@@ -35,7 +35,7 @@ public class CommandPardon {
             if (gameprofilebanlist.isBanned(gameprofile)) {
                 gameprofilebanlist.remove(gameprofile);
                 ++i;
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.pardon.success", new Object[] { ChatComponentUtils.a(gameprofile)}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.pardon.success", new Object[]{ChatComponentUtils.a(gameprofile)}), true);
             }
         }
 

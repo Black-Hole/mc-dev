@@ -352,7 +352,7 @@ public class Advancement {
 
                     String s;
 
-                    for (Iterator iterator = map.keySet().iterator(); iterator.hasNext(); astring[i++] = new String[] { s}) {
+                    for (Iterator iterator = map.keySet().iterator(); iterator.hasNext(); astring[i++] = new String[]{s}) {
                         s = (String) iterator.next();
                     }
                 }

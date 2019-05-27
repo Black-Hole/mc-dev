@@ -72,7 +72,7 @@ public class BlockTripwire extends Block {
     }
 
     private void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        EnumDirection[] aenumdirection = new EnumDirection[] { EnumDirection.SOUTH, EnumDirection.WEST};
+        EnumDirection[] aenumdirection = new EnumDirection[]{EnumDirection.SOUTH, EnumDirection.WEST};
         int i = aenumdirection.length;
         int j = 0;
 
@@ -160,26 +160,26 @@ public class BlockTripwire extends Block {
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
-        case CLOCKWISE_180:
-            return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTripwire.NORTH, iblockdata.get(BlockTripwire.SOUTH))).set(BlockTripwire.EAST, iblockdata.get(BlockTripwire.WEST))).set(BlockTripwire.SOUTH, iblockdata.get(BlockTripwire.NORTH))).set(BlockTripwire.WEST, iblockdata.get(BlockTripwire.EAST));
-        case COUNTERCLOCKWISE_90:
-            return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTripwire.NORTH, iblockdata.get(BlockTripwire.EAST))).set(BlockTripwire.EAST, iblockdata.get(BlockTripwire.SOUTH))).set(BlockTripwire.SOUTH, iblockdata.get(BlockTripwire.WEST))).set(BlockTripwire.WEST, iblockdata.get(BlockTripwire.NORTH));
-        case CLOCKWISE_90:
-            return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTripwire.NORTH, iblockdata.get(BlockTripwire.WEST))).set(BlockTripwire.EAST, iblockdata.get(BlockTripwire.NORTH))).set(BlockTripwire.SOUTH, iblockdata.get(BlockTripwire.EAST))).set(BlockTripwire.WEST, iblockdata.get(BlockTripwire.SOUTH));
-        default:
-            return iblockdata;
+            case CLOCKWISE_180:
+                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTripwire.NORTH, iblockdata.get(BlockTripwire.SOUTH))).set(BlockTripwire.EAST, iblockdata.get(BlockTripwire.WEST))).set(BlockTripwire.SOUTH, iblockdata.get(BlockTripwire.NORTH))).set(BlockTripwire.WEST, iblockdata.get(BlockTripwire.EAST));
+            case COUNTERCLOCKWISE_90:
+                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTripwire.NORTH, iblockdata.get(BlockTripwire.EAST))).set(BlockTripwire.EAST, iblockdata.get(BlockTripwire.SOUTH))).set(BlockTripwire.SOUTH, iblockdata.get(BlockTripwire.WEST))).set(BlockTripwire.WEST, iblockdata.get(BlockTripwire.NORTH));
+            case CLOCKWISE_90:
+                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTripwire.NORTH, iblockdata.get(BlockTripwire.WEST))).set(BlockTripwire.EAST, iblockdata.get(BlockTripwire.NORTH))).set(BlockTripwire.SOUTH, iblockdata.get(BlockTripwire.EAST))).set(BlockTripwire.WEST, iblockdata.get(BlockTripwire.SOUTH));
+            default:
+                return iblockdata;
         }
     }
 
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         switch (enumblockmirror) {
-        case LEFT_RIGHT:
-            return (IBlockData) ((IBlockData) iblockdata.set(BlockTripwire.NORTH, iblockdata.get(BlockTripwire.SOUTH))).set(BlockTripwire.SOUTH, iblockdata.get(BlockTripwire.NORTH));
-        case FRONT_BACK:
-            return (IBlockData) ((IBlockData) iblockdata.set(BlockTripwire.EAST, iblockdata.get(BlockTripwire.WEST))).set(BlockTripwire.WEST, iblockdata.get(BlockTripwire.EAST));
-        default:
-            return super.a(iblockdata, enumblockmirror);
+            case LEFT_RIGHT:
+                return (IBlockData) ((IBlockData) iblockdata.set(BlockTripwire.NORTH, iblockdata.get(BlockTripwire.SOUTH))).set(BlockTripwire.SOUTH, iblockdata.get(BlockTripwire.NORTH));
+            case FRONT_BACK:
+                return (IBlockData) ((IBlockData) iblockdata.set(BlockTripwire.EAST, iblockdata.get(BlockTripwire.WEST))).set(BlockTripwire.WEST, iblockdata.get(BlockTripwire.EAST));
+            default:
+                return super.a(iblockdata, enumblockmirror);
         }
     }
 

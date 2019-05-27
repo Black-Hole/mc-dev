@@ -149,7 +149,7 @@ public class TileEntityStructure extends TileEntity {
         return this.structureName == null ? "" : this.structureName.toString();
     }
 
-    public boolean d() {
+    public boolean f() {
         return this.structureName != null;
     }
 

@@ -11,12 +11,12 @@ public enum EnumBlockMirror {
         int l = i > k ? i - j : i;
 
         switch (this) {
-        case FRONT_BACK:
-            return (j - l) % j;
-        case LEFT_RIGHT:
-            return (k - l + j) % j;
-        default:
-            return i;
+            case FRONT_BACK:
+                return (j - l) % j;
+            case LEFT_RIGHT:
+                return (k - l + j) % j;
+            default:
+                return i;
         }
     }
 

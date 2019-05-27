@@ -56,9 +56,9 @@ public class CommandBanIp {
             IpBanEntry ipbanentry = new IpBanEntry(s, (Date) null, commandlistenerwrapper.getName(), (Date) null, ichatbasecomponent == null ? null : ichatbasecomponent.getString());
 
             ipbanlist.add(ipbanentry);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.banip.success", new Object[] { s, ipbanentry.getReason()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.banip.success", new Object[]{s, ipbanentry.getReason()}), true);
             if (!list.isEmpty()) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.banip.info", new Object[] { list.size(), EntitySelector.a(list)}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.banip.info", new Object[]{list.size(), EntitySelector.a(list)}), true);
             }
 
             Iterator iterator = list.iterator();

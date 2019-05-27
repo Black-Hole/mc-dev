@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class PathfinderGoalWaterJump extends PathfinderGoalWaterJumpAbstract {
 
-    private static final int[] a = new int[] { 0, 1, 4, 5, 6, 7};
+    private static final int[] a = new int[]{0, 1, 4, 5, 6, 7};
     private final EntityDolphin b;
     private final int c;
     private boolean d;

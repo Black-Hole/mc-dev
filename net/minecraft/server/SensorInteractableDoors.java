@@ -21,7 +21,7 @@ public class SensorInteractableDoors extends Sensor<EntityLiving> {
                     BlockPosition blockposition1 = blockposition.b(i, j, k);
 
                     if (worldserver.getType(blockposition1).a(TagsBlock.WOODEN_DOORS)) {
-                        list.add(GlobalPos.a(dimensionmanager, blockposition1));
+                        list.add(GlobalPos.create(dimensionmanager, blockposition1));
                     }
                 }
             }

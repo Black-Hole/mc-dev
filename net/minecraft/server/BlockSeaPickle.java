@@ -74,15 +74,15 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch ((Integer) iblockdata.get(BlockSeaPickle.a)) {
-        case 1:
-        default:
-            return BlockSeaPickle.c;
-        case 2:
-            return BlockSeaPickle.d;
-        case 3:
-            return BlockSeaPickle.e;
-        case 4:
-            return BlockSeaPickle.f;
+            case 1:
+            default:
+                return BlockSeaPickle.c;
+            case 2:
+                return BlockSeaPickle.d;
+            case 3:
+                return BlockSeaPickle.e;
+            case 4:
+                return BlockSeaPickle.f;
         }
     }
 

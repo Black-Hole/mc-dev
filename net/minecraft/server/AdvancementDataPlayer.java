@@ -277,7 +277,7 @@ public class AdvancementDataPlayer {
             if (!flag1 && advancementprogress.isDone()) {
                 advancement.d().a(this.player);
                 if (advancement.c() != null && advancement.c().i() && this.player.world.getGameRules().getBoolean("announceAdvancements")) {
-                    this.d.getPlayerList().sendMessage(new ChatMessage("chat.type.advancement." + advancement.c().e().a(), new Object[] { this.player.getScoreboardDisplayName(), advancement.j()}));
+                    this.d.getPlayerList().sendMessage(new ChatMessage("chat.type.advancement." + advancement.c().e().a(), new Object[]{this.player.getScoreboardDisplayName(), advancement.j()}));
                 }
             }
         }

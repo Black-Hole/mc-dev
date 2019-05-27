@@ -19,15 +19,15 @@ public class BlockLadder extends Block implements IBlockWaterlogged {
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch ((EnumDirection) iblockdata.get(BlockLadder.FACING)) {
-        case NORTH:
-            return BlockLadder.f;
-        case SOUTH:
-            return BlockLadder.e;
-        case WEST:
-            return BlockLadder.d;
-        case EAST:
-        default:
-            return BlockLadder.c;
+            case NORTH:
+                return BlockLadder.f;
+            case SOUTH:
+                return BlockLadder.e;
+            case WEST:
+                return BlockLadder.d;
+            case EAST:
+            default:
+                return BlockLadder.c;
         }
     }
 

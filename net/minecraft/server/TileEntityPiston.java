@@ -35,15 +35,15 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         return this.save(new NBTTagCompound());
     }
 
-    public boolean c() {
+    public boolean d() {
         return this.c;
     }
 
-    public EnumDirection d() {
+    public EnumDirection f() {
         return this.b;
     }
 
-    public boolean f() {
+    public boolean h() {
         return this.g;
     }
 
@@ -60,7 +60,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
     }
 
     private IBlockData x() {
-        return !this.c() && this.f() && this.a.getBlock() instanceof BlockPiston ? (IBlockData) ((IBlockData) Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.TYPE, this.a.getBlock() == Blocks.STICKY_PISTON ? BlockPropertyPistonType.STICKY : BlockPropertyPistonType.DEFAULT)).set(BlockPistonExtension.FACING, this.a.get(BlockPiston.FACING)) : this.a;
+        return !this.d() && this.h() && this.a.getBlock() instanceof BlockPiston ? (IBlockData) ((IBlockData) Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.TYPE, this.a.getBlock() == Blocks.STICKY_PISTON ? BlockPropertyPistonType.STICKY : BlockPropertyPistonType.DEFAULT)).set(BlockPistonExtension.FACING, this.a.get(BlockPiston.FACING)) : this.a;
     }
 
     private void f(float f) {
@@ -87,14 +87,14 @@ public class TileEntityPiston extends TileEntity implements ITickable {
                             double d3 = vec3d.z;
 
                             switch (enumdirection.k()) {
-                            case X:
-                                d1 = (double) enumdirection.getAdjacentX();
-                                break;
-                            case Y:
-                                d2 = (double) enumdirection.getAdjacentY();
-                                break;
-                            case Z:
-                                d3 = (double) enumdirection.getAdjacentZ();
+                                case X:
+                                    d1 = (double) enumdirection.getAdjacentX();
+                                    break;
+                                case Y:
+                                    d2 = (double) enumdirection.getAdjacentY();
+                                    break;
+                                case Z:
+                                    d3 = (double) enumdirection.getAdjacentZ();
                             }
 
                             entity.setMot(d1, d2, d3);
@@ -158,13 +158,13 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
     private double a(AxisAlignedBB axisalignedbb, EnumDirection enumdirection, AxisAlignedBB axisalignedbb1) {
         switch (enumdirection.k()) {
-        case X:
-            return b(axisalignedbb, enumdirection, axisalignedbb1);
-        case Y:
-        default:
-            return c(axisalignedbb, enumdirection, axisalignedbb1);
-        case Z:
-            return d(axisalignedbb, enumdirection, axisalignedbb1);
+            case X:
+                return b(axisalignedbb, enumdirection, axisalignedbb1);
+            case Y:
+            default:
+                return c(axisalignedbb, enumdirection, axisalignedbb1);
+            case Z:
+                return d(axisalignedbb, enumdirection, axisalignedbb1);
         }
     }
 
@@ -180,19 +180,19 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         double d3 = Math.max(d1, 0.0D);
 
         switch (enumdirection) {
-        case WEST:
-            return new AxisAlignedBB(axisalignedbb.minX + d2, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + d3, axisalignedbb.maxY, axisalignedbb.maxZ);
-        case EAST:
-            return new AxisAlignedBB(axisalignedbb.maxX + d2, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.maxX + d3, axisalignedbb.maxY, axisalignedbb.maxZ);
-        case DOWN:
-            return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY + d2, axisalignedbb.minZ, axisalignedbb.maxX, axisalignedbb.minY + d3, axisalignedbb.maxZ);
-        case UP:
-        default:
-            return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.maxY + d2, axisalignedbb.minZ, axisalignedbb.maxX, axisalignedbb.maxY + d3, axisalignedbb.maxZ);
-        case NORTH:
-            return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ + d2, axisalignedbb.maxX, axisalignedbb.maxY, axisalignedbb.minZ + d3);
-        case SOUTH:
-            return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.maxZ + d2, axisalignedbb.maxX, axisalignedbb.maxY, axisalignedbb.maxZ + d3);
+            case WEST:
+                return new AxisAlignedBB(axisalignedbb.minX + d2, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + d3, axisalignedbb.maxY, axisalignedbb.maxZ);
+            case EAST:
+                return new AxisAlignedBB(axisalignedbb.maxX + d2, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.maxX + d3, axisalignedbb.maxY, axisalignedbb.maxZ);
+            case DOWN:
+                return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY + d2, axisalignedbb.minZ, axisalignedbb.maxX, axisalignedbb.minY + d3, axisalignedbb.maxZ);
+            case UP:
+            default:
+                return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.maxY + d2, axisalignedbb.minZ, axisalignedbb.maxX, axisalignedbb.maxY + d3, axisalignedbb.maxZ);
+            case NORTH:
+                return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ + d2, axisalignedbb.maxX, axisalignedbb.maxY, axisalignedbb.minZ + d3);
+            case SOUTH:
+                return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.maxZ + d2, axisalignedbb.maxX, axisalignedbb.maxY, axisalignedbb.maxZ + d3);
         }
     }
 
@@ -236,7 +236,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
             this.i = 1.0F;
             this.j = this.i;
             this.world.removeTileEntity(this.position);
-            this.m();
+            this.W_();
             if (this.world.getType(this.position).getBlock() == Blocks.MOVING_PISTON) {
                 IBlockData iblockdata;
 
@@ -259,7 +259,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         this.j = this.i;
         if (this.j >= 1.0F) {
             this.world.removeTileEntity(this.position);
-            this.m();
+            this.W_();
             if (this.a != null && this.world.getType(this.position).getBlock() == Blocks.MOVING_PISTON) {
                 IBlockData iblockdata = Block.b(this.a, (GeneratorAccess) this.world, this.position);
 
@@ -326,7 +326,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         } else {
             IBlockData iblockdata;
 
-            if (this.f()) {
+            if (this.h()) {
                 iblockdata = (IBlockData) ((IBlockData) Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.FACING, this.b)).set(BlockPistonExtension.SHORT, this.c != 1.0F - this.i < 4.0F);
             } else {
                 iblockdata = this.a;

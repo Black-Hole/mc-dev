@@ -16,7 +16,7 @@ public class BehaviorCareer extends Behavior<EntityVillager> {
         GlobalPos globalpos = (GlobalPos) entityvillager.getBehaviorController().getMemory(MemoryModuleType.JOB_SITE).get();
         MinecraftServer minecraftserver = worldserver.getMinecraftServer();
 
-        minecraftserver.getWorldServer(globalpos.a()).B().c(globalpos.b()).ifPresent((villageplacetype) -> {
+        minecraftserver.getWorldServer(globalpos.getDimensionManager()).B().c(globalpos.getBlockPosition()).ifPresent((villageplacetype) -> {
             IRegistry.VILLAGER_PROFESSION.d().filter((villagerprofession) -> {
                 return villagerprofession.b() == villageplacetype;
             }).findFirst().ifPresent((villagerprofession) -> {

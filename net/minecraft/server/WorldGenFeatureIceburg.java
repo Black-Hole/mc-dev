@@ -241,7 +241,7 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureIcebur
                             this.a(generatoraccess, blockposition1, Blocks.AIR.getBlockData());
                             this.a(generatoraccess, blockposition1.up(), Blocks.AIR.getBlockData());
                         } else if (this.a(block)) {
-                            Block[] ablock = new Block[] { generatoraccess.getType(blockposition1.west()).getBlock(), generatoraccess.getType(blockposition1.east()).getBlock(), generatoraccess.getType(blockposition1.north()).getBlock(), generatoraccess.getType(blockposition1.south()).getBlock()};
+                            Block[] ablock = new Block[]{generatoraccess.getType(blockposition1.west()).getBlock(), generatoraccess.getType(blockposition1.east()).getBlock(), generatoraccess.getType(blockposition1.north()).getBlock(), generatoraccess.getType(blockposition1.south()).getBlock()};
                             int l1 = 0;
                             Block[] ablock1 = ablock;
                             int i2 = ablock.length;

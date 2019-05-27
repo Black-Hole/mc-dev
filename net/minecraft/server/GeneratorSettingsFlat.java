@@ -53,17 +53,17 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
         hashmap.put(GeneratorSettingsFlat.M, WorldGenStage.Decoration.SURFACE_STRUCTURES);
     });
     public static final Map<String, WorldGenFeatureConfigured<?>[]> u = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
-        hashmap.put("mineshaft", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.x});
-        hashmap.put("village", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.y});
-        hashmap.put("stronghold", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.z});
-        hashmap.put("biome_1", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.A, GeneratorSettingsFlat.B, GeneratorSettingsFlat.C, GeneratorSettingsFlat.D, GeneratorSettingsFlat.L, GeneratorSettingsFlat.E});
-        hashmap.put("oceanmonument", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.F});
-        hashmap.put("lake", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.G});
-        hashmap.put("lava_lake", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.H});
-        hashmap.put("endcity", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.I});
-        hashmap.put("mansion", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.J});
-        hashmap.put("fortress", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.K});
-        hashmap.put("pillager_outpost", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.M});
+        hashmap.put("mineshaft", new WorldGenFeatureConfigured[]{GeneratorSettingsFlat.x});
+        hashmap.put("village", new WorldGenFeatureConfigured[]{GeneratorSettingsFlat.y});
+        hashmap.put("stronghold", new WorldGenFeatureConfigured[]{GeneratorSettingsFlat.z});
+        hashmap.put("biome_1", new WorldGenFeatureConfigured[]{GeneratorSettingsFlat.A, GeneratorSettingsFlat.B, GeneratorSettingsFlat.C, GeneratorSettingsFlat.D, GeneratorSettingsFlat.L, GeneratorSettingsFlat.E});
+        hashmap.put("oceanmonument", new WorldGenFeatureConfigured[]{GeneratorSettingsFlat.F});
+        hashmap.put("lake", new WorldGenFeatureConfigured[]{GeneratorSettingsFlat.G});
+        hashmap.put("lava_lake", new WorldGenFeatureConfigured[]{GeneratorSettingsFlat.H});
+        hashmap.put("endcity", new WorldGenFeatureConfigured[]{GeneratorSettingsFlat.I});
+        hashmap.put("mansion", new WorldGenFeatureConfigured[]{GeneratorSettingsFlat.J});
+        hashmap.put("fortress", new WorldGenFeatureConfigured[]{GeneratorSettingsFlat.K});
+        hashmap.put("pillager_outpost", new WorldGenFeatureConfigured[]{GeneratorSettingsFlat.M});
     });
     public static final Map<WorldGenFeatureConfigured<?>, WorldGenFeatureConfiguration> v = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         hashmap.put(GeneratorSettingsFlat.x, new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL));

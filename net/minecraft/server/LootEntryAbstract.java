@@ -77,7 +77,7 @@ public abstract class LootEntryAbstract implements LootEntryChildren {
         }
 
         public LootEntryAlternatives.a a(LootEntryAbstract.a<?> lootentryabstract_a) {
-            return new LootEntryAlternatives.a(new LootEntryAbstract.a[] { this, lootentryabstract_a});
+            return new LootEntryAlternatives.a(new LootEntryAbstract.a[]{this, lootentryabstract_a});
         }
 
         public abstract LootEntryAbstract b();

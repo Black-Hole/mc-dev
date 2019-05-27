@@ -26,7 +26,7 @@ public class CommandKick {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
             entityplayer.playerConnection.disconnect(ichatbasecomponent);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.kick.success", new Object[] { entityplayer.getScoreboardDisplayName(), ichatbasecomponent}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.kick.success", new Object[]{entityplayer.getScoreboardDisplayName(), ichatbasecomponent}), true);
         }
 
         return collection.size();

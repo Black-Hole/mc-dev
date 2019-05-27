@@ -31,10 +31,10 @@ public class BlockCommand extends BlockTileEntity {
             if (tileentity instanceof TileEntityCommand) {
                 TileEntityCommand tileentitycommand = (TileEntityCommand) tileentity;
                 boolean flag1 = world.isBlockIndirectlyPowered(blockposition);
-                boolean flag2 = tileentitycommand.d();
+                boolean flag2 = tileentitycommand.f();
 
                 tileentitycommand.a(flag1);
-                if (!flag2 && !tileentitycommand.f() && tileentitycommand.u() != TileEntityCommand.Type.SEQUENCE) {
+                if (!flag2 && !tileentitycommand.g() && tileentitycommand.u() != TileEntityCommand.Type.SEQUENCE) {
                     if (flag1) {
                         tileentitycommand.s();
                         world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
@@ -55,7 +55,7 @@ public class BlockCommand extends BlockTileEntity {
                 CommandBlockListenerAbstract commandblocklistenerabstract = tileentitycommand.getCommandBlock();
                 boolean flag = !UtilColor.b(commandblocklistenerabstract.getCommand());
                 TileEntityCommand.Type tileentitycommand_type = tileentitycommand.u();
-                boolean flag1 = tileentitycommand.g();
+                boolean flag1 = tileentitycommand.h();
 
                 if (tileentitycommand_type == TileEntityCommand.Type.AUTO) {
                     tileentitycommand.s();
@@ -65,7 +65,7 @@ public class BlockCommand extends BlockTileEntity {
                         commandblocklistenerabstract.a(0);
                     }
 
-                    if (tileentitycommand.d() || tileentitycommand.f()) {
+                    if (tileentitycommand.f() || tileentitycommand.g()) {
                         world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
                     }
                 } else if (tileentitycommand_type == TileEntityCommand.Type.REDSTONE) {
@@ -202,7 +202,7 @@ public class BlockCommand extends BlockTileEntity {
                 break;
             }
 
-            if (tileentitycommand.d() || tileentitycommand.f()) {
+            if (tileentitycommand.f() || tileentitycommand.g()) {
                 CommandBlockListenerAbstract commandblocklistenerabstract = tileentitycommand.getCommandBlock();
 
                 if (tileentitycommand.s()) {

@@ -11,14 +11,14 @@ public interface AdvancementRequirements {
 
         String s;
 
-        for (Iterator iterator = collection.iterator(); iterator.hasNext(); astring[i++] = new String[] { s}) {
+        for (Iterator iterator = collection.iterator(); iterator.hasNext(); astring[i++] = new String[]{s}) {
             s = (String) iterator.next();
         }
 
         return astring;
     };
     AdvancementRequirements OR = (collection) -> {
-        return new String[][] { (String[]) collection.toArray(new String[0])};
+        return new String[][]{(String[]) collection.toArray(new String[0])};
     };
 
     String[][] createRequirements(Collection<String> collection);

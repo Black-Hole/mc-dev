@@ -37,7 +37,7 @@ public class CommandTime {
     }
 
     private static int c(CommandListenerWrapper commandlistenerwrapper, int i) {
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.time.query", new Object[] { i}), false);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.time.query", new Object[]{i}), false);
         return i;
     }
 
@@ -50,7 +50,7 @@ public class CommandTime {
             worldserver.setDayTime((long) i);
         }
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.time.set", new Object[] { i}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.time.set", new Object[]{i}), true);
         return a(commandlistenerwrapper.getWorld());
     }
 
@@ -65,7 +65,7 @@ public class CommandTime {
 
         int j = a(commandlistenerwrapper.getWorld());
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.time.set", new Object[] { j}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.time.set", new Object[]{j}), true);
         return j;
     }
 }

@@ -104,6 +104,6 @@ public class ArgumentVectorPosition implements IVectorPosition {
     }
 
     public int hashCode() {
-        return Objects.hash(new Object[] { this.a, this.b, this.c});
+        return Objects.hash(new Object[]{this.a, this.b, this.c});
     }
 }

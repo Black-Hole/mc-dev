@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 public class WorldGenFeaturePillagerOutpost extends WorldGenFeatureRandomScattered<WorldGenFeaturePillagerOutpostConfiguration> {
 
-    private static final List<BiomeBase.BiomeMeta> a = Lists.newArrayList(new BiomeBase.BiomeMeta[] { new BiomeBase.BiomeMeta(EntityTypes.PILLAGER, 1, 1, 1)});
+    private static final List<BiomeBase.BiomeMeta> a = Lists.newArrayList(new BiomeBase.BiomeMeta[]{new BiomeBase.BiomeMeta(EntityTypes.PILLAGER, 1, 1, 1)});
 
     public WorldGenFeaturePillagerOutpost(Function<Dynamic<?>, ? extends WorldGenFeaturePillagerOutpostConfiguration> function) {
         super(function);

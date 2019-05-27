@@ -300,7 +300,7 @@ public class EnderDragonBattle {
 
                 PlayerChunk.State playerchunk_state = ((Chunk) ichunkaccess).getState();
 
-                if (!playerchunk_state.a(PlayerChunk.State.TICKING)) {
+                if (!playerchunk_state.isAtLeast(PlayerChunk.State.TICKING)) {
                     return false;
                 }
             }

@@ -200,14 +200,14 @@ public class Item implements IMaterial {
             return this.l;
         } else {
             switch (this.l) {
-            case COMMON:
-            case UNCOMMON:
-                return EnumItemRarity.RARE;
-            case RARE:
-                return EnumItemRarity.EPIC;
-            case EPIC:
-            default:
-                return this.l;
+                case COMMON:
+                case UNCOMMON:
+                    return EnumItemRarity.RARE;
+                case RARE:
+                    return EnumItemRarity.EPIC;
+                case EPIC:
+                default:
+                    return this.l;
             }
         }
     }

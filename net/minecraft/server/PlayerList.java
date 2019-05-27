@@ -96,19 +96,19 @@ public abstract class PlayerList {
         ChatMessage chatmessage;
 
         if (entityplayer.getProfile().getName().equalsIgnoreCase(s)) {
-            chatmessage = new ChatMessage("multiplayer.player.joined", new Object[] { entityplayer.getScoreboardDisplayName()});
+            chatmessage = new ChatMessage("multiplayer.player.joined", new Object[]{entityplayer.getScoreboardDisplayName()});
         } else {
-            chatmessage = new ChatMessage("multiplayer.player.joined.renamed", new Object[] { entityplayer.getScoreboardDisplayName(), s});
+            chatmessage = new ChatMessage("multiplayer.player.joined.renamed", new Object[]{entityplayer.getScoreboardDisplayName(), s});
         }
 
         this.sendMessage(chatmessage.a(EnumChatFormat.YELLOW));
         playerconnection.a(entityplayer.locX, entityplayer.locY, entityplayer.locZ, entityplayer.yaw, entityplayer.pitch);
         this.players.add(entityplayer);
         this.j.put(entityplayer.getUniqueID(), entityplayer);
-        this.sendAll(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, new EntityPlayer[] { entityplayer}));
+        this.sendAll(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, new EntityPlayer[]{entityplayer}));
 
         for (int i = 0; i < this.players.size(); ++i) {
-            entityplayer.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, new EntityPlayer[] { (EntityPlayer) this.players.get(i)}));
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, new EntityPlayer[]{(EntityPlayer) this.players.get(i)}));
         }
 
         worldserver.addPlayerJoin(entityplayer);
@@ -302,7 +302,7 @@ public abstract class PlayerList {
             this.p.remove(uuid);
         }
 
-        this.sendAll(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, new EntityPlayer[] { entityplayer}));
+        this.sendAll(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, new EntityPlayer[]{entityplayer}));
     }
 
     @Nullable
@@ -312,9 +312,9 @@ public abstract class PlayerList {
         if (this.k.isBanned(gameprofile)) {
             GameProfileBanEntry gameprofilebanentry = (GameProfileBanEntry) this.k.get(gameprofile);
 
-            chatmessage = new ChatMessage("multiplayer.disconnect.banned.reason", new Object[] { gameprofilebanentry.getReason()});
+            chatmessage = new ChatMessage("multiplayer.disconnect.banned.reason", new Object[]{gameprofilebanentry.getReason()});
             if (gameprofilebanentry.getExpires() != null) {
-                chatmessage.addSibling(new ChatMessage("multiplayer.disconnect.banned.expiration", new Object[] { PlayerList.g.format(gameprofilebanentry.getExpires())}));
+                chatmessage.addSibling(new ChatMessage("multiplayer.disconnect.banned.expiration", new Object[]{PlayerList.g.format(gameprofilebanentry.getExpires())}));
             }
 
             return chatmessage;
@@ -323,9 +323,9 @@ public abstract class PlayerList {
         } else if (this.l.isBanned(socketaddress)) {
             IpBanEntry ipbanentry = this.l.get(socketaddress);
 
-            chatmessage = new ChatMessage("multiplayer.disconnect.banned_ip.reason", new Object[] { ipbanentry.getReason()});
+            chatmessage = new ChatMessage("multiplayer.disconnect.banned_ip.reason", new Object[]{ipbanentry.getReason()});
             if (ipbanentry.getExpires() != null) {
-                chatmessage.addSibling(new ChatMessage("multiplayer.disconnect.banned_ip.expiration", new Object[] { PlayerList.g.format(ipbanentry.getExpires())}));
+                chatmessage.addSibling(new ChatMessage("multiplayer.disconnect.banned_ip.expiration", new Object[]{PlayerList.g.format(ipbanentry.getExpires())}));
             }
 
             return chatmessage;

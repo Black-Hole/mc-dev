@@ -122,7 +122,7 @@ public class BlockCampfire extends BlockTileEntity implements IBlockWaterlogged 
                 TileEntity tileentity = generatoraccess.getTileEntity(blockposition);
 
                 if (tileentity instanceof TileEntityCampfire) {
-                    ((TileEntityCampfire) tileentity).d();
+                    ((TileEntityCampfire) tileentity).f();
                 }
             }
 
@@ -139,7 +139,7 @@ public class BlockCampfire extends BlockTileEntity implements IBlockWaterlogged 
         if (!world.isClientSide && entity instanceof EntityArrow) {
             EntityArrow entityarrow = (EntityArrow) entity;
 
-            if (entityarrow.isBurning() && !(Boolean) iblockdata.get(BlockCampfire.b)) {
+            if (entityarrow.isBurning() && !(Boolean) iblockdata.get(BlockCampfire.b) && !(Boolean) iblockdata.get(BlockCampfire.d)) {
                 BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
 
                 world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.r, true), 11);

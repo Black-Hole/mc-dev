@@ -14,7 +14,7 @@ public class CommandSeed {
                 chatmodifier.setColor(EnumChatFormat.GREEN).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, String.valueOf(i))).setInsertion(String.valueOf(i));
             }));
 
-            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.seed.success", new Object[] { ichatbasecomponent}), false);
+            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.seed.success", new Object[]{ichatbasecomponent}), false);
             return (int) i;
         }));
     }

@@ -35,7 +35,7 @@ public class BehaviorStrollPlaceList extends Behavior<EntityVillager> {
 
             if (!list.isEmpty()) {
                 this.g = (GlobalPos) list.get(worldserver.getRandom().nextInt(list.size()));
-                return this.g != null && Objects.equals(worldserver.getWorldProvider().getDimensionManager(), this.g.a()) && ((GlobalPos) optional1.get()).b().a((IPosition) entityvillager.ch(), (double) this.e);
+                return this.g != null && Objects.equals(worldserver.getWorldProvider().getDimensionManager(), this.g.getDimensionManager()) && ((GlobalPos) optional1.get()).getBlockPosition().a((IPosition) entityvillager.ch(), (double) this.e);
             }
         }
 
@@ -44,7 +44,7 @@ public class BehaviorStrollPlaceList extends Behavior<EntityVillager> {
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
         if (i > this.f && this.g != null) {
-            entityvillager.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(this.g.b(), this.c, this.d)));
+            entityvillager.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(this.g.getBlockPosition(), this.c, this.d)));
             this.f = i + 100L;
         }
 

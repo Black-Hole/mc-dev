@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 public class WorldGenMonument extends StructureGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    private static final List<BiomeBase.BiomeMeta> a = Lists.newArrayList(new BiomeBase.BiomeMeta[] { new BiomeBase.BiomeMeta(EntityTypes.GUARDIAN, 1, 2, 4)});
+    private static final List<BiomeBase.BiomeMeta> a = Lists.newArrayList(new BiomeBase.BiomeMeta[]{new BiomeBase.BiomeMeta(EntityTypes.GUARDIAN, 1, 2, 4)});
 
     public WorldGenMonument(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
         super(function);

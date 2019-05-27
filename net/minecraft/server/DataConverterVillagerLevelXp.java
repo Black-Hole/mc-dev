@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class DataConverterVillagerLevelXp extends DataFix {
 
-    private static final int[] a = new int[] { 0, 10, 50, 100, 150};
+    private static final int[] a = new int[]{0, 10, 50, 100, 150};
 
     public static int a(int i) {
         return DataConverterVillagerLevelXp.a[MathHelper.clamp(i - 1, 0, DataConverterVillagerLevelXp.a.length - 1)];

@@ -23,7 +23,7 @@ public class PlayerChunk {
     private volatile CompletableFuture<Either<Chunk, PlayerChunk.Failure>> tickingFuture;
     private volatile CompletableFuture<Either<Chunk, PlayerChunk.Failure>> entityTickingFuture;
     private CompletableFuture<IChunkAccess> chunkSave;
-    private int oldTicketLevel;
+    public int oldTicketLevel;
     private int ticketLevel;
     private int n;
     private final ChunkCoordIntPair location;
@@ -59,10 +59,6 @@ public class PlayerChunk {
         CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> completablefuture = (CompletableFuture) this.statusFutures.get(chunkstatus.c());
 
         return completablefuture == null ? PlayerChunk.UNLOADED_CHUNK_ACCESS_FUTURE : completablefuture;
-    }
-
-    public CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> getStatusFuture(ChunkStatus chunkstatus) {
-        return b(this.ticketLevel).b(chunkstatus) ? this.getStatusFutureUnchecked(chunkstatus) : PlayerChunk.UNLOADED_CHUNK_ACCESS_FUTURE;
     }
 
     public CompletableFuture<Either<Chunk, PlayerChunk.Failure>> a() {
@@ -208,7 +204,7 @@ public class PlayerChunk {
             }
         }
 
-        if (b(this.ticketLevel).b(chunkstatus)) {
+        if (getChunkStatus(this.ticketLevel).b(chunkstatus)) {
             CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> completablefuture1 = playerchunkmap.a(this, chunkstatus);
 
             this.a(completablefuture1);
@@ -250,19 +246,12 @@ public class PlayerChunk {
     }
 
     protected void a(PlayerChunkMap playerchunkmap) {
-        ChunkStatus chunkstatus = b(this.oldTicketLevel);
-        ChunkStatus chunkstatus1 = b(this.ticketLevel);
+        ChunkStatus chunkstatus = getChunkStatus(this.oldTicketLevel);
+        ChunkStatus chunkstatus1 = getChunkStatus(this.ticketLevel);
         boolean flag = this.oldTicketLevel <= PlayerChunkMap.GOLDEN_TICKET;
         boolean flag1 = this.ticketLevel <= PlayerChunkMap.GOLDEN_TICKET;
-        PlayerChunk.State playerchunk_state = c(this.oldTicketLevel);
-        PlayerChunk.State playerchunk_state1 = c(this.ticketLevel);
-
-        if (flag1) {
-            for (int i = flag ? chunkstatus.c() + 1 : 0; i <= chunkstatus1.c(); ++i) {
-                this.a((ChunkStatus) PlayerChunk.CHUNK_STATUSES.get(i), playerchunkmap);
-            }
-        }
-
+        PlayerChunk.State playerchunk_state = getChunkState(this.oldTicketLevel);
+        PlayerChunk.State playerchunk_state1 = getChunkState(this.ticketLevel);
         CompletableFuture completablefuture;
 
         if (flag) {
@@ -272,18 +261,18 @@ public class PlayerChunk {
                 }
             });
 
-            for (int j = flag1 ? chunkstatus1.c() + 1 : 0; j <= chunkstatus.c(); ++j) {
-                completablefuture = (CompletableFuture) this.statusFutures.get(j);
+            for (int i = flag1 ? chunkstatus1.c() + 1 : 0; i <= chunkstatus.c(); ++i) {
+                completablefuture = (CompletableFuture) this.statusFutures.get(i);
                 if (completablefuture != null) {
                     completablefuture.complete(either);
                 } else {
-                    this.statusFutures.set(j, CompletableFuture.completedFuture(either));
+                    this.statusFutures.set(i, CompletableFuture.completedFuture(either));
                 }
             }
         }
 
-        boolean flag2 = playerchunk_state.a(PlayerChunk.State.BORDER);
-        boolean flag3 = playerchunk_state1.a(PlayerChunk.State.BORDER);
+        boolean flag2 = playerchunk_state.isAtLeast(PlayerChunk.State.BORDER);
+        boolean flag3 = playerchunk_state1.isAtLeast(PlayerChunk.State.BORDER);
 
         this.hasBeenLoaded |= flag3;
         if (!flag2 && flag3) {
@@ -300,8 +289,8 @@ public class PlayerChunk {
             }));
         }
 
-        boolean flag4 = playerchunk_state.a(PlayerChunk.State.TICKING);
-        boolean flag5 = playerchunk_state1.a(PlayerChunk.State.TICKING);
+        boolean flag4 = playerchunk_state.isAtLeast(PlayerChunk.State.TICKING);
+        boolean flag5 = playerchunk_state1.isAtLeast(PlayerChunk.State.TICKING);
 
         if (!flag4 && flag5) {
             this.tickingFuture = playerchunkmap.a(this);
@@ -313,8 +302,8 @@ public class PlayerChunk {
             this.tickingFuture = PlayerChunk.UNLOADED_CHUNK_FUTURE;
         }
 
-        boolean flag6 = playerchunk_state.a(PlayerChunk.State.ENTITY_TICKING);
-        boolean flag7 = playerchunk_state1.a(PlayerChunk.State.ENTITY_TICKING);
+        boolean flag6 = playerchunk_state.isAtLeast(PlayerChunk.State.ENTITY_TICKING);
+        boolean flag7 = playerchunk_state1.isAtLeast(PlayerChunk.State.ENTITY_TICKING);
 
         if (!flag6 && flag7) {
             if (this.entityTickingFuture != PlayerChunk.UNLOADED_CHUNK_FUTURE) {
@@ -334,11 +323,11 @@ public class PlayerChunk {
         this.oldTicketLevel = this.ticketLevel;
     }
 
-    public static ChunkStatus b(int i) {
+    public static ChunkStatus getChunkStatus(int i) {
         return i < 33 ? ChunkStatus.FULL : ChunkStatus.a(i - 33);
     }
 
-    public static PlayerChunk.State c(int i) {
+    public static PlayerChunk.State getChunkState(int i) {
         return PlayerChunk.CHUNK_STATES[MathHelper.clamp(33 - i + 1, 0, PlayerChunk.CHUNK_STATES.length - 1)];
     }
 
@@ -347,7 +336,7 @@ public class PlayerChunk {
     }
 
     public void l() {
-        this.hasBeenLoaded = c(this.ticketLevel).a(PlayerChunk.State.BORDER);
+        this.hasBeenLoaded = getChunkState(this.ticketLevel).isAtLeast(PlayerChunk.State.BORDER);
     }
 
     public void a(ProtoChunkExtension protochunkextension) {
@@ -391,7 +380,7 @@ public class PlayerChunk {
 
         private State() {}
 
-        public boolean a(PlayerChunk.State playerchunk_state) {
+        public boolean isAtLeast(PlayerChunk.State playerchunk_state) {
             return this.ordinal() >= playerchunk_state.ordinal();
         }
     }

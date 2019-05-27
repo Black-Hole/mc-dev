@@ -41,9 +41,9 @@ public class TileEntityCommand extends TileEntity {
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         this.h.a(nbttagcompound);
-        nbttagcompound.setBoolean("powered", this.d());
-        nbttagcompound.setBoolean("conditionMet", this.g());
-        nbttagcompound.setBoolean("auto", this.f());
+        nbttagcompound.setBoolean("powered", this.f());
+        nbttagcompound.setBoolean("conditionMet", this.h());
+        nbttagcompound.setBoolean("auto", this.g());
         return nbttagcompound;
     }
 
@@ -82,11 +82,11 @@ public class TileEntityCommand extends TileEntity {
         this.a = flag;
     }
 
-    public boolean d() {
+    public boolean f() {
         return this.a;
     }
 
-    public boolean f() {
+    public boolean g() {
         return this.b;
     }
 
@@ -105,7 +105,7 @@ public class TileEntityCommand extends TileEntity {
 
     }
 
-    public boolean g() {
+    public boolean h() {
         return this.c;
     }
 

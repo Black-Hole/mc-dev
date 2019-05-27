@@ -97,25 +97,25 @@ public class EntityArmorStand extends EntityLiving {
     @Override
     public ItemStack getEquipment(EnumItemSlot enumitemslot) {
         switch (enumitemslot.a()) {
-        case HAND:
-            return (ItemStack) this.handItems.get(enumitemslot.b());
-        case ARMOR:
-            return (ItemStack) this.armorItems.get(enumitemslot.b());
-        default:
-            return ItemStack.a;
+            case HAND:
+                return (ItemStack) this.handItems.get(enumitemslot.b());
+            case ARMOR:
+                return (ItemStack) this.armorItems.get(enumitemslot.b());
+            default:
+                return ItemStack.a;
         }
     }
 
     @Override
     public void setSlot(EnumItemSlot enumitemslot, ItemStack itemstack) {
         switch (enumitemslot.a()) {
-        case HAND:
-            this.b(itemstack);
-            this.handItems.set(enumitemslot.b(), itemstack);
-            break;
-        case ARMOR:
-            this.b(itemstack);
-            this.armorItems.set(enumitemslot.b(), itemstack);
+            case HAND:
+                this.b(itemstack);
+                this.handItems.set(enumitemslot.b(), itemstack);
+                break;
+            case ARMOR:
+                this.b(itemstack);
+                this.armorItems.set(enumitemslot.b(), itemstack);
         }
 
     }

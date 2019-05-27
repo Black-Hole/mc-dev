@@ -24,7 +24,7 @@ public class BehaviorFindPosition extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
         return this.c && entityliving.isBaby() ? false : worldserver.getTime() - this.d >= 20L;
     }
 
@@ -69,7 +69,7 @@ public class BehaviorFindPosition extends Behavior<EntityLiving> {
         if (optional.isPresent()) {
             BlockPosition blockposition = (BlockPosition) optional.get();
 
-            entityliving.getBehaviorController().setMemory(this.b, (Object) GlobalPos.a(worldserver.getWorldProvider().getDimensionManager(), blockposition));
+            entityliving.getBehaviorController().setMemory(this.b, (Object) GlobalPos.create(worldserver.getWorldProvider().getDimensionManager(), blockposition));
             PacketDebug.c(worldserver, blockposition);
         } else if (this.f < 5) {
             this.e.long2LongEntrySet().removeIf((entry) -> {

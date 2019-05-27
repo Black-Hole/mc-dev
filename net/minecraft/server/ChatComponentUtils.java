@@ -16,17 +16,22 @@ public class ChatComponentUtils {
         return chatmodifier.g() ? ichatbasecomponent : (ichatbasecomponent.getChatModifier().g() ? ichatbasecomponent.setChatModifier(chatmodifier.clone()) : (new ChatComponentText("")).addSibling(ichatbasecomponent).setChatModifier(chatmodifier.clone()));
     }
 
-    public static IChatBaseComponent filterForDisplay(@Nullable CommandListenerWrapper commandlistenerwrapper, IChatBaseComponent ichatbasecomponent, @Nullable Entity entity) throws CommandSyntaxException {
-        IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent instanceof ChatComponentContextual ? ((ChatComponentContextual) ichatbasecomponent).a(commandlistenerwrapper, entity) : ichatbasecomponent.g();
-        Iterator iterator = ichatbasecomponent.a().iterator();
+    public static IChatBaseComponent filterForDisplay(@Nullable CommandListenerWrapper commandlistenerwrapper, IChatBaseComponent ichatbasecomponent, @Nullable Entity entity, int i) throws CommandSyntaxException {
+        if (i > 100) {
+            return ichatbasecomponent;
+        } else {
+            ++i;
+            IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent instanceof ChatComponentContextual ? ((ChatComponentContextual) ichatbasecomponent).a(commandlistenerwrapper, entity, i) : ichatbasecomponent.g();
+            Iterator iterator = ichatbasecomponent.a().iterator();
 
-        while (iterator.hasNext()) {
-            IChatBaseComponent ichatbasecomponent2 = (IChatBaseComponent) iterator.next();
+            while (iterator.hasNext()) {
+                IChatBaseComponent ichatbasecomponent2 = (IChatBaseComponent) iterator.next();
 
-            ichatbasecomponent1.addSibling(filterForDisplay(commandlistenerwrapper, ichatbasecomponent2, entity));
+                ichatbasecomponent1.addSibling(filterForDisplay(commandlistenerwrapper, ichatbasecomponent2, entity, i));
+            }
+
+            return a(ichatbasecomponent1, ichatbasecomponent.getChatModifier());
         }
-
-        return a(ichatbasecomponent1, ichatbasecomponent.getChatModifier());
     }
 
     public static IChatBaseComponent a(GameProfile gameprofile) {

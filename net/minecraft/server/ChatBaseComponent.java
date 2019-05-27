@@ -58,7 +58,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
 
     @Override
     public Stream<IChatBaseComponent> c() {
-        return Streams.concat(new Stream[] { Stream.of(this), this.a.stream().flatMap(IChatBaseComponent::c)});
+        return Streams.concat(new Stream[]{Stream.of(this), this.a.stream().flatMap(IChatBaseComponent::c)});
     }
 
     public boolean equals(Object object) {
@@ -74,7 +74,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
     }
 
     public int hashCode() {
-        return Objects.hash(new Object[] { this.getChatModifier(), this.a});
+        return Objects.hash(new Object[]{this.getChatModifier(), this.a});
     }
 
     public String toString() {

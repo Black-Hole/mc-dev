@@ -60,7 +60,7 @@ public class ProtoChunkTickList<T> implements TickList<T> {
 
     @Override
     public void a(BlockPosition blockposition, T t0, int i, TickListPriority ticklistpriority) {
-        IChunkAccess.a(this.c, blockposition.getY() >> 4).add(ProtoChunk.k(blockposition));
+        IChunkAccess.a(this.c, blockposition.getY() >> 4).add(ProtoChunk.l(blockposition));
     }
 
     @Override
@@ -71,7 +71,7 @@ public class ProtoChunkTickList<T> implements TickList<T> {
     @Override
     public void a(Stream<NextTickListEntry<T>> stream) {
         stream.forEach((nextticklistentry) -> {
-            this.a(nextticklistentry.a, nextticklistentry.a(), 0, nextticklistentry.c);
+            this.a(nextticklistentry.a, nextticklistentry.b(), 0, nextticklistentry.c);
         });
     }
 }

@@ -66,6 +66,7 @@ public class ContainerMerchant extends Container {
                 }
 
                 slot.a(itemstack1, itemstack);
+                this.j();
             } else if (i != 0 && i != 1) {
                 if (i >= 3 && i < 30) {
                     if (!this.a(itemstack1, 30, 39, false)) {
@@ -92,6 +93,15 @@ public class ContainerMerchant extends Container {
         }
 
         return itemstack;
+    }
+
+    private void j() {
+        if (!this.merchant.getWorld().isClientSide) {
+            Entity entity = (Entity) this.merchant;
+
+            this.merchant.getWorld().a(entity.locX, entity.locY, entity.locZ, this.merchant.eb(), SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
+        }
+
     }
 
     @Override
@@ -160,14 +170,14 @@ public class ContainerMerchant extends Container {
                 if (!itemstack1.isEmpty() && this.b(itemstack, itemstack1)) {
                     ItemStack itemstack2 = this.inventoryMerchant.getItem(i);
                     int k = itemstack2.isEmpty() ? 0 : itemstack2.getCount();
-                    int l = Math.min(64 - k, itemstack1.getCount());
+                    int l = Math.min(itemstack.getMaxStackSize() - k, itemstack1.getCount());
                     ItemStack itemstack3 = itemstack1.cloneItemStack();
                     int i1 = k + l;
 
                     itemstack1.subtract(l);
                     itemstack3.setCount(i1);
                     this.inventoryMerchant.setItem(i, itemstack3);
-                    if (i1 >= 64) {
+                    if (i1 >= itemstack.getMaxStackSize()) {
                         break;
                     }
                 }

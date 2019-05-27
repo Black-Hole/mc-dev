@@ -6,10 +6,10 @@ import javax.annotation.Nullable;
 public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePlantElement {
 
     public static final BlockStateInteger AGE = BlockProperties.Z;
-    protected static final VoxelShape[] b = new VoxelShape[] { Block.a(11.0D, 7.0D, 6.0D, 15.0D, 12.0D, 10.0D), Block.a(9.0D, 5.0D, 5.0D, 15.0D, 12.0D, 11.0D), Block.a(7.0D, 3.0D, 4.0D, 15.0D, 12.0D, 12.0D)};
-    protected static final VoxelShape[] c = new VoxelShape[] { Block.a(1.0D, 7.0D, 6.0D, 5.0D, 12.0D, 10.0D), Block.a(1.0D, 5.0D, 5.0D, 7.0D, 12.0D, 11.0D), Block.a(1.0D, 3.0D, 4.0D, 9.0D, 12.0D, 12.0D)};
-    protected static final VoxelShape[] d = new VoxelShape[] { Block.a(6.0D, 7.0D, 1.0D, 10.0D, 12.0D, 5.0D), Block.a(5.0D, 5.0D, 1.0D, 11.0D, 12.0D, 7.0D), Block.a(4.0D, 3.0D, 1.0D, 12.0D, 12.0D, 9.0D)};
-    protected static final VoxelShape[] e = new VoxelShape[] { Block.a(6.0D, 7.0D, 11.0D, 10.0D, 12.0D, 15.0D), Block.a(5.0D, 5.0D, 9.0D, 11.0D, 12.0D, 15.0D), Block.a(4.0D, 3.0D, 7.0D, 12.0D, 12.0D, 15.0D)};
+    protected static final VoxelShape[] b = new VoxelShape[]{Block.a(11.0D, 7.0D, 6.0D, 15.0D, 12.0D, 10.0D), Block.a(9.0D, 5.0D, 5.0D, 15.0D, 12.0D, 11.0D), Block.a(7.0D, 3.0D, 4.0D, 15.0D, 12.0D, 12.0D)};
+    protected static final VoxelShape[] c = new VoxelShape[]{Block.a(1.0D, 7.0D, 6.0D, 5.0D, 12.0D, 10.0D), Block.a(1.0D, 5.0D, 5.0D, 7.0D, 12.0D, 11.0D), Block.a(1.0D, 3.0D, 4.0D, 9.0D, 12.0D, 12.0D)};
+    protected static final VoxelShape[] d = new VoxelShape[]{Block.a(6.0D, 7.0D, 1.0D, 10.0D, 12.0D, 5.0D), Block.a(5.0D, 5.0D, 1.0D, 11.0D, 12.0D, 7.0D), Block.a(4.0D, 3.0D, 1.0D, 12.0D, 12.0D, 9.0D)};
+    protected static final VoxelShape[] e = new VoxelShape[]{Block.a(6.0D, 7.0D, 11.0D, 10.0D, 12.0D, 15.0D), Block.a(5.0D, 5.0D, 9.0D, 11.0D, 12.0D, 15.0D), Block.a(4.0D, 3.0D, 7.0D, 12.0D, 12.0D, 15.0D)};
 
     public BlockCocoa(Block.Info block_info) {
         super(block_info);
@@ -40,15 +40,15 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
         int i = (Integer) iblockdata.get(BlockCocoa.AGE);
 
         switch ((EnumDirection) iblockdata.get(BlockCocoa.FACING)) {
-        case SOUTH:
-            return BlockCocoa.e[i];
-        case NORTH:
-        default:
-            return BlockCocoa.d[i];
-        case WEST:
-            return BlockCocoa.c[i];
-        case EAST:
-            return BlockCocoa.b[i];
+            case SOUTH:
+                return BlockCocoa.e[i];
+            case NORTH:
+            default:
+                return BlockCocoa.d[i];
+            case WEST:
+                return BlockCocoa.c[i];
+            case EAST:
+                return BlockCocoa.b[i];
         }
     }
 

@@ -21,7 +21,7 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
 
     private static final Collection<String> a = Arrays.asList("stone", "minecraft:stone", "stone[foo=bar]", "#stone", "#stone[foo=bar]{baz=nbt}");
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("arguments.block.tag.unknown", new Object[] { object});
+        return new ChatMessage("arguments.block.tag.unknown", new Object[]{object});
     });
 
     public ArgumentBlockPredicate() {}

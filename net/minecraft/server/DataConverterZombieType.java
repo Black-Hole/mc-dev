@@ -18,19 +18,19 @@ public class DataConverterZombieType extends DataConverterEntityNameAbstract {
             int i = dynamic.get("ZombieType").asInt(0);
 
             switch (i) {
-            case 0:
-            default:
-                break;
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-                s1 = "ZombieVillager";
-                dynamic = dynamic.set("Profession", dynamic.createInt(i - 1));
-                break;
-            case 6:
-                s1 = "Husk";
+                case 0:
+                default:
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                    s1 = "ZombieVillager";
+                    dynamic = dynamic.set("Profession", dynamic.createInt(i - 1));
+                    break;
+                case 6:
+                    s1 = "Husk";
             }
 
             dynamic = dynamic.remove("ZombieType");

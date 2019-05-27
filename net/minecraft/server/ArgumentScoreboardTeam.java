@@ -15,7 +15,7 @@ public class ArgumentScoreboardTeam implements ArgumentType<String> {
 
     private static final Collection<String> a = Arrays.asList("foo", "123");
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("team.notFound", new Object[] { object});
+        return new ChatMessage("team.notFound", new Object[]{object});
     });
 
     public ArgumentScoreboardTeam() {}

@@ -61,7 +61,7 @@ public abstract class TileEntityContainer extends TileEntity implements IInvento
 
     public static boolean a(EntityHuman entityhuman, ChestLock chestlock, IChatBaseComponent ichatbasecomponent) {
         if (!entityhuman.isSpectator() && !chestlock.a(entityhuman.getItemInMainHand())) {
-            entityhuman.a((IChatBaseComponent) (new ChatMessage("container.isLocked", new Object[] { ichatbasecomponent})), true);
+            entityhuman.a((IChatBaseComponent) (new ChatMessage("container.isLocked", new Object[]{ichatbasecomponent})), true);
             entityhuman.a(SoundEffects.BLOCK_CHEST_LOCKED, SoundCategory.BLOCKS, 1.0F, 1.0F);
             return false;
         } else {

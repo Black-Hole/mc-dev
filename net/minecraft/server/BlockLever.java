@@ -20,35 +20,35 @@ public class BlockLever extends BlockAttachable {
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch ((BlockPropertyAttachPosition) iblockdata.get(BlockLever.FACE)) {
-        case FLOOR:
-            switch (((EnumDirection) iblockdata.get(BlockLever.FACING)).k()) {
-            case X:
-                return BlockLever.g;
-            case Z:
+            case FLOOR:
+                switch (((EnumDirection) iblockdata.get(BlockLever.FACING)).k()) {
+                    case X:
+                        return BlockLever.g;
+                    case Z:
+                    default:
+                        return BlockLever.f;
+                }
+            case WALL:
+                switch ((EnumDirection) iblockdata.get(BlockLever.FACING)) {
+                    case EAST:
+                        return BlockLever.e;
+                    case WEST:
+                        return BlockLever.d;
+                    case SOUTH:
+                        return BlockLever.c;
+                    case NORTH:
+                    default:
+                        return BlockLever.b;
+                }
+            case CEILING:
             default:
-                return BlockLever.f;
-            }
-        case WALL:
-            switch ((EnumDirection) iblockdata.get(BlockLever.FACING)) {
-            case EAST:
-                return BlockLever.e;
-            case WEST:
-                return BlockLever.d;
-            case SOUTH:
-                return BlockLever.c;
-            case NORTH:
-            default:
-                return BlockLever.b;
-            }
-        case CEILING:
-        default:
-            switch (((EnumDirection) iblockdata.get(BlockLever.FACING)).k()) {
-            case X:
-                return BlockLever.i;
-            case Z:
-            default:
-                return BlockLever.h;
-            }
+                switch (((EnumDirection) iblockdata.get(BlockLever.FACING)).k()) {
+                    case X:
+                        return BlockLever.i;
+                    case Z:
+                    default:
+                        return BlockLever.h;
+                }
         }
     }
 

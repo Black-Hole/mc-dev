@@ -35,29 +35,29 @@ public class ContainerLectern extends Container {
             return true;
         } else {
             switch (i) {
-            case 1:
-                j = this.containerProperties.getProperty(0);
-                this.a(0, j - 1);
-                return true;
-            case 2:
-                j = this.containerProperties.getProperty(0);
-                this.a(0, j + 1);
-                return true;
-            case 3:
-                if (!entityhuman.dQ()) {
+                case 1:
+                    j = this.containerProperties.getProperty(0);
+                    this.a(0, j - 1);
+                    return true;
+                case 2:
+                    j = this.containerProperties.getProperty(0);
+                    this.a(0, j + 1);
+                    return true;
+                case 3:
+                    if (!entityhuman.dQ()) {
+                        return false;
+                    }
+
+                    ItemStack itemstack = this.inventory.splitWithoutUpdate(0);
+
+                    this.inventory.update();
+                    if (!entityhuman.inventory.pickup(itemstack)) {
+                        entityhuman.drop(itemstack, false);
+                    }
+
+                    return true;
+                default:
                     return false;
-                }
-
-                ItemStack itemstack = this.inventory.splitWithoutUpdate(0);
-
-                this.inventory.update();
-                if (!entityhuman.inventory.pickup(itemstack)) {
-                    entityhuman.drop(itemstack, false);
-                }
-
-                return true;
-            default:
-                return false;
             }
         }
     }

@@ -16,7 +16,7 @@ public class CommandTellRaw {
             for (Iterator iterator = ArgumentEntity.f(commandcontext, "targets").iterator(); iterator.hasNext(); ++i) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                entityplayer.sendMessage(ChatComponentUtils.filterForDisplay((CommandListenerWrapper) commandcontext.getSource(), ArgumentChatComponent.a(commandcontext, "message"), entityplayer));
+                entityplayer.sendMessage(ChatComponentUtils.filterForDisplay((CommandListenerWrapper) commandcontext.getSource(), ArgumentChatComponent.a(commandcontext, "message"), entityplayer, 0));
             }
 
             return i;

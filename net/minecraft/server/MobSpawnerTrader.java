@@ -102,7 +102,6 @@ public class MobSpawnerTrader {
 
             if (entityllamatrader != null) {
                 entityllamatrader.setLeashHolder(entityvillagertrader, true);
-                entityllamatrader.v(47999);
             }
         }
     }

@@ -64,15 +64,15 @@ public class BlockBell extends BlockTileEntity {
             BlockPropertyBellAttach blockpropertybellattach = (BlockPropertyBellAttach) iblockdata.get(BlockBell.b);
 
             switch (blockpropertybellattach) {
-            case FLOOR:
-                return enumdirection1.k() == enumdirection.k();
-            case SINGLE_WALL:
-            case DOUBLE_WALL:
-                return enumdirection1.k() != enumdirection.k();
-            case CEILING:
-                return true;
-            default:
-                return false;
+                case FLOOR:
+                    return enumdirection1.k() == enumdirection.k();
+                case SINGLE_WALL:
+                case DOUBLE_WALL:
+                    return enumdirection1.k() != enumdirection.k();
+                case CEILING:
+                    return true;
+                default:
+                    return false;
             }
         } else {
             return false;
@@ -167,12 +167,12 @@ public class BlockBell extends BlockTileEntity {
 
     private static EnumDirection q(IBlockData iblockdata) {
         switch ((BlockPropertyBellAttach) iblockdata.get(BlockBell.b)) {
-        case FLOOR:
-            return EnumDirection.UP;
-        case CEILING:
-            return EnumDirection.DOWN;
-        default:
-            return ((EnumDirection) iblockdata.get(BlockBell.a)).opposite();
+            case FLOOR:
+                return EnumDirection.UP;
+            case CEILING:
+                return EnumDirection.DOWN;
+            default:
+                return ((EnumDirection) iblockdata.get(BlockBell.a)).opposite();
         }
     }
 

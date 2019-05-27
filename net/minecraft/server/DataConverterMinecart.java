@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public class DataConverterMinecart extends DataFix {
 
-    private static final List<String> a = Lists.newArrayList(new String[] { "MinecartRideable", "MinecartChest", "MinecartFurnace"});
+    private static final List<String> a = Lists.newArrayList(new String[]{"MinecartRideable", "MinecartChest", "MinecartFurnace"});
 
     public DataConverterMinecart(Schema schema, boolean flag) {
         super(schema, flag);

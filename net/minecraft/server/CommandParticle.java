@@ -50,7 +50,7 @@ public class CommandParticle {
         if (j == 0) {
             throw CommandParticle.a.create();
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.particle.success", new Object[] { IRegistry.PARTICLE_TYPE.getKey(particleparam.b()).toString()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.particle.success", new Object[]{IRegistry.PARTICLE_TYPE.getKey(particleparam.b()).toString()}), true);
             return j;
         }
     }

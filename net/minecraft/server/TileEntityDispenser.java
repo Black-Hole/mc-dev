@@ -39,7 +39,7 @@ public class TileEntityDispenser extends TileEntityLootable {
         return false;
     }
 
-    public int s() {
+    public int h() {
         this.d((EntityHuman) null);
         int i = -1;
         int j = 1;

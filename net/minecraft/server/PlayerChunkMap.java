@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.util.Either;
@@ -21,11 +22,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
@@ -62,6 +65,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
     private final File x;
     private final PlayerMap playerMap;
     public final Int2ObjectMap<PlayerChunkMap.EntityTracker> trackedEntities;
+    private final Queue<Runnable> A;
     private int viewDistance;
     private int entityDistance;
 
@@ -74,6 +78,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
         this.v = new AtomicInteger();
         this.playerMap = new PlayerMap();
         this.trackedEntities = new Int2ObjectOpenHashMap();
+        this.A = Queues.newConcurrentLinkedQueue();
         this.definedStructureManager = definedstructuremanager;
         this.x = worldserver.getWorldProvider().getDimensionManager().a(file);
         this.world = worldserver;
@@ -247,7 +252,6 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
 
     @Override
     public void close() throws IOException {
-        this.save(true);
         this.q.close();
         this.n.close();
         super.close();
@@ -276,6 +280,9 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
                 });
             } while (mutableboolean.isTrue());
 
+            this.b(() -> {
+                return true;
+            });
             PlayerChunkMap.LOGGER.info("ThreadedAnvilChunkStorage ({}): All chunks are saved", this.x.getName());
         } else {
             this.visibleChunks.values().stream().filter(PlayerChunk::hasBeenLoaded).forEach((playerchunk) -> {
@@ -298,39 +305,52 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
         this.n.a(booleansupplier);
         gameprofilerfiller.exitEnter("chunk_unload");
         if (!this.world.isSavingDisabled()) {
-            LongIterator longiterator = this.unloadQueue.iterator();
-
-            for (int i = 0; longiterator.hasNext() && (booleansupplier.getAsBoolean() || i < 200 || this.unloadQueue.size() > 2000); longiterator.remove()) {
-                long j = longiterator.nextLong();
-                PlayerChunk playerchunk = (PlayerChunk) this.updatingChunks.remove(j);
-
-                if (playerchunk != null) {
-                    this.pendingUnload.put(j, playerchunk);
-                    this.updatingChunksModified = true;
-                    ++i;
-                    this.a(j, playerchunk);
-                }
-            }
+            this.b(booleansupplier);
         }
 
         gameprofilerfiller.exit();
     }
 
+    private void b(BooleanSupplier booleansupplier) {
+        LongIterator longiterator = this.unloadQueue.iterator();
+
+        for (int i = 0; longiterator.hasNext() && (booleansupplier.getAsBoolean() || i < 200 || this.unloadQueue.size() > 2000); longiterator.remove()) {
+            long j = longiterator.nextLong();
+            PlayerChunk playerchunk = (PlayerChunk) this.updatingChunks.remove(j);
+
+            if (playerchunk != null) {
+                this.pendingUnload.put(j, playerchunk);
+                this.updatingChunksModified = true;
+                ++i;
+                this.a(j, playerchunk);
+            }
+        }
+
+        Runnable runnable;
+
+        while (booleansupplier.getAsBoolean() && (runnable = (Runnable) this.A.poll()) != null) {
+            runnable.run();
+        }
+
+    }
+
     private void a(long i, PlayerChunk playerchunk) {
         CompletableFuture<IChunkAccess> completablefuture = playerchunk.getChunkSave();
-
-        completablefuture.thenAcceptAsync((ichunkaccess) -> {
+        Consumer consumer = (ichunkaccess) -> {
             CompletableFuture<IChunkAccess> completablefuture1 = playerchunk.getChunkSave();
 
             if (completablefuture1 != completablefuture) {
                 this.a(i, playerchunk);
             } else {
                 if (this.pendingUnload.remove(i, playerchunk) && ichunkaccess != null) {
+                    if (ichunkaccess instanceof Chunk) {
+                        ((Chunk) ichunkaccess).setLoaded(false);
+                    }
+
                     this.saveChunk(ichunkaccess);
                     if (this.loadedChunks.remove(i) && ichunkaccess instanceof Chunk) {
                         Chunk chunk = (Chunk) ichunkaccess;
 
-                        chunk.setLoaded(false);
                         this.world.unloadChunk(chunk);
                     }
 
@@ -340,13 +360,25 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
                 }
 
             }
-        }, this.executor);
+        };
+        Queue queue = this.A;
+
+        this.A.getClass();
+        completablefuture.thenAcceptAsync(consumer, queue::add).whenComplete((ovoid, throwable) -> {
+            if (throwable != null) {
+                PlayerChunkMap.LOGGER.error("Failed to save chunk " + playerchunk.h(), throwable);
+            }
+
+        });
     }
 
-    protected void b() {
-        if (this.updatingChunksModified) {
+    protected boolean b() {
+        if (!this.updatingChunksModified) {
+            return false;
+        } else {
             this.visibleChunks = this.updatingChunks.clone();
             this.updatingChunksModified = false;
+            return true;
         }
     }
 
@@ -354,71 +386,107 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
         ChunkCoordIntPair chunkcoordintpair = playerchunk.h();
 
         if (chunkstatus == ChunkStatus.EMPTY) {
-            return CompletableFuture.supplyAsync(() -> {
-                try {
-                    NBTTagCompound nbttagcompound = this.readChunkData(chunkcoordintpair);
-
-                    if (nbttagcompound != null) {
-                        boolean flag = nbttagcompound.hasKeyOfType("Level", 10) && nbttagcompound.getCompound("Level").hasKeyOfType("Status", 8);
-
-                        if (flag) {
-                            ProtoChunk protochunk = ChunkRegionLoader.loadChunk(this.world, this.definedStructureManager, this.n, chunkcoordintpair, nbttagcompound);
-
-                            protochunk.setLastSaved(this.world.getTime());
-                            return Either.left(protochunk);
-                        }
-
-                        PlayerChunkMap.LOGGER.error("Chunk file at {} is missing level data, skipping", chunkcoordintpair);
-                    }
-                } catch (ReportedException reportedexception) {
-                    Throwable throwable = reportedexception.getCause();
-
-                    if (!(throwable instanceof IOException)) {
-                        throw reportedexception;
-                    }
-
-                    PlayerChunkMap.LOGGER.error("Couldn't load chunk {}", chunkcoordintpair, throwable);
-                } catch (Exception exception) {
-                    PlayerChunkMap.LOGGER.error("Couldn't load chunk {}", chunkcoordintpair, exception);
-                }
-
-                return Either.left(new ProtoChunk(chunkcoordintpair, ChunkConverter.a));
-            }, this.executor);
+            return this.f(chunkcoordintpair);
         } else {
-            if (chunkstatus == ChunkStatus.LIGHT) {
-                this.u.a(TicketType.LIGHT, chunkcoordintpair, 33 + ChunkStatus.a(ChunkStatus.FEATURES), chunkcoordintpair);
-            }
-
-            CompletableFuture<Either<List<IChunkAccess>, PlayerChunk.Failure>> completablefuture = this.a(chunkcoordintpair, chunkstatus.f(), (i) -> {
-                return this.a(chunkstatus, i);
-            });
+            CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> completablefuture = playerchunk.a(chunkstatus.e(), this);
 
             return completablefuture.thenComposeAsync((either) -> {
-                return (CompletableFuture) either.map((list) -> {
-                    try {
-                        CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> completablefuture1 = chunkstatus.a(this.world, this.chunkGenerator, this.definedStructureManager, this.lightEngine, (ichunkaccess) -> {
-                            return this.c(playerchunk);
-                        }, list);
+                Optional<IChunkAccess> optional = either.left();
+
+                if (!optional.isPresent()) {
+                    return CompletableFuture.completedFuture(either);
+                } else {
+                    if (chunkstatus == ChunkStatus.LIGHT) {
+                        this.u.a(TicketType.LIGHT, chunkcoordintpair, 33 + ChunkStatus.a(ChunkStatus.FEATURES), chunkcoordintpair);
+                    }
+
+                    IChunkAccess ichunkaccess = (IChunkAccess) optional.get();
+
+                    if (ichunkaccess.getChunkStatus().b(chunkstatus)) {
+                        CompletableFuture completablefuture1;
+
+                        if (chunkstatus == ChunkStatus.LIGHT) {
+                            completablefuture1 = this.b(playerchunk, chunkstatus);
+                        } else {
+                            completablefuture1 = chunkstatus.a(this.world, this.definedStructureManager, this.lightEngine, (ichunkaccess1) -> {
+                                return this.c(playerchunk);
+                            }, ichunkaccess);
+                        }
 
                         this.worldLoadListener.a(chunkcoordintpair, chunkstatus);
                         return completablefuture1;
-                    } catch (Exception exception) {
-                        CrashReport crashreport = CrashReport.a(exception, "Exception generating new chunk");
-                        CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Chunk to be generated");
-
-                        crashreportsystemdetails.a("Location", (Object) String.format("%d,%d", chunkcoordintpair.x, chunkcoordintpair.z));
-                        crashreportsystemdetails.a("Position hash", (Object) ChunkCoordIntPair.pair(chunkcoordintpair.x, chunkcoordintpair.z));
-                        crashreportsystemdetails.a("Generator", (Object) this.chunkGenerator);
-                        throw new ReportedException(crashreport);
+                    } else {
+                        return this.b(playerchunk, chunkstatus);
                     }
-                }, (playerchunk_failure) -> {
-                    this.c(chunkcoordintpair);
-                    return CompletableFuture.completedFuture(Either.right(playerchunk_failure));
-                });
-            }, (runnable) -> {
-                this.mailboxWorldGen.a((Object) ChunkTaskQueueSorter.a(playerchunk, runnable));
-            });
+                }
+            }, this.executor);
         }
+    }
+
+    private CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> f(ChunkCoordIntPair chunkcoordintpair) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                NBTTagCompound nbttagcompound = this.readChunkData(chunkcoordintpair);
+
+                if (nbttagcompound != null) {
+                    boolean flag = nbttagcompound.hasKeyOfType("Level", 10) && nbttagcompound.getCompound("Level").hasKeyOfType("Status", 8);
+
+                    if (flag) {
+                        ProtoChunk protochunk = ChunkRegionLoader.loadChunk(this.world, this.definedStructureManager, this.n, chunkcoordintpair, nbttagcompound);
+
+                        protochunk.setLastSaved(this.world.getTime());
+                        return Either.left(protochunk);
+                    }
+
+                    PlayerChunkMap.LOGGER.error("Chunk file at {} is missing level data, skipping", chunkcoordintpair);
+                }
+            } catch (ReportedException reportedexception) {
+                Throwable throwable = reportedexception.getCause();
+
+                if (!(throwable instanceof IOException)) {
+                    throw reportedexception;
+                }
+
+                PlayerChunkMap.LOGGER.error("Couldn't load chunk {}", chunkcoordintpair, throwable);
+            } catch (Exception exception) {
+                PlayerChunkMap.LOGGER.error("Couldn't load chunk {}", chunkcoordintpair, exception);
+            }
+
+            return Either.left(new ProtoChunk(chunkcoordintpair, ChunkConverter.a));
+        }, this.executor);
+    }
+
+    private CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> b(PlayerChunk playerchunk, ChunkStatus chunkstatus) {
+        ChunkCoordIntPair chunkcoordintpair = playerchunk.h();
+        CompletableFuture<Either<List<IChunkAccess>, PlayerChunk.Failure>> completablefuture = this.a(chunkcoordintpair, chunkstatus.f(), (i) -> {
+            return this.a(chunkstatus, i);
+        });
+
+        return completablefuture.thenComposeAsync((either) -> {
+            return (CompletableFuture) either.map((list) -> {
+                try {
+                    CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> completablefuture1 = chunkstatus.a(this.world, this.chunkGenerator, this.definedStructureManager, this.lightEngine, (ichunkaccess) -> {
+                        return this.c(playerchunk);
+                    }, list);
+
+                    this.worldLoadListener.a(chunkcoordintpair, chunkstatus);
+                    return completablefuture1;
+                } catch (Exception exception) {
+                    CrashReport crashreport = CrashReport.a(exception, "Exception generating new chunk");
+                    CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Chunk to be generated");
+
+                    crashreportsystemdetails.a("Location", (Object) String.format("%d,%d", chunkcoordintpair.x, chunkcoordintpair.z));
+                    crashreportsystemdetails.a("Position hash", (Object) ChunkCoordIntPair.pair(chunkcoordintpair.x, chunkcoordintpair.z));
+                    crashreportsystemdetails.a("Generator", (Object) this.chunkGenerator);
+                    throw new ReportedException(crashreport);
+                }
+            }, (playerchunk_failure) -> {
+                this.c(chunkcoordintpair);
+                return CompletableFuture.completedFuture(Either.right(playerchunk_failure));
+            });
+        }, (runnable) -> {
+            this.mailboxWorldGen.a((Object) ChunkTaskQueueSorter.a(playerchunk, runnable));
+        });
     }
 
     protected void c(ChunkCoordIntPair chunkcoordintpair) {
@@ -445,7 +513,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
         CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> completablefuture = playerchunk.getStatusFutureUnchecked(ChunkStatus.FULL.e());
 
         return completablefuture.thenApplyAsync((either) -> {
-            ChunkStatus chunkstatus = PlayerChunk.b(playerchunk.getTicketLevel());
+            ChunkStatus chunkstatus = PlayerChunk.getChunkStatus(playerchunk.getTicketLevel());
 
             return !chunkstatus.b(ChunkStatus.FULL) ? PlayerChunk.UNLOADED_CHUNK_ACCESS : either.mapLeft((ichunkaccess) -> {
                 ChunkCoordIntPair chunkcoordintpair = playerchunk.h();
@@ -459,7 +527,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
                 }
 
                 chunk.a(() -> {
-                    return PlayerChunk.c(playerchunk.getTicketLevel());
+                    return PlayerChunk.getChunkState(playerchunk.getTicketLevel());
                 });
                 chunk.addEntities();
                 if (this.loadedChunks.add(chunkcoordintpair.pair())) {
@@ -478,7 +546,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
 
                             if (!(entity instanceof EntityHuman) && !this.world.addEntityChunk(entity)) {
                                 if (list == null) {
-                                    list = Lists.newArrayList(new Entity[] { entity});
+                                    list = Lists.newArrayList(new Entity[]{entity});
                                 } else {
                                     list.add(entity);
                                 }

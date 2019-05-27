@@ -23,13 +23,13 @@ public class ArgumentParserSelector {
 
     public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.entity.invalid", new Object[0]));
     public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.entity.selector.unknown", new Object[] { object});
+        return new ChatMessage("argument.entity.selector.unknown", new Object[]{object});
     });
     public static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.entity.selector.not_allowed", new Object[0]));
     public static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("argument.entity.selector.missing", new Object[0]));
     public static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.unterminated", new Object[0]));
     public static final DynamicCommandExceptionType f = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.entity.options.valueless", new Object[] { object});
+        return new ChatMessage("argument.entity.options.valueless", new Object[]{object});
     });
     public static final BiConsumer<Vec3D, List<? extends Entity>> g = (vec3d, list) -> {
     };

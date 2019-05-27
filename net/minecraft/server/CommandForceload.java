@@ -13,10 +13,10 @@ import it.unimi.dsi.fastutil.longs.LongSet;
 public class CommandForceload {
 
     private static final Dynamic2CommandExceptionType a = new Dynamic2CommandExceptionType((object, object1) -> {
-        return new ChatMessage("commands.forceload.toobig", new Object[] { object, object1});
+        return new ChatMessage("commands.forceload.toobig", new Object[]{object, object1});
     });
     private static final Dynamic2CommandExceptionType b = new Dynamic2CommandExceptionType((object, object1) -> {
-        return new ChatMessage("commands.forceload.query.failure", new Object[] { object, object1});
+        return new ChatMessage("commands.forceload.query.failure", new Object[]{object, object1});
     });
     private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.forceload.added.failure", new Object[0]));
     private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.forceload.removed.failure", new Object[0]));
@@ -51,7 +51,7 @@ public class CommandForceload {
         boolean flag = commandlistenerwrapper.getServer().getWorldServer(dimensionmanager).getForceLoadedChunks().contains(chunkcoordintpair.pair());
 
         if (flag) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.query.success", new Object[] { chunkcoordintpair, dimensionmanager}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.query.success", new Object[]{chunkcoordintpair, dimensionmanager}), false);
             return 1;
         } else {
             throw CommandForceload.b.create(chunkcoordintpair, dimensionmanager);
@@ -67,12 +67,12 @@ public class CommandForceload {
             String s = Joiner.on(", ").join(longset.stream().sorted().map(ChunkCoordIntPair::new).map(ChunkCoordIntPair::toString).iterator());
 
             if (i == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.list.single", new Object[] { dimensionmanager, s}), false);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.list.single", new Object[]{dimensionmanager, s}), false);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.list.multiple", new Object[] { i, dimensionmanager, s}), false);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.list.multiple", new Object[]{i, dimensionmanager, s}), false);
             }
         } else {
-            commandlistenerwrapper.sendFailureMessage(new ChatMessage("commands.forceload.added.none", new Object[] { dimensionmanager}));
+            commandlistenerwrapper.sendFailureMessage(new ChatMessage("commands.forceload.added.none", new Object[]{dimensionmanager}));
         }
 
         return i;
@@ -86,7 +86,7 @@ public class CommandForceload {
         longset.forEach((i) -> {
             worldserver.setForceLoaded(ChunkCoordIntPair.getX(i), ChunkCoordIntPair.getZ(i), false);
         });
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.removed.all", new Object[] { dimensionmanager}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.removed.all", new Object[]{dimensionmanager}), true);
         return 0;
     }
 
@@ -128,12 +128,12 @@ public class CommandForceload {
                     throw (flag ? CommandForceload.c : CommandForceload.d).create();
                 } else {
                     if (j2 == 1) {
-                        commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload." + (flag ? "added" : "removed") + ".single", new Object[] { chunkcoordintpair, dimensionmanager}), true);
+                        commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload." + (flag ? "added" : "removed") + ".single", new Object[]{chunkcoordintpair, dimensionmanager}), true);
                     } else {
                         ChunkCoordIntPair chunkcoordintpair1 = new ChunkCoordIntPair(i1, j1);
                         ChunkCoordIntPair chunkcoordintpair2 = new ChunkCoordIntPair(k1, l1);
 
-                        commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload." + (flag ? "added" : "removed") + ".multiple", new Object[] { j2, dimensionmanager, chunkcoordintpair1, chunkcoordintpair2}), true);
+                        commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload." + (flag ? "added" : "removed") + ".multiple", new Object[]{j2, dimensionmanager, chunkcoordintpair1, chunkcoordintpair2}), true);
                     }
 
                     return j2;

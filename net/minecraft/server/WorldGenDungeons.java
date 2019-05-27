@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 public class WorldGenDungeons extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final EntityTypes<?>[] aS = new EntityTypes[] { EntityTypes.SKELETON, EntityTypes.ZOMBIE, EntityTypes.ZOMBIE, EntityTypes.SPIDER};
+    private static final EntityTypes<?>[] aS = new EntityTypes[]{EntityTypes.SKELETON, EntityTypes.ZOMBIE, EntityTypes.ZOMBIE, EntityTypes.SPIDER};
     private static final IBlockData aT = Blocks.CAVE_AIR.getBlockData();
 
     public WorldGenDungeons(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {

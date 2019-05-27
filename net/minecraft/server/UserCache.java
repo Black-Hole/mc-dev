@@ -51,7 +51,7 @@ public class UserCache {
     private final File h;
     private static final ParameterizedType i = new ParameterizedType() {
         public Type[] getActualTypeArguments() {
-            return new Type[] { UserCache.UserCacheEntry.class};
+            return new Type[]{UserCache.UserCacheEntry.class};
         }
 
         public Type getRawType() {
@@ -85,7 +85,7 @@ public class UserCache {
             }
         };
 
-        gameprofilerepository.findProfilesByNames(new String[] { s}, Agent.MINECRAFT, profilelookupcallback);
+        gameprofilerepository.findProfilesByNames(new String[]{s}, Agent.MINECRAFT, profilelookupcallback);
         if (!d() && agameprofile[0] == null) {
             UUID uuid = EntityHuman.a(new GameProfile((UUID) null, s));
             GameProfile gameprofile = new GameProfile(uuid, s);

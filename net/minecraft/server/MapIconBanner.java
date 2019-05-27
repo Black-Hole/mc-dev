@@ -47,39 +47,39 @@ public class MapIconBanner {
 
     public MapIcon.Type c() {
         switch (this.b) {
-        case WHITE:
-            return MapIcon.Type.BANNER_WHITE;
-        case ORANGE:
-            return MapIcon.Type.BANNER_ORANGE;
-        case MAGENTA:
-            return MapIcon.Type.BANNER_MAGENTA;
-        case LIGHT_BLUE:
-            return MapIcon.Type.BANNER_LIGHT_BLUE;
-        case YELLOW:
-            return MapIcon.Type.BANNER_YELLOW;
-        case LIME:
-            return MapIcon.Type.BANNER_LIME;
-        case PINK:
-            return MapIcon.Type.BANNER_PINK;
-        case GRAY:
-            return MapIcon.Type.BANNER_GRAY;
-        case LIGHT_GRAY:
-            return MapIcon.Type.BANNER_LIGHT_GRAY;
-        case CYAN:
-            return MapIcon.Type.BANNER_CYAN;
-        case PURPLE:
-            return MapIcon.Type.BANNER_PURPLE;
-        case BLUE:
-            return MapIcon.Type.BANNER_BLUE;
-        case BROWN:
-            return MapIcon.Type.BANNER_BROWN;
-        case GREEN:
-            return MapIcon.Type.BANNER_GREEN;
-        case RED:
-            return MapIcon.Type.BANNER_RED;
-        case BLACK:
-        default:
-            return MapIcon.Type.BANNER_BLACK;
+            case WHITE:
+                return MapIcon.Type.BANNER_WHITE;
+            case ORANGE:
+                return MapIcon.Type.BANNER_ORANGE;
+            case MAGENTA:
+                return MapIcon.Type.BANNER_MAGENTA;
+            case LIGHT_BLUE:
+                return MapIcon.Type.BANNER_LIGHT_BLUE;
+            case YELLOW:
+                return MapIcon.Type.BANNER_YELLOW;
+            case LIME:
+                return MapIcon.Type.BANNER_LIME;
+            case PINK:
+                return MapIcon.Type.BANNER_PINK;
+            case GRAY:
+                return MapIcon.Type.BANNER_GRAY;
+            case LIGHT_GRAY:
+                return MapIcon.Type.BANNER_LIGHT_GRAY;
+            case CYAN:
+                return MapIcon.Type.BANNER_CYAN;
+            case PURPLE:
+                return MapIcon.Type.BANNER_PURPLE;
+            case BLUE:
+                return MapIcon.Type.BANNER_BLUE;
+            case BROWN:
+                return MapIcon.Type.BANNER_BROWN;
+            case GREEN:
+                return MapIcon.Type.BANNER_GREEN;
+            case RED:
+                return MapIcon.Type.BANNER_RED;
+            case BLACK:
+            default:
+                return MapIcon.Type.BANNER_BLACK;
         }
     }
 
@@ -101,7 +101,7 @@ public class MapIconBanner {
     }
 
     public int hashCode() {
-        return Objects.hash(new Object[] { this.a, this.b, this.c});
+        return Objects.hash(new Object[]{this.a, this.b, this.c});
     }
 
     public NBTTagCompound e() {

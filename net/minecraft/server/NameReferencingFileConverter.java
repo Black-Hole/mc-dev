@@ -280,7 +280,7 @@ public class NameReferencingFileConverter {
                     }
                 };
 
-                a(minecraftserver, Lists.newArrayList(new String[] { s}), profilelookupcallback);
+                a(minecraftserver, Lists.newArrayList(new String[]{s}), profilelookupcallback);
                 return !list.isEmpty() && ((GameProfile) list.get(0)).getId() != null ? ((GameProfile) list.get(0)).getId().toString() : "";
             } else {
                 return EntityHuman.a(new GameProfile((UUID) null, s)).toString();

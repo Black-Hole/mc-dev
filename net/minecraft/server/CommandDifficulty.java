@@ -8,7 +8,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 public class CommandDifficulty {
 
     private static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.difficulty.failure", new Object[] { object});
+        return new ChatMessage("commands.difficulty.failure", new Object[]{object});
     });
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
@@ -29,7 +29,7 @@ public class CommandDifficulty {
         })).executes((commandcontext) -> {
             EnumDifficulty enumdifficulty1 = ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getDifficulty();
 
-            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.difficulty.query", new Object[] { enumdifficulty1.b()}), false);
+            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.difficulty.query", new Object[]{enumdifficulty1.b()}), false);
             return enumdifficulty1.a();
         }));
     }
@@ -41,7 +41,7 @@ public class CommandDifficulty {
             throw CommandDifficulty.a.create(enumdifficulty.c());
         } else {
             minecraftserver.a(enumdifficulty, true);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.difficulty.success", new Object[] { enumdifficulty.b()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.difficulty.success", new Object[]{enumdifficulty.b()}), true);
             return 0;
         }
     }

@@ -29,8 +29,8 @@ public class ContainerEnchantTable extends Container {
         this.h = new Random();
         this.i = ContainerProperty.a();
         this.costs = new int[3];
-        this.enchantments = new int[] { -1, -1, -1};
-        this.levels = new int[] { -1, -1, -1};
+        this.enchantments = new int[]{-1, -1, -1};
+        this.levels = new int[]{-1, -1, -1};
         this.containerAccess = containeraccess;
         this.a(new Slot(this.enchantSlots, 0, 15, 47) {
             @Override

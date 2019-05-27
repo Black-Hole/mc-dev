@@ -21,22 +21,22 @@ public class PlayerSelector {
 
     private static final Map<String, PlayerSelector.b> i = Maps.newHashMap();
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.entity.options.unknown", new Object[] { object});
+        return new ChatMessage("argument.entity.options.unknown", new Object[]{object});
     });
     public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.entity.options.inapplicable", new Object[] { object});
+        return new ChatMessage("argument.entity.options.inapplicable", new Object[]{object});
     });
     public static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.distance.negative", new Object[0]));
     public static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.level.negative", new Object[0]));
     public static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.limit.toosmall", new Object[0]));
     public static final DynamicCommandExceptionType f = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.entity.options.sort.irreversible", new Object[] { object});
+        return new ChatMessage("argument.entity.options.sort.irreversible", new Object[]{object});
     });
     public static final DynamicCommandExceptionType g = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.entity.options.mode.invalid", new Object[] { object});
+        return new ChatMessage("argument.entity.options.mode.invalid", new Object[]{object});
     });
     public static final DynamicCommandExceptionType h = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.entity.options.type.invalid", new Object[] { object});
+        return new ChatMessage("argument.entity.options.type.invalid", new Object[]{object});
     });
 
     private static void a(String s, PlayerSelector.a playerselector_a, Predicate<ArgumentParserSelector> predicate, IChatBaseComponent ichatbasecomponent) {
@@ -165,45 +165,45 @@ public class PlayerSelector {
                 byte b0 = -1;
 
                 switch (s.hashCode()) {
-                case -938285885:
-                    if (s.equals("random")) {
-                        b0 = 2;
-                    }
-                    break;
-                case 1510793967:
-                    if (s.equals("furthest")) {
-                        b0 = 1;
-                    }
-                    break;
-                case 1780188658:
-                    if (s.equals("arbitrary")) {
-                        b0 = 3;
-                    }
-                    break;
-                case 1825779806:
-                    if (s.equals("nearest")) {
-                        b0 = 0;
-                    }
+                    case -938285885:
+                        if (s.equals("random")) {
+                            b0 = 2;
+                        }
+                        break;
+                    case 1510793967:
+                        if (s.equals("furthest")) {
+                            b0 = 1;
+                        }
+                        break;
+                    case 1780188658:
+                        if (s.equals("arbitrary")) {
+                            b0 = 3;
+                        }
+                        break;
+                    case 1825779806:
+                        if (s.equals("nearest")) {
+                            b0 = 0;
+                        }
                 }
 
                 BiConsumer biconsumer;
 
                 switch (b0) {
-                case 0:
-                    biconsumer = ArgumentParserSelector.h;
-                    break;
-                case 1:
-                    biconsumer = ArgumentParserSelector.i;
-                    break;
-                case 2:
-                    biconsumer = ArgumentParserSelector.j;
-                    break;
-                case 3:
-                    biconsumer = ArgumentParserSelector.g;
-                    break;
-                default:
-                    argumentparserselector.g().setCursor(i);
-                    throw PlayerSelector.f.createWithContext(argumentparserselector.g(), s);
+                    case 0:
+                        biconsumer = ArgumentParserSelector.h;
+                        break;
+                    case 1:
+                        biconsumer = ArgumentParserSelector.i;
+                        break;
+                    case 2:
+                        biconsumer = ArgumentParserSelector.j;
+                        break;
+                    case 3:
+                        biconsumer = ArgumentParserSelector.g;
+                        break;
+                    default:
+                        argumentparserselector.g().setCursor(i);
+                        throw PlayerSelector.f.createWithContext(argumentparserselector.g(), s);
                 }
 
                 argumentparserselector.a(biconsumer);

@@ -219,28 +219,28 @@ public abstract class EntityHanging extends Entity {
     public float a(EnumBlockRotation enumblockrotation) {
         if (this.direction != null && this.direction.k() != EnumDirection.EnumAxis.Y) {
             switch (enumblockrotation) {
-            case CLOCKWISE_180:
-                this.direction = this.direction.opposite();
-                break;
-            case COUNTERCLOCKWISE_90:
-                this.direction = this.direction.f();
-                break;
-            case CLOCKWISE_90:
-                this.direction = this.direction.e();
+                case CLOCKWISE_180:
+                    this.direction = this.direction.opposite();
+                    break;
+                case COUNTERCLOCKWISE_90:
+                    this.direction = this.direction.f();
+                    break;
+                case CLOCKWISE_90:
+                    this.direction = this.direction.e();
             }
         }
 
         float f = MathHelper.g(this.yaw);
 
         switch (enumblockrotation) {
-        case CLOCKWISE_180:
-            return f + 180.0F;
-        case COUNTERCLOCKWISE_90:
-            return f + 90.0F;
-        case CLOCKWISE_90:
-            return f + 270.0F;
-        default:
-            return f;
+            case CLOCKWISE_180:
+                return f + 180.0F;
+            case COUNTERCLOCKWISE_90:
+                return f + 90.0F;
+            case CLOCKWISE_90:
+                return f + 270.0F;
+            default:
+                return f;
         }
     }
 

@@ -17,10 +17,10 @@ import java.util.Collections;
 public class CommandBossBar {
 
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.bossbar.create.failed", new Object[] { object});
+        return new ChatMessage("commands.bossbar.create.failed", new Object[]{object});
     });
     private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.bossbar.unknown", new Object[] { object});
+        return new ChatMessage("commands.bossbar.unknown", new Object[]{object});
     });
     private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.players.unchanged", new Object[0]));
     private static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.name.unchanged", new Object[0]));
@@ -91,30 +91,30 @@ public class CommandBossBar {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, BossBattleCustom bossbattlecustom) {
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.get.value", new Object[] { bossbattlecustom.e(), bossbattlecustom.c()}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.get.value", new Object[]{bossbattlecustom.e(), bossbattlecustom.c()}), true);
         return bossbattlecustom.c();
     }
 
     private static int b(CommandListenerWrapper commandlistenerwrapper, BossBattleCustom bossbattlecustom) {
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.get.max", new Object[] { bossbattlecustom.e(), bossbattlecustom.d()}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.get.max", new Object[]{bossbattlecustom.e(), bossbattlecustom.d()}), true);
         return bossbattlecustom.d();
     }
 
     private static int c(CommandListenerWrapper commandlistenerwrapper, BossBattleCustom bossbattlecustom) {
         if (bossbattlecustom.g()) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.get.visible.visible", new Object[] { bossbattlecustom.e()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.get.visible.visible", new Object[]{bossbattlecustom.e()}), true);
             return 1;
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.get.visible.hidden", new Object[] { bossbattlecustom.e()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.get.visible.hidden", new Object[]{bossbattlecustom.e()}), true);
             return 0;
         }
     }
 
     private static int d(CommandListenerWrapper commandlistenerwrapper, BossBattleCustom bossbattlecustom) {
         if (bossbattlecustom.getPlayers().isEmpty()) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.get.players.none", new Object[] { bossbattlecustom.e()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.get.players.none", new Object[]{bossbattlecustom.e()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.get.players.some", new Object[] { bossbattlecustom.e(), bossbattlecustom.getPlayers().size(), ChatComponentUtils.b(bossbattlecustom.getPlayers(), EntityHuman::getScoreboardDisplayName)}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.get.players.some", new Object[]{bossbattlecustom.e(), bossbattlecustom.getPlayers().size(), ChatComponentUtils.b(bossbattlecustom.getPlayers(), EntityHuman::getScoreboardDisplayName)}), true);
         }
 
         return bossbattlecustom.getPlayers().size();
@@ -130,9 +130,9 @@ public class CommandBossBar {
         } else {
             bossbattlecustom.setVisible(flag);
             if (flag) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.visible.success.visible", new Object[] { bossbattlecustom.e()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.visible.success.visible", new Object[]{bossbattlecustom.e()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.visible.success.hidden", new Object[] { bossbattlecustom.e()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.visible.success.hidden", new Object[]{bossbattlecustom.e()}), true);
             }
 
             return 0;
@@ -144,7 +144,7 @@ public class CommandBossBar {
             throw CommandBossBar.h.create();
         } else {
             bossbattlecustom.a(i);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.value.success", new Object[] { bossbattlecustom.e(), i}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.value.success", new Object[]{bossbattlecustom.e(), i}), true);
             return i;
         }
     }
@@ -154,7 +154,7 @@ public class CommandBossBar {
             throw CommandBossBar.i.create();
         } else {
             bossbattlecustom.b(i);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.max.success", new Object[] { bossbattlecustom.e(), i}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.max.success", new Object[]{bossbattlecustom.e(), i}), true);
             return i;
         }
     }
@@ -164,7 +164,7 @@ public class CommandBossBar {
             throw CommandBossBar.f.create();
         } else {
             bossbattlecustom.a(bossbattle_barcolor);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.color.success", new Object[] { bossbattlecustom.e()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.color.success", new Object[]{bossbattlecustom.e()}), true);
             return 0;
         }
     }
@@ -174,19 +174,19 @@ public class CommandBossBar {
             throw CommandBossBar.g.create();
         } else {
             bossbattlecustom.a(bossbattle_barstyle);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.style.success", new Object[] { bossbattlecustom.e()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.style.success", new Object[]{bossbattlecustom.e()}), true);
             return 0;
         }
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, BossBattleCustom bossbattlecustom, IChatBaseComponent ichatbasecomponent) throws CommandSyntaxException {
-        IChatBaseComponent ichatbasecomponent1 = ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, (Entity) null);
+        IChatBaseComponent ichatbasecomponent1 = ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, (Entity) null, 0);
 
         if (bossbattlecustom.j().equals(ichatbasecomponent1)) {
             throw CommandBossBar.e.create();
         } else {
             bossbattlecustom.a(ichatbasecomponent1);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.name.success", new Object[] { bossbattlecustom.e()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.name.success", new Object[]{bossbattlecustom.e()}), true);
             return 0;
         }
     }
@@ -198,9 +198,9 @@ public class CommandBossBar {
             throw CommandBossBar.d.create();
         } else {
             if (bossbattlecustom.getPlayers().isEmpty()) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.players.success.none", new Object[] { bossbattlecustom.e()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.players.success.none", new Object[]{bossbattlecustom.e()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.players.success.some", new Object[] { bossbattlecustom.e(), collection.size(), ChatComponentUtils.b(collection, EntityHuman::getScoreboardDisplayName)}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.players.success.some", new Object[]{bossbattlecustom.e(), collection.size(), ChatComponentUtils.b(collection, EntityHuman::getScoreboardDisplayName)}), true);
             }
 
             return bossbattlecustom.getPlayers().size();
@@ -213,7 +213,7 @@ public class CommandBossBar {
         if (collection.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.list.bars.none", new Object[0]), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.list.bars.some", new Object[] { collection.size(), ChatComponentUtils.b(collection, BossBattleCustom::e)}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.list.bars.some", new Object[]{collection.size(), ChatComponentUtils.b(collection, BossBattleCustom::e)}), false);
         }
 
         return collection.size();
@@ -225,9 +225,9 @@ public class CommandBossBar {
         if (bossbattlecustomdata.a(minecraftkey) != null) {
             throw CommandBossBar.b.create(minecraftkey.toString());
         } else {
-            BossBattleCustom bossbattlecustom = bossbattlecustomdata.register(minecraftkey, ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, (Entity) null));
+            BossBattleCustom bossbattlecustom = bossbattlecustomdata.register(minecraftkey, ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, (Entity) null, 0));
 
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.create.success", new Object[] { bossbattlecustom.e()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.create.success", new Object[]{bossbattlecustom.e()}), true);
             return bossbattlecustomdata.getBattles().size();
         }
     }
@@ -237,7 +237,7 @@ public class CommandBossBar {
 
         bossbattlecustom.b();
         bossbattlecustomdata.remove(bossbattlecustom);
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.remove.success", new Object[] { bossbattlecustom.e()}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.remove.success", new Object[]{bossbattlecustom.e()}), true);
         return bossbattlecustomdata.getBattles().size();
     }
 

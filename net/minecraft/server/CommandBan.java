@@ -39,7 +39,7 @@ public class CommandBan {
 
                 gameprofilebanlist.add(gameprofilebanentry);
                 ++i;
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.ban.success", new Object[] { ChatComponentUtils.a(gameprofile), gameprofilebanentry.getReason()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.ban.success", new Object[]{ChatComponentUtils.a(gameprofile), gameprofilebanentry.getReason()}), true);
                 EntityPlayer entityplayer = commandlistenerwrapper.getServer().getPlayerList().a(gameprofile.getId());
 
                 if (entityplayer != null) {

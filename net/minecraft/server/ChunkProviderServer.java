@@ -32,9 +32,9 @@ public class ChunkProviderServer extends IChunkProvider {
     private long lastTickTime;
     public boolean allowMonsters = true;
     public boolean allowAnimals = true;
-    private final long[] n = new long[4];
-    private final ChunkStatus[] o = new ChunkStatus[4];
-    private final IChunkAccess[] p = new IChunkAccess[4];
+    private final long[] cachePos = new long[4];
+    private final ChunkStatus[] cacheStatus = new ChunkStatus[4];
+    private final IChunkAccess[] cacheChunk = new IChunkAccess[4];
 
     public ChunkProviderServer(WorldServer worldserver, File file, DataFixer datafixer, DefinedStructureManager definedstructuremanager, Executor executor, ChunkGenerator<?> chunkgenerator, int i, int j, WorldLoadListener worldloadlistener, Supplier<WorldPersistentData> supplier) {
         this.world = worldserver;
@@ -49,7 +49,7 @@ public class ChunkProviderServer extends IChunkProvider {
         this.playerChunkMap = new PlayerChunkMap(worldserver, file, datafixer, definedstructuremanager, executor, this.serverThreadQueue, this, this.getChunkGenerator(), worldloadlistener, supplier, i, j);
         this.lightEngine = this.playerChunkMap.a();
         this.chunkMapDistance = this.playerChunkMap.e();
-        this.l();
+        this.clearCache();
     }
 
     @Override
@@ -79,8 +79,8 @@ public class ChunkProviderServer extends IChunkProvider {
             IChunkAccess ichunkaccess;
 
             for (int l = 0; l < 4; ++l) {
-                if (k == this.n[l] && chunkstatus == this.o[l]) {
-                    ichunkaccess = this.p[l];
+                if (k == this.cachePos[l] && chunkstatus == this.cacheStatus[l]) {
+                    ichunkaccess = this.cacheChunk[l];
                     if (ichunkaccess != null || !flag) {
                         return ichunkaccess;
                     }
@@ -101,22 +101,22 @@ public class ChunkProviderServer extends IChunkProvider {
             });
 
             for (int i1 = 3; i1 > 0; --i1) {
-                this.n[i1] = this.n[i1 - 1];
-                this.o[i1] = this.o[i1 - 1];
-                this.p[i1] = this.p[i1 - 1];
+                this.cachePos[i1] = this.cachePos[i1 - 1];
+                this.cacheStatus[i1] = this.cacheStatus[i1 - 1];
+                this.cacheChunk[i1] = this.cacheChunk[i1 - 1];
             }
 
-            this.n[0] = k;
-            this.o[0] = chunkstatus;
-            this.p[0] = ichunkaccess;
+            this.cachePos[0] = k;
+            this.cacheStatus[0] = chunkstatus;
+            this.cacheChunk[0] = ichunkaccess;
             return ichunkaccess;
         }
     }
 
-    private void l() {
-        Arrays.fill(this.n, ChunkCoordIntPair.a);
-        Arrays.fill(this.o, (Object) null);
-        Arrays.fill(this.p, (Object) null);
+    private void clearCache() {
+        Arrays.fill(this.cachePos, ChunkCoordIntPair.a);
+        Arrays.fill(this.cacheStatus, (Object) null);
+        Arrays.fill(this.cacheChunk, (Object) null);
     }
 
     private CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> getChunkFutureMainThread(int i, int j, ChunkStatus chunkstatus, boolean flag) {
@@ -140,7 +140,7 @@ public class ChunkProviderServer extends IChunkProvider {
             }
         }
 
-        return this.a(playerchunk, l) ? PlayerChunk.UNLOADED_CHUNK_ACCESS_FUTURE : playerchunk.getStatusFuture(chunkstatus);
+        return this.a(playerchunk, l) ? PlayerChunk.UNLOADED_CHUNK_ACCESS_FUTURE : playerchunk.a(chunkstatus, this.playerChunkMap);
     }
 
     private boolean a(@Nullable PlayerChunk playerchunk, int i) {
@@ -151,7 +151,7 @@ public class ChunkProviderServer extends IChunkProvider {
         PlayerChunk playerchunk = this.getChunk((new ChunkCoordIntPair(i, j)).pair());
         int k = 33 + ChunkStatus.a(ChunkStatus.FULL);
 
-        return playerchunk != null && playerchunk.getTicketLevel() <= k ? ((Either) playerchunk.getStatusFuture(ChunkStatus.FULL).getNow(PlayerChunk.UNLOADED_CHUNK_ACCESS)).left().isPresent() : false;
+        return !this.a(playerchunk, k);
     }
 
     @Override
@@ -191,12 +191,14 @@ public class ChunkProviderServer extends IChunkProvider {
     }
 
     private boolean tickDistanceManager() {
-        if (this.chunkMapDistance.a(this.playerChunkMap)) {
-            this.playerChunkMap.b();
-            this.l();
-            return true;
-        } else {
+        boolean flag = this.chunkMapDistance.a(this.playerChunkMap);
+        boolean flag1 = this.playerChunkMap.b();
+
+        if (!flag && !flag1) {
             return false;
+        } else {
+            this.clearCache();
+            return true;
         }
     }
 
@@ -232,11 +234,13 @@ public class ChunkProviderServer extends IChunkProvider {
     }
 
     public void save(boolean flag) {
+        this.tickDistanceManager();
         this.playerChunkMap.save(flag);
     }
 
     @Override
     public void close() throws IOException {
+        this.save(true);
         this.lightEngine.close();
         this.playerChunkMap.close();
     }
@@ -250,7 +254,7 @@ public class ChunkProviderServer extends IChunkProvider {
         this.world.getMethodProfiler().exitEnter("unload");
         this.playerChunkMap.unloadChunks(booleansupplier);
         this.world.getMethodProfiler().exit();
-        this.l();
+        this.clearCache();
     }
 
     private void tickChunks() {

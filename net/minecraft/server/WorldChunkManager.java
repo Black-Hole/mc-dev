@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 
 public abstract class WorldChunkManager {
 
-    private static final List<BiomeBase> c = Lists.newArrayList(new BiomeBase[] { Biomes.FOREST, Biomes.PLAINS, Biomes.TAIGA, Biomes.TAIGA_HILLS, Biomes.WOODED_HILLS, Biomes.JUNGLE, Biomes.JUNGLE_HILLS});
+    private static final List<BiomeBase> c = Lists.newArrayList(new BiomeBase[]{Biomes.FOREST, Biomes.PLAINS, Biomes.TAIGA, Biomes.TAIGA_HILLS, Biomes.WOODED_HILLS, Biomes.JUNGLE, Biomes.JUNGLE_HILLS});
     protected final Map<StructureGenerator<?>, Boolean> a = Maps.newHashMap();
     protected final Set<IBlockData> b = Sets.newHashSet();
 

@@ -34,7 +34,7 @@ public class BehaviorWork extends Behavior<EntityVillager> {
             this.b = true;
             entityvillager.ej();
             behaviorcontroller.getMemory(MemoryModuleType.JOB_SITE).ifPresent((globalpos) -> {
-                behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorTarget(globalpos.b())));
+                behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorTarget(globalpos.getBlockPosition())));
             });
         }
 
@@ -49,7 +49,7 @@ public class BehaviorWork extends Behavior<EntityVillager> {
         } else {
             GlobalPos globalpos = (GlobalPos) optional.get();
 
-            return this.a < 100 && Objects.equals(globalpos.a(), worldserver.getWorldProvider().getDimensionManager()) && globalpos.b().a((IPosition) entityvillager.ch(), 1.73D);
+            return this.a < 100 && Objects.equals(globalpos.getDimensionManager(), worldserver.getWorldProvider().getDimensionManager()) && globalpos.getBlockPosition().a((IPosition) entityvillager.ch(), 1.73D);
         }
     }
 

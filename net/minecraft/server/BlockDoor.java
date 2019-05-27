@@ -26,15 +26,15 @@ public class BlockDoor extends Block {
         boolean flag1 = iblockdata.get(BlockDoor.HINGE) == BlockPropertyDoorHinge.RIGHT;
 
         switch (enumdirection) {
-        case EAST:
-        default:
-            return flag ? BlockDoor.i : (flag1 ? BlockDoor.g : BlockDoor.f);
-        case SOUTH:
-            return flag ? BlockDoor.f : (flag1 ? BlockDoor.i : BlockDoor.h);
-        case WEST:
-            return flag ? BlockDoor.h : (flag1 ? BlockDoor.f : BlockDoor.g);
-        case NORTH:
-            return flag ? BlockDoor.g : (flag1 ? BlockDoor.h : BlockDoor.i);
+            case EAST:
+            default:
+                return flag ? BlockDoor.i : (flag1 ? BlockDoor.g : BlockDoor.f);
+            case SOUTH:
+                return flag ? BlockDoor.f : (flag1 ? BlockDoor.i : BlockDoor.h);
+            case WEST:
+                return flag ? BlockDoor.h : (flag1 ? BlockDoor.f : BlockDoor.g);
+            case NORTH:
+                return flag ? BlockDoor.g : (flag1 ? BlockDoor.h : BlockDoor.i);
         }
     }
 
@@ -73,14 +73,14 @@ public class BlockDoor extends Block {
     @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         switch (pathmode) {
-        case LAND:
-            return (Boolean) iblockdata.get(BlockDoor.OPEN);
-        case WATER:
-            return false;
-        case AIR:
-            return (Boolean) iblockdata.get(BlockDoor.OPEN);
-        default:
-            return false;
+            case LAND:
+                return (Boolean) iblockdata.get(BlockDoor.OPEN);
+            case WATER:
+                return false;
+            case AIR:
+                return (Boolean) iblockdata.get(BlockDoor.OPEN);
+            default:
+                return false;
         }
     }
 

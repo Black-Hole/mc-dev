@@ -11,7 +11,7 @@ public class WorldGenCavesHell extends WorldGenCaves {
 
     public WorldGenCavesHell(Function<Dynamic<?>, ? extends WorldGenFeatureConfigurationChance> function) {
         super(function, 128);
-        this.j = ImmutableSet.of(Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.DIRT, Blocks.COARSE_DIRT, new Block[] { Blocks.PODZOL, Blocks.GRASS_BLOCK, Blocks.NETHERRACK});
+        this.j = ImmutableSet.of(Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.DIRT, Blocks.COARSE_DIRT, new Block[]{Blocks.PODZOL, Blocks.GRASS_BLOCK, Blocks.NETHERRACK});
         this.k = ImmutableSet.of(FluidTypes.LAVA, FluidTypes.WATER);
     }
 

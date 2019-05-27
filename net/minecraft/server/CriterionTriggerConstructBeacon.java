@@ -134,7 +134,7 @@ public class CriterionTriggerConstructBeacon implements CriterionTrigger<Criteri
         }
 
         public boolean a(TileEntityBeacon tileentitybeacon) {
-            return this.a.d(tileentitybeacon.f());
+            return this.a.d(tileentitybeacon.h());
         }
 
         @Override

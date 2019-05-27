@@ -24,10 +24,10 @@ public class CommandLoot {
         return ICompletionProvider.a((Iterable) loottableregistry.a(), suggestionsbuilder);
     };
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.drop.no_held_items", new Object[] { object});
+        return new ChatMessage("commands.drop.no_held_items", new Object[]{object});
     });
     private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.drop.no_loot_table", new Object[] { object});
+        return new ChatMessage("commands.drop.no_loot_table", new Object[]{object});
     });
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
@@ -230,9 +230,9 @@ public class CommandLoot {
         if (list.size() == 1) {
             ItemStack itemstack = (ItemStack) list.get(0);
 
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.drop.success.single", new Object[] { itemstack.getCount(), itemstack.B()}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.drop.success.single", new Object[]{itemstack.getCount(), itemstack.B()}), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.drop.success.multiple", new Object[] { list.size()}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.drop.success.multiple", new Object[]{list.size()}), false);
         }
 
     }
@@ -241,9 +241,9 @@ public class CommandLoot {
         if (list.size() == 1) {
             ItemStack itemstack = (ItemStack) list.get(0);
 
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.drop.success.single_with_table", new Object[] { itemstack.getCount(), itemstack.B(), minecraftkey}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.drop.success.single_with_table", new Object[]{itemstack.getCount(), itemstack.B(), minecraftkey}), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.drop.success.multiple_with_table", new Object[] { list.size(), minecraftkey}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.drop.success.multiple_with_table", new Object[]{list.size(), minecraftkey}), false);
         }
 
     }

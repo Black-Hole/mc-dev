@@ -21,7 +21,7 @@ public class TileEntityComparator extends TileEntity {
         this.a = nbttagcompound.getInt("OutputSignal");
     }
 
-    public int c() {
+    public int d() {
         return this.a;
     }
 

@@ -22,15 +22,15 @@ public class BlockTripwireHook extends Block {
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch ((EnumDirection) iblockdata.get(BlockTripwireHook.FACING)) {
-        case EAST:
-        default:
-            return BlockTripwireHook.g;
-        case WEST:
-            return BlockTripwireHook.f;
-        case SOUTH:
-            return BlockTripwireHook.e;
-        case NORTH:
-            return BlockTripwireHook.d;
+            case EAST:
+            default:
+                return BlockTripwireHook.g;
+            case WEST:
+                return BlockTripwireHook.f;
+            case SOUTH:
+                return BlockTripwireHook.e;
+            case NORTH:
+                return BlockTripwireHook.d;
         }
     }
 

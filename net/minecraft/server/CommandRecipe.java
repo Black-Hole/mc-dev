@@ -42,9 +42,9 @@ public class CommandRecipe {
             throw CommandRecipe.a.create();
         } else {
             if (collection.size() == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.recipe.give.success.single", new Object[] { collection1.size(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.recipe.give.success.single", new Object[]{collection1.size(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.recipe.give.success.multiple", new Object[] { collection1.size(), collection.size()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.recipe.give.success.multiple", new Object[]{collection1.size(), collection.size()}), true);
             }
 
             return i;
@@ -64,9 +64,9 @@ public class CommandRecipe {
             throw CommandRecipe.b.create();
         } else {
             if (collection.size() == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.recipe.take.success.single", new Object[] { collection1.size(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.recipe.take.success.single", new Object[]{collection1.size(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.recipe.take.success.multiple", new Object[] { collection1.size(), collection.size()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.recipe.take.success.multiple", new Object[]{collection1.size(), collection.size()}), true);
             }
 
             return i;

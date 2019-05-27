@@ -19,7 +19,7 @@ public final class VoxelShapes {
         return new VoxelShapeCube(voxelshapebitset);
     });
     public static final VoxelShape a = create(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
-    private static final VoxelShape c = new VoxelShapeArray(new VoxelShapeBitSet(0, 0, 0), new DoubleArrayList(new double[] { 0.0D}), new DoubleArrayList(new double[] { 0.0D}), new DoubleArrayList(new double[] { 0.0D}));
+    private static final VoxelShape c = new VoxelShapeArray(new VoxelShapeBitSet(0, 0, 0), new DoubleArrayList(new double[]{0.0D}), new DoubleArrayList(new double[]{0.0D}), new DoubleArrayList(new double[]{0.0D}));
 
     public static VoxelShape a() {
         return VoxelShapes.c;
@@ -64,7 +64,7 @@ public final class VoxelShapes {
                 return new VoxelShapeCube(voxelshapebitset);
             }
         } else {
-            return new VoxelShapeArray(VoxelShapes.b.a, new double[] { axisalignedbb.minX, axisalignedbb.maxX}, new double[] { axisalignedbb.minY, axisalignedbb.maxY}, new double[] { axisalignedbb.minZ, axisalignedbb.maxZ});
+            return new VoxelShapeArray(VoxelShapes.b.a, new double[]{axisalignedbb.minX, axisalignedbb.maxX}, new double[]{axisalignedbb.minY, axisalignedbb.maxY}, new double[]{axisalignedbb.minZ, axisalignedbb.maxZ});
         }
     }
 
@@ -252,7 +252,7 @@ public final class VoxelShapes {
                     l1 += k1;
                 }
 
-                double[] adouble = new double[] { d0};
+                double[] adouble = new double[]{d0};
 
                 stream.forEach((voxelshape) -> {
                     adouble[0] = voxelshape.a(enumdirection_enumaxis2, axisalignedbb, adouble[0]);

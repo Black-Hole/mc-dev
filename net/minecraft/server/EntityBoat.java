@@ -150,19 +150,19 @@ public class EntityBoat extends Entity {
 
     public Item f() {
         switch (this.getType()) {
-        case OAK:
-        default:
-            return Items.OAK_BOAT;
-        case SPRUCE:
-            return Items.SPRUCE_BOAT;
-        case BIRCH:
-            return Items.BIRCH_BOAT;
-        case JUNGLE:
-            return Items.JUNGLE_BOAT;
-        case ACACIA:
-            return Items.ACACIA_BOAT;
-        case DARK_OAK:
-            return Items.DARK_OAK_BOAT;
+            case OAK:
+            default:
+                return Items.OAK_BOAT;
+            case SPRUCE:
+                return Items.SPRUCE_BOAT;
+            case BIRCH:
+                return Items.BIRCH_BOAT;
+            case JUNGLE:
+                return Items.JUNGLE_BOAT;
+            case ACACIA:
+                return Items.ACACIA_BOAT;
+            case DARK_OAK:
+                return Items.DARK_OAK_BOAT;
         }
     }
 
@@ -308,15 +308,15 @@ public class EntityBoat extends Entity {
     @Nullable
     protected SoundEffect i() {
         switch (this.s()) {
-        case IN_WATER:
-        case UNDER_WATER:
-        case UNDER_FLOWING_WATER:
-            return SoundEffects.ENTITY_BOAT_PADDLE_WATER;
-        case ON_LAND:
-            return SoundEffects.ENTITY_BOAT_PADDLE_LAND;
-        case IN_AIR:
-        default:
-            return null;
+            case IN_WATER:
+            case UNDER_WATER:
+            case UNDER_FLOWING_WATER:
+                return SoundEffects.ENTITY_BOAT_PADDLE_WATER;
+            case ON_LAND:
+                return SoundEffects.ENTITY_BOAT_PADDLE_LAND;
+            case IN_AIR:
+            default:
+                return null;
         }
     }
 

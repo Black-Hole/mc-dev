@@ -28,7 +28,7 @@ public class CommandList {
         List<EntityPlayer> list = playerlist.getPlayers();
         IChatBaseComponent ichatbasecomponent = ChatComponentUtils.b(list, function);
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.list.players", new Object[] { list.size(), playerlist.getMaxPlayers(), ichatbasecomponent}), false);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.list.players", new Object[]{list.size(), playerlist.getMaxPlayers(), ichatbasecomponent}), false);
         return list.size();
     }
 }

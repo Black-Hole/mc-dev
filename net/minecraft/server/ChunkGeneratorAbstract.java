@@ -122,7 +122,7 @@ public abstract class ChunkGeneratorAbstract<T extends GeneratorSettingsDefault>
         int j1 = Math.floorMod(j, this.k);
         double d0 = (double) i1 / (double) this.k;
         double d1 = (double) j1 / (double) this.k;
-        double[][] adouble = new double[][] { this.b(k, l), this.b(k, l + 1), this.b(k + 1, l), this.b(k + 1, l + 1)};
+        double[][] adouble = new double[][]{this.b(k, l), this.b(k, l + 1), this.b(k + 1, l), this.b(k + 1, l + 1)};
         int k1 = this.getSeaLevel();
 
         for (int l1 = this.m - 1; l1 >= 0; --l1) {
@@ -385,7 +385,7 @@ public abstract class ChunkGeneratorAbstract<T extends GeneratorSettingsDefault>
                                 if (iblockdata != ChunkGeneratorAbstract.i) {
                                     if (iblockdata.h() != 0) {
                                         blockposition_mutableblockposition.d(j4, j3, i5);
-                                        protochunk.j(blockposition_mutableblockposition);
+                                        protochunk.k(blockposition_mutableblockposition);
                                     }
 
                                     chunksection.setType(k4, k3, j5, iblockdata, false);

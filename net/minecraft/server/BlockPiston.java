@@ -32,19 +32,19 @@ public class BlockPiston extends BlockDirectional {
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         if ((Boolean) iblockdata.get(BlockPiston.EXTENDED)) {
             switch ((EnumDirection) iblockdata.get(BlockPiston.FACING)) {
-            case DOWN:
-                return BlockPiston.h;
-            case UP:
-            default:
-                return BlockPiston.g;
-            case NORTH:
-                return BlockPiston.f;
-            case SOUTH:
-                return BlockPiston.e;
-            case WEST:
-                return BlockPiston.d;
-            case EAST:
-                return BlockPiston.c;
+                case DOWN:
+                    return BlockPiston.h;
+                case UP:
+                default:
+                    return BlockPiston.g;
+                case NORTH:
+                    return BlockPiston.f;
+                case SOUTH:
+                    return BlockPiston.e;
+                case WEST:
+                    return BlockPiston.d;
+                case EAST:
+                    return BlockPiston.c;
             }
         } else {
             return VoxelShapes.b();
@@ -106,7 +106,7 @@ public class BlockPiston extends BlockDirectional {
                 if (tileentity instanceof TileEntityPiston) {
                     TileEntityPiston tileentitypiston = (TileEntityPiston) tileentity;
 
-                    if (tileentitypiston.c() && (tileentitypiston.a(0.0F) < 0.5F || world.getTime() == tileentitypiston.v() || ((WorldServer) world).b())) {
+                    if (tileentitypiston.d() && (tileentitypiston.a(0.0F) < 0.5F || world.getTime() == tileentitypiston.v() || ((WorldServer) world).b())) {
                         b0 = 2;
                     }
                 }
@@ -196,7 +196,7 @@ public class BlockPiston extends BlockDirectional {
                     if (tileentity1 instanceof TileEntityPiston) {
                         TileEntityPiston tileentitypiston = (TileEntityPiston) tileentity1;
 
-                        if (tileentitypiston.d() == enumdirection && tileentitypiston.c()) {
+                        if (tileentitypiston.f() == enumdirection && tileentitypiston.d()) {
                             tileentitypiston.u();
                             flag1 = true;
                         }
@@ -235,12 +235,12 @@ public class BlockPiston extends BlockDirectional {
                     }
 
                     switch (iblockdata.getPushReaction()) {
-                    case BLOCK:
-                        return false;
-                    case DESTROY:
-                        return flag;
-                    case PUSH_ONLY:
-                        return enumdirection == enumdirection1;
+                        case BLOCK:
+                            return false;
+                        case DESTROY:
+                            return flag;
+                        case PUSH_ONLY:
+                            return enumdirection == enumdirection1;
                     }
                 } else if ((Boolean) iblockdata.get(BlockPiston.EXTENDED)) {
                     return false;

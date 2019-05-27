@@ -24,6 +24,8 @@ public interface IMerchant {
 
     boolean ea();
 
+    SoundEffect eb();
+
     default void openTrade(EntityHuman entityhuman, IChatBaseComponent ichatbasecomponent, int i) {
         OptionalInt optionalint = entityhuman.openContainer(new TileInventory((j, playerinventory, entityhuman1) -> {
             return new ContainerMerchant(j, playerinventory, this);

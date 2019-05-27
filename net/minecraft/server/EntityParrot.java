@@ -20,7 +20,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         }
     };
     private static final Item bK = Items.COOKIE;
-    private static final Set<Item> bL = Sets.newHashSet(new Item[] { Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS});
+    private static final Set<Item> bL = Sets.newHashSet(new Item[]{Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS});
     private static final Map<EntityTypes<?>, SoundEffect> bM = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         hashmap.put(EntityTypes.BLAZE, SoundEffects.ENTITY_PARROT_IMITATE_BLAZE);
         hashmap.put(EntityTypes.CAVE_SPIDER, SoundEffects.ENTITY_PARROT_IMITATE_SPIDER);
@@ -224,7 +224,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         BlockPosition blockposition = new BlockPosition(i, j, k);
         Block block = generatoraccess.getType(blockposition.down()).getBlock();
 
-        return block.a(TagsBlock.LEAVES) || block == Blocks.GRASS || block instanceof BlockLogAbstract || block == Blocks.AIR && super.a(generatoraccess, enummobspawn);
+        return block.a(TagsBlock.LEAVES) || block == Blocks.GRASS_BLOCK || block instanceof BlockLogAbstract || block == Blocks.AIR && super.a(generatoraccess, enummobspawn);
     }
 
     @Override

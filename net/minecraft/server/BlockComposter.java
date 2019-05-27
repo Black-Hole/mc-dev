@@ -244,7 +244,7 @@ public class BlockComposter extends Block implements IInventoryHolder {
 
         @Override
         public int[] getSlotsForFace(EnumDirection enumdirection) {
-            return enumdirection == EnumDirection.UP ? new int[] { 0} : new int[0];
+            return enumdirection == EnumDirection.UP ? new int[]{0} : new int[0];
         }
 
         @Override
@@ -291,7 +291,7 @@ public class BlockComposter extends Block implements IInventoryHolder {
 
         @Override
         public int[] getSlotsForFace(EnumDirection enumdirection) {
-            return enumdirection == EnumDirection.DOWN ? new int[] { 0} : new int[0];
+            return enumdirection == EnumDirection.DOWN ? new int[]{0} : new int[0];
         }
 
         @Override

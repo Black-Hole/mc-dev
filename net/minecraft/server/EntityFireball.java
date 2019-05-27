@@ -102,8 +102,8 @@ public abstract class EntityFireball extends Entity {
     public void b(NBTTagCompound nbttagcompound) {
         Vec3D vec3d = this.getMot();
 
-        nbttagcompound.set("direction", this.a(new double[] { vec3d.x, vec3d.y, vec3d.z}));
-        nbttagcompound.set("power", this.a(new double[] { this.dirX, this.dirY, this.dirZ}));
+        nbttagcompound.set("direction", this.a(new double[]{vec3d.x, vec3d.y, vec3d.z}));
+        nbttagcompound.set("power", this.a(new double[]{this.dirX, this.dirY, this.dirZ}));
         nbttagcompound.setInt("life", this.f);
     }
 

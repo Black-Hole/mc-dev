@@ -367,7 +367,7 @@ public class Chunk implements IChunkAccess {
     }
 
     @Nullable
-    private TileEntity j(BlockPosition blockposition) {
+    private TileEntity k(BlockPosition blockposition) {
         IBlockData iblockdata = this.getType(blockposition);
         Block block = iblockdata.getBlock();
 
@@ -398,7 +398,7 @@ public class Chunk implements IChunkAccess {
 
         if (tileentity == null) {
             if (chunk_enumtileentitystate == Chunk.EnumTileEntityState.IMMEDIATE) {
-                tileentity = this.j(blockposition);
+                tileentity = this.k(blockposition);
                 this.world.setTileEntity(blockposition, tileentity);
             }
         } else if (tileentity.isRemoved()) {
@@ -426,7 +426,7 @@ public class Chunk implements IChunkAccess {
             TileEntity tileentity1 = (TileEntity) this.tileEntities.put(blockposition.immutableCopy(), tileentity);
 
             if (tileentity1 != null && tileentity1 != tileentity) {
-                tileentity1.m();
+                tileentity1.W_();
             }
 
         }
@@ -437,13 +437,34 @@ public class Chunk implements IChunkAccess {
         this.e.put(new BlockPosition(nbttagcompound.getInt("x"), nbttagcompound.getInt("y"), nbttagcompound.getInt("z")), nbttagcompound);
     }
 
+    @Nullable
+    @Override
+    public NBTTagCompound j(BlockPosition blockposition) {
+        TileEntity tileentity = this.getTileEntity(blockposition);
+        NBTTagCompound nbttagcompound;
+
+        if (tileentity != null && !tileentity.isRemoved()) {
+            nbttagcompound = tileentity.save(new NBTTagCompound());
+            nbttagcompound.setBoolean("keepPacked", false);
+            return nbttagcompound;
+        } else {
+            nbttagcompound = (NBTTagCompound) this.e.get(blockposition);
+            if (nbttagcompound != null) {
+                nbttagcompound = nbttagcompound.clone();
+                nbttagcompound.setBoolean("keepPacked", true);
+            }
+
+            return nbttagcompound;
+        }
+    }
+
     @Override
     public void removeTileEntity(BlockPosition blockposition) {
         if (this.loaded || this.world.e()) {
             TileEntity tileentity = (TileEntity) this.tileEntities.remove(blockposition);
 
             if (tileentity != null) {
-                tileentity.m();
+                tileentity.W_();
             }
         }
 
@@ -769,12 +790,12 @@ public class Chunk implements IChunkAccess {
 
     public void a(WorldServer worldserver) {
         if (this.o == TickListEmpty.a()) {
-            this.o = new TickListChunk<>(IRegistry.BLOCK::getKey, worldserver.getBlockTickList().a(true, this.loc));
+            this.o = new TickListChunk<>(IRegistry.BLOCK::getKey, worldserver.getBlockTickList().a(this.loc, true, false));
             this.setNeedsSaving(true);
         }
 
         if (this.p == TickListEmpty.a()) {
-            this.p = new TickListChunk<>(IRegistry.FLUID::getKey, worldserver.getFluidTickList().a(true, this.loc));
+            this.p = new TickListChunk<>(IRegistry.FLUID::getKey, worldserver.getFluidTickList().a(this.loc, true, false));
             this.setNeedsSaving(true);
         }
 

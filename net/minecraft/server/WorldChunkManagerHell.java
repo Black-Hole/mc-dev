@@ -55,6 +55,6 @@ public class WorldChunkManagerHell extends WorldChunkManager {
 
     @Override
     public Set<BiomeBase> a(int i, int j, int k) {
-        return Sets.newHashSet(new BiomeBase[] { this.c});
+        return Sets.newHashSet(new BiomeBase[]{this.c});
     }
 }

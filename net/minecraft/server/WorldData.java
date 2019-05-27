@@ -711,11 +711,11 @@ public class WorldData {
 
             try {
                 switch (this.v) {
-                case 19132:
-                    s = "McRegion";
-                    break;
-                case 19133:
-                    s = "Anvil";
+                    case 19132:
+                        s = "McRegion";
+                        break;
+                    case 19133:
+                        s = "Anvil";
                 }
             } catch (Throwable throwable) {
                 ;

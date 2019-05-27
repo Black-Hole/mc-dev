@@ -37,7 +37,7 @@ public class BlockTall extends Block implements IBlockWaterlogged {
         VoxelShape voxelshape4 = Block.a((double) f7, (double) f3, (double) f7, 16.0D, (double) f4, (double) f8);
         VoxelShape voxelshape5 = VoxelShapes.a(voxelshape1, voxelshape4);
         VoxelShape voxelshape6 = VoxelShapes.a(voxelshape2, voxelshape3);
-        VoxelShape[] avoxelshape = new VoxelShape[] { VoxelShapes.a(), voxelshape2, voxelshape3, voxelshape6, voxelshape1, VoxelShapes.a(voxelshape2, voxelshape1), VoxelShapes.a(voxelshape3, voxelshape1), VoxelShapes.a(voxelshape6, voxelshape1), voxelshape4, VoxelShapes.a(voxelshape2, voxelshape4), VoxelShapes.a(voxelshape3, voxelshape4), VoxelShapes.a(voxelshape6, voxelshape4), voxelshape5, VoxelShapes.a(voxelshape2, voxelshape5), VoxelShapes.a(voxelshape3, voxelshape5), VoxelShapes.a(voxelshape6, voxelshape5)};
+        VoxelShape[] avoxelshape = new VoxelShape[]{VoxelShapes.a(), voxelshape2, voxelshape3, voxelshape6, voxelshape1, VoxelShapes.a(voxelshape2, voxelshape1), VoxelShapes.a(voxelshape3, voxelshape1), VoxelShapes.a(voxelshape6, voxelshape1), voxelshape4, VoxelShapes.a(voxelshape2, voxelshape4), VoxelShapes.a(voxelshape3, voxelshape4), VoxelShapes.a(voxelshape6, voxelshape4), voxelshape5, VoxelShapes.a(voxelshape2, voxelshape5), VoxelShapes.a(voxelshape3, voxelshape5), VoxelShapes.a(voxelshape6, voxelshape5)};
 
         for (int i = 0; i < 16; ++i) {
             avoxelshape[i] = VoxelShapes.a(voxelshape, avoxelshape[i]);
@@ -102,26 +102,26 @@ public class BlockTall extends Block implements IBlockWaterlogged {
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
-        case CLOCKWISE_180:
-            return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.SOUTH))).set(BlockTall.EAST, iblockdata.get(BlockTall.WEST))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.NORTH))).set(BlockTall.WEST, iblockdata.get(BlockTall.EAST));
-        case COUNTERCLOCKWISE_90:
-            return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.EAST))).set(BlockTall.EAST, iblockdata.get(BlockTall.SOUTH))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.WEST))).set(BlockTall.WEST, iblockdata.get(BlockTall.NORTH));
-        case CLOCKWISE_90:
-            return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.WEST))).set(BlockTall.EAST, iblockdata.get(BlockTall.NORTH))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.EAST))).set(BlockTall.WEST, iblockdata.get(BlockTall.SOUTH));
-        default:
-            return iblockdata;
+            case CLOCKWISE_180:
+                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.SOUTH))).set(BlockTall.EAST, iblockdata.get(BlockTall.WEST))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.NORTH))).set(BlockTall.WEST, iblockdata.get(BlockTall.EAST));
+            case COUNTERCLOCKWISE_90:
+                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.EAST))).set(BlockTall.EAST, iblockdata.get(BlockTall.SOUTH))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.WEST))).set(BlockTall.WEST, iblockdata.get(BlockTall.NORTH));
+            case CLOCKWISE_90:
+                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.WEST))).set(BlockTall.EAST, iblockdata.get(BlockTall.NORTH))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.EAST))).set(BlockTall.WEST, iblockdata.get(BlockTall.SOUTH));
+            default:
+                return iblockdata;
         }
     }
 
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         switch (enumblockmirror) {
-        case LEFT_RIGHT:
-            return (IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.SOUTH))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.NORTH));
-        case FRONT_BACK:
-            return (IBlockData) ((IBlockData) iblockdata.set(BlockTall.EAST, iblockdata.get(BlockTall.WEST))).set(BlockTall.WEST, iblockdata.get(BlockTall.EAST));
-        default:
-            return super.a(iblockdata, enumblockmirror);
+            case LEFT_RIGHT:
+                return (IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.SOUTH))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.NORTH));
+            case FRONT_BACK:
+                return (IBlockData) ((IBlockData) iblockdata.set(BlockTall.EAST, iblockdata.get(BlockTall.WEST))).set(BlockTall.WEST, iblockdata.get(BlockTall.EAST));
+            default:
+                return super.a(iblockdata, enumblockmirror);
         }
     }
 }

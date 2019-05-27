@@ -36,44 +36,44 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
             String s;
 
             switch (i) {
-            case 0:
-                LegacyPingHandler.LOGGER.debug("Ping: (<1.3.x) from {}:{}", inetsocketaddress.getAddress(), inetsocketaddress.getPort());
-                s = String.format("%s\u00a7%d\u00a7%d", minecraftserver.getMotd(), minecraftserver.getPlayerCount(), minecraftserver.getMaxPlayers());
-                this.a(channelhandlercontext, this.a(s));
-                break;
-            case 1:
-                if (bytebuf.readUnsignedByte() != 1) {
-                    return;
-                }
+                case 0:
+                    LegacyPingHandler.LOGGER.debug("Ping: (<1.3.x) from {}:{}", inetsocketaddress.getAddress(), inetsocketaddress.getPort());
+                    s = String.format("%s\u00a7%d\u00a7%d", minecraftserver.getMotd(), minecraftserver.getPlayerCount(), minecraftserver.getMaxPlayers());
+                    this.a(channelhandlercontext, this.a(s));
+                    break;
+                case 1:
+                    if (bytebuf.readUnsignedByte() != 1) {
+                        return;
+                    }
 
-                LegacyPingHandler.LOGGER.debug("Ping: (1.4-1.5.x) from {}:{}", inetsocketaddress.getAddress(), inetsocketaddress.getPort());
-                s = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", 127, minecraftserver.getVersion(), minecraftserver.getMotd(), minecraftserver.getPlayerCount(), minecraftserver.getMaxPlayers());
-                this.a(channelhandlercontext, this.a(s));
-                break;
-            default:
-                boolean flag1 = bytebuf.readUnsignedByte() == 1;
+                    LegacyPingHandler.LOGGER.debug("Ping: (1.4-1.5.x) from {}:{}", inetsocketaddress.getAddress(), inetsocketaddress.getPort());
+                    s = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", 127, minecraftserver.getVersion(), minecraftserver.getMotd(), minecraftserver.getPlayerCount(), minecraftserver.getMaxPlayers());
+                    this.a(channelhandlercontext, this.a(s));
+                    break;
+                default:
+                    boolean flag1 = bytebuf.readUnsignedByte() == 1;
 
-                flag1 &= bytebuf.readUnsignedByte() == 250;
-                flag1 &= "MC|PingHost".equals(new String(bytebuf.readBytes(bytebuf.readShort() * 2).array(), StandardCharsets.UTF_16BE));
-                int j = bytebuf.readUnsignedShort();
+                    flag1 &= bytebuf.readUnsignedByte() == 250;
+                    flag1 &= "MC|PingHost".equals(new String(bytebuf.readBytes(bytebuf.readShort() * 2).array(), StandardCharsets.UTF_16BE));
+                    int j = bytebuf.readUnsignedShort();
 
-                flag1 &= bytebuf.readUnsignedByte() >= 73;
-                flag1 &= 3 + bytebuf.readBytes(bytebuf.readShort() * 2).array().length + 4 == j;
-                flag1 &= bytebuf.readInt() <= 65535;
-                flag1 &= bytebuf.readableBytes() == 0;
-                if (!flag1) {
-                    return;
-                }
+                    flag1 &= bytebuf.readUnsignedByte() >= 73;
+                    flag1 &= 3 + bytebuf.readBytes(bytebuf.readShort() * 2).array().length + 4 == j;
+                    flag1 &= bytebuf.readInt() <= 65535;
+                    flag1 &= bytebuf.readableBytes() == 0;
+                    if (!flag1) {
+                        return;
+                    }
 
-                LegacyPingHandler.LOGGER.debug("Ping: (1.6) from {}:{}", inetsocketaddress.getAddress(), inetsocketaddress.getPort());
-                String s1 = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", 127, minecraftserver.getVersion(), minecraftserver.getMotd(), minecraftserver.getPlayerCount(), minecraftserver.getMaxPlayers());
-                ByteBuf bytebuf1 = this.a(s1);
+                    LegacyPingHandler.LOGGER.debug("Ping: (1.6) from {}:{}", inetsocketaddress.getAddress(), inetsocketaddress.getPort());
+                    String s1 = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", 127, minecraftserver.getVersion(), minecraftserver.getMotd(), minecraftserver.getPlayerCount(), minecraftserver.getMaxPlayers());
+                    ByteBuf bytebuf1 = this.a(s1);
 
-                try {
-                    this.a(channelhandlercontext, bytebuf1);
-                } finally {
-                    bytebuf1.release();
-                }
+                    try {
+                        this.a(channelhandlercontext, bytebuf1);
+                    } finally {
+                        bytebuf1.release();
+                    }
             }
 
             bytebuf.release();

@@ -16,13 +16,13 @@ import java.util.List;
 public class CommandDatapack {
 
     private static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.datapack.unknown", new Object[] { object});
+        return new ChatMessage("commands.datapack.unknown", new Object[]{object});
     });
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.datapack.enable.failed", new Object[] { object});
+        return new ChatMessage("commands.datapack.enable.failed", new Object[]{object});
     });
     private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.datapack.disable.failed", new Object[] { object});
+        return new ChatMessage("commands.datapack.disable.failed", new Object[]{object});
     });
     private static final SuggestionProvider<CommandListenerWrapper> d = (commandcontext, suggestionsbuilder) -> {
         return ICompletionProvider.b(((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository().d().stream().map(ResourcePackLoader::e).map(StringArgumentType::escapeIfRequired), suggestionsbuilder);
@@ -78,7 +78,7 @@ public class CommandDatapack {
             worlddata.P().add(resourcepackloader1.e());
         });
         worlddata.O().remove(resourcepackloader.e());
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.enable.success", new Object[] { resourcepackloader.a(true)}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.enable.success", new Object[]{resourcepackloader.a(true)}), true);
         commandlistenerwrapper.getServer().reload();
         return resourcepackrepository.d().size();
     }
@@ -96,7 +96,7 @@ public class CommandDatapack {
             worlddata.P().add(resourcepackloader1.e());
         });
         worlddata.O().add(resourcepackloader.e());
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.disable.success", new Object[] { resourcepackloader.a(true)}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.disable.success", new Object[]{resourcepackloader.a(true)}), true);
         commandlistenerwrapper.getServer().reload();
         return resourcepackrepository.d().size();
     }
@@ -111,7 +111,7 @@ public class CommandDatapack {
         if (resourcepackrepository.c().isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.available.none", new Object[0]), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.available.success", new Object[] { resourcepackrepository.c().size(), ChatComponentUtils.b(resourcepackrepository.c(), (resourcepackloader) -> {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.available.success", new Object[]{resourcepackrepository.c().size(), ChatComponentUtils.b(resourcepackrepository.c(), (resourcepackloader) -> {
                         return resourcepackloader.a(false);
                     })}), false);
         }
@@ -125,7 +125,7 @@ public class CommandDatapack {
         if (resourcepackrepository.d().isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.enabled.none", new Object[0]), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.enabled.success", new Object[] { resourcepackrepository.d().size(), ChatComponentUtils.b(resourcepackrepository.d(), (resourcepackloader) -> {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.enabled.success", new Object[]{resourcepackrepository.d().size(), ChatComponentUtils.b(resourcepackrepository.d(), (resourcepackloader) -> {
                         return resourcepackloader.a(true);
                     })}), false);
         }

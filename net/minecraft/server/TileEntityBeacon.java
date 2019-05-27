@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 
 public class TileEntityBeacon extends TileEntity implements ITileInventory, ITickable {
 
-    public static final MobEffectList[][] a = new MobEffectList[][] { { MobEffects.FASTER_MOVEMENT, MobEffects.FASTER_DIG}, { MobEffects.RESISTANCE, MobEffects.JUMP}, { MobEffects.INCREASE_DAMAGE}, { MobEffects.REGENERATION}};
+    public static final MobEffectList[][] a = new MobEffectList[][]{{MobEffects.FASTER_MOVEMENT, MobEffects.FASTER_DIG}, {MobEffects.RESISTANCE, MobEffects.JUMP}, {MobEffects.INCREASE_DAMAGE}, {MobEffects.REGENERATION}};
     private static final Set<MobEffectList> b = (Set) Arrays.stream(TileEntityBeacon.a).flatMap(Arrays::stream).collect(Collectors.toSet());
     private List<TileEntityBeacon.BeaconColorTracker> c = Lists.newArrayList();
     private List<TileEntityBeacon.BeaconColorTracker> g = Lists.newArrayList();
@@ -32,32 +32,32 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
             @Override
             public int getProperty(int i) {
                 switch (i) {
-                case 0:
-                    return TileEntityBeacon.this.levels;
-                case 1:
-                    return MobEffectList.getId(TileEntityBeacon.this.primaryEffect);
-                case 2:
-                    return MobEffectList.getId(TileEntityBeacon.this.secondaryEffect);
-                default:
-                    return 0;
+                    case 0:
+                        return TileEntityBeacon.this.levels;
+                    case 1:
+                        return MobEffectList.getId(TileEntityBeacon.this.primaryEffect);
+                    case 2:
+                        return MobEffectList.getId(TileEntityBeacon.this.secondaryEffect);
+                    default:
+                        return 0;
                 }
             }
 
             @Override
             public void setProperty(int i, int j) {
                 switch (i) {
-                case 0:
-                    TileEntityBeacon.this.levels = j;
-                    break;
-                case 1:
-                    if (!TileEntityBeacon.this.world.isClientSide && !TileEntityBeacon.this.c.isEmpty()) {
-                        TileEntityBeacon.this.a(SoundEffects.BLOCK_BEACON_POWER_SELECT);
-                    }
+                    case 0:
+                        TileEntityBeacon.this.levels = j;
+                        break;
+                    case 1:
+                        if (!TileEntityBeacon.this.world.isClientSide && !TileEntityBeacon.this.c.isEmpty()) {
+                            TileEntityBeacon.this.a(SoundEffects.BLOCK_BEACON_POWER_SELECT);
+                        }
 
-                    TileEntityBeacon.this.primaryEffect = TileEntityBeacon.b(j);
-                    break;
-                case 2:
-                    TileEntityBeacon.this.secondaryEffect = TileEntityBeacon.b(j);
+                        TileEntityBeacon.this.primaryEffect = TileEntityBeacon.b(j);
+                        break;
+                    case 2:
+                        TileEntityBeacon.this.secondaryEffect = TileEntityBeacon.b(j);
                 }
 
             }
@@ -96,14 +96,16 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
             if (block instanceof IBeaconBeam) {
                 float[] afloat = ((IBeaconBeam) block).a().d();
 
-                if (blockposition.getY() <= j + 1) {
+                if (this.g.size() <= 1) {
                     tileentitybeacon_beaconcolortracker = new TileEntityBeacon.BeaconColorTracker(afloat);
                     this.g.add(tileentitybeacon_beaconcolortracker);
-                } else if (Arrays.equals(afloat, tileentitybeacon_beaconcolortracker.a)) {
-                    tileentitybeacon_beaconcolortracker.a();
-                } else {
-                    tileentitybeacon_beaconcolortracker = new TileEntityBeacon.BeaconColorTracker(new float[] { (tileentitybeacon_beaconcolortracker.a[0] + afloat[0]) / 2.0F, (tileentitybeacon_beaconcolortracker.a[1] + afloat[1]) / 2.0F, (tileentitybeacon_beaconcolortracker.a[2] + afloat[2]) / 2.0F});
-                    this.g.add(tileentitybeacon_beaconcolortracker);
+                } else if (tileentitybeacon_beaconcolortracker != null) {
+                    if (Arrays.equals(afloat, tileentitybeacon_beaconcolortracker.a)) {
+                        tileentitybeacon_beaconcolortracker.a();
+                    } else {
+                        tileentitybeacon_beaconcolortracker = new TileEntityBeacon.BeaconColorTracker(new float[]{(tileentitybeacon_beaconcolortracker.a[0] + afloat[0]) / 2.0F, (tileentitybeacon_beaconcolortracker.a[1] + afloat[1]) / 2.0F, (tileentitybeacon_beaconcolortracker.a[2] + afloat[2]) / 2.0F});
+                        this.g.add(tileentitybeacon_beaconcolortracker);
+                    }
                 }
             } else {
                 if (tileentitybeacon_beaconcolortracker == null || iblockdata.b((IBlockAccess) this.world, blockposition) >= 15 && block != Blocks.BEDROCK) {
@@ -119,31 +121,7 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
             ++this.i;
         }
 
-        if (this.i >= l) {
-            this.i = -1;
-            i1 = this.levels;
-            boolean flag = this.levels > 0 && !this.c.isEmpty();
-
-            this.c = this.g;
-            if (!this.world.isClientSide) {
-                if (i1 < this.levels) {
-                    Iterator iterator = this.world.a(EntityPlayer.class, (new AxisAlignedBB((double) i, (double) j, (double) k, (double) i, (double) (j - 4), (double) k)).grow(10.0D, 5.0D, 10.0D)).iterator();
-
-                    while (iterator.hasNext()) {
-                        EntityPlayer entityplayer = (EntityPlayer) iterator.next();
-
-                        CriterionTriggers.l.a(entityplayer, this);
-                    }
-                }
-
-                boolean flag1 = this.levels > 0 && !this.c.isEmpty();
-
-                if (flag != flag1) {
-                    this.a(flag1 ? SoundEffects.BLOCK_BEACON_ACTIVATE : SoundEffects.BLOCK_BEACON_DEACTIVATE);
-                }
-            }
-        }
-
+        i1 = this.levels;
         if (this.world.getTime() % 80L == 0L) {
             if (!this.c.isEmpty()) {
                 this.a(i, j, k);
@@ -152,6 +130,27 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
             if (this.levels > 0 && !this.c.isEmpty()) {
                 this.applyEffects();
                 this.a(SoundEffects.BLOCK_BEACON_AMBIENT);
+            }
+        }
+
+        if (this.i >= l) {
+            this.i = -1;
+            boolean flag = i1 > 0;
+
+            this.c = this.g;
+            if (!this.world.isClientSide) {
+                boolean flag1 = this.levels > 0;
+
+                if (!flag && flag1) {
+                    this.a(SoundEffects.BLOCK_BEACON_ACTIVATE);
+                    Iterator iterator = this.world.a(EntityPlayer.class, (new AxisAlignedBB((double) i, (double) j, (double) k, (double) i, (double) (j - 4), (double) k)).grow(10.0D, 5.0D, 10.0D)).iterator();
+
+                    while (iterator.hasNext()) {
+                        EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+
+                        CriterionTriggers.l.a(entityplayer, this);
+                    }
+                }
             }
         }
 
@@ -185,6 +184,12 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
             }
         }
 
+    }
+
+    @Override
+    public void W_() {
+        this.a(SoundEffects.BLOCK_BEACON_DEACTIVATE);
+        super.W_();
     }
 
     private void applyEffects() {
@@ -224,7 +229,7 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
         this.world.a((EntityHuman) null, this.position, soundeffect, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
-    public int f() {
+    public int h() {
         return this.levels;
     }
 

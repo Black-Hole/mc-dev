@@ -220,7 +220,7 @@ public class DefinedStructure {
                 }
 
                 boolean flag = true;
-                EnumDirection[] aenumdirection = new EnumDirection[] { EnumDirection.UP, EnumDirection.NORTH, EnumDirection.EAST, EnumDirection.SOUTH, EnumDirection.WEST};
+                EnumDirection[] aenumdirection = new EnumDirection[]{EnumDirection.UP, EnumDirection.NORTH, EnumDirection.EAST, EnumDirection.SOUTH, EnumDirection.WEST};
 
                 Iterator iterator1;
                 BlockPosition blockposition2;
@@ -397,11 +397,11 @@ public class DefinedStructure {
 
     public BlockPosition a(EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
-        case COUNTERCLOCKWISE_90:
-        case CLOCKWISE_90:
-            return new BlockPosition(this.c.getZ(), this.c.getY(), this.c.getX());
-        default:
-            return this.c;
+            case COUNTERCLOCKWISE_90:
+            case CLOCKWISE_90:
+                return new BlockPosition(this.c.getZ(), this.c.getY(), this.c.getX());
+            default:
+                return this.c;
         }
     }
 
@@ -412,28 +412,28 @@ public class DefinedStructure {
         boolean flag = true;
 
         switch (enumblockmirror) {
-        case LEFT_RIGHT:
-            k = -k;
-            break;
-        case FRONT_BACK:
-            i = -i;
-            break;
-        default:
-            flag = false;
+            case LEFT_RIGHT:
+                k = -k;
+                break;
+            case FRONT_BACK:
+                i = -i;
+                break;
+            default:
+                flag = false;
         }
 
         int l = blockposition1.getX();
         int i1 = blockposition1.getZ();
 
         switch (enumblockrotation) {
-        case COUNTERCLOCKWISE_90:
-            return new BlockPosition(l - i1 + k, j, l + i1 - i);
-        case CLOCKWISE_90:
-            return new BlockPosition(l + i1 - k, j, i1 - l + i);
-        case CLOCKWISE_180:
-            return new BlockPosition(l + l - i, j, i1 + i1 - k);
-        default:
-            return flag ? new BlockPosition(i, j, k) : blockposition;
+            case COUNTERCLOCKWISE_90:
+                return new BlockPosition(l - i1 + k, j, l + i1 - i);
+            case CLOCKWISE_90:
+                return new BlockPosition(l + i1 - k, j, i1 - l + i);
+            case CLOCKWISE_180:
+                return new BlockPosition(l + l - i, j, i1 + i1 - k);
+            default:
+                return flag ? new BlockPosition(i, j, k) : blockposition;
         }
     }
 
@@ -444,28 +444,28 @@ public class DefinedStructure {
         boolean flag = true;
 
         switch (enumblockmirror) {
-        case LEFT_RIGHT:
-            d2 = 1.0D - d2;
-            break;
-        case FRONT_BACK:
-            d0 = 1.0D - d0;
-            break;
-        default:
-            flag = false;
+            case LEFT_RIGHT:
+                d2 = 1.0D - d2;
+                break;
+            case FRONT_BACK:
+                d0 = 1.0D - d0;
+                break;
+            default:
+                flag = false;
         }
 
         int i = blockposition.getX();
         int j = blockposition.getZ();
 
         switch (enumblockrotation) {
-        case COUNTERCLOCKWISE_90:
-            return new Vec3D((double) (i - j) + d2, d1, (double) (i + j + 1) - d0);
-        case CLOCKWISE_90:
-            return new Vec3D((double) (i + j + 1) - d2, d1, (double) (j - i) + d0);
-        case CLOCKWISE_180:
-            return new Vec3D((double) (i + i + 1) - d0, d1, (double) (j + j + 1) - d2);
-        default:
-            return flag ? new Vec3D(d0, d1, d2) : vec3d;
+            case COUNTERCLOCKWISE_90:
+                return new Vec3D((double) (i - j) + d2, d1, (double) (i + j + 1) - d0);
+            case CLOCKWISE_90:
+                return new Vec3D((double) (i + j + 1) - d2, d1, (double) (j - i) + d0);
+            case CLOCKWISE_180:
+                return new Vec3D((double) (i + i + 1) - d0, d1, (double) (j + j + 1) - d2);
+            default:
+                return flag ? new Vec3D(d0, d1, d2) : vec3d;
         }
     }
 
@@ -481,17 +481,17 @@ public class DefinedStructure {
         BlockPosition blockposition1 = blockposition;
 
         switch (enumblockrotation) {
-        case COUNTERCLOCKWISE_90:
-            blockposition1 = blockposition.b(l, 0, i - k);
-            break;
-        case CLOCKWISE_90:
-            blockposition1 = blockposition.b(j - l, 0, k);
-            break;
-        case CLOCKWISE_180:
-            blockposition1 = blockposition.b(i - k, 0, j - l);
-            break;
-        case NONE:
-            blockposition1 = blockposition.b(k, 0, l);
+            case COUNTERCLOCKWISE_90:
+                blockposition1 = blockposition.b(l, 0, i - k);
+                break;
+            case CLOCKWISE_90:
+                blockposition1 = blockposition.b(j - l, 0, k);
+                break;
+            case CLOCKWISE_180:
+                blockposition1 = blockposition.b(i - k, 0, j - l);
+                break;
+            case NONE:
+                blockposition1 = blockposition.b(k, 0, l);
         }
 
         return blockposition1;
@@ -510,26 +510,26 @@ public class DefinedStructure {
         StructureBoundingBox structureboundingbox = new StructureBoundingBox(0, 0, 0, 0, 0, 0);
 
         switch (enumblockrotation) {
-        case COUNTERCLOCKWISE_90:
-            structureboundingbox = new StructureBoundingBox(i - j, 0, i + j - i1, i - j + k, l, i + j);
-            break;
-        case CLOCKWISE_90:
-            structureboundingbox = new StructureBoundingBox(i + j - k, 0, j - i, i + j, l, j - i + i1);
-            break;
-        case CLOCKWISE_180:
-            structureboundingbox = new StructureBoundingBox(i + i - k, 0, j + j - i1, i + i, l, j + j);
-            break;
-        case NONE:
-            structureboundingbox = new StructureBoundingBox(0, 0, 0, k, l, i1);
+            case COUNTERCLOCKWISE_90:
+                structureboundingbox = new StructureBoundingBox(i - j, 0, i + j - i1, i - j + k, l, i + j);
+                break;
+            case CLOCKWISE_90:
+                structureboundingbox = new StructureBoundingBox(i + j - k, 0, j - i, i + j, l, j - i + i1);
+                break;
+            case CLOCKWISE_180:
+                structureboundingbox = new StructureBoundingBox(i + i - k, 0, j + j - i1, i + i, l, j + j);
+                break;
+            case NONE:
+                structureboundingbox = new StructureBoundingBox(0, 0, 0, k, l, i1);
         }
 
         switch (enumblockmirror) {
-        case LEFT_RIGHT:
-            this.a(enumblockrotation, i1, k, structureboundingbox, EnumDirection.NORTH, EnumDirection.SOUTH);
-            break;
-        case FRONT_BACK:
-            this.a(enumblockrotation, k, i1, structureboundingbox, EnumDirection.WEST, EnumDirection.EAST);
-        case NONE:
+            case LEFT_RIGHT:
+                this.a(enumblockrotation, i1, k, structureboundingbox, EnumDirection.NORTH, EnumDirection.SOUTH);
+                break;
+            case FRONT_BACK:
+                this.a(enumblockrotation, k, i1, structureboundingbox, EnumDirection.WEST, EnumDirection.EAST);
+            case NONE:
         }
 
         structureboundingbox.a(blockposition.getX(), blockposition.getY(), blockposition.getZ());

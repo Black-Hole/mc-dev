@@ -213,7 +213,9 @@ public class ContainerGrindstone extends Container {
         itemstack1.setRepairCost(0);
         if (itemstack1.getItem() == Items.ENCHANTED_BOOK && map.size() == 0) {
             itemstack1 = new ItemStack(Items.BOOK);
-            itemstack1.a(itemstack.getName());
+            if (itemstack.hasName()) {
+                itemstack1.a(itemstack.getName());
+            }
         }
 
         for (int k = 0; k < map.size(); ++k) {

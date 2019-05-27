@@ -39,7 +39,7 @@ public class JsonList<K, V extends JsonListEntry<K>> {
     private boolean e = true;
     private static final ParameterizedType f = new ParameterizedType() {
         public Type[] getActualTypeArguments() {
-            return new Type[] { JsonListEntry.class};
+            return new Type[]{JsonListEntry.class};
         }
 
         public Type getRawType() {

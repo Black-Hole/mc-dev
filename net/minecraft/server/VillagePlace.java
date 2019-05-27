@@ -119,7 +119,11 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
     }
 
     private boolean f(long i) {
-        return this.a(VillagePlaceType.a, i, VillagePlace.Occupancy.IS_OCCUPIED).count() > 0L;
+        Optional<VillagePlaceSection> optional = this.c(i);
+
+        return optional == null ? false : (Boolean) optional.map((villageplacesection) -> {
+            return villageplacesection.a(VillagePlaceType.a, VillagePlace.Occupancy.IS_OCCUPIED).count() > 0L;
+        }).orElse(false);
     }
 
     @Override

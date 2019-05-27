@@ -541,7 +541,7 @@ public class WorldGenWoodlandMansionPieces {
                 ;
             }
 
-            WorldGenWoodlandMansionPieces.b[] aworldgenwoodlandmansionpieces_b = new WorldGenWoodlandMansionPieces.b[] { new WorldGenWoodlandMansionPieces.a(), new WorldGenWoodlandMansionPieces.f(), new WorldGenWoodlandMansionPieces.h()};
+            WorldGenWoodlandMansionPieces.b[] aworldgenwoodlandmansionpieces_b = new WorldGenWoodlandMansionPieces.b[]{new WorldGenWoodlandMansionPieces.a(), new WorldGenWoodlandMansionPieces.f(), new WorldGenWoodlandMansionPieces.h()};
 
             for (k = 0; k < 3; ++k) {
                 BlockPosition blockposition1 = blockposition.up(8 * k + (k == 2 ? 3 : 0));
@@ -1078,28 +1078,28 @@ public class WorldGenWoodlandMansionPieces {
                 byte b0 = -1;
 
                 switch (s.hashCode()) {
-                case -1505748702:
-                    if (s.equals("Warrior")) {
-                        b0 = 1;
-                    }
-                    break;
-                case 2390418:
-                    if (s.equals("Mage")) {
-                        b0 = 0;
-                    }
+                    case -1505748702:
+                        if (s.equals("Warrior")) {
+                            b0 = 1;
+                        }
+                        break;
+                    case 2390418:
+                        if (s.equals("Mage")) {
+                            b0 = 0;
+                        }
                 }
 
                 EntityIllagerAbstract entityillagerabstract;
 
                 switch (b0) {
-                case 0:
-                    entityillagerabstract = (EntityIllagerAbstract) EntityTypes.EVOKER.a(generatoraccess.getMinecraftWorld());
-                    break;
-                case 1:
-                    entityillagerabstract = (EntityIllagerAbstract) EntityTypes.VINDICATOR.a(generatoraccess.getMinecraftWorld());
-                    break;
-                default:
-                    return;
+                    case 0:
+                        entityillagerabstract = (EntityIllagerAbstract) EntityTypes.EVOKER.a(generatoraccess.getMinecraftWorld());
+                        break;
+                    case 1:
+                        entityillagerabstract = (EntityIllagerAbstract) EntityTypes.VINDICATOR.a(generatoraccess.getMinecraftWorld());
+                        break;
+                    default:
+                        return;
                 }
 
                 entityillagerabstract.setPersistent();

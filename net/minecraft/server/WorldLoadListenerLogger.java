@@ -34,7 +34,7 @@ public class WorldLoadListenerLogger implements WorldLoadListener {
 
         if (SystemUtils.getMonotonicMillis() > this.e) {
             this.e += 500L;
-            WorldLoadListenerLogger.LOGGER.info((new ChatMessage("menu.preparingSpawn", new Object[] { MathHelper.clamp(i, 0, 100)})).getString());
+            WorldLoadListenerLogger.LOGGER.info((new ChatMessage("menu.preparingSpawn", new Object[]{MathHelper.clamp(i, 0, 100)})).getString());
         }
 
     }

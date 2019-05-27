@@ -195,7 +195,7 @@ public class EntityPigZombie extends EntityZombie {
 
         public PathfinderGoalAngerOther(EntityPigZombie entitypigzombie) {
             super(entitypigzombie);
-            this.a(new Class[] { EntityZombie.class});
+            this.a(new Class[]{EntityZombie.class});
         }
 
         @Override

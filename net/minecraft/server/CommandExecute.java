@@ -27,11 +27,11 @@ import java.util.function.IntFunction;
 public class CommandExecute {
 
     private static final Dynamic2CommandExceptionType a = new Dynamic2CommandExceptionType((object, object1) -> {
-        return new ChatMessage("commands.execute.blocks.toobig", new Object[] { object, object1});
+        return new ChatMessage("commands.execute.blocks.toobig", new Object[]{object, object1});
     });
     private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.execute.conditional.fail", new Object[0]));
     private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.execute.conditional.fail_count", new Object[] { object});
+        return new ChatMessage("commands.execute.conditional.fail_count", new Object[]{object});
     });
     private static final BinaryOperator<ResultConsumer<CommandListenerWrapper>> d = (resultconsumer, resultconsumer1) -> {
         return (commandcontext, flag, i) -> {
@@ -261,7 +261,7 @@ public class CommandExecute {
             int i = commandexecute_a.test(commandcontext);
 
             if (i > 0) {
-                ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass_count", new Object[] { i}), false);
+                ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass_count", new Object[]{i}), false);
                 return i;
             } else {
                 throw CommandExecute.b.create();
@@ -338,7 +338,7 @@ public class CommandExecute {
         OptionalInt optionalint = c(commandcontext, flag);
 
         if (optionalint.isPresent()) {
-            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass_count", new Object[] { optionalint.getAsInt()}), false);
+            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass_count", new Object[]{optionalint.getAsInt()}), false);
             return optionalint.getAsInt();
         } else {
             throw CommandExecute.b.create();

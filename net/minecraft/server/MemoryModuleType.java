@@ -41,7 +41,7 @@ public class MemoryModuleType<U> {
         return IRegistry.MEMORY_MODULE_TYPE.getKey(this).toString();
     }
 
-    public Optional<Function<Dynamic<?>, U>> a() {
+    public Optional<Function<Dynamic<?>, U>> getSerializer() {
         return this.y;
     }
 

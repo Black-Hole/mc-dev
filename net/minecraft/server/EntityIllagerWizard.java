@@ -87,7 +87,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
         private Spell(int i, double d0, double d1, double d2) {
             this.g = i;
-            this.h = new double[] { d0, d1, d2};
+            this.h = new double[]{d0, d1, d2};
         }
 
         public static EntityIllagerWizard.Spell a(int i) {

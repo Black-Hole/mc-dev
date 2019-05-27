@@ -30,6 +30,6 @@ public class EntityDamageSourceIndirect extends EntityDamageSource {
         String s = "death.attack." + this.translationIndex;
         String s1 = s + ".item";
 
-        return !itemstack.isEmpty() && itemstack.hasName() ? new ChatMessage(s1, new Object[] { entityliving.getScoreboardDisplayName(), ichatbasecomponent, itemstack.B()}) : new ChatMessage(s, new Object[] { entityliving.getScoreboardDisplayName(), ichatbasecomponent});
+        return !itemstack.isEmpty() && itemstack.hasName() ? new ChatMessage(s1, new Object[]{entityliving.getScoreboardDisplayName(), ichatbasecomponent, itemstack.B()}) : new ChatMessage(s, new Object[]{entityliving.getScoreboardDisplayName(), ichatbasecomponent});
     }
 }

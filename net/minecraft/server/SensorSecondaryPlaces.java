@@ -23,7 +23,7 @@ public class SensorSecondaryPlaces extends Sensor<EntityVillager> {
                     BlockPosition blockposition1 = blockposition.b(i, j, k);
 
                     if (entityvillager.getVillagerData().getProfession().d().contains(worldserver.getType(blockposition1).getBlock())) {
-                        list.add(GlobalPos.a(dimensionmanager, blockposition1));
+                        list.add(GlobalPos.create(dimensionmanager, blockposition1));
                     }
                 }
             }

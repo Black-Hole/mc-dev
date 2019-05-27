@@ -77,9 +77,9 @@ public class CommandPlaySound {
             throw CommandPlaySound.a.create();
         } else {
             if (collection.size() == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.playsound.success.single", new Object[] { minecraftkey, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.playsound.success.single", new Object[]{minecraftkey, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.playsound.success.single", new Object[] { minecraftkey, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.playsound.success.single", new Object[]{minecraftkey, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
             }
 
             return i;

@@ -32,14 +32,14 @@ public final class VoxelShapeArray extends VoxelShape {
     @Override
     protected DoubleList a(EnumDirection.EnumAxis enumdirection_enumaxis) {
         switch (enumdirection_enumaxis) {
-        case X:
-            return this.b;
-        case Y:
-            return this.c;
-        case Z:
-            return this.d;
-        default:
-            throw new IllegalArgumentException();
+            case X:
+                return this.b;
+            case Y:
+                return this.c;
+            case Z:
+                return this.d;
+            default:
+                throw new IllegalArgumentException();
         }
     }
 }

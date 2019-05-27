@@ -42,7 +42,7 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
         while (!this.d.isEmpty() && booleansupplier.getAsBoolean()) {
             ChunkCoordIntPair chunkcoordintpair = SectionPosition.a(this.d.firstLong()).u();
 
-            this.c(chunkcoordintpair);
+            this.d(chunkcoordintpair);
         }
 
     }
@@ -94,14 +94,17 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
     }
 
     private void b(ChunkCoordIntPair chunkcoordintpair) {
+        this.a(chunkcoordintpair, DynamicOpsNBT.a, this.c(chunkcoordintpair));
+    }
+
+    @Nullable
+    private NBTTagCompound c(ChunkCoordIntPair chunkcoordintpair) {
         try {
-            NBTTagCompound nbttagcompound = this.read(chunkcoordintpair);
-
-            this.a(chunkcoordintpair, DynamicOpsNBT.a, nbttagcompound);
+            return this.read(chunkcoordintpair);
         } catch (IOException ioexception) {
-            RegionFileSection.LOGGER.error("Error reading data from disk", ioexception);
+            RegionFileSection.LOGGER.error("Error reading chunk {} data from disk", chunkcoordintpair, ioexception);
+            return null;
         }
-
     }
 
     private <T> void a(ChunkCoordIntPair chunkcoordintpair, DynamicOps<T> dynamicops, @Nullable T t0) {
@@ -138,7 +141,7 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
 
     }
 
-    private void c(ChunkCoordIntPair chunkcoordintpair) {
+    private void d(ChunkCoordIntPair chunkcoordintpair) {
         Dynamic<NBTBase> dynamic = this.a(chunkcoordintpair, DynamicOpsNBT.a);
         NBTBase nbtbase = (NBTBase) dynamic.getValue();
 
@@ -193,7 +196,7 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
                 long j = SectionPosition.a(chunkcoordintpair, i).v();
 
                 if (this.d.contains(j)) {
-                    this.c(chunkcoordintpair);
+                    this.d(chunkcoordintpair);
                     return;
                 }
             }

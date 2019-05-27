@@ -471,11 +471,11 @@ public abstract class EntityInsentient extends EntityLiving {
 
             this.setSlot(enumitemslot, itemstack);
             switch (enumitemslot.a()) {
-            case HAND:
-                this.dropChanceHand[enumitemslot.b()] = 2.0F;
-                break;
-            case ARMOR:
-                this.dropChanceArmor[enumitemslot.b()] = 2.0F;
+                case HAND:
+                    this.dropChanceHand[enumitemslot.b()] = 2.0F;
+                    break;
+                case ARMOR:
+                    this.dropChanceArmor[enumitemslot.b()] = 2.0F;
             }
 
             this.persistent = true;
@@ -697,23 +697,23 @@ public abstract class EntityInsentient extends EntityLiving {
     @Override
     public ItemStack getEquipment(EnumItemSlot enumitemslot) {
         switch (enumitemslot.a()) {
-        case HAND:
-            return (ItemStack) this.bA.get(enumitemslot.b());
-        case ARMOR:
-            return (ItemStack) this.bB.get(enumitemslot.b());
-        default:
-            return ItemStack.a;
+            case HAND:
+                return (ItemStack) this.bA.get(enumitemslot.b());
+            case ARMOR:
+                return (ItemStack) this.bB.get(enumitemslot.b());
+            default:
+                return ItemStack.a;
         }
     }
 
     @Override
     public void setSlot(EnumItemSlot enumitemslot, ItemStack itemstack) {
         switch (enumitemslot.a()) {
-        case HAND:
-            this.bA.set(enumitemslot.b(), itemstack);
-            break;
-        case ARMOR:
-            this.bB.set(enumitemslot.b(), itemstack);
+            case HAND:
+                this.bA.set(enumitemslot.b(), itemstack);
+                break;
+            case ARMOR:
+                this.bB.set(enumitemslot.b(), itemstack);
         }
 
     }
@@ -745,14 +745,14 @@ public abstract class EntityInsentient extends EntityLiving {
         float f;
 
         switch (enumitemslot.a()) {
-        case HAND:
-            f = this.dropChanceHand[enumitemslot.b()];
-            break;
-        case ARMOR:
-            f = this.dropChanceArmor[enumitemslot.b()];
-            break;
-        default:
-            f = 0.0F;
+            case HAND:
+                f = this.dropChanceHand[enumitemslot.b()];
+                break;
+            case ARMOR:
+                f = this.dropChanceArmor[enumitemslot.b()];
+                break;
+            default:
+                f = 0.0F;
         }
 
         return f;
@@ -812,56 +812,56 @@ public abstract class EntityInsentient extends EntityLiving {
     @Nullable
     public static Item a(EnumItemSlot enumitemslot, int i) {
         switch (enumitemslot) {
-        case HEAD:
-            if (i == 0) {
-                return Items.LEATHER_HELMET;
-            } else if (i == 1) {
-                return Items.GOLDEN_HELMET;
-            } else if (i == 2) {
-                return Items.CHAINMAIL_HELMET;
-            } else if (i == 3) {
-                return Items.IRON_HELMET;
-            } else if (i == 4) {
-                return Items.DIAMOND_HELMET;
-            }
-        case CHEST:
-            if (i == 0) {
-                return Items.LEATHER_CHESTPLATE;
-            } else if (i == 1) {
-                return Items.GOLDEN_CHESTPLATE;
-            } else if (i == 2) {
-                return Items.CHAINMAIL_CHESTPLATE;
-            } else if (i == 3) {
-                return Items.IRON_CHESTPLATE;
-            } else if (i == 4) {
-                return Items.DIAMOND_CHESTPLATE;
-            }
-        case LEGS:
-            if (i == 0) {
-                return Items.LEATHER_LEGGINGS;
-            } else if (i == 1) {
-                return Items.GOLDEN_LEGGINGS;
-            } else if (i == 2) {
-                return Items.CHAINMAIL_LEGGINGS;
-            } else if (i == 3) {
-                return Items.IRON_LEGGINGS;
-            } else if (i == 4) {
-                return Items.DIAMOND_LEGGINGS;
-            }
-        case FEET:
-            if (i == 0) {
-                return Items.LEATHER_BOOTS;
-            } else if (i == 1) {
-                return Items.GOLDEN_BOOTS;
-            } else if (i == 2) {
-                return Items.CHAINMAIL_BOOTS;
-            } else if (i == 3) {
-                return Items.IRON_BOOTS;
-            } else if (i == 4) {
-                return Items.DIAMOND_BOOTS;
-            }
-        default:
-            return null;
+            case HEAD:
+                if (i == 0) {
+                    return Items.LEATHER_HELMET;
+                } else if (i == 1) {
+                    return Items.GOLDEN_HELMET;
+                } else if (i == 2) {
+                    return Items.CHAINMAIL_HELMET;
+                } else if (i == 3) {
+                    return Items.IRON_HELMET;
+                } else if (i == 4) {
+                    return Items.DIAMOND_HELMET;
+                }
+            case CHEST:
+                if (i == 0) {
+                    return Items.LEATHER_CHESTPLATE;
+                } else if (i == 1) {
+                    return Items.GOLDEN_CHESTPLATE;
+                } else if (i == 2) {
+                    return Items.CHAINMAIL_CHESTPLATE;
+                } else if (i == 3) {
+                    return Items.IRON_CHESTPLATE;
+                } else if (i == 4) {
+                    return Items.DIAMOND_CHESTPLATE;
+                }
+            case LEGS:
+                if (i == 0) {
+                    return Items.LEATHER_LEGGINGS;
+                } else if (i == 1) {
+                    return Items.GOLDEN_LEGGINGS;
+                } else if (i == 2) {
+                    return Items.CHAINMAIL_LEGGINGS;
+                } else if (i == 3) {
+                    return Items.IRON_LEGGINGS;
+                } else if (i == 4) {
+                    return Items.DIAMOND_LEGGINGS;
+                }
+            case FEET:
+                if (i == 0) {
+                    return Items.LEATHER_BOOTS;
+                } else if (i == 1) {
+                    return Items.GOLDEN_BOOTS;
+                } else if (i == 2) {
+                    return Items.CHAINMAIL_BOOTS;
+                } else if (i == 3) {
+                    return Items.IRON_BOOTS;
+                } else if (i == 4) {
+                    return Items.DIAMOND_BOOTS;
+                }
+            default:
+                return null;
         }
     }
 
@@ -911,11 +911,11 @@ public abstract class EntityInsentient extends EntityLiving {
 
     public void a(EnumItemSlot enumitemslot, float f) {
         switch (enumitemslot.a()) {
-        case HAND:
-            this.dropChanceHand[enumitemslot.b()] = f;
-            break;
-        case ARMOR:
-            this.dropChanceArmor[enumitemslot.b()] = f;
+            case HAND:
+                this.dropChanceHand[enumitemslot.b()] = f;
+                break;
+            case ARMOR:
+                this.dropChanceArmor[enumitemslot.b()] = f;
         }
 
     }

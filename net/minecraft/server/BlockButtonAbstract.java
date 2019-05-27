@@ -42,27 +42,27 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
         boolean flag = (Boolean) iblockdata.get(BlockButtonAbstract.POWERED);
 
         switch ((BlockPropertyAttachPosition) iblockdata.get(BlockButtonAbstract.FACE)) {
-        case FLOOR:
-            if (enumdirection.k() == EnumDirection.EnumAxis.X) {
-                return flag ? BlockButtonAbstract.w : BlockButtonAbstract.d;
-            }
+            case FLOOR:
+                if (enumdirection.k() == EnumDirection.EnumAxis.X) {
+                    return flag ? BlockButtonAbstract.w : BlockButtonAbstract.d;
+                }
 
-            return flag ? BlockButtonAbstract.x : BlockButtonAbstract.e;
-        case WALL:
-            switch (enumdirection) {
-            case EAST:
-                return flag ? BlockButtonAbstract.B : BlockButtonAbstract.i;
-            case WEST:
-                return flag ? BlockButtonAbstract.A : BlockButtonAbstract.h;
-            case SOUTH:
-                return flag ? BlockButtonAbstract.z : BlockButtonAbstract.g;
-            case NORTH:
+                return flag ? BlockButtonAbstract.x : BlockButtonAbstract.e;
+            case WALL:
+                switch (enumdirection) {
+                    case EAST:
+                        return flag ? BlockButtonAbstract.B : BlockButtonAbstract.i;
+                    case WEST:
+                        return flag ? BlockButtonAbstract.A : BlockButtonAbstract.h;
+                    case SOUTH:
+                        return flag ? BlockButtonAbstract.z : BlockButtonAbstract.g;
+                    case NORTH:
+                    default:
+                        return flag ? BlockButtonAbstract.y : BlockButtonAbstract.f;
+                }
+            case CEILING:
             default:
-                return flag ? BlockButtonAbstract.y : BlockButtonAbstract.f;
-            }
-        case CEILING:
-        default:
-            return enumdirection.k() == EnumDirection.EnumAxis.X ? (flag ? BlockButtonAbstract.j : BlockButtonAbstract.b) : (flag ? BlockButtonAbstract.k : BlockButtonAbstract.c);
+                return enumdirection.k() == EnumDirection.EnumAxis.X ? (flag ? BlockButtonAbstract.j : BlockButtonAbstract.b) : (flag ? BlockButtonAbstract.k : BlockButtonAbstract.c);
         }
     }
 

@@ -74,15 +74,15 @@ public class BlockStructure extends BlockTileEntity {
 
     private void a(TileEntityStructure tileentitystructure) {
         switch (tileentitystructure.getUsageMode()) {
-        case SAVE:
-            tileentitystructure.b(false);
-            break;
-        case LOAD:
-            tileentitystructure.c(false);
-            break;
-        case CORNER:
-            tileentitystructure.E();
-        case DATA:
+            case SAVE:
+                tileentitystructure.b(false);
+                break;
+            case LOAD:
+                tileentitystructure.c(false);
+                break;
+            case CORNER:
+                tileentitystructure.E();
+            case DATA:
         }
 
     }

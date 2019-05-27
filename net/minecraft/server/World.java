@@ -144,7 +144,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
                         this.m(blockposition);
                     }
 
-                    if ((i & 2) != 0 && (!this.isClientSide || (i & 4) == 0) && (this.isClientSide || chunk.getState() != null && chunk.getState().a(PlayerChunk.State.TICKING))) {
+                    if ((i & 2) != 0 && (!this.isClientSide || (i & 4) == 0) && (this.isClientSide || chunk.getState() != null && chunk.getState().isAtLeast(PlayerChunk.State.TICKING))) {
                         this.notify(blockposition, iblockdata1, iblockdata, i);
                     }
 
@@ -366,7 +366,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
 
     public boolean a(TileEntity tileentity) {
         if (this.tickingTileEntities) {
-            World.LOGGER.error("Adding block entity while ticking: {} @ {}", new Supplier[] { () -> {
+            World.LOGGER.error("Adding block entity while ticking: {} @ {}", new Supplier[]{() -> {
                         return IRegistry.BLOCK_ENTITY_TYPE.getKey(tileentity.q());
                     }, tileentity::getPosition});
         }
@@ -681,7 +681,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
                         TileEntity tileentity1 = (TileEntity) iterator.next();
 
                         if (tileentity1.getPosition().equals(blockposition)) {
-                            tileentity1.m();
+                            tileentity1.W_();
                             iterator.remove();
                         }
                     }
@@ -700,7 +700,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
         TileEntity tileentity = this.getTileEntity(blockposition);
 
         if (tileentity != null && this.tickingTileEntities) {
-            tileentity.m();
+            tileentity.W_();
             this.tileEntityListPending.remove(tileentity);
         } else {
             if (tileentity != null) {

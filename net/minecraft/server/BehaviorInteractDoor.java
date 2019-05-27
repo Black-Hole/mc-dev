@@ -28,8 +28,8 @@ public class BehaviorInteractDoor extends Behavior<EntityLiving> {
 
     private Set<BlockPosition> a(WorldServer worldserver, List<GlobalPos> list, List<BlockPosition> list1) {
         Stream stream = list.stream().filter((globalpos) -> {
-            return globalpos.a() == worldserver.getWorldProvider().getDimensionManager();
-        }).map(GlobalPos::b);
+            return globalpos.getDimensionManager() == worldserver.getWorldProvider().getDimensionManager();
+        }).map(GlobalPos::getBlockPosition);
 
         list1.getClass();
         return (Set) stream.filter(list1::contains).collect(Collectors.toSet());

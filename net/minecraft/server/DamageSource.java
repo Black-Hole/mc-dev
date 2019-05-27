@@ -160,7 +160,7 @@ public class DamageSource {
         String s = "death.attack." + this.translationIndex;
         String s1 = s + ".player";
 
-        return entityliving1 != null ? new ChatMessage(s1, new Object[] { entityliving.getScoreboardDisplayName(), entityliving1.getScoreboardDisplayName()}) : new ChatMessage(s, new Object[] { entityliving.getScoreboardDisplayName()});
+        return entityliving1 != null ? new ChatMessage(s1, new Object[]{entityliving.getScoreboardDisplayName(), entityliving1.getScoreboardDisplayName()}) : new ChatMessage(s, new Object[]{entityliving.getScoreboardDisplayName()});
     }
 
     public boolean p() {

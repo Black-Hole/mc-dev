@@ -27,7 +27,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         this.goalSelector.a(5, new EntityDrowned.b(this, 1.0D));
         this.goalSelector.a(6, new EntityDrowned.e(this, 1.0D, this.world.getSeaLevel()));
         this.goalSelector.a(7, new PathfinderGoalRandomStroll(this, 1.0D));
-        this.targetSelector.a(1, (new PathfinderGoalHurtByTarget(this, new Class[] { EntityDrowned.class})).a(EntityPigZombie.class));
+        this.targetSelector.a(1, (new PathfinderGoalHurtByTarget(this, new Class[]{EntityDrowned.class})).a(EntityPigZombie.class));
         this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, 10, true, false, this::h));
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityVillagerAbstract.class, false));
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, true));

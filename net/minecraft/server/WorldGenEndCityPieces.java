@@ -39,7 +39,7 @@ public class WorldGenEndCityPieces {
             }
         }
     };
-    private static final List<Tuple<EnumBlockRotation, BlockPosition>> d = Lists.newArrayList(new Tuple[] { new Tuple<>(EnumBlockRotation.NONE, new BlockPosition(1, -1, 0)), new Tuple<>(EnumBlockRotation.CLOCKWISE_90, new BlockPosition(6, -1, 1)), new Tuple<>(EnumBlockRotation.COUNTERCLOCKWISE_90, new BlockPosition(0, -1, 5)), new Tuple<>(EnumBlockRotation.CLOCKWISE_180, new BlockPosition(5, -1, 6))});
+    private static final List<Tuple<EnumBlockRotation, BlockPosition>> d = Lists.newArrayList(new Tuple[]{new Tuple<>(EnumBlockRotation.NONE, new BlockPosition(1, -1, 0)), new Tuple<>(EnumBlockRotation.CLOCKWISE_90, new BlockPosition(6, -1, 1)), new Tuple<>(EnumBlockRotation.COUNTERCLOCKWISE_90, new BlockPosition(0, -1, 5)), new Tuple<>(EnumBlockRotation.CLOCKWISE_180, new BlockPosition(5, -1, 6))});
     private static final WorldGenEndCityPieces.PieceGenerator e = new WorldGenEndCityPieces.PieceGenerator() {
         @Override
         public void a() {}
@@ -129,7 +129,7 @@ public class WorldGenEndCityPieces {
             return true;
         }
     };
-    private static final List<Tuple<EnumBlockRotation, BlockPosition>> g = Lists.newArrayList(new Tuple[] { new Tuple<>(EnumBlockRotation.NONE, new BlockPosition(4, -1, 0)), new Tuple<>(EnumBlockRotation.CLOCKWISE_90, new BlockPosition(12, -1, 4)), new Tuple<>(EnumBlockRotation.COUNTERCLOCKWISE_90, new BlockPosition(0, -1, 8)), new Tuple<>(EnumBlockRotation.CLOCKWISE_180, new BlockPosition(8, -1, 12))});
+    private static final List<Tuple<EnumBlockRotation, BlockPosition>> g = Lists.newArrayList(new Tuple[]{new Tuple<>(EnumBlockRotation.NONE, new BlockPosition(4, -1, 0)), new Tuple<>(EnumBlockRotation.CLOCKWISE_90, new BlockPosition(12, -1, 4)), new Tuple<>(EnumBlockRotation.COUNTERCLOCKWISE_90, new BlockPosition(0, -1, 8)), new Tuple<>(EnumBlockRotation.CLOCKWISE_180, new BlockPosition(8, -1, 12))});
     private static final WorldGenEndCityPieces.PieceGenerator h = new WorldGenEndCityPieces.PieceGenerator() {
         @Override
         public void a() {}

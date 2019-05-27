@@ -41,9 +41,9 @@ public class CommandTitle {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.cleared.single", new Object[] { ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.cleared.single", new Object[]{((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.cleared.multiple", new Object[] { collection.size()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.cleared.multiple", new Object[]{collection.size()}), true);
         }
 
         return collection.size();
@@ -60,9 +60,9 @@ public class CommandTitle {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.reset.single", new Object[] { ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.reset.single", new Object[]{((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.reset.multiple", new Object[] { collection.size()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.reset.multiple", new Object[]{collection.size()}), true);
         }
 
         return collection.size();
@@ -74,13 +74,13 @@ public class CommandTitle {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            entityplayer.playerConnection.sendPacket(new PacketPlayOutTitle(packetplayouttitle_enumtitleaction, ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, entityplayer)));
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutTitle(packetplayouttitle_enumtitleaction, ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, entityplayer, 0)));
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.show." + packetplayouttitle_enumtitleaction.name().toLowerCase(Locale.ROOT) + ".single", new Object[] { ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.show." + packetplayouttitle_enumtitleaction.name().toLowerCase(Locale.ROOT) + ".single", new Object[]{((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.show." + packetplayouttitle_enumtitleaction.name().toLowerCase(Locale.ROOT) + ".multiple", new Object[] { collection.size()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.show." + packetplayouttitle_enumtitleaction.name().toLowerCase(Locale.ROOT) + ".multiple", new Object[]{collection.size()}), true);
         }
 
         return collection.size();
@@ -97,9 +97,9 @@ public class CommandTitle {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.times.single", new Object[] { ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.times.single", new Object[]{((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.times.multiple", new Object[] { collection.size()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.times.multiple", new Object[]{collection.size()}), true);
         }
 
         return collection.size();

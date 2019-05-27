@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 
 public class TileEntityConduit extends TileEntity implements ITickable {
 
-    private static final Block[] b = new Block[] { Blocks.PRISMARINE, Blocks.PRISMARINE_BRICKS, Blocks.SEA_LANTERN, Blocks.DARK_PRISMARINE};
+    private static final Block[] b = new Block[]{Blocks.PRISMARINE, Blocks.PRISMARINE_BRICKS, Blocks.SEA_LANTERN, Blocks.DARK_PRISMARINE};
     public int a;
     private float c;
     private boolean g;
@@ -68,18 +68,18 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         long i = this.world.getTime();
 
         if (i % 40L == 0L) {
-            this.a(this.f());
-            if (!this.world.isClientSide && this.c()) {
+            this.a(this.h());
+            if (!this.world.isClientSide && this.d()) {
                 this.s();
                 this.t();
             }
         }
 
-        if (i % 80L == 0L && this.c()) {
+        if (i % 80L == 0L && this.d()) {
             this.a(SoundEffects.BLOCK_CONDUIT_AMBIENT);
         }
 
-        if (i > this.l && this.c()) {
+        if (i > this.l && this.d()) {
             this.l = i + 60L + (long) this.world.getRandom().nextInt(40);
             this.a(SoundEffects.BLOCK_CONDUIT_AMBIENT_SHORT);
         }
@@ -87,14 +87,14 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         if (this.world.isClientSide) {
             this.u();
             this.y();
-            if (this.c()) {
+            if (this.d()) {
                 ++this.c;
             }
         }
 
     }
 
-    private boolean f() {
+    private boolean h() {
         this.i.clear();
 
         int i;
@@ -266,7 +266,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
 
     }
 
-    public boolean c() {
+    public boolean d() {
         return this.g;
     }
 

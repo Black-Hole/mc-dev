@@ -17,7 +17,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     @Override
     protected void initPathfinder() {
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
-        this.goalSelector.a(0, new PathfinderGoalUseItem<>(this, PotionUtil.a(new ItemStack(Items.POTION), Potions.h), SoundEffects.ENTITY_WANDERING_TRADER_DISAPPEARED, (entityvillagertrader) -> {
+        this.goalSelector.a(0, new PathfinderGoalUseItem<>(this, PotionUtil.a(new ItemStack(Items.POTION), Potions.INVISIBILITY), SoundEffects.ENTITY_WANDERING_TRADER_DISAPPEARED, (entityvillagertrader) -> {
             return !this.world.J() && !entityvillagertrader.isInvisible();
         }));
         this.goalSelector.a(0, new PathfinderGoalUseItem<>(this, new ItemStack(Items.MILK_BUCKET), SoundEffects.ENTITY_WANDERING_TRADER_REAPPEARED, (entityvillagertrader) -> {
@@ -165,7 +165,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     @Override
-    protected SoundEffect eb() {
+    public SoundEffect eb() {
         return SoundEffects.ENTITY_WANDERING_TRADER_YES;
     }
 

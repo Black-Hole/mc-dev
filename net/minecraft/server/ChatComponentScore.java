@@ -73,7 +73,7 @@ public class ChatComponentScore extends ChatBaseComponent implements ChatCompone
     }
 
     @Override
-    public IChatBaseComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity) throws CommandSyntaxException {
+    public IChatBaseComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity, int i) throws CommandSyntaxException {
         if (commandlistenerwrapper == null) {
             return this.g();
         } else {

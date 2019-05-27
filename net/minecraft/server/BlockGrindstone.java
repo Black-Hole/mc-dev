@@ -82,32 +82,32 @@ public class BlockGrindstone extends BlockAttachable {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockGrindstone.FACING);
 
         switch ((BlockPropertyAttachPosition) iblockdata.get(BlockGrindstone.FACE)) {
-        case FLOOR:
-            if (enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.SOUTH) {
-                return BlockGrindstone.A;
-            }
-
-            return BlockGrindstone.h;
-        case WALL:
-            if (enumdirection == EnumDirection.NORTH) {
-                return BlockGrindstone.R;
-            } else if (enumdirection == EnumDirection.SOUTH) {
-                return BlockGrindstone.J;
-            } else {
-                if (enumdirection == EnumDirection.EAST) {
-                    return BlockGrindstone.ah;
+            case FLOOR:
+                if (enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.SOUTH) {
+                    return BlockGrindstone.A;
                 }
 
-                return BlockGrindstone.Z;
-            }
-        case CEILING:
-            if (enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.SOUTH) {
-                return BlockGrindstone.ax;
-            }
+                return BlockGrindstone.h;
+            case WALL:
+                if (enumdirection == EnumDirection.NORTH) {
+                    return BlockGrindstone.R;
+                } else if (enumdirection == EnumDirection.SOUTH) {
+                    return BlockGrindstone.J;
+                } else {
+                    if (enumdirection == EnumDirection.EAST) {
+                        return BlockGrindstone.ah;
+                    }
 
-            return BlockGrindstone.ap;
-        default:
-            return BlockGrindstone.A;
+                    return BlockGrindstone.Z;
+                }
+            case CEILING:
+                if (enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.SOUTH) {
+                    return BlockGrindstone.ax;
+                }
+
+                return BlockGrindstone.ap;
+            default:
+                return BlockGrindstone.A;
         }
     }
 

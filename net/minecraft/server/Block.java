@@ -7,7 +7,6 @@ import it.unimi.dsi.fastutil.objects.Object2ByteLinkedOpenHashMap;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -18,7 +17,7 @@ public class Block implements IMaterial {
 
     protected static final Logger LOGGER = LogManager.getLogger();
     public static final RegistryBlockID<IBlockData> REGISTRY_ID = new RegistryBlockID<>();
-    private static final EnumDirection[] a = new EnumDirection[] { EnumDirection.WEST, EnumDirection.EAST, EnumDirection.NORTH, EnumDirection.SOUTH, EnumDirection.DOWN, EnumDirection.UP};
+    private static final EnumDirection[] a = new EnumDirection[]{EnumDirection.WEST, EnumDirection.EAST, EnumDirection.NORTH, EnumDirection.SOUTH, EnumDirection.DOWN, EnumDirection.UP};
     private static final LoadingCache<VoxelShape, Boolean> b = CacheBuilder.newBuilder().maximumSize(512L).weakKeys().build(new CacheLoader<VoxelShape, Boolean>() {
         public Boolean load(VoxelShape voxelshape) {
             return !VoxelShapes.c(VoxelShapes.b(), voxelshape, OperatorBoolean.NOT_SAME);
@@ -242,14 +241,14 @@ public class Block implements IMaterial {
     @Deprecated
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         switch (pathmode) {
-        case LAND:
-            return !a(iblockdata.getCollisionShape(iblockaccess, blockposition));
-        case WATER:
-            return iblockaccess.getFluid(blockposition).a(TagsFluid.WATER);
-        case AIR:
-            return !a(iblockdata.getCollisionShape(iblockaccess, blockposition));
-        default:
-            return false;
+            case LAND:
+                return !a(iblockdata.getCollisionShape(iblockaccess, blockposition));
+            case WATER:
+                return iblockaccess.getFluid(blockposition).a(TagsFluid.WATER);
+            case AIR:
+                return !a(iblockdata.getCollisionShape(iblockaccess, blockposition));
+            default:
+                return false;
         }
     }
 
@@ -823,7 +822,11 @@ public class Block implements IMaterial {
         }
 
         public int hashCode() {
-            return Objects.hash(new Object[] { this.a, this.b, this.c});
+            int i = this.a.hashCode();
+
+            i = 31 * i + this.b.hashCode();
+            i = 31 * i + this.c.hashCode();
+            return i;
         }
     }
 }

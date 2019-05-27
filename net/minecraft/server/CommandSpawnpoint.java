@@ -32,9 +32,9 @@ public class CommandSpawnpoint {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.spawnpoint.success.single", new Object[] { blockposition.getX(), blockposition.getY(), blockposition.getZ(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.spawnpoint.success.single", new Object[]{blockposition.getX(), blockposition.getY(), blockposition.getZ(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.spawnpoint.success.multiple", new Object[] { blockposition.getX(), blockposition.getY(), blockposition.getZ(), collection.size()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.spawnpoint.success.multiple", new Object[]{blockposition.getX(), blockposition.getY(), blockposition.getZ(), collection.size()}), true);
         }
 
         return collection.size();

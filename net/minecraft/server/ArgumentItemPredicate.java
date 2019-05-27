@@ -17,7 +17,7 @@ public class ArgumentItemPredicate implements ArgumentType<ArgumentItemPredicate
 
     private static final Collection<String> a = Arrays.asList("stick", "minecraft:stick", "#stick", "#stick{foo=bar}");
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("arguments.item.tag.unknown", new Object[] { object});
+        return new ChatMessage("arguments.item.tag.unknown", new Object[]{object});
     });
 
     public ArgumentItemPredicate() {}

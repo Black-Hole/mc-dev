@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 public class BlockSnow extends Block {
 
     public static final BlockStateInteger LAYERS = BlockProperties.ak;
-    protected static final VoxelShape[] b = new VoxelShape[] { VoxelShapes.a(), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
+    protected static final VoxelShape[] b = new VoxelShape[]{VoxelShapes.a(), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
     protected BlockSnow(Block.Info block_info) {
         super(block_info);
@@ -16,14 +16,14 @@ public class BlockSnow extends Block {
     @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         switch (pathmode) {
-        case LAND:
-            return (Integer) iblockdata.get(BlockSnow.LAYERS) < 5;
-        case WATER:
-            return false;
-        case AIR:
-            return false;
-        default:
-            return false;
+            case LAND:
+                return (Integer) iblockdata.get(BlockSnow.LAYERS) < 5;
+            case WATER:
+                return false;
+            case AIR:
+                return false;
+            default:
+                return false;
         }
     }
 

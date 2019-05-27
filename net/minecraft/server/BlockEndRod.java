@@ -24,13 +24,13 @@ public class BlockEndRod extends BlockDirectional {
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch (((EnumDirection) iblockdata.get(BlockEndRod.FACING)).k()) {
-        case X:
-        default:
-            return BlockEndRod.d;
-        case Z:
-            return BlockEndRod.c;
-        case Y:
-            return BlockEndRod.b;
+            case X:
+            default:
+                return BlockEndRod.d;
+            case Z:
+                return BlockEndRod.c;
+            case Y:
+                return BlockEndRod.b;
         }
     }
 

@@ -117,17 +117,17 @@ public class ProtoChunk implements IChunkAccess {
         while (iterator.hasNext()) {
             BlockPosition blockposition = (BlockPosition) iterator.next();
 
-            IChunkAccess.a(ashortlist, blockposition.getY() >> 4).add(k(blockposition));
+            IChunkAccess.a(ashortlist, blockposition.getY() >> 4).add(l(blockposition));
         }
 
         return ashortlist;
     }
 
     public void b(short short0, int i) {
-        this.j(a(short0, i, this.b));
+        this.k(a(short0, i, this.b));
     }
 
-    public void j(BlockPosition blockposition) {
+    public void k(BlockPosition blockposition) {
         this.l.add(blockposition.immutableCopy());
     }
 
@@ -369,7 +369,7 @@ public class ProtoChunk implements IChunkAccess {
         this.c = true;
     }
 
-    public static short k(BlockPosition blockposition) {
+    public static short l(BlockPosition blockposition) {
         int i = blockposition.getX();
         int j = blockposition.getY();
         int k = blockposition.getZ();
@@ -391,7 +391,7 @@ public class ProtoChunk implements IChunkAccess {
     @Override
     public void f(BlockPosition blockposition) {
         if (!World.isOutsideWorld(blockposition)) {
-            IChunkAccess.a(this.m, blockposition.getY() >> 4).add(k(blockposition));
+            IChunkAccess.a(this.m, blockposition.getY() >> 4).add(l(blockposition));
         }
 
     }
@@ -443,6 +443,14 @@ public class ProtoChunk implements IChunkAccess {
     @Override
     public NBTTagCompound i(BlockPosition blockposition) {
         return (NBTTagCompound) this.i.get(blockposition);
+    }
+
+    @Nullable
+    @Override
+    public NBTTagCompound j(BlockPosition blockposition) {
+        TileEntity tileentity = this.getTileEntity(blockposition);
+
+        return tileentity != null ? tileentity.save(new NBTTagCompound()) : (NBTTagCompound) this.i.get(blockposition);
     }
 
     @Override

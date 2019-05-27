@@ -30,43 +30,43 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
 
     @Override
     public void tick() {
-        this.s();
+        this.h();
         if (this.i == TileEntityShulkerBox.AnimationPhase.OPENING || this.i == TileEntityShulkerBox.AnimationPhase.CLOSING) {
-            this.v();
+            this.u();
         }
 
     }
 
-    protected void s() {
+    protected void h() {
         this.k = this.j;
         switch (this.i) {
-        case CLOSED:
-            this.j = 0.0F;
-            break;
-        case OPENING:
-            this.j += 0.1F;
-            if (this.j >= 1.0F) {
-                this.v();
-                this.i = TileEntityShulkerBox.AnimationPhase.OPENED;
-                this.j = 1.0F;
-                this.x();
-            }
-            break;
-        case CLOSING:
-            this.j -= 0.1F;
-            if (this.j <= 0.0F) {
-                this.i = TileEntityShulkerBox.AnimationPhase.CLOSED;
+            case CLOSED:
                 this.j = 0.0F;
-                this.x();
-            }
-            break;
-        case OPENED:
-            this.j = 1.0F;
+                break;
+            case OPENING:
+                this.j += 0.1F;
+                if (this.j >= 1.0F) {
+                    this.u();
+                    this.i = TileEntityShulkerBox.AnimationPhase.OPENED;
+                    this.j = 1.0F;
+                    this.v();
+                }
+                break;
+            case CLOSING:
+                this.j -= 0.1F;
+                if (this.j <= 0.0F) {
+                    this.i = TileEntityShulkerBox.AnimationPhase.CLOSED;
+                    this.j = 0.0F;
+                    this.v();
+                }
+                break;
+            case OPENED:
+                this.j = 1.0F;
         }
 
     }
 
-    public TileEntityShulkerBox.AnimationPhase t() {
+    public TileEntityShulkerBox.AnimationPhase s() {
         return this.i;
     }
 
@@ -86,7 +86,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
         return this.b(enumdirection).a((double) enumdirection1.getAdjacentX(), (double) enumdirection1.getAdjacentY(), (double) enumdirection1.getAdjacentZ());
     }
 
-    private void v() {
+    private void u() {
         IBlockData iblockdata = this.world.getType(this.getPosition());
 
         if (iblockdata.getBlock() instanceof BlockShulkerBox) {
@@ -105,32 +105,32 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
                         AxisAlignedBB axisalignedbb1 = entity.getBoundingBox();
 
                         switch (enumdirection.k()) {
-                        case X:
-                            if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
-                                d0 = axisalignedbb.maxX - axisalignedbb1.minX;
-                            } else {
-                                d0 = axisalignedbb1.maxX - axisalignedbb.minX;
-                            }
+                            case X:
+                                if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
+                                    d0 = axisalignedbb.maxX - axisalignedbb1.minX;
+                                } else {
+                                    d0 = axisalignedbb1.maxX - axisalignedbb.minX;
+                                }
 
-                            d0 += 0.01D;
-                            break;
-                        case Y:
-                            if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
-                                d1 = axisalignedbb.maxY - axisalignedbb1.minY;
-                            } else {
-                                d1 = axisalignedbb1.maxY - axisalignedbb.minY;
-                            }
+                                d0 += 0.01D;
+                                break;
+                            case Y:
+                                if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
+                                    d1 = axisalignedbb.maxY - axisalignedbb1.minY;
+                                } else {
+                                    d1 = axisalignedbb1.maxY - axisalignedbb.minY;
+                                }
 
-                            d1 += 0.01D;
-                            break;
-                        case Z:
-                            if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
-                                d2 = axisalignedbb.maxZ - axisalignedbb1.minZ;
-                            } else {
-                                d2 = axisalignedbb1.maxZ - axisalignedbb.minZ;
-                            }
+                                d1 += 0.01D;
+                                break;
+                            case Z:
+                                if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
+                                    d2 = axisalignedbb.maxZ - axisalignedbb1.minZ;
+                                } else {
+                                    d2 = axisalignedbb1.maxZ - axisalignedbb.minZ;
+                                }
 
-                            d2 += 0.01D;
+                                d2 += 0.01D;
                         }
 
                         entity.move(EnumMoveType.SHULKER_BOX, new Vec3D(d0 * (double) enumdirection.getAdjacentX(), d1 * (double) enumdirection.getAdjacentY(), d2 * (double) enumdirection.getAdjacentZ()));
@@ -152,12 +152,12 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
             this.c = j;
             if (j == 0) {
                 this.i = TileEntityShulkerBox.AnimationPhase.CLOSING;
-                this.x();
+                this.v();
             }
 
             if (j == 1) {
                 this.i = TileEntityShulkerBox.AnimationPhase.OPENING;
-                this.x();
+                this.v();
             }
 
             return true;
@@ -166,7 +166,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
         }
     }
 
-    private void x() {
+    private void v() {
         this.getBlock().a(this.getWorld(), this.getPosition(), 3);
     }
 

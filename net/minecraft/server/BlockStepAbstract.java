@@ -29,12 +29,12 @@ public class BlockStepAbstract extends Block implements IBlockWaterlogged {
         BlockPropertySlabType blockpropertyslabtype = (BlockPropertySlabType) iblockdata.get(BlockStepAbstract.a);
 
         switch (blockpropertyslabtype) {
-        case DOUBLE:
-            return VoxelShapes.b();
-        case TOP:
-            return BlockStepAbstract.d;
-        default:
-            return BlockStepAbstract.c;
+            case DOUBLE:
+                return VoxelShapes.b();
+            case TOP:
+                return BlockStepAbstract.d;
+            default:
+                return BlockStepAbstract.c;
         }
     }
 
@@ -101,14 +101,14 @@ public class BlockStepAbstract extends Block implements IBlockWaterlogged {
     @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         switch (pathmode) {
-        case LAND:
-            return false;
-        case WATER:
-            return iblockaccess.getFluid(blockposition).a(TagsFluid.WATER);
-        case AIR:
-            return false;
-        default:
-            return false;
+            case LAND:
+                return false;
+            case WATER:
+                return iblockaccess.getFluid(blockposition).a(TagsFluid.WATER);
+            case AIR:
+                return false;
+            default:
+                return false;
         }
     }
 }

@@ -50,14 +50,14 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
         List list;
 
         switch (this.e) {
-        case EVERYTHING:
-            list = world.getEntities((Entity) null, axisalignedbb);
-            break;
-        case MOBS:
-            list = world.a(EntityLiving.class, axisalignedbb);
-            break;
-        default:
-            return 0;
+            case EVERYTHING:
+                list = world.getEntities((Entity) null, axisalignedbb);
+                break;
+            case MOBS:
+                list = world.a(EntityLiving.class, axisalignedbb);
+                break;
+            default:
+                return 0;
         }
 
         if (!list.isEmpty()) {

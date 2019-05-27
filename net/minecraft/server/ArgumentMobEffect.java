@@ -15,7 +15,7 @@ public class ArgumentMobEffect implements ArgumentType<MobEffectList> {
 
     private static final Collection<String> b = Arrays.asList("spooky", "effect");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("effect.effectNotFound", new Object[] { object});
+        return new ChatMessage("effect.effectNotFound", new Object[]{object});
     });
 
     public ArgumentMobEffect() {}

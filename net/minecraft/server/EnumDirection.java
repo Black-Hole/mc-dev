@@ -80,7 +80,7 @@ public enum EnumDirection implements INamable {
     }
 
     private static EnumDirection[] a(EnumDirection enumdirection, EnumDirection enumdirection1, EnumDirection enumdirection2) {
-        return new EnumDirection[] { enumdirection, enumdirection1, enumdirection2, enumdirection2.opposite(), enumdirection1.opposite(), enumdirection.opposite()};
+        return new EnumDirection[]{enumdirection, enumdirection1, enumdirection2, enumdirection2.opposite(), enumdirection1.opposite(), enumdirection.opposite()};
     }
 
     public int a() {
@@ -101,31 +101,31 @@ public enum EnumDirection implements INamable {
 
     public EnumDirection e() {
         switch (this) {
-        case NORTH:
-            return EnumDirection.EAST;
-        case EAST:
-            return EnumDirection.SOUTH;
-        case SOUTH:
-            return EnumDirection.WEST;
-        case WEST:
-            return EnumDirection.NORTH;
-        default:
-            throw new IllegalStateException("Unable to get Y-rotated facing of " + this);
+            case NORTH:
+                return EnumDirection.EAST;
+            case EAST:
+                return EnumDirection.SOUTH;
+            case SOUTH:
+                return EnumDirection.WEST;
+            case WEST:
+                return EnumDirection.NORTH;
+            default:
+                throw new IllegalStateException("Unable to get Y-rotated facing of " + this);
         }
     }
 
     public EnumDirection f() {
         switch (this) {
-        case NORTH:
-            return EnumDirection.WEST;
-        case EAST:
-            return EnumDirection.NORTH;
-        case SOUTH:
-            return EnumDirection.EAST;
-        case WEST:
-            return EnumDirection.SOUTH;
-        default:
-            throw new IllegalStateException("Unable to get CCW facing of " + this);
+            case NORTH:
+                return EnumDirection.WEST;
+            case EAST:
+                return EnumDirection.NORTH;
+            case SOUTH:
+                return EnumDirection.EAST;
+            case WEST:
+                return EnumDirection.SOUTH;
+            default:
+                throw new IllegalStateException("Unable to get CCW facing of " + this);
         }
     }
 
@@ -168,13 +168,13 @@ public enum EnumDirection implements INamable {
 
     public static EnumDirection a(EnumDirection.EnumAxis enumdirection_enumaxis, EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection) {
         switch (enumdirection_enumaxis) {
-        case X:
-            return enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? EnumDirection.EAST : EnumDirection.WEST;
-        case Y:
-            return enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? EnumDirection.UP : EnumDirection.DOWN;
-        case Z:
-        default:
-            return enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? EnumDirection.SOUTH : EnumDirection.NORTH;
+            case X:
+                return enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? EnumDirection.EAST : EnumDirection.WEST;
+            case Y:
+                return enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? EnumDirection.UP : EnumDirection.DOWN;
+            case Z:
+            default:
+                return enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? EnumDirection.SOUTH : EnumDirection.NORTH;
         }
     }
 
@@ -239,7 +239,7 @@ public enum EnumDirection implements INamable {
 
     public static enum EnumDirectionLimit implements Iterable<EnumDirection>, Predicate<EnumDirection> {
 
-        HORIZONTAL(new EnumDirection[] { EnumDirection.NORTH, EnumDirection.EAST, EnumDirection.SOUTH, EnumDirection.WEST}, new EnumDirection.EnumAxis[] { EnumDirection.EnumAxis.X, EnumDirection.EnumAxis.Z}), VERTICAL(new EnumDirection[] { EnumDirection.UP, EnumDirection.DOWN}, new EnumDirection.EnumAxis[] { EnumDirection.EnumAxis.Y});
+        HORIZONTAL(new EnumDirection[]{EnumDirection.NORTH, EnumDirection.EAST, EnumDirection.SOUTH, EnumDirection.WEST}, new EnumDirection.EnumAxis[]{EnumDirection.EnumAxis.X, EnumDirection.EnumAxis.Z}), VERTICAL(new EnumDirection[]{EnumDirection.UP, EnumDirection.DOWN}, new EnumDirection.EnumAxis[]{EnumDirection.EnumAxis.Y});
 
         private final EnumDirection[] c;
         private final EnumDirection.EnumAxis[] d;
@@ -354,13 +354,13 @@ public enum EnumDirection implements INamable {
 
         public EnumDirection.EnumDirectionLimit d() {
             switch (this) {
-            case X:
-            case Z:
-                return EnumDirection.EnumDirectionLimit.HORIZONTAL;
-            case Y:
-                return EnumDirection.EnumDirectionLimit.VERTICAL;
-            default:
-                throw new Error("Someone's been tampering with the universe!");
+                case X:
+                case Z:
+                    return EnumDirection.EnumDirectionLimit.HORIZONTAL;
+                case Y:
+                    return EnumDirection.EnumDirectionLimit.VERTICAL;
+                default:
+                    throw new Error("Someone's been tampering with the universe!");
             }
         }
 

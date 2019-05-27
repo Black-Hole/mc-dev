@@ -164,7 +164,7 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
         return i;
     }
 
-    protected void a(long i, NibbleArray nibblearray) {
+    protected void a(long i, @Nullable NibbleArray nibblearray) {
         this.c.a(i, nibblearray);
     }
 
@@ -198,7 +198,7 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
 
     @Override
     public void a(SectionPosition sectionposition, boolean flag) {
-        this.c.c(sectionposition.v(), flag);
+        this.c.d(sectionposition.v(), flag);
     }
 
     public void a(ChunkCoordIntPair chunkcoordintpair, boolean flag) {
@@ -206,5 +206,11 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
 
         this.c.c();
         this.c.b(i, flag);
+    }
+
+    public void b(ChunkCoordIntPair chunkcoordintpair, boolean flag) {
+        long i = SectionPosition.f(SectionPosition.b(chunkcoordintpair.x, 0, chunkcoordintpair.z));
+
+        this.c.c(i, flag);
     }
 }

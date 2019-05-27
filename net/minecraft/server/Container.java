@@ -570,14 +570,14 @@ public abstract class Container {
 
     public static void a(Set<Slot> set, int i, ItemStack itemstack, int j) {
         switch (i) {
-        case 0:
-            itemstack.setCount(MathHelper.d((float) itemstack.getCount() / (float) set.size()));
-            break;
-        case 1:
-            itemstack.setCount(1);
-            break;
-        case 2:
-            itemstack.setCount(itemstack.getItem().getMaxStackSize());
+            case 0:
+                itemstack.setCount(MathHelper.d((float) itemstack.getCount() / (float) set.size()));
+                break;
+            case 1:
+                itemstack.setCount(1);
+                break;
+            case 2:
+                itemstack.setCount(itemstack.getItem().getMaxStackSize());
         }
 
         itemstack.add(j);

@@ -22,7 +22,7 @@ public class BlockDropper extends BlockDispenser {
     public void dispense(World world, BlockPosition blockposition) {
         SourceBlock sourceblock = new SourceBlock(world, blockposition);
         TileEntityDispenser tileentitydispenser = (TileEntityDispenser) sourceblock.getTileEntity();
-        int i = tileentitydispenser.s();
+        int i = tileentitydispenser.h();
 
         if (i < 0) {
             world.triggerEffect(1001, blockposition, 0);

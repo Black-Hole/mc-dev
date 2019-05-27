@@ -22,15 +22,15 @@ public class DataConverterItemFrame extends DataConverterNamedEntity {
 
     private static byte a(byte b0) {
         switch (b0) {
-        case 0:
-            return 3;
-        case 1:
-            return 4;
-        case 2:
-        default:
-            return 2;
-        case 3:
-            return 5;
+            case 0:
+                return 3;
+            case 1:
+                return 4;
+            case 2:
+            default:
+                return 2;
+            case 3:
+                return 5;
         }
     }
 }

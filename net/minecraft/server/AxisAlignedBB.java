@@ -227,7 +227,7 @@ public class AxisAlignedBB {
     }
 
     public Optional<Vec3D> b(Vec3D vec3d, Vec3D vec3d1) {
-        double[] adouble = new double[] { 1.0D};
+        double[] adouble = new double[]{1.0D};
         double d0 = vec3d1.x - vec3d.x;
         double d1 = vec3d1.y - vec3d.y;
         double d2 = vec3d1.z - vec3d.z;
@@ -244,7 +244,7 @@ public class AxisAlignedBB {
 
     @Nullable
     public static MovingObjectPositionBlock a(Iterable<AxisAlignedBB> iterable, Vec3D vec3d, Vec3D vec3d1, BlockPosition blockposition) {
-        double[] adouble = new double[] { 1.0D};
+        double[] adouble = new double[]{1.0D};
         EnumDirection enumdirection = null;
         double d0 = vec3d1.x - vec3d.x;
         double d1 = vec3d1.y - vec3d.y;

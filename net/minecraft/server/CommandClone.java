@@ -18,7 +18,7 @@ public class CommandClone {
 
     private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.clone.overlap", new Object[0]));
     private static final Dynamic2CommandExceptionType c = new Dynamic2CommandExceptionType((object, object1) -> {
-        return new ChatMessage("commands.clone.toobig", new Object[] { object, object1});
+        return new ChatMessage("commands.clone.toobig", new Object[]{object, object1});
     });
     private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.clone.failed", new Object[0]));
     public static final Predicate<ShapeDetectorBlock> a = (shapedetectorblock) -> {
@@ -192,7 +192,7 @@ public class CommandClone {
                     if (j == 0) {
                         throw CommandClone.d.create();
                     } else {
-                        commandlistenerwrapper.sendMessage(new ChatMessage("commands.clone.success", new Object[] { j}), true);
+                        commandlistenerwrapper.sendMessage(new ChatMessage("commands.clone.success", new Object[]{j}), true);
                         return j;
                     }
                 } else {

@@ -21,14 +21,14 @@ public class PacketPlayOutCombatEvent implements Packet<PacketListenerPlayOut> {
         EntityLiving entityliving = combattracker.c();
 
         switch (packetplayoutcombatevent_enumcombateventtype) {
-        case END_COMBAT:
-            this.d = combattracker.f();
-            this.c = entityliving == null ? -1 : entityliving.getId();
-            break;
-        case ENTITY_DIED:
-            this.b = combattracker.h().getId();
-            this.c = entityliving == null ? -1 : entityliving.getId();
-            this.e = ichatbasecomponent;
+            case END_COMBAT:
+                this.d = combattracker.f();
+                this.c = entityliving == null ? -1 : entityliving.getId();
+                break;
+            case ENTITY_DIED:
+                this.b = combattracker.h().getId();
+                this.c = entityliving == null ? -1 : entityliving.getId();
+                this.e = ichatbasecomponent;
         }
 
     }

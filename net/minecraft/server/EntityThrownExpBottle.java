@@ -27,7 +27,7 @@ public class EntityThrownExpBottle extends EntityProjectileThrowable {
     @Override
     protected void a(MovingObjectPosition movingobjectposition) {
         if (!this.world.isClientSide) {
-            this.world.triggerEffect(2002, new BlockPosition(this), PotionUtil.a(Potions.b));
+            this.world.triggerEffect(2002, new BlockPosition(this), PotionUtil.a(Potions.WATER));
             int i = 3 + this.world.random.nextInt(5) + this.world.random.nextInt(5);
 
             while (i > 0) {

@@ -56,7 +56,7 @@ public class InventoryEnderChest extends InventorySubcontainer {
     @Override
     public void startOpen(EntityHuman entityhuman) {
         if (this.a != null) {
-            this.a.c();
+            this.a.d();
         }
 
         super.startOpen(entityhuman);
@@ -65,7 +65,7 @@ public class InventoryEnderChest extends InventorySubcontainer {
     @Override
     public void closeContainer(EntityHuman entityhuman) {
         if (this.a != null) {
-            this.a.d();
+            this.a.f();
         }
 
         super.closeContainer(entityhuman);

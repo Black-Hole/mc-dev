@@ -33,7 +33,7 @@ public class EntityDamageSource extends DamageSource {
         ItemStack itemstack = this.x instanceof EntityLiving ? ((EntityLiving) this.x).getItemInMainHand() : ItemStack.a;
         String s = "death.attack." + this.translationIndex;
 
-        return !itemstack.isEmpty() && itemstack.hasName() ? new ChatMessage(s + ".item", new Object[] { entityliving.getScoreboardDisplayName(), this.x.getScoreboardDisplayName(), itemstack.B()}) : new ChatMessage(s, new Object[] { entityliving.getScoreboardDisplayName(), this.x.getScoreboardDisplayName()});
+        return !itemstack.isEmpty() && itemstack.hasName() ? new ChatMessage(s + ".item", new Object[]{entityliving.getScoreboardDisplayName(), this.x.getScoreboardDisplayName(), itemstack.B()}) : new ChatMessage(s, new Object[]{entityliving.getScoreboardDisplayName(), this.x.getScoreboardDisplayName()});
     }
 
     @Override

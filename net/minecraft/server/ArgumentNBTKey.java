@@ -26,7 +26,7 @@ public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.h> {
     private static final Collection<String> c = Arrays.asList("foo", "foo.bar", "foo[0]", "[0]", "[]", "{foo=bar}");
     public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("arguments.nbtpath.node.invalid", new Object[0]));
     public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("arguments.nbtpath.nothing_found", new Object[] { object});
+        return new ChatMessage("arguments.nbtpath.nothing_found", new Object[]{object});
     });
 
     public ArgumentNBTKey() {}
@@ -67,40 +67,40 @@ public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.h> {
         String s;
 
         switch (stringreader.peek()) {
-        case '"':
-            s = stringreader.readString();
-            return a(stringreader, s);
-        case '[':
-            stringreader.skip();
-            char c0 = stringreader.peek();
+            case '"':
+                s = stringreader.readString();
+                return a(stringreader, s);
+            case '[':
+                stringreader.skip();
+                char c0 = stringreader.peek();
 
-            if (c0 == '{') {
-                NBTTagCompound nbttagcompound = (new MojangsonParser(stringreader)).f();
+                if (c0 == '{') {
+                    NBTTagCompound nbttagcompound = (new MojangsonParser(stringreader)).f();
 
-                stringreader.expect(']');
-                return new ArgumentNBTKey.e(nbttagcompound);
-            } else {
-                if (c0 == ']') {
-                    stringreader.skip();
-                    return ArgumentNBTKey.a.a;
+                    stringreader.expect(']');
+                    return new ArgumentNBTKey.e(nbttagcompound);
+                } else {
+                    if (c0 == ']') {
+                        stringreader.skip();
+                        return ArgumentNBTKey.a.a;
+                    }
+
+                    int i = stringreader.readInt();
+
+                    stringreader.expect(']');
+                    return new ArgumentNBTKey.c(i);
+                }
+            case '{':
+                if (!flag) {
+                    throw ArgumentNBTKey.a.createWithContext(stringreader);
                 }
 
-                int i = stringreader.readInt();
+                NBTTagCompound nbttagcompound1 = (new MojangsonParser(stringreader)).f();
 
-                stringreader.expect(']');
-                return new ArgumentNBTKey.c(i);
-            }
-        case '{':
-            if (!flag) {
-                throw ArgumentNBTKey.a.createWithContext(stringreader);
-            }
-
-            NBTTagCompound nbttagcompound1 = (new MojangsonParser(stringreader)).f();
-
-            return new ArgumentNBTKey.g(nbttagcompound1);
-        default:
-            s = b(stringreader);
-            return a(stringreader, s);
+                return new ArgumentNBTKey.g(nbttagcompound1);
+            default:
+                s = b(stringreader);
+                return a(stringreader, s);
         }
     }
 

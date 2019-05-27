@@ -50,16 +50,16 @@ public class CommandDataAccessorEntity implements CommandDataAccessor {
 
     @Override
     public IChatBaseComponent b() {
-        return new ChatMessage("commands.data.entity.modified", new Object[] { this.c.getScoreboardDisplayName()});
+        return new ChatMessage("commands.data.entity.modified", new Object[]{this.c.getScoreboardDisplayName()});
     }
 
     @Override
     public IChatBaseComponent a(NBTBase nbtbase) {
-        return new ChatMessage("commands.data.entity.query", new Object[] { this.c.getScoreboardDisplayName(), nbtbase.k()});
+        return new ChatMessage("commands.data.entity.query", new Object[]{this.c.getScoreboardDisplayName(), nbtbase.k()});
     }
 
     @Override
     public IChatBaseComponent a(ArgumentNBTKey.h argumentnbtkey_h, double d0, int i) {
-        return new ChatMessage("commands.data.entity.get", new Object[] { argumentnbtkey_h, this.c.getScoreboardDisplayName(), String.format(Locale.ROOT, "%.2f", d0), i});
+        return new ChatMessage("commands.data.entity.get", new Object[]{argumentnbtkey_h, this.c.getScoreboardDisplayName(), String.format(Locale.ROOT, "%.2f", d0), i});
     }
 }

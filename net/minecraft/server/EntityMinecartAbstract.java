@@ -13,7 +13,7 @@ public abstract class EntityMinecartAbstract extends Entity {
     private static final DataWatcherObject<Integer> f = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Boolean> g = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.i);
     private boolean ar;
-    private static final int[][][] as = new int[][][] { { { 0, 0, -1}, { 0, 0, 1}}, { { -1, 0, 0}, { 1, 0, 0}}, { { -1, -1, 0}, { 1, 0, 0}}, { { -1, 0, 0}, { 1, -1, 0}}, { { 0, 0, -1}, { 0, -1, 1}}, { { 0, -1, -1}, { 0, 0, 1}}, { { 0, 0, 1}, { 1, 0, 0}}, { { 0, 0, 1}, { -1, 0, 0}}, { { 0, 0, -1}, { -1, 0, 0}}, { { 0, 0, -1}, { 1, 0, 0}}};
+    private static final int[][][] as = new int[][][]{{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
     private int at;
     private double au;
     private double av;
@@ -256,7 +256,7 @@ public abstract class EntityMinecartAbstract extends Entity {
 
     protected void b(BlockPosition blockposition, IBlockData iblockdata) {
         this.fallDistance = 0.0F;
-        Vec3D vec3d = this.k(this.locX, this.locY, this.locZ);
+        Vec3D vec3d = this.l(this.locX, this.locY, this.locZ);
 
         this.locY = (double) blockposition.getY();
         boolean flag = false;
@@ -273,21 +273,21 @@ public abstract class EntityMinecartAbstract extends Entity {
         BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(blockminecarttrackabstract.e());
 
         switch (blockpropertytrackposition) {
-        case ASCENDING_EAST:
-            this.setMot(vec3d1.add(-0.0078125D, 0.0D, 0.0D));
-            ++this.locY;
-            break;
-        case ASCENDING_WEST:
-            this.setMot(vec3d1.add(0.0078125D, 0.0D, 0.0D));
-            ++this.locY;
-            break;
-        case ASCENDING_NORTH:
-            this.setMot(vec3d1.add(0.0D, 0.0D, 0.0078125D));
-            ++this.locY;
-            break;
-        case ASCENDING_SOUTH:
-            this.setMot(vec3d1.add(0.0D, 0.0D, -0.0078125D));
-            ++this.locY;
+            case ASCENDING_EAST:
+                this.setMot(vec3d1.add(-0.0078125D, 0.0D, 0.0D));
+                ++this.locY;
+                break;
+            case ASCENDING_WEST:
+                this.setMot(vec3d1.add(0.0078125D, 0.0D, 0.0D));
+                ++this.locY;
+                break;
+            case ASCENDING_NORTH:
+                this.setMot(vec3d1.add(0.0D, 0.0D, 0.0078125D));
+                ++this.locY;
+                break;
+            case ASCENDING_SOUTH:
+                this.setMot(vec3d1.add(0.0D, 0.0D, -0.0078125D));
+                ++this.locY;
         }
 
         vec3d1 = this.getMot();
@@ -367,7 +367,7 @@ public abstract class EntityMinecartAbstract extends Entity {
         }
 
         this.decelerate();
-        Vec3D vec3d3 = this.k(this.locX, this.locY, this.locZ);
+        Vec3D vec3d3 = this.l(this.locX, this.locY, this.locZ);
         Vec3D vec3d4;
         double d15;
 
@@ -439,7 +439,7 @@ public abstract class EntityMinecartAbstract extends Entity {
     }
 
     @Nullable
-    public Vec3D k(double d0, double d1, double d2) {
+    public Vec3D l(double d0, double d1, double d2) {
         int i = MathHelper.floor(d0);
         int j = MathHelper.floor(d1);
         int k = MathHelper.floor(d2);

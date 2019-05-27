@@ -6,7 +6,7 @@ import java.util.Set;
 
 public enum EnumDirection8 {
 
-    NORTH(new EnumDirection[] { EnumDirection.NORTH}), NORTH_EAST(new EnumDirection[] { EnumDirection.NORTH, EnumDirection.EAST}), EAST(new EnumDirection[] { EnumDirection.EAST}), SOUTH_EAST(new EnumDirection[] { EnumDirection.SOUTH, EnumDirection.EAST}), SOUTH(new EnumDirection[] { EnumDirection.SOUTH}), SOUTH_WEST(new EnumDirection[] { EnumDirection.SOUTH, EnumDirection.WEST}), WEST(new EnumDirection[] { EnumDirection.WEST}), NORTH_WEST(new EnumDirection[] { EnumDirection.NORTH, EnumDirection.WEST});
+    NORTH(new EnumDirection[]{EnumDirection.NORTH}), NORTH_EAST(new EnumDirection[]{EnumDirection.NORTH, EnumDirection.EAST}), EAST(new EnumDirection[]{EnumDirection.EAST}), SOUTH_EAST(new EnumDirection[]{EnumDirection.SOUTH, EnumDirection.EAST}), SOUTH(new EnumDirection[]{EnumDirection.SOUTH}), SOUTH_WEST(new EnumDirection[]{EnumDirection.SOUTH, EnumDirection.WEST}), WEST(new EnumDirection[]{EnumDirection.WEST}), NORTH_WEST(new EnumDirection[]{EnumDirection.NORTH, EnumDirection.WEST});
 
     private static final int i = 1 << EnumDirection8.NORTH_WEST.ordinal();
     private static final int j = 1 << EnumDirection8.WEST.ordinal();

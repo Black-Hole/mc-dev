@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ContainerStonecutter extends Container {
 
-    static final ImmutableList<Item> c = ImmutableList.of(Items.b, Items.aq, Items.ge, Items.eq, Items.m, Items.cX, Items.bL, Items.ds, Items.gm, Items.bU, Items.fX, Items.fY, new Item[] { Items.fZ, Items.g, Items.h, Items.c, Items.d, Items.e, Items.f, Items.cY, Items.bO, Items.bJ, Items.bI, Items.bH, Items.dx, Items.dy, Items.bK, Items.as, Items.gg});
+    static final ImmutableList<Item> c = ImmutableList.of(Items.b, Items.aq, Items.ge, Items.eq, Items.m, Items.cX, Items.bL, Items.ds, Items.gm, Items.bU, Items.fX, Items.fY, new Item[]{Items.fZ, Items.g, Items.h, Items.c, Items.d, Items.e, Items.f, Items.cY, Items.bO, Items.bJ, Items.bI, Items.bH, Items.dx, Items.dy, Items.bK, Items.as, Items.gg});
     private final ContainerAccess containerAccess;
     private final ContainerProperty containerProperty;
     private final World world;

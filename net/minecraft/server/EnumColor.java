@@ -38,7 +38,7 @@ public enum EnumColor implements INamable {
         int k1 = (j & 255) >> 0;
 
         this.w = k1 << 16 | j1 << 8 | i1 << 0;
-        this.x = new float[] { (float) i1 / 255.0F, (float) j1 / 255.0F, (float) k1 / 255.0F};
+        this.x = new float[]{(float) i1 / 255.0F, (float) j1 / 255.0F, (float) k1 / 255.0F};
         this.y = k;
     }
 

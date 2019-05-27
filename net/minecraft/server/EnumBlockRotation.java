@@ -13,41 +13,41 @@ public enum EnumBlockRotation {
 
     public EnumBlockRotation a(EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
-        case CLOCKWISE_180:
-            switch (this) {
-            case NONE:
-                return EnumBlockRotation.CLOCKWISE_180;
-            case CLOCKWISE_90:
-                return EnumBlockRotation.COUNTERCLOCKWISE_90;
             case CLOCKWISE_180:
-                return EnumBlockRotation.NONE;
+                switch (this) {
+                    case NONE:
+                        return EnumBlockRotation.CLOCKWISE_180;
+                    case CLOCKWISE_90:
+                        return EnumBlockRotation.COUNTERCLOCKWISE_90;
+                    case CLOCKWISE_180:
+                        return EnumBlockRotation.NONE;
+                    case COUNTERCLOCKWISE_90:
+                        return EnumBlockRotation.CLOCKWISE_90;
+                }
             case COUNTERCLOCKWISE_90:
-                return EnumBlockRotation.CLOCKWISE_90;
-            }
-        case COUNTERCLOCKWISE_90:
-            switch (this) {
-            case NONE:
-                return EnumBlockRotation.COUNTERCLOCKWISE_90;
+                switch (this) {
+                    case NONE:
+                        return EnumBlockRotation.COUNTERCLOCKWISE_90;
+                    case CLOCKWISE_90:
+                        return EnumBlockRotation.NONE;
+                    case CLOCKWISE_180:
+                        return EnumBlockRotation.CLOCKWISE_90;
+                    case COUNTERCLOCKWISE_90:
+                        return EnumBlockRotation.CLOCKWISE_180;
+                }
             case CLOCKWISE_90:
-                return EnumBlockRotation.NONE;
-            case CLOCKWISE_180:
-                return EnumBlockRotation.CLOCKWISE_90;
-            case COUNTERCLOCKWISE_90:
-                return EnumBlockRotation.CLOCKWISE_180;
-            }
-        case CLOCKWISE_90:
-            switch (this) {
-            case NONE:
-                return EnumBlockRotation.CLOCKWISE_90;
-            case CLOCKWISE_90:
-                return EnumBlockRotation.CLOCKWISE_180;
-            case CLOCKWISE_180:
-                return EnumBlockRotation.COUNTERCLOCKWISE_90;
-            case COUNTERCLOCKWISE_90:
-                return EnumBlockRotation.NONE;
-            }
-        default:
-            return this;
+                switch (this) {
+                    case NONE:
+                        return EnumBlockRotation.CLOCKWISE_90;
+                    case CLOCKWISE_90:
+                        return EnumBlockRotation.CLOCKWISE_180;
+                    case CLOCKWISE_180:
+                        return EnumBlockRotation.COUNTERCLOCKWISE_90;
+                    case COUNTERCLOCKWISE_90:
+                        return EnumBlockRotation.NONE;
+                }
+            default:
+                return this;
         }
     }
 
@@ -56,28 +56,28 @@ public enum EnumBlockRotation {
             return enumdirection;
         } else {
             switch (this) {
-            case CLOCKWISE_90:
-                return enumdirection.e();
-            case CLOCKWISE_180:
-                return enumdirection.opposite();
-            case COUNTERCLOCKWISE_90:
-                return enumdirection.f();
-            default:
-                return enumdirection;
+                case CLOCKWISE_90:
+                    return enumdirection.e();
+                case CLOCKWISE_180:
+                    return enumdirection.opposite();
+                case COUNTERCLOCKWISE_90:
+                    return enumdirection.f();
+                default:
+                    return enumdirection;
             }
         }
     }
 
     public int a(int i, int j) {
         switch (this) {
-        case CLOCKWISE_90:
-            return (i + j / 4) % j;
-        case CLOCKWISE_180:
-            return (i + j / 2) % j;
-        case COUNTERCLOCKWISE_90:
-            return (i + j * 3 / 4) % j;
-        default:
-            return i;
+            case CLOCKWISE_90:
+                return (i + j / 4) % j;
+            case CLOCKWISE_180:
+                return (i + j / 2) % j;
+            case COUNTERCLOCKWISE_90:
+                return (i + j * 3 / 4) % j;
+            default:
+                return i;
         }
     }
 

@@ -107,7 +107,7 @@ public class GenLayers {
         GenLayer genlayer1 = new GenLayer((AreaFactory) immutablelist.get(1));
         GenLayer genlayer2 = new GenLayer((AreaFactory) immutablelist.get(2));
 
-        return new GenLayer[] { genlayer, genlayer1, genlayer2};
+        return new GenLayer[]{genlayer, genlayer1, genlayer2};
     }
 
     public static boolean a(int i, int j) {

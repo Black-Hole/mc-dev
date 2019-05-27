@@ -18,11 +18,11 @@ public class BlockPortal extends Block {
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch ((EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS)) {
-        case Z:
-            return BlockPortal.c;
-        case X:
-        default:
-            return BlockPortal.b;
+            case Z:
+                return BlockPortal.c;
+            case X:
+            default:
+                return BlockPortal.b;
         }
     }
 
@@ -93,18 +93,18 @@ public class BlockPortal extends Block {
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
-        case COUNTERCLOCKWISE_90:
-        case CLOCKWISE_90:
-            switch ((EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS)) {
-            case Z:
-                return (IBlockData) iblockdata.set(BlockPortal.AXIS, EnumDirection.EnumAxis.X);
-            case X:
-                return (IBlockData) iblockdata.set(BlockPortal.AXIS, EnumDirection.EnumAxis.Z);
+            case COUNTERCLOCKWISE_90:
+            case CLOCKWISE_90:
+                switch ((EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS)) {
+                    case Z:
+                        return (IBlockData) iblockdata.set(BlockPortal.AXIS, EnumDirection.EnumAxis.X);
+                    case X:
+                        return (IBlockData) iblockdata.set(BlockPortal.AXIS, EnumDirection.EnumAxis.Z);
+                    default:
+                        return iblockdata;
+                }
             default:
                 return iblockdata;
-            }
-        default:
-            return iblockdata;
         }
     }
 

@@ -177,7 +177,7 @@ public class EntityEnderman extends EntityMonster {
         double d1 = this.locY + (double) (this.random.nextInt(64) - 32);
         double d2 = this.locZ + (this.random.nextDouble() - 0.5D) * 64.0D;
 
-        return this.k(d0, d1, d2);
+        return this.l(d0, d1, d2);
     }
 
     private boolean a(Entity entity) {
@@ -189,10 +189,10 @@ public class EntityEnderman extends EntityMonster {
         double d2 = this.locY + (double) (this.random.nextInt(16) - 8) - vec3d.y * 16.0D;
         double d3 = this.locZ + (this.random.nextDouble() - 0.5D) * 8.0D - vec3d.z * 16.0D;
 
-        return this.k(d1, d2, d3);
+        return this.l(d1, d2, d3);
     }
 
-    private boolean k(double d0, double d1, double d2) {
+    private boolean l(double d0, double d1, double d2) {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(d0, d1, d2);
 
         while (blockposition_mutableblockposition.getY() > 0 && !this.world.getType(blockposition_mutableblockposition).getMaterial().isSolid()) {

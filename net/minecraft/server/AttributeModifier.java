@@ -83,7 +83,7 @@ public class AttributeModifier {
 
         ADDITION(0), MULTIPLY_BASE(1), MULTIPLY_TOTAL(2);
 
-        private static final AttributeModifier.Operation[] d = new AttributeModifier.Operation[] { AttributeModifier.Operation.ADDITION, AttributeModifier.Operation.MULTIPLY_BASE, AttributeModifier.Operation.MULTIPLY_TOTAL};
+        private static final AttributeModifier.Operation[] d = new AttributeModifier.Operation[]{AttributeModifier.Operation.ADDITION, AttributeModifier.Operation.MULTIPLY_BASE, AttributeModifier.Operation.MULTIPLY_TOTAL};
         private final int e;
 
         private Operation(int i) {

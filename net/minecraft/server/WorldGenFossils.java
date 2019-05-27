@@ -22,8 +22,8 @@ public class WorldGenFossils extends WorldGenerator<WorldGenFeatureEmptyConfigur
     private static final MinecraftKey be = new MinecraftKey("fossil/skull_2_coal");
     private static final MinecraftKey bf = new MinecraftKey("fossil/skull_3_coal");
     private static final MinecraftKey bg = new MinecraftKey("fossil/skull_4_coal");
-    private static final MinecraftKey[] bh = new MinecraftKey[] { WorldGenFossils.a, WorldGenFossils.aS, WorldGenFossils.aT, WorldGenFossils.aU, WorldGenFossils.aZ, WorldGenFossils.ba, WorldGenFossils.bb, WorldGenFossils.bc};
-    private static final MinecraftKey[] bi = new MinecraftKey[] { WorldGenFossils.aV, WorldGenFossils.aW, WorldGenFossils.aX, WorldGenFossils.aY, WorldGenFossils.bd, WorldGenFossils.be, WorldGenFossils.bf, WorldGenFossils.bg};
+    private static final MinecraftKey[] bh = new MinecraftKey[]{WorldGenFossils.a, WorldGenFossils.aS, WorldGenFossils.aT, WorldGenFossils.aU, WorldGenFossils.aZ, WorldGenFossils.ba, WorldGenFossils.bb, WorldGenFossils.bc};
+    private static final MinecraftKey[] bi = new MinecraftKey[]{WorldGenFossils.aV, WorldGenFossils.aW, WorldGenFossils.aX, WorldGenFossils.aY, WorldGenFossils.bd, WorldGenFossils.be, WorldGenFossils.bf, WorldGenFossils.bg};
 
     public WorldGenFossils(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
         super(function);

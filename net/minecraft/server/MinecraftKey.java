@@ -35,7 +35,7 @@ public class MinecraftKey implements Comparable<MinecraftKey> {
     }
 
     public MinecraftKey(String s, String s1) {
-        this(new String[] { s, s1});
+        this(new String[]{s, s1});
     }
 
     public static MinecraftKey a(String s, char c0) {
@@ -52,7 +52,7 @@ public class MinecraftKey implements Comparable<MinecraftKey> {
     }
 
     protected static String[] b(String s, char c0) {
-        String[] astring = new String[] { "minecraft", s};
+        String[] astring = new String[]{"minecraft", s};
         int i = s.indexOf(c0);
 
         if (i >= 0) {

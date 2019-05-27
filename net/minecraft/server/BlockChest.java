@@ -91,15 +91,15 @@ public class BlockChest extends BlockTileEntity implements IBlockWaterlogged {
             return BlockChest.h;
         } else {
             switch (j(iblockdata)) {
-            case NORTH:
-            default:
-                return BlockChest.d;
-            case SOUTH:
-                return BlockChest.e;
-            case WEST:
-                return BlockChest.f;
-            case EAST:
-                return BlockChest.g;
+                case NORTH:
+                default:
+                    return BlockChest.d;
+                case SOUTH:
+                    return BlockChest.e;
+                case WEST:
+                    return BlockChest.f;
+                case EAST:
+                    return BlockChest.g;
             }
         }
     }

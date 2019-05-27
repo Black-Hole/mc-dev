@@ -27,7 +27,7 @@ public class EntityPanda extends EntityAnimal {
     private float bN;
     private float bO;
     private float bP;
-    private static final Predicate<EntityItem> bQ = (entityitem) -> {
+    private static final Predicate<EntityItem> PICKUP_PREDICATE = (entityitem) -> {
         Item item = entityitem.getItemStack().getItem();
 
         return (item == Blocks.BAMBOO.getItem() || item == Blocks.CAKE.getItem()) && entityitem.isAlive() && !entityitem.q();
@@ -445,7 +445,7 @@ public class EntityPanda extends EntityAnimal {
 
     @Override
     protected void a(EntityItem entityitem) {
-        if (this.getEquipment(EnumItemSlot.MAINHAND).isEmpty() && EntityPanda.bQ.test(entityitem)) {
+        if (this.getEquipment(EnumItemSlot.MAINHAND).isEmpty() && EntityPanda.PICKUP_PREDICATE.test(entityitem)) {
             ItemStack itemstack = entityitem.getItemStack();
 
             this.setSlot(EnumItemSlot.MAINHAND, itemstack);
@@ -722,7 +722,7 @@ public class EntityPanda extends EntityAnimal {
         @Override
         public boolean a() {
             if (this.b <= EntityPanda.this.ticksLived && !EntityPanda.this.isBaby() && !EntityPanda.this.isInWater() && EntityPanda.this.eq() && EntityPanda.this.dV() <= 0) {
-                List<EntityItem> list = EntityPanda.this.world.a(EntityItem.class, EntityPanda.this.getBoundingBox().grow(6.0D, 6.0D, 6.0D), EntityPanda.bQ);
+                List<EntityItem> list = EntityPanda.this.world.a(EntityItem.class, EntityPanda.this.getBoundingBox().grow(6.0D, 6.0D, 6.0D), EntityPanda.PICKUP_PREDICATE);
 
                 return !list.isEmpty() || !EntityPanda.this.getEquipment(EnumItemSlot.MAINHAND).isEmpty();
             } else {
@@ -745,7 +745,7 @@ public class EntityPanda extends EntityAnimal {
 
         @Override
         public void c() {
-            List<EntityItem> list = EntityPanda.this.world.a(EntityItem.class, EntityPanda.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), EntityPanda.bQ);
+            List<EntityItem> list = EntityPanda.this.world.a(EntityItem.class, EntityPanda.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), EntityPanda.PICKUP_PREDICATE);
 
             if (!list.isEmpty() && EntityPanda.this.getEquipment(EnumItemSlot.MAINHAND).isEmpty()) {
                 EntityPanda.this.getNavigation().a((Entity) list.get(0), 1.2000000476837158D);

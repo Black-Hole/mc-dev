@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky.a, LightEngineStorageSky> {
 
     private static final EnumDirection[] d = EnumDirection.values();
-    private static final EnumDirection[] e = new EnumDirection[] { EnumDirection.NORTH, EnumDirection.SOUTH, EnumDirection.WEST, EnumDirection.EAST};
+    private static final EnumDirection[] e = new EnumDirection[]{EnumDirection.NORTH, EnumDirection.SOUTH, EnumDirection.WEST, EnumDirection.EAST};
 
     public LightEngineSky(ILightAccess ilightaccess) {
         super(ilightaccess, EnumSkyBlock.SKY, new LightEngineStorageSky(ilightaccess));

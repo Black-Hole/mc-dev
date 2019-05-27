@@ -154,7 +154,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
     public void a(EntityLiving entityliving) {
         this.f = entityliving;
         int i = this.a.l();
-        int j = this.a.k(this.f.locX, this.f.locY, this.f.locZ);
+        int j = this.a.l(this.f.locX, this.f.locY, this.f.locZ);
         int k = MathHelper.floor(this.f.locX);
         int l = MathHelper.floor(this.f.locZ);
         double d0 = (double) k - this.a.locX;

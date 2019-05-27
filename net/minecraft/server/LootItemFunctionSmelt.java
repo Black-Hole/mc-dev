@@ -19,7 +19,7 @@ public class LootItemFunctionSmelt extends LootItemFunctionConditional {
         if (itemstack.isEmpty()) {
             return itemstack;
         } else {
-            Optional<FurnaceRecipe> optional = loottableinfo.d().getCraftingManager().craft(Recipes.SMELTING, new InventorySubcontainer(new ItemStack[] { itemstack}), loottableinfo.d());
+            Optional<FurnaceRecipe> optional = loottableinfo.d().getCraftingManager().craft(Recipes.SMELTING, new InventorySubcontainer(new ItemStack[]{itemstack}), loottableinfo.d());
 
             if (optional.isPresent()) {
                 ItemStack itemstack1 = ((FurnaceRecipe) optional.get()).c();

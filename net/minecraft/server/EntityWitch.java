@@ -30,7 +30,7 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
         this.goalSelector.a(2, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(3, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(3, new PathfinderGoalRandomLookaround(this));
-        this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, new Class[] { EntityRaider.class}));
+        this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, new Class[]{EntityRaider.class}));
         this.targetSelector.a(2, this.bC);
         this.targetSelector.a(3, this.bD);
     }
@@ -107,13 +107,13 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
                 PotionRegistry potionregistry = null;
 
                 if (this.random.nextFloat() < 0.15F && this.a(TagsFluid.WATER) && !this.hasEffect(MobEffects.WATER_BREATHING)) {
-                    potionregistry = Potions.x;
+                    potionregistry = Potions.WATER_BREATHING;
                 } else if (this.random.nextFloat() < 0.15F && (this.isBurning() || this.cD() != null && this.cD().p()) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
-                    potionregistry = Potions.m;
+                    potionregistry = Potions.FIRE_RESISTANCE;
                 } else if (this.random.nextFloat() < 0.05F && this.getHealth() < this.getMaxHealth()) {
-                    potionregistry = Potions.z;
+                    potionregistry = Potions.HEALING;
                 } else if (this.random.nextFloat() < 0.5F && this.getGoalTarget() != null && !this.hasEffect(MobEffects.FASTER_MOVEMENT) && this.getGoalTarget().h((Entity) this) > 121.0D) {
-                    potionregistry = Potions.o;
+                    potionregistry = Potions.SWIFTNESS;
                 }
 
                 if (potionregistry != null) {
@@ -163,22 +163,22 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
             double d1 = entityliving.locY + (double) entityliving.getHeadHeight() - 1.100000023841858D - this.locY;
             double d2 = entityliving.locZ + vec3d.z - this.locZ;
             float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2);
-            PotionRegistry potionregistry = Potions.B;
+            PotionRegistry potionregistry = Potions.HARMING;
 
             if (entityliving instanceof EntityRaider) {
                 if (entityliving.getHealth() <= 4.0F) {
-                    potionregistry = Potions.z;
+                    potionregistry = Potions.HEALING;
                 } else {
-                    potionregistry = Potions.G;
+                    potionregistry = Potions.REGENERATION;
                 }
 
                 this.setGoalTarget((EntityLiving) null);
             } else if (f1 >= 8.0F && !entityliving.hasEffect(MobEffects.SLOWER_MOVEMENT)) {
-                potionregistry = Potions.r;
+                potionregistry = Potions.SLOWNESS;
             } else if (entityliving.getHealth() >= 8.0F && !entityliving.hasEffect(MobEffects.POISON)) {
-                potionregistry = Potions.D;
+                potionregistry = Potions.POISON;
             } else if (f1 <= 3.0F && !entityliving.hasEffect(MobEffects.WEAKNESS) && this.random.nextFloat() < 0.25F) {
-                potionregistry = Potions.M;
+                potionregistry = Potions.WEAKNESS;
             }
 
             EntityPotion entitypotion = new EntityPotion(this.world, this);

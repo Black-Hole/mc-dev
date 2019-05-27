@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 public class TileEntitySign extends TileEntity {
 
-    public final IChatBaseComponent[] lines = new IChatBaseComponent[] { new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")};
+    public final IChatBaseComponent[] lines = new IChatBaseComponent[]{new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")};
     private int c = -1;
     private int g = -1;
     private int h = -1;
@@ -45,7 +45,7 @@ public class TileEntitySign extends TileEntity {
 
             if (this.world instanceof WorldServer) {
                 try {
-                    this.lines[i] = ChatComponentUtils.filterForDisplay(this.a((EntityPlayer) null), ichatbasecomponent, (Entity) null);
+                    this.lines[i] = ChatComponentUtils.filterForDisplay(this.a((EntityPlayer) null), ichatbasecomponent, (Entity) null, 0);
                 } catch (CommandSyntaxException commandsyntaxexception) {
                     this.lines[i] = ichatbasecomponent;
                 }
@@ -79,7 +79,7 @@ public class TileEntitySign extends TileEntity {
         return true;
     }
 
-    public boolean c() {
+    public boolean d() {
         return this.isEditable;
     }
 
@@ -87,7 +87,7 @@ public class TileEntitySign extends TileEntity {
         this.j = entityhuman;
     }
 
-    public EntityHuman d() {
+    public EntityHuman f() {
         return this.j;
     }
 

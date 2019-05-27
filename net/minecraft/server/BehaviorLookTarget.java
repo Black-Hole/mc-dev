@@ -28,7 +28,7 @@ public class BehaviorLookTarget extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
         return ((List) entityliving.getBehaviorController().getMemory(MemoryModuleType.VISIBLE_MOBS).get()).stream().anyMatch(this.a);
     }
 

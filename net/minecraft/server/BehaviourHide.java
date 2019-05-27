@@ -23,7 +23,7 @@ public class BehaviourHide extends Behavior<EntityLiving> {
         boolean flag = (Long) optional.get() + 300L <= i;
 
         if (this.c <= this.b && !flag) {
-            BlockPosition blockposition = ((GlobalPos) behaviorcontroller.getMemory(MemoryModuleType.HIDING_PLACE).get()).b();
+            BlockPosition blockposition = ((GlobalPos) behaviorcontroller.getMemory(MemoryModuleType.HIDING_PLACE).get()).getBlockPosition();
 
             if (blockposition.a((BaseBlockPosition) (new BlockPosition(entityliving)), (double) (this.a + 1))) {
                 ++this.c;

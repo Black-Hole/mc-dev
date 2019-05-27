@@ -15,13 +15,13 @@ public class ArgumentScoreboardObjective implements ArgumentType<String> {
 
     private static final Collection<String> b = Arrays.asList("foo", "*", "012");
     private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("arguments.objective.notFound", new Object[] { object});
+        return new ChatMessage("arguments.objective.notFound", new Object[]{object});
     });
     private static final DynamicCommandExceptionType d = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("arguments.objective.readonly", new Object[] { object});
+        return new ChatMessage("arguments.objective.readonly", new Object[]{object});
     });
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.scoreboard.objectives.add.longName", new Object[] { object});
+        return new ChatMessage("commands.scoreboard.objectives.add.longName", new Object[]{object});
     });
 
     public ArgumentScoreboardObjective() {}

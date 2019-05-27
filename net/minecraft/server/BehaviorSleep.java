@@ -13,18 +13,18 @@ public class BehaviorSleep extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
         if (entityliving.isPassenger()) {
             return false;
         } else {
             GlobalPos globalpos = (GlobalPos) entityliving.getBehaviorController().getMemory(MemoryModuleType.HOME).get();
 
-            if (!Objects.equals(worldserver.getWorldProvider().getDimensionManager(), globalpos.a())) {
+            if (!Objects.equals(worldserver.getWorldProvider().getDimensionManager(), globalpos.getDimensionManager())) {
                 return false;
             } else {
-                IBlockData iblockdata = worldserver.getType(globalpos.b());
+                IBlockData iblockdata = worldserver.getType(globalpos.getBlockPosition());
 
-                return globalpos.b().a((IPosition) entityliving.ch(), 2.0D) && iblockdata.getBlock().a(TagsBlock.BEDS) && !(Boolean) iblockdata.get(BlockBed.OCCUPIED);
+                return globalpos.getBlockPosition().a((IPosition) entityliving.ch(), 2.0D) && iblockdata.getBlock().a(TagsBlock.BEDS) && !(Boolean) iblockdata.get(BlockBed.OCCUPIED);
             }
         }
     }
@@ -36,7 +36,7 @@ public class BehaviorSleep extends Behavior<EntityLiving> {
         if (!optional.isPresent()) {
             return false;
         } else {
-            BlockPosition blockposition = ((GlobalPos) optional.get()).b();
+            BlockPosition blockposition = ((GlobalPos) optional.get()).getBlockPosition();
 
             return entityliving.getBehaviorController().c(Activity.REST) && entityliving.locY > (double) blockposition.getY() + 0.4D && blockposition.a((IPosition) entityliving.ch(), 1.14D);
         }
@@ -45,7 +45,7 @@ public class BehaviorSleep extends Behavior<EntityLiving> {
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
         if (i > this.a) {
-            entityliving.e(((GlobalPos) entityliving.getBehaviorController().getMemory(MemoryModuleType.HOME).get()).b());
+            entityliving.e(((GlobalPos) entityliving.getBehaviorController().getMemory(MemoryModuleType.HOME).get()).getBlockPosition());
         }
 
     }

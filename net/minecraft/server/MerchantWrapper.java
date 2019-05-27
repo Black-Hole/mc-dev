@@ -55,4 +55,9 @@ public class MerchantWrapper implements IMerchant {
     public boolean ea() {
         return true;
     }
+
+    @Override
+    public SoundEffect eb() {
+        return SoundEffects.ENTITY_VILLAGER_YES;
+    }
 }

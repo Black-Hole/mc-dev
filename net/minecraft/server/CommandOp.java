@@ -41,7 +41,7 @@ public class CommandOp {
             if (!playerlist.isOp(gameprofile)) {
                 playerlist.addOp(gameprofile);
                 ++i;
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.op.success", new Object[] { ((GameProfile) collection.iterator().next()).getName()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.op.success", new Object[]{((GameProfile) collection.iterator().next()).getName()}), true);
             }
         }
 

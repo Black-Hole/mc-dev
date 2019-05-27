@@ -103,8 +103,9 @@ public class WorldUpgraderIterator {
     }
 
     private static void a(File file, File file1, WorldChunkManager worldchunkmanager, int i, int j, IProgressUpdate iprogressupdate) {
+        String s = file1.getName();
+
         try {
-            String s = file1.getName();
             RegionFile regionfile = new RegionFile(file1);
             Throwable throwable = null;
 
@@ -120,34 +121,39 @@ public class WorldUpgraderIterator {
                             ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(k, l);
 
                             if (regionfile.d(chunkcoordintpair) && !regionfile1.d(chunkcoordintpair)) {
-                                DataInputStream datainputstream = regionfile.a(chunkcoordintpair);
-                                Throwable throwable2 = null;
-
                                 NBTTagCompound nbttagcompound;
 
                                 try {
-                                    if (datainputstream == null) {
-                                        WorldUpgraderIterator.LOGGER.warn("Failed to fetch input stream");
-                                        continue;
-                                    }
+                                    DataInputStream datainputstream = regionfile.a(chunkcoordintpair);
+                                    Throwable throwable2 = null;
 
-                                    nbttagcompound = NBTCompressedStreamTools.a(datainputstream);
-                                } catch (Throwable throwable3) {
-                                    throwable2 = throwable3;
-                                    throw throwable3;
-                                } finally {
-                                    if (datainputstream != null) {
-                                        if (throwable2 != null) {
-                                            try {
-                                                datainputstream.close();
-                                            } catch (Throwable throwable4) {
-                                                throwable2.addSuppressed(throwable4);
-                                            }
-                                        } else {
-                                            datainputstream.close();
+                                    try {
+                                        if (datainputstream == null) {
+                                            WorldUpgraderIterator.LOGGER.warn("Failed to fetch input stream for chunk {}", chunkcoordintpair);
+                                            continue;
                                         }
-                                    }
 
+                                        nbttagcompound = NBTCompressedStreamTools.a(datainputstream);
+                                    } catch (Throwable throwable3) {
+                                        throwable2 = throwable3;
+                                        throw throwable3;
+                                    } finally {
+                                        if (datainputstream != null) {
+                                            if (throwable2 != null) {
+                                                try {
+                                                    datainputstream.close();
+                                                } catch (Throwable throwable4) {
+                                                    throwable2.addSuppressed(throwable4);
+                                                }
+                                            } else {
+                                                datainputstream.close();
+                                            }
+                                        }
+
+                                    }
+                                } catch (IOException ioexception) {
+                                    WorldUpgraderIterator.LOGGER.warn("Failed to read data for chunk {}", chunkcoordintpair, ioexception);
+                                    continue;
                                 }
 
                                 NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Level");
@@ -223,8 +229,8 @@ public class WorldUpgraderIterator {
                 }
 
             }
-        } catch (IOException ioexception) {
-            ioexception.printStackTrace();
+        } catch (IOException ioexception1) {
+            WorldUpgraderIterator.LOGGER.error("Failed to upgrade region file {}", file1, ioexception1);
         }
 
     }

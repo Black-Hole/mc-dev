@@ -27,7 +27,7 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
         } else if (entityvillager.getVillagerData().getProfession() != VillagerProfession.FARMER) {
             return false;
         } else {
-            Set<BlockPosition> set = (Set) ((List) entityvillager.getBehaviorController().getMemory(MemoryModuleType.SECONDARY_JOB_SITE).get()).stream().map(GlobalPos::b).collect(Collectors.toSet());
+            Set<BlockPosition> set = (Set) ((List) entityvillager.getBehaviorController().getMemory(MemoryModuleType.SECONDARY_JOB_SITE).get()).stream().map(GlobalPos::getBlockPosition).collect(Collectors.toSet());
             BlockPosition blockposition = new BlockPosition(entityvillager);
             Stream stream = ImmutableList.of(blockposition.down(), blockposition.south(), blockposition.north(), blockposition.east(), blockposition.west()).stream();
 
@@ -101,6 +101,7 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
                     }
 
                     if (flag) {
+                        worldserver.a((EntityHuman) null, (double) this.a.getX(), (double) this.a.getY(), (double) this.a.getZ(), SoundEffects.ITEM_CROP_PLANT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                         itemstack.subtract(1);
                         if (itemstack.isEmpty()) {
                             inventorysubcontainer.setItem(j, ItemStack.a);

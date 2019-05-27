@@ -15,7 +15,7 @@ public class ArgumentParticle implements ArgumentType<ParticleParam> {
 
     private static final Collection<String> b = Arrays.asList("foo", "foo:bar", "particle with options");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("particle.notFound", new Object[] { object});
+        return new ChatMessage("particle.notFound", new Object[]{object});
     });
 
     public ArgumentParticle() {}

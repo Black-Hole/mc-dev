@@ -18,11 +18,11 @@ public class GenLayerBiome implements AreaTransformer5 {
     private static final int n = IRegistry.BIOME.a((Object) Biomes.SWAMP);
     private static final int o = IRegistry.BIOME.a((Object) Biomes.TAIGA);
     private static final int p = IRegistry.BIOME.a((Object) Biomes.SNOWY_TAIGA);
-    private static final int[] q = new int[] { GenLayerBiome.b, GenLayerBiome.d, GenLayerBiome.c, GenLayerBiome.n, GenLayerBiome.j, GenLayerBiome.o};
-    private static final int[] r = new int[] { GenLayerBiome.b, GenLayerBiome.b, GenLayerBiome.b, GenLayerBiome.m, GenLayerBiome.m, GenLayerBiome.j};
-    private static final int[] s = new int[] { GenLayerBiome.d, GenLayerBiome.l, GenLayerBiome.c, GenLayerBiome.j, GenLayerBiome.a, GenLayerBiome.n};
-    private static final int[] t = new int[] { GenLayerBiome.d, GenLayerBiome.c, GenLayerBiome.o, GenLayerBiome.j};
-    private static final int[] u = new int[] { GenLayerBiome.e, GenLayerBiome.e, GenLayerBiome.e, GenLayerBiome.p};
+    private static final int[] q = new int[]{GenLayerBiome.b, GenLayerBiome.d, GenLayerBiome.c, GenLayerBiome.n, GenLayerBiome.j, GenLayerBiome.o};
+    private static final int[] r = new int[]{GenLayerBiome.b, GenLayerBiome.b, GenLayerBiome.b, GenLayerBiome.m, GenLayerBiome.m, GenLayerBiome.j};
+    private static final int[] s = new int[]{GenLayerBiome.d, GenLayerBiome.l, GenLayerBiome.c, GenLayerBiome.j, GenLayerBiome.a, GenLayerBiome.n};
+    private static final int[] t = new int[]{GenLayerBiome.d, GenLayerBiome.c, GenLayerBiome.o, GenLayerBiome.j};
+    private static final int[] u = new int[]{GenLayerBiome.e, GenLayerBiome.e, GenLayerBiome.e, GenLayerBiome.p};
     private final GeneratorSettingsOverworld v;
     private int[] w;
 
@@ -47,28 +47,28 @@ public class GenLayerBiome implements AreaTransformer5 {
             i &= -3841;
             if (!GenLayers.a(i) && i != GenLayerBiome.i) {
                 switch (i) {
-                case 1:
-                    if (j > 0) {
-                        return worldgencontext.a(3) == 0 ? GenLayerBiome.g : GenLayerBiome.h;
-                    }
+                    case 1:
+                        if (j > 0) {
+                            return worldgencontext.a(3) == 0 ? GenLayerBiome.g : GenLayerBiome.h;
+                        }
 
-                    return this.w[worldgencontext.a(this.w.length)];
-                case 2:
-                    if (j > 0) {
-                        return GenLayerBiome.f;
-                    }
+                        return this.w[worldgencontext.a(this.w.length)];
+                    case 2:
+                        if (j > 0) {
+                            return GenLayerBiome.f;
+                        }
 
-                    return GenLayerBiome.s[worldgencontext.a(GenLayerBiome.s.length)];
-                case 3:
-                    if (j > 0) {
-                        return GenLayerBiome.k;
-                    }
+                        return GenLayerBiome.s[worldgencontext.a(GenLayerBiome.s.length)];
+                    case 3:
+                        if (j > 0) {
+                            return GenLayerBiome.k;
+                        }
 
-                    return GenLayerBiome.t[worldgencontext.a(GenLayerBiome.t.length)];
-                case 4:
-                    return GenLayerBiome.u[worldgencontext.a(GenLayerBiome.u.length)];
-                default:
-                    return GenLayerBiome.i;
+                        return GenLayerBiome.t[worldgencontext.a(GenLayerBiome.t.length)];
+                    case 4:
+                        return GenLayerBiome.u[worldgencontext.a(GenLayerBiome.u.length)];
+                    default:
+                        return GenLayerBiome.i;
                 }
             } else {
                 return i;

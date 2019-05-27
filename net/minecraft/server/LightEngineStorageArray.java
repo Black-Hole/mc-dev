@@ -56,8 +56,9 @@ public abstract class LightEngineStorageArray<M extends LightEngineStorageArray<
         }
     }
 
-    public void d(long i) {
-        this.a.remove(i);
+    @Nullable
+    public NibbleArray d(long i) {
+        return (NibbleArray) this.a.remove(i);
     }
 
     public void a(long i, NibbleArray nibblearray) {

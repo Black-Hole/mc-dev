@@ -47,7 +47,7 @@ public class CommandXp {
     private static int a(CommandListenerWrapper commandlistenerwrapper, EntityPlayer entityplayer, CommandXp.Unit commandxp_unit) {
         int i = commandxp_unit.f.applyAsInt(entityplayer);
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.query." + commandxp_unit.e, new Object[] { entityplayer.getScoreboardDisplayName(), i}), false);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.query." + commandxp_unit.e, new Object[]{entityplayer.getScoreboardDisplayName(), i}), false);
         return i;
     }
 
@@ -61,9 +61,9 @@ public class CommandXp {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.add." + commandxp_unit.e + ".success.single", new Object[] { i, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.add." + commandxp_unit.e + ".success.single", new Object[]{i, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.add." + commandxp_unit.e + ".success.multiple", new Object[] { i, collection.size()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.add." + commandxp_unit.e + ".success.multiple", new Object[]{i, collection.size()}), true);
         }
 
         return collection.size();
@@ -85,9 +85,9 @@ public class CommandXp {
             throw CommandXp.a.create();
         } else {
             if (collection.size() == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.set." + commandxp_unit.e + ".success.single", new Object[] { i, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.set." + commandxp_unit.e + ".success.single", new Object[]{i, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.set." + commandxp_unit.e + ".success.multiple", new Object[] { i, collection.size()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.set." + commandxp_unit.e + ".success.multiple", new Object[]{i, collection.size()}), true);
             }
 
             return collection.size();

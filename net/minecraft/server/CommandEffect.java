@@ -70,9 +70,9 @@ public class CommandEffect {
             throw CommandEffect.a.create();
         } else {
             if (collection.size() == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.give.success.single", new Object[] { mobeffectlist.d(), ((Entity) collection.iterator().next()).getScoreboardDisplayName(), k / 20}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.give.success.single", new Object[]{mobeffectlist.d(), ((Entity) collection.iterator().next()).getScoreboardDisplayName(), k / 20}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.give.success.multiple", new Object[] { mobeffectlist.d(), collection.size(), k / 20}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.give.success.multiple", new Object[]{mobeffectlist.d(), collection.size(), k / 20}), true);
             }
 
             return j;
@@ -95,9 +95,9 @@ public class CommandEffect {
             throw CommandEffect.b.create();
         } else {
             if (collection.size() == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.everything.success.single", new Object[] { ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.everything.success.single", new Object[]{((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.everything.success.multiple", new Object[] { collection.size()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.everything.success.multiple", new Object[]{collection.size()}), true);
             }
 
             return i;
@@ -120,9 +120,9 @@ public class CommandEffect {
             throw CommandEffect.c.create();
         } else {
             if (collection.size() == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.specific.success.single", new Object[] { mobeffectlist.d(), ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.specific.success.single", new Object[]{mobeffectlist.d(), ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.specific.success.multiple", new Object[] { mobeffectlist.d(), collection.size()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.specific.success.multiple", new Object[]{mobeffectlist.d(), collection.size()}), true);
             }
 
             return i;

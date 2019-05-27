@@ -38,12 +38,12 @@ public class EntitySheep extends EntityAnimal {
 
     private static float[] c(EnumColor enumcolor) {
         if (enumcolor == EnumColor.WHITE) {
-            return new float[] { 0.9019608F, 0.9019608F, 0.9019608F};
+            return new float[]{0.9019608F, 0.9019608F, 0.9019608F};
         } else {
             float[] afloat = enumcolor.d();
             float f = 0.75F;
 
-            return new float[] { afloat[0] * 0.75F, afloat[1] * 0.75F, afloat[2] * 0.75F};
+            return new float[]{afloat[0] * 0.75F, afloat[1] * 0.75F, afloat[2] * 0.75F};
         }
     }
 
@@ -99,39 +99,39 @@ public class EntitySheep extends EntityAnimal {
             return this.getEntityType().g();
         } else {
             switch (this.getColor()) {
-            case WHITE:
-            default:
-                return LootTables.L;
-            case ORANGE:
-                return LootTables.M;
-            case MAGENTA:
-                return LootTables.N;
-            case LIGHT_BLUE:
-                return LootTables.O;
-            case YELLOW:
-                return LootTables.P;
-            case LIME:
-                return LootTables.Q;
-            case PINK:
-                return LootTables.R;
-            case GRAY:
-                return LootTables.S;
-            case LIGHT_GRAY:
-                return LootTables.T;
-            case CYAN:
-                return LootTables.U;
-            case PURPLE:
-                return LootTables.V;
-            case BLUE:
-                return LootTables.W;
-            case BROWN:
-                return LootTables.X;
-            case GREEN:
-                return LootTables.Y;
-            case RED:
-                return LootTables.Z;
-            case BLACK:
-                return LootTables.aa;
+                case WHITE:
+                default:
+                    return LootTables.L;
+                case ORANGE:
+                    return LootTables.M;
+                case MAGENTA:
+                    return LootTables.N;
+                case LIGHT_BLUE:
+                    return LootTables.O;
+                case YELLOW:
+                    return LootTables.P;
+                case LIME:
+                    return LootTables.Q;
+                case PINK:
+                    return LootTables.R;
+                case GRAY:
+                    return LootTables.S;
+                case LIGHT_GRAY:
+                    return LootTables.T;
+                case CYAN:
+                    return LootTables.U;
+                case PURPLE:
+                    return LootTables.V;
+                case BLUE:
+                    return LootTables.W;
+                case BROWN:
+                    return LootTables.X;
+                case GREEN:
+                    return LootTables.Y;
+                case RED:
+                    return LootTables.Z;
+                case BLACK:
+                    return LootTables.aa;
             }
         }
     }

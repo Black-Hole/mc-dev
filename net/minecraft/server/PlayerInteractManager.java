@@ -26,7 +26,7 @@ public class PlayerInteractManager {
         this.gamemode = enumgamemode;
         enumgamemode.a(this.player.abilities);
         this.player.updateAbilities();
-        this.player.server.getPlayerList().sendAll(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_GAME_MODE, new EntityPlayer[] { this.player}));
+        this.player.server.getPlayerList().sendAll(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_GAME_MODE, new EntityPlayer[]{this.player}));
         this.world.everyoneSleeping();
     }
 

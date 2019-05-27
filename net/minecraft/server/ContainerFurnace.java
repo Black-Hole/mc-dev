@@ -133,7 +133,7 @@ public abstract class ContainerFurnace extends ContainerRecipeBook<IInventory> {
     }
 
     protected boolean a(ItemStack itemstack) {
-        return this.c.getCraftingManager().craft(this.f, new InventorySubcontainer(new ItemStack[] { itemstack}), this.c).isPresent();
+        return this.c.getCraftingManager().craft(this.f, new InventorySubcontainer(new ItemStack[]{itemstack}), this.c).isPresent();
     }
 
     protected boolean b(ItemStack itemstack) {

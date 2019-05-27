@@ -32,7 +32,7 @@ public class CommandDebug {
             throw CommandDebug.b.create();
         } else {
             minecraftserver.aj();
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.started", new Object[] { "Started the debug profiler. Type '/debug stop' to stop it."}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.started", new Object[]{"Started the debug profiler. Type '/debug stop' to stop it."}), true);
             return 0;
         }
     }
@@ -51,7 +51,7 @@ public class CommandDebug {
             float f = (float) methodprofilerresults.f() / 1.0E9F;
             float f1 = (float) methodprofilerresults.g() / f;
 
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.stopped", new Object[] { String.format(Locale.ROOT, "%.2f", f), methodprofilerresults.g(), String.format("%.2f", f1)}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.stopped", new Object[]{String.format(Locale.ROOT, "%.2f", f), methodprofilerresults.g(), String.format("%.2f", f1)}), true);
             return MathHelper.d(f1);
         }
     }

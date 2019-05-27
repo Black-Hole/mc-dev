@@ -15,7 +15,7 @@ public class ArgumentEnchantment implements ArgumentType<Enchantment> {
 
     private static final Collection<String> b = Arrays.asList("unbreaking", "silk_touch");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("enchantment.unknown", new Object[] { object});
+        return new ChatMessage("enchantment.unknown", new Object[]{object});
     });
 
     public ArgumentEnchantment() {}

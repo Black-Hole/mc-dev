@@ -34,27 +34,27 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
         this.a = packetdataserializer.k();
         this.b = (PacketPlayOutBoss.Action) packetdataserializer.a(PacketPlayOutBoss.Action.class);
         switch (this.b) {
-        case ADD:
-            this.c = packetdataserializer.h();
-            this.d = packetdataserializer.readFloat();
-            this.e = (BossBattle.BarColor) packetdataserializer.a(BossBattle.BarColor.class);
-            this.f = (BossBattle.BarStyle) packetdataserializer.a(BossBattle.BarStyle.class);
-            this.a(packetdataserializer.readUnsignedByte());
-        case REMOVE:
-        default:
-            break;
-        case UPDATE_PCT:
-            this.d = packetdataserializer.readFloat();
-            break;
-        case UPDATE_NAME:
-            this.c = packetdataserializer.h();
-            break;
-        case UPDATE_STYLE:
-            this.e = (BossBattle.BarColor) packetdataserializer.a(BossBattle.BarColor.class);
-            this.f = (BossBattle.BarStyle) packetdataserializer.a(BossBattle.BarStyle.class);
-            break;
-        case UPDATE_PROPERTIES:
-            this.a(packetdataserializer.readUnsignedByte());
+            case ADD:
+                this.c = packetdataserializer.h();
+                this.d = packetdataserializer.readFloat();
+                this.e = (BossBattle.BarColor) packetdataserializer.a(BossBattle.BarColor.class);
+                this.f = (BossBattle.BarStyle) packetdataserializer.a(BossBattle.BarStyle.class);
+                this.a(packetdataserializer.readUnsignedByte());
+            case REMOVE:
+            default:
+                break;
+            case UPDATE_PCT:
+                this.d = packetdataserializer.readFloat();
+                break;
+            case UPDATE_NAME:
+                this.c = packetdataserializer.h();
+                break;
+            case UPDATE_STYLE:
+                this.e = (BossBattle.BarColor) packetdataserializer.a(BossBattle.BarColor.class);
+                this.f = (BossBattle.BarStyle) packetdataserializer.a(BossBattle.BarStyle.class);
+                break;
+            case UPDATE_PROPERTIES:
+                this.a(packetdataserializer.readUnsignedByte());
         }
 
     }
@@ -70,27 +70,27 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
         packetdataserializer.a(this.a);
         packetdataserializer.a((Enum) this.b);
         switch (this.b) {
-        case ADD:
-            packetdataserializer.a(this.c);
-            packetdataserializer.writeFloat(this.d);
-            packetdataserializer.a((Enum) this.e);
-            packetdataserializer.a((Enum) this.f);
-            packetdataserializer.writeByte(this.k());
-        case REMOVE:
-        default:
-            break;
-        case UPDATE_PCT:
-            packetdataserializer.writeFloat(this.d);
-            break;
-        case UPDATE_NAME:
-            packetdataserializer.a(this.c);
-            break;
-        case UPDATE_STYLE:
-            packetdataserializer.a((Enum) this.e);
-            packetdataserializer.a((Enum) this.f);
-            break;
-        case UPDATE_PROPERTIES:
-            packetdataserializer.writeByte(this.k());
+            case ADD:
+                packetdataserializer.a(this.c);
+                packetdataserializer.writeFloat(this.d);
+                packetdataserializer.a((Enum) this.e);
+                packetdataserializer.a((Enum) this.f);
+                packetdataserializer.writeByte(this.k());
+            case REMOVE:
+            default:
+                break;
+            case UPDATE_PCT:
+                packetdataserializer.writeFloat(this.d);
+                break;
+            case UPDATE_NAME:
+                packetdataserializer.a(this.c);
+                break;
+            case UPDATE_STYLE:
+                packetdataserializer.a((Enum) this.e);
+                packetdataserializer.a((Enum) this.f);
+                break;
+            case UPDATE_PROPERTIES:
+                packetdataserializer.writeByte(this.k());
         }
 
     }

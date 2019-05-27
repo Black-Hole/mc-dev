@@ -18,7 +18,7 @@ public class ArgumentInventorySlot implements ArgumentType<Integer> {
 
     private static final Collection<String> a = Arrays.asList("container.5", "12", "weapon");
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("slot.unknown", new Object[] { object});
+        return new ChatMessage("slot.unknown", new Object[]{object});
     });
     private static final Map<String, Integer> c = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         int i;

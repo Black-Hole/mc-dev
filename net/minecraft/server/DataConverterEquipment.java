@@ -45,11 +45,11 @@ public class DataConverterEquipment extends DataFix {
                 });
 
                 if (!list.isEmpty()) {
-                    either = Either.left(Lists.newArrayList(new Object[] { list.get(0), is}));
+                    either = Either.left(Lists.newArrayList(new Object[]{list.get(0), is}));
                 }
 
                 if (list.size() > 1) {
-                    List<IS> list1 = Lists.newArrayList(new Object[] { is, is, is, is});
+                    List<IS> list1 = Lists.newArrayList(new Object[]{is, is, is, is});
 
                     for (int i = 1; i < Math.min(list.size(), 5); ++i) {
                         list1.set(i - 1, list.get(i));

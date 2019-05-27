@@ -26,15 +26,15 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IBlockWaterl
             return iblockdata.get(BlockTrapdoor.HALF) == BlockPropertyHalf.TOP ? BlockTrapdoor.j : BlockTrapdoor.i;
         } else {
             switch ((EnumDirection) iblockdata.get(BlockTrapdoor.FACING)) {
-            case NORTH:
-            default:
-                return BlockTrapdoor.h;
-            case SOUTH:
-                return BlockTrapdoor.g;
-            case WEST:
-                return BlockTrapdoor.f;
-            case EAST:
-                return BlockTrapdoor.e;
+                case NORTH:
+                default:
+                    return BlockTrapdoor.h;
+                case SOUTH:
+                    return BlockTrapdoor.g;
+                case WEST:
+                    return BlockTrapdoor.f;
+                case EAST:
+                    return BlockTrapdoor.e;
             }
         }
     }
@@ -42,14 +42,14 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IBlockWaterl
     @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         switch (pathmode) {
-        case LAND:
-            return (Boolean) iblockdata.get(BlockTrapdoor.OPEN);
-        case WATER:
-            return (Boolean) iblockdata.get(BlockTrapdoor.d);
-        case AIR:
-            return (Boolean) iblockdata.get(BlockTrapdoor.OPEN);
-        default:
-            return false;
+            case LAND:
+                return (Boolean) iblockdata.get(BlockTrapdoor.OPEN);
+            case WATER:
+                return (Boolean) iblockdata.get(BlockTrapdoor.d);
+            case AIR:
+                return (Boolean) iblockdata.get(BlockTrapdoor.OPEN);
+            default:
+                return false;
         }
     }
 

@@ -52,14 +52,14 @@ public class BlockFenceGate extends BlockFacingHorizontal {
     @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         switch (pathmode) {
-        case LAND:
-            return (Boolean) iblockdata.get(BlockFenceGate.OPEN);
-        case WATER:
-            return false;
-        case AIR:
-            return (Boolean) iblockdata.get(BlockFenceGate.OPEN);
-        default:
-            return false;
+            case LAND:
+                return (Boolean) iblockdata.get(BlockFenceGate.OPEN);
+            case WATER:
+                return false;
+            case AIR:
+                return (Boolean) iblockdata.get(BlockFenceGate.OPEN);
+            default:
+                return false;
         }
     }
 

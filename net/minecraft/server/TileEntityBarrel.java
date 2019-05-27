@@ -144,7 +144,7 @@ public class TileEntityBarrel extends TileEntityLootable {
             IBlockData iblockdata = this.getBlock();
 
             if (iblockdata.getBlock() != Blocks.BARREL) {
-                this.m();
+                this.W_();
                 return;
             }
 

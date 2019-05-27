@@ -15,16 +15,16 @@ import java.util.Iterator;
 public class CommandEnchant {
 
     private static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.enchant.failed.entity", new Object[] { object});
+        return new ChatMessage("commands.enchant.failed.entity", new Object[]{object});
     });
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.enchant.failed.itemless", new Object[] { object});
+        return new ChatMessage("commands.enchant.failed.itemless", new Object[]{object});
     });
     private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.enchant.failed.incompatible", new Object[] { object});
+        return new ChatMessage("commands.enchant.failed.incompatible", new Object[]{object});
     });
     private static final Dynamic2CommandExceptionType d = new Dynamic2CommandExceptionType((object, object1) -> {
-        return new ChatMessage("commands.enchant.failed.level", new Object[] { object, object1});
+        return new ChatMessage("commands.enchant.failed.level", new Object[]{object, object1});
     });
     private static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("commands.enchant.failed", new Object[0]));
 
@@ -71,9 +71,9 @@ public class CommandEnchant {
                 throw CommandEnchant.e.create();
             } else {
                 if (collection.size() == 1) {
-                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.enchant.success.single", new Object[] { enchantment.d(i), ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
+                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.enchant.success.single", new Object[]{enchantment.d(i), ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
                 } else {
-                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.enchant.success.multiple", new Object[] { enchantment.d(i), collection.size()}), true);
+                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.enchant.success.multiple", new Object[]{enchantment.d(i), collection.size()}), true);
                 }
 
                 return j;

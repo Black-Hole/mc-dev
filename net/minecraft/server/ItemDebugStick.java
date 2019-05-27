@@ -40,7 +40,7 @@ public class ItemDebugStick extends Item {
             String s = IRegistry.BLOCK.getKey(block).toString();
 
             if (collection.isEmpty()) {
-                a(entityhuman, (IChatBaseComponent) (new ChatMessage(this.getName() + ".empty", new Object[] { s})));
+                a(entityhuman, (IChatBaseComponent) (new ChatMessage(this.getName() + ".empty", new Object[]{s})));
             } else {
                 NBTTagCompound nbttagcompound = itemstack.a("DebugProperty");
                 String s1 = nbttagcompound.getString(s);
@@ -54,13 +54,13 @@ public class ItemDebugStick extends Item {
                     IBlockData iblockdata1 = a(iblockdata, iblockstate, entityhuman.isSneaking());
 
                     generatoraccess.setTypeAndData(blockposition, iblockdata1, 18);
-                    a(entityhuman, (IChatBaseComponent) (new ChatMessage(this.getName() + ".update", new Object[] { iblockstate.a(), a(iblockdata1, iblockstate)})));
+                    a(entityhuman, (IChatBaseComponent) (new ChatMessage(this.getName() + ".update", new Object[]{iblockstate.a(), a(iblockdata1, iblockstate)})));
                 } else {
                     iblockstate = (IBlockState) a((Iterable) collection, (Object) iblockstate, entityhuman.isSneaking());
                     String s2 = iblockstate.a();
 
                     nbttagcompound.setString(s, s2);
-                    a(entityhuman, (IChatBaseComponent) (new ChatMessage(this.getName() + ".select", new Object[] { s2, a(iblockdata, iblockstate)})));
+                    a(entityhuman, (IChatBaseComponent) (new ChatMessage(this.getName() + ".select", new Object[]{s2, a(iblockdata, iblockstate)})));
                 }
 
             }

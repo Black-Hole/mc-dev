@@ -14,6 +14,6 @@ public class DamageSourceNetherBed extends DamageSource {
             chatmodifier.setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.OPEN_URL, "https://bugs.mojang.com/browse/MCPE-28723")).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText("MCPE-28723")));
         });
 
-        return new ChatMessage("death.attack.netherBed.message", new Object[] { entityliving.getScoreboardDisplayName(), ichatbasecomponent});
+        return new ChatMessage("death.attack.netherBed.message", new Object[]{entityliving.getScoreboardDisplayName(), ichatbasecomponent});
     }
 }

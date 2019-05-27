@@ -12,7 +12,7 @@ public class CommandSay {
         })).then(CommandDispatcher.a("message", (ArgumentType) ArgumentChat.a()).executes((commandcontext) -> {
             IChatBaseComponent ichatbasecomponent = ArgumentChat.a(commandcontext, "message");
 
-            ((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList().sendMessage(new ChatMessage("chat.type.announcement", new Object[] { ((CommandListenerWrapper) commandcontext.getSource()).getScoreboardDisplayName(), ichatbasecomponent}));
+            ((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList().sendMessage(new ChatMessage("chat.type.announcement", new Object[]{((CommandListenerWrapper) commandcontext.getSource()).getScoreboardDisplayName(), ichatbasecomponent}));
             return 1;
         })));
     }

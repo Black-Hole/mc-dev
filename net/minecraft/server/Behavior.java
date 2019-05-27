@@ -31,7 +31,7 @@ public abstract class Behavior<E extends EntityLiving> {
     }
 
     public final boolean b(WorldServer worldserver, E e0, long i) {
-        if (this.a(e0) && this.a(worldserver, e0)) {
+        if (this.a(e0) && this.shouldExecute(worldserver, e0)) {
             this.b = Behavior.Status.RUNNING;
             int j = this.d + worldserver.getRandom().nextInt(this.e + 1 - this.d);
 
@@ -71,7 +71,7 @@ public abstract class Behavior<E extends EntityLiving> {
         return i > this.c;
     }
 
-    protected boolean a(WorldServer worldserver, E e0) {
+    protected boolean shouldExecute(WorldServer worldserver, E e0) {
         return true;
     }
 

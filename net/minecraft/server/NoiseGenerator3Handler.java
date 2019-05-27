@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class NoiseGenerator3Handler {
 
-    protected static final int[][] a = new int[][] { { 1, 1, 0}, { -1, 1, 0}, { 1, -1, 0}, { -1, -1, 0}, { 1, 0, 1}, { -1, 0, 1}, { 1, 0, -1}, { -1, 0, -1}, { 0, 1, 1}, { 0, -1, 1}, { 0, 1, -1}, { 0, -1, -1}, { 1, 1, 0}, { 0, -1, 1}, { -1, 1, 0}, { 0, -1, -1}};
+    protected static final int[][] a = new int[][]{{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0}, {1, 0, 1}, {-1, 0, 1}, {1, 0, -1}, {-1, 0, -1}, {0, 1, 1}, {0, -1, 1}, {0, 1, -1}, {0, -1, -1}, {1, 1, 0}, {0, -1, 1}, {-1, 1, 0}, {0, -1, -1}};
     private static final double e = Math.sqrt(3.0D);
     private static final double f = 0.5D * (NoiseGenerator3Handler.e - 1.0D);
     private static final double g = (3.0D - NoiseGenerator3Handler.e) / 6.0D;

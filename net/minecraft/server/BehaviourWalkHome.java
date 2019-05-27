@@ -15,7 +15,7 @@ public class BehaviourWalkHome extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
         if (worldserver.getTime() - this.b < 40L) {
             return false;
         } else {

@@ -7,6 +7,7 @@ import it.unimi.dsi.fastutil.objects.ObjectListIterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.IntSupplier;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,7 +55,16 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
         this.a(chunkcoordintpair.x, chunkcoordintpair.z, () -> {
             return 0;
         }, LightEngineThreaded.Update.PRE_UPDATE, SystemUtils.a(() -> {
-            for (int i = 0; i < 16; ++i) {
+            super.b(chunkcoordintpair, false);
+
+            int i;
+
+            for (i = -1; i < 17; ++i) {
+                super.a(EnumSkyBlock.BLOCK, SectionPosition.a(chunkcoordintpair, i), (NibbleArray) null);
+                super.a(EnumSkyBlock.SKY, SectionPosition.a(chunkcoordintpair, i), (NibbleArray) null);
+            }
+
+            for (i = 0; i < 16; ++i) {
                 super.a(SectionPosition.a(chunkcoordintpair, i), true);
             }
 
@@ -84,8 +94,10 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
     }
 
     @Override
-    public void a(EnumSkyBlock enumskyblock, SectionPosition sectionposition, NibbleArray nibblearray) {
-        this.a(sectionposition.a(), sectionposition.c(), LightEngineThreaded.Update.PRE_UPDATE, SystemUtils.a(() -> {
+    public void a(EnumSkyBlock enumskyblock, SectionPosition sectionposition, @Nullable NibbleArray nibblearray) {
+        this.a(sectionposition.a(), sectionposition.c(), () -> {
+            return 0;
+        }, LightEngineThreaded.Update.PRE_UPDATE, SystemUtils.a(() -> {
             super.a(enumskyblock, sectionposition, nibblearray);
         }, () -> {
             return "queueData " + sectionposition;
@@ -104,6 +116,17 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
             }
 
         }, ChunkCoordIntPair.pair(i, j), intsupplier));
+    }
+
+    @Override
+    public void b(ChunkCoordIntPair chunkcoordintpair, boolean flag) {
+        this.a(chunkcoordintpair.x, chunkcoordintpair.z, () -> {
+            return 0;
+        }, LightEngineThreaded.Update.PRE_UPDATE, SystemUtils.a(() -> {
+            super.b(chunkcoordintpair, flag);
+        }, () -> {
+            return "retainData " + chunkcoordintpair;
+        }));
     }
 
     public CompletableFuture<IChunkAccess> a(IChunkAccess ichunkaccess, boolean flag) {
@@ -134,6 +157,7 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
         }));
         return CompletableFuture.supplyAsync(() -> {
             ichunkaccess.b(true);
+            super.b(chunkcoordintpair, false);
             return ichunkaccess;
         }, (runnable) -> {
             this.a(chunkcoordintpair.x, chunkcoordintpair.z, LightEngineThreaded.Update.POST_UPDATE, runnable);

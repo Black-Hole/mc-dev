@@ -79,34 +79,34 @@ public class RemoteStatusListener extends RemoteConnectionThread {
         if (3 <= i && -2 == abyte[0] && -3 == abyte[1]) {
             this.a("Packet '" + StatusChallengeUtils.a(abyte[2]) + "' [" + socketaddress + "]");
             switch (abyte[2]) {
-            case 0:
-                if (!this.c(datagrampacket)) {
-                    this.a("Invalid challenge [" + socketaddress + "]");
-                    return false;
-                } else if (15 == i) {
-                    this.a(this.b(datagrampacket), datagrampacket);
-                    this.a("Rules [" + socketaddress + "]");
-                } else {
-                    RemoteStatusReply remotestatusreply = new RemoteStatusReply(1460);
+                case 0:
+                    if (!this.c(datagrampacket)) {
+                        this.a("Invalid challenge [" + socketaddress + "]");
+                        return false;
+                    } else if (15 == i) {
+                        this.a(this.b(datagrampacket), datagrampacket);
+                        this.a("Rules [" + socketaddress + "]");
+                    } else {
+                        RemoteStatusReply remotestatusreply = new RemoteStatusReply(1460);
 
-                    remotestatusreply.a((int) 0);
-                    remotestatusreply.a(this.a(datagrampacket.getSocketAddress()));
-                    remotestatusreply.a(this.l);
-                    remotestatusreply.a("SMP");
-                    remotestatusreply.a(this.m);
-                    remotestatusreply.a(Integer.toString(this.d()));
-                    remotestatusreply.a(Integer.toString(this.k));
-                    remotestatusreply.a((short) this.j);
-                    remotestatusreply.a(this.r);
-                    this.a(remotestatusreply.a(), datagrampacket);
-                    this.a("Status [" + socketaddress + "]");
-                }
-            default:
-                return true;
-            case 9:
-                this.d(datagrampacket);
-                this.a("Challenge [" + socketaddress + "]");
-                return true;
+                        remotestatusreply.a((int) 0);
+                        remotestatusreply.a(this.a(datagrampacket.getSocketAddress()));
+                        remotestatusreply.a(this.l);
+                        remotestatusreply.a("SMP");
+                        remotestatusreply.a(this.m);
+                        remotestatusreply.a(Integer.toString(this.d()));
+                        remotestatusreply.a(Integer.toString(this.k));
+                        remotestatusreply.a((short) this.j);
+                        remotestatusreply.a(this.r);
+                        this.a(remotestatusreply.a(), datagrampacket);
+                        this.a("Status [" + socketaddress + "]");
+                    }
+                default:
+                    return true;
+                case 9:
+                    this.d(datagrampacket);
+                    this.a("Challenge [" + socketaddress + "]");
+                    return true;
             }
         } else {
             this.a("Invalid packet [" + socketaddress + "]");

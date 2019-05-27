@@ -18,7 +18,7 @@ public class CommandTeam {
 
     private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.team.add.duplicate", new Object[0]));
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.team.add.longName", new Object[] { object});
+        return new ChatMessage("commands.team.add.longName", new Object[]{object});
     });
     private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.team.empty.unchanged", new Object[0]));
     private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.name.unchanged", new Object[0]));
@@ -102,9 +102,9 @@ public class CommandTeam {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.leave.success.single", new Object[] { collection.iterator().next()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.leave.success.single", new Object[]{collection.iterator().next()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.leave.success.multiple", new Object[] { collection.size()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.leave.success.multiple", new Object[]{collection.size()}), true);
         }
 
         return collection.size();
@@ -121,9 +121,9 @@ public class CommandTeam {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.join.success.single", new Object[] { collection.iterator().next(), scoreboardteam.d()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.join.success.single", new Object[]{collection.iterator().next(), scoreboardteam.d()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.join.success.multiple", new Object[] { collection.size(), scoreboardteam.d()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.join.success.multiple", new Object[]{collection.size(), scoreboardteam.d()}), true);
         }
 
         return collection.size();
@@ -134,7 +134,7 @@ public class CommandTeam {
             throw CommandTeam.j.create();
         } else {
             scoreboardteam.setNameTagVisibility(scoreboardteambase_enumnametagvisibility);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.nametagVisibility.success", new Object[] { scoreboardteam.d(), scoreboardteambase_enumnametagvisibility.b()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.nametagVisibility.success", new Object[]{scoreboardteam.d(), scoreboardteambase_enumnametagvisibility.b()}), true);
             return 0;
         }
     }
@@ -144,7 +144,7 @@ public class CommandTeam {
             throw CommandTeam.k.create();
         } else {
             scoreboardteam.setDeathMessageVisibility(scoreboardteambase_enumnametagvisibility);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.deathMessageVisibility.success", new Object[] { scoreboardteam.d(), scoreboardteambase_enumnametagvisibility.b()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.deathMessageVisibility.success", new Object[]{scoreboardteam.d(), scoreboardteambase_enumnametagvisibility.b()}), true);
             return 0;
         }
     }
@@ -154,7 +154,7 @@ public class CommandTeam {
             throw CommandTeam.l.create();
         } else {
             scoreboardteam.setCollisionRule(scoreboardteambase_enumteampush);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.collisionRule.success", new Object[] { scoreboardteam.d(), scoreboardteambase_enumteampush.b()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.collisionRule.success", new Object[]{scoreboardteam.d(), scoreboardteambase_enumteampush.b()}), true);
             return 0;
         }
     }
@@ -168,7 +168,7 @@ public class CommandTeam {
             }
         } else {
             scoreboardteam.setCanSeeFriendlyInvisibles(flag);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.seeFriendlyInvisibles." + (flag ? "enabled" : "disabled"), new Object[] { scoreboardteam.d()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.seeFriendlyInvisibles." + (flag ? "enabled" : "disabled"), new Object[]{scoreboardteam.d()}), true);
             return 0;
         }
     }
@@ -182,7 +182,7 @@ public class CommandTeam {
             }
         } else {
             scoreboardteam.setAllowFriendlyFire(flag);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.friendlyfire." + (flag ? "enabled" : "disabled"), new Object[] { scoreboardteam.d()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.friendlyfire." + (flag ? "enabled" : "disabled"), new Object[]{scoreboardteam.d()}), true);
             return 0;
         }
     }
@@ -192,7 +192,7 @@ public class CommandTeam {
             throw CommandTeam.d.create();
         } else {
             scoreboardteam.setDisplayName(ichatbasecomponent);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.name.success", new Object[] { scoreboardteam.d()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.name.success", new Object[]{scoreboardteam.d()}), true);
             return 0;
         }
     }
@@ -202,7 +202,7 @@ public class CommandTeam {
             throw CommandTeam.e.create();
         } else {
             scoreboardteam.setColor(enumchatformat);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.color.success", new Object[] { scoreboardteam.d(), enumchatformat.g()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.color.success", new Object[]{scoreboardteam.d(), enumchatformat.g()}), true);
             return 0;
         }
     }
@@ -222,7 +222,7 @@ public class CommandTeam {
                 scoreboardserver.removePlayerFromTeam(s, scoreboardteam);
             }
 
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.empty.success", new Object[] { collection.size(), scoreboardteam.d()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.empty.success", new Object[]{collection.size(), scoreboardteam.d()}), true);
             return collection.size();
         }
     }
@@ -231,7 +231,7 @@ public class CommandTeam {
         ScoreboardServer scoreboardserver = commandlistenerwrapper.getServer().getScoreboard();
 
         scoreboardserver.removeTeam(scoreboardteam);
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.remove.success", new Object[] { scoreboardteam.d()}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.remove.success", new Object[]{scoreboardteam.d()}), true);
         return scoreboardserver.getTeams().size();
     }
 
@@ -250,7 +250,7 @@ public class CommandTeam {
             ScoreboardTeam scoreboardteam = scoreboardserver.createTeam(s);
 
             scoreboardteam.setDisplayName(ichatbasecomponent);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.add.success", new Object[] { scoreboardteam.d()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.add.success", new Object[]{scoreboardteam.d()}), true);
             return scoreboardserver.getTeams().size();
         }
     }
@@ -259,9 +259,9 @@ public class CommandTeam {
         Collection<String> collection = scoreboardteam.getPlayerNameSet();
 
         if (collection.isEmpty()) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.list.members.empty", new Object[] { scoreboardteam.d()}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.list.members.empty", new Object[]{scoreboardteam.d()}), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.list.members.success", new Object[] { scoreboardteam.d(), collection.size(), ChatComponentUtils.a(collection)}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.list.members.success", new Object[]{scoreboardteam.d(), collection.size(), ChatComponentUtils.a(collection)}), false);
         }
 
         return collection.size();
@@ -273,7 +273,7 @@ public class CommandTeam {
         if (collection.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.list.teams.empty", new Object[0]), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.list.teams.success", new Object[] { collection.size(), ChatComponentUtils.b(collection, ScoreboardTeam::d)}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.list.teams.success", new Object[]{collection.size(), ChatComponentUtils.b(collection, ScoreboardTeam::d)}), false);
         }
 
         return collection.size();
@@ -281,13 +281,13 @@ public class CommandTeam {
 
     private static int b(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam, IChatBaseComponent ichatbasecomponent) {
         scoreboardteam.setPrefix(ichatbasecomponent);
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.prefix.success", new Object[] { ichatbasecomponent}), false);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.prefix.success", new Object[]{ichatbasecomponent}), false);
         return 1;
     }
 
     private static int c(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam, IChatBaseComponent ichatbasecomponent) {
         scoreboardteam.setSuffix(ichatbasecomponent);
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.suffix.success", new Object[] { ichatbasecomponent}), false);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.suffix.success", new Object[]{ichatbasecomponent}), false);
         return 1;
     }
 }

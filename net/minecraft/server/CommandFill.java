@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 public class CommandFill {
 
     private static final Dynamic2CommandExceptionType a = new Dynamic2CommandExceptionType((object, object1) -> {
-        return new ChatMessage("commands.fill.toobig", new Object[] { object, object1});
+        return new ChatMessage("commands.fill.toobig", new Object[]{object, object1});
     });
     private static final ArgumentTileLocation b = new ArgumentTileLocation(Blocks.AIR.getBlockData(), Collections.emptySet(), (NBTTagCompound) null);
     private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.fill.failed", new Object[0]));
@@ -86,7 +86,7 @@ public class CommandFill {
             if (j == 0) {
                 throw CommandFill.c.create();
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.fill.success", new Object[] { j}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.fill.success", new Object[]{j}), true);
                 return j;
             }
         }

@@ -149,6 +149,12 @@ public class ProtoChunkExtension extends ProtoChunk {
         return this.a.i(blockposition);
     }
 
+    @Nullable
+    @Override
+    public NBTTagCompound j(BlockPosition blockposition) {
+        return this.a.j(blockposition);
+    }
+
     @Override
     public void a(BiomeBase[] abiomebase) {}
 

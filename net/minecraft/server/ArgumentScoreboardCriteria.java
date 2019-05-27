@@ -18,7 +18,7 @@ public class ArgumentScoreboardCriteria implements ArgumentType<IScoreboardCrite
 
     private static final Collection<String> b = Arrays.asList("foo", "foo.bar.baz", "minecraft:foo");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.criteria.invalid", new Object[] { object});
+        return new ChatMessage("argument.criteria.invalid", new Object[]{object});
     });
 
     private ArgumentScoreboardCriteria() {}

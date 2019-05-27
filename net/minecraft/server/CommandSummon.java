@@ -31,7 +31,7 @@ public class CommandSummon {
             EntityLightning entitylightning = new EntityLightning(commandlistenerwrapper.getWorld(), vec3d.x, vec3d.y, vec3d.z, false);
 
             commandlistenerwrapper.getWorld().strikeLightning(entitylightning);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.summon.success", new Object[] { entitylightning.getScoreboardDisplayName()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.summon.success", new Object[]{entitylightning.getScoreboardDisplayName()}), true);
             return 1;
         } else {
             WorldServer worldserver = commandlistenerwrapper.getWorld();
@@ -47,7 +47,7 @@ public class CommandSummon {
                     ((EntityInsentient) entity).prepare(commandlistenerwrapper.getWorld(), commandlistenerwrapper.getWorld().getDamageScaler(new BlockPosition(entity)), EnumMobSpawn.COMMAND, (GroupDataEntity) null, (NBTTagCompound) null);
                 }
 
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.summon.success", new Object[] { entity.getScoreboardDisplayName()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.summon.success", new Object[]{entity.getScoreboardDisplayName()}), true);
                 return 1;
             }
         }

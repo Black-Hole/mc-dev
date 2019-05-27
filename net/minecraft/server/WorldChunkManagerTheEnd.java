@@ -15,7 +15,7 @@ public class WorldChunkManagerTheEnd extends WorldChunkManager {
     private final BiomeBase[] e;
 
     public WorldChunkManagerTheEnd(BiomeLayoutTheEndConfiguration biomelayouttheendconfiguration) {
-        this.e = new BiomeBase[] { Biomes.THE_END, Biomes.END_HIGHLANDS, Biomes.END_MIDLANDS, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS};
+        this.e = new BiomeBase[]{Biomes.THE_END, Biomes.END_HIGHLANDS, Biomes.END_MIDLANDS, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS};
         this.d = new SeededRandom(biomelayouttheendconfiguration.a());
         this.d.a(17292);
         this.c = new NoiseGenerator3Handler(this.d);

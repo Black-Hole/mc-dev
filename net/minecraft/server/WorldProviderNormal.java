@@ -52,12 +52,12 @@ public class WorldProviderNormal extends WorldProvider {
             if (jsonobject.has("biome_source") && jsonobject.getAsJsonObject("biome_source").has("type") && jsonobject.getAsJsonObject("biome_source").has("options")) {
                 BiomeLayout<?, ?> biomelayout3 = (BiomeLayout) IRegistry.BIOME_SOURCE_TYPE.get(new MinecraftKey(jsonobject.getAsJsonObject("biome_source").getAsJsonPrimitive("type").getAsString()));
                 JsonObject jsonobject1 = jsonobject.getAsJsonObject("biome_source").getAsJsonObject("options");
-                BiomeBase[] abiomebase = new BiomeBase[] { Biomes.OCEAN};
+                BiomeBase[] abiomebase = new BiomeBase[]{Biomes.OCEAN};
 
                 if (jsonobject1.has("biomes")) {
                     JsonArray jsonarray = jsonobject1.getAsJsonArray("biomes");
 
-                    abiomebase = jsonarray.size() > 0 ? new BiomeBase[jsonarray.size()] : new BiomeBase[] { Biomes.OCEAN};
+                    abiomebase = jsonarray.size() > 0 ? new BiomeBase[jsonarray.size()] : new BiomeBase[]{Biomes.OCEAN};
 
                     for (int i = 0; i < jsonarray.size(); ++i) {
                         abiomebase[i] = (BiomeBase) IRegistry.BIOME.getOptional(new MinecraftKey(jsonarray.get(i).getAsString())).orElse(Biomes.OCEAN);

@@ -21,7 +21,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
     @Override
     public boolean setProperty(int i, int j) {
         if (i == 1) {
-            this.d();
+            this.f();
             this.j = 0;
             this.c = EnumDirection.fromType1(j);
             this.a = 0;
@@ -43,9 +43,9 @@ public class TileEntityBell extends TileEntity implements ITickable {
             this.a = 0;
         }
 
-        if (this.a >= 5 && this.j == 0 && this.f()) {
+        if (this.a >= 5 && this.j == 0 && this.h()) {
             this.i = true;
-            this.c();
+            this.d();
         }
 
         if (this.i) {
@@ -60,7 +60,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
 
     }
 
-    private void c() {
+    private void d() {
         this.world.a((EntityHuman) null, this.getPosition(), SoundEffects.BLOCK_BELL_RESONATE, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
@@ -77,7 +77,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
         this.world.playBlockAction(blockposition, this.getBlock().getBlock(), 1, enumdirection.a());
     }
 
-    private void d() {
+    private void f() {
         BlockPosition blockposition = this.getPosition();
 
         if (this.world.getTime() > this.g + 60L || this.h == null) {
@@ -101,7 +101,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
 
     }
 
-    private boolean f() {
+    private boolean h() {
         BlockPosition blockposition = this.getPosition();
         Iterator iterator = this.h.iterator();
 

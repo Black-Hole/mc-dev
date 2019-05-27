@@ -4,8 +4,9 @@ import java.util.Comparator;
 
 public class TicketType<T> {
 
-    private final String h;
-    private final Comparator<T> i;
+    private final String i;
+    private final Comparator<T> j;
+    private final long k;
     public static final TicketType<Unit> START = a("start", (unit, unit1) -> {
         return 0;
     });
@@ -16,22 +17,32 @@ public class TicketType<T> {
     public static final TicketType<ChunkCoordIntPair> FORCED = a("forced", Comparator.comparingLong(ChunkCoordIntPair::pair));
     public static final TicketType<ChunkCoordIntPair> LIGHT = a("light", Comparator.comparingLong(ChunkCoordIntPair::pair));
     public static final TicketType<BlockPosition2D> PORTAL = a("portal", Comparator.comparingLong(BlockPosition2D::b));
-    public static final TicketType<ChunkCoordIntPair> UNKNOWN = a("unknown", Comparator.comparingLong(ChunkCoordIntPair::pair));
+    public static final TicketType<Integer> POST_TELEPORT = a("post_teleport", Integer::compareTo, 5);
+    public static final TicketType<ChunkCoordIntPair> UNKNOWN = a("unknown", Comparator.comparingLong(ChunkCoordIntPair::pair), 1);
 
     public static <T> TicketType<T> a(String s, Comparator<T> comparator) {
-        return new TicketType<>(s, comparator);
+        return new TicketType<>(s, comparator, 0L);
     }
 
-    protected TicketType(String s, Comparator<T> comparator) {
-        this.h = s;
-        this.i = comparator;
+    public static <T> TicketType<T> a(String s, Comparator<T> comparator, int i) {
+        return new TicketType<>(s, comparator, (long) i);
+    }
+
+    protected TicketType(String s, Comparator<T> comparator, long i) {
+        this.i = s;
+        this.j = comparator;
+        this.k = i;
     }
 
     public String toString() {
-        return this.h;
+        return this.i;
     }
 
     public Comparator<T> a() {
-        return this.i;
+        return this.j;
+    }
+
+    public long b() {
+        return this.k;
     }
 }

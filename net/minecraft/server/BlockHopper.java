@@ -27,36 +27,36 @@ public class BlockHopper extends BlockTileEntity {
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch ((EnumDirection) iblockdata.get(BlockHopper.FACING)) {
-        case DOWN:
-            return BlockHopper.g;
-        case NORTH:
-            return BlockHopper.i;
-        case SOUTH:
-            return BlockHopper.j;
-        case WEST:
-            return BlockHopper.k;
-        case EAST:
-            return BlockHopper.h;
-        default:
-            return BlockHopper.f;
+            case DOWN:
+                return BlockHopper.g;
+            case NORTH:
+                return BlockHopper.i;
+            case SOUTH:
+                return BlockHopper.j;
+            case WEST:
+                return BlockHopper.k;
+            case EAST:
+                return BlockHopper.h;
+            default:
+                return BlockHopper.f;
         }
     }
 
     @Override
     public VoxelShape i(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         switch ((EnumDirection) iblockdata.get(BlockHopper.FACING)) {
-        case DOWN:
-            return BlockHopper.w;
-        case NORTH:
-            return BlockHopper.y;
-        case SOUTH:
-            return BlockHopper.z;
-        case WEST:
-            return BlockHopper.A;
-        case EAST:
-            return BlockHopper.x;
-        default:
-            return IHopper.a;
+            case DOWN:
+                return BlockHopper.w;
+            case NORTH:
+                return BlockHopper.y;
+            case SOUTH:
+                return BlockHopper.z;
+            case WEST:
+                return BlockHopper.A;
+            case EAST:
+                return BlockHopper.x;
+            default:
+                return IHopper.a;
         }
     }
 

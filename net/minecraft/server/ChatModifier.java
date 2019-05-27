@@ -325,7 +325,7 @@ public class ChatModifier {
     }
 
     public int hashCode() {
-        return Objects.hash(new Object[] { this.b, this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j});
+        return Objects.hash(new Object[]{this.b, this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j});
     }
 
     public ChatModifier clone() {

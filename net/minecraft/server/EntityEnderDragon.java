@@ -38,7 +38,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
 
     public EntityEnderDragon(EntityTypes<? extends EntityEnderDragon> entitytypes, World world) {
         super(EntityTypes.ENDER_DRAGON, world);
-        this.children = new EntityComplexPart[] { this.bA, this.bB, this.bC, this.bD, this.bE, this.bF, this.bG, this.bH};
+        this.children = new EntityComplexPart[]{this.bA, this.bB, this.bC, this.bD, this.bE, this.bF, this.bG, this.bH};
         this.setHealth(this.getMaxHealth());
         this.noclip = true;
         this.af = true;
@@ -585,10 +585,10 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
             this.bU[23] = 8257536;
         }
 
-        return this.k(this.locX, this.locY, this.locZ);
+        return this.l(this.locX, this.locY, this.locZ);
     }
 
-    public int k(double d0, double d1, double d2) {
+    public int l(double d0, double d1, double d2) {
         float f = 10000.0F;
         int i = 0;
         PathPoint pathpoint = new PathPoint(MathHelper.floor(d0), MathHelper.floor(d1), MathHelper.floor(d2));

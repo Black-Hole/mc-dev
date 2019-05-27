@@ -500,239 +500,239 @@ public class ChunkConverterPalette extends DataFix {
                         String s2;
 
                         switch ((Integer) java_util_map_entry.getKey()) {
-                        case 2:
-                            intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
+                            case 2:
+                                intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
 
-                            while (intlistiterator.hasNext()) {
-                                l = (Integer) intlistiterator.next();
-                                l |= k;
-                                dynamic1 = this.a(l);
-                                if ("minecraft:grass_block".equals(ChunkConverterPalette.a(dynamic1))) {
-                                    s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.UP)));
-                                    if ("minecraft:snow".equals(s) || "minecraft:snow_layer".equals(s)) {
-                                        this.a(l, ChunkConverterPalette.f);
-                                    }
-                                }
-                            }
-                            break;
-                        case 3:
-                            intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
-
-                            while (true) {
-                                if (!intlistiterator.hasNext()) {
-                                    continue label229;
-                                }
-
-                                l = (Integer) intlistiterator.next();
-                                l |= k;
-                                dynamic1 = this.a(l);
-                                if ("minecraft:podzol".equals(ChunkConverterPalette.a(dynamic1))) {
-                                    s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.UP)));
-                                    if ("minecraft:snow".equals(s) || "minecraft:snow_layer".equals(s)) {
-                                        this.a(l, ChunkConverterPalette.e);
-                                    }
-                                }
-                            }
-                        case 25:
-                            intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
-
-                            while (true) {
-                                if (!intlistiterator.hasNext()) {
-                                    continue label229;
-                                }
-
-                                l = (Integer) intlistiterator.next();
-                                l |= k;
-                                dynamic1 = this.c(l);
-                                if (dynamic1 != null) {
-                                    s = Boolean.toString(dynamic1.get("powered").asBoolean(false)) + (byte) Math.min(Math.max(dynamic1.get("note").asInt(0), 0), 24);
-                                    this.a(l, (Dynamic) ChunkConverterPalette.q.getOrDefault(s, ChunkConverterPalette.q.get("false0")));
-                                }
-                            }
-                        case 26:
-                            intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
-
-                            while (true) {
-                                if (!intlistiterator.hasNext()) {
-                                    continue label229;
-                                }
-
-                                l = (Integer) intlistiterator.next();
-                                l |= k;
-                                dynamic1 = this.b(l);
-                                dynamic2 = this.a(l);
-                                if (dynamic1 != null) {
-                                    i1 = dynamic1.get("color").asInt(0);
-                                    if (i1 != 14 && i1 >= 0 && i1 < 16) {
-                                        s1 = ChunkConverterPalette.a(dynamic2, "facing") + ChunkConverterPalette.a(dynamic2, "occupied") + ChunkConverterPalette.a(dynamic2, "part") + i1;
-                                        if (ChunkConverterPalette.s.containsKey(s1)) {
-                                            this.a(l, (Dynamic) ChunkConverterPalette.s.get(s1));
+                                while (intlistiterator.hasNext()) {
+                                    l = (Integer) intlistiterator.next();
+                                    l |= k;
+                                    dynamic1 = this.a(l);
+                                    if ("minecraft:grass_block".equals(ChunkConverterPalette.a(dynamic1))) {
+                                        s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.UP)));
+                                        if ("minecraft:snow".equals(s) || "minecraft:snow_layer".equals(s)) {
+                                            this.a(l, ChunkConverterPalette.f);
                                         }
                                     }
                                 }
-                            }
-                        case 64:
-                        case 71:
-                        case 193:
-                        case 194:
-                        case 195:
-                        case 196:
-                        case 197:
-                            intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
+                                break;
+                            case 3:
+                                intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
 
-                            while (true) {
-                                if (!intlistiterator.hasNext()) {
-                                    continue label229;
+                                while (true) {
+                                    if (!intlistiterator.hasNext()) {
+                                        continue label229;
+                                    }
+
+                                    l = (Integer) intlistiterator.next();
+                                    l |= k;
+                                    dynamic1 = this.a(l);
+                                    if ("minecraft:podzol".equals(ChunkConverterPalette.a(dynamic1))) {
+                                        s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.UP)));
+                                        if ("minecraft:snow".equals(s) || "minecraft:snow_layer".equals(s)) {
+                                            this.a(l, ChunkConverterPalette.e);
+                                        }
+                                    }
                                 }
+                            case 25:
+                                intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
 
-                                l = (Integer) intlistiterator.next();
-                                l |= k;
-                                dynamic1 = this.a(l);
-                                if (ChunkConverterPalette.a(dynamic1).endsWith("_door")) {
+                                while (true) {
+                                    if (!intlistiterator.hasNext()) {
+                                        continue label229;
+                                    }
+
+                                    l = (Integer) intlistiterator.next();
+                                    l |= k;
+                                    dynamic1 = this.c(l);
+                                    if (dynamic1 != null) {
+                                        s = Boolean.toString(dynamic1.get("powered").asBoolean(false)) + (byte) Math.min(Math.max(dynamic1.get("note").asInt(0), 0), 24);
+                                        this.a(l, (Dynamic) ChunkConverterPalette.q.getOrDefault(s, ChunkConverterPalette.q.get("false0")));
+                                    }
+                                }
+                            case 26:
+                                intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
+
+                                while (true) {
+                                    if (!intlistiterator.hasNext()) {
+                                        continue label229;
+                                    }
+
+                                    l = (Integer) intlistiterator.next();
+                                    l |= k;
+                                    dynamic1 = this.b(l);
                                     dynamic2 = this.a(l);
-                                    if ("lower".equals(ChunkConverterPalette.a(dynamic2, "half"))) {
-                                        i1 = a(l, ChunkConverterPalette.Direction.UP);
-                                        Dynamic<?> dynamic3 = this.a(i1);
-                                        String s3 = ChunkConverterPalette.a(dynamic2);
-
-                                        if (s3.equals(ChunkConverterPalette.a(dynamic3))) {
-                                            String s4 = ChunkConverterPalette.a(dynamic2, "facing");
-                                            String s5 = ChunkConverterPalette.a(dynamic2, "open");
-                                            String s6 = flag ? "left" : ChunkConverterPalette.a(dynamic3, "hinge");
-                                            String s7 = flag ? "false" : ChunkConverterPalette.a(dynamic3, "powered");
-
-                                            this.a(l, (Dynamic) ChunkConverterPalette.p.get(s3 + s4 + "lower" + s6 + s5 + s7));
-                                            this.a(i1, (Dynamic) ChunkConverterPalette.p.get(s3 + s4 + "upper" + s6 + s5 + s7));
+                                    if (dynamic1 != null) {
+                                        i1 = dynamic1.get("color").asInt(0);
+                                        if (i1 != 14 && i1 >= 0 && i1 < 16) {
+                                            s1 = ChunkConverterPalette.a(dynamic2, "facing") + ChunkConverterPalette.a(dynamic2, "occupied") + ChunkConverterPalette.a(dynamic2, "part") + i1;
+                                            if (ChunkConverterPalette.s.containsKey(s1)) {
+                                                this.a(l, (Dynamic) ChunkConverterPalette.s.get(s1));
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        case 86:
-                            intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
+                            case 64:
+                            case 71:
+                            case 193:
+                            case 194:
+                            case 195:
+                            case 196:
+                            case 197:
+                                intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
 
-                            while (true) {
-                                if (!intlistiterator.hasNext()) {
-                                    continue label229;
-                                }
-
-                                l = (Integer) intlistiterator.next();
-                                l |= k;
-                                dynamic1 = this.a(l);
-                                if ("minecraft:carved_pumpkin".equals(ChunkConverterPalette.a(dynamic1))) {
-                                    s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.DOWN)));
-                                    if ("minecraft:grass_block".equals(s) || "minecraft:dirt".equals(s)) {
-                                        this.a(l, ChunkConverterPalette.d);
-                                    }
-                                }
-                            }
-                        case 110:
-                            intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
-
-                            while (true) {
-                                if (!intlistiterator.hasNext()) {
-                                    continue label229;
-                                }
-
-                                l = (Integer) intlistiterator.next();
-                                l |= k;
-                                dynamic1 = this.a(l);
-                                if ("minecraft:mycelium".equals(ChunkConverterPalette.a(dynamic1))) {
-                                    s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.UP)));
-                                    if ("minecraft:snow".equals(s) || "minecraft:snow_layer".equals(s)) {
-                                        this.a(l, ChunkConverterPalette.g);
-                                    }
-                                }
-                            }
-                        case 140:
-                            intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
-
-                            while (true) {
-                                if (!intlistiterator.hasNext()) {
-                                    continue label229;
-                                }
-
-                                l = (Integer) intlistiterator.next();
-                                l |= k;
-                                dynamic1 = this.c(l);
-                                if (dynamic1 != null) {
-                                    s = dynamic1.get("Item").asString("") + dynamic1.get("Data").asInt(0);
-                                    this.a(l, (Dynamic) ChunkConverterPalette.n.getOrDefault(s, ChunkConverterPalette.n.get("minecraft:air0")));
-                                }
-                            }
-                        case 144:
-                            intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
-
-                            while (true) {
-                                if (!intlistiterator.hasNext()) {
-                                    continue label229;
-                                }
-
-                                l = (Integer) intlistiterator.next();
-                                l |= k;
-                                dynamic1 = this.b(l);
-                                if (dynamic1 != null) {
-                                    s = String.valueOf(dynamic1.get("SkullType").asInt(0));
-                                    s2 = ChunkConverterPalette.a(this.a(l), "facing");
-                                    if (!"up".equals(s2) && !"down".equals(s2)) {
-                                        s1 = s + s2;
-                                    } else {
-                                        s1 = s + String.valueOf(dynamic1.get("Rot").asInt(0));
+                                while (true) {
+                                    if (!intlistiterator.hasNext()) {
+                                        continue label229;
                                     }
 
-                                    dynamic1.remove("SkullType");
-                                    dynamic1.remove("facing");
-                                    dynamic1.remove("Rot");
-                                    this.a(l, (Dynamic) ChunkConverterPalette.o.getOrDefault(s1, ChunkConverterPalette.o.get("0north")));
-                                }
-                            }
-                        case 175:
-                            intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
+                                    l = (Integer) intlistiterator.next();
+                                    l |= k;
+                                    dynamic1 = this.a(l);
+                                    if (ChunkConverterPalette.a(dynamic1).endsWith("_door")) {
+                                        dynamic2 = this.a(l);
+                                        if ("lower".equals(ChunkConverterPalette.a(dynamic2, "half"))) {
+                                            i1 = a(l, ChunkConverterPalette.Direction.UP);
+                                            Dynamic<?> dynamic3 = this.a(i1);
+                                            String s3 = ChunkConverterPalette.a(dynamic2);
 
-                            while (true) {
-                                if (!intlistiterator.hasNext()) {
-                                    continue label229;
-                                }
+                                            if (s3.equals(ChunkConverterPalette.a(dynamic3))) {
+                                                String s4 = ChunkConverterPalette.a(dynamic2, "facing");
+                                                String s5 = ChunkConverterPalette.a(dynamic2, "open");
+                                                String s6 = flag ? "left" : ChunkConverterPalette.a(dynamic3, "hinge");
+                                                String s7 = flag ? "false" : ChunkConverterPalette.a(dynamic3, "powered");
 
-                                l = (Integer) intlistiterator.next();
-                                l |= k;
-                                dynamic1 = this.a(l);
-                                if ("upper".equals(ChunkConverterPalette.a(dynamic1, "half"))) {
-                                    dynamic2 = this.a(a(l, ChunkConverterPalette.Direction.DOWN));
-                                    s2 = ChunkConverterPalette.a(dynamic2);
-                                    if ("minecraft:sunflower".equals(s2)) {
-                                        this.a(l, ChunkConverterPalette.h);
-                                    } else if ("minecraft:lilac".equals(s2)) {
-                                        this.a(l, ChunkConverterPalette.i);
-                                    } else if ("minecraft:tall_grass".equals(s2)) {
-                                        this.a(l, ChunkConverterPalette.j);
-                                    } else if ("minecraft:large_fern".equals(s2)) {
-                                        this.a(l, ChunkConverterPalette.k);
-                                    } else if ("minecraft:rose_bush".equals(s2)) {
-                                        this.a(l, ChunkConverterPalette.l);
-                                    } else if ("minecraft:peony".equals(s2)) {
-                                        this.a(l, ChunkConverterPalette.m);
-                                    }
-                                }
-                            }
-                        case 176:
-                        case 177:
-                            intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
-
-                            while (intlistiterator.hasNext()) {
-                                l = (Integer) intlistiterator.next();
-                                l |= k;
-                                dynamic1 = this.b(l);
-                                dynamic2 = this.a(l);
-                                if (dynamic1 != null) {
-                                    i1 = dynamic1.get("Base").asInt(0);
-                                    if (i1 != 15 && i1 >= 0 && i1 < 16) {
-                                        s1 = ChunkConverterPalette.a(dynamic2, (Integer) java_util_map_entry.getKey() == 176 ? "rotation" : "facing") + "_" + i1;
-                                        if (ChunkConverterPalette.t.containsKey(s1)) {
-                                            this.a(l, (Dynamic) ChunkConverterPalette.t.get(s1));
+                                                this.a(l, (Dynamic) ChunkConverterPalette.p.get(s3 + s4 + "lower" + s6 + s5 + s7));
+                                                this.a(i1, (Dynamic) ChunkConverterPalette.p.get(s3 + s4 + "upper" + s6 + s5 + s7));
+                                            }
                                         }
                                     }
                                 }
-                            }
+                            case 86:
+                                intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
+
+                                while (true) {
+                                    if (!intlistiterator.hasNext()) {
+                                        continue label229;
+                                    }
+
+                                    l = (Integer) intlistiterator.next();
+                                    l |= k;
+                                    dynamic1 = this.a(l);
+                                    if ("minecraft:carved_pumpkin".equals(ChunkConverterPalette.a(dynamic1))) {
+                                        s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.DOWN)));
+                                        if ("minecraft:grass_block".equals(s) || "minecraft:dirt".equals(s)) {
+                                            this.a(l, ChunkConverterPalette.d);
+                                        }
+                                    }
+                                }
+                            case 110:
+                                intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
+
+                                while (true) {
+                                    if (!intlistiterator.hasNext()) {
+                                        continue label229;
+                                    }
+
+                                    l = (Integer) intlistiterator.next();
+                                    l |= k;
+                                    dynamic1 = this.a(l);
+                                    if ("minecraft:mycelium".equals(ChunkConverterPalette.a(dynamic1))) {
+                                        s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.UP)));
+                                        if ("minecraft:snow".equals(s) || "minecraft:snow_layer".equals(s)) {
+                                            this.a(l, ChunkConverterPalette.g);
+                                        }
+                                    }
+                                }
+                            case 140:
+                                intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
+
+                                while (true) {
+                                    if (!intlistiterator.hasNext()) {
+                                        continue label229;
+                                    }
+
+                                    l = (Integer) intlistiterator.next();
+                                    l |= k;
+                                    dynamic1 = this.c(l);
+                                    if (dynamic1 != null) {
+                                        s = dynamic1.get("Item").asString("") + dynamic1.get("Data").asInt(0);
+                                        this.a(l, (Dynamic) ChunkConverterPalette.n.getOrDefault(s, ChunkConverterPalette.n.get("minecraft:air0")));
+                                    }
+                                }
+                            case 144:
+                                intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
+
+                                while (true) {
+                                    if (!intlistiterator.hasNext()) {
+                                        continue label229;
+                                    }
+
+                                    l = (Integer) intlistiterator.next();
+                                    l |= k;
+                                    dynamic1 = this.b(l);
+                                    if (dynamic1 != null) {
+                                        s = String.valueOf(dynamic1.get("SkullType").asInt(0));
+                                        s2 = ChunkConverterPalette.a(this.a(l), "facing");
+                                        if (!"up".equals(s2) && !"down".equals(s2)) {
+                                            s1 = s + s2;
+                                        } else {
+                                            s1 = s + String.valueOf(dynamic1.get("Rot").asInt(0));
+                                        }
+
+                                        dynamic1.remove("SkullType");
+                                        dynamic1.remove("facing");
+                                        dynamic1.remove("Rot");
+                                        this.a(l, (Dynamic) ChunkConverterPalette.o.getOrDefault(s1, ChunkConverterPalette.o.get("0north")));
+                                    }
+                                }
+                            case 175:
+                                intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
+
+                                while (true) {
+                                    if (!intlistiterator.hasNext()) {
+                                        continue label229;
+                                    }
+
+                                    l = (Integer) intlistiterator.next();
+                                    l |= k;
+                                    dynamic1 = this.a(l);
+                                    if ("upper".equals(ChunkConverterPalette.a(dynamic1, "half"))) {
+                                        dynamic2 = this.a(a(l, ChunkConverterPalette.Direction.DOWN));
+                                        s2 = ChunkConverterPalette.a(dynamic2);
+                                        if ("minecraft:sunflower".equals(s2)) {
+                                            this.a(l, ChunkConverterPalette.h);
+                                        } else if ("minecraft:lilac".equals(s2)) {
+                                            this.a(l, ChunkConverterPalette.i);
+                                        } else if ("minecraft:tall_grass".equals(s2)) {
+                                            this.a(l, ChunkConverterPalette.j);
+                                        } else if ("minecraft:large_fern".equals(s2)) {
+                                            this.a(l, ChunkConverterPalette.k);
+                                        } else if ("minecraft:rose_bush".equals(s2)) {
+                                            this.a(l, ChunkConverterPalette.l);
+                                        } else if ("minecraft:peony".equals(s2)) {
+                                            this.a(l, ChunkConverterPalette.m);
+                                        }
+                                    }
+                                }
+                            case 176:
+                            case 177:
+                                intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
+
+                                while (intlistiterator.hasNext()) {
+                                    l = (Integer) intlistiterator.next();
+                                    l |= k;
+                                    dynamic1 = this.b(l);
+                                    dynamic2 = this.a(l);
+                                    if (dynamic1 != null) {
+                                        i1 = dynamic1.get("Base").asInt(0);
+                                        if (i1 != 15 && i1 >= 0 && i1 < 16) {
+                                            s1 = ChunkConverterPalette.a(dynamic2, (Integer) java_util_map_entry.getKey() == 176 ? "rotation" : "facing") + "_" + i1;
+                                            if (ChunkConverterPalette.t.containsKey(s1)) {
+                                                this.a(l, (Dynamic) ChunkConverterPalette.t.get(s1));
+                                            }
+                                        }
+                                    }
+                                }
                         }
                     }
                 }
@@ -752,20 +752,20 @@ public class ChunkConverterPalette extends DataFix {
 
         public static int a(int i, ChunkConverterPalette.Direction chunkconverterpalette_direction) {
             switch (chunkconverterpalette_direction.b()) {
-            case X:
-                int j = (i & 15) + chunkconverterpalette_direction.a().a();
+                case X:
+                    int j = (i & 15) + chunkconverterpalette_direction.a().a();
 
-                return j >= 0 && j <= 15 ? i & -16 | j : -1;
-            case Y:
-                int k = (i >> 8) + chunkconverterpalette_direction.a().a();
+                    return j >= 0 && j <= 15 ? i & -16 | j : -1;
+                case Y:
+                    int k = (i >> 8) + chunkconverterpalette_direction.a().a();
 
-                return k >= 0 && k <= 255 ? i & 255 | k << 8 : -1;
-            case Z:
-                int l = (i >> 4 & 15) + chunkconverterpalette_direction.a().a();
+                    return k >= 0 && k <= 255 ? i & 255 | k << 8 : -1;
+                case Z:
+                    int l = (i >> 4 & 15) + chunkconverterpalette_direction.a().a();
 
-                return l >= 0 && l <= 15 ? i & -241 | l << 4 : -1;
-            default:
-                return -1;
+                    return l >= 0 && l <= 15 ? i & -241 | l << 4 : -1;
+                default:
+                    return -1;
             }
         }
 

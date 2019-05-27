@@ -57,30 +57,30 @@ public class LootItemFunctions {
 
     public static BiFunction<ItemStack, LootTableInfo, ItemStack> a(BiFunction<ItemStack, LootTableInfo, ItemStack>[] abifunction) {
         switch (abifunction.length) {
-        case 0:
-            return LootItemFunctions.a;
-        case 1:
-            return abifunction[0];
-        case 2:
-            BiFunction<ItemStack, LootTableInfo, ItemStack> bifunction = abifunction[0];
-            BiFunction<ItemStack, LootTableInfo, ItemStack> bifunction1 = abifunction[1];
+            case 0:
+                return LootItemFunctions.a;
+            case 1:
+                return abifunction[0];
+            case 2:
+                BiFunction<ItemStack, LootTableInfo, ItemStack> bifunction = abifunction[0];
+                BiFunction<ItemStack, LootTableInfo, ItemStack> bifunction1 = abifunction[1];
 
-            return (itemstack, loottableinfo) -> {
-                return (ItemStack) bifunction1.apply(bifunction.apply(itemstack, loottableinfo), loottableinfo);
-            };
-        default:
-            return (itemstack, loottableinfo) -> {
-                BiFunction[] abifunction1 = abifunction;
-                int i = abifunction.length;
+                return (itemstack, loottableinfo) -> {
+                    return (ItemStack) bifunction1.apply(bifunction.apply(itemstack, loottableinfo), loottableinfo);
+                };
+            default:
+                return (itemstack, loottableinfo) -> {
+                    BiFunction[] abifunction1 = abifunction;
+                    int i = abifunction.length;
 
-                for (int j = 0; j < i; ++j) {
-                    BiFunction<ItemStack, LootTableInfo, ItemStack> bifunction2 = abifunction1[j];
+                    for (int j = 0; j < i; ++j) {
+                        BiFunction<ItemStack, LootTableInfo, ItemStack> bifunction2 = abifunction1[j];
 
-                    itemstack = (ItemStack) bifunction2.apply(itemstack, loottableinfo);
-                }
+                        itemstack = (ItemStack) bifunction2.apply(itemstack, loottableinfo);
+                    }
 
-                return itemstack;
-            };
+                    return itemstack;
+                };
         }
     }
 

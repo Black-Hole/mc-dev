@@ -449,7 +449,7 @@ public class WorldServer extends World {
     private void a(NextTickListEntry<FluidType> nextticklistentry) {
         Fluid fluid = this.getFluid(nextticklistentry.a);
 
-        if (fluid.getType() == nextticklistentry.a()) {
+        if (fluid.getType() == nextticklistentry.b()) {
             fluid.a((World) this, nextticklistentry.a);
         }
 
@@ -458,7 +458,7 @@ public class WorldServer extends World {
     private void b(NextTickListEntry<Block> nextticklistentry) {
         IBlockData iblockdata = this.getType(nextticklistentry.a);
 
-        if (iblockdata.getBlock() == nextticklistentry.a()) {
+        if (iblockdata.getBlock() == nextticklistentry.b()) {
             iblockdata.a((World) this, nextticklistentry.a, this.random);
         }
 

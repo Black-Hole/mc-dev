@@ -22,7 +22,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
 
     private static final DataWatcherObject<VillagerData> bC = DataWatcher.a(EntityVillager.class, DataWatcherRegistry.q);
     public static final Map<Item, Integer> bA = ImmutableMap.of(Items.BREAD, 4, Items.POTATO, 1, Items.CARROT, 1, Items.BEETROOT, 1);
-    private static final Set<Item> bD = ImmutableSet.of(Items.BREAD, Items.POTATO, Items.CARROT, Items.WHEAT, Items.WHEAT_SEEDS, Items.BEETROOT, new Item[] { Items.BEETROOT_SEEDS});
+    private static final Set<Item> bD = ImmutableSet.of(Items.BREAD, Items.POTATO, Items.CARROT, Items.WHEAT, Items.WHEAT_SEEDS, Items.BEETROOT, new Item[]{Items.BEETROOT_SEEDS});
     private int bE;
     private boolean bF;
     @Nullable
@@ -35,7 +35,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
     private long bM;
     private int bN;
     private long bO;
-    private static final ImmutableList<MemoryModuleType<?>> bP = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, new MemoryModuleType[] { MemoryModuleType.PATH, MemoryModuleType.INTERACTABLE_DOORS, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.GOLEM_SPAWN_CONDITIONS, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE});
+    private static final ImmutableList<MemoryModuleType<?>> bP = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, new MemoryModuleType[]{MemoryModuleType.PATH, MemoryModuleType.INTERACTABLE_DOORS, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.GOLEM_SPAWN_CONDITIONS, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE});
     private static final ImmutableList<SensorType<? extends Sensor<? super EntityVillager>>> bQ = ImmutableList.of(SensorType.b, SensorType.c, SensorType.d, SensorType.e, SensorType.f, SensorType.g, SensorType.h, SensorType.i);
     public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<EntityVillager, VillagePlaceType>> bB = ImmutableMap.of(MemoryModuleType.HOME, (entityvillager, villageplacetype) -> {
         return villageplacetype == VillagePlaceType.q;
@@ -198,7 +198,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
                     return super.a(entityhuman, enumhand);
                 } else {
                     if (!this.world.isClientSide && !this.trades.isEmpty()) {
-                        this.f(entityhuman);
+                        this.g(entityhuman);
                     }
 
                     return true;
@@ -217,8 +217,8 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
 
     }
 
-    private void f(EntityHuman entityhuman) {
-        this.g(entityhuman);
+    private void g(EntityHuman entityhuman) {
+        this.h(entityhuman);
         this.setTradingPlayer(entityhuman);
         this.openTrade(entityhuman, this.getScoreboardDisplayName(), this.getVillagerData().getLevel());
     }
@@ -247,7 +247,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
         this.bO = this.world.getDayTime() % 24000L;
     }
 
-    private void g(EntityHuman entityhuman) {
+    private void h(EntityHuman entityhuman) {
         int i = this.bL.a(entityhuman.getUniqueID(), (reputationtype) -> {
             return reputationtype != ReputationType.GOLEM;
         });
@@ -428,14 +428,14 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
             MinecraftServer minecraftserver = ((WorldServer) this.world).getMinecraftServer();
 
             this.br.getMemory(memorymoduletype).ifPresent((globalpos) -> {
-                WorldServer worldserver = minecraftserver.getWorldServer(globalpos.a());
+                WorldServer worldserver = minecraftserver.getWorldServer(globalpos.getDimensionManager());
                 VillagePlace villageplace = worldserver.B();
-                Optional<VillagePlaceType> optional = villageplace.c(globalpos.b());
+                Optional<VillagePlaceType> optional = villageplace.c(globalpos.getBlockPosition());
                 BiPredicate<EntityVillager, VillagePlaceType> bipredicate = (BiPredicate) EntityVillager.bB.get(memorymoduletype);
 
                 if (optional.isPresent() && bipredicate.test(this, optional.get())) {
-                    villageplace.b(globalpos.b());
-                    PacketDebug.c(worldserver, globalpos.b());
+                    villageplace.b(globalpos.getBlockPosition());
+                    PacketDebug.c(worldserver, globalpos.getBlockPosition());
                 }
 
             });
@@ -469,6 +469,12 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
             }
 
         }
+    }
+
+    public int f(EntityHuman entityhuman) {
+        return this.bL.a(entityhuman.getUniqueID(), (reputationtype) -> {
+            return reputationtype != ReputationType.GOLEM;
+        });
     }
 
     public void s(int i) {
@@ -582,6 +588,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
                 }
             }
 
+            this.receive(entityitem, itemstack.getCount());
             ItemStack itemstack2 = this.getInventory().a(itemstack);
 
             if (itemstack2.isEmpty()) {

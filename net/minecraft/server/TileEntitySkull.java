@@ -83,10 +83,10 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
     public void setGameProfile(@Nullable GameProfile gameprofile) {
         this.gameProfile = gameprofile;
-        this.d();
+        this.f();
     }
 
-    private void d() {
+    private void f() {
         this.gameProfile = b(this.gameProfile);
         this.update();
     }

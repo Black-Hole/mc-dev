@@ -24,6 +24,7 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
     protected final LongSet h = new LongOpenHashSet();
     protected final Long2ObjectMap<NibbleArray> i = new Long2ObjectOpenHashMap();
     private final LongSet n = new LongOpenHashSet();
+    private final LongSet o = new LongOpenHashSet();
     protected volatile boolean j;
 
     protected LightEngineStorage(EnumSkyBlock enumskyblock, ILightAccess ilightaccess, M m0) {
@@ -88,7 +89,7 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
 
     @Override
     protected int c(long i) {
-        return i == Long.MAX_VALUE ? 2 : (this.b.contains(i) ? 0 : (!this.n.contains(i) && this.f.b(i) ? 1 : 2));
+        return i == Long.MAX_VALUE ? 2 : (this.b.contains(i) ? 0 : (!this.o.contains(i) && this.f.b(i) ? 1 : 2));
     }
 
     @Override
@@ -111,8 +112,8 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
         }
 
         if (k >= 2 && j != 2) {
-            if (this.n.contains(i)) {
-                this.n.remove(i);
+            if (this.o.contains(i)) {
+                this.o.remove(i);
             } else {
                 this.f.a(i, this.j(i));
                 this.g.add(i);
@@ -129,10 +130,10 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
         }
 
         if (k != 2 && j >= 2) {
-            this.n.add(i);
+            this.o.add(i);
         }
 
-        this.j = !this.n.isEmpty();
+        this.j = !this.o.isEmpty();
     }
 
     protected NibbleArray j(long i) {
@@ -164,26 +165,35 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
 
     protected void a(LightEngineLayer<M, ?> lightenginelayer, boolean flag, boolean flag1) {
         if (this.a() || !this.i.isEmpty()) {
-            LongIterator longiterator = this.n.iterator();
+            LongIterator longiterator = this.o.iterator();
 
             long i;
+            NibbleArray nibblearray;
 
             while (longiterator.hasNext()) {
                 i = (Long) longiterator.next();
-                this.i.remove(i);
                 this.a(lightenginelayer, i);
-                this.f.d(i);
+                NibbleArray nibblearray1 = (NibbleArray) this.i.remove(i);
+
+                nibblearray = this.f.d(i);
+                if (this.n.contains(SectionPosition.f(i))) {
+                    if (nibblearray1 != null) {
+                        this.i.put(i, nibblearray1);
+                    } else if (nibblearray != null) {
+                        this.i.put(i, nibblearray);
+                    }
+                }
             }
 
             this.f.c();
-            longiterator = this.n.iterator();
+            longiterator = this.o.iterator();
 
             while (longiterator.hasNext()) {
                 i = (Long) longiterator.next();
                 this.l(i);
             }
 
-            this.n.clear();
+            this.o.clear();
             this.j = false;
             ObjectIterator objectiterator = this.i.long2ObjectEntrySet().iterator();
 
@@ -194,8 +204,7 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
                 entry = (Entry) objectiterator.next();
                 j = entry.getLongKey();
                 if (this.g(j)) {
-                    NibbleArray nibblearray = (NibbleArray) entry.getValue();
-
+                    nibblearray = (NibbleArray) entry.getValue();
                     if (this.f.c(j) != nibblearray) {
                         this.a(lightenginelayer, j);
                         this.f.a(j, nibblearray);
@@ -228,29 +237,29 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
                                         long l2;
 
                                         switch (enumdirection) {
-                                        case DOWN:
-                                            k2 = BlockPosition.a(k + j2, l, i1 + i2);
-                                            l2 = BlockPosition.a(k + j2, l - 1, i1 + i2);
-                                            break;
-                                        case UP:
-                                            k2 = BlockPosition.a(k + j2, l + 16 - 1, i1 + i2);
-                                            l2 = BlockPosition.a(k + j2, l + 16, i1 + i2);
-                                            break;
-                                        case NORTH:
-                                            k2 = BlockPosition.a(k + i2, l + j2, i1);
-                                            l2 = BlockPosition.a(k + i2, l + j2, i1 - 1);
-                                            break;
-                                        case SOUTH:
-                                            k2 = BlockPosition.a(k + i2, l + j2, i1 + 16 - 1);
-                                            l2 = BlockPosition.a(k + i2, l + j2, i1 + 16);
-                                            break;
-                                        case WEST:
-                                            k2 = BlockPosition.a(k, l + i2, i1 + j2);
-                                            l2 = BlockPosition.a(k - 1, l + i2, i1 + j2);
-                                            break;
-                                        default:
-                                            k2 = BlockPosition.a(k + 16 - 1, l + i2, i1 + j2);
-                                            l2 = BlockPosition.a(k + 16, l + i2, i1 + j2);
+                                            case DOWN:
+                                                k2 = BlockPosition.a(k + j2, l, i1 + i2);
+                                                l2 = BlockPosition.a(k + j2, l - 1, i1 + i2);
+                                                break;
+                                            case UP:
+                                                k2 = BlockPosition.a(k + j2, l + 16 - 1, i1 + i2);
+                                                l2 = BlockPosition.a(k + j2, l + 16, i1 + i2);
+                                                break;
+                                            case NORTH:
+                                                k2 = BlockPosition.a(k + i2, l + j2, i1);
+                                                l2 = BlockPosition.a(k + i2, l + j2, i1 - 1);
+                                                break;
+                                            case SOUTH:
+                                                k2 = BlockPosition.a(k + i2, l + j2, i1 + 16 - 1);
+                                                l2 = BlockPosition.a(k + i2, l + j2, i1 + 16);
+                                                break;
+                                            case WEST:
+                                                k2 = BlockPosition.a(k, l + i2, i1 + j2);
+                                                l2 = BlockPosition.a(k - 1, l + i2, i1 + j2);
+                                                break;
+                                            default:
+                                                k2 = BlockPosition.a(k + 16 - 1, l + i2, i1 + j2);
+                                                l2 = BlockPosition.a(k + 16, l + i2, i1 + j2);
                                         }
 
                                         lightenginelayer.a(k2, l2, lightenginelayer.b(k2, l2, lightenginelayer.c(k2)), false);
@@ -282,11 +291,25 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
 
     protected void b(long i, boolean flag) {}
 
-    protected void a(long i, NibbleArray nibblearray) {
-        this.i.put(i, nibblearray);
+    public void c(long i, boolean flag) {
+        if (flag) {
+            this.n.add(i);
+        } else {
+            this.n.remove(i);
+        }
+
     }
 
-    protected void c(long i, boolean flag) {
+    protected void a(long i, @Nullable NibbleArray nibblearray) {
+        if (nibblearray != null) {
+            this.i.put(i, nibblearray);
+        } else {
+            this.i.remove(i);
+        }
+
+    }
+
+    protected void d(long i, boolean flag) {
         boolean flag1 = this.b.contains(i);
 
         if (!flag1 && !flag) {

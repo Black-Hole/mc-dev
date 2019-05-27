@@ -36,7 +36,7 @@ public class CommandPardonIP {
                 throw CommandPardonIP.b.create();
             } else {
                 ipbanlist.remove(s);
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.pardonip.success", new Object[] { s}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.pardonip.success", new Object[]{s}), true);
                 return 1;
             }
         }

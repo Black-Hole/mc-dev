@@ -9,7 +9,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     public static final DataWatcherObject<Boolean> CONVERTING = DataWatcher.a(EntityZombieVillager.class, DataWatcherRegistry.i);
     private static final DataWatcherObject<VillagerData> c = DataWatcher.a(EntityZombieVillager.class, DataWatcherRegistry.q);
     public int conversionTime;
-    private UUID conversionPlayer;
+    public UUID conversionPlayer;
     private NBTTagCompound bB;
     private int bC;
 

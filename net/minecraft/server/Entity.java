@@ -121,7 +121,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.uniqueID = MathHelper.a(this.random);
         this.ap = this.uniqueID.toString();
         this.aE = Sets.newHashSet();
-        this.aG = new double[] { 0.0D, 0.0D, 0.0D};
+        this.aG = new double[]{0.0D, 0.0D, 0.0D};
         this.f = entitytypes;
         this.world = world;
         this.size = entitytypes.j();
@@ -1878,7 +1878,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
         EnumDirection enumdirection = EnumDirection.UP;
         double d3 = Double.MAX_VALUE;
-        EnumDirection[] aenumdirection = new EnumDirection[] { EnumDirection.NORTH, EnumDirection.SOUTH, EnumDirection.WEST, EnumDirection.EAST, EnumDirection.UP};
+        EnumDirection[] aenumdirection = new EnumDirection[]{EnumDirection.NORTH, EnumDirection.SOUTH, EnumDirection.WEST, EnumDirection.EAST, EnumDirection.UP};
         int i = aenumdirection.length;
 
         for (int j = 0; j < i; ++j) {
@@ -2161,6 +2161,16 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return (Boolean) this.datawatcher.get(Entity.aA);
     }
 
+    public final void enderTeleportAndLoad(double d0, double d1, double d2) {
+        if (this.world instanceof WorldServer) {
+            ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(new BlockPosition(d0, d1, d2));
+
+            ((WorldServer) this.world).getChunkProvider().addTicket(TicketType.POST_TELEPORT, chunkcoordintpair, 0, this.getId());
+            this.world.getChunkAt(chunkcoordintpair.x, chunkcoordintpair.z);
+            this.enderTeleportTo(d0, d1, d2);
+        }
+    }
+
     public void enderTeleportTo(double d0, double d1, double d2) {
         if (this.world instanceof WorldServer) {
             this.aF = true;
@@ -2298,14 +2308,14 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         float f = MathHelper.g(this.yaw);
 
         switch (enumblockrotation) {
-        case CLOCKWISE_180:
-            return f + 180.0F;
-        case COUNTERCLOCKWISE_90:
-            return f + 270.0F;
-        case CLOCKWISE_90:
-            return f + 90.0F;
-        default:
-            return f;
+            case CLOCKWISE_180:
+                return f + 180.0F;
+            case COUNTERCLOCKWISE_90:
+                return f + 270.0F;
+            case CLOCKWISE_90:
+                return f + 90.0F;
+            default:
+                return f;
         }
     }
 
@@ -2313,12 +2323,12 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         float f = MathHelper.g(this.yaw);
 
         switch (enumblockmirror) {
-        case LEFT_RIGHT:
-            return -f;
-        case FRONT_BACK:
-            return 180.0F - f;
-        default:
-            return f;
+            case LEFT_RIGHT:
+                return -f;
+            case FRONT_BACK:
+                return 180.0F - f;
+            default:
+                return f;
         }
     }
 

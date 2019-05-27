@@ -18,7 +18,7 @@ public class BehaviorHome extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
         Optional<BlockPosition> optional = worldserver.B().a((villageplacetype) -> {
             return villageplacetype == VillagePlaceType.q;
         }, (blockposition) -> {
@@ -49,7 +49,7 @@ public class BehaviorHome extends Behavior<EntityLiving> {
                 Optional<GlobalPos> optional1 = behaviorcontroller.getMemory(MemoryModuleType.HOME);
 
                 if (optional1.isPresent()) {
-                    optional = Optional.of(((GlobalPos) optional1.get()).b());
+                    optional = Optional.of(((GlobalPos) optional1.get()).getBlockPosition());
                 }
             }
         }
@@ -59,7 +59,7 @@ public class BehaviorHome extends Behavior<EntityLiving> {
             behaviorcontroller.removeMemory(MemoryModuleType.LOOK_TARGET);
             behaviorcontroller.removeMemory(MemoryModuleType.BREED_TARGET);
             behaviorcontroller.removeMemory(MemoryModuleType.INTERACTION_TARGET);
-            behaviorcontroller.setMemory(MemoryModuleType.HIDING_PLACE, (Object) GlobalPos.a(worldserver.getWorldProvider().getDimensionManager(), (BlockPosition) optional.get()));
+            behaviorcontroller.setMemory(MemoryModuleType.HIDING_PLACE, (Object) GlobalPos.create(worldserver.getWorldProvider().getDimensionManager(), (BlockPosition) optional.get()));
             if (!((BlockPosition) optional.get()).a((IPosition) entityliving.ch(), (double) this.c)) {
                 behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget((BlockPosition) optional.get(), this.a, this.c)));
             }

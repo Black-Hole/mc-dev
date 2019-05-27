@@ -11,7 +11,7 @@ import com.mojang.datafixers.types.Type;
 
 public class DataConverterHanging extends DataFix {
 
-    private static final int[][] a = new int[][] { { 0, 0, 1}, { -1, 0, 0}, { 0, 0, -1}, { 1, 0, 0}};
+    private static final int[][] a = new int[][]{{0, 0, 1}, {-1, 0, 0}, {0, 0, -1}, {1, 0, 0}};
 
     public DataConverterHanging(Schema schema, boolean flag) {
         super(schema, flag);

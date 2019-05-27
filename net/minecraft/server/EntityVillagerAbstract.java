@@ -74,7 +74,6 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     public void a(MerchantRecipe merchantrecipe) {
         merchantrecipe.increaseUses();
         this.e = -this.A();
-        this.a(this.eb(), this.getSoundVolume(), this.cU());
         this.b(merchantrecipe);
         if (this.tradingPlayer instanceof EntityPlayer) {
             CriterionTriggers.s.a((EntityPlayer) this.tradingPlayer, this, merchantrecipe.getSellingItem());
@@ -98,7 +97,8 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
 
     }
 
-    protected SoundEffect eb() {
+    @Override
+    public SoundEffect eb() {
         return SoundEffects.ENTITY_VILLAGER_YES;
     }
 

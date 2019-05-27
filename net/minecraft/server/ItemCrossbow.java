@@ -263,7 +263,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
     private static float[] a(Random random) {
         boolean flag = random.nextBoolean();
 
-        return new float[] { 1.0F, a(flag), a(!flag)};
+        return new float[]{1.0F, a(flag), a(!flag)};
     }
 
     private static float a(boolean flag) {
@@ -330,14 +330,14 @@ public class ItemCrossbow extends ItemProjectileWeapon {
 
     private SoundEffect a(int i) {
         switch (i) {
-        case 1:
-            return SoundEffects.ITEM_CROSSBOW_QUICK_CHARGE_1;
-        case 2:
-            return SoundEffects.ITEM_CROSSBOW_QUICK_CHARGE_2;
-        case 3:
-            return SoundEffects.ITEM_CROSSBOW_QUICK_CHARGE_3;
-        default:
-            return SoundEffects.ITEM_CROSSBOW_LOADING_START;
+            case 1:
+                return SoundEffects.ITEM_CROSSBOW_QUICK_CHARGE_1;
+            case 2:
+                return SoundEffects.ITEM_CROSSBOW_QUICK_CHARGE_2;
+            case 3:
+                return SoundEffects.ITEM_CROSSBOW_QUICK_CHARGE_3;
+            default:
+                return SoundEffects.ITEM_CROSSBOW_LOADING_START;
         }
     }
 

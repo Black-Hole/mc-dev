@@ -7,9 +7,9 @@ public class BehaviorHomeRaid extends BehaviorHome {
     }
 
     @Override
-    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
         Raid raid = worldserver.c_(new BlockPosition(entityliving));
 
-        return super.a(worldserver, entityliving) && raid != null && raid.u() && !raid.e() && !raid.f();
+        return super.shouldExecute(worldserver, entityliving) && raid != null && raid.u() && !raid.e() && !raid.f();
     }
 }

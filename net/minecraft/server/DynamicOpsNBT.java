@@ -34,34 +34,34 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
 
     public Type<?> getType(NBTBase nbtbase) {
         switch (nbtbase.getTypeId()) {
-        case 0:
-            return DSL.nilType();
-        case 1:
-            return DSL.byteType();
-        case 2:
-            return DSL.shortType();
-        case 3:
-            return DSL.intType();
-        case 4:
-            return DSL.longType();
-        case 5:
-            return DSL.floatType();
-        case 6:
-            return DSL.doubleType();
-        case 7:
-            return DSL.list(DSL.byteType());
-        case 8:
-            return DSL.string();
-        case 9:
-            return DSL.list(DSL.remainderType());
-        case 10:
-            return DSL.compoundList(DSL.remainderType(), DSL.remainderType());
-        case 11:
-            return DSL.list(DSL.intType());
-        case 12:
-            return DSL.list(DSL.longType());
-        default:
-            return DSL.remainderType();
+            case 0:
+                return DSL.nilType();
+            case 1:
+                return DSL.byteType();
+            case 2:
+                return DSL.shortType();
+            case 3:
+                return DSL.intType();
+            case 4:
+                return DSL.longType();
+            case 5:
+                return DSL.floatType();
+            case 6:
+                return DSL.doubleType();
+            case 7:
+                return DSL.list(DSL.byteType());
+            case 8:
+                return DSL.string();
+            case 9:
+                return DSL.list(DSL.remainderType());
+            case 10:
+                return DSL.compoundList(DSL.remainderType(), DSL.remainderType());
+            case 11:
+                return DSL.list(DSL.intType());
+            case 12:
+                return DSL.list(DSL.longType());
+            default:
+                return DSL.remainderType();
         }
     }
 

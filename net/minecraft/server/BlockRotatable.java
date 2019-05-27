@@ -12,18 +12,18 @@ public class BlockRotatable extends Block {
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
-        case COUNTERCLOCKWISE_90:
-        case CLOCKWISE_90:
-            switch ((EnumDirection.EnumAxis) iblockdata.get(BlockRotatable.AXIS)) {
-            case X:
-                return (IBlockData) iblockdata.set(BlockRotatable.AXIS, EnumDirection.EnumAxis.Z);
-            case Z:
-                return (IBlockData) iblockdata.set(BlockRotatable.AXIS, EnumDirection.EnumAxis.X);
+            case COUNTERCLOCKWISE_90:
+            case CLOCKWISE_90:
+                switch ((EnumDirection.EnumAxis) iblockdata.get(BlockRotatable.AXIS)) {
+                    case X:
+                        return (IBlockData) iblockdata.set(BlockRotatable.AXIS, EnumDirection.EnumAxis.Z);
+                    case Z:
+                        return (IBlockData) iblockdata.set(BlockRotatable.AXIS, EnumDirection.EnumAxis.X);
+                    default:
+                        return iblockdata;
+                }
             default:
                 return iblockdata;
-            }
-        default:
-            return iblockdata;
         }
     }
 

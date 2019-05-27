@@ -1872,17 +1872,17 @@ public class WorldGenMonumentPieces {
             }
 
             switch (enumdirection) {
-            case NORTH:
-                this.n.a(j1 * 8, l1 * 4, -(k1 + l) * 8 + 1);
-                break;
-            case SOUTH:
-                this.n.a(j1 * 8, l1 * 4, k1 * 8);
-                break;
-            case WEST:
-                this.n.a(-(k1 + l) * 8 + 1, l1 * 4, j1 * 8);
-                break;
-            default:
-                this.n.a(k1 * 8, l1 * 4, j1 * 8);
+                case NORTH:
+                    this.n.a(j1 * 8, l1 * 4, -(k1 + l) * 8 + 1);
+                    break;
+                case SOUTH:
+                    this.n.a(j1 * 8, l1 * 4, k1 * 8);
+                    break;
+                case WEST:
+                    this.n.a(-(k1 + l) * 8 + 1, l1 * 4, j1 * 8);
+                    break;
+                default:
+                    this.n.a(k1 * 8, l1 * 4, j1 * 8);
             }
 
         }

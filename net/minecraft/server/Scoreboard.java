@@ -284,22 +284,22 @@ public class Scoreboard {
 
     public static String getSlotName(int i) {
         switch (i) {
-        case 0:
-            return "list";
-        case 1:
-            return "sidebar";
-        case 2:
-            return "belowName";
-        default:
-            if (i >= 3 && i <= 18) {
-                EnumChatFormat enumchatformat = EnumChatFormat.a(i - 3);
+            case 0:
+                return "list";
+            case 1:
+                return "sidebar";
+            case 2:
+                return "belowName";
+            default:
+                if (i >= 3 && i <= 18) {
+                    EnumChatFormat enumchatformat = EnumChatFormat.a(i - 3);
 
-                if (enumchatformat != null && enumchatformat != EnumChatFormat.RESET) {
-                    return "sidebar.team." + enumchatformat.g();
+                    if (enumchatformat != null && enumchatformat != EnumChatFormat.RESET) {
+                        return "sidebar.team." + enumchatformat.g();
+                    }
                 }
-            }
 
-            return null;
+                return null;
         }
     }
 

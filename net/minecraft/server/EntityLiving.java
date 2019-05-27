@@ -180,6 +180,10 @@ public abstract class EntityLiving extends Entity {
     @Override
     public void entityBaseTick() {
         this.aB = this.aC;
+        if (this.justCreated) {
+            this.getBedPosition().ifPresent(this::a);
+        }
+
         super.entityBaseTick();
         this.world.getMethodProfiler().enter("livingEntityBaseTick");
         boolean flag = this instanceof EntityHuman;
@@ -520,8 +524,10 @@ public abstract class EntityLiving extends Entity {
             BlockPosition blockposition = new BlockPosition(nbttagcompound.getInt("SleepingX"), nbttagcompound.getInt("SleepingY"), nbttagcompound.getInt("SleepingZ"));
 
             this.d(blockposition);
-            this.a(blockposition);
             this.datawatcher.set(EntityLiving.POSE, EntityPose.SLEEPING);
+            if (!this.justCreated) {
+                this.a(blockposition);
+            }
         }
 
         if (nbttagcompound.hasKeyOfType("Brain", 10)) {
@@ -824,7 +830,7 @@ public abstract class EntityLiving extends Entity {
                     Entity entity = damagesource.j();
 
                     if (entity instanceof EntityLiving) {
-                        this.d((EntityLiving) entity);
+                        this.shieldBlock((EntityLiving) entity);
                     }
                 }
 
@@ -954,7 +960,7 @@ public abstract class EntityLiving extends Entity {
         }
     }
 
-    protected void d(EntityLiving entityliving) {
+    protected void shieldBlock(EntityLiving entityliving) {
         entityliving.e(this);
     }
 
@@ -1487,7 +1493,7 @@ public abstract class EntityLiving extends Entity {
 
             if (enumdirection != null) {
                 EnumDirection enumdirection1 = enumdirection.e();
-                int[][] aint = new int[][] { { 0, 1}, { 0, -1}, { -1, 1}, { -1, -1}, { 1, 1}, { 1, -1}, { -1, 0}, { 1, 0}, { 0, 1}};
+                int[][] aint = new int[][]{{0, 1}, {0, -1}, {-1, 1}, {-1, -1}, {1, 1}, {1, -1}, {-1, 0}, {1, 0}, {0, 1}};
                 double d3 = Math.floor(this.locX) + 0.5D;
                 double d4 = Math.floor(this.locZ) + 0.5D;
                 double d5 = this.getBoundingBox().maxX - this.getBoundingBox().minX;
@@ -1830,14 +1836,14 @@ public abstract class EntityLiving extends Entity {
                 ItemStack itemstack;
 
                 switch (enumitemslot.a()) {
-                case HAND:
-                    itemstack = (ItemStack) this.bw.get(enumitemslot.b());
-                    break;
-                case ARMOR:
-                    itemstack = (ItemStack) this.bx.get(enumitemslot.b());
-                    break;
-                default:
-                    continue;
+                    case HAND:
+                        itemstack = (ItemStack) this.bw.get(enumitemslot.b());
+                        break;
+                    case ARMOR:
+                        itemstack = (ItemStack) this.bx.get(enumitemslot.b());
+                        break;
+                    default:
+                        continue;
                 }
 
                 ItemStack itemstack1 = this.getEquipment(enumitemslot);
@@ -1853,11 +1859,11 @@ public abstract class EntityLiving extends Entity {
                     }
 
                     switch (enumitemslot.a()) {
-                    case HAND:
-                        this.bw.set(enumitemslot.b(), itemstack1.isEmpty() ? ItemStack.a : itemstack1.cloneItemStack());
-                        break;
-                    case ARMOR:
-                        this.bx.set(enumitemslot.b(), itemstack1.isEmpty() ? ItemStack.a : itemstack1.cloneItemStack());
+                        case HAND:
+                            this.bw.set(enumitemslot.b(), itemstack1.isEmpty() ? ItemStack.a : itemstack1.cloneItemStack());
+                            break;
+                        case ARMOR:
+                            this.bx.set(enumitemslot.b(), itemstack1.isEmpty() ? ItemStack.a : itemstack1.cloneItemStack());
                     }
                 }
             }
@@ -2650,20 +2656,20 @@ public abstract class EntityLiving extends Entity {
 
     private static byte d(EnumItemSlot enumitemslot) {
         switch (enumitemslot) {
-        case MAINHAND:
-            return 47;
-        case OFFHAND:
-            return 48;
-        case HEAD:
-            return 49;
-        case CHEST:
-            return 50;
-        case FEET:
-            return 52;
-        case LEGS:
-            return 51;
-        default:
-            return 47;
+            case MAINHAND:
+                return 47;
+            case OFFHAND:
+                return 48;
+            case HEAD:
+                return 49;
+            case CHEST:
+                return 50;
+            case FEET:
+                return 52;
+            case LEGS:
+                return 51;
+            default:
+                return 47;
         }
     }
 

@@ -82,13 +82,11 @@ public class EntityEnderCrystal extends Entity {
         } else {
             if (!this.dead && !this.world.isClientSide) {
                 this.die();
-                if (!this.world.isClientSide) {
-                    if (!damagesource.isExplosion()) {
-                        this.world.explode((Entity) null, this.locX, this.locY, this.locZ, 6.0F, Explosion.Effect.DESTROY);
-                    }
-
-                    this.a(damagesource);
+                if (!damagesource.isExplosion()) {
+                    this.world.explode((Entity) null, this.locX, this.locY, this.locZ, 6.0F, Explosion.Effect.DESTROY);
                 }
+
+                this.a(damagesource);
             }
 
             return true;

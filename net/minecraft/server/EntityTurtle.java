@@ -522,7 +522,7 @@ public class EntityTurtle extends EntityAnimal {
         i(EntityTurtle entityturtle, double d0, Item item) {
             this.b = entityturtle;
             this.c = d0;
-            this.f = Sets.newHashSet(new Item[] { item});
+            this.f = Sets.newHashSet(new Item[]{item});
             this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
         }
 

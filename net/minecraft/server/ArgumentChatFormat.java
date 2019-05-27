@@ -15,7 +15,7 @@ public class ArgumentChatFormat implements ArgumentType<EnumChatFormat> {
 
     private static final Collection<String> b = Arrays.asList("red", "green");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.color.invalid", new Object[] { object});
+        return new ChatMessage("argument.color.invalid", new Object[]{object});
     });
 
     private ArgumentChatFormat() {}

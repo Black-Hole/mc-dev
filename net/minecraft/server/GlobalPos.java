@@ -7,15 +7,15 @@ import java.util.Objects;
 
 public final class GlobalPos implements MinecraftSerializable {
 
-    private final DimensionManager a;
-    private final BlockPosition b;
+    private final DimensionManager dimensionManager;
+    private final BlockPosition blockPosition;
 
     private GlobalPos(DimensionManager dimensionmanager, BlockPosition blockposition) {
-        this.a = dimensionmanager;
-        this.b = blockposition;
+        this.dimensionManager = dimensionmanager;
+        this.blockPosition = blockposition;
     }
 
-    public static GlobalPos a(DimensionManager dimensionmanager, BlockPosition blockposition) {
+    public static GlobalPos create(DimensionManager dimensionmanager, BlockPosition blockposition) {
         return new GlobalPos(dimensionmanager, blockposition);
     }
 
@@ -29,12 +29,12 @@ public final class GlobalPos implements MinecraftSerializable {
         });
     }
 
-    public DimensionManager a() {
-        return this.a;
+    public DimensionManager getDimensionManager() {
+        return this.dimensionManager;
     }
 
-    public BlockPosition b() {
-        return this.b;
+    public BlockPosition getBlockPosition() {
+        return this.blockPosition;
     }
 
     public boolean equals(Object object) {
@@ -43,22 +43,22 @@ public final class GlobalPos implements MinecraftSerializable {
         } else if (object != null && this.getClass() == object.getClass()) {
             GlobalPos globalpos = (GlobalPos) object;
 
-            return Objects.equals(this.a, globalpos.a) && Objects.equals(this.b, globalpos.b);
+            return Objects.equals(this.dimensionManager, globalpos.dimensionManager) && Objects.equals(this.blockPosition, globalpos.blockPosition);
         } else {
             return false;
         }
     }
 
     public int hashCode() {
-        return Objects.hash(new Object[] { this.a, this.b});
+        return Objects.hash(new Object[]{this.dimensionManager, this.blockPosition});
     }
 
     @Override
     public <T> T a(DynamicOps<T> dynamicops) {
-        return dynamicops.createMap(ImmutableMap.of(dynamicops.createString("dimension"), this.a.a(dynamicops), dynamicops.createString("pos"), this.b.a(dynamicops)));
+        return dynamicops.createMap(ImmutableMap.of(dynamicops.createString("dimension"), this.dimensionManager.a(dynamicops), dynamicops.createString("pos"), this.blockPosition.a(dynamicops)));
     }
 
     public String toString() {
-        return this.a.toString() + " " + this.b;
+        return this.dimensionManager.toString() + " " + this.blockPosition;
     }
 }

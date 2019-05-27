@@ -143,15 +143,15 @@ public abstract class StructurePiece {
             return i;
         } else {
             switch (enumdirection) {
-            case NORTH:
-            case SOUTH:
-                return this.n.a + i;
-            case WEST:
-                return this.n.d - j;
-            case EAST:
-                return this.n.a + j;
-            default:
-                return i;
+                case NORTH:
+                case SOUTH:
+                    return this.n.a + i;
+                case WEST:
+                    return this.n.d - j;
+                case EAST:
+                    return this.n.a + j;
+                default:
+                    return i;
             }
         }
     }
@@ -167,15 +167,15 @@ public abstract class StructurePiece {
             return j;
         } else {
             switch (enumdirection) {
-            case NORTH:
-                return this.n.f - j;
-            case SOUTH:
-                return this.n.c + j;
-            case WEST:
-            case EAST:
-                return this.n.c + i;
-            default:
-                return j;
+                case NORTH:
+                    return this.n.f - j;
+                case SOUTH:
+                    return this.n.c + j;
+                case WEST:
+                case EAST:
+                    return this.n.c + i;
+                default:
+                    return j;
             }
         }
     }
@@ -439,21 +439,21 @@ public abstract class StructurePiece {
             this.b = EnumBlockMirror.NONE;
         } else {
             switch (enumdirection) {
-            case SOUTH:
-                this.b = EnumBlockMirror.LEFT_RIGHT;
-                this.c = EnumBlockRotation.NONE;
-                break;
-            case WEST:
-                this.b = EnumBlockMirror.LEFT_RIGHT;
-                this.c = EnumBlockRotation.CLOCKWISE_90;
-                break;
-            case EAST:
-                this.b = EnumBlockMirror.NONE;
-                this.c = EnumBlockRotation.CLOCKWISE_90;
-                break;
-            default:
-                this.b = EnumBlockMirror.NONE;
-                this.c = EnumBlockRotation.NONE;
+                case SOUTH:
+                    this.b = EnumBlockMirror.LEFT_RIGHT;
+                    this.c = EnumBlockRotation.NONE;
+                    break;
+                case WEST:
+                    this.b = EnumBlockMirror.LEFT_RIGHT;
+                    this.c = EnumBlockRotation.CLOCKWISE_90;
+                    break;
+                case EAST:
+                    this.b = EnumBlockMirror.NONE;
+                    this.c = EnumBlockRotation.CLOCKWISE_90;
+                    break;
+                default:
+                    this.b = EnumBlockMirror.NONE;
+                    this.c = EnumBlockRotation.NONE;
             }
         }
 

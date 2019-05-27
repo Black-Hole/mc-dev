@@ -10,14 +10,14 @@ public class BehaviorBellRing extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
         return worldserver.random.nextFloat() > 0.95F;
     }
 
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
-        BlockPosition blockposition = ((GlobalPos) behaviorcontroller.getMemory(MemoryModuleType.MEETING_POINT).get()).b();
+        BlockPosition blockposition = ((GlobalPos) behaviorcontroller.getMemory(MemoryModuleType.MEETING_POINT).get()).getBlockPosition();
 
         if (blockposition.a((BaseBlockPosition) (new BlockPosition(entityliving)), 3.0D)) {
             IBlockData iblockdata = worldserver.getType(blockposition);

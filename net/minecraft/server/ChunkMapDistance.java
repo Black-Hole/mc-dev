@@ -80,7 +80,7 @@ public abstract class ChunkMapDistance {
             Entry<ObjectSortedSet<Ticket<?>>> entry = (Entry) objectiterator.next();
 
             if (((ObjectSortedSet) entry.getValue()).removeIf((ticket) -> {
-                return ticket.getTicketType() == TicketType.UNKNOWN && ticket.getCreationTick() != this.currentTick;
+                return ticket.a(this.currentTick);
             })) {
                 this.f.b(entry.getLongKey(), this.a((ObjectSortedSet) entry.getValue()), false);
             }

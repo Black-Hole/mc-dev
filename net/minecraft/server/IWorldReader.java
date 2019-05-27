@@ -125,7 +125,7 @@ public interface IWorldReader extends IIBlockAccess {
         final CursorPosition cursorposition = new CursorPosition(i, k, i1, j, l, j1);
         final BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-        return Streams.concat(new Stream[] { StreamSupport.stream(new AbstractSpliterator<VoxelShape>(Long.MAX_VALUE, 0) {
+        return Streams.concat(new Stream[]{StreamSupport.stream(new AbstractSpliterator<VoxelShape>(Long.MAX_VALUE, 0) {
                     boolean a = entity == null;
 
                     public boolean tryAdvance(Consumer<? super VoxelShape> consumer) {

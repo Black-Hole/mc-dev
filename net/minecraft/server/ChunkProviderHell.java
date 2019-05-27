@@ -24,7 +24,7 @@ public class ChunkProviderHell extends ChunkGeneratorAbstract<GeneratorSettingsN
 
     @Override
     protected double[] a(int i, int j) {
-        return new double[] { 0.0D, 0.0D};
+        return new double[]{0.0D, 0.0D};
     }
 
     @Override

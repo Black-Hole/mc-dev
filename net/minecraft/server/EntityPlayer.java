@@ -359,8 +359,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                 if (!future.isSuccess()) {
                     boolean flag1 = true;
                     String s = ichatbasecomponent.a(256);
-                    ChatMessage chatmessage = new ChatMessage("death.attack.message_too_long", new Object[] { (new ChatComponentText(s)).a(EnumChatFormat.YELLOW)});
-                    IChatBaseComponent ichatbasecomponent1 = (new ChatMessage("death.attack.even_more_magic", new Object[] { this.getScoreboardDisplayName()})).a((chatmodifier) -> {
+                    ChatMessage chatmessage = new ChatMessage("death.attack.message_too_long", new Object[]{(new ChatComponentText(s)).a(EnumChatFormat.YELLOW)});
+                    IChatBaseComponent ichatbasecomponent1 = (new ChatMessage("death.attack.even_more_magic", new Object[]{this.getScoreboardDisplayName()})).a((chatmodifier) -> {
                         chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, chatmessage));
                     });
 
@@ -1098,7 +1098,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                 String s = ichatbasecomponent.a(256);
                 IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText(s)).a(EnumChatFormat.YELLOW);
 
-                this.playerConnection.sendPacket(new PacketPlayOutChat((new ChatMessage("multiplayer.message_not_delivered", new Object[] { ichatbasecomponent1})).a(EnumChatFormat.RED), ChatMessageType.SYSTEM));
+                this.playerConnection.sendPacket(new PacketPlayOutChat((new ChatMessage("multiplayer.message_not_delivered", new Object[]{ichatbasecomponent1})).a(EnumChatFormat.RED), ChatMessageType.SYSTEM));
             }
 
         });
@@ -1147,7 +1147,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     public void c(Entity entity) {
         if (entity instanceof EntityHuman) {
-            this.playerConnection.sendPacket(new PacketPlayOutEntityDestroy(new int[] { entity.getId()}));
+            this.playerConnection.sendPacket(new PacketPlayOutEntityDestroy(new int[]{entity.getId()}));
         } else {
             this.removeQueue.add(entity.getId());
         }

@@ -103,12 +103,12 @@ public final class VoxelShapeBitSet extends VoxelShapeDiscrete {
 
     static VoxelShapeBitSet a(VoxelShapeDiscrete voxelshapediscrete, VoxelShapeDiscrete voxelshapediscrete1, VoxelShapeMerger voxelshapemerger, VoxelShapeMerger voxelshapemerger1, VoxelShapeMerger voxelshapemerger2, OperatorBoolean operatorboolean) {
         VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(voxelshapemerger.a().size() - 1, voxelshapemerger1.a().size() - 1, voxelshapemerger2.a().size() - 1);
-        int[] aint = new int[] { Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
+        int[] aint = new int[]{Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
 
         voxelshapemerger.a((i, j, k) -> {
-            boolean[] aboolean = new boolean[] { false};
+            boolean[] aboolean = new boolean[]{false};
             boolean flag = voxelshapemerger1.a((l, i1, j1) -> {
-                boolean[] aboolean1 = new boolean[] { false};
+                boolean[] aboolean1 = new boolean[]{false};
                 boolean flag1 = voxelshapemerger2.a((k1, l1, i2) -> {
                     boolean flag2 = operatorboolean.apply(voxelshapediscrete.c(i, l, k1), voxelshapediscrete1.c(j, i1, l1));
 

@@ -64,6 +64,10 @@ public class ChunkRegionLoader {
         ChunkProviderServer chunkproviderserver = worldserver.getChunkProvider();
         LightEngine lightengine = chunkproviderserver.getLightEngine();
 
+        if (flag) {
+            lightengine.b(chunkcoordintpair, true);
+        }
+
         for (int k = 0; k < nbttaglist.size(); ++k) {
             NBTTagCompound nbttagcompound2 = nbttaglist.getCompound(k);
             byte b0 = nbttagcompound2.getByte("Y");
@@ -144,7 +148,7 @@ public class ChunkRegionLoader {
                     BlockPosition blockposition = (BlockPosition) iterator.next();
 
                     if (((IChunkAccess) object).getType(blockposition).h() != 0) {
-                        protochunk.j(blockposition);
+                        protochunk.k(blockposition);
                     }
                 }
             }
@@ -300,35 +304,17 @@ public class ChunkRegionLoader {
         NBTTagList nbttaglist1 = new NBTTagList();
         Iterator iterator = ichunkaccess.c().iterator();
 
-        NBTTagCompound nbttagcompound3;
-
         while (iterator.hasNext()) {
             BlockPosition blockposition = (BlockPosition) iterator.next();
-            TileEntity tileentity = ichunkaccess.getTileEntity(blockposition);
 
-            if (tileentity != null) {
-                nbttagcompound3 = new NBTTagCompound();
-                tileentity.save(nbttagcompound3);
-                if (ichunkaccess.getChunkStatus().getType() == ChunkStatus.Type.LEVELCHUNK) {
-                    nbttagcompound3.setBoolean("keepPacked", false);
-                }
-
-                nbttaglist1.add(nbttagcompound3);
-            } else {
-                nbttagcompound3 = ichunkaccess.i(blockposition);
-                if (nbttagcompound3 != null) {
-                    if (ichunkaccess.getChunkStatus().getType() == ChunkStatus.Type.LEVELCHUNK) {
-                        nbttagcompound3.setBoolean("keepPacked", true);
-                    }
-
-                    nbttaglist1.add(nbttagcompound3);
-                }
+            nbttagcompound2 = ichunkaccess.j(blockposition);
+            if (nbttagcompound2 != null) {
+                nbttaglist1.add(nbttagcompound2);
             }
         }
 
         nbttagcompound1.set("TileEntities", nbttaglist1);
         NBTTagList nbttaglist2 = new NBTTagList();
-        NBTTagCompound nbttagcompound4;
 
         if (ichunkaccess.getChunkStatus().getType() == ChunkStatus.Type.LEVELCHUNK) {
             Chunk chunk = (Chunk) ichunkaccess;
@@ -340,11 +326,11 @@ public class ChunkRegionLoader {
 
                 while (iterator1.hasNext()) {
                     Entity entity = (Entity) iterator1.next();
+                    NBTTagCompound nbttagcompound3 = new NBTTagCompound();
 
-                    nbttagcompound4 = new NBTTagCompound();
-                    if (entity.d(nbttagcompound4)) {
+                    if (entity.d(nbttagcompound3)) {
                         chunk.d(true);
-                        nbttaglist2.add(nbttagcompound4);
+                        nbttaglist2.add(nbttagcompound3);
                     }
                 }
             }
@@ -352,21 +338,6 @@ public class ChunkRegionLoader {
             ProtoChunk protochunk = (ProtoChunk) ichunkaccess;
 
             nbttaglist2.addAll(protochunk.y());
-            Iterator iterator2 = ichunkaccess.c().iterator();
-
-            while (iterator2.hasNext()) {
-                BlockPosition blockposition1 = (BlockPosition) iterator2.next();
-                TileEntity tileentity1 = ichunkaccess.getTileEntity(blockposition1);
-
-                if (tileentity1 != null) {
-                    nbttagcompound4 = new NBTTagCompound();
-                    tileentity1.save(nbttagcompound4);
-                    nbttaglist1.add(nbttagcompound4);
-                } else {
-                    nbttaglist1.add(ichunkaccess.i(blockposition1));
-                }
-            }
-
             nbttagcompound1.set("Lights", a(protochunk.w()));
             nbttagcompound2 = new NBTTagCompound();
             WorldGenStage.Features[] aworldgenstage_features = WorldGenStage.Features.values();
@@ -403,18 +374,18 @@ public class ChunkRegionLoader {
         }
 
         nbttagcompound1.set("PostProcessing", a(ichunkaccess.l()));
-        nbttagcompound3 = new NBTTagCompound();
-        Iterator iterator3 = ichunkaccess.f().iterator();
+        NBTTagCompound nbttagcompound4 = new NBTTagCompound();
+        Iterator iterator2 = ichunkaccess.f().iterator();
 
-        while (iterator3.hasNext()) {
-            Entry<HeightMap.Type, HeightMap> entry = (Entry) iterator3.next();
+        while (iterator2.hasNext()) {
+            Entry<HeightMap.Type, HeightMap> entry = (Entry) iterator2.next();
 
             if (ichunkaccess.getChunkStatus().h().contains(entry.getKey())) {
-                nbttagcompound3.set(((HeightMap.Type) entry.getKey()).a(), new NBTTagLongArray(((HeightMap) entry.getValue()).a()));
+                nbttagcompound4.set(((HeightMap.Type) entry.getKey()).a(), new NBTTagLongArray(((HeightMap) entry.getValue()).a()));
             }
         }
 
-        nbttagcompound1.set("Heightmaps", nbttagcompound3);
+        nbttagcompound1.set("Heightmaps", nbttagcompound4);
         nbttagcompound1.set("Structures", a(chunkcoordintpair, ichunkaccess.h(), ichunkaccess.v()));
         return nbttagcompound;
     }

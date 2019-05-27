@@ -35,7 +35,7 @@ public class CommandDeop {
             if (playerlist.isOp(gameprofile)) {
                 playerlist.removeOp(gameprofile);
                 ++i;
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.deop.success", new Object[] { ((GameProfile) collection.iterator().next()).getName()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.deop.success", new Object[]{((GameProfile) collection.iterator().next()).getName()}), true);
             }
         }
 

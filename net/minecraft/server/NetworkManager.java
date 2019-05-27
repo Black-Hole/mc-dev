@@ -97,7 +97,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
                     NetworkManager.LOGGER.debug("Timeout", throwable);
                     this.close(new ChatMessage("disconnect.timeout", new Object[0]));
                 } else {
-                    ChatMessage chatmessage = new ChatMessage("disconnect.genericReason", new Object[] { "Internal Exception: " + throwable});
+                    ChatMessage chatmessage = new ChatMessage("disconnect.genericReason", new Object[]{"Internal Exception: " + throwable});
 
                     if (flag) {
                         NetworkManager.LOGGER.debug("Failed to sent packet", throwable);

@@ -32,17 +32,17 @@ public class ArgumentRotationAxis implements ArgumentType<EnumSet<EnumDirection.
             EnumDirection.EnumAxis enumdirection_enumaxis;
 
             switch (c0) {
-            case 'x':
-                enumdirection_enumaxis = EnumDirection.EnumAxis.X;
-                break;
-            case 'y':
-                enumdirection_enumaxis = EnumDirection.EnumAxis.Y;
-                break;
-            case 'z':
-                enumdirection_enumaxis = EnumDirection.EnumAxis.Z;
-                break;
-            default:
-                throw ArgumentRotationAxis.b.create();
+                case 'x':
+                    enumdirection_enumaxis = EnumDirection.EnumAxis.X;
+                    break;
+                case 'y':
+                    enumdirection_enumaxis = EnumDirection.EnumAxis.Y;
+                    break;
+                case 'z':
+                    enumdirection_enumaxis = EnumDirection.EnumAxis.Z;
+                    break;
+                default:
+                    throw ArgumentRotationAxis.b.create();
             }
 
             if (enumset.contains(enumdirection_enumaxis)) {

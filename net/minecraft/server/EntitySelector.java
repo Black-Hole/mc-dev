@@ -89,7 +89,7 @@ public class EntitySelector {
         } else if (this.j != null) {
             EntityPlayer entityplayer = commandlistenerwrapper.getServer().getPlayerList().getPlayer(this.j);
 
-            return (List) (entityplayer == null ? Collections.emptyList() : Lists.newArrayList(new EntityPlayer[] { entityplayer}));
+            return (List) (entityplayer == null ? Collections.emptyList() : Lists.newArrayList(new EntityPlayer[]{entityplayer}));
         } else if (this.k != null) {
             Iterator iterator = commandlistenerwrapper.getServer().getWorlds().iterator();
 
@@ -105,13 +105,13 @@ public class EntitySelector {
                 entity = worldserver.getEntity(this.k);
             } while (entity == null);
 
-            return Lists.newArrayList(new Entity[] { entity});
+            return Lists.newArrayList(new Entity[]{entity});
         } else {
             Vec3D vec3d = (Vec3D) this.f.apply(commandlistenerwrapper.getPosition());
             Predicate<Entity> predicate = this.a(vec3d);
 
             if (this.i) {
-                return (List) (commandlistenerwrapper.getEntity() != null && predicate.test(commandlistenerwrapper.getEntity()) ? Lists.newArrayList(new Entity[] { commandlistenerwrapper.getEntity()}) : Collections.emptyList());
+                return (List) (commandlistenerwrapper.getEntity() != null && predicate.test(commandlistenerwrapper.getEntity()) ? Lists.newArrayList(new Entity[]{commandlistenerwrapper.getEntity()}) : Collections.emptyList());
             } else {
                 List<Entity> list = Lists.newArrayList();
 
@@ -158,10 +158,10 @@ public class EntitySelector {
 
         if (this.j != null) {
             entityplayer = commandlistenerwrapper.getServer().getPlayerList().getPlayer(this.j);
-            return (List) (entityplayer == null ? Collections.emptyList() : Lists.newArrayList(new EntityPlayer[] { entityplayer}));
+            return (List) (entityplayer == null ? Collections.emptyList() : Lists.newArrayList(new EntityPlayer[]{entityplayer}));
         } else if (this.k != null) {
             entityplayer = commandlistenerwrapper.getServer().getPlayerList().a(this.k);
-            return (List) (entityplayer == null ? Collections.emptyList() : Lists.newArrayList(new EntityPlayer[] { entityplayer}));
+            return (List) (entityplayer == null ? Collections.emptyList() : Lists.newArrayList(new EntityPlayer[]{entityplayer}));
         } else {
             Vec3D vec3d = (Vec3D) this.f.apply(commandlistenerwrapper.getPosition());
             Predicate<Entity> predicate = this.a(vec3d);
@@ -171,7 +171,7 @@ public class EntitySelector {
                     EntityPlayer entityplayer1 = (EntityPlayer) commandlistenerwrapper.getEntity();
 
                     if (predicate.test(entityplayer1)) {
-                        return Lists.newArrayList(new EntityPlayer[] { entityplayer1});
+                        return Lists.newArrayList(new EntityPlayer[]{entityplayer1});
                     }
                 }
 

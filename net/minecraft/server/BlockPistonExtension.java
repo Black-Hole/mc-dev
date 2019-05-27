@@ -30,19 +30,19 @@ public class BlockPistonExtension extends BlockDirectional {
 
     private VoxelShape j(IBlockData iblockdata) {
         switch ((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)) {
-        case DOWN:
-        default:
-            return BlockPistonExtension.i;
-        case UP:
-            return BlockPistonExtension.h;
-        case NORTH:
-            return BlockPistonExtension.g;
-        case SOUTH:
-            return BlockPistonExtension.f;
-        case WEST:
-            return BlockPistonExtension.e;
-        case EAST:
-            return BlockPistonExtension.d;
+            case DOWN:
+            default:
+                return BlockPistonExtension.i;
+            case UP:
+                return BlockPistonExtension.h;
+            case NORTH:
+                return BlockPistonExtension.g;
+            case SOUTH:
+                return BlockPistonExtension.f;
+            case WEST:
+                return BlockPistonExtension.e;
+            case EAST:
+                return BlockPistonExtension.d;
         }
     }
 
@@ -60,19 +60,19 @@ public class BlockPistonExtension extends BlockDirectional {
         boolean flag = (Boolean) iblockdata.get(BlockPistonExtension.SHORT);
 
         switch ((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)) {
-        case DOWN:
-        default:
-            return flag ? BlockPistonExtension.B : BlockPistonExtension.k;
-        case UP:
-            return flag ? BlockPistonExtension.A : BlockPistonExtension.j;
-        case NORTH:
-            return flag ? BlockPistonExtension.D : BlockPistonExtension.x;
-        case SOUTH:
-            return flag ? BlockPistonExtension.C : BlockPistonExtension.w;
-        case WEST:
-            return flag ? BlockPistonExtension.F : BlockPistonExtension.z;
-        case EAST:
-            return flag ? BlockPistonExtension.E : BlockPistonExtension.y;
+            case DOWN:
+            default:
+                return flag ? BlockPistonExtension.B : BlockPistonExtension.k;
+            case UP:
+                return flag ? BlockPistonExtension.A : BlockPistonExtension.j;
+            case NORTH:
+                return flag ? BlockPistonExtension.D : BlockPistonExtension.x;
+            case SOUTH:
+                return flag ? BlockPistonExtension.C : BlockPistonExtension.w;
+            case WEST:
+                return flag ? BlockPistonExtension.F : BlockPistonExtension.z;
+            case EAST:
+                return flag ? BlockPistonExtension.E : BlockPistonExtension.y;
         }
     }
 

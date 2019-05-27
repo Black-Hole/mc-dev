@@ -7,10 +7,10 @@ public class EntityHorse extends EntityHorseAbstract {
 
     private static final UUID bJ = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
     private static final DataWatcherObject<Integer> bK = DataWatcher.a(EntityHorse.class, DataWatcherRegistry.b);
-    private static final String[] bL = new String[] { "textures/entity/horse/horse_white.png", "textures/entity/horse/horse_creamy.png", "textures/entity/horse/horse_chestnut.png", "textures/entity/horse/horse_brown.png", "textures/entity/horse/horse_black.png", "textures/entity/horse/horse_gray.png", "textures/entity/horse/horse_darkbrown.png"};
-    private static final String[] bM = new String[] { "hwh", "hcr", "hch", "hbr", "hbl", "hgr", "hdb"};
-    private static final String[] bN = new String[] { null, "textures/entity/horse/horse_markings_white.png", "textures/entity/horse/horse_markings_whitefield.png", "textures/entity/horse/horse_markings_whitedots.png", "textures/entity/horse/horse_markings_blackdots.png"};
-    private static final String[] bO = new String[] { "", "wo_", "wmo", "wdo", "bdo"};
+    private static final String[] bL = new String[]{"textures/entity/horse/horse_white.png", "textures/entity/horse/horse_creamy.png", "textures/entity/horse/horse_chestnut.png", "textures/entity/horse/horse_brown.png", "textures/entity/horse/horse_black.png", "textures/entity/horse/horse_gray.png", "textures/entity/horse/horse_darkbrown.png"};
+    private static final String[] bM = new String[]{"hwh", "hcr", "hch", "hbr", "hbl", "hgr", "hdb"};
+    private static final String[] bN = new String[]{null, "textures/entity/horse/horse_markings_white.png", "textures/entity/horse/horse_markings_whitefield.png", "textures/entity/horse/horse_markings_whitedots.png", "textures/entity/horse/horse_markings_blackdots.png"};
+    private static final String[] bO = new String[]{"", "wo_", "wmo", "wdo", "bdo"};
     private String bP;
     private final String[] bQ = new String[2];
 

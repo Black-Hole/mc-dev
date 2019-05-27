@@ -19,10 +19,10 @@ import java.util.Set;
 public class CommandSpreadPlayers {
 
     private static final Dynamic4CommandExceptionType a = new Dynamic4CommandExceptionType((object, object1, object2, object3) -> {
-        return new ChatMessage("commands.spreadplayers.failed.teams", new Object[] { object, object1, object2, object3});
+        return new ChatMessage("commands.spreadplayers.failed.teams", new Object[]{object, object1, object2, object3});
     });
     private static final Dynamic4CommandExceptionType b = new Dynamic4CommandExceptionType((object, object1, object2, object3) -> {
-        return new ChatMessage("commands.spreadplayers.failed.entities", new Object[] { object, object1, object2, object3});
+        return new ChatMessage("commands.spreadplayers.failed.entities", new Object[]{object, object1, object2, object3});
     });
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
@@ -44,7 +44,7 @@ public class CommandSpreadPlayers {
         a(vec2f, (double) f, commandlistenerwrapper.getWorld(), random, d0, d1, d2, d3, acommandspreadplayers_a, flag);
         double d4 = a(collection, commandlistenerwrapper.getWorld(), acommandspreadplayers_a, flag);
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.spreadplayers.success." + (flag ? "teams" : "entities"), new Object[] { acommandspreadplayers_a.length, vec2f.i, vec2f.j, String.format(Locale.ROOT, "%.2f", d4)}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.spreadplayers.success." + (flag ? "teams" : "entities"), new Object[]{acommandspreadplayers_a.length, vec2f.i, vec2f.j, String.format(Locale.ROOT, "%.2f", d4)}), true);
         return acommandspreadplayers_a.length;
     }
 
@@ -168,7 +168,7 @@ public class CommandSpreadPlayers {
                 commandspreadplayers_a = acommandspreadplayers_a[i++];
             }
 
-            entity.enderTeleportTo((double) ((float) MathHelper.floor(commandspreadplayers_a.a) + 0.5F), (double) commandspreadplayers_a.a((IBlockAccess) worldserver), (double) MathHelper.floor(commandspreadplayers_a.b) + 0.5D);
+            entity.enderTeleportAndLoad((double) ((float) MathHelper.floor(commandspreadplayers_a.a) + 0.5F), (double) commandspreadplayers_a.a((IBlockAccess) worldserver), (double) MathHelper.floor(commandspreadplayers_a.b) + 0.5D);
             d1 = Double.MAX_VALUE;
             CommandSpreadPlayers.a[] acommandspreadplayers_a1 = acommandspreadplayers_a;
             int j = acommandspreadplayers_a.length;

@@ -7,9 +7,9 @@ public class BehaviorOutsideCelebrate extends BehaviorOutside {
     }
 
     @Override
-    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
         Raid raid = worldserver.c_(new BlockPosition(entityliving));
 
-        return raid != null && raid.e() && super.a(worldserver, entityliving);
+        return raid != null && raid.e() && super.shouldExecute(worldserver, entityliving);
     }
 }

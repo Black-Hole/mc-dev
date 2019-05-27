@@ -58,16 +58,16 @@ public class CommandDataAccessorTile implements CommandDataAccessor {
 
     @Override
     public IChatBaseComponent b() {
-        return new ChatMessage("commands.data.block.modified", new Object[] { this.d.getX(), this.d.getY(), this.d.getZ()});
+        return new ChatMessage("commands.data.block.modified", new Object[]{this.d.getX(), this.d.getY(), this.d.getZ()});
     }
 
     @Override
     public IChatBaseComponent a(NBTBase nbtbase) {
-        return new ChatMessage("commands.data.block.query", new Object[] { this.d.getX(), this.d.getY(), this.d.getZ(), nbtbase.k()});
+        return new ChatMessage("commands.data.block.query", new Object[]{this.d.getX(), this.d.getY(), this.d.getZ(), nbtbase.k()});
     }
 
     @Override
     public IChatBaseComponent a(ArgumentNBTKey.h argumentnbtkey_h, double d0, int i) {
-        return new ChatMessage("commands.data.block.get", new Object[] { argumentnbtkey_h, this.d.getX(), this.d.getY(), this.d.getZ(), String.format(Locale.ROOT, "%.2f", d0), i});
+        return new ChatMessage("commands.data.block.get", new Object[]{argumentnbtkey_h, this.d.getX(), this.d.getY(), this.d.getZ(), String.format(Locale.ROOT, "%.2f", d0), i});
     }
 }

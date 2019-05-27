@@ -6,7 +6,7 @@ import com.mojang.datafixers.types.DynamicOps;
 
 public class VillagerData {
 
-    private static final int[] a = new int[] { 0, 10, 50, 100, 150};
+    private static final int[] a = new int[]{0, 10, 50, 100, 150};
     private final VillagerType b;
     private final VillagerProfession c;
     private final int d;

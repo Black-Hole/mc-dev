@@ -75,13 +75,13 @@ public class BiomeDecoratorGroups {
     }
 
     public static void l(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeBase.a(WorldGenerator.DISK, new WorldGenFeatureCircleConfiguration(Blocks.SAND.getBlockData(), 7, 2, Lists.newArrayList(new IBlockData[] { Blocks.DIRT.getBlockData(), Blocks.GRASS_BLOCK.getBlockData()})), WorldGenDecorator.b, new WorldGenDecoratorFrequencyConfiguration(3)));
-        biomebase.a(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeBase.a(WorldGenerator.DISK, new WorldGenFeatureCircleConfiguration(Blocks.CLAY.getBlockData(), 4, 1, Lists.newArrayList(new IBlockData[] { Blocks.DIRT.getBlockData(), Blocks.CLAY.getBlockData()})), WorldGenDecorator.b, new WorldGenDecoratorFrequencyConfiguration(1)));
-        biomebase.a(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeBase.a(WorldGenerator.DISK, new WorldGenFeatureCircleConfiguration(Blocks.GRAVEL.getBlockData(), 6, 2, Lists.newArrayList(new IBlockData[] { Blocks.DIRT.getBlockData(), Blocks.GRASS_BLOCK.getBlockData()})), WorldGenDecorator.b, new WorldGenDecoratorFrequencyConfiguration(1)));
+        biomebase.a(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeBase.a(WorldGenerator.DISK, new WorldGenFeatureCircleConfiguration(Blocks.SAND.getBlockData(), 7, 2, Lists.newArrayList(new IBlockData[]{Blocks.DIRT.getBlockData(), Blocks.GRASS_BLOCK.getBlockData()})), WorldGenDecorator.b, new WorldGenDecoratorFrequencyConfiguration(3)));
+        biomebase.a(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeBase.a(WorldGenerator.DISK, new WorldGenFeatureCircleConfiguration(Blocks.CLAY.getBlockData(), 4, 1, Lists.newArrayList(new IBlockData[]{Blocks.DIRT.getBlockData(), Blocks.CLAY.getBlockData()})), WorldGenDecorator.b, new WorldGenDecoratorFrequencyConfiguration(1)));
+        biomebase.a(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeBase.a(WorldGenerator.DISK, new WorldGenFeatureCircleConfiguration(Blocks.GRAVEL.getBlockData(), 6, 2, Lists.newArrayList(new IBlockData[]{Blocks.DIRT.getBlockData(), Blocks.GRASS_BLOCK.getBlockData()})), WorldGenDecorator.b, new WorldGenDecoratorFrequencyConfiguration(1)));
     }
 
     public static void m(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeBase.a(WorldGenerator.DISK, new WorldGenFeatureCircleConfiguration(Blocks.CLAY.getBlockData(), 4, 1, Lists.newArrayList(new IBlockData[] { Blocks.DIRT.getBlockData(), Blocks.CLAY.getBlockData()})), WorldGenDecorator.b, new WorldGenDecoratorFrequencyConfiguration(1)));
+        biomebase.a(WorldGenStage.Decoration.UNDERGROUND_ORES, BiomeBase.a(WorldGenerator.DISK, new WorldGenFeatureCircleConfiguration(Blocks.CLAY.getBlockData(), 4, 1, Lists.newArrayList(new IBlockData[]{Blocks.DIRT.getBlockData(), Blocks.CLAY.getBlockData()})), WorldGenDecorator.b, new WorldGenDecoratorFrequencyConfiguration(1)));
     }
 
     public static void n(BiomeBase biomebase) {
@@ -106,15 +106,15 @@ public class BiomeDecoratorGroups {
 
     public static void s(BiomeBase biomebase) {
         biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.BAMBOO, new WorldGenFeatureConfigurationChance(0.2F), WorldGenDecorator.x, new WorldGenDecoratorNoiseConfiguration(160, 80.0D, 0.3D, HeightMap.Type.WORLD_SURFACE_WG)));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.FANCY_TREE, WorldGenerator.JUNGLE_GROUND_BUSH, WorldGenerator.MEGA_JUNGLE_TREE}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[] { 0.05F, 0.15F, 0.7F}, WorldGenerator.JUNGLE_GRASS, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(30, 0.1F, 1)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.FANCY_TREE, WorldGenerator.JUNGLE_GROUND_BUSH, WorldGenerator.MEGA_JUNGLE_TREE}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[]{0.05F, 0.15F, 0.7F}, WorldGenerator.JUNGLE_GRASS, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(30, 0.1F, 1)));
     }
 
     public static void t(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.PINE_TREE}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e}, new float[] { 0.33333334F}, WorldGenerator.SPRUCE_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.PINE_TREE}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e}, new float[]{0.33333334F}, WorldGenerator.SPRUCE_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)));
     }
 
     public static void u(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.FANCY_TREE}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e}, new float[] { 0.1F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(0, 0.1F, 1)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.FANCY_TREE}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e}, new float[]{0.1F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(0, 0.1F, 1)));
     }
 
     public static void v(BiomeBase biomebase) {
@@ -122,35 +122,35 @@ public class BiomeDecoratorGroups {
     }
 
     public static void w(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.BIRCH_TREE, WorldGenerator.FANCY_TREE}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[] { 0.2F, 0.1F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.BIRCH_TREE, WorldGenerator.FANCY_TREE}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[]{0.2F, 0.1F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)));
     }
 
     public static void x(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.SUPER_BIRCH_TREE}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e}, new float[] { 0.5F}, WorldGenerator.BIRCH_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.SUPER_BIRCH_TREE}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e}, new float[]{0.5F}, WorldGenerator.BIRCH_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)));
     }
 
     public static void y(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.SAVANNA_TREE}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e}, new float[] { 0.8F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(1, 0.1F, 1)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.SAVANNA_TREE}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e}, new float[]{0.8F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(1, 0.1F, 1)));
     }
 
     public static void z(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.SAVANNA_TREE}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e}, new float[] { 0.8F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(2, 0.1F, 1)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.SAVANNA_TREE}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e}, new float[]{0.8F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(2, 0.1F, 1)));
     }
 
     public static void A(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.SPRUCE_TREE, WorldGenerator.FANCY_TREE}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[] { 0.666F, 0.1F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(0, 0.1F, 1)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.SPRUCE_TREE, WorldGenerator.FANCY_TREE}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[]{0.666F, 0.1F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(0, 0.1F, 1)));
     }
 
     public static void B(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.SPRUCE_TREE, WorldGenerator.FANCY_TREE}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[] { 0.666F, 0.1F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(3, 0.1F, 1)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.SPRUCE_TREE, WorldGenerator.FANCY_TREE}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[]{0.666F, 0.1F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(3, 0.1F, 1)));
     }
 
     public static void C(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.FANCY_TREE, WorldGenerator.JUNGLE_GROUND_BUSH, WorldGenerator.MEGA_JUNGLE_TREE}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[] { 0.1F, 0.5F, 0.33333334F}, WorldGenerator.JUNGLE_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(50, 0.1F, 1)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.FANCY_TREE, WorldGenerator.JUNGLE_GROUND_BUSH, WorldGenerator.MEGA_JUNGLE_TREE}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[]{0.1F, 0.5F, 0.33333334F}, WorldGenerator.JUNGLE_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(50, 0.1F, 1)));
     }
 
     public static void D(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.FANCY_TREE, WorldGenerator.JUNGLE_GROUND_BUSH}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[] { 0.1F, 0.5F}, WorldGenerator.JUNGLE_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(2, 0.1F, 1)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.FANCY_TREE, WorldGenerator.JUNGLE_GROUND_BUSH}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[]{0.1F, 0.5F}, WorldGenerator.JUNGLE_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(2, 0.1F, 1)));
     }
 
     public static void E(BiomeBase biomebase) {
@@ -162,11 +162,11 @@ public class BiomeDecoratorGroups {
     }
 
     public static void G(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.MEGA_SPRUCE_TREE, WorldGenerator.PINE_TREE}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[] { 0.33333334F, 0.33333334F}, WorldGenerator.SPRUCE_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.MEGA_SPRUCE_TREE, WorldGenerator.PINE_TREE}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[]{0.33333334F, 0.33333334F}, WorldGenerator.SPRUCE_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)));
     }
 
     public static void H(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.MEGA_SPRUCE_TREE, WorldGenerator.MEGA_PINE_TREE, WorldGenerator.PINE_TREE}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[] { 0.025641026F, 0.30769232F, 0.33333334F}, WorldGenerator.SPRUCE_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.MEGA_SPRUCE_TREE, WorldGenerator.MEGA_PINE_TREE, WorldGenerator.PINE_TREE}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[]{0.025641026F, 0.30769232F, 0.33333334F}, WorldGenerator.SPRUCE_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)));
     }
 
     public static void I(BiomeBase biomebase) {
@@ -191,7 +191,7 @@ public class BiomeDecoratorGroups {
     }
 
     public static void N(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_RANDOM_SELECTOR, new WorldGenFeatureRandomConfiguration(new WorldGenerator[] { WorldGenerator.DOUBLE_PLANT, WorldGenerator.DOUBLE_PLANT, WorldGenerator.DOUBLE_PLANT, WorldGenerator.GENERAL_FOREST_FLOWER}, new WorldGenFeatureConfiguration[] { new WorldGenFeatureDoublePlantConfiguration(Blocks.LILAC.getBlockData()), new WorldGenFeatureDoublePlantConfiguration(Blocks.ROSE_BUSH.getBlockData()), new WorldGenFeatureDoublePlantConfiguration(Blocks.PEONY.getBlockData()), WorldGenFeatureConfiguration.e}, 0), WorldGenDecorator.c, new WorldGenDecoratorFrequencyConfiguration(5)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_RANDOM_SELECTOR, new WorldGenFeatureRandomConfiguration(new WorldGenerator[]{WorldGenerator.DOUBLE_PLANT, WorldGenerator.DOUBLE_PLANT, WorldGenerator.DOUBLE_PLANT, WorldGenerator.GENERAL_FOREST_FLOWER}, new WorldGenFeatureConfiguration[]{new WorldGenFeatureDoublePlantConfiguration(Blocks.LILAC.getBlockData()), new WorldGenFeatureDoublePlantConfiguration(Blocks.ROSE_BUSH.getBlockData()), new WorldGenFeatureDoublePlantConfiguration(Blocks.PEONY.getBlockData()), WorldGenFeatureConfiguration.e}, 0), WorldGenDecorator.c, new WorldGenDecoratorFrequencyConfiguration(5)));
     }
 
     public static void O(BiomeBase biomebase) {
@@ -215,7 +215,7 @@ public class BiomeDecoratorGroups {
     }
 
     public static void R(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.FANCY_TREE}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e}, new float[] { 0.33333334F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(0, 0.05F, 1)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.FANCY_TREE}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e}, new float[]{0.33333334F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(0, 0.05F, 1)));
         biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.PLAIN_FLOWER, WorldGenFeatureConfiguration.e, WorldGenDecorator.f, new WorldGenFeatureDecoratorNoiseConfiguration(-0.8D, 15, 4)));
         biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.GRASS, new WorldGenFeatureTallGrassConfiguration(Blocks.GRASS.getBlockData()), WorldGenDecorator.g, new WorldGenFeatureDecoratorNoiseConfiguration(-0.8D, 5, 10)));
     }
@@ -299,7 +299,7 @@ public class BiomeDecoratorGroups {
     }
 
     public static void ai(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.SIMPLE_BLOCK, new WorldGenFeatureBlockConfiguration(Blocks.SEAGRASS.getBlockData(), new IBlockData[] { Blocks.STONE.getBlockData()}, new IBlockData[] { Blocks.WATER.getBlockData()}, new IBlockData[] { Blocks.WATER.getBlockData()}), WorldGenDecorator.y, new WorldGenDecoratorCarveMaskConfiguration(WorldGenStage.Features.LIQUID, 0.1F)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.SIMPLE_BLOCK, new WorldGenFeatureBlockConfiguration(Blocks.SEAGRASS.getBlockData(), new IBlockData[]{Blocks.STONE.getBlockData()}, new IBlockData[]{Blocks.WATER.getBlockData()}, new IBlockData[]{Blocks.WATER.getBlockData()}), WorldGenDecorator.y, new WorldGenDecoratorCarveMaskConfiguration(WorldGenStage.Features.LIQUID, 0.1F)));
     }
 
     public static void aj(BiomeBase biomebase) {

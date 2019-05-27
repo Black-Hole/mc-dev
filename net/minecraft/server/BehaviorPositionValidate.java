@@ -16,19 +16,19 @@ public class BehaviorPositionValidate extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
         GlobalPos globalpos = (GlobalPos) entityliving.getBehaviorController().getMemory(this.a).get();
 
-        return Objects.equals(worldserver.getWorldProvider().getDimensionManager(), globalpos.a()) && globalpos.b().a((IPosition) entityliving.ch(), 5.0D);
+        return Objects.equals(worldserver.getWorldProvider().getDimensionManager(), globalpos.getDimensionManager()) && globalpos.getBlockPosition().a((IPosition) entityliving.ch(), 5.0D);
     }
 
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
         GlobalPos globalpos = (GlobalPos) behaviorcontroller.getMemory(this.a).get();
-        WorldServer worldserver1 = worldserver.getMinecraftServer().getWorldServer(globalpos.a());
+        WorldServer worldserver1 = worldserver.getMinecraftServer().getWorldServer(globalpos.getDimensionManager());
 
-        if (this.a(worldserver1, globalpos.b()) || this.a(worldserver1, globalpos.b(), entityliving)) {
+        if (this.a(worldserver1, globalpos.getBlockPosition()) || this.a(worldserver1, globalpos.getBlockPosition(), entityliving)) {
             behaviorcontroller.removeMemory(this.a);
         }
 

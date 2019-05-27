@@ -12,13 +12,13 @@ public class ArgumentMinecraftKeyRegistered implements ArgumentType<MinecraftKey
 
     private static final Collection<String> d = Arrays.asList("foo", "foo:bar", "012");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.id.unknown", new Object[] { object});
+        return new ChatMessage("argument.id.unknown", new Object[]{object});
     });
     public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("advancement.advancementNotFound", new Object[] { object});
+        return new ChatMessage("advancement.advancementNotFound", new Object[]{object});
     });
     public static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("recipe.notFound", new Object[] { object});
+        return new ChatMessage("recipe.notFound", new Object[]{object});
     });
 
     public ArgumentMinecraftKeyRegistered() {}

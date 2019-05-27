@@ -14,10 +14,10 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
 
     private static final Collection<String> a = Arrays.asList("foo", "foo:bar", "#foo");
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("arguments.function.tag.unknown", new Object[] { object});
+        return new ChatMessage("arguments.function.tag.unknown", new Object[]{object});
     });
     private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("arguments.function.unknown", new Object[] { object});
+        return new ChatMessage("arguments.function.unknown", new Object[]{object});
     });
 
     public ArgumentTag() {}

@@ -108,7 +108,7 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
     }
 
     private void a(WorldServer worldserver, EntityVillager entityvillager, BlockPosition blockposition) {
-        GlobalPos globalpos = GlobalPos.a(worldserver.getWorldProvider().getDimensionManager(), blockposition);
+        GlobalPos globalpos = GlobalPos.create(worldserver.getWorldProvider().getDimensionManager(), blockposition);
 
         entityvillager.getBehaviorController().setMemory(MemoryModuleType.HOME, (Object) globalpos);
     }

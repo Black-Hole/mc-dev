@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorageSky.a> {
 
-    private static final EnumDirection[] k = new EnumDirection[] { EnumDirection.NORTH, EnumDirection.SOUTH, EnumDirection.WEST, EnumDirection.EAST};
+    private static final EnumDirection[] k = new EnumDirection[]{EnumDirection.NORTH, EnumDirection.SOUTH, EnumDirection.WEST, EnumDirection.EAST};
     private final LongSet l = new LongOpenHashSet();
     private final LongSet m = new LongOpenHashSet();
     private final LongSet n = new LongOpenHashSet();
@@ -216,21 +216,21 @@ public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorage
                                             long l2;
 
                                             switch (enumdirection) {
-                                            case NORTH:
-                                                k2 = BlockPosition.a(k + i2, l + j2, i1);
-                                                l2 = BlockPosition.a(k + i2, l + j2, i1 - 1);
-                                                break;
-                                            case SOUTH:
-                                                k2 = BlockPosition.a(k + i2, l + j2, i1 + 16 - 1);
-                                                l2 = BlockPosition.a(k + i2, l + j2, i1 + 16);
-                                                break;
-                                            case WEST:
-                                                k2 = BlockPosition.a(k, l + i2, i1 + j2);
-                                                l2 = BlockPosition.a(k - 1, l + i2, i1 + j2);
-                                                break;
-                                            default:
-                                                k2 = BlockPosition.a(k + 16 - 1, l + i2, i1 + j2);
-                                                l2 = BlockPosition.a(k + 16, l + i2, i1 + j2);
+                                                case NORTH:
+                                                    k2 = BlockPosition.a(k + i2, l + j2, i1);
+                                                    l2 = BlockPosition.a(k + i2, l + j2, i1 - 1);
+                                                    break;
+                                                case SOUTH:
+                                                    k2 = BlockPosition.a(k + i2, l + j2, i1 + 16 - 1);
+                                                    l2 = BlockPosition.a(k + i2, l + j2, i1 + 16);
+                                                    break;
+                                                case WEST:
+                                                    k2 = BlockPosition.a(k, l + i2, i1 + j2);
+                                                    l2 = BlockPosition.a(k - 1, l + i2, i1 + j2);
+                                                    break;
+                                                default:
+                                                    k2 = BlockPosition.a(k + 16 - 1, l + i2, i1 + j2);
+                                                    l2 = BlockPosition.a(k + 16, l + i2, i1 + j2);
                                             }
 
                                             lightenginelayer.a(k2, l2, lightenginelayer.b(k2, l2, 0), true);

@@ -15,7 +15,7 @@ public class ArgumentScoreboardSlot implements ArgumentType<Integer> {
 
     private static final Collection<String> b = Arrays.asList("sidebar", "foo.bar");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.scoreboardDisplaySlot.invalid", new Object[] { object});
+        return new ChatMessage("argument.scoreboardDisplaySlot.invalid", new Object[]{object});
     });
 
     private ArgumentScoreboardSlot() {}

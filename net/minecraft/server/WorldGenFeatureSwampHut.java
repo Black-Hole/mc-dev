@@ -7,8 +7,8 @@ import java.util.function.Function;
 
 public class WorldGenFeatureSwampHut extends WorldGenFeatureRandomScattered<WorldGenFeatureEmptyConfiguration> {
 
-    private static final List<BiomeBase.BiomeMeta> a = Lists.newArrayList(new BiomeBase.BiomeMeta[] { new BiomeBase.BiomeMeta(EntityTypes.WITCH, 1, 1, 1)});
-    private static final List<BiomeBase.BiomeMeta> aS = Lists.newArrayList(new BiomeBase.BiomeMeta[] { new BiomeBase.BiomeMeta(EntityTypes.CAT, 1, 1, 1)});
+    private static final List<BiomeBase.BiomeMeta> a = Lists.newArrayList(new BiomeBase.BiomeMeta[]{new BiomeBase.BiomeMeta(EntityTypes.WITCH, 1, 1, 1)});
+    private static final List<BiomeBase.BiomeMeta> aS = Lists.newArrayList(new BiomeBase.BiomeMeta[]{new BiomeBase.BiomeMeta(EntityTypes.CAT, 1, 1, 1)});
 
     public WorldGenFeatureSwampHut(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
         super(function);

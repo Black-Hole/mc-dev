@@ -51,7 +51,7 @@ public abstract class VoxelShape {
     }
 
     public VoxelShape c() {
-        VoxelShape[] avoxelshape = new VoxelShape[] { VoxelShapes.a()};
+        VoxelShape[] avoxelshape = new VoxelShape[]{VoxelShapes.a()};
 
         this.b((d0, d1, d2, d3, d4, d5) -> {
             avoxelshape[0] = VoxelShapes.b(avoxelshape[0], VoxelShapes.create(d0, d1, d2, d3, d4, d5), OperatorBoolean.OR);

@@ -16,7 +16,7 @@ public class ArgumentParserItemStack {
 
     public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.item.tag.disallowed", new Object[0]));
     public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.item.id.invalid", new Object[] { object});
+        return new ChatMessage("argument.item.id.invalid", new Object[]{object});
     });
     private static final Function<SuggestionsBuilder, CompletableFuture<Suggestions>> c = SuggestionsBuilder::buildFuture;
     private final StringReader d;

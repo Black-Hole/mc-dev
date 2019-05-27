@@ -83,7 +83,7 @@ public class BlockCauldron extends Block {
                 if (item == Items.GLASS_BOTTLE) {
                     if (i > 0 && !world.isClientSide) {
                         if (!entityhuman.abilities.canInstantlyBuild) {
-                            itemstack1 = PotionUtil.a(new ItemStack(Items.POTION), Potions.b);
+                            itemstack1 = PotionUtil.a(new ItemStack(Items.POTION), Potions.WATER);
                             entityhuman.a(StatisticList.USE_CAULDRON);
                             itemstack.subtract(1);
                             if (itemstack.isEmpty()) {
@@ -100,7 +100,7 @@ public class BlockCauldron extends Block {
                     }
 
                     return true;
-                } else if (item == Items.POTION && PotionUtil.d(itemstack) == Potions.b) {
+                } else if (item == Items.POTION && PotionUtil.d(itemstack) == Potions.WATER) {
                     if (i < 3 && !world.isClientSide) {
                         if (!entityhuman.abilities.canInstantlyBuild) {
                             itemstack1 = new ItemStack(Items.GLASS_BOTTLE);

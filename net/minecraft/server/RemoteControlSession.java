@@ -57,36 +57,36 @@ public class RemoteControlSession extends RemoteConnectionThread {
 
                     k += 4;
                     switch (i1) {
-                    case 2:
-                        if (this.i) {
-                            String s = StatusChallengeUtils.a(this.k, k, i);
+                        case 2:
+                            if (this.i) {
+                                String s = StatusChallengeUtils.a(this.k, k, i);
 
-                            try {
-                                this.a(l, this.b.executeRemoteCommand(s));
-                            } catch (Exception exception) {
-                                this.a(l, "Error executing: " + s + " (" + exception.getMessage() + ")");
+                                try {
+                                    this.a(l, this.b.executeRemoteCommand(s));
+                                } catch (Exception exception) {
+                                    this.a(l, "Error executing: " + s + " (" + exception.getMessage() + ")");
+                                }
+                                continue;
                             }
+
+                            this.f();
                             continue;
-                        }
+                        case 3:
+                            String s1 = StatusChallengeUtils.a(this.k, k, i);
+                            int j1 = k + s1.length();
 
-                        this.f();
-                        continue;
-                    case 3:
-                        String s1 = StatusChallengeUtils.a(this.k, k, i);
-                        int j1 = k + s1.length();
+                            if (!s1.isEmpty() && s1.equals(this.l)) {
+                                this.i = true;
+                                this.a(l, 2, "");
+                                continue;
+                            }
 
-                        if (!s1.isEmpty() && s1.equals(this.l)) {
-                            this.i = true;
-                            this.a(l, 2, "");
+                            this.i = false;
+                            this.f();
                             continue;
-                        }
-
-                        this.i = false;
-                        this.f();
-                        continue;
-                    default:
-                        this.a(l, String.format("Unknown request %s", Integer.toHexString(i1)));
-                        continue;
+                        default:
+                            this.a(l, String.format("Unknown request %s", Integer.toHexString(i1)));
+                            continue;
                     }
                 }
             } catch (SocketTimeoutException sockettimeoutexception) {

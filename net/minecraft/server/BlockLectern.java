@@ -51,16 +51,16 @@ public class BlockLectern extends BlockTileEntity {
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch ((EnumDirection) iblockdata.get(BlockLectern.a)) {
-        case NORTH:
-            return BlockLectern.j;
-        case SOUTH:
-            return BlockLectern.w;
-        case EAST:
-            return BlockLectern.k;
-        case WEST:
-            return BlockLectern.i;
-        default:
-            return BlockLectern.f;
+            case NORTH:
+                return BlockLectern.j;
+            case SOUTH:
+                return BlockLectern.w;
+            case EAST:
+                return BlockLectern.k;
+            case WEST:
+                return BlockLectern.i;
+            default:
+                return BlockLectern.f;
         }
     }
 
@@ -103,14 +103,14 @@ public class BlockLectern extends BlockTileEntity {
         if (tileentity instanceof TileEntityLectern) {
             TileEntityLectern tileentitylectern = (TileEntityLectern) tileentity;
 
-            tileentitylectern.a(itemstack.cloneAndSubtract(1));
-            a(world, blockposition, iblockdata, true);
+            tileentitylectern.setBook(itemstack.cloneAndSubtract(1));
+            setHasBook(world, blockposition, iblockdata, true);
             world.a((EntityHuman) null, blockposition, SoundEffects.ITEM_BOOK_PUT, SoundCategory.BLOCKS, 1.0F, 1.0F);
         }
 
     }
 
-    public static void a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
+    public static void setHasBook(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
         world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) iblockdata.set(BlockLectern.b, false)).set(BlockLectern.c, flag), 3);
         b(world, blockposition, iblockdata);
     }
@@ -158,7 +158,7 @@ public class BlockLectern extends BlockTileEntity {
         if (tileentity instanceof TileEntityLectern) {
             TileEntityLectern tileentitylectern = (TileEntityLectern) tileentity;
             EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockLectern.a);
-            ItemStack itemstack = tileentitylectern.c().cloneItemStack();
+            ItemStack itemstack = tileentitylectern.getBook().cloneItemStack();
             float f = 0.25F * (float) enumdirection.getAdjacentX();
             float f1 = 0.25F * (float) enumdirection.getAdjacentZ();
             EntityItem entityitem = new EntityItem(world, (double) blockposition.getX() + 0.5D + (double) f, (double) (blockposition.getY() + 1), (double) blockposition.getZ() + 0.5D + (double) f1, itemstack);

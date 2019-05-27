@@ -27,7 +27,7 @@ public class ItemSkullPlayer extends ItemBlockWallable {
             }
 
             if (s != null) {
-                return new ChatMessage(this.getName() + ".named", new Object[] { s});
+                return new ChatMessage(this.getName() + ".named", new Object[]{s});
             }
         }
 

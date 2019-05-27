@@ -49,4 +49,9 @@ public class BlockSlowSand extends Block {
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         return false;
     }
+
+    @Override
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EntityTypes<?> entitytypes) {
+        return true;
+    }
 }

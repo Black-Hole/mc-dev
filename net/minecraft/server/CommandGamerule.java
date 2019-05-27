@@ -30,14 +30,14 @@ public class CommandGamerule {
         GameRules.GameRuleValue gamerules_gamerulevalue = commandlistenerwrapper.getServer().getGameRules().get(s);
 
         gamerules_gamerulevalue.getType().a(commandcontext, "value", gamerules_gamerulevalue);
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.gamerule.set", new Object[] { s, gamerules_gamerulevalue.getValue()}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.gamerule.set", new Object[]{s, gamerules_gamerulevalue.getValue()}), true);
         return gamerules_gamerulevalue.getIntValue();
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, String s) {
         GameRules.GameRuleValue gamerules_gamerulevalue = commandlistenerwrapper.getServer().getGameRules().get(s);
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.gamerule.query", new Object[] { s, gamerules_gamerulevalue.getValue()}), false);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.gamerule.query", new Object[]{s, gamerules_gamerulevalue.getValue()}), false);
         return gamerules_gamerulevalue.getIntValue();
     }
 }

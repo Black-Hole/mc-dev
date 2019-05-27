@@ -93,7 +93,7 @@ public class LootTableRegistry implements IResourcePackListener {
     public static void a(LootCollector lootcollector, MinecraftKey minecraftkey, LootTable loottable, Function<MinecraftKey, LootTable> function) {
         Set<MinecraftKey> set = ImmutableSet.of(minecraftkey);
 
-        loottable.a(lootcollector.b("{" + minecraftkey.toString() + "}"), function, set, loottable.a());
+        loottable.a(lootcollector.b("{" + minecraftkey.toString() + "}"), function, set, loottable.getLootContextParameterSet());
     }
 
     public static JsonElement a(LootTable loottable) {

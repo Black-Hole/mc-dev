@@ -21,7 +21,7 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
     protected static final VoxelShape y = Block.a(8.0D, 8.0D, 8.0D, 16.0D, 16.0D, 16.0D);
     protected static final VoxelShape[] z = a(BlockStairs.e, BlockStairs.g, BlockStairs.k, BlockStairs.h, BlockStairs.w);
     protected static final VoxelShape[] A = a(BlockStairs.f, BlockStairs.i, BlockStairs.x, BlockStairs.j, BlockStairs.y);
-    private static final int[] B = new int[] { 12, 5, 3, 10, 14, 13, 7, 11, 13, 7, 11, 14, 8, 4, 1, 2, 4, 1, 2, 8};
+    private static final int[] B = new int[]{12, 5, 3, 10, 14, 13, 7, 11, 13, 7, 11, 14, 8, 4, 1, 2, 4, 1, 2, 8};
     private final Block C;
     private final IBlockData D;
 
@@ -209,37 +209,37 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
         BlockPropertyStairsShape blockpropertystairsshape = (BlockPropertyStairsShape) iblockdata.get(BlockStairs.SHAPE);
 
         switch (enumblockmirror) {
-        case LEFT_RIGHT:
-            if (enumdirection.k() == EnumDirection.EnumAxis.Z) {
-                switch (blockpropertystairsshape) {
-                case INNER_LEFT:
-                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_RIGHT);
-                case INNER_RIGHT:
-                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_LEFT);
-                case OUTER_LEFT:
-                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_RIGHT);
-                case OUTER_RIGHT:
-                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_LEFT);
-                default:
-                    return iblockdata.a(EnumBlockRotation.CLOCKWISE_180);
+            case LEFT_RIGHT:
+                if (enumdirection.k() == EnumDirection.EnumAxis.Z) {
+                    switch (blockpropertystairsshape) {
+                        case INNER_LEFT:
+                            return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_RIGHT);
+                        case INNER_RIGHT:
+                            return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_LEFT);
+                        case OUTER_LEFT:
+                            return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_RIGHT);
+                        case OUTER_RIGHT:
+                            return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_LEFT);
+                        default:
+                            return iblockdata.a(EnumBlockRotation.CLOCKWISE_180);
+                    }
                 }
-            }
-            break;
-        case FRONT_BACK:
-            if (enumdirection.k() == EnumDirection.EnumAxis.X) {
-                switch (blockpropertystairsshape) {
-                case INNER_LEFT:
-                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_LEFT);
-                case INNER_RIGHT:
-                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_RIGHT);
-                case OUTER_LEFT:
-                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_RIGHT);
-                case OUTER_RIGHT:
-                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_LEFT);
-                case STRAIGHT:
-                    return iblockdata.a(EnumBlockRotation.CLOCKWISE_180);
+                break;
+            case FRONT_BACK:
+                if (enumdirection.k() == EnumDirection.EnumAxis.X) {
+                    switch (blockpropertystairsshape) {
+                        case INNER_LEFT:
+                            return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_LEFT);
+                        case INNER_RIGHT:
+                            return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_RIGHT);
+                        case OUTER_LEFT:
+                            return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_RIGHT);
+                        case OUTER_RIGHT:
+                            return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_LEFT);
+                        case STRAIGHT:
+                            return iblockdata.a(EnumBlockRotation.CLOCKWISE_180);
+                    }
                 }
-            }
         }
 
         return super.a(iblockdata, enumblockmirror);

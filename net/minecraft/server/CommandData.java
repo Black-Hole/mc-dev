@@ -23,20 +23,20 @@ public class CommandData {
 
     private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.data.merge.failed", new Object[0]));
     private static final DynamicCommandExceptionType e = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.data.get.invalid", new Object[] { object});
+        return new ChatMessage("commands.data.get.invalid", new Object[]{object});
     });
     private static final DynamicCommandExceptionType f = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.data.get.unknown", new Object[] { object});
+        return new ChatMessage("commands.data.get.unknown", new Object[]{object});
     });
     private static final SimpleCommandExceptionType g = new SimpleCommandExceptionType(new ChatMessage("commands.data.get.multiple", new Object[0]));
     private static final DynamicCommandExceptionType h = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.data.modify.expected_list", new Object[] { object});
+        return new ChatMessage("commands.data.modify.expected_list", new Object[]{object});
     });
     private static final DynamicCommandExceptionType i = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.data.modify.expected_object", new Object[] { object});
+        return new ChatMessage("commands.data.modify.expected_object", new Object[]{object});
     });
     private static final DynamicCommandExceptionType j = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.data.modify.invalid_index", new Object[] { object});
+        return new ChatMessage("commands.data.modify.invalid_index", new Object[]{object});
     });
     public static final List<Function<String, CommandData.c>> a = ImmutableList.of(CommandDataAccessorEntity.a, CommandDataAccessorTile.a);
     public static final List<CommandData.c> b = (List) CommandData.a.stream().map((function) -> {

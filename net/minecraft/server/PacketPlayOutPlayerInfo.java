@@ -53,43 +53,43 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
             IChatBaseComponent ichatbasecomponent = null;
 
             switch (this.a) {
-            case ADD_PLAYER:
-                gameprofile = new GameProfile(packetdataserializer.k(), packetdataserializer.e(16));
-                int l = packetdataserializer.i();
+                case ADD_PLAYER:
+                    gameprofile = new GameProfile(packetdataserializer.k(), packetdataserializer.e(16));
+                    int l = packetdataserializer.i();
 
-                for (int i1 = 0; i1 < l; ++i1) {
-                    String s = packetdataserializer.e(32767);
-                    String s1 = packetdataserializer.e(32767);
+                    for (int i1 = 0; i1 < l; ++i1) {
+                        String s = packetdataserializer.e(32767);
+                        String s1 = packetdataserializer.e(32767);
 
-                    if (packetdataserializer.readBoolean()) {
-                        gameprofile.getProperties().put(s, new Property(s, s1, packetdataserializer.e(32767)));
-                    } else {
-                        gameprofile.getProperties().put(s, new Property(s, s1));
+                        if (packetdataserializer.readBoolean()) {
+                            gameprofile.getProperties().put(s, new Property(s, s1, packetdataserializer.e(32767)));
+                        } else {
+                            gameprofile.getProperties().put(s, new Property(s, s1));
+                        }
                     }
-                }
 
-                enumgamemode = EnumGamemode.getById(packetdataserializer.i());
-                k = packetdataserializer.i();
-                if (packetdataserializer.readBoolean()) {
-                    ichatbasecomponent = packetdataserializer.h();
-                }
-                break;
-            case UPDATE_GAME_MODE:
-                gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
-                enumgamemode = EnumGamemode.getById(packetdataserializer.i());
-                break;
-            case UPDATE_LATENCY:
-                gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
-                k = packetdataserializer.i();
-                break;
-            case UPDATE_DISPLAY_NAME:
-                gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
-                if (packetdataserializer.readBoolean()) {
-                    ichatbasecomponent = packetdataserializer.h();
-                }
-                break;
-            case REMOVE_PLAYER:
-                gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
+                    enumgamemode = EnumGamemode.getById(packetdataserializer.i());
+                    k = packetdataserializer.i();
+                    if (packetdataserializer.readBoolean()) {
+                        ichatbasecomponent = packetdataserializer.h();
+                    }
+                    break;
+                case UPDATE_GAME_MODE:
+                    gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
+                    enumgamemode = EnumGamemode.getById(packetdataserializer.i());
+                    break;
+                case UPDATE_LATENCY:
+                    gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
+                    k = packetdataserializer.i();
+                    break;
+                case UPDATE_DISPLAY_NAME:
+                    gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
+                    if (packetdataserializer.readBoolean()) {
+                        ichatbasecomponent = packetdataserializer.h();
+                    }
+                    break;
+                case REMOVE_PLAYER:
+                    gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
             }
 
             this.b.add(new PacketPlayOutPlayerInfo.PlayerInfoData(gameprofile, k, enumgamemode, ichatbasecomponent));
@@ -107,53 +107,53 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
             PacketPlayOutPlayerInfo.PlayerInfoData packetplayoutplayerinfo_playerinfodata = (PacketPlayOutPlayerInfo.PlayerInfoData) iterator.next();
 
             switch (this.a) {
-            case ADD_PLAYER:
-                packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
-                packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getName());
-                packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.a().getProperties().size());
-                Iterator iterator1 = packetplayoutplayerinfo_playerinfodata.a().getProperties().values().iterator();
+                case ADD_PLAYER:
+                    packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
+                    packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getName());
+                    packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.a().getProperties().size());
+                    Iterator iterator1 = packetplayoutplayerinfo_playerinfodata.a().getProperties().values().iterator();
 
-                while (iterator1.hasNext()) {
-                    Property property = (Property) iterator1.next();
+                    while (iterator1.hasNext()) {
+                        Property property = (Property) iterator1.next();
 
-                    packetdataserializer.a(property.getName());
-                    packetdataserializer.a(property.getValue());
-                    if (property.hasSignature()) {
-                        packetdataserializer.writeBoolean(true);
-                        packetdataserializer.a(property.getSignature());
-                    } else {
-                        packetdataserializer.writeBoolean(false);
+                        packetdataserializer.a(property.getName());
+                        packetdataserializer.a(property.getValue());
+                        if (property.hasSignature()) {
+                            packetdataserializer.writeBoolean(true);
+                            packetdataserializer.a(property.getSignature());
+                        } else {
+                            packetdataserializer.writeBoolean(false);
+                        }
                     }
-                }
 
-                packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.c().getId());
-                packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.b());
-                if (packetplayoutplayerinfo_playerinfodata.d() == null) {
-                    packetdataserializer.writeBoolean(false);
-                } else {
-                    packetdataserializer.writeBoolean(true);
-                    packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.d());
-                }
-                break;
-            case UPDATE_GAME_MODE:
-                packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
-                packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.c().getId());
-                break;
-            case UPDATE_LATENCY:
-                packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
-                packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.b());
-                break;
-            case UPDATE_DISPLAY_NAME:
-                packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
-                if (packetplayoutplayerinfo_playerinfodata.d() == null) {
-                    packetdataserializer.writeBoolean(false);
-                } else {
-                    packetdataserializer.writeBoolean(true);
-                    packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.d());
-                }
-                break;
-            case REMOVE_PLAYER:
-                packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
+                    packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.c().getId());
+                    packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.b());
+                    if (packetplayoutplayerinfo_playerinfodata.d() == null) {
+                        packetdataserializer.writeBoolean(false);
+                    } else {
+                        packetdataserializer.writeBoolean(true);
+                        packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.d());
+                    }
+                    break;
+                case UPDATE_GAME_MODE:
+                    packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
+                    packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.c().getId());
+                    break;
+                case UPDATE_LATENCY:
+                    packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
+                    packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.b());
+                    break;
+                case UPDATE_DISPLAY_NAME:
+                    packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
+                    if (packetplayoutplayerinfo_playerinfodata.d() == null) {
+                        packetdataserializer.writeBoolean(false);
+                    } else {
+                        packetdataserializer.writeBoolean(true);
+                        packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.d());
+                    }
+                    break;
+                case REMOVE_PLAYER:
+                    packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
             }
         }
 

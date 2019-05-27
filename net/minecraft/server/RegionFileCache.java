@@ -26,7 +26,7 @@ public abstract class RegionFileCache implements AutoCloseable {
             return regionfile;
         } else {
             if (this.cache.size() >= 256) {
-                this.cache.removeLast();
+                ((RegionFile) this.cache.removeLast()).close();
             }
 
             if (!this.a.exists()) {

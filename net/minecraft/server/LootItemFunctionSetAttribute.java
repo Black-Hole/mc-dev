@@ -103,7 +103,7 @@ public class LootItemFunctionSetAttribute extends LootItemFunctionConditional {
             EnumItemSlot[] aenumitemslot;
 
             if (ChatDeserializer.a(jsonobject, "slot")) {
-                aenumitemslot = new EnumItemSlot[] { EnumItemSlot.fromName(ChatDeserializer.h(jsonobject, "slot"))};
+                aenumitemslot = new EnumItemSlot[]{EnumItemSlot.fromName(ChatDeserializer.h(jsonobject, "slot"))};
             } else {
                 if (!ChatDeserializer.d(jsonobject, "slot")) {
                     throw new JsonSyntaxException("Invalid or missing attribute modifier slot; must be either string or array of strings.");
@@ -140,14 +140,14 @@ public class LootItemFunctionSetAttribute extends LootItemFunctionConditional {
 
         private static String a(AttributeModifier.Operation attributemodifier_operation) {
             switch (attributemodifier_operation) {
-            case ADDITION:
-                return "addition";
-            case MULTIPLY_BASE:
-                return "multiply_base";
-            case MULTIPLY_TOTAL:
-                return "multiply_total";
-            default:
-                throw new IllegalArgumentException("Unknown operation " + attributemodifier_operation);
+                case ADDITION:
+                    return "addition";
+                case MULTIPLY_BASE:
+                    return "multiply_base";
+                case MULTIPLY_TOTAL:
+                    return "multiply_total";
+                default:
+                    throw new IllegalArgumentException("Unknown operation " + attributemodifier_operation);
             }
         }
 
@@ -155,31 +155,31 @@ public class LootItemFunctionSetAttribute extends LootItemFunctionConditional {
             byte b0 = -1;
 
             switch (s.hashCode()) {
-            case -1226589444:
-                if (s.equals("addition")) {
-                    b0 = 0;
-                }
-                break;
-            case -78229492:
-                if (s.equals("multiply_base")) {
-                    b0 = 1;
-                }
-                break;
-            case 1886894441:
-                if (s.equals("multiply_total")) {
-                    b0 = 2;
-                }
+                case -1226589444:
+                    if (s.equals("addition")) {
+                        b0 = 0;
+                    }
+                    break;
+                case -78229492:
+                    if (s.equals("multiply_base")) {
+                        b0 = 1;
+                    }
+                    break;
+                case 1886894441:
+                    if (s.equals("multiply_total")) {
+                        b0 = 2;
+                    }
             }
 
             switch (b0) {
-            case 0:
-                return AttributeModifier.Operation.ADDITION;
-            case 1:
-                return AttributeModifier.Operation.MULTIPLY_BASE;
-            case 2:
-                return AttributeModifier.Operation.MULTIPLY_TOTAL;
-            default:
-                throw new JsonSyntaxException("Unknown attribute modifier operation " + s);
+                case 0:
+                    return AttributeModifier.Operation.ADDITION;
+                case 1:
+                    return AttributeModifier.Operation.MULTIPLY_BASE;
+                case 2:
+                    return AttributeModifier.Operation.MULTIPLY_TOTAL;
+                default:
+                    throw new JsonSyntaxException("Unknown attribute modifier operation " + s);
             }
         }
     }

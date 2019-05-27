@@ -158,12 +158,12 @@ public class EntityPufferFish extends EntityFish {
 
     private static float q(int i) {
         switch (i) {
-        case 0:
-            return 0.5F;
-        case 1:
-            return 0.7F;
-        default:
-            return 1.0F;
+            case 0:
+                return 0.5F;
+            case 1:
+                return 0.7F;
+            default:
+                return 1.0F;
         }
     }
 

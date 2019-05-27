@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 public class ArgumentPredicateItemStack implements Predicate<ItemStack> {
 
     private static final Dynamic2CommandExceptionType a = new Dynamic2CommandExceptionType((object, object1) -> {
-        return new ChatMessage("arguments.item.overstacked", new Object[] { object, object1});
+        return new ChatMessage("arguments.item.overstacked", new Object[]{object, object1});
     });
     private final Item b;
     @Nullable

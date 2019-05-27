@@ -64,7 +64,7 @@ public class PersistentRaid extends PersistentBase {
                 BlockPosition blockposition = new BlockPosition(entityplayer);
                 Optional<BlockPosition> optional = this.b.B().b((villageplacetype) -> {
                     return villageplacetype == VillagePlaceType.r;
-                }, Objects::nonNull, blockposition, 48, VillagePlace.Occupancy.ANY);
+                }, Objects::nonNull, blockposition, 64, VillagePlace.Occupancy.ANY);
 
                 if (!optional.isPresent()) {
                     optional = Optional.of(blockposition);

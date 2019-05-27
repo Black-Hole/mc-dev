@@ -36,7 +36,7 @@ public class ItemScaffolding extends ItemBlock {
                     int j = world.getBuildHeight();
 
                     if (entityhuman instanceof EntityPlayer && blockposition_mutableblockposition.getY() >= j) {
-                        PacketPlayOutChat packetplayoutchat = new PacketPlayOutChat((new ChatMessage("build.tooHigh", new Object[] { j})).a(EnumChatFormat.RED), ChatMessageType.GAME_INFO);
+                        PacketPlayOutChat packetplayoutchat = new PacketPlayOutChat((new ChatMessage("build.tooHigh", new Object[]{j})).a(EnumChatFormat.RED), ChatMessageType.GAME_INFO);
 
                         ((EntityPlayer) entityhuman).playerConnection.sendPacket(packetplayoutchat);
                     }

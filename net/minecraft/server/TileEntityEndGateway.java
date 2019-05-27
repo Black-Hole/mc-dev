@@ -47,8 +47,8 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
 
     @Override
     public void tick() {
-        boolean flag = this.c();
-        boolean flag1 = this.d();
+        boolean flag = this.d();
+        boolean flag1 = this.f();
 
         ++this.age;
         if (flag1) {
@@ -61,21 +61,21 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
             }
 
             if (this.age % 2400L == 0L) {
-                this.f();
+                this.h();
             }
         }
 
-        if (flag != this.c() || flag1 != this.d()) {
+        if (flag != this.d() || flag1 != this.f()) {
             this.update();
         }
 
     }
 
-    public boolean c() {
+    public boolean d() {
         return this.age < 200L;
     }
 
-    public boolean d() {
+    public boolean f() {
         return this.c > 0;
     }
 
@@ -90,7 +90,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
         return this.save(new NBTTagCompound());
     }
 
-    public void f() {
+    public void h() {
         if (!this.world.isClientSide) {
             this.c = 40;
             this.world.playBlockAction(this.getPosition(), this.getBlock().getBlock(), 1, 0);
@@ -110,7 +110,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
     }
 
     public void a(Entity entity) {
-        if (!this.world.isClientSide && !this.d()) {
+        if (!this.world.isClientSide && !this.f()) {
             this.c = 100;
             if (this.exitPortal == null && this.world.worldProvider instanceof WorldProviderTheEnd) {
                 this.u();
@@ -119,10 +119,10 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
             if (this.exitPortal != null) {
                 BlockPosition blockposition = this.exactTeleport ? this.exitPortal : this.t();
 
-                entity.enderTeleportTo((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
+                entity.enderTeleportAndLoad((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
             }
 
-            this.f();
+            this.h();
         }
     }
 

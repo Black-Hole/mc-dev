@@ -72,46 +72,42 @@ public class RegionFile implements AutoCloseable {
     }
 
     @Nullable
-    public synchronized DataInputStream a(ChunkCoordIntPair chunkcoordintpair) {
-        try {
-            int i = this.getOffset(chunkcoordintpair);
+    public synchronized DataInputStream a(ChunkCoordIntPair chunkcoordintpair) throws IOException {
+        int i = this.getOffset(chunkcoordintpair);
 
-            if (i == 0) {
+        if (i == 0) {
+            return null;
+        } else {
+            int j = i >> 8;
+            int k = i & 255;
+
+            if (j + k > this.e.size()) {
                 return null;
             } else {
-                int j = i >> 8;
-                int k = i & 255;
+                this.b.seek((long) (j * 4096));
+                int l = this.b.readInt();
 
-                if (j + k > this.e.size()) {
+                if (l > 4096 * k) {
+                    return null;
+                } else if (l <= 0) {
                     return null;
                 } else {
-                    this.b.seek((long) (j * 4096));
-                    int l = this.b.readInt();
+                    byte b0 = this.b.readByte();
+                    byte[] abyte;
 
-                    if (l > 4096 * k) {
-                        return null;
-                    } else if (l <= 0) {
-                        return null;
+                    if (b0 == 1) {
+                        abyte = new byte[l - 1];
+                        this.b.read(abyte);
+                        return new DataInputStream(new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(abyte))));
+                    } else if (b0 == 2) {
+                        abyte = new byte[l - 1];
+                        this.b.read(abyte);
+                        return new DataInputStream(new BufferedInputStream(new InflaterInputStream(new ByteArrayInputStream(abyte))));
                     } else {
-                        byte b0 = this.b.readByte();
-                        byte[] abyte;
-
-                        if (b0 == 1) {
-                            abyte = new byte[l - 1];
-                            this.b.read(abyte);
-                            return new DataInputStream(new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(abyte))));
-                        } else if (b0 == 2) {
-                            abyte = new byte[l - 1];
-                            this.b.read(abyte);
-                            return new DataInputStream(new BufferedInputStream(new InflaterInputStream(new ByteArrayInputStream(abyte))));
-                        } else {
-                            return null;
-                        }
+                        return null;
                     }
                 }
             }
-        } catch (IOException ioexception) {
-            return null;
         }
     }
 
@@ -143,17 +139,15 @@ public class RegionFile implements AutoCloseable {
         return new DataOutputStream(new BufferedOutputStream(new DeflaterOutputStream(new RegionFile.ChunkBuffer(chunkcoordintpair))));
     }
 
-    protected synchronized void a(ChunkCoordIntPair chunkcoordintpair, byte[] abyte, int i) {
-        try {
-            int j = this.getOffset(chunkcoordintpair);
-            int k = j >> 8;
-            int l = j & 255;
-            int i1 = (i + 5) / 4096 + 1;
+    protected synchronized void a(ChunkCoordIntPair chunkcoordintpair, byte[] abyte, int i) throws IOException {
+        int j = this.getOffset(chunkcoordintpair);
+        int k = j >> 8;
+        int l = j & 255;
+        int i1 = (i + 5) / 4096 + 1;
 
-            if (i1 >= 256) {
-                throw new RuntimeException(String.format("Too big to save, %d > 1048576", i));
-            }
-
+        if (i1 >= 256) {
+            throw new RuntimeException(String.format("Too big to save, %d > 1048576", i));
+        } else {
             if (k != 0 && l == i1) {
                 this.a(k, abyte, i);
             } else {
@@ -210,10 +204,7 @@ public class RegionFile implements AutoCloseable {
             }
 
             this.b(chunkcoordintpair, (int) (SystemUtils.getTimeMillis() / 1000L));
-        } catch (IOException ioexception) {
-            ioexception.printStackTrace();
         }
-
     }
 
     private void a(int i, byte[] abyte, int j) throws IOException {
@@ -264,7 +255,7 @@ public class RegionFile implements AutoCloseable {
             this.b = chunkcoordintpair;
         }
 
-        public void close() {
+        public void close() throws IOException {
             RegionFile.this.a(this.b, this.buf, this.count);
         }
     }

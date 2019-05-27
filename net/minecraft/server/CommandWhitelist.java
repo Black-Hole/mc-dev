@@ -64,7 +64,7 @@ public class CommandWhitelist {
                 WhiteListEntry whitelistentry = new WhiteListEntry(gameprofile);
 
                 whitelist.add(whitelistentry);
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.add.success", new Object[] { ChatComponentUtils.a(gameprofile)}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.add.success", new Object[]{ChatComponentUtils.a(gameprofile)}), true);
                 ++i;
             }
         }
@@ -88,7 +88,7 @@ public class CommandWhitelist {
                 WhiteListEntry whitelistentry = new WhiteListEntry(gameprofile);
 
                 whitelist.b(whitelistentry);
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.remove.success", new Object[] { ChatComponentUtils.a(gameprofile)}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.remove.success", new Object[]{ChatComponentUtils.a(gameprofile)}), true);
                 ++i;
             }
         }
@@ -132,7 +132,7 @@ public class CommandWhitelist {
         if (astring.length == 0) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.none", new Object[0]), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.list", new Object[] { astring.length, String.join(", ", astring)}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.list", new Object[]{astring.length, String.join(", ", astring)}), false);
         }
 
         return astring.length;

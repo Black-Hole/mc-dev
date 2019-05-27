@@ -46,7 +46,7 @@ public class BlockShulkerBox extends BlockTileEntity {
                 TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) tileentity;
                 boolean flag;
 
-                if (tileentityshulkerbox.t() == TileEntityShulkerBox.AnimationPhase.CLOSED) {
+                if (tileentityshulkerbox.s() == TileEntityShulkerBox.AnimationPhase.CLOSED) {
                     AxisAlignedBB axisalignedbb = VoxelShapes.b().getBoundingBox().b((double) (0.5F * (float) enumdirection.getAdjacentX()), (double) (0.5F * (float) enumdirection.getAdjacentY()), (double) (0.5F * (float) enumdirection.getAdjacentZ())).a((double) enumdirection.getAdjacentX(), (double) enumdirection.getAdjacentY(), (double) enumdirection.getAdjacentZ());
 
                     flag = world.c(axisalignedbb.a(blockposition.shift(enumdirection)));
@@ -83,12 +83,16 @@ public class BlockShulkerBox extends BlockTileEntity {
         if (tileentity instanceof TileEntityShulkerBox) {
             TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) tileentity;
 
-            if (!world.isClientSide && entityhuman.isCreative()) {
+            if (!world.isClientSide && entityhuman.isCreative() && !tileentityshulkerbox.isNotEmpty()) {
                 ItemStack itemstack = b(this.d());
                 NBTTagCompound nbttagcompound = tileentityshulkerbox.g(new NBTTagCompound());
 
                 if (!nbttagcompound.isEmpty()) {
                     itemstack.a("BlockEntityTag", (NBTBase) nbttagcompound);
+                }
+
+                if (tileentityshulkerbox.hasCustomName()) {
+                    itemstack.a(tileentityshulkerbox.getCustomName());
                 }
 
                 EntityItem entityitem = new EntityItem(world, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), itemstack);
@@ -178,39 +182,39 @@ public class BlockShulkerBox extends BlockTileEntity {
             return Blocks.SHULKER_BOX;
         } else {
             switch (enumcolor) {
-            case WHITE:
-                return Blocks.WHITE_SHULKER_BOX;
-            case ORANGE:
-                return Blocks.ORANGE_SHULKER_BOX;
-            case MAGENTA:
-                return Blocks.MAGENTA_SHULKER_BOX;
-            case LIGHT_BLUE:
-                return Blocks.LIGHT_BLUE_SHULKER_BOX;
-            case YELLOW:
-                return Blocks.YELLOW_SHULKER_BOX;
-            case LIME:
-                return Blocks.LIME_SHULKER_BOX;
-            case PINK:
-                return Blocks.PINK_SHULKER_BOX;
-            case GRAY:
-                return Blocks.GRAY_SHULKER_BOX;
-            case LIGHT_GRAY:
-                return Blocks.LIGHT_GRAY_SHULKER_BOX;
-            case CYAN:
-                return Blocks.CYAN_SHULKER_BOX;
-            case PURPLE:
-            default:
-                return Blocks.PURPLE_SHULKER_BOX;
-            case BLUE:
-                return Blocks.BLUE_SHULKER_BOX;
-            case BROWN:
-                return Blocks.BROWN_SHULKER_BOX;
-            case GREEN:
-                return Blocks.GREEN_SHULKER_BOX;
-            case RED:
-                return Blocks.RED_SHULKER_BOX;
-            case BLACK:
-                return Blocks.BLACK_SHULKER_BOX;
+                case WHITE:
+                    return Blocks.WHITE_SHULKER_BOX;
+                case ORANGE:
+                    return Blocks.ORANGE_SHULKER_BOX;
+                case MAGENTA:
+                    return Blocks.MAGENTA_SHULKER_BOX;
+                case LIGHT_BLUE:
+                    return Blocks.LIGHT_BLUE_SHULKER_BOX;
+                case YELLOW:
+                    return Blocks.YELLOW_SHULKER_BOX;
+                case LIME:
+                    return Blocks.LIME_SHULKER_BOX;
+                case PINK:
+                    return Blocks.PINK_SHULKER_BOX;
+                case GRAY:
+                    return Blocks.GRAY_SHULKER_BOX;
+                case LIGHT_GRAY:
+                    return Blocks.LIGHT_GRAY_SHULKER_BOX;
+                case CYAN:
+                    return Blocks.CYAN_SHULKER_BOX;
+                case PURPLE:
+                default:
+                    return Blocks.PURPLE_SHULKER_BOX;
+                case BLUE:
+                    return Blocks.BLUE_SHULKER_BOX;
+                case BROWN:
+                    return Blocks.BROWN_SHULKER_BOX;
+                case GREEN:
+                    return Blocks.GREEN_SHULKER_BOX;
+                case RED:
+                    return Blocks.RED_SHULKER_BOX;
+                case BLACK:
+                    return Blocks.BLACK_SHULKER_BOX;
             }
         }
     }

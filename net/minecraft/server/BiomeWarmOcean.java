@@ -20,7 +20,7 @@ public class BiomeWarmOcean extends BiomeBase {
         BiomeDecoratorGroups.Z(this);
         BiomeDecoratorGroups.aa(this);
         BiomeDecoratorGroups.am(this);
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.SIMPLE_RANDOM_SELECTOR, new WorldGenFeatureRandom2(new WorldGenerator[] { WorldGenerator.CORAL_TREE, WorldGenerator.CORAL_CLAW, WorldGenerator.CORAL_MUSHROOM}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}), WorldGenDecorator.x, new WorldGenDecoratorNoiseConfiguration(20, 400.0D, 0.0D, HeightMap.Type.OCEAN_FLOOR_WG)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.SIMPLE_RANDOM_SELECTOR, new WorldGenFeatureRandom2(new WorldGenerator[]{WorldGenerator.CORAL_TREE, WorldGenerator.CORAL_CLAW, WorldGenerator.CORAL_MUSHROOM}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}), WorldGenDecorator.x, new WorldGenDecoratorNoiseConfiguration(20, 400.0D, 0.0D, HeightMap.Type.OCEAN_FLOOR_WG)));
         BiomeDecoratorGroups.aj(this);
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.SEA_PICKLE, new WorldGenFeatureKelpConfiguration(20), WorldGenDecorator.l, new WorldGenDecoratorChanceConfiguration(16)));
         BiomeDecoratorGroups.ap(this);

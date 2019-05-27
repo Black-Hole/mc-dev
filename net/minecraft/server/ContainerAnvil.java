@@ -220,17 +220,17 @@ public class ContainerAnvil extends Container {
                                 int j2 = 0;
 
                                 switch (enchantment.d()) {
-                                case COMMON:
-                                    j2 = 1;
-                                    break;
-                                case UNCOMMON:
-                                    j2 = 2;
-                                    break;
-                                case RARE:
-                                    j2 = 4;
-                                    break;
-                                case VERY_RARE:
-                                    j2 = 8;
+                                    case COMMON:
+                                        j2 = 1;
+                                        break;
+                                    case UNCOMMON:
+                                        j2 = 2;
+                                        break;
+                                    case RARE:
+                                        j2 = 4;
+                                        break;
+                                    case VERY_RARE:
+                                        j2 = 8;
                                 }
 
                                 if (flag) {

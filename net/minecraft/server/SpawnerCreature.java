@@ -151,13 +151,13 @@ public final class SpawnerCreature {
             BlockPosition blockposition2 = blockposition.down();
 
             switch (entitypositiontypes_surface) {
-            case IN_WATER:
-                return fluid.a(TagsFluid.WATER) && iworldreader.getFluid(blockposition2).a(TagsFluid.WATER) && !iworldreader.getType(blockposition1).isOccluding(iworldreader, blockposition1);
-            case ON_GROUND:
-            default:
-                IBlockData iblockdata1 = iworldreader.getType(blockposition2);
+                case IN_WATER:
+                    return fluid.a(TagsFluid.WATER) && iworldreader.getFluid(blockposition2).a(TagsFluid.WATER) && !iworldreader.getType(blockposition1).isOccluding(iworldreader, blockposition1);
+                case ON_GROUND:
+                default:
+                    IBlockData iblockdata1 = iworldreader.getType(blockposition2);
 
-                return !iblockdata1.a((IBlockAccess) iworldreader, blockposition2, entitytypes) ? false : a((IBlockAccess) iworldreader, blockposition, iblockdata, fluid) && a((IBlockAccess) iworldreader, blockposition1, iworldreader.getType(blockposition1), iworldreader.getFluid(blockposition1));
+                    return !iblockdata1.a((IBlockAccess) iworldreader, blockposition2, entitytypes) ? false : a((IBlockAccess) iworldreader, blockposition, iblockdata, fluid) && a((IBlockAccess) iworldreader, blockposition1, iworldreader.getType(blockposition1), iworldreader.getFluid(blockposition1));
             }
         } else {
             return false;

@@ -59,7 +59,7 @@ public class EntityPotion extends EntityProjectile {
             ItemStack itemstack = this.getItem();
             PotionRegistry potionregistry = PotionUtil.d(itemstack);
             List<MobEffect> list = PotionUtil.getEffects(itemstack);
-            boolean flag = potionregistry == Potions.b && list.isEmpty();
+            boolean flag = potionregistry == Potions.WATER && list.isEmpty();
 
             if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK && flag) {
                 MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;

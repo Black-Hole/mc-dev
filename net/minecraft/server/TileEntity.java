@@ -118,7 +118,7 @@ public abstract class TileEntity {
         return this.f;
     }
 
-    public void m() {
+    public void W_() {
         this.f = true;
     }
 
@@ -163,7 +163,7 @@ public abstract class TileEntity {
     public void r() {
         if (!this.g) {
             this.g = true;
-            TileEntity.LOGGER.warn("Block entity invalid: {} @ {}", new Supplier[] { () -> {
+            TileEntity.LOGGER.warn("Block entity invalid: {} @ {}", new Supplier[]{() -> {
                         return IRegistry.BLOCK_ENTITY_TYPE.getKey(this.q());
                     }, this::getPosition});
         }

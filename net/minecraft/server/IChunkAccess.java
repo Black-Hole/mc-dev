@@ -129,9 +129,10 @@ public interface IChunkAccess extends IStructureAccess {
     }
 
     @Nullable
-    default NBTTagCompound i(BlockPosition blockposition) {
-        throw new UnsupportedOperationException();
-    }
+    NBTTagCompound i(BlockPosition blockposition);
+
+    @Nullable
+    NBTTagCompound j(BlockPosition blockposition);
 
     default void a(BiomeBase[] abiomebase) {
         throw new UnsupportedOperationException();

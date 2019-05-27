@@ -42,7 +42,7 @@ public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
-        return ICompletionProvider.a(new String[] { "=", "+=", "-=", "*=", "/=", "%=", "<", ">", "><"}, suggestionsbuilder);
+        return ICompletionProvider.a(new String[]{"=", "+=", "-=", "*=", "/=", "%=", "<", ">", "><"}, suggestionsbuilder);
     }
 
     public Collection<String> getExamples() {
@@ -62,86 +62,86 @@ public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation
         byte b0 = -1;
 
         switch (s.hashCode()) {
-        case 60:
-            if (s.equals("<")) {
-                b0 = 6;
-            }
-            break;
-        case 61:
-            if (s.equals("=")) {
-                b0 = 0;
-            }
-            break;
-        case 62:
-            if (s.equals(">")) {
-                b0 = 7;
-            }
-            break;
-        case 1208:
-            if (s.equals("%=")) {
-                b0 = 5;
-            }
-            break;
-        case 1363:
-            if (s.equals("*=")) {
-                b0 = 3;
-            }
-            break;
-        case 1394:
-            if (s.equals("+=")) {
-                b0 = 1;
-            }
-            break;
-        case 1456:
-            if (s.equals("-=")) {
-                b0 = 2;
-            }
-            break;
-        case 1518:
-            if (s.equals("/=")) {
-                b0 = 4;
-            }
+            case 60:
+                if (s.equals("<")) {
+                    b0 = 6;
+                }
+                break;
+            case 61:
+                if (s.equals("=")) {
+                    b0 = 0;
+                }
+                break;
+            case 62:
+                if (s.equals(">")) {
+                    b0 = 7;
+                }
+                break;
+            case 1208:
+                if (s.equals("%=")) {
+                    b0 = 5;
+                }
+                break;
+            case 1363:
+                if (s.equals("*=")) {
+                    b0 = 3;
+                }
+                break;
+            case 1394:
+                if (s.equals("+=")) {
+                    b0 = 1;
+                }
+                break;
+            case 1456:
+                if (s.equals("-=")) {
+                    b0 = 2;
+                }
+                break;
+            case 1518:
+                if (s.equals("/=")) {
+                    b0 = 4;
+                }
         }
 
         switch (b0) {
-        case 0:
-            return (i, j) -> {
-                return j;
-            };
-        case 1:
-            return (i, j) -> {
-                return i + j;
-            };
-        case 2:
-            return (i, j) -> {
-                return i - j;
-            };
-        case 3:
-            return (i, j) -> {
-                return i * j;
-            };
-        case 4:
-            return (i, j) -> {
-                if (j == 0) {
-                    throw ArgumentMathOperation.c.create();
-                } else {
-                    return MathHelper.a(i, j);
-                }
-            };
-        case 5:
-            return (i, j) -> {
-                if (j == 0) {
-                    throw ArgumentMathOperation.c.create();
-                } else {
-                    return MathHelper.b(i, j);
-                }
-            };
-        case 6:
-            return Math::min;
-        case 7:
-            return Math::max;
-        default:
-            throw ArgumentMathOperation.b.create();
+            case 0:
+                return (i, j) -> {
+                    return j;
+                };
+            case 1:
+                return (i, j) -> {
+                    return i + j;
+                };
+            case 2:
+                return (i, j) -> {
+                    return i - j;
+                };
+            case 3:
+                return (i, j) -> {
+                    return i * j;
+                };
+            case 4:
+                return (i, j) -> {
+                    if (j == 0) {
+                        throw ArgumentMathOperation.c.create();
+                    } else {
+                        return MathHelper.a(i, j);
+                    }
+                };
+            case 5:
+                return (i, j) -> {
+                    if (j == 0) {
+                        throw ArgumentMathOperation.c.create();
+                    } else {
+                        return MathHelper.b(i, j);
+                    }
+                };
+            case 6:
+                return Math::min;
+            case 7:
+                return Math::max;
+            default:
+                throw ArgumentMathOperation.b.create();
         }
     }
 

@@ -356,56 +356,56 @@ public class DataConverterRegistry {
         Schema schema79 = datafixerbuilder.addSchema(1906, DataConverterSchemaV1906::new);
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema79, "Add POI Blocks", DataConverterTypes.k));
-        Schema schema80 = datafixerbuilder.addSchema(1907, DataConverterRegistry.b);
+        Schema schema80 = datafixerbuilder.addSchema(1909, DataConverterSchemaV1909::new);
 
-        datafixerbuilder.addFixer(new DataConverterChunkLightRemove(schema80, false));
-        Schema schema81 = datafixerbuilder.addSchema(1909, DataConverterSchemaV1909::new);
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema80, "Add jigsaw", DataConverterTypes.k));
+        Schema schema81 = datafixerbuilder.addSchema(1911, DataConverterRegistry.b);
 
-        datafixerbuilder.addFixer(new DataConverterAddChoices(schema81, "Add jigsaw", DataConverterTypes.k));
-        Schema schema82 = datafixerbuilder.addSchema(1911, DataConverterRegistry.b);
+        datafixerbuilder.addFixer(new DataConverterChunkStatus2(schema81, false));
+        Schema schema82 = datafixerbuilder.addSchema(1917, DataConverterRegistry.b);
 
-        datafixerbuilder.addFixer(new DataConverterChunkStatus2(schema82, false));
-        Schema schema83 = datafixerbuilder.addSchema(1917, DataConverterRegistry.b);
+        datafixerbuilder.addFixer(new DataConverterCatType(schema82, false));
+        Schema schema83 = datafixerbuilder.addSchema(1918, DataConverterRegistry.b);
 
-        datafixerbuilder.addFixer(new DataConverterCatType(schema83, false));
-        Schema schema84 = datafixerbuilder.addSchema(1918, DataConverterRegistry.b);
+        datafixerbuilder.addFixer(new DataConverterVillagerProfession(schema83, "minecraft:villager"));
+        datafixerbuilder.addFixer(new DataConverterVillagerProfession(schema83, "minecraft:zombie_villager"));
+        Schema schema84 = datafixerbuilder.addSchema(1920, DataConverterSchemaV1920::new);
 
-        datafixerbuilder.addFixer(new DataConverterVillagerProfession(schema84, "minecraft:villager"));
-        datafixerbuilder.addFixer(new DataConverterVillagerProfession(schema84, "minecraft:zombie_villager"));
-        Schema schema85 = datafixerbuilder.addSchema(1920, DataConverterSchemaV1920::new);
+        datafixerbuilder.addFixer(new DataConverterNewVillage(schema84, false));
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema84, "Add campfire", DataConverterTypes.k));
+        Schema schema85 = datafixerbuilder.addSchema(1925, DataConverterRegistry.b);
 
-        datafixerbuilder.addFixer(new DataConverterNewVillage(schema85, false));
-        datafixerbuilder.addFixer(new DataConverterAddChoices(schema85, "Add campfire", DataConverterTypes.k));
-        Schema schema86 = datafixerbuilder.addSchema(1925, DataConverterRegistry.b);
+        datafixerbuilder.addFixer(new DataConverterMapId(schema85, false));
+        Schema schema86 = datafixerbuilder.addSchema(1928, DataConverterSchemaV1928::new);
 
-        datafixerbuilder.addFixer(new DataConverterMapId(schema86, false));
-        Schema schema87 = datafixerbuilder.addSchema(1928, DataConverterSchemaV1928::new);
-
-        datafixerbuilder.addFixer(new DataConverterEntityRavagerRename(schema87, true));
-        datafixerbuilder.addFixer(DataConverterItemName.a(schema87, "Rename ravager egg item", (s) -> {
+        datafixerbuilder.addFixer(new DataConverterEntityRavagerRename(schema86, true));
+        datafixerbuilder.addFixer(DataConverterItemName.a(schema86, "Rename ravager egg item", (s) -> {
             return (String) DataConverterEntityRavagerRename.a.getOrDefault(s, s);
         }));
-        Schema schema88 = datafixerbuilder.addSchema(1929, DataConverterSchemaV1929::new);
+        Schema schema87 = datafixerbuilder.addSchema(1929, DataConverterSchemaV1929::new);
 
-        datafixerbuilder.addFixer(new DataConverterAddChoices(schema88, "Add Wandering Trader and Trader Llama", DataConverterTypes.ENTITY));
-        Schema schema89 = datafixerbuilder.addSchema(1931, DataConverterSchemaV1931::new);
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema87, "Add Wandering Trader and Trader Llama", DataConverterTypes.ENTITY));
+        Schema schema88 = datafixerbuilder.addSchema(1931, DataConverterSchemaV1931::new);
 
-        datafixerbuilder.addFixer(new DataConverterAddChoices(schema89, "Added Fox", DataConverterTypes.ENTITY));
-        Schema schema90 = datafixerbuilder.addSchema(1936, DataConverterRegistry.b);
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema88, "Added Fox", DataConverterTypes.ENTITY));
+        Schema schema89 = datafixerbuilder.addSchema(1936, DataConverterRegistry.b);
 
-        datafixerbuilder.addFixer(new DataConverterOptionsAddTextBackground(schema90, false));
-        Schema schema91 = datafixerbuilder.addSchema(1946, DataConverterRegistry.b);
+        datafixerbuilder.addFixer(new DataConverterOptionsAddTextBackground(schema89, false));
+        Schema schema90 = datafixerbuilder.addSchema(1946, DataConverterRegistry.b);
 
-        datafixerbuilder.addFixer(new DataConverterPOI(schema91, false));
-        Schema schema92 = datafixerbuilder.addSchema(1948, DataConverterRegistry.b);
+        datafixerbuilder.addFixer(new DataConverterPOI(schema90, false));
+        Schema schema91 = datafixerbuilder.addSchema(1948, DataConverterRegistry.b);
 
-        datafixerbuilder.addFixer(new DataConverterOminousBannerRename(schema92, false));
-        Schema schema93 = datafixerbuilder.addSchema(1953, DataConverterRegistry.b);
+        datafixerbuilder.addFixer(new DataConverterOminousBannerRename(schema91, false));
+        Schema schema92 = datafixerbuilder.addSchema(1953, DataConverterRegistry.b);
 
-        datafixerbuilder.addFixer(new DataConverterOminousBannerBlockEntityRename(schema93, false));
-        Schema schema94 = datafixerbuilder.addSchema(1955, DataConverterRegistry.b);
+        datafixerbuilder.addFixer(new DataConverterOminousBannerBlockEntityRename(schema92, false));
+        Schema schema93 = datafixerbuilder.addSchema(1955, DataConverterRegistry.b);
 
-        datafixerbuilder.addFixer(new DataConverterVillagerLevelXp(schema94, false));
-        datafixerbuilder.addFixer(new DataConverterZombieVillagerLevelXp(schema94, false));
+        datafixerbuilder.addFixer(new DataConverterVillagerLevelXp(schema93, false));
+        datafixerbuilder.addFixer(new DataConverterZombieVillagerLevelXp(schema93, false));
+        Schema schema94 = datafixerbuilder.addSchema(1961, DataConverterRegistry.b);
+
+        datafixerbuilder.addFixer(new DataConverterChunkLightRemove(schema94, false));
     }
 }

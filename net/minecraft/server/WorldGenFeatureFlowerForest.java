@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 public class WorldGenFeatureFlowerForest extends WorldGenFlowers {
 
-    private static final Block[] a = new Block[] { Blocks.DANDELION, Blocks.POPPY, Blocks.BLUE_ORCHID, Blocks.ALLIUM, Blocks.AZURE_BLUET, Blocks.RED_TULIP, Blocks.ORANGE_TULIP, Blocks.WHITE_TULIP, Blocks.PINK_TULIP, Blocks.OXEYE_DAISY, Blocks.CORNFLOWER, Blocks.LILY_OF_THE_VALLEY};
+    private static final Block[] a = new Block[]{Blocks.DANDELION, Blocks.POPPY, Blocks.BLUE_ORCHID, Blocks.ALLIUM, Blocks.AZURE_BLUET, Blocks.RED_TULIP, Blocks.ORANGE_TULIP, Blocks.WHITE_TULIP, Blocks.PINK_TULIP, Blocks.OXEYE_DAISY, Blocks.CORNFLOWER, Blocks.LILY_OF_THE_VALLEY};
 
     public WorldGenFeatureFlowerForest(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
         super(function);

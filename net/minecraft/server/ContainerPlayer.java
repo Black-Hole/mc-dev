@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class ContainerPlayer extends ContainerRecipeBook<InventoryCrafting> {
 
-    private static final String[] d = new String[] { "item/empty_armor_slot_boots", "item/empty_armor_slot_leggings", "item/empty_armor_slot_chestplate", "item/empty_armor_slot_helmet"};
-    private static final EnumItemSlot[] e = new EnumItemSlot[] { EnumItemSlot.HEAD, EnumItemSlot.CHEST, EnumItemSlot.LEGS, EnumItemSlot.FEET};
+    private static final String[] d = new String[]{"item/empty_armor_slot_boots", "item/empty_armor_slot_leggings", "item/empty_armor_slot_chestplate", "item/empty_armor_slot_helmet"};
+    private static final EnumItemSlot[] e = new EnumItemSlot[]{EnumItemSlot.HEAD, EnumItemSlot.CHEST, EnumItemSlot.LEGS, EnumItemSlot.FEET};
     private final InventoryCrafting craftInventory = new InventoryCrafting(this, 2, 2);
     private final InventoryCraftResult resultInventory = new InventoryCraftResult();
     public final boolean c;

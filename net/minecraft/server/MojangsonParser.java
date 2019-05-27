@@ -17,13 +17,13 @@ public class MojangsonParser {
     public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.nbt.expected.key", new Object[0]));
     public static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.nbt.expected.value", new Object[0]));
     public static final Dynamic2CommandExceptionType d = new Dynamic2CommandExceptionType((object, object1) -> {
-        return new ChatMessage("argument.nbt.list.mixed", new Object[] { object, object1});
+        return new ChatMessage("argument.nbt.list.mixed", new Object[]{object, object1});
     });
     public static final Dynamic2CommandExceptionType e = new Dynamic2CommandExceptionType((object, object1) -> {
-        return new ChatMessage("argument.nbt.array.mixed", new Object[] { object, object1});
+        return new ChatMessage("argument.nbt.array.mixed", new Object[]{object, object1});
     });
     public static final DynamicCommandExceptionType f = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.nbt.array.invalid", new Object[] { object});
+        return new ChatMessage("argument.nbt.array.invalid", new Object[]{object});
     });
     private static final Pattern g = Pattern.compile("[-+]?(?:[0-9]+[.]|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?", 2);
     private static final Pattern h = Pattern.compile("[-+]?(?:[0-9]+[.]?|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?d", 2);

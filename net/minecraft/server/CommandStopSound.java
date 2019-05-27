@@ -46,12 +46,12 @@ public class CommandStopSound {
 
         if (soundcategory != null) {
             if (minecraftkey != null) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.stopsound.success.source.sound", new Object[] { minecraftkey, soundcategory.a()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.stopsound.success.source.sound", new Object[]{minecraftkey, soundcategory.a()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.stopsound.success.source.any", new Object[] { soundcategory.a()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.stopsound.success.source.any", new Object[]{soundcategory.a()}), true);
             }
         } else if (minecraftkey != null) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.stopsound.success.sourceless.sound", new Object[] { minecraftkey}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.stopsound.success.sourceless.sound", new Object[]{minecraftkey}), true);
         } else {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.stopsound.success.sourceless.any", new Object[0]), true);
         }

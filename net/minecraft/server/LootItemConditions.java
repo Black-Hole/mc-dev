@@ -54,57 +54,57 @@ public class LootItemConditions {
 
     public static <T> Predicate<T> a(Predicate<T>[] apredicate) {
         switch (apredicate.length) {
-        case 0:
-            return (object) -> {
-                return true;
-            };
-        case 1:
-            return apredicate[0];
-        case 2:
-            return apredicate[0].and(apredicate[1]);
-        default:
-            return (object) -> {
-                Predicate[] apredicate1 = apredicate;
-                int i = apredicate.length;
+            case 0:
+                return (object) -> {
+                    return true;
+                };
+            case 1:
+                return apredicate[0];
+            case 2:
+                return apredicate[0].and(apredicate[1]);
+            default:
+                return (object) -> {
+                    Predicate[] apredicate1 = apredicate;
+                    int i = apredicate.length;
 
-                for (int j = 0; j < i; ++j) {
-                    Predicate<T> predicate = apredicate1[j];
+                    for (int j = 0; j < i; ++j) {
+                        Predicate<T> predicate = apredicate1[j];
 
-                    if (!predicate.test(object)) {
-                        return false;
+                        if (!predicate.test(object)) {
+                            return false;
+                        }
                     }
-                }
 
-                return true;
-            };
+                    return true;
+                };
         }
     }
 
     public static <T> Predicate<T> b(Predicate<T>[] apredicate) {
         switch (apredicate.length) {
-        case 0:
-            return (object) -> {
-                return false;
-            };
-        case 1:
-            return apredicate[0];
-        case 2:
-            return apredicate[0].or(apredicate[1]);
-        default:
-            return (object) -> {
-                Predicate[] apredicate1 = apredicate;
-                int i = apredicate.length;
+            case 0:
+                return (object) -> {
+                    return false;
+                };
+            case 1:
+                return apredicate[0];
+            case 2:
+                return apredicate[0].or(apredicate[1]);
+            default:
+                return (object) -> {
+                    Predicate[] apredicate1 = apredicate;
+                    int i = apredicate.length;
 
-                for (int j = 0; j < i; ++j) {
-                    Predicate<T> predicate = apredicate1[j];
+                    for (int j = 0; j < i; ++j) {
+                        Predicate<T> predicate = apredicate1[j];
 
-                    if (predicate.test(object)) {
-                        return true;
+                        if (predicate.test(object)) {
+                            return true;
+                        }
                     }
-                }
 
-                return false;
-            };
+                    return false;
+                };
         }
     }
 

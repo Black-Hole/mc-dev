@@ -174,7 +174,7 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
     @Override
     public Stream<IChatBaseComponent> c() {
         this.i();
-        return Streams.concat(new Stream[] { this.b.stream(), this.a.stream()}).flatMap(IChatBaseComponent::c);
+        return Streams.concat(new Stream[]{this.b.stream(), this.a.stream()}).flatMap(IChatBaseComponent::c);
     }
 
     @Override
@@ -208,16 +208,16 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
     }
 
     @Override
-    public IChatBaseComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity) throws CommandSyntaxException {
+    public IChatBaseComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity, int i) throws CommandSyntaxException {
         Object[] aobject = new Object[this.g.length];
 
-        for (int i = 0; i < aobject.length; ++i) {
-            Object object = this.g[i];
+        for (int j = 0; j < aobject.length; ++j) {
+            Object object = this.g[j];
 
             if (object instanceof IChatBaseComponent) {
-                aobject[i] = ChatComponentUtils.filterForDisplay(commandlistenerwrapper, (IChatBaseComponent) object, entity);
+                aobject[j] = ChatComponentUtils.filterForDisplay(commandlistenerwrapper, (IChatBaseComponent) object, entity, i);
             } else {
-                aobject[i] = object;
+                aobject[j] = object;
             }
         }
 

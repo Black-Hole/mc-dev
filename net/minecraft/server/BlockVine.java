@@ -333,26 +333,26 @@ public class BlockVine extends Block {
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
-        case CLOCKWISE_180:
-            return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.SOUTH))).set(BlockVine.EAST, iblockdata.get(BlockVine.WEST))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.NORTH))).set(BlockVine.WEST, iblockdata.get(BlockVine.EAST));
-        case COUNTERCLOCKWISE_90:
-            return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.EAST))).set(BlockVine.EAST, iblockdata.get(BlockVine.SOUTH))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.WEST))).set(BlockVine.WEST, iblockdata.get(BlockVine.NORTH));
-        case CLOCKWISE_90:
-            return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.WEST))).set(BlockVine.EAST, iblockdata.get(BlockVine.NORTH))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.EAST))).set(BlockVine.WEST, iblockdata.get(BlockVine.SOUTH));
-        default:
-            return iblockdata;
+            case CLOCKWISE_180:
+                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.SOUTH))).set(BlockVine.EAST, iblockdata.get(BlockVine.WEST))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.NORTH))).set(BlockVine.WEST, iblockdata.get(BlockVine.EAST));
+            case COUNTERCLOCKWISE_90:
+                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.EAST))).set(BlockVine.EAST, iblockdata.get(BlockVine.SOUTH))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.WEST))).set(BlockVine.WEST, iblockdata.get(BlockVine.NORTH));
+            case CLOCKWISE_90:
+                return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.WEST))).set(BlockVine.EAST, iblockdata.get(BlockVine.NORTH))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.EAST))).set(BlockVine.WEST, iblockdata.get(BlockVine.SOUTH));
+            default:
+                return iblockdata;
         }
     }
 
     @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         switch (enumblockmirror) {
-        case LEFT_RIGHT:
-            return (IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.SOUTH))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.NORTH));
-        case FRONT_BACK:
-            return (IBlockData) ((IBlockData) iblockdata.set(BlockVine.EAST, iblockdata.get(BlockVine.WEST))).set(BlockVine.WEST, iblockdata.get(BlockVine.EAST));
-        default:
-            return super.a(iblockdata, enumblockmirror);
+            case LEFT_RIGHT:
+                return (IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.SOUTH))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.NORTH));
+            case FRONT_BACK:
+                return (IBlockData) ((IBlockData) iblockdata.set(BlockVine.EAST, iblockdata.get(BlockVine.WEST))).set(BlockVine.WEST, iblockdata.get(BlockVine.EAST));
+            default:
+                return super.a(iblockdata, enumblockmirror);
         }
     }
 

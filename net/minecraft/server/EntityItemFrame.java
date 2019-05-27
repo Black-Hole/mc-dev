@@ -63,14 +63,14 @@ public class EntityItemFrame extends EntityHanging {
             EnumDirection.EnumAxis enumdirection_enumaxis = this.direction.k();
 
             switch (enumdirection_enumaxis) {
-            case X:
-                d1 = 1.0D;
-                break;
-            case Y:
-                d2 = 1.0D;
-                break;
-            case Z:
-                d3 = 1.0D;
+                case X:
+                    d1 = 1.0D;
+                    break;
+                case Y:
+                    d2 = 1.0D;
+                    break;
+                case Z:
+                    d3 = 1.0D;
             }
 
             d1 /= 32.0D;

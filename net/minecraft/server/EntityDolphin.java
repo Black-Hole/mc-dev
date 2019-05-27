@@ -106,7 +106,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         this.goalSelector.a(8, new EntityDolphin.d());
         this.goalSelector.a(8, new PathfinderGoalFollowBoat(this));
         this.goalSelector.a(9, new PathfinderGoalAvoidTarget<>(this, EntityGuardian.class, 8.0F, 1.0D, 1.0D));
-        this.targetSelector.a(1, (new PathfinderGoalHurtByTarget(this, new Class[] { EntityGuardian.class})).a());
+        this.targetSelector.a(1, (new PathfinderGoalHurtByTarget(this, new Class[]{EntityGuardian.class})).a());
     }
 
     @Override

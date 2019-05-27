@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockBrewingStand extends BlockTileEntity {
 
-    public static final BlockStateBoolean[] HAS_BOTTLE = new BlockStateBoolean[] { BlockProperties.k, BlockProperties.l, BlockProperties.m};
+    public static final BlockStateBoolean[] HAS_BOTTLE = new BlockStateBoolean[]{BlockProperties.k, BlockProperties.l, BlockProperties.m};
     protected static final VoxelShape b = VoxelShapes.a(Block.a(1.0D, 0.0D, 1.0D, 15.0D, 2.0D, 15.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 14.0D, 9.0D));
 
     public BlockBrewingStand(Block.Info block_info) {

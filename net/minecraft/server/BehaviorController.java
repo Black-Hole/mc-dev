@@ -69,7 +69,7 @@ public class BehaviorController<E extends EntityLiving> implements MinecraftSeri
     }
 
     private <T, U> void a(MemoryModuleType<U> memorymoduletype, Dynamic<T> dynamic) {
-        this.setMemory(memorymoduletype, ((Function) memorymoduletype.a().orElseThrow(RuntimeException::new)).apply(dynamic));
+        this.setMemory(memorymoduletype, ((Function) memorymoduletype.getSerializer().orElseThrow(RuntimeException::new)).apply(dynamic));
     }
 
     public <U> void removeMemory(MemoryModuleType<U> memorymoduletype) {
@@ -193,7 +193,7 @@ public class BehaviorController<E extends EntityLiving> implements MinecraftSeri
     @Override
     public <T> T a(DynamicOps<T> dynamicops) {
         T t0 = dynamicops.createMap((Map) this.memories.entrySet().stream().filter((entry) -> {
-            return ((MemoryModuleType) entry.getKey()).a().isPresent() && ((Optional) entry.getValue()).isPresent();
+            return ((MemoryModuleType) entry.getKey()).getSerializer().isPresent() && ((Optional) entry.getValue()).isPresent();
         }).map((entry) -> {
             return Pair.of(dynamicops.createString(IRegistry.MEMORY_MODULE_TYPE.getKey(entry.getKey()).toString()), ((MinecraftSerializable) ((Optional) entry.getValue()).get()).a(dynamicops));
         }).collect(Collectors.toMap(Pair::getFirst, Pair::getSecond)));

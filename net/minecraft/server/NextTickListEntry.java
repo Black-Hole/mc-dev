@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class NextTickListEntry<T> implements Comparable<NextTickListEntry<?>> {
+import java.util.Comparator;
+
+public class NextTickListEntry<T> {
 
     private static long d;
     private final T e;
@@ -35,22 +37,24 @@ public class NextTickListEntry<T> implements Comparable<NextTickListEntry<?>> {
         return this.a.hashCode();
     }
 
-    public int compareTo(NextTickListEntry<?> nextticklistentry) {
-        int i = Long.compare(this.b, nextticklistentry.b);
+    public static <T> Comparator<NextTickListEntry<T>> a() {
+        return (nextticklistentry, nextticklistentry1) -> {
+            int i = Long.compare(nextticklistentry.b, nextticklistentry1.b);
 
-        if (i != 0) {
-            return i;
-        } else {
-            i = Integer.compare(this.c.ordinal(), nextticklistentry.c.ordinal());
-            return i != 0 ? i : Long.compare(this.f, nextticklistentry.f);
-        }
+            if (i != 0) {
+                return i;
+            } else {
+                i = nextticklistentry.c.compareTo(nextticklistentry1.c);
+                return i != 0 ? i : Long.compare(nextticklistentry.f, nextticklistentry1.f);
+            }
+        };
     }
 
     public String toString() {
         return this.e + ": " + this.a + ", " + this.b + ", " + this.c + ", " + this.f;
     }
 
-    public T a() {
+    public T b() {
         return this.e;
     }
 }

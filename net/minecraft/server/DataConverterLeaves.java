@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 
 public class DataConverterLeaves extends DataFix {
 
-    private static final int[][] a = new int[][] { { -1, 0, 0}, { 1, 0, 0}, { 0, -1, 0}, { 0, 1, 0}, { 0, 0, -1}, { 0, 0, 1}};
+    private static final int[][] a = new int[][]{{-1, 0, 0}, {1, 0, 0}, {0, -1, 0}, {0, 1, 0}, {0, 0, -1}, {0, 0, 1}};
     private static final Object2IntMap<String> b = (Object2IntMap) DataFixUtils.make(new Object2IntOpenHashMap(), (object2intopenhashmap) -> {
         object2intopenhashmap.put("minecraft:acacia_leaves", 0);
         object2intopenhashmap.put("minecraft:birch_leaves", 1);
@@ -45,7 +45,7 @@ public class DataConverterLeaves extends DataFix {
         object2intopenhashmap.put("minecraft:oak_leaves", 4);
         object2intopenhashmap.put("minecraft:spruce_leaves", 5);
     });
-    private static final Set<String> c = ImmutableSet.of("minecraft:acacia_bark", "minecraft:birch_bark", "minecraft:dark_oak_bark", "minecraft:jungle_bark", "minecraft:oak_bark", "minecraft:spruce_bark", new String[] { "minecraft:acacia_log", "minecraft:birch_log", "minecraft:dark_oak_log", "minecraft:jungle_log", "minecraft:oak_log", "minecraft:spruce_log", "minecraft:stripped_acacia_log", "minecraft:stripped_birch_log", "minecraft:stripped_dark_oak_log", "minecraft:stripped_jungle_log", "minecraft:stripped_oak_log", "minecraft:stripped_spruce_log"});
+    private static final Set<String> c = ImmutableSet.of("minecraft:acacia_bark", "minecraft:birch_bark", "minecraft:dark_oak_bark", "minecraft:jungle_bark", "minecraft:oak_bark", "minecraft:spruce_bark", new String[]{"minecraft:acacia_log", "minecraft:birch_log", "minecraft:dark_oak_log", "minecraft:jungle_log", "minecraft:oak_log", "minecraft:spruce_log", "minecraft:stripped_acacia_log", "minecraft:stripped_birch_log", "minecraft:stripped_dark_oak_log", "minecraft:stripped_jungle_log", "minecraft:stripped_oak_log", "minecraft:stripped_spruce_log"});
 
     public DataConverterLeaves(Schema schema, boolean flag) {
         super(schema, flag);
@@ -65,7 +65,7 @@ public class DataConverterLeaves extends DataFix {
 
             return this.fixTypeEverywhereTyped("Leaves fix", type, (typed) -> {
                 return typed.updateTyped(opticfinder, (typed1) -> {
-                    int[] aint = new int[] { 0};
+                    int[] aint = new int[]{0};
                     Typed<?> typed2 = typed1.updateTyped(opticfinder1, (typed3) -> {
                         Int2ObjectMap<DataConverterLeaves.a> int2objectmap = new Int2ObjectOpenHashMap((Map) typed3.getAllTyped(opticfinder2).stream().map((typed4) -> {
                             return new DataConverterLeaves.a(typed4, this.getInputSchema());

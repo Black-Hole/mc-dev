@@ -51,9 +51,9 @@ public class CommandTeleport {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.entity.single", new Object[] { ((Entity) collection.iterator().next()).getScoreboardDisplayName(), entity.getScoreboardDisplayName()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.entity.single", new Object[]{((Entity) collection.iterator().next()).getScoreboardDisplayName(), entity.getScoreboardDisplayName()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.entity.multiple", new Object[] { collection.size(), entity.getScoreboardDisplayName()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.entity.multiple", new Object[]{collection.size(), entity.getScoreboardDisplayName()}), true);
         }
 
         return collection.size();
@@ -102,9 +102,9 @@ public class CommandTeleport {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.location.single", new Object[] { ((Entity) collection.iterator().next()).getScoreboardDisplayName(), vec3d.x, vec3d.y, vec3d.z}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.location.single", new Object[]{((Entity) collection.iterator().next()).getScoreboardDisplayName(), vec3d.x, vec3d.y, vec3d.z}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.location.multiple", new Object[] { collection.size(), vec3d.x, vec3d.y, vec3d.z}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.location.multiple", new Object[]{collection.size(), vec3d.x, vec3d.y, vec3d.z}), true);
         }
 
         return collection.size();
@@ -112,6 +112,9 @@ public class CommandTeleport {
 
     private static void a(CommandListenerWrapper commandlistenerwrapper, Entity entity, WorldServer worldserver, double d0, double d1, double d2, Set<PacketPlayOutPosition.EnumPlayerTeleportFlags> set, float f, float f1, @Nullable CommandTeleport.a commandteleport_a) {
         if (entity instanceof EntityPlayer) {
+            ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(new BlockPosition(d0, d1, d2));
+
+            worldserver.getChunkProvider().addTicket(TicketType.POST_TELEPORT, chunkcoordintpair, 1, entity.getId());
             entity.stopRiding();
             if (((EntityPlayer) entity).isSleeping()) {
                 ((EntityPlayer) entity).wakeup(true, true, false);

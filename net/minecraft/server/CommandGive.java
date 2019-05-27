@@ -56,9 +56,9 @@ public class CommandGive {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.give.success.single", new Object[] { i, argumentpredicateitemstack.a(i, false).B(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.give.success.single", new Object[]{i, argumentpredicateitemstack.a(i, false).B(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.give.success.single", new Object[] { i, argumentpredicateitemstack.a(i, false).B(), collection.size()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.give.success.single", new Object[]{i, argumentpredicateitemstack.a(i, false).B(), collection.size()}), true);
         }
 
         return collection.size();

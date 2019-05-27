@@ -48,9 +48,9 @@ public class CommandTeamMsg {
                 EntityPlayer entityplayer = (EntityPlayer) iterator1.next();
 
                 if (entityplayer == entity) {
-                    entityplayer.sendMessage(new ChatMessage("chat.type.team.sent", new Object[] { ichatbasecomponent1, commandlistenerwrapper.getScoreboardDisplayName(), ichatbasecomponent.h()}));
+                    entityplayer.sendMessage(new ChatMessage("chat.type.team.sent", new Object[]{ichatbasecomponent1, commandlistenerwrapper.getScoreboardDisplayName(), ichatbasecomponent.h()}));
                 } else if (entityplayer.getScoreboardTeam() == scoreboardteam) {
-                    entityplayer.sendMessage(new ChatMessage("chat.type.team.text", new Object[] { ichatbasecomponent1, commandlistenerwrapper.getScoreboardDisplayName(), ichatbasecomponent.h()}));
+                    entityplayer.sendMessage(new ChatMessage("chat.type.team.text", new Object[]{ichatbasecomponent1, commandlistenerwrapper.getScoreboardDisplayName(), ichatbasecomponent.h()}));
                 }
             }
 

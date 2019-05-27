@@ -41,7 +41,7 @@ public final class Ticket<T> implements Comparable<Ticket<?>> {
     }
 
     public int hashCode() {
-        return Objects.hash(new Object[] { this.a, this.b, this.c});
+        return Objects.hash(new Object[]{this.a, this.b, this.c});
     }
 
     public String toString() {
@@ -56,7 +56,9 @@ public final class Ticket<T> implements Comparable<Ticket<?>> {
         return this.b;
     }
 
-    public long getCreationTick() {
-        return this.d;
+    public boolean a(long i) {
+        long j = this.a.b();
+
+        return j != 0L && i - this.d > j;
     }
 }

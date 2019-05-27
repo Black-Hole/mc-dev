@@ -71,17 +71,17 @@ public class TileEntityEnderChest extends TileEntity implements ITickable {
     }
 
     @Override
-    public void m() {
+    public void W_() {
         this.invalidateBlockCache();
-        super.m();
+        super.W_();
     }
 
-    public void c() {
+    public void d() {
         ++this.c;
         this.world.playBlockAction(this.position, Blocks.ENDER_CHEST, 1, this.c);
     }
 
-    public void d() {
+    public void f() {
         --this.c;
         this.world.playBlockAction(this.position, Blocks.ENDER_CHEST, 1, this.c);
     }

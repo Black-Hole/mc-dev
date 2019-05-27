@@ -19,7 +19,7 @@ public class ArgumentDimension implements ArgumentType<DimensionManager> {
         return DimensionManager.a(dimensionmanager).toString();
     }).collect(Collectors.toList());
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.dimension.invalid", new Object[] { object});
+        return new ChatMessage("argument.dimension.invalid", new Object[]{object});
     });
 
     public ArgumentDimension() {}

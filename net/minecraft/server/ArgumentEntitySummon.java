@@ -12,7 +12,7 @@ public class ArgumentEntitySummon implements ArgumentType<MinecraftKey> {
 
     private static final Collection<String> b = Arrays.asList("minecraft:pig", "cow");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("entity.notFound", new Object[] { object});
+        return new ChatMessage("entity.notFound", new Object[]{object});
     });
 
     public ArgumentEntitySummon() {}

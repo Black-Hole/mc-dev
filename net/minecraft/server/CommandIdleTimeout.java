@@ -17,7 +17,7 @@ public class CommandIdleTimeout {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, int i) {
         commandlistenerwrapper.getServer().setIdleTimeout(i);
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.setidletimeout.success", new Object[] { i}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.setidletimeout.success", new Object[]{i}), true);
         return i;
     }
 }

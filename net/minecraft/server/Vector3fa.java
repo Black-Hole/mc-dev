@@ -11,7 +11,7 @@ public final class Vector3fa {
     }
 
     public Vector3fa(Vec3D vec3d) {
-        this.a = new float[] { (float) vec3d.x, (float) vec3d.y, (float) vec3d.z};
+        this.a = new float[]{(float) vec3d.x, (float) vec3d.y, (float) vec3d.z};
     }
 
     public boolean equals(Object object) {

@@ -29,7 +29,7 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
 
         } else {
             if (flag) {
-                this.f();
+                this.h();
             } else {
                 for (int i = 0; i < this.items.size(); ++i) {
                     if (this.cookingTimes[i] > 0) {
@@ -41,7 +41,7 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
         }
     }
 
-    private void f() {
+    private void h() {
         for (int i = 0; i < this.items.size(); ++i) {
             ItemStack itemstack = (ItemStack) this.items.get(i);
 
@@ -49,7 +49,7 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
                 int j = this.cookingTimes[i]++;
 
                 if (this.cookingTimes[i] >= this.cookingTotalTimes[i]) {
-                    InventorySubcontainer inventorysubcontainer = new InventorySubcontainer(new ItemStack[] { itemstack});
+                    InventorySubcontainer inventorysubcontainer = new InventorySubcontainer(new ItemStack[]{itemstack});
                     ItemStack itemstack1 = (ItemStack) this.world.getCraftingManager().craft(Recipes.CAMPFIRE_COOKING, inventorysubcontainer, this.world).map((recipecampfire) -> {
                         return recipecampfire.a(inventorysubcontainer);
                     }).orElse(itemstack);
@@ -146,7 +146,7 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
     }
 
     public Optional<RecipeCampfire> a(ItemStack itemstack) {
-        return this.items.stream().noneMatch(ItemStack::isEmpty) ? Optional.empty() : this.world.getCraftingManager().craft(Recipes.CAMPFIRE_COOKING, new InventorySubcontainer(new ItemStack[] { itemstack}), this.world);
+        return this.items.stream().noneMatch(ItemStack::isEmpty) ? Optional.empty() : this.world.getCraftingManager().craft(Recipes.CAMPFIRE_COOKING, new InventorySubcontainer(new ItemStack[]{itemstack}), this.world);
     }
 
     public boolean a(ItemStack itemstack, int i) {
@@ -175,7 +175,7 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
         this.items.clear();
     }
 
-    public void d() {
+    public void f() {
         if (!this.getWorld().isClientSide) {
             InventoryUtils.a(this.getWorld(), this.getPosition(), this.getItems());
         }

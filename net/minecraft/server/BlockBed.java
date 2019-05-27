@@ -142,14 +142,14 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
         EnumDirection enumdirection1 = iblockdata.get(BlockBed.PART) == BlockPropertyBedPart.HEAD ? enumdirection : enumdirection.opposite();
 
         switch (enumdirection1) {
-        case NORTH:
-            return BlockBed.h;
-        case SOUTH:
-            return BlockBed.i;
-        case WEST:
-            return BlockBed.j;
-        default:
-            return BlockBed.k;
+            case NORTH:
+                return BlockBed.h;
+            case SOUTH:
+                return BlockBed.i;
+            case WEST:
+                return BlockBed.j;
+            default:
+                return BlockBed.k;
         }
     }
 

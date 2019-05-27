@@ -44,7 +44,7 @@ public class CommandGamemodeDefault {
             }
         }
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.defaultgamemode.success", new Object[] { enumgamemode.c()}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.defaultgamemode.success", new Object[]{enumgamemode.c()}), true);
         return i;
     }
 }

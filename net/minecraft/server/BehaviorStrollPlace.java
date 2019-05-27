@@ -21,7 +21,7 @@ public class BehaviorStrollPlace extends Behavior<EntityCreature> {
     protected boolean a(WorldServer worldserver, EntityCreature entitycreature) {
         Optional<GlobalPos> optional = entitycreature.getBehaviorController().getMemory(this.a);
 
-        return optional.isPresent() && Objects.equals(worldserver.getWorldProvider().getDimensionManager(), ((GlobalPos) optional.get()).a()) && ((GlobalPos) optional.get()).b().a((IPosition) entitycreature.ch(), (double) this.c);
+        return optional.isPresent() && Objects.equals(worldserver.getWorldProvider().getDimensionManager(), ((GlobalPos) optional.get()).getDimensionManager()) && ((GlobalPos) optional.get()).getBlockPosition().a((IPosition) entitycreature.ch(), (double) this.c);
     }
 
     protected void a(WorldServer worldserver, EntityCreature entitycreature, long i) {
@@ -30,7 +30,7 @@ public class BehaviorStrollPlace extends Behavior<EntityCreature> {
             Optional<GlobalPos> optional = behaviorcontroller.getMemory(this.a);
 
             optional.ifPresent((globalpos) -> {
-                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(globalpos.b(), 0.4F, this.b)));
+                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(globalpos.getBlockPosition(), 0.4F, this.b)));
             });
             this.d = i + 80L;
         }

@@ -327,7 +327,7 @@ public abstract class EntityHuman extends EntityLiving {
             super.passengerTick();
             this.bD = this.bE;
             this.bE = 0.0F;
-            this.l(this.locX - d0, this.locY - d1, this.locZ - d2);
+            this.m(this.locX - d0, this.locY - d1, this.locZ - d2);
             if (this.getVehicle() instanceof EntityPig) {
                 this.pitch = f1;
                 this.yaw = f;
@@ -561,18 +561,18 @@ public abstract class EntityHuman extends EntityLiving {
             float f1;
 
             switch (this.getEffect(MobEffects.SLOWER_DIG).getAmplifier()) {
-            case 0:
-                f1 = 0.3F;
-                break;
-            case 1:
-                f1 = 0.09F;
-                break;
-            case 2:
-                f1 = 0.0027F;
-                break;
-            case 3:
-            default:
-                f1 = 8.1E-4F;
+                case 0:
+                    f1 = 0.3F;
+                    break;
+                case 1:
+                    f1 = 0.09F;
+                    break;
+                case 2:
+                    f1 = 0.0027F;
+                    break;
+                case 3:
+                default:
+                    f1 = 8.1E-4F;
             }
 
             f *= f1;
@@ -696,8 +696,8 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     @Override
-    protected void d(EntityLiving entityliving) {
-        super.d(entityliving);
+    protected void shieldBlock(EntityLiving entityliving) {
+        super.shieldBlock(entityliving);
         if (entityliving.getItemInMainHand().getItem() instanceof ItemAxe) {
             this.o(true);
         }
@@ -1341,7 +1341,7 @@ public abstract class EntityHuman extends EntityLiving {
         }
     }
 
-    private void l(double d0, double d1, double d2) {
+    private void m(double d0, double d1, double d2) {
         if (this.isPassenger()) {
             int i = Math.round(MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2) * 100.0F);
 
@@ -1555,7 +1555,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     @Override
     public Iterable<ItemStack> aY() {
-        return Lists.newArrayList(new ItemStack[] { this.getItemInMainHand(), this.getItemInOffHand()});
+        return Lists.newArrayList(new ItemStack[]{this.getItemInMainHand(), this.getItemInOffHand()});
     }
 
     @Override
@@ -1645,14 +1645,14 @@ public abstract class EntityHuman extends EntityLiving {
     @Override
     public float b(EntityPose entitypose, EntitySize entitysize) {
         switch (entitypose) {
-        case SWIMMING:
-        case FALL_FLYING:
-        case SPIN_ATTACK:
-            return 0.4F;
-        case SNEAKING:
-            return 1.27F;
-        default:
-            return 1.62F;
+            case SWIMMING:
+            case FALL_FLYING:
+            case SPIN_ATTACK:
+                return 0.4F;
+            case SNEAKING:
+                return 1.27F;
+            default:
+                return 1.62F;
         }
     }
 

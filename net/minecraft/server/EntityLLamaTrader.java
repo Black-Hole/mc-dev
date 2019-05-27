@@ -38,10 +38,6 @@ public class EntityLlamaTrader extends EntityLlama {
         this.targetSelector.a(1, new EntityLlamaTrader.a(this));
     }
 
-    public void v(int i) {
-        this.bJ = i;
-    }
-
     @Override
     protected void g(EntityHuman entityhuman) {
         Entity entity = this.getLeashHolder();
@@ -92,6 +88,7 @@ public class EntityLlamaTrader extends EntityLlama {
             this.setAgeRaw(0);
         }
 
+        this.bJ = 47999;
         return groupdataentity1;
     }
 

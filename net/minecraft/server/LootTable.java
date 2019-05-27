@@ -87,7 +87,7 @@ public class LootTable {
         return list;
     }
 
-    public LootContextParameterSet a() {
+    public LootContextParameterSet getLootContextParameterSet() {
         return this.d;
     }
 

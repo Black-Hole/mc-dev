@@ -154,20 +154,20 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
 
         if (enumchatformat.isFormat()) {
             switch (enumchatformat) {
-            case OBFUSCATED:
-                chatmodifier.setRandom(true);
-                break;
-            case BOLD:
-                chatmodifier.setBold(true);
-                break;
-            case STRIKETHROUGH:
-                chatmodifier.setStrikethrough(true);
-                break;
-            case UNDERLINE:
-                chatmodifier.setUnderline(true);
-                break;
-            case ITALIC:
-                chatmodifier.setItalic(true);
+                case OBFUSCATED:
+                    chatmodifier.setRandom(true);
+                    break;
+                case BOLD:
+                    chatmodifier.setBold(true);
+                    break;
+                case STRIKETHROUGH:
+                    chatmodifier.setStrikethrough(true);
+                    break;
+                case UNDERLINE:
+                    chatmodifier.setUnderline(true);
+                    break;
+                case ITALIC:
+                    chatmodifier.setItalic(true);
             }
         }
 

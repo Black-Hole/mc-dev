@@ -72,7 +72,7 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
 
     @Override
     public <T> T a(DynamicOps<T> dynamicops) {
-        return dynamicops.createIntList(IntStream.of(new int[] { this.getX(), this.getY(), this.getZ()}));
+        return dynamicops.createIntList(IntStream.of(new int[]{this.getX(), this.getY(), this.getZ()}));
     }
 
     public static long a(long i, EnumDirection enumdirection) {
@@ -190,15 +190,15 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
 
     public BlockPosition a(EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
-        case NONE:
-        default:
-            return this;
-        case CLOCKWISE_90:
-            return new BlockPosition(-this.getZ(), this.getY(), this.getX());
-        case CLOCKWISE_180:
-            return new BlockPosition(-this.getX(), this.getY(), -this.getZ());
-        case COUNTERCLOCKWISE_90:
-            return new BlockPosition(this.getZ(), this.getY(), -this.getX());
+            case NONE:
+            default:
+                return this;
+            case CLOCKWISE_90:
+                return new BlockPosition(-this.getZ(), this.getY(), this.getX());
+            case CLOCKWISE_180:
+                return new BlockPosition(-this.getX(), this.getY(), -this.getZ());
+            case COUNTERCLOCKWISE_90:
+                return new BlockPosition(this.getZ(), this.getY(), -this.getX());
         }
     }
 

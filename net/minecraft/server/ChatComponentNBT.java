@@ -53,7 +53,7 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
     }
 
     @Override
-    public IChatBaseComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity) throws CommandSyntaxException {
+    public IChatBaseComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity, int i) throws CommandSyntaxException {
         if (commandlistenerwrapper != null && this.d != null) {
             Stream<String> stream = this.a(commandlistenerwrapper).flatMap((nbttagcompound) -> {
                 try {
@@ -67,7 +67,7 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
                 try {
                     IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
 
-                    return Stream.of(ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, entity));
+                    return Stream.of(ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, entity, i));
                 } catch (Exception exception) {
                     ChatComponentNBT.LOGGER.warn("Failed to parse component: " + s, exception);
                     return Stream.of();

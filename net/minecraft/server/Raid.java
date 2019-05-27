@@ -219,10 +219,18 @@ public class Raid {
                 }
 
                 int i = this.r();
+                boolean flag1;
 
                 if (i == 0 && this.z()) {
                     if (this.u > 0) {
-                        if (!this.z.isPresent() && this.u % 5 == 0) {
+                        flag1 = this.z.isPresent();
+                        boolean flag2 = !flag1 && this.u % 5 == 0;
+
+                        if (flag1 && !this.l.getChunkProvider().a(new ChunkCoordIntPair((BlockPosition) this.z.get()))) {
+                            flag2 = true;
+                        }
+
+                        if (flag2) {
                             byte b0 = 0;
 
                             if (this.u < 100) {
@@ -252,7 +260,7 @@ public class Raid {
                     this.E();
                     if (i > 0) {
                         if (i <= 2) {
-                            this.s.a(Raid.b.g().a(" - ").addSibling(new ChatMessage("event.minecraft.raid.raiders_remaining", new Object[] { i})));
+                            this.s.a(Raid.b.g().a(" - ").addSibling(new ChatMessage("event.minecraft.raid.raiders_remaining", new Object[]{i})));
                         } else {
                             this.s.a((IChatBaseComponent) Raid.b);
                         }
@@ -261,7 +269,7 @@ public class Raid {
                     }
                 }
 
-                boolean flag1 = false;
+                flag1 = false;
                 int j = 0;
 
                 while (this.F()) {
@@ -389,6 +397,10 @@ public class Raid {
 
                 if (!entityraider.dead && entityraider.dimension == this.l.getWorldProvider().getDimensionManager() && this.k.m(blockposition) < 12544.0D) {
                     if (entityraider.ticksLived > 600) {
+                        if (this.l.getEntity(entityraider.getUniqueID()) == null) {
+                            hashset.add(entityraider);
+                        }
+
                         if (!this.l.b_(blockposition) && entityraider.cv() > 2400) {
                             entityraider.b(entityraider.eo() + 1);
                         }
@@ -585,7 +597,7 @@ public class Raid {
             int k1 = this.l.a(HeightMap.Type.WORLD_SURFACE, i1, j1);
 
             blockposition_mutableblockposition.d(i1, k1, j1);
-            if ((!this.l.b_(blockposition_mutableblockposition) || i >= 2) && this.l.isAreaLoaded(blockposition_mutableblockposition.getX() - 10, blockposition_mutableblockposition.getY() - 10, blockposition_mutableblockposition.getZ() - 10, blockposition_mutableblockposition.getX() + 10, blockposition_mutableblockposition.getY() + 10, blockposition_mutableblockposition.getZ() + 10) && (SpawnerCreature.a(EntityPositionTypes.Surface.ON_GROUND, (IWorldReader) this.l, (BlockPosition) blockposition_mutableblockposition, EntityTypes.RAVAGER) || this.l.getType(blockposition_mutableblockposition.down()).getBlock() == Blocks.SNOW && this.l.getType(blockposition_mutableblockposition).isAir())) {
+            if ((!this.l.b_(blockposition_mutableblockposition) || i >= 2) && this.l.isAreaLoaded(blockposition_mutableblockposition.getX() - 10, blockposition_mutableblockposition.getY() - 10, blockposition_mutableblockposition.getZ() - 10, blockposition_mutableblockposition.getX() + 10, blockposition_mutableblockposition.getY() + 10, blockposition_mutableblockposition.getZ() + 10) && this.l.getChunkProvider().a(new ChunkCoordIntPair(blockposition_mutableblockposition)) && (SpawnerCreature.a(EntityPositionTypes.Surface.ON_GROUND, (IWorldReader) this.l, (BlockPosition) blockposition_mutableblockposition, EntityTypes.RAVAGER) || this.l.getType(blockposition_mutableblockposition.down()).getBlock() == Blocks.SNOW && this.l.getType(blockposition_mutableblockposition).isAir())) {
                 return blockposition_mutableblockposition;
             }
         }
@@ -662,28 +674,28 @@ public class Raid {
         int j;
 
         switch (raid_wave) {
-        case WITCH:
-            if (flag1 || i <= 2 || i == 4) {
-                return 0;
-            }
+            case WITCH:
+                if (flag1 || i <= 2 || i == 4) {
+                    return 0;
+                }
 
-            j = 1;
-            break;
-        case PILLAGER:
-        case VINDICATOR:
-            if (flag1) {
-                j = random.nextInt(2);
-            } else if (flag2) {
                 j = 1;
-            } else {
-                j = 2;
-            }
-            break;
-        case RAVAGER:
-            j = !flag1 && flag ? 1 : 0;
-            break;
-        default:
-            return 0;
+                break;
+            case PILLAGER:
+            case VINDICATOR:
+                if (flag1) {
+                    j = random.nextInt(2);
+                } else if (flag2) {
+                    j = 1;
+                } else {
+                    j = 2;
+                }
+                break;
+            case RAVAGER:
+                j = !flag1 && flag ? 1 : 0;
+                break;
+            default:
+                return 0;
         }
 
         return j > 0 ? random.nextInt(j + 1) : 0;
@@ -725,14 +737,14 @@ public class Raid {
 
     public int a(EnumDifficulty enumdifficulty) {
         switch (enumdifficulty) {
-        case EASY:
-            return 3;
-        case NORMAL:
-            return 5;
-        case HARD:
-            return 7;
-        default:
-            return 0;
+            case EASY:
+                return 3;
+            case NORMAL:
+                return 5;
+            case HARD:
+                return 7;
+            default:
+                return 0;
         }
     }
 
@@ -748,7 +760,7 @@ public class Raid {
 
     static enum Wave {
 
-        VINDICATOR(EntityTypes.VINDICATOR, new int[] { 0, 0, 2, 0, 1, 4, 2, 5}), EVOKER(EntityTypes.EVOKER, new int[] { 0, 0, 0, 0, 0, 1, 1, 2}), PILLAGER(EntityTypes.PILLAGER, new int[] { 0, 4, 3, 3, 4, 4, 4, 2}), WITCH(EntityTypes.WITCH, new int[] { 0, 0, 0, 0, 3, 0, 0, 1}), RAVAGER(EntityTypes.RAVAGER, new int[] { 0, 0, 0, 1, 0, 1, 0, 2});
+        VINDICATOR(EntityTypes.VINDICATOR, new int[]{0, 0, 2, 0, 1, 4, 2, 5}), EVOKER(EntityTypes.EVOKER, new int[]{0, 0, 0, 0, 0, 1, 1, 2}), PILLAGER(EntityTypes.PILLAGER, new int[]{0, 4, 3, 3, 4, 4, 4, 2}), WITCH(EntityTypes.WITCH, new int[]{0, 0, 0, 0, 3, 0, 0, 1}), RAVAGER(EntityTypes.RAVAGER, new int[]{0, 0, 0, 1, 0, 1, 0, 2});
 
         private static final Raid.Wave[] f = values();
         private final EntityTypes<? extends EntityRaider> g;

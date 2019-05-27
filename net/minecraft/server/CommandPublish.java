@@ -12,7 +12,7 @@ public class CommandPublish {
 
     private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.publish.failed", new Object[0]));
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.publish.alreadyPublished", new Object[] { object});
+        return new ChatMessage("commands.publish.alreadyPublished", new Object[]{object});
     });
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
@@ -31,7 +31,7 @@ public class CommandPublish {
         } else if (!commandlistenerwrapper.getServer().a(commandlistenerwrapper.getServer().getGamemode(), false, i)) {
             throw CommandPublish.a.create();
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.publish.success", new Object[] { i}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.publish.success", new Object[]{i}), true);
             return i;
         }
     }

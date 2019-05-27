@@ -20,7 +20,7 @@ public class ArgumentAnchor implements ArgumentType<ArgumentAnchor.Anchor> {
 
     private static final Collection<String> a = Arrays.asList("eyes", "feet");
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.anchor.invalid", new Object[] { object});
+        return new ChatMessage("argument.anchor.invalid", new Object[]{object});
     });
 
     public ArgumentAnchor() {}

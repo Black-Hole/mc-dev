@@ -38,7 +38,7 @@ public class LootItemFunctionSetName extends LootItemFunctionConditional {
 
                 return (ichatbasecomponent) -> {
                     try {
-                        return ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, entity);
+                        return ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, entity, 0);
                     } catch (CommandSyntaxException commandsyntaxexception) {
                         LootItemFunctionSetName.LOGGER.warn("Failed to resolve text component", commandsyntaxexception);
                         return ichatbasecomponent;

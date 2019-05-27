@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class ResourcePackSourceVanilla implements ResourcePackSource {
 
-    private final ResourcePackVanilla a = new ResourcePackVanilla(new String[] { "minecraft"});
+    private final ResourcePackVanilla a = new ResourcePackVanilla(new String[]{"minecraft"});
 
     public ResourcePackSourceVanilla() {}
 

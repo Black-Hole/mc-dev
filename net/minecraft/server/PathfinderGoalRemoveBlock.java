@@ -105,7 +105,7 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
         if (iblockaccess.getType(blockposition).getBlock() == this.g) {
             return blockposition;
         } else {
-            BlockPosition[] ablockposition = new BlockPosition[] { blockposition.down(), blockposition.west(), blockposition.east(), blockposition.north(), blockposition.south(), blockposition.down().down()};
+            BlockPosition[] ablockposition = new BlockPosition[]{blockposition.down(), blockposition.west(), blockposition.east(), blockposition.north(), blockposition.south(), blockposition.down().down()};
             BlockPosition[] ablockposition1 = ablockposition;
             int i = ablockposition.length;
 

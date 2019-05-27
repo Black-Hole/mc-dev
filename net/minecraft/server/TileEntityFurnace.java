@@ -10,9 +10,9 @@ import javax.annotation.Nullable;
 
 public abstract class TileEntityFurnace extends TileEntityContainer implements IWorldInventory, RecipeHolder, AutoRecipeOutput, ITickable {
 
-    private static final int[] g = new int[] { 0};
-    private static final int[] h = new int[] { 2, 1};
-    private static final int[] i = new int[] { 1};
+    private static final int[] g = new int[]{0};
+    private static final int[] h = new int[]{2, 1};
+    private static final int[] i = new int[]{1};
     protected NonNullList<ItemStack> items;
     public int burnTime;
     private int ticksForCurrentFuel;
@@ -29,33 +29,33 @@ public abstract class TileEntityFurnace extends TileEntityContainer implements I
             @Override
             public int getProperty(int i) {
                 switch (i) {
-                case 0:
-                    return TileEntityFurnace.this.burnTime;
-                case 1:
-                    return TileEntityFurnace.this.ticksForCurrentFuel;
-                case 2:
-                    return TileEntityFurnace.this.cookTime;
-                case 3:
-                    return TileEntityFurnace.this.cookTimeTotal;
-                default:
-                    return 0;
+                    case 0:
+                        return TileEntityFurnace.this.burnTime;
+                    case 1:
+                        return TileEntityFurnace.this.ticksForCurrentFuel;
+                    case 2:
+                        return TileEntityFurnace.this.cookTime;
+                    case 3:
+                        return TileEntityFurnace.this.cookTimeTotal;
+                    default:
+                        return 0;
                 }
             }
 
             @Override
             public void setProperty(int i, int j) {
                 switch (i) {
-                case 0:
-                    TileEntityFurnace.this.burnTime = j;
-                    break;
-                case 1:
-                    TileEntityFurnace.this.ticksForCurrentFuel = j;
-                    break;
-                case 2:
-                    TileEntityFurnace.this.cookTime = j;
-                    break;
-                case 3:
-                    TileEntityFurnace.this.cookTimeTotal = j;
+                    case 0:
+                        TileEntityFurnace.this.burnTime = j;
+                        break;
+                    case 1:
+                        TileEntityFurnace.this.ticksForCurrentFuel = j;
+                        break;
+                    case 2:
+                        TileEntityFurnace.this.cookTime = j;
+                        break;
+                    case 3:
+                        TileEntityFurnace.this.cookTimeTotal = j;
                 }
 
             }

@@ -2,10 +2,10 @@ package net.minecraft.server;
 
 public class EnchantmentWeaponDamage extends Enchantment {
 
-    private static final String[] d = new String[] { "all", "undead", "arthropods"};
-    private static final int[] e = new int[] { 1, 5, 5};
-    private static final int[] f = new int[] { 11, 8, 8};
-    private static final int[] g = new int[] { 20, 20, 20};
+    private static final String[] d = new String[]{"all", "undead", "arthropods"};
+    private static final int[] e = new int[]{1, 5, 5};
+    private static final int[] f = new int[]{11, 8, 8};
+    private static final int[] g = new int[]{20, 20, 20};
     public final int a;
 
     public EnchantmentWeaponDamage(Enchantment.Rarity enchantment_rarity, int i, EnumItemSlot... aenumitemslot) {

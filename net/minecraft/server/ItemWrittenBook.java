@@ -80,7 +80,7 @@ public class ItemWrittenBook extends Item {
                     try {
                         IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.b(s);
 
-                        object = ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, entityhuman);
+                        object = ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, entityhuman, 0);
                     } catch (Exception exception) {
                         object = new ChatComponentText(s);
                     }

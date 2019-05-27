@@ -6,7 +6,7 @@ public class ContainerWorkbench extends ContainerRecipeBook<InventoryCrafting> {
 
     private final InventoryCrafting craftInventory;
     private final InventoryCraftResult resultInventory;
-    private final ContainerAccess e;
+    public final ContainerAccess containerAccess;
     private final EntityHuman f;
 
     public ContainerWorkbench(int i, PlayerInventory playerinventory) {
@@ -17,7 +17,7 @@ public class ContainerWorkbench extends ContainerRecipeBook<InventoryCrafting> {
         super(Containers.CRAFTING, i);
         this.craftInventory = new InventoryCrafting(this, 3, 3);
         this.resultInventory = new InventoryCraftResult();
-        this.e = containeraccess;
+        this.containerAccess = containeraccess;
         this.f = playerinventory.player;
         this.a((Slot) (new SlotResult(playerinventory.player, this.craftInventory, this.resultInventory, 0, 124, 35)));
 
@@ -63,7 +63,7 @@ public class ContainerWorkbench extends ContainerRecipeBook<InventoryCrafting> {
 
     @Override
     public void a(IInventory iinventory) {
-        this.e.a((world, blockposition) -> {
+        this.containerAccess.a((world, blockposition) -> {
             a(this.windowId, world, this.f, this.craftInventory, this.resultInventory);
         });
     }
@@ -87,14 +87,14 @@ public class ContainerWorkbench extends ContainerRecipeBook<InventoryCrafting> {
     @Override
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        this.e.a((world, blockposition) -> {
+        this.containerAccess.a((world, blockposition) -> {
             this.a(entityhuman, world, (IInventory) this.craftInventory);
         });
     }
 
     @Override
     public boolean canUse(EntityHuman entityhuman) {
-        return a(this.e, entityhuman, Blocks.CRAFTING_TABLE);
+        return a(this.containerAccess, entityhuman, Blocks.CRAFTING_TABLE);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class ContainerWorkbench extends ContainerRecipeBook<InventoryCrafting> {
 
             itemstack = itemstack1.cloneItemStack();
             if (i == 0) {
-                this.e.a((world, blockposition) -> {
+                this.containerAccess.a((world, blockposition) -> {
                     itemstack1.getItem().b(itemstack1, world, entityhuman);
                 });
                 if (!this.a(itemstack1, 10, 46, true)) {

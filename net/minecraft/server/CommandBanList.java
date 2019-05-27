@@ -27,13 +27,13 @@ public class CommandBanList {
         if (collection.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.banlist.none", new Object[0]), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.banlist.list", new Object[] { collection.size()}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.banlist.list", new Object[]{collection.size()}), false);
             Iterator iterator = collection.iterator();
 
             while (iterator.hasNext()) {
                 ExpirableListEntry<?> expirablelistentry = (ExpirableListEntry) iterator.next();
 
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.banlist.entry", new Object[] { expirablelistentry.e(), expirablelistentry.getSource(), expirablelistentry.getReason()}), false);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.banlist.entry", new Object[]{expirablelistentry.e(), expirablelistentry.getSource(), expirablelistentry.getReason()}), false);
             }
         }
 
