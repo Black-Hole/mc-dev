@@ -28,7 +28,7 @@ public class BehaviorLookInteract extends Behavior<EntityLiving> {
     }
 
     @Override
-    public boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
+    public boolean a(WorldServer worldserver, EntityLiving entityliving) {
         return this.d.test(entityliving) && this.b(entityliving).stream().anyMatch(this::a);
     }
 

@@ -18,7 +18,7 @@ public class BehaviorHome extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
         Optional<BlockPosition> optional = worldserver.B().a((villageplacetype) -> {
             return villageplacetype == VillagePlaceType.q;
         }, (blockposition) -> {

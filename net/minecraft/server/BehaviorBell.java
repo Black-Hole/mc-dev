@@ -12,7 +12,7 @@ public class BehaviorBell extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
         Optional<GlobalPos> optional = behaviorcontroller.getMemory(MemoryModuleType.MEETING_POINT);
 

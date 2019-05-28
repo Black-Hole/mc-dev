@@ -16,7 +16,7 @@ public class BehaviorPositionValidate extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
         GlobalPos globalpos = (GlobalPos) entityliving.getBehaviorController().getMemory(this.a).get();
 
         return Objects.equals(worldserver.getWorldProvider().getDimensionManager(), globalpos.getDimensionManager()) && globalpos.getBlockPosition().a((IPosition) entityliving.ch(), 5.0D);

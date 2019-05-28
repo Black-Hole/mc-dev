@@ -9,6 +9,6 @@ public class BehaviorVictory extends BehaviorStrollRandom {
     protected boolean a(WorldServer worldserver, EntityCreature entitycreature) {
         Raid raid = worldserver.c_(new BlockPosition(entitycreature));
 
-        return raid != null && raid.e() && super.shouldExecute(worldserver, entitycreature);
+        return raid != null && raid.e() && super.a(worldserver, (EntityLiving) entitycreature);
     }
 }

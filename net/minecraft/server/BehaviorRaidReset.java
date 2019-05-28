@@ -9,7 +9,7 @@ public class BehaviorRaidReset extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
         return worldserver.random.nextInt(20) == 0;
     }
 

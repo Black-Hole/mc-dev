@@ -10,7 +10,7 @@ public class BehaviorBellRing extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
         return worldserver.random.nextFloat() > 0.95F;
     }
 

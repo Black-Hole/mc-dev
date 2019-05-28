@@ -24,7 +24,7 @@ public class BehaviorFindPosition extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
         return this.c && entityliving.isBaby() ? false : worldserver.getTime() - this.d >= 20L;
     }
 

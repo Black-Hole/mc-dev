@@ -27,7 +27,7 @@ public class BehaviorOutside extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
         return !worldserver.f(new BlockPosition(entityliving.locX, entityliving.getBoundingBox().minY, entityliving.locZ));
     }
 

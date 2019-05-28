@@ -13,7 +13,7 @@ public class BehaviorSleep extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean shouldExecute(WorldServer worldserver, EntityLiving entityliving) {
+    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
         if (entityliving.isPassenger()) {
             return false;
         } else {

@@ -34,7 +34,7 @@ public class BehaviorInteract<E extends EntityLiving, T extends EntityLiving> ex
     }
 
     @Override
-    protected boolean shouldExecute(WorldServer worldserver, E e0) {
+    protected boolean a(WorldServer worldserver, E e0) {
         return this.f.test(e0) && ((List) e0.getBehaviorController().getMemory(MemoryModuleType.VISIBLE_MOBS).get()).stream().anyMatch((entityliving) -> {
             return this.c.equals(entityliving.getEntityType()) && this.e.test(entityliving);
         });
