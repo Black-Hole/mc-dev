@@ -108,16 +108,16 @@ public class ShapeDetector {
         }
     }
 
-    public static class c {
+    public static class Shape {
 
-        public final Vec3D a;
-        public final Vec3D b;
-        public final int c;
+        public final Vec3D position;
+        public final Vec3D velocity;
+        public final int yaw;
 
-        public c(Vec3D vec3d, Vec3D vec3d1, int i) {
-            this.a = vec3d;
-            this.b = vec3d1;
-            this.c = i;
+        public Shape(Vec3D vec3d, Vec3D vec3d1, int i) {
+            this.position = vec3d;
+            this.velocity = vec3d1;
+            this.yaw = i;
         }
     }
 
@@ -169,7 +169,7 @@ public class ShapeDetector {
             return MoreObjects.toStringHelper(this).add("up", this.c).add("forwards", this.b).add("frontTopLeft", this.a).toString();
         }
 
-        public ShapeDetector.c a(EnumDirection enumdirection, BlockPosition blockposition, double d0, Vec3D vec3d, double d1) {
+        public ShapeDetector.Shape a(EnumDirection enumdirection, BlockPosition blockposition, double d0, Vec3D vec3d, double d1) {
             EnumDirection enumdirection1 = this.getFacing();
             EnumDirection enumdirection2 = enumdirection1.e();
             double d2 = (double) (this.a().getY() + 1) - d0 * (double) this.e();
@@ -209,7 +209,7 @@ public class ShapeDetector {
 
             int i = (enumdirection1.get2DRotationValue() - enumdirection.opposite().get2DRotationValue()) * 90;
 
-            return new ShapeDetector.c(new Vec3D(d3, d2, d4), new Vec3D(d5, vec3d.y, d6), i);
+            return new ShapeDetector.Shape(new Vec3D(d3, d2, d4), new Vec3D(d5, vec3d.y, d6), i);
         }
     }
 

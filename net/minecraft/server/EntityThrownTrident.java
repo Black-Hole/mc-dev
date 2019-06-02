@@ -70,7 +70,7 @@ public class EntityThrownTrident extends EntityArrow {
     private boolean w() {
         Entity entity = this.getShooter();
 
-        return entity != null && entity.isAlive() ? !(entity instanceof EntityPlayer) || !entity.t() : false;
+        return entity != null && entity.isAlive() ? !(entity instanceof EntityPlayer) || !entity.isSpectator() : false;
     }
 
     @Override

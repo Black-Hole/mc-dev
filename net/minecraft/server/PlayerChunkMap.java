@@ -735,7 +735,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
         return nbttagcompound == null ? null : this.getChunkData(this.world.getWorldProvider().getDimensionManager(), this.m, nbttagcompound);
     }
 
-    boolean d(ChunkCoordIntPair chunkcoordintpair) {
+    boolean isOutsideOfRange(ChunkCoordIntPair chunkcoordintpair) {
         return this.playerMap.a(chunkcoordintpair.pair()).noneMatch((entityplayer) -> {
             return !entityplayer.isSpectator() && a(chunkcoordintpair, (Entity) entityplayer) < 16384.0D;
         });

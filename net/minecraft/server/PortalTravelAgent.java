@@ -30,16 +30,16 @@ public class PortalTravelAgent {
     public boolean a(Entity entity, float f) {
         Vec3D vec3d = entity.getPortalOffset();
         EnumDirection enumdirection = entity.getPortalDirection();
-        ShapeDetector.c shapedetector_c = this.a(new BlockPosition(entity), entity.getMot(), enumdirection, vec3d.x, vec3d.y, entity instanceof EntityHuman);
+        ShapeDetector.Shape shapedetector_shape = this.a(new BlockPosition(entity), entity.getMot(), enumdirection, vec3d.x, vec3d.y, entity instanceof EntityHuman);
 
-        if (shapedetector_c == null) {
+        if (shapedetector_shape == null) {
             return false;
         } else {
-            Vec3D vec3d1 = shapedetector_c.a;
-            Vec3D vec3d2 = shapedetector_c.b;
+            Vec3D vec3d1 = shapedetector_shape.position;
+            Vec3D vec3d2 = shapedetector_shape.velocity;
 
             entity.setMot(vec3d2);
-            entity.yaw = f + (float) shapedetector_c.c;
+            entity.yaw = f + (float) shapedetector_shape.yaw;
             if (entity instanceof EntityPlayer) {
                 ((EntityPlayer) entity).playerConnection.a(vec3d1.x, vec3d1.y, vec3d1.z, entity.yaw, entity.pitch);
                 ((EntityPlayer) entity).playerConnection.syncPosition();
@@ -52,7 +52,7 @@ public class PortalTravelAgent {
     }
 
     @Nullable
-    public ShapeDetector.c a(BlockPosition blockposition, Vec3D vec3d, EnumDirection enumdirection, double d0, double d1, boolean flag) {
+    public ShapeDetector.Shape a(BlockPosition blockposition, Vec3D vec3d, EnumDirection enumdirection, double d0, double d1, boolean flag) {
         boolean flag1 = true;
         boolean flag2 = true;
         BlockPosition blockposition1 = null;

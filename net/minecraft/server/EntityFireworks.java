@@ -93,7 +93,7 @@ public class EntityFireworks extends Entity implements IProjectile {
 
         vec3d = this.getMot();
         MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, this.getBoundingBox().a(vec3d).g(1.0D), (entity) -> {
-            return !entity.t() && entity.isAlive() && entity.isInteractable();
+            return !entity.isSpectator() && entity.isAlive() && entity.isInteractable();
         }, RayTrace.BlockCollisionOption.COLLIDER, true);
 
         if (!this.noclip) {

@@ -1600,6 +1600,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     }
 
+    @Override
     public abstract boolean isSpectator();
 
     @Override

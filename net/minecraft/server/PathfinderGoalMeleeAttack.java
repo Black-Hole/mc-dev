@@ -48,7 +48,7 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
     public boolean b() {
         EntityLiving entityliving = this.a.getGoalTarget();
 
-        return entityliving == null ? false : (!entityliving.isAlive() ? false : (!this.e ? !this.a.getNavigation().n() : (!this.a.a(new BlockPosition(entityliving)) ? false : !(entityliving instanceof EntityHuman) || !entityliving.t() && !((EntityHuman) entityliving).isCreative())));
+        return entityliving == null ? false : (!entityliving.isAlive() ? false : (!this.e ? !this.a.getNavigation().n() : (!this.a.a(new BlockPosition(entityliving)) ? false : !(entityliving instanceof EntityHuman) || !entityliving.isSpectator() && !((EntityHuman) entityliving).isCreative())));
     }
 
     @Override

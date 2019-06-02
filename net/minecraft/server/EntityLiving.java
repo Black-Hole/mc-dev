@@ -1179,7 +1179,7 @@ public abstract class EntityLiving extends Entity {
     }
 
     public boolean isClimbing() {
-        if (this.t()) {
+        if (this.isSpectator()) {
             return false;
         } else {
             IBlockData iblockdata = this.cH();

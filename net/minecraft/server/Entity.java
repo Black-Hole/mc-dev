@@ -142,7 +142,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.headHeight = this.getHeadHeight(EntityPose.STANDING, this.size);
     }
 
-    public boolean t() {
+    public boolean isSpectator() {
         return false;
     }
 
@@ -2029,15 +2029,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                 Vec3D vec3d1 = this.getPortalOffset();
 
                 blockposition = new BlockPosition(d0, this.locY, d1);
-                ShapeDetector.c shapedetector_c = worldserver1.getTravelAgent().a(blockposition, vec3d, this.getPortalDirection(), vec3d1.x, vec3d1.y, this instanceof EntityHuman);
+                ShapeDetector.Shape shapedetector_shape = worldserver1.getTravelAgent().a(blockposition, vec3d, this.getPortalDirection(), vec3d1.x, vec3d1.y, this instanceof EntityHuman);
 
-                if (shapedetector_c == null) {
+                if (shapedetector_shape == null) {
                     return null;
                 }
 
-                blockposition = new BlockPosition(shapedetector_c.a);
-                vec3d = shapedetector_c.b;
-                f = (float) shapedetector_c.c;
+                blockposition = new BlockPosition(shapedetector_shape.position);
+                vec3d = shapedetector_shape.velocity;
+                f = (float) shapedetector_shape.yaw;
             }
 
             this.world.getMethodProfiler().exitEnter("reloading");

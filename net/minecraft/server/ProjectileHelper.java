@@ -11,7 +11,7 @@ public final class ProjectileHelper {
 
     public static MovingObjectPosition a(Entity entity, boolean flag, boolean flag1, @Nullable Entity entity1, RayTrace.BlockCollisionOption raytrace_blockcollisionoption) {
         return a(entity, flag, flag1, entity1, raytrace_blockcollisionoption, true, (entity2) -> {
-            return !entity2.t() && entity2.isInteractable() && (flag1 || !entity2.s(entity1)) && !entity2.noclip;
+            return !entity2.isSpectator() && entity2.isInteractable() && (flag1 || !entity2.s(entity1)) && !entity2.noclip;
         }, entity.getBoundingBox().a(entity.getMot()).g(1.0D));
     }
 

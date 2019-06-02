@@ -54,7 +54,7 @@ public class PathfinderTargetCondition {
     public boolean a(@Nullable EntityLiving entityliving, EntityLiving entityliving1) {
         if (entityliving == entityliving1) {
             return false;
-        } else if (entityliving1.t()) {
+        } else if (entityliving1.isSpectator()) {
             return false;
         } else if (!entityliving1.isAlive()) {
             return false;

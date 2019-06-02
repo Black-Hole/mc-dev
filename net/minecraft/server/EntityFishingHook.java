@@ -203,7 +203,7 @@ public class EntityFishingHook extends Entity {
 
     private void m() {
         MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, this.getBoundingBox().a(this.getMot()).g(1.0D), (entity) -> {
-            return !entity.t() && (entity.isInteractable() || entity instanceof EntityItem) && (entity != this.owner || this.g >= 5);
+            return !entity.isSpectator() && (entity.isInteractable() || entity instanceof EntityItem) && (entity != this.owner || this.g >= 5);
         }, RayTrace.BlockCollisionOption.COLLIDER, true);
 
         if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.MISS) {

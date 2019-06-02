@@ -293,7 +293,7 @@ public class ChunkProviderServer extends IChunkProvider {
                     this.world.getMethodProfiler().exit();
                     ChunkCoordIntPair chunkcoordintpair = playerchunk.h();
 
-                    if (!this.playerChunkMap.d(chunkcoordintpair)) {
+                    if (!this.playerChunkMap.isOutsideOfRange(chunkcoordintpair)) {
                         chunk.b(chunk.q() + j);
                         if (flag1 && (this.allowMonsters || this.allowAnimals) && this.world.getWorldBorder().isInBounds(chunk.getPos())) {
                             this.world.getMethodProfiler().enter("spawner");

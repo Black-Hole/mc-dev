@@ -40,7 +40,7 @@ public class MobEffects {
 
         @Override
         public void tick(EntityLiving entityliving, int i) {
-            if (entityliving instanceof EntityPlayer && !entityliving.t()) {
+            if (entityliving instanceof EntityPlayer && !entityliving.isSpectator()) {
                 EntityPlayer entityplayer = (EntityPlayer) entityliving;
                 WorldServer worldserver = entityplayer.getWorldServer();
 

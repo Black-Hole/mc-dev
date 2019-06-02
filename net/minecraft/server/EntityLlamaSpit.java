@@ -28,7 +28,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
 
         Vec3D vec3d = this.getMot();
         MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, this.getBoundingBox().a(vec3d).g(1.0D), (entity) -> {
-            return !entity.t() && entity != this.shooter;
+            return !entity.isSpectator() && entity != this.shooter;
         }, RayTrace.BlockCollisionOption.OUTLINE, true);
 
         if (movingobjectposition != null) {

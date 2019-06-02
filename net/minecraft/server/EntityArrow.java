@@ -409,7 +409,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     @Nullable
     protected MovingObjectPositionEntity a(Vec3D vec3d, Vec3D vec3d1) {
         return ProjectileHelper.a(this.world, this, vec3d, vec3d1, this.getBoundingBox().a(this.getMot()).g(1.0D), (entity) -> {
-            return !entity.t() && entity.isAlive() && entity.isInteractable() && (entity != this.getShooter() || this.av >= 5) && (this.az == null || !this.az.contains(entity.getId()));
+            return !entity.isSpectator() && entity.isAlive() && entity.isInteractable() && (entity != this.getShooter() || this.av >= 5) && (this.az == null || !this.az.contains(entity.getId()));
         });
     }
 

@@ -15,10 +15,10 @@ public final class IEntitySelector {
         return entity instanceof IInventory && entity.isAlive();
     };
     public static final Predicate<Entity> e = (entity) -> {
-        return !(entity instanceof EntityHuman) || !entity.t() && !((EntityHuman) entity).isCreative();
+        return !(entity instanceof EntityHuman) || !entity.isSpectator() && !((EntityHuman) entity).isCreative();
     };
     public static final Predicate<Entity> f = (entity) -> {
-        return !entity.t();
+        return !entity.isSpectator();
     };
 
     public static Predicate<Entity> a(double d0, double d1, double d2, double d3) {

@@ -75,7 +75,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
 
         AxisAlignedBB axisalignedbb = this.getBoundingBox().a(this.getMot()).g(1.0D);
         Iterator iterator = this.world.getEntities(this, axisalignedbb, (entity) -> {
-            return !entity.t() && entity.isInteractable();
+            return !entity.isSpectator() && entity.isInteractable();
         }).iterator();
 
         while (iterator.hasNext()) {
@@ -94,7 +94,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         }
 
         MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, axisalignedbb, (entity1) -> {
-            return !entity1.t() && entity1.isInteractable() && entity1 != this.as;
+            return !entity1.isSpectator() && entity1.isInteractable() && entity1 != this.as;
         }, RayTrace.BlockCollisionOption.OUTLINE, true);
 
         if (this.as != null && this.at-- <= 0) {

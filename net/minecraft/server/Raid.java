@@ -303,7 +303,7 @@ public class Raid {
                             UUID uuid = (UUID) iterator.next();
                             Entity entity = this.l.getEntity(uuid);
 
-                            if (entity instanceof EntityLiving && !entity.t()) {
+                            if (entity instanceof EntityLiving && !entity.isSpectator()) {
                                 EntityLiving entityliving = (EntityLiving) entity;
 
                                 entityliving.addEffect(new MobEffect(MobEffects.HERO_OF_THE_VILLAGE, 48000, this.p - 1, false, false, true));
