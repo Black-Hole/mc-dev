@@ -20,50 +20,50 @@ public abstract class EntityFishSchool extends EntityFish {
     }
 
     @Override
-    public int dC() {
-        return this.dX();
+    public int dD() {
+        return this.dY();
     }
 
-    public int dX() {
-        return super.dC();
+    public int dY() {
+        return super.dD();
     }
 
     @Override
-    protected boolean dV() {
-        return !this.dY();
+    protected boolean dW() {
+        return !this.dZ();
     }
 
-    public boolean dY() {
+    public boolean dZ() {
         return this.b != null && this.b.isAlive();
     }
 
     public EntityFishSchool a(EntityFishSchool entityfishschool) {
         this.b = entityfishschool;
-        entityfishschool.ee();
+        entityfishschool.ef();
         return entityfishschool;
     }
 
-    public void dZ() {
-        this.b.ef();
+    public void ea() {
+        this.b.eg();
         this.b = null;
     }
 
-    private void ee() {
+    private void ef() {
         ++this.c;
     }
 
-    private void ef() {
+    private void eg() {
         --this.c;
     }
 
-    public boolean ea() {
-        return this.eb() && this.c < this.dX();
+    public boolean eb() {
+        return this.ec() && this.c < this.dY();
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.eb() && this.world.random.nextInt(200) == 1) {
+        if (this.ec() && this.world.random.nextInt(200) == 1) {
             List<EntityFish> list = this.world.a(this.getClass(), this.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
 
             if (list.size() <= 1) {
@@ -73,23 +73,23 @@ public abstract class EntityFishSchool extends EntityFish {
 
     }
 
-    public boolean eb() {
+    public boolean ec() {
         return this.c > 1;
     }
 
-    public boolean ec() {
+    public boolean ed() {
         return this.h((Entity) this.b) <= 121.0D;
     }
 
-    public void ed() {
-        if (this.dY()) {
+    public void ee() {
+        if (this.dZ()) {
             this.getNavigation().a((Entity) this.b, 1.0D);
         }
 
     }
 
     public void a(Stream<EntityFishSchool> stream) {
-        stream.limit((long) (this.dX() - this.c)).filter((entityfishschool) -> {
+        stream.limit((long) (this.dY() - this.c)).filter((entityfishschool) -> {
             return entityfishschool != this;
         }).forEach((entityfishschool) -> {
             entityfishschool.a(this);

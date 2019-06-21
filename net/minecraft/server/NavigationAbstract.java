@@ -213,7 +213,7 @@ public abstract class NavigationAbstract {
                 this.h = vec3d1;
                 double d0 = vec3d.f(this.h);
 
-                this.k = this.a.da() > 0.0F ? d0 / (double) this.a.da() * 1000.0D : 0.0D;
+                this.k = this.a.db() > 0.0F ? d0 / (double) this.a.db() * 1000.0D : 0.0D;
             }
 
             if (this.k > 0.0D && (double) this.i > this.k * 3.0D) {
@@ -241,7 +241,7 @@ public abstract class NavigationAbstract {
     protected abstract boolean a();
 
     protected boolean p() {
-        return this.a.au() || this.a.aC();
+        return this.a.av() || this.a.aD();
     }
 
     protected void D_() {

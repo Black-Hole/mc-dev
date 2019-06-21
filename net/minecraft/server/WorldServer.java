@@ -57,7 +57,7 @@ public class WorldServer extends World {
 
     public WorldServer(MinecraftServer minecraftserver, Executor executor, WorldNBTStorage worldnbtstorage, WorldData worlddata, DimensionManager dimensionmanager, GameProfilerFiller gameprofilerfiller, WorldLoadListener worldloadlistener) {
         super(worlddata, dimensionmanager, (world, worldprovider) -> {
-            return new ChunkProviderServer((WorldServer) world, worldnbtstorage.getDirectory(), worldnbtstorage.getDataFixer(), worldnbtstorage.f(), executor, worldprovider.getChunkGenerator(), minecraftserver.getPlayerList().getViewDistance(), minecraftserver.getPlayerList().getViewDistance() - 2, worldloadlistener, () -> {
+            return new ChunkProviderServer((WorldServer) world, worldnbtstorage.getDirectory(), worldnbtstorage.getDataFixer(), worldnbtstorage.f(), executor, worldprovider.getChunkGenerator(), minecraftserver.getPlayerList().getViewDistance(), worldloadlistener, () -> {
                 return minecraftserver.getWorldServer(DimensionManager.OVERWORLD).getWorldPersistentData();
             });
         }, gameprofilerfiller, false);
@@ -97,8 +97,8 @@ public class WorldServer extends World {
         int i;
 
         if (this.worldProvider.g()) {
-            if (this.getGameRules().getBoolean("doWeatherCycle")) {
-                int j = this.worldData.A();
+            if (this.getGameRules().getBoolean(GameRules.DO_WEATHER_CYCLE)) {
+                int j = this.worldData.z();
 
                 i = this.worldData.getThunderDuration();
                 int k = this.worldData.getWeatherDuration();
@@ -187,7 +187,7 @@ public class WorldServer extends World {
             return !entityplayer.isSpectator() && !entityplayer.isDeeplySleeping();
         })) {
             this.D = false;
-            if (this.getGameRules().getBoolean("doDaylightCycle")) {
+            if (this.getGameRules().getBoolean(GameRules.DO_DAYLIGHT_CYCLE)) {
                 long l = this.worldData.getDayTime() + 24000L;
 
                 this.setDayTime(l - l % 24000L);
@@ -196,7 +196,7 @@ public class WorldServer extends World {
             this.players.stream().filter(EntityLiving::isSleeping).forEach((entityplayer) -> {
                 entityplayer.wakeup(false, false, true);
             });
-            if (this.getGameRules().getBoolean("doWeatherCycle")) {
+            if (this.getGameRules().getBoolean(GameRules.DO_WEATHER_CYCLE)) {
                 this.clearWeather();
             }
         }
@@ -316,7 +316,7 @@ public class WorldServer extends World {
             blockposition = this.a(this.a(j, 0, k, 15));
             if (this.isRainingAt(blockposition)) {
                 DifficultyDamageScaler difficultydamagescaler = this.getDamageScaler(blockposition);
-                boolean flag1 = this.getGameRules().getBoolean("doMobSpawning") && this.random.nextDouble() < (double) difficultydamagescaler.b() * 0.01D;
+                boolean flag1 = this.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && this.random.nextDouble() < (double) difficultydamagescaler.b() * 0.01D;
 
                 if (flag1) {
                     EntityHorseSkeleton entityhorseskeleton = (EntityHorseSkeleton) EntityTypes.SKELETON_HORSE.a((World) this);
@@ -373,7 +373,7 @@ public class WorldServer extends World {
 
                         Fluid fluid = chunksection.b(blockposition2.getX() - j, blockposition2.getY() - j1, blockposition2.getZ() - k);
 
-                        if (fluid.g()) {
+                        if (fluid.h()) {
                             fluid.b(this, blockposition2, this.random);
                         }
 
@@ -535,7 +535,7 @@ public class WorldServer extends World {
                 this.getChunkAt(entity.chunkX, entity.chunkZ).a(entity, entity.chunkY);
             }
 
-            if (!entity.bT() && !this.isChunkLoaded(i, k)) {
+            if (!entity.bU() && !this.isChunkLoaded(i, k)) {
                 entity.inChunk = false;
             } else {
                 this.getChunkAt(i, k).a(entity);
@@ -719,10 +719,8 @@ public class WorldServer extends World {
             if (!(entity instanceof EntityInsentient) || !((EntityInsentient) entity).isPersistent()) {
                 EnumCreatureType enumcreaturetype = entity.getEntityType().d();
 
-                if (enumcreaturetype != EnumCreatureType.MISC && this.getChunkProvider().a(entity)) {
-                    object2intmap.computeInt(enumcreaturetype, (enumcreaturetype1, integer) -> {
-                        return 1 + (integer == null ? 0 : integer);
-                    });
+                if (enumcreaturetype != EnumCreatureType.MISC && this.getChunkProvider().b(entity)) {
+                    object2intmap.mergeInt(enumcreaturetype, 1, Integer::sum);
                 }
             }
         }
@@ -852,7 +850,7 @@ public class WorldServer extends World {
 
     public void unregisterEntity(Entity entity) {
         if (entity instanceof EntityEnderDragon) {
-            EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).dT();
+            EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).dU();
             int i = aentitycomplexpart.length;
 
             for (int j = 0; j < i; ++j) {
@@ -883,7 +881,7 @@ public class WorldServer extends World {
         } else {
             this.entitiesById.put(entity.getId(), entity);
             if (entity instanceof EntityEnderDragon) {
-                EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).dT();
+                EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).dU();
                 int i = aentitycomplexpart.length;
 
                 for (int j = 0; j < i; ++j) {
@@ -1141,7 +1139,7 @@ public class WorldServer extends World {
     @Override
     public void a(long i) {
         super.a(i);
-        this.worldData.z().a(this.server, i);
+        this.worldData.y().a(this.server, i);
     }
 
     @Override
@@ -1271,9 +1269,7 @@ public class WorldServer extends World {
 
     @Nullable
     public Raid c_(BlockPosition blockposition) {
-        Raid raid = this.c.a(blockposition, 9216);
-
-        return this.b_(blockposition) ? raid : null;
+        return this.c.a(blockposition, 9216);
     }
 
     public boolean d_(BlockPosition blockposition) {

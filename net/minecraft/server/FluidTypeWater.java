@@ -37,8 +37,8 @@ public abstract class FluidTypeWater extends FluidTypeFlowing {
     }
 
     @Override
-    public IBlockData a(Fluid fluid) {
-        return (IBlockData) Blocks.WATER.getBlockData().set(BlockFluids.LEVEL, d(fluid));
+    public IBlockData b(Fluid fluid) {
+        return (IBlockData) Blocks.WATER.getBlockData().set(BlockFluids.LEVEL, e(fluid));
     }
 
     @Override
@@ -77,12 +77,12 @@ public abstract class FluidTypeWater extends FluidTypeFlowing {
         }
 
         @Override
-        public int c(Fluid fluid) {
+        public int d(Fluid fluid) {
             return (Integer) fluid.get(FluidTypeWater.a.LEVEL);
         }
 
         @Override
-        public boolean b(Fluid fluid) {
+        public boolean c(Fluid fluid) {
             return false;
         }
     }
@@ -92,12 +92,12 @@ public abstract class FluidTypeWater extends FluidTypeFlowing {
         public b() {}
 
         @Override
-        public int c(Fluid fluid) {
+        public int d(Fluid fluid) {
             return 8;
         }
 
         @Override
-        public boolean b(Fluid fluid) {
+        public boolean c(Fluid fluid) {
             return true;
         }
     }

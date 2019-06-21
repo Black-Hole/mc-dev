@@ -58,4 +58,22 @@ public class CursorPosition {
     public int d() {
         return this.i;
     }
+
+    public int e() {
+        int i = 0;
+
+        if (this.g == this.a || this.g == this.d) {
+            ++i;
+        }
+
+        if (this.h == this.b || this.h == this.e) {
+            ++i;
+        }
+
+        if (this.i == this.c || this.i == this.f) {
+            ++i;
+        }
+
+        return i;
+    }
 }

@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.Random;
+
 public class EntityEndermite extends EntityMonster {
 
     private static final PathfinderTargetCondition b = (new PathfinderTargetCondition()).a(5.0D).e();
@@ -87,7 +89,7 @@ public class EntityEndermite extends EntityMonster {
     }
 
     @Override
-    public double aN() {
+    public double aO() {
         return 0.1D;
     }
 
@@ -118,15 +120,9 @@ public class EntityEndermite extends EntityMonster {
 
     }
 
-    @Override
-    protected boolean I_() {
-        return true;
-    }
-
-    @Override
-    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        if (super.a(generatoraccess, enummobspawn)) {
-            EntityHuman entityhuman = this.world.a(EntityEndermite.b, (EntityLiving) this);
+    public static boolean b(EntityTypes<EntityEndermite> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        if (d(entitytypes, generatoraccess, enummobspawn, blockposition, random)) {
+            EntityHuman entityhuman = generatoraccess.a(EntityEndermite.b, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
 
             return entityhuman == null;
         } else {

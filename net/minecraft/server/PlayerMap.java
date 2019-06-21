@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Sets;
+import com.google.common.collect.Streams;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -12,7 +13,7 @@ public final class PlayerMap {
     public PlayerMap() {}
 
     public Stream<EntityPlayer> a(long i) {
-        return this.a.stream();
+        return Streams.concat(new Stream[]{this.a.stream(), this.b.stream()});
     }
 
     public void a(long i, EntityPlayer entityplayer, boolean flag) {

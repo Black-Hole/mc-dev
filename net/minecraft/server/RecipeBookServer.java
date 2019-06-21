@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -101,27 +102,27 @@ public class RecipeBookServer extends RecipeBook {
         this.f = nbttagcompound.getBoolean("isFurnaceFilteringCraftable");
         NBTTagList nbttaglist = nbttagcompound.getList("recipes", 8);
 
-        for (int i = 0; i < nbttaglist.size(); ++i) {
-            MinecraftKey minecraftkey = new MinecraftKey(nbttaglist.getString(i));
-            Optional<? extends IRecipe<?>> optional = this.l.a(minecraftkey);
-
-            if (!optional.isPresent()) {
-                RecipeBookServer.LOGGER.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey);
-            } else {
-                this.a((IRecipe) optional.get());
-            }
-        }
-
+        this.a(nbttaglist, this::a);
         NBTTagList nbttaglist1 = nbttagcompound.getList("toBeDisplayed", 8);
 
-        for (int j = 0; j < nbttaglist1.size(); ++j) {
-            MinecraftKey minecraftkey1 = new MinecraftKey(nbttaglist1.getString(j));
-            Optional<? extends IRecipe<?>> optional1 = this.l.a(minecraftkey1);
+        this.a(nbttaglist1, this::f);
+    }
 
-            if (!optional1.isPresent()) {
-                RecipeBookServer.LOGGER.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey1);
-            } else {
-                this.f((IRecipe) optional1.get());
+    private void a(NBTTagList nbttaglist, Consumer<IRecipe<?>> consumer) {
+        for (int i = 0; i < nbttaglist.size(); ++i) {
+            String s = nbttaglist.getString(i);
+
+            try {
+                MinecraftKey minecraftkey = new MinecraftKey(s);
+                Optional<? extends IRecipe<?>> optional = this.l.a(minecraftkey);
+
+                if (!optional.isPresent()) {
+                    RecipeBookServer.LOGGER.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey);
+                } else {
+                    consumer.accept(optional.get());
+                }
+            } catch (ResourceKeyInvalidException resourcekeyinvalidexception) {
+                RecipeBookServer.LOGGER.error("Tried to load improperly formatted recipe: {} removed now.", s);
             }
         }
 

@@ -33,8 +33,8 @@ public class EntitySheep extends EntityAnimal {
     private static final Map<EnumColor, float[]> bB = Maps.newEnumMap((Map) Arrays.stream(EnumColor.values()).collect(Collectors.toMap((enumcolor) -> {
         return enumcolor;
     }, EntitySheep::c)));
-    private int bD;
-    private PathfinderGoalEatTile bE;
+    private int bC;
+    private PathfinderGoalEatTile bD;
 
     private static float[] c(EnumColor enumcolor) {
         if (enumcolor == EnumColor.WHITE) {
@@ -53,13 +53,13 @@ public class EntitySheep extends EntityAnimal {
 
     @Override
     protected void initPathfinder() {
-        this.bE = new PathfinderGoalEatTile(this);
+        this.bD = new PathfinderGoalEatTile(this);
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 1.25D));
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
         this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.1D, RecipeItemStack.a(Items.WHEAT), false));
         this.goalSelector.a(4, new PathfinderGoalFollowParent(this, 1.1D));
-        this.goalSelector.a(5, this.bE);
+        this.goalSelector.a(5, this.bD);
         this.goalSelector.a(6, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(7, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
@@ -67,14 +67,14 @@ public class EntitySheep extends EntityAnimal {
 
     @Override
     protected void mobTick() {
-        this.bD = this.bE.g();
+        this.bC = this.bD.g();
         super.mobTick();
     }
 
     @Override
     public void movementTick() {
         if (this.world.isClientSide) {
-            this.bD = Math.max(0, this.bD - 1);
+            this.bC = Math.max(0, this.bC - 1);
         }
 
         super.movementTick();

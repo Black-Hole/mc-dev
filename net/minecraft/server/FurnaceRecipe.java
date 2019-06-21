@@ -8,6 +8,6 @@ public class FurnaceRecipe extends RecipeCooking {
 
     @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.o;
+        return RecipeSerializer.p;
     }
 }

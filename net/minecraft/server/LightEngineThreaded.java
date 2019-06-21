@@ -56,6 +56,7 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
             return 0;
         }, LightEngineThreaded.Update.PRE_UPDATE, SystemUtils.a(() -> {
             super.b(chunkcoordintpair, false);
+            super.a(chunkcoordintpair, false);
 
             int i;
 

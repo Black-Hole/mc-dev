@@ -21,7 +21,7 @@ public class NibbleArray {
     }
 
     public int a(int i, int j, int k) {
-        return this.a(this.b(i, j, k));
+        return this.b(this.b(i, j, k));
     }
 
     public void a(int i, int j, int k, int l) {
@@ -32,13 +32,13 @@ public class NibbleArray {
         return j << 8 | k << 4 | i;
     }
 
-    private int a(int i) {
+    private int b(int i) {
         if (this.a == null) {
             return 0;
         } else {
-            int j = this.c(i);
+            int j = this.d(i);
 
-            return this.b(i) ? this.a[j] & 15 : this.a[j] >> 4 & 15;
+            return this.c(i) ? this.a[j] & 15 : this.a[j] >> 4 & 15;
         }
     }
 
@@ -47,9 +47,9 @@ public class NibbleArray {
             this.a = new byte[2048];
         }
 
-        int k = this.c(i);
+        int k = this.d(i);
 
-        if (this.b(i)) {
+        if (this.c(i)) {
             this.a[k] = (byte) (this.a[k] & 240 | j & 15);
         } else {
             this.a[k] = (byte) (this.a[k] & 15 | (j & 15) << 4);
@@ -57,11 +57,11 @@ public class NibbleArray {
 
     }
 
-    private boolean b(int i) {
+    private boolean c(int i) {
         return (i & 1) == 0;
     }
 
-    private int c(int i) {
+    private int d(int i) {
         return i >> 1;
     }
 
@@ -81,7 +81,7 @@ public class NibbleArray {
         StringBuilder stringbuilder = new StringBuilder();
 
         for (int i = 0; i < 4096; ++i) {
-            stringbuilder.append(Integer.toHexString(this.a(i)));
+            stringbuilder.append(Integer.toHexString(this.b(i)));
             if ((i & 15) == 15) {
                 stringbuilder.append("\n");
             }

@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Random;
 import java.util.function.Predicate;
 
 public abstract class EntityFish extends EntityWaterAnimal {
@@ -27,11 +28,8 @@ public abstract class EntityFish extends EntityWaterAnimal {
         return this.isFromBucket();
     }
 
-    @Override
-    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        BlockPosition blockposition = new BlockPosition(this);
-
-        return generatoraccess.getType(blockposition).getBlock() == Blocks.WATER && generatoraccess.getType(blockposition.up()).getBlock() == Blocks.WATER ? super.a(generatoraccess, enummobspawn) : false;
+    public static boolean b(EntityTypes<? extends EntityFish> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        return generatoraccess.getType(blockposition).getBlock() == Blocks.WATER && generatoraccess.getType(blockposition.up()).getBlock() == Blocks.WATER;
     }
 
     @Override
@@ -40,7 +38,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
     }
 
     @Override
-    public int dC() {
+    public int dD() {
         return 8;
     }
 
@@ -89,7 +87,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
     @Override
     public void e(Vec3D vec3d) {
-        if (this.de() && this.isInWater()) {
+        if (this.df() && this.isInWater()) {
             this.a(0.01F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.9D));
@@ -108,7 +106,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
             this.setMot(this.getMot().add((double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F), 0.4000000059604645D, (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F)));
             this.onGround = false;
             this.impulse = true;
-            this.a(this.getSoundFlop(), this.getSoundVolume(), this.cU());
+            this.a(this.getSoundFlop(), this.getSoundVolume(), this.cV());
         }
 
         super.movementTick();
@@ -150,7 +148,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
     protected abstract ItemStack l();
 
-    protected boolean dV() {
+    protected boolean dW() {
         return true;
     }
 
@@ -189,8 +187,8 @@ public abstract class EntityFish extends EntityWaterAnimal {
                 this.i.aK = this.i.yaw;
                 float f1 = (float) (this.e * this.i.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
 
-                this.i.o(MathHelper.g(0.125F, this.i.da(), f1));
-                this.i.setMot(this.i.getMot().add(0.0D, (double) this.i.da() * d1 * 0.1D, 0.0D));
+                this.i.o(MathHelper.g(0.125F, this.i.db(), f1));
+                this.i.setMot(this.i.getMot().add(0.0D, (double) this.i.db() * d1 * 0.1D, 0.0D));
             } else {
                 this.i.o(0.0F);
             }
@@ -208,7 +206,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
         @Override
         public boolean a() {
-            return this.h.dV() && super.a();
+            return this.h.dW() && super.a();
         }
     }
 }

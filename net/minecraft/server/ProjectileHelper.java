@@ -32,7 +32,7 @@ public final class ProjectileHelper {
         World world = entity.world;
         Vec3D vec3d1 = new Vec3D(d0, d1, d2);
 
-        if (flag2 && !world.a(entity, entity.getBoundingBox(), (Set) (!flag1 && entity1 != null ? a(entity1) : ImmutableSet.of()))) {
+        if (flag2 && !world.b(entity, entity.getBoundingBox(), (Set) (!flag1 && entity1 != null ? a(entity1) : ImmutableSet.of()))) {
             return new MovingObjectPositionBlock(vec3d1, EnumDirection.a(vec3d.x, vec3d.y, vec3d.z), new BlockPosition(entity), false);
         } else {
             Vec3D vec3d2 = vec3d1.e(vec3d);

@@ -7,9 +7,11 @@ import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.types.DynamicOps;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,7 +19,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.Map.Entry;
-import java.util.function.DoublePredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,14 +29,28 @@ public class Reputation {
 
     public Reputation() {}
 
-    private Stream<Reputation.b> b() {
+    public void b() {
+        Iterator iterator = this.a.values().iterator();
+
+        while (iterator.hasNext()) {
+            Reputation.a reputation_a = (Reputation.a) iterator.next();
+
+            reputation_a.a();
+            if (reputation_a.b()) {
+                iterator.remove();
+            }
+        }
+
+    }
+
+    private Stream<Reputation.b> c() {
         return this.a.entrySet().stream().flatMap((entry) -> {
             return ((Reputation.a) entry.getValue()).a((UUID) entry.getKey());
         });
     }
 
     private Collection<Reputation.b> a(Random random, int i) {
-        List<Reputation.b> list = (List) this.b().collect(Collectors.toList());
+        List<Reputation.b> list = (List) this.c().collect(Collectors.toList());
 
         if (list.isEmpty()) {
             return Collections.emptyList();
@@ -73,9 +88,9 @@ public class Reputation {
         Collection<Reputation.b> collection = reputation.a(random, i);
 
         collection.forEach((reputation_b) -> {
-            int j = reputation_b.c - reputation_b.b.k;
+            int j = reputation_b.c - reputation_b.b.j;
 
-            if (j > 2) {
+            if (j >= 2) {
                 this.a(reputation_b.a).a.mergeInt(reputation_b.b, j, Reputation::a);
             }
 
@@ -88,20 +103,21 @@ public class Reputation {
         return reputation_a != null ? reputation_a.a(predicate) : 0;
     }
 
-    public long a(ReputationType reputationtype, DoublePredicate doublepredicate) {
-        return this.a.values().stream().filter((reputation_a) -> {
-            return doublepredicate.test((double) (reputation_a.a.getOrDefault(reputationtype, 0) * reputationtype.h));
-        }).count();
-    }
-
     public void a(UUID uuid, ReputationType reputationtype, int i) {
-        this.a(uuid).a.mergeInt(reputationtype, i, (integer, integer1) -> {
+        Reputation.a reputation_a = this.a(uuid);
+
+        reputation_a.a.mergeInt(reputationtype, i, (integer, integer1) -> {
             return this.a(reputationtype, integer, integer1);
         });
+        reputation_a.a(reputationtype);
+        if (reputation_a.b()) {
+            this.a.remove(uuid);
+        }
+
     }
 
     public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createList(this.b().map((reputation_b) -> {
+        return new Dynamic(dynamicops, dynamicops.createList(this.c().map((reputation_b) -> {
             return reputation_b.a(dynamicops);
         }).map(Dynamic::getValue)));
     }
@@ -119,7 +135,7 @@ public class Reputation {
     private int a(ReputationType reputationtype, int i, int j) {
         int k = i + j;
 
-        return k > reputationtype.i ? Math.max(reputationtype.i, i) : k;
+        return k > reputationtype.h ? Math.max(reputationtype.h, i) : k;
     }
 
     static class a {
@@ -134,7 +150,7 @@ public class Reputation {
             return this.a.object2IntEntrySet().stream().filter((it_unimi_dsi_fastutil_objects_object2intmap_entry) -> {
                 return predicate.test(it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey());
             }).mapToInt((it_unimi_dsi_fastutil_objects_object2intmap_entry) -> {
-                return it_unimi_dsi_fastutil_objects_object2intmap_entry.getIntValue() * ((ReputationType) it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey()).h;
+                return it_unimi_dsi_fastutil_objects_object2intmap_entry.getIntValue() * ((ReputationType) it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey()).g;
             }).sum();
         }
 
@@ -142,6 +158,43 @@ public class Reputation {
             return this.a.object2IntEntrySet().stream().map((it_unimi_dsi_fastutil_objects_object2intmap_entry) -> {
                 return new Reputation.b(uuid, (ReputationType) it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey(), it_unimi_dsi_fastutil_objects_object2intmap_entry.getIntValue());
             });
+        }
+
+        public void a() {
+            ObjectIterator objectiterator = this.a.object2IntEntrySet().iterator();
+
+            while (objectiterator.hasNext()) {
+                it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<ReputationType> it_unimi_dsi_fastutil_objects_object2intmap_entry = (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry) objectiterator.next();
+                int i = it_unimi_dsi_fastutil_objects_object2intmap_entry.getIntValue() - ((ReputationType) it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey()).i;
+
+                if (i < 2) {
+                    objectiterator.remove();
+                } else {
+                    it_unimi_dsi_fastutil_objects_object2intmap_entry.setValue(i);
+                }
+            }
+
+        }
+
+        public boolean b() {
+            return this.a.isEmpty();
+        }
+
+        public void a(ReputationType reputationtype) {
+            int i = this.a.getInt(reputationtype);
+
+            if (i > reputationtype.h) {
+                this.a.put(reputationtype, reputationtype.h);
+            }
+
+            if (i < 2) {
+                this.b(reputationtype);
+            }
+
+        }
+
+        public void b(ReputationType reputationtype) {
+            this.a.removeInt(reputationtype);
         }
     }
 
@@ -158,7 +211,7 @@ public class Reputation {
         }
 
         public int a() {
-            return this.c * this.b.h;
+            return this.c * this.b.g;
         }
 
         public String toString() {
@@ -166,7 +219,7 @@ public class Reputation {
         }
 
         public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-            return SystemUtils.a("Target", this.a, new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("Type"), dynamicops.createString(this.b.g), dynamicops.createString("Value"), dynamicops.createInt(this.c)))));
+            return SystemUtils.a("Target", this.a, new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("Type"), dynamicops.createString(this.b.f), dynamicops.createString("Value"), dynamicops.createInt(this.c)))));
         }
 
         public static Optional<Reputation.b> a(Dynamic<?> dynamic) {

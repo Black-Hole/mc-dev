@@ -36,7 +36,7 @@ public class BlockLongGrass extends BlockPlant implements IBlockFragilePlantElem
     }
 
     @Override
-    public Block.EnumRandomOffset S_() {
+    public Block.EnumRandomOffset R_() {
         return Block.EnumRandomOffset.XYZ;
     }
 }

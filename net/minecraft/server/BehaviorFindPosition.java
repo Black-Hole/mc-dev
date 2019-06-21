@@ -54,14 +54,18 @@ public class BehaviorFindPosition extends Behavior<EntityLiving> {
                     object = blockposition;
                 }
 
-                PathEntity pathentity = entitycreature.getNavigation().b((BlockPosition) object);
-                boolean flag = pathentity != null && pathentity.a((BlockPosition) object);
+                if (entitycreature.getBoundingBox().g(2.0D).c(new Vec3D((BaseBlockPosition) object))) {
+                    return true;
+                } else {
+                    PathEntity pathentity = entitycreature.getNavigation().b((BlockPosition) object);
+                    boolean flag = pathentity != null && pathentity.a((BlockPosition) object);
 
-                if (!flag) {
-                    this.e.put(j, this.d + 40L);
+                    if (!flag) {
+                        this.e.put(j, this.d + 40L);
+                    }
+
+                    return flag;
                 }
-
-                return flag;
             }
         };
         Optional<BlockPosition> optional = villageplace.b(this.a.c(), predicate, new BlockPosition(entityliving), 48);

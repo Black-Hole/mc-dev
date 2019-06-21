@@ -47,17 +47,17 @@ public class MerchantWrapper implements IMerchant {
     }
 
     @Override
-    public void r(int i) {
+    public void s(int i) {
         this.d = i;
     }
 
     @Override
-    public boolean ea() {
+    public boolean eb() {
         return true;
     }
 
     @Override
-    public SoundEffect eb() {
+    public SoundEffect ec() {
         return SoundEffects.ENTITY_VILLAGER_YES;
     }
 }

@@ -24,7 +24,7 @@ public class Block implements IMaterial {
         }
     });
     private static final VoxelShape c = VoxelShapes.a(VoxelShapes.b(), a(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D), OperatorBoolean.ONLY_FIRST);
-    private static final VoxelShape d = a(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D);
+    private static final VoxelShape d = a(7.0D, 0.0D, 7.0D, 9.0D, 10.0D, 9.0D);
     protected final int n;
     public final float strength;
     protected final float durability;
@@ -93,7 +93,7 @@ public class Block implements IMaterial {
 
     @Deprecated
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EntityTypes<?> entitytypes) {
-        return d(iblockdata, iblockaccess, blockposition, EnumDirection.UP);
+        return d(iblockdata, iblockaccess, blockposition, EnumDirection.UP) && this.n < 14;
     }
 
     @Deprecated
@@ -480,7 +480,7 @@ public class Block implements IMaterial {
     }
 
     public static void a(World world, BlockPosition blockposition, ItemStack itemstack) {
-        if (!world.isClientSide && !itemstack.isEmpty() && world.getGameRules().getBoolean("doTileDrops")) {
+        if (!world.isClientSide && !itemstack.isEmpty() && world.getGameRules().getBoolean(GameRules.DO_TILE_DROPS)) {
             float f = 0.5F;
             double d0 = (double) (world.random.nextFloat() * 0.5F) + 0.25D;
             double d1 = (double) (world.random.nextFloat() * 0.5F) + 0.25D;
@@ -493,7 +493,7 @@ public class Block implements IMaterial {
     }
 
     protected void dropExperience(World world, BlockPosition blockposition, int i) {
-        if (!world.isClientSide && world.getGameRules().getBoolean("doTileDrops")) {
+        if (!world.isClientSide && world.getGameRules().getBoolean(GameRules.DO_TILE_DROPS)) {
             while (i > 0) {
                 int j = EntityExperienceOrb.getOrbValue(i);
 
@@ -560,7 +560,7 @@ public class Block implements IMaterial {
 
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, @Nullable EntityLiving entityliving, ItemStack itemstack) {}
 
-    public boolean T_() {
+    public boolean S_() {
         return !this.material.isBuildable() && !this.material.isLiquid();
     }
 
@@ -639,13 +639,13 @@ public class Block implements IMaterial {
         return this.blockData;
     }
 
-    public Block.EnumRandomOffset S_() {
+    public Block.EnumRandomOffset R_() {
         return Block.EnumRandomOffset.NONE;
     }
 
     @Deprecated
     public Vec3D l(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        Block.EnumRandomOffset block_enumrandomoffset = this.S_();
+        Block.EnumRandomOffset block_enumrandomoffset = this.R_();
 
         if (block_enumrandomoffset == Block.EnumRandomOffset.NONE) {
             return Vec3D.a;

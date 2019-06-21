@@ -182,7 +182,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     }
 
     @Override
-    protected float cU() {
+    protected float cV() {
         return this.isBaby() ? (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 2.0F : (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F;
     }
 

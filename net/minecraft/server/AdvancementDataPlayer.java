@@ -83,7 +83,7 @@ public class AdvancementDataPlayer {
     }
 
     private void d() {
-        Iterator iterator = this.d.getAdvancementData().b().iterator();
+        Iterator iterator = this.d.getAdvancementData().a().iterator();
 
         while (iterator.hasNext()) {
             Advancement advancement = (Advancement) iterator.next();
@@ -117,7 +117,7 @@ public class AdvancementDataPlayer {
     }
 
     private void f() {
-        Iterator iterator = this.d.getAdvancementData().b().iterator();
+        Iterator iterator = this.d.getAdvancementData().a().iterator();
 
         while (iterator.hasNext()) {
             Advancement advancement = (Advancement) iterator.next();
@@ -276,7 +276,7 @@ public class AdvancementDataPlayer {
             flag = true;
             if (!flag1 && advancementprogress.isDone()) {
                 advancement.d().a(this.player);
-                if (advancement.c() != null && advancement.c().i() && this.player.world.getGameRules().getBoolean("announceAdvancements")) {
+                if (advancement.c() != null && advancement.c().i() && this.player.world.getGameRules().getBoolean(GameRules.ANNOUNCE_ADVANCEMENTS)) {
                     this.d.getPlayerList().sendMessage(new ChatMessage("chat.type.advancement." + advancement.c().e().a(), new Object[]{this.player.getScoreboardDisplayName(), advancement.j()}));
                 }
             }

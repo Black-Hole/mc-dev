@@ -65,17 +65,17 @@ public class EntityPainting extends EntityHanging {
 
     @Override
     public int getHangingWidth() {
-        return this.art.getWidth();
+        return this.art == null ? 1 : this.art.getWidth();
     }
 
     @Override
     public int getHangingHeight() {
-        return this.art.getHeight();
+        return this.art == null ? 1 : this.art.getHeight();
     }
 
     @Override
     public void a(@Nullable Entity entity) {
-        if (this.world.getGameRules().getBoolean("doEntityDrops")) {
+        if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
             this.a(SoundEffects.ENTITY_PAINTING_BREAK, 1.0F, 1.0F);
             if (entity instanceof EntityHuman) {
                 EntityHuman entityhuman = (EntityHuman) entity;

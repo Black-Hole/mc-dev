@@ -10,11 +10,11 @@ public class BehaviorWork extends Behavior<EntityVillager> {
     private boolean b;
 
     public BehaviorWork() {
-        super(ImmutableMap.of(MemoryModuleType.JOB_SITE, MemoryStatus.VALUE_PRESENT, MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.GOLEM_SPAWN_CONDITIONS, MemoryStatus.REGISTERED));
+        super(ImmutableMap.of(MemoryModuleType.JOB_SITE, MemoryStatus.VALUE_PRESENT, MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED));
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
-        return this.a(worldserver.getDayTime() % 24000L, entityvillager.eq());
+        return this.a(worldserver.getDayTime() % 24000L, entityvillager.et());
     }
 
     protected void f(WorldServer worldserver, EntityVillager entityvillager, long i) {
@@ -25,14 +25,12 @@ public class BehaviorWork extends Behavior<EntityVillager> {
 
     protected void d(WorldServer worldserver, EntityVillager entityvillager, long i) {
         BehaviorController<EntityVillager> behaviorcontroller = entityvillager.getBehaviorController();
-        EntityVillager.a entityvillager_a = (EntityVillager.a) behaviorcontroller.getMemory(MemoryModuleType.GOLEM_SPAWN_CONDITIONS).orElseGet(EntityVillager.a::new);
 
-        entityvillager_a.a(i);
-        behaviorcontroller.setMemory(MemoryModuleType.GOLEM_SPAWN_CONDITIONS, (Object) entityvillager_a);
+        behaviorcontroller.setMemory(MemoryModuleType.LAST_WORKED_AT_POI, (Object) MinecraftSerializableLong.a(i));
         if (!this.b) {
-            entityvillager.ei();
+            entityvillager.ek();
             this.b = true;
-            entityvillager.ej();
+            entityvillager.el();
             behaviorcontroller.getMemory(MemoryModuleType.JOB_SITE).ifPresent((globalpos) -> {
                 behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorTarget(globalpos.getBlockPosition())));
             });
@@ -49,7 +47,7 @@ public class BehaviorWork extends Behavior<EntityVillager> {
         } else {
             GlobalPos globalpos = (GlobalPos) optional.get();
 
-            return this.a < 100 && Objects.equals(globalpos.getDimensionManager(), worldserver.getWorldProvider().getDimensionManager()) && globalpos.getBlockPosition().a((IPosition) entityvillager.ch(), 1.73D);
+            return this.a < 100 && Objects.equals(globalpos.getDimensionManager(), worldserver.getWorldProvider().getDimensionManager()) && globalpos.getBlockPosition().a((IPosition) entityvillager.ci(), 1.73D);
         }
     }
 

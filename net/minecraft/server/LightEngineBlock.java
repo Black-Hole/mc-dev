@@ -4,8 +4,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageBlock.a, LightEngineStorageBlock> {
 
-    private static final EnumDirection[] d = EnumDirection.values();
-    private final BlockPosition.MutableBlockPosition e = new BlockPosition.MutableBlockPosition();
+    private static final EnumDirection[] e = EnumDirection.values();
+    private final BlockPosition.MutableBlockPosition f = new BlockPosition.MutableBlockPosition();
 
     public LightEngineBlock(ILightAccess ilightaccess) {
         super(ilightaccess, EnumSkyBlock.BLOCK, new LightEngineStorageBlock(ilightaccess));
@@ -17,7 +17,7 @@ public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageB
         int l = BlockPosition.d(i);
         IBlockAccess iblockaccess = this.a.b(j >> 4, l >> 4);
 
-        return iblockaccess != null ? iblockaccess.h(this.e.d(j, k, l)) : 0;
+        return iblockaccess != null ? iblockaccess.h(this.f.d(j, k, l)) : 0;
     }
 
     @Override
@@ -38,14 +38,16 @@ public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageB
                 return 15;
             } else {
                 AtomicInteger atomicinteger = new AtomicInteger();
-                VoxelShape voxelshape = this.a(j, atomicinteger);
+                IBlockData iblockdata = this.a(j, atomicinteger);
 
                 if (atomicinteger.get() >= 15) {
                     return 15;
                 } else {
-                    VoxelShape voxelshape1 = this.a(i, (AtomicInteger) null);
+                    IBlockData iblockdata1 = this.a(i, (AtomicInteger) null);
+                    VoxelShape voxelshape = this.a(iblockdata1, i, enumdirection);
+                    VoxelShape voxelshape1 = this.a(iblockdata, j, enumdirection.opposite());
 
-                    return VoxelShapes.b(voxelshape1, voxelshape, enumdirection) ? 15 : k + Math.max(1, atomicinteger.get());
+                    return VoxelShapes.b(voxelshape, voxelshape1) ? 15 : k + Math.max(1, atomicinteger.get());
                 }
             }
         }
@@ -54,7 +56,7 @@ public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageB
     @Override
     protected void a(long i, int j, boolean flag) {
         long k = SectionPosition.e(i);
-        EnumDirection[] aenumdirection = LightEngineBlock.d;
+        EnumDirection[] aenumdirection = LightEngineBlock.e;
         int l = aenumdirection.length;
 
         for (int i1 = 0; i1 < l; ++i1) {
@@ -87,7 +89,7 @@ public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageB
 
         long j1 = SectionPosition.e(i);
         NibbleArray nibblearray = ((LightEngineStorageBlock) this.c).a(j1, true);
-        EnumDirection[] aenumdirection = LightEngineBlock.d;
+        EnumDirection[] aenumdirection = LightEngineBlock.e;
         int k1 = aenumdirection.length;
 
         for (int l1 = 0; l1 < k1; ++l1) {

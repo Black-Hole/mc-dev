@@ -12,6 +12,11 @@ public class EnchantmentSweeping extends Enchantment {
     }
 
     @Override
+    public int b(int i) {
+        return this.a(i) + 15;
+    }
+
+    @Override
     public int getMaxLevel() {
         return 3;
     }

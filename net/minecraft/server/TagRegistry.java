@@ -35,13 +35,6 @@ public class TagRegistry implements IReloadListener {
         return this.d;
     }
 
-    public void e() {
-        this.a.b();
-        this.b.b();
-        this.c.b();
-        this.d.b();
-    }
-
     public void a(PacketDataSerializer packetdataserializer) {
         this.a.a(packetdataserializer);
         this.b.a(packetdataserializer);
@@ -71,7 +64,6 @@ public class TagRegistry implements IReloadListener {
 
         ireloadlistener_a.getClass();
         return completablefuture4.thenCompose(ireloadlistener_a::a).thenAcceptAsync((tagregistry_a) -> {
-            this.e();
             this.a.a(tagregistry_a.a);
             this.b.a(tagregistry_a.b);
             this.c.a(tagregistry_a.c);

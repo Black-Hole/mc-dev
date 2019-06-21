@@ -63,19 +63,27 @@ public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorage
         if (l < j + 1) {
             ((LightEngineStorageSky.a) this.f).c.put(k, j + 1);
             if (this.o.contains(k)) {
-                this.m.add(i);
-                this.n.remove(i);
+                this.q(i);
                 if (l > ((LightEngineStorageSky.a) this.f).b) {
                     long i1 = SectionPosition.b(SectionPosition.b(i), l - 1, SectionPosition.d(i));
 
-                    this.m.remove(i1);
-                    this.n.add(i1);
+                    this.p(i1);
                 }
 
                 this.e();
             }
         }
 
+    }
+
+    private void p(long i) {
+        this.n.add(i);
+        this.m.remove(i);
+    }
+
+    private void q(long i) {
+        this.m.add(i);
+        this.n.remove(i);
     }
 
     private void e() {
@@ -88,8 +96,7 @@ public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorage
         boolean flag = this.o.contains(j);
 
         if (flag) {
-            this.n.add(i);
-            this.m.remove(i);
+            this.p(i);
         }
 
         int k = SectionPosition.c(i);
@@ -104,8 +111,7 @@ public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorage
             if (this.g(l)) {
                 ((LightEngineStorageSky.a) this.f).c.put(j, k + 1);
                 if (flag) {
-                    this.m.add(l);
-                    this.n.remove(l);
+                    this.q(l);
                 }
             } else {
                 ((LightEngineStorageSky.a) this.f).c.remove(j);
@@ -120,25 +126,17 @@ public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorage
 
     @Override
     protected void b(long i, boolean flag) {
-        int j;
-        long k;
-
         if (flag && this.o.add(i)) {
-            j = ((LightEngineStorageSky.a) this.f).c.get(i);
+            int j = ((LightEngineStorageSky.a) this.f).c.get(i);
+
             if (j != ((LightEngineStorageSky.a) this.f).b) {
-                k = SectionPosition.b(SectionPosition.b(i), j - 1, SectionPosition.d(i));
-                this.m.add(k);
-                this.n.remove(k);
+                long k = SectionPosition.b(SectionPosition.b(i), j - 1, SectionPosition.d(i));
+
+                this.q(k);
                 this.e();
             }
-        } else if (!flag && this.o.remove(i)) {
-            j = ((LightEngineStorageSky.a) this.f).c.get(i);
-            if (j != ((LightEngineStorageSky.a) this.f).b) {
-                k = SectionPosition.b(SectionPosition.b(i), j - 1, SectionPosition.d(i));
-                this.n.add(k);
-                this.m.remove(k);
-                this.e();
-            }
+        } else if (!flag) {
+            this.o.remove(i);
         }
 
     }

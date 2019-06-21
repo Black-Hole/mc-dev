@@ -12,6 +12,11 @@ public class EnchantmentArrowKnockback extends Enchantment {
     }
 
     @Override
+    public int b(int i) {
+        return this.a(i) + 25;
+    }
+
+    @Override
     public int getMaxLevel() {
         return 2;
     }

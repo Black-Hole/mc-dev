@@ -81,7 +81,7 @@ public abstract class PlayerList {
         this.a(entityplayer, (EntityPlayer) null, worldserver);
         PlayerConnection playerconnection = new PlayerConnection(this.server, networkmanager, entityplayer);
 
-        playerconnection.sendPacket(new PacketPlayOutLogin(entityplayer.getId(), entityplayer.playerInteractManager.getGameMode(), worlddata.isHardcore(), worldserver.worldProvider.getDimensionManager(), this.getMaxPlayers(), worlddata.getType(), this.viewDistance, worldserver.getGameRules().getBoolean("reducedDebugInfo")));
+        playerconnection.sendPacket(new PacketPlayOutLogin(entityplayer.getId(), entityplayer.playerInteractManager.getGameMode(), worlddata.isHardcore(), worldserver.worldProvider.getDimensionManager(), this.getMaxPlayers(), worlddata.getType(), this.viewDistance, worldserver.getGameRules().getBoolean(GameRules.REDUCED_DEBUG_INFO)));
         playerconnection.sendPacket(new PacketPlayOutCustomPayload(PacketPlayOutCustomPayload.a, (new PacketDataSerializer(Unpooled.buffer())).a(this.getServer().getServerModName())));
         playerconnection.sendPacket(new PacketPlayOutServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
         playerconnection.sendPacket(new PacketPlayOutAbilities(entityplayer.abilities));
@@ -569,7 +569,7 @@ public abstract class PlayerList {
     }
 
     public boolean isOp(GameProfile gameprofile) {
-        return this.operators.d(gameprofile) || this.server.b(gameprofile) && this.server.getWorldServer(DimensionManager.OVERWORLD).getWorldData().u() || this.u;
+        return this.operators.d(gameprofile) || this.server.b(gameprofile) && this.server.getWorldServer(DimensionManager.OVERWORLD).getWorldData().t() || this.u;
     }
 
     @Nullable
@@ -635,7 +635,7 @@ public abstract class PlayerList {
         WorldBorder worldborder = this.server.getWorldServer(DimensionManager.OVERWORLD).getWorldBorder();
 
         entityplayer.playerConnection.sendPacket(new PacketPlayOutWorldBorder(worldborder, PacketPlayOutWorldBorder.EnumWorldBorderAction.INITIALIZE));
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateTime(worldserver.getTime(), worldserver.getDayTime(), worldserver.getGameRules().getBoolean("doDaylightCycle")));
+        entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateTime(worldserver.getTime(), worldserver.getDayTime(), worldserver.getGameRules().getBoolean(GameRules.DO_DAYLIGHT_CYCLE)));
         BlockPosition blockposition = worldserver.getSpawn();
 
         entityplayer.playerConnection.sendPacket(new PacketPlayOutSpawnPosition(blockposition));
@@ -763,7 +763,7 @@ public abstract class PlayerList {
         return advancementdataplayer;
     }
 
-    public void a(int i, int j) {
+    public void a(int i) {
         this.viewDistance = i;
         this.sendAll(new PacketPlayOutViewDistance(i));
         Iterator iterator = this.server.getWorlds().iterator();
@@ -772,7 +772,7 @@ public abstract class PlayerList {
             WorldServer worldserver = (WorldServer) iterator.next();
 
             if (worldserver != null) {
-                worldserver.getChunkProvider().setViewDistance(i, j);
+                worldserver.getChunkProvider().setViewDistance(i);
             }
         }
 

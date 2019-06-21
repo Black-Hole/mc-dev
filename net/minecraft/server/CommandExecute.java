@@ -65,7 +65,7 @@ public class CommandExecute {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.bO()).a(entity.aT()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.bP()).a(entity.aU()));
             }
 
             return list;
@@ -78,7 +78,7 @@ public class CommandExecute {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.bO()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.bP()));
             }
 
             return list;
@@ -91,7 +91,7 @@ public class CommandExecute {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.aT()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.aU()));
             }
 
             return list;

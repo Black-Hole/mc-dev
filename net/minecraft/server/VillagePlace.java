@@ -36,7 +36,7 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
         return this.b(predicate, blockposition, i, villageplace_occupancy).count();
     }
 
-    private Stream<VillagePlaceRecord> b(Predicate<VillagePlaceType> predicate, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
+    public Stream<VillagePlaceRecord> b(Predicate<VillagePlaceType> predicate, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
         int j = i * i;
 
         return ChunkCoordIntPair.a(new ChunkCoordIntPair(blockposition), Math.floorDiv(i, 16)).flatMap((chunkcoordintpair) -> {

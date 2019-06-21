@@ -31,6 +31,7 @@ public class BehaviorWalkAwayBlock extends Behavior<EntityVillager> {
             } else {
                 entityvillager.a(this.a);
                 behaviorcontroller.removeMemory(this.a);
+                behaviorcontroller.setMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, (Object) i);
             }
 
         });

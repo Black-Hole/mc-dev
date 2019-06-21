@@ -74,7 +74,7 @@ public class InventoryCraftResult implements IInventory, RecipeHolder {
 
     @Nullable
     @Override
-    public IRecipe<?> V_() {
+    public IRecipe<?> U_() {
         return this.b;
     }
 }

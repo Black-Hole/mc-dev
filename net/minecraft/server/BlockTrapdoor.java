@@ -144,4 +144,9 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IBlockWaterl
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
+
+    @Override
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EntityTypes<?> entitytypes) {
+        return false;
+    }
 }

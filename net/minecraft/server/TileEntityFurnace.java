@@ -427,7 +427,7 @@ public abstract class TileEntityFurnace extends TileEntityContainer implements I
 
     @Nullable
     @Override
-    public IRecipe<?> V_() {
+    public IRecipe<?> U_() {
         return null;
     }
 

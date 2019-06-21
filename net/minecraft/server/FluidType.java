@@ -13,7 +13,7 @@ public abstract class FluidType {
 
         this.a(blockstatelist_a);
         this.d = blockstatelist_a.a(FluidImpl::new);
-        this.e((Fluid) this.d.getBlockData());
+        this.f((Fluid) this.d.getBlockData());
     }
 
     protected void a(BlockStateList.a<FluidType, Fluid> blockstatelist_a) {}
@@ -22,7 +22,7 @@ public abstract class FluidType {
         return this.d;
     }
 
-    protected final void e(Fluid fluid) {
+    protected final void f(Fluid fluid) {
         this.a = fluid;
     }
 
@@ -54,11 +54,13 @@ public abstract class FluidType {
 
     public abstract float a(Fluid fluid, IBlockAccess iblockaccess, BlockPosition blockposition);
 
-    protected abstract IBlockData a(Fluid fluid);
+    public abstract float a(Fluid fluid);
 
-    public abstract boolean b(Fluid fluid);
+    protected abstract IBlockData b(Fluid fluid);
 
-    public abstract int c(Fluid fluid);
+    public abstract boolean c(Fluid fluid);
+
+    public abstract int d(Fluid fluid);
 
     public boolean a(FluidType fluidtype) {
         return fluidtype == this;

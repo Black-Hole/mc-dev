@@ -135,7 +135,7 @@ public class EnchantmentManager {
         };
 
         if (entityliving != null) {
-            a(enchantmentmanager_a, entityliving.ba());
+            a(enchantmentmanager_a, entityliving.bb());
         }
 
         if (entity instanceof EntityHuman) {
@@ -150,7 +150,7 @@ public class EnchantmentManager {
         };
 
         if (entityliving != null) {
-            a(enchantmentmanager_a, entityliving.ba());
+            a(enchantmentmanager_a, entityliving.bb());
         }
 
         if (entityliving instanceof EntityHuman) {
@@ -322,16 +322,7 @@ public class EnchantmentManager {
                 list.add(WeightedRandom.a(random, list1));
 
                 while (random.nextInt(50) <= i) {
-                    i = i * 4 / 5 + 1;
-                    list1 = a(i, itemstack, flag);
-                    Iterator iterator = list.iterator();
-
-                    while (iterator.hasNext()) {
-                        WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) iterator.next();
-
-                        a(list1, weightedrandomenchant);
-                    }
-
+                    a(list1, (WeightedRandomEnchant) SystemUtils.a((List) list));
                     if (list1.isEmpty()) {
                         break;
                     }
@@ -383,7 +374,7 @@ public class EnchantmentManager {
 
             if ((!enchantment.isTreasure() || flag) && (enchantment.itemTarget.canEnchant(item) || flag1)) {
                 for (int j = enchantment.getMaxLevel(); j > enchantment.getStartLevel() - 1; --j) {
-                    if (i >= enchantment.a(j)) {
+                    if (i >= enchantment.a(j) && i <= enchantment.b(j)) {
                         list.add(new WeightedRandomEnchant(enchantment, j));
                         break;
                     }

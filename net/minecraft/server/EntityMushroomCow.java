@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Random;
 import java.util.UUID;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -8,20 +9,28 @@ public class EntityMushroomCow extends EntityCow {
     private static final DataWatcherObject<String> bz = DataWatcher.a(EntityMushroomCow.class, DataWatcherRegistry.d);
     private MobEffectList bA;
     private int bB;
-    private UUID bD;
+    private UUID bC;
 
     public EntityMushroomCow(EntityTypes<? extends EntityMushroomCow> entitytypes, World world) {
         super(entitytypes, world);
-        this.bC = Blocks.MYCELIUM;
+    }
+
+    @Override
+    public float a(BlockPosition blockposition, IWorldReader iworldreader) {
+        return iworldreader.getType(blockposition.down()).getBlock() == Blocks.MYCELIUM ? 10.0F : iworldreader.w(blockposition) - 0.5F;
+    }
+
+    public static boolean c(EntityTypes<EntityMushroomCow> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        return generatoraccess.getType(blockposition.down()).getBlock() == Blocks.MYCELIUM && generatoraccess.getLightLevel(blockposition, 0) > 8;
     }
 
     @Override
     public void onLightningStrike(EntityLightning entitylightning) {
         UUID uuid = entitylightning.getUniqueID();
 
-        if (!uuid.equals(this.bD)) {
+        if (!uuid.equals(this.bC)) {
             this.setVariant(this.getVariant() == EntityMushroomCow.Type.RED ? EntityMushroomCow.Type.BROWN : EntityMushroomCow.Type.RED);
-            this.bD = uuid;
+            this.bC = uuid;
             this.a(SoundEffects.ENTITY_MOOSHROOM_CONVERT, 2.0F, 1.0F);
         }
 

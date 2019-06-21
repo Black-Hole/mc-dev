@@ -257,7 +257,7 @@ public class EntityFireworks extends Entity implements IProjectile {
     }
 
     @Override
-    public boolean br() {
+    public boolean bs() {
         return false;
     }
 

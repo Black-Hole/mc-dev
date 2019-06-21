@@ -4,15 +4,17 @@ public final class MethodProfilerResultsField implements Comparable<MethodProfil
 
     public final double a;
     public final double b;
-    public final String c;
+    public final long c;
+    public final String d;
 
-    public MethodProfilerResultsField(String s, double d0, double d1) {
-        this.c = s;
+    public MethodProfilerResultsField(String s, double d0, double d1, long i) {
+        this.d = s;
         this.a = d0;
         this.b = d1;
+        this.c = i;
     }
 
     public int compareTo(MethodProfilerResultsField methodprofilerresultsfield) {
-        return methodprofilerresultsfield.a < this.a ? -1 : (methodprofilerresultsfield.a > this.a ? 1 : methodprofilerresultsfield.c.compareTo(this.c));
+        return methodprofilerresultsfield.a < this.a ? -1 : (methodprofilerresultsfield.a > this.a ? 1 : methodprofilerresultsfield.d.compareTo(this.d));
     }
 }

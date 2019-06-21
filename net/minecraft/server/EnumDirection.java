@@ -283,7 +283,7 @@ public enum EnumDirection implements INamable {
         }
     }
 
-    public static enum EnumAxis implements Predicate<EnumDirection>, INamable {
+    public static enum EnumAxis implements INamable, Predicate<EnumDirection> {
 
         X("x") {
             @Override

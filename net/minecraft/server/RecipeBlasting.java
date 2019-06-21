@@ -8,6 +8,6 @@ public class RecipeBlasting extends RecipeCooking {
 
     @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.p;
+        return RecipeSerializer.q;
     }
 }

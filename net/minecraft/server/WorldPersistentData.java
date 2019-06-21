@@ -48,23 +48,31 @@ public class WorldPersistentData {
     public <T extends PersistentBase> T b(Supplier<T> supplier, String s) {
         PersistentBase persistentbase = (PersistentBase) this.data.get(s);
 
-        if (persistentbase == null) {
-            try {
-                File file = this.a(s);
-
-                if (file.exists()) {
-                    persistentbase = (PersistentBase) supplier.get();
-                    NBTTagCompound nbttagcompound = this.a(s, SharedConstants.a().getWorldVersion());
-
-                    persistentbase.a(nbttagcompound.getCompound("data"));
-                    this.data.put(s, persistentbase);
-                }
-            } catch (Exception exception) {
-                WorldPersistentData.LOGGER.error("Error loading saved data: {}", s, exception);
-            }
+        if (persistentbase == null && !this.data.containsKey(s)) {
+            persistentbase = this.c(supplier, s);
+            this.data.put(s, persistentbase);
         }
 
         return persistentbase;
+    }
+
+    @Nullable
+    private <T extends PersistentBase> T c(Supplier<T> supplier, String s) {
+        try {
+            File file = this.a(s);
+
+            if (file.exists()) {
+                T t0 = (PersistentBase) supplier.get();
+                NBTTagCompound nbttagcompound = this.a(s, SharedConstants.a().getWorldVersion());
+
+                t0.a(nbttagcompound.getCompound("data"));
+                return t0;
+            }
+        } catch (Exception exception) {
+            WorldPersistentData.LOGGER.error("Error loading saved data: {}", s, exception);
+        }
+
+        return null;
     }
 
     public void a(PersistentBase persistentbase) {
@@ -158,7 +166,9 @@ public class WorldPersistentData {
         while (iterator.hasNext()) {
             PersistentBase persistentbase = (PersistentBase) iterator.next();
 
-            persistentbase.a(this.a(persistentbase.getId()));
+            if (persistentbase != null) {
+                persistentbase.a(this.a(persistentbase.getId()));
+            }
         }
 
     }

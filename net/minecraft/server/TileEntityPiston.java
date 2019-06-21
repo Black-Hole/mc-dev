@@ -236,7 +236,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
             this.i = 1.0F;
             this.j = this.i;
             this.world.removeTileEntity(this.position);
-            this.W_();
+            this.V_();
             if (this.world.getType(this.position).getBlock() == Blocks.MOVING_PISTON) {
                 IBlockData iblockdata;
 
@@ -259,7 +259,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         this.j = this.i;
         if (this.j >= 1.0F) {
             this.world.removeTileEntity(this.position);
-            this.W_();
+            this.V_();
             if (this.a != null && this.world.getType(this.position).getBlock() == Blocks.MOVING_PISTON) {
                 IBlockData iblockdata = Block.b(this.a, (GeneratorAccess) this.world, this.position);
 

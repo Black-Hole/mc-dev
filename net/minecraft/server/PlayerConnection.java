@@ -567,7 +567,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
     @Override
     public void a(PacketPlayInEntityNBTQuery packetplayinentitynbtquery) {
         PlayerConnectionUtils.ensureMainThread(packetplayinentitynbtquery, this, this.player.getWorldServer());
-        if (this.player.j(2)) {
+        if (this.player.k(2)) {
             Entity entity = this.player.getWorldServer().getEntity(packetplayinentitynbtquery.c());
 
             if (entity != null) {
@@ -582,7 +582,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
     @Override
     public void a(PacketPlayInTileNBTQuery packetplayintilenbtquery) {
         PlayerConnectionUtils.ensureMainThread(packetplayintilenbtquery, this, this.player.getWorldServer());
-        if (this.player.j(2)) {
+        if (this.player.k(2)) {
             TileEntity tileentity = this.player.getWorldServer().getTileEntity(packetplayintilenbtquery.c());
             NBTTagCompound nbttagcompound = tileentity != null ? tileentity.save(new NBTTagCompound()) : null;
 
@@ -644,7 +644,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
                                 i = 1;
                             }
 
-                            if (!this.player.H() && (!this.player.getWorldServer().getGameRules().getBoolean("disableElytraMovementCheck") || !this.player.isGliding())) {
+                            if (!this.player.H() && (!this.player.getWorldServer().getGameRules().getBoolean(GameRules.DISABLE_ELYTRA_MOVEMENT_CHECK) || !this.player.isGliding())) {
                                 float f2 = this.player.isGliding() ? 300.0F : 100.0F;
 
                                 if (d11 - d10 > (double) (f2 * (float) i) && !this.isExemptPlayer()) {
@@ -1058,7 +1058,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
                     this.player.a(entity, enumhand);
                 } else if (packetplayinuseentity.b() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT_AT) {
                     enumhand = packetplayinuseentity.c();
-                    entity.a(this.player, packetplayinuseentity.d(), enumhand);
+                    entity.a((EntityHuman) this.player, packetplayinuseentity.d(), enumhand);
                 } else if (packetplayinuseentity.b() == PacketPlayInUseEntity.EnumEntityUseAction.ATTACK) {
                     if (entity instanceof EntityItem || entity instanceof EntityExperienceOrb || entity instanceof EntityArrow || entity == this.player) {
                         this.disconnect(new ChatMessage("multiplayer.disconnect.invalid_entity_attacked", new Object[0]));
@@ -1093,7 +1093,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
                     this.player = this.minecraftServer.getPlayerList().moveToWorld(this.player, DimensionManager.OVERWORLD, false);
                     if (this.minecraftServer.isHardcore()) {
                         this.player.a(EnumGamemode.SPECTATOR);
-                        this.player.getWorldServer().getGameRules().set("spectatorsGenerateChunks", "false", this.minecraftServer);
+                        ((GameRules.GameRuleBoolean) this.player.getWorldServer().getGameRules().get(GameRules.SPECTATORS_GENERATE_CHUNKS)).a(false, this.minecraftServer);
                     }
                 }
                 break;
@@ -1294,7 +1294,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
     @Override
     public void a(PacketPlayInDifficultyChange packetplayindifficultychange) {
         PlayerConnectionUtils.ensureMainThread(packetplayindifficultychange, this, this.player.getWorldServer());
-        if (this.player.j(2) || this.isExemptPlayer()) {
+        if (this.player.k(2) || this.isExemptPlayer()) {
             this.minecraftServer.a(packetplayindifficultychange.b(), false);
         }
     }
@@ -1302,7 +1302,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
     @Override
     public void a(PacketPlayInDifficultyLock packetplayindifficultylock) {
         PlayerConnectionUtils.ensureMainThread(packetplayindifficultylock, this, this.player.getWorldServer());
-        if (this.player.j(2) || this.isExemptPlayer()) {
+        if (this.player.k(2) || this.isExemptPlayer()) {
             this.minecraftServer.d(packetplayindifficultylock.b());
         }
     }

@@ -681,7 +681,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
                         TileEntity tileentity1 = (TileEntity) iterator.next();
 
                         if (tileentity1.getPosition().equals(blockposition)) {
-                            tileentity1.W_();
+                            tileentity1.V_();
                             iterator.remove();
                         }
                     }
@@ -700,7 +700,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
         TileEntity tileentity = this.getTileEntity(blockposition);
 
         if (tileentity != null && this.tickingTileEntities) {
-            tileentity.W_();
+            tileentity.V_();
             this.tileEntityListPending.remove(tileentity);
         } else {
             if (tileentity != null) {
@@ -935,7 +935,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
 
     protected void a() {
         this.a(this.worldData.getTime() + 1L);
-        if (this.worldData.w().getBoolean("doDaylightCycle")) {
+        if (this.worldData.v().getBoolean(GameRules.DO_DAYLIGHT_CYCLE)) {
             this.setDayTime(this.worldData.getDayTime() + 1L);
         }
 
@@ -976,7 +976,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
     }
 
     public GameRules getGameRules() {
-        return this.worldData.w();
+        return this.worldData.v();
     }
 
     public float f(float f) {
@@ -1021,7 +1021,6 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
     public CrashReportSystemDetails a(CrashReport crashreport) {
         CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Affected level", 1);
 
-        crashreportsystemdetails.a("Level name", (Object) (this.worldData == null ? "????" : this.worldData.getName()));
         crashreportsystemdetails.a("All players", () -> {
             return this.getPlayers().size() + " total; " + this.getPlayers();
         });
@@ -1029,6 +1028,9 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
 
         this.chunkProvider.getClass();
         crashreportsystemdetails.a("Chunk stats", ichunkprovider::getName);
+        crashreportsystemdetails.a("Level dimension", () -> {
+            return this.worldProvider.getDimensionManager().toString();
+        });
 
         try {
             this.worldData.a(crashreportsystemdetails);

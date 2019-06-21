@@ -57,7 +57,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
             int j = MathHelper.floor(this.locY);
             int k = MathHelper.floor(this.locZ);
 
-            if (this.at()) {
+            if (this.au()) {
                 this.damageEntity(DamageSource.DROWN, 1.0F);
             }
 
@@ -65,7 +65,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
                 this.damageEntity(DamageSource.BURN, 1.0F);
             }
 
-            if (!this.world.getGameRules().getBoolean("mobGriefing")) {
+            if (!this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
                 return;
             }
 

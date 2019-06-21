@@ -19,6 +19,11 @@ public class EnchantmentProtection extends Enchantment {
     }
 
     @Override
+    public int b(int i) {
+        return this.a(i) + this.a.c();
+    }
+
+    @Override
     public int getMaxLevel() {
         return 4;
     }
@@ -33,7 +38,7 @@ public class EnchantmentProtection extends Enchantment {
         if (enchantment instanceof EnchantmentProtection) {
             EnchantmentProtection enchantmentprotection = (EnchantmentProtection) enchantment;
 
-            return this.a != enchantmentprotection.a;
+            return this.a == enchantmentprotection.a ? false : this.a == EnchantmentProtection.DamageType.FALL || enchantmentprotection.a == EnchantmentProtection.DamageType.FALL;
         } else {
             return super.a(enchantment);
         }

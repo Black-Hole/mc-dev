@@ -23,7 +23,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
     }
 
     @Override
-    public boolean T_() {
+    public boolean S_() {
         return true;
     }
 

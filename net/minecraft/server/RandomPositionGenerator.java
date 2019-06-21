@@ -8,7 +8,7 @@ public class RandomPositionGenerator {
 
     @Nullable
     public static Vec3D a(EntityCreature entitycreature, int i, int j) {
-        return c(entitycreature, i, j, (Vec3D) null);
+        return d(entitycreature, i, j, (Vec3D) null);
     }
 
     @Nullable
@@ -26,7 +26,7 @@ public class RandomPositionGenerator {
     public static Vec3D a(EntityCreature entitycreature, int i, int j, Vec3D vec3d) {
         Vec3D vec3d1 = vec3d.a(entitycreature.locX, entitycreature.locY, entitycreature.locZ);
 
-        return c(entitycreature, i, j, vec3d1);
+        return d(entitycreature, i, j, vec3d1);
     }
 
     @Nullable
@@ -41,11 +41,19 @@ public class RandomPositionGenerator {
     public static Vec3D b(EntityCreature entitycreature, int i, int j, Vec3D vec3d) {
         Vec3D vec3d1 = (new Vec3D(entitycreature.locX, entitycreature.locY, entitycreature.locZ)).d(vec3d);
 
-        return c(entitycreature, i, j, vec3d1);
+        entitycreature.getClass();
+        return a(entitycreature, i, j, vec3d1, false, 1.5707963705062866D, entitycreature::f);
     }
 
     @Nullable
-    private static Vec3D c(EntityCreature entitycreature, int i, int j, @Nullable Vec3D vec3d) {
+    public static Vec3D c(EntityCreature entitycreature, int i, int j, Vec3D vec3d) {
+        Vec3D vec3d1 = (new Vec3D(entitycreature.locX, entitycreature.locY, entitycreature.locZ)).d(vec3d);
+
+        return d(entitycreature, i, j, vec3d1);
+    }
+
+    @Nullable
+    private static Vec3D d(EntityCreature entitycreature, int i, int j, @Nullable Vec3D vec3d) {
         entitycreature.getClass();
         return a(entitycreature, i, j, vec3d, true, 1.5707963705062866D, entitycreature::f);
     }
@@ -56,58 +64,54 @@ public class RandomPositionGenerator {
         Random random = entitycreature.getRandom();
         boolean flag1;
 
-        if (entitycreature.dL()) {
-            flag1 = entitycreature.dI().a((IPosition) entitycreature.ch(), (double) (entitycreature.dJ() + (float) i) + 1.0D);
+        if (entitycreature.dM()) {
+            flag1 = entitycreature.dJ().a((IPosition) entitycreature.ci(), (double) (entitycreature.dK() + (float) i) + 1.0D);
         } else {
             flag1 = false;
         }
 
         boolean flag2 = false;
         double d1 = Double.NEGATIVE_INFINITY;
-        int k = 0;
-        int l = 0;
-        int i1 = 0;
+        BlockPosition blockposition = new BlockPosition(entitycreature);
 
-        for (int j1 = 0; j1 < 10; ++j1) {
-            BlockPosition blockposition = a(random, i, j, vec3d, d0);
+        for (int k = 0; k < 10; ++k) {
+            BlockPosition blockposition1 = a(random, i, j, vec3d, d0);
 
-            if (blockposition != null) {
-                int k1 = blockposition.getX();
-                int l1 = blockposition.getY();
-                int i2 = blockposition.getZ();
-                BlockPosition blockposition1;
+            if (blockposition1 != null) {
+                int l = blockposition1.getX();
+                int i1 = blockposition1.getY();
+                int j1 = blockposition1.getZ();
+                BlockPosition blockposition2;
 
-                if (entitycreature.dL() && i > 1) {
-                    blockposition1 = entitycreature.dI();
-                    if (entitycreature.locX > (double) blockposition1.getX()) {
-                        k1 -= random.nextInt(i / 2);
+                if (entitycreature.dM() && i > 1) {
+                    blockposition2 = entitycreature.dJ();
+                    if (entitycreature.locX > (double) blockposition2.getX()) {
+                        l -= random.nextInt(i / 2);
                     } else {
-                        k1 += random.nextInt(i / 2);
+                        l += random.nextInt(i / 2);
                     }
 
-                    if (entitycreature.locZ > (double) blockposition1.getZ()) {
-                        i2 -= random.nextInt(i / 2);
+                    if (entitycreature.locZ > (double) blockposition2.getZ()) {
+                        j1 -= random.nextInt(i / 2);
                     } else {
-                        i2 += random.nextInt(i / 2);
+                        j1 += random.nextInt(i / 2);
                     }
                 }
 
-                blockposition1 = new BlockPosition((double) k1 + entitycreature.locX, (double) l1 + entitycreature.locY, (double) i2 + entitycreature.locZ);
-                if ((!flag1 || entitycreature.a(blockposition1)) && navigationabstract.a(blockposition1)) {
+                blockposition2 = new BlockPosition((double) l + entitycreature.locX, (double) i1 + entitycreature.locY, (double) j1 + entitycreature.locZ);
+                if ((!flag1 || entitycreature.a(blockposition2)) && navigationabstract.a(blockposition2)) {
                     if (!flag) {
-                        blockposition1 = a(blockposition1, entitycreature);
-                        if (b(blockposition1, entitycreature)) {
+                        blockposition2 = a(blockposition2, entitycreature);
+                        if (b(blockposition2, entitycreature)) {
                             continue;
                         }
                     }
 
-                    double d2 = todoublefunction.applyAsDouble(blockposition1);
+                    double d2 = todoublefunction.applyAsDouble(blockposition2);
 
                     if (d2 > d1) {
                         d1 = d2;
-                        k = k1;
-                        l = l1;
-                        i1 = i2;
+                        blockposition = blockposition2;
                         flag2 = true;
                     }
                 }
@@ -115,7 +119,7 @@ public class RandomPositionGenerator {
         }
 
         if (flag2) {
-            return new Vec3D((double) k + entitycreature.locX, (double) l + entitycreature.locY, (double) i1 + entitycreature.locZ);
+            return new Vec3D(blockposition);
         } else {
             return null;
         }

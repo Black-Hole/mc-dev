@@ -41,10 +41,10 @@ public class ChunkTaskQueueSorter implements AutoCloseable, PlayerChunk.c {
     }
 
     public static ChunkTaskQueueSorter.a<Runnable> a(PlayerChunk playerchunk, Runnable runnable) {
-        long i = playerchunk.h().pair();
+        long i = playerchunk.i().pair();
 
         playerchunk.getClass();
-        return a(runnable, i, playerchunk::j);
+        return a(runnable, i, playerchunk::k);
     }
 
     public static ChunkTaskQueueSorter.b a(Runnable runnable, long i, boolean flag) {

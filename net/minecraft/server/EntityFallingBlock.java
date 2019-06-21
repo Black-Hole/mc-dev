@@ -37,7 +37,7 @@ public class EntityFallingBlock extends Entity {
     }
 
     @Override
-    public boolean br() {
+    public boolean bs() {
         return false;
     }
 
@@ -103,7 +103,7 @@ public class EntityFallingBlock extends Entity {
 
                 if (!this.onGround && !flag1) {
                     if (!this.world.isClientSide && (this.ticksLived > 100 && (blockposition.getY() < 1 || blockposition.getY() > 256) || this.ticksLived > 600)) {
-                        if (this.dropItem && this.world.getGameRules().getBoolean("doEntityDrops")) {
+                        if (this.dropItem && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
                             this.a((IMaterial) block);
                         }
 
@@ -117,7 +117,7 @@ public class EntityFallingBlock extends Entity {
                         this.die();
                         if (!this.g) {
                             if (!flag1 && (!iblockdata.a((BlockActionContext) (new BlockActionContextDirectional(this.world, blockposition, EnumDirection.DOWN, ItemStack.a, EnumDirection.UP))) || !this.block.canPlace(this.world, blockposition))) {
-                                if (this.dropItem && this.world.getGameRules().getBoolean("doEntityDrops")) {
+                                if (this.dropItem && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
                                     this.a((IMaterial) block);
                                 }
                             } else {
@@ -150,7 +150,7 @@ public class EntityFallingBlock extends Entity {
                                             tileentity.update();
                                         }
                                     }
-                                } else if (this.dropItem && this.world.getGameRules().getBoolean("doEntityDrops")) {
+                                } else if (this.dropItem && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
                                     this.a((IMaterial) block);
                                 }
                             }
@@ -251,7 +251,7 @@ public class EntityFallingBlock extends Entity {
     }
 
     @Override
-    public boolean bS() {
+    public boolean bT() {
         return true;
     }
 

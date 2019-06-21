@@ -13,7 +13,7 @@ public class DedicatedPlayerList extends PlayerList {
         super(dedicatedserver, dedicatedserver.getDedicatedServerProperties().maxPlayers);
         DedicatedServerProperties dedicatedserverproperties = dedicatedserver.getDedicatedServerProperties();
 
-        this.a(dedicatedserverproperties.viewDistance, dedicatedserverproperties.viewDistance - 2);
+        this.a(dedicatedserverproperties.viewDistance);
         super.setHasWhitelist((Boolean) dedicatedserverproperties.whiteList.get());
         if (!dedicatedserver.isEmbeddedServer()) {
             this.getProfileBans().a(true);

@@ -25,7 +25,7 @@ public class EntitySpider extends EntityMonster {
     }
 
     @Override
-    public double aO() {
+    public double aP() {
         return (double) (this.getHeight() * 0.5F);
     }
 
@@ -160,7 +160,7 @@ public class EntitySpider extends EntityMonster {
 
         @Override
         public boolean a() {
-            float f = this.e.aE();
+            float f = this.e.aF();
 
             return f >= 0.5F ? false : super.a();
         }
@@ -179,7 +179,7 @@ public class EntitySpider extends EntityMonster {
 
         @Override
         public boolean b() {
-            float f = this.a.aE();
+            float f = this.a.aF();
 
             if (f >= 0.5F && this.a.getRandom().nextInt(100) == 0) {
                 this.a.setGoalTarget((EntityLiving) null);

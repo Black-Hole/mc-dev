@@ -33,4 +33,8 @@ public class DataWatcherObject<T> {
     public int hashCode() {
         return this.a;
     }
+
+    public String toString() {
+        return "<entity data: " + this.a + ">";
+    }
 }

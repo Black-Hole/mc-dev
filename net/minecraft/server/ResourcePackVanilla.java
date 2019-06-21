@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -189,7 +188,7 @@ public class ResourcePackVanilla implements IResourcePack {
 
     @Nullable
     protected InputStream c(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) {
-        String s = "/" + enumresourcepacktype.a() + "/" + minecraftkey.b() + "/" + minecraftkey.getKey();
+        String s = d(enumresourcepacktype, minecraftkey);
 
         if (ResourcePackVanilla.a != null) {
             java.nio.file.Path java_nio_file_path = ResourcePackVanilla.a.resolve(enumresourcepacktype.a() + "/" + minecraftkey.b() + "/" + minecraftkey.getKey());
@@ -206,10 +205,18 @@ public class ResourcePackVanilla implements IResourcePack {
         try {
             URL url = ResourcePackVanilla.class.getResource(s);
 
-            return url != null && ResourcePackFolder.a(new File(url.getFile()), s) ? ResourcePackVanilla.class.getResourceAsStream(s) : null;
+            return a(s, url) ? url.openStream() : null;
         } catch (IOException ioexception1) {
             return ResourcePackVanilla.class.getResourceAsStream(s);
         }
+    }
+
+    private static String d(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) {
+        return "/" + enumresourcepacktype.a() + "/" + minecraftkey.b() + "/" + minecraftkey.getKey();
+    }
+
+    private static boolean a(String s, @Nullable URL url) throws IOException {
+        return url != null && (url.getProtocol().equals("jar") || ResourcePackFolder.a(new File(url.getFile()), s));
     }
 
     @Nullable
@@ -219,11 +226,23 @@ public class ResourcePackVanilla implements IResourcePack {
 
     @Override
     public boolean b(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) {
-        InputStream inputstream = this.c(enumresourcepacktype, minecraftkey);
-        boolean flag = inputstream != null;
+        String s = d(enumresourcepacktype, minecraftkey);
 
-        IOUtils.closeQuietly(inputstream);
-        return flag;
+        if (ResourcePackVanilla.a != null) {
+            java.nio.file.Path java_nio_file_path = ResourcePackVanilla.a.resolve(enumresourcepacktype.a() + "/" + minecraftkey.b() + "/" + minecraftkey.getKey());
+
+            if (Files.exists(java_nio_file_path, new LinkOption[0])) {
+                return true;
+            }
+        }
+
+        try {
+            URL url = ResourcePackVanilla.class.getResource(s);
+
+            return a(s, url);
+        } catch (IOException ioexception) {
+            return false;
+        }
     }
 
     @Override

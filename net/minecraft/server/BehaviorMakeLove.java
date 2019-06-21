@@ -36,33 +36,33 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
         if (entityvillager.h((Entity) entityvillager1) <= 5.0D) {
             BehaviorUtil.a((EntityLiving) entityvillager, (EntityLiving) entityvillager1);
             if (i >= this.a) {
-                Optional<BlockPosition> optional = this.b(worldserver, entityvillager);
-
-                if (!optional.isPresent()) {
-                    worldserver.broadcastEntityEffect(entityvillager1, (byte) 13);
-                    worldserver.broadcastEntityEffect(entityvillager, (byte) 13);
-                    return;
-                }
-
-                entityvillager.em();
-                entityvillager1.em();
-                Optional<EntityVillager> optional1 = this.a(entityvillager, entityvillager1);
-
-                if (optional1.isPresent()) {
-                    entityvillager.s(12);
-                    entityvillager1.s(12);
-                    this.a(worldserver, (EntityVillager) optional1.get(), (BlockPosition) optional.get());
-                } else {
-                    worldserver.B().b((BlockPosition) optional.get());
-                }
-            }
-
-            if (entityvillager.getRandom().nextInt(35) == 0) {
+                entityvillager.ep();
+                entityvillager1.ep();
+                this.a(worldserver, entityvillager, entityvillager1);
+            } else if (entityvillager.getRandom().nextInt(35) == 0) {
                 worldserver.broadcastEntityEffect(entityvillager1, (byte) 12);
                 worldserver.broadcastEntityEffect(entityvillager, (byte) 12);
             }
 
         }
+    }
+
+    private void a(WorldServer worldserver, EntityVillager entityvillager, EntityVillager entityvillager1) {
+        Optional<BlockPosition> optional = this.b(worldserver, entityvillager);
+
+        if (!optional.isPresent()) {
+            worldserver.broadcastEntityEffect(entityvillager1, (byte) 13);
+            worldserver.broadcastEntityEffect(entityvillager, (byte) 13);
+        } else {
+            Optional<EntityVillager> optional1 = this.a(entityvillager, entityvillager1);
+
+            if (optional1.isPresent()) {
+                this.a(worldserver, (EntityVillager) optional1.get(), (BlockPosition) optional.get());
+            } else {
+                worldserver.B().b((BlockPosition) optional.get());
+            }
+        }
+
     }
 
     protected void f(WorldServer worldserver, EntityVillager entityvillager, long i) {
@@ -87,8 +87,14 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
 
     private Optional<BlockPosition> b(WorldServer worldserver, EntityVillager entityvillager) {
         return worldserver.B().a(VillagePlaceType.q.c(), (blockposition) -> {
-            return true;
+            return this.a(entityvillager, blockposition);
         }, new BlockPosition(entityvillager), 48);
+    }
+
+    private boolean a(EntityVillager entityvillager, BlockPosition blockposition) {
+        PathEntity pathentity = entityvillager.getNavigation().b(blockposition);
+
+        return pathentity != null && pathentity.a(blockposition);
     }
 
     private Optional<EntityVillager> a(EntityVillager entityvillager, EntityVillager entityvillager1) {

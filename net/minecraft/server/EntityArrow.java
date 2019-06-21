@@ -331,6 +331,8 @@ public abstract class EntityArrow extends Entity implements IProjectile {
             }
         }
 
+        int j = entity.ad();
+
         if (this.isBurning() && !(entity instanceof EntityEnderman)) {
             entity.setOnFire(5);
         }
@@ -381,6 +383,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
                 this.die();
             }
         } else {
+            entity.g(j);
             this.setMot(this.getMot().a(-0.1D));
             this.yaw += 180.0F;
             this.lastYaw += 180.0F;
@@ -516,7 +519,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     }
 
     @Override
-    public boolean br() {
+    public boolean bs() {
         return false;
     }
 

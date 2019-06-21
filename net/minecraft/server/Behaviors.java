@@ -12,7 +12,7 @@ public class Behaviors {
     }
 
     public static ImmutableList<Pair<Integer, ? extends Behavior<? super EntityVillager>>> b(VillagerProfession villagerprofession, float f) {
-        return ImmutableList.of(b(), Pair.of(5, new BehaviorGateSingle<>(ImmutableList.of(Pair.of(new BehaviorWork(), 7), Pair.of(new BehaviorStrollPosition(MemoryModuleType.JOB_SITE, 4), 2), Pair.of(new BehaviorStrollPlace(MemoryModuleType.JOB_SITE, 1, 10), 5), Pair.of(new BehaviorStrollPlaceList(MemoryModuleType.SECONDARY_JOB_SITE, 0.4F, 1, 6, MemoryModuleType.JOB_SITE), 5), Pair.of(new BehaviorFarm(), 5)))), Pair.of(10, new BehaviorTradePlayer(400, 1600)), Pair.of(10, new BehaviorLookInteract(EntityTypes.PLAYER, 4)), Pair.of(2, new BehaviorWalkAwayBlock(MemoryModuleType.JOB_SITE, f, 9, 100, 1200)), Pair.of(3, new BehaviorVillageHeroGift(100)), Pair.of(3, new BehaviorPositionValidate(villagerprofession.b(), MemoryModuleType.JOB_SITE)), Pair.of(99, new BehaviorSchedule()));
+        return ImmutableList.of(b(), Pair.of(5, new BehaviorGateSingle<>(ImmutableList.of(Pair.of(new BehaviorWork(), 7), Pair.of(new BehaviorStrollPosition(MemoryModuleType.JOB_SITE, 4), 2), Pair.of(new BehaviorStrollPlace(MemoryModuleType.JOB_SITE, 1, 10), 5), Pair.of(new BehaviorStrollPlaceList(MemoryModuleType.SECONDARY_JOB_SITE, 0.4F, 1, 6, MemoryModuleType.JOB_SITE), 5), Pair.of(new BehaviorFarm(), villagerprofession == VillagerProfession.FARMER ? 2 : 5)))), Pair.of(10, new BehaviorTradePlayer(400, 1600)), Pair.of(10, new BehaviorLookInteract(EntityTypes.PLAYER, 4)), Pair.of(2, new BehaviorWalkAwayBlock(MemoryModuleType.JOB_SITE, f, 9, 100, 1200)), Pair.of(3, new BehaviorVillageHeroGift(100)), Pair.of(3, new BehaviorPositionValidate(villagerprofession.b(), MemoryModuleType.JOB_SITE)), Pair.of(99, new BehaviorSchedule()));
     }
 
     public static ImmutableList<Pair<Integer, ? extends Behavior<? super EntityVillager>>> a(float f) {
@@ -34,7 +34,7 @@ public class Behaviors {
     public static ImmutableList<Pair<Integer, ? extends Behavior<? super EntityVillager>>> f(VillagerProfession villagerprofession, float f) {
         float f1 = f * 1.5F;
 
-        return ImmutableList.of(Pair.of(0, new BehaviorCooldown()), Pair.of(1, new BehaviorWalkAwayEntity(MemoryModuleType.NEAREST_HOSTILE, f1)), Pair.of(1, new BehaviorWalkAwayEntity(MemoryModuleType.HURT_BY_ENTITY, f1)), Pair.of(3, new BehaviorStrollRandom(f1)), b());
+        return ImmutableList.of(Pair.of(0, new BehaviorCooldown()), Pair.of(1, new BehaviorWalkAwayEntity(MemoryModuleType.NEAREST_HOSTILE, f1)), Pair.of(1, new BehaviorWalkAwayEntity(MemoryModuleType.HURT_BY_ENTITY, f1)), Pair.of(3, new BehaviorStrollRandom(f1, 2, 2)), b());
     }
 
     public static ImmutableList<Pair<Integer, ? extends Behavior<? super EntityVillager>>> g(VillagerProfession villagerprofession, float f) {

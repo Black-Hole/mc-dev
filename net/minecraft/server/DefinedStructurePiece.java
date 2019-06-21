@@ -42,6 +42,7 @@ public abstract class DefinedStructurePiece extends StructurePiece {
     @Override
     public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
         this.b.a(structureboundingbox);
+        this.n = this.a.b(this.b, this.c);
         if (this.a.a(generatoraccess, this.c, this.b, 2)) {
             List<DefinedStructure.BlockInfo> list = this.a.a(this.c, this.b, Blocks.STRUCTURE_BLOCK);
             Iterator iterator = list.iterator();
@@ -99,7 +100,7 @@ public abstract class DefinedStructurePiece extends StructurePiece {
     }
 
     @Override
-    public EnumBlockRotation Y_() {
+    public EnumBlockRotation X_() {
         return this.b.d();
     }
 }

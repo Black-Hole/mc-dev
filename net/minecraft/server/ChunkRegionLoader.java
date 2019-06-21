@@ -257,6 +257,7 @@ public class ChunkRegionLoader {
         ChunkSection[] achunksection = ichunkaccess.getSections();
         NBTTagList nbttaglist = new NBTTagList();
         LightEngineThreaded lightenginethreaded = worldserver.getChunkProvider().getLightEngine();
+        boolean flag = ichunkaccess.r();
 
         NBTTagCompound nbttagcompound2;
 
@@ -287,7 +288,7 @@ public class ChunkRegionLoader {
         }
 
         nbttagcompound1.set("Sections", nbttaglist);
-        if (ichunkaccess.r()) {
+        if (flag) {
             nbttagcompound1.setBoolean("isLightOn", true);
         }
 

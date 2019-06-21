@@ -1,11 +1,8 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 public class BehaviorFarm extends Behavior<EntityVillager> {
@@ -16,43 +13,61 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
     private boolean c;
     private long d;
     private int e;
+    private List<BlockPosition> f = Lists.newArrayList();
 
     public BehaviorFarm() {
         super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.SECONDARY_JOB_SITE, MemoryStatus.VALUE_PRESENT));
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
-        if (!worldserver.getGameRules().getBoolean("mobGriefing")) {
+        if (!worldserver.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
             return false;
         } else if (entityvillager.getVillagerData().getProfession() != VillagerProfession.FARMER) {
             return false;
         } else {
-            Set<BlockPosition> set = (Set) ((List) entityvillager.getBehaviorController().getMemory(MemoryModuleType.SECONDARY_JOB_SITE).get()).stream().map(GlobalPos::getBlockPosition).collect(Collectors.toSet());
-            BlockPosition blockposition = new BlockPosition(entityvillager);
-            Stream stream = ImmutableList.of(blockposition.down(), blockposition.south(), blockposition.north(), blockposition.east(), blockposition.west()).stream();
+            this.b = entityvillager.es();
+            this.c = false;
+            InventorySubcontainer inventorysubcontainer = entityvillager.getInventory();
+            int i = inventorysubcontainer.getSize();
 
-            set.getClass();
-            List<BlockPosition> list = (List) stream.filter(set::contains).collect(Collectors.toList());
-
-            this.b = entityvillager.ep();
-            this.c = entityvillager.eo();
-            List<BlockPosition> list1 = (List) list.stream().map(BlockPosition::up).filter((blockposition1) -> {
-                return this.a(worldserver.getType(blockposition1));
-            }).collect(Collectors.toList());
-
-            if (!list1.isEmpty()) {
-                this.a = (BlockPosition) list1.get(worldserver.getRandom().nextInt(list1.size()));
-                return true;
-            } else {
-                return false;
+            for (int j = 0; j < i; ++j) {
+                if (inventorysubcontainer.getItem(j).isEmpty()) {
+                    this.c = true;
+                    break;
+                }
             }
+
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(entityvillager.locX, entityvillager.locY, entityvillager.locZ);
+
+            this.f.clear();
+
+            for (int k = -1; k <= 1; ++k) {
+                for (int l = -1; l <= 1; ++l) {
+                    for (int i1 = -1; i1 <= 1; ++i1) {
+                        blockposition_mutableblockposition.c(entityvillager.locX + (double) k, entityvillager.locY + (double) l, entityvillager.locZ + (double) i1);
+                        if (this.a((BlockPosition) blockposition_mutableblockposition, worldserver)) {
+                            this.f.add(new BlockPosition(blockposition_mutableblockposition));
+                        }
+                    }
+                }
+            }
+
+            this.a = this.a(worldserver);
+            return (this.b || this.c) && this.a != null;
         }
     }
 
-    private boolean a(IBlockData iblockdata) {
-        Block block = iblockdata.getBlock();
+    @Nullable
+    private BlockPosition a(WorldServer worldserver) {
+        return this.f.isEmpty() ? null : (BlockPosition) this.f.get(worldserver.getRandom().nextInt(this.f.size()));
+    }
 
-        return block instanceof BlockCrops && ((BlockCrops) block).isRipe(iblockdata) && this.c || iblockdata.isAir() && this.b;
+    private boolean a(BlockPosition blockposition, WorldServer worldserver) {
+        IBlockData iblockdata = worldserver.getType(blockposition);
+        Block block = iblockdata.getBlock();
+        Block block1 = worldserver.getType(blockposition.down()).getBlock();
+
+        return block instanceof BlockCrops && ((BlockCrops) block).isRipe(iblockdata) && this.c || iblockdata.isAir() && block1 instanceof BlockSoil && this.b;
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
@@ -71,13 +86,16 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
     }
 
     protected void d(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        if (this.e > 15 && this.a != null && i > this.d) {
+        if (this.a != null && i > this.d) {
             IBlockData iblockdata = worldserver.getType(this.a);
             Block block = iblockdata.getBlock();
+            Block block1 = worldserver.getType(this.a.down()).getBlock();
 
             if (block instanceof BlockCrops && ((BlockCrops) block).isRipe(iblockdata) && this.c) {
                 worldserver.b(this.a, true);
-            } else if (iblockdata.isAir() && this.b) {
+            }
+
+            if (iblockdata.isAir() && block1 instanceof BlockSoil && this.b) {
                 InventorySubcontainer inventorysubcontainer = entityvillager.getInventory();
 
                 for (int j = 0; j < inventorysubcontainer.getSize(); ++j) {
@@ -110,12 +128,22 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
                     }
                 }
             }
+
+            if (block instanceof BlockCrops && !((BlockCrops) block).isRipe(iblockdata)) {
+                this.f.remove(this.a);
+                this.a = this.a(worldserver);
+                if (this.a != null) {
+                    this.d = i + 20L;
+                    entityvillager.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorTarget(this.a), 0.5F, 1)));
+                    entityvillager.getBehaviorController().setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorTarget(this.a)));
+                }
+            }
         }
 
         ++this.e;
     }
 
     protected boolean g(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        return this.e < 30;
+        return this.e < 200;
     }
 }

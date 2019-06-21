@@ -124,7 +124,7 @@ public class ChunkSection {
 
                     if (!fluid.isEmpty()) {
                         ++this.nonEmptyBlockCount;
-                        if (fluid.g()) {
+                        if (fluid.h()) {
                             ++this.e;
                         }
                     }

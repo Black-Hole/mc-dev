@@ -18,7 +18,7 @@ public abstract class EntityFlying extends EntityInsentient {
             this.a(0.02F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.800000011920929D));
-        } else if (this.aC()) {
+        } else if (this.aD()) {
             this.a(0.02F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.5D));

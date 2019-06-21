@@ -294,7 +294,7 @@ public final class ItemStack {
     }
 
     public String toString() {
-        return this.count + "x" + this.getItem().getName();
+        return this.count + " " + this.getItem();
     }
 
     public void a(World world, Entity entity, int i, boolean flag) {

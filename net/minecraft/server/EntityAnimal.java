@@ -1,17 +1,16 @@
 package net.minecraft.server;
 
+import java.util.Random;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
 public abstract class EntityAnimal extends EntityAgeable {
 
-    protected Block bC;
     public int loveTicks;
     public UUID breedCause;
 
     protected EntityAnimal(EntityTypes<? extends EntityAnimal> entitytypes, World world) {
         super(entitytypes, world);
-        this.bC = Blocks.GRASS_BLOCK;
     }
 
     @Override
@@ -55,7 +54,7 @@ public abstract class EntityAnimal extends EntityAgeable {
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return iworldreader.getType(blockposition.down()).getBlock() == this.bC ? 10.0F : iworldreader.w(blockposition) - 0.5F;
+        return iworldreader.getType(blockposition.down()).getBlock() == Blocks.GRASS_BLOCK ? 10.0F : iworldreader.w(blockposition) - 0.5F;
     }
 
     @Override
@@ -69,7 +68,7 @@ public abstract class EntityAnimal extends EntityAgeable {
     }
 
     @Override
-    public double aN() {
+    public double aO() {
         return 0.14D;
     }
 
@@ -80,14 +79,8 @@ public abstract class EntityAnimal extends EntityAgeable {
         this.breedCause = nbttagcompound.b("LoveCause") ? nbttagcompound.a("LoveCause") : null;
     }
 
-    @Override
-    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        int i = MathHelper.floor(this.locX);
-        int j = MathHelper.floor(this.getBoundingBox().minY);
-        int k = MathHelper.floor(this.locZ);
-        BlockPosition blockposition = new BlockPosition(i, j, k);
-
-        return generatoraccess.getType(blockposition.down()).getBlock() == this.bC && generatoraccess.getLightLevel(blockposition, 0) > 8 && super.a(generatoraccess, enummobspawn);
+    public static boolean b(EntityTypes<? extends EntityAnimal> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        return generatoraccess.getType(blockposition.down()).getBlock() == Blocks.GRASS_BLOCK && generatoraccess.getLightLevel(blockposition, 0) > 8;
     }
 
     @Override
@@ -114,7 +107,7 @@ public abstract class EntityAnimal extends EntityAgeable {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (this.i(itemstack)) {
-            if (this.getAge() == 0 && this.ea()) {
+            if (this.getAge() == 0 && this.eb()) {
                 this.a(entityhuman, itemstack);
                 this.f(entityhuman);
                 return true;
@@ -137,7 +130,7 @@ public abstract class EntityAnimal extends EntityAgeable {
 
     }
 
-    public boolean ea() {
+    public boolean eb() {
         return this.loveTicks <= 0;
     }
 

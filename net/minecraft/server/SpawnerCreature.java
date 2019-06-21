@@ -38,7 +38,7 @@ public final class SpawnerCreature {
 
                     while (true) {
                         if (j2 < l1) {
-                            label96:
+                            label97:
                             {
                                 j1 += world.random.nextInt(6) - world.random.nextInt(6);
                                 k1 += world.random.nextInt(6) - world.random.nextInt(6);
@@ -54,7 +54,7 @@ public final class SpawnerCreature {
                                         if (biomebase_biomemeta == null) {
                                             biomebase_biomemeta = a(chunkgenerator, enumcreaturetype, world.random, (BlockPosition) blockposition_mutableblockposition);
                                             if (biomebase_biomemeta == null) {
-                                                break label96;
+                                                break label97;
                                             }
 
                                             l1 = biomebase_biomemeta.c + world.random.nextInt(1 + biomebase_biomemeta.d - biomebase_biomemeta.c);
@@ -66,7 +66,7 @@ public final class SpawnerCreature {
                                             if (entitytypes.b() && a(chunkgenerator, enumcreaturetype, biomebase_biomemeta, (BlockPosition) blockposition_mutableblockposition)) {
                                                 EntityPositionTypes.Surface entitypositiontypes_surface = EntityPositionTypes.a(entitytypes);
 
-                                                if (entitypositiontypes_surface != null && a(entitypositiontypes_surface, (IWorldReader) world, (BlockPosition) blockposition_mutableblockposition, entitytypes) && world.c(entitytypes.a((double) f, (double) k, (double) f1))) {
+                                                if (a(entitypositiontypes_surface, (IWorldReader) world, (BlockPosition) blockposition_mutableblockposition, entitytypes) && EntityPositionTypes.a(entitytypes, world, EnumMobSpawn.NATURAL, blockposition_mutableblockposition, world.random) && world.c(entitytypes.a((double) f, (double) k, (double) f1))) {
                                                     EntityInsentient entityinsentient;
 
                                                     try {
@@ -88,12 +88,12 @@ public final class SpawnerCreature {
                                                         ++i;
                                                         ++i2;
                                                         world.addEntity(entityinsentient);
-                                                        if (i >= entityinsentient.dC()) {
+                                                        if (i >= entityinsentient.dD()) {
                                                             return;
                                                         }
 
                                                         if (entityinsentient.c(i2)) {
-                                                            break label96;
+                                                            break label97;
                                                         }
                                                     }
                                                 }
@@ -144,7 +144,9 @@ public final class SpawnerCreature {
     }
 
     public static boolean a(EntityPositionTypes.Surface entitypositiontypes_surface, IWorldReader iworldreader, BlockPosition blockposition, @Nullable EntityTypes<?> entitytypes) {
-        if (entitytypes != null && iworldreader.getWorldBorder().a(blockposition)) {
+        if (entitypositiontypes_surface == EntityPositionTypes.Surface.NO_RESTRICTIONS) {
+            return true;
+        } else if (entitytypes != null && iworldreader.getWorldBorder().a(blockposition)) {
             IBlockData iblockdata = iworldreader.getType(blockposition);
             Fluid fluid = iworldreader.getFluid(blockposition);
             BlockPosition blockposition1 = blockposition.up();
@@ -191,7 +193,7 @@ public final class SpawnerCreature {
                             double d0 = MathHelper.a((double) j1, (double) k + (double) f, (double) k + 16.0D - (double) f);
                             double d1 = MathHelper.a((double) k1, (double) l + (double) f, (double) l + 16.0D - (double) f);
 
-                            if (!generatoraccess.c(biomebase_biomemeta.b.a(d0, (double) blockposition.getY(), d1))) {
+                            if (!generatoraccess.c(biomebase_biomemeta.b.a(d0, (double) blockposition.getY(), d1)) || !EntityPositionTypes.a(biomebase_biomemeta.b, generatoraccess, EnumMobSpawn.CHUNK_GENERATION, new BlockPosition(d0, (double) blockposition.getY(), d1), generatoraccess.getRandom())) {
                                 continue;
                             }
 

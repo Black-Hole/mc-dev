@@ -56,8 +56,8 @@ public class SecondaryWorldData extends WorldData {
     }
 
     @Override
-    public int k() {
-        return this.b.k();
+    public int j() {
+        return this.b.j();
     }
 
     @Override
@@ -131,24 +131,24 @@ public class SecondaryWorldData extends WorldData {
     public void a(WorldType worldtype) {}
 
     @Override
-    public boolean u() {
-        return this.b.u();
+    public boolean t() {
+        return this.b.t();
     }
 
     @Override
     public void c(boolean flag) {}
 
     @Override
-    public boolean v() {
-        return this.b.v();
+    public boolean u() {
+        return this.b.u();
     }
 
     @Override
     public void d(boolean flag) {}
 
     @Override
-    public GameRules w() {
-        return this.b.w();
+    public GameRules v() {
+        return this.b.v();
     }
 
     @Override
@@ -168,8 +168,8 @@ public class SecondaryWorldData extends WorldData {
     public void e(boolean flag) {}
 
     @Override
-    public CustomFunctionCallbackTimerQueue<MinecraftServer> z() {
-        return this.b.z();
+    public CustomFunctionCallbackTimerQueue<MinecraftServer> y() {
+        return this.b.y();
     }
 
     @Override
@@ -180,5 +180,11 @@ public class SecondaryWorldData extends WorldData {
     @Override
     public NBTTagCompound a(DimensionManager dimensionmanager) {
         return this.b.a(dimensionmanager);
+    }
+
+    @Override
+    public void a(CrashReportSystemDetails crashreportsystemdetails) {
+        crashreportsystemdetails.a("Derived", (Object) true);
+        this.b.a(crashreportsystemdetails);
     }
 }

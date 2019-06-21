@@ -27,7 +27,7 @@ public class PathfinderGoalBreakDoor extends PathfinderGoalDoorInteract {
 
     @Override
     public boolean a() {
-        return !super.a() ? false : (!this.entity.world.getGameRules().getBoolean("mobGriefing") ? false : this.a(this.entity.world.getDifficulty()) && !this.g());
+        return !super.a() ? false : (!this.entity.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) ? false : this.a(this.entity.world.getDifficulty()) && !this.g());
     }
 
     @Override
@@ -38,7 +38,7 @@ public class PathfinderGoalBreakDoor extends PathfinderGoalDoorInteract {
 
     @Override
     public boolean b() {
-        return this.a <= this.f() && !this.g() && this.door.a((IPosition) this.entity.ch(), 2.0D) && this.a(this.entity.world.getDifficulty());
+        return this.a <= this.f() && !this.g() && this.door.a((IPosition) this.entity.ci(), 2.0D) && this.a(this.entity.world.getDifficulty());
     }
 
     @Override

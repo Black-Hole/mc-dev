@@ -203,11 +203,6 @@ public class Tag<T> {
             return this;
         }
 
-        public Tag.a<T> a(Collection<T> collection) {
-            this.a.add(new Tag.d<>(collection));
-            return this;
-        }
-
         public Tag.a<T> a(Tag<T> tag) {
             this.a.add(new Tag.c<>(tag));
             return this;

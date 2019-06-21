@@ -75,16 +75,6 @@ public class Advancements {
         Advancements.LOGGER.info("Loaded {} advancements", this.advancements.size());
     }
 
-    public void a() {
-        this.advancements.clear();
-        this.c.clear();
-        this.d.clear();
-        if (this.e != null) {
-            this.e.a();
-        }
-
-    }
-
     public Iterable<Advancement> b() {
         return this.c;
     }
@@ -103,7 +93,5 @@ public class Advancements {
         void a(Advancement advancement);
 
         void c(Advancement advancement);
-
-        void a();
     }
 }

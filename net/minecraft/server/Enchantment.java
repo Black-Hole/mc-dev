@@ -52,6 +52,10 @@ public abstract class Enchantment {
         return 1 + i * 10;
     }
 
+    public int b(int i) {
+        return this.a(i) + 5;
+    }
+
     public int a(int i, DamageSource damagesource) {
         return 0;
     }
@@ -114,7 +118,7 @@ public abstract class Enchantment {
 
     public static enum Rarity {
 
-        COMMON(30), UNCOMMON(10), RARE(3), VERY_RARE(1);
+        COMMON(10), UNCOMMON(5), RARE(2), VERY_RARE(1);
 
         private final int e;
 

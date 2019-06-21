@@ -18,33 +18,33 @@ public class EntityFox extends EntityAnimal {
     private static final DataWatcherObject<Integer> bz = DataWatcher.a(EntityFox.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Byte> bA = DataWatcher.a(EntityFox.class, DataWatcherRegistry.a);
     private static final DataWatcherObject<Optional<UUID>> bB = DataWatcher.a(EntityFox.class, DataWatcherRegistry.o);
-    private static final DataWatcherObject<Optional<UUID>> bD = DataWatcher.a(EntityFox.class, DataWatcherRegistry.o);
-    private static final Predicate<EntityItem> bE = (entityitem) -> {
+    private static final DataWatcherObject<Optional<UUID>> bC = DataWatcher.a(EntityFox.class, DataWatcherRegistry.o);
+    private static final Predicate<EntityItem> bD = (entityitem) -> {
         return !entityitem.q() && entityitem.isAlive();
     };
-    private static final Predicate<Entity> bF = (entity) -> {
+    private static final Predicate<Entity> bE = (entity) -> {
         if (!(entity instanceof EntityLiving)) {
             return false;
         } else {
             EntityLiving entityliving = (EntityLiving) entity;
 
-            return entityliving.ct() != null && entityliving.cu() < entityliving.ticksLived + 600;
+            return entityliving.cu() != null && entityliving.cv() < entityliving.ticksLived + 600;
         }
     };
-    private static final Predicate<Entity> bG = (entity) -> {
+    private static final Predicate<Entity> bF = (entity) -> {
         return entity instanceof EntityChicken || entity instanceof EntityRabbit;
     };
-    private static final Predicate<Entity> bH = (entity) -> {
+    private static final Predicate<Entity> bG = (entity) -> {
         return !entity.isSneaking() && IEntitySelector.e.test(entity);
     };
+    private PathfinderGoal bH;
     private PathfinderGoal bI;
     private PathfinderGoal bJ;
-    private PathfinderGoal bK;
+    private float bK;
     private float bL;
     private float bM;
     private float bN;
-    private float bO;
-    private int bP;
+    private int bO;
 
     public EntityFox(EntityTypes<? extends EntityFox> entitytypes, World world) {
         super(entitytypes, world);
@@ -59,28 +59,28 @@ public class EntityFox extends EntityAnimal {
     protected void initDatawatcher() {
         super.initDatawatcher();
         this.datawatcher.register(EntityFox.bB, Optional.empty());
-        this.datawatcher.register(EntityFox.bD, Optional.empty());
+        this.datawatcher.register(EntityFox.bC, Optional.empty());
         this.datawatcher.register(EntityFox.bz, 0);
         this.datawatcher.register(EntityFox.bA, (byte) 0);
     }
 
     @Override
     protected void initPathfinder() {
-        this.bI = new PathfinderGoalNearestAttackableTarget<>(this, EntityAnimal.class, 10, false, false, (entityliving) -> {
+        this.bH = new PathfinderGoalNearestAttackableTarget<>(this, EntityAnimal.class, 10, false, false, (entityliving) -> {
             return entityliving instanceof EntityChicken || entityliving instanceof EntityRabbit;
         });
-        this.bJ = new PathfinderGoalNearestAttackableTarget<>(this, EntityTurtle.class, 10, false, false, EntityTurtle.bz);
-        this.bK = new PathfinderGoalNearestAttackableTarget<>(this, EntityFish.class, 20, false, false, (entityliving) -> {
+        this.bI = new PathfinderGoalNearestAttackableTarget<>(this, EntityTurtle.class, 10, false, false, EntityTurtle.bz);
+        this.bJ = new PathfinderGoalNearestAttackableTarget<>(this, EntityFish.class, 20, false, false, (entityliving) -> {
             return entityliving instanceof EntityFishSchool;
         });
         this.goalSelector.a(0, new EntityFox.g());
         this.goalSelector.a(1, new EntityFox.b());
         this.goalSelector.a(2, new EntityFox.n(2.2D));
         this.goalSelector.a(3, new PathfinderGoalAvoidTarget<>(this, EntityHuman.class, 16.0F, 1.6D, 1.4D, (entityliving) -> {
-            return EntityFox.bH.test(entityliving) && !this.c(entityliving.getUniqueID());
+            return EntityFox.bG.test(entityliving) && !this.c(entityliving.getUniqueID()) && !this.em();
         }));
         this.goalSelector.a(3, new PathfinderGoalAvoidTarget<>(this, EntityWolf.class, 8.0F, 1.6D, 1.4D, (entityliving) -> {
-            return !((EntityWolf) entityliving).isTamed();
+            return !((EntityWolf) entityliving).isTamed() && !this.em();
         }));
         this.goalSelector.a(4, new EntityFox.u());
         this.goalSelector.a(5, new EntityFox.o());
@@ -97,7 +97,7 @@ public class EntityFox extends EntityAnimal {
         this.goalSelector.a(11, new EntityFox.j(this, EntityHuman.class, 24.0F));
         this.goalSelector.a(12, new EntityFox.r());
         this.targetSelector.a(3, new EntityFox.a(EntityLiving.class, false, false, (entityliving) -> {
-            return EntityFox.bF.test(entityliving) && !this.c(entityliving.getUniqueID());
+            return EntityFox.bE.test(entityliving) && !this.c(entityliving.getUniqueID());
         }));
     }
 
@@ -108,20 +108,20 @@ public class EntityFox extends EntityAnimal {
 
     @Override
     public void movementTick() {
-        if (!this.world.isClientSide && this.isAlive() && this.de()) {
-            ++this.bP;
+        if (!this.world.isClientSide && this.isAlive() && this.df()) {
+            ++this.bO;
             ItemStack itemstack = this.getEquipment(EnumItemSlot.MAINHAND);
 
             if (this.j(itemstack)) {
-                if (this.bP > 600) {
+                if (this.bO > 600) {
                     ItemStack itemstack1 = itemstack.a(this.world, (EntityLiving) this);
 
                     if (!itemstack1.isEmpty()) {
                         this.setSlot(EnumItemSlot.MAINHAND, itemstack1);
                     }
 
-                    this.bP = 0;
-                } else if (this.bP > 560 && this.random.nextFloat() < 0.1F) {
+                    this.bO = 0;
+                } else if (this.bO > 560 && this.random.nextFloat() < 0.1F) {
                     this.a(this.d(itemstack), 1.0F, 1.0F);
                     this.world.broadcastEntityEffect(this, (byte) 45);
                 }
@@ -143,7 +143,7 @@ public class EntityFox extends EntityAnimal {
         }
 
         super.movementTick();
-        if (this.el() && this.random.nextFloat() < 0.05F) {
+        if (this.em() && this.random.nextFloat() < 0.05F) {
             this.a(SoundEffects.ENTITY_FOX_AGGRO, 1.0F, 1.0F);
         }
 
@@ -231,13 +231,13 @@ public class EntityFox extends EntityAnimal {
 
     private void initializePathFinderGoals() {
         if (this.getFoxType() == EntityFox.Type.RED) {
+            this.targetSelector.a(4, this.bH);
             this.targetSelector.a(4, this.bI);
-            this.targetSelector.a(4, this.bJ);
-            this.targetSelector.a(6, this.bK);
-        } else {
-            this.targetSelector.a(4, this.bK);
-            this.targetSelector.a(6, this.bI);
             this.targetSelector.a(6, this.bJ);
+        } else {
+            this.targetSelector.a(4, this.bJ);
+            this.targetSelector.a(6, this.bH);
+            this.targetSelector.a(6, this.bI);
         }
 
     }
@@ -253,7 +253,7 @@ public class EntityFox extends EntityAnimal {
 
     @Override
     protected float b(EntityPose entitypose, EntitySize entitysize) {
-        return this.isBaby() ? entitysize.height * 0.95F : 0.4F;
+        return this.isBaby() ? entitysize.height * 0.85F : 0.4F;
     }
 
     public EntityFox.Type getFoxType() {
@@ -264,17 +264,17 @@ public class EntityFox extends EntityAnimal {
         this.datawatcher.set(EntityFox.bz, entityfox_type.c());
     }
 
-    private List<UUID> ek() {
+    private List<UUID> el() {
         List<UUID> list = Lists.newArrayList();
 
         list.add(((Optional) this.datawatcher.get(EntityFox.bB)).orElse((Object) null));
-        list.add(((Optional) this.datawatcher.get(EntityFox.bD)).orElse((Object) null));
+        list.add(((Optional) this.datawatcher.get(EntityFox.bC)).orElse((Object) null));
         return list;
     }
 
     private void b(@Nullable UUID uuid) {
         if (((Optional) this.datawatcher.get(EntityFox.bB)).isPresent()) {
-            this.datawatcher.set(EntityFox.bD, Optional.ofNullable(uuid));
+            this.datawatcher.set(EntityFox.bC, Optional.ofNullable(uuid));
         } else {
             this.datawatcher.set(EntityFox.bB, Optional.ofNullable(uuid));
         }
@@ -284,7 +284,7 @@ public class EntityFox extends EntityAnimal {
     @Override
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        List<UUID> list = this.ek();
+        List<UUID> list = this.el();
         NBTTagList nbttaglist = new NBTTagList();
         Iterator iterator = list.iterator();
 
@@ -320,23 +320,23 @@ public class EntityFox extends EntityAnimal {
     }
 
     public boolean isSitting() {
-        return this.r(1);
+        return this.s(1);
     }
 
     public void setSitting(boolean flag) {
         this.d(1, flag);
     }
 
-    public boolean dX() {
-        return this.r(64);
+    public boolean dY() {
+        return this.s(64);
     }
 
     private void v(boolean flag) {
         this.d(64, flag);
     }
 
-    private boolean el() {
-        return this.r(128);
+    private boolean em() {
+        return this.s(128);
     }
 
     private void w(boolean flag) {
@@ -345,7 +345,7 @@ public class EntityFox extends EntityAnimal {
 
     @Override
     public boolean isSleeping() {
-        return this.r(32);
+        return this.s(32);
     }
 
     public void setSleeping(boolean flag) {
@@ -361,7 +361,7 @@ public class EntityFox extends EntityAnimal {
 
     }
 
-    private boolean r(int i) {
+    private boolean s(int i) {
         return ((Byte) this.datawatcher.get(EntityFox.bA) & i) != 0;
     }
 
@@ -377,7 +377,7 @@ public class EntityFox extends EntityAnimal {
         Item item = itemstack.getItem();
         ItemStack itemstack1 = this.getEquipment(EnumItemSlot.MAINHAND);
 
-        return itemstack1.isEmpty() || this.bP > 0 && item.isFood() && !itemstack1.getItem().isFood();
+        return itemstack1.isEmpty() || this.bO > 0 && item.isFood() && !itemstack1.getItem().isFood();
     }
 
     private void k(ItemStack itemstack) {
@@ -413,7 +413,7 @@ public class EntityFox extends EntityAnimal {
             this.dropChanceHand[EnumItemSlot.MAINHAND.b()] = 2.0F;
             this.receive(entityitem, itemstack.getCount());
             entityitem.die();
-            this.bP = 0;
+            this.bO = 0;
         }
 
     }
@@ -421,18 +421,18 @@ public class EntityFox extends EntityAnimal {
     @Override
     public void tick() {
         super.tick();
-        if (this.de()) {
+        if (this.df()) {
             boolean flag = this.isInWater();
 
             if (flag || this.getGoalTarget() != null || this.world.U()) {
-                this.em();
+                this.en();
             }
 
             if (flag || this.isSleeping()) {
                 this.setSitting(false);
             }
 
-            if (this.dX() && this.world.random.nextFloat() < 0.2F) {
+            if (this.dY() && this.world.random.nextFloat() < 0.2F) {
                 BlockPosition blockposition = new BlockPosition(this.locX, this.locY, this.locZ);
                 IBlockData iblockdata = this.world.getType(blockposition);
 
@@ -440,21 +440,21 @@ public class EntityFox extends EntityAnimal {
             }
         }
 
-        this.bM = this.bL;
-        if (this.eg()) {
-            this.bL += (1.0F - this.bL) * 0.4F;
+        this.bL = this.bK;
+        if (this.eh()) {
+            this.bK += (1.0F - this.bK) * 0.4F;
         } else {
-            this.bL += (0.0F - this.bL) * 0.4F;
+            this.bK += (0.0F - this.bK) * 0.4F;
         }
 
-        this.bO = this.bN;
+        this.bN = this.bM;
         if (this.isCrouching()) {
-            this.bN += 0.2F;
-            if (this.bN > 3.0F) {
-                this.bN = 3.0F;
+            this.bM += 0.2F;
+            if (this.bM > 3.0F) {
+                this.bM = 3.0F;
             }
         } else {
-            this.bN = 0.0F;
+            this.bM = 0.0F;
         }
 
     }
@@ -469,16 +469,16 @@ public class EntityFox extends EntityAnimal {
         ((EntityFox) entityageable).b(entityhuman.getUniqueID());
     }
 
-    public boolean dY() {
-        return this.r(16);
+    public boolean dZ() {
+        return this.s(16);
     }
 
     public void s(boolean flag) {
         this.d(16, flag);
     }
 
-    public boolean ee() {
-        return this.bN == 3.0F;
+    public boolean ef() {
+        return this.bM == 3.0F;
     }
 
     public void setCrouching(boolean flag) {
@@ -486,20 +486,20 @@ public class EntityFox extends EntityAnimal {
     }
 
     public boolean isCrouching() {
-        return this.r(4);
+        return this.s(4);
     }
 
     public void u(boolean flag) {
         this.d(8, flag);
     }
 
-    public boolean eg() {
-        return this.r(8);
+    public boolean eh() {
+        return this.s(8);
     }
 
     @Override
     public void setGoalTarget(@Nullable EntityLiving entityliving) {
-        if (this.el() && entityliving == null) {
+        if (this.em() && entityliving == null) {
             this.w(false);
         }
 
@@ -533,11 +533,11 @@ public class EntityFox extends EntityAnimal {
         }
     }
 
-    private void em() {
+    private void en() {
         this.setSleeping(false);
     }
 
-    private void en() {
+    private void eo() {
         this.u(false);
         this.setCrouching(false);
         this.setSitting(false);
@@ -546,8 +546,8 @@ public class EntityFox extends EntityAnimal {
         this.v(false);
     }
 
-    private boolean eo() {
-        return !this.isSleeping() && !this.isSitting() && !this.dX();
+    private boolean ep() {
+        return !this.isSleeping() && !this.isSitting() && !this.dY();
     }
 
     @Override
@@ -555,7 +555,7 @@ public class EntityFox extends EntityAnimal {
         SoundEffect soundeffect = this.getSoundAmbient();
 
         if (soundeffect == SoundEffects.ENTITY_FOX_SCREECH) {
-            this.a(soundeffect, 2.0F, this.cU());
+            this.a(soundeffect, 2.0F, this.cV());
         } else {
             super.B();
         }
@@ -593,7 +593,7 @@ public class EntityFox extends EntityAnimal {
     }
 
     private boolean c(UUID uuid) {
-        return this.ek().contains(uuid);
+        return this.el().contains(uuid);
     }
 
     @Override
@@ -636,12 +636,12 @@ public class EntityFox extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return super.a() && !EntityFox.this.dX() && !EntityFox.this.eg();
+            return super.a() && !EntityFox.this.dY() && !EntityFox.this.eh();
         }
 
         @Override
         public boolean b() {
-            return super.b() && !EntityFox.this.dX() && !EntityFox.this.eg();
+            return super.b() && !EntityFox.this.dY() && !EntityFox.this.eh();
         }
     }
 
@@ -656,17 +656,17 @@ public class EntityFox extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return !this.b.el() && super.a();
+            return !this.b.em() && super.a();
         }
 
         @Override
         public boolean b() {
-            return !this.b.el() && super.b();
+            return !this.b.em() && super.b();
         }
 
         @Override
         public void c() {
-            this.b.en();
+            this.b.eo();
             super.c();
         }
     }
@@ -687,7 +687,7 @@ public class EntityFox extends EntityAnimal {
 
         @Override
         protected boolean b() {
-            return !EntityFox.this.dY() && !EntityFox.this.isCrouching() && !EntityFox.this.eg() & !EntityFox.this.dX();
+            return !EntityFox.this.dZ() && !EntityFox.this.isCrouching() && !EntityFox.this.eh() & !EntityFox.this.dY();
         }
     }
 
@@ -697,7 +697,7 @@ public class EntityFox extends EntityAnimal {
 
         @Override
         public boolean a() {
-            if (!EntityFox.this.ee()) {
+            if (!EntityFox.this.ef()) {
                 return false;
             } else {
                 EntityLiving entityliving = EntityFox.this.getGoalTarget();
@@ -729,7 +729,7 @@ public class EntityFox extends EntityAnimal {
             if (entityliving != null && entityliving.isAlive()) {
                 double d0 = EntityFox.this.getMot().y;
 
-                return (d0 * d0 >= 0.05000000074505806D || Math.abs(EntityFox.this.pitch) >= 15.0F || !EntityFox.this.onGround) && !EntityFox.this.dX();
+                return (d0 * d0 >= 0.05000000074505806D || Math.abs(EntityFox.this.pitch) >= 15.0F || !EntityFox.this.onGround) && !EntityFox.this.dY();
             } else {
                 return false;
             }
@@ -757,8 +757,8 @@ public class EntityFox extends EntityAnimal {
         @Override
         public void d() {
             EntityFox.this.setCrouching(false);
+            EntityFox.this.bM = 0.0F;
             EntityFox.this.bN = 0.0F;
-            EntityFox.this.bO = 0.0F;
             EntityFox.this.u(false);
             EntityFox.this.s(false);
         }
@@ -771,7 +771,7 @@ public class EntityFox extends EntityAnimal {
                 EntityFox.this.getControllerLook().a(entityliving, 60.0F, 30.0F);
             }
 
-            if (!EntityFox.this.dX()) {
+            if (!EntityFox.this.dY()) {
                 Vec3D vec3d = EntityFox.this.getMot();
 
                 if (vec3d.y * vec3d.y < 0.029999999329447746D && EntityFox.this.pitch != 0.0F) {
@@ -804,12 +804,12 @@ public class EntityFox extends EntityAnimal {
         @Override
         public void c() {
             super.c();
-            EntityFox.this.en();
+            EntityFox.this.eo();
         }
 
         @Override
         public boolean a() {
-            return EntityFox.this.isInWater() && EntityFox.this.ce() > 0.25D || EntityFox.this.aC();
+            return EntityFox.this.isInWater() && EntityFox.this.cf() > 0.25D || EntityFox.this.aD();
         }
     }
 
@@ -821,7 +821,7 @@ public class EntityFox extends EntityAnimal {
 
         @Override
         public void c() {
-            EntityFox.this.en();
+            EntityFox.this.eo();
             super.c();
         }
 
@@ -836,7 +836,7 @@ public class EntityFox extends EntityAnimal {
         }
 
         private boolean g() {
-            return !EntityFox.this.isSleeping() && !EntityFox.this.isSitting() && !EntityFox.this.el() && EntityFox.this.getGoalTarget() == null;
+            return !EntityFox.this.isSleeping() && !EntityFox.this.isSitting() && !EntityFox.this.em() && EntityFox.this.getGoalTarget() == null;
         }
     }
 
@@ -848,7 +848,7 @@ public class EntityFox extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return !EntityFox.this.el() && super.a();
+            return !EntityFox.this.em() && super.a();
         }
     }
 
@@ -862,7 +862,7 @@ public class EntityFox extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return EntityFox.this.dX();
+            return EntityFox.this.dY();
         }
 
         @Override
@@ -937,7 +937,7 @@ public class EntityFox extends EntityAnimal {
         }
 
         protected void m() {
-            if (EntityFox.this.world.getGameRules().getBoolean("mobGriefing")) {
+            if (EntityFox.this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
                 IBlockData iblockdata = EntityFox.this.world.getType(this.e);
 
                 if (iblockdata.getBlock() == Blocks.SWEET_BERRY_BUSH) {
@@ -989,7 +989,7 @@ public class EntityFox extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return EntityFox.this.getLastDamager() == null && EntityFox.this.getRandom().nextFloat() < 0.02F && !EntityFox.this.isSleeping() && EntityFox.this.getGoalTarget() == null && EntityFox.this.getNavigation().n() && !this.h() && !EntityFox.this.dY() && !EntityFox.this.isCrouching();
+            return EntityFox.this.getLastDamager() == null && EntityFox.this.getRandom().nextFloat() < 0.02F && !EntityFox.this.isSleeping() && EntityFox.this.getGoalTarget() == null && EntityFox.this.getNavigation().n() && !this.h() && !EntityFox.this.dZ() && !EntityFox.this.isCrouching();
         }
 
         @Override
@@ -1018,7 +1018,7 @@ public class EntityFox extends EntityAnimal {
                 this.j();
             }
 
-            EntityFox.this.getControllerLook().a(EntityFox.this.locX + this.c, EntityFox.this.locY + (double) EntityFox.this.getHeadHeight(), EntityFox.this.locZ + this.d, (float) EntityFox.this.dA(), (float) EntityFox.this.M());
+            EntityFox.this.getControllerLook().a(EntityFox.this.locX + this.c, EntityFox.this.locY + (double) EntityFox.this.getHeadHeight(), EntityFox.this.locZ + this.d, (float) EntityFox.this.dB(), (float) EntityFox.this.M());
         }
 
         private void j() {
@@ -1062,7 +1062,7 @@ public class EntityFox extends EntityAnimal {
         @Override
         public void d() {
             this.c = EntityFox.this.random.nextInt(140);
-            EntityFox.this.en();
+            EntityFox.this.eo();
         }
 
         @Override
@@ -1134,7 +1134,7 @@ public class EntityFox extends EntityAnimal {
 
         @Override
         public void c() {
-            EntityFox.this.en();
+            EntityFox.this.eo();
             super.c();
         }
     }
@@ -1155,7 +1155,7 @@ public class EntityFox extends EntityAnimal {
             if (this.b > 0 && this.e.getRandom().nextInt(this.b) != 0) {
                 return false;
             } else {
-                Iterator iterator = EntityFox.this.ek().iterator();
+                Iterator iterator = EntityFox.this.el().iterator();
 
                 while (iterator.hasNext()) {
                     UUID uuid = (UUID) iterator.next();
@@ -1168,7 +1168,7 @@ public class EntityFox extends EntityAnimal {
 
                             this.k = entityliving;
                             this.j = entityliving.getLastDamager();
-                            int i = entityliving.cs();
+                            int i = entityliving.ct();
 
                             return i != this.l && this.a(this.j, PathfinderTargetCondition.a);
                         }
@@ -1184,12 +1184,12 @@ public class EntityFox extends EntityAnimal {
             EntityFox.this.setGoalTarget(this.j);
             this.c = this.j;
             if (this.k != null) {
-                this.l = this.k.cs();
+                this.l = this.k.ct();
             }
 
             EntityFox.this.a(SoundEffects.ENTITY_FOX_AGGRO, 1.0F, 1.0F);
             EntityFox.this.w(true);
-            EntityFox.this.em();
+            EntityFox.this.en();
             super.c();
         }
     }
@@ -1202,8 +1202,8 @@ public class EntityFox extends EntityAnimal {
 
         @Override
         public void c() {
-            ((EntityFox) this.animal).en();
-            ((EntityFox) this.partner).en();
+            ((EntityFox) this.animal).eo();
+            ((EntityFox) this.partner).eo();
             super.c();
         }
 
@@ -1241,7 +1241,7 @@ public class EntityFox extends EntityAnimal {
                 entityfox.setPositionRotation(this.animal.locX, this.animal.locY, this.animal.locZ, 0.0F, 0.0F);
                 this.b.addEntity(entityfox);
                 this.b.broadcastEntityEffect(this.animal, (byte) 18);
-                if (this.b.getGameRules().getBoolean("doMobLoot")) {
+                if (this.b.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
                     this.b.addEntity(new EntityExperienceOrb(this.b, this.animal.locX, this.animal.locY, this.animal.locZ, this.animal.getRandom().nextInt(7) + 1));
                 }
 
@@ -1275,7 +1275,7 @@ public class EntityFox extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return !EntityFox.this.isSitting() && !EntityFox.this.isSleeping() && !EntityFox.this.isCrouching() && !EntityFox.this.dX() && super.a();
+            return !EntityFox.this.isSitting() && !EntityFox.this.isSleeping() && !EntityFox.this.isCrouching() && !EntityFox.this.dY() && super.a();
         }
     }
 
@@ -1292,7 +1292,7 @@ public class EntityFox extends EntityAnimal {
             } else {
                 EntityLiving entityliving = EntityFox.this.getGoalTarget();
 
-                return entityliving != null && entityliving.isAlive() && EntityFox.bG.test(entityliving) && EntityFox.this.h((Entity) entityliving) > 36.0D && !EntityFox.this.isCrouching() && !EntityFox.this.eg() && !EntityFox.this.jumping;
+                return entityliving != null && entityliving.isAlive() && EntityFox.bF.test(entityliving) && EntityFox.this.h((Entity) entityliving) > 36.0D && !EntityFox.this.isCrouching() && !EntityFox.this.eh() && !EntityFox.this.jumping;
             }
         }
 
@@ -1310,7 +1310,7 @@ public class EntityFox extends EntityAnimal {
                 EntityFox.this.u(true);
                 EntityFox.this.setCrouching(true);
                 EntityFox.this.getNavigation().o();
-                EntityFox.this.getControllerLook().a(entityliving, (float) EntityFox.this.dA(), (float) EntityFox.this.M());
+                EntityFox.this.getControllerLook().a(entityliving, (float) EntityFox.this.dB(), (float) EntityFox.this.M());
             } else {
                 EntityFox.this.u(false);
                 EntityFox.this.setCrouching(false);
@@ -1322,7 +1322,7 @@ public class EntityFox extends EntityAnimal {
         public void e() {
             EntityLiving entityliving = EntityFox.this.getGoalTarget();
 
-            EntityFox.this.getControllerLook().a(entityliving, (float) EntityFox.this.dA(), (float) EntityFox.this.M());
+            EntityFox.this.getControllerLook().a(entityliving, (float) EntityFox.this.dB(), (float) EntityFox.this.M());
             if (EntityFox.this.h((Entity) entityliving) <= 36.0D) {
                 EntityFox.this.u(true);
                 EntityFox.this.setCrouching(true);
@@ -1342,7 +1342,7 @@ public class EntityFox extends EntityAnimal {
 
         @Override
         public void a() {
-            if (EntityFox.this.eo()) {
+            if (EntityFox.this.ep()) {
                 super.a();
             }
 
@@ -1360,12 +1360,12 @@ public class EntityFox extends EntityAnimal {
             if (!EntityFox.this.getEquipment(EnumItemSlot.MAINHAND).isEmpty()) {
                 return false;
             } else if (EntityFox.this.getGoalTarget() == null && EntityFox.this.getLastDamager() == null) {
-                if (!EntityFox.this.eo()) {
+                if (!EntityFox.this.ep()) {
                     return false;
                 } else if (EntityFox.this.getRandom().nextInt(10) != 0) {
                     return false;
                 } else {
-                    List<EntityItem> list = EntityFox.this.world.a(EntityItem.class, EntityFox.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), EntityFox.bE);
+                    List<EntityItem> list = EntityFox.this.world.a(EntityItem.class, EntityFox.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), EntityFox.bD);
 
                     return !list.isEmpty() && EntityFox.this.getEquipment(EnumItemSlot.MAINHAND).isEmpty();
                 }
@@ -1376,7 +1376,7 @@ public class EntityFox extends EntityAnimal {
 
         @Override
         public void e() {
-            List<EntityItem> list = EntityFox.this.world.a(EntityItem.class, EntityFox.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), EntityFox.bE);
+            List<EntityItem> list = EntityFox.this.world.a(EntityItem.class, EntityFox.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), EntityFox.bD);
             ItemStack itemstack = EntityFox.this.getEquipment(EnumItemSlot.MAINHAND);
 
             if (itemstack.isEmpty() && !list.isEmpty()) {
@@ -1387,7 +1387,7 @@ public class EntityFox extends EntityAnimal {
 
         @Override
         public void c() {
-            List<EntityItem> list = EntityFox.this.world.a(EntityItem.class, EntityFox.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), EntityFox.bE);
+            List<EntityItem> list = EntityFox.this.world.a(EntityItem.class, EntityFox.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), EntityFox.bD);
 
             if (!list.isEmpty()) {
                 EntityFox.this.getNavigation().a((Entity) list.get(0), 1.2000000476837158D);

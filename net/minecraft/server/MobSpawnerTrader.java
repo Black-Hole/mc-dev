@@ -17,8 +17,8 @@ public class MobSpawnerTrader {
         this.c = 1200;
         WorldData worlddata = worldserver.getWorldData();
 
-        this.d = worlddata.R();
-        this.e = worlddata.S();
+        this.d = worlddata.Q();
+        this.e = worlddata.R();
         if (this.d == 0 && this.e == 0) {
             this.d = 24000;
             worlddata.j(this.d);
@@ -37,7 +37,7 @@ public class MobSpawnerTrader {
             worlddata.j(this.d);
             if (this.d <= 0) {
                 this.d = 24000;
-                if (this.b.getGameRules().getBoolean("doMobSpawning")) {
+                if (this.b.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
                     int i = this.e;
 
                     this.e = MathHelper.clamp(this.e + 25, 25, 75);
@@ -83,7 +83,7 @@ public class MobSpawnerTrader {
                     }
 
                     this.b.getWorldData().a(entityvillagertrader.getUniqueID());
-                    entityvillagertrader.s(48000);
+                    entityvillagertrader.t(48000);
                     entityvillagertrader.g(blockposition1);
                     entityvillagertrader.a(blockposition1, 16);
                     return true;

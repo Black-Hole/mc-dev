@@ -186,7 +186,7 @@ public class DefinedStructure {
                         if (definedstructure_blockinfo.c != null) {
                             tileentity = generatoraccess.getTileEntity(blockposition1);
                             Clearable.a(tileentity);
-                            generatoraccess.setTypeAndData(blockposition1, Blocks.BARRIER.getBlockData(), 4);
+                            generatoraccess.setTypeAndData(blockposition1, Blocks.BARRIER.getBlockData(), 20);
                         }
 
                         if (generatoraccess.setTypeAndData(blockposition1, iblockdata, i)) {

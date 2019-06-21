@@ -12,6 +12,11 @@ public class EnchantmentQuickCharge extends Enchantment {
     }
 
     @Override
+    public int b(int i) {
+        return 50;
+    }
+
+    @Override
     public int getMaxLevel() {
         return 3;
     }

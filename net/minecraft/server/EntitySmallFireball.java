@@ -21,14 +21,18 @@ public class EntitySmallFireball extends EntityFireballFireball {
                 Entity entity = ((MovingObjectPositionEntity) movingobjectposition).getEntity();
 
                 if (!entity.isFireProof()) {
+                    int i = entity.ad();
+
                     entity.setOnFire(5);
                     boolean flag = entity.damageEntity(DamageSource.fireball(this, this.shooter), 5.0F);
 
                     if (flag) {
                         this.a(this.shooter, entity);
+                    } else {
+                        entity.g(i);
                     }
                 }
-            } else if (this.shooter == null || !(this.shooter instanceof EntityInsentient) || this.world.getGameRules().getBoolean("mobGriefing")) {
+            } else if (this.shooter == null || !(this.shooter instanceof EntityInsentient) || this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
                 MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;
                 BlockPosition blockposition = movingobjectpositionblock.getBlockPosition().shift(movingobjectpositionblock.getDirection());
 

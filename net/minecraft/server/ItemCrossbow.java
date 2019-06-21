@@ -13,10 +13,10 @@ public class ItemCrossbow extends ItemProjectileWeapon {
     public ItemCrossbow(Item.Info item_info) {
         super(item_info);
         this.a(new MinecraftKey("pull"), (itemstack, world, entityliving) -> {
-            return entityliving != null && itemstack.getItem() == this ? (d(itemstack) ? 0.0F : (float) (itemstack.k() - entityliving.dm()) / (float) e(itemstack)) : 0.0F;
+            return entityliving != null && itemstack.getItem() == this ? (d(itemstack) ? 0.0F : (float) (itemstack.k() - entityliving.dn()) / (float) e(itemstack)) : 0.0F;
         });
         this.a(new MinecraftKey("pulling"), (itemstack, world, entityliving) -> {
-            return entityliving != null && entityliving.isHandRaised() && entityliving.dl() == itemstack && !d(itemstack) ? 1.0F : 0.0F;
+            return entityliving != null && entityliving.isHandRaised() && entityliving.dm() == itemstack && !d(itemstack) ? 1.0F : 0.0F;
         });
         this.a(new MinecraftKey("charged"), (itemstack, world, entityliving) -> {
             return entityliving != null && d(itemstack) ? 1.0F : 0.0F;

@@ -187,7 +187,7 @@ public class EntityTrackerEntry {
 
     public void a(Consumer<Packet<?>> consumer) {
         if (this.tracker.dead) {
-            EntityTrackerEntry.LOGGER.warn("Fetching addPacket for removed entity");
+            EntityTrackerEntry.LOGGER.warn("Fetching packet for removed entity " + this.tracker);
         }
 
         Packet<?> packet = this.tracker.N();

@@ -12,7 +12,7 @@ public abstract class EntityTameableAnimal extends EntityAnimal {
 
     protected EntityTameableAnimal(EntityTypes<? extends EntityTameableAnimal> entitytypes, World world) {
         super(entitytypes, world);
-        this.dW();
+        this.dX();
     }
 
     @Override
@@ -98,10 +98,10 @@ public abstract class EntityTameableAnimal extends EntityAnimal {
             this.datawatcher.set(EntityTameableAnimal.bz, (byte) (b0 & -5));
         }
 
-        this.dW();
+        this.dX();
     }
 
-    protected void dW() {}
+    protected void dX() {}
 
     public boolean isSitting() {
         return ((Byte) this.datawatcher.get(EntityTameableAnimal.bz) & 1) != 0;
@@ -196,7 +196,7 @@ public abstract class EntityTameableAnimal extends EntityAnimal {
 
     @Override
     public void die(DamageSource damagesource) {
-        if (!this.world.isClientSide && this.world.getGameRules().getBoolean("showDeathMessages") && this.getOwner() instanceof EntityPlayer) {
+        if (!this.world.isClientSide && this.world.getGameRules().getBoolean(GameRules.SHOW_DEATH_MESSAGES) && this.getOwner() instanceof EntityPlayer) {
             this.getOwner().sendMessage(this.getCombatTracker().getDeathMessage());
         }
 

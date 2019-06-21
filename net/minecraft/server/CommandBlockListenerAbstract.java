@@ -180,7 +180,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
 
     @Override
     public boolean shouldSendSuccess() {
-        return this.d().getGameRules().getBoolean("sendCommandFeedback") && this.trackOutput;
+        return this.d().getGameRules().getBoolean(GameRules.SEND_COMMAND_FEEDBACK) && this.trackOutput;
     }
 
     @Override
@@ -190,6 +190,6 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
 
     @Override
     public boolean shouldBroadcastCommands() {
-        return this.d().getGameRules().getBoolean("commandBlockOutput");
+        return this.d().getGameRules().getBoolean(GameRules.COMMAND_BLOCK_OUTPUT);
     }
 }

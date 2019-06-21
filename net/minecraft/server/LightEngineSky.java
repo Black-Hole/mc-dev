@@ -4,8 +4,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky.a, LightEngineStorageSky> {
 
-    private static final EnumDirection[] d = EnumDirection.values();
-    private static final EnumDirection[] e = new EnumDirection[]{EnumDirection.NORTH, EnumDirection.SOUTH, EnumDirection.WEST, EnumDirection.EAST};
+    private static final EnumDirection[] e = EnumDirection.values();
+    private static final EnumDirection[] f = new EnumDirection[]{EnumDirection.NORTH, EnumDirection.SOUTH, EnumDirection.WEST, EnumDirection.EAST};
 
     public LightEngineSky(ILightAccess ilightaccess) {
         super(ilightaccess, EnumSkyBlock.SKY, new LightEngineStorageSky(ilightaccess));
@@ -28,7 +28,7 @@ public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky
                 return k;
             } else {
                 AtomicInteger atomicinteger = new AtomicInteger();
-                VoxelShape voxelshape = this.a(j, atomicinteger);
+                IBlockData iblockdata = this.a(j, atomicinteger);
 
                 if (atomicinteger.get() >= 15) {
                     return 15;
@@ -51,14 +51,19 @@ public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky
                         enumdirection = EnumDirection.a(j2, k2, l2);
                     }
 
-                    VoxelShape voxelshape1 = this.a(i, (AtomicInteger) null);
+                    IBlockData iblockdata1 = this.a(i, (AtomicInteger) null);
+                    VoxelShape voxelshape;
 
                     if (enumdirection != null) {
-                        if (VoxelShapes.b(voxelshape1, voxelshape, enumdirection)) {
+                        voxelshape = this.a(iblockdata1, i, enumdirection);
+                        VoxelShape voxelshape1 = this.a(iblockdata, j, enumdirection.opposite());
+
+                        if (VoxelShapes.b(voxelshape, voxelshape1)) {
                             return 15;
                         }
                     } else {
-                        if (VoxelShapes.b(voxelshape1, VoxelShapes.a(), EnumDirection.DOWN)) {
+                        voxelshape = this.a(iblockdata1, i, EnumDirection.DOWN);
+                        if (VoxelShapes.b(voxelshape, VoxelShapes.a())) {
                             return 15;
                         }
 
@@ -69,7 +74,9 @@ public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky
                             return 15;
                         }
 
-                        if (VoxelShapes.b(VoxelShapes.a(), voxelshape, enumdirection1)) {
+                        VoxelShape voxelshape2 = this.a(iblockdata, j, enumdirection1.opposite());
+
+                        if (VoxelShapes.b(VoxelShapes.a(), voxelshape2)) {
                             return 15;
                         }
                     }
@@ -116,7 +123,7 @@ public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky
             this.b(i, k2, j, flag);
         }
 
-        EnumDirection[] aenumdirection = LightEngineSky.e;
+        EnumDirection[] aenumdirection = LightEngineSky.f;
         int i3 = aenumdirection.length;
         int j3 = 0;
 
@@ -166,7 +173,7 @@ public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky
 
         long j1 = SectionPosition.e(i);
         NibbleArray nibblearray = ((LightEngineStorageSky) this.c).a(j1, true);
-        EnumDirection[] aenumdirection = LightEngineSky.d;
+        EnumDirection[] aenumdirection = LightEngineSky.e;
         int k1 = aenumdirection.length;
 
         for (int l1 = 0; l1 < k1; ++l1) {

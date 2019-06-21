@@ -24,7 +24,7 @@ public class Navigation extends NavigationAbstract {
 
     @Override
     protected Vec3D b() {
-        return new Vec3D(this.a.locX, (double) this.s(), this.a.locZ);
+        return new Vec3D(this.a.locX, (double) this.t(), this.a.locZ);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class Navigation extends NavigationAbstract {
         return this.b(new BlockPosition(entity));
     }
 
-    private int s() {
+    private int t() {
         if (this.a.isInWater() && this.r()) {
             int i = MathHelper.floor(this.a.getBoundingBox().minY);
             Block block = this.b.getType(new BlockPosition(this.a.locX, (double) i, this.a.locZ)).getBlock();

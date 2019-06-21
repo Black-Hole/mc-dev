@@ -96,15 +96,12 @@ public abstract class LightEngineGraph {
     }
 
     private void a(long i, int j, int k) {
-        if (j <= this.a - 1) {
-            j = Math.min(this.a - 1, j);
-            this.c.put(i, (byte) j);
-            this.b[k].add(i);
-            if (this.d > k) {
-                this.d = k;
-            }
-
+        this.c.put(i, (byte) j);
+        this.b[k].add(i);
+        if (this.d > k) {
+            this.d = k;
         }
+
     }
 
     protected void f(long i) {
@@ -118,10 +115,8 @@ public abstract class LightEngineGraph {
 
     private void a(long i, long j, int k, int l, int i1, boolean flag) {
         if (!this.a(j)) {
-            if (k >= this.a) {
-                k = this.a;
-            }
-
+            k = MathHelper.clamp(k, 0, this.a - 1);
+            l = MathHelper.clamp(l, 0, this.a - 1);
             boolean flag1;
 
             if (i1 == 255) {
@@ -136,7 +131,7 @@ public abstract class LightEngineGraph {
             if (flag) {
                 j1 = Math.min(i1, k);
             } else {
-                j1 = this.a(j, i, k);
+                j1 = MathHelper.clamp(this.a(j, i, k), 0, this.a - 1);
             }
 
             int k1 = this.a(l, i1);
@@ -158,7 +153,7 @@ public abstract class LightEngineGraph {
 
     protected final void b(long i, long j, int k, boolean flag) {
         int l = this.c.get(j) & 255;
-        int i1 = this.b(i, j, k);
+        int i1 = MathHelper.clamp(this.b(i, j, k), 0, this.a - 1);
 
         if (flag) {
             this.a(i, j, i1, this.c(j), l, true);
@@ -168,7 +163,7 @@ public abstract class LightEngineGraph {
 
             if (l == 255) {
                 flag1 = true;
-                j1 = this.c(j);
+                j1 = MathHelper.clamp(this.c(j), 0, this.a - 1);
             } else {
                 j1 = l;
                 flag1 = false;
@@ -193,7 +188,7 @@ public abstract class LightEngineGraph {
                 --i;
                 LongLinkedOpenHashSet longlinkedopenhashset = this.b[this.d];
                 long j = longlinkedopenhashset.removeFirstLong();
-                int k = this.c(j);
+                int k = MathHelper.clamp(this.c(j), 0, this.a - 1);
 
                 if (longlinkedopenhashset.isEmpty()) {
                     this.a(this.a);

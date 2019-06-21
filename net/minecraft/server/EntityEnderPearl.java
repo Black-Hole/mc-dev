@@ -65,7 +65,7 @@ public class EntityEnderPearl extends EntityProjectileThrowable {
                 EntityPlayer entityplayer = (EntityPlayer) entityliving;
 
                 if (entityplayer.playerConnection.a().isConnected() && entityplayer.world == this.world && !entityplayer.isSleeping()) {
-                    if (this.random.nextFloat() < 0.05F && this.world.getGameRules().getBoolean("doMobSpawning")) {
+                    if (this.random.nextFloat() < 0.05F && this.world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
                         EntityEndermite entityendermite = (EntityEndermite) EntityTypes.ENDERMITE.a(this.world);
 
                         entityendermite.setPlayerSpawned(true);

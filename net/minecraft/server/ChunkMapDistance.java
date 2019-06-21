@@ -32,44 +32,26 @@ public abstract class ChunkMapDistance {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int b = 33 + ChunkStatus.a(ChunkStatus.FULL) - 2;
     private final Long2ObjectMap<ObjectSet<EntityPlayer>> c = new Long2ObjectOpenHashMap();
-    private final Long2ObjectMap<ObjectSet<EntityPlayer>> d = new Long2ObjectOpenHashMap();
     private final Long2ObjectOpenHashMap<ObjectSortedSet<Ticket<?>>> tickets = new Long2ObjectOpenHashMap();
-    private final ChunkMapDistance.a f = new ChunkMapDistance.a();
-    private final ChunkMapDistance.c g = new ChunkMapDistance.c();
-    private int entitydistance;
-    private final ChunkMapDistance.b i = new ChunkMapDistance.b(8);
-    private final ChunkMapDistance.d j = new ChunkMapDistance.d(33);
-    private final Set<PlayerChunk> k = Sets.newHashSet();
-    private final PlayerChunk.c l;
-    private final Mailbox<ChunkTaskQueueSorter.a<Runnable>> m;
-    private final Mailbox<ChunkTaskQueueSorter.b> n;
-    private final LongSet o = new LongOpenHashSet();
-    private final Executor p;
+    private final ChunkMapDistance.a e = new ChunkMapDistance.a();
+    private final ChunkMapDistance.b f = new ChunkMapDistance.b(8);
+    private final ChunkMapDistance.c g = new ChunkMapDistance.c(33);
+    private final Set<PlayerChunk> h = Sets.newHashSet();
+    private final PlayerChunk.c i;
+    private final Mailbox<ChunkTaskQueueSorter.a<Runnable>> j;
+    private final Mailbox<ChunkTaskQueueSorter.b> k;
+    private final LongSet l = new LongOpenHashSet();
+    private final Executor m;
     private long currentTick;
 
     protected ChunkMapDistance(Executor executor, Executor executor1) {
         ThreadedMailbox<Runnable> threadedmailbox = ThreadedMailbox.a(executor1, "player ticket throttler");
         ChunkTaskQueueSorter chunktaskqueuesorter = new ChunkTaskQueueSorter(ImmutableList.of(threadedmailbox), executor, 15);
 
-        this.l = chunktaskqueuesorter;
-        this.m = chunktaskqueuesorter.a(threadedmailbox, true);
-        this.n = chunktaskqueuesorter.a((Mailbox) threadedmailbox);
-        this.p = executor1;
-    }
-
-    protected void setEntityDistance(int i) {
-        int j = this.e();
-
-        this.entitydistance = i;
-        int k = this.e();
-        ObjectIterator objectiterator = this.d.long2ObjectEntrySet().iterator();
-
-        while (objectiterator.hasNext()) {
-            Entry<ObjectSet<EntityPlayer>> entry = (Entry) objectiterator.next();
-
-            this.g.b(entry.getLongKey(), k, k < j);
-        }
-
+        this.i = chunktaskqueuesorter;
+        this.j = chunktaskqueuesorter.a(threadedmailbox, true);
+        this.k = chunktaskqueuesorter.a((Mailbox) threadedmailbox);
+        this.m = executor1;
     }
 
     protected void purgeTickets() {
@@ -82,7 +64,7 @@ public abstract class ChunkMapDistance {
             if (((ObjectSortedSet) entry.getValue()).removeIf((ticket) -> {
                 return ticket.a(this.currentTick);
             })) {
-                this.f.b(entry.getLongKey(), this.a((ObjectSortedSet) entry.getValue()), false);
+                this.e.b(entry.getLongKey(), this.a((ObjectSortedSet) entry.getValue()), false);
             }
 
             if (((ObjectSortedSet) entry.getValue()).isEmpty()) {
@@ -107,30 +89,29 @@ public abstract class ChunkMapDistance {
     protected abstract PlayerChunk a(long i, int j, @Nullable PlayerChunk playerchunk, int k);
 
     public boolean a(PlayerChunkMap playerchunkmap) {
-        this.i.a();
-        this.j.a();
+        this.f.a();
         this.g.a();
-        int i = Integer.MAX_VALUE - this.f.a(Integer.MAX_VALUE);
+        int i = Integer.MAX_VALUE - this.e.a(Integer.MAX_VALUE);
         boolean flag = i != 0;
 
         if (flag) {
             ;
         }
 
-        if (!this.k.isEmpty()) {
-            this.k.forEach((playerchunk) -> {
+        if (!this.h.isEmpty()) {
+            this.h.forEach((playerchunk) -> {
                 playerchunk.a(playerchunkmap);
             });
-            this.k.clear();
+            this.h.clear();
             return true;
         } else {
-            if (!this.o.isEmpty()) {
-                LongIterator longiterator = this.o.iterator();
+            if (!this.l.isEmpty()) {
+                LongIterator longiterator = this.l.iterator();
 
                 while (longiterator.hasNext()) {
                     long j = longiterator.nextLong();
 
-                    if (this.d(j).stream().anyMatch((ticket) -> {
+                    if (this.e(j).stream().anyMatch((ticket) -> {
                         return ticket.getTicketType() == TicketType.PLAYER;
                     })) {
                         PlayerChunk playerchunk = playerchunkmap.getUpdatingChunk(j);
@@ -142,15 +123,15 @@ public abstract class ChunkMapDistance {
                         CompletableFuture<Either<Chunk, PlayerChunk.Failure>> completablefuture = playerchunk.b();
 
                         completablefuture.thenAccept((either) -> {
-                            this.p.execute(() -> {
-                                this.n.a((Object) ChunkTaskQueueSorter.a(() -> {
+                            this.m.execute(() -> {
+                                this.k.a((Object) ChunkTaskQueueSorter.a(() -> {
                                 }, j, false));
                             });
                         });
                     }
                 }
 
-                this.o.clear();
+                this.l.clear();
             }
 
             return flag;
@@ -158,7 +139,7 @@ public abstract class ChunkMapDistance {
     }
 
     private void a(long i, Ticket<?> ticket) {
-        ObjectSortedSet<Ticket<?>> objectsortedset = this.d(i);
+        ObjectSortedSet<Ticket<?>> objectsortedset = this.e(i);
         ObjectBidirectionalIterator<Ticket<?>> objectbidirectionaliterator = objectsortedset.iterator();
         int j;
 
@@ -173,13 +154,13 @@ public abstract class ChunkMapDistance {
         }
 
         if (ticket.b() < j) {
-            this.f.b(i, ticket.b(), true);
+            this.e.b(i, ticket.b(), true);
         }
 
     }
 
     private void b(long i, Ticket<?> ticket) {
-        ObjectSortedSet<Ticket<?>> objectsortedset = this.d(i);
+        ObjectSortedSet<Ticket<?>> objectsortedset = this.e(i);
 
         if (objectsortedset.remove(ticket)) {
             ;
@@ -189,7 +170,7 @@ public abstract class ChunkMapDistance {
             this.tickets.remove(i);
         }
 
-        this.f.b(i, this.a(objectsortedset), false);
+        this.e.b(i, this.a(objectsortedset), false);
     }
 
     public <T> void a(TicketType<T> tickettype, ChunkCoordIntPair chunkcoordintpair, int i, T t0) {
@@ -212,14 +193,14 @@ public abstract class ChunkMapDistance {
         this.b(chunkcoordintpair.pair(), ticket);
     }
 
-    private ObjectSortedSet<Ticket<?>> d(long i) {
+    private ObjectSortedSet<Ticket<?>> e(long i) {
         return (ObjectSortedSet) this.tickets.computeIfAbsent(i, (j) -> {
             return new ObjectAVLTreeSet();
         });
     }
 
     protected void a(ChunkCoordIntPair chunkcoordintpair, boolean flag) {
-        Ticket<ChunkCoordIntPair> ticket = new Ticket<>(TicketType.FORCED, 32, chunkcoordintpair, this.currentTick);
+        Ticket<ChunkCoordIntPair> ticket = new Ticket<>(TicketType.FORCED, 31, chunkcoordintpair, this.currentTick);
 
         if (flag) {
             this.a(chunkcoordintpair.pair(), ticket);
@@ -229,56 +210,41 @@ public abstract class ChunkMapDistance {
 
     }
 
-    private int e() {
-        return 16 - this.entitydistance;
-    }
-
     public void a(SectionPosition sectionposition, EntityPlayer entityplayer) {
         long i = sectionposition.u().pair();
 
-        entityplayer.a(sectionposition);
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutViewCentre(sectionposition.a(), sectionposition.c()));
-        ((ObjectSet) this.d.computeIfAbsent(sectionposition.v(), (j) -> {
-            return new ObjectOpenHashSet();
-        })).add(entityplayer);
         ((ObjectSet) this.c.computeIfAbsent(i, (j) -> {
             return new ObjectOpenHashSet();
         })).add(entityplayer);
-        this.i.b(i, 0, true);
-        this.j.b(i, 0, true);
-        this.g.b(sectionposition.v(), this.e(), true);
+        this.f.b(i, 0, true);
+        this.g.b(i, 0, true);
     }
 
     public void b(SectionPosition sectionposition, EntityPlayer entityplayer) {
         long i = sectionposition.u().pair();
-        ObjectSet<EntityPlayer> objectset = (ObjectSet) this.d.get(sectionposition.v());
+        ObjectSet<EntityPlayer> objectset = (ObjectSet) this.c.get(i);
 
-        if (objectset != null) {
-            objectset.remove(entityplayer);
-            if (objectset.isEmpty()) {
-                this.d.remove(sectionposition.v());
-                this.g.b(sectionposition.v(), Integer.MAX_VALUE, false);
-            }
-
-            ObjectSet<EntityPlayer> objectset1 = (ObjectSet) this.c.get(i);
-
-            objectset1.remove(entityplayer);
-            if (objectset1.isEmpty()) {
-                this.c.remove(i);
-                this.i.b(i, Integer.MAX_VALUE, false);
-                this.j.b(i, Integer.MAX_VALUE, false);
-            }
-
+        objectset.remove(entityplayer);
+        if (objectset.isEmpty()) {
+            this.c.remove(i);
+            this.f.b(i, Integer.MAX_VALUE, false);
+            this.g.b(i, Integer.MAX_VALUE, false);
         }
+
     }
 
-    protected void b(int i) {
-        this.j.a(i);
+    protected void a(int i) {
+        this.g.a(i);
     }
 
     public int b() {
-        this.i.a();
-        return this.i.a.size();
+        this.f.a();
+        return this.f.a.size();
+    }
+
+    public boolean d(long i) {
+        this.f.a();
+        return this.f.a.containsKey(i);
     }
 
     class a extends ChunkMap {
@@ -321,7 +287,7 @@ public abstract class ChunkMapDistance {
             if (k != j) {
                 playerchunk = ChunkMapDistance.this.a(i, j, playerchunk, k);
                 if (playerchunk != null) {
-                    ChunkMapDistance.this.k.add(playerchunk);
+                    ChunkMapDistance.this.h.add(playerchunk);
                 }
 
             }
@@ -332,13 +298,13 @@ public abstract class ChunkMapDistance {
         }
     }
 
-    class d extends ChunkMapDistance.b {
+    class c extends ChunkMapDistance.b {
 
         private int e = 0;
         private final Long2IntMap f = Long2IntMaps.synchronize(new Long2IntOpenHashMap());
         private final LongSet g = new LongOpenHashSet();
 
-        protected d(int i) {
+        protected c(int i) {
             super(i);
             this.f.defaultReturnValue(i + 2);
         }
@@ -367,17 +333,17 @@ public abstract class ChunkMapDistance {
                 Ticket<?> ticket = new Ticket<>(TicketType.PLAYER, ChunkMapDistance.b, new ChunkCoordIntPair(i), ChunkMapDistance.this.currentTick);
 
                 if (flag1) {
-                    ChunkMapDistance.this.m.a((Object) ChunkTaskQueueSorter.a(() -> {
-                        ChunkMapDistance.this.p.execute(() -> {
+                    ChunkMapDistance.this.j.a((Object) ChunkTaskQueueSorter.a(() -> {
+                        ChunkMapDistance.this.m.execute(() -> {
                             ChunkMapDistance.this.a(i, ticket);
-                            ChunkMapDistance.this.o.add(i);
+                            ChunkMapDistance.this.l.add(i);
                         });
                     }, i, () -> {
                         return j;
                     }));
                 } else {
-                    ChunkMapDistance.this.n.a((Object) ChunkTaskQueueSorter.a(() -> {
-                        ChunkMapDistance.this.p.execute(() -> {
+                    ChunkMapDistance.this.k.a((Object) ChunkTaskQueueSorter.a(() -> {
+                        ChunkMapDistance.this.m.execute(() -> {
                             ChunkMapDistance.this.b(i, ticket);
                         });
                     }, i, true));
@@ -398,7 +364,7 @@ public abstract class ChunkMapDistance {
                     int k = this.c(i);
 
                     if (j != k) {
-                        ChunkMapDistance.this.l.a(new ChunkCoordIntPair(i), () -> {
+                        ChunkMapDistance.this.i.a(new ChunkCoordIntPair(i), () -> {
                             return this.f.get(i);
                         }, k, (l) -> {
                             this.f.put(i, l);
@@ -414,46 +380,6 @@ public abstract class ChunkMapDistance {
 
         private boolean c(int i) {
             return i <= this.e - 2;
-        }
-    }
-
-    class c extends LightEngineGraphSection {
-
-        protected final Long2ByteMap a = new Long2ByteOpenHashMap();
-
-        protected c() {
-            super(18, 16, 256);
-            this.a.defaultReturnValue((byte) 18);
-        }
-
-        @Override
-        protected int c(long i) {
-            return this.a.get(i);
-        }
-
-        @Override
-        protected void a(long i, int j) {
-            if (j > 16) {
-                this.a.remove(i);
-            } else {
-                this.a.put(i, (byte) j);
-            }
-
-        }
-
-        @Override
-        protected int b(long i) {
-            return this.d(i) ? ChunkMapDistance.this.e() : Integer.MAX_VALUE;
-        }
-
-        private boolean d(long i) {
-            ObjectSet<EntityPlayer> objectset = (ObjectSet) ChunkMapDistance.this.d.get(i);
-
-            return objectset != null && !objectset.isEmpty();
-        }
-
-        public void a() {
-            this.b(Integer.MAX_VALUE);
         }
     }
 

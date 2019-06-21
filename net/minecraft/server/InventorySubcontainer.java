@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
 
@@ -48,38 +49,40 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
         return itemstack;
     }
 
-    public ItemStack a(ItemStack itemstack) {
-        ItemStack itemstack1 = itemstack.cloneItemStack();
+    public ItemStack a(Item item, int i) {
+        ItemStack itemstack = new ItemStack(item, 0);
 
-        for (int i = 0; i < this.a; ++i) {
-            ItemStack itemstack2 = this.getItem(i);
+        for (int j = this.a - 1; j >= 0; --j) {
+            ItemStack itemstack1 = this.getItem(j);
 
-            if (itemstack2.isEmpty()) {
-                this.setItem(i, itemstack1);
-                this.update();
-                return ItemStack.a;
-            }
+            if (itemstack1.getItem().equals(item)) {
+                int k = i - itemstack.getCount();
+                ItemStack itemstack2 = itemstack1.cloneAndSubtract(k);
 
-            if (ItemStack.c(itemstack2, itemstack1)) {
-                int j = Math.min(this.getMaxStackSize(), itemstack2.getMaxStackSize());
-                int k = Math.min(itemstack1.getCount(), j - itemstack2.getCount());
-
-                if (k > 0) {
-                    itemstack2.add(k);
-                    itemstack1.subtract(k);
-                    if (itemstack1.isEmpty()) {
-                        this.update();
-                        return ItemStack.a;
-                    }
+                itemstack.add(itemstack2.getCount());
+                if (itemstack.getCount() == i) {
+                    break;
                 }
             }
         }
 
-        if (itemstack1.getCount() != itemstack.getCount()) {
+        if (!itemstack.isEmpty()) {
             this.update();
         }
 
-        return itemstack1;
+        return itemstack;
+    }
+
+    public ItemStack a(ItemStack itemstack) {
+        ItemStack itemstack1 = itemstack.cloneItemStack();
+
+        this.c(itemstack1);
+        if (itemstack1.isEmpty()) {
+            return ItemStack.a;
+        } else {
+            this.b(itemstack1);
+            return itemstack1.isEmpty() ? ItemStack.a : itemstack1;
+        }
     }
 
     @Override
@@ -148,6 +151,7 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
     @Override
     public void clear() {
         this.items.clear();
+        this.update();
     }
 
     @Override
@@ -158,6 +162,51 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
             ItemStack itemstack = (ItemStack) iterator.next();
 
             autorecipestackmanager.b(itemstack);
+        }
+
+    }
+
+    public String toString() {
+        return ((List) this.items.stream().filter((itemstack) -> {
+            return !itemstack.isEmpty();
+        }).collect(Collectors.toList())).toString();
+    }
+
+    private void b(ItemStack itemstack) {
+        for (int i = 0; i < this.a; ++i) {
+            ItemStack itemstack1 = this.getItem(i);
+
+            if (itemstack1.isEmpty()) {
+                this.setItem(i, itemstack.cloneItemStack());
+                itemstack.setCount(0);
+                return;
+            }
+        }
+
+    }
+
+    private void c(ItemStack itemstack) {
+        for (int i = 0; i < this.a; ++i) {
+            ItemStack itemstack1 = this.getItem(i);
+
+            if (ItemStack.c(itemstack1, itemstack)) {
+                this.a(itemstack, itemstack1);
+                if (itemstack.isEmpty()) {
+                    return;
+                }
+            }
+        }
+
+    }
+
+    private void a(ItemStack itemstack, ItemStack itemstack1) {
+        int i = Math.min(this.getMaxStackSize(), itemstack1.getMaxStackSize());
+        int j = Math.min(itemstack.getCount(), i - itemstack1.getCount());
+
+        if (j > 0) {
+            itemstack1.add(j);
+            itemstack.subtract(j);
+            this.update();
         }
 
     }

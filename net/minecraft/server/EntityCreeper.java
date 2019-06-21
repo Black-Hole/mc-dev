@@ -39,7 +39,7 @@ public class EntityCreeper extends EntityMonster {
     }
 
     @Override
-    public int bu() {
+    public int bv() {
         return this.getGoalTarget() == null ? 3 : 3 + (int) (this.getHealth() - 1.0F);
     }
 
@@ -86,7 +86,7 @@ public class EntityCreeper extends EntityMonster {
         }
 
         if (nbttagcompound.getBoolean("ignited")) {
-            this.dY();
+            this.ignite();
         }
 
     }
@@ -112,7 +112,7 @@ public class EntityCreeper extends EntityMonster {
 
             if (this.fuseTicks >= this.maxFuseTicks) {
                 this.fuseTicks = this.maxFuseTicks;
-                this.eb();
+                this.explode();
             }
         }
 
@@ -176,7 +176,7 @@ public class EntityCreeper extends EntityMonster {
             this.world.a(entityhuman, this.locX, this.locY, this.locZ, SoundEffects.ITEM_FLINTANDSTEEL_USE, this.getSoundCategory(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
             entityhuman.a(enumhand);
             if (!this.world.isClientSide) {
-                this.dY();
+                this.ignite();
                 itemstack.damage(1, entityhuman, (entityhuman1) -> {
                     entityhuman1.d(enumhand);
                 });
@@ -187,9 +187,9 @@ public class EntityCreeper extends EntityMonster {
         return super.a(entityhuman, enumhand);
     }
 
-    private void eb() {
+    public void explode() {
         if (!this.world.isClientSide) {
-            Explosion.Effect explosion_effect = this.world.getGameRules().getBoolean("mobGriefing") ? Explosion.Effect.DESTROY : Explosion.Effect.NONE;
+            Explosion.Effect explosion_effect = this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) ? Explosion.Effect.DESTROY : Explosion.Effect.NONE;
             float f = this.isPowered() ? 2.0F : 1.0F;
 
             this.killed = true;
@@ -228,7 +228,7 @@ public class EntityCreeper extends EntityMonster {
         return (Boolean) this.datawatcher.get(EntityCreeper.d);
     }
 
-    public void dY() {
+    public void ignite() {
         this.datawatcher.set(EntityCreeper.d, true);
     }
 

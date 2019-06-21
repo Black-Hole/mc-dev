@@ -28,15 +28,15 @@ import org.apache.logging.log4j.Logger;
 public class DedicatedServer extends MinecraftServer implements IMinecraftServer {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Pattern j = Pattern.compile("^[a-fA-F0-9]{40}$");
+    private static final Pattern i = Pattern.compile("^[a-fA-F0-9]{40}$");
     private final List<ServerCommand> serverCommandQueue = Collections.synchronizedList(Lists.newArrayList());
-    private RemoteStatusListener l;
+    private RemoteStatusListener remoteStatusListener;
     public final RemoteControlCommandListener remoteControlCommandListener;
     private RemoteControlListener remoteControlListener;
     public DedicatedServerSettings propertyManager;
-    private EnumGamemode p;
+    private EnumGamemode o;
     @Nullable
-    private ServerGUI q;
+    private ServerGUI p;
 
     public DedicatedServer(File file, DedicatedServerSettings dedicatedserversettings, DataFixer datafixer, YggdrasilAuthenticationService yggdrasilauthenticationservice, MinecraftSessionService minecraftsessionservice, GameProfileRepository gameprofilerepository, UserCache usercache, WorldLoadListenerFactory worldloadlistenerfactory, String s) {
         super(file, Proxy.NO_PROXY, datafixer, new CommandDispatcher(true), yggdrasilauthenticationservice, minecraftsessionservice, gameprofilerepository, usercache, worldloadlistenerfactory, s);
@@ -108,8 +108,8 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         this.setForceGamemode(dedicatedserverproperties.forceGamemode);
         super.setIdleTimeout((Integer) dedicatedserverproperties.playerIdleTimeout.get());
         this.n(dedicatedserverproperties.enforceWhitelist);
-        this.p = dedicatedserverproperties.gamemode;
-        DedicatedServer.LOGGER.info("Default game type: {}", this.p);
+        this.o = dedicatedserverproperties.gamemode;
+        DedicatedServer.LOGGER.info("Default game type: {}", this.o);
         InetAddress inetaddress = null;
 
         if (!this.getServerIp().isEmpty()) {
@@ -186,13 +186,13 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
             DedicatedServer.LOGGER.info("Done ({})! For help, type \"help\"", s2);
             if (dedicatedserverproperties.announcePlayerAchievements != null) {
-                this.getGameRules().set("announceAdvancements", dedicatedserverproperties.announcePlayerAchievements ? "true" : "false", this);
+                ((GameRules.GameRuleBoolean) this.getGameRules().get(GameRules.ANNOUNCE_ADVANCEMENTS)).a(dedicatedserverproperties.announcePlayerAchievements, (MinecraftServer) this);
             }
 
             if (dedicatedserverproperties.enableQuery) {
                 DedicatedServer.LOGGER.info("Starting GS4 status listener");
-                this.l = new RemoteStatusListener(this);
-                this.l.a();
+                this.remoteStatusListener = new RemoteStatusListener(this);
+                this.remoteStatusListener.a();
             }
 
             if (dedicatedserverproperties.enableRcon) {
@@ -231,7 +231,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
             s = "";
         }
 
-        if (!s.isEmpty() && !DedicatedServer.j.matcher(s).matches()) {
+        if (!s.isEmpty() && !DedicatedServer.i.matcher(s).matches()) {
             DedicatedServer.LOGGER.warn("Invalid sha1 for ressource-pack-sha1");
         }
 
@@ -245,7 +245,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     @Override
     public void setGamemode(EnumGamemode enumgamemode) {
         super.setGamemode(enumgamemode);
-        this.p = enumgamemode;
+        this.o = enumgamemode;
     }
 
     @Override
@@ -260,7 +260,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     @Override
     public EnumGamemode getGamemode() {
-        return this.p;
+        return this.o;
     }
 
     @Override
@@ -289,16 +289,16 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     @Override
     public void exit() {
-        if (this.q != null) {
-            this.q.b();
+        if (this.p != null) {
+            this.p.b();
         }
 
         if (this.remoteControlListener != null) {
             this.remoteControlListener.b();
         }
 
-        if (this.l != null) {
-            this.l.b();
+        if (this.remoteStatusListener != null) {
+            this.remoteStatusListener.b();
         }
 
     }
@@ -375,15 +375,15 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     }
 
     public void aY() {
-        if (this.q == null) {
-            this.q = ServerGUI.a(this);
+        if (this.p == null) {
+            this.p = ServerGUI.a(this);
         }
 
     }
 
     @Override
     public boolean ah() {
-        return this.q != null;
+        return this.p != null;
     }
 
     @Override
@@ -535,7 +535,9 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     @Override
     public String executeRemoteCommand(String s) {
         this.remoteControlCommandListener.clearMessages();
-        this.getCommandDispatcher().a(this.remoteControlCommandListener.f(), s);
+        this.executeSync(() -> {
+            this.getCommandDispatcher().a(this.remoteControlCommandListener.f(), s);
+        });
         return this.remoteControlCommandListener.getMessages();
     }
 

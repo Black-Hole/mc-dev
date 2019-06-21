@@ -74,7 +74,7 @@ public abstract class WorldGenFeaturePillagerOutpostPoolPiece extends StructureP
     }
 
     @Override
-    public EnumBlockRotation Y_() {
+    public EnumBlockRotation X_() {
         return this.c;
     }
 

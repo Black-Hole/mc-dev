@@ -28,7 +28,7 @@ public class BlockPortal extends Block {
 
     @Override
     public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (world.worldProvider.isOverworld() && world.getGameRules().getBoolean("doMobSpawning") && random.nextInt(2000) < world.getDifficulty().a()) {
+        if (world.worldProvider.isOverworld() && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && random.nextInt(2000) < world.getDifficulty().a()) {
             while (world.getType(blockposition).getBlock() == this) {
                 blockposition = blockposition.down();
             }
@@ -37,7 +37,7 @@ public class BlockPortal extends Block {
                 Entity entity = EntityTypes.ZOMBIE_PIGMAN.spawnCreature(world, (NBTTagCompound) null, (IChatBaseComponent) null, (EntityHuman) null, blockposition.up(), EnumMobSpawn.STRUCTURE, false, false);
 
                 if (entity != null) {
-                    entity.portalCooldown = entity.aW();
+                    entity.portalCooldown = entity.aX();
                 }
             }
         }

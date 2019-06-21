@@ -76,7 +76,7 @@ public class EntityBoat extends Entity {
 
     @Nullable
     @Override
-    public AxisAlignedBB ap() {
+    public AxisAlignedBB aq() {
         return this.getBoundingBox();
     }
 
@@ -86,7 +86,7 @@ public class EntityBoat extends Entity {
     }
 
     @Override
-    public double aO() {
+    public double aP() {
         return -0.1D;
     }
 
@@ -105,7 +105,7 @@ public class EntityBoat extends Entity {
                 boolean flag = damagesource.getEntity() instanceof EntityHuman && ((EntityHuman) damagesource.getEntity()).abilities.canInstantlyBuild;
 
                 if (flag || this.getDamage() > 40.0F) {
-                    if (!flag && this.world.getGameRules().getBoolean("doEntityDrops")) {
+                    if (!flag && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
                         this.a((IMaterial) this.f());
                     }
 
@@ -203,7 +203,7 @@ public class EntityBoat extends Entity {
         this.lastZ = this.locZ;
         super.tick();
         this.r();
-        if (this.bZ()) {
+        if (this.ca()) {
             if (this.getPassengers().isEmpty() || !(this.getPassengers().get(0) instanceof EntityHuman)) {
                 this.a(false, false);
             }
@@ -321,7 +321,7 @@ public class EntityBoat extends Entity {
     }
 
     private void r() {
-        if (this.aw > 0 && !this.bZ()) {
+        if (this.aw > 0 && !this.ca()) {
             double d0 = this.locX + (this.ax - this.locX) / (double) this.aw;
             double d1 = this.locY + (this.ay - this.locY) / (double) this.aw;
             double d2 = this.locZ + (this.az - this.locZ) / (double) this.aw;
@@ -659,7 +659,7 @@ public class EntityBoat extends Entity {
     public void k(Entity entity) {
         if (this.w(entity)) {
             float f = 0.0F;
-            float f1 = (float) ((this.dead ? 0.009999999776482582D : this.aO()) + entity.aN());
+            float f1 = (float) ((this.dead ? 0.009999999776482582D : this.aP()) + entity.aO());
 
             if (this.getPassengers().size() > 1) {
                 int i = this.getPassengers().indexOf(entity);
@@ -741,7 +741,7 @@ public class EntityBoat extends Entity {
                     this.b(this.fallDistance, 1.0F);
                     if (!this.world.isClientSide && !this.dead) {
                         this.die();
-                        if (this.world.getGameRules().getBoolean("doEntityDrops")) {
+                        if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
                             int i;
 
                             for (i = 0; i < 3; ++i) {

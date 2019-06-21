@@ -51,7 +51,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
         this.datawatcher.set(EntityPhantom.b, MathHelper.clamp(i, 0, 64));
     }
 
-    private void dU() {
+    private void dV() {
         this.updateSize();
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double) (6 + this.getSize()));
     }
@@ -68,7 +68,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
         if (EntityPhantom.b.equals(datawatcherobject)) {
-            this.dU();
+            this.dV();
         }
 
         super.a(datawatcherobject);
@@ -102,7 +102,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
 
     @Override
     public void movementTick() {
-        if (this.isAlive() && this.dS()) {
+        if (this.isAlive() && this.dT()) {
             this.setOnFire(8);
         }
 
@@ -312,7 +312,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
                         while (iterator.hasNext()) {
                             EntityCat entitycat = (EntityCat) iterator.next();
 
-                            entitycat.ej();
+                            entitycat.ek();
                         }
 
                         return false;

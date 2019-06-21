@@ -221,15 +221,15 @@ public class WorldBorder {
     }
 
     public void b(WorldData worlddata) {
-        this.setCenter(worlddata.C(), worlddata.D());
-        this.setDamageAmount(worlddata.I());
-        this.setDamageBuffer(worlddata.H());
-        this.setWarningDistance(worlddata.J());
-        this.setWarningTime(worlddata.K());
-        if (worlddata.F() > 0L) {
-            this.transitionSizeBetween(worlddata.E(), worlddata.G(), worlddata.F());
+        this.setCenter(worlddata.B(), worlddata.C());
+        this.setDamageAmount(worlddata.H());
+        this.setDamageBuffer(worlddata.G());
+        this.setWarningDistance(worlddata.I());
+        this.setWarningTime(worlddata.J());
+        if (worlddata.E() > 0L) {
+            this.transitionSizeBetween(worlddata.D(), worlddata.F(), worlddata.E());
         } else {
-            this.setSize(worlddata.E());
+            this.setSize(worlddata.D());
         }
 
     }

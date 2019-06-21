@@ -23,7 +23,7 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
 
     @Override
     public void b(World world, BlockPosition blockposition, Fluid fluid, Random random) {
-        if (world.getGameRules().getBoolean("doFireTick")) {
+        if (world.getGameRules().getBoolean(GameRules.DO_FIRE_TICK)) {
             int i = random.nextInt(3);
 
             if (i > 0) {
@@ -93,8 +93,8 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
     }
 
     @Override
-    public IBlockData a(Fluid fluid) {
-        return (IBlockData) Blocks.LAVA.getBlockData().set(BlockFluids.LEVEL, d(fluid));
+    public IBlockData b(Fluid fluid) {
+        return (IBlockData) Blocks.LAVA.getBlockData().set(BlockFluids.LEVEL, e(fluid));
     }
 
     @Override
@@ -176,12 +176,12 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
         }
 
         @Override
-        public int c(Fluid fluid) {
+        public int d(Fluid fluid) {
             return (Integer) fluid.get(FluidTypeLava.a.LEVEL);
         }
 
         @Override
-        public boolean b(Fluid fluid) {
+        public boolean c(Fluid fluid) {
             return false;
         }
     }
@@ -191,12 +191,12 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
         public b() {}
 
         @Override
-        public int c(Fluid fluid) {
+        public int d(Fluid fluid) {
             return 8;
         }
 
         @Override
-        public boolean b(Fluid fluid) {
+        public boolean c(Fluid fluid) {
             return true;
         }
     }

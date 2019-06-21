@@ -37,7 +37,7 @@ public class CommandGamemode {
         if (commandlistenerwrapper.getEntity() == entityplayer) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.gamemode.success.self", new Object[]{chatmessage}), true);
         } else {
-            if (commandlistenerwrapper.getWorld().getGameRules().getBoolean("sendCommandFeedback")) {
+            if (commandlistenerwrapper.getWorld().getGameRules().getBoolean(GameRules.SEND_COMMAND_FEEDBACK)) {
                 entityplayer.sendMessage(new ChatMessage("gameMode.changed", new Object[]{chatmessage}));
             }
 

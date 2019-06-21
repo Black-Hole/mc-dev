@@ -8,6 +8,6 @@ public class RecipeCampfire extends RecipeCooking {
 
     @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.r;
+        return RecipeSerializer.s;
     }
 }

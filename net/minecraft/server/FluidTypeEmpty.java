@@ -40,17 +40,22 @@ public class FluidTypeEmpty extends FluidType {
     }
 
     @Override
-    protected IBlockData a(Fluid fluid) {
+    public float a(Fluid fluid) {
+        return 0.0F;
+    }
+
+    @Override
+    protected IBlockData b(Fluid fluid) {
         return Blocks.AIR.getBlockData();
     }
 
     @Override
-    public boolean b(Fluid fluid) {
+    public boolean c(Fluid fluid) {
         return false;
     }
 
     @Override
-    public int c(Fluid fluid) {
+    public int d(Fluid fluid) {
         return 0;
     }
 

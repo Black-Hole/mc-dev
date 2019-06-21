@@ -269,19 +269,23 @@ public final class VoxelShapes {
     }
 
     public static VoxelShape a(VoxelShape voxelshape, EnumDirection enumdirection) {
-        EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
-        boolean flag;
-        int i;
-
-        if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
-            flag = DoubleMath.fuzzyEquals(voxelshape.c(enumdirection_enumaxis), 1.0D, 1.0E-7D);
-            i = voxelshape.a.c(enumdirection_enumaxis) - 1;
+        if (voxelshape == b()) {
+            return b();
         } else {
-            flag = DoubleMath.fuzzyEquals(voxelshape.b(enumdirection_enumaxis), 0.0D, 1.0E-7D);
-            i = 0;
-        }
+            EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
+            boolean flag;
+            int i;
 
-        return (VoxelShape) (!flag ? a() : new VoxelShapeSlice(voxelshape, enumdirection_enumaxis, i));
+            if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
+                flag = DoubleMath.fuzzyEquals(voxelshape.c(enumdirection_enumaxis), 1.0D, 1.0E-7D);
+                i = voxelshape.a.c(enumdirection_enumaxis) - 1;
+            } else {
+                flag = DoubleMath.fuzzyEquals(voxelshape.b(enumdirection_enumaxis), 0.0D, 1.0E-7D);
+                i = 0;
+            }
+
+            return (VoxelShape) (!flag ? a() : new VoxelShapeSlice(voxelshape, enumdirection_enumaxis, i));
+        }
     }
 
     public static boolean b(VoxelShape voxelshape, VoxelShape voxelshape1, EnumDirection enumdirection) {
@@ -303,6 +307,10 @@ public final class VoxelShapes {
         } else {
             return true;
         }
+    }
+
+    public static boolean b(VoxelShape voxelshape, VoxelShape voxelshape1) {
+        return voxelshape != b() && voxelshape1 != b() ? (voxelshape.isEmpty() && voxelshape1.isEmpty() ? false : !c(b(), b(voxelshape, voxelshape1, OperatorBoolean.OR), OperatorBoolean.ONLY_FIRST)) : true;
     }
 
     @VisibleForTesting

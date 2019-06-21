@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
@@ -10,7 +11,7 @@ public class EntityDolphin extends EntityWaterAnimal {
     private static final DataWatcherObject<BlockPosition> c = DataWatcher.a(EntityDolphin.class, DataWatcherRegistry.l);
     private static final DataWatcherObject<Boolean> d = DataWatcher.a(EntityDolphin.class, DataWatcherRegistry.i);
     private static final DataWatcherObject<Integer> bz = DataWatcher.a(EntityDolphin.class, DataWatcherRegistry.b);
-    private static final PathfinderTargetCondition bA = (new PathfinderTargetCondition()).a(10.0D).b().a();
+    private static final PathfinderTargetCondition bA = (new PathfinderTargetCondition()).a(10.0D).b().a().c();
     public static final Predicate<EntityItem> b = (entityitem) -> {
         return !entityitem.q() && entityitem.isAlive() && entityitem.isInWater();
     };
@@ -25,13 +26,13 @@ public class EntityDolphin extends EntityWaterAnimal {
     @Nullable
     @Override
     public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        this.setAirTicks(this.bo());
+        this.setAirTicks(this.bp());
         this.pitch = 0.0F;
         return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
     @Override
-    public boolean cl() {
+    public boolean cm() {
         return false;
     }
 
@@ -46,7 +47,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         return (BlockPosition) this.datawatcher.get(EntityDolphin.c);
     }
 
-    public boolean dV() {
+    public boolean dW() {
         return (Boolean) this.datawatcher.get(EntityDolphin.d);
     }
 
@@ -54,7 +55,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         this.datawatcher.set(EntityDolphin.d, flag);
     }
 
-    public int dW() {
+    public int dX() {
         return (Integer) this.datawatcher.get(EntityDolphin.bz);
     }
 
@@ -76,8 +77,8 @@ public class EntityDolphin extends EntityWaterAnimal {
         nbttagcompound.setInt("TreasurePosX", this.l().getX());
         nbttagcompound.setInt("TreasurePosY", this.l().getY());
         nbttagcompound.setInt("TreasurePosZ", this.l().getZ());
-        nbttagcompound.setBoolean("GotFish", this.dV());
-        nbttagcompound.setInt("Moistness", this.dW());
+        nbttagcompound.setBoolean("GotFish", this.dW());
+        nbttagcompound.setInt("Moistness", this.dX());
     }
 
     @Override
@@ -136,13 +137,13 @@ public class EntityDolphin extends EntityWaterAnimal {
     }
 
     @Override
-    public int bo() {
+    public int bp() {
         return 4800;
     }
 
     @Override
-    protected int l(int i) {
-        return this.bo();
+    protected int m(int i) {
+        return this.bp();
     }
 
     @Override
@@ -156,7 +157,7 @@ public class EntityDolphin extends EntityWaterAnimal {
     }
 
     @Override
-    public int dA() {
+    public int dB() {
         return 1;
     }
 
@@ -191,11 +192,11 @@ public class EntityDolphin extends EntityWaterAnimal {
     public void tick() {
         super.tick();
         if (!this.isNoAI()) {
-            if (this.at()) {
+            if (this.au()) {
                 this.b(2400);
             } else {
-                this.b(this.dW() - 1);
-                if (this.dW() <= 0) {
+                this.b(this.dX() - 1);
+                if (this.dX() <= 0) {
                     this.damageEntity(DamageSource.DRYOUT, 1.0F);
                 }
 
@@ -242,9 +243,8 @@ public class EntityDolphin extends EntityWaterAnimal {
         }
     }
 
-    @Override
-    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        return this.locY > 45.0D && this.locY < (double) generatoraccess.getSeaLevel() && generatoraccess.getBiome(new BlockPosition(this)) != Biomes.OCEAN || generatoraccess.getBiome(new BlockPosition(this)) != Biomes.DEEP_OCEAN && super.a(generatoraccess, enummobspawn);
+    public static boolean b(EntityTypes<EntityDolphin> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        return blockposition.getY() > 45 && blockposition.getY() < generatoraccess.getSeaLevel() && (generatoraccess.getBiome(blockposition) != Biomes.OCEAN || generatoraccess.getBiome(blockposition) != Biomes.DEEP_OCEAN) && generatoraccess.getFluid(blockposition).a(TagsFluid.WATER);
     }
 
     @Override
@@ -274,16 +274,16 @@ public class EntityDolphin extends EntityWaterAnimal {
         return SoundEffects.ENTITY_DOLPHIN_SWIM;
     }
 
-    protected boolean dX() {
+    protected boolean dY() {
         BlockPosition blockposition = this.getNavigation().h();
 
-        return blockposition != null ? blockposition.a((IPosition) this.ch(), 12.0D) : false;
+        return blockposition != null ? blockposition.a((IPosition) this.ci(), 12.0D) : false;
     }
 
     @Override
     public void e(Vec3D vec3d) {
-        if (this.de() && this.isInWater()) {
-            this.a(this.da(), vec3d);
+        if (this.df() && this.isInWater()) {
+            this.a(this.db(), vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.9D));
             if (this.getGoalTarget() == null) {
@@ -317,14 +317,14 @@ public class EntityDolphin extends EntityWaterAnimal {
 
         @Override
         public boolean a() {
-            return this.a.dV() && this.a.getAirTicks() >= 100;
+            return this.a.dW() && this.a.getAirTicks() >= 100;
         }
 
         @Override
         public boolean b() {
             BlockPosition blockposition = this.a.l();
 
-            return !(new BlockPosition((double) blockposition.getX(), this.a.locY, (double) blockposition.getZ())).a((IPosition) this.a.ch(), 4.0D) && !this.b && this.a.getAirTicks() >= 100;
+            return !(new BlockPosition((double) blockposition.getX(), this.a.locY, (double) blockposition.getZ())).a((IPosition) this.a.ci(), 4.0D) && !this.b && this.a.getAirTicks() >= 100;
         }
 
         @Override
@@ -356,7 +356,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         public void d() {
             BlockPosition blockposition = this.a.l();
 
-            if ((new BlockPosition((double) blockposition.getX(), this.a.locY, (double) blockposition.getZ())).a((IPosition) this.a.ch(), 4.0D) || this.b) {
+            if ((new BlockPosition((double) blockposition.getX(), this.a.locY, (double) blockposition.getZ())).a((IPosition) this.a.ci(), 4.0D) || this.b) {
                 this.a.r(false);
             }
 
@@ -367,7 +367,7 @@ public class EntityDolphin extends EntityWaterAnimal {
             BlockPosition blockposition = this.a.l();
             World world = this.a.world;
 
-            if (this.a.dX() || this.a.getNavigation().n()) {
+            if (this.a.dY() || this.a.getNavigation().n()) {
                 Vec3D vec3d = RandomPositionGenerator.a((EntityCreature) this.a, 16, 1, new Vec3D((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()), 0.39269909262657166D);
 
                 if (vec3d == null) {
@@ -387,7 +387,7 @@ public class EntityDolphin extends EntityWaterAnimal {
                     return;
                 }
 
-                this.a.getControllerLook().a(vec3d.x, vec3d.y, vec3d.z, (float) (this.a.dA() + 20), (float) this.a.M());
+                this.a.getControllerLook().a(vec3d.x, vec3d.y, vec3d.z, (float) (this.a.dB() + 20), (float) this.a.M());
                 this.a.getNavigation().a(vec3d.x, vec3d.y, vec3d.z, 1.3D);
                 if (world.random.nextInt(80) == 0) {
                     world.broadcastEntityEffect(this.a, (byte) 38);
@@ -433,7 +433,7 @@ public class EntityDolphin extends EntityWaterAnimal {
 
         @Override
         public void e() {
-            this.a.getControllerLook().a(this.c, (float) (this.a.dA() + 20), (float) this.a.M());
+            this.a.getControllerLook().a(this.c, (float) (this.a.dB() + 20), (float) this.a.M());
             if (this.a.h((Entity) this.c) < 6.25D) {
                 this.a.getNavigation().o();
             } else {

@@ -2,16 +2,19 @@ package net.minecraft.server;
 
 import com.google.common.collect.ImmutableMap;
 
-public class BehaviorPanic extends Behavior<EntityLiving> {
+public class BehaviorPanic extends Behavior<EntityVillager> {
 
     public BehaviorPanic() {
         super(ImmutableMap.of());
     }
 
-    @Override
-    protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
-        if (b(entityliving) || a(entityliving)) {
-            BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
+    protected boolean g(WorldServer worldserver, EntityVillager entityvillager, long i) {
+        return b(entityvillager) || a(entityvillager);
+    }
+
+    protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
+        if (b(entityvillager) || a(entityvillager)) {
+            BehaviorController<?> behaviorcontroller = entityvillager.getBehaviorController();
 
             if (!behaviorcontroller.c(Activity.PANIC)) {
                 behaviorcontroller.removeMemory(MemoryModuleType.PATH);
@@ -22,6 +25,13 @@ public class BehaviorPanic extends Behavior<EntityLiving> {
             }
 
             behaviorcontroller.a(Activity.PANIC);
+        }
+
+    }
+
+    protected void d(WorldServer worldserver, EntityVillager entityvillager, long i) {
+        if (i % 100L == 0L) {
+            entityvillager.a(i, 3);
         }
 
     }

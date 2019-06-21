@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.EnumSet;
+import java.util.Random;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
@@ -64,7 +65,7 @@ public class EntityGuardian extends EntityMonster {
     }
 
     @Override
-    public boolean cl() {
+    public boolean cm() {
         return true;
     }
 
@@ -132,17 +133,17 @@ public class EntityGuardian extends EntityMonster {
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return this.au() ? SoundEffects.ENTITY_GUARDIAN_AMBIENT : SoundEffects.ENTITY_GUARDIAN_AMBIENT_LAND;
+        return this.av() ? SoundEffects.ENTITY_GUARDIAN_AMBIENT : SoundEffects.ENTITY_GUARDIAN_AMBIENT_LAND;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return this.au() ? SoundEffects.ENTITY_GUARDIAN_HURT : SoundEffects.ENTITY_GUARDIAN_HURT_LAND;
+        return this.av() ? SoundEffects.ENTITY_GUARDIAN_HURT : SoundEffects.ENTITY_GUARDIAN_HURT_LAND;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return this.au() ? SoundEffects.ENTITY_GUARDIAN_DEATH : SoundEffects.ENTITY_GUARDIAN_DEATH_LAND;
+        return this.av() ? SoundEffects.ENTITY_GUARDIAN_DEATH : SoundEffects.ENTITY_GUARDIAN_DEATH_LAND;
     }
 
     @Override
@@ -187,7 +188,7 @@ public class EntityGuardian extends EntityMonster {
 
                 this.c += this.bz;
                 this.bB = this.bA;
-                if (!this.au()) {
+                if (!this.av()) {
                     this.bA = this.random.nextFloat();
                 } else if (this.dY()) {
                     this.bA += (0.0F - this.bA) * 0.25F;
@@ -232,7 +233,7 @@ public class EntityGuardian extends EntityMonster {
                 }
             }
 
-            if (this.au()) {
+            if (this.av()) {
                 this.setAirTicks(300);
             } else if (this.onGround) {
                 this.setMot(this.getMot().add((double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.4F), 0.5D, (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.4F)));
@@ -258,23 +259,12 @@ public class EntityGuardian extends EntityMonster {
     }
 
     @Override
-    protected boolean I_() {
-        return true;
-    }
-
-    @Override
     public boolean a(IWorldReader iworldreader) {
         return iworldreader.i(this);
     }
 
-    @Override
-    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        return (this.random.nextInt(20) == 0 || !generatoraccess.v(new BlockPosition(this))) && super.a(generatoraccess, enummobspawn);
-    }
-
-    @Override
-    protected boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition) {
-        return generatoraccess.getFluid(blockposition).a(TagsFluid.WATER);
+    public static boolean b(EntityTypes<? extends EntityGuardian> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        return (random.nextInt(20) == 0 || !generatoraccess.v(blockposition)) && generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL && (enummobspawn == EnumMobSpawn.SPAWNER || generatoraccess.getFluid(blockposition).a(TagsFluid.WATER));
     }
 
     @Override
@@ -301,7 +291,7 @@ public class EntityGuardian extends EntityMonster {
 
     @Override
     public void e(Vec3D vec3d) {
-        if (this.de() && this.isInWater()) {
+        if (this.df() && this.isInWater()) {
             this.a(0.1F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.9D));
@@ -336,7 +326,7 @@ public class EntityGuardian extends EntityMonster {
                 this.i.yaw = this.a(this.i.yaw, f, 90.0F);
                 this.i.aK = this.i.yaw;
                 float f1 = (float) (this.e * this.i.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
-                float f2 = MathHelper.g(0.125F, this.i.da(), f1);
+                float f2 = MathHelper.g(0.125F, this.i.db(), f1);
 
                 this.i.o(f2);
                 double d4 = Math.sin((double) (this.i.ticksLived + this.i.getId()) * 0.5D) * 0.05D;

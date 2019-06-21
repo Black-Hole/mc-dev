@@ -10,7 +10,7 @@ public class MobSpawnerCat {
     public MobSpawnerCat() {}
 
     public int a(WorldServer worldserver, boolean flag, boolean flag1) {
-        if (flag1 && worldserver.getGameRules().getBoolean("doMobSpawning")) {
+        if (flag1 && worldserver.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
             --this.a;
             if (this.a > 0) {
                 return 0;

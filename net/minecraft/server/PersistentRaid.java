@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 public class PersistentRaid extends PersistentBase {
@@ -32,6 +32,10 @@ public class PersistentRaid extends PersistentBase {
         while (iterator.hasNext()) {
             Raid raid = (Raid) iterator.next();
 
+            if (this.b.getGameRules().getBoolean(GameRules.x)) {
+                raid.n();
+            }
+
             if (raid.d()) {
                 iterator.remove();
                 this.b();
@@ -48,12 +52,14 @@ public class PersistentRaid extends PersistentBase {
     }
 
     public static boolean a(EntityRaider entityraider, Raid raid) {
-        return entityraider != null && raid != null && raid.i() != null ? entityraider.isAlive() && entityraider.ej() && entityraider.cv() <= 2400 && entityraider.world.getWorldProvider().getDimensionManager() == raid.i().getWorldProvider().getDimensionManager() : false;
+        return entityraider != null && raid != null && raid.i() != null ? entityraider.isAlive() && entityraider.ej() && entityraider.cw() <= 2400 && entityraider.world.getWorldProvider().getDimensionManager() == raid.i().getWorldProvider().getDimensionManager() : false;
     }
 
     @Nullable
     public Raid a(EntityPlayer entityplayer) {
         if (entityplayer.isSpectator()) {
+            return null;
+        } else if (this.b.getGameRules().getBoolean(GameRules.x)) {
             return null;
         } else {
             DimensionManager dimensionmanager = entityplayer.world.getWorldProvider().getDimensionManager();
@@ -62,20 +68,32 @@ public class PersistentRaid extends PersistentBase {
                 return null;
             } else {
                 BlockPosition blockposition = new BlockPosition(entityplayer);
-                Optional<BlockPosition> optional = this.b.B().b((villageplacetype) -> {
-                    return villageplacetype == VillagePlaceType.r;
-                }, Objects::nonNull, blockposition, 64, VillagePlace.Occupancy.ANY);
+                List<VillagePlaceRecord> list = (List) this.b.B().b(VillagePlaceType.a, blockposition, 64, VillagePlace.Occupancy.IS_OCCUPIED).collect(Collectors.toList());
+                int i = 0;
+                Vec3D vec3d = new Vec3D(0.0D, 0.0D, 0.0D);
 
-                if (!optional.isPresent()) {
-                    optional = Optional.of(blockposition);
+                for (Iterator iterator = list.iterator(); iterator.hasNext(); ++i) {
+                    VillagePlaceRecord villageplacerecord = (VillagePlaceRecord) iterator.next();
+                    BlockPosition blockposition1 = villageplacerecord.f();
+
+                    vec3d = vec3d.add((double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
                 }
 
-                Raid raid = this.a(entityplayer.getWorldServer(), (BlockPosition) optional.get());
+                BlockPosition blockposition2;
+
+                if (i > 0) {
+                    vec3d = vec3d.a(1.0D / (double) i);
+                    blockposition2 = new BlockPosition(vec3d);
+                } else {
+                    blockposition2 = blockposition;
+                }
+
+                Raid raid = this.a(entityplayer.getWorldServer(), blockposition2);
                 boolean flag = false;
 
                 if (!raid.j()) {
-                    if (!this.a.containsKey(raid.t())) {
-                        this.a.put(raid.t(), raid);
+                    if (!this.a.containsKey(raid.u())) {
+                        this.a.put(raid.u(), raid);
                     }
 
                     flag = true;
@@ -117,7 +135,7 @@ public class PersistentRaid extends PersistentBase {
             NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(i);
             Raid raid = new Raid(this.b, nbttagcompound1);
 
-            this.a.put(raid.t(), raid);
+            this.a.put(raid.u(), raid);
         }
 
     }
@@ -157,9 +175,9 @@ public class PersistentRaid extends PersistentBase {
 
         while (iterator.hasNext()) {
             Raid raid1 = (Raid) iterator.next();
-            double d1 = raid1.s().m(blockposition);
+            double d1 = raid1.t().m(blockposition);
 
-            if (raid1.u() && d1 < d0) {
+            if (raid1.v() && d1 < d0) {
                 raid = raid1;
                 d0 = d1;
             }

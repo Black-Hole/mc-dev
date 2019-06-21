@@ -13,7 +13,7 @@ public class EntityHorseZombie extends EntityHorseAbstract {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(15.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
-        this.getAttributeInstance(EntityHorseZombie.attributeJumpStrength).setValue(this.ey());
+        this.getAttributeInstance(EntityHorseZombie.attributeJumpStrength).setValue(this.ez());
     }
 
     @Override
@@ -62,7 +62,7 @@ public class EntityHorseZombie extends EntityHorseAbstract {
             return super.a(entityhuman, enumhand);
         } else {
             if (!itemstack.isEmpty()) {
-                if (!this.eq() && itemstack.getItem() == Items.SADDLE) {
+                if (!this.er() && itemstack.getItem() == Items.SADDLE) {
                     this.e(entityhuman);
                     return true;
                 }
@@ -78,5 +78,5 @@ public class EntityHorseZombie extends EntityHorseAbstract {
     }
 
     @Override
-    protected void ee() {}
+    protected void ef() {}
 }

@@ -35,7 +35,7 @@ public class BehaviorStrollPlaceList extends Behavior<EntityVillager> {
 
             if (!list.isEmpty()) {
                 this.g = (GlobalPos) list.get(worldserver.getRandom().nextInt(list.size()));
-                return this.g != null && Objects.equals(worldserver.getWorldProvider().getDimensionManager(), this.g.getDimensionManager()) && ((GlobalPos) optional1.get()).getBlockPosition().a((IPosition) entityvillager.ch(), (double) this.e);
+                return this.g != null && Objects.equals(worldserver.getWorldProvider().getDimensionManager(), this.g.getDimensionManager()) && ((GlobalPos) optional1.get()).getBlockPosition().a((IPosition) entityvillager.ci(), (double) this.e);
             }
         }
 

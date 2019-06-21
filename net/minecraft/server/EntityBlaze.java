@@ -58,7 +58,7 @@ public class EntityBlaze extends EntityMonster {
     }
 
     @Override
-    public float aE() {
+    public float aF() {
         return 1.0F;
     }
 
@@ -83,7 +83,7 @@ public class EntityBlaze extends EntityMonster {
 
     @Override
     protected void mobTick() {
-        if (this.at()) {
+        if (this.au()) {
             this.damageEntity(DamageSource.DROWN, 1.0F);
         }
 
@@ -95,7 +95,7 @@ public class EntityBlaze extends EntityMonster {
 
         EntityLiving entityliving = this.getGoalTarget();
 
-        if (entityliving != null && entityliving.locY + (double) entityliving.getHeadHeight() > this.locY + (double) this.getHeadHeight() + (double) this.b) {
+        if (entityliving != null && entityliving.locY + (double) entityliving.getHeadHeight() > this.locY + (double) this.getHeadHeight() + (double) this.b && this.c(entityliving)) {
             Vec3D vec3d = this.getMot();
 
             this.setMot(this.getMot().add(0.0D, (0.30000001192092896D - vec3d.y) * 0.30000001192092896D, 0.0D));
@@ -113,11 +113,11 @@ public class EntityBlaze extends EntityMonster {
         return this.l();
     }
 
-    public boolean l() {
+    private boolean l() {
         return ((Byte) this.datawatcher.get(EntityBlaze.d) & 1) != 0;
     }
 
-    public void r(boolean flag) {
+    private void r(boolean flag) {
         byte b0 = (Byte) this.datawatcher.get(EntityBlaze.d);
 
         if (flag) {
@@ -129,16 +129,12 @@ public class EntityBlaze extends EntityMonster {
         this.datawatcher.set(EntityBlaze.d, b0);
     }
 
-    @Override
-    protected boolean I_() {
-        return true;
-    }
-
     static class PathfinderGoalBlazeFireball extends PathfinderGoal {
 
         private final EntityBlaze a;
         private int b;
         private int c;
+        private int d;
 
         public PathfinderGoalBlazeFireball(EntityBlaze entityblaze) {
             this.a = entityblaze;
@@ -149,7 +145,7 @@ public class EntityBlaze extends EntityMonster {
         public boolean a() {
             EntityLiving entityliving = this.a.getGoalTarget();
 
-            return entityliving != null && entityliving.isAlive();
+            return entityliving != null && entityliving.isAlive() && this.a.c(entityliving);
         }
 
         @Override
@@ -160,66 +156,79 @@ public class EntityBlaze extends EntityMonster {
         @Override
         public void d() {
             this.a.r(false);
+            this.d = 0;
         }
 
         @Override
         public void e() {
             --this.c;
             EntityLiving entityliving = this.a.getGoalTarget();
-            double d0 = this.a.h((Entity) entityliving);
 
-            if (d0 < 4.0D) {
-                if (this.c <= 0) {
-                    this.c = 20;
-                    this.a.C(entityliving);
+            if (entityliving != null) {
+                boolean flag = this.a.getEntitySenses().a(entityliving);
+
+                if (flag) {
+                    this.d = 0;
+                } else {
+                    ++this.d;
                 }
 
-                this.a.getControllerMove().a(entityliving.locX, entityliving.locY, entityliving.locZ, 1.0D);
-            } else if (d0 < this.g() * this.g()) {
-                double d1 = entityliving.locX - this.a.locX;
-                double d2 = entityliving.getBoundingBox().minY + (double) (entityliving.getHeight() / 2.0F) - (this.a.locY + (double) (this.a.getHeight() / 2.0F));
-                double d3 = entityliving.locZ - this.a.locZ;
+                double d0 = this.a.h((Entity) entityliving);
 
-                if (this.c <= 0) {
-                    ++this.b;
-                    if (this.b == 1) {
-                        this.c = 60;
-                        this.a.r(true);
-                    } else if (this.b <= 4) {
-                        this.c = 6;
-                    } else {
-                        this.c = 100;
-                        this.b = 0;
-                        this.a.r(false);
+                if (d0 < 4.0D) {
+                    if (!flag) {
+                        return;
                     }
 
-                    if (this.b > 1) {
-                        float f = MathHelper.c(MathHelper.sqrt(d0)) * 0.5F;
+                    if (this.c <= 0) {
+                        this.c = 20;
+                        this.a.C(entityliving);
+                    }
 
-                        this.a.world.a((EntityHuman) null, 1018, new BlockPosition(this.a), 0);
+                    this.a.getControllerMove().a(entityliving.locX, entityliving.locY, entityliving.locZ, 1.0D);
+                } else if (d0 < this.g() * this.g() && flag) {
+                    double d1 = entityliving.locX - this.a.locX;
+                    double d2 = entityliving.getBoundingBox().minY + (double) (entityliving.getHeight() / 2.0F) - (this.a.locY + (double) (this.a.getHeight() / 2.0F));
+                    double d3 = entityliving.locZ - this.a.locZ;
 
-                        for (int i = 0; i < 1; ++i) {
-                            EntitySmallFireball entitysmallfireball = new EntitySmallFireball(this.a.world, this.a, d1 + this.a.getRandom().nextGaussian() * (double) f, d2, d3 + this.a.getRandom().nextGaussian() * (double) f);
+                    if (this.c <= 0) {
+                        ++this.b;
+                        if (this.b == 1) {
+                            this.c = 60;
+                            this.a.r(true);
+                        } else if (this.b <= 4) {
+                            this.c = 6;
+                        } else {
+                            this.c = 100;
+                            this.b = 0;
+                            this.a.r(false);
+                        }
 
-                            entitysmallfireball.locY = this.a.locY + (double) (this.a.getHeight() / 2.0F) + 0.5D;
-                            this.a.world.addEntity(entitysmallfireball);
+                        if (this.b > 1) {
+                            float f = MathHelper.c(MathHelper.sqrt(d0)) * 0.5F;
+
+                            this.a.world.a((EntityHuman) null, 1018, new BlockPosition(this.a), 0);
+
+                            for (int i = 0; i < 1; ++i) {
+                                EntitySmallFireball entitysmallfireball = new EntitySmallFireball(this.a.world, this.a, d1 + this.a.getRandom().nextGaussian() * (double) f, d2, d3 + this.a.getRandom().nextGaussian() * (double) f);
+
+                                entitysmallfireball.locY = this.a.locY + (double) (this.a.getHeight() / 2.0F) + 0.5D;
+                                this.a.world.addEntity(entitysmallfireball);
+                            }
                         }
                     }
+
+                    this.a.getControllerLook().a(entityliving, 10.0F, 10.0F);
+                } else if (this.d < 5) {
+                    this.a.getControllerMove().a(entityliving.locX, entityliving.locY, entityliving.locZ, 1.0D);
                 }
 
-                this.a.getControllerLook().a(entityliving, 10.0F, 10.0F);
-            } else {
-                this.a.getNavigation().o();
-                this.a.getControllerMove().a(entityliving.locX, entityliving.locY, entityliving.locZ, 1.0D);
+                super.e();
             }
-
-            super.e();
         }
 
         private double g() {
-            AttributeInstance attributeinstance = this.a.getAttributeInstance(GenericAttributes.FOLLOW_RANGE);
-
-            return attributeinstance == null ? 16.0D : attributeinstance.getValue();
+            return this.a.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).getValue();
         }
     }
 }

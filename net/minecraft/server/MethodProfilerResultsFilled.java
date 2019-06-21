@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -10,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,62 +20,71 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private final Map<String, Long> b;
-    private final long c;
-    private final int d;
-    private final long e;
-    private final int f;
+    private final Map<String, Long> c;
+    private final long d;
+    private final int e;
+    private final long f;
+    private final int g;
+    private final int h;
 
-    public MethodProfilerResultsFilled(Map<String, Long> map, long i, int j, long k, int l) {
+    public MethodProfilerResultsFilled(Map<String, Long> map, Map<String, Long> map1, long i, int j, long k, int l) {
         this.b = map;
-        this.c = i;
-        this.d = j;
-        this.e = k;
-        this.f = l;
+        this.c = map1;
+        this.d = i;
+        this.e = j;
+        this.f = k;
+        this.g = l;
+        this.h = l - j;
     }
 
     public List<MethodProfilerResultsField> a(String s) {
         long i = this.b.containsKey("root") ? (Long) this.b.get("root") : 0L;
-        long j = this.b.containsKey(s) ? (Long) this.b.get(s) : -1L;
+        long j = (Long) this.b.getOrDefault(s, -1L);
+        long k = (Long) this.c.getOrDefault(s, 0L);
         List<MethodProfilerResultsField> list = Lists.newArrayList();
 
         if (!s.isEmpty()) {
             s = s + ".";
         }
 
-        long k = 0L;
+        long l = 0L;
         Iterator iterator = this.b.keySet().iterator();
 
         while (iterator.hasNext()) {
             String s1 = (String) iterator.next();
 
             if (s1.length() > s.length() && s1.startsWith(s) && s1.indexOf(".", s.length() + 1) < 0) {
-                k += (Long) this.b.get(s1);
+                l += (Long) this.b.get(s1);
             }
         }
 
-        float f = (float) k;
+        float f = (float) l;
 
-        if (k < j) {
-            k = j;
+        if (l < j) {
+            l = j;
         }
 
-        if (i < k) {
-            i = k;
+        if (i < l) {
+            i = l;
         }
 
-        Iterator iterator1 = this.b.keySet().iterator();
+        Set<String> set = Sets.newHashSet(this.b.keySet());
+
+        set.addAll(this.c.keySet());
+        Iterator iterator1 = set.iterator();
 
         String s2;
 
         while (iterator1.hasNext()) {
             s2 = (String) iterator1.next();
             if (s2.length() > s.length() && s2.startsWith(s) && s2.indexOf(".", s.length() + 1) < 0) {
-                long l = (Long) this.b.get(s2);
-                double d0 = (double) l * 100.0D / (double) k;
-                double d1 = (double) l * 100.0D / (double) i;
+                long i1 = (Long) this.b.getOrDefault(s2, 0L);
+                double d0 = (double) i1 * 100.0D / (double) l;
+                double d1 = (double) i1 * 100.0D / (double) i;
                 String s3 = s2.substring(s.length());
+                long j1 = (Long) this.c.getOrDefault(s2, 0L);
 
-                list.add(new MethodProfilerResultsField(s3, d0, d1));
+                list.add(new MethodProfilerResultsField(s3, d0, d1, j1));
             }
         }
 
@@ -84,33 +95,33 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
             this.b.put(s2, (Long) this.b.get(s2) * 999L / 1000L);
         }
 
-        if ((float) k > f) {
-            list.add(new MethodProfilerResultsField("unspecified", (double) ((float) k - f) * 100.0D / (double) k, (double) ((float) k - f) * 100.0D / (double) i));
+        if ((float) l > f) {
+            list.add(new MethodProfilerResultsField("unspecified", (double) ((float) l - f) * 100.0D / (double) l, (double) ((float) l - f) * 100.0D / (double) i, k));
         }
 
         Collections.sort(list);
-        list.add(0, new MethodProfilerResultsField(s, 100.0D, (double) k * 100.0D / (double) i));
+        list.add(0, new MethodProfilerResultsField(s, 100.0D, (double) l * 100.0D / (double) i, k));
         return list;
     }
 
     @Override
     public long a() {
-        return this.c;
-    }
-
-    @Override
-    public int b() {
         return this.d;
     }
 
     @Override
-    public long c() {
+    public int b() {
         return this.e;
     }
 
     @Override
-    public int d() {
+    public long c() {
         return this.f;
+    }
+
+    @Override
+    public int d() {
+        return this.g;
     }
 
     @Override
@@ -122,7 +133,7 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
 
         try {
             outputstreamwriter = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-            outputstreamwriter.write(this.a(this.f(), this.g()));
+            outputstreamwriter.write(this.a(this.g(), this.f()));
             boolean flag1 = true;
 
             return flag1;
@@ -173,10 +184,10 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
                     stringbuilder.append("|   ");
                 }
 
-                stringbuilder.append(methodprofilerresultsfield.c).append(" - ").append(String.format(Locale.ROOT, "%.2f", methodprofilerresultsfield.a)).append("%/").append(String.format(Locale.ROOT, "%.2f", methodprofilerresultsfield.b)).append("%\n");
-                if (!"unspecified".equals(methodprofilerresultsfield.c)) {
+                stringbuilder.append(methodprofilerresultsfield.d).append('(').append(methodprofilerresultsfield.c).append('/').append(String.format(Locale.ROOT, "%.0f", (float) methodprofilerresultsfield.c / (float) this.h)).append(')').append(" - ").append(String.format(Locale.ROOT, "%.2f", methodprofilerresultsfield.a)).append("%/").append(String.format(Locale.ROOT, "%.2f", methodprofilerresultsfield.b)).append("%\n");
+                if (!"unspecified".equals(methodprofilerresultsfield.d)) {
                     try {
-                        this.a(i + 1, s + "." + methodprofilerresultsfield.c, stringbuilder);
+                        this.a(i + 1, s + "." + methodprofilerresultsfield.d, stringbuilder);
                     } catch (Exception exception) {
                         stringbuilder.append("[[ EXCEPTION ").append(exception).append(" ]]");
                     }
@@ -194,5 +205,10 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
         } catch (Throwable throwable) {
             return "Witty comment unavailable :(";
         }
+    }
+
+    @Override
+    public int f() {
+        return this.h;
     }
 }

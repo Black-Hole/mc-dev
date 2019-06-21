@@ -13,7 +13,7 @@ public class CommandFunction {
     public static final SuggestionProvider<CommandListenerWrapper> a = (commandcontext, suggestionsbuilder) -> {
         CustomFunctionData customfunctiondata = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getFunctionData();
 
-        ICompletionProvider.a((Iterable) customfunctiondata.g().a(), suggestionsbuilder, "#");
+        ICompletionProvider.a((Iterable) customfunctiondata.h().a(), suggestionsbuilder, "#");
         return ICompletionProvider.a((Iterable) customfunctiondata.c().keySet(), suggestionsbuilder);
     };
 

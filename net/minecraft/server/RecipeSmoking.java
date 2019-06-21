@@ -8,6 +8,6 @@ public class RecipeSmoking extends RecipeCooking {
 
     @Override
     public RecipeSerializer<?> getRecipeSerializer() {
-        return RecipeSerializer.q;
+        return RecipeSerializer.r;
     }
 }

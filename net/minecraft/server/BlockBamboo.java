@@ -23,7 +23,7 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
     }
 
     @Override
-    public Block.EnumRandomOffset S_() {
+    public Block.EnumRandomOffset R_() {
         return Block.EnumRandomOffset.XZ;
     }
 

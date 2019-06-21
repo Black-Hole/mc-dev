@@ -12,6 +12,11 @@ public class EnchantmentSilkTouch extends Enchantment {
     }
 
     @Override
+    public int b(int i) {
+        return super.a(i) + 50;
+    }
+
+    @Override
     public int getMaxLevel() {
         return 1;
     }

@@ -59,7 +59,7 @@ public class ItemBoneMeal extends Item {
     }
 
     public static boolean a(ItemStack itemstack, World world, BlockPosition blockposition, @Nullable EnumDirection enumdirection) {
-        if (world.getType(blockposition).getBlock() == Blocks.WATER && world.getFluid(blockposition).f() == 8) {
+        if (world.getType(blockposition).getBlock() == Blocks.WATER && world.getFluid(blockposition).g() == 8) {
             if (!world.isClientSide) {
                 label77:
                 for (int i = 0; i < 128; ++i) {
@@ -94,7 +94,7 @@ public class ItemBoneMeal extends Item {
                     if (iblockdata.canPlace(world, blockposition1)) {
                         IBlockData iblockdata1 = world.getType(blockposition1);
 
-                        if (iblockdata1.getBlock() == Blocks.WATER && world.getFluid(blockposition1).f() == 8) {
+                        if (iblockdata1.getBlock() == Blocks.WATER && world.getFluid(blockposition1).g() == 8) {
                             world.setTypeAndData(blockposition1, iblockdata, 3);
                         } else if (iblockdata1.getBlock() == Blocks.SEAGRASS && ItemBoneMeal.i.nextInt(10) == 0) {
                             ((IBlockFragilePlantElement) Blocks.SEAGRASS).b(world, ItemBoneMeal.i, blockposition1, iblockdata1);

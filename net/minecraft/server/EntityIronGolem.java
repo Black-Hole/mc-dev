@@ -45,7 +45,7 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     @Override
-    protected int k(int i) {
+    protected int l(int i) {
         return i;
     }
 

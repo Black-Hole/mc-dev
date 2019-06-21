@@ -5,14 +5,14 @@ import javax.annotation.Nullable;
 
 public class EntityHorse extends EntityHorseAbstract {
 
-    private static final UUID bJ = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
-    private static final DataWatcherObject<Integer> bK = DataWatcher.a(EntityHorse.class, DataWatcherRegistry.b);
-    private static final String[] bL = new String[]{"textures/entity/horse/horse_white.png", "textures/entity/horse/horse_creamy.png", "textures/entity/horse/horse_chestnut.png", "textures/entity/horse/horse_brown.png", "textures/entity/horse/horse_black.png", "textures/entity/horse/horse_gray.png", "textures/entity/horse/horse_darkbrown.png"};
-    private static final String[] bM = new String[]{"hwh", "hcr", "hch", "hbr", "hbl", "hgr", "hdb"};
-    private static final String[] bN = new String[]{null, "textures/entity/horse/horse_markings_white.png", "textures/entity/horse/horse_markings_whitefield.png", "textures/entity/horse/horse_markings_whitedots.png", "textures/entity/horse/horse_markings_blackdots.png"};
-    private static final String[] bO = new String[]{"", "wo_", "wmo", "wdo", "bdo"};
-    private String bP;
-    private final String[] bQ = new String[2];
+    private static final UUID bI = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
+    private static final DataWatcherObject<Integer> bJ = DataWatcher.a(EntityHorse.class, DataWatcherRegistry.b);
+    private static final String[] bK = new String[]{"textures/entity/horse/horse_white.png", "textures/entity/horse/horse_creamy.png", "textures/entity/horse/horse_chestnut.png", "textures/entity/horse/horse_brown.png", "textures/entity/horse/horse_black.png", "textures/entity/horse/horse_gray.png", "textures/entity/horse/horse_darkbrown.png"};
+    private static final String[] bL = new String[]{"hwh", "hcr", "hch", "hbr", "hbl", "hgr", "hdb"};
+    private static final String[] bM = new String[]{null, "textures/entity/horse/horse_markings_white.png", "textures/entity/horse/horse_markings_whitefield.png", "textures/entity/horse/horse_markings_whitedots.png", "textures/entity/horse/horse_markings_blackdots.png"};
+    private static final String[] bN = new String[]{"", "wo_", "wmo", "wdo", "bdo"};
+    private String bO;
+    private final String[] bP = new String[2];
 
     public EntityHorse(EntityTypes<? extends EntityHorse> entitytypes, World world) {
         super(entitytypes, world);
@@ -21,7 +21,7 @@ public class EntityHorse extends EntityHorseAbstract {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityHorse.bK, 0);
+        this.datawatcher.register(EntityHorse.bJ, 0);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class EntityHorse extends EntityHorseAbstract {
 
     }
 
-    public ItemStack dV() {
+    public ItemStack dW() {
         return this.getEquipment(EnumItemSlot.CHEST);
     }
 
@@ -55,37 +55,37 @@ public class EntityHorse extends EntityHorseAbstract {
             }
         }
 
-        this.en();
+        this.eo();
     }
 
     public void setVariant(int i) {
-        this.datawatcher.set(EntityHorse.bK, i);
-        this.eC();
+        this.datawatcher.set(EntityHorse.bJ, i);
+        this.eD();
     }
 
     public int getVariant() {
-        return (Integer) this.datawatcher.get(EntityHorse.bK);
+        return (Integer) this.datawatcher.get(EntityHorse.bJ);
     }
 
-    private void eC() {
-        this.bP = null;
+    private void eD() {
+        this.bO = null;
     }
 
     @Override
-    protected void en() {
-        super.en();
+    protected void eo() {
+        super.eo();
         this.l(this.inventoryChest.getItem(1));
     }
 
     private void l(ItemStack itemstack) {
         this.k(itemstack);
         if (!this.world.isClientSide) {
-            this.getAttributeInstance(GenericAttributes.ARMOR).b(EntityHorse.bJ);
+            this.getAttributeInstance(GenericAttributes.ARMOR).b(EntityHorse.bI);
             if (this.j(itemstack)) {
                 int i = ((ItemHorseArmor) itemstack.getItem()).e();
 
                 if (i != 0) {
-                    this.getAttributeInstance(GenericAttributes.ARMOR).b((new AttributeModifier(EntityHorse.bJ, "Horse armor bonus", (double) i, AttributeModifier.Operation.ADDITION)).a(false));
+                    this.getAttributeInstance(GenericAttributes.ARMOR).b((new AttributeModifier(EntityHorse.bI, "Horse armor bonus", (double) i, AttributeModifier.Operation.ADDITION)).a(false));
                 }
             }
         }
@@ -94,10 +94,10 @@ public class EntityHorse extends EntityHorseAbstract {
 
     @Override
     public void a(IInventory iinventory) {
-        ItemStack itemstack = this.dV();
+        ItemStack itemstack = this.dW();
 
         super.a(iinventory);
-        ItemStack itemstack1 = this.dV();
+        ItemStack itemstack1 = this.dW();
 
         if (this.ticksLived > 20 && this.j(itemstack1) && itemstack != itemstack1) {
             this.a(SoundEffects.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
@@ -117,9 +117,9 @@ public class EntityHorse extends EntityHorseAbstract {
     @Override
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.ex());
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(this.ez());
-        this.getAttributeInstance(EntityHorse.attributeJumpStrength).setValue(this.ey());
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.ey());
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(this.eA());
+        this.getAttributeInstance(EntityHorse.attributeJumpStrength).setValue(this.ez());
     }
 
     @Override
@@ -127,7 +127,7 @@ public class EntityHorse extends EntityHorseAbstract {
         super.tick();
         if (this.world.isClientSide && this.datawatcher.a()) {
             this.datawatcher.e();
-            this.eC();
+            this.eD();
         }
 
     }
@@ -189,11 +189,11 @@ public class EntityHorse extends EntityHorseAbstract {
                 }
 
                 if (!this.isTamed()) {
-                    this.eu();
+                    this.ev();
                     return true;
                 }
 
-                boolean flag1 = !this.isBaby() && !this.eq() && itemstack.getItem() == Items.SADDLE;
+                boolean flag1 = !this.isBaby() && !this.er() && itemstack.getItem() == Items.SADDLE;
 
                 if (this.j(itemstack) || flag1) {
                     this.e(entityhuman);
@@ -212,7 +212,7 @@ public class EntityHorse extends EntityHorseAbstract {
 
     @Override
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.ew() && ((EntityHorseAbstract) entityanimal).ew());
+        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.ex() && ((EntityHorseAbstract) entityanimal).ex());
     }
 
     @Override
@@ -254,7 +254,7 @@ public class EntityHorse extends EntityHorseAbstract {
     }
 
     @Override
-    public boolean eA() {
+    public boolean eB() {
         return true;
     }
 

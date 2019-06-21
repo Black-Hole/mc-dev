@@ -16,7 +16,7 @@ public interface Fluid extends IBlockDataHolder<Fluid> {
     FluidType getType();
 
     default boolean isSource() {
-        return this.getType().b(this);
+        return this.getType().c(this);
     }
 
     default boolean isEmpty() {
@@ -27,15 +27,19 @@ public interface Fluid extends IBlockDataHolder<Fluid> {
         return this.getType().a(this, iblockaccess, blockposition);
     }
 
-    default int f() {
-        return this.getType().c(this);
+    default float f() {
+        return this.getType().a(this);
+    }
+
+    default int g() {
+        return this.getType().d(this);
     }
 
     default void a(World world, BlockPosition blockposition) {
         this.getType().a(world, blockposition, this);
     }
 
-    default boolean g() {
+    default boolean h() {
         return this.getType().k();
     }
 
@@ -48,14 +52,14 @@ public interface Fluid extends IBlockDataHolder<Fluid> {
     }
 
     default IBlockData getBlockData() {
-        return this.getType().a(this);
+        return this.getType().b(this);
     }
 
     default boolean a(Tag<FluidType> tag) {
         return this.getType().a(tag);
     }
 
-    default float k() {
+    default float l() {
         return this.getType().d();
     }
 

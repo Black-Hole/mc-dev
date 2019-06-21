@@ -56,10 +56,10 @@ public abstract class RecipeSingleItem implements IRecipe<IInventory> {
 
     public static class a<T extends RecipeSingleItem> implements RecipeSerializer<T> {
 
-        final RecipeSingleItem.a.a<T> t;
+        final RecipeSingleItem.a.a<T> u;
 
         protected a(RecipeSingleItem.a.a<T> recipesingleitem_a_a) {
-            this.t = recipesingleitem_a_a;
+            this.u = recipesingleitem_a_a;
         }
 
         @Override
@@ -77,7 +77,7 @@ public abstract class RecipeSingleItem implements IRecipe<IInventory> {
             int i = ChatDeserializer.n(jsonobject, "count");
             ItemStack itemstack = new ItemStack((IMaterial) IRegistry.ITEM.get(new MinecraftKey(s1)), i);
 
-            return this.t.create(minecraftkey, s, recipeitemstack, itemstack);
+            return this.u.create(minecraftkey, s, recipeitemstack, itemstack);
         }
 
         @Override
@@ -86,7 +86,7 @@ public abstract class RecipeSingleItem implements IRecipe<IInventory> {
             RecipeItemStack recipeitemstack = RecipeItemStack.b(packetdataserializer);
             ItemStack itemstack = packetdataserializer.m();
 
-            return this.t.create(minecraftkey, s, recipeitemstack, itemstack);
+            return this.u.create(minecraftkey, s, recipeitemstack, itemstack);
         }
 
         public void a(PacketDataSerializer packetdataserializer, T t0) {

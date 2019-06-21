@@ -47,36 +47,43 @@ public class WorldMap extends PersistentBase {
 
     @Override
     public void a(NBTTagCompound nbttagcompound) {
-        this.map = DimensionManager.a(nbttagcompound.getInt("dimension"));
-        this.centerX = nbttagcompound.getInt("xCenter");
-        this.centerZ = nbttagcompound.getInt("zCenter");
-        this.scale = (byte) MathHelper.clamp(nbttagcompound.getByte("scale"), 0, 4);
-        this.track = !nbttagcompound.hasKeyOfType("trackingPosition", 1) || nbttagcompound.getBoolean("trackingPosition");
-        this.unlimitedTracking = nbttagcompound.getBoolean("unlimitedTracking");
-        this.locked = nbttagcompound.getBoolean("locked");
-        this.colors = nbttagcompound.getByteArray("colors");
-        if (this.colors.length != 16384) {
-            this.colors = new byte[16384];
+        int i = nbttagcompound.getInt("dimension");
+        DimensionManager dimensionmanager = DimensionManager.a(i);
+
+        if (dimensionmanager == null) {
+            throw new IllegalArgumentException("Invalid map dimension: " + i);
+        } else {
+            this.map = dimensionmanager;
+            this.centerX = nbttagcompound.getInt("xCenter");
+            this.centerZ = nbttagcompound.getInt("zCenter");
+            this.scale = (byte) MathHelper.clamp(nbttagcompound.getByte("scale"), 0, 4);
+            this.track = !nbttagcompound.hasKeyOfType("trackingPosition", 1) || nbttagcompound.getBoolean("trackingPosition");
+            this.unlimitedTracking = nbttagcompound.getBoolean("unlimitedTracking");
+            this.locked = nbttagcompound.getBoolean("locked");
+            this.colors = nbttagcompound.getByteArray("colors");
+            if (this.colors.length != 16384) {
+                this.colors = new byte[16384];
+            }
+
+            NBTTagList nbttaglist = nbttagcompound.getList("banners", 10);
+
+            for (int j = 0; j < nbttaglist.size(); ++j) {
+                MapIconBanner mapiconbanner = MapIconBanner.a(nbttaglist.getCompound(j));
+
+                this.l.put(mapiconbanner.f(), mapiconbanner);
+                this.a(mapiconbanner.c(), (GeneratorAccess) null, mapiconbanner.f(), (double) mapiconbanner.a().getX(), (double) mapiconbanner.a().getZ(), 180.0D, mapiconbanner.d());
+            }
+
+            NBTTagList nbttaglist1 = nbttagcompound.getList("frames", 10);
+
+            for (int k = 0; k < nbttaglist1.size(); ++k) {
+                WorldMapFrame worldmapframe = WorldMapFrame.a(nbttaglist1.getCompound(k));
+
+                this.m.put(worldmapframe.e(), worldmapframe);
+                this.a(MapIcon.Type.FRAME, (GeneratorAccess) null, "frame-" + worldmapframe.d(), (double) worldmapframe.b().getX(), (double) worldmapframe.b().getZ(), (double) worldmapframe.c(), (IChatBaseComponent) null);
+            }
+
         }
-
-        NBTTagList nbttaglist = nbttagcompound.getList("banners", 10);
-
-        for (int i = 0; i < nbttaglist.size(); ++i) {
-            MapIconBanner mapiconbanner = MapIconBanner.a(nbttaglist.getCompound(i));
-
-            this.l.put(mapiconbanner.f(), mapiconbanner);
-            this.a(mapiconbanner.c(), (GeneratorAccess) null, mapiconbanner.f(), (double) mapiconbanner.a().getX(), (double) mapiconbanner.a().getZ(), 180.0D, mapiconbanner.d());
-        }
-
-        NBTTagList nbttaglist1 = nbttagcompound.getList("frames", 10);
-
-        for (int j = 0; j < nbttaglist1.size(); ++j) {
-            WorldMapFrame worldmapframe = WorldMapFrame.a(nbttaglist1.getCompound(j));
-
-            this.m.put(worldmapframe.e(), worldmapframe);
-            this.a(MapIcon.Type.FRAME, (GeneratorAccess) null, "frame-" + worldmapframe.d(), (double) worldmapframe.b().getX(), (double) worldmapframe.b().getZ(), (double) worldmapframe.c(), (IChatBaseComponent) null);
-        }
-
     }
 
     @Override
@@ -158,9 +165,9 @@ public class WorldMap extends PersistentBase {
                 this.decorations.remove("frame-" + worldmapframe.d());
             }
 
-            WorldMapFrame worldmapframe1 = new WorldMapFrame(blockposition, entityitemframe.direction.get2DRotationValue() * 90, entityitemframe.getId());
+            WorldMapFrame worldmapframe1 = new WorldMapFrame(blockposition, entityitemframe.getDirection().get2DRotationValue() * 90, entityitemframe.getId());
 
-            this.a(MapIcon.Type.FRAME, entityhuman.world, "frame-" + entityitemframe.getId(), (double) blockposition.getX(), (double) blockposition.getZ(), (double) (entityitemframe.direction.get2DRotationValue() * 90), (IChatBaseComponent) null);
+            this.a(MapIcon.Type.FRAME, entityhuman.world, "frame-" + entityitemframe.getId(), (double) blockposition.getX(), (double) blockposition.getZ(), (double) (entityitemframe.getDirection().get2DRotationValue() * 90), (IChatBaseComponent) null);
             this.m.put(worldmapframe1.e(), worldmapframe1);
         }
 

@@ -54,7 +54,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
     @Override
     public void a(DamageSource damagesource) {
         super.a(damagesource);
-        if (!damagesource.isExplosion() && this.world.getGameRules().getBoolean("doEntityDrops")) {
+        if (!damagesource.isExplosion() && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
             this.a((IMaterial) Blocks.FURNACE);
         }
 

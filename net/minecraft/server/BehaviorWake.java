@@ -15,6 +15,6 @@ public class BehaviorWake extends Behavior<EntityLiving> {
 
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
-        entityliving.dy();
+        entityliving.dz();
     }
 }

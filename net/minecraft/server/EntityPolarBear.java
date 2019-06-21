@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
@@ -10,7 +11,7 @@ public class EntityPolarBear extends EntityAnimal {
     private static final DataWatcherObject<Boolean> bz = DataWatcher.a(EntityPolarBear.class, DataWatcherRegistry.i);
     private float bA;
     private float bB;
-    private int bD;
+    private int bC;
 
     public EntityPolarBear(EntityTypes<? extends EntityPolarBear> entitytypes, World world) {
         super(entitytypes, world);
@@ -51,15 +52,10 @@ public class EntityPolarBear extends EntityAnimal {
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(6.0D);
     }
 
-    @Override
-    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        int i = MathHelper.floor(this.locX);
-        int j = MathHelper.floor(this.getBoundingBox().minY);
-        int k = MathHelper.floor(this.locZ);
-        BlockPosition blockposition = new BlockPosition(i, j, k);
+    public static boolean c(EntityTypes<EntityPolarBear> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
         BiomeBase biomebase = generatoraccess.getBiome(blockposition);
 
-        return biomebase != Biomes.FROZEN_OCEAN && biomebase != Biomes.DEEP_FROZEN_OCEAN ? super.a(generatoraccess, enummobspawn) : generatoraccess.getLightLevel(blockposition, 0) > 8 && generatoraccess.getType(blockposition.down()).getBlock() == Blocks.ICE;
+        return biomebase != Biomes.FROZEN_OCEAN && biomebase != Biomes.DEEP_FROZEN_OCEAN ? b(entitytypes, generatoraccess, enummobspawn, blockposition, random) : generatoraccess.getLightLevel(blockposition, 0) > 8 && generatoraccess.getType(blockposition.down()).getBlock() == Blocks.ICE;
     }
 
     @Override
@@ -82,10 +78,10 @@ public class EntityPolarBear extends EntityAnimal {
         this.a(SoundEffects.ENTITY_POLAR_BEAR_STEP, 0.15F, 1.0F);
     }
 
-    protected void dV() {
-        if (this.bD <= 0) {
-            this.a(SoundEffects.ENTITY_POLAR_BEAR_WARNING, 1.0F, this.cU());
-            this.bD = 40;
+    protected void dW() {
+        if (this.bC <= 0) {
+            this.a(SoundEffects.ENTITY_POLAR_BEAR_WARNING, 1.0F, this.cV());
+            this.bC = 40;
         }
 
     }
@@ -105,15 +101,15 @@ public class EntityPolarBear extends EntityAnimal {
             }
 
             this.bA = this.bB;
-            if (this.dW()) {
+            if (this.dX()) {
                 this.bB = MathHelper.a(this.bB + 1.0F, 0.0F, 6.0F);
             } else {
                 this.bB = MathHelper.a(this.bB - 1.0F, 0.0F, 6.0F);
             }
         }
 
-        if (this.bD > 0) {
-            --this.bD;
+        if (this.bC > 0) {
+            --this.bC;
         }
 
     }
@@ -141,7 +137,7 @@ public class EntityPolarBear extends EntityAnimal {
         return flag;
     }
 
-    public boolean dW() {
+    public boolean dX() {
         return (Boolean) this.datawatcher.get(EntityPolarBear.bz);
     }
 
@@ -150,7 +146,7 @@ public class EntityPolarBear extends EntityAnimal {
     }
 
     @Override
-    protected float cZ() {
+    protected float da() {
         return 0.98F;
     }
 
@@ -199,7 +195,7 @@ public class EntityPolarBear extends EntityAnimal {
 
                 if (this.b <= 10) {
                     EntityPolarBear.this.r(true);
-                    EntityPolarBear.this.dV();
+                    EntityPolarBear.this.dW();
                 }
             } else {
                 this.b = 20;

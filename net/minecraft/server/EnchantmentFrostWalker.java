@@ -14,6 +14,11 @@ public class EnchantmentFrostWalker extends Enchantment {
     }
 
     @Override
+    public int b(int i) {
+        return this.a(i) + 15;
+    }
+
+    @Override
     public boolean isTreasure() {
         return true;
     }
@@ -33,7 +38,7 @@ public class EnchantmentFrostWalker extends Enchantment {
             while (iterator.hasNext()) {
                 BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
-                if (blockposition1.a((IPosition) entityliving.ch(), (double) f)) {
+                if (blockposition1.a((IPosition) entityliving.ci(), (double) f)) {
                     blockposition_mutableblockposition.d(blockposition1.getX(), blockposition1.getY() + 1, blockposition1.getZ());
                     IBlockData iblockdata1 = world.getType(blockposition_mutableblockposition);
 

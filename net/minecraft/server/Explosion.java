@@ -102,7 +102,7 @@ public class Explosion {
                             Fluid fluid = this.world.getFluid(blockposition);
 
                             if (!iblockdata.isAir() || !fluid.isEmpty()) {
-                                float f2 = Math.max(iblockdata.getBlock().getDurability(), fluid.k());
+                                float f2 = Math.max(iblockdata.getBlock().getDurability(), fluid.l());
 
                                 if (this.source != null) {
                                     f2 = this.source.a(this, this.world, blockposition, iblockdata, fluid, f2);
@@ -139,7 +139,7 @@ public class Explosion {
         for (int l1 = 0; l1 < list.size(); ++l1) {
             Entity entity = (Entity) list.get(l1);
 
-            if (!entity.bR()) {
+            if (!entity.bS()) {
                 double d7 = (double) (MathHelper.sqrt(entity.c(new Vec3D(this.posX, this.posY, this.posZ))) / f3);
 
                 if (d7 <= 1.0D) {

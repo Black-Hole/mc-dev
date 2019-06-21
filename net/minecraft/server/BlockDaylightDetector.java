@@ -51,7 +51,7 @@ public class BlockDaylightDetector extends BlockTileEntity {
 
     @Override
     public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        if (entityhuman.dQ()) {
+        if (entityhuman.dR()) {
             if (world.isClientSide) {
                 return true;
             } else {

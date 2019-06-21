@@ -129,7 +129,7 @@ public class EntityShulkerBullet extends Entity {
         double d3 = (double) blockposition.getZ() + 0.5D;
         EnumDirection enumdirection = null;
 
-        if (!blockposition.a((IPosition) this.ch(), 2.0D)) {
+        if (!blockposition.a((IPosition) this.ci(), 2.0D)) {
             BlockPosition blockposition1 = new BlockPosition(this);
             List<EnumDirection> list = Lists.newArrayList();
 
@@ -289,7 +289,7 @@ public class EntityShulkerBullet extends Entity {
     }
 
     @Override
-    public float aE() {
+    public float aF() {
         return 1.0F;
     }
 

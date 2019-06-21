@@ -430,8 +430,16 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
             return this.d(this.b + i, this.c + j, this.d + k);
         }
 
+        public void o(int i) {
+            this.b = i;
+        }
+
         public void p(int i) {
             this.c = i;
+        }
+
+        public void q(int i) {
+            this.d = i;
         }
 
         @Override

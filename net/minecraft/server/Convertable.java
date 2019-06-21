@@ -51,7 +51,7 @@ public class Convertable {
     public boolean isConvertable(String s) {
         WorldData worlddata = this.b(s);
 
-        return worlddata != null && worlddata.k() != this.e();
+        return worlddata != null && worlddata.j() != this.e();
     }
 
     public boolean convert(String s, IProgressUpdate iprogressupdate) {

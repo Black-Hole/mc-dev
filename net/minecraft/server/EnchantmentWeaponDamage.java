@@ -19,6 +19,11 @@ public class EnchantmentWeaponDamage extends Enchantment {
     }
 
     @Override
+    public int b(int i) {
+        return this.a(i) + EnchantmentWeaponDamage.g[this.a];
+    }
+
+    @Override
     public int getMaxLevel() {
         return 5;
     }

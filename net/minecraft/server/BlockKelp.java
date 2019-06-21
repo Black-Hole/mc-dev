@@ -23,7 +23,7 @@ public class BlockKelp extends Block implements IFluidContainer {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
-        return fluid.a(TagsFluid.WATER) && fluid.f() == 8 ? this.a((GeneratorAccess) blockactioncontext.getWorld()) : null;
+        return fluid.a(TagsFluid.WATER) && fluid.g() == 8 ? this.a((GeneratorAccess) blockactioncontext.getWorld()) : null;
     }
 
     public IBlockData a(GeneratorAccess generatoraccess) {

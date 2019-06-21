@@ -46,7 +46,7 @@ public class CustomFunctionData implements IResourcePackListener {
     }
 
     public int b() {
-        return this.server.getGameRules().c("maxCommandChainLength");
+        return this.server.getGameRules().getInt(GameRules.MAX_COMMAND_CHAIN_LENGTH);
     }
 
     public Map<MinecraftKey, CustomFunction> c() {
@@ -73,7 +73,7 @@ public class CustomFunctionData implements IResourcePackListener {
         this.server.getMethodProfiler().exit();
         if (this.m) {
             this.m = false;
-            Collection<CustomFunction> collection = this.g().b(CustomFunctionData.e).a();
+            Collection<CustomFunction> collection = this.h().b(CustomFunctionData.e).a();
 
             gameprofiler = this.server.getMethodProfiler();
             minecraftkey = CustomFunctionData.e;
@@ -151,7 +151,6 @@ public class CustomFunctionData implements IResourcePackListener {
     public void a(IResourceManager iresourcemanager) {
         this.g.clear();
         this.l.clear();
-        this.k.b();
         Collection<MinecraftKey> collection = iresourcemanager.a("functions", (s) -> {
             return s.endsWith(".mcfunction");
         });
@@ -234,7 +233,11 @@ public class CustomFunctionData implements IResourcePackListener {
         return this.server.getServerCommandListener().a(2).a();
     }
 
-    public Tags<CustomFunction> g() {
+    public CommandListenerWrapper g() {
+        return new CommandListenerWrapper(ICommandListener.DUMMY, Vec3D.a, Vec2F.a, (WorldServer) null, 4, "", new ChatComponentText(""), this.server, (Entity) null);
+    }
+
+    public Tags<CustomFunction> h() {
         return this.k;
     }
 

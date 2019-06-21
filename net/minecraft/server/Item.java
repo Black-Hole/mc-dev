@@ -144,6 +144,10 @@ public class Item implements IMaterial {
         return false;
     }
 
+    public String toString() {
+        return IRegistry.ITEM.getKey(this).getKey();
+    }
+
     protected String l() {
         if (this.name == null) {
             this.name = SystemUtils.a("item", IRegistry.ITEM.getKey(this));
@@ -177,7 +181,7 @@ public class Item implements IMaterial {
 
     public void b(ItemStack itemstack, World world, EntityHuman entityhuman) {}
 
-    public boolean P_() {
+    public boolean O_() {
         return false;
     }
 

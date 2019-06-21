@@ -130,6 +130,10 @@ public class SystemUtils {
         });
     }
 
+    public static <T> T a(List<T> list) {
+        return list.get(list.size() - 1);
+    }
+
     public static <T> T a(Iterable<T> iterable, @Nullable T t0) {
         Iterator<T> iterator = iterable.iterator();
         T t1 = iterator.next();

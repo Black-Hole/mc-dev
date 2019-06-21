@@ -29,12 +29,12 @@ public class CommandSchedule {
             either.ifLeft((customfunction) -> {
                 MinecraftKey minecraftkey = customfunction.a();
 
-                commandlistenerwrapper.getWorld().getWorldData().z().b(minecraftkey.toString(), j, new CustomFunctionCallback(minecraftkey));
+                commandlistenerwrapper.getWorld().getWorldData().y().b(minecraftkey.toString(), j, new CustomFunctionCallback(minecraftkey));
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.schedule.created.function", new Object[]{minecraftkey, i, j}), true);
             }).ifRight((tag) -> {
                 MinecraftKey minecraftkey = tag.c();
 
-                commandlistenerwrapper.getWorld().getWorldData().z().b("#" + minecraftkey.toString(), j, new CustomFunctionCallbackTag(minecraftkey));
+                commandlistenerwrapper.getWorld().getWorldData().y().b("#" + minecraftkey.toString(), j, new CustomFunctionCallbackTag(minecraftkey));
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.schedule.created.tag", new Object[]{minecraftkey, i, j}), true);
             });
             return (int) Math.floorMod(j, 2147483647L);

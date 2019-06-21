@@ -156,12 +156,12 @@ public class EntityEnderman extends EntityMonster {
 
     @Override
     protected void mobTick() {
-        if (this.at()) {
+        if (this.au()) {
             this.damageEntity(DamageSource.DROWN, 1.0F);
         }
 
         if (this.world.J() && this.ticksLived >= this.bC + 600) {
-            float f = this.aE();
+            float f = this.aF();
 
             if (f > 0.5F && this.world.f(new BlockPosition(this)) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
                 this.setGoalTarget((EntityLiving) null);
@@ -285,7 +285,7 @@ public class EntityEnderman extends EntityMonster {
 
         @Override
         public boolean a() {
-            return this.enderman.getCarried() != null ? false : (!this.enderman.world.getGameRules().getBoolean("mobGriefing") ? false : this.enderman.getRandom().nextInt(20) == 0);
+            return this.enderman.getCarried() != null ? false : (!this.enderman.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) ? false : this.enderman.getRandom().nextInt(20) == 0);
         }
 
         @Override
@@ -321,7 +321,7 @@ public class EntityEnderman extends EntityMonster {
 
         @Override
         public boolean a() {
-            return this.a.getCarried() == null ? false : (!this.a.world.getGameRules().getBoolean("mobGriefing") ? false : this.a.getRandom().nextInt(2000) == 0);
+            return this.a.getCarried() == null ? false : (!this.a.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) ? false : this.a.getRandom().nextInt(2000) == 0);
         }
 
         @Override

@@ -426,7 +426,7 @@ public class Chunk implements IChunkAccess {
             TileEntity tileentity1 = (TileEntity) this.tileEntities.put(blockposition.immutableCopy(), tileentity);
 
             if (tileentity1 != null && tileentity1 != tileentity) {
-                tileentity1.W_();
+                tileentity1.V_();
             }
 
         }
@@ -464,7 +464,7 @@ public class Chunk implements IChunkAccess {
             TileEntity tileentity = (TileEntity) this.tileEntities.remove(blockposition);
 
             if (tileentity != null) {
-                tileentity.W_();
+                tileentity.V_();
             }
         }
 
@@ -502,7 +502,7 @@ public class Chunk implements IChunkAccess {
                         }
 
                         if (entity1 instanceof EntityEnderDragon) {
-                            EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity1).dT();
+                            EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity1).dU();
                             int l = aentitycomplexpart.length;
 
                             for (int i1 = 0; i1 < l; ++i1) {

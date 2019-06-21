@@ -178,7 +178,7 @@ public class CommandListenerWrapper implements ICompletionProvider {
     private void sendAdminMessage(IChatBaseComponent ichatbasecomponent) {
         IChatBaseComponent ichatbasecomponent1 = (new ChatMessage("chat.type.admin", new Object[]{this.getScoreboardDisplayName(), ichatbasecomponent})).a(new EnumChatFormat[]{EnumChatFormat.GRAY, EnumChatFormat.ITALIC});
 
-        if (this.i.getGameRules().getBoolean("sendCommandFeedback")) {
+        if (this.i.getGameRules().getBoolean(GameRules.SEND_COMMAND_FEEDBACK)) {
             Iterator iterator = this.i.getPlayerList().getPlayers().iterator();
 
             while (iterator.hasNext()) {
@@ -190,7 +190,7 @@ public class CommandListenerWrapper implements ICompletionProvider {
             }
         }
 
-        if (this.base != this.i && this.i.getGameRules().getBoolean("logAdminCommands")) {
+        if (this.base != this.i && this.i.getGameRules().getBoolean(GameRules.LOG_ADMIN_COMMANDS)) {
             this.i.sendMessage(ichatbasecomponent1);
         }
 

@@ -5,12 +5,12 @@ import com.google.gson.JsonObject;
 
 public class RecipeSerializerCooking<T extends RecipeCooking> implements RecipeSerializer<T> {
 
-    private final int t;
-    private final RecipeSerializerCooking.a<T> u;
+    private final int u;
+    private final RecipeSerializerCooking.a<T> v;
 
     public RecipeSerializerCooking(RecipeSerializerCooking.a<T> recipeserializercooking_a, int i) {
-        this.t = i;
-        this.u = recipeserializercooking_a;
+        this.u = i;
+        this.v = recipeserializercooking_a;
     }
 
     @Override
@@ -24,9 +24,9 @@ public class RecipeSerializerCooking<T extends RecipeCooking> implements RecipeS
             return new IllegalStateException("Item: " + s1 + " does not exist");
         }));
         float f = ChatDeserializer.a(jsonobject, "experience", 0.0F);
-        int i = ChatDeserializer.a(jsonobject, "cookingtime", this.t);
+        int i = ChatDeserializer.a(jsonobject, "cookingtime", this.u);
 
-        return this.u.create(minecraftkey, s, recipeitemstack, itemstack, f, i);
+        return this.v.create(minecraftkey, s, recipeitemstack, itemstack, f, i);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class RecipeSerializerCooking<T extends RecipeCooking> implements RecipeS
         float f = packetdataserializer.readFloat();
         int i = packetdataserializer.i();
 
-        return this.u.create(minecraftkey, s, recipeitemstack, itemstack, f, i);
+        return this.v.create(minecraftkey, s, recipeitemstack, itemstack, f, i);
     }
 
     public void a(PacketDataSerializer packetdataserializer, T t0) {

@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 public class CriterionConditionEntityEquipment {
 
     public static final CriterionConditionEntityEquipment a = new CriterionConditionEntityEquipment(CriterionConditionItem.a, CriterionConditionItem.a, CriterionConditionItem.a, CriterionConditionItem.a, CriterionConditionItem.a, CriterionConditionItem.a);
-    public static final CriterionConditionEntityEquipment b = new CriterionConditionEntityEquipment(CriterionConditionItem.a.a().a((IMaterial) Items.WHITE_BANNER).a(Raid.a.getTag()).b(), CriterionConditionItem.a, CriterionConditionItem.a, CriterionConditionItem.a, CriterionConditionItem.a, CriterionConditionItem.a);
+    public static final CriterionConditionEntityEquipment b = new CriterionConditionEntityEquipment(CriterionConditionItem.a.a().a((IMaterial) Items.WHITE_BANNER).a(Raid.s().getTag()).b(), CriterionConditionItem.a, CriterionConditionItem.a, CriterionConditionItem.a, CriterionConditionItem.a, CriterionConditionItem.a);
     private final CriterionConditionItem c;
     private final CriterionConditionItem d;
     private final CriterionConditionItem e;

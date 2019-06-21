@@ -34,19 +34,21 @@ public interface IEntityAccess {
         return this.a(oclass, axisalignedbb, IEntitySelector.f);
     }
 
-    default Stream<VoxelShape> a(@Nullable Entity entity, VoxelShape voxelshape, Set<Entity> set) {
-        if (voxelshape.isEmpty()) {
+    default Stream<VoxelShape> a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
+        if (axisalignedbb.a() < 1.0E-7D) {
             return Stream.empty();
         } else {
-            AxisAlignedBB axisalignedbb = voxelshape.getBoundingBox();
-
-            return this.getEntities(entity, axisalignedbb.g(0.25D)).stream().filter((entity1) -> {
-                return !set.contains(entity1) && (entity == null || !entity.x(entity1));
+            AxisAlignedBB axisalignedbb1 = axisalignedbb.g(1.0E-7D);
+            Stream stream = this.getEntities(entity, axisalignedbb1).stream().filter((entity1) -> {
+                return !set.contains(entity1);
+            }).filter((entity1) -> {
+                return entity == null || !entity.x(entity1);
             }).flatMap((entity1) -> {
-                return Stream.of(entity1.ap(), entity == null ? null : entity.j(entity1)).filter(Objects::nonNull).filter((axisalignedbb1) -> {
-                    return axisalignedbb1.c(axisalignedbb);
-                }).map(VoxelShapes::a);
-            });
+                return Stream.of(entity1.aq(), entity == null ? null : entity.j(entity1));
+            }).filter(Objects::nonNull);
+
+            axisalignedbb1.getClass();
+            return stream.filter(axisalignedbb1::c).map(VoxelShapes::a);
         }
     }
 

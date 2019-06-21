@@ -25,7 +25,7 @@ public class BlockFlowers extends BlockPlant {
     }
 
     @Override
-    public Block.EnumRandomOffset S_() {
+    public Block.EnumRandomOffset R_() {
         return Block.EnumRandomOffset.XZ;
     }
 

@@ -289,6 +289,11 @@ public class ChatDeserializer {
     }
 
     @Nullable
+    public static <T> T a(Gson gson, Reader reader, Class<T> oclass) {
+        return a(gson, reader, oclass, false);
+    }
+
+    @Nullable
     public static <T> T a(Gson gson, String s, Class<T> oclass) {
         return a(gson, s, oclass, false);
     }

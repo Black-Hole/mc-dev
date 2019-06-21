@@ -62,7 +62,7 @@ public class VillageSiege {
             EntityHuman entityhuman = (EntityHuman) iterator.next();
 
             if (!entityhuman.isSpectator()) {
-                BlockPosition blockposition = new BlockPosition(entityhuman);
+                BlockPosition blockposition = entityhuman.getChunkCoordinates();
 
                 if (this.a.b_(blockposition)) {
                     for (int i = 0; i < 10; ++i) {
@@ -71,15 +71,14 @@ public class VillageSiege {
                         this.f = blockposition.getX() + MathHelper.d(MathHelper.cos(f) * 32.0F);
                         this.g = blockposition.getY();
                         this.h = blockposition.getZ() + MathHelper.d(MathHelper.sin(f) * 32.0F);
+                        if (this.a(new BlockPosition(this.f, this.g, this.h)) != null) {
+                            this.e = 0;
+                            this.d = 20;
+                            break;
+                        }
                     }
 
-                    Vec3D vec3d = this.a(new BlockPosition(this.f, this.g, this.h));
-
-                    if (vec3d != null) {
-                        this.e = 0;
-                        this.d = 20;
-                        return true;
-                    }
+                    return true;
                 }
             }
         }
@@ -109,9 +108,12 @@ public class VillageSiege {
     @Nullable
     private Vec3D a(BlockPosition blockposition) {
         for (int i = 0; i < 10; ++i) {
-            BlockPosition blockposition1 = blockposition.b(this.a.random.nextInt(16) - 8, this.a.random.nextInt(6) - 3, this.a.random.nextInt(16) - 8);
+            int j = blockposition.getX() + this.a.random.nextInt(16) - 8;
+            int k = blockposition.getZ() + this.a.random.nextInt(16) - 8;
+            int l = this.a.a(HeightMap.Type.WORLD_SURFACE, j, k);
+            BlockPosition blockposition1 = new BlockPosition(j, l, k);
 
-            if (this.a.b_(blockposition1) && SpawnerCreature.a(EntityPositionTypes.Surface.ON_GROUND, (IWorldReader) this.a, blockposition1, (EntityTypes) null)) {
+            if (this.a.b_(blockposition1) && SpawnerCreature.a(EntityPositionTypes.Surface.ON_GROUND, (IWorldReader) this.a, blockposition1, EntityTypes.ZOMBIE)) {
                 return new Vec3D((double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
             }
         }

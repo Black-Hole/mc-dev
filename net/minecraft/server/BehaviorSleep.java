@@ -24,7 +24,7 @@ public class BehaviorSleep extends Behavior<EntityLiving> {
             } else {
                 IBlockData iblockdata = worldserver.getType(globalpos.getBlockPosition());
 
-                return globalpos.getBlockPosition().a((IPosition) entityliving.ch(), 2.0D) && iblockdata.getBlock().a(TagsBlock.BEDS) && !(Boolean) iblockdata.get(BlockBed.OCCUPIED);
+                return globalpos.getBlockPosition().a((IPosition) entityliving.ci(), 2.0D) && iblockdata.getBlock().a(TagsBlock.BEDS) && !(Boolean) iblockdata.get(BlockBed.OCCUPIED);
             }
         }
     }
@@ -38,7 +38,7 @@ public class BehaviorSleep extends Behavior<EntityLiving> {
         } else {
             BlockPosition blockposition = ((GlobalPos) optional.get()).getBlockPosition();
 
-            return entityliving.getBehaviorController().c(Activity.REST) && entityliving.locY > (double) blockposition.getY() + 0.4D && blockposition.a((IPosition) entityliving.ch(), 1.14D);
+            return entityliving.getBehaviorController().c(Activity.REST) && entityliving.locY > (double) blockposition.getY() + 0.4D && blockposition.a((IPosition) entityliving.ci(), 1.14D);
         }
     }
 
@@ -58,7 +58,7 @@ public class BehaviorSleep extends Behavior<EntityLiving> {
     @Override
     protected void f(WorldServer worldserver, EntityLiving entityliving, long i) {
         if (entityliving.isSleeping()) {
-            entityliving.dy();
+            entityliving.dz();
             this.a = i + 40L;
         }
 

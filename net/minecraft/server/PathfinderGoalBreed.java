@@ -101,7 +101,7 @@ public class PathfinderGoalBreed extends PathfinderGoal {
             entityageable.setPositionRotation(this.animal.locX, this.animal.locY, this.animal.locZ, 0.0F, 0.0F);
             this.b.addEntity(entityageable);
             this.b.broadcastEntityEffect(this.animal, (byte) 18);
-            if (this.b.getGameRules().getBoolean("doMobLoot")) {
+            if (this.b.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
                 this.b.addEntity(new EntityExperienceOrb(this.b, this.animal.locX, this.animal.locY, this.animal.locZ, this.animal.getRandom().nextInt(7) + 1));
             }
 

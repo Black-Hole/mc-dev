@@ -60,7 +60,7 @@ public class EntityWitherSkull extends EntityFireball {
                 }
             }
 
-            Explosion.Effect explosion_effect = this.world.getGameRules().getBoolean("mobGriefing") ? Explosion.Effect.DESTROY : Explosion.Effect.NONE;
+            Explosion.Effect explosion_effect = this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) ? Explosion.Effect.DESTROY : Explosion.Effect.NONE;
 
             this.world.createExplosion(this, this.locX, this.locY, this.locZ, 1.0F, false, explosion_effect);
             this.die();
@@ -92,7 +92,7 @@ public class EntityWitherSkull extends EntityFireball {
     }
 
     @Override
-    protected boolean L_() {
+    protected boolean K_() {
         return false;
     }
 }

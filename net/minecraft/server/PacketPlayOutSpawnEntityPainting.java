@@ -17,7 +17,7 @@ public class PacketPlayOutSpawnEntityPainting implements Packet<PacketListenerPl
         this.a = entitypainting.getId();
         this.b = entitypainting.getUniqueID();
         this.c = entitypainting.getBlockPosition();
-        this.d = entitypainting.direction;
+        this.d = entitypainting.getDirection();
         this.e = IRegistry.MOTIVE.a((Object) entitypainting.art);
     }
 

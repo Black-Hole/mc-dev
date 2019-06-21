@@ -5,28 +5,28 @@ import javax.annotation.Nullable;
 
 public class EntityLlamaTrader extends EntityLlama {
 
-    private int bJ;
+    private int bI = 47999;
 
     public EntityLlamaTrader(EntityTypes<? extends EntityLlamaTrader> entitytypes, World world) {
         super(entitytypes, world);
     }
 
     @Override
-    protected EntityLlama eF() {
+    protected EntityLlama eG() {
         return (EntityLlama) EntityTypes.TRADER_LLAMA.a(this.world);
     }
 
     @Override
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("DespawnDelay", this.bJ);
+        nbttagcompound.setInt("DespawnDelay", this.bI);
     }
 
     @Override
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("DespawnDelay", 99)) {
-            this.bJ = nbttagcompound.getInt("DespawnDelay");
+            this.bI = nbttagcompound.getInt("DespawnDelay");
         }
 
     }
@@ -51,15 +51,15 @@ public class EntityLlamaTrader extends EntityLlama {
     public void movementTick() {
         super.movementTick();
         if (!this.world.isClientSide) {
-            this.eK();
+            this.eL();
         }
 
     }
 
-    private void eK() {
-        if (this.eL()) {
-            this.bJ = this.eM() ? ((EntityVillagerTrader) this.getLeashHolder()).eg() - 1 : this.bJ - 1;
-            if (this.bJ <= 0) {
+    private void eL() {
+        if (this.eM()) {
+            this.bI = this.eN() ? ((EntityVillagerTrader) this.getLeashHolder()).eh() - 1 : this.bI - 1;
+            if (this.bI <= 0) {
                 this.unleash(true, false);
                 this.die();
             }
@@ -67,16 +67,16 @@ public class EntityLlamaTrader extends EntityLlama {
         }
     }
 
-    private boolean eL() {
-        return !this.isTamed() && !this.eN() && !this.hasSinglePlayerPassenger();
-    }
-
     private boolean eM() {
-        return this.getLeashHolder() instanceof EntityVillagerTrader;
+        return !this.isTamed() && !this.eO() && !this.hasSinglePlayerPassenger();
     }
 
     private boolean eN() {
-        return this.isLeashed() && !this.eM();
+        return this.getLeashHolder() instanceof EntityVillagerTrader;
+    }
+
+    private boolean eO() {
+        return this.isLeashed() && !this.eN();
     }
 
     @Nullable
@@ -88,7 +88,6 @@ public class EntityLlamaTrader extends EntityLlama {
             this.setAgeRaw(0);
         }
 
-        this.bJ = 47999;
         return groupdataentity1;
     }
 
@@ -117,7 +116,7 @@ public class EntityLlamaTrader extends EntityLlama {
                     EntityVillagerTrader entityvillagertrader = (EntityVillagerTrader) entity;
 
                     this.c = entityvillagertrader.getLastDamager();
-                    int i = entityvillagertrader.cs();
+                    int i = entityvillagertrader.ct();
 
                     return i != this.d && this.a(this.c, PathfinderTargetCondition.a);
                 }
@@ -130,7 +129,7 @@ public class EntityLlamaTrader extends EntityLlama {
             Entity entity = this.b.getLeashHolder();
 
             if (entity instanceof EntityVillagerTrader) {
-                this.d = ((EntityVillagerTrader) entity).cs();
+                this.d = ((EntityVillagerTrader) entity).ct();
             }
 
             super.c();

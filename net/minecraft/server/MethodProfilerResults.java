@@ -14,11 +14,11 @@ public interface MethodProfilerResults {
 
     int d();
 
-    default long f() {
+    default long g() {
         return this.c() - this.a();
     }
 
-    default int g() {
+    default int f() {
         return this.d() - this.b();
     }
 

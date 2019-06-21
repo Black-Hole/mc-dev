@@ -66,7 +66,7 @@ public abstract class EntityMinecartAbstract extends Entity {
     }
 
     @Override
-    public double aO() {
+    public double aP() {
         return 0.0D;
     }
 
@@ -100,7 +100,7 @@ public abstract class EntityMinecartAbstract extends Entity {
 
     public void a(DamageSource damagesource) {
         this.die();
-        if (this.world.getGameRules().getBoolean("doEntityDrops")) {
+        if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
             ItemStack itemstack = new ItemStack(Items.MINECART);
 
             if (this.hasCustomName()) {
@@ -133,7 +133,7 @@ public abstract class EntityMinecartAbstract extends Entity {
         }
 
         if (this.locY < -64.0D) {
-            this.ae();
+            this.af();
         }
 
         this.doPortalTick();
@@ -228,7 +228,7 @@ public abstract class EntityMinecartAbstract extends Entity {
                 }
             }
 
-            this.ax();
+            this.ay();
         }
     }
 

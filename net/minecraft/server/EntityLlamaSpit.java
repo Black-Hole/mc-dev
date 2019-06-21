@@ -65,7 +65,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
 
         if (!this.world.a(this.getBoundingBox(), Material.AIR)) {
             this.die();
-        } else if (this.au()) {
+        } else if (this.av()) {
             this.die();
         } else {
             this.setMot(vec3d.a(0.9900000095367432D));

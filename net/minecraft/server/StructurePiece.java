@@ -459,7 +459,7 @@ public abstract class StructurePiece {
 
     }
 
-    public EnumBlockRotation Y_() {
+    public EnumBlockRotation X_() {
         return this.c;
     }
 

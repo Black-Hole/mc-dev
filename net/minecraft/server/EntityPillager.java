@@ -88,17 +88,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
     }
 
     @Override
-    protected boolean I_() {
-        return true;
-    }
-
-    @Override
-    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        return generatoraccess.getBrightness(EnumSkyBlock.BLOCK, new BlockPosition(this.locX, this.locY, this.locZ)) > 8 ? false : super.a(generatoraccess, enummobspawn);
-    }
-
-    @Override
-    public int dC() {
+    public int dD() {
         return 1;
     }
 
@@ -237,7 +227,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
     @Override
     public void a(int i, boolean flag) {
         Raid raid = this.ek();
-        boolean flag1 = this.random.nextFloat() <= raid.v();
+        boolean flag1 = this.random.nextFloat() <= raid.w();
 
         if (flag1) {
             ItemStack itemstack = new ItemStack(Items.CROSSBOW);

@@ -18,11 +18,11 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         super(entitytypes, world);
     }
 
-    public int dV() {
+    public int dW() {
         return (Integer) this.datawatcher.get(EntityVillagerAbstract.bA);
     }
 
-    public void q(int i) {
+    public void r(int i) {
         this.datawatcher.set(EntityVillagerAbstract.bA, i);
     }
 
@@ -53,7 +53,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return this.tradingPlayer;
     }
 
-    public boolean dY() {
+    public boolean dZ() {
         return this.tradingPlayer != null;
     }
 
@@ -61,14 +61,14 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     public MerchantRecipeList getOffers() {
         if (this.trades == null) {
             this.trades = new MerchantRecipeList();
-            this.ef();
+            this.ei();
         }
 
         return this.trades;
     }
 
     @Override
-    public void r(int i) {}
+    public void s(int i) {}
 
     @Override
     public void a(MerchantRecipe merchantrecipe) {
@@ -84,7 +84,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     protected abstract void b(MerchantRecipe merchantrecipe);
 
     @Override
-    public boolean ea() {
+    public boolean eb() {
         return true;
     }
 
@@ -92,13 +92,13 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     public void i(ItemStack itemstack) {
         if (!this.world.isClientSide && this.e > -this.A() + 20) {
             this.e = -this.A();
-            this.a(this.r(!itemstack.isEmpty()), this.getSoundVolume(), this.cU());
+            this.a(this.r(!itemstack.isEmpty()), this.getSoundVolume(), this.cV());
         }
 
     }
 
     @Override
-    public SoundEffect eb() {
+    public SoundEffect ec() {
         return SoundEffects.ENTITY_VILLAGER_YES;
     }
 
@@ -106,8 +106,8 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return flag ? SoundEffects.ENTITY_VILLAGER_YES : SoundEffects.ENTITY_VILLAGER_NO;
     }
 
-    public void ec() {
-        this.a(SoundEffects.ENTITY_VILLAGER_CELEBRATE, this.getSoundVolume(), this.cU());
+    public void ed() {
+        this.a(SoundEffects.ENTITY_VILLAGER_CELEBRATE, this.getSoundVolume(), this.cV());
     }
 
     @Override
@@ -151,6 +151,23 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
 
     }
 
+    @Nullable
+    @Override
+    public Entity a(DimensionManager dimensionmanager) {
+        this.ee();
+        return super.a(dimensionmanager);
+    }
+
+    protected void ee() {
+        this.setTradingPlayer((EntityHuman) null);
+    }
+
+    @Override
+    public void die(DamageSource damagesource) {
+        super.die(damagesource);
+        this.ee();
+    }
+
     @Override
     public boolean a(EntityHuman entityhuman) {
         return false;
@@ -181,7 +198,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return this.world;
     }
 
-    protected abstract void ef();
+    protected abstract void ei();
 
     protected void a(MerchantRecipeList merchantrecipelist, VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption, int i) {
         Set<Integer> set = Sets.newHashSet();

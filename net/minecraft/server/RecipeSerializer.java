@@ -18,11 +18,12 @@ public interface RecipeSerializer<T extends IRecipe<?>> {
     RecipeSerializerComplex<RecipiesShield> l = (RecipeSerializerComplex) a("crafting_special_shielddecoration", (RecipeSerializer) (new RecipeSerializerComplex<>(RecipiesShield::new)));
     RecipeSerializerComplex<RecipeShulkerBox> m = (RecipeSerializerComplex) a("crafting_special_shulkerboxcoloring", (RecipeSerializer) (new RecipeSerializerComplex<>(RecipeShulkerBox::new)));
     RecipeSerializerComplex<RecipeSuspiciousStew> n = (RecipeSerializerComplex) a("crafting_special_suspiciousstew", (RecipeSerializer) (new RecipeSerializerComplex<>(RecipeSuspiciousStew::new)));
-    RecipeSerializerCooking<FurnaceRecipe> o = (RecipeSerializerCooking) a("smelting", (RecipeSerializer) (new RecipeSerializerCooking<>(FurnaceRecipe::new, 200)));
-    RecipeSerializerCooking<RecipeBlasting> p = (RecipeSerializerCooking) a("blasting", (RecipeSerializer) (new RecipeSerializerCooking<>(RecipeBlasting::new, 100)));
-    RecipeSerializerCooking<RecipeSmoking> q = (RecipeSerializerCooking) a("smoking", (RecipeSerializer) (new RecipeSerializerCooking<>(RecipeSmoking::new, 100)));
-    RecipeSerializerCooking<RecipeCampfire> r = (RecipeSerializerCooking) a("campfire_cooking", (RecipeSerializer) (new RecipeSerializerCooking<>(RecipeCampfire::new, 100)));
-    RecipeSerializer<RecipeStonecutting> s = a("stonecutting", (RecipeSerializer) (new RecipeSingleItem.a<>(RecipeStonecutting::new)));
+    RecipeSerializerComplex<RecipeRepair> o = (RecipeSerializerComplex) a("crafting_special_repairitem", (RecipeSerializer) (new RecipeSerializerComplex<>(RecipeRepair::new)));
+    RecipeSerializerCooking<FurnaceRecipe> p = (RecipeSerializerCooking) a("smelting", (RecipeSerializer) (new RecipeSerializerCooking<>(FurnaceRecipe::new, 200)));
+    RecipeSerializerCooking<RecipeBlasting> q = (RecipeSerializerCooking) a("blasting", (RecipeSerializer) (new RecipeSerializerCooking<>(RecipeBlasting::new, 100)));
+    RecipeSerializerCooking<RecipeSmoking> r = (RecipeSerializerCooking) a("smoking", (RecipeSerializer) (new RecipeSerializerCooking<>(RecipeSmoking::new, 100)));
+    RecipeSerializerCooking<RecipeCampfire> s = (RecipeSerializerCooking) a("campfire_cooking", (RecipeSerializer) (new RecipeSerializerCooking<>(RecipeCampfire::new, 100)));
+    RecipeSerializer<RecipeStonecutting> t = a("stonecutting", (RecipeSerializer) (new RecipeSingleItem.a<>(RecipeStonecutting::new)));
 
     T a(MinecraftKey minecraftkey, JsonObject jsonobject);
 

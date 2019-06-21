@@ -65,7 +65,7 @@ public class EntityTNTPrimed extends Entity {
                 this.explode();
             }
         } else {
-            this.ax();
+            this.ay();
             this.world.addParticle(Particles.SMOKE, this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D);
         }
 

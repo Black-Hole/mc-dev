@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
@@ -12,8 +13,6 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap.Entry;
-import it.unimi.dsi.fastutil.objects.ObjectBidirectionalIterator;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import java.io.File;
 import java.io.IOException;
@@ -67,9 +66,8 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
     public final Int2ObjectMap<PlayerChunkMap.EntityTracker> trackedEntities;
     private final Queue<Runnable> A;
     private int viewDistance;
-    private int entityDistance;
 
-    public PlayerChunkMap(WorldServer worldserver, File file, DataFixer datafixer, DefinedStructureManager definedstructuremanager, Executor executor, IAsyncTaskHandler<Runnable> iasynctaskhandler, ILightAccess ilightaccess, ChunkGenerator<?> chunkgenerator, WorldLoadListener worldloadlistener, Supplier<WorldPersistentData> supplier, int i, int j) {
+    public PlayerChunkMap(WorldServer worldserver, File file, DataFixer datafixer, DefinedStructureManager definedstructuremanager, Executor executor, IAsyncTaskHandler<Runnable> iasynctaskhandler, ILightAccess ilightaccess, ChunkGenerator<?> chunkgenerator, WorldLoadListener worldloadlistener, Supplier<WorldPersistentData> supplier, int i) {
         super(new File(worldserver.getWorldProvider().getDimensionManager().a(file), "region"), datafixer);
         this.visibleChunks = this.updatingChunks.clone();
         this.pendingUnload = new Long2ObjectLinkedOpenHashMap();
@@ -97,7 +95,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
         this.u = new PlayerChunkMap.a(executor, iasynctaskhandler);
         this.m = supplier;
         this.n = new VillagePlace(new File(this.x, "poi"), datafixer);
-        this.setViewDistance(i, j);
+        this.setViewDistance(i);
     }
 
     private static double a(ChunkCoordIntPair chunkcoordintpair, Entity entity) {
@@ -151,7 +149,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
         return () -> {
             PlayerChunk playerchunk = this.getVisibleChunk(i);
 
-            return playerchunk == null ? ChunkTaskQueue.a - 1 : Math.min(playerchunk.j(), ChunkTaskQueue.a - 1);
+            return playerchunk == null ? ChunkTaskQueue.a - 1 : Math.min(playerchunk.k(), ChunkTaskQueue.a - 1);
         };
     }
 
@@ -259,7 +257,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
 
     protected void save(boolean flag) {
         if (flag) {
-            List<PlayerChunk> list = (List) this.visibleChunks.values().stream().filter(PlayerChunk::hasBeenLoaded).peek(PlayerChunk::l).collect(Collectors.toList());
+            List<PlayerChunk> list = (List) this.visibleChunks.values().stream().filter(PlayerChunk::hasBeenLoaded).peek(PlayerChunk::m).collect(Collectors.toList());
             MutableBoolean mutableboolean = new MutableBoolean();
 
             do {
@@ -290,7 +288,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
 
                 if (ichunkaccess instanceof ProtoChunkExtension || ichunkaccess instanceof Chunk) {
                     this.saveChunk(ichunkaccess);
-                    playerchunk.l();
+                    playerchunk.m();
                 }
 
             });
@@ -366,7 +364,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
         this.A.getClass();
         completablefuture.thenAcceptAsync(consumer, queue::add).whenComplete((ovoid, throwable) -> {
             if (throwable != null) {
-                PlayerChunkMap.LOGGER.error("Failed to save chunk " + playerchunk.h(), throwable);
+                PlayerChunkMap.LOGGER.error("Failed to save chunk " + playerchunk.i(), throwable);
             }
 
         });
@@ -383,7 +381,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
     }
 
     public CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> a(PlayerChunk playerchunk, ChunkStatus chunkstatus) {
-        ChunkCoordIntPair chunkcoordintpair = playerchunk.h();
+        ChunkCoordIntPair chunkcoordintpair = playerchunk.i();
 
         if (chunkstatus == ChunkStatus.EMPTY) {
             return this.f(chunkcoordintpair);
@@ -457,7 +455,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
     }
 
     private CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> b(PlayerChunk playerchunk, ChunkStatus chunkstatus) {
-        ChunkCoordIntPair chunkcoordintpair = playerchunk.h();
+        ChunkCoordIntPair chunkcoordintpair = playerchunk.i();
         CompletableFuture<Either<List<IChunkAccess>, PlayerChunk.Failure>> completablefuture = this.a(chunkcoordintpair, chunkstatus.f(), (i) -> {
             return this.a(chunkstatus, i);
         });
@@ -516,7 +514,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
             ChunkStatus chunkstatus = PlayerChunk.getChunkStatus(playerchunk.getTicketLevel());
 
             return !chunkstatus.b(ChunkStatus.FULL) ? PlayerChunk.UNLOADED_CHUNK_ACCESS : either.mapLeft((ichunkaccess) -> {
-                ChunkCoordIntPair chunkcoordintpair = playerchunk.h();
+                ChunkCoordIntPair chunkcoordintpair = playerchunk.i();
                 Chunk chunk;
 
                 if (ichunkaccess instanceof ProtoChunkExtension) {
@@ -563,7 +561,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
             });
         }, (runnable) -> {
             Mailbox mailbox = this.mailboxMain;
-            long i = playerchunk.h().pair();
+            long i = playerchunk.i().pair();
 
             playerchunk.getClass();
             mailbox.a((Object) ChunkTaskQueueSorter.a(runnable, i, playerchunk::getTicketLevel));
@@ -571,7 +569,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
     }
 
     public CompletableFuture<Either<Chunk, PlayerChunk.Failure>> a(PlayerChunk playerchunk) {
-        ChunkCoordIntPair chunkcoordintpair = playerchunk.h();
+        ChunkCoordIntPair chunkcoordintpair = playerchunk.i();
         CompletableFuture<Either<List<IChunkAccess>, PlayerChunk.Failure>> completablefuture = this.a(chunkcoordintpair, 1, (i) -> {
             return ChunkStatus.FULL;
         });
@@ -660,35 +658,29 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
         }
     }
 
-    protected void setViewDistance(int i, int j) {
-        int k = MathHelper.clamp(i + 1, 3, 33);
-        int l;
+    protected void setViewDistance(int i) {
+        int j = MathHelper.clamp(i + 1, 3, 33);
 
-        if (k != this.viewDistance) {
-            l = this.viewDistance;
-            this.viewDistance = k;
-            this.u.b(this.viewDistance);
+        if (j != this.viewDistance) {
+            int k = this.viewDistance;
+
+            this.viewDistance = j;
+            this.u.a(this.viewDistance);
             ObjectIterator objectiterator = this.updatingChunks.values().iterator();
 
             while (objectiterator.hasNext()) {
                 PlayerChunk playerchunk = (PlayerChunk) objectiterator.next();
-                ChunkCoordIntPair chunkcoordintpair = playerchunk.h();
+                ChunkCoordIntPair chunkcoordintpair = playerchunk.i();
                 Packet<?>[] apacket = new Packet[2];
 
                 this.a(chunkcoordintpair, false).forEach((entityplayer) -> {
-                    int i1 = b(chunkcoordintpair, entityplayer, true);
-                    boolean flag = i1 <= l;
-                    boolean flag1 = i1 <= this.viewDistance;
+                    int l = b(chunkcoordintpair, entityplayer, true);
+                    boolean flag = l <= k;
+                    boolean flag1 = l <= this.viewDistance;
 
                     this.sendChunk(entityplayer, chunkcoordintpair, apacket, flag, flag1);
                 });
             }
-        }
-
-        l = MathHelper.clamp(j + 1, 1, 16);
-        if (l != this.entityDistance) {
-            this.entityDistance = l;
-            this.u.setEntityDistance(this.entityDistance);
         }
 
     }
@@ -724,8 +716,8 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
         return this.u;
     }
 
-    protected ObjectBidirectionalIterator<Entry<PlayerChunk>> f() {
-        return this.visibleChunks.long2ObjectEntrySet().fastIterator();
+    protected Iterable<PlayerChunk> f() {
+        return Iterables.unmodifiableIterable(this.visibleChunks.values());
     }
 
     @Nullable
@@ -736,13 +728,15 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
     }
 
     boolean isOutsideOfRange(ChunkCoordIntPair chunkcoordintpair) {
-        return this.playerMap.a(chunkcoordintpair.pair()).noneMatch((entityplayer) -> {
+        long i = chunkcoordintpair.pair();
+
+        return !this.u.d(i) ? true : this.playerMap.a(i).noneMatch((entityplayer) -> {
             return !entityplayer.isSpectator() && a(chunkcoordintpair, (Entity) entityplayer) < 16384.0D;
         });
     }
 
     private boolean b(EntityPlayer entityplayer) {
-        return entityplayer.isSpectator() && !this.world.getGameRules().getBoolean("spectatorsGenerateChunks");
+        return entityplayer.isSpectator() && !this.world.getGameRules().getBoolean(GameRules.SPECTATORS_GENERATE_CHUNKS);
     }
 
     void a(EntityPlayer entityplayer, boolean flag) {
@@ -753,6 +747,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
 
         if (flag) {
             this.playerMap.a(ChunkCoordIntPair.pair(i, j), entityplayer, flag1);
+            this.c(entityplayer);
             if (!flag1) {
                 this.u.a(SectionPosition.a((Entity) entityplayer), entityplayer);
             }
@@ -760,7 +755,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
             SectionPosition sectionposition = entityplayer.M();
 
             this.playerMap.a(sectionposition.u().pair(), entityplayer);
-            if (!flag1) {
+            if (!flag2) {
                 this.u.b(sectionposition, entityplayer);
             }
         }
@@ -769,10 +764,18 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
             for (int l = j - this.viewDistance; l <= j + this.viewDistance; ++l) {
                 ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(k, l);
 
-                this.sendChunk(entityplayer, chunkcoordintpair, new Packet[2], !flag && !flag2, flag && !flag1);
+                this.sendChunk(entityplayer, chunkcoordintpair, new Packet[2], !flag, flag);
             }
         }
 
+    }
+
+    private SectionPosition c(EntityPlayer entityplayer) {
+        SectionPosition sectionposition = SectionPosition.a((Entity) entityplayer);
+
+        entityplayer.a(sectionposition);
+        entityplayer.playerConnection.sendPacket(new PacketPlayOutViewCentre(sectionposition.a(), sectionposition.c()));
+        return sectionposition;
     }
 
     public void movePlayer(EntityPlayer entityplayer) {
@@ -799,11 +802,12 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
         boolean flag2 = sectionposition.v() != sectionposition1.v();
 
         if (flag2 || flag != flag1) {
-            if (!flag && flag1 || flag2) {
+            this.c(entityplayer);
+            if (!flag) {
                 this.u.b(sectionposition, entityplayer);
             }
 
-            if (flag && !flag1 || flag2) {
+            if (!flag1) {
                 this.u.a(sectionposition1, entityplayer);
             }
 
@@ -818,52 +822,52 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
             if (k != l) {
                 this.playerMap.a(k, l, entityplayer);
             }
+        }
 
-            int i1 = sectionposition.a();
-            int j1 = sectionposition.c();
-            int k1;
-            int l1;
+        int i1 = sectionposition.a();
+        int j1 = sectionposition.c();
+        int k1;
+        int l1;
 
-            if (Math.abs(i1 - i) <= this.viewDistance * 2 && Math.abs(j1 - j) <= this.viewDistance * 2) {
-                k1 = Math.min(i, i1) - this.viewDistance;
-                l1 = Math.min(j, j1) - this.viewDistance;
-                int i2 = Math.max(i, i1) + this.viewDistance;
-                int j2 = Math.max(j, j1) + this.viewDistance;
+        if (Math.abs(i1 - i) <= this.viewDistance * 2 && Math.abs(j1 - j) <= this.viewDistance * 2) {
+            k1 = Math.min(i, i1) - this.viewDistance;
+            l1 = Math.min(j, j1) - this.viewDistance;
+            int i2 = Math.max(i, i1) + this.viewDistance;
+            int j2 = Math.max(j, j1) + this.viewDistance;
 
-                for (int k2 = k1; k2 <= i2; ++k2) {
-                    for (int l2 = l1; l2 <= j2; ++l2) {
-                        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(k2, l2);
-                        boolean flag3 = !flag && a(chunkcoordintpair, i1, j1) <= this.viewDistance;
-                        boolean flag4 = !flag1 && a(chunkcoordintpair, i, j) <= this.viewDistance;
+            for (int k2 = k1; k2 <= i2; ++k2) {
+                for (int l2 = l1; l2 <= j2; ++l2) {
+                    ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(k2, l2);
+                    boolean flag3 = a(chunkcoordintpair, i1, j1) <= this.viewDistance;
+                    boolean flag4 = a(chunkcoordintpair, i, j) <= this.viewDistance;
 
-                        this.sendChunk(entityplayer, chunkcoordintpair, new Packet[2], flag3, flag4);
-                    }
+                    this.sendChunk(entityplayer, chunkcoordintpair, new Packet[2], flag3, flag4);
                 }
-            } else {
-                ChunkCoordIntPair chunkcoordintpair1;
-                boolean flag5;
-                boolean flag6;
+            }
+        } else {
+            ChunkCoordIntPair chunkcoordintpair1;
+            boolean flag5;
+            boolean flag6;
 
-                for (k1 = i1 - this.viewDistance; k1 <= i1 + this.viewDistance; ++k1) {
-                    for (l1 = j1 - this.viewDistance; l1 <= j1 + this.viewDistance; ++l1) {
-                        chunkcoordintpair1 = new ChunkCoordIntPair(k1, l1);
-                        flag5 = !flag;
-                        flag6 = false;
-                        this.sendChunk(entityplayer, chunkcoordintpair1, new Packet[2], flag5, false);
-                    }
-                }
-
-                for (k1 = i - this.viewDistance; k1 <= i + this.viewDistance; ++k1) {
-                    for (l1 = j - this.viewDistance; l1 <= j + this.viewDistance; ++l1) {
-                        chunkcoordintpair1 = new ChunkCoordIntPair(k1, l1);
-                        flag5 = false;
-                        flag6 = !flag1;
-                        this.sendChunk(entityplayer, chunkcoordintpair1, new Packet[2], false, flag6);
-                    }
+            for (k1 = i1 - this.viewDistance; k1 <= i1 + this.viewDistance; ++k1) {
+                for (l1 = j1 - this.viewDistance; l1 <= j1 + this.viewDistance; ++l1) {
+                    chunkcoordintpair1 = new ChunkCoordIntPair(k1, l1);
+                    flag5 = true;
+                    flag6 = false;
+                    this.sendChunk(entityplayer, chunkcoordintpair1, new Packet[2], true, false);
                 }
             }
 
+            for (k1 = i - this.viewDistance; k1 <= i + this.viewDistance; ++k1) {
+                for (l1 = j - this.viewDistance; l1 <= j + this.viewDistance; ++l1) {
+                    chunkcoordintpair1 = new ChunkCoordIntPair(k1, l1);
+                    flag5 = false;
+                    flag6 = true;
+                    this.sendChunk(entityplayer, chunkcoordintpair1, new Packet[2], false, true);
+                }
+            }
         }
+
     }
 
     @Override

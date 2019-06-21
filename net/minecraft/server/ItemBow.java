@@ -7,10 +7,10 @@ public class ItemBow extends ItemProjectileWeapon {
     public ItemBow(Item.Info item_info) {
         super(item_info);
         this.a(new MinecraftKey("pull"), (itemstack, world, entityliving) -> {
-            return entityliving == null ? 0.0F : (entityliving.dl().getItem() != Items.BOW ? 0.0F : (float) (itemstack.k() - entityliving.dm()) / 20.0F);
+            return entityliving == null ? 0.0F : (entityliving.dm().getItem() != Items.BOW ? 0.0F : (float) (itemstack.k() - entityliving.dn()) / 20.0F);
         });
         this.a(new MinecraftKey("pulling"), (itemstack, world, entityliving) -> {
-            return entityliving != null && entityliving.isHandRaised() && entityliving.dl() == itemstack ? 1.0F : 0.0F;
+            return entityliving != null && entityliving.isHandRaised() && entityliving.dm() == itemstack ? 1.0F : 0.0F;
         });
     }
 

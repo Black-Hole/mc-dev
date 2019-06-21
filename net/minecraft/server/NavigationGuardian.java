@@ -103,7 +103,7 @@ public class NavigationGuardian extends NavigationAbstract {
                 this.h = vec3d1;
                 double d0 = vec3d.f(this.h);
 
-                this.k = this.a.da() > 0.0F ? d0 / (double) this.a.da() * 100.0D : 0.0D;
+                this.k = this.a.db() > 0.0F ? d0 / (double) this.a.db() * 100.0D : 0.0D;
             }
 
             if (this.k > 0.0D && (double) this.i > this.k * 2.0D) {

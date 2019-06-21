@@ -92,7 +92,7 @@ public class EntityItemFrame extends EntityHanging {
     }
 
     @Override
-    public float aR() {
+    public float aS() {
         return 0.0F;
     }
 
@@ -139,8 +139,8 @@ public class EntityItemFrame extends EntityHanging {
         this.a(SoundEffects.ENTITY_ITEM_FRAME_PLACE, 1.0F, 1.0F);
     }
 
-    public void b(@Nullable Entity entity, boolean flag) {
-        if (!this.world.getGameRules().getBoolean("doEntityDrops")) {
+    private void b(@Nullable Entity entity, boolean flag) {
+        if (!this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
             if (entity == null) {
                 this.c(this.getItem());
             }

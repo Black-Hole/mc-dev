@@ -91,13 +91,12 @@ public class EntityGhast extends EntityFlying implements IMonster {
         return 10.0F;
     }
 
-    @Override
-    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        return this.random.nextInt(20) == 0 && super.a(generatoraccess, enummobspawn) && generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL;
+    public static boolean b(EntityTypes<EntityGhast> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        return generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL && random.nextInt(20) == 0 && a(entitytypes, generatoraccess, enummobspawn, blockposition, random);
     }
 
     @Override
-    public int dC() {
+    public int dD() {
         return 1;
     }
 

@@ -43,7 +43,7 @@ public class BlockCoralBase extends Block implements IBlockWaterlogged {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
-        return (IBlockData) this.getBlockData().set(BlockCoralBase.b, fluid.a(TagsFluid.WATER) && fluid.f() == 8);
+        return (IBlockData) this.getBlockData().set(BlockCoralBase.b, fluid.a(TagsFluid.WATER) && fluid.g() == 8);
     }
 
     @Override

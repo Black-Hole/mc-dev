@@ -25,7 +25,7 @@ public class BlockMonsterEggs extends Block {
     @Override
     public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, ItemStack itemstack) {
         super.dropNaturally(iblockdata, world, blockposition, itemstack);
-        if (!world.isClientSide && world.getGameRules().getBoolean("doTileDrops") && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) == 0) {
+        if (!world.isClientSide && world.getGameRules().getBoolean(GameRules.DO_TILE_DROPS) && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) == 0) {
             EntitySilverfish entitysilverfish = (EntitySilverfish) EntityTypes.SILVERFISH.a(world);
 
             entitysilverfish.setPositionRotation((double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, 0.0F, 0.0F);

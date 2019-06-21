@@ -19,25 +19,26 @@ public class MethodProfiler implements GameProfilerFillerActive {
     private final List<String> c = Lists.newArrayList();
     private final LongList d = new LongArrayList();
     private final Object2LongMap<String> e = new Object2LongOpenHashMap();
-    private final IntSupplier f;
-    private final long g;
-    private final int h;
-    private String i = "";
-    private boolean j;
+    private final Object2LongMap<String> f = new Object2LongOpenHashMap();
+    private final IntSupplier g;
+    private final long h;
+    private final int i;
+    private String j = "";
+    private boolean k;
 
     public MethodProfiler(long i, IntSupplier intsupplier) {
-        this.g = i;
-        this.h = intsupplier.getAsInt();
-        this.f = intsupplier;
+        this.h = i;
+        this.i = intsupplier.getAsInt();
+        this.g = intsupplier;
     }
 
     @Override
     public void a() {
-        if (this.j) {
+        if (this.k) {
             MethodProfiler.LOGGER.error("Profiler tick already started - missing endTick()?");
         } else {
-            this.j = true;
-            this.i = "";
+            this.k = true;
+            this.j = "";
             this.c.clear();
             this.enter("root");
         }
@@ -45,13 +46,13 @@ public class MethodProfiler implements GameProfilerFillerActive {
 
     @Override
     public void b() {
-        if (!this.j) {
+        if (!this.k) {
             MethodProfiler.LOGGER.error("Profiler tick already ended - missing startTick()?");
         } else {
             this.exit();
-            this.j = false;
-            if (!this.i.isEmpty()) {
-                MethodProfiler.LOGGER.error("Profiler tick ended before path was fully popped (remainder: '{}'). Mismatched push/pop?", this.i);
+            this.k = false;
+            if (!this.j.isEmpty()) {
+                MethodProfiler.LOGGER.error("Profiler tick ended before path was fully popped (remainder: '{}'). Mismatched push/pop?", this.j);
             }
 
         }
@@ -59,15 +60,15 @@ public class MethodProfiler implements GameProfilerFillerActive {
 
     @Override
     public void enter(String s) {
-        if (!this.j) {
+        if (!this.k) {
             MethodProfiler.LOGGER.error("Cannot push '{}' to profiler if profiler tick hasn't started - missing startTick()?", s);
         } else {
-            if (!this.i.isEmpty()) {
-                this.i = this.i + ".";
+            if (!this.j.isEmpty()) {
+                this.j = this.j + ".";
             }
 
-            this.i = this.i + s;
-            this.c.add(this.i);
+            this.j = this.j + s;
+            this.c.add(this.j);
             this.d.add(SystemUtils.getMonotonicNanos());
         }
     }
@@ -79,7 +80,7 @@ public class MethodProfiler implements GameProfilerFillerActive {
 
     @Override
     public void exit() {
-        if (!this.j) {
+        if (!this.k) {
             MethodProfiler.LOGGER.error("Cannot pop from profiler if profiler tick hasn't started - missing startTick()?");
         } else if (this.d.isEmpty()) {
             MethodProfiler.LOGGER.error("Tried to pop one too many times! Mismatched push() and pop()?");
@@ -90,12 +91,13 @@ public class MethodProfiler implements GameProfilerFillerActive {
             this.c.remove(this.c.size() - 1);
             long k = i - j;
 
-            this.e.put(this.i, this.e.getLong(this.i) + k);
+            this.e.put(this.j, this.e.getLong(this.j) + k);
+            this.f.put(this.j, this.f.getLong(this.j) + 1L);
             if (k > MethodProfiler.a) {
-                MethodProfiler.LOGGER.warn("Something's taking too long! '{}' took aprox {} ms", this.i, (double) k / 1000000.0D);
+                MethodProfiler.LOGGER.warn("Something's taking too long! '{}' took aprox {} ms", this.j, (double) k / 1000000.0D);
             }
 
-            this.i = this.c.isEmpty() ? "" : (String) this.c.get(this.c.size() - 1);
+            this.j = this.c.isEmpty() ? "" : (String) this.c.get(this.c.size() - 1);
         }
     }
 
@@ -107,6 +109,6 @@ public class MethodProfiler implements GameProfilerFillerActive {
 
     @Override
     public MethodProfilerResults d() {
-        return new MethodProfilerResultsFilled(this.e, this.g, this.h, SystemUtils.getMonotonicNanos(), this.f.getAsInt());
+        return new MethodProfilerResultsFilled(this.e, this.f, this.h, this.i, SystemUtils.getMonotonicNanos(), this.g.getAsInt());
     }
 }

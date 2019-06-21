@@ -64,7 +64,7 @@ public class EntityDragonFireball extends EntityFireball {
     }
 
     @Override
-    protected boolean L_() {
+    protected boolean K_() {
         return false;
     }
 }

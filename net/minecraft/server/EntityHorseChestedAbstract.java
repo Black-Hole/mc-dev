@@ -2,33 +2,33 @@ package net.minecraft.server;
 
 public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
 
-    private static final DataWatcherObject<Boolean> bJ = DataWatcher.a(EntityHorseChestedAbstract.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> bI = DataWatcher.a(EntityHorseChestedAbstract.class, DataWatcherRegistry.i);
 
     protected EntityHorseChestedAbstract(EntityTypes<? extends EntityHorseChestedAbstract> entitytypes, World world) {
         super(entitytypes, world);
-        this.bH = false;
+        this.bG = false;
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityHorseChestedAbstract.bJ, false);
+        this.datawatcher.register(EntityHorseChestedAbstract.bI, false);
     }
 
     @Override
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.ex());
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.ey());
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.17499999701976776D);
         this.getAttributeInstance(EntityHorseChestedAbstract.attributeJumpStrength).setValue(0.5D);
     }
 
     public boolean isCarryingChest() {
-        return (Boolean) this.datawatcher.get(EntityHorseChestedAbstract.bJ);
+        return (Boolean) this.datawatcher.get(EntityHorseChestedAbstract.bI);
     }
 
     public void setCarryingChest(boolean flag) {
-        this.datawatcher.set(EntityHorseChestedAbstract.bJ, flag);
+        this.datawatcher.set(EntityHorseChestedAbstract.bI, flag);
     }
 
     @Override
@@ -37,8 +37,8 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
     }
 
     @Override
-    public double aO() {
-        return super.aO() - 0.25D;
+    public double aP() {
+        return super.aP() - 0.25D;
     }
 
     @Override
@@ -48,8 +48,8 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
     }
 
     @Override
-    protected void cE() {
-        super.cE();
+    protected void cF() {
+        super.cF();
         if (this.isCarryingChest()) {
             if (!this.world.isClientSide) {
                 this.a((IMaterial) Blocks.CHEST);
@@ -103,7 +103,7 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
             }
         }
 
-        this.en();
+        this.eo();
     }
 
     @Override
@@ -152,18 +152,18 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
                             return true;
                         }
 
-                        this.eu();
+                        this.ev();
                         return true;
                     }
 
                     if (!this.isCarryingChest() && itemstack.getItem() == Blocks.CHEST.getItem()) {
                         this.setCarryingChest(true);
-                        this.dY();
+                        this.dZ();
                         flag = true;
                         this.loadChest();
                     }
 
-                    if (!this.isBaby() && !this.eq() && itemstack.getItem() == Items.SADDLE) {
+                    if (!this.isBaby() && !this.er() && itemstack.getItem() == Items.SADDLE) {
                         this.e(entityhuman);
                         return true;
                     }
@@ -187,11 +187,11 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
         }
     }
 
-    protected void dY() {
+    protected void dZ() {
         this.a(SoundEffects.ENTITY_DONKEY_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 
-    public int dZ() {
+    public int ea() {
         return 5;
     }
 }

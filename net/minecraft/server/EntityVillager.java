@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
@@ -27,16 +26,14 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
     private boolean bF;
     @Nullable
     private EntityHuman bG;
-    @Nullable
-    private UUID bH;
-    private long bI;
-    private byte bK;
-    private final Reputation bL;
-    private long bM;
-    private int bN;
-    private long bO;
-    private static final ImmutableList<MemoryModuleType<?>> bP = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, new MemoryModuleType[]{MemoryModuleType.PATH, MemoryModuleType.INTERACTABLE_DOORS, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.GOLEM_SPAWN_CONDITIONS, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE});
-    private static final ImmutableList<SensorType<? extends Sensor<? super EntityVillager>>> bQ = ImmutableList.of(SensorType.b, SensorType.c, SensorType.d, SensorType.e, SensorType.f, SensorType.g, SensorType.h, SensorType.i);
+    private byte bI;
+    private final Reputation bJ;
+    private long bK;
+    private long bL;
+    private int bM;
+    private long bN;
+    private static final ImmutableList<MemoryModuleType<?>> bO = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, new MemoryModuleType[]{MemoryModuleType.PATH, MemoryModuleType.INTERACTABLE_DOORS, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WORKED_AT_POI, MemoryModuleType.GOLEM_LAST_SEEN_TIME});
+    private static final ImmutableList<SensorType<? extends Sensor<? super EntityVillager>>> bP = ImmutableList.of(SensorType.b, SensorType.c, SensorType.d, SensorType.e, SensorType.f, SensorType.g, SensorType.h, SensorType.i, SensorType.j);
     public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<EntityVillager, VillagePlaceType>> bB = ImmutableMap.of(MemoryModuleType.HOME, (entityvillager, villageplacetype) -> {
         return villageplacetype == VillagePlaceType.q;
     }, MemoryModuleType.JOB_SITE, (entityvillager, villageplacetype) -> {
@@ -51,8 +48,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
 
     public EntityVillager(EntityTypes<? extends EntityVillager> entitytypes, World world, VillagerType villagertype) {
         super(entitytypes, world);
-        this.bI = Long.MIN_VALUE;
-        this.bL = new Reputation();
+        this.bJ = new Reputation();
         ((Navigation) this.getNavigation()).a(true);
         this.getNavigation().d(true);
         this.setCanPickupLoot(true);
@@ -67,7 +63,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
 
     @Override
     protected BehaviorController<?> a(Dynamic<?> dynamic) {
-        BehaviorController<EntityVillager> behaviorcontroller = new BehaviorController<>(EntityVillager.bP, EntityVillager.bQ, dynamic);
+        BehaviorController<EntityVillager> behaviorcontroller = new BehaviorController<>(EntityVillager.bO, EntityVillager.bP, dynamic);
 
         this.a(behaviorcontroller);
         return behaviorcontroller;
@@ -128,7 +124,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
         this.world.getMethodProfiler().enter("brain");
         this.getBehaviorController().a((WorldServer) this.world, (EntityLiving) this);
         this.world.getMethodProfiler().exit();
-        if (!this.dY() && this.bE > 0) {
+        if (!this.dZ() && this.bE > 0) {
             --this.bE;
             if (this.bE <= 0) {
                 if (this.bF) {
@@ -149,26 +145,26 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
         if (!this.isNoAI() && this.random.nextInt(100) == 0) {
             Raid raid = ((WorldServer) this.world).c_(new BlockPosition(this));
 
-            if (raid != null && raid.u() && !raid.a()) {
+            if (raid != null && raid.v() && !raid.a()) {
                 this.world.broadcastEntityEffect(this, (byte) 42);
             }
+        }
+
+        if (!this.br.getMemory(MemoryModuleType.JOB_SITE).isPresent() && this.dZ()) {
+            this.ee();
         }
 
         super.mobTick();
     }
 
-    public void eg() {
-        this.setTradingPlayer((EntityHuman) null);
-        this.es();
-    }
-
     @Override
     public void tick() {
         super.tick();
-        if (this.dV() > 0) {
-            this.q(this.dV() - 1);
+        if (this.dW() > 0) {
+            this.r(this.dW() - 1);
         }
 
+        this.eC();
     }
 
     @Override
@@ -179,16 +175,16 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
         if (flag) {
             itemstack.a(entityhuman, (EntityLiving) this, enumhand);
             return true;
-        } else if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.dY() && !this.isSleeping()) {
+        } else if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.dZ() && !this.isSleeping()) {
             if (this.isBaby()) {
-                this.er();
+                this.ev();
                 return super.a(entityhuman, enumhand);
             } else {
                 boolean flag1 = this.getOffers().isEmpty();
 
                 if (enumhand == EnumHand.MAIN_HAND) {
                     if (flag1 && !this.world.isClientSide) {
-                        this.er();
+                        this.ev();
                     }
 
                     entityhuman.a(StatisticList.TALKED_TO_VILLAGER);
@@ -209,10 +205,10 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
         }
     }
 
-    private void er() {
-        this.q(40);
+    private void ev() {
+        this.r(40);
         if (!this.world.e()) {
-            this.a(SoundEffects.ENTITY_VILLAGER_NO, this.getSoundVolume(), this.cU());
+            this.a(SoundEffects.ENTITY_VILLAGER_NO, this.getSoundVolume(), this.cV());
         }
 
     }
@@ -229,12 +225,34 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
 
         super.setTradingPlayer(entityhuman);
         if (flag) {
-            this.eg();
+            this.ee();
         }
 
     }
 
-    public void ei() {
+    @Override
+    protected void ee() {
+        super.ee();
+        this.ew();
+    }
+
+    private void ew() {
+        Iterator iterator = this.getOffers().iterator();
+
+        while (iterator.hasNext()) {
+            MerchantRecipe merchantrecipe = (MerchantRecipe) iterator.next();
+
+            merchantrecipe.setSpecialPrice();
+        }
+
+    }
+
+    @Override
+    public boolean ej() {
+        return true;
+    }
+
+    public void ek() {
         Iterator iterator = this.getOffers().iterator();
 
         while (iterator.hasNext()) {
@@ -244,13 +262,15 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
             merchantrecipe.resetUses();
         }
 
-        this.bO = this.world.getDayTime() % 24000L;
+        if (this.getVillagerData().getProfession() == VillagerProfession.FARMER) {
+            this.eB();
+        }
+
+        this.bN = this.world.getDayTime() % 24000L;
     }
 
     private void h(EntityHuman entityhuman) {
-        int i = this.bL.a(entityhuman.getUniqueID(), (reputationtype) -> {
-            return reputationtype != ReputationType.GOLEM;
-        });
+        int i = this.f(entityhuman);
 
         if (i != 0) {
             Iterator iterator = this.getOffers().iterator();
@@ -278,17 +298,6 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
 
     }
 
-    private void es() {
-        Iterator iterator = this.getOffers().iterator();
-
-        while (iterator.hasNext()) {
-            MerchantRecipe merchantrecipe = (MerchantRecipe) iterator.next();
-
-            merchantrecipe.setSpecialPrice();
-        }
-
-    }
-
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
@@ -299,14 +308,11 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.set("VillagerData", (NBTBase) this.getVillagerData().a(DynamicOpsNBT.a));
-        nbttagcompound.setByte("FoodLevel", this.bK);
-        nbttagcompound.set("Gossips", (NBTBase) this.bL.a((DynamicOps) DynamicOpsNBT.a).getValue());
-        nbttagcompound.setInt("Xp", this.bN);
-        nbttagcompound.setLong("LastRestock", this.bO);
-        if (this.bH != null) {
-            nbttagcompound.a("BuddyGolem", this.bH);
-        }
-
+        nbttagcompound.setByte("FoodLevel", this.bI);
+        nbttagcompound.set("Gossips", (NBTBase) this.bJ.a((DynamicOps) DynamicOpsNBT.a).getValue());
+        nbttagcompound.setInt("Xp", this.bM);
+        nbttagcompound.setLong("LastRestock", this.bN);
+        nbttagcompound.setLong("LastGossipDecay", this.bL);
     }
 
     @Override
@@ -321,21 +327,18 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
         }
 
         if (nbttagcompound.hasKeyOfType("FoodLevel", 1)) {
-            this.bK = nbttagcompound.getByte("FoodLevel");
+            this.bI = nbttagcompound.getByte("FoodLevel");
         }
 
         NBTTagList nbttaglist = nbttagcompound.getList("Gossips", 10);
 
-        this.bL.a(new Dynamic(DynamicOpsNBT.a, nbttaglist));
+        this.bJ.a(new Dynamic(DynamicOpsNBT.a, nbttaglist));
         if (nbttagcompound.hasKeyOfType("Xp", 3)) {
-            this.bN = nbttagcompound.getInt("Xp");
+            this.bM = nbttagcompound.getInt("Xp");
         }
 
-        this.bO = nbttagcompound.getLong("LastRestock");
-        if (nbttagcompound.b("BuddyGolem")) {
-            this.bH = nbttagcompound.a("BuddyGolem");
-        }
-
+        this.bN = nbttagcompound.getLong("LastRestock");
+        this.bL = nbttagcompound.getLong("LastGossipDecay");
         this.setCanPickupLoot(true);
         this.a((WorldServer) this.world);
     }
@@ -348,7 +351,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
     @Nullable
     @Override
     protected SoundEffect getSoundAmbient() {
-        return this.isSleeping() ? null : (this.dY() ? SoundEffects.ENTITY_VILLAGER_TRADE : SoundEffects.ENTITY_VILLAGER_AMBIENT);
+        return this.isSleeping() ? null : (this.dZ() ? SoundEffects.ENTITY_VILLAGER_TRADE : SoundEffects.ENTITY_VILLAGER_AMBIENT);
     }
 
     @Override
@@ -361,11 +364,11 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
         return SoundEffects.ENTITY_VILLAGER_DEATH;
     }
 
-    public void ej() {
+    public void el() {
         SoundEffect soundeffect = this.getVillagerData().getProfession().b().d();
 
         if (soundeffect != null) {
-            this.a(soundeffect, this.getSoundVolume(), this.cU());
+            this.a(soundeffect, this.getSoundVolume(), this.cV());
         }
 
     }
@@ -389,9 +392,9 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
     protected void b(MerchantRecipe merchantrecipe) {
         int i = 3 + this.random.nextInt(4);
 
-        this.bN += merchantrecipe.getXp();
+        this.bM += merchantrecipe.getXp();
         this.bG = this.getTrader();
-        if (this.et()) {
+        if (this.ey()) {
             this.bE = 40;
             this.bF = true;
             i += 5;
@@ -417,10 +420,32 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
 
     @Override
     public void die(DamageSource damagesource) {
+        Entity entity = damagesource.getEntity();
+
+        if (entity != null) {
+            this.a(entity);
+        }
+
         this.a(MemoryModuleType.HOME);
         this.a(MemoryModuleType.JOB_SITE);
         this.a(MemoryModuleType.MEETING_POINT);
         super.die(damagesource);
+    }
+
+    private void a(Entity entity) {
+        if (this.world instanceof WorldServer) {
+            Optional<List<EntityLiving>> optional = this.br.getMemory(MemoryModuleType.VISIBLE_MOBS);
+
+            if (optional.isPresent()) {
+                WorldServer worldserver = (WorldServer) this.world;
+
+                ((List) optional.get()).stream().filter((entityliving) -> {
+                    return entityliving instanceof ReputationHandler;
+                }).forEach((entityliving) -> {
+                    worldserver.a(ReputationEvent.d, entity, (ReputationHandler) entityliving);
+                });
+            }
+        }
     }
 
     public void a(MemoryModuleType<GlobalPos> memorymoduletype) {
@@ -443,11 +468,15 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
     }
 
     public boolean canBreed() {
-        return this.bK + this.ev() >= 12 && this.getAge() == 0;
+        return this.bI + this.eA() >= 12 && this.getAge() == 0;
     }
 
-    public void em() {
-        if (this.bK < 12 && this.ev() != 0) {
+    private boolean ex() {
+        return this.bI < 12;
+    }
+
+    public void eo() {
+        if (this.ex() && this.eA() != 0) {
             for (int i = 0; i < this.getInventory().getSize(); ++i) {
                 ItemStack itemstack = this.getInventory().getItem(i);
 
@@ -458,9 +487,9 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
                         int j = itemstack.getCount();
 
                         for (int k = j; k > 0; --k) {
-                            this.bK = (byte) (this.bK + integer);
+                            this.bI = (byte) (this.bI + integer);
                             this.getInventory().splitStack(i, 1);
-                            if (this.bK >= 12) {
+                            if (!this.ex()) {
                                 return;
                             }
                         }
@@ -472,28 +501,33 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
     }
 
     public int f(EntityHuman entityhuman) {
-        return this.bL.a(entityhuman.getUniqueID(), (reputationtype) -> {
-            return reputationtype != ReputationType.GOLEM;
+        return this.bJ.a(entityhuman.getUniqueID(), (reputationtype) -> {
+            return true;
         });
     }
 
-    public void s(int i) {
-        this.bK = (byte) (this.bK - i);
+    private void u(int i) {
+        this.bI = (byte) (this.bI - i);
+    }
+
+    public void ep() {
+        this.eo();
+        this.u(12);
     }
 
     public void b(MerchantRecipeList merchantrecipelist) {
         this.trades = merchantrecipelist;
     }
 
-    private boolean et() {
+    private boolean ey() {
         int i = this.getVillagerData().getLevel();
 
-        return VillagerData.d(i) && this.bN >= VillagerData.c(i);
+        return VillagerData.d(i) && this.bM >= VillagerData.c(i);
     }
 
     public void populateTrades() {
         this.setVillagerData(this.getVillagerData().withLevel(this.getVillagerData().getLevel() + 1));
-        this.ef();
+        this.ei();
     }
 
     @Override
@@ -503,12 +537,12 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
 
         if (ichatbasecomponent != null) {
             return ScoreboardTeam.a(scoreboardteambase, ichatbasecomponent).a((chatmodifier) -> {
-                chatmodifier.setChatHoverable(this.bJ()).setInsertion(this.getUniqueIDString());
+                chatmodifier.setChatHoverable(this.bK()).setInsertion(this.getUniqueIDString());
             });
         } else {
             VillagerProfession villagerprofession = this.getVillagerData().getProfession();
             IChatBaseComponent ichatbasecomponent1 = (new ChatMessage(this.getEntityType().e() + '.' + IRegistry.VILLAGER_PROFESSION.getKey(villagerprofession).getKey(), new Object[0])).a((chatmodifier) -> {
-                chatmodifier.setChatHoverable(this.bJ()).setInsertion(this.getUniqueIDString());
+                chatmodifier.setChatHoverable(this.bK()).setInsertion(this.getUniqueIDString());
             });
 
             if (scoreboardteambase != null) {
@@ -575,43 +609,39 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
         VillagerProfession villagerprofession = this.getVillagerData().getProfession();
 
         if (EntityVillager.bD.contains(item) || villagerprofession.c().contains(item)) {
-            if (villagerprofession == VillagerProfession.FARMER && item == Items.WHEAT) {
-                int i = itemstack.getCount() / 3;
+            InventorySubcontainer inventorysubcontainer = this.getInventory();
+            int i = inventorysubcontainer.a(item);
 
-                if (i > 0) {
-                    ItemStack itemstack1 = this.getInventory().a(new ItemStack(Items.BREAD, i));
+            if (i == 256) {
+                return;
+            }
 
-                    itemstack.subtract(i * 3);
-                    if (!itemstack1.isEmpty()) {
-                        this.a(itemstack1, 0.5F);
-                    }
-                }
+            if (i > 256) {
+                inventorysubcontainer.a(item, i - 256);
+                return;
             }
 
             this.receive(entityitem, itemstack.getCount());
-            ItemStack itemstack2 = this.getInventory().a(itemstack);
+            ItemStack itemstack1 = inventorysubcontainer.a(itemstack);
 
-            if (itemstack2.isEmpty()) {
+            if (itemstack1.isEmpty()) {
                 entityitem.die();
             } else {
-                itemstack.setCount(itemstack2.getCount());
+                itemstack.setCount(itemstack1.getCount());
             }
         }
 
     }
 
-    public boolean en() {
-        return this.ev() >= 24;
+    public boolean eq() {
+        return this.eA() >= 24;
     }
 
-    public boolean eo() {
-        boolean flag = this.getVillagerData().getProfession() == VillagerProfession.FARMER;
-        int i = this.ev();
-
-        return flag ? i < 60 : i < 12;
+    public boolean er() {
+        return this.eA() < 12;
     }
 
-    private int ev() {
+    private int eA() {
         InventorySubcontainer inventorysubcontainer = this.getInventory();
 
         return EntityVillager.bA.entrySet().stream().mapToInt((entry) -> {
@@ -619,14 +649,32 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
         }).sum();
     }
 
-    public boolean ep() {
+    private void eB() {
+        InventorySubcontainer inventorysubcontainer = this.getInventory();
+        int i = inventorysubcontainer.a(Items.WHEAT);
+        int j = i / 3;
+
+        if (j != 0) {
+            int k = j * 3;
+
+            inventorysubcontainer.a(Items.WHEAT, k);
+            ItemStack itemstack = inventorysubcontainer.a(new ItemStack(Items.BREAD, j));
+
+            if (!itemstack.isEmpty()) {
+                this.a(itemstack, 0.5F);
+            }
+
+        }
+    }
+
+    public boolean es() {
         InventorySubcontainer inventorysubcontainer = this.getInventory();
 
         return inventorysubcontainer.a((Set) ImmutableSet.of(Items.WHEAT_SEEDS, Items.POTATO, Items.CARROT, Items.BEETROOT_SEEDS));
     }
 
     @Override
-    protected void ef() {
+    protected void ei() {
         VillagerData villagerdata = this.getVillagerData();
         Int2ObjectMap<VillagerTrades.IMerchantRecipeOption[]> int2objectmap = (Int2ObjectMap) VillagerTrades.a.get(villagerdata.getProfession());
 
@@ -642,106 +690,104 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
     }
 
     public void a(EntityVillager entityvillager, long i) {
-        if ((i < this.bM || i >= this.bM + 1200L) && (i < entityvillager.bM || i >= entityvillager.bM + 1200L)) {
-            boolean flag = this.a(i);
-
-            if (this.a((Entity) this) || flag) {
-                this.bL.a(this.getUniqueID(), ReputationType.GOLEM, ReputationType.GOLEM.i);
-            }
-
-            this.bL.a(entityvillager.bL, this.random, 10);
-            this.bM = i;
-            entityvillager.bM = i;
-            if (flag) {
-                this.ew();
-            }
-
+        if ((i < this.bK || i >= this.bK + 1200L) && (i < entityvillager.bK || i >= entityvillager.bK + 1200L)) {
+            this.bJ.a(entityvillager.bJ, this.random, 10);
+            this.bK = i;
+            entityvillager.bK = i;
+            this.a(i, 5);
         }
     }
 
-    private void ew() {
+    private void eC() {
+        long i = this.world.getTime();
+
+        if (this.bL == 0L) {
+            this.bL = i;
+        } else if (i >= this.bL + 24000L) {
+            this.bJ.b();
+            this.bL = i;
+        }
+    }
+
+    public void a(long i, int j) {
+        if (this.a(i)) {
+            AxisAlignedBB axisalignedbb = this.getBoundingBox().grow(10.0D, 10.0D, 10.0D);
+            List<EntityVillager> list = this.world.a(EntityVillager.class, axisalignedbb);
+            List<EntityVillager> list1 = (List) list.stream().filter((entityvillager) -> {
+                return entityvillager.a(i);
+            }).limit(5L).collect(Collectors.toList());
+
+            if (list1.size() >= j) {
+                EntityIronGolem entityirongolem = this.eD();
+
+                if (entityirongolem != null) {
+                    list.forEach((entityvillager) -> {
+                        entityvillager.b(i);
+                    });
+                }
+            }
+        }
+    }
+
+    private void b(long i) {
+        this.br.setMemory(MemoryModuleType.GOLEM_LAST_SEEN_TIME, (Object) i);
+    }
+
+    private boolean c(long i) {
+        Optional<Long> optional = this.br.getMemory(MemoryModuleType.GOLEM_LAST_SEEN_TIME);
+
+        if (!optional.isPresent()) {
+            return false;
+        } else {
+            Long olong = (Long) optional.get();
+
+            return i - olong <= 600L;
+        }
+    }
+
+    public boolean a(long i) {
         VillagerData villagerdata = this.getVillagerData();
 
-        if (villagerdata.getProfession() != VillagerProfession.NONE && villagerdata.getProfession() != VillagerProfession.NITWIT) {
-            Optional<EntityVillager.a> optional = this.getBehaviorController().getMemory(MemoryModuleType.GOLEM_SPAWN_CONDITIONS);
-
-            if (optional.isPresent()) {
-                if (((EntityVillager.a) optional.get()).c(this.world.getTime())) {
-                    boolean flag = this.bL.a(ReputationType.GOLEM, (d0) -> {
-                        return d0 > 30.0D;
-                    }) >= 5L;
-
-                    if (flag) {
-                        AxisAlignedBB axisalignedbb = this.getBoundingBox().b(80.0D, 80.0D, 80.0D);
-                        List<EntityVillager> list = (List) this.world.a(EntityVillager.class, axisalignedbb, this::a).stream().limit(5L).collect(Collectors.toList());
-                        boolean flag1 = list.size() >= 5;
-
-                        if (flag1) {
-                            EntityIronGolem entityirongolem = this.ex();
-
-                            if (entityirongolem != null) {
-                                UUID uuid = entityirongolem.getUniqueID();
-
-                                EntityVillager entityvillager;
-
-                                for (Iterator iterator = list.iterator(); iterator.hasNext(); entityvillager.bH = uuid) {
-                                    entityvillager = (EntityVillager) iterator.next();
-                                    Iterator iterator1 = list.iterator();
-
-                                    while (iterator1.hasNext()) {
-                                        EntityVillager entityvillager1 = (EntityVillager) iterator1.next();
-
-                                        entityvillager.bL.a(entityvillager1.getUniqueID(), ReputationType.GOLEM, -ReputationType.GOLEM.i);
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private boolean a(Entity entity) {
-        return this.bL.a(entity.getUniqueID(), (reputationtype) -> {
-            return reputationtype == ReputationType.GOLEM;
-        }) > 30;
-    }
-
-    private boolean a(long i) {
-        if (this.bH == null) {
-            return true;
-        } else {
-            if (this.bI < i + 1200L) {
-                this.bI = i + 1200L;
-                Entity entity = ((WorldServer) this.world).getEntity(this.bH);
-
-                if (entity == null || !entity.isAlive() || this.h(entity) > 6400.0D) {
-                    this.bH = null;
-                    return true;
-                }
-            }
-
-            return false;
-        }
+        return villagerdata.getProfession() != VillagerProfession.NONE && villagerdata.getProfession() != VillagerProfession.NITWIT ? (!this.d(this.world.getTime()) ? false : !this.c(i)) : false;
     }
 
     @Nullable
-    private EntityIronGolem ex() {
+    private EntityIronGolem eD() {
         BlockPosition blockposition = new BlockPosition(this);
+        int i = 0;
 
-        for (int i = 0; i < 10; ++i) {
-            BlockPosition blockposition1 = blockposition.b(this.world.random.nextInt(16) - 8, this.world.random.nextInt(6) - 3, this.world.random.nextInt(16) - 8);
-            EntityIronGolem entityirongolem = (EntityIronGolem) EntityTypes.IRON_GOLEM.b(this.world, (NBTTagCompound) null, (IChatBaseComponent) null, (EntityHuman) null, blockposition1, EnumMobSpawn.MOB_SUMMONED, false, false);
+        while (i < 10) {
+            double d0 = (double) (this.world.random.nextInt(16) - 8);
+            double d1 = (double) (this.world.random.nextInt(16) - 8);
+            double d2 = 6.0D;
+            int j = 0;
 
-            if (entityirongolem != null) {
-                if (entityirongolem.a((GeneratorAccess) this.world, EnumMobSpawn.MOB_SUMMONED) && entityirongolem.a((IWorldReader) this.world)) {
-                    this.world.addEntity(entityirongolem);
-                    return entityirongolem;
+            while (true) {
+                if (j >= -12) {
+                    BlockPosition blockposition1 = blockposition.a(d0, d2 + (double) j, d1);
+
+                    if (!this.world.getType(blockposition1).isAir() && !this.world.getType(blockposition1).getMaterial().isLiquid() || !this.world.getType(blockposition1.down()).getMaterial().f()) {
+                        --j;
+                        continue;
+                    }
+
+                    d2 += (double) j;
                 }
 
-                entityirongolem.die();
+                BlockPosition blockposition2 = blockposition.a(d0, d2, d1);
+                EntityIronGolem entityirongolem = (EntityIronGolem) EntityTypes.IRON_GOLEM.b(this.world, (NBTTagCompound) null, (IChatBaseComponent) null, (EntityHuman) null, blockposition2, EnumMobSpawn.MOB_SUMMONED, false, false);
+
+                if (entityirongolem != null) {
+                    if (entityirongolem.a((GeneratorAccess) this.world, EnumMobSpawn.MOB_SUMMONED) && entityirongolem.a((IWorldReader) this.world)) {
+                        this.world.addEntity(entityirongolem);
+                        return entityirongolem;
+                    }
+
+                    entityirongolem.die();
+                }
+
+                ++i;
+                break;
             }
         }
 
@@ -751,28 +797,28 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
     @Override
     public void a(ReputationEvent reputationevent, Entity entity) {
         if (reputationevent == ReputationEvent.a) {
-            this.bL.a(entity.getUniqueID(), ReputationType.MAJOR_POSITIVE, 25);
+            this.bJ.a(entity.getUniqueID(), ReputationType.MAJOR_POSITIVE, 25);
         } else if (reputationevent == ReputationEvent.e) {
-            this.bL.a(entity.getUniqueID(), ReputationType.TRADING, 2);
+            this.bJ.a(entity.getUniqueID(), ReputationType.TRADING, 2);
         } else if (reputationevent == ReputationEvent.c) {
-            this.bL.a(entity.getUniqueID(), ReputationType.MINOR_NEGATIVE, 25);
+            this.bJ.a(entity.getUniqueID(), ReputationType.MINOR_NEGATIVE, 25);
         } else if (reputationevent == ReputationEvent.d) {
-            this.bL.a(entity.getUniqueID(), ReputationType.MAJOR_NEGATIVE, 25);
+            this.bJ.a(entity.getUniqueID(), ReputationType.MAJOR_NEGATIVE, 25);
         }
 
     }
 
     @Override
     public int getExperience() {
-        return this.bN;
+        return this.bM;
     }
 
     public void setExperience(int i) {
-        this.bN = i;
+        this.bM = i;
     }
 
-    public long eq() {
-        return this.bO;
+    public long et() {
+        return this.bN;
     }
 
     @Override
@@ -784,29 +830,13 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
     @Override
     public void e(BlockPosition blockposition) {
         super.e(blockposition);
-        EntityVillager.a entityvillager_a = (EntityVillager.a) this.getBehaviorController().getMemory(MemoryModuleType.GOLEM_SPAWN_CONDITIONS).orElseGet(EntityVillager.a::new);
-
-        entityvillager_a.b(this.world.getTime());
-        this.br.setMemory(MemoryModuleType.GOLEM_SPAWN_CONDITIONS, (Object) entityvillager_a);
+        this.br.setMemory(MemoryModuleType.LAST_SLEPT, (Object) MinecraftSerializableLong.a(this.world.getTime()));
     }
 
-    public static final class a {
+    private boolean d(long i) {
+        Optional<MinecraftSerializableLong> optional = this.br.getMemory(MemoryModuleType.LAST_SLEPT);
+        Optional<MinecraftSerializableLong> optional1 = this.br.getMemory(MemoryModuleType.LAST_WORKED_AT_POI);
 
-        private long a;
-        private long b;
-
-        public a() {}
-
-        public void a(long i) {
-            this.a = i;
-        }
-
-        public void b(long i) {
-            this.b = i;
-        }
-
-        private boolean c(long i) {
-            return i - this.b < 24000L && i - this.a < 36000L;
-        }
+        return optional.isPresent() && optional1.isPresent() ? i - ((MinecraftSerializableLong) optional.get()).a() < 24000L && i - ((MinecraftSerializableLong) optional1.get()).a() < 36000L : false;
     }
 }

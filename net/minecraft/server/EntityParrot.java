@@ -13,15 +13,15 @@ import javax.annotation.Nullable;
 
 public class EntityParrot extends EntityPerchable implements EntityBird {
 
-    private static final DataWatcherObject<Integer> bI = DataWatcher.a(EntityParrot.class, DataWatcherRegistry.b);
-    private static final Predicate<EntityInsentient> bJ = new Predicate<EntityInsentient>() {
+    private static final DataWatcherObject<Integer> bH = DataWatcher.a(EntityParrot.class, DataWatcherRegistry.b);
+    private static final Predicate<EntityInsentient> bI = new Predicate<EntityInsentient>() {
         public boolean test(@Nullable EntityInsentient entityinsentient) {
-            return entityinsentient != null && EntityParrot.bM.containsKey(entityinsentient.getEntityType());
+            return entityinsentient != null && EntityParrot.bL.containsKey(entityinsentient.getEntityType());
         }
     };
-    private static final Item bK = Items.COOKIE;
-    private static final Set<Item> bL = Sets.newHashSet(new Item[]{Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS});
-    private static final Map<EntityTypes<?>, SoundEffect> bM = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+    private static final Item bJ = Items.COOKIE;
+    private static final Set<Item> bK = Sets.newHashSet(new Item[]{Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS});
+    private static final Map<EntityTypes<?>, SoundEffect> bL = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         hashmap.put(EntityTypes.BLAZE, SoundEffects.ENTITY_PARROT_IMITATE_BLAZE);
         hashmap.put(EntityTypes.CAVE_SPIDER, SoundEffects.ENTITY_PARROT_IMITATE_SPIDER);
         hashmap.put(EntityTypes.CREEPER, SoundEffects.ENTITY_PARROT_IMITATE_CREEPER);
@@ -57,13 +57,13 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         hashmap.put(EntityTypes.ZOMBIE, SoundEffects.ENTITY_PARROT_IMITATE_ZOMBIE);
         hashmap.put(EntityTypes.ZOMBIE_VILLAGER, SoundEffects.ENTITY_PARROT_IMITATE_ZOMBIE_VILLAGER);
     });
+    public float bC;
     public float bD;
     public float bE;
     public float bF;
-    public float bG;
-    public float bH = 1.0F;
-    private boolean bN;
-    private BlockPosition bO;
+    public float bG = 1.0F;
+    private boolean bM;
+    private BlockPosition bN;
 
     public EntityParrot(EntityTypes<? extends EntityParrot> entitytypes, World world) {
         super(entitytypes, world);
@@ -117,37 +117,37 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
     @Override
     public void movementTick() {
         b(this.world, (Entity) this);
-        if (this.bO == null || !this.bO.a((IPosition) this.ch(), 3.46D) || this.world.getType(this.bO).getBlock() != Blocks.JUKEBOX) {
-            this.bN = false;
-            this.bO = null;
+        if (this.bN == null || !this.bN.a((IPosition) this.ci(), 3.46D) || this.world.getType(this.bN).getBlock() != Blocks.JUKEBOX) {
+            this.bM = false;
+            this.bN = null;
         }
 
         super.movementTick();
-        this.ei();
+        this.ej();
     }
 
-    private void ei() {
-        this.bG = this.bD;
-        this.bF = this.bE;
-        this.bE = (float) ((double) this.bE + (double) (this.onGround ? -1 : 4) * 0.3D);
-        this.bE = MathHelper.a(this.bE, 0.0F, 1.0F);
-        if (!this.onGround && this.bH < 1.0F) {
-            this.bH = 1.0F;
+    private void ej() {
+        this.bF = this.bC;
+        this.bE = this.bD;
+        this.bD = (float) ((double) this.bD + (double) (this.onGround ? -1 : 4) * 0.3D);
+        this.bD = MathHelper.a(this.bD, 0.0F, 1.0F);
+        if (!this.onGround && this.bG < 1.0F) {
+            this.bG = 1.0F;
         }
 
-        this.bH = (float) ((double) this.bH * 0.9D);
+        this.bG = (float) ((double) this.bG * 0.9D);
         Vec3D vec3d = this.getMot();
 
         if (!this.onGround && vec3d.y < 0.0D) {
             this.setMot(vec3d.d(1.0D, 0.6D, 1.0D));
         }
 
-        this.bD += this.bH * 2.0F;
+        this.bC += this.bG * 2.0F;
     }
 
     private static boolean b(World world, Entity entity) {
         if (entity.isAlive() && !entity.isSilent() && world.random.nextInt(50) == 0) {
-            List<EntityInsentient> list = world.a(EntityInsentient.class, entity.getBoundingBox().g(20.0D), EntityParrot.bJ);
+            List<EntityInsentient> list = world.a(EntityInsentient.class, entity.getBoundingBox().g(20.0D), EntityParrot.bI);
 
             if (!list.isEmpty()) {
                 EntityInsentient entityinsentient = (EntityInsentient) list.get(world.random.nextInt(list.size()));
@@ -170,7 +170,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
     public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (!this.isTamed() && EntityParrot.bL.contains(itemstack.getItem())) {
+        if (!this.isTamed() && EntityParrot.bK.contains(itemstack.getItem())) {
             if (!entityhuman.abilities.canInstantlyBuild) {
                 itemstack.subtract(1);
             }
@@ -191,7 +191,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
             }
 
             return true;
-        } else if (itemstack.getItem() == EntityParrot.bK) {
+        } else if (itemstack.getItem() == EntityParrot.bJ) {
             if (!entityhuman.abilities.canInstantlyBuild) {
                 itemstack.subtract(1);
             }
@@ -216,15 +216,10 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         return false;
     }
 
-    @Override
-    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        int i = MathHelper.floor(this.locX);
-        int j = MathHelper.floor(this.getBoundingBox().minY);
-        int k = MathHelper.floor(this.locZ);
-        BlockPosition blockposition = new BlockPosition(i, j, k);
+    public static boolean c(EntityTypes<EntityParrot> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
         Block block = generatoraccess.getType(blockposition.down()).getBlock();
 
-        return block.a(TagsBlock.LEAVES) || block == Blocks.GRASS_BLOCK || block instanceof BlockLogAbstract || block == Blocks.AIR && super.a(generatoraccess, enummobspawn);
+        return (block.a(TagsBlock.LEAVES) || block == Blocks.GRASS_BLOCK || block instanceof BlockLogAbstract || block == Blocks.AIR) && generatoraccess.getLightLevel(blockposition, 0) > 8;
     }
 
     @Override
@@ -264,7 +259,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
 
     private static SoundEffect a(Random random) {
         if (random.nextInt(1000) == 0) {
-            List<EntityTypes<?>> list = Lists.newArrayList(EntityParrot.bM.keySet());
+            List<EntityTypes<?>> list = Lists.newArrayList(EntityParrot.bL.keySet());
 
             return b((EntityTypes) list.get(random.nextInt(list.size())));
         } else {
@@ -273,7 +268,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
     }
 
     public static SoundEffect b(EntityTypes<?> entitytypes) {
-        return (SoundEffect) EntityParrot.bM.getOrDefault(entitytypes, SoundEffects.ENTITY_PARROT_AMBIENT);
+        return (SoundEffect) EntityParrot.bL.getOrDefault(entitytypes, SoundEffects.ENTITY_PARROT_AMBIENT);
     }
 
     @Override
@@ -294,16 +289,16 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
     @Override
     protected float e(float f) {
         this.a(SoundEffects.ENTITY_PARROT_FLY, 0.15F, 1.0F);
-        return f + this.bE / 2.0F;
+        return f + this.bD / 2.0F;
     }
 
     @Override
-    protected boolean al() {
+    protected boolean am() {
         return true;
     }
 
     @Override
-    protected float cU() {
+    protected float cV() {
         return b(this.random);
     }
 
@@ -342,17 +337,17 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
     }
 
     public int getVariant() {
-        return MathHelper.clamp((Integer) this.datawatcher.get(EntityParrot.bI), 0, 4);
+        return MathHelper.clamp((Integer) this.datawatcher.get(EntityParrot.bH), 0, 4);
     }
 
     public void setVariant(int i) {
-        this.datawatcher.set(EntityParrot.bI, i);
+        this.datawatcher.set(EntityParrot.bH, i);
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityParrot.bI, 0);
+        this.datawatcher.register(EntityParrot.bH, 0);
     }
 
     @Override

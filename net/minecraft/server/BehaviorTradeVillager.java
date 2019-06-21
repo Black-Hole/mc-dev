@@ -34,7 +34,7 @@ public class BehaviorTradeVillager extends Behavior<EntityVillager> {
         if (entityvillager.h((Entity) entityvillager1) <= 5.0D) {
             BehaviorUtil.a((EntityLiving) entityvillager, (EntityLiving) entityvillager1);
             entityvillager.a(entityvillager1, i);
-            if (entityvillager.en() && entityvillager1.eo()) {
+            if (entityvillager.eq() && (entityvillager.getVillagerData().getProfession() == VillagerProfession.FARMER || entityvillager1.er())) {
                 a(entityvillager, EntityVillager.bA.keySet(), entityvillager1);
             }
 
@@ -69,7 +69,13 @@ public class BehaviorTradeVillager extends Behavior<EntityVillager> {
                 Item item = itemstack1.getItem();
 
                 if (set.contains(item)) {
-                    int j = itemstack1.getCount() / 2;
+                    int j;
+
+                    if (itemstack1.getCount() > itemstack1.getMaxStackSize() / 2) {
+                        j = itemstack1.getCount() / 2;
+                    } else {
+                        j = itemstack1.getCount();
+                    }
 
                     itemstack1.subtract(j);
                     itemstack = new ItemStack(item, j);

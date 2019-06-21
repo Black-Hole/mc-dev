@@ -12,6 +12,11 @@ public class EnchantmentInfiniteArrows extends Enchantment {
     }
 
     @Override
+    public int b(int i) {
+        return 50;
+    }
+
+    @Override
     public int getMaxLevel() {
         return 1;
     }

@@ -17,6 +17,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Supplier;
 
 public class VillagePlaceSection implements MinecraftSerializable {
 
@@ -57,7 +58,11 @@ public class VillagePlaceSection implements MinecraftSerializable {
 
     public void a(BlockPosition blockposition, VillagePlaceType villageplacetype) {
         if (this.a(new VillagePlaceRecord(blockposition, villageplacetype, this.d))) {
-            VillagePlaceSection.LOGGER.debug(String.format("Added POI of type %s @ %s", villageplacetype, blockposition));
+            VillagePlaceSection.LOGGER.debug("Added POI of type {} @ {}", new Supplier[]{() -> {
+                        return villageplacetype;
+                    }, () -> {
+                        return blockposition;
+                    }});
             this.d.run();
         }
 
@@ -91,7 +96,7 @@ public class VillagePlaceSection implements MinecraftSerializable {
             VillagePlaceSection.LOGGER.error("POI data mismatch: never registered at " + blockposition);
         } else {
             ((Set) this.c.get(villageplacerecord.g())).remove(villageplacerecord);
-            VillagePlaceSection.LOGGER.debug(String.format("Removed POI of type %s @ %s", villageplacerecord.g(), villageplacerecord.f()));
+            VillagePlaceSection.LOGGER.debug("Removed POI of type {} @ {}", new Supplier[]{villageplacerecord::g, villageplacerecord::f});
             this.d.run();
         }
     }

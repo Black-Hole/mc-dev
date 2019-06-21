@@ -1,14 +1,15 @@
 package net.minecraft.server;
 
+import java.util.Random;
+
 public class EntitySkeletonStray extends EntitySkeletonAbstract {
 
     public EntitySkeletonStray(EntityTypes<? extends EntitySkeletonStray> entitytypes, World world) {
         super(entitytypes, world);
     }
 
-    @Override
-    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        return super.a(generatoraccess, enummobspawn) && (enummobspawn == EnumMobSpawn.SPAWNER || generatoraccess.f(new BlockPosition(this)));
+    public static boolean b(EntityTypes<EntitySkeletonStray> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        return c(entitytypes, generatoraccess, enummobspawn, blockposition, random) && (enummobspawn == EnumMobSpawn.SPAWNER || generatoraccess.f(blockposition));
     }
 
     @Override

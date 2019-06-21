@@ -110,7 +110,7 @@ public class EntityExperienceOrb extends Entity {
     }
 
     @Override
-    protected void ay() {}
+    protected void az() {}
 
     @Override
     protected void burn(int i) {
@@ -192,7 +192,7 @@ public class EntityExperienceOrb extends Entity {
     }
 
     @Override
-    public boolean br() {
+    public boolean bs() {
         return false;
     }
 

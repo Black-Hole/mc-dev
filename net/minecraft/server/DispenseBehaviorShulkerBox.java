@@ -15,9 +15,6 @@ public class DispenseBehaviorShulkerBox extends DispenseBehaviorMaybe {
             EnumDirection enumdirection1 = isourceblock.getWorld().isEmpty(blockposition.down()) ? enumdirection : EnumDirection.UP;
 
             this.dispensed = ((ItemBlock) item).a((BlockActionContext) (new BlockActionContextDirectional(isourceblock.getWorld(), blockposition, enumdirection, itemstack, enumdirection1))) == EnumInteractionResult.SUCCESS;
-            if (this.dispensed) {
-                itemstack.subtract(1);
-            }
         }
 
         return itemstack;

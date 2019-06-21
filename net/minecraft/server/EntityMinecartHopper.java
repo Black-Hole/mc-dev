@@ -116,7 +116,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
     @Override
     public void a(DamageSource damagesource) {
         super.a(damagesource);
-        if (this.world.getGameRules().getBoolean("doEntityDrops")) {
+        if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
             this.a((IMaterial) Blocks.HOPPER);
         }
 

@@ -118,7 +118,7 @@ public abstract class TileEntity {
         return this.f;
     }
 
-    public void W_() {
+    public void V_() {
         this.f = true;
     }
 

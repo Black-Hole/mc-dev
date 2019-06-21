@@ -31,7 +31,7 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
             return (IBlockData) iblockdata.set(BlockSeaPickle.a, Math.min(4, (Integer) iblockdata.get(BlockSeaPickle.a) + 1));
         } else {
             Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
-            boolean flag = fluid.a(TagsFluid.WATER) && fluid.f() == 8;
+            boolean flag = fluid.a(TagsFluid.WATER) && fluid.g() == 8;
 
             return (IBlockData) super.getPlacedState(blockactioncontext).set(BlockSeaPickle.b, flag);
         }

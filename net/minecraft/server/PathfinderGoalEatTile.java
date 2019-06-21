@@ -55,7 +55,7 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
             BlockPosition blockposition = new BlockPosition(this.b);
 
             if (PathfinderGoalEatTile.a.test(this.c.getType(blockposition))) {
-                if (this.c.getGameRules().getBoolean("mobGriefing")) {
+                if (this.c.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
                     this.c.b(blockposition, false);
                 }
 
@@ -64,7 +64,7 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
                 BlockPosition blockposition1 = blockposition.down();
 
                 if (this.c.getType(blockposition1).getBlock() == Blocks.GRASS_BLOCK) {
-                    if (this.c.getGameRules().getBoolean("mobGriefing")) {
+                    if (this.c.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
                         this.c.triggerEffect(2001, blockposition1, Block.getCombinedId(Blocks.GRASS_BLOCK.getBlockData()));
                         this.c.setTypeAndData(blockposition1, Blocks.DIRT.getBlockData(), 2);
                     }

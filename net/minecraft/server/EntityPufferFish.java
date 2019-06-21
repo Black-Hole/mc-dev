@@ -65,23 +65,23 @@ public class EntityPufferFish extends EntityFish {
 
     @Override
     public void tick() {
-        if (!this.world.isClientSide && this.isAlive() && this.de()) {
+        if (!this.world.isClientSide && this.isAlive() && this.df()) {
             if (this.c > 0) {
                 if (this.getPuffState() == 0) {
-                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.getSoundVolume(), this.cU());
+                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.getSoundVolume(), this.cV());
                     this.setPuffState(1);
                 } else if (this.c > 40 && this.getPuffState() == 1) {
-                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.getSoundVolume(), this.cU());
+                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.getSoundVolume(), this.cV());
                     this.setPuffState(2);
                 }
 
                 ++this.c;
             } else if (this.getPuffState() != 0) {
                 if (this.d > 60 && this.getPuffState() == 2) {
-                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.getSoundVolume(), this.cU());
+                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.getSoundVolume(), this.cV());
                     this.setPuffState(1);
                 } else if (this.d > 100 && this.getPuffState() == 1) {
-                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.getSoundVolume(), this.cU());
+                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.getSoundVolume(), this.cV());
                     this.setPuffState(0);
                 }
 
@@ -153,10 +153,10 @@ public class EntityPufferFish extends EntityFish {
 
     @Override
     public EntitySize a(EntityPose entitypose) {
-        return super.a(entitypose).a(q(this.getPuffState()));
+        return super.a(entitypose).a(r(this.getPuffState()));
     }
 
-    private static float q(int i) {
+    private static float r(int i) {
         switch (i) {
             case 0:
                 return 0.5F;

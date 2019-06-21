@@ -11,11 +11,11 @@ public abstract class EntityHanging extends Entity {
     };
     private int e;
     public BlockPosition blockPosition;
-    @Nullable
-    public EnumDirection direction;
+    protected EnumDirection direction;
 
     protected EntityHanging(EntityTypes<? extends EntityHanging> entitytypes, World world) {
         super(entitytypes, world);
+        this.direction = EnumDirection.SOUTH;
     }
 
     protected EntityHanging(EntityTypes<? extends EntityHanging> entitytypes, World world, BlockPosition blockposition) {
@@ -179,7 +179,7 @@ public abstract class EntityHanging extends Entity {
     @Override
     public void a(NBTTagCompound nbttagcompound) {
         this.blockPosition = new BlockPosition(nbttagcompound.getInt("TileX"), nbttagcompound.getInt("TileY"), nbttagcompound.getInt("TileZ"));
-        this.setDirection(EnumDirection.fromType2(nbttagcompound.getByte("Facing")));
+        this.direction = EnumDirection.fromType2(nbttagcompound.getByte("Facing"));
     }
 
     public abstract int getHangingWidth();
@@ -200,7 +200,7 @@ public abstract class EntityHanging extends Entity {
     }
 
     @Override
-    protected boolean aI() {
+    protected boolean aJ() {
         return false;
     }
 
@@ -217,7 +217,7 @@ public abstract class EntityHanging extends Entity {
 
     @Override
     public float a(EnumBlockRotation enumblockrotation) {
-        if (this.direction != null && this.direction.k() != EnumDirection.EnumAxis.Y) {
+        if (this.direction.k() != EnumDirection.EnumAxis.Y) {
             switch (enumblockrotation) {
                 case CLOCKWISE_180:
                     this.direction = this.direction.opposite();

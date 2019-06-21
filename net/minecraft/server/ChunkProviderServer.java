@@ -2,9 +2,7 @@ package net.minecraft.server;
 
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.util.Either;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap.Entry;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.ObjectBidirectionalIterator;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -36,7 +34,7 @@ public class ChunkProviderServer extends IChunkProvider {
     private final ChunkStatus[] cacheStatus = new ChunkStatus[4];
     private final IChunkAccess[] cacheChunk = new IChunkAccess[4];
 
-    public ChunkProviderServer(WorldServer worldserver, File file, DataFixer datafixer, DefinedStructureManager definedstructuremanager, Executor executor, ChunkGenerator<?> chunkgenerator, int i, int j, WorldLoadListener worldloadlistener, Supplier<WorldPersistentData> supplier) {
+    public ChunkProviderServer(WorldServer worldserver, File file, DataFixer datafixer, DefinedStructureManager definedstructuremanager, Executor executor, ChunkGenerator<?> chunkgenerator, int i, WorldLoadListener worldloadlistener, Supplier<WorldPersistentData> supplier) {
         this.world = worldserver;
         this.serverThreadQueue = new ChunkProviderServer.a(worldserver);
         this.chunkGenerator = chunkgenerator;
@@ -46,7 +44,7 @@ public class ChunkProviderServer extends IChunkProvider {
 
         file2.mkdirs();
         this.worldPersistentData = new WorldPersistentData(file2, datafixer);
-        this.playerChunkMap = new PlayerChunkMap(worldserver, file, datafixer, definedstructuremanager, executor, this.serverThreadQueue, this, this.getChunkGenerator(), worldloadlistener, supplier, i, j);
+        this.playerChunkMap = new PlayerChunkMap(worldserver, file, datafixer, definedstructuremanager, executor, this.serverThreadQueue, this, this.getChunkGenerator(), worldloadlistener, supplier, i);
         this.lightEngine = this.playerChunkMap.a();
         this.chunkMapDistance = this.playerChunkMap.e();
         this.clearCache();
@@ -221,6 +219,12 @@ public class ChunkProviderServer extends IChunkProvider {
         return this.a(i, PlayerChunk::a);
     }
 
+    public boolean b(Entity entity) {
+        long i = ChunkCoordIntPair.pair(MathHelper.floor(entity.locX) >> 4, MathHelper.floor(entity.locZ) >> 4);
+
+        return this.a(i, PlayerChunk::c);
+    }
+
     private boolean a(long i, Function<PlayerChunk, CompletableFuture<Either<Chunk, PlayerChunk.Failure>>> function) {
         PlayerChunk playerchunk = this.getChunk(i);
 
@@ -264,11 +268,11 @@ public class ChunkProviderServer extends IChunkProvider {
         this.lastTickTime = i;
         WorldData worlddata = this.world.getWorldData();
         boolean flag = worlddata.getType() == WorldType.DEBUG_ALL_BLOCK_STATES;
-        boolean flag1 = this.world.getGameRules().getBoolean("doMobSpawning");
+        boolean flag1 = this.world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING);
 
         if (!flag) {
             this.world.getMethodProfiler().enter("pollingChunks");
-            int k = this.world.getGameRules().c("randomTickSpeed");
+            int k = this.world.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED);
             BlockPosition blockposition = this.world.getSpawn();
             boolean flag2 = worlddata.getTime() % 400L == 0L;
 
@@ -278,11 +282,7 @@ public class ChunkProviderServer extends IChunkProvider {
             Object2IntMap<EnumCreatureType> object2intmap = this.world.l();
 
             this.world.getMethodProfiler().exit();
-            ObjectBidirectionalIterator objectbidirectionaliterator = this.playerChunkMap.f();
-
-            while (objectbidirectionaliterator.hasNext()) {
-                Entry<PlayerChunk> entry = (Entry) objectbidirectionaliterator.next();
-                PlayerChunk playerchunk = (PlayerChunk) entry.getValue();
+            this.playerChunkMap.f().forEach((playerchunk) -> {
                 Optional<Chunk> optional = ((Either) playerchunk.b().getNow(PlayerChunk.UNLOADED_CHUNK)).left();
 
                 if (optional.isPresent()) {
@@ -291,7 +291,7 @@ public class ChunkProviderServer extends IChunkProvider {
                     this.world.getMethodProfiler().enter("broadcast");
                     playerchunk.a(chunk);
                     this.world.getMethodProfiler().exit();
-                    ChunkCoordIntPair chunkcoordintpair = playerchunk.h();
+                    ChunkCoordIntPair chunkcoordintpair = playerchunk.i();
 
                     if (!this.playerChunkMap.isOutsideOfRange(chunkcoordintpair)) {
                         chunk.b(chunk.q() + j);
@@ -318,8 +318,7 @@ public class ChunkProviderServer extends IChunkProvider {
                         this.world.a(chunk, k);
                     }
                 }
-            }
-
+            });
             this.world.getMethodProfiler().enter("customSpawners");
             if (flag1) {
                 this.chunkGenerator.doMobSpawning(this.world, this.allowMonsters, this.allowAnimals);
@@ -402,8 +401,8 @@ public class ChunkProviderServer extends IChunkProvider {
         this.playerChunkMap.broadcast(entity, packet);
     }
 
-    public void setViewDistance(int i, int j) {
-        this.playerChunkMap.setViewDistance(i, j);
+    public void setViewDistance(int i) {
+        this.playerChunkMap.setViewDistance(i);
     }
 
     @Override

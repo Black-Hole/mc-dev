@@ -45,7 +45,7 @@ public class BlockChest extends BlockTileEntity implements IBlockWaterlogged {
 
                 @Override
                 public IChatBaseComponent getScoreboardDisplayName() {
-                    return new ChatMessage("container.chestDouble", new Object[0]);
+                    return (IChatBaseComponent) (tileentitychest.hasCustomName() ? tileentitychest.getScoreboardDisplayName() : (tileentitychest1.hasCustomName() ? tileentitychest1.getScoreboardDisplayName() : new ChatMessage("container.chestDouble", new Object[0])));
                 }
             };
         }

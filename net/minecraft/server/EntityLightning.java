@@ -82,7 +82,7 @@ public class EntityLightning extends Entity {
     }
 
     private void a(int i) {
-        if (!this.e && !this.world.isClientSide && this.world.getGameRules().getBoolean("doFireTick")) {
+        if (!this.e && !this.world.isClientSide && this.world.getGameRules().getBoolean(GameRules.DO_FIRE_TICK)) {
             IBlockData iblockdata = Blocks.FIRE.getBlockData();
             BlockPosition blockposition = new BlockPosition(this);
 

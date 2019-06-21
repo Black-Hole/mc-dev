@@ -106,7 +106,7 @@ public class EntityPotion extends EntityProjectile {
                 double d0 = this.h(entityliving);
 
                 if (d0 < 16.0D && a(entityliving)) {
-                    entityliving.damageEntity(DamageSource.DROWN, 1.0F);
+                    entityliving.damageEntity(DamageSource.c(entityliving, this.getShooter()), 1.0F);
                 }
             }
         }
@@ -123,7 +123,7 @@ public class EntityPotion extends EntityProjectile {
             while (iterator.hasNext()) {
                 EntityLiving entityliving = (EntityLiving) iterator.next();
 
-                if (entityliving.dt()) {
+                if (entityliving.du()) {
                     double d0 = this.h(entityliving);
 
                     if (d0 < 16.0D) {

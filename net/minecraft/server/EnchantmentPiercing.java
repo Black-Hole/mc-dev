@@ -12,6 +12,11 @@ public class EnchantmentPiercing extends Enchantment {
     }
 
     @Override
+    public int b(int i) {
+        return 50;
+    }
+
+    @Override
     public int getMaxLevel() {
         return 4;
     }

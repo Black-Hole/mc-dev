@@ -156,7 +156,7 @@ public class EntityVex extends EntityMonster {
     }
 
     @Override
-    public float aE() {
+    public float aF() {
         return 1.0F;
     }
 

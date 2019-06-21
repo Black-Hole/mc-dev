@@ -1,100 +1,62 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.ImmutableMap.Builder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class CraftingManager implements IResourcePackListener {
+public class CraftingManager extends ResourceDataJson {
 
+    private static final Gson a = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final int a = "recipes/".length();
-    public static final int b = ".json".length();
-    public Map<Recipes<?>, Map<MinecraftKey, IRecipe<?>>> recipes = (Map) SystemUtils.a((Object) Maps.newHashMap(), CraftingManager::initializeRecipeMap);
-    private boolean e;
+    public Map<Recipes<?>, Map<MinecraftKey, IRecipe<?>>> recipes = ImmutableMap.of();
+    private boolean d;
 
-    public CraftingManager() {}
+    public CraftingManager() {
+        super(CraftingManager.a, "recipes");
+    }
 
-    @Override
-    public void a(IResourceManager iresourcemanager) {
-        Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-
-        this.e = false;
-        initializeRecipeMap(this.recipes);
-        Iterator iterator = iresourcemanager.a("recipes", (s) -> {
-            return s.endsWith(".json");
-        }).iterator();
+    protected void a(Map<MinecraftKey, JsonObject> map, IResourceManager iresourcemanager, GameProfilerFiller gameprofilerfiller) {
+        this.d = false;
+        Map<Recipes<?>, Builder<MinecraftKey, IRecipe<?>>> map1 = Maps.newHashMap();
+        Iterator iterator = map.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
-            String s = minecraftkey.getKey();
-            MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.b(), s.substring(CraftingManager.a, s.length() - CraftingManager.b));
+            Entry<MinecraftKey, JsonObject> entry = (Entry) iterator.next();
+            MinecraftKey minecraftkey = (MinecraftKey) entry.getKey();
 
             try {
-                IResource iresource = iresourcemanager.a(minecraftkey);
-                Throwable throwable = null;
+                IRecipe<?> irecipe = a(minecraftkey, (JsonObject) entry.getValue());
 
-                try {
-                    JsonObject jsonobject = (JsonObject) ChatDeserializer.a(gson, IOUtils.toString(iresource.b(), StandardCharsets.UTF_8), JsonObject.class);
-
-                    if (jsonobject == null) {
-                        CraftingManager.LOGGER.error("Couldn't load recipe {} as it's null or empty", minecraftkey1);
-                    } else {
-                        this.addRecipe(a(minecraftkey1, jsonobject));
-                    }
-                } catch (Throwable throwable1) {
-                    throwable = throwable1;
-                    throw throwable1;
-                } finally {
-                    if (iresource != null) {
-                        if (throwable != null) {
-                            try {
-                                iresource.close();
-                            } catch (Throwable throwable2) {
-                                throwable.addSuppressed(throwable2);
-                            }
-                        } else {
-                            iresource.close();
-                        }
-                    }
-
-                }
+                ((Builder) map1.computeIfAbsent(irecipe.g(), (recipes) -> {
+                    return ImmutableMap.builder();
+                })).put(minecraftkey, irecipe);
             } catch (IllegalArgumentException | JsonParseException jsonparseexception) {
-                CraftingManager.LOGGER.error("Parsing error loading recipe {}", minecraftkey1, jsonparseexception);
-                this.e = true;
-            } catch (IOException ioexception) {
-                CraftingManager.LOGGER.error("Couldn't read custom advancement {} from {}", minecraftkey1, minecraftkey, ioexception);
-                this.e = true;
+                CraftingManager.LOGGER.error("Parsing error loading recipe {}", minecraftkey, jsonparseexception);
             }
         }
 
-        CraftingManager.LOGGER.info("Loaded {} recipes", this.recipes.size());
-    }
-
-    public void addRecipe(IRecipe<?> irecipe) {
-        Map<MinecraftKey, IRecipe<?>> map = (Map) this.recipes.get(irecipe.g());
-
-        if (map.containsKey(irecipe.getKey())) {
-            throw new IllegalStateException("Duplicate recipe ignored with ID " + irecipe.getKey());
-        } else {
-            map.put(irecipe.getKey(), irecipe);
-        }
+        this.recipes = (Map) map1.entrySet().stream().collect(ImmutableMap.toImmutableMap(Entry::getKey, (entry1) -> {
+            return ((Builder) entry1.getValue()).build();
+        }));
+        CraftingManager.LOGGER.info("Loaded {} recipes", map1.size());
     }
 
     public <C extends IInventory, T extends IRecipe<C>> Optional<T> craft(Recipes<T> recipes, C c0, World world) {
@@ -112,7 +74,7 @@ public class CraftingManager implements IResourcePackListener {
     }
 
     private <C extends IInventory, T extends IRecipe<C>> Map<MinecraftKey, IRecipe<C>> a(Recipes<T> recipes) {
-        return (Map) this.recipes.getOrDefault(recipes, Maps.newHashMap());
+        return (Map) this.recipes.getOrDefault(recipes, Collections.emptyMap());
     }
 
     public <C extends IInventory, T extends IRecipe<C>> NonNullList<ItemStack> c(Recipes<T> recipes, C c0, World world) {
@@ -155,17 +117,5 @@ public class CraftingManager implements IResourcePackListener {
         return ((RecipeSerializer) IRegistry.RECIPE_SERIALIZER.getOptional(new MinecraftKey(s)).orElseThrow(() -> {
             return new JsonSyntaxException("Invalid or unsupported recipe type '" + s + "'");
         })).a(minecraftkey, jsonobject);
-    }
-
-    public static void initializeRecipeMap(Map<Recipes<?>, Map<MinecraftKey, IRecipe<?>>> map) {
-        map.clear();
-        Iterator iterator = IRegistry.RECIPE_TYPE.iterator();
-
-        while (iterator.hasNext()) {
-            Recipes<?> recipes = (Recipes) iterator.next();
-
-            map.put(recipes, Maps.newHashMap());
-        }
-
     }
 }

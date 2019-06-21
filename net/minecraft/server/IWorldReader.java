@@ -94,96 +94,88 @@ public interface IWorldReader extends IIBlockAccess {
     }
 
     default boolean c(AxisAlignedBB axisalignedbb) {
-        return this.a((Entity) null, axisalignedbb, Collections.emptySet());
+        return this.b((Entity) null, axisalignedbb, Collections.emptySet());
     }
 
     default boolean getCubes(Entity entity) {
-        return this.a(entity, entity.getBoundingBox(), Collections.emptySet());
+        return this.b(entity, entity.getBoundingBox(), Collections.emptySet());
     }
 
     default boolean getCubes(Entity entity, AxisAlignedBB axisalignedbb) {
-        return this.a(entity, axisalignedbb, Collections.emptySet());
+        return this.b(entity, axisalignedbb, Collections.emptySet());
     }
 
-    default boolean a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
-        return this.b(entity, axisalignedbb, set).allMatch(VoxelShape::isEmpty);
+    default boolean b(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
+        return this.c(entity, axisalignedbb, set).allMatch(VoxelShape::isEmpty);
     }
 
-    default Stream<VoxelShape> a(@Nullable Entity entity, VoxelShape voxelshape, Set<Entity> set) {
+    default Stream<VoxelShape> a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
         return Stream.empty();
     }
 
-    default Stream<VoxelShape> b(@Nullable final Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
-        final VoxelShape voxelshape = VoxelShapes.a(axisalignedbb);
-        final int i = MathHelper.floor(voxelshape.b(EnumDirection.EnumAxis.X) - 1.0E-7D) - 1;
-        final int j = MathHelper.floor(voxelshape.c(EnumDirection.EnumAxis.X) + 1.0E-7D) + 1;
-        final int k = MathHelper.floor(voxelshape.b(EnumDirection.EnumAxis.Y) - 1.0E-7D) - 1;
-        final int l = MathHelper.floor(voxelshape.c(EnumDirection.EnumAxis.Y) + 1.0E-7D) + 1;
-        final int i1 = MathHelper.floor(voxelshape.b(EnumDirection.EnumAxis.Z) - 1.0E-7D) - 1;
-        final int j1 = MathHelper.floor(voxelshape.c(EnumDirection.EnumAxis.Z) + 1.0E-7D) + 1;
+    default Stream<VoxelShape> c(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
+        return Streams.concat(new Stream[]{this.b(entity, axisalignedbb), this.a(entity, axisalignedbb, set)});
+    }
+
+    default Stream<VoxelShape> b(@Nullable final Entity entity, AxisAlignedBB axisalignedbb) {
+        int i = MathHelper.floor(axisalignedbb.minX - 1.0E-7D) - 1;
+        int j = MathHelper.floor(axisalignedbb.maxX + 1.0E-7D) + 1;
+        int k = MathHelper.floor(axisalignedbb.minY - 1.0E-7D) - 1;
+        int l = MathHelper.floor(axisalignedbb.maxY + 1.0E-7D) + 1;
+        int i1 = MathHelper.floor(axisalignedbb.minZ - 1.0E-7D) - 1;
+        int j1 = MathHelper.floor(axisalignedbb.maxZ + 1.0E-7D) + 1;
         final VoxelShapeCollision voxelshapecollision = entity == null ? VoxelShapeCollision.a() : VoxelShapeCollision.a(entity);
         final CursorPosition cursorposition = new CursorPosition(i, k, i1, j, l, j1);
         final BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+        final VoxelShape voxelshape = VoxelShapes.a(axisalignedbb);
 
-        return Streams.concat(new Stream[]{StreamSupport.stream(new AbstractSpliterator<VoxelShape>(Long.MAX_VALUE, 0) {
-                    boolean a = entity == null;
+        return StreamSupport.stream(new AbstractSpliterator<VoxelShape>(Long.MAX_VALUE, 1280) {
+            boolean a = entity == null;
 
-                    public boolean tryAdvance(Consumer<? super VoxelShape> consumer) {
-                        if (!this.a) {
-                            this.a = true;
-                            VoxelShape voxelshape1 = IWorldReader.this.getWorldBorder().a();
-                            boolean flag = VoxelShapes.c(voxelshape1, VoxelShapes.a(entity.getBoundingBox().shrink(1.0E-7D)), OperatorBoolean.AND);
-                            boolean flag1 = VoxelShapes.c(voxelshape1, VoxelShapes.a(entity.getBoundingBox().g(1.0E-7D)), OperatorBoolean.AND);
+            public boolean tryAdvance(Consumer<? super VoxelShape> consumer) {
+                if (!this.a) {
+                    this.a = true;
+                    VoxelShape voxelshape1 = IWorldReader.this.getWorldBorder().a();
+                    boolean flag = VoxelShapes.c(voxelshape1, VoxelShapes.a(entity.getBoundingBox().shrink(1.0E-7D)), OperatorBoolean.AND);
+                    boolean flag1 = VoxelShapes.c(voxelshape1, VoxelShapes.a(entity.getBoundingBox().g(1.0E-7D)), OperatorBoolean.AND);
 
-                            if (!flag && flag1) {
-                                consumer.accept(voxelshape1);
-                                return true;
-                            }
-                        }
+                    if (!flag && flag1) {
+                        consumer.accept(voxelshape1);
+                        return true;
+                    }
+                }
 
-                        while (cursorposition.a()) {
-                            int k1 = cursorposition.b();
-                            int l1 = cursorposition.c();
-                            int i2 = cursorposition.d();
-                            int j2 = 0;
+                while (cursorposition.a()) {
+                    int k1 = cursorposition.b();
+                    int l1 = cursorposition.c();
+                    int i2 = cursorposition.d();
+                    int j2 = cursorposition.e();
 
-                            if (k1 == i || k1 == j) {
-                                ++j2;
-                            }
+                    if (j2 != 3) {
+                        int k2 = k1 >> 4;
+                        int l2 = i2 >> 4;
+                        IChunkAccess ichunkaccess = IWorldReader.this.getChunkAt(k2, l2, IWorldReader.this.O(), false);
 
-                            if (l1 == k || l1 == l) {
-                                ++j2;
-                            }
+                        if (ichunkaccess != null) {
+                            blockposition_mutableblockposition.d(k1, l1, i2);
+                            IBlockData iblockdata = ichunkaccess.getType(blockposition_mutableblockposition);
 
-                            if (i2 == i1 || i2 == j1) {
-                                ++j2;
-                            }
+                            if ((j2 != 1 || iblockdata.f()) && (j2 != 2 || iblockdata.getBlock() == Blocks.MOVING_PISTON)) {
+                                VoxelShape voxelshape2 = iblockdata.b((IBlockAccess) IWorldReader.this, blockposition_mutableblockposition, voxelshapecollision);
+                                VoxelShape voxelshape3 = voxelshape2.a((double) k1, (double) l1, (double) i2);
 
-                            if (j2 < 3) {
-                                int k2 = k1 >> 4;
-                                int l2 = i2 >> 4;
-                                IChunkAccess ichunkaccess = IWorldReader.this.getChunkAt(k2, l2, IWorldReader.this.O(), false);
-
-                                if (ichunkaccess != null) {
-                                    blockposition_mutableblockposition.d(k1, l1, i2);
-                                    IBlockData iblockdata = ichunkaccess.getType(blockposition_mutableblockposition);
-
-                                    if ((j2 != 1 || iblockdata.f()) && (j2 != 2 || iblockdata.getBlock() == Blocks.MOVING_PISTON)) {
-                                        VoxelShape voxelshape2 = IWorldReader.this.getType(blockposition_mutableblockposition).b((IBlockAccess) IWorldReader.this, blockposition_mutableblockposition, voxelshapecollision);
-                                        VoxelShape voxelshape3 = voxelshape2.a((double) k1, (double) l1, (double) i2);
-
-                                        if (VoxelShapes.c(voxelshape, voxelshape3, OperatorBoolean.AND)) {
-                                            consumer.accept(voxelshape3);
-                                            return true;
-                                        }
-                                    }
+                                if (VoxelShapes.c(voxelshape, voxelshape3, OperatorBoolean.AND)) {
+                                    consumer.accept(voxelshape3);
+                                    return true;
                                 }
                             }
                         }
-
-                        return false;
                     }
-                }, false), this.a(entity, voxelshape, set)});
+                }
+
+                return false;
+            }
+        }, false);
     }
 
     default boolean y(BlockPosition blockposition) {

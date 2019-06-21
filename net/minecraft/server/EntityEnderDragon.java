@@ -112,7 +112,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
 
             this.world.addParticle(Particles.EXPLOSION, this.locX + (double) f, this.locY + 2.0D + (double) f1, this.locZ + (double) f2, 0.0D, 0.0D, 0.0D);
         } else {
-            this.dW();
+            this.dX();
             Vec3D vec3d = this.getMot();
 
             f1 = 0.2F / (MathHelper.sqrt(b(vec3d)) * 10.0F + 1.0F);
@@ -310,7 +310,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
         return (float) d0;
     }
 
-    private void dW() {
+    private void dX() {
         if (this.currentEnderCrystal != null) {
             if (this.currentEnderCrystal.dead) {
                 this.currentEnderCrystal = null;
@@ -354,7 +354,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
                 double d4 = d2 * d2 + d3 * d3;
 
                 entity.f(d2 / d4 * 4.0D, 0.20000000298023224D, d3 / d4 * 4.0D);
-                if (!this.bQ.a().a() && ((EntityLiving) entity).cs() < entity.ticksLived - 2) {
+                if (!this.bQ.a().a() && ((EntityLiving) entity).ct() < entity.ticksLived - 2) {
                     entity.damageEntity(DamageSource.mobAttack(this), 5.0F);
                     this.a((EntityLiving) this, entity);
                 }
@@ -397,7 +397,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
                     Block block = iblockdata.getBlock();
 
                     if (!iblockdata.isAir() && iblockdata.getMaterial() != Material.FIRE) {
-                        if (this.world.getGameRules().getBoolean("mobGriefing") && !TagsBlock.DRAGON_IMMUNE.isTagged(block)) {
+                        if (this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) && !TagsBlock.DRAGON_IMMUNE.isTagged(block)) {
                             flag1 = this.world.a(blockposition, false) || flag1;
                         } else {
                             flag = true;
@@ -471,7 +471,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
     }
 
     @Override
-    protected void cn() {
+    protected void co() {
         if (this.bP != null) {
             this.bP.b(this);
         }
@@ -485,7 +485,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
             this.world.addParticle(Particles.EXPLOSION_EMITTER, this.locX + (double) f, this.locY + 2.0D + (double) f1, this.locZ + (double) f2, 0.0D, 0.0D, 0.0D);
         }
 
-        boolean flag = this.world.getGameRules().getBoolean("doMobLoot");
+        boolean flag = this.world.getGameRules().getBoolean(GameRules.DO_MOB_LOOT);
         short short0 = 500;
 
         if (this.bP != null && !this.bP.d()) {
@@ -749,7 +749,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
     @Override
     protected void checkDespawn() {}
 
-    public EntityComplexPart[] dT() {
+    public EntityComplexPart[] dU() {
         return this.children;
     }
 
@@ -798,7 +798,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
         } else {
             BlockPosition blockposition = this.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.a);
 
-            f1 = Math.max(MathHelper.sqrt(blockposition.a(this.ch(), true)) / 4.0F, 1.0F);
+            f1 = Math.max(MathHelper.sqrt(blockposition.a(this.ci(), true)) / 4.0F, 1.0F);
             float f3 = 6.0F / f1;
             float f4 = this.pitch;
             float f5 = 1.5F;

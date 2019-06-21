@@ -53,8 +53,8 @@ public interface GeneratorAccess extends IEntityAccess, IWorldReader, VirtualLev
     }
 
     @Override
-    default Stream<VoxelShape> a(@Nullable Entity entity, VoxelShape voxelshape, Set<Entity> set) {
-        return IEntityAccess.super.a(entity, voxelshape, set);
+    default Stream<VoxelShape> a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
+        return IEntityAccess.super.a(entity, axisalignedbb, set);
     }
 
     @Override

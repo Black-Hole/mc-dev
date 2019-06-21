@@ -12,6 +12,11 @@ public class EnchantmentMending extends Enchantment {
     }
 
     @Override
+    public int b(int i) {
+        return this.a(i) + 50;
+    }
+
+    @Override
     public boolean isTreasure() {
         return true;
     }

@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class SensorVillagerHostiles extends Sensor<EntityLiving> {
 
-    private static final ImmutableMap<EntityTypes<?>, Float> a = ImmutableMap.builder().put(EntityTypes.ZOMBIE, 8.0F).put(EntityTypes.EVOKER, 12.0F).put(EntityTypes.VINDICATOR, 10.0F).put(EntityTypes.VEX, 8.0F).put(EntityTypes.PILLAGER, 15.0F).put(EntityTypes.ILLUSIONER, 12.0F).put(EntityTypes.RAVAGER, 12.0F).put(EntityTypes.HUSK, 8.0F).build();
+    private static final ImmutableMap<EntityTypes<?>, Float> a = ImmutableMap.builder().put(EntityTypes.DROWNED, 8.0F).put(EntityTypes.EVOKER, 12.0F).put(EntityTypes.HUSK, 8.0F).put(EntityTypes.ILLUSIONER, 12.0F).put(EntityTypes.PILLAGER, 15.0F).put(EntityTypes.RAVAGER, 12.0F).put(EntityTypes.VEX, 8.0F).put(EntityTypes.VINDICATOR, 10.0F).put(EntityTypes.ZOMBIE, 8.0F).put(EntityTypes.ZOMBIE_VILLAGER, 8.0F).build();
 
     public SensorVillagerHostiles() {}
 

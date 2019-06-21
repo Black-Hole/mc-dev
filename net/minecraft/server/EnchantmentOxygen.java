@@ -12,6 +12,11 @@ public class EnchantmentOxygen extends Enchantment {
     }
 
     @Override
+    public int b(int i) {
+        return this.a(i) + 30;
+    }
+
+    @Override
     public int getMaxLevel() {
         return 3;
     }

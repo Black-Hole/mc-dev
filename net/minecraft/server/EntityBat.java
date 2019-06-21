@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
+import java.util.Random;
 import javax.annotation.Nullable;
 
 public class EntityBat extends EntityAmbient {
@@ -27,8 +28,8 @@ public class EntityBat extends EntityAmbient {
     }
 
     @Override
-    protected float cU() {
-        return super.cU() * 0.95F;
+    protected float cV() {
+        return super.cV() * 0.95F;
     }
 
     @Nullable
@@ -116,7 +117,7 @@ public class EntityBat extends EntityAmbient {
                 this.d = null;
             }
 
-            if (this.d == null || this.random.nextInt(30) == 0 || this.d.a((IPosition) this.ch(), 2.0D)) {
+            if (this.d == null || this.random.nextInt(30) == 0 || this.d.a((IPosition) this.ci(), 2.0D)) {
                 this.d = new BlockPosition(this.locX + (double) this.random.nextInt(7) - (double) this.random.nextInt(7), this.locY + (double) this.random.nextInt(6) - 2.0D, this.locZ + (double) this.random.nextInt(7) - (double) this.random.nextInt(7));
             }
 
@@ -180,27 +181,24 @@ public class EntityBat extends EntityAmbient {
         nbttagcompound.setByte("BatFlags", (Byte) this.datawatcher.get(EntityBat.b));
     }
 
-    @Override
-    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().minY, this.locZ);
-
+    public static boolean b(EntityTypes<EntityBat> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
         if (blockposition.getY() >= generatoraccess.getSeaLevel()) {
             return false;
         } else {
             int i = generatoraccess.getLightLevel(blockposition);
             byte b0 = 4;
 
-            if (this.dT()) {
+            if (dU()) {
                 b0 = 7;
-            } else if (this.random.nextBoolean()) {
+            } else if (random.nextBoolean()) {
                 return false;
             }
 
-            return i > this.random.nextInt(b0) ? false : super.a(generatoraccess, enummobspawn);
+            return i > random.nextInt(b0) ? false : a(entitytypes, generatoraccess, enummobspawn, blockposition, random);
         }
     }
 
-    private boolean dT() {
+    private static boolean dU() {
         LocalDate localdate = LocalDate.now();
         int i = localdate.get(ChronoField.DAY_OF_MONTH);
         int j = localdate.get(ChronoField.MONTH_OF_YEAR);

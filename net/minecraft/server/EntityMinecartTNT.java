@@ -63,7 +63,7 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
 
         if (!damagesource.p() && !damagesource.isExplosion() && d0 < 0.009999999776482582D) {
             super.a(damagesource);
-            if (!damagesource.isExplosion() && this.world.getGameRules().getBoolean("doEntityDrops")) {
+            if (!damagesource.isExplosion() && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
                 this.a((IMaterial) Blocks.TNT);
             }
 

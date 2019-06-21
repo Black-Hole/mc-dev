@@ -7,18 +7,13 @@ public abstract class EntityWaterAnimal extends EntityCreature {
     }
 
     @Override
-    public boolean cl() {
+    public boolean cm() {
         return true;
     }
 
     @Override
     public EnumMonsterType getMonsterType() {
         return EnumMonsterType.e;
-    }
-
-    @Override
-    protected boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition) {
-        return generatoraccess.getFluid(blockposition).a(TagsFluid.WATER);
     }
 
     @Override
@@ -42,7 +37,7 @@ public abstract class EntityWaterAnimal extends EntityCreature {
     }
 
     protected void a(int i) {
-        if (this.isAlive() && !this.au()) {
+        if (this.isAlive() && !this.av()) {
             this.setAirTicks(i - 1);
             if (this.getAirTicks() == -20) {
                 this.setAirTicks(0);
@@ -63,7 +58,7 @@ public abstract class EntityWaterAnimal extends EntityCreature {
     }
 
     @Override
-    public boolean bD() {
+    public boolean bE() {
         return false;
     }
 

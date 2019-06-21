@@ -1,18 +1,19 @@
 package net.minecraft.server;
 
+import java.util.Random;
+
 public class EntityZombieHusk extends EntityZombie {
 
     public EntityZombieHusk(EntityTypes<? extends EntityZombieHusk> entitytypes, World world) {
         super(entitytypes, world);
     }
 
-    @Override
-    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        return super.a(generatoraccess, enummobspawn) && (enummobspawn == EnumMobSpawn.SPAWNER || generatoraccess.f(new BlockPosition(this)));
+    public static boolean b(EntityTypes<EntityZombieHusk> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        return c(entitytypes, generatoraccess, enummobspawn, blockposition, random) && (enummobspawn == EnumMobSpawn.SPAWNER || generatoraccess.f(blockposition));
     }
 
     @Override
-    protected boolean J_() {
+    protected boolean I_() {
         return false;
     }
 

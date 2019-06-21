@@ -105,7 +105,7 @@ public class EntityItem extends Entity {
                 ++this.age;
             }
 
-            this.impulse |= this.ax();
+            this.impulse |= this.ay();
             if (!this.world.isClientSide) {
                 double d0 = this.getMot().d(vec3d).g();
 
@@ -288,7 +288,7 @@ public class EntityItem extends Entity {
     }
 
     @Override
-    public boolean br() {
+    public boolean bs() {
         return false;
     }
 

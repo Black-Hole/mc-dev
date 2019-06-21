@@ -48,7 +48,7 @@ public class CustomFunction {
                 }
 
                 try {
-                    ParseResults<CommandListenerWrapper> parseresults = customfunctiondata.a().getCommandDispatcher().a().parse(stringreader, customfunctiondata.f());
+                    ParseResults<CommandListenerWrapper> parseresults = customfunctiondata.a().getCommandDispatcher().a().parse(stringreader, customfunctiondata.g());
 
                     if (parseresults.getReader().canRead()) {
                         if (parseresults.getExceptions().size() == 1) {

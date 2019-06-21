@@ -149,7 +149,7 @@ public class BlockFluids extends Block implements IFluidSource {
     @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
         if (this.b.a(TagsFluid.LAVA)) {
-            entity.aB();
+            entity.aC();
         }
 
     }

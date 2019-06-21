@@ -30,7 +30,7 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
             return false;
         } else {
             if (!this.g) {
-                if (this.a.cv() >= 100) {
+                if (this.a.cw() >= 100) {
                     return false;
                 }
 

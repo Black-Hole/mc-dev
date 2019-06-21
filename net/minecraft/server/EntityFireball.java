@@ -49,7 +49,7 @@ public abstract class EntityFireball extends Entity {
             this.die();
         } else {
             super.tick();
-            if (this.L_()) {
+            if (this.K_()) {
                 this.setOnFire(1);
             }
 
@@ -84,7 +84,7 @@ public abstract class EntityFireball extends Entity {
         }
     }
 
-    protected boolean L_() {
+    protected boolean K_() {
         return true;
     }
 
@@ -136,7 +136,7 @@ public abstract class EntityFireball extends Entity {
     }
 
     @Override
-    public float aR() {
+    public float aS() {
         return 1.0F;
     }
 
@@ -165,7 +165,7 @@ public abstract class EntityFireball extends Entity {
     }
 
     @Override
-    public float aE() {
+    public float aF() {
         return 1.0F;
     }
 

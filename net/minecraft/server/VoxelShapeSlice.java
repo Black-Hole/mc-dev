@@ -6,7 +6,7 @@ public class VoxelShapeSlice extends VoxelShape {
 
     private final VoxelShape b;
     private final EnumDirection.EnumAxis c;
-    private final DoubleList d = new VoxelShapeCubePoint(1);
+    private static final DoubleList d = new VoxelShapeCubePoint(1);
 
     public VoxelShapeSlice(VoxelShape voxelshape, EnumDirection.EnumAxis enumdirection_enumaxis, int i) {
         super(a(voxelshape.a, enumdirection_enumaxis, i));
@@ -20,6 +20,6 @@ public class VoxelShapeSlice extends VoxelShape {
 
     @Override
     protected DoubleList a(EnumDirection.EnumAxis enumdirection_enumaxis) {
-        return enumdirection_enumaxis == this.c ? this.d : this.b.a(enumdirection_enumaxis);
+        return enumdirection_enumaxis == this.c ? VoxelShapeSlice.d : this.b.a(enumdirection_enumaxis);
     }
 }

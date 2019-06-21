@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Random;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
@@ -8,11 +9,11 @@ public class EntityOcelot extends EntityAnimal {
     private static final RecipeItemStack bz = RecipeItemStack.a(Items.COD, Items.SALMON);
     private static final DataWatcherObject<Boolean> bA = DataWatcher.a(EntityOcelot.class, DataWatcherRegistry.i);
     private EntityOcelot.a<EntityHuman> bB;
-    private EntityOcelot.b bD;
+    private EntityOcelot.b bC;
 
     public EntityOcelot(EntityTypes<? extends EntityOcelot> entitytypes, World world) {
         super(entitytypes, world);
-        this.dV();
+        this.dW();
     }
 
     private boolean isTrusting() {
@@ -21,7 +22,7 @@ public class EntityOcelot extends EntityAnimal {
 
     private void setTrusting(boolean flag) {
         this.datawatcher.set(EntityOcelot.bA, flag);
-        this.dV();
+        this.dW();
     }
 
     @Override
@@ -44,9 +45,9 @@ public class EntityOcelot extends EntityAnimal {
 
     @Override
     protected void initPathfinder() {
-        this.bD = new EntityOcelot.b(this, 0.6D, EntityOcelot.bz, true);
+        this.bC = new EntityOcelot.b(this, 0.6D, EntityOcelot.bz, true);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(3, this.bD);
+        this.goalSelector.a(3, this.bC);
         this.goalSelector.a(7, new PathfinderGoalLeapAtTarget(this, 0.3F));
         this.goalSelector.a(8, new PathfinderGoalOcelotAttack(this));
         this.goalSelector.a(9, new PathfinderGoalBreed(this, 0.8D));
@@ -128,7 +129,7 @@ public class EntityOcelot extends EntityAnimal {
     public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if ((this.bD == null || this.bD.h()) && !this.isTrusting() && this.i(itemstack) && entityhuman.h((Entity) this) < 9.0D) {
+        if ((this.bC == null || this.bC.h()) && !this.isTrusting() && this.i(itemstack) && entityhuman.h((Entity) this) < 9.0D) {
             this.a(entityhuman, itemstack);
             if (!this.world.isClientSide) {
                 if (this.random.nextInt(3) == 0) {
@@ -164,7 +165,7 @@ public class EntityOcelot extends EntityAnimal {
 
     }
 
-    protected void dV() {
+    protected void dW() {
         if (this.bB == null) {
             this.bB = new EntityOcelot.a<>(this, EntityHuman.class, 16.0F, 0.8D, 1.33D);
         }
@@ -186,9 +187,8 @@ public class EntityOcelot extends EntityAnimal {
         return EntityOcelot.bz.test(itemstack);
     }
 
-    @Override
-    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        return this.random.nextInt(3) != 0;
+    public static boolean c(EntityTypes<EntityOcelot> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        return random.nextInt(3) != 0;
     }
 
     @Override
@@ -211,7 +211,7 @@ public class EntityOcelot extends EntityAnimal {
         return false;
     }
 
-    protected void dW() {
+    protected void dX() {
         for (int i = 0; i < 2; ++i) {
             EntityOcelot entityocelot = (EntityOcelot) EntityTypes.OCELOT.a(this.world);
 
@@ -227,7 +227,7 @@ public class EntityOcelot extends EntityAnimal {
     public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         groupdataentity = super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
         if (generatoraccess.getRandom().nextInt(7) == 0) {
-            this.dW();
+            this.dX();
         }
 
         return groupdataentity;

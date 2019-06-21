@@ -8,7 +8,7 @@ public interface IHopper extends IInventory {
     VoxelShape b = Block.a(0.0D, 16.0D, 0.0D, 16.0D, 32.0D, 16.0D);
     VoxelShape c = VoxelShapes.a(IHopper.a, IHopper.b);
 
-    default VoxelShape O_() {
+    default VoxelShape N_() {
         return IHopper.c;
     }
 

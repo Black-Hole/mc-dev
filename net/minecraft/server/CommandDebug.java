@@ -48,10 +48,10 @@ public class CommandDebug {
             File file = new File(minecraftserver.d("debug"), "profile-results-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + ".txt");
 
             methodprofilerresults.a(file);
-            float f = (float) methodprofilerresults.f() / 1.0E9F;
-            float f1 = (float) methodprofilerresults.g() / f;
+            float f = (float) methodprofilerresults.g() / 1.0E9F;
+            float f1 = (float) methodprofilerresults.f() / f;
 
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.stopped", new Object[]{String.format(Locale.ROOT, "%.2f", f), methodprofilerresults.g(), String.format("%.2f", f1)}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.stopped", new Object[]{String.format(Locale.ROOT, "%.2f", f), methodprofilerresults.f(), String.format("%.2f", f1)}), true);
             return MathHelper.d(f1);
         }
     }

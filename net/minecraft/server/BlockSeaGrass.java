@@ -26,7 +26,7 @@ public class BlockSeaGrass extends BlockPlant implements IBlockFragilePlantEleme
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
-        return fluid.a(TagsFluid.WATER) && fluid.f() == 8 ? super.getPlacedState(blockactioncontext) : null;
+        return fluid.a(TagsFluid.WATER) && fluid.g() == 8 ? super.getPlacedState(blockactioncontext) : null;
     }
 
     @Override

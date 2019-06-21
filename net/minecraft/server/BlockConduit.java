@@ -63,7 +63,7 @@ public class BlockConduit extends BlockTileEntity implements IBlockWaterlogged {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
-        return (IBlockData) this.getBlockData().set(BlockConduit.a, fluid.a(TagsFluid.WATER) && fluid.f() == 8);
+        return (IBlockData) this.getBlockData().set(BlockConduit.a, fluid.a(TagsFluid.WATER) && fluid.g() == 8);
     }
 
     @Override

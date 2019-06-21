@@ -138,7 +138,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
             b0 = 2;
         }
 
-        boolean flag1 = this.random.nextFloat() <= raid.v();
+        boolean flag1 = this.random.nextFloat() <= raid.w();
 
         if (flag1) {
             Map<Enchantment, Integer> map = Maps.newHashMap();
@@ -153,7 +153,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
     static class b extends PathfinderGoalNearestAttackableTarget<EntityLiving> {
 
         public b(EntityVindicator entityvindicator) {
-            super(entityvindicator, EntityLiving.class, 0, true, true, EntityLiving::du);
+            super(entityvindicator, EntityLiving.class, 0, true, true, EntityLiving::dv);
         }
 
         @Override
@@ -164,7 +164,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
         @Override
         public void c() {
             super.c();
-            this.e.m(0);
+            this.e.n(0);
         }
     }
 
@@ -192,7 +192,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
         @Override
         public void c() {
             super.c();
-            this.entity.m(0);
+            this.entity.n(0);
         }
     }
 

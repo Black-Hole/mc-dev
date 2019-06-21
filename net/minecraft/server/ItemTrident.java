@@ -7,7 +7,7 @@ public class ItemTrident extends Item {
     public ItemTrident(Item.Info item_info) {
         super(item_info);
         this.a(new MinecraftKey("throwing"), (itemstack, world, entityliving) -> {
-            return entityliving != null && entityliving.isHandRaised() && entityliving.dl() == itemstack ? 1.0F : 0.0F;
+            return entityliving != null && entityliving.isHandRaised() && entityliving.dm() == itemstack ? 1.0F : 0.0F;
         });
     }
 
@@ -70,7 +70,7 @@ public class ItemTrident extends Item {
                         f3 *= f6 / f5;
                         f4 *= f6 / f5;
                         entityhuman.f((double) f2, (double) f3, (double) f4);
-                        entityhuman.p(20);
+                        entityhuman.q(20);
                         if (entityhuman.onGround) {
                             float f7 = 1.1999999F;
 

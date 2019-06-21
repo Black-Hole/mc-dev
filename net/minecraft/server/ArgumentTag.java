@@ -68,7 +68,7 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
     }
 
     private static Tag<CustomFunction> d(CommandContext<CommandListenerWrapper> commandcontext, MinecraftKey minecraftkey) throws CommandSyntaxException {
-        Tag<CustomFunction> tag = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getFunctionData().g().a(minecraftkey);
+        Tag<CustomFunction> tag = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getFunctionData().h().a(minecraftkey);
 
         if (tag == null) {
             throw ArgumentTag.b.create(minecraftkey.toString());

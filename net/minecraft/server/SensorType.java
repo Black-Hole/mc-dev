@@ -13,14 +13,15 @@ public class SensorType<U extends Sensor<?>> {
     public static final SensorType<SensorVillagerHostiles> g = a("villager_hostiles", SensorVillagerHostiles::new);
     public static final SensorType<SensorVillagerBabies> h = a("villager_babies", SensorVillagerBabies::new);
     public static final SensorType<SensorSecondaryPlaces> i = a("secondary_pois", SensorSecondaryPlaces::new);
-    private final Supplier<U> j;
+    public static final SensorType<SensorGolemLastSeen> j = a("golem_last_seen", SensorGolemLastSeen::new);
+    private final Supplier<U> k;
 
     private SensorType(Supplier<U> supplier) {
-        this.j = supplier;
+        this.k = supplier;
     }
 
     public U a() {
-        return (Sensor) this.j.get();
+        return (Sensor) this.k.get();
     }
 
     private static <U extends Sensor<?>> SensorType<U> a(String s, Supplier<U> supplier) {

@@ -1,11 +1,17 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
@@ -23,7 +29,7 @@ public class Tags<T> {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson b = new Gson();
     private static final int c = ".json".length();
-    private final Map<MinecraftKey, Tag<T>> d = Maps.newHashMap();
+    private Map<MinecraftKey, Tag<T>> d = ImmutableMap.of();
     private final Function<MinecraftKey, Optional<T>> e;
     private final String f;
     private final boolean g;
@@ -34,14 +40,6 @@ public class Tags<T> {
         this.f = s;
         this.g = flag;
         this.h = s1;
-    }
-
-    public void a(Tag<T> tag) {
-        if (this.d.containsKey(tag.c())) {
-            throw new IllegalArgumentException("Duplicate " + this.h + " tag '" + tag.c() + "'");
-        } else {
-            this.d.put(tag.c(), tag);
-        }
     }
 
     @Nullable
@@ -57,10 +55,6 @@ public class Tags<T> {
 
     public Collection<MinecraftKey> a() {
         return this.d.keySet();
-    }
-
-    public void b() {
-        this.d.clear();
     }
 
     public CompletableFuture<Map<MinecraftKey, Tag.a<T>>> a(IResourceManager iresourcemanager, Executor executor) {
@@ -82,16 +76,58 @@ public class Tags<T> {
                         IResource iresource = (IResource) iterator1.next();
 
                         try {
-                            JsonObject jsonobject = (JsonObject) ChatDeserializer.a(Tags.b, IOUtils.toString(iresource.b(), StandardCharsets.UTF_8), JsonObject.class);
+                            InputStream inputstream = iresource.b();
+                            Throwable throwable = null;
 
-                            if (jsonobject == null) {
-                                Tags.LOGGER.error("Couldn't load {} tag list {} from {} in data pack {} as it's empty or null", this.h, minecraftkey1, minecraftkey, iresource.d());
-                            } else {
-                                ((Tag.a) map.computeIfAbsent(minecraftkey1, (minecraftkey2) -> {
-                                    return (Tag.a) SystemUtils.a((Object) Tag.a.a(), (tag_a) -> {
-                                        tag_a.a(this.g);
-                                    });
-                                })).a(this.e, jsonobject);
+                            try {
+                                BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(inputstream, StandardCharsets.UTF_8));
+                                Throwable throwable1 = null;
+
+                                try {
+                                    JsonObject jsonobject = (JsonObject) ChatDeserializer.a(Tags.b, (Reader) bufferedreader, JsonObject.class);
+
+                                    if (jsonobject == null) {
+                                        Tags.LOGGER.error("Couldn't load {} tag list {} from {} in data pack {} as it's empty or null", this.h, minecraftkey1, minecraftkey, iresource.d());
+                                    } else {
+                                        ((Tag.a) map.computeIfAbsent(minecraftkey1, (minecraftkey2) -> {
+                                            return (Tag.a) SystemUtils.a((Object) Tag.a.a(), (tag_a) -> {
+                                                tag_a.a(this.g);
+                                            });
+                                        })).a(this.e, jsonobject);
+                                    }
+                                } catch (Throwable throwable2) {
+                                    throwable1 = throwable2;
+                                    throw throwable2;
+                                } finally {
+                                    if (bufferedreader != null) {
+                                        if (throwable1 != null) {
+                                            try {
+                                                bufferedreader.close();
+                                            } catch (Throwable throwable3) {
+                                                throwable1.addSuppressed(throwable3);
+                                            }
+                                        } else {
+                                            bufferedreader.close();
+                                        }
+                                    }
+
+                                }
+                            } catch (Throwable throwable4) {
+                                throwable = throwable4;
+                                throw throwable4;
+                            } finally {
+                                if (inputstream != null) {
+                                    if (throwable != null) {
+                                        try {
+                                            inputstream.close();
+                                        } catch (Throwable throwable5) {
+                                            throwable.addSuppressed(throwable5);
+                                        }
+                                    } else {
+                                        inputstream.close();
+                                    }
+                                }
+
                             }
                         } catch (RuntimeException | IOException ioexception) {
                             Tags.LOGGER.error("Couldn't read {} tag list {} from {} in data pack {}", this.h, minecraftkey1, minecraftkey, iresource.d(), ioexception);
@@ -109,47 +145,45 @@ public class Tags<T> {
     }
 
     public void a(Map<MinecraftKey, Tag.a<T>> map) {
-        while (true) {
-            if (!map.isEmpty()) {
-                boolean flag = false;
-                Iterator iterator = map.entrySet().iterator();
+        HashMap hashmap = Maps.newHashMap();
 
-                Entry entry;
+        while (!map.isEmpty()) {
+            boolean flag = false;
+            Iterator iterator = map.entrySet().iterator();
 
-                while (iterator.hasNext()) {
-                    entry = (Entry) iterator.next();
-                    if (((Tag.a) entry.getValue()).a(this::a)) {
-                        flag = true;
-                        this.a(((Tag.a) entry.getValue()).b((MinecraftKey) entry.getKey()));
-                        iterator.remove();
-                    }
-                }
+            while (iterator.hasNext()) {
+                Entry<MinecraftKey, Tag.a<T>> entry = (Entry) iterator.next();
+                Tag.a<T> tag_a = (Tag.a) entry.getValue();
 
-                if (flag) {
-                    continue;
-                }
+                hashmap.getClass();
+                if (tag_a.a(hashmap::get)) {
+                    flag = true;
+                    MinecraftKey minecraftkey = (MinecraftKey) entry.getKey();
 
-                iterator = map.entrySet().iterator();
-
-                while (iterator.hasNext()) {
-                    entry = (Entry) iterator.next();
-                    Tags.LOGGER.error("Couldn't load {} tag {} as it either references another tag that doesn't exist, or ultimately references itself", this.h, entry.getKey());
+                    hashmap.put(minecraftkey, tag_a.b(minecraftkey));
+                    iterator.remove();
                 }
             }
 
-            Iterator iterator1 = map.entrySet().iterator();
-
-            while (iterator1.hasNext()) {
-                Entry<MinecraftKey, Tag.a<T>> entry1 = (Entry) iterator1.next();
-
-                this.a(((Tag.a) entry1.getValue()).b((MinecraftKey) entry1.getKey()));
+            if (!flag) {
+                map.forEach((minecraftkey1, tag_a1) -> {
+                    Tags.LOGGER.error("Couldn't load {} tag {} as it either references another tag that doesn't exist, or ultimately references itself", this.h, minecraftkey1);
+                });
+                break;
             }
-
-            return;
         }
+
+        map.forEach((minecraftkey1, tag_a1) -> {
+            Tag tag = (Tag) hashmap.put(minecraftkey1, tag_a1.b(minecraftkey1));
+        });
+        this.b((Map) hashmap);
     }
 
-    public Map<MinecraftKey, Tag<T>> c() {
+    protected void b(Map<MinecraftKey, Tag<T>> map) {
+        this.d = ImmutableMap.copyOf(map);
+    }
+
+    public Map<MinecraftKey, Tag<T>> b() {
         return this.d;
     }
 }

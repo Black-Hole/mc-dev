@@ -193,7 +193,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         @Override
         public void e() {
             if (EntityIllagerWizard.this.getGoalTarget() != null) {
-                EntityIllagerWizard.this.getControllerLook().a(EntityIllagerWizard.this.getGoalTarget(), (float) EntityIllagerWizard.this.dA(), (float) EntityIllagerWizard.this.M());
+                EntityIllagerWizard.this.getControllerLook().a(EntityIllagerWizard.this.getGoalTarget(), (float) EntityIllagerWizard.this.dB(), (float) EntityIllagerWizard.this.M());
             }
 
         }

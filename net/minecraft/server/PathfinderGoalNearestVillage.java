@@ -52,7 +52,7 @@ public class PathfinderGoalNearestVillage extends PathfinderGoal {
         if (this.c != null) {
             NavigationAbstract navigationabstract = this.a.getNavigation();
 
-            if (navigationabstract.n() && !this.c.a((IPosition) this.a.ch(), 10.0D)) {
+            if (navigationabstract.n() && !this.c.a((IPosition) this.a.ci(), 10.0D)) {
                 Vec3D vec3d = new Vec3D(this.c);
                 Vec3D vec3d1 = new Vec3D(this.a.locX, this.a.locY, this.a.locZ);
                 Vec3D vec3d2 = vec3d1.d(vec3d);

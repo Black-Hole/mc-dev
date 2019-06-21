@@ -24,7 +24,7 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     @Override
-    public double aN() {
+    public double aO() {
         return 0.1D;
     }
 
@@ -96,15 +96,9 @@ public class EntitySilverfish extends EntityMonster {
         return BlockMonsterEggs.j(iworldreader.getType(blockposition.down())) ? 10.0F : super.a(blockposition, iworldreader);
     }
 
-    @Override
-    protected boolean I_() {
-        return true;
-    }
-
-    @Override
-    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        if (super.a(generatoraccess, enummobspawn)) {
-            EntityHuman entityhuman = this.world.a(EntitySilverfish.b, (EntityLiving) this);
+    public static boolean b(EntityTypes<EntitySilverfish> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        if (d(entitytypes, generatoraccess, enummobspawn, blockposition, random)) {
+            EntityHuman entityhuman = generatoraccess.a(EntitySilverfish.b, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
 
             return entityhuman == null;
         } else {
@@ -136,7 +130,7 @@ public class EntitySilverfish extends EntityMonster {
             } else {
                 Random random = this.a.getRandom();
 
-                if (this.a.world.getGameRules().getBoolean("mobGriefing") && random.nextInt(10) == 0) {
+                if (this.a.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) && random.nextInt(10) == 0) {
                     this.h = EnumDirection.a(random);
                     BlockPosition blockposition = (new BlockPosition(this.a.locX, this.a.locY + 0.5D, this.a.locZ)).shift(this.h);
                     IBlockData iblockdata = this.a.world.getType(blockposition);
@@ -213,7 +207,7 @@ public class EntitySilverfish extends EntityMonster {
                             Block block = iblockdata.getBlock();
 
                             if (block instanceof BlockMonsterEggs) {
-                                if (world.getGameRules().getBoolean("mobGriefing")) {
+                                if (world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
                                     world.b(blockposition1, true);
                                 } else {
                                     world.setTypeAndData(blockposition1, ((BlockMonsterEggs) block).d().getBlockData(), 3);

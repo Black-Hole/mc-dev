@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public abstract class EntityPerchable extends EntityTameableAnimal {
 
-    private int bD;
+    private int bC;
 
     protected EntityPerchable(EntityTypes<? extends EntityPerchable> entitytypes, World world) {
         super(entitytypes, world);
@@ -23,11 +23,11 @@ public abstract class EntityPerchable extends EntityTameableAnimal {
 
     @Override
     public void tick() {
-        ++this.bD;
+        ++this.bC;
         super.tick();
     }
 
-    public boolean eh() {
-        return this.bD > 100;
+    public boolean ei() {
+        return this.bC > 100;
     }
 }

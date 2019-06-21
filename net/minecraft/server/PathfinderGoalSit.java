@@ -21,7 +21,7 @@ public class PathfinderGoalSit extends PathfinderGoal {
     public boolean a() {
         if (!this.entity.isTamed()) {
             return false;
-        } else if (this.entity.au()) {
+        } else if (this.entity.av()) {
             return false;
         } else if (!this.entity.onGround) {
             return false;

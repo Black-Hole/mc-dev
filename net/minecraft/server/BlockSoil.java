@@ -66,7 +66,7 @@ public class BlockSoil extends Block {
 
     @Override
     public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
-        if (!world.isClientSide && world.random.nextFloat() < f - 0.5F && entity instanceof EntityLiving && (entity instanceof EntityHuman || world.getGameRules().getBoolean("mobGriefing")) && entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F) {
+        if (!world.isClientSide && world.random.nextFloat() < f - 0.5F && entity instanceof EntityLiving && (entity instanceof EntityHuman || world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) && entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F) {
             fade(world.getType(blockposition), world, blockposition);
         }
 

@@ -25,7 +25,7 @@ public class BehaviorHome extends Behavior<EntityLiving> {
             return true;
         }, new BlockPosition(entityliving), this.c + 1, VillagePlace.Occupancy.ANY);
 
-        if (optional.isPresent() && ((BlockPosition) optional.get()).a((IPosition) entityliving.ch(), (double) this.c)) {
+        if (optional.isPresent() && ((BlockPosition) optional.get()).a((IPosition) entityliving.ci(), (double) this.c)) {
             this.d = optional;
         } else {
             this.d = Optional.empty();
@@ -60,7 +60,7 @@ public class BehaviorHome extends Behavior<EntityLiving> {
             behaviorcontroller.removeMemory(MemoryModuleType.BREED_TARGET);
             behaviorcontroller.removeMemory(MemoryModuleType.INTERACTION_TARGET);
             behaviorcontroller.setMemory(MemoryModuleType.HIDING_PLACE, (Object) GlobalPos.create(worldserver.getWorldProvider().getDimensionManager(), (BlockPosition) optional.get()));
-            if (!((BlockPosition) optional.get()).a((IPosition) entityliving.ch(), (double) this.c)) {
+            if (!((BlockPosition) optional.get()).a((IPosition) entityliving.ci(), (double) this.c)) {
                 behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget((BlockPosition) optional.get(), this.a, this.c)));
             }
         }

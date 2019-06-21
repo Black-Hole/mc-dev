@@ -80,7 +80,7 @@ public class BlockFire extends Block {
 
     @Override
     public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (world.getGameRules().getBoolean("doFireTick")) {
+        if (world.getGameRules().getBoolean(GameRules.DO_FIRE_TICK)) {
             if (!iblockdata.canPlace(world, blockposition)) {
                 world.a(blockposition, false);
             }

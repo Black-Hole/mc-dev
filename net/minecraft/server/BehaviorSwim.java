@@ -14,7 +14,7 @@ public class BehaviorSwim extends Behavior<EntityInsentient> {
     }
 
     protected boolean a(WorldServer worldserver, EntityInsentient entityinsentient) {
-        return entityinsentient.isInWater() && entityinsentient.ce() > (double) this.a || entityinsentient.aC();
+        return entityinsentient.isInWater() && entityinsentient.cf() > (double) this.a || entityinsentient.aD();
     }
 
     protected boolean g(WorldServer worldserver, EntityInsentient entityinsentient, long i) {

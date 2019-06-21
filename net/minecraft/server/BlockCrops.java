@@ -125,7 +125,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
 
     @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
-        if (entity instanceof EntityRavager && world.getGameRules().getBoolean("mobGriefing")) {
+        if (entity instanceof EntityRavager && world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
             world.b(blockposition, true);
         }
 

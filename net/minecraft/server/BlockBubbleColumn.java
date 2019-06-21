@@ -56,7 +56,7 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
     public static boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
         Fluid fluid = generatoraccess.getFluid(blockposition);
 
-        return generatoraccess.getType(blockposition).getBlock() == Blocks.WATER && fluid.f() >= 8 && fluid.isSource();
+        return generatoraccess.getType(blockposition).getBlock() == Blocks.WATER && fluid.g() >= 8 && fluid.isSource();
     }
 
     private static boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {

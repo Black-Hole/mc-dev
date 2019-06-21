@@ -10,6 +10,6 @@ public class BehaviorHomeRaid extends BehaviorHome {
     protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
         Raid raid = worldserver.c_(new BlockPosition(entityliving));
 
-        return super.a(worldserver, entityliving) && raid != null && raid.u() && !raid.e() && !raid.f();
+        return super.a(worldserver, entityliving) && raid != null && raid.v() && !raid.e() && !raid.f();
     }
 }

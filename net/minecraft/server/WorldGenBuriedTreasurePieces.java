@@ -48,7 +48,8 @@ public class WorldGenBuriedTreasurePieces {
                         }
                     }
 
-                    return this.a(generatoraccess, structureboundingbox, random, new BlockPosition(this.n.a, blockposition_mutableblockposition.getY(), this.n.c), LootTables.G, (IBlockData) null);
+                    this.n = new StructureBoundingBox(blockposition_mutableblockposition.getX(), blockposition_mutableblockposition.getY(), blockposition_mutableblockposition.getZ(), blockposition_mutableblockposition.getX(), blockposition_mutableblockposition.getY(), blockposition_mutableblockposition.getZ());
+                    return this.a(generatoraccess, structureboundingbox, random, blockposition_mutableblockposition, LootTables.G, (IBlockData) null);
                 }
 
                 blockposition_mutableblockposition.e(0, -1, 0);

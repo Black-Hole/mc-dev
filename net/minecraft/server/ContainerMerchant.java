@@ -66,7 +66,7 @@ public class ContainerMerchant extends Container {
                 }
 
                 slot.a(itemstack1, itemstack);
-                this.j();
+                this.k();
             } else if (i != 0 && i != 1) {
                 if (i >= 3 && i < 30) {
                     if (!this.a(itemstack1, 30, 39, false)) {
@@ -95,11 +95,11 @@ public class ContainerMerchant extends Container {
         return itemstack;
     }
 
-    private void j() {
+    private void k() {
         if (!this.merchant.getWorld().isClientSide) {
             Entity entity = (Entity) this.merchant;
 
-            this.merchant.getWorld().a(entity.locX, entity.locY, entity.locZ, this.merchant.eb(), SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
+            this.merchant.getWorld().a(entity.locX, entity.locY, entity.locZ, this.merchant.ec(), SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
         }
 
     }
@@ -129,7 +129,7 @@ public class ContainerMerchant extends Container {
     }
 
     public void g(int i) {
-        if (this.h().size() > i) {
+        if (this.i().size() > i) {
             ItemStack itemstack = this.inventoryMerchant.getItem(0);
 
             if (!itemstack.isEmpty()) {
@@ -151,10 +151,10 @@ public class ContainerMerchant extends Container {
             }
 
             if (this.inventoryMerchant.getItem(0).isEmpty() && this.inventoryMerchant.getItem(1).isEmpty()) {
-                ItemStack itemstack2 = ((MerchantRecipe) this.h().get(i)).getBuyItem1();
+                ItemStack itemstack2 = ((MerchantRecipe) this.i().get(i)).getBuyItem1();
 
                 this.c(0, itemstack2);
-                ItemStack itemstack3 = ((MerchantRecipe) this.h().get(i)).getBuyItem2();
+                ItemStack itemstack3 = ((MerchantRecipe) this.i().get(i)).getBuyItem2();
 
                 this.c(1, itemstack3);
             }
@@ -190,7 +190,7 @@ public class ContainerMerchant extends Container {
         return itemstack.getItem() == itemstack1.getItem() && ItemStack.equals(itemstack, itemstack1);
     }
 
-    public MerchantRecipeList h() {
+    public MerchantRecipeList i() {
         return this.merchant.getOffers();
     }
 }

@@ -45,7 +45,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
     }
 
     @Override
-    public double aN() {
+    public double aO() {
         return -0.45D;
     }
 
@@ -61,7 +61,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         }
 
         if (this.isPatrolLeader()) {
-            this.setSlot(EnumItemSlot.HEAD, Raid.a);
+            this.setSlot(EnumItemSlot.HEAD, Raid.s());
             this.a(EnumItemSlot.HEAD, 2.0F);
         }
 
@@ -70,6 +70,10 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         }
 
         return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
+    }
+
+    public static boolean b(EntityTypes<? extends EntityMonsterPatrolling> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        return generatoraccess.getBrightness(EnumSkyBlock.BLOCK, blockposition) > 8 ? false : d(entitytypes, generatoraccess, enummobspawn, blockposition, random);
     }
 
     @Override
@@ -142,7 +146,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
             NavigationAbstract navigationabstract = this.a.getNavigation();
 
             if (navigationabstract.n()) {
-                if (flag && this.a.getPatrolTarget().a((IPosition) this.a.ch(), 10.0D)) {
+                if (flag && this.a.getPatrolTarget().a((IPosition) this.a.ci(), 10.0D)) {
                     this.a.ee();
                 } else {
                     Vec3D vec3d = new Vec3D(this.a.getPatrolTarget());

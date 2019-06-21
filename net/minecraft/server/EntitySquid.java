@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.Random;
+
 public class EntitySquid extends EntityWaterAnimal {
 
     public float b;
@@ -86,7 +88,7 @@ public class EntitySquid extends EntityWaterAnimal {
             }
         }
 
-        if (this.au()) {
+        if (this.av()) {
             if (this.bA < 3.1415927F) {
                 float f = this.bA / 3.1415927F;
 
@@ -136,7 +138,7 @@ public class EntitySquid extends EntityWaterAnimal {
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (super.damageEntity(damagesource, f) && this.getLastDamager() != null) {
-            this.dV();
+            this.dW();
             return true;
         } else {
             return false;
@@ -150,8 +152,8 @@ public class EntitySquid extends EntityWaterAnimal {
         return vec3d1;
     }
 
-    private void dV() {
-        this.a(SoundEffects.ENTITY_SQUID_SQUIRT, this.getSoundVolume(), this.cU());
+    private void dW() {
+        this.a(SoundEffects.ENTITY_SQUID_SQUIRT, this.getSoundVolume(), this.cV());
         Vec3D vec3d = this.f(new Vec3D(0.0D, -1.0D, 0.0D)).add(this.locX, this.locY, this.locZ);
 
         for (int i = 0; i < 30; ++i) {
@@ -168,9 +170,8 @@ public class EntitySquid extends EntityWaterAnimal {
         this.move(EnumMoveType.SELF, this.getMot());
     }
 
-    @Override
-    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        return this.locY > 45.0D && this.locY < (double) generatoraccess.getSeaLevel();
+    public static boolean b(EntityTypes<EntitySquid> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        return blockposition.getY() > 45 && blockposition.getY() < generatoraccess.getSeaLevel();
     }
 
     public void a(float f, float f1, float f2) {
@@ -257,7 +258,7 @@ public class EntitySquid extends EntityWaterAnimal {
 
         @Override
         public void e() {
-            int i = this.b.cv();
+            int i = this.b.cw();
 
             if (i > 100) {
                 this.b.a(0.0F, 0.0F, 0.0F);

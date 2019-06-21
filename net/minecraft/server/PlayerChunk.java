@@ -69,6 +69,10 @@ public class PlayerChunk {
         return this.entityTickingFuture;
     }
 
+    public CompletableFuture<Either<Chunk, PlayerChunk.Failure>> c() {
+        return this.fullChunkFuture;
+    }
+
     @Nullable
     public Chunk getChunk() {
         CompletableFuture<Either<Chunk, PlayerChunk.Failure>> completablefuture = this.a();
@@ -225,7 +229,7 @@ public class PlayerChunk {
         });
     }
 
-    public ChunkCoordIntPair h() {
+    public ChunkCoordIntPair i() {
         return this.location;
     }
 
@@ -233,7 +237,7 @@ public class PlayerChunk {
         return this.ticketLevel;
     }
 
-    public int j() {
+    public int k() {
         return this.n;
     }
 
@@ -319,7 +323,7 @@ public class PlayerChunk {
             this.entityTickingFuture = PlayerChunk.UNLOADED_CHUNK_FUTURE;
         }
 
-        this.w.a(this.location, this::j, this.ticketLevel, this::d);
+        this.w.a(this.location, this::k, this.ticketLevel, this::d);
         this.oldTicketLevel = this.ticketLevel;
     }
 
@@ -335,7 +339,7 @@ public class PlayerChunk {
         return this.hasBeenLoaded;
     }
 
-    public void l() {
+    public void m() {
         this.hasBeenLoaded = getChunkState(this.ticketLevel).isAtLeast(PlayerChunk.State.BORDER);
     }
 

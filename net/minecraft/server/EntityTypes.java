@@ -208,7 +208,7 @@ public class EntityTypes<T extends Entity> {
             axisalignedbb1 = axisalignedbb1.b(0.0D, -1.0D, 0.0D);
         }
 
-        Stream<VoxelShape> stream = iworldreader.b((Entity) null, axisalignedbb1, Collections.emptySet());
+        Stream<VoxelShape> stream = iworldreader.c((Entity) null, axisalignedbb1, Collections.emptySet());
 
         return 1.0D + VoxelShapes.a(EnumDirection.EnumAxis.Y, axisalignedbb, stream, flag ? -2.0D : -1.0D);
     }
@@ -218,7 +218,7 @@ public class EntityTypes<T extends Entity> {
             MinecraftServer minecraftserver = world.getMinecraftServer();
 
             if (minecraftserver != null && entity != null) {
-                if (world.isClientSide || !entity.bS() || entityhuman != null && minecraftserver.getPlayerList().isOp(entityhuman.getProfile())) {
+                if (world.isClientSide || !entity.bT() || entityhuman != null && minecraftserver.getPlayerList().isOp(entityhuman.getProfile())) {
                     NBTTagCompound nbttagcompound1 = entity.save(new NBTTagCompound());
                     UUID uuid = entity.getUniqueID();
 

@@ -56,7 +56,7 @@ public class EntityMinecartMobSpawner extends EntityMinecartAbstract {
     }
 
     @Override
-    public boolean bS() {
+    public boolean bT() {
         return true;
     }
 }

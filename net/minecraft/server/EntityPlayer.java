@@ -79,15 +79,17 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                 i = 1;
             }
 
-            int k = (i * 2 + 1) * (i * 2 + 1);
-            int l = this.s(k);
-            int i1 = (new Random()).nextInt(k);
+            long k = (long) (i * 2 + 1);
+            long l = k * k;
+            int i1 = l > 2147483647L ? Integer.MAX_VALUE : (int) l;
+            int j1 = this.t(i1);
+            int k1 = (new Random()).nextInt(i1);
 
-            for (int j1 = 0; j1 < k; ++j1) {
-                int k1 = (i1 + l * j1) % k;
-                int l1 = k1 % (i * 2 + 1);
-                int i2 = k1 / (i * 2 + 1);
-                BlockPosition blockposition1 = worldserver.getWorldProvider().a(blockposition.getX() + l1 - i, blockposition.getZ() + i2 - i, false);
+            for (int l1 = 0; l1 < i1; ++l1) {
+                int i2 = (k1 + j1 * l1) % i1;
+                int j2 = i2 % (i * 2 + 1);
+                int k2 = i2 / (i * 2 + 1);
+                BlockPosition blockposition1 = worldserver.getWorldProvider().a(blockposition.getX() + j2 - i, blockposition.getZ() + k2 - i, false);
 
                 if (blockposition1 != null) {
                     this.setPositionRotation(blockposition1, 0.0F, 0.0F);
@@ -106,7 +108,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     }
 
-    private int s(int i) {
+    private int t(int i) {
         return i <= 16 ? i - 1 : 17;
     }
 
@@ -133,7 +135,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
 
         if (this.isSleeping()) {
-            this.dy();
+            this.dz();
         }
 
     }
@@ -278,7 +280,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             for (int i = 0; i < this.inventory.getSize(); ++i) {
                 ItemStack itemstack = this.inventory.getItem(i);
 
-                if (itemstack.getItem().P_()) {
+                if (itemstack.getItem().O_()) {
                     Packet<?> packet = ((ItemWorldMapBase) itemstack.getItem()).a(itemstack, this.world, (EntityHuman) this);
 
                     if (packet != null) {
@@ -350,7 +352,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     @Override
     public void die(DamageSource damagesource) {
-        boolean flag = this.world.getGameRules().getBoolean("showDeathMessages");
+        boolean flag = this.world.getGameRules().getBoolean(GameRules.SHOW_DEATH_MESSAGES);
 
         if (flag) {
             IChatBaseComponent ichatbasecomponent = this.getCombatTracker().getDeathMessage();
@@ -397,7 +399,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             if (!this.world.isClientSide && entityliving instanceof EntityWither) {
                 boolean flag1 = false;
 
-                if (this.world.getGameRules().getBoolean("mobGriefing")) {
+                if (this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
                     BlockPosition blockposition = new BlockPosition(this.locX, this.locY, this.locZ);
                     IBlockData iblockdata = Blocks.WITHER_ROSE.getBlockData();
 
@@ -784,8 +786,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     @Override
-    public void openTrade(int i, MerchantRecipeList merchantrecipelist, int j, int k, boolean flag) {
-        this.playerConnection.sendPacket(new PacketPlayOutOpenWindowMerchant(i, merchantrecipelist, j, k, flag));
+    public void openTrade(int i, MerchantRecipeList merchantrecipelist, int j, int k, boolean flag, boolean flag1) {
+        this.playerConnection.sendPacket(new PacketPlayOutOpenWindowMerchant(i, merchantrecipelist, j, k, flag, flag1));
     }
 
     @Override
@@ -982,7 +984,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             this.al = entityplayer.al;
             this.am = entityplayer.am;
             this.an = entityplayer.an;
-        } else if (this.world.getGameRules().getBoolean("keepInventory") || entityplayer.isSpectator()) {
+        } else if (this.world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) || entityplayer.isSpectator()) {
             this.inventory.a(entityplayer.inventory);
             this.expLevel = entityplayer.expLevel;
             this.expTotal = entityplayer.expTotal;
@@ -1073,7 +1075,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
 
         this.updateAbilities();
-        this.dg();
+        this.dh();
     }
 
     @Override
@@ -1161,7 +1163,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     @Override
     protected void C() {
         if (this.isSpectator()) {
-            this.cx();
+            this.cy();
             this.setInvisible(true);
         } else {
             super.C();
@@ -1214,7 +1216,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     @Override
     public void a(EnumHand enumhand) {
         super.a(enumhand);
-        this.dZ();
+        this.ea();
     }
 
     public boolean H() {

@@ -135,7 +135,7 @@ public class BlockCommand extends BlockTileEntity {
 
             if (!world.isClientSide) {
                 if (itemstack.b("BlockEntityTag") == null) {
-                    commandblocklistenerabstract.a(world.getGameRules().getBoolean("sendCommandFeedback"));
+                    commandblocklistenerabstract.a(world.getGameRules().getBoolean(GameRules.SEND_COMMAND_FEEDBACK));
                     tileentitycommand.b(this == Blocks.CHAIN_COMMAND_BLOCK);
                 }
 
@@ -181,7 +181,7 @@ public class BlockCommand extends BlockTileEntity {
         IBlockData iblockdata;
         int i;
 
-        for (i = gamerules.c("maxCommandChainLength"); i-- > 0; enumdirection = (EnumDirection) iblockdata.get(BlockCommand.a)) {
+        for (i = gamerules.getInt(GameRules.MAX_COMMAND_CHAIN_LENGTH); i-- > 0; enumdirection = (EnumDirection) iblockdata.get(BlockCommand.a)) {
             blockposition_mutableblockposition.c(enumdirection);
             iblockdata = world.getType(blockposition_mutableblockposition);
             Block block = iblockdata.getBlock();
@@ -218,7 +218,7 @@ public class BlockCommand extends BlockTileEntity {
         }
 
         if (i <= 0) {
-            int j = Math.max(gamerules.c("maxCommandChainLength"), 0);
+            int j = Math.max(gamerules.getInt(GameRules.MAX_COMMAND_CHAIN_LENGTH), 0);
 
             BlockCommand.LOGGER.warn("Command Block chain tried to execute more than {} steps!", j);
         }

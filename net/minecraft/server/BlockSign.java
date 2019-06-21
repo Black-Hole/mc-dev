@@ -24,7 +24,7 @@ public abstract class BlockSign extends BlockTileEntity implements IBlockWaterlo
     }
 
     @Override
-    public boolean T_() {
+    public boolean S_() {
         return true;
     }
 

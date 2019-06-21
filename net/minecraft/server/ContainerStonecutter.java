@@ -17,7 +17,7 @@ public class ContainerStonecutter extends Container {
     final Slot e;
     private Runnable m;
     public final IInventory inventory;
-    private final InventoryCraftResult n;
+    private final InventoryCraftResult resultInventory;
 
     public ContainerStonecutter(int i, PlayerInventory playerinventory) {
         this(i, playerinventory, ContainerAccess.a);
@@ -38,11 +38,11 @@ public class ContainerStonecutter extends Container {
                 ContainerStonecutter.this.m.run();
             }
         };
-        this.n = new InventoryCraftResult();
+        this.resultInventory = new InventoryCraftResult();
         this.containerAccess = containeraccess;
         this.world = playerinventory.player.world;
         this.d = this.a(new Slot(this.inventory, 0, 20, 33));
-        this.e = this.a(new Slot(this.n, 1, 143, 33) {
+        this.e = this.a(new Slot(this.resultInventory, 1, 143, 33) {
             @Override
             public boolean isAllowed(ItemStack itemstack) {
                 return false;
@@ -195,7 +195,7 @@ public class ContainerStonecutter extends Container {
     @Override
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        this.n.splitWithoutUpdate(1);
+        this.resultInventory.splitWithoutUpdate(1);
         this.containerAccess.a((world, blockposition) -> {
             this.a(entityhuman, entityhuman.world, this.inventory);
         });

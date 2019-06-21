@@ -83,17 +83,17 @@ public class EntityRavager extends EntityRaider {
     }
 
     @Override
-    public int dA() {
+    public int dB() {
         return 45;
     }
 
     @Override
-    public double aO() {
+    public double aP() {
         return 2.1D;
     }
 
     @Override
-    public boolean dD() {
+    public boolean dE() {
         return !this.isNoAI() && this.getRidingPassenger() instanceof EntityLiving;
     }
 
@@ -116,7 +116,7 @@ public class EntityRavager extends EntityRaider {
                 this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(MathHelper.d(0.1D, d1, d0));
             }
 
-            if (this.positionChanged && this.world.getGameRules().getBoolean("mobGriefing")) {
+            if (this.positionChanged && this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
                 boolean flag = false;
                 AxisAlignedBB axisalignedbb = this.getBoundingBox().g(0.2D);
                 Iterator iterator = BlockPosition.b(MathHelper.floor(axisalignedbb.minX), MathHelper.floor(axisalignedbb.minY), MathHelper.floor(axisalignedbb.minZ), MathHelper.floor(axisalignedbb.maxX), MathHelper.floor(axisalignedbb.maxY), MathHelper.floor(axisalignedbb.maxZ)).iterator();

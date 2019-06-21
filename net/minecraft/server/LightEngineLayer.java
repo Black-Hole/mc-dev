@@ -6,12 +6,12 @@ import javax.annotation.Nullable;
 
 public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S extends LightEngineStorage<M>> extends LightEngineGraph implements LightEngineLayerEventListener {
 
-    private static final EnumDirection[] d = EnumDirection.values();
+    private static final EnumDirection[] e = EnumDirection.values();
     protected final ILightAccess a;
     protected final EnumSkyBlock b;
     protected final S c;
-    private boolean e;
-    private final BlockPosition.MutableBlockPosition f = new BlockPosition.MutableBlockPosition();
+    private boolean f;
+    protected final BlockPosition.MutableBlockPosition d = new BlockPosition.MutableBlockPosition();
     private final long[] g = new long[2];
     private final IBlockAccess[] h = new IBlockAccess[2];
 
@@ -59,13 +59,13 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
         Arrays.fill(this.h, (Object) null);
     }
 
-    protected VoxelShape a(long i, @Nullable AtomicInteger atomicinteger) {
+    protected IBlockData a(long i, @Nullable AtomicInteger atomicinteger) {
         if (i == Long.MAX_VALUE) {
             if (atomicinteger != null) {
                 atomicinteger.set(0);
             }
 
-            return VoxelShapes.a();
+            return Blocks.AIR.getBlockData();
         } else {
             int j = SectionPosition.a(BlockPosition.b(i));
             int k = SectionPosition.a(BlockPosition.d(i));
@@ -76,19 +76,23 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
                     atomicinteger.set(16);
                 }
 
-                return VoxelShapes.b();
+                return Blocks.BEDROCK.getBlockData();
             } else {
-                this.f.g(i);
-                IBlockData iblockdata = iblockaccess.getType(this.f);
+                this.d.g(i);
+                IBlockData iblockdata = iblockaccess.getType(this.d);
                 boolean flag = iblockdata.o() && iblockdata.g();
 
                 if (atomicinteger != null) {
-                    atomicinteger.set(iblockdata.b(this.a.getWorld(), (BlockPosition) this.f));
+                    atomicinteger.set(iblockdata.b(this.a.getWorld(), (BlockPosition) this.d));
                 }
 
-                return flag ? iblockdata.j(this.a.getWorld(), this.f) : VoxelShapes.a();
+                return flag ? iblockdata : Blocks.AIR.getBlockData();
             }
         }
+    }
+
+    protected VoxelShape a(IBlockData iblockdata, long i, EnumDirection enumdirection) {
+        return iblockdata.o() ? iblockdata.a(this.a.getWorld(), this.d.g(i), enumdirection) : VoxelShapes.a();
     }
 
     public static int a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, IBlockData iblockdata1, BlockPosition blockposition1, EnumDirection enumdirection, int i) {
@@ -139,7 +143,7 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
     }
 
     public int a(int i, boolean flag, boolean flag1) {
-        if (!this.e) {
+        if (!this.f) {
             if (this.c.b()) {
                 i = this.c.b(i);
                 if (i == 0) {
@@ -150,7 +154,7 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
             this.c.a(this, flag, flag1);
         }
 
-        this.e = true;
+        this.f = true;
         if (this.b()) {
             i = this.b(i);
             this.c();
@@ -159,7 +163,7 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
             }
         }
 
-        this.e = false;
+        this.f = false;
         this.c.d();
         return i;
     }
@@ -183,7 +187,7 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
         long i = blockposition.asLong();
 
         this.f(i);
-        EnumDirection[] aenumdirection = LightEngineLayer.d;
+        EnumDirection[] aenumdirection = LightEngineLayer.e;
         int j = aenumdirection.length;
 
         for (int k = 0; k < j; ++k) {

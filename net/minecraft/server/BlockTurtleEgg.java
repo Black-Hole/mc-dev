@@ -134,6 +134,6 @@ public class BlockTurtleEgg extends Block {
     }
 
     private boolean a(World world, Entity entity) {
-        return entity instanceof EntityTurtle ? false : (entity instanceof EntityLiving && !(entity instanceof EntityHuman) ? world.getGameRules().getBoolean("mobGriefing") : true);
+        return entity instanceof EntityTurtle ? false : (entity instanceof EntityLiving && !(entity instanceof EntityHuman) ? world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) : true);
     }
 }

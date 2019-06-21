@@ -102,7 +102,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
 
     @Override
     public boolean b() {
-        return this.a.getNavigation().n() ? false : !this.d.a((IPosition) this.a.ch(), (double) (this.a.getWidth() + (float) this.g));
+        return this.a.getNavigation().n() ? false : !this.d.a((IPosition) this.a.ci(), (double) (this.a.getWidth() + (float) this.g));
     }
 
     @Override
@@ -112,7 +112,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
 
     @Override
     public void d() {
-        if (this.a.getNavigation().n() || this.d.a((IPosition) this.a.ch(), (double) this.g)) {
+        if (this.a.getNavigation().n() || this.d.a((IPosition) this.a.ci(), (double) this.g)) {
             this.f.add(this.d);
         }
 
