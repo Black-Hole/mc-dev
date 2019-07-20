@@ -22,7 +22,7 @@ public class ParticleType extends Particle<ParticleType> implements ParticlePara
     }
 
     @Override
-    public Particle<ParticleType> b() {
+    public Particle<ParticleType> getParticle() {
         return this;
     }
 

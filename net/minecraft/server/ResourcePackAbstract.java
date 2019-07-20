@@ -23,7 +23,7 @@ public abstract class ResourcePackAbstract implements IResourcePack {
     }
 
     private static String c(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) {
-        return String.format("%s/%s/%s", enumresourcepacktype.a(), minecraftkey.b(), minecraftkey.getKey());
+        return String.format("%s/%s/%s", enumresourcepacktype.a(), minecraftkey.getNamespace(), minecraftkey.getKey());
     }
 
     protected static String a(File file, File file1) {

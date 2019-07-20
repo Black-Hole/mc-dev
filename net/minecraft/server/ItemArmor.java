@@ -21,7 +21,7 @@ public class ItemArmor extends Item {
     protected final ArmorMaterial e;
 
     public static ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-        BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
+        BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
         List<EntityLiving> list = isourceblock.getWorld().a(EntityLiving.class, new AxisAlignedBB(blockposition), IEntitySelector.f.and(new IEntitySelector.EntitySelectorEquipable(itemstack)));
 
         if (list.isEmpty()) {

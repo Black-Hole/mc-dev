@@ -1,42 +1,41 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Sets;
-import com.google.common.collect.Streams;
-import java.util.Set;
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import java.util.stream.Stream;
 
 public final class PlayerMap {
 
-    private final Set<EntityPlayer> a = Sets.newHashSet();
-    private final Set<EntityPlayer> b = Sets.newHashSet();
+    private final Object2BooleanMap<EntityPlayer> a = new Object2BooleanOpenHashMap();
 
     public PlayerMap() {}
 
     public Stream<EntityPlayer> a(long i) {
-        return Streams.concat(new Stream[]{this.a.stream(), this.b.stream()});
+        return this.a.keySet().stream();
     }
 
     public void a(long i, EntityPlayer entityplayer, boolean flag) {
-        (flag ? this.b : this.a).add(entityplayer);
+        this.a.put(entityplayer, flag);
     }
 
     public void a(long i, EntityPlayer entityplayer) {
-        this.a.remove(entityplayer);
-        this.b.remove(entityplayer);
+        this.a.removeBoolean(entityplayer);
     }
 
     public void a(EntityPlayer entityplayer) {
-        this.b.add(entityplayer);
-        this.a.remove(entityplayer);
+        this.a.replace(entityplayer, true);
     }
 
     public void b(EntityPlayer entityplayer) {
-        this.b.remove(entityplayer);
-        this.a.add(entityplayer);
+        this.a.replace(entityplayer, false);
     }
 
     public boolean c(EntityPlayer entityplayer) {
-        return !this.a.contains(entityplayer);
+        return this.a.getOrDefault(entityplayer, true);
+    }
+
+    public boolean d(EntityPlayer entityplayer) {
+        return this.a.getBoolean(entityplayer);
     }
 
     public void a(long i, long j, EntityPlayer entityplayer) {}

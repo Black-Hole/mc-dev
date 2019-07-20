@@ -26,7 +26,7 @@ public class CommandPublish {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, int i) throws CommandSyntaxException {
-        if (commandlistenerwrapper.getServer().ae()) {
+        if (commandlistenerwrapper.getServer().af()) {
             throw CommandPublish.b.create(commandlistenerwrapper.getServer().getPort());
         } else if (!commandlistenerwrapper.getServer().a(commandlistenerwrapper.getServer().getGamemode(), false, i)) {
             throw CommandPublish.a.create();

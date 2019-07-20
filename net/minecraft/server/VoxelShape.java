@@ -60,8 +60,12 @@ public abstract class VoxelShape {
     }
 
     public void b(VoxelShapes.a voxelshapes_a) {
+        DoubleList doublelist = this.a(EnumDirection.EnumAxis.X);
+        DoubleList doublelist1 = this.a(EnumDirection.EnumAxis.Y);
+        DoubleList doublelist2 = this.a(EnumDirection.EnumAxis.Z);
+
         this.a.b((i, j, k, l, i1, j1) -> {
-            voxelshapes_a.consume(this.a(EnumDirection.EnumAxis.X, i), this.a(EnumDirection.EnumAxis.Y, j), this.a(EnumDirection.EnumAxis.Z, k), this.a(EnumDirection.EnumAxis.X, l), this.a(EnumDirection.EnumAxis.Y, i1), this.a(EnumDirection.EnumAxis.Z, j1));
+            voxelshapes_a.consume(doublelist.getDouble(i), doublelist1.getDouble(j), doublelist2.getDouble(k), doublelist.getDouble(l), doublelist1.getDouble(i1), doublelist2.getDouble(j1));
         }, true);
     }
 

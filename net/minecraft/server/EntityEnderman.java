@@ -57,12 +57,12 @@ public class EntityEnderman extends EntityMonster {
         if (entityliving == null) {
             this.bC = 0;
             this.datawatcher.set(EntityEnderman.bz, false);
-            attributeinstance.c(EntityEnderman.c);
+            attributeinstance.removeModifier(EntityEnderman.c);
         } else {
             this.bC = this.ticksLived;
             this.datawatcher.set(EntityEnderman.bz, true);
             if (!attributeinstance.a(EntityEnderman.c)) {
-                attributeinstance.b(EntityEnderman.c);
+                attributeinstance.addModifier(EntityEnderman.c);
             }
         }
 
@@ -87,7 +87,7 @@ public class EntityEnderman extends EntityMonster {
 
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityEnderman.bz.equals(datawatcherobject) && this.dY() && this.world.isClientSide) {
+        if (EntityEnderman.bz.equals(datawatcherobject) && this.dX() && this.world.isClientSide) {
             this.l();
         }
 
@@ -165,14 +165,14 @@ public class EntityEnderman extends EntityMonster {
 
             if (f > 0.5F && this.world.f(new BlockPosition(this)) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
                 this.setGoalTarget((EntityLiving) null);
-                this.dW();
+                this.dV();
             }
         }
 
         super.mobTick();
     }
 
-    protected boolean dW() {
+    protected boolean dV() {
         double d0 = this.locX + (this.random.nextDouble() - 0.5D) * 64.0D;
         double d1 = this.locY + (double) (this.random.nextInt(64) - 32);
         double d2 = this.locZ + (this.random.nextDouble() - 0.5D) * 64.0D;
@@ -205,7 +205,7 @@ public class EntityEnderman extends EntityMonster {
             boolean flag = this.a(d0, d1, d2, true);
 
             if (flag) {
-                this.world.a((EntityHuman) null, this.lastX, this.lastY, this.lastZ, SoundEffects.ENTITY_ENDERMAN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
+                this.world.playSound((EntityHuman) null, this.lastX, this.lastY, this.lastZ, SoundEffects.ENTITY_ENDERMAN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
                 this.a(SoundEffects.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
             }
 
@@ -215,7 +215,7 @@ public class EntityEnderman extends EntityMonster {
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return this.dY() ? SoundEffects.ENTITY_ENDERMAN_SCREAM : SoundEffects.ENTITY_ENDERMAN_AMBIENT;
+        return this.dX() ? SoundEffects.ENTITY_ENDERMAN_SCREAM : SoundEffects.ENTITY_ENDERMAN_AMBIENT;
     }
 
     @Override
@@ -256,13 +256,13 @@ public class EntityEnderman extends EntityMonster {
             boolean flag = super.damageEntity(damagesource, f);
 
             if (damagesource.ignoresArmor() && this.random.nextInt(10) != 0) {
-                this.dW();
+                this.dV();
             }
 
             return flag;
         } else {
             for (int i = 0; i < 64; ++i) {
-                if (this.dW()) {
+                if (this.dV()) {
                     return true;
                 }
             }
@@ -271,7 +271,7 @@ public class EntityEnderman extends EntityMonster {
         }
     }
 
-    public boolean dY() {
+    public boolean dX() {
         return (Boolean) this.datawatcher.get(EntityEnderman.bz);
     }
 
@@ -345,7 +345,7 @@ public class EntityEnderman extends EntityMonster {
         }
 
         private boolean a(IWorldReader iworldreader, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1, IBlockData iblockdata2, BlockPosition blockposition1) {
-            return iblockdata1.isAir() && !iblockdata2.isAir() && Block.a(iblockdata2.getCollisionShape(iworldreader, blockposition1)) && iblockdata.canPlace(iworldreader, blockposition);
+            return iblockdata1.isAir() && !iblockdata2.isAir() && iblockdata2.o(iworldreader, blockposition1) && iblockdata.canPlace(iworldreader, blockposition);
         }
     }
 
@@ -438,7 +438,7 @@ public class EntityEnderman extends EntityMonster {
                 if (this.c != null && !this.i.isPassenger()) {
                     if (this.i.f((EntityHuman) this.c)) {
                         if (this.c.h((Entity) this.i) < 16.0D) {
-                            this.i.dW();
+                            this.i.dV();
                         }
 
                         this.l = 0;

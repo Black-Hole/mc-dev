@@ -34,17 +34,17 @@ public class EntityAIBodyControl {
     }
 
     private void b() {
-        this.a.aK = MathHelper.b(this.a.aK, this.a.aM, (float) this.a.dB());
+        this.a.aK = MathHelper.b(this.a.aK, this.a.aM, (float) this.a.dA());
     }
 
     private void c() {
-        this.a.aM = MathHelper.b(this.a.aM, this.a.aK, (float) this.a.dB());
+        this.a.aM = MathHelper.b(this.a.aM, this.a.aK, (float) this.a.dA());
     }
 
     private void d() {
         int i = this.b - 10;
         float f = MathHelper.a((float) i / 10.0F, 0.0F, 1.0F);
-        float f1 = (float) this.a.dB() * (1.0F - f);
+        float f1 = (float) this.a.dA() * (1.0F - f);
 
         this.a.aK = MathHelper.b(this.a.aK, this.a.aM, f1);
     }

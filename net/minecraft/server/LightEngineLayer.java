@@ -42,7 +42,7 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
             }
         }
 
-        IBlockAccess iblockaccess = this.a.b(i, j);
+        IBlockAccess iblockaccess = this.a.c(i, j);
 
         for (int i1 = 1; i1 > 0; --i1) {
             this.g[i1] = this.g[i1 - 1];

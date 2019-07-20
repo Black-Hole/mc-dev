@@ -41,6 +41,11 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
     }
 
     @Override
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
+        return false;
+    }
+
+    @Override
     public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         Vec3D vec3d = iblockdata.l(iblockaccess, blockposition);
 

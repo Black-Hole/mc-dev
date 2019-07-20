@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 public abstract class ChatBaseComponent implements IChatBaseComponent {
 
-    protected final List<IChatBaseComponent> a = Lists.newArrayList();
+    protected final List<IChatBaseComponent> siblings = Lists.newArrayList();
     private ChatModifier b;
 
     public ChatBaseComponent() {}
@@ -17,19 +17,19 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
     @Override
     public IChatBaseComponent addSibling(IChatBaseComponent ichatbasecomponent) {
         ichatbasecomponent.getChatModifier().setChatModifier(this.getChatModifier());
-        this.a.add(ichatbasecomponent);
+        this.siblings.add(ichatbasecomponent);
         return this;
     }
 
     @Override
-    public List<IChatBaseComponent> a() {
-        return this.a;
+    public List<IChatBaseComponent> getSiblings() {
+        return this.siblings;
     }
 
     @Override
     public IChatBaseComponent setChatModifier(ChatModifier chatmodifier) {
         this.b = chatmodifier;
-        Iterator iterator = this.a.iterator();
+        Iterator iterator = this.siblings.iterator();
 
         while (iterator.hasNext()) {
             IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
@@ -44,7 +44,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
     public ChatModifier getChatModifier() {
         if (this.b == null) {
             this.b = new ChatModifier();
-            Iterator iterator = this.a.iterator();
+            Iterator iterator = this.siblings.iterator();
 
             while (iterator.hasNext()) {
                 IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
@@ -58,7 +58,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
 
     @Override
     public Stream<IChatBaseComponent> c() {
-        return Streams.concat(new Stream[]{Stream.of(this), this.a.stream().flatMap(IChatBaseComponent::c)});
+        return Streams.concat(new Stream[]{Stream.of(this), this.siblings.stream().flatMap(IChatBaseComponent::c)});
     }
 
     public boolean equals(Object object) {
@@ -69,15 +69,15 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
         } else {
             ChatBaseComponent chatbasecomponent = (ChatBaseComponent) object;
 
-            return this.a.equals(chatbasecomponent.a) && this.getChatModifier().equals(chatbasecomponent.getChatModifier());
+            return this.siblings.equals(chatbasecomponent.siblings) && this.getChatModifier().equals(chatbasecomponent.getChatModifier());
         }
     }
 
     public int hashCode() {
-        return Objects.hash(new Object[]{this.getChatModifier(), this.a});
+        return Objects.hash(new Object[]{this.getChatModifier(), this.siblings});
     }
 
     public String toString() {
-        return "BaseComponent{style=" + this.b + ", siblings=" + this.a + '}';
+        return "BaseComponent{style=" + this.b + ", siblings=" + this.siblings + '}';
     }
 }

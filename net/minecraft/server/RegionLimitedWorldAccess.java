@@ -23,10 +23,10 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     private final WorldProvider k;
     private final GeneratorSettingsDefault l;
     private final TickList<Block> m = new TickListWorldGen<>((blockposition) -> {
-        return this.x(blockposition).n();
+        return this.w(blockposition).n();
     });
     private final TickList<FluidType> n = new TickListWorldGen<>((blockposition) -> {
-        return this.x(blockposition).o();
+        return this.w(blockposition).o();
     });
 
     public RegionLimitedWorldAccess(WorldServer worldserver, List<IChunkAccess> list) {
@@ -113,7 +113,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
 
     @Override
     public Fluid getFluid(BlockPosition blockposition) {
-        return this.x(blockposition).getFluid(blockposition);
+        return this.w(blockposition).getFluid(blockposition);
     }
 
     @Nullable
@@ -129,7 +129,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
 
     @Override
     public BiomeBase getBiome(BlockPosition blockposition) {
-        BiomeBase biomebase = this.x(blockposition).getBiomeIndex()[blockposition.getX() & 15 | (blockposition.getZ() & 15) << 4];
+        BiomeBase biomebase = this.w(blockposition).getBiomeIndex()[blockposition.getX() & 15 | (blockposition.getZ() & 15) << 4];
 
         if (biomebase == null) {
             throw new RuntimeException(String.format("Biome is null @ %s", blockposition));
@@ -145,7 +145,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
 
     @Override
     public int getLightLevel(BlockPosition blockposition, int i) {
-        return this.x(blockposition).a(blockposition, i, this.getWorldProvider().g());
+        return this.w(blockposition).a(blockposition, i, this.getWorldProvider().g());
     }
 
     @Override
@@ -168,7 +168,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     @Nullable
     @Override
     public TileEntity getTileEntity(BlockPosition blockposition) {
-        IChunkAccess ichunkaccess = this.x(blockposition);
+        IChunkAccess ichunkaccess = this.w(blockposition);
         TileEntity tileentity = ichunkaccess.getTileEntity(blockposition);
 
         if (tileentity != null) {
@@ -205,7 +205,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
 
     @Override
     public boolean setTypeAndData(BlockPosition blockposition, IBlockData iblockdata, int i) {
-        IChunkAccess ichunkaccess = this.x(blockposition);
+        IChunkAccess ichunkaccess = this.w(blockposition);
         IBlockData iblockdata1 = ichunkaccess.setType(blockposition, iblockdata, false);
 
         if (iblockdata1 != null) {
@@ -238,7 +238,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     }
 
     private void i(BlockPosition blockposition) {
-        this.x(blockposition).f(blockposition);
+        this.w(blockposition).f(blockposition);
     }
 
     @Override
@@ -329,7 +329,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     }
 
     @Override
-    public void a(@Nullable EntityHuman entityhuman, BlockPosition blockposition, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1) {}
+    public void playSound(@Nullable EntityHuman entityhuman, BlockPosition blockposition, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1) {}
 
     @Override
     public void addParticle(ParticleParam particleparam, double d0, double d1, double d2, double d3, double d4, double d5) {}

@@ -96,7 +96,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
     }
 
     @Override
-    public int dD() {
+    public int dC() {
         return 1;
     }
 

@@ -69,10 +69,11 @@ public abstract class BlockPressurePlateAbstract extends Block {
         boolean flag1 = j > 0;
 
         if (i != j) {
-            iblockdata = this.a(iblockdata, j);
-            world.setTypeAndData(blockposition, iblockdata, 2);
+            IBlockData iblockdata1 = this.a(iblockdata, j);
+
+            world.setTypeAndData(blockposition, iblockdata1, 2);
             this.a(world, blockposition);
-            world.m(blockposition);
+            world.b(blockposition, iblockdata, iblockdata1);
         }
 
         if (!flag1 && flag) {

@@ -79,17 +79,19 @@ public class CrashReportSystemDetails {
         return stringbuilder.toString();
     }
 
-    public void a(String s, CrashReportCallable<String> crashreportcallable) {
+    public CrashReportSystemDetails a(String s, CrashReportCallable<String> crashreportcallable) {
         try {
             this.a(s, crashreportcallable.call());
         } catch (Throwable throwable) {
             this.a(s, throwable);
         }
 
+        return this;
     }
 
-    public void a(String s, Object object) {
+    public CrashReportSystemDetails a(String s, Object object) {
         this.c.add(new CrashReportSystemDetails.CrashReportDetail(s, object));
+        return this;
     }
 
     public void a(String s, Throwable throwable) {

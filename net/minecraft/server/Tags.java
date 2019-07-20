@@ -67,7 +67,7 @@ public class Tags<T> {
             while (iterator.hasNext()) {
                 MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
                 String s = minecraftkey.getKey();
-                MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.b(), s.substring(this.f.length() + 1, s.length() - Tags.c));
+                MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.getNamespace(), s.substring(this.f.length() + 1, s.length() - Tags.c));
 
                 try {
                     Iterator iterator1 = iresourcemanager.c(minecraftkey).iterator();

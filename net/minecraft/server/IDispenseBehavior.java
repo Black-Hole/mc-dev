@@ -124,7 +124,7 @@ public interface IDispenseBehavior {
         DispenseBehaviorItem dispensebehavioritem = new DispenseBehaviorItem() {
             @Override
             public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-                EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
+                EnumDirection enumdirection = (EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING);
                 EntityTypes<?> entitytypes = ((ItemMonsterEgg) itemstack.getItem()).b(itemstack.getTag());
 
                 entitytypes.spawnCreature(isourceblock.getWorld(), itemstack, (EntityHuman) null, isourceblock.getBlockPosition().shift(enumdirection), EnumMobSpawn.DISPENSER, enumdirection != EnumDirection.UP, false);
@@ -143,7 +143,7 @@ public interface IDispenseBehavior {
         BlockDispenser.a((IMaterial) Items.FIREWORK_ROCKET, (IDispenseBehavior) (new DispenseBehaviorItem() {
             @Override
             public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-                EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
+                EnumDirection enumdirection = (EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING);
                 double d0 = isourceblock.getX() + (double) enumdirection.getAdjacentX();
                 double d1 = (double) ((float) isourceblock.getBlockPosition().getY() + 0.2F);
                 double d2 = isourceblock.getZ() + (double) enumdirection.getAdjacentZ();
@@ -161,7 +161,7 @@ public interface IDispenseBehavior {
         BlockDispenser.a((IMaterial) Items.FIRE_CHARGE, (IDispenseBehavior) (new DispenseBehaviorItem() {
             @Override
             public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-                EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
+                EnumDirection enumdirection = (EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING);
                 IPosition iposition = BlockDispenser.a(isourceblock);
                 double d0 = iposition.getX() + (double) ((float) enumdirection.getAdjacentX() * 0.3F);
                 double d1 = iposition.getY() + (double) ((float) enumdirection.getAdjacentY() * 0.3F);
@@ -196,7 +196,7 @@ public interface IDispenseBehavior {
             @Override
             public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 ItemBucket itembucket = (ItemBucket) itemstack.getItem();
-                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
+                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
                 World world = isourceblock.getWorld();
 
                 if (itembucket.a((EntityHuman) null, world, blockposition, (MovingObjectPositionBlock) null)) {
@@ -220,7 +220,7 @@ public interface IDispenseBehavior {
             @Override
             public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 World world = isourceblock.getWorld();
-                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
+                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
                 IBlockData iblockdata = world.getType(blockposition);
                 Block block = iblockdata.getBlock();
 
@@ -254,7 +254,7 @@ public interface IDispenseBehavior {
                 World world = isourceblock.getWorld();
 
                 this.dispensed = true;
-                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
+                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
                 IBlockData iblockdata = world.getType(blockposition);
 
                 if (ItemFlintAndSteel.a(iblockdata, (GeneratorAccess) world, blockposition)) {
@@ -280,7 +280,7 @@ public interface IDispenseBehavior {
             protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 this.dispensed = true;
                 World world = isourceblock.getWorld();
-                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
+                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
 
                 if (!ItemBoneMeal.a(itemstack, world, blockposition) && !ItemBoneMeal.a(itemstack, world, blockposition, (EnumDirection) null)) {
                     this.dispensed = false;
@@ -295,11 +295,11 @@ public interface IDispenseBehavior {
             @Override
             protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 World world = isourceblock.getWorld();
-                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
+                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
                 EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, (EntityLiving) null);
 
                 world.addEntity(entitytntprimed);
-                world.a((EntityHuman) null, entitytntprimed.locX, entitytntprimed.locY, entitytntprimed.locZ, SoundEffects.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.playSound((EntityHuman) null, entitytntprimed.locX, entitytntprimed.locY, entitytntprimed.locZ, SoundEffects.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 itemstack.subtract(1);
                 return itemstack;
             }
@@ -321,7 +321,7 @@ public interface IDispenseBehavior {
             @Override
             protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 World world = isourceblock.getWorld();
-                EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
+                EnumDirection enumdirection = (EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING);
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
 
                 this.dispensed = true;
@@ -345,7 +345,7 @@ public interface IDispenseBehavior {
             @Override
             protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 World world = isourceblock.getWorld();
-                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
+                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
                 BlockPumpkinCarved blockpumpkincarved = (BlockPumpkinCarved) Blocks.CARVED_PUMPKIN;
 
                 this.dispensed = true;
@@ -383,7 +383,7 @@ public interface IDispenseBehavior {
 
                 if (!world.e()) {
                     this.dispensed = false;
-                    BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
+                    BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
                     List<EntitySheep> list = world.a(EntitySheep.class, new AxisAlignedBB(blockposition));
                     Iterator iterator1 = list.iterator();
 

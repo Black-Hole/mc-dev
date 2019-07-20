@@ -30,7 +30,7 @@ public class EntityTurtle extends EntityAnimal {
         this.datawatcher.set(EntityTurtle.bA, blockposition);
     }
 
-    private BlockPosition dY() {
+    private BlockPosition dX() {
         return (BlockPosition) this.datawatcher.get(EntityTurtle.bA);
     }
 
@@ -38,11 +38,11 @@ public class EntityTurtle extends EntityAnimal {
         this.datawatcher.set(EntityTurtle.bD, blockposition);
     }
 
-    private BlockPosition dZ() {
+    private BlockPosition dY() {
         return (BlockPosition) this.datawatcher.get(EntityTurtle.bD);
     }
 
-    public boolean dW() {
+    public boolean dV() {
         return (Boolean) this.datawatcher.get(EntityTurtle.bB);
     }
 
@@ -50,7 +50,7 @@ public class EntityTurtle extends EntityAnimal {
         this.datawatcher.set(EntityTurtle.bB, flag);
     }
 
-    public boolean dX() {
+    public boolean dW() {
         return (Boolean) this.datawatcher.get(EntityTurtle.bC);
     }
 
@@ -59,7 +59,7 @@ public class EntityTurtle extends EntityAnimal {
         this.datawatcher.set(EntityTurtle.bC, flag);
     }
 
-    private boolean ea() {
+    private boolean dZ() {
         return (Boolean) this.datawatcher.get(EntityTurtle.bE);
     }
 
@@ -67,7 +67,7 @@ public class EntityTurtle extends EntityAnimal {
         this.datawatcher.set(EntityTurtle.bE, flag);
     }
 
-    private boolean ef() {
+    private boolean ee() {
         return (Boolean) this.datawatcher.get(EntityTurtle.bF);
     }
 
@@ -89,13 +89,13 @@ public class EntityTurtle extends EntityAnimal {
     @Override
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("HomePosX", this.dY().getX());
-        nbttagcompound.setInt("HomePosY", this.dY().getY());
-        nbttagcompound.setInt("HomePosZ", this.dY().getZ());
-        nbttagcompound.setBoolean("HasEgg", this.dW());
-        nbttagcompound.setInt("TravelPosX", this.dZ().getX());
-        nbttagcompound.setInt("TravelPosY", this.dZ().getY());
-        nbttagcompound.setInt("TravelPosZ", this.dZ().getZ());
+        nbttagcompound.setInt("HomePosX", this.dX().getX());
+        nbttagcompound.setInt("HomePosY", this.dX().getY());
+        nbttagcompound.setInt("HomePosZ", this.dX().getZ());
+        nbttagcompound.setBoolean("HasEgg", this.dV());
+        nbttagcompound.setInt("TravelPosX", this.dY().getX());
+        nbttagcompound.setInt("TravelPosY", this.dY().getY());
+        nbttagcompound.setInt("TravelPosZ", this.dY().getZ());
     }
 
     @Override
@@ -202,8 +202,8 @@ public class EntityTurtle extends EntityAnimal {
     }
 
     @Override
-    public boolean eb() {
-        return super.eb() && !this.dW();
+    public boolean ea() {
+        return super.ea() && !this.dV();
     }
 
     @Override
@@ -234,13 +234,13 @@ public class EntityTurtle extends EntityAnimal {
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return !this.ea() && iworldreader.getFluid(blockposition).a(TagsFluid.WATER) ? 10.0F : (iworldreader.getType(blockposition.down()).getBlock() == Blocks.SAND ? 10.0F : iworldreader.w(blockposition) - 0.5F);
+        return !this.dZ() && iworldreader.getFluid(blockposition).a(TagsFluid.WATER) ? 10.0F : (iworldreader.getType(blockposition.down()).getBlock() == Blocks.SAND ? 10.0F : iworldreader.v(blockposition) - 0.5F);
     }
 
     @Override
     public void movementTick() {
         super.movementTick();
-        if (this.isAlive() && this.dX() && this.bG >= 1 && this.bG % 5 == 0) {
+        if (this.isAlive() && this.dW() && this.bG >= 1 && this.bG % 5 == 0) {
             BlockPosition blockposition = new BlockPosition(this);
 
             if (this.world.getType(blockposition.down()).getBlock() == Blocks.SAND) {
@@ -265,7 +265,7 @@ public class EntityTurtle extends EntityAnimal {
             this.a(0.1F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.9D));
-            if (this.getGoalTarget() == null && (!this.ea() || !this.dY().a((IPosition) this.ci(), 20.0D))) {
+            if (this.getGoalTarget() == null && (!this.dZ() || !this.dX().a((IPosition) this.getPositionVector(), 20.0D))) {
                 this.setMot(this.getMot().add(0.0D, -0.005D, 0.0D));
             }
         } else {
@@ -305,7 +305,7 @@ public class EntityTurtle extends EntityAnimal {
             if (this.a instanceof EntityTurtle) {
                 EntityTurtle entityturtle = (EntityTurtle) this.a;
 
-                if (entityturtle.ef()) {
+                if (entityturtle.ee()) {
                     return this.b.getType(blockposition).getBlock() == Blocks.WATER;
                 }
             }
@@ -326,7 +326,7 @@ public class EntityTurtle extends EntityAnimal {
         private void g() {
             if (this.i.isInWater()) {
                 this.i.setMot(this.i.getMot().add(0.0D, 0.005D, 0.0D));
-                if (!this.i.dY().a((IPosition) this.i.ci(), 16.0D)) {
+                if (!this.i.dX().a((IPosition) this.i.getPositionVector(), 16.0D)) {
                     this.i.o(Math.max(this.i.db() / 2.0F, 0.08F));
                 }
 
@@ -380,7 +380,7 @@ public class EntityTurtle extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return this.g.isBaby() && !this.g.isInWater() ? super.a() : (!this.g.ea() && !this.g.isInWater() && !this.g.dW() ? super.a() : false);
+            return this.g.isBaby() && !this.g.isInWater() ? super.a() : (!this.g.dZ() && !this.g.isInWater() && !this.g.dV() ? super.a() : false);
         }
 
         @Override
@@ -407,7 +407,7 @@ public class EntityTurtle extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return !this.a.isInWater() && !this.h.ea() && !this.h.dW() ? super.a() : false;
+            return !this.a.isInWater() && !this.h.dZ() && !this.h.dV() ? super.a() : false;
         }
     }
 
@@ -422,12 +422,12 @@ public class EntityTurtle extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return this.g.dW() && this.g.dY().a((IPosition) this.g.ci(), 9.0D) ? super.a() : false;
+            return this.g.dV() && this.g.dX().a((IPosition) this.g.getPositionVector(), 9.0D) ? super.a() : false;
         }
 
         @Override
         public boolean b() {
-            return super.b() && this.g.dW() && this.g.dY().a((IPosition) this.g.ci(), 9.0D);
+            return super.b() && this.g.dV() && this.g.dX().a((IPosition) this.g.getPositionVector(), 9.0D);
         }
 
         @Override
@@ -441,14 +441,14 @@ public class EntityTurtle extends EntityAnimal {
                 } else if (this.g.bG > 200) {
                     World world = this.g.world;
 
-                    world.a((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_LAY_EGG, SoundCategory.BLOCKS, 0.3F, 0.9F + world.random.nextFloat() * 0.2F);
+                    world.playSound((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_LAY_EGG, SoundCategory.BLOCKS, 0.3F, 0.9F + world.random.nextFloat() * 0.2F);
                     world.setTypeAndData(this.e.up(), (IBlockData) Blocks.TURTLE_EGG.getBlockData().set(BlockTurtleEgg.b, this.g.random.nextInt(4) + 1), 3);
                     this.g.r(false);
                     this.g.s(false);
                     this.g.setLoveTicks(600);
                 }
 
-                if (this.g.dX()) {
+                if (this.g.dW()) {
                     this.g.bG++;
                 }
             }
@@ -478,7 +478,7 @@ public class EntityTurtle extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return super.a() && !this.d.dW();
+            return super.a() && !this.d.dV();
         }
 
         @Override
@@ -551,7 +551,7 @@ public class EntityTurtle extends EntityAnimal {
 
         @Override
         public void e() {
-            this.b.getControllerLook().a(this.d, (float) (this.b.dB() + 20), (float) this.b.M());
+            this.b.getControllerLook().a(this.d, (float) (this.b.dA() + 20), (float) this.b.M());
             if (this.b.h((Entity) this.d) < 6.25D) {
                 this.b.getNavigation().o();
             } else {
@@ -575,7 +575,7 @@ public class EntityTurtle extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return this.a.isBaby() ? false : (this.a.dW() ? true : (this.a.getRandom().nextInt(700) != 0 ? false : !this.a.dY().a((IPosition) this.a.ci(), 64.0D)));
+            return this.a.isBaby() ? false : (this.a.dV() ? true : (this.a.getRandom().nextInt(700) != 0 ? false : !this.a.dX().a((IPosition) this.a.getPositionVector(), 64.0D)));
         }
 
         @Override
@@ -592,13 +592,13 @@ public class EntityTurtle extends EntityAnimal {
 
         @Override
         public boolean b() {
-            return !this.a.dY().a((IPosition) this.a.ci(), 7.0D) && !this.c && this.d <= 600;
+            return !this.a.dX().a((IPosition) this.a.getPositionVector(), 7.0D) && !this.c && this.d <= 600;
         }
 
         @Override
         public void e() {
-            BlockPosition blockposition = this.a.dY();
-            boolean flag = blockposition.a((IPosition) this.a.ci(), 16.0D);
+            BlockPosition blockposition = this.a.dX();
+            boolean flag = blockposition.a((IPosition) this.a.getPositionVector(), 16.0D);
 
             if (flag) {
                 ++this.d;
@@ -639,7 +639,7 @@ public class EntityTurtle extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return !this.a.ea() && !this.a.dW() && this.a.isInWater();
+            return !this.a.dZ() && !this.a.dV() && this.a.isInWater();
         }
 
         @Override
@@ -665,7 +665,7 @@ public class EntityTurtle extends EntityAnimal {
         @Override
         public void e() {
             if (this.a.getNavigation().n()) {
-                BlockPosition blockposition = this.a.dZ();
+                BlockPosition blockposition = this.a.dY();
                 Vec3D vec3d = RandomPositionGenerator.a((EntityCreature) this.a, 16, 3, new Vec3D((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()), 0.3141592741012573D);
 
                 if (vec3d == null) {
@@ -694,7 +694,7 @@ public class EntityTurtle extends EntityAnimal {
 
         @Override
         public boolean b() {
-            return !this.a.getNavigation().n() && !this.c && !this.a.ea() && !this.a.isInLove() && !this.a.dW();
+            return !this.a.getNavigation().n() && !this.c && !this.a.dZ() && !this.a.isInLove() && !this.a.dV();
         }
 
         @Override

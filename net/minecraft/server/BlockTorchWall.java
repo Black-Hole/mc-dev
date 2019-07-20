@@ -35,7 +35,7 @@ public class BlockTorchWall extends BlockTorch {
         BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
 
-        return Block.d(iblockdata1, iworldreader, blockposition1, enumdirection);
+        return iblockdata1.d(iworldreader, blockposition1, enumdirection);
     }
 
     @Nullable

@@ -145,7 +145,7 @@ public class LootItemConditionBlockStateProperty implements LootItemCondition {
         public <T extends Comparable<T>> LootItemConditionBlockStateProperty.a a(IBlockState<T> iblockstate, T t0) {
             if (!this.b.contains(iblockstate)) {
                 throw new IllegalArgumentException("Block " + IRegistry.BLOCK.getKey(this.a) + " does not have property '" + iblockstate + "'");
-            } else if (!iblockstate.d().contains(t0)) {
+            } else if (!iblockstate.getValues().contains(t0)) {
                 throw new IllegalArgumentException("Block " + IRegistry.BLOCK.getKey(this.a) + " property '" + iblockstate + "' does not have value '" + t0 + "'");
             } else {
                 this.c.put(iblockstate, t0);

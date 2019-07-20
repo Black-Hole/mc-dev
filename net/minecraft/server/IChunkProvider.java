@@ -13,12 +13,17 @@ public abstract class IChunkProvider implements ILightAccess, AutoCloseable {
     }
 
     @Nullable
+    public Chunk a(int i, int j) {
+        return this.getChunkAt(i, j, false);
+    }
+
+    @Nullable
     @Override
-    public IBlockAccess b(int i, int j) {
+    public IBlockAccess c(int i, int j) {
         return this.getChunkAt(i, j, ChunkStatus.EMPTY, false);
     }
 
-    public boolean a(int i, int j) {
+    public boolean b(int i, int j) {
         return this.getChunkAt(i, j, ChunkStatus.FULL, false) != null;
     }
 

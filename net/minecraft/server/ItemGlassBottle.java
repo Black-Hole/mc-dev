@@ -19,7 +19,7 @@ public class ItemGlassBottle extends Item {
             EntityAreaEffectCloud entityareaeffectcloud = (EntityAreaEffectCloud) list.get(0);
 
             entityareaeffectcloud.setRadius(entityareaeffectcloud.getRadius() - 0.5F);
-            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            world.playSound((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, new ItemStack(Items.DRAGON_BREATH)));
         } else {
             MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.SOURCE_ONLY);
@@ -35,7 +35,7 @@ public class ItemGlassBottle extends Item {
                     }
 
                     if (world.getFluid(blockposition).a(TagsFluid.WATER)) {
-                        world.a(entityhuman, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                        world.playSound(entityhuman, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                         return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, PotionUtil.a(new ItemStack(Items.POTION), Potions.WATER)));
                     }
                 }

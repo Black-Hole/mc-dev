@@ -32,8 +32,8 @@ public class PathfinderTurtle extends PathfinderNormal {
     }
 
     @Override
-    public PathPoint a(double d0, double d1, double d2) {
-        return this.a(MathHelper.floor(d0), MathHelper.floor(d1 + 0.5D), MathHelper.floor(d2));
+    public PathDestination a(double d0, double d1, double d2) {
+        return new PathDestination(this.a(MathHelper.floor(d0), MathHelper.floor(d1 + 0.5D), MathHelper.floor(d2)));
     }
 
     @Override

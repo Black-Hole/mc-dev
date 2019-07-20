@@ -11,6 +11,6 @@ public class ItemBanner extends ItemBlockWallable {
     }
 
     public EnumColor b() {
-        return ((BlockBannerAbstract) this.getBlock()).b();
+        return ((BlockBannerAbstract) this.getBlock()).getColor();
     }
 }

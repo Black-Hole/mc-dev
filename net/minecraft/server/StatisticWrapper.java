@@ -19,7 +19,7 @@ public class StatisticWrapper<T> implements Iterable<Statistic<T>> {
         });
     }
 
-    public IRegistry<T> a() {
+    public IRegistry<T> getRegistry() {
         return this.a;
     }
 

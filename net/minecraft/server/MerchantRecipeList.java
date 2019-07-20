@@ -56,6 +56,7 @@ public class MerchantRecipeList extends ArrayList<MerchantRecipe> {
             packetdataserializer.writeInt(merchantrecipe.getXp());
             packetdataserializer.writeInt(merchantrecipe.getSpecialPrice());
             packetdataserializer.writeFloat(merchantrecipe.getPriceMultiplier());
+            packetdataserializer.writeInt(merchantrecipe.k());
         }
 
     }
@@ -79,10 +80,11 @@ public class MerchantRecipeList extends ArrayList<MerchantRecipe> {
             int i1 = packetdataserializer.readInt();
             int j1 = packetdataserializer.readInt();
             float f = packetdataserializer.readFloat();
-            MerchantRecipe merchantrecipe = new MerchantRecipe(itemstack, itemstack2, itemstack1, k, l, i1, f);
+            int k1 = packetdataserializer.readInt();
+            MerchantRecipe merchantrecipe = new MerchantRecipe(itemstack, itemstack2, itemstack1, k, l, i1, f, k1);
 
             if (flag) {
-                merchantrecipe.p();
+                merchantrecipe.q();
             }
 
             merchantrecipe.setSpecialPrice(j1);
@@ -99,7 +101,7 @@ public class MerchantRecipeList extends ArrayList<MerchantRecipe> {
         for (int i = 0; i < this.size(); ++i) {
             MerchantRecipe merchantrecipe = (MerchantRecipe) this.get(i);
 
-            nbttaglist.add(merchantrecipe.r());
+            nbttaglist.add(merchantrecipe.s());
         }
 
         nbttagcompound.set("Recipes", nbttaglist);

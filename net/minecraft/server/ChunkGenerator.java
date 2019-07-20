@@ -88,7 +88,14 @@ public abstract class ChunkGenerator<C extends GeneratorSettingsDefault> {
         for (int k1 = 0; k1 < j1; ++k1) {
             WorldGenStage.Decoration worldgenstage_decoration = aworldgenstage_decoration[k1];
 
-            biomebase.a(worldgenstage_decoration, this, regionlimitedworldaccess, i1, seededrandom, blockposition);
+            try {
+                biomebase.a(worldgenstage_decoration, this, regionlimitedworldaccess, i1, seededrandom, blockposition);
+            } catch (Exception exception) {
+                CrashReport crashreport = CrashReport.a(exception, "Biome decoration");
+
+                crashreport.a("Generation").a("CenterX", (Object) i).a("CenterZ", (Object) j).a("Step", (Object) worldgenstage_decoration).a("Seed", (Object) i1).a("Biome", (Object) IRegistry.BIOME.getKey(biomebase));
+                throw new ReportedException(crashreport);
+            }
         }
 
     }

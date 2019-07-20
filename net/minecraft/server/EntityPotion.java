@@ -123,7 +123,7 @@ public class EntityPotion extends EntityProjectile {
             while (iterator.hasNext()) {
                 EntityLiving entityliving = (EntityLiving) iterator.next();
 
-                if (entityliving.du()) {
+                if (entityliving.dt()) {
                     double d0 = this.h(entityliving);
 
                     if (d0 < 16.0D) {
@@ -170,7 +170,7 @@ public class EntityPotion extends EntityProjectile {
         while (iterator.hasNext()) {
             MobEffect mobeffect = (MobEffect) iterator.next();
 
-            entityareaeffectcloud.a(new MobEffect(mobeffect));
+            entityareaeffectcloud.addEffect(new MobEffect(mobeffect));
         }
 
         NBTTagCompound nbttagcompound = itemstack.getTag();

@@ -206,10 +206,10 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
                 if ((double) blockposition.getY() - d0 > 2.0D) {
                     return Optional.empty();
                 } else {
-                    float f = entitytypes.h() / 2.0F;
+                    float f = entitytypes.i() / 2.0F;
                     Vec3D vec3d = new Vec3D((double) blockposition_mutableblockposition.getX() + 0.5D, d0, (double) blockposition_mutableblockposition.getZ() + 0.5D);
 
-                    return iworldreader.c(new AxisAlignedBB(vec3d.x - (double) f, vec3d.y, vec3d.z - (double) f, vec3d.x + (double) f, vec3d.y + (double) entitytypes.i(), vec3d.z + (double) f)) ? Optional.of(vec3d) : Optional.empty();
+                    return iworldreader.c(new AxisAlignedBB(vec3d.x - (double) f, vec3d.y, vec3d.z - (double) f, vec3d.x + (double) f, vec3d.y + (double) entitytypes.j(), vec3d.z + (double) f)) ? Optional.of(vec3d) : Optional.empty();
                 }
             }
         }

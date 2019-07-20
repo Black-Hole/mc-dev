@@ -28,7 +28,7 @@ public class BlockStateInteger extends BlockState<Integer> {
     }
 
     @Override
-    public Collection<Integer> d() {
+    public Collection<Integer> getValues() {
         return this.a;
     }
 

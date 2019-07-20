@@ -32,11 +32,11 @@ public class ParticleParamBlock implements ParticleParam {
 
     @Override
     public String a() {
-        return IRegistry.PARTICLE_TYPE.getKey(this.b()) + " " + ArgumentBlock.a(this.c);
+        return IRegistry.PARTICLE_TYPE.getKey(this.getParticle()) + " " + ArgumentBlock.a(this.c);
     }
 
     @Override
-    public Particle<ParticleParamBlock> b() {
+    public Particle<ParticleParamBlock> getParticle() {
         return this.b;
     }
 }

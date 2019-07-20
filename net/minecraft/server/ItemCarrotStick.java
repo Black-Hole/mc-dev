@@ -16,7 +16,7 @@ public class ItemCarrotStick extends Item {
             if (entityhuman.isPassenger() && entityhuman.getVehicle() instanceof EntityPig) {
                 EntityPig entitypig = (EntityPig) entityhuman.getVehicle();
 
-                if (itemstack.h() - itemstack.getDamage() >= 7 && entitypig.dX()) {
+                if (itemstack.h() - itemstack.getDamage() >= 7 && entitypig.dW()) {
                     itemstack.damage(7, entityhuman, (entityhuman1) -> {
                         entityhuman1.d(enumhand);
                     });

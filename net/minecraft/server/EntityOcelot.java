@@ -13,7 +13,7 @@ public class EntityOcelot extends EntityAnimal {
 
     public EntityOcelot(EntityTypes<? extends EntityOcelot> entitytypes, World world) {
         super(entitytypes, world);
-        this.dW();
+        this.dV();
     }
 
     private boolean isTrusting() {
@@ -22,7 +22,7 @@ public class EntityOcelot extends EntityAnimal {
 
     private void setTrusting(boolean flag) {
         this.datawatcher.set(EntityOcelot.bA, flag);
-        this.dW();
+        this.dV();
     }
 
     @Override
@@ -165,7 +165,7 @@ public class EntityOcelot extends EntityAnimal {
 
     }
 
-    protected void dW() {
+    protected void dV() {
         if (this.bB == null) {
             this.bB = new EntityOcelot.a<>(this, EntityHuman.class, 16.0F, 0.8D, 1.33D);
         }
@@ -211,7 +211,7 @@ public class EntityOcelot extends EntityAnimal {
         return false;
     }
 
-    protected void dX() {
+    protected void dW() {
         for (int i = 0; i < 2; ++i) {
             EntityOcelot entityocelot = (EntityOcelot) EntityTypes.OCELOT.a(this.world);
 
@@ -227,7 +227,7 @@ public class EntityOcelot extends EntityAnimal {
     public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         groupdataentity = super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
         if (generatoraccess.getRandom().nextInt(7) == 0) {
-            this.dX();
+            this.dW();
         }
 
         return groupdataentity;

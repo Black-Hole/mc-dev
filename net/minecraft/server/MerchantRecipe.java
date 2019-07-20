@@ -51,6 +51,10 @@ public class MerchantRecipe {
     }
 
     public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1, ItemStack itemstack2, int i, int j, int k, float f) {
+        this(itemstack, itemstack1, itemstack2, i, j, k, f, 0);
+    }
+
+    public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1, ItemStack itemstack2, int i, int j, int k, float f, int l) {
         this.rewardExp = true;
         this.xp = 1;
         this.buyingItem1 = itemstack;
@@ -60,6 +64,7 @@ public class MerchantRecipe {
         this.maxUses = j;
         this.xp = k;
         this.priceMultiplier = f;
+        this.demand = l;
     }
 
     public ItemStack a() {
@@ -107,6 +112,10 @@ public class MerchantRecipe {
         ++this.uses;
     }
 
+    public int k() {
+        return this.demand;
+    }
+
     public void increaseSpecialPrice(int i) {
         this.specialPrice += i;
     }
@@ -135,7 +144,7 @@ public class MerchantRecipe {
         return this.uses >= this.maxUses;
     }
 
-    public void p() {
+    public void q() {
         this.uses = this.maxUses;
     }
 
@@ -143,7 +152,7 @@ public class MerchantRecipe {
         return this.rewardExp;
     }
 
-    public NBTTagCompound r() {
+    public NBTTagCompound s() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.set("buy", this.buyingItem1.save(new NBTTagCompound()));

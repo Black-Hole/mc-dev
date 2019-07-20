@@ -16,6 +16,10 @@ public interface IEntityAccess {
 
     <T extends Entity> List<T> a(Class<? extends T> oclass, AxisAlignedBB axisalignedbb, @Nullable Predicate<? super T> predicate);
 
+    default <T extends Entity> List<T> b(Class<? extends T> oclass, AxisAlignedBB axisalignedbb, @Nullable Predicate<? super T> predicate) {
+        return this.a(oclass, axisalignedbb, predicate);
+    }
+
     List<? extends EntityHuman> getPlayers();
 
     default List<Entity> getEntities(@Nullable Entity entity, AxisAlignedBB axisalignedbb) {
@@ -32,6 +36,10 @@ public interface IEntityAccess {
 
     default <T extends Entity> List<T> a(Class<? extends T> oclass, AxisAlignedBB axisalignedbb) {
         return this.a(oclass, axisalignedbb, IEntitySelector.f);
+    }
+
+    default <T extends Entity> List<T> b(Class<? extends T> oclass, AxisAlignedBB axisalignedbb) {
+        return this.b(oclass, axisalignedbb, IEntitySelector.f);
     }
 
     default Stream<VoxelShape> a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
@@ -150,6 +158,11 @@ public interface IEntityAccess {
     @Nullable
     default <T extends EntityLiving> T a(Class<? extends T> oclass, PathfinderTargetCondition pathfindertargetcondition, @Nullable EntityLiving entityliving, double d0, double d1, double d2, AxisAlignedBB axisalignedbb) {
         return this.a(this.a(oclass, axisalignedbb, (Predicate) null), pathfindertargetcondition, entityliving, d0, d1, d2);
+    }
+
+    @Nullable
+    default <T extends EntityLiving> T b(Class<? extends T> oclass, PathfinderTargetCondition pathfindertargetcondition, @Nullable EntityLiving entityliving, double d0, double d1, double d2, AxisAlignedBB axisalignedbb) {
+        return this.a(this.b(oclass, axisalignedbb, (Predicate) null), pathfindertargetcondition, entityliving, d0, d1, d2);
     }
 
     @Nullable

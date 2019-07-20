@@ -197,7 +197,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
     private IBlockData a(World world, IBlockData iblockdata, BlockPosition blockposition) {
         Fluid fluid = iblockdata.p();
 
-        return !fluid.isEmpty() && !Block.d(iblockdata, world, blockposition, EnumDirection.UP) ? fluid.getBlockData() : iblockdata;
+        return !fluid.isEmpty() && !iblockdata.d(world, blockposition, EnumDirection.UP) ? fluid.getBlockData() : iblockdata;
     }
 
     private static boolean a(BiomeBase[] abiomebase, int i, int j, int k) {

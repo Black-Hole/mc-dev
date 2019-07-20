@@ -50,7 +50,7 @@ public class DemoPlayerInteractManager extends PlayerInteractManager {
 
     }
 
-    private void f() {
+    private void e() {
         if (this.e > 100) {
             this.player.sendMessage(new ChatMessage("demo.reminder", new Object[0]));
             this.e = 0;
@@ -59,30 +59,18 @@ public class DemoPlayerInteractManager extends PlayerInteractManager {
     }
 
     @Override
-    public void a(BlockPosition blockposition, EnumDirection enumdirection) {
+    public void a(BlockPosition blockposition, PacketPlayInBlockDig.EnumPlayerDigType packetplayinblockdig_enumplayerdigtype, EnumDirection enumdirection, int i) {
         if (this.d) {
-            this.f();
+            this.e();
         } else {
-            super.a(blockposition, enumdirection);
+            super.a(blockposition, packetplayinblockdig_enumplayerdigtype, enumdirection, i);
         }
-    }
-
-    @Override
-    public void a(BlockPosition blockposition) {
-        if (!this.d) {
-            super.a(blockposition);
-        }
-    }
-
-    @Override
-    public boolean breakBlock(BlockPosition blockposition) {
-        return this.d ? false : super.breakBlock(blockposition);
     }
 
     @Override
     public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand) {
         if (this.d) {
-            this.f();
+            this.e();
             return EnumInteractionResult.PASS;
         } else {
             return super.a(entityhuman, world, itemstack, enumhand);
@@ -92,7 +80,7 @@ public class DemoPlayerInteractManager extends PlayerInteractManager {
     @Override
     public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (this.d) {
-            this.f();
+            this.e();
             return EnumInteractionResult.PASS;
         } else {
             return super.a(entityhuman, world, itemstack, enumhand, movingobjectpositionblock);

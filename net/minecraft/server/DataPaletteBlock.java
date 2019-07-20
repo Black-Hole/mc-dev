@@ -1,5 +1,8 @@
 package net.minecraft.server;
 
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2IntMap.Entry;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
@@ -203,5 +206,22 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
 
     public boolean a(T t0) {
         return this.h.b(t0);
+    }
+
+    public void a(DataPaletteBlock.a<T> datapaletteblock_a) {
+        Int2IntOpenHashMap int2intopenhashmap = new Int2IntOpenHashMap();
+
+        this.a.a((i) -> {
+            int2intopenhashmap.put(i, int2intopenhashmap.get(i) + 1);
+        });
+        int2intopenhashmap.int2IntEntrySet().forEach((entry) -> {
+            datapaletteblock_a.accept(this.h.a(entry.getIntKey()), entry.getIntValue());
+        });
+    }
+
+    @FunctionalInterface
+    public interface a<T> {
+
+        void accept(T t0, int i);
     }
 }

@@ -21,7 +21,7 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
         while (iterator.hasNext()) {
             AttributeInstance attributeinstance = (AttributeInstance) iterator.next();
 
-            this.b.add(new PacketPlayOutUpdateAttributes.AttributeSnapshot(attributeinstance.getAttribute().getName(), attributeinstance.b(), attributeinstance.c()));
+            this.b.add(new PacketPlayOutUpdateAttributes.AttributeSnapshot(attributeinstance.getAttribute().getName(), attributeinstance.getBaseValue(), attributeinstance.getModifiers()));
         }
 
     }
@@ -65,9 +65,9 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
             while (iterator1.hasNext()) {
                 AttributeModifier attributemodifier = (AttributeModifier) iterator1.next();
 
-                packetdataserializer.a(attributemodifier.a());
-                packetdataserializer.writeDouble(attributemodifier.d());
-                packetdataserializer.writeByte(attributemodifier.c().a());
+                packetdataserializer.a(attributemodifier.getUniqueId());
+                packetdataserializer.writeDouble(attributemodifier.getAmount());
+                packetdataserializer.writeByte(attributemodifier.getOperation().a());
             }
         }
 

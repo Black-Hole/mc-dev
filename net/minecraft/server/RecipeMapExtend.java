@@ -40,7 +40,7 @@ public class RecipeMapExtend extends ShapedRecipes {
             while (iterator.hasNext()) {
                 MapIcon mapicon = (MapIcon) iterator.next();
 
-                if (mapicon.b() == MapIcon.Type.MANSION || mapicon.b() == MapIcon.Type.MONUMENT) {
+                if (mapicon.getType() == MapIcon.Type.MANSION || mapicon.getType() == MapIcon.Type.MONUMENT) {
                     return true;
                 }
             }

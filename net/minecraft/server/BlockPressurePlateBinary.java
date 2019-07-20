@@ -27,9 +27,9 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
     @Override
     protected void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
         if (this.material == Material.WOOD) {
-            generatoraccess.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.8F);
+            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.8F);
         } else {
-            generatoraccess.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_STONE_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.6F);
+            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_STONE_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.6F);
         }
 
     }
@@ -37,9 +37,9 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
     @Override
     protected void b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
         if (this.material == Material.WOOD) {
-            generatoraccess.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.7F);
+            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.7F);
         } else {
-            generatoraccess.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.5F);
+            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.5F);
         }
 
     }

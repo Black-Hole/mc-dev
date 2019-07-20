@@ -57,7 +57,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
     }
 
     @Override
-    protected boolean dW() {
+    protected boolean dV() {
         return false;
     }
 
@@ -87,7 +87,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
     }
 
     @Override
-    protected ItemStack dY() {
+    protected ItemStack dX() {
         return ItemStack.a;
     }
 
@@ -111,7 +111,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
     }
 
     @Override
-    protected boolean dZ() {
+    protected boolean dY() {
         return false;
     }
 
@@ -129,7 +129,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         return !this.isSwimming();
     }
 
-    private boolean ef() {
+    private boolean ee() {
         if (this.bz) {
             return true;
         } else {
@@ -141,7 +141,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
 
     @Override
     public void e(Vec3D vec3d) {
-        if (this.df() && this.isInWater() && this.ef()) {
+        if (this.df() && this.isInWater() && this.ee()) {
             this.a(0.01F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.9D));
@@ -154,7 +154,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
     @Override
     public void ax() {
         if (!this.world.isClientSide) {
-            if (this.df() && this.isInWater() && this.ef()) {
+            if (this.df() && this.isInWater() && this.ee()) {
                 this.navigation = this.b;
                 this.setSwimming(true);
             } else {
@@ -165,14 +165,14 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
 
     }
 
-    protected boolean ea() {
+    protected boolean dZ() {
         PathEntity pathentity = this.getNavigation().l();
 
         if (pathentity != null) {
-            PathPoint pathpoint = pathentity.j();
+            BlockPosition blockposition = pathentity.k();
 
-            if (pathpoint != null) {
-                double d0 = this.e((double) pathpoint.a, (double) pathpoint.b, (double) pathpoint.c);
+            if (blockposition != null) {
+                double d0 = this.e((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
 
                 if (d0 < 4.0D) {
                     return true;
@@ -213,7 +213,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         public void a() {
             EntityLiving entityliving = this.i.getGoalTarget();
 
-            if (this.i.ef() && this.i.isInWater()) {
+            if (this.i.ee() && this.i.isInWater()) {
                 if (entityliving != null && entityliving.locY > this.i.locY || this.i.bz) {
                     this.i.setMot(this.i.getMot().add(0.0D, 0.002D, 0.0D));
                 }
@@ -396,7 +396,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
 
         @Override
         public void e() {
-            if (this.a.locY < (double) (this.c - 1) && (this.a.getNavigation().n() || this.a.ea())) {
+            if (this.a.locY < (double) (this.c - 1) && (this.a.getNavigation().n() || this.a.dZ())) {
                 Vec3D vec3d = RandomPositionGenerator.a(this.a, 4, 8, new Vec3D(this.a.locX, (double) (this.c - 1), this.a.locZ));
 
                 if (vec3d == null) {
@@ -445,7 +445,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         @Override
         public void d() {
             super.d();
-            this.a.dq();
+            this.a.dp();
             this.a.q(false);
         }
     }

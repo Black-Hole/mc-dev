@@ -16,6 +16,11 @@ public class PacketStatusListener implements PacketStatusInListener {
     public void a(IChatBaseComponent ichatbasecomponent) {}
 
     @Override
+    public NetworkManager a() {
+        return this.networkManager;
+    }
+
+    @Override
     public void a(PacketStatusInStart packetstatusinstart) {
         if (this.d) {
             this.networkManager.close(PacketStatusListener.a);

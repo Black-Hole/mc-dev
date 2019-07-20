@@ -32,7 +32,7 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
     }
 
     private boolean m() {
-        return this.e != null && this.a.world.isLoaded(this.e) && this.a((IWorldReader) this.a.world, this.e) ? true : this.l();
+        return this.e != null && this.a((IWorldReader) this.a.world, this.e) ? true : this.l();
     }
 
     @Override
@@ -123,8 +123,8 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
 
     @Override
     protected boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
-        Block block = iworldreader.getType(blockposition).getBlock();
+        IChunkAccess ichunkaccess = iworldreader.getChunkAt(blockposition.getX() >> 4, blockposition.getZ() >> 4, ChunkStatus.FULL, false);
 
-        return block == this.g && iworldreader.getType(blockposition.up()).isAir() && iworldreader.getType(blockposition.up(2)).isAir();
+        return ichunkaccess == null ? false : ichunkaccess.getType(blockposition).getBlock() == this.g && ichunkaccess.getType(blockposition.up()).isAir() && ichunkaccess.getType(blockposition.up(2)).isAir();
     }
 }

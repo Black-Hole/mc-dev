@@ -68,7 +68,7 @@ public class BlockNote extends Block {
         int k = (Integer) iblockdata.get(BlockNote.NOTE);
         float f = (float) Math.pow(2.0D, (double) (k - 12) / 12.0D);
 
-        world.a((EntityHuman) null, blockposition, ((BlockPropertyInstrument) iblockdata.get(BlockNote.INSTRUMENT)).a(), SoundCategory.RECORDS, 3.0F, f);
+        world.playSound((EntityHuman) null, blockposition, ((BlockPropertyInstrument) iblockdata.get(BlockNote.INSTRUMENT)).a(), SoundCategory.RECORDS, 3.0F, f);
         world.addParticle(Particles.NOTE, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 1.2D, (double) blockposition.getZ() + 0.5D, (double) k / 24.0D, 0.0D, 0.0D);
         return true;
     }

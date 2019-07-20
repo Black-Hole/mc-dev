@@ -54,7 +54,7 @@ public class BlockKelpPlant extends Block implements IFluidContainer {
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
         Block block = iblockdata1.getBlock();
 
-        return block != Blocks.MAGMA_BLOCK && (block == this || Block.d(iblockdata1, iworldreader, blockposition1, EnumDirection.UP));
+        return block != Blocks.MAGMA_BLOCK && (block == this || iblockdata1.d(iworldreader, blockposition1, EnumDirection.UP));
     }
 
     @Override

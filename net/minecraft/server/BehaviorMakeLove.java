@@ -36,8 +36,8 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
         if (entityvillager.h((Entity) entityvillager1) <= 5.0D) {
             BehaviorUtil.a((EntityLiving) entityvillager, (EntityLiving) entityvillager1);
             if (i >= this.a) {
-                entityvillager.ep();
-                entityvillager1.ep();
+                entityvillager.eo();
+                entityvillager1.eo();
                 this.a(worldserver, entityvillager, entityvillager1);
             } else if (entityvillager.getRandom().nextInt(35) == 0) {
                 worldserver.broadcastEntityEffect(entityvillager1, (byte) 12);
@@ -92,9 +92,9 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
     }
 
     private boolean a(EntityVillager entityvillager, BlockPosition blockposition) {
-        PathEntity pathentity = entityvillager.getNavigation().b(blockposition);
+        PathEntity pathentity = entityvillager.getNavigation().a(blockposition, VillagePlaceType.q.d());
 
-        return pathentity != null && pathentity.a(blockposition);
+        return pathentity != null && pathentity.h();
     }
 
     private Optional<EntityVillager> a(EntityVillager entityvillager, EntityVillager entityvillager1) {

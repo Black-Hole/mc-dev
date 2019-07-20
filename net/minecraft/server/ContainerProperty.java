@@ -9,12 +9,12 @@ public abstract class ContainerProperty {
     public static ContainerProperty a(final IContainerProperties icontainerproperties, final int i) {
         return new ContainerProperty() {
             @Override
-            public int b() {
+            public int get() {
                 return icontainerproperties.getProperty(i);
             }
 
             @Override
-            public void a(int j) {
+            public void set(int j) {
                 icontainerproperties.setProperty(i, j);
             }
         };
@@ -23,12 +23,12 @@ public abstract class ContainerProperty {
     public static ContainerProperty a(final int[] aint, final int i) {
         return new ContainerProperty() {
             @Override
-            public int b() {
+            public int get() {
                 return aint[i];
             }
 
             @Override
-            public void a(int j) {
+            public void set(int j) {
                 aint[i] = j;
             }
         };
@@ -39,23 +39,23 @@ public abstract class ContainerProperty {
             private int a;
 
             @Override
-            public int b() {
+            public int get() {
                 return this.a;
             }
 
             @Override
-            public void a(int i) {
+            public void set(int i) {
                 this.a = i;
             }
         };
     }
 
-    public abstract int b();
+    public abstract int get();
 
-    public abstract void a(int i);
+    public abstract void set(int i);
 
     public boolean c() {
-        int i = this.b();
+        int i = this.get();
         boolean flag = i != this.a;
 
         this.a = i;

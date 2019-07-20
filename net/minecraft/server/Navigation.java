@@ -28,7 +28,7 @@ public class Navigation extends NavigationAbstract {
     }
 
     @Override
-    public PathEntity b(BlockPosition blockposition) {
+    public PathEntity a(BlockPosition blockposition, int i) {
         BlockPosition blockposition1;
 
         if (this.b.getType(blockposition).isAir()) {
@@ -37,7 +37,7 @@ public class Navigation extends NavigationAbstract {
             }
 
             if (blockposition1.getY() > 0) {
-                return super.b(blockposition1.up());
+                return super.a(blockposition1.up(), i);
             }
 
             while (blockposition1.getY() < this.b.getBuildHeight() && this.b.getType(blockposition1).isAir()) {
@@ -48,19 +48,19 @@ public class Navigation extends NavigationAbstract {
         }
 
         if (!this.b.getType(blockposition).getMaterial().isBuildable()) {
-            return super.b(blockposition);
+            return super.a(blockposition, i);
         } else {
             for (blockposition1 = blockposition.up(); blockposition1.getY() < this.b.getBuildHeight() && this.b.getType(blockposition1).getMaterial().isBuildable(); blockposition1 = blockposition1.up()) {
                 ;
             }
 
-            return super.b(blockposition1);
+            return super.a(blockposition1, i);
         }
     }
 
     @Override
-    public PathEntity a(Entity entity) {
-        return this.b(new BlockPosition(entity));
+    public PathEntity a(Entity entity, int i) {
+        return this.a(new BlockPosition(entity), i);
     }
 
     private int t() {

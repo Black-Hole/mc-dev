@@ -33,7 +33,7 @@ public class CommandTeamMsg {
                 chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatMessage("chat.type.team.hover", new Object[0]))).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, "/teammsg "));
             };
             IChatBaseComponent ichatbasecomponent1 = scoreboardteam.d().a(consumer);
-            Iterator iterator = ichatbasecomponent1.a().iterator();
+            Iterator iterator = ichatbasecomponent1.getSiblings().iterator();
 
             while (iterator.hasNext()) {
                 IChatBaseComponent ichatbasecomponent2 = (IChatBaseComponent) iterator.next();

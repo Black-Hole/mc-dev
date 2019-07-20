@@ -37,6 +37,6 @@ public class ChatComponentText extends ChatBaseComponent {
 
     @Override
     public String toString() {
-        return "TextComponent{text='" + this.b + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
+        return "TextComponent{text='" + this.b + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
     }
 }

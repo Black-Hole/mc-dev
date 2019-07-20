@@ -44,7 +44,7 @@ public class ItemWaterLily extends ItemBlock {
                     }
 
                     entityhuman.b(StatisticList.ITEM_USED.b(this));
-                    world.a(entityhuman, blockposition, SoundEffects.BLOCK_LILY_PAD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.playSound(entityhuman, blockposition, SoundEffects.BLOCK_LILY_PAD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
                 }
             }

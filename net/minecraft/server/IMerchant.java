@@ -22,11 +22,11 @@ public interface IMerchant {
 
     void s(int i);
 
-    boolean eb();
+    boolean ea();
 
-    SoundEffect ec();
+    SoundEffect eb();
 
-    default boolean ej() {
+    default boolean ei() {
         return false;
     }
 
@@ -39,7 +39,7 @@ public interface IMerchant {
             MerchantRecipeList merchantrecipelist = this.getOffers();
 
             if (!merchantrecipelist.isEmpty()) {
-                entityhuman.openTrade(optionalint.getAsInt(), merchantrecipelist, i, this.getExperience(), this.eb(), this.ej());
+                entityhuman.openTrade(optionalint.getAsInt(), merchantrecipelist, i, this.getExperience(), this.ea(), this.ei());
             }
         }
 

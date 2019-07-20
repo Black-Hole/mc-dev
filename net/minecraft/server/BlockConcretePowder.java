@@ -38,7 +38,7 @@ public class BlockConcretePowder extends BlockFalling {
             if (enumdirection != EnumDirection.DOWN || canHarden(iblockdata)) {
                 blockposition_mutableblockposition.g(blockposition).c(enumdirection);
                 iblockdata = iblockaccess.getType(blockposition_mutableblockposition);
-                if (canHarden(iblockdata) && !Block.d(iblockdata, iblockaccess, blockposition, enumdirection.opposite())) {
+                if (canHarden(iblockdata) && !iblockdata.d(iblockaccess, blockposition, enumdirection.opposite())) {
                     flag = true;
                     break;
                 }

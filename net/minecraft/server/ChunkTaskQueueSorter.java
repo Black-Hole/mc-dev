@@ -1,11 +1,13 @@
 package net.minecraft.server;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.util.Either;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
@@ -25,7 +27,7 @@ public class ChunkTaskQueueSorter implements AutoCloseable, PlayerChunk.c {
 
     public ChunkTaskQueueSorter(List<Mailbox<?>> list, Executor executor, int i) {
         this.b = (Map) list.stream().collect(Collectors.toMap(Function.identity(), (mailbox) -> {
-            return new ChunkTaskQueue<>(mailbox.bd() + "_queue", i);
+            return new ChunkTaskQueue<>(mailbox.bf() + "_queue", i);
         }));
         this.c = Sets.newHashSet(list);
         this.d = new ThreadedMailbox<>(new PairedQueue.a(4), executor, "sorter");
@@ -55,7 +57,7 @@ public class ChunkTaskQueueSorter implements AutoCloseable, PlayerChunk.c {
         return (Mailbox) this.d.a((mailbox1) -> {
             return new PairedQueue.b(0, () -> {
                 this.b(mailbox);
-                mailbox1.a((Object) Mailbox.a("chunk priority sorter around " + mailbox.bd(), (chunktaskqueuesorter_a) -> {
+                mailbox1.a((Object) Mailbox.a("chunk priority sorter around " + mailbox.bf(), (chunktaskqueuesorter_a) -> {
                     this.a(mailbox, chunktaskqueuesorter_a.a, chunktaskqueuesorter_a.b, chunktaskqueuesorter_a.c, flag);
                 }));
             });
@@ -65,7 +67,7 @@ public class ChunkTaskQueueSorter implements AutoCloseable, PlayerChunk.c {
     public Mailbox<ChunkTaskQueueSorter.b> a(Mailbox<Runnable> mailbox) {
         return (Mailbox) this.d.a((mailbox1) -> {
             return new PairedQueue.b(0, () -> {
-                mailbox1.a((Object) Mailbox.a("chunk priority sorter around " + mailbox.bd(), (chunktaskqueuesorter_b) -> {
+                mailbox1.a((Object) Mailbox.a("chunk priority sorter around " + mailbox.bf(), (chunktaskqueuesorter_b) -> {
                     this.a(mailbox, chunktaskqueuesorter_b.b, chunktaskqueuesorter_b.a, chunktaskqueuesorter_b.c);
                 }));
             });
@@ -142,6 +144,15 @@ public class ChunkTaskQueueSorter implements AutoCloseable, PlayerChunk.c {
         } else {
             return chunktaskqueue;
         }
+    }
+
+    @VisibleForTesting
+    public String a() {
+        return (String) this.b.entrySet().stream().map((entry) -> {
+            return ((Mailbox) entry.getKey()).bf() + "=[" + (String) ((ChunkTaskQueue) entry.getValue()).b().stream().map((olong) -> {
+                return olong + ":" + new ChunkCoordIntPair(olong);
+            }).collect(Collectors.joining(",")) + "]";
+        }).collect(Collectors.joining(",")) + ", s=" + this.c.size();
     }
 
     public void close() {

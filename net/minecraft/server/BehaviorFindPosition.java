@@ -4,10 +4,10 @@ import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2LongMap.Entry;
-import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-public class BehaviorFindPosition extends Behavior<EntityLiving> {
+public class BehaviorFindPosition extends Behavior<EntityCreature> {
 
     private final VillagePlaceType a;
     private final MemoryModuleType<GlobalPos> b;
@@ -23,16 +23,13 @@ public class BehaviorFindPosition extends Behavior<EntityLiving> {
         this.c = flag;
     }
 
-    @Override
-    protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
-        return this.c && entityliving.isBaby() ? false : worldserver.getTime() - this.d >= 20L;
+    protected boolean a(WorldServer worldserver, EntityCreature entitycreature) {
+        return this.c && entitycreature.isBaby() ? false : worldserver.getTime() - this.d >= 20L;
     }
 
-    @Override
-    protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
+    protected void a(WorldServer worldserver, EntityCreature entitycreature, long i) {
         this.f = 0;
         this.d = worldserver.getTime() + (long) worldserver.getRandom().nextInt(20);
-        EntityCreature entitycreature = (EntityCreature) entityliving;
         VillagePlace villageplace = worldserver.B();
         Predicate<BlockPosition> predicate = (blockposition) -> {
             long j = blockposition.asLong();
@@ -42,51 +39,28 @@ public class BehaviorFindPosition extends Behavior<EntityLiving> {
             } else if (++this.f >= 5) {
                 return false;
             } else {
-                Object object;
-
-                if (this.a == VillagePlaceType.r) {
-                    BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(blockposition);
-
-                    this.a(worldserver, blockposition_mutableblockposition);
-                    blockposition_mutableblockposition.c(EnumDirection.UP);
-                    object = blockposition_mutableblockposition;
-                } else {
-                    object = blockposition;
-                }
-
-                if (entitycreature.getBoundingBox().g(2.0D).c(new Vec3D((BaseBlockPosition) object))) {
-                    return true;
-                } else {
-                    PathEntity pathentity = entitycreature.getNavigation().b((BlockPosition) object);
-                    boolean flag = pathentity != null && pathentity.a((BlockPosition) object);
-
-                    if (!flag) {
-                        this.e.put(j, this.d + 40L);
-                    }
-
-                    return flag;
-                }
+                this.e.put(j, this.d + 40L);
+                return true;
             }
         };
-        Optional<BlockPosition> optional = villageplace.b(this.a.c(), predicate, new BlockPosition(entityliving), 48);
+        Stream<BlockPosition> stream = villageplace.a(this.a.c(), predicate, new BlockPosition(entitycreature), 48, VillagePlace.Occupancy.HAS_SPACE);
+        PathEntity pathentity = entitycreature.getNavigation().a(stream, this.a.d());
 
-        if (optional.isPresent()) {
-            BlockPosition blockposition = (BlockPosition) optional.get();
+        if (pathentity != null && pathentity.h()) {
+            BlockPosition blockposition = pathentity.k();
 
-            entityliving.getBehaviorController().setMemory(this.b, (Object) GlobalPos.create(worldserver.getWorldProvider().getDimensionManager(), blockposition));
-            PacketDebug.c(worldserver, blockposition);
+            villageplace.c(blockposition).ifPresent((villageplacetype) -> {
+                villageplace.a(this.a.c(), (blockposition1) -> {
+                    return blockposition1.equals(blockposition);
+                }, blockposition, 1);
+                entitycreature.getBehaviorController().setMemory(this.b, (Object) GlobalPos.create(worldserver.getWorldProvider().getDimensionManager(), blockposition));
+                PacketDebug.c(worldserver, blockposition);
+            });
         } else if (this.f < 5) {
             this.e.long2LongEntrySet().removeIf((entry) -> {
                 return entry.getLongValue() < this.d;
             });
         }
-
-    }
-
-    private void a(WorldServer worldserver, BlockPosition.MutableBlockPosition blockposition_mutableblockposition) {
-        do {
-            blockposition_mutableblockposition.c(EnumDirection.DOWN);
-        } while (worldserver.getType(blockposition_mutableblockposition).getCollisionShape(worldserver, blockposition_mutableblockposition).isEmpty() && blockposition_mutableblockposition.getY() > 0);
 
     }
 }

@@ -78,7 +78,7 @@ public class EntityPolarBear extends EntityAnimal {
         this.a(SoundEffects.ENTITY_POLAR_BEAR_STEP, 0.15F, 1.0F);
     }
 
-    protected void dW() {
+    protected void dV() {
         if (this.bC <= 0) {
             this.a(SoundEffects.ENTITY_POLAR_BEAR_WARNING, 1.0F, this.cV());
             this.bC = 40;
@@ -101,7 +101,7 @@ public class EntityPolarBear extends EntityAnimal {
             }
 
             this.bA = this.bB;
-            if (this.dX()) {
+            if (this.dW()) {
                 this.bB = MathHelper.a(this.bB + 1.0F, 0.0F, 6.0F);
             } else {
                 this.bB = MathHelper.a(this.bB - 1.0F, 0.0F, 6.0F);
@@ -137,7 +137,7 @@ public class EntityPolarBear extends EntityAnimal {
         return flag;
     }
 
-    public boolean dX() {
+    public boolean dW() {
         return (Boolean) this.datawatcher.get(EntityPolarBear.bz);
     }
 
@@ -195,7 +195,7 @@ public class EntityPolarBear extends EntityAnimal {
 
                 if (this.b <= 10) {
                     EntityPolarBear.this.r(true);
-                    EntityPolarBear.this.dW();
+                    EntityPolarBear.this.dV();
                 }
             } else {
                 this.b = 20;

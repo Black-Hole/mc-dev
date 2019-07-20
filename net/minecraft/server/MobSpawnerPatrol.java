@@ -91,7 +91,7 @@ public class MobSpawnerPatrol {
             if (entitymonsterpatrolling != null) {
                 if (flag) {
                     entitymonsterpatrolling.setPatrolLeader(true);
-                    entitymonsterpatrolling.ee();
+                    entitymonsterpatrolling.ed();
                 }
 
                 entitymonsterpatrolling.setPosition((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());

@@ -99,8 +99,8 @@ public class TileEntitySign extends TileEntity {
             IChatBaseComponent ichatbasecomponent = aichatbasecomponent[j];
             ChatModifier chatmodifier = ichatbasecomponent == null ? null : ichatbasecomponent.getChatModifier();
 
-            if (chatmodifier != null && chatmodifier.h() != null) {
-                ChatClickable chatclickable = chatmodifier.h();
+            if (chatmodifier != null && chatmodifier.getClickEvent() != null) {
+                ChatClickable chatclickable = chatmodifier.getClickEvent();
 
                 if (chatclickable.a() == ChatClickable.EnumClickAction.RUN_COMMAND) {
                     entityhuman.getMinecraftServer().getCommandDispatcher().a(this.a((EntityPlayer) entityhuman), chatclickable.b());

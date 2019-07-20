@@ -96,7 +96,7 @@ public class EntityVex extends EntityMonster {
     }
 
     @Nullable
-    public BlockPosition dW() {
+    public BlockPosition dV() {
         return this.d;
     }
 
@@ -212,7 +212,7 @@ public class EntityVex extends EntityMonster {
 
         @Override
         public void e() {
-            BlockPosition blockposition = EntityVex.this.dW();
+            BlockPosition blockposition = EntityVex.this.dV();
 
             if (blockposition == null) {
                 blockposition = new BlockPosition(EntityVex.this);

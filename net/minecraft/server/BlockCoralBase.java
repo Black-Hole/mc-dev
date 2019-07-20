@@ -69,7 +69,7 @@ public class BlockCoralBase extends Block implements IBlockWaterlogged {
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.down();
 
-        return Block.d(iworldreader.getType(blockposition1), iworldreader, blockposition1, EnumDirection.UP);
+        return iworldreader.getType(blockposition1).d(iworldreader, blockposition1, EnumDirection.UP);
     }
 
     @Override

@@ -27,7 +27,7 @@ public abstract class EntityPerchable extends EntityTameableAnimal {
         super.tick();
     }
 
-    public boolean ei() {
+    public boolean eh() {
         return this.bC > 100;
     }
 }

@@ -10,7 +10,7 @@ public class DispenseBehaviorShulkerBox extends DispenseBehaviorMaybe {
         Item item = itemstack.getItem();
 
         if (item instanceof ItemBlock) {
-            EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
+            EnumDirection enumdirection = (EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING);
             BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
             EnumDirection enumdirection1 = isourceblock.getWorld().isEmpty(blockposition.down()) ? enumdirection : EnumDirection.UP;
 

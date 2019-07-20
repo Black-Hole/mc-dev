@@ -4,9 +4,8 @@ import java.util.Random;
 
 public class EntityEndermite extends EntityMonster {
 
-    private static final PathfinderTargetCondition b = (new PathfinderTargetCondition()).a(5.0D).e();
-    private int c;
-    private boolean d;
+    private int b;
+    private boolean c;
 
     public EntityEndermite(EntityTypes<? extends EntityEndermite> entitytypes, World world) {
         super(entitytypes, world);
@@ -65,15 +64,15 @@ public class EntityEndermite extends EntityMonster {
     @Override
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.c = nbttagcompound.getInt("Lifetime");
-        this.d = nbttagcompound.getBoolean("PlayerSpawned");
+        this.b = nbttagcompound.getInt("Lifetime");
+        this.c = nbttagcompound.getBoolean("PlayerSpawned");
     }
 
     @Override
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("Lifetime", this.c);
-        nbttagcompound.setBoolean("PlayerSpawned", this.d);
+        nbttagcompound.setInt("Lifetime", this.b);
+        nbttagcompound.setBoolean("PlayerSpawned", this.c);
     }
 
     @Override
@@ -94,11 +93,11 @@ public class EntityEndermite extends EntityMonster {
     }
 
     public boolean isPlayerSpawned() {
-        return this.d;
+        return this.c;
     }
 
     public void setPlayerSpawned(boolean flag) {
-        this.d = flag;
+        this.c = flag;
     }
 
     @Override
@@ -110,10 +109,10 @@ public class EntityEndermite extends EntityMonster {
             }
         } else {
             if (!this.isPersistent()) {
-                ++this.c;
+                ++this.b;
             }
 
-            if (this.c >= 2400) {
+            if (this.b >= 2400) {
                 this.die();
             }
         }
@@ -122,7 +121,7 @@ public class EntityEndermite extends EntityMonster {
 
     public static boolean b(EntityTypes<EntityEndermite> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
         if (d(entitytypes, generatoraccess, enummobspawn, blockposition, random)) {
-            EntityHuman entityhuman = generatoraccess.a(EntityEndermite.b, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
+            EntityHuman entityhuman = generatoraccess.a((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, 5.0D, true);
 
             return entityhuman == null;
         } else {

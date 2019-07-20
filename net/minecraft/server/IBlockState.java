@@ -7,7 +7,7 @@ public interface IBlockState<T extends Comparable<T>> {
 
     String a();
 
-    Collection<T> d();
+    Collection<T> getValues();
 
     Class<T> b();
 

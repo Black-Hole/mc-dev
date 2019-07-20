@@ -21,7 +21,7 @@ public class ItemBookAndQuill extends Item {
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        entityhuman.a(itemstack, enumhand);
+        entityhuman.openBook(itemstack, enumhand);
         entityhuman.b(StatisticList.ITEM_USED.b(this));
         return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
     }

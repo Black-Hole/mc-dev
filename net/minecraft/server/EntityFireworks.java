@@ -124,7 +124,7 @@ public class EntityFireworks extends Entity implements IProjectile {
         this.pitch = MathHelper.g(0.2F, this.lastPitch, this.pitch);
         this.yaw = MathHelper.g(0.2F, this.lastYaw, this.yaw);
         if (this.ticksFlown == 0 && !this.isSilent()) {
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.AMBIENT, 3.0F, 1.0F);
+            this.world.playSound((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.AMBIENT, 3.0F, 1.0F);
         }
 
         ++this.ticksFlown;

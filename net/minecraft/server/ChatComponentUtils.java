@@ -22,7 +22,7 @@ public class ChatComponentUtils {
         } else {
             ++i;
             IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent instanceof ChatComponentContextual ? ((ChatComponentContextual) ichatbasecomponent).a(commandlistenerwrapper, entity, i) : ichatbasecomponent.g();
-            Iterator iterator = ichatbasecomponent.a().iterator();
+            Iterator iterator = ichatbasecomponent.getSiblings().iterator();
 
             while (iterator.hasNext()) {
                 IChatBaseComponent ichatbasecomponent2 = (IChatBaseComponent) iterator.next();

@@ -66,7 +66,7 @@ public class ItemEnderEye extends Item {
                         CriterionTriggers.m.a((EntityPlayer) entityhuman, blockposition);
                     }
 
-                    world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_ENDER_EYE_LAUNCH, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderEye.i.nextFloat() * 0.4F + 0.8F));
+                    world.playSound((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_ENDER_EYE_LAUNCH, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderEye.i.nextFloat() * 0.4F + 0.8F));
                     world.a((EntityHuman) null, 1003, new BlockPosition(entityhuman), 0);
                     if (!entityhuman.abilities.canInstantlyBuild) {
                         itemstack.subtract(1);

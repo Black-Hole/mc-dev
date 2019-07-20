@@ -171,7 +171,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
                     this.impulse = true;
                 }
 
-                if (movingobjectpositionentity == null || this.s() <= 0) {
+                if (movingobjectpositionentity == null || this.getPierceLevel() <= 0) {
                     break;
                 }
 
@@ -273,7 +273,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
             this.inGround = true;
             this.shake = 7;
             this.setCritical(false);
-            this.b((byte) 0);
+            this.setPierceLevel((byte) 0);
             this.a(SoundEffects.ENTITY_ARROW_HIT);
             this.o(false);
             this.w();
@@ -298,7 +298,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         float f = (float) this.getMot().f();
         int i = MathHelper.f(Math.max((double) f * this.damage, 0.0D));
 
-        if (this.s() > 0) {
+        if (this.getPierceLevel() > 0) {
             if (this.az == null) {
                 this.az = new IntOpenHashSet(5);
             }
@@ -307,7 +307,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
                 this.aA = Lists.newArrayListWithCapacity(5);
             }
 
-            if (this.az.size() >= this.s() + 1) {
+            if (this.az.size() >= this.getPierceLevel() + 1) {
                 this.die();
                 return;
             }
@@ -341,7 +341,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
             if (entity instanceof EntityLiving) {
                 EntityLiving entityliving = (EntityLiving) entity;
 
-                if (!this.world.isClientSide && this.s() <= 0) {
+                if (!this.world.isClientSide && this.getPierceLevel() <= 0) {
                     entityliving.setArrowCount(entityliving.getArrowCount() + 1);
                 }
 
@@ -379,7 +379,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
             }
 
             this.a(this.ay, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
-            if (this.s() <= 0 && !(entity instanceof EntityEnderman)) {
+            if (this.getPierceLevel() <= 0 && !(entity instanceof EntityEnderman)) {
                 this.die();
             }
         } else {
@@ -428,7 +428,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         nbttagcompound.setByte("pickup", (byte) this.fromPlayer.ordinal());
         nbttagcompound.setDouble("damage", this.damage);
         nbttagcompound.setBoolean("crit", this.isCritical());
-        nbttagcompound.setByte("PierceLevel", this.s());
+        nbttagcompound.setByte("PierceLevel", this.getPierceLevel());
         if (this.shooter != null) {
             nbttagcompound.a("OwnerUUID", this.shooter);
         }
@@ -457,7 +457,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         }
 
         this.setCritical(nbttagcompound.getBoolean("crit"));
-        this.b(nbttagcompound.getByte("PierceLevel"));
+        this.setPierceLevel(nbttagcompound.getByte("PierceLevel"));
         if (nbttagcompound.b("OwnerUUID")) {
             this.shooter = nbttagcompound.a("OwnerUUID");
         }
@@ -532,7 +532,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         this.a(1, flag);
     }
 
-    public void b(byte b0) {
+    public void setPierceLevel(byte b0) {
         this.datawatcher.set(EntityArrow.as, b0);
     }
 
@@ -559,7 +559,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         return (b0 & 4) != 0;
     }
 
-    public byte s() {
+    public byte getPierceLevel() {
         return (Byte) this.datawatcher.get(EntityArrow.as);
     }
 

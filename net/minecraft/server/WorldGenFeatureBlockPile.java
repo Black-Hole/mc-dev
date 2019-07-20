@@ -39,7 +39,7 @@ public abstract class WorldGenFeatureBlockPile extends WorldGenerator<WorldGenFe
         BlockPosition blockposition1 = blockposition.down();
         IBlockData iblockdata = generatoraccess.getType(blockposition1);
 
-        return iblockdata.getBlock() == Blocks.GRASS_PATH ? random.nextBoolean() : Block.d(iblockdata, generatoraccess, blockposition1, EnumDirection.UP);
+        return iblockdata.getBlock() == Blocks.GRASS_PATH ? random.nextBoolean() : iblockdata.d(generatoraccess, blockposition1, EnumDirection.UP);
     }
 
     private void b(GeneratorAccess generatoraccess, BlockPosition blockposition, Random random) {

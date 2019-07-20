@@ -51,18 +51,18 @@ public class EntityZombieHusk extends EntityZombie {
     }
 
     @Override
-    protected boolean dZ() {
+    protected boolean dY() {
         return true;
     }
 
     @Override
-    protected void eb() {
+    protected void ea() {
         this.b(EntityTypes.ZOMBIE);
         this.world.a((EntityHuman) null, 1041, new BlockPosition(this), 0);
     }
 
     @Override
-    protected ItemStack dY() {
+    protected ItemStack dX() {
         return ItemStack.a;
     }
 }

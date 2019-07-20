@@ -5,10 +5,10 @@ import java.util.Optional;
 
 public class BehaviorPositionEntity implements BehaviorPosition {
 
-    private final EntityLiving a;
+    private final Entity a;
 
-    public BehaviorPositionEntity(EntityLiving entityliving) {
-        this.a = entityliving;
+    public BehaviorPositionEntity(Entity entity) {
+        this.a = entity;
     }
 
     @Override

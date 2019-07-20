@@ -7,7 +7,7 @@ public class EntitySalmon extends EntityFishSchool {
     }
 
     @Override
-    public int dY() {
+    public int dX() {
         return 5;
     }
 

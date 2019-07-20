@@ -25,14 +25,14 @@ public class ItemChorusFruit extends Item {
                 }
 
                 if (entityliving.a(d3, d4, d5, true)) {
-                    world.a((EntityHuman) null, d0, d1, d2, SoundEffects.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                    world.playSound((EntityHuman) null, d0, d1, d2, SoundEffects.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
                     entityliving.a(SoundEffects.ITEM_CHORUS_FRUIT_TELEPORT, 1.0F, 1.0F);
                     break;
                 }
             }
 
             if (entityliving instanceof EntityHuman) {
-                ((EntityHuman) entityliving).getCooldownTracker().a(this, 20);
+                ((EntityHuman) entityliving).getCooldownTracker().setCooldown(this, 20);
             }
         }
 

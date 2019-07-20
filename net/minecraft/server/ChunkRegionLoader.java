@@ -357,7 +357,7 @@ public class ChunkRegionLoader {
         TickList<Block> ticklist = ichunkaccess.n();
 
         if (ticklist instanceof ProtoChunkTickList) {
-            nbttagcompound1.set("ToBeTicked", ((ProtoChunkTickList) ticklist).a());
+            nbttagcompound1.set("ToBeTicked", ((ProtoChunkTickList) ticklist).b());
         } else if (ticklist instanceof TickListChunk) {
             nbttagcompound1.set("TileTicks", ((TickListChunk) ticklist).a(worldserver.getTime()));
         } else {
@@ -367,7 +367,7 @@ public class ChunkRegionLoader {
         TickList<FluidType> ticklist1 = ichunkaccess.o();
 
         if (ticklist1 instanceof ProtoChunkTickList) {
-            nbttagcompound1.set("LiquidsToBeTicked", ((ProtoChunkTickList) ticklist1).a());
+            nbttagcompound1.set("LiquidsToBeTicked", ((ProtoChunkTickList) ticklist1).b());
         } else if (ticklist1 instanceof TickListChunk) {
             nbttagcompound1.set("LiquidTicks", ((TickListChunk) ticklist1).a(worldserver.getTime()));
         } else {

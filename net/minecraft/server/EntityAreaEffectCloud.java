@@ -97,7 +97,7 @@ public class EntityAreaEffectCloud extends Entity {
 
     }
 
-    public void a(MobEffect mobeffect) {
+    public void addEffect(MobEffect mobeffect) {
         this.effects.add(mobeffect);
         if (!this.hasColor) {
             this.z();
@@ -161,7 +161,7 @@ public class EntityAreaEffectCloud extends Entity {
                         f1 = MathHelper.c(this.random.nextFloat()) * 0.2F;
                         f2 = MathHelper.cos(f4) * f1;
                         f3 = MathHelper.sin(f4) * f1;
-                        if (particleparam.b() == Particles.ENTITY_EFFECT) {
+                        if (particleparam.getParticle() == Particles.ENTITY_EFFECT) {
                             int i1 = this.random.nextBoolean() ? 16777215 : this.getColor();
 
                             i = i1 >> 16 & 255;
@@ -182,7 +182,7 @@ public class EntityAreaEffectCloud extends Entity {
                     f3 = MathHelper.cos(f1) * f2;
                     float f6 = MathHelper.sin(f1) * f2;
 
-                    if (particleparam.b() == Particles.ENTITY_EFFECT) {
+                    if (particleparam.getParticle() == Particles.ENTITY_EFFECT) {
                         i = this.getColor();
                         j = i >> 16 & 255;
                         k = i >> 8 & 255;
@@ -252,7 +252,7 @@ public class EntityAreaEffectCloud extends Entity {
                         while (iterator2.hasNext()) {
                             EntityLiving entityliving = (EntityLiving) iterator2.next();
 
-                            if (!this.affectedEntities.containsKey(entityliving) && entityliving.du()) {
+                            if (!this.affectedEntities.containsKey(entityliving) && entityliving.dt()) {
                                 double d0 = entityliving.locX - this.locX;
                                 double d1 = entityliving.locZ - this.locZ;
                                 double d2 = d0 * d0 + d1 * d1;
@@ -364,7 +364,7 @@ public class EntityAreaEffectCloud extends Entity {
                 MobEffect mobeffect = MobEffect.b(nbttaglist.getCompound(i));
 
                 if (mobeffect != null) {
-                    this.a(mobeffect);
+                    this.addEffect(mobeffect);
                 }
             }
         }

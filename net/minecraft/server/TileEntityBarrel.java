@@ -176,6 +176,6 @@ public class TileEntityBarrel extends TileEntityLootable {
         double d1 = (double) this.position.getY() + 0.5D + (double) baseblockposition.getY() / 2.0D;
         double d2 = (double) this.position.getZ() + 0.5D + (double) baseblockposition.getZ() / 2.0D;
 
-        this.world.a((EntityHuman) null, d0, d1, d2, soundeffect, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+        this.world.playSound((EntityHuman) null, d0, d1, d2, soundeffect, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
     }
 }

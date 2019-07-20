@@ -20,14 +20,14 @@ public class DataWatcher {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Map<Class<? extends Entity>, Integer> b = Maps.newHashMap();
-    private final Entity c;
-    private final Map<Integer, DataWatcher.Item<?>> d = Maps.newHashMap();
-    private final ReadWriteLock e = new ReentrantReadWriteLock();
+    private final Entity entity;
+    private final Map<Integer, DataWatcher.Item<?>> entries = Maps.newHashMap();
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private boolean f = true;
     private boolean g;
 
     public DataWatcher(Entity entity) {
-        this.c = entity;
+        this.entity = entity;
     }
 
     public static <T> DataWatcherObject<T> a(Class<? extends Entity> oclass, DataWatcherSerializer<T> datawatcherserializer) {
@@ -75,7 +75,7 @@ public class DataWatcher {
 
         if (i > 254) {
             throw new IllegalArgumentException("Data value id is too big with " + i + "! (Max is " + 254 + ")");
-        } else if (this.d.containsKey(i)) {
+        } else if (this.entries.containsKey(i)) {
             throw new IllegalArgumentException("Duplicate id value for " + i + "!");
         } else if (DataWatcherRegistry.b(datawatcherobject.b()) < 0) {
             throw new IllegalArgumentException("Unregistered serializer " + datawatcherobject.b() + " for " + i + "!");
@@ -87,19 +87,19 @@ public class DataWatcher {
     private <T> void registerObject(DataWatcherObject<T> datawatcherobject, T t0) {
         DataWatcher.Item<T> datawatcher_item = new DataWatcher.Item<>(datawatcherobject, t0);
 
-        this.e.writeLock().lock();
-        this.d.put(datawatcherobject.a(), datawatcher_item);
+        this.lock.writeLock().lock();
+        this.entries.put(datawatcherobject.a(), datawatcher_item);
         this.f = false;
-        this.e.writeLock().unlock();
+        this.lock.writeLock().unlock();
     }
 
     private <T> DataWatcher.Item<T> b(DataWatcherObject<T> datawatcherobject) {
-        this.e.readLock().lock();
+        this.lock.readLock().lock();
 
         DataWatcher.Item datawatcher_item;
 
         try {
-            datawatcher_item = (DataWatcher.Item) this.d.get(datawatcherobject.a());
+            datawatcher_item = (DataWatcher.Item) this.entries.get(datawatcherobject.a());
         } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.a(throwable, "Getting synched entity data");
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Synched entity data");
@@ -107,7 +107,7 @@ public class DataWatcher {
             crashreportsystemdetails.a("Data ID", (Object) datawatcherobject);
             throw new ReportedException(crashreport);
         } finally {
-            this.e.readLock().unlock();
+            this.lock.readLock().unlock();
         }
 
         return datawatcher_item;
@@ -122,7 +122,7 @@ public class DataWatcher {
 
         if (ObjectUtils.notEqual(t0, datawatcher_item.b())) {
             datawatcher_item.a(t0);
-            this.c.a(datawatcherobject);
+            this.entity.a(datawatcherobject);
             datawatcher_item.a(true);
             this.g = true;
         }
@@ -150,8 +150,8 @@ public class DataWatcher {
         List<DataWatcher.Item<?>> list = null;
 
         if (this.g) {
-            this.e.readLock().lock();
-            Iterator iterator = this.d.values().iterator();
+            this.lock.readLock().lock();
+            Iterator iterator = this.entries.values().iterator();
 
             while (iterator.hasNext()) {
                 DataWatcher.Item<?> datawatcher_item = (DataWatcher.Item) iterator.next();
@@ -166,7 +166,7 @@ public class DataWatcher {
                 }
             }
 
-            this.e.readLock().unlock();
+            this.lock.readLock().unlock();
         }
 
         this.g = false;
@@ -174,8 +174,8 @@ public class DataWatcher {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.e.readLock().lock();
-        Iterator iterator = this.d.values().iterator();
+        this.lock.readLock().lock();
+        Iterator iterator = this.entries.values().iterator();
 
         while (iterator.hasNext()) {
             DataWatcher.Item<?> datawatcher_item = (DataWatcher.Item) iterator.next();
@@ -183,7 +183,7 @@ public class DataWatcher {
             a(packetdataserializer, datawatcher_item);
         }
 
-        this.e.readLock().unlock();
+        this.lock.readLock().unlock();
         packetdataserializer.writeByte(255);
     }
 
@@ -191,18 +191,18 @@ public class DataWatcher {
     public List<DataWatcher.Item<?>> c() {
         List<DataWatcher.Item<?>> list = null;
 
-        this.e.readLock().lock();
+        this.lock.readLock().lock();
 
         DataWatcher.Item datawatcher_item;
 
-        for (Iterator iterator = this.d.values().iterator(); iterator.hasNext(); list.add(datawatcher_item.d())) {
+        for (Iterator iterator = this.entries.values().iterator(); iterator.hasNext(); list.add(datawatcher_item.d())) {
             datawatcher_item = (DataWatcher.Item) iterator.next();
             if (list == null) {
                 list = Lists.newArrayList();
             }
         }
 
-        this.e.readLock().unlock();
+        this.lock.readLock().unlock();
         return list;
     }
 
@@ -253,8 +253,8 @@ public class DataWatcher {
 
     public void e() {
         this.g = false;
-        this.e.readLock().lock();
-        Iterator iterator = this.d.values().iterator();
+        this.lock.readLock().lock();
+        Iterator iterator = this.entries.values().iterator();
 
         while (iterator.hasNext()) {
             DataWatcher.Item<?> datawatcher_item = (DataWatcher.Item) iterator.next();
@@ -262,7 +262,7 @@ public class DataWatcher {
             datawatcher_item.a(false);
         }
 
-        this.e.readLock().unlock();
+        this.lock.readLock().unlock();
     }
 
     public static class Item<T> {

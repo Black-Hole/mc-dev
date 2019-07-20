@@ -50,7 +50,7 @@ public class DispenserRegistry {
     public static Set<String> b() {
         Set<String> set = new TreeSet();
 
-        a(IRegistry.ENTITY_TYPE, EntityTypes::e, set);
+        a(IRegistry.ENTITY_TYPE, EntityTypes::f, set);
         a(IRegistry.MOB_EFFECT, MobEffectList::c, set);
         a(IRegistry.ITEM, Item::getName, set);
         a(IRegistry.ENCHANTMENT, Enchantment::g, set);

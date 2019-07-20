@@ -32,7 +32,7 @@ public abstract class BlockDirtSnowSpreadable extends BlockDirtSnow {
         if (!world.isClientSide) {
             if (!b(iblockdata, (IWorldReader) world, blockposition)) {
                 world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
-            } else if (world.getLightLevel(blockposition.up()) >= 4) {
+            } else {
                 if (world.getLightLevel(blockposition.up()) >= 9) {
                     IBlockData iblockdata1 = this.getBlockData();
 

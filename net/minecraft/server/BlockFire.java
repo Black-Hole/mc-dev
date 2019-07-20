@@ -46,7 +46,7 @@ public class BlockFire extends Block {
         BlockPosition blockposition1 = blockposition.down();
         IBlockData iblockdata = iblockaccess.getType(blockposition1);
 
-        if (!this.j(iblockdata) && !Block.d(iblockdata, iblockaccess, blockposition1, EnumDirection.UP)) {
+        if (!this.j(iblockdata) && !iblockdata.d(iblockaccess, blockposition1, EnumDirection.UP)) {
             IBlockData iblockdata1 = this.getBlockData();
             EnumDirection[] aenumdirection = EnumDirection.values();
             int i = aenumdirection.length;
@@ -70,7 +70,7 @@ public class BlockFire extends Block {
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.down();
 
-        return Block.d(iworldreader.getType(blockposition1), iworldreader, blockposition1, EnumDirection.UP) || this.canBurn(iworldreader, blockposition);
+        return iworldreader.getType(blockposition1).d(iworldreader, blockposition1, EnumDirection.UP) || this.canBurn(iworldreader, blockposition);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class BlockFire extends Block {
                     if (!this.canBurn(world, blockposition)) {
                         BlockPosition blockposition1 = blockposition.down();
 
-                        if (!Block.d(world.getType(blockposition1), world, blockposition1, EnumDirection.UP) || i > 3) {
+                        if (!world.getType(blockposition1).d(world, blockposition1, EnumDirection.UP) || i > 3) {
                             world.a(blockposition, false);
                         }
 
@@ -117,7 +117,7 @@ public class BlockFire extends Block {
                     }
                 }
 
-                boolean flag1 = world.t(blockposition);
+                boolean flag1 = world.s(blockposition);
                 int k = flag1 ? -50 : 0;
 
                 this.a(world, blockposition.east(), 300 + k, random, i);

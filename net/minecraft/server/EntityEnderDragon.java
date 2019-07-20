@@ -112,7 +112,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
 
             this.world.addParticle(Particles.EXPLOSION, this.locX + (double) f, this.locY + 2.0D + (double) f1, this.locZ + (double) f2, 0.0D, 0.0D, 0.0D);
         } else {
-            this.dX();
+            this.dW();
             Vec3D vec3d = this.getMot();
 
             f1 = 0.2F / (MathHelper.sqrt(b(vec3d)) * 10.0F + 1.0F);
@@ -310,7 +310,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
         return (float) d0;
     }
 
-    private void dX() {
+    private void dW() {
         if (this.currentEnderCrystal != null) {
             if (this.currentEnderCrystal.dead) {
                 this.currentEnderCrystal = null;
@@ -728,7 +728,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
             list.add(0, pathpoint2);
         }
 
-        return new PathEntity(list);
+        return new PathEntity(list, new BlockPosition(pathpoint1.a, pathpoint1.b, pathpoint1.c), true);
     }
 
     @Override
@@ -749,7 +749,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
     @Override
     protected void checkDespawn() {}
 
-    public EntityComplexPart[] dU() {
+    public EntityComplexPart[] dT() {
         return this.children;
     }
 
@@ -798,7 +798,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
         } else {
             BlockPosition blockposition = this.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.a);
 
-            f1 = Math.max(MathHelper.sqrt(blockposition.a(this.ci(), true)) / 4.0F, 1.0F);
+            f1 = Math.max(MathHelper.sqrt(blockposition.a(this.getPositionVector(), true)) / 4.0F, 1.0F);
             float f3 = 6.0F / f1;
             float f4 = this.pitch;
             float f5 = 1.5F;

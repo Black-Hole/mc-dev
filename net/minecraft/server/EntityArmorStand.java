@@ -418,7 +418,7 @@ public class EntityArmorStand extends EntityLiving {
                     return false;
                 } else {
                     boolean flag = damagesource.j() instanceof EntityArrow;
-                    boolean flag1 = flag && ((EntityArrow) damagesource.j()).s() > 0;
+                    boolean flag1 = flag && ((EntityArrow) damagesource.j()).getPierceLevel() > 0;
                     boolean flag2 = "player".equals(damagesource.q());
 
                     if (!flag2 && !flag) {
@@ -504,7 +504,7 @@ public class EntityArmorStand extends EntityLiving {
     }
 
     private void F() {
-        this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_ARMOR_STAND_BREAK, this.getSoundCategory(), 1.0F, 1.0F);
+        this.world.playSound((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_ARMOR_STAND_BREAK, this.getSoundCategory(), 1.0F, 1.0F);
     }
 
     @Override
@@ -726,7 +726,7 @@ public class EntityArmorStand extends EntityLiving {
     public void onLightningStrike(EntityLightning entitylightning) {}
 
     @Override
-    public boolean du() {
+    public boolean dt() {
         return false;
     }
 
@@ -741,7 +741,7 @@ public class EntityArmorStand extends EntityLiving {
     }
 
     @Override
-    public boolean dv() {
+    public boolean du() {
         return false;
     }
 
@@ -749,6 +749,6 @@ public class EntityArmorStand extends EntityLiving {
     public EntitySize a(EntityPose entitypose) {
         float f = this.isMarker() ? 0.0F : (this.isBaby() ? 0.5F : 1.0F);
 
-        return this.getEntityType().j().a(f);
+        return this.getEntityType().k().a(f);
     }
 }

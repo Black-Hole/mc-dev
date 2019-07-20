@@ -28,6 +28,6 @@ public class WorldGenFlatLayerInfo {
     }
 
     public String toString() {
-        return (this.b > 1 ? this.b + "*" : "") + IRegistry.BLOCK.getKey(this.a.getBlock());
+        return (this.b != 1 ? this.b + "*" : "") + IRegistry.BLOCK.getKey(this.a.getBlock());
     }
 }

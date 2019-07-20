@@ -44,7 +44,7 @@ public abstract class BlockDataAbstract<O, S> implements IBlockDataHolder<S> {
     }
 
     public <T extends Comparable<T>> S a(IBlockState<T> iblockstate) {
-        return this.set(iblockstate, (Comparable) a(iblockstate.d(), this.get(iblockstate)));
+        return this.set(iblockstate, (Comparable) a(iblockstate.getValues(), this.get(iblockstate)));
     }
 
     protected static <T> T a(Collection<T> collection, T t0) {
@@ -124,7 +124,7 @@ public abstract class BlockDataAbstract<O, S> implements IBlockDataHolder<S> {
             while (unmodifiableiterator.hasNext()) {
                 Entry<IBlockState<?>, Comparable<?>> entry = (Entry) unmodifiableiterator.next();
                 IBlockState<?> iblockstate = (IBlockState) entry.getKey();
-                Iterator iterator = iblockstate.d().iterator();
+                Iterator iterator = iblockstate.getValues().iterator();
 
                 while (iterator.hasNext()) {
                     Comparable<?> comparable = (Comparable) iterator.next();

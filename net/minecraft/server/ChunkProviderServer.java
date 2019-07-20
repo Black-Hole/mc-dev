@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.util.Either;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -64,6 +65,18 @@ public class ChunkProviderServer extends IChunkProvider {
         return this.playerChunkMap.c();
     }
 
+    private void a(long i, IChunkAccess ichunkaccess, ChunkStatus chunkstatus) {
+        for (int j = 3; j > 0; --j) {
+            this.cachePos[j] = this.cachePos[j - 1];
+            this.cacheStatus[j] = this.cacheStatus[j - 1];
+            this.cacheChunk[j] = this.cacheChunk[j - 1];
+        }
+
+        this.cachePos[0] = i;
+        this.cacheStatus[0] = chunkstatus;
+        this.cacheChunk[0] = ichunkaccess;
+    }
+
     @Nullable
     @Override
     public IChunkAccess getChunkAt(int i, int j, ChunkStatus chunkstatus, boolean flag) {
@@ -97,17 +110,49 @@ public class ChunkProviderServer extends IChunkProvider {
                     return null;
                 }
             });
+            this.a(k, ichunkaccess, chunkstatus);
+            return ichunkaccess;
+        }
+    }
 
-            for (int i1 = 3; i1 > 0; --i1) {
-                this.cachePos[i1] = this.cachePos[i1 - 1];
-                this.cacheStatus[i1] = this.cacheStatus[i1 - 1];
-                this.cacheChunk[i1] = this.cacheChunk[i1 - 1];
+    @Nullable
+    @Override
+    public Chunk a(int i, int j) {
+        if (Thread.currentThread() != this.serverThread) {
+            return null;
+        } else {
+            long k = ChunkCoordIntPair.pair(i, j);
+
+            for (int l = 0; l < 4; ++l) {
+                if (k == this.cachePos[l] && this.cacheStatus[l] == ChunkStatus.FULL) {
+                    IChunkAccess ichunkaccess = this.cacheChunk[l];
+
+                    return ichunkaccess instanceof Chunk ? (Chunk) ichunkaccess : null;
+                }
             }
 
-            this.cachePos[0] = k;
-            this.cacheStatus[0] = chunkstatus;
-            this.cacheChunk[0] = ichunkaccess;
-            return ichunkaccess;
+            PlayerChunk playerchunk = this.getChunk(k);
+
+            if (playerchunk == null) {
+                return null;
+            } else {
+                Either<IChunkAccess, PlayerChunk.Failure> either = (Either) playerchunk.b(ChunkStatus.FULL).getNow((Object) null);
+
+                if (either == null) {
+                    return null;
+                } else {
+                    IChunkAccess ichunkaccess1 = (IChunkAccess) either.left().orElse((Object) null);
+
+                    if (ichunkaccess1 != null) {
+                        this.a(k, ichunkaccess1, ChunkStatus.FULL);
+                        if (ichunkaccess1 instanceof Chunk) {
+                            return (Chunk) ichunkaccess1;
+                        }
+                    }
+
+                    return null;
+                }
+            }
         }
     }
 
@@ -153,7 +198,7 @@ public class ChunkProviderServer extends IChunkProvider {
     }
 
     @Override
-    public IBlockAccess b(int i, int j) {
+    public IBlockAccess c(int i, int j) {
         long k = ChunkCoordIntPair.pair(i, j);
         PlayerChunk playerchunk = this.getChunk(k);
 
@@ -333,7 +378,12 @@ public class ChunkProviderServer extends IChunkProvider {
 
     @Override
     public String getName() {
-        return "ServerChunkCache: " + this.g();
+        return "ServerChunkCache: " + this.h();
+    }
+
+    @VisibleForTesting
+    public int f() {
+        return this.serverThreadQueue.be();
     }
 
     @Override
@@ -341,7 +391,7 @@ public class ChunkProviderServer extends IChunkProvider {
         return this.chunkGenerator;
     }
 
-    public int g() {
+    public int h() {
         return this.playerChunkMap.d();
     }
 
@@ -415,7 +465,7 @@ public class ChunkProviderServer extends IChunkProvider {
         return this.worldPersistentData;
     }
 
-    public VillagePlace i() {
+    public VillagePlace j() {
         return this.playerChunkMap.h();
     }
 

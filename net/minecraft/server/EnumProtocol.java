@@ -109,6 +109,7 @@ public enum EnumProtocol {
             this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntityEffect.class);
             this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutRecipeUpdate.class);
             this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutTags.class);
+            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutBlockBreak.class);
             this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInTeleportAccept.class);
             this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInTileNBTQuery.class);
             this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInDifficultyChange.class);

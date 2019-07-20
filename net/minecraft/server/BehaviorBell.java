@@ -16,7 +16,7 @@ public class BehaviorBell extends Behavior<EntityLiving> {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
         Optional<GlobalPos> optional = behaviorcontroller.getMemory(MemoryModuleType.MEETING_POINT);
 
-        return worldserver.getRandom().nextInt(100) == 0 && optional.isPresent() && Objects.equals(worldserver.getWorldProvider().getDimensionManager(), ((GlobalPos) optional.get()).getDimensionManager()) && ((GlobalPos) optional.get()).getBlockPosition().a((IPosition) entityliving.ci(), 4.0D) && ((List) behaviorcontroller.getMemory(MemoryModuleType.VISIBLE_MOBS).get()).stream().anyMatch((entityliving1) -> {
+        return worldserver.getRandom().nextInt(100) == 0 && optional.isPresent() && Objects.equals(worldserver.getWorldProvider().getDimensionManager(), ((GlobalPos) optional.get()).getDimensionManager()) && ((GlobalPos) optional.get()).getBlockPosition().a((IPosition) entityliving.getPositionVector(), 4.0D) && ((List) behaviorcontroller.getMemory(MemoryModuleType.VISIBLE_MOBS).get()).stream().anyMatch((entityliving1) -> {
             return EntityTypes.VILLAGER.equals(entityliving1.getEntityType());
         });
     }

@@ -39,7 +39,7 @@ public abstract class PathfinderAbstract {
 
     public abstract PathPoint b();
 
-    public abstract PathPoint a(double d0, double d1, double d2);
+    public abstract PathDestination a(double d0, double d1, double d2);
 
     public abstract int a(PathPoint[] apathpoint, PathPoint pathpoint);
 

@@ -64,7 +64,7 @@ public class DragonControllerLandedFlame extends AbstractDragonControllerLanded 
             this.d.setRadius(5.0F);
             this.d.setDuration(200);
             this.d.setParticle(Particles.DRAGON_BREATH);
-            this.d.a(new MobEffect(MobEffects.HARM));
+            this.d.addEffect(new MobEffect(MobEffects.HARM));
             this.a.world.addEntity(this.d);
         }
 

@@ -34,7 +34,7 @@ public class BlockLadder extends Block implements IBlockWaterlogged {
     private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         IBlockData iblockdata = iblockaccess.getType(blockposition);
 
-        return !iblockdata.isPowerSource() && Block.d(iblockdata, iblockaccess, blockposition, enumdirection);
+        return !iblockdata.isPowerSource() && iblockdata.d(iblockaccess, blockposition, enumdirection);
     }
 
     @Override

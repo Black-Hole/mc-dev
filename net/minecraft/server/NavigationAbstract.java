@@ -1,5 +1,9 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 public abstract class NavigationAbstract {
@@ -22,7 +26,8 @@ public abstract class NavigationAbstract {
     protected long n;
     protected PathfinderAbstract o;
     private BlockPosition q;
-    private Pathfinder r;
+    private int r;
+    private Pathfinder s;
 
     public NavigationAbstract(EntityInsentient entityinsentient, World world) {
         this.g = Vec3D.a;
@@ -31,7 +36,7 @@ public abstract class NavigationAbstract {
         this.a = entityinsentient;
         this.b = world;
         this.p = entityinsentient.getAttributeInstance(GenericAttributes.FOLLOW_RANGE);
-        this.r = this.a(MathHelper.floor(this.p.getValue() * 16.0D));
+        this.s = this.a(MathHelper.floor(this.p.getValue() * 16.0D));
     }
 
     public BlockPosition h() {
@@ -56,7 +61,7 @@ public abstract class NavigationAbstract {
         if (this.b.getTime() - this.n > 20L) {
             if (this.q != null) {
                 this.c = null;
-                this.c = this.b(this.q);
+                this.c = this.a(this.q, this.r);
                 this.n = this.b.getTime();
                 this.m = false;
             }
@@ -67,58 +72,59 @@ public abstract class NavigationAbstract {
     }
 
     @Nullable
-    public final PathEntity a(double d0, double d1, double d2) {
-        return this.b(new BlockPosition(d0, d1, d2));
+    public final PathEntity a(double d0, double d1, double d2, int i) {
+        return this.a(new BlockPosition(d0, d1, d2), i);
     }
 
     @Nullable
-    public PathEntity b(BlockPosition blockposition) {
-        float f = (float) blockposition.getX() + 0.5F;
-        float f1 = (float) blockposition.getY() + 0.5F;
-        float f2 = (float) blockposition.getZ() + 0.5F;
-
-        return this.a(blockposition, (double) f, (double) f1, (double) f2, 8, false);
+    public PathEntity a(Stream<BlockPosition> stream, int i) {
+        return this.a((Set) stream.collect(Collectors.toSet()), 8, false, i);
     }
 
     @Nullable
-    public PathEntity a(Entity entity) {
-        BlockPosition blockposition = new BlockPosition(entity);
-        double d0 = entity.locX;
-        double d1 = entity.getBoundingBox().minY;
-        double d2 = entity.locZ;
-
-        return this.a(blockposition, d0, d1, d2, 16, true);
+    public PathEntity a(BlockPosition blockposition, int i) {
+        return this.a(ImmutableSet.of(blockposition), 8, false, i);
     }
 
     @Nullable
-    protected PathEntity a(BlockPosition blockposition, double d0, double d1, double d2, int i, boolean flag) {
-        if (this.a.locY < 0.0D) {
+    public PathEntity a(Entity entity, int i) {
+        return this.a(ImmutableSet.of(new BlockPosition(entity)), 16, true, i);
+    }
+
+    @Nullable
+    protected PathEntity a(Set<BlockPosition> set, int i, boolean flag, int j) {
+        if (set.isEmpty()) {
+            return null;
+        } else if (this.a.locY < 0.0D) {
             return null;
         } else if (!this.a()) {
             return null;
-        } else if (this.c != null && !this.c.b() && blockposition.equals(this.q)) {
+        } else if (this.c != null && !this.c.b() && set.contains(this.q)) {
             return this.c;
         } else {
-            this.q = blockposition.immutableCopy();
-            float f = this.i();
-
             this.b.getMethodProfiler().enter("pathfind");
-            BlockPosition blockposition1 = flag ? (new BlockPosition(this.a)).up() : new BlockPosition(this.a);
-            int j = (int) (f + (float) i);
-            ChunkCache chunkcache = new ChunkCache(this.b, blockposition1.b(-j, -j, -j), blockposition1.b(j, j, j));
-            PathEntity pathentity = this.r.a(chunkcache, this.a, d0, d1, d2, f);
+            float f = this.i();
+            BlockPosition blockposition = flag ? (new BlockPosition(this.a)).up() : new BlockPosition(this.a);
+            int k = (int) (f + (float) i);
+            ChunkCache chunkcache = new ChunkCache(this.b, blockposition.b(-k, -k, -k), blockposition.b(k, k, k));
+            PathEntity pathentity = this.s.a(chunkcache, this.a, set, f, j);
 
             this.b.getMethodProfiler().exit();
+            if (pathentity != null && pathentity.k() != null) {
+                this.q = pathentity.k();
+                this.r = j;
+            }
+
             return pathentity;
         }
     }
 
     public boolean a(double d0, double d1, double d2, double d3) {
-        return this.a(this.a(d0, d1, d2), d3);
+        return this.a(this.a(d0, d1, d2, 1), d3);
     }
 
     public boolean a(Entity entity, double d0) {
-        PathEntity pathentity = this.a(entity);
+        PathEntity pathentity = this.a(entity, 1);
 
         return pathentity != null && this.a(pathentity, d0);
     }
@@ -283,7 +289,7 @@ public abstract class NavigationAbstract {
         return this.o.e();
     }
 
-    public void c(BlockPosition blockposition) {
+    public void b(BlockPosition blockposition) {
         if (this.c != null && !this.c.b() && this.c.e() != 0) {
             PathPoint pathpoint = this.c.c();
             Vec3D vec3d = new Vec3D(((double) pathpoint.a + this.a.locX) / 2.0D, ((double) pathpoint.b + this.a.locY) / 2.0D, ((double) pathpoint.c + this.a.locZ) / 2.0D);

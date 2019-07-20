@@ -133,10 +133,10 @@ public class BlockRedstoneWire extends Block {
         IBlockData iblockdata1 = iblockaccess.getType(blockposition2);
 
         if (!iblockdata1.isOccluding(iblockaccess, blockposition2)) {
-            boolean flag = Block.d(iblockdata, iblockaccess, blockposition1, EnumDirection.UP) || iblockdata.getBlock() == Blocks.HOPPER;
+            boolean flag = iblockdata.d(iblockaccess, blockposition1, EnumDirection.UP) || iblockdata.getBlock() == Blocks.HOPPER;
 
             if (flag && j(iblockaccess.getType(blockposition1.up()))) {
-                if (a(iblockdata.getCollisionShape(iblockaccess, blockposition1))) {
+                if (iblockdata.o(iblockaccess, blockposition1)) {
                     return BlockPropertyRedstoneSide.UP;
                 }
 
@@ -152,7 +152,7 @@ public class BlockRedstoneWire extends Block {
         BlockPosition blockposition1 = blockposition.down();
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
 
-        return Block.d(iblockdata1, iworldreader, blockposition1, EnumDirection.UP) || iblockdata1.getBlock() == Blocks.HOPPER;
+        return iblockdata1.d(iworldreader, blockposition1, EnumDirection.UP) || iblockdata1.getBlock() == Blocks.HOPPER;
     }
 
     private IBlockData a(World world, BlockPosition blockposition, IBlockData iblockdata) {
@@ -176,7 +176,7 @@ public class BlockRedstoneWire extends Block {
         int i = (Integer) iblockdata.get(BlockRedstoneWire.POWER);
 
         this.h = false;
-        int j = world.r(blockposition);
+        int j = world.q(blockposition);
 
         this.h = true;
         int k = 0;

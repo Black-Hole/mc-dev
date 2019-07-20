@@ -64,7 +64,7 @@ public abstract class Enchantment {
         return 0.0F;
     }
 
-    public final boolean b(Enchantment enchantment) {
+    public final boolean isCompatible(Enchantment enchantment) {
         return this.a(enchantment) && enchantment.a(this);
     }
 

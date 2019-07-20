@@ -53,7 +53,7 @@ public abstract class TileEntityLootable extends TileEntityContainer {
             LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).set(LootContextParameters.POSITION, new BlockPosition(this.position)).a(this.lootTableSeed);
 
             if (entityhuman != null) {
-                loottableinfo_builder.a(entityhuman.ec()).set(LootContextParameters.THIS_ENTITY, entityhuman);
+                loottableinfo_builder.a(entityhuman.eb()).set(LootContextParameters.THIS_ENTITY, entityhuman);
             }
 
             loottable.fillInventory(this, loottableinfo_builder.build(LootContextParameterSets.CHEST));

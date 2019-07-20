@@ -129,7 +129,7 @@ public class ThreadedMailbox<T> implements Mailbox<T>, AutoCloseable, Runnable {
     }
 
     @Override
-    public String bd() {
+    public String bf() {
         return this.e;
     }
 }

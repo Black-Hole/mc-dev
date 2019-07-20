@@ -42,7 +42,7 @@ public class BlockTurtleEgg extends Block {
     }
 
     private void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        world.a((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_BREAK, SoundCategory.BLOCKS, 0.7F, 0.9F + world.random.nextFloat() * 0.2F);
+        world.playSound((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_BREAK, SoundCategory.BLOCKS, 0.7F, 0.9F + world.random.nextFloat() * 0.2F);
         int i = (Integer) iblockdata.get(BlockTurtleEgg.b);
 
         if (i <= 1) {
@@ -60,10 +60,10 @@ public class BlockTurtleEgg extends Block {
             int i = (Integer) iblockdata.get(BlockTurtleEgg.a);
 
             if (i < 2) {
-                world.a((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_CRACK, SoundCategory.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
+                world.playSound((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_CRACK, SoundCategory.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
                 world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTurtleEgg.a, i + 1), 2);
             } else {
-                world.a((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_HATCH, SoundCategory.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
+                world.playSound((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_HATCH, SoundCategory.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
                 world.a(blockposition, false);
                 if (!world.isClientSide) {
                     for (int j = 0; j < (Integer) iblockdata.get(BlockTurtleEgg.b); ++j) {

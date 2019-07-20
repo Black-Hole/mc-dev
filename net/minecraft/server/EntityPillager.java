@@ -84,11 +84,11 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
         Block block = iworldreader.getType(blockposition.down()).getBlock();
 
-        return block != Blocks.GRASS_BLOCK && block != Blocks.SAND ? 0.5F - iworldreader.w(blockposition) : 10.0F;
+        return block != Blocks.GRASS_BLOCK && block != Blocks.SAND ? 0.5F - iworldreader.v(blockposition) : 10.0F;
     }
 
     @Override
-    public int dD() {
+    public int dC() {
         return 1;
     }
 
@@ -205,7 +205,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
     }
 
     private boolean b(Item item) {
-        return this.el() && item == Items.WHITE_BANNER;
+        return this.ek() && item == Items.WHITE_BANNER;
     }
 
     @Override
@@ -226,7 +226,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
 
     @Override
     public void a(int i, boolean flag) {
-        Raid raid = this.ek();
+        Raid raid = this.ej();
         boolean flag1 = this.random.nextFloat() <= raid.w();
 
         if (flag1) {
@@ -252,7 +252,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
     }
 
     @Override
-    public SoundEffect dW() {
+    public SoundEffect dV() {
         return SoundEffects.ENTITY_PILLAGER_CELEBRATE;
     }
 

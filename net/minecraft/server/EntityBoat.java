@@ -231,7 +231,7 @@ public class EntityBoat extends Entity {
                         double d0 = i == 1 ? -vec3d.z : vec3d.z;
                         double d1 = i == 1 ? vec3d.x : -vec3d.x;
 
-                        this.world.a((EntityHuman) null, this.locX + d0, this.locY, this.locZ + d1, soundeffect, this.getSoundCategory(), 1.0F, 0.8F + 0.4F * this.random.nextFloat());
+                        this.world.playSound((EntityHuman) null, this.locX + d0, this.locY, this.locZ + d1, soundeffect, this.getSoundCategory(), 1.0F, 0.8F + 0.4F * this.random.nextFloat());
                     }
                 }
 

@@ -44,7 +44,7 @@ public class BiomeFrozenDeepOcean extends BiomeBase {
     }
 
     @Override
-    public float getAdjustedTemperature(BlockPosition blockposition) {
+    protected float c(BlockPosition blockposition) {
         float f = this.getTemperature();
         double d0 = BiomeFrozenDeepOcean.u.a((double) blockposition.getX() * 0.05D, (double) blockposition.getZ() * 0.05D);
         double d1 = BiomeFrozenDeepOcean.e.a((double) blockposition.getX() * 0.2D, (double) blockposition.getZ() * 0.2D);

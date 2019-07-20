@@ -86,7 +86,7 @@ public class EntityRabbit extends EntityAnimal {
 
     }
 
-    public void dW() {
+    public void dV() {
         this.setJumping(true);
         this.bC = 10;
         this.bB = 0;
@@ -114,7 +114,7 @@ public class EntityRabbit extends EntityAnimal {
         if (this.onGround) {
             if (!this.bD) {
                 this.setJumping(false);
-                this.eg();
+                this.ef();
             }
 
             if (this.getRabbitType() == 99 && this.bE == 0) {
@@ -123,7 +123,7 @@ public class EntityRabbit extends EntityAnimal {
                 if (entityliving != null && this.h((Entity) entityliving) < 16.0D) {
                     this.b(entityliving.locX, entityliving.locZ);
                     this.moveController.a(entityliving.locX, entityliving.locY, entityliving.locZ, this.moveController.c());
-                    this.dW();
+                    this.dV();
                     this.bD = true;
                 }
             }
@@ -140,10 +140,10 @@ public class EntityRabbit extends EntityAnimal {
                     }
 
                     this.b(vec3d.x, vec3d.z);
-                    this.dW();
+                    this.dV();
                 }
             } else if (!entityrabbit_controllerjumprabbit.d()) {
-                this.dZ();
+                this.dY();
             }
         }
 
@@ -157,15 +157,15 @@ public class EntityRabbit extends EntityAnimal {
         this.yaw = (float) (MathHelper.d(d1 - this.locZ, d0 - this.locX) * 57.2957763671875D) - 90.0F;
     }
 
-    private void dZ() {
+    private void dY() {
         ((EntityRabbit.ControllerJumpRabbit) this.bt).a(true);
     }
 
-    private void ea() {
+    private void dZ() {
         ((EntityRabbit.ControllerJumpRabbit) this.bt).a(false);
     }
 
-    private void ef() {
+    private void ee() {
         if (this.moveController.c() < 2.2D) {
             this.bE = 10;
         } else {
@@ -174,9 +174,9 @@ public class EntityRabbit extends EntityAnimal {
 
     }
 
-    private void eg() {
-        this.ef();
-        this.ea();
+    private void ef() {
+        this.ee();
+        this.dZ();
     }
 
     @Override
@@ -329,10 +329,10 @@ public class EntityRabbit extends EntityAnimal {
     public static boolean c(EntityTypes<EntityRabbit> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
         Block block = generatoraccess.getType(blockposition.down()).getBlock();
 
-        return block != Blocks.GRASS_BLOCK && block != Blocks.SNOW && block != Blocks.SAND ? generatoraccess.getLightLevel(blockposition, 0) > 8 : true;
+        return (block == Blocks.GRASS_BLOCK || block == Blocks.SNOW || block == Blocks.SAND) && generatoraccess.getLightLevel(blockposition, 0) > 8;
     }
 
-    private boolean eh() {
+    private boolean eg() {
         return this.bF == 0;
     }
 
@@ -383,7 +383,7 @@ public class EntityRabbit extends EntityAnimal {
                 }
 
                 this.i = false;
-                this.h = this.entity.eh();
+                this.h = this.entity.eg();
                 this.h = true;
             }
 
@@ -519,7 +519,7 @@ public class EntityRabbit extends EntityAnimal {
         @Override
         public void b() {
             if (this.a) {
-                this.c.dW();
+                this.c.dV();
                 this.a = false;
             }
 

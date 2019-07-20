@@ -113,7 +113,7 @@ public class ChunkCache implements IWorldReader {
     @Nullable
     @Override
     public TileEntity getTileEntity(BlockPosition blockposition) {
-        IChunkAccess ichunkaccess = this.x(blockposition);
+        IChunkAccess ichunkaccess = this.w(blockposition);
 
         return ichunkaccess.getTileEntity(blockposition);
     }
@@ -123,7 +123,7 @@ public class ChunkCache implements IWorldReader {
         if (World.isOutsideWorld(blockposition)) {
             return Blocks.AIR.getBlockData();
         } else {
-            IChunkAccess ichunkaccess = this.x(blockposition);
+            IChunkAccess ichunkaccess = this.w(blockposition);
 
             return ichunkaccess.getType(blockposition);
         }
@@ -134,7 +134,7 @@ public class ChunkCache implements IWorldReader {
         if (World.isOutsideWorld(blockposition)) {
             return FluidTypes.EMPTY.i();
         } else {
-            IChunkAccess ichunkaccess = this.x(blockposition);
+            IChunkAccess ichunkaccess = this.w(blockposition);
 
             return ichunkaccess.getFluid(blockposition);
         }
@@ -142,7 +142,7 @@ public class ChunkCache implements IWorldReader {
 
     @Override
     public BiomeBase getBiome(BlockPosition blockposition) {
-        IChunkAccess ichunkaccess = this.x(blockposition);
+        IChunkAccess ichunkaccess = this.w(blockposition);
 
         return ichunkaccess.getBiome(blockposition);
     }

@@ -116,11 +116,10 @@ public class EntityFallingBlock extends Entity {
                     if (iblockdata.getBlock() != Blocks.MOVING_PISTON) {
                         this.die();
                         if (!this.g) {
-                            if (!flag1 && (!iblockdata.a((BlockActionContext) (new BlockActionContextDirectional(this.world, blockposition, EnumDirection.DOWN, ItemStack.a, EnumDirection.UP))) || !this.block.canPlace(this.world, blockposition))) {
-                                if (this.dropItem && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
-                                    this.a((IMaterial) block);
-                                }
-                            } else {
+                            boolean flag2 = iblockdata.a((BlockActionContext) (new BlockActionContextDirectional(this.world, blockposition, EnumDirection.DOWN, ItemStack.a, EnumDirection.UP)));
+                            boolean flag3 = this.block.canPlace(this.world, blockposition);
+
+                            if (flag2 && flag3) {
                                 if (this.block.b((IBlockState) BlockProperties.C) && this.world.getFluid(blockposition).getType() == FluidTypes.WATER) {
                                     this.block = (IBlockData) this.block.set(BlockProperties.C, true);
                                 }
@@ -153,6 +152,8 @@ public class EntityFallingBlock extends Entity {
                                 } else if (this.dropItem && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
                                     this.a((IMaterial) block);
                                 }
+                            } else if (this.dropItem && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
+                                this.a((IMaterial) block);
                             }
                         } else if (block instanceof BlockFalling) {
                             ((BlockFalling) block).a(this.world, blockposition);

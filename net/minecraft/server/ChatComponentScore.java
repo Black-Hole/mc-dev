@@ -49,7 +49,7 @@ public class ChatComponentScore extends ChatBaseComponent implements ChatCompone
     private void b(CommandListenerWrapper commandlistenerwrapper) {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
-        if (minecraftserver != null && minecraftserver.E() && UtilColor.b(this.e)) {
+        if (minecraftserver != null && minecraftserver.F() && UtilColor.b(this.e)) {
             ScoreboardServer scoreboardserver = minecraftserver.getScoreboard();
             ScoreboardObjective scoreboardobjective = scoreboardserver.getObjective(this.d);
 
@@ -119,6 +119,6 @@ public class ChatComponentScore extends ChatBaseComponent implements ChatCompone
 
     @Override
     public String toString() {
-        return "ScoreComponent{name='" + this.b + '\'' + "objective='" + this.d + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
+        return "ScoreComponent{name='" + this.b + '\'' + "objective='" + this.d + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
     }
 }

@@ -496,7 +496,7 @@ public final class ItemStack {
                 NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
                 AttributeModifier attributemodifier = GenericAttributes.a(nbttagcompound);
 
-                if (attributemodifier != null && (!nbttagcompound.hasKeyOfType("Slot", 8) || nbttagcompound.getString("Slot").equals(enumitemslot.getSlotName())) && attributemodifier.a().getLeastSignificantBits() != 0L && attributemodifier.a().getMostSignificantBits() != 0L) {
+                if (attributemodifier != null && (!nbttagcompound.hasKeyOfType("Slot", 8) || nbttagcompound.getString("Slot").equals(enumitemslot.getSlotName())) && attributemodifier.getUniqueId().getLeastSignificantBits() != 0L && attributemodifier.getUniqueId().getMostSignificantBits() != 0L) {
                     ((Multimap) object).put(nbttagcompound.getString("AttributeName"), attributemodifier);
                 }
             }

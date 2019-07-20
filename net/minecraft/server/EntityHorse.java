@@ -34,7 +34,7 @@ public class EntityHorse extends EntityHorseAbstract {
 
     }
 
-    public ItemStack dW() {
+    public ItemStack dV() {
         return this.getEquipment(EnumItemSlot.CHEST);
     }
 
@@ -55,25 +55,25 @@ public class EntityHorse extends EntityHorseAbstract {
             }
         }
 
-        this.eo();
+        this.en();
     }
 
     public void setVariant(int i) {
         this.datawatcher.set(EntityHorse.bJ, i);
-        this.eD();
+        this.eC();
     }
 
     public int getVariant() {
         return (Integer) this.datawatcher.get(EntityHorse.bJ);
     }
 
-    private void eD() {
+    private void eC() {
         this.bO = null;
     }
 
     @Override
-    protected void eo() {
-        super.eo();
+    protected void en() {
+        super.en();
         this.l(this.inventoryChest.getItem(1));
     }
 
@@ -85,7 +85,7 @@ public class EntityHorse extends EntityHorseAbstract {
                 int i = ((ItemHorseArmor) itemstack.getItem()).e();
 
                 if (i != 0) {
-                    this.getAttributeInstance(GenericAttributes.ARMOR).b((new AttributeModifier(EntityHorse.bI, "Horse armor bonus", (double) i, AttributeModifier.Operation.ADDITION)).a(false));
+                    this.getAttributeInstance(GenericAttributes.ARMOR).addModifier((new AttributeModifier(EntityHorse.bI, "Horse armor bonus", (double) i, AttributeModifier.Operation.ADDITION)).a(false));
                 }
             }
         }
@@ -94,10 +94,10 @@ public class EntityHorse extends EntityHorseAbstract {
 
     @Override
     public void a(IInventory iinventory) {
-        ItemStack itemstack = this.dW();
+        ItemStack itemstack = this.dV();
 
         super.a(iinventory);
-        ItemStack itemstack1 = this.dW();
+        ItemStack itemstack1 = this.dV();
 
         if (this.ticksLived > 20 && this.j(itemstack1) && itemstack != itemstack1) {
             this.a(SoundEffects.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
@@ -117,9 +117,9 @@ public class EntityHorse extends EntityHorseAbstract {
     @Override
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.ey());
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(this.eA());
-        this.getAttributeInstance(EntityHorse.attributeJumpStrength).setValue(this.ez());
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.ex());
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(this.ez());
+        this.getAttributeInstance(EntityHorse.attributeJumpStrength).setValue(this.ey());
     }
 
     @Override
@@ -127,7 +127,7 @@ public class EntityHorse extends EntityHorseAbstract {
         super.tick();
         if (this.world.isClientSide && this.datawatcher.a()) {
             this.datawatcher.e();
-            this.eD();
+            this.eC();
         }
 
     }
@@ -189,11 +189,11 @@ public class EntityHorse extends EntityHorseAbstract {
                 }
 
                 if (!this.isTamed()) {
-                    this.ev();
+                    this.eu();
                     return true;
                 }
 
-                boolean flag1 = !this.isBaby() && !this.er() && itemstack.getItem() == Items.SADDLE;
+                boolean flag1 = !this.isBaby() && !this.eq() && itemstack.getItem() == Items.SADDLE;
 
                 if (this.j(itemstack) || flag1) {
                     this.e(entityhuman);
@@ -212,7 +212,7 @@ public class EntityHorse extends EntityHorseAbstract {
 
     @Override
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.ex() && ((EntityHorseAbstract) entityanimal).ex());
+        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.ew() && ((EntityHorseAbstract) entityanimal).ew());
     }
 
     @Override
@@ -254,7 +254,7 @@ public class EntityHorse extends EntityHorseAbstract {
     }
 
     @Override
-    public boolean eB() {
+    public boolean eA() {
         return true;
     }
 

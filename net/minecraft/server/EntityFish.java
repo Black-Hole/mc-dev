@@ -38,7 +38,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
     }
 
     @Override
-    public int dD() {
+    public int dC() {
         return 8;
     }
 
@@ -148,7 +148,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
     protected abstract ItemStack l();
 
-    protected boolean dW() {
+    protected boolean dV() {
         return true;
     }
 
@@ -206,7 +206,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
         @Override
         public boolean a() {
-            return this.h.dW() && super.a();
+            return this.h.dV() && super.a();
         }
     }
 }

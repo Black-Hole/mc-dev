@@ -47,7 +47,7 @@ public class PathfinderGoalAvoidTarget<T extends EntityLiving> extends Pathfinde
 
     @Override
     public boolean a() {
-        this.b = this.a.world.a(this.f, this.k, this.a, this.a.locX, this.a.locY, this.a.locZ, this.a.getBoundingBox().grow((double) this.c, 3.0D, (double) this.c));
+        this.b = this.a.world.b(this.f, this.k, this.a, this.a.locX, this.a.locY, this.a.locZ, this.a.getBoundingBox().grow((double) this.c, 3.0D, (double) this.c));
         if (this.b == null) {
             return false;
         } else {
@@ -58,7 +58,7 @@ public class PathfinderGoalAvoidTarget<T extends EntityLiving> extends Pathfinde
             } else if (this.b.e(vec3d.x, vec3d.y, vec3d.z) < this.b.h((Entity) this.a)) {
                 return false;
             } else {
-                this.d = this.e.a(vec3d.x, vec3d.y, vec3d.z);
+                this.d = this.e.a(vec3d.x, vec3d.y, vec3d.z, 0);
                 return this.d != null;
             }
         }

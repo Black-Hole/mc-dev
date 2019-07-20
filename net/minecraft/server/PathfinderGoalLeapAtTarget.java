@@ -44,6 +44,6 @@ public class PathfinderGoalLeapAtTarget extends PathfinderGoal {
             vec3d1 = vec3d1.d().a(0.4D).e(vec3d.a(0.2D));
         }
 
-        this.a.setMot(vec3d1.x, (double) this.c, vec3d1.y);
+        this.a.setMot(vec3d1.x, (double) this.c, vec3d1.z);
     }
 }

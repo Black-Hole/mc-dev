@@ -52,7 +52,7 @@ public class ResourceManager implements IReloadableResourceManager {
 
     @Override
     public IResource a(MinecraftKey minecraftkey) throws IOException {
-        IResourceManager iresourcemanager = (IResourceManager) this.b.get(minecraftkey.b());
+        IResourceManager iresourcemanager = (IResourceManager) this.b.get(minecraftkey.getNamespace());
 
         if (iresourcemanager != null) {
             return iresourcemanager.a(minecraftkey);
@@ -63,7 +63,7 @@ public class ResourceManager implements IReloadableResourceManager {
 
     @Override
     public List<IResource> c(MinecraftKey minecraftkey) throws IOException {
-        IResourceManager iresourcemanager = (IResourceManager) this.b.get(minecraftkey.b());
+        IResourceManager iresourcemanager = (IResourceManager) this.b.get(minecraftkey.getNamespace());
 
         if (iresourcemanager != null) {
             return iresourcemanager.c(minecraftkey);

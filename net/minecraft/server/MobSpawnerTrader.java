@@ -64,7 +64,7 @@ public class MobSpawnerTrader {
             BlockPosition blockposition = entityplayer.getChunkCoordinates();
             boolean flag = true;
             VillagePlace villageplace = this.b.B();
-            Optional<BlockPosition> optional = villageplace.a(VillagePlaceType.r.c(), (blockposition1) -> {
+            Optional<BlockPosition> optional = villageplace.b(VillagePlaceType.r.c(), (blockposition1) -> {
                 return true;
             }, blockposition, 48, VillagePlace.Occupancy.ANY);
             BlockPosition blockposition1 = (BlockPosition) optional.orElse(blockposition);

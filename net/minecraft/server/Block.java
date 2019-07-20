@@ -93,7 +93,7 @@ public class Block implements IMaterial {
 
     @Deprecated
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EntityTypes<?> entitytypes) {
-        return d(iblockdata, iblockaccess, blockposition, EnumDirection.UP) && this.n < 14;
+        return iblockdata.d(iblockaccess, blockposition, EnumDirection.UP) && this.n < 14;
     }
 
     @Deprecated
@@ -230,23 +230,23 @@ public class Block implements IMaterial {
 
     @Deprecated
     public boolean isOccluding(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.getMaterial().f() && a(iblockdata.getCollisionShape(iblockaccess, blockposition)) && !iblockdata.isPowerSource();
+        return iblockdata.getMaterial().f() && iblockdata.o(iblockaccess, blockposition) && !iblockdata.isPowerSource();
     }
 
     @Deprecated
     public boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.material.isSolid() && a(iblockdata.getCollisionShape(iblockaccess, blockposition));
+        return this.material.isSolid() && iblockdata.o(iblockaccess, blockposition);
     }
 
     @Deprecated
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         switch (pathmode) {
             case LAND:
-                return !a(iblockdata.getCollisionShape(iblockaccess, blockposition));
+                return !iblockdata.o(iblockaccess, blockposition);
             case WATER:
                 return iblockaccess.getFluid(blockposition).a(TagsFluid.WATER);
             case AIR:
-                return !a(iblockdata.getCollisionShape(iblockaccess, blockposition));
+                return !iblockdata.o(iblockaccess, blockposition);
             default:
                 return false;
         }
@@ -406,7 +406,7 @@ public class Block implements IMaterial {
         if (this.h == null) {
             MinecraftKey minecraftkey = IRegistry.BLOCK.getKey(this);
 
-            this.h = new MinecraftKey(minecraftkey.b(), "blocks/" + minecraftkey.getKey());
+            this.h = new MinecraftKey(minecraftkey.getNamespace(), "blocks/" + minecraftkey.getKey());
         }
 
         return this.h;

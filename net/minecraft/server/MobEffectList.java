@@ -133,7 +133,7 @@ public class MobEffectList {
             AttributeInstance attributeinstance = attributemapbase.a((IAttribute) entry.getKey());
 
             if (attributeinstance != null) {
-                attributeinstance.c((AttributeModifier) entry.getValue());
+                attributeinstance.removeModifier((AttributeModifier) entry.getValue());
             }
         }
 
@@ -149,14 +149,14 @@ public class MobEffectList {
             if (attributeinstance != null) {
                 AttributeModifier attributemodifier = (AttributeModifier) entry.getValue();
 
-                attributeinstance.c(attributemodifier);
-                attributeinstance.b(new AttributeModifier(attributemodifier.a(), this.c() + " " + i, this.a(i, attributemodifier), attributemodifier.c()));
+                attributeinstance.removeModifier(attributemodifier);
+                attributeinstance.addModifier(new AttributeModifier(attributemodifier.getUniqueId(), this.c() + " " + i, this.a(i, attributemodifier), attributemodifier.getOperation()));
             }
         }
 
     }
 
     public double a(int i, AttributeModifier attributemodifier) {
-        return attributemodifier.d() * (double) (i + 1);
+        return attributemodifier.getAmount() * (double) (i + 1);
     }
 }

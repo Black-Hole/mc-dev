@@ -13,7 +13,7 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
     private boolean c;
     private long d;
     private int e;
-    private List<BlockPosition> f = Lists.newArrayList();
+    private final List<BlockPosition> f = Lists.newArrayList();
 
     public BehaviorFarm() {
         super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.SECONDARY_JOB_SITE, MemoryStatus.VALUE_PRESENT));
@@ -25,13 +25,20 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
         } else if (entityvillager.getVillagerData().getProfession() != VillagerProfession.FARMER) {
             return false;
         } else {
-            this.b = entityvillager.es();
+            this.b = entityvillager.er();
             this.c = false;
             InventorySubcontainer inventorysubcontainer = entityvillager.getInventory();
             int i = inventorysubcontainer.getSize();
 
             for (int j = 0; j < i; ++j) {
-                if (inventorysubcontainer.getItem(j).isEmpty()) {
+                ItemStack itemstack = inventorysubcontainer.getItem(j);
+
+                if (itemstack.isEmpty()) {
+                    this.c = true;
+                    break;
+                }
+
+                if (itemstack.getItem() == Items.WHEAT_SEEDS || itemstack.getItem() == Items.BEETROOT_SEEDS) {
                     this.c = true;
                     break;
                 }
@@ -119,7 +126,7 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
                     }
 
                     if (flag) {
-                        worldserver.a((EntityHuman) null, (double) this.a.getX(), (double) this.a.getY(), (double) this.a.getZ(), SoundEffects.ITEM_CROP_PLANT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        worldserver.playSound((EntityHuman) null, (double) this.a.getX(), (double) this.a.getY(), (double) this.a.getZ(), SoundEffects.ITEM_CROP_PLANT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                         itemstack.subtract(1);
                         if (itemstack.isEmpty()) {
                             inventorysubcontainer.setItem(j, ItemStack.a);

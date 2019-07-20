@@ -38,7 +38,7 @@ public final class SpawnerCreature {
 
                     while (true) {
                         if (j2 < l1) {
-                            label97:
+                            label104:
                             {
                                 j1 += world.random.nextInt(6) - world.random.nextInt(6);
                                 k1 += world.random.nextInt(6) - world.random.nextInt(6);
@@ -47,53 +47,57 @@ public final class SpawnerCreature {
                                 float f1 = (float) k1 + 0.5F;
                                 EntityHuman entityhuman = world.a((double) f, (double) f1, -1.0D);
 
-                                if (entityhuman != null && entityhuman.e((double) f, (double) k, (double) f1) > 576.0D && !blockposition.a((IPosition) (new Vec3D((double) f, (double) k, (double) f1)), 24.0D)) {
-                                    ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition_mutableblockposition);
+                                if (entityhuman != null) {
+                                    double d0 = entityhuman.e((double) f, (double) k, (double) f1);
 
-                                    if (Objects.equals(chunkcoordintpair, chunk.getPos()) || world.getChunkProvider().a(chunkcoordintpair)) {
-                                        if (biomebase_biomemeta == null) {
-                                            biomebase_biomemeta = a(chunkgenerator, enumcreaturetype, world.random, (BlockPosition) blockposition_mutableblockposition);
+                                    if (d0 > 576.0D && !blockposition.a((IPosition) (new Vec3D((double) f, (double) k, (double) f1)), 24.0D)) {
+                                        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition_mutableblockposition);
+
+                                        if (Objects.equals(chunkcoordintpair, chunk.getPos()) || world.getChunkProvider().a(chunkcoordintpair)) {
                                             if (biomebase_biomemeta == null) {
-                                                break label97;
+                                                biomebase_biomemeta = a(chunkgenerator, enumcreaturetype, world.random, (BlockPosition) blockposition_mutableblockposition);
+                                                if (biomebase_biomemeta == null) {
+                                                    break label104;
+                                                }
+
+                                                l1 = biomebase_biomemeta.c + world.random.nextInt(1 + biomebase_biomemeta.d - biomebase_biomemeta.c);
                                             }
 
-                                            l1 = biomebase_biomemeta.c + world.random.nextInt(1 + biomebase_biomemeta.d - biomebase_biomemeta.c);
-                                        }
+                                            if (biomebase_biomemeta.b.e() != EnumCreatureType.MISC && (biomebase_biomemeta.b.d() || d0 <= 16384.0D)) {
+                                                EntityTypes<?> entitytypes = biomebase_biomemeta.b;
 
-                                        if (biomebase_biomemeta.b.d() != EnumCreatureType.MISC) {
-                                            EntityTypes<?> entitytypes = biomebase_biomemeta.b;
+                                                if (entitytypes.b() && a(chunkgenerator, enumcreaturetype, biomebase_biomemeta, (BlockPosition) blockposition_mutableblockposition)) {
+                                                    EntityPositionTypes.Surface entitypositiontypes_surface = EntityPositionTypes.a(entitytypes);
 
-                                            if (entitytypes.b() && a(chunkgenerator, enumcreaturetype, biomebase_biomemeta, (BlockPosition) blockposition_mutableblockposition)) {
-                                                EntityPositionTypes.Surface entitypositiontypes_surface = EntityPositionTypes.a(entitytypes);
+                                                    if (a(entitypositiontypes_surface, (IWorldReader) world, (BlockPosition) blockposition_mutableblockposition, entitytypes) && EntityPositionTypes.a(entitytypes, world, EnumMobSpawn.NATURAL, blockposition_mutableblockposition, world.random) && world.c(entitytypes.a((double) f, (double) k, (double) f1))) {
+                                                        EntityInsentient entityinsentient;
 
-                                                if (a(entitypositiontypes_surface, (IWorldReader) world, (BlockPosition) blockposition_mutableblockposition, entitytypes) && EntityPositionTypes.a(entitytypes, world, EnumMobSpawn.NATURAL, blockposition_mutableblockposition, world.random) && world.c(entitytypes.a((double) f, (double) k, (double) f1))) {
-                                                    EntityInsentient entityinsentient;
+                                                        try {
+                                                            Entity entity = entitytypes.a(world);
 
-                                                    try {
-                                                        Entity entity = entitytypes.a(world);
+                                                            if (!(entity instanceof EntityInsentient)) {
+                                                                throw new IllegalStateException("Trying to spawn a non-mob: " + IRegistry.ENTITY_TYPE.getKey(entitytypes));
+                                                            }
 
-                                                        if (!(entity instanceof EntityInsentient)) {
-                                                            throw new IllegalStateException("Trying to spawn a non-mob: " + IRegistry.ENTITY_TYPE.getKey(entitytypes));
-                                                        }
-
-                                                        entityinsentient = (EntityInsentient) entity;
-                                                    } catch (Exception exception) {
-                                                        SpawnerCreature.LOGGER.warn("Failed to create mob", exception);
-                                                        return;
-                                                    }
-
-                                                    entityinsentient.setPositionRotation((double) f, (double) k, (double) f1, world.random.nextFloat() * 360.0F, 0.0F);
-                                                    if ((entityhuman.e((double) f, (double) k, (double) f1) <= 16384.0D || !entityinsentient.isTypeNotPersistent(entityhuman.e((double) f, (double) k, (double) f1))) && entityinsentient.a((GeneratorAccess) world, EnumMobSpawn.NATURAL) && entityinsentient.a((IWorldReader) world)) {
-                                                        groupdataentity = entityinsentient.prepare(world, world.getDamageScaler(new BlockPosition(entityinsentient)), EnumMobSpawn.NATURAL, groupdataentity, (NBTTagCompound) null);
-                                                        ++i;
-                                                        ++i2;
-                                                        world.addEntity(entityinsentient);
-                                                        if (i >= entityinsentient.dD()) {
+                                                            entityinsentient = (EntityInsentient) entity;
+                                                        } catch (Exception exception) {
+                                                            SpawnerCreature.LOGGER.warn("Failed to create mob", exception);
                                                             return;
                                                         }
 
-                                                        if (entityinsentient.c(i2)) {
-                                                            break label97;
+                                                        entityinsentient.setPositionRotation((double) f, (double) k, (double) f1, world.random.nextFloat() * 360.0F, 0.0F);
+                                                        if ((d0 <= 16384.0D || !entityinsentient.isTypeNotPersistent(d0)) && entityinsentient.a((GeneratorAccess) world, EnumMobSpawn.NATURAL) && entityinsentient.a((IWorldReader) world)) {
+                                                            groupdataentity = entityinsentient.prepare(world, world.getDamageScaler(new BlockPosition(entityinsentient)), EnumMobSpawn.NATURAL, groupdataentity, (NBTTagCompound) null);
+                                                            ++i;
+                                                            ++i2;
+                                                            world.addEntity(entityinsentient);
+                                                            if (i >= entityinsentient.dC()) {
+                                                                return;
+                                                            }
+
+                                                            if (entityinsentient.c(i2)) {
+                                                                break label104;
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -140,7 +144,7 @@ public final class SpawnerCreature {
     }
 
     public static boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
-        return Block.a(iblockdata.getCollisionShape(iblockaccess, blockposition)) ? false : (iblockdata.isPowerSource() ? false : (!fluid.isEmpty() ? false : !iblockdata.a(TagsBlock.RAILS)));
+        return iblockdata.o(iblockaccess, blockposition) ? false : (iblockdata.isPowerSource() ? false : (!fluid.isEmpty() ? false : !iblockdata.a(TagsBlock.RAILS)));
     }
 
     public static boolean a(EntityPositionTypes.Surface entitypositiontypes_surface, IWorldReader iworldreader, BlockPosition blockposition, @Nullable EntityTypes<?> entitytypes) {
@@ -189,7 +193,7 @@ public final class SpawnerCreature {
                         BlockPosition blockposition = a(generatoraccess, biomebase_biomemeta.b, j1, k1);
 
                         if (biomebase_biomemeta.b.b() && a(EntityPositionTypes.Surface.ON_GROUND, (IWorldReader) generatoraccess, blockposition, biomebase_biomemeta.b)) {
-                            float f = biomebase_biomemeta.b.h();
+                            float f = biomebase_biomemeta.b.i();
                             double d0 = MathHelper.a((double) j1, (double) k + (double) f, (double) k + 16.0D - (double) f);
                             double d1 = MathHelper.a((double) k1, (double) l + (double) f, (double) l + 16.0D - (double) f);
 

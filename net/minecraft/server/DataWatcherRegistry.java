@@ -149,7 +149,7 @@ public class DataWatcherRegistry {
     };
     public static final DataWatcherSerializer<ParticleParam> j = new DataWatcherSerializer<ParticleParam>() {
         public void a(PacketDataSerializer packetdataserializer, ParticleParam particleparam) {
-            packetdataserializer.d(IRegistry.PARTICLE_TYPE.a((Object) particleparam.b()));
+            packetdataserializer.d(IRegistry.PARTICLE_TYPE.a((Object) particleparam.getParticle()));
             particleparam.a(packetdataserializer);
         }
 

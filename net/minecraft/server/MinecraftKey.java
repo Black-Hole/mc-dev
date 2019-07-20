@@ -17,16 +17,16 @@ import org.apache.commons.lang3.StringUtils;
 public class MinecraftKey implements Comparable<MinecraftKey> {
 
     private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.id.invalid", new Object[0]));
-    protected final String a;
-    protected final String b;
+    protected final String namespace;
+    protected final String key;
 
     protected MinecraftKey(String[] astring) {
-        this.a = StringUtils.isEmpty(astring[0]) ? "minecraft" : astring[0];
-        this.b = astring[1];
-        if (!d(this.a)) {
-            throw new ResourceKeyInvalidException("Non [a-z0-9_.-] character in namespace of location: " + this.a + ':' + this.b);
-        } else if (!c(this.b)) {
-            throw new ResourceKeyInvalidException("Non [a-z0-9/._-] character in path of location: " + this.a + ':' + this.b);
+        this.namespace = StringUtils.isEmpty(astring[0]) ? "minecraft" : astring[0];
+        this.key = astring[1];
+        if (!d(this.namespace)) {
+            throw new ResourceKeyInvalidException("Non [a-z0-9_.-] character in namespace of location: " + this.namespace + ':' + this.key);
+        } else if (!c(this.key)) {
+            throw new ResourceKeyInvalidException("Non [a-z0-9/._-] character in path of location: " + this.namespace + ':' + this.key);
         }
     }
 
@@ -66,15 +66,15 @@ public class MinecraftKey implements Comparable<MinecraftKey> {
     }
 
     public String getKey() {
-        return this.b;
+        return this.key;
     }
 
-    public String b() {
-        return this.a;
+    public String getNamespace() {
+        return this.namespace;
     }
 
     public String toString() {
-        return this.a + ':' + this.b;
+        return this.namespace + ':' + this.key;
     }
 
     public boolean equals(Object object) {
@@ -85,19 +85,19 @@ public class MinecraftKey implements Comparable<MinecraftKey> {
         } else {
             MinecraftKey minecraftkey = (MinecraftKey) object;
 
-            return this.a.equals(minecraftkey.a) && this.b.equals(minecraftkey.b);
+            return this.namespace.equals(minecraftkey.namespace) && this.key.equals(minecraftkey.key);
         }
     }
 
     public int hashCode() {
-        return 31 * this.a.hashCode() + this.b.hashCode();
+        return 31 * this.namespace.hashCode() + this.key.hashCode();
     }
 
     public int compareTo(MinecraftKey minecraftkey) {
-        int i = this.b.compareTo(minecraftkey.b);
+        int i = this.key.compareTo(minecraftkey.key);
 
         if (i == 0) {
-            i = this.a.compareTo(minecraftkey.a);
+            i = this.namespace.compareTo(minecraftkey.namespace);
         }
 
         return i;

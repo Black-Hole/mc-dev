@@ -33,7 +33,7 @@ public class PathfinderNormal extends PathfinderAbstract {
             i = MathHelper.floor(this.b.getBoundingBox().minY);
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(this.b.locX, (double) i, this.b.locZ);
 
-            for (Block block = this.a.getType(blockposition_mutableblockposition).getBlock(); block == Blocks.WATER; block = this.a.getType(blockposition_mutableblockposition).getBlock()) {
+            for (IBlockData iblockdata = this.a.getType(blockposition_mutableblockposition); iblockdata.getBlock() == Blocks.WATER || iblockdata.p() == FluidTypes.WATER.a(false); iblockdata = this.a.getType(blockposition_mutableblockposition)) {
                 ++i;
                 blockposition_mutableblockposition.c(this.b.locX, (double) i, this.b.locZ);
             }
@@ -75,8 +75,8 @@ public class PathfinderNormal extends PathfinderAbstract {
     }
 
     @Override
-    public PathPoint a(double d0, double d1, double d2) {
-        return this.a(MathHelper.floor(d0), MathHelper.floor(d1), MathHelper.floor(d2));
+    public PathDestination a(double d0, double d1, double d2) {
+        return new PathDestination(this.a(MathHelper.floor(d0), MathHelper.floor(d1), MathHelper.floor(d2)));
     }
 
     @Override
@@ -142,7 +142,7 @@ public class PathfinderNormal extends PathfinderAbstract {
     }
 
     private boolean a(PathPoint pathpoint, @Nullable PathPoint pathpoint1, @Nullable PathPoint pathpoint2, @Nullable PathPoint pathpoint3) {
-        return pathpoint3 != null && !pathpoint3.i && pathpoint2 != null && pathpoint2.k >= 0.0F && pathpoint2.b <= pathpoint.b && pathpoint1 != null && pathpoint1.k >= 0.0F && pathpoint1.b <= pathpoint.b;
+        return pathpoint3 != null && pathpoint2 != null && pathpoint1 != null ? (pathpoint3.i ? false : (pathpoint2.b <= pathpoint.b && pathpoint1.b <= pathpoint.b ? pathpoint3.k >= 0.0F && (pathpoint2.b < pathpoint.b || pathpoint2.k >= 0.0F) && (pathpoint1.b < pathpoint.b || pathpoint1.k >= 0.0F) : false)) : false;
     }
 
     public static double a(IBlockAccess iblockaccess, BlockPosition blockposition) {

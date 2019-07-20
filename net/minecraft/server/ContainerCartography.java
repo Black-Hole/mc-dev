@@ -79,7 +79,7 @@ public class ContainerCartography extends Container {
             public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
                 itemstack.getItem().b(itemstack, entityhuman.world, entityhuman);
                 containeraccess.a((world, blockposition) -> {
-                    world.a((EntityHuman) null, blockposition, SoundEffects.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.playSound((EntityHuman) null, blockposition, SoundEffects.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 });
                 return super.a(entityhuman, itemstack);
             }

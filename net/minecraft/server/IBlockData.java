@@ -267,6 +267,14 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
         this.getBlock().a(world, iblockdata, movingobjectpositionblock, entity);
     }
 
+    public boolean d(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+        return this.c != null ? this.c.i[enumdirection.ordinal()] : Block.d(this, iblockaccess, blockposition, enumdirection);
+    }
+
+    public boolean o(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return this.c != null ? this.c.j : Block.a(this.getCollisionShape(iblockaccess, blockposition));
+    }
+
     public static <T> Dynamic<T> a(DynamicOps<T> dynamicops, IBlockData iblockdata) {
         ImmutableMap<IBlockState<?>, Comparable<?>> immutablemap = iblockdata.getStateMap();
         Object object;
@@ -321,6 +329,8 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
         private final VoxelShape[] f;
         private final VoxelShape g;
         private final boolean h;
+        private final boolean[] i;
+        private final boolean j;
 
         private a(IBlockData iblockdata) {
             Block block = iblockdata.getBlock();
@@ -329,13 +339,16 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
             this.c = block.j(iblockdata, BlockAccessAir.INSTANCE, BlockPosition.ZERO);
             this.d = block.b(iblockdata, (IBlockAccess) BlockAccessAir.INSTANCE, BlockPosition.ZERO);
             this.e = block.k(iblockdata, BlockAccessAir.INSTANCE, BlockPosition.ZERO);
+            int i;
+
             if (!iblockdata.o()) {
                 this.f = null;
             } else {
                 this.f = new VoxelShape[IBlockData.a.a.length];
                 VoxelShape voxelshape = block.h(iblockdata, BlockAccessAir.INSTANCE, BlockPosition.ZERO);
                 EnumDirection[] aenumdirection = IBlockData.a.a;
-                int i = aenumdirection.length;
+
+                i = aenumdirection.length;
 
                 for (int j = 0; j < i; ++j) {
                     EnumDirection enumdirection = aenumdirection[j];
@@ -348,6 +361,17 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
             this.h = Arrays.stream(EnumDirection.EnumAxis.values()).anyMatch((enumdirection_enumaxis) -> {
                 return this.g.b(enumdirection_enumaxis) < 0.0D || this.g.c(enumdirection_enumaxis) > 1.0D;
             });
+            this.i = new boolean[6];
+            EnumDirection[] aenumdirection1 = IBlockData.a.a;
+            int k = aenumdirection1.length;
+
+            for (i = 0; i < k; ++i) {
+                EnumDirection enumdirection1 = aenumdirection1[i];
+
+                this.i[enumdirection1.ordinal()] = Block.d(iblockdata, BlockAccessAir.INSTANCE, BlockPosition.ZERO, enumdirection1);
+            }
+
+            this.j = Block.a(iblockdata.getCollisionShape(BlockAccessAir.INSTANCE, BlockPosition.ZERO));
         }
     }
 }

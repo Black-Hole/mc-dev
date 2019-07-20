@@ -127,7 +127,7 @@ public class BlockDispenser extends BlockTileEntity {
     }
 
     public static IPosition a(ISourceBlock isourceblock) {
-        EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
+        EnumDirection enumdirection = (EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING);
         double d0 = isourceblock.getX() + 0.7D * (double) enumdirection.getAdjacentX();
         double d1 = isourceblock.getY() + 0.7D * (double) enumdirection.getAdjacentY();
         double d2 = isourceblock.getZ() + 0.7D * (double) enumdirection.getAdjacentZ();

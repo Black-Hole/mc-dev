@@ -18,7 +18,7 @@ public class BlockAttachable extends BlockFacingHorizontal {
     public static boolean b(IWorldReader iworldreader, BlockPosition blockposition, EnumDirection enumdirection) {
         BlockPosition blockposition1 = blockposition.shift(enumdirection);
 
-        return Block.d(iworldreader.getType(blockposition1), iworldreader, blockposition1, enumdirection.opposite());
+        return iworldreader.getType(blockposition1).d(iworldreader, blockposition1, enumdirection.opposite());
     }
 
     @Nullable

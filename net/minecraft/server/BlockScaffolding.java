@@ -116,7 +116,7 @@ public class BlockScaffolding extends Block implements IBlockWaterlogged {
 
         if (iblockdata.getBlock() == Blocks.SCAFFOLDING) {
             i = (Integer) iblockdata.get(BlockScaffolding.a);
-        } else if (Block.d(iblockdata, iblockaccess, blockposition_mutableblockposition, EnumDirection.UP)) {
+        } else if (iblockdata.d(iblockaccess, blockposition_mutableblockposition, EnumDirection.UP)) {
             return 0;
         }
 

@@ -96,7 +96,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
     }
 
     @Override
-    public SoundEffect dW() {
+    public SoundEffect dV() {
         return SoundEffects.ENTITY_ILLUSIONER_AMBIENT;
     }
 

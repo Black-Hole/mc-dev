@@ -99,7 +99,7 @@ public class EntityCreeper extends EntityMonster {
                 this.a(1);
             }
 
-            int i = this.dW();
+            int i = this.dV();
 
             if (i > 0 && this.fuseTicks == 0) {
                 this.a(SoundEffects.ENTITY_CREEPER_PRIMED, 1.0F, 0.5F);
@@ -154,7 +154,7 @@ public class EntityCreeper extends EntityMonster {
         return (Boolean) this.datawatcher.get(EntityCreeper.POWERED);
     }
 
-    public int dW() {
+    public int dV() {
         return (Integer) this.datawatcher.get(EntityCreeper.b);
     }
 
@@ -173,7 +173,7 @@ public class EntityCreeper extends EntityMonster {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (itemstack.getItem() == Items.FLINT_AND_STEEL) {
-            this.world.a(entityhuman, this.locX, this.locY, this.locZ, SoundEffects.ITEM_FLINTANDSTEEL_USE, this.getSoundCategory(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
+            this.world.playSound(entityhuman, this.locX, this.locY, this.locZ, SoundEffects.ITEM_FLINTANDSTEEL_USE, this.getSoundCategory(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
             entityhuman.a(enumhand);
             if (!this.world.isClientSide) {
                 this.ignite();
@@ -216,7 +216,7 @@ public class EntityCreeper extends EntityMonster {
             while (iterator.hasNext()) {
                 MobEffect mobeffect = (MobEffect) iterator.next();
 
-                entityareaeffectcloud.a(new MobEffect(mobeffect));
+                entityareaeffectcloud.addEffect(new MobEffect(mobeffect));
             }
 
             this.world.addEntity(entityareaeffectcloud);

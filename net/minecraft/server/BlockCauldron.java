@@ -56,7 +56,7 @@ public class BlockCauldron extends Block {
 
                     entityhuman.a(StatisticList.FILL_CAULDRON);
                     this.a(world, blockposition, iblockdata, 3);
-                    world.a((EntityHuman) null, blockposition, SoundEffects.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.playSound((EntityHuman) null, blockposition, SoundEffects.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
 
                 return true;
@@ -73,7 +73,7 @@ public class BlockCauldron extends Block {
 
                     entityhuman.a(StatisticList.USE_CAULDRON);
                     this.a(world, blockposition, iblockdata, 0);
-                    world.a((EntityHuman) null, blockposition, SoundEffects.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.playSound((EntityHuman) null, blockposition, SoundEffects.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
 
                 return true;
@@ -95,7 +95,7 @@ public class BlockCauldron extends Block {
                             }
                         }
 
-                        world.a((EntityHuman) null, blockposition, SoundEffects.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        world.playSound((EntityHuman) null, blockposition, SoundEffects.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
                         this.a(world, blockposition, iblockdata, i - 1);
                     }
 
@@ -111,7 +111,7 @@ public class BlockCauldron extends Block {
                             }
                         }
 
-                        world.a((EntityHuman) null, blockposition, SoundEffects.ITEM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        world.playSound((EntityHuman) null, blockposition, SoundEffects.ITEM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
                         this.a(world, blockposition, iblockdata, i + 1);
                     }
 

@@ -160,13 +160,13 @@ public class CustomFunctionData implements IResourcePackListener {
         while (iterator.hasNext()) {
             MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
             String s = minecraftkey.getKey();
-            MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.b(), s.substring(CustomFunctionData.a, s.length() - CustomFunctionData.b));
+            MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.getNamespace(), s.substring(CustomFunctionData.a, s.length() - CustomFunctionData.b));
 
             list.add(CompletableFuture.supplyAsync(() -> {
                 return a(iresourcemanager, minecraftkey);
             }, Resource.a).thenApplyAsync((list1) -> {
                 return CustomFunction.a(minecraftkey1, this, list1);
-            }, this.server.aT()).handle((customfunction, throwable) -> {
+            }, this.server.aU()).handle((customfunction, throwable) -> {
                 return this.a(customfunction, throwable, minecraftkey);
             }));
         }
@@ -176,7 +176,7 @@ public class CustomFunctionData implements IResourcePackListener {
             CustomFunctionData.LOGGER.info("Loaded {} custom command functions", this.g.size());
         }
 
-        this.k.a((Map) this.k.a(iresourcemanager, this.server.aT()).join());
+        this.k.a((Map) this.k.a(iresourcemanager, this.server.aU()).join());
         this.l.addAll(this.k.b(CustomFunctionData.d).a());
         this.m = true;
     }
@@ -234,7 +234,7 @@ public class CustomFunctionData implements IResourcePackListener {
     }
 
     public CommandListenerWrapper g() {
-        return new CommandListenerWrapper(ICommandListener.DUMMY, Vec3D.a, Vec2F.a, (WorldServer) null, 4, "", new ChatComponentText(""), this.server, (Entity) null);
+        return new CommandListenerWrapper(ICommandListener.DUMMY, Vec3D.a, Vec2F.a, (WorldServer) null, this.server.k(), "", new ChatComponentText(""), this.server, (Entity) null);
     }
 
     public Tags<CustomFunction> h() {

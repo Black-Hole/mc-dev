@@ -96,7 +96,7 @@ public class EntitySheep extends EntityAnimal {
     @Override
     public MinecraftKey getDefaultLootTable() {
         if (this.isSheared()) {
-            return this.getEntityType().g();
+            return this.getEntityType().h();
         } else {
             switch (this.getColor()) {
                 case WHITE:

@@ -43,7 +43,7 @@ public class TickListChunk<T> implements TickList<T> {
         stream.forEach(set::add);
     }
 
-    public Stream<NextTickListEntry<T>> a() {
+    public Stream<NextTickListEntry<T>> b() {
         return this.a.stream();
     }
 

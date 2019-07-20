@@ -108,30 +108,24 @@ public class ChunkSection {
         this.nonEmptyBlockCount = 0;
         this.tickingBlockCount = 0;
         this.e = 0;
+        this.blockIds.a((iblockdata, i) -> {
+            Fluid fluid = iblockdata.p();
 
-        for (int i = 0; i < 16; ++i) {
-            for (int j = 0; j < 16; ++j) {
-                for (int k = 0; k < 16; ++k) {
-                    IBlockData iblockdata = this.getType(i, j, k);
-                    Fluid fluid = this.b(i, j, k);
-
-                    if (!iblockdata.isAir()) {
-                        ++this.nonEmptyBlockCount;
-                        if (iblockdata.q()) {
-                            ++this.tickingBlockCount;
-                        }
-                    }
-
-                    if (!fluid.isEmpty()) {
-                        ++this.nonEmptyBlockCount;
-                        if (fluid.h()) {
-                            ++this.e;
-                        }
-                    }
+            if (!iblockdata.isAir()) {
+                this.nonEmptyBlockCount = (short) (this.nonEmptyBlockCount + i);
+                if (iblockdata.q()) {
+                    this.tickingBlockCount = (short) (this.tickingBlockCount + i);
                 }
             }
-        }
 
+            if (!fluid.isEmpty()) {
+                this.nonEmptyBlockCount = (short) (this.nonEmptyBlockCount + i);
+                if (fluid.h()) {
+                    this.e = (short) (this.e + i);
+                }
+            }
+
+        });
     }
 
     public DataPaletteBlock<IBlockData> getBlocks() {

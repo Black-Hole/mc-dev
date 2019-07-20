@@ -150,6 +150,8 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
 
                         CriterionTriggers.l.a(entityplayer, this);
                     }
+                } else if (flag && !flag1) {
+                    this.a(SoundEffects.BLOCK_BEACON_DEACTIVATE);
                 }
             }
         }
@@ -226,7 +228,7 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
     }
 
     public void a(SoundEffect soundeffect) {
-        this.world.a((EntityHuman) null, this.position, soundeffect, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        this.world.playSound((EntityHuman) null, this.position, soundeffect, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
     public int h() {

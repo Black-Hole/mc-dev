@@ -14,7 +14,7 @@ public class WorldGenDecoratorCarveMask extends WorldGenDecorator<WorldGenDecora
     }
 
     public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenDecoratorCarveMaskConfiguration worldgendecoratorcarvemaskconfiguration, BlockPosition blockposition) {
-        IChunkAccess ichunkaccess = generatoraccess.x(blockposition);
+        IChunkAccess ichunkaccess = generatoraccess.w(blockposition);
         ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
         BitSet bitset = ichunkaccess.a(worldgendecoratorcarvemaskconfiguration.a);
 

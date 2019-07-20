@@ -56,7 +56,7 @@ public class BlockSweetBerryBush extends BlockPlant implements IBlockFragilePlan
             int j = 1 + world.random.nextInt(2);
 
             a(world, blockposition, new ItemStack(Items.SWEET_BERRIES, j + (flag ? 1 : 0)));
-            world.a((EntityHuman) null, blockposition, SoundEffects.ITEM_SWEET_BERRIES_PICK_FROM_BUSH, SoundCategory.BLOCKS, 1.0F, 0.8F + world.random.nextFloat() * 0.4F);
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.ITEM_SWEET_BERRIES_PICK_FROM_BUSH, SoundCategory.BLOCKS, 1.0F, 0.8F + world.random.nextFloat() * 0.4F);
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSweetBerryBush.a, 1), 2);
             return true;
         } else {

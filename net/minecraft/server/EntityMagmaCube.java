@@ -41,7 +41,7 @@ public class EntityMagmaCube extends EntitySlime {
 
     @Override
     protected MinecraftKey getDefaultLootTable() {
-        return this.eb() ? LootTables.a : this.getEntityType().g();
+        return this.ea() ? LootTables.a : this.getEntityType().h();
     }
 
     @Override
@@ -50,12 +50,12 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     @Override
-    protected int dU() {
-        return super.dU() * 4;
+    protected int dT() {
+        return super.dT() * 4;
     }
 
     @Override
-    protected void dV() {
+    protected void dU() {
         this.b *= 0.9F;
     }
 
@@ -84,28 +84,28 @@ public class EntityMagmaCube extends EntitySlime {
     public void b(float f, float f1) {}
 
     @Override
-    protected boolean dW() {
+    protected boolean dV() {
         return this.df();
     }
 
     @Override
-    protected int dX() {
-        return super.dX() + 2;
+    protected int dW() {
+        return super.dW() + 2;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return this.eb() ? SoundEffects.ENTITY_MAGMA_CUBE_HURT_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_HURT;
+        return this.ea() ? SoundEffects.ENTITY_MAGMA_CUBE_HURT_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return this.eb() ? SoundEffects.ENTITY_MAGMA_CUBE_DEATH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_DEATH;
+        return this.ea() ? SoundEffects.ENTITY_MAGMA_CUBE_DEATH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundSquish() {
-        return this.eb() ? SoundEffects.ENTITY_MAGMA_CUBE_SQUISH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_SQUISH;
+        return this.ea() ? SoundEffects.ENTITY_MAGMA_CUBE_SQUISH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_SQUISH;
     }
 
     @Override

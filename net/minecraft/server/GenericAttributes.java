@@ -40,8 +40,8 @@ public class GenericAttributes {
         IAttribute iattribute = attributeinstance.getAttribute();
 
         nbttagcompound.setString("Name", iattribute.getName());
-        nbttagcompound.setDouble("Base", attributeinstance.b());
-        Collection<AttributeModifier> collection = attributeinstance.c();
+        nbttagcompound.setDouble("Base", attributeinstance.getBaseValue());
+        Collection<AttributeModifier> collection = attributeinstance.getModifiers();
 
         if (collection != null && !collection.isEmpty()) {
             NBTTagList nbttaglist = new NBTTagList();
@@ -64,10 +64,10 @@ public class GenericAttributes {
     public static NBTTagCompound a(AttributeModifier attributemodifier) {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        nbttagcompound.setString("Name", attributemodifier.b());
-        nbttagcompound.setDouble("Amount", attributemodifier.d());
-        nbttagcompound.setInt("Operation", attributemodifier.c().a());
-        nbttagcompound.a("UUID", attributemodifier.a());
+        nbttagcompound.setString("Name", attributemodifier.getName());
+        nbttagcompound.setDouble("Amount", attributemodifier.getAmount());
+        nbttagcompound.setInt("Operation", attributemodifier.getOperation().a());
+        nbttagcompound.a("UUID", attributemodifier.getUniqueId());
         return nbttagcompound;
     }
 
@@ -94,13 +94,13 @@ public class GenericAttributes {
                 AttributeModifier attributemodifier = a(nbttaglist.getCompound(i));
 
                 if (attributemodifier != null) {
-                    AttributeModifier attributemodifier1 = attributeinstance.a(attributemodifier.a());
+                    AttributeModifier attributemodifier1 = attributeinstance.a(attributemodifier.getUniqueId());
 
                     if (attributemodifier1 != null) {
-                        attributeinstance.c(attributemodifier1);
+                        attributeinstance.removeModifier(attributemodifier1);
                     }
 
-                    attributeinstance.b(attributemodifier);
+                    attributeinstance.addModifier(attributemodifier);
                 }
             }
         }

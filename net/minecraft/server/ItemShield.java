@@ -5,7 +5,7 @@ public class ItemShield extends Item {
     public ItemShield(Item.Info item_info) {
         super(item_info);
         this.a(new MinecraftKey("blocking"), (itemstack, world, entityliving) -> {
-            return entityliving != null && entityliving.isHandRaised() && entityliving.dm() == itemstack ? 1.0F : 0.0F;
+            return entityliving != null && entityliving.isHandRaised() && entityliving.dl() == itemstack ? 1.0F : 0.0F;
         });
         BlockDispenser.a((IMaterial) this, ItemArmor.a);
     }

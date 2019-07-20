@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonElement;
@@ -14,20 +15,27 @@ import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.longs.LongIterator;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
 import java.net.Proxy;
 import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.KeyPair;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -35,6 +43,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
+import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
@@ -52,16 +61,17 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     public static final Logger LOGGER = LogManager.getLogger();
     public static final File b = new File("usercache.json");
+    private static final CompletableFuture<Unit> i = CompletableFuture.completedFuture(Unit.INSTANCE);
     public static final WorldSettings c = (new WorldSettings((long) "North Carolina".hashCode(), EnumGamemode.SURVIVAL, true, false, WorldType.NORMAL)).a();
     public Convertable convertable;
     private final MojangStatisticsGenerator snooper = new MojangStatisticsGenerator("server", this, SystemUtils.getMonotonicMillis());
     public File universe;
     private final List<Runnable> tickables = Lists.newArrayList();
-    private final GameProfiler methodProfiler = new GameProfiler(this::ai);
+    private final GameProfiler methodProfiler = new GameProfiler(this::aj);
     private ServerConnection serverConnection;
     public final WorldLoadListenerFactory worldLoadListenerFactory;
     private final ServerPing serverPing = new ServerPing();
-    private final Random p = new Random();
+    private final Random q = new Random();
     public final DataFixer dataConverterManager;
     private String serverIp;
     private int serverPort = -1;
@@ -72,78 +82,78 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     private int ticks;
     protected final Proxy proxy;
     private boolean onlineMode;
-    private boolean z;
+    private boolean A;
     private boolean spawnAnimals;
     private boolean spawnNPCs;
     private boolean pvpMode;
     private boolean allowFlight;
     @Nullable
     private String motd;
-    private int F;
     private int G;
+    private int H;
     public final long[] f = new long[100];
     @Nullable
-    private KeyPair H;
+    private KeyPair I;
     @Nullable
-    private String I;
-    private final String J;
+    private String J;
+    private final String K;
     private boolean demoMode;
     private boolean bonusChest;
-    private String N = "";
     private String O = "";
+    private String P = "";
     private volatile boolean hasTicked;
     private long lastOverloadTime;
     @Nullable
-    private IChatBaseComponent R;
-    private boolean S;
+    private IChatBaseComponent S;
     private boolean T;
+    private boolean U;
     @Nullable
     private final YggdrasilAuthenticationService yggdrasilAuthenticationService;
     private final MinecraftSessionService minecraftSessionService;
     private final GameProfileRepository gameProfileRepository;
     private final UserCache userCache;
-    private long Y;
+    private long Z;
     public final Thread serverThread = (Thread) SystemUtils.a((Object) (new Thread(this, "Server thread")), (thread) -> {
         thread.setUncaughtExceptionHandler((thread1, throwable) -> {
             MinecraftServer.LOGGER.error(throwable);
         });
     });
     private long nextTick = SystemUtils.getMonotonicMillis();
-    private long aa;
-    private boolean ab;
-    private final IReloadableResourceManager ad;
+    private long ab;
+    private boolean ac;
+    private final IReloadableResourceManager ae;
     private final ResourcePackRepository<ResourcePackLoader> resourcePackRepository;
     @Nullable
     private ResourcePackSourceFolder resourcePackFolder;
     public CommandDispatcher commandDispatcher;
-    private final CraftingManager ah;
-    private final TagRegistry ai;
-    private final ScoreboardServer aj;
-    private final BossBattleCustomData ak;
-    private final LootTableRegistry al;
-    private final AdvancementDataWorld am;
-    private final CustomFunctionData an;
-    private final CircularTimer ao;
-    private boolean ap;
+    private final CraftingManager ai;
+    private final TagRegistry aj;
+    private final ScoreboardServer ak;
+    private final BossBattleCustomData al;
+    private final LootTableRegistry am;
+    private final AdvancementDataWorld an;
+    private final CustomFunctionData ao;
+    private final CircularTimer ap;
+    private boolean aq;
     private boolean forceUpgrade;
     private boolean eraseCache;
-    private float as;
+    private float at;
     public final Executor executorService;
     @Nullable
-    private String au;
+    private String av;
 
     public MinecraftServer(File file, Proxy proxy, DataFixer datafixer, CommandDispatcher commanddispatcher, YggdrasilAuthenticationService yggdrasilauthenticationservice, MinecraftSessionService minecraftsessionservice, GameProfileRepository gameprofilerepository, UserCache usercache, WorldLoadListenerFactory worldloadlistenerfactory, String s) {
         super("Server");
-        this.ad = new ResourceManager(EnumResourcePackType.SERVER_DATA, this.serverThread);
+        this.ae = new ResourceManager(EnumResourcePackType.SERVER_DATA, this.serverThread);
         this.resourcePackRepository = new ResourcePackRepository<>(ResourcePackLoader::new);
-        this.ah = new CraftingManager();
-        this.ai = new TagRegistry();
-        this.aj = new ScoreboardServer(this);
-        this.ak = new BossBattleCustomData(this);
-        this.al = new LootTableRegistry();
-        this.am = new AdvancementDataWorld();
-        this.an = new CustomFunctionData(this);
-        this.ao = new CircularTimer();
+        this.ai = new CraftingManager();
+        this.aj = new TagRegistry();
+        this.ak = new ScoreboardServer(this);
+        this.al = new BossBattleCustomData(this);
+        this.am = new LootTableRegistry();
+        this.an = new AdvancementDataWorld();
+        this.ao = new CustomFunctionData(this);
+        this.ap = new CircularTimer();
         this.proxy = proxy;
         this.commandDispatcher = commanddispatcher;
         this.yggdrasilAuthenticationService = yggdrasilauthenticationservice;
@@ -155,13 +165,13 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.worldLoadListenerFactory = worldloadlistenerfactory;
         this.convertable = new Convertable(file.toPath(), file.toPath().resolve("../backups"), datafixer);
         this.dataConverterManager = datafixer;
-        this.ad.a((IReloadListener) this.ai);
-        this.ad.a((IReloadListener) this.ah);
-        this.ad.a((IReloadListener) this.al);
-        this.ad.a((IReloadListener) this.an);
-        this.ad.a((IReloadListener) this.am);
+        this.ae.a((IReloadListener) this.aj);
+        this.ae.a((IReloadListener) this.ai);
+        this.ae.a((IReloadListener) this.am);
+        this.ae.a((IReloadListener) this.ao);
+        this.ae.a((IReloadListener) this.an);
         this.executorService = SystemUtils.e();
-        this.J = s;
+        this.K = s;
     }
 
     private void initializeScoreboards(WorldPersistentData worldpersistentdata) {
@@ -237,7 +247,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     protected synchronized void b(IChatBaseComponent ichatbasecomponent) {
-        this.R = ichatbasecomponent;
+        this.S = ichatbasecomponent;
     }
 
     protected void a(String s, String s1, long i, WorldType worldtype, JsonElement jsonelement) {
@@ -432,7 +442,9 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     public abstract int j();
 
-    public abstract boolean k();
+    public abstract int k();
+
+    public abstract boolean l();
 
     public boolean saveChunks(boolean flag, boolean flag1, boolean flag2) {
         boolean flag3 = false;
@@ -553,8 +565,8 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
                     }
 
                     this.nextTick += 50L;
-                    if (this.S) {
-                        this.S = false;
+                    if (this.T) {
+                        this.T = false;
                         this.methodProfiler.d().d();
                     }
 
@@ -562,8 +574,8 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
                     this.methodProfiler.enter("tick");
                     this.a(this::canSleepForTick);
                     this.methodProfiler.exitEnter("nextTickWait");
-                    this.ab = true;
-                    this.aa = Math.max(SystemUtils.getMonotonicMillis() + 50L, this.nextTick);
+                    this.ac = true;
+                    this.ab = Math.max(SystemUtils.getMonotonicMillis() + 50L, this.nextTick);
                     this.sleepForTick();
                     this.methodProfiler.exit();
                     this.methodProfiler.b();
@@ -582,7 +594,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
                 crashreport = this.b(new CrashReport("Exception in server tick loop", throwable));
             }
 
-            File file = new File(new File(this.s(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
+            File file = new File(new File(this.t(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
 
             if (crashreport.a(file)) {
                 MinecraftServer.LOGGER.error("This crash report has been saved to: {}", file.getAbsolutePath());
@@ -606,7 +618,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     private boolean canSleepForTick() {
-        return this.isEntered() || SystemUtils.getMonotonicMillis() < (this.ab ? this.aa : this.nextTick);
+        return this.isEntered() || SystemUtils.getMonotonicMillis() < (this.ac ? this.ab : this.nextTick);
     }
 
     protected void sleepForTick() {
@@ -627,13 +639,13 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     @Override
     public boolean executeNext() {
-        boolean flag = this.aW();
+        boolean flag = this.aX();
 
-        this.ab = flag;
+        this.ac = flag;
         return flag;
     }
 
-    private boolean aW() {
+    private boolean aX() {
         if (super.executeNext()) {
             return true;
         } else {
@@ -681,7 +693,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     }
 
-    public File s() {
+    public File t() {
         return new File(".");
     }
 
@@ -694,11 +706,11 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
         ++this.ticks;
         this.b(booleansupplier);
-        if (i - this.Y >= 5000000000L) {
-            this.Y = i;
+        if (i - this.Z >= 5000000000L) {
+            this.Z = i;
             this.serverPing.setPlayerSample(new ServerPing.ServerPingPlayerSample(this.getMaxPlayers(), this.getPlayerCount()));
             GameProfile[] agameprofile = new GameProfile[Math.min(this.getPlayerCount(), 12)];
-            int j = MathHelper.nextInt(this.p, 0, this.getPlayerCount() - agameprofile.length);
+            int j = MathHelper.nextInt(this.q, 0, this.getPlayerCount() - agameprofile.length);
 
             for (int k = 0; k < agameprofile.length; ++k) {
                 agameprofile[k] = ((EntityPlayer) this.playerList.getPlayers().get(j + k)).getProfile();
@@ -730,10 +742,10 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.methodProfiler.enter("tallying");
         long l = this.f[this.ticks % 100] = SystemUtils.getMonotonicNanos() - i;
 
-        this.as = this.as * 0.8F + (float) l / 1000000.0F * 0.19999999F;
+        this.at = this.at * 0.8F + (float) l / 1000000.0F * 0.19999999F;
         long i1 = SystemUtils.getMonotonicNanos();
 
-        this.ao.a(i1 - i);
+        this.ap.a(i1 - i);
         this.methodProfiler.exit();
     }
 
@@ -854,7 +866,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
             boolean flag = !optionset.has(optionspec) && !optionset.valuesOf(nonoptionargumentspec).contains("nogui");
 
             if (flag && !GraphicsEnvironment.isHeadless()) {
-                dedicatedserver.aY();
+                dedicatedserver.aZ();
             }
 
             dedicatedserver.startServerThread();
@@ -873,7 +885,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     protected void c(String s) {
-        this.au = s;
+        this.av = s;
     }
 
     protected void setForceUpgrade(boolean flag) {
@@ -889,7 +901,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public File d(String s) {
-        return new File(this.s(), s);
+        return new File(this.t(), s);
     }
 
     public void info(String s) {
@@ -969,16 +981,16 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
             return stringbuilder.toString();
         });
-        if (this.au != null) {
+        if (this.av != null) {
             crashreport.g().a("Server Id", () -> {
-                return this.au;
+                return this.av;
             });
         }
 
         return crashreport;
     }
 
-    public boolean E() {
+    public boolean F() {
         return this.universe != null;
     }
 
@@ -988,7 +1000,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public KeyPair getKeyPair() {
-        return this.H;
+        return this.I;
     }
 
     public int getPort() {
@@ -1000,23 +1012,23 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public String getSinglePlayerName() {
-        return this.I;
-    }
-
-    public void i(String s) {
-        this.I = s;
-    }
-
-    public boolean isEmbeddedServer() {
-        return this.I != null;
-    }
-
-    public String getWorld() {
         return this.J;
     }
 
+    public void i(String s) {
+        this.J = s;
+    }
+
+    public boolean isEmbeddedServer() {
+        return this.J != null;
+    }
+
+    public String getWorld() {
+        return this.K;
+    }
+
     public void a(KeyPair keypair) {
-        this.H = keypair;
+        this.I = keypair;
     }
 
     public void a(EnumDifficulty enumdifficulty, boolean flag) {
@@ -1083,16 +1095,16 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public String getResourcePack() {
-        return this.N;
-    }
-
-    public String getResourcePackHash() {
         return this.O;
     }
 
+    public String getResourcePackHash() {
+        return this.P;
+    }
+
     public void setResourcePack(String s, String s1) {
-        this.N = s;
-        this.O = s1;
+        this.O = s;
+        this.P = s1;
     }
 
     @Override
@@ -1106,7 +1118,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         }
 
         mojangstatisticsgenerator.a("uses_auth", this.onlineMode);
-        mojangstatisticsgenerator.a("gui_state", this.ah() ? "enabled" : "disabled");
+        mojangstatisticsgenerator.a("gui_state", this.ai() ? "enabled" : "disabled");
         mojangstatisticsgenerator.a("run_time", (SystemUtils.getMonotonicMillis() - mojangstatisticsgenerator.g()) / 60L * 1000L);
         mojangstatisticsgenerator.a("avg_tick_ms", (int) (MathHelper.a(this.f) * 1.0E-6D));
         int i = 0;
@@ -1124,8 +1136,8 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
                 mojangstatisticsgenerator.a("world[" + i + "][hardcore]", worlddata.isHardcore());
                 mojangstatisticsgenerator.a("world[" + i + "][generator_name]", worlddata.getType().name());
                 mojangstatisticsgenerator.a("world[" + i + "][generator_version]", worlddata.getType().getVersion());
-                mojangstatisticsgenerator.a("world[" + i + "][height]", this.F);
-                mojangstatisticsgenerator.a("world[" + i + "][chunks_loaded]", worldserver.getChunkProvider().g());
+                mojangstatisticsgenerator.a("world[" + i + "][height]", this.G);
+                mojangstatisticsgenerator.a("world[" + i + "][chunks_loaded]", worldserver.getChunkProvider().h());
                 ++i;
             }
         }
@@ -1133,7 +1145,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         mojangstatisticsgenerator.a("worlds", i);
     }
 
-    public abstract boolean R();
+    public abstract boolean S();
 
     public boolean getOnlineMode() {
         return this.onlineMode;
@@ -1143,12 +1155,12 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.onlineMode = flag;
     }
 
-    public boolean T() {
-        return this.z;
+    public boolean U() {
+        return this.A;
     }
 
     public void h(boolean flag) {
-        this.z = flag;
+        this.A = flag;
     }
 
     public boolean getSpawnAnimals() {
@@ -1163,7 +1175,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.spawnNPCs;
     }
 
-    public abstract boolean W();
+    public abstract boolean X();
 
     public void setSpawnNPCs(boolean flag) {
         this.spawnNPCs = flag;
@@ -1196,11 +1208,11 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public int getMaxBuildHeight() {
-        return this.F;
+        return this.G;
     }
 
     public void b(int i) {
-        this.F = i;
+        this.G = i;
     }
 
     public boolean isStopped() {
@@ -1215,7 +1227,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.playerList = playerlist;
     }
 
-    public abstract boolean ae();
+    public abstract boolean af();
 
     public void setGamemode(EnumGamemode enumgamemode) {
         Iterator iterator = this.getWorlds().iterator();
@@ -1233,18 +1245,18 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.serverConnection;
     }
 
-    public boolean ah() {
+    public boolean ai() {
         return false;
     }
 
     public abstract boolean a(EnumGamemode enumgamemode, boolean flag, int i);
 
-    public int ai() {
+    public int aj() {
         return this.ticks;
     }
 
-    public void aj() {
-        this.S = true;
+    public void ak() {
+        this.T = true;
     }
 
     public int getSpawnProtection() {
@@ -1256,19 +1268,19 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public void setForceGamemode(boolean flag) {
-        this.T = flag;
+        this.U = flag;
     }
 
     public boolean getForceGamemode() {
-        return this.T;
+        return this.U;
     }
 
     public int getIdleTimeout() {
-        return this.G;
+        return this.H;
     }
 
     public void setIdleTimeout(int i) {
-        this.G = i;
+        this.H = i;
     }
 
     public MinecraftSessionService getMinecraftSessionService() {
@@ -1288,10 +1300,10 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public void invalidatePingSample() {
-        this.Y = 0L;
+        this.Z = 0L;
     }
 
-    public int av() {
+    public int aw() {
         return 29999984;
     }
 
@@ -1305,15 +1317,15 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.serverThread;
     }
 
-    public int ay() {
+    public int az() {
         return 256;
     }
 
-    public long az() {
+    public long aA() {
         return this.nextTick;
     }
 
-    public DataFixer aA() {
+    public DataFixer aB() {
         return this.dataConverterManager;
     }
 
@@ -1322,11 +1334,11 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public AdvancementDataWorld getAdvancementData() {
-        return this.am;
+        return this.an;
     }
 
     public CustomFunctionData getFunctionData() {
-        return this.an;
+        return this.ao;
     }
 
     public void reload() {
@@ -1361,7 +1373,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.resourcePackRepository.d().forEach((resourcepackloader1) -> {
             list1.add(resourcepackloader1.d());
         });
-        CompletableFuture<Unit> completablefuture = this.ad.a(this.executorService, this, list1, CompletableFuture.completedFuture(Unit.INSTANCE));
+        CompletableFuture<Unit> completablefuture = this.ae.a(this.executorService, this, list1, MinecraftServer.i);
 
         this.awaitTasks(completablefuture::isDone);
 
@@ -1385,7 +1397,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public void a(CommandListenerWrapper commandlistenerwrapper) {
-        if (this.aP()) {
+        if (this.aQ()) {
             PlayerList playerlist = commandlistenerwrapper.getServer().getPlayerList();
             WhiteList whitelist = playerlist.getWhitelist();
 
@@ -1406,7 +1418,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public IReloadableResourceManager getResourceManager() {
-        return this.ad;
+        return this.ae;
     }
 
     public ResourcePackRepository<ResourcePackLoader> getResourcePackRepository() {
@@ -1432,19 +1444,19 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public CraftingManager getCraftingManager() {
-        return this.ah;
-    }
-
-    public TagRegistry getTagRegistry() {
         return this.ai;
     }
 
-    public ScoreboardServer getScoreboard() {
+    public TagRegistry getTagRegistry() {
         return this.aj;
     }
 
+    public ScoreboardServer getScoreboard() {
+        return this.ak;
+    }
+
     public LootTableRegistry getLootTableRegistry() {
-        return this.al;
+        return this.am;
     }
 
     public GameRules getGameRules() {
@@ -1452,15 +1464,19 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public BossBattleCustomData getBossBattleCustomData() {
-        return this.ak;
+        return this.al;
     }
 
-    public boolean aP() {
-        return this.ap;
+    public boolean aQ() {
+        return this.aq;
     }
 
     public void n(boolean flag) {
-        this.ap = flag;
+        this.aq = flag;
+    }
+
+    public float aR() {
+        return this.at;
     }
 
     public int a(GameProfile gameprofile) {
@@ -1477,9 +1493,201 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.methodProfiler;
     }
 
-    public Executor aT() {
+    public Executor aU() {
         return this.executorService;
     }
 
     public abstract boolean b(GameProfile gameprofile);
+
+    public void a(java.nio.file.Path java_nio_file_path) throws IOException {
+        java.nio.file.Path java_nio_file_path1 = java_nio_file_path.resolve("levels");
+        Iterator iterator = this.worldServer.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Entry<DimensionManager, WorldServer> entry = (Entry) iterator.next();
+            MinecraftKey minecraftkey = DimensionManager.a((DimensionManager) entry.getKey());
+            java.nio.file.Path java_nio_file_path2 = java_nio_file_path1.resolve(minecraftkey.getNamespace()).resolve(minecraftkey.getKey());
+
+            Files.createDirectories(java_nio_file_path2);
+            ((WorldServer) entry.getValue()).a(java_nio_file_path2);
+        }
+
+        this.d(java_nio_file_path.resolve("gamerules.txt"));
+        this.e(java_nio_file_path.resolve("classpath.txt"));
+        this.c(java_nio_file_path.resolve("example_crash.txt"));
+        this.b(java_nio_file_path.resolve("stats.txt"));
+        this.f(java_nio_file_path.resolve("threads.txt"));
+    }
+
+    private void b(java.nio.file.Path java_nio_file_path) throws IOException {
+        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path);
+        Throwable throwable = null;
+
+        try {
+            bufferedwriter.write(String.format("pending_tasks: %d\n", this.be()));
+            bufferedwriter.write(String.format("average_tick_time: %f\n", this.aR()));
+            bufferedwriter.write(String.format("tick_times: %s\n", Arrays.toString(this.f)));
+            bufferedwriter.write(String.format("queue: %s\n", SystemUtils.e()));
+        } catch (Throwable throwable1) {
+            throwable = throwable1;
+            throw throwable1;
+        } finally {
+            if (bufferedwriter != null) {
+                if (throwable != null) {
+                    try {
+                        bufferedwriter.close();
+                    } catch (Throwable throwable2) {
+                        throwable.addSuppressed(throwable2);
+                    }
+                } else {
+                    bufferedwriter.close();
+                }
+            }
+
+        }
+
+    }
+
+    private void c(java.nio.file.Path java_nio_file_path) throws IOException {
+        CrashReport crashreport = new CrashReport("Server dump", new Exception("dummy"));
+
+        this.b(crashreport);
+        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path);
+        Throwable throwable = null;
+
+        try {
+            bufferedwriter.write(crashreport.e());
+        } catch (Throwable throwable1) {
+            throwable = throwable1;
+            throw throwable1;
+        } finally {
+            if (bufferedwriter != null) {
+                if (throwable != null) {
+                    try {
+                        bufferedwriter.close();
+                    } catch (Throwable throwable2) {
+                        throwable.addSuppressed(throwable2);
+                    }
+                } else {
+                    bufferedwriter.close();
+                }
+            }
+
+        }
+
+    }
+
+    private void d(java.nio.file.Path java_nio_file_path) throws IOException {
+        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path);
+        Throwable throwable = null;
+
+        try {
+            final List<String> list = Lists.newArrayList();
+            final GameRules gamerules = this.getGameRules();
+
+            GameRules.a(new GameRules.GameRuleVisitor() {
+                @Override
+                public <T extends GameRules.GameRuleValue<T>> void a(GameRules.GameRuleKey<T> gamerules_gamerulekey, GameRules.GameRuleDefinition<T> gamerules_gameruledefinition) {
+                    list.add(String.format("%s=%s\n", gamerules_gamerulekey.a(), gamerules.get(gamerules_gamerulekey).toString()));
+                }
+            });
+            Iterator iterator = list.iterator();
+
+            while (iterator.hasNext()) {
+                String s = (String) iterator.next();
+
+                bufferedwriter.write(s);
+            }
+        } catch (Throwable throwable1) {
+            throwable = throwable1;
+            throw throwable1;
+        } finally {
+            if (bufferedwriter != null) {
+                if (throwable != null) {
+                    try {
+                        bufferedwriter.close();
+                    } catch (Throwable throwable2) {
+                        throwable.addSuppressed(throwable2);
+                    }
+                } else {
+                    bufferedwriter.close();
+                }
+            }
+
+        }
+
+    }
+
+    private void e(java.nio.file.Path java_nio_file_path) throws IOException {
+        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path);
+        Throwable throwable = null;
+
+        try {
+            String s = System.getProperty("java.class.path");
+            String s1 = System.getProperty("path.separator");
+            Iterator iterator = Splitter.on(s1).split(s).iterator();
+
+            while (iterator.hasNext()) {
+                String s2 = (String) iterator.next();
+
+                bufferedwriter.write(s2);
+                bufferedwriter.write("\n");
+            }
+        } catch (Throwable throwable1) {
+            throwable = throwable1;
+            throw throwable1;
+        } finally {
+            if (bufferedwriter != null) {
+                if (throwable != null) {
+                    try {
+                        bufferedwriter.close();
+                    } catch (Throwable throwable2) {
+                        throwable.addSuppressed(throwable2);
+                    }
+                } else {
+                    bufferedwriter.close();
+                }
+            }
+
+        }
+
+    }
+
+    private void f(java.nio.file.Path java_nio_file_path) throws IOException {
+        ThreadMXBean threadmxbean = ManagementFactory.getThreadMXBean();
+        ThreadInfo[] athreadinfo = threadmxbean.dumpAllThreads(true, true);
+
+        Arrays.sort(athreadinfo, Comparator.comparing(ThreadInfo::getThreadName));
+        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path);
+        Throwable throwable = null;
+
+        try {
+            ThreadInfo[] athreadinfo1 = athreadinfo;
+            int i = athreadinfo.length;
+
+            for (int j = 0; j < i; ++j) {
+                ThreadInfo threadinfo = athreadinfo1[j];
+
+                bufferedwriter.write(threadinfo.toString());
+                bufferedwriter.write(10);
+            }
+        } catch (Throwable throwable1) {
+            throwable = throwable1;
+            throw throwable1;
+        } finally {
+            if (bufferedwriter != null) {
+                if (throwable != null) {
+                    try {
+                        bufferedwriter.close();
+                    } catch (Throwable throwable2) {
+                        throwable.addSuppressed(throwable2);
+                    }
+                } else {
+                    bufferedwriter.close();
+                }
+            }
+
+        }
+
+    }
 }

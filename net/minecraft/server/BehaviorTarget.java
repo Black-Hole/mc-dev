@@ -24,4 +24,8 @@ public class BehaviorTarget implements BehaviorPosition {
     public boolean a(EntityLiving entityliving) {
         return true;
     }
+
+    public String toString() {
+        return "BlockPosWrapper{pos=" + this.a + ", lookAt=" + this.b + '}';
+    }
 }

@@ -62,7 +62,7 @@ public class PathfinderGoalHurtByTarget extends PathfinderGoalTarget {
 
     protected void g() {
         double d0 = this.k();
-        List<EntityInsentient> list = this.e.world.a(this.e.getClass(), (new AxisAlignedBB(this.e.locX, this.e.locY, this.e.locZ, this.e.locX + 1.0D, this.e.locY + 1.0D, this.e.locZ + 1.0D)).grow(d0, 10.0D, d0));
+        List<EntityInsentient> list = this.e.world.b(this.e.getClass(), (new AxisAlignedBB(this.e.locX, this.e.locY, this.e.locZ, this.e.locX + 1.0D, this.e.locY + 1.0D, this.e.locZ + 1.0D)).grow(d0, 10.0D, d0));
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {

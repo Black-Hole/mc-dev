@@ -48,14 +48,15 @@ public class WorldProviderNormal extends WorldProvider {
             WorldChunkManager worldchunkmanager = null;
             JsonElement jsonelement = (JsonElement) Dynamic.convert(DynamicOpsNBT.a, JsonOps.INSTANCE, this.b.getWorldData().getGeneratorOptions());
             JsonObject jsonobject = jsonelement.getAsJsonObject();
+            JsonObject jsonobject1 = jsonobject.getAsJsonObject("biome_source");
 
-            if (jsonobject.has("biome_source") && jsonobject.getAsJsonObject("biome_source").has("type") && jsonobject.getAsJsonObject("biome_source").has("options")) {
-                BiomeLayout<?, ?> biomelayout3 = (BiomeLayout) IRegistry.BIOME_SOURCE_TYPE.get(new MinecraftKey(jsonobject.getAsJsonObject("biome_source").getAsJsonPrimitive("type").getAsString()));
-                JsonObject jsonobject1 = jsonobject.getAsJsonObject("biome_source").getAsJsonObject("options");
+            if (jsonobject1 != null && jsonobject1.has("type") && jsonobject1.has("options")) {
+                BiomeLayout<?, ?> biomelayout3 = (BiomeLayout) IRegistry.BIOME_SOURCE_TYPE.get(new MinecraftKey(jsonobject1.getAsJsonPrimitive("type").getAsString()));
+                JsonObject jsonobject2 = jsonobject1.getAsJsonObject("options");
                 BiomeBase[] abiomebase = new BiomeBase[]{Biomes.OCEAN};
 
-                if (jsonobject1.has("biomes")) {
-                    JsonArray jsonarray = jsonobject1.getAsJsonArray("biomes");
+                if (jsonobject2.has("biomes")) {
+                    JsonArray jsonarray = jsonobject2.getAsJsonArray("biomes");
 
                     abiomebase = jsonarray.size() > 0 ? new BiomeBase[jsonarray.size()] : new BiomeBase[]{Biomes.OCEAN};
 
@@ -71,7 +72,7 @@ public class WorldProviderNormal extends WorldProvider {
                 }
 
                 if (BiomeLayout.a == biomelayout3) {
-                    int j = jsonobject1.has("size") ? jsonobject1.getAsJsonPrimitive("size").getAsInt() : 2;
+                    int j = jsonobject2.has("size") ? jsonobject2.getAsJsonPrimitive("size").getAsInt() : 2;
                     BiomeLayoutCheckerboardConfiguration biomelayoutcheckerboardconfiguration = ((BiomeLayoutCheckerboardConfiguration) biomelayout2.a()).a(abiomebase).a(j);
 
                     worldchunkmanager = biomelayout2.a(biomelayoutcheckerboardconfiguration);
@@ -90,23 +91,25 @@ public class WorldProviderNormal extends WorldProvider {
 
             IBlockData iblockdata = Blocks.STONE.getBlockData();
             IBlockData iblockdata1 = Blocks.WATER.getBlockData();
+            JsonObject jsonobject3 = jsonobject.getAsJsonObject("chunk_generator");
 
-            if (jsonobject.has("chunk_generator") && jsonobject.getAsJsonObject("chunk_generator").has("options")) {
+            if (jsonobject3 != null && jsonobject3.has("options")) {
+                JsonObject jsonobject4 = jsonobject3.getAsJsonObject("options");
                 String s;
 
-                if (jsonobject.getAsJsonObject("chunk_generator").getAsJsonObject("options").has("default_block")) {
-                    s = jsonobject.getAsJsonObject("chunk_generator").getAsJsonObject("options").getAsJsonPrimitive("default_block").getAsString();
+                if (jsonobject4.has("default_block")) {
+                    s = jsonobject4.getAsJsonPrimitive("default_block").getAsString();
                     iblockdata = ((Block) IRegistry.BLOCK.get(new MinecraftKey(s))).getBlockData();
                 }
 
-                if (jsonobject.getAsJsonObject("chunk_generator").getAsJsonObject("options").has("default_fluid")) {
-                    s = jsonobject.getAsJsonObject("chunk_generator").getAsJsonObject("options").getAsJsonPrimitive("default_fluid").getAsString();
+                if (jsonobject4.has("default_fluid")) {
+                    s = jsonobject4.getAsJsonPrimitive("default_fluid").getAsString();
                     iblockdata1 = ((Block) IRegistry.BLOCK.get(new MinecraftKey(s))).getBlockData();
                 }
             }
 
-            if (jsonobject.has("chunk_generator") && jsonobject.getAsJsonObject("chunk_generator").has("type")) {
-                ChunkGeneratorType<?, ?> chunkgeneratortype5 = (ChunkGeneratorType) IRegistry.CHUNK_GENERATOR_TYPE.get(new MinecraftKey(jsonobject.getAsJsonObject("chunk_generator").getAsJsonPrimitive("type").getAsString()));
+            if (jsonobject3 != null && jsonobject3.has("type")) {
+                ChunkGeneratorType<?, ?> chunkgeneratortype5 = (ChunkGeneratorType) IRegistry.CHUNK_GENERATOR_TYPE.get(new MinecraftKey(jsonobject3.getAsJsonPrimitive("type").getAsString()));
 
                 if (ChunkGeneratorType.b == chunkgeneratortype5) {
                     GeneratorSettingsNether generatorsettingsnether = (GeneratorSettingsNether) chunkgeneratortype2.a();

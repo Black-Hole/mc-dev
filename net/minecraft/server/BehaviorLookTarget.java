@@ -11,7 +11,7 @@ public class BehaviorLookTarget extends Behavior<EntityLiving> {
 
     public BehaviorLookTarget(EnumCreatureType enumcreaturetype, float f) {
         this((entityliving) -> {
-            return enumcreaturetype.equals(entityliving.getEntityType().d());
+            return enumcreaturetype.equals(entityliving.getEntityType().e());
         }, f);
     }
 

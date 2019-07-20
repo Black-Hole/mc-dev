@@ -40,7 +40,7 @@ public class BlockTripwireHook extends Block {
         BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
 
-        return enumdirection.k().c() && Block.d(iblockdata1, iworldreader, blockposition1, enumdirection) && !iblockdata1.isPowerSource();
+        return enumdirection.k().c() && iblockdata1.d(iworldreader, blockposition1, enumdirection) && !iblockdata1.isPowerSource();
     }
 
     @Override
@@ -165,13 +165,13 @@ public class BlockTripwireHook extends Block {
 
     private void a(World world, BlockPosition blockposition, boolean flag, boolean flag1, boolean flag2, boolean flag3) {
         if (flag1 && !flag3) {
-            world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_TRIPWIRE_CLICK_ON, SoundCategory.BLOCKS, 0.4F, 0.6F);
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_TRIPWIRE_CLICK_ON, SoundCategory.BLOCKS, 0.4F, 0.6F);
         } else if (!flag1 && flag3) {
-            world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_TRIPWIRE_CLICK_OFF, SoundCategory.BLOCKS, 0.4F, 0.5F);
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_TRIPWIRE_CLICK_OFF, SoundCategory.BLOCKS, 0.4F, 0.5F);
         } else if (flag && !flag2) {
-            world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_TRIPWIRE_ATTACH, SoundCategory.BLOCKS, 0.4F, 0.7F);
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_TRIPWIRE_ATTACH, SoundCategory.BLOCKS, 0.4F, 0.7F);
         } else if (!flag && flag2) {
-            world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_TRIPWIRE_DETACH, SoundCategory.BLOCKS, 0.4F, 1.2F / (world.random.nextFloat() * 0.2F + 0.9F));
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_TRIPWIRE_DETACH, SoundCategory.BLOCKS, 0.4F, 1.2F / (world.random.nextFloat() * 0.2F + 0.9F));
         }
 
     }

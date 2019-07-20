@@ -141,6 +141,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
         this.q = this.player.locZ;
     }
 
+    @Override
     public NetworkManager a() {
         return this.networkManager;
     }
@@ -735,11 +736,12 @@ public class PlayerConnection implements PacketListenerPlayIn {
     @Override
     public void a(PacketPlayInBlockDig packetplayinblockdig) {
         PlayerConnectionUtils.ensureMainThread(packetplayinblockdig, this, this.player.getWorldServer());
-        WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
         BlockPosition blockposition = packetplayinblockdig.b();
 
         this.player.resetIdleTimer();
-        switch (packetplayinblockdig.d()) {
+        PacketPlayInBlockDig.EnumPlayerDigType packetplayinblockdig_enumplayerdigtype = packetplayinblockdig.d();
+
+        switch (packetplayinblockdig_enumplayerdigtype) {
             case SWAP_HELD_ITEMS:
                 if (!this.player.isSpectator()) {
                     ItemStack itemstack = this.player.b(EnumHand.OFF_HAND);
@@ -767,36 +769,8 @@ public class PlayerConnection implements PacketListenerPlayIn {
             case START_DESTROY_BLOCK:
             case ABORT_DESTROY_BLOCK:
             case STOP_DESTROY_BLOCK:
-                double d0 = this.player.locX - ((double) blockposition.getX() + 0.5D);
-                double d1 = this.player.locY - ((double) blockposition.getY() + 0.5D) + 1.5D;
-                double d2 = this.player.locZ - ((double) blockposition.getZ() + 0.5D);
-                double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-
-                if (d3 > 36.0D) {
-                    return;
-                } else if (blockposition.getY() >= this.minecraftServer.getMaxBuildHeight()) {
-                    return;
-                } else {
-                    if (packetplayinblockdig.d() == PacketPlayInBlockDig.EnumPlayerDigType.START_DESTROY_BLOCK) {
-                        if (!this.minecraftServer.a(worldserver, blockposition, this.player) && worldserver.getWorldBorder().a(blockposition)) {
-                            this.player.playerInteractManager.a(blockposition, packetplayinblockdig.c());
-                        } else {
-                            this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(worldserver, blockposition));
-                        }
-                    } else {
-                        if (packetplayinblockdig.d() == PacketPlayInBlockDig.EnumPlayerDigType.STOP_DESTROY_BLOCK) {
-                            this.player.playerInteractManager.a(blockposition);
-                        } else if (packetplayinblockdig.d() == PacketPlayInBlockDig.EnumPlayerDigType.ABORT_DESTROY_BLOCK) {
-                            this.player.playerInteractManager.e();
-                        }
-
-                        if (!worldserver.getType(blockposition).isAir()) {
-                            this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(worldserver, blockposition));
-                        }
-                    }
-
-                    return;
-                }
+                this.player.playerInteractManager.a(blockposition, packetplayinblockdig_enumplayerdigtype, packetplayinblockdig.c(), this.minecraftServer.getMaxBuildHeight());
+                return;
             default:
                 throw new IllegalArgumentException("Invalid player action");
         }
@@ -817,7 +791,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
             IChatBaseComponent ichatbasecomponent = (new ChatMessage("build.tooHigh", new Object[]{this.minecraftServer.getMaxBuildHeight()})).a(EnumChatFormat.RED);
 
             this.player.playerConnection.sendPacket(new PacketPlayOutChat(ichatbasecomponent, ChatMessageType.GAME_INFO));
-        } else if (this.teleportPos == null && this.player.e((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) < 64.0D && !this.minecraftServer.a(worldserver, blockposition, this.player) && worldserver.getWorldBorder().a(blockposition)) {
+        } else if (this.teleportPos == null && this.player.e((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) < 64.0D && worldserver.a((EntityHuman) this.player, blockposition)) {
             this.player.playerInteractManager.a(this.player, worldserver, itemstack, enumhand, movingobjectpositionblock);
         }
 

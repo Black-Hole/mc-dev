@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Either;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
@@ -122,5 +123,10 @@ public class ChunkTaskQueue<T> {
 
     public String toString() {
         return this.d + " " + this.c + "...";
+    }
+
+    @VisibleForTesting
+    LongSet b() {
+        return new LongOpenHashSet(this.e);
     }
 }

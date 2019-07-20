@@ -114,7 +114,7 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
 
     private boolean a(EntityLiving entityliving) {
         this.c = 10 + this.e.getRandom().nextInt(5);
-        PathEntity pathentity = this.e.getNavigation().a((Entity) entityliving);
+        PathEntity pathentity = this.e.getNavigation().a((Entity) entityliving, 0);
 
         if (pathentity == null) {
             return false;

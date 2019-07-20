@@ -7,7 +7,7 @@ public class ItemMinecart extends Item {
 
         @Override
         public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-            EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
+            EnumDirection enumdirection = (EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING);
             World world = isourceblock.getWorld();
             double d0 = isourceblock.getX() + (double) enumdirection.getAdjacentX() * 1.125D;
             double d1 = Math.floor(isourceblock.getY()) + (double) enumdirection.getAdjacentY();

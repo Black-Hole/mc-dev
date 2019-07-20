@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.types.Type;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
@@ -76,7 +75,7 @@ public class EntityTypes<T extends Entity> {
     public static final EntityTypes<EntityRabbit> RABBIT = a("rabbit", EntityTypes.a.a(EntityRabbit::new, EnumCreatureType.CREATURE).a(0.4F, 0.5F));
     public static final EntityTypes<EntitySalmon> SALMON = a("salmon", EntityTypes.a.a(EntitySalmon::new, EnumCreatureType.WATER_CREATURE).a(0.7F, 0.4F));
     public static final EntityTypes<EntitySheep> SHEEP = a("sheep", EntityTypes.a.a(EntitySheep::new, EnumCreatureType.CREATURE).a(0.9F, 1.3F));
-    public static final EntityTypes<EntityShulker> SHULKER = a("shulker", EntityTypes.a.a(EntityShulker::new, EnumCreatureType.MONSTER).c().a(1.0F, 1.0F));
+    public static final EntityTypes<EntityShulker> SHULKER = a("shulker", EntityTypes.a.a(EntityShulker::new, EnumCreatureType.MONSTER).c().d().a(1.0F, 1.0F));
     public static final EntityTypes<EntityShulkerBullet> SHULKER_BULLET = a("shulker_bullet", EntityTypes.a.a(EntityShulkerBullet::new, EnumCreatureType.MISC).a(0.3125F, 0.3125F));
     public static final EntityTypes<EntitySilverfish> SILVERFISH = a("silverfish", EntityTypes.a.a(EntitySilverfish::new, EnumCreatureType.MONSTER).a(0.4F, 0.3F));
     public static final EntityTypes<EntitySkeleton> SKELETON = a("skeleton", EntityTypes.a.a(EntitySkeleton::new, EnumCreatureType.MONSTER).a(0.6F, 1.99F));
@@ -101,7 +100,7 @@ public class EntityTypes<T extends Entity> {
     public static final EntityTypes<EntityVillager> VILLAGER = a("villager", EntityTypes.a.a(EntityVillager::new, EnumCreatureType.MISC).a(0.6F, 1.95F));
     public static final EntityTypes<EntityIronGolem> IRON_GOLEM = a("iron_golem", EntityTypes.a.a(EntityIronGolem::new, EnumCreatureType.MISC).a(1.4F, 2.7F));
     public static final EntityTypes<EntityVindicator> VINDICATOR = a("vindicator", EntityTypes.a.a(EntityVindicator::new, EnumCreatureType.MONSTER).a(0.6F, 1.95F));
-    public static final EntityTypes<EntityPillager> PILLAGER = a("pillager", EntityTypes.a.a(EntityPillager::new, EnumCreatureType.MONSTER).a(0.6F, 1.95F));
+    public static final EntityTypes<EntityPillager> PILLAGER = a("pillager", EntityTypes.a.a(EntityPillager::new, EnumCreatureType.MONSTER).d().a(0.6F, 1.95F));
     public static final EntityTypes<EntityVillagerTrader> WANDERING_TRADER = a("wandering_trader", EntityTypes.a.a(EntityVillagerTrader::new, EnumCreatureType.CREATURE).a(0.6F, 1.95F));
     public static final EntityTypes<EntityWitch> WITCH = a("witch", EntityTypes.a.a(EntityWitch::new, EnumCreatureType.MONSTER).a(0.6F, 1.95F));
     public static final EntityTypes<EntityWither> WITHER = a("wither", EntityTypes.a.a(EntityWither::new, EnumCreatureType.MONSTER).c().a(0.9F, 3.5F));
@@ -121,14 +120,13 @@ public class EntityTypes<T extends Entity> {
     private final boolean bb;
     private final boolean bc;
     private final boolean bd;
+    private final boolean be;
     @Nullable
-    private String be;
+    private String bf;
     @Nullable
-    private IChatBaseComponent bf;
+    private IChatBaseComponent bg;
     @Nullable
-    private MinecraftKey bg;
-    @Nullable
-    private final Type<?> bh;
+    private MinecraftKey bh;
     private final EntitySize bi;
 
     private static <T extends Entity> EntityTypes<T> a(String s, EntityTypes.a<T> entitytypes_a) {
@@ -143,13 +141,13 @@ public class EntityTypes<T extends Entity> {
         return IRegistry.ENTITY_TYPE.getOptional(MinecraftKey.a(s));
     }
 
-    public EntityTypes(EntityTypes.b<T> entitytypes_b, EnumCreatureType enumcreaturetype, boolean flag, boolean flag1, boolean flag2, @Nullable Type<?> type, EntitySize entitysize) {
+    public EntityTypes(EntityTypes.b<T> entitytypes_b, EnumCreatureType enumcreaturetype, boolean flag, boolean flag1, boolean flag2, boolean flag3, EntitySize entitysize) {
         this.aZ = entitytypes_b;
         this.ba = enumcreaturetype;
+        this.be = flag3;
         this.bb = flag;
         this.bc = flag1;
         this.bd = flag2;
-        this.bh = type;
         this.bi = entitysize;
     }
 
@@ -242,41 +240,45 @@ public class EntityTypes<T extends Entity> {
         return this.bd;
     }
 
-    public EnumCreatureType d() {
-        return this.ba;
-    }
-
-    public String e() {
-        if (this.be == null) {
-            this.be = SystemUtils.a("entity", IRegistry.ENTITY_TYPE.getKey(this));
-        }
-
+    public boolean d() {
         return this.be;
     }
 
-    public IChatBaseComponent f() {
+    public EnumCreatureType e() {
+        return this.ba;
+    }
+
+    public String f() {
         if (this.bf == null) {
-            this.bf = new ChatMessage(this.e(), new Object[0]);
+            this.bf = SystemUtils.a("entity", IRegistry.ENTITY_TYPE.getKey(this));
         }
 
         return this.bf;
     }
 
-    public MinecraftKey g() {
+    public IChatBaseComponent g() {
         if (this.bg == null) {
-            MinecraftKey minecraftkey = IRegistry.ENTITY_TYPE.getKey(this);
-
-            this.bg = new MinecraftKey(minecraftkey.b(), "entities/" + minecraftkey.getKey());
+            this.bg = new ChatMessage(this.f(), new Object[0]);
         }
 
         return this.bg;
     }
 
-    public float h() {
-        return this.bi.width;
+    public MinecraftKey h() {
+        if (this.bh == null) {
+            MinecraftKey minecraftkey = IRegistry.ENTITY_TYPE.getKey(this);
+
+            this.bh = new MinecraftKey(minecraftkey.getNamespace(), "entities/" + minecraftkey.getKey());
+        }
+
+        return this.bh;
     }
 
     public float i() {
+        return this.bi.width;
+    }
+
+    public float j() {
         return this.bi.height;
     }
 
@@ -296,12 +298,12 @@ public class EntityTypes<T extends Entity> {
     }
 
     public AxisAlignedBB a(double d0, double d1, double d2) {
-        float f = this.h() / 2.0F;
+        float f = this.i() / 2.0F;
 
-        return new AxisAlignedBB(d0 - (double) f, d1, d2 - (double) f, d0 + (double) f, d1 + (double) this.i(), d2 + (double) f);
+        return new AxisAlignedBB(d0 - (double) f, d1, d2 - (double) f, d0 + (double) f, d1 + (double) this.j(), d2 + (double) f);
     }
 
-    public EntitySize j() {
+    public EntitySize k() {
         return this.bi;
     }
 
@@ -365,11 +367,13 @@ public class EntityTypes<T extends Entity> {
         private boolean c = true;
         private boolean d = true;
         private boolean e;
-        private EntitySize f = EntitySize.b(0.6F, 1.8F);
+        private boolean f;
+        private EntitySize g = EntitySize.b(0.6F, 1.8F);
 
         private a(EntityTypes.b<T> entitytypes_b, EnumCreatureType enumcreaturetype) {
             this.a = entitytypes_b;
             this.b = enumcreaturetype;
+            this.f = enumcreaturetype == EnumCreatureType.CREATURE || enumcreaturetype == EnumCreatureType.MISC;
         }
 
         public static <T extends Entity> EntityTypes.a<T> a(EntityTypes.b<T> entitytypes_b, EnumCreatureType enumcreaturetype) {
@@ -383,7 +387,7 @@ public class EntityTypes<T extends Entity> {
         }
 
         public EntityTypes.a<T> a(float f, float f1) {
-            this.f = EntitySize.b(f, f1);
+            this.g = EntitySize.b(f, f1);
             return this;
         }
 
@@ -402,12 +406,15 @@ public class EntityTypes<T extends Entity> {
             return this;
         }
 
-        public EntityTypes<T> a(String s) {
-            Type<?> type = null;
+        public EntityTypes.a<T> d() {
+            this.f = true;
+            return this;
+        }
 
+        public EntityTypes<T> a(String s) {
             if (this.c) {
                 try {
-                    type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.a().getWorldVersion())).getChoiceType(DataConverterTypes.o, s);
+                    DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.a().getWorldVersion())).getChoiceType(DataConverterTypes.o, s);
                 } catch (IllegalStateException illegalstateexception) {
                     if (SharedConstants.b) {
                         throw illegalstateexception;
@@ -417,7 +424,7 @@ public class EntityTypes<T extends Entity> {
                 }
             }
 
-            return new EntityTypes<>(this.a, this.b, this.c, this.d, this.e, type, this.f);
+            return new EntityTypes<>(this.a, this.b, this.c, this.d, this.e, this.f, this.g);
         }
     }
 }

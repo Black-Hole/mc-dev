@@ -26,12 +26,12 @@ public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
 
     @Override
     protected void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        generatoraccess.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.90000004F);
+        generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.90000004F);
     }
 
     @Override
     protected void b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        generatoraccess.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.75F);
+        generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.75F);
     }
 
     @Override

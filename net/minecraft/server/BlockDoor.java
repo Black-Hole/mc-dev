@@ -127,7 +127,7 @@ public class BlockDoor extends Block {
         IBlockData iblockdata2 = world.getType(blockposition4);
         BlockPosition blockposition5 = blockposition1.shift(enumdirection2);
         IBlockData iblockdata3 = world.getType(blockposition5);
-        int i = (a(iblockdata.getCollisionShape(world, blockposition2)) ? -1 : 0) + (a(iblockdata1.getCollisionShape(world, blockposition3)) ? -1 : 0) + (a(iblockdata2.getCollisionShape(world, blockposition4)) ? 1 : 0) + (a(iblockdata3.getCollisionShape(world, blockposition5)) ? 1 : 0);
+        int i = (iblockdata.o(world, blockposition2) ? -1 : 0) + (iblockdata1.o(world, blockposition3) ? -1 : 0) + (iblockdata2.o(world, blockposition4) ? 1 : 0) + (iblockdata3.o(world, blockposition5) ? 1 : 0);
         boolean flag = iblockdata.getBlock() == this && iblockdata.get(BlockDoor.HALF) == BlockPropertyDoubleBlockHalf.LOWER;
         boolean flag1 = iblockdata2.getBlock() == this && iblockdata2.get(BlockDoor.HALF) == BlockPropertyDoubleBlockHalf.LOWER;
 
@@ -188,7 +188,7 @@ public class BlockDoor extends Block {
         BlockPosition blockposition1 = blockposition.down();
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
 
-        return iblockdata.get(BlockDoor.HALF) == BlockPropertyDoubleBlockHalf.LOWER ? Block.d(iblockdata1, iworldreader, blockposition1, EnumDirection.UP) : iblockdata1.getBlock() == this;
+        return iblockdata.get(BlockDoor.HALF) == BlockPropertyDoubleBlockHalf.LOWER ? iblockdata1.d(iworldreader, blockposition1, EnumDirection.UP) : iblockdata1.getBlock() == this;
     }
 
     private void b(World world, BlockPosition blockposition, boolean flag) {

@@ -335,7 +335,7 @@ public class EntityFishingHook extends Entity {
                 this.world.broadcastEntityEffect(this, (byte) 31);
                 i = this.hooked instanceof EntityItem ? 3 : 5;
             } else if (this.ar > 0) {
-                LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).set(LootContextParameters.POSITION, new BlockPosition(this)).set(LootContextParameters.TOOL, itemstack).a(this.random).a((float) this.aw + this.owner.ec());
+                LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).set(LootContextParameters.POSITION, new BlockPosition(this)).set(LootContextParameters.TOOL, itemstack).a(this.random).a((float) this.aw + this.owner.eb());
                 LootTable loottable = this.world.getMinecraftServer().getLootTableRegistry().getLootTable(LootTables.ab);
                 List<ItemStack> list = loottable.populateLoot(loottableinfo_builder.build(LootContextParameterSets.FISHING));
 

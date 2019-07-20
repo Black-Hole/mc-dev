@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 
 public class ArgumentSerializers {
@@ -13,6 +14,7 @@ public class ArgumentSerializers {
         ArgumentRegistry.a("brigadier:float", FloatArgumentType.class, new ArgumentSerializerFloat());
         ArgumentRegistry.a("brigadier:double", DoubleArgumentType.class, new ArgumentSerializerDouble());
         ArgumentRegistry.a("brigadier:integer", IntegerArgumentType.class, new ArgumentSerializerInteger());
+        ArgumentRegistry.a("brigadier:long", LongArgumentType.class, new ArgumentSerializerLong());
         ArgumentRegistry.a("brigadier:string", StringArgumentType.class, new ArgumentSerializerString());
     }
 

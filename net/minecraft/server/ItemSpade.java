@@ -33,7 +33,7 @@ public class ItemSpade extends ItemTool {
             if (iblockdata != null) {
                 EntityHuman entityhuman = itemactioncontext.getEntity();
 
-                world.a(entityhuman, blockposition, SoundEffects.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.playSound(entityhuman, blockposition, SoundEffects.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 if (!world.isClientSide) {
                     world.setTypeAndData(blockposition, iblockdata, 11);
                     if (entityhuman != null) {

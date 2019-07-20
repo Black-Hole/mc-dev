@@ -12,7 +12,7 @@ public class EntityLlamaTrader extends EntityLlama {
     }
 
     @Override
-    protected EntityLlama eG() {
+    protected EntityLlama eF() {
         return (EntityLlama) EntityTypes.TRADER_LLAMA.a(this.world);
     }
 
@@ -51,14 +51,14 @@ public class EntityLlamaTrader extends EntityLlama {
     public void movementTick() {
         super.movementTick();
         if (!this.world.isClientSide) {
-            this.eL();
+            this.eK();
         }
 
     }
 
-    private void eL() {
-        if (this.eM()) {
-            this.bI = this.eN() ? ((EntityVillagerTrader) this.getLeashHolder()).eh() - 1 : this.bI - 1;
+    private void eK() {
+        if (this.eL()) {
+            this.bI = this.eM() ? ((EntityVillagerTrader) this.getLeashHolder()).ef() - 1 : this.bI - 1;
             if (this.bI <= 0) {
                 this.unleash(true, false);
                 this.die();
@@ -67,16 +67,16 @@ public class EntityLlamaTrader extends EntityLlama {
         }
     }
 
-    private boolean eM() {
-        return !this.isTamed() && !this.eO() && !this.hasSinglePlayerPassenger();
+    private boolean eL() {
+        return !this.isTamed() && !this.eN() && !this.hasSinglePlayerPassenger();
     }
 
-    private boolean eN() {
+    private boolean eM() {
         return this.getLeashHolder() instanceof EntityVillagerTrader;
     }
 
-    private boolean eO() {
-        return this.isLeashed() && !this.eN();
+    private boolean eN() {
+        return this.isLeashed() && !this.eM();
     }
 
     @Nullable

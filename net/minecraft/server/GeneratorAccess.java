@@ -35,14 +35,14 @@ public interface GeneratorAccess extends IEntityAccess, IWorldReader, VirtualLev
 
     @Override
     default boolean isChunkLoaded(int i, int j) {
-        return this.getChunkProvider().a(i, j);
+        return this.getChunkProvider().b(i, j);
     }
 
     Random getRandom();
 
     void update(BlockPosition blockposition, Block block);
 
-    void a(@Nullable EntityHuman entityhuman, BlockPosition blockposition, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1);
+    void playSound(@Nullable EntityHuman entityhuman, BlockPosition blockposition, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1);
 
     void addParticle(ParticleParam particleparam, double d0, double d1, double d2, double d3, double d4, double d5);
 

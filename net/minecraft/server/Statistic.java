@@ -17,14 +17,14 @@ public class Statistic<T> extends IScoreboardCriteria {
     }
 
     public static <T> String a(StatisticWrapper<T> statisticwrapper, T t0) {
-        return a(IRegistry.STATS.getKey(statisticwrapper)) + ":" + a(statisticwrapper.a().getKey(t0));
+        return a(IRegistry.STATS.getKey(statisticwrapper)) + ":" + a(statisticwrapper.getRegistry().getKey(t0));
     }
 
     private static <T> String a(@Nullable MinecraftKey minecraftkey) {
         return minecraftkey.toString().replace(':', '.');
     }
 
-    public StatisticWrapper<T> a() {
+    public StatisticWrapper<T> getWrapper() {
         return this.q;
     }
 

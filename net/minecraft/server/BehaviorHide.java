@@ -3,13 +3,13 @@ package net.minecraft.server;
 import com.google.common.collect.ImmutableMap;
 import java.util.Optional;
 
-public class BehaviourHide extends Behavior<EntityLiving> {
+public class BehaviorHide extends Behavior<EntityLiving> {
 
     private final int a;
     private final int b;
     private int c;
 
-    public BehaviourHide(int i, int j) {
+    public BehaviorHide(int i, int j) {
         super(ImmutableMap.of(MemoryModuleType.HIDING_PLACE, MemoryStatus.VALUE_PRESENT, MemoryModuleType.HEARD_BELL_TIME, MemoryStatus.VALUE_PRESENT));
         this.b = i * 20;
         this.c = 0;

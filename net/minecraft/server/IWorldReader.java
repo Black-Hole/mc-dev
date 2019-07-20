@@ -15,7 +15,7 @@ public interface IWorldReader extends IIBlockAccess {
         return this.getType(blockposition).isAir();
     }
 
-    default boolean v(BlockPosition blockposition) {
+    default boolean u(BlockPosition blockposition) {
         if (blockposition.getY() >= this.getSeaLevel()) {
             return this.f(blockposition);
         } else {
@@ -49,7 +49,7 @@ public interface IWorldReader extends IIBlockAccess {
 
     int a(HeightMap.Type heightmap_type, int i, int j);
 
-    default float w(BlockPosition blockposition) {
+    default float v(BlockPosition blockposition) {
         return this.getWorldProvider().i()[this.getLightLevel(blockposition)];
     }
 
@@ -67,7 +67,7 @@ public interface IWorldReader extends IIBlockAccess {
 
     int getSeaLevel();
 
-    default IChunkAccess x(BlockPosition blockposition) {
+    default IChunkAccess w(BlockPosition blockposition) {
         return this.getChunkAt(blockposition.getX() >> 4, blockposition.getZ() >> 4);
     }
 
@@ -178,7 +178,7 @@ public interface IWorldReader extends IIBlockAccess {
         }, false);
     }
 
-    default boolean y(BlockPosition blockposition) {
+    default boolean x(BlockPosition blockposition) {
         return this.getFluid(blockposition).a(TagsFluid.WATER);
     }
 

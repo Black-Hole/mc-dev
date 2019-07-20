@@ -66,7 +66,7 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
 
     @Override
     public void e() {
-        if (!this.e.up().a((IPosition) this.a.ci(), this.h())) {
+        if (!this.e.up().a((IPosition) this.a.getPositionVector(), this.h())) {
             this.h = false;
             ++this.d;
             if (this.j()) {

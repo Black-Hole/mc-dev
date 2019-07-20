@@ -124,7 +124,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.aG = new double[]{0.0D, 0.0D, 0.0D};
         this.f = entitytypes;
         this.world = world;
-        this.size = entitytypes.j();
+        this.size = entitytypes.k();
         this.setPosition(0.0D, 0.0D, 0.0D);
         if (world != null) {
             this.dimension = world.worldProvider.getDimensionManager();
@@ -826,7 +826,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     public void a(SoundEffect soundeffect, float f, float f1) {
         if (!this.isSilent()) {
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, soundeffect, this.getSoundCategory(), f, f1);
+            this.world.playSound((EntityHuman) null, this.locX, this.locY, this.locZ, soundeffect, this.getSoundCategory(), f, f1);
         }
 
     }
@@ -1095,7 +1095,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
         if (this.world.isLoaded(blockposition_mutableblockposition)) {
             blockposition_mutableblockposition.p(MathHelper.floor(this.locY + (double) this.getHeadHeight()));
-            return this.world.w(blockposition_mutableblockposition);
+            return this.world.v(blockposition_mutableblockposition);
         } else {
             return 0.0F;
         }
@@ -1167,7 +1167,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public double h(Entity entity) {
-        return this.c(entity.ci());
+        return this.c(entity.getPositionVector());
     }
 
     public double c(Vec3D vec3d) {
@@ -1934,7 +1934,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             EnumDirection enumdirection1 = aenumdirection[j];
 
             blockposition_mutableblockposition.g(blockposition).c(enumdirection1);
-            if (!Block.a(this.world.getType(blockposition_mutableblockposition).getCollisionShape(this.world, blockposition_mutableblockposition))) {
+            if (!this.world.getType(blockposition_mutableblockposition).o(this.world, blockposition_mutableblockposition)) {
                 double d4 = vec3d.a(enumdirection1.k());
                 double d5 = enumdirection1.c() == EnumDirection.EnumAxisDirection.POSITIVE ? 1.0D - d4 : d4;
 
@@ -1967,7 +1967,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     private static void c(IChatBaseComponent ichatbasecomponent) {
         ichatbasecomponent.a((chatmodifier) -> {
             chatmodifier.setChatClickable((ChatClickable) null);
-        }).a().forEach(Entity::c);
+        }).getSiblings().forEach(Entity::c);
     }
 
     @Override
@@ -1980,7 +1980,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             c(ichatbasecomponent1);
             return ichatbasecomponent1;
         } else {
-            return this.f.f();
+            return this.f.g();
         }
     }
 
@@ -2502,7 +2502,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     public boolean ca() {
         Entity entity = this.getRidingPassenger();
 
-        return entity instanceof EntityHuman ? ((EntityHuman) entity).dH() : !this.world.isClientSide;
+        return entity instanceof EntityHuman ? ((EntityHuman) entity).dG() : !this.world.isClientSide;
     }
 
     @Nullable
@@ -2661,10 +2661,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     public abstract Packet<?> N();
 
     public EntitySize a(EntityPose entitypose) {
-        return this.f.j();
+        return this.f.k();
     }
 
-    public Vec3D ci() {
+    public Vec3D getPositionVector() {
         return new Vec3D(this.locX, this.locY, this.locZ);
     }
 

@@ -117,7 +117,7 @@ public class EntityBat extends EntityAmbient {
                 this.d = null;
             }
 
-            if (this.d == null || this.random.nextInt(30) == 0 || this.d.a((IPosition) this.ci(), 2.0D)) {
+            if (this.d == null || this.random.nextInt(30) == 0 || this.d.a((IPosition) this.getPositionVector(), 2.0D)) {
                 this.d = new BlockPosition(this.locX + (double) this.random.nextInt(7) - (double) this.random.nextInt(7), this.locY + (double) this.random.nextInt(6) - 2.0D, this.locZ + (double) this.random.nextInt(7) - (double) this.random.nextInt(7));
             }
 
@@ -188,7 +188,7 @@ public class EntityBat extends EntityAmbient {
             int i = generatoraccess.getLightLevel(blockposition);
             byte b0 = 4;
 
-            if (dU()) {
+            if (dT()) {
                 b0 = 7;
             } else if (random.nextBoolean()) {
                 return false;
@@ -198,7 +198,7 @@ public class EntityBat extends EntityAmbient {
         }
     }
 
-    private static boolean dU() {
+    private static boolean dT() {
         LocalDate localdate = LocalDate.now();
         int i = localdate.get(ChronoField.DAY_OF_MONTH);
         int j = localdate.get(ChronoField.MONTH_OF_YEAR);

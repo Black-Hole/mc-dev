@@ -66,11 +66,11 @@ public class ContainerLoom extends Container {
                 ContainerLoom.this.f.a(1);
                 ContainerLoom.this.g.a(1);
                 if (!ContainerLoom.this.f.hasItem() || !ContainerLoom.this.g.hasItem()) {
-                    ContainerLoom.this.d.a(0);
+                    ContainerLoom.this.d.set(0);
                 }
 
                 containeraccess.a((world, blockposition) -> {
-                    world.a((EntityHuman) null, blockposition, SoundEffects.UI_LOOM_TAKE_RESULT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.playSound((EntityHuman) null, blockposition, SoundEffects.UI_LOOM_TAKE_RESULT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 });
                 return super.a(entityhuman, itemstack);
             }
@@ -99,7 +99,7 @@ public class ContainerLoom extends Container {
     @Override
     public boolean a(EntityHuman entityhuman, int i) {
         if (i > 0 && i <= EnumBannerPatternType.P) {
-            this.d.a(i);
+            this.d.set(i);
             this.j();
             return true;
         } else {
@@ -114,17 +114,17 @@ public class ContainerLoom extends Container {
         ItemStack itemstack2 = this.h.getItem();
         ItemStack itemstack3 = this.i.getItem();
 
-        if (!itemstack3.isEmpty() && (itemstack.isEmpty() || itemstack1.isEmpty() || this.d.b() <= 0 || this.d.b() >= EnumBannerPatternType.O - 5 && itemstack2.isEmpty())) {
+        if (!itemstack3.isEmpty() && (itemstack.isEmpty() || itemstack1.isEmpty() || this.d.get() <= 0 || this.d.get() >= EnumBannerPatternType.O - 5 && itemstack2.isEmpty())) {
             this.i.set(ItemStack.a);
-            this.d.a(0);
+            this.d.set(0);
         } else if (!itemstack2.isEmpty() && itemstack2.getItem() instanceof ItemBannerPattern) {
             NBTTagCompound nbttagcompound = itemstack.a("BlockEntityTag");
             boolean flag = nbttagcompound.hasKeyOfType("Patterns", 9) && !itemstack.isEmpty() && nbttagcompound.getList("Patterns", 10).size() >= 6;
 
             if (flag) {
-                this.d.a(0);
+                this.d.set(0);
             } else {
-                this.d.a(((ItemBannerPattern) itemstack2.getItem()).b().ordinal());
+                this.d.set(((ItemBannerPattern) itemstack2.getItem()).b().ordinal());
             }
         }
 
@@ -196,7 +196,7 @@ public class ContainerLoom extends Container {
     }
 
     private void j() {
-        if (this.d.b() > 0) {
+        if (this.d.get() > 0) {
             ItemStack itemstack = this.f.getItem();
             ItemStack itemstack1 = this.g.getItem();
             ItemStack itemstack2 = ItemStack.a;
@@ -204,7 +204,7 @@ public class ContainerLoom extends Container {
             if (!itemstack.isEmpty() && !itemstack1.isEmpty()) {
                 itemstack2 = itemstack.cloneItemStack();
                 itemstack2.setCount(1);
-                EnumBannerPatternType enumbannerpatterntype = EnumBannerPatternType.values()[this.d.b()];
+                EnumBannerPatternType enumbannerpatterntype = EnumBannerPatternType.values()[this.d.get()];
                 EnumColor enumcolor = ((ItemDye) itemstack1.getItem()).d();
                 NBTTagCompound nbttagcompound = itemstack2.a("BlockEntityTag");
                 NBTTagList nbttaglist;

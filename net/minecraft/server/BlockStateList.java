@@ -34,7 +34,7 @@ public class BlockStateList<O, S extends IBlockDataHolder<S>> {
         IBlockState iblockstate;
 
         for (UnmodifiableIterator unmodifiableiterator = this.c.values().iterator(); unmodifiableiterator.hasNext();stream = stream.flatMap((list1) -> {
-            return iblockstate.d().stream().map((comparable) -> {
+            return iblockstate.getValues().stream().map((comparable) -> {
                 List<Comparable<?>> list2 = Lists.newArrayList(list1);
 
                 list2.add(comparable);
@@ -116,7 +116,7 @@ public class BlockStateList<O, S extends IBlockDataHolder<S>> {
             if (!BlockStateList.a.matcher(s).matches()) {
                 throw new IllegalArgumentException(this.a + " has invalidly named property: " + s);
             } else {
-                Collection<T> collection = iblockstate.d();
+                Collection<T> collection = iblockstate.getValues();
 
                 if (collection.size() <= 1) {
                     throw new IllegalArgumentException(this.a + " attempted use property " + s + " with <= 1 possible values");

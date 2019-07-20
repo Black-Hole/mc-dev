@@ -36,7 +36,7 @@ public class BlockStateEnum<T extends Enum<T> & INamable> extends BlockState<T> 
     }
 
     @Override
-    public Collection<T> d() {
+    public Collection<T> getValues() {
         return this.a;
     }
 

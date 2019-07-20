@@ -61,7 +61,7 @@ public class TileEntityBanner extends TileEntity implements INamableTileEntity {
         }
 
         if (this.hasWorld()) {
-            this.color = ((BlockBannerAbstract) this.getBlock().getBlock()).b();
+            this.color = ((BlockBannerAbstract) this.getBlock().getBlock()).getColor();
         } else {
             this.color = null;
         }
@@ -108,7 +108,7 @@ public class TileEntityBanner extends TileEntity implements INamableTileEntity {
 
     public EnumColor a(Supplier<IBlockData> supplier) {
         if (this.color == null) {
-            this.color = ((BlockBannerAbstract) ((IBlockData) supplier.get()).getBlock()).b();
+            this.color = ((BlockBannerAbstract) ((IBlockData) supplier.get()).getBlock()).getColor();
         }
 
         return this.color;

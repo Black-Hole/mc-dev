@@ -36,7 +36,7 @@ public class TickListServer<T> implements TickList<T> {
         this.i = consumer;
     }
 
-    public void a() {
+    public void b() {
         int i = this.nextTickList.size();
 
         if (i != this.nextTickListHash.size()) {
@@ -212,5 +212,9 @@ public class TickListServer<T> implements TickList<T> {
             this.nextTickList.add(nextticklistentry);
         }
 
+    }
+
+    public int a() {
+        return this.nextTickListHash.size();
     }
 }

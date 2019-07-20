@@ -44,7 +44,7 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
         List<MethodProfilerResultsField> list = Lists.newArrayList();
 
         if (!s.isEmpty()) {
-            s = s + ".";
+            s = s + '\u001e';
         }
 
         long l = 0L;
@@ -53,7 +53,7 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
         while (iterator.hasNext()) {
             String s1 = (String) iterator.next();
 
-            if (s1.length() > s.length() && s1.startsWith(s) && s1.indexOf(".", s.length() + 1) < 0) {
+            if (s1.length() > s.length() && s1.startsWith(s) && s1.indexOf(30, s.length() + 1) < 0) {
                 l += (Long) this.b.get(s1);
             }
         }
@@ -77,7 +77,7 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
 
         while (iterator1.hasNext()) {
             s2 = (String) iterator1.next();
-            if (s2.length() > s.length() && s2.startsWith(s) && s2.indexOf(".", s.length() + 1) < 0) {
+            if (s2.length() > s.length() && s2.startsWith(s) && s2.indexOf(30, s.length() + 1) < 0) {
                 long i1 = (Long) this.b.getOrDefault(s2, 0L);
                 double d0 = (double) i1 * 100.0D / (double) l;
                 double d1 = (double) i1 * 100.0D / (double) i;
@@ -154,6 +154,7 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
         stringbuilder.append("// ");
         stringbuilder.append(h());
         stringbuilder.append("\n\n");
+        stringbuilder.append("Version: ").append(SharedConstants.a().getId()).append('\n');
         stringbuilder.append("Time span: ").append(i / 1000000L).append(" ms\n");
         stringbuilder.append("Tick span: ").append(j).append(" ticks\n");
         stringbuilder.append("// This is approximately ").append(String.format(Locale.ROOT, "%.2f", (float) j / ((float) i / 1.0E9F))).append(" ticks per second. It should be ").append(20).append(" ticks per second\n\n");
@@ -187,7 +188,7 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
                 stringbuilder.append(methodprofilerresultsfield.d).append('(').append(methodprofilerresultsfield.c).append('/').append(String.format(Locale.ROOT, "%.0f", (float) methodprofilerresultsfield.c / (float) this.h)).append(')').append(" - ").append(String.format(Locale.ROOT, "%.2f", methodprofilerresultsfield.a)).append("%/").append(String.format(Locale.ROOT, "%.2f", methodprofilerresultsfield.b)).append("%\n");
                 if (!"unspecified".equals(methodprofilerresultsfield.d)) {
                     try {
-                        this.a(i + 1, s + "." + methodprofilerresultsfield.d, stringbuilder);
+                        this.a(i + 1, s + '\u001e' + methodprofilerresultsfield.d, stringbuilder);
                     } catch (Exception exception) {
                         stringbuilder.append("[[ EXCEPTION ").append(exception).append(" ]]");
                     }

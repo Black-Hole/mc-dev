@@ -80,7 +80,7 @@ public class BlockBell extends BlockTileEntity {
     }
 
     private void a(World world, BlockPosition blockposition) {
-        world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_BELL_USE, SoundCategory.BLOCKS, 2.0F, 1.0F);
+        world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_BELL_USE, SoundCategory.BLOCKS, 2.0F, 1.0F);
     }
 
     private VoxelShape j(IBlockData iblockdata) {
@@ -120,14 +120,14 @@ public class BlockBell extends BlockTileEntity {
                 return iblockdata;
             }
         } else {
-            boolean flag = enumdirection_enumaxis == EnumDirection.EnumAxis.X && d(world.getType(blockposition.west()), world, blockposition.west(), EnumDirection.EAST) && d(world.getType(blockposition.east()), world, blockposition.east(), EnumDirection.WEST) || enumdirection_enumaxis == EnumDirection.EnumAxis.Z && d(world.getType(blockposition.north()), world, blockposition.north(), EnumDirection.SOUTH) && d(world.getType(blockposition.south()), world, blockposition.south(), EnumDirection.NORTH);
+            boolean flag = enumdirection_enumaxis == EnumDirection.EnumAxis.X && world.getType(blockposition.west()).d(world, blockposition.west(), EnumDirection.EAST) && world.getType(blockposition.east()).d(world, blockposition.east(), EnumDirection.WEST) || enumdirection_enumaxis == EnumDirection.EnumAxis.Z && world.getType(blockposition.north()).d(world, blockposition.north(), EnumDirection.SOUTH) && world.getType(blockposition.south()).d(world, blockposition.south(), EnumDirection.NORTH);
 
             iblockdata = (IBlockData) ((IBlockData) this.getBlockData().set(BlockBell.a, enumdirection.opposite())).set(BlockBell.b, flag ? BlockPropertyBellAttach.DOUBLE_WALL : BlockPropertyBellAttach.SINGLE_WALL);
             if (iblockdata.canPlace(blockactioncontext.getWorld(), blockactioncontext.getClickPosition())) {
                 return iblockdata;
             }
 
-            boolean flag1 = d(world.getType(blockposition.down()), world, blockposition.down(), EnumDirection.UP);
+            boolean flag1 = world.getType(blockposition.down()).d(world, blockposition.down(), EnumDirection.UP);
 
             iblockdata = (IBlockData) iblockdata.set(BlockBell.b, flag1 ? BlockPropertyBellAttach.FLOOR : BlockPropertyBellAttach.CEILING);
             if (iblockdata.canPlace(blockactioncontext.getWorld(), blockactioncontext.getClickPosition())) {
@@ -147,11 +147,11 @@ public class BlockBell extends BlockTileEntity {
             return Blocks.AIR.getBlockData();
         } else {
             if (enumdirection.k() == ((EnumDirection) iblockdata.get(BlockBell.a)).k()) {
-                if (blockpropertybellattach == BlockPropertyBellAttach.DOUBLE_WALL && !d(iblockdata1, generatoraccess, blockposition1, enumdirection)) {
+                if (blockpropertybellattach == BlockPropertyBellAttach.DOUBLE_WALL && !iblockdata1.d(generatoraccess, blockposition1, enumdirection)) {
                     return (IBlockData) ((IBlockData) iblockdata.set(BlockBell.b, BlockPropertyBellAttach.SINGLE_WALL)).set(BlockBell.a, enumdirection.opposite());
                 }
 
-                if (blockpropertybellattach == BlockPropertyBellAttach.SINGLE_WALL && enumdirection1.opposite() == enumdirection && d(iblockdata1, generatoraccess, blockposition1, (EnumDirection) iblockdata.get(BlockBell.a))) {
+                if (blockpropertybellattach == BlockPropertyBellAttach.SINGLE_WALL && enumdirection1.opposite() == enumdirection && iblockdata1.d(generatoraccess, blockposition1, (EnumDirection) iblockdata.get(BlockBell.a))) {
                     return (IBlockData) iblockdata.set(BlockBell.b, BlockPropertyBellAttach.DOUBLE_WALL);
                 }
             }

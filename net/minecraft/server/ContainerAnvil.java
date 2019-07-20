@@ -45,13 +45,13 @@ public class ContainerAnvil extends Container {
 
             @Override
             public boolean isAllowed(EntityHuman entityhuman) {
-                return (entityhuman.abilities.canInstantlyBuild || entityhuman.expLevel >= ContainerAnvil.this.levelCost.b()) && ContainerAnvil.this.levelCost.b() > 0 && this.hasItem();
+                return (entityhuman.abilities.canInstantlyBuild || entityhuman.expLevel >= ContainerAnvil.this.levelCost.get()) && ContainerAnvil.this.levelCost.get() > 0 && this.hasItem();
             }
 
             @Override
             public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
                 if (!entityhuman.abilities.canInstantlyBuild) {
-                    entityhuman.levelDown(-ContainerAnvil.this.levelCost.b());
+                    entityhuman.levelDown(-ContainerAnvil.this.levelCost.get());
                 }
 
                 ContainerAnvil.this.repairInventory.setItem(0, ItemStack.a);
@@ -68,7 +68,7 @@ public class ContainerAnvil extends Container {
                     ContainerAnvil.this.repairInventory.setItem(1, ItemStack.a);
                 }
 
-                ContainerAnvil.this.levelCost.a(0);
+                ContainerAnvil.this.levelCost.set(0);
                 containeraccess.a((world, blockposition) -> {
                     IBlockData iblockdata = world.getType(blockposition);
 
@@ -117,14 +117,14 @@ public class ContainerAnvil extends Container {
     public void e() {
         ItemStack itemstack = this.repairInventory.getItem(0);
 
-        this.levelCost.a(1);
+        this.levelCost.set(1);
         int i = 0;
         byte b0 = 0;
         byte b1 = 0;
 
         if (itemstack.isEmpty()) {
             this.resultInventory.setItem(0, ItemStack.a);
-            this.levelCost.a(0);
+            this.levelCost.set(0);
         } else {
             ItemStack itemstack1 = itemstack.cloneItemStack();
             ItemStack itemstack2 = this.repairInventory.getItem(1);
@@ -142,7 +142,7 @@ public class ContainerAnvil extends Container {
                     k = Math.min(itemstack1.getDamage(), itemstack1.h() / 4);
                     if (k <= 0) {
                         this.resultInventory.setItem(0, ItemStack.a);
-                        this.levelCost.a(0);
+                        this.levelCost.set(0);
                         return;
                     }
 
@@ -157,7 +157,7 @@ public class ContainerAnvil extends Container {
                 } else {
                     if (!flag && (itemstack1.getItem() != itemstack2.getItem() || !itemstack1.e())) {
                         this.resultInventory.setItem(0, ItemStack.a);
-                        this.levelCost.a(0);
+                        this.levelCost.set(0);
                         return;
                     }
 
@@ -202,7 +202,7 @@ public class ContainerAnvil extends Container {
                             while (iterator1.hasNext()) {
                                 Enchantment enchantment1 = (Enchantment) iterator1.next();
 
-                                if (enchantment1 != enchantment && !enchantment.b(enchantment1)) {
+                                if (enchantment1 != enchantment && !enchantment.isCompatible(enchantment1)) {
                                     flag3 = false;
                                     ++i;
                                 }
@@ -247,7 +247,7 @@ public class ContainerAnvil extends Container {
 
                     if (flag2 && !flag1) {
                         this.resultInventory.setItem(0, ItemStack.a);
-                        this.levelCost.a(0);
+                        this.levelCost.set(0);
                         return;
                     }
                 }
@@ -265,16 +265,16 @@ public class ContainerAnvil extends Container {
                 itemstack1.a((IChatBaseComponent) (new ChatComponentText(this.renameText)));
             }
 
-            this.levelCost.a(j + i);
+            this.levelCost.set(j + i);
             if (i <= 0) {
                 itemstack1 = ItemStack.a;
             }
 
-            if (b1 == i && b1 > 0 && this.levelCost.b() >= 40) {
-                this.levelCost.a(39);
+            if (b1 == i && b1 > 0 && this.levelCost.get() >= 40) {
+                this.levelCost.set(39);
             }
 
-            if (this.levelCost.b() >= 40 && !this.player.abilities.canInstantlyBuild) {
+            if (this.levelCost.get() >= 40 && !this.player.abilities.canInstantlyBuild) {
                 itemstack1 = ItemStack.a;
             }
 

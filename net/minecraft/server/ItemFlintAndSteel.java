@@ -17,7 +17,7 @@ public class ItemFlintAndSteel extends Item {
         IBlockData iblockdata;
 
         if (a(world.getType(blockposition1), (GeneratorAccess) world, blockposition1)) {
-            world.a(entityhuman, blockposition1, SoundEffects.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, ItemFlintAndSteel.i.nextFloat() * 0.4F + 0.8F);
+            world.playSound(entityhuman, blockposition1, SoundEffects.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, ItemFlintAndSteel.i.nextFloat() * 0.4F + 0.8F);
             iblockdata = ((BlockFire) Blocks.FIRE).a((IBlockAccess) world, blockposition1);
             world.setTypeAndData(blockposition1, iblockdata, 11);
             ItemStack itemstack = itemactioncontext.getItemStack();
@@ -33,7 +33,7 @@ public class ItemFlintAndSteel extends Item {
         } else {
             iblockdata = world.getType(blockposition);
             if (a(iblockdata)) {
-                world.a(entityhuman, blockposition, SoundEffects.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, ItemFlintAndSteel.i.nextFloat() * 0.4F + 0.8F);
+                world.playSound(entityhuman, blockposition, SoundEffects.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, ItemFlintAndSteel.i.nextFloat() * 0.4F + 0.8F);
                 world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.r, true), 11);
                 if (entityhuman != null) {
                     itemactioncontext.getItemStack().damage(1, entityhuman, (entityhuman1) -> {

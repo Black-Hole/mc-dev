@@ -39,6 +39,9 @@ public class CrashReport {
         this.d.a("Minecraft Version", () -> {
             return SharedConstants.a().getName();
         });
+        this.d.a("Minecraft Version ID", () -> {
+            return SharedConstants.a().getId();
+        });
         this.d.a("Operating System", () -> {
             return System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version");
         });
@@ -59,6 +62,7 @@ public class CrashReport {
 
             return k + " bytes (" + j1 + " MB) / " + j + " bytes (" + i1 + " MB) up to " + i + " bytes (" + l + " MB)";
         });
+        this.d.a("CPUs", (Object) Runtime.getRuntime().availableProcessors());
         this.d.a("JVM Flags", () -> {
             List<String> list = (List) SystemUtils.h().collect(Collectors.toList());
 

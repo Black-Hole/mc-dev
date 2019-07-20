@@ -13,10 +13,10 @@ public class ItemCrossbow extends ItemProjectileWeapon {
     public ItemCrossbow(Item.Info item_info) {
         super(item_info);
         this.a(new MinecraftKey("pull"), (itemstack, world, entityliving) -> {
-            return entityliving != null && itemstack.getItem() == this ? (d(itemstack) ? 0.0F : (float) (itemstack.k() - entityliving.dn()) / (float) e(itemstack)) : 0.0F;
+            return entityliving != null && itemstack.getItem() == this ? (d(itemstack) ? 0.0F : (float) (itemstack.k() - entityliving.dm()) / (float) e(itemstack)) : 0.0F;
         });
         this.a(new MinecraftKey("pulling"), (itemstack, world, entityliving) -> {
-            return entityliving != null && entityliving.isHandRaised() && entityliving.dm() == itemstack && !d(itemstack) ? 1.0F : 0.0F;
+            return entityliving != null && entityliving.isHandRaised() && entityliving.dl() == itemstack && !d(itemstack) ? 1.0F : 0.0F;
         });
         this.a(new MinecraftKey("charged"), (itemstack, world, entityliving) -> {
             return entityliving != null && d(itemstack) ? 1.0F : 0.0F;
@@ -66,7 +66,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
             a(itemstack, true);
             SoundCategory soundcategory = entityliving instanceof EntityHuman ? SoundCategory.PLAYERS : SoundCategory.HOSTILE;
 
-            world.a((EntityHuman) null, entityliving.locX, entityliving.locY, entityliving.locZ, SoundEffects.ITEM_CROSSBOW_LOADING_END, soundcategory, 1.0F, 1.0F / (ItemCrossbow.i.nextFloat() * 0.5F + 1.0F) + 0.2F);
+            world.playSound((EntityHuman) null, entityliving.locX, entityliving.locY, entityliving.locZ, SoundEffects.ITEM_CROSSBOW_LOADING_END, soundcategory, 1.0F, 1.0F / (ItemCrossbow.i.nextFloat() * 0.5F + 1.0F) + 0.2F);
         }
 
     }
@@ -215,7 +215,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
                 entityliving1.d(enumhand);
             });
             world.addEntity((Entity) object);
-            world.a((EntityHuman) null, entityliving.locX, entityliving.locY, entityliving.locZ, SoundEffects.ITEM_CROSSBOW_SHOOT, SoundCategory.PLAYERS, 1.0F, f);
+            world.playSound((EntityHuman) null, entityliving.locX, entityliving.locY, entityliving.locZ, SoundEffects.ITEM_CROSSBOW_SHOOT, SoundCategory.PLAYERS, 1.0F, f);
         }
     }
 
@@ -232,7 +232,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
         int i = EnchantmentManager.getEnchantmentLevel(Enchantments.PIERCING, itemstack);
 
         if (i > 0) {
-            entityarrow.b((byte) i);
+            entityarrow.setPierceLevel((byte) i);
         }
 
         return entityarrow;
@@ -301,12 +301,12 @@ public class ItemCrossbow extends ItemProjectileWeapon {
 
             if (f >= 0.2F && !this.c) {
                 this.c = true;
-                world.a((EntityHuman) null, entityliving.locX, entityliving.locY, entityliving.locZ, soundeffect, SoundCategory.PLAYERS, 0.5F, 1.0F);
+                world.playSound((EntityHuman) null, entityliving.locX, entityliving.locY, entityliving.locZ, soundeffect, SoundCategory.PLAYERS, 0.5F, 1.0F);
             }
 
             if (f >= 0.5F && soundeffect1 != null && !this.d) {
                 this.d = true;
-                world.a((EntityHuman) null, entityliving.locX, entityliving.locY, entityliving.locZ, soundeffect1, SoundCategory.PLAYERS, 0.5F, 1.0F);
+                world.playSound((EntityHuman) null, entityliving.locX, entityliving.locY, entityliving.locZ, soundeffect1, SoundCategory.PLAYERS, 0.5F, 1.0F);
             }
         }
 

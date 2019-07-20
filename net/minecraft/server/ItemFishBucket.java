@@ -21,7 +21,7 @@ public class ItemFishBucket extends ItemBucket {
 
     @Override
     protected void a(@Nullable EntityHuman entityhuman, GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        generatoraccess.a(entityhuman, blockposition, SoundEffects.ITEM_BUCKET_EMPTY_FISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        generatoraccess.playSound(entityhuman, blockposition, SoundEffects.ITEM_BUCKET_EMPTY_FISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
     }
 
     private void b(World world, ItemStack itemstack, BlockPosition blockposition) {

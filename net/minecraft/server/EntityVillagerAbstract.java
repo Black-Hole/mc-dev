@@ -18,7 +18,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         super(entitytypes, world);
     }
 
-    public int dW() {
+    public int dV() {
         return (Integer) this.datawatcher.get(EntityVillagerAbstract.bA);
     }
 
@@ -53,7 +53,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return this.tradingPlayer;
     }
 
-    public boolean dZ() {
+    public boolean dY() {
         return this.tradingPlayer != null;
     }
 
@@ -61,7 +61,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     public MerchantRecipeList getOffers() {
         if (this.trades == null) {
             this.trades = new MerchantRecipeList();
-            this.ei();
+            this.eh();
         }
 
         return this.trades;
@@ -84,7 +84,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     protected abstract void b(MerchantRecipe merchantrecipe);
 
     @Override
-    public boolean eb() {
+    public boolean ea() {
         return true;
     }
 
@@ -98,7 +98,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     }
 
     @Override
-    public SoundEffect ec() {
+    public SoundEffect eb() {
         return SoundEffects.ENTITY_VILLAGER_YES;
     }
 
@@ -106,7 +106,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return flag ? SoundEffects.ENTITY_VILLAGER_YES : SoundEffects.ENTITY_VILLAGER_NO;
     }
 
-    public void ed() {
+    public void ec() {
         this.a(SoundEffects.ENTITY_VILLAGER_CELEBRATE, this.getSoundVolume(), this.cV());
     }
 
@@ -154,18 +154,18 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     @Nullable
     @Override
     public Entity a(DimensionManager dimensionmanager) {
-        this.ee();
+        this.ed();
         return super.a(dimensionmanager);
     }
 
-    protected void ee() {
+    protected void ed() {
         this.setTradingPlayer((EntityHuman) null);
     }
 
     @Override
     public void die(DamageSource damagesource) {
         super.die(damagesource);
-        this.ee();
+        this.ed();
     }
 
     @Override
@@ -198,7 +198,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return this.world;
     }
 
-    protected abstract void ei();
+    protected abstract void eh();
 
     protected void a(MerchantRecipeList merchantrecipelist, VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption, int i) {
         Set<Integer> set = Sets.newHashSet();

@@ -61,20 +61,24 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
             flag1 = true;
         }
 
+        IBlockData iblockdata1;
+
         if (flag1 && !flag) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockMinecartDetector.POWERED, true), 3);
-            this.b(world, blockposition, iblockdata, true);
+            iblockdata1 = (IBlockData) iblockdata.set(BlockMinecartDetector.POWERED, true);
+            world.setTypeAndData(blockposition, iblockdata1, 3);
+            this.b(world, blockposition, iblockdata1, true);
             world.applyPhysics(blockposition, this);
             world.applyPhysics(blockposition.down(), this);
-            world.m(blockposition);
+            world.b(blockposition, iblockdata, iblockdata1);
         }
 
         if (!flag1 && flag) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockMinecartDetector.POWERED, false), 3);
-            this.b(world, blockposition, iblockdata, false);
+            iblockdata1 = (IBlockData) iblockdata.set(BlockMinecartDetector.POWERED, false);
+            world.setTypeAndData(blockposition, iblockdata1, 3);
+            this.b(world, blockposition, iblockdata1, false);
             world.applyPhysics(blockposition, this);
             world.applyPhysics(blockposition.down(), this);
-            world.m(blockposition);
+            world.b(blockposition, iblockdata, iblockdata1);
         }
 
         if (flag1) {

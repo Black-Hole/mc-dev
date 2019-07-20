@@ -130,7 +130,7 @@ public class EntityWolf extends EntityTameableAnimal {
     @Override
     public void movementTick() {
         super.movementTick();
-        if (!this.world.isClientSide && this.bI && !this.bJ && !this.dU() && this.onGround) {
+        if (!this.world.isClientSide && this.bI && !this.bJ && !this.dT() && this.onGround) {
             this.bJ = true;
             this.bK = 0.0F;
             this.bL = 0.0F;
@@ -148,7 +148,7 @@ public class EntityWolf extends EntityTameableAnimal {
         super.tick();
         if (this.isAlive()) {
             this.bH = this.bG;
-            if (this.ej()) {
+            if (this.ei()) {
                 this.bG += (1.0F - this.bG) * 0.4F;
             } else {
                 this.bG += (0.0F - this.bG) * 0.4F;
@@ -321,7 +321,7 @@ public class EntityWolf extends EntityTameableAnimal {
     }
 
     @Override
-    public int dD() {
+    public int dC() {
         return 8;
     }
 
@@ -380,7 +380,7 @@ public class EntityWolf extends EntityTameableAnimal {
         }
     }
 
-    public boolean ej() {
+    public boolean ei() {
         return (Boolean) this.datawatcher.get(EntityWolf.bE);
     }
 

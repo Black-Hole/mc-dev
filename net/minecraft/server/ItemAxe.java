@@ -31,7 +31,7 @@ public class ItemAxe extends ItemTool {
         if (block != null) {
             EntityHuman entityhuman = itemactioncontext.getEntity();
 
-            world.a(entityhuman, blockposition, SoundEffects.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            world.playSound(entityhuman, blockposition, SoundEffects.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
             if (!world.isClientSide) {
                 world.setTypeAndData(blockposition, (IBlockData) block.getBlockData().set(BlockRotatable.AXIS, iblockdata.get(BlockRotatable.AXIS)), 11);
                 if (entityhuman != null) {

@@ -179,4 +179,6 @@ public interface PacketListenerPlayOut extends PacketListener {
     void a(PacketPlayOutViewDistance packetplayoutviewdistance);
 
     void a(PacketPlayOutViewCentre packetplayoutviewcentre);
+
+    void a(PacketPlayOutBlockBreak packetplayoutblockbreak);
 }

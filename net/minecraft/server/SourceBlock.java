@@ -36,7 +36,7 @@ public class SourceBlock implements ISourceBlock {
     }
 
     @Override
-    public IBlockData e() {
+    public IBlockData getBlockData() {
         return this.a.getType(this.b);
     }
 

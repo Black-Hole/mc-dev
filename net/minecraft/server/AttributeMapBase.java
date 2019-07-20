@@ -60,7 +60,7 @@ public abstract class AttributeMapBase {
             AttributeInstance attributeinstance = this.a((String) entry.getKey());
 
             if (attributeinstance != null) {
-                attributeinstance.c((AttributeModifier) entry.getValue());
+                attributeinstance.removeModifier((AttributeModifier) entry.getValue());
             }
         }
 
@@ -74,8 +74,8 @@ public abstract class AttributeMapBase {
             AttributeInstance attributeinstance = this.a((String) entry.getKey());
 
             if (attributeinstance != null) {
-                attributeinstance.c((AttributeModifier) entry.getValue());
-                attributeinstance.b((AttributeModifier) entry.getValue());
+                attributeinstance.removeModifier((AttributeModifier) entry.getValue());
+                attributeinstance.addModifier((AttributeModifier) entry.getValue());
             }
         }
 

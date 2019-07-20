@@ -8,11 +8,16 @@ public class PathEntity {
     private final List<PathPoint> a;
     private PathPoint[] b = new PathPoint[0];
     private PathPoint[] c = new PathPoint[0];
-    private PathPoint d;
     private int e;
+    private final BlockPosition f;
+    private final float g;
+    private final boolean h;
 
-    public PathEntity(List<PathPoint> list) {
+    public PathEntity(List<PathPoint> list, BlockPosition blockposition, boolean flag) {
         this.a = list;
+        this.f = blockposition;
+        this.g = list.isEmpty() ? Float.MAX_VALUE : ((PathPoint) this.a.get(this.a.size() - 1)).c(this.f);
+        this.h = flag;
     }
 
     public void a() {
@@ -97,18 +102,19 @@ public class PathEntity {
         }
     }
 
-    public boolean a(BlockPosition blockposition) {
-        PathPoint pathpoint = this.c();
-
-        return pathpoint == null ? false : blockposition.a(new BaseBlockPosition(pathpoint.a, pathpoint.b, pathpoint.c), 2.0D);
-    }
-
-    @Nullable
-    public PathPoint j() {
-        return this.d;
+    public boolean h() {
+        return this.h;
     }
 
     public String toString() {
         return "Path(length=" + this.a.size() + ")";
+    }
+
+    public BlockPosition k() {
+        return this.f;
+    }
+
+    public float l() {
+        return this.g;
     }
 }

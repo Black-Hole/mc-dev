@@ -123,7 +123,7 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
                 WorldServer worldserver = commandlistenerwrapper.getWorld();
                 BlockPosition blockposition = this.f.c(commandlistenerwrapper);
 
-                if (worldserver.o(blockposition)) {
+                if (worldserver.n(blockposition)) {
                     TileEntity tileentity = worldserver.getTileEntity(blockposition);
 
                     if (tileentity != null) {
@@ -150,7 +150,7 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
 
         @Override
         public String toString() {
-            return "BlockPosArgument{pos='" + this.e + '\'' + "path='" + this.c + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
+            return "BlockPosArgument{pos='" + this.e + '\'' + "path='" + this.c + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
         }
     }
 
@@ -218,7 +218,7 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
 
         @Override
         public String toString() {
-            return "EntityNbtComponent{selector='" + this.e + '\'' + "path='" + this.c + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
+            return "EntityNbtComponent{selector='" + this.e + '\'' + "path='" + this.c + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
         }
     }
 }

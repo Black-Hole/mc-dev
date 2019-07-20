@@ -33,7 +33,7 @@ public abstract class BlockBannerAbstract extends BlockTileEntity {
 
     }
 
-    public EnumColor b() {
+    public EnumColor getColor() {
         return this.a;
     }
 }

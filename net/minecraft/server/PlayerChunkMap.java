@@ -13,9 +13,12 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap.Entry;
+import it.unimi.dsi.fastutil.objects.ObjectBidirectionalIterator;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +26,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BooleanSupplier;
@@ -58,7 +63,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
     private final Mailbox<ChunkTaskQueueSorter.a<Runnable>> mailboxWorldGen;
     private final Mailbox<ChunkTaskQueueSorter.a<Runnable>> mailboxMain;
     public final WorldLoadListener worldLoadListener;
-    private final PlayerChunkMap.a u;
+    public final PlayerChunkMap.a chunkDistanceManager;
     private final AtomicInteger v;
     private final DefinedStructureManager definedStructureManager;
     private final File x;
@@ -83,16 +88,18 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
         this.chunkGenerator = chunkgenerator;
         this.executor = iasynctaskhandler;
         ThreadedMailbox<Runnable> threadedmailbox = ThreadedMailbox.a(executor, "worldgen");
-        ThreadedMailbox<Runnable> threadedmailbox1 = ThreadedMailbox.a((Executor) iasynctaskhandler, "main");
+
+        iasynctaskhandler.getClass();
+        Mailbox<Runnable> mailbox = Mailbox.a("main", iasynctaskhandler::a);
 
         this.worldLoadListener = worldloadlistener;
-        ThreadedMailbox<Runnable> threadedmailbox2 = ThreadedMailbox.a(executor, "light");
+        ThreadedMailbox<Runnable> threadedmailbox1 = ThreadedMailbox.a(executor, "light");
 
-        this.q = new ChunkTaskQueueSorter(ImmutableList.of(threadedmailbox, threadedmailbox1, threadedmailbox2), executor, Integer.MAX_VALUE);
+        this.q = new ChunkTaskQueueSorter(ImmutableList.of(threadedmailbox, mailbox, threadedmailbox1), executor, Integer.MAX_VALUE);
         this.mailboxWorldGen = this.q.a(threadedmailbox, false);
-        this.mailboxMain = this.q.a(threadedmailbox1, false);
-        this.lightEngine = new LightEngineThreaded(ilightaccess, this, this.world.getWorldProvider().g(), threadedmailbox2, this.q.a(threadedmailbox2, false));
-        this.u = new PlayerChunkMap.a(executor, iasynctaskhandler);
+        this.mailboxMain = this.q.a(mailbox, false);
+        this.lightEngine = new LightEngineThreaded(ilightaccess, this, this.world.getWorldProvider().g(), threadedmailbox1, this.q.a(threadedmailbox1, false));
+        this.chunkDistanceManager = new PlayerChunkMap.a(executor, iasynctaskhandler);
         this.m = supplier;
         this.n = new VillagePlace(new File(this.x, "poi"), datafixer);
         this.setViewDistance(i);
@@ -326,7 +333,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
 
         Runnable runnable;
 
-        while (booleansupplier.getAsBoolean() && (runnable = (Runnable) this.A.poll()) != null) {
+        while ((booleansupplier.getAsBoolean() || this.A.size() > 2000) && (runnable = (Runnable) this.A.poll()) != null) {
             runnable.run();
         }
 
@@ -395,7 +402,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
                     return CompletableFuture.completedFuture(either);
                 } else {
                     if (chunkstatus == ChunkStatus.LIGHT) {
-                        this.u.a(TicketType.LIGHT, chunkcoordintpair, 33 + ChunkStatus.a(ChunkStatus.FEATURES), chunkcoordintpair);
+                        this.chunkDistanceManager.a(TicketType.LIGHT, chunkcoordintpair, 33 + ChunkStatus.a(ChunkStatus.FEATURES), chunkcoordintpair);
                     }
 
                     IChunkAccess ichunkaccess = (IChunkAccess) optional.get();
@@ -489,7 +496,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
 
     protected void c(ChunkCoordIntPair chunkcoordintpair) {
         this.executor.a(SystemUtils.a(() -> {
-            this.u.b(TicketType.LIGHT, chunkcoordintpair, 33 + ChunkStatus.a(ChunkStatus.FEATURES), chunkcoordintpair);
+            this.chunkDistanceManager.b(TicketType.LIGHT, chunkcoordintpair, 33 + ChunkStatus.a(ChunkStatus.FEATURES), chunkcoordintpair);
         }, () -> {
             return "release light ticket " + chunkcoordintpair;
         }));
@@ -665,7 +672,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
             int k = this.viewDistance;
 
             this.viewDistance = j;
-            this.u.a(this.viewDistance);
+            this.chunkDistanceManager.a(this.viewDistance);
             ObjectIterator objectiterator = this.updatingChunks.values().iterator();
 
             while (objectiterator.hasNext()) {
@@ -713,11 +720,49 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
     }
 
     protected PlayerChunkMap.a e() {
-        return this.u;
+        return this.chunkDistanceManager;
     }
 
     protected Iterable<PlayerChunk> f() {
         return Iterables.unmodifiableIterable(this.visibleChunks.values());
+    }
+
+    void a(Writer writer) throws IOException {
+        CSVWriter csvwriter = CSVWriter.a().a("x").a("z").a("level").a("in_memory").a("status").a("full_status").a("accessible_ready").a("ticking_ready").a("entity_ticking_ready").a("ticket").a("spawning").a("entity_count").a("block_entity_count").a(writer);
+        ObjectBidirectionalIterator objectbidirectionaliterator = this.visibleChunks.long2ObjectEntrySet().iterator();
+
+        while (objectbidirectionaliterator.hasNext()) {
+            Entry<PlayerChunk> entry = (Entry) objectbidirectionaliterator.next();
+            ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(entry.getLongKey());
+            PlayerChunk playerchunk = (PlayerChunk) entry.getValue();
+            Optional<IChunkAccess> optional = Optional.ofNullable(playerchunk.f());
+            Optional<Chunk> optional1 = optional.flatMap((ichunkaccess) -> {
+                return ichunkaccess instanceof Chunk ? Optional.of((Chunk) ichunkaccess) : Optional.empty();
+            });
+
+            csvwriter.a(chunkcoordintpair.x, chunkcoordintpair.z, playerchunk.getTicketLevel(), optional.isPresent(), optional.map(IChunkAccess::getChunkStatus).orElse((Object) null), optional1.map(Chunk::getState).orElse((Object) null), a(playerchunk.c()), a(playerchunk.a()), a(playerchunk.b()), this.chunkDistanceManager.c(entry.getLongKey()), !this.isOutsideOfRange(chunkcoordintpair), optional1.map((chunk) -> {
+                return Stream.of(chunk.getEntitySlices()).mapToInt(EntitySlice::size).sum();
+            }).orElse(0), optional1.map((chunk) -> {
+                return chunk.getTileEntities().size();
+            }).orElse(0));
+        }
+
+    }
+
+    private static String a(CompletableFuture<Either<Chunk, PlayerChunk.Failure>> completablefuture) {
+        try {
+            Either<Chunk, PlayerChunk.Failure> either = (Either) completablefuture.getNow((Object) null);
+
+            return either != null ? (String) either.map((chunk) -> {
+                return "done";
+            }, (playerchunk_failure) -> {
+                return "unloaded";
+            }) : "not completed";
+        } catch (CompletionException completionexception) {
+            return "failed " + completionexception.getCause().getMessage();
+        } catch (CancellationException cancellationexception) {
+            return "cancelled";
+        }
     }
 
     @Nullable
@@ -730,7 +775,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
     boolean isOutsideOfRange(ChunkCoordIntPair chunkcoordintpair) {
         long i = chunkcoordintpair.pair();
 
-        return !this.u.d(i) ? true : this.playerMap.a(i).noneMatch((entityplayer) -> {
+        return !this.chunkDistanceManager.d(i) ? true : this.playerMap.a(i).noneMatch((entityplayer) -> {
             return !entityplayer.isSpectator() && a(chunkcoordintpair, (Entity) entityplayer) < 16384.0D;
         });
     }
@@ -749,14 +794,14 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
             this.playerMap.a(ChunkCoordIntPair.pair(i, j), entityplayer, flag1);
             this.c(entityplayer);
             if (!flag1) {
-                this.u.a(SectionPosition.a((Entity) entityplayer), entityplayer);
+                this.chunkDistanceManager.a(SectionPosition.a((Entity) entityplayer), entityplayer);
             }
         } else {
             SectionPosition sectionposition = entityplayer.M();
 
             this.playerMap.a(sectionposition.u().pair(), entityplayer);
             if (!flag2) {
-                this.u.b(sectionposition, entityplayer);
+                this.chunkDistanceManager.b(sectionposition, entityplayer);
             }
         }
 
@@ -797,18 +842,18 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
         SectionPosition sectionposition1 = SectionPosition.a((Entity) entityplayer);
         long k = sectionposition.u().pair();
         long l = sectionposition1.u().pair();
-        boolean flag = this.playerMap.c(entityplayer);
+        boolean flag = this.playerMap.d(entityplayer);
         boolean flag1 = this.b(entityplayer);
         boolean flag2 = sectionposition.v() != sectionposition1.v();
 
         if (flag2 || flag != flag1) {
             this.c(entityplayer);
             if (!flag) {
-                this.u.b(sectionposition, entityplayer);
+                this.chunkDistanceManager.b(sectionposition, entityplayer);
             }
 
             if (!flag1) {
-                this.u.a(sectionposition1, entityplayer);
+                this.chunkDistanceManager.a(sectionposition1, entityplayer);
             }
 
             if (!flag && flag1) {

@@ -52,7 +52,7 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
         this.a.q(false);
         this.f = 0;
         this.e = -1;
-        this.a.dq();
+        this.a.dp();
     }
 
     @Override
@@ -109,12 +109,12 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
 
             if (this.a.isHandRaised()) {
                 if (!flag && this.f < -60) {
-                    this.a.dq();
+                    this.a.dp();
                 } else if (flag) {
-                    int i = this.a.do_();
+                    int i = this.a.dn();
 
                     if (i >= 20) {
-                        this.a.dq();
+                        this.a.dp();
                         ((IRangedEntity) this.a).a(entityliving, ItemBow.a(i));
                         this.e = this.c;
                     }

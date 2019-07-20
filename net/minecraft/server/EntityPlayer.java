@@ -135,7 +135,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
 
         if (this.isSleeping()) {
-            this.dz();
+            this.dy();
         }
 
     }
@@ -465,7 +465,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            boolean flag = this.server.R() && this.canPvP() && "fall".equals(damagesource.translationIndex);
+            boolean flag = this.server.S() && this.canPvP() && "fall".equals(damagesource.translationIndex);
 
             if (!flag && this.invulnerableTicks > 0 && damagesource != DamageSource.OUT_OF_WORLD) {
                 return false;
@@ -803,7 +803,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     @Override
-    public void a(ItemStack itemstack, EnumHand enumhand) {
+    public void openBook(ItemStack itemstack, EnumHand enumhand) {
         Item item = itemstack.getItem();
 
         if (item == Items.WRITTEN_BOOK) {
@@ -1216,7 +1216,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     @Override
     public void a(EnumHand enumhand) {
         super.a(enumhand);
-        this.ea();
+        this.dZ();
     }
 
     public boolean H() {

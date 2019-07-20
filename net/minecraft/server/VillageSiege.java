@@ -5,58 +5,61 @@ import javax.annotation.Nullable;
 
 public class VillageSiege {
 
-    private final WorldServer a;
-    private boolean b;
-    private VillageSiege.State c;
+    private boolean a;
+    private VillageSiege.State b;
+    private int c;
     private int d;
     private int e;
     private int f;
     private int g;
-    private int h;
 
-    public VillageSiege(WorldServer worldserver) {
-        this.c = VillageSiege.State.SIEGE_DONE;
-        this.a = worldserver;
+    public VillageSiege() {
+        this.b = VillageSiege.State.SIEGE_DONE;
     }
 
-    public void a() {
-        if (this.a.J()) {
-            this.c = VillageSiege.State.SIEGE_DONE;
-            this.b = false;
-        } else {
-            float f = this.a.j(0.0F);
+    public int a(WorldServer worldserver, boolean flag, boolean flag1) {
+        if (!worldserver.J() && flag) {
+            float f = worldserver.j(0.0F);
 
             if ((double) f == 0.5D) {
-                this.c = this.a.random.nextInt(10) == 0 ? VillageSiege.State.SIEGE_TONIGHT : VillageSiege.State.SIEGE_DONE;
+                this.b = worldserver.random.nextInt(10) == 0 ? VillageSiege.State.SIEGE_TONIGHT : VillageSiege.State.SIEGE_DONE;
             }
 
-            if (this.c != VillageSiege.State.SIEGE_DONE) {
-                if (!this.b) {
-                    if (!this.b()) {
-                        return;
+            if (this.b == VillageSiege.State.SIEGE_DONE) {
+                return 0;
+            } else {
+                if (!this.a) {
+                    if (!this.a(worldserver)) {
+                        return 0;
                     }
 
-                    this.b = true;
+                    this.a = true;
                 }
 
-                if (this.e > 0) {
-                    --this.e;
+                if (this.d > 0) {
+                    --this.d;
+                    return 0;
                 } else {
-                    this.e = 2;
-                    if (this.d > 0) {
-                        this.c();
-                        --this.d;
+                    this.d = 2;
+                    if (this.c > 0) {
+                        this.b(worldserver);
+                        --this.c;
                     } else {
-                        this.c = VillageSiege.State.SIEGE_DONE;
+                        this.b = VillageSiege.State.SIEGE_DONE;
                     }
 
+                    return 1;
                 }
             }
+        } else {
+            this.b = VillageSiege.State.SIEGE_DONE;
+            this.a = false;
+            return 0;
         }
     }
 
-    private boolean b() {
-        Iterator iterator = this.a.getPlayers().iterator();
+    private boolean a(WorldServer worldserver) {
+        Iterator iterator = worldserver.getPlayers().iterator();
 
         while (iterator.hasNext()) {
             EntityHuman entityhuman = (EntityHuman) iterator.next();
@@ -64,16 +67,16 @@ public class VillageSiege {
             if (!entityhuman.isSpectator()) {
                 BlockPosition blockposition = entityhuman.getChunkCoordinates();
 
-                if (this.a.b_(blockposition)) {
+                if (worldserver.b_(blockposition) && worldserver.getBiome(blockposition).o() != BiomeBase.Geography.MUSHROOM) {
                     for (int i = 0; i < 10; ++i) {
-                        float f = this.a.random.nextFloat() * 6.2831855F;
+                        float f = worldserver.random.nextFloat() * 6.2831855F;
 
-                        this.f = blockposition.getX() + MathHelper.d(MathHelper.cos(f) * 32.0F);
-                        this.g = blockposition.getY();
-                        this.h = blockposition.getZ() + MathHelper.d(MathHelper.sin(f) * 32.0F);
-                        if (this.a(new BlockPosition(this.f, this.g, this.h)) != null) {
-                            this.e = 0;
-                            this.d = 20;
+                        this.e = blockposition.getX() + MathHelper.d(MathHelper.cos(f) * 32.0F);
+                        this.f = blockposition.getY();
+                        this.g = blockposition.getZ() + MathHelper.d(MathHelper.sin(f) * 32.0F);
+                        if (this.a(worldserver, new BlockPosition(this.e, this.f, this.g)) != null) {
+                            this.d = 0;
+                            this.c = 20;
                             break;
                         }
                     }
@@ -86,35 +89,35 @@ public class VillageSiege {
         return false;
     }
 
-    private void c() {
-        Vec3D vec3d = this.a(new BlockPosition(this.f, this.g, this.h));
+    private void b(WorldServer worldserver) {
+        Vec3D vec3d = this.a(worldserver, new BlockPosition(this.e, this.f, this.g));
 
         if (vec3d != null) {
             EntityZombie entityzombie;
 
             try {
-                entityzombie = new EntityZombie(this.a);
-                entityzombie.prepare(this.a, this.a.getDamageScaler(new BlockPosition(entityzombie)), EnumMobSpawn.EVENT, (GroupDataEntity) null, (NBTTagCompound) null);
+                entityzombie = new EntityZombie(worldserver);
+                entityzombie.prepare(worldserver, worldserver.getDamageScaler(new BlockPosition(entityzombie)), EnumMobSpawn.EVENT, (GroupDataEntity) null, (NBTTagCompound) null);
             } catch (Exception exception) {
                 exception.printStackTrace();
                 return;
             }
 
-            entityzombie.setPositionRotation(vec3d.x, vec3d.y, vec3d.z, this.a.random.nextFloat() * 360.0F, 0.0F);
-            this.a.addEntity(entityzombie);
+            entityzombie.setPositionRotation(vec3d.x, vec3d.y, vec3d.z, worldserver.random.nextFloat() * 360.0F, 0.0F);
+            worldserver.addEntity(entityzombie);
         }
     }
 
     @Nullable
-    private Vec3D a(BlockPosition blockposition) {
+    private Vec3D a(WorldServer worldserver, BlockPosition blockposition) {
         for (int i = 0; i < 10; ++i) {
-            int j = blockposition.getX() + this.a.random.nextInt(16) - 8;
-            int k = blockposition.getZ() + this.a.random.nextInt(16) - 8;
-            int l = this.a.a(HeightMap.Type.WORLD_SURFACE, j, k);
+            int j = blockposition.getX() + worldserver.random.nextInt(16) - 8;
+            int k = blockposition.getZ() + worldserver.random.nextInt(16) - 8;
+            int l = worldserver.a(HeightMap.Type.WORLD_SURFACE, j, k);
             BlockPosition blockposition1 = new BlockPosition(j, l, k);
 
-            if (this.a.b_(blockposition1) && SpawnerCreature.a(EntityPositionTypes.Surface.ON_GROUND, (IWorldReader) this.a, blockposition1, EntityTypes.ZOMBIE)) {
-                return new Vec3D((double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
+            if (worldserver.b_(blockposition1) && EntityMonster.c(EntityTypes.ZOMBIE, worldserver, EnumMobSpawn.EVENT, blockposition1, worldserver.random)) {
+                return new Vec3D((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY(), (double) blockposition1.getZ() + 0.5D);
             }
         }
 

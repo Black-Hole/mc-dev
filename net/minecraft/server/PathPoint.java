@@ -59,6 +59,22 @@ public class PathPoint {
         return f * f + f1 * f1 + f2 * f2;
     }
 
+    public float c(PathPoint pathpoint) {
+        float f = (float) Math.abs(pathpoint.a - this.a);
+        float f1 = (float) Math.abs(pathpoint.b - this.b);
+        float f2 = (float) Math.abs(pathpoint.c - this.c);
+
+        return f + f1 + f2;
+    }
+
+    public float c(BlockPosition blockposition) {
+        float f = (float) Math.abs(blockposition.getX() - this.a);
+        float f1 = (float) Math.abs(blockposition.getY() - this.b);
+        float f2 = (float) Math.abs(blockposition.getZ() - this.c);
+
+        return f + f1 + f2;
+    }
+
     public boolean equals(Object object) {
         if (!(object instanceof PathPoint)) {
             return false;
@@ -78,6 +94,6 @@ public class PathPoint {
     }
 
     public String toString() {
-        return this.a + ", " + this.b + ", " + this.c;
+        return "Node{x=" + this.a + ", y=" + this.b + ", z=" + this.c + '}';
     }
 }

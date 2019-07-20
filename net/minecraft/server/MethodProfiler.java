@@ -8,9 +8,9 @@ import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import java.time.Duration;
 import java.util.List;
 import java.util.function.IntSupplier;
-import java.util.function.Supplier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Supplier;
 
 public class MethodProfiler implements GameProfilerFillerActive {
 
@@ -52,7 +52,9 @@ public class MethodProfiler implements GameProfilerFillerActive {
             this.exit();
             this.k = false;
             if (!this.j.isEmpty()) {
-                MethodProfiler.LOGGER.error("Profiler tick ended before path was fully popped (remainder: '{}'). Mismatched push/pop?", this.j);
+                MethodProfiler.LOGGER.error("Profiler tick ended before path was fully popped (remainder: '{}'). Mismatched push/pop?", new Supplier[]{() -> {
+                            return MethodProfilerResults.b(this.j);
+                        }});
             }
 
         }
@@ -64,7 +66,7 @@ public class MethodProfiler implements GameProfilerFillerActive {
             MethodProfiler.LOGGER.error("Cannot push '{}' to profiler if profiler tick hasn't started - missing startTick()?", s);
         } else {
             if (!this.j.isEmpty()) {
-                this.j = this.j + ".";
+                this.j = this.j + '\u001e';
             }
 
             this.j = this.j + s;
@@ -74,8 +76,8 @@ public class MethodProfiler implements GameProfilerFillerActive {
     }
 
     @Override
-    public void a(Supplier<String> supplier) {
-        this.enter((String) supplier.get());
+    public void a(java.util.function.Supplier<String> java_util_function_supplier) {
+        this.enter((String) java_util_function_supplier.get());
     }
 
     @Override
@@ -94,7 +96,11 @@ public class MethodProfiler implements GameProfilerFillerActive {
             this.e.put(this.j, this.e.getLong(this.j) + k);
             this.f.put(this.j, this.f.getLong(this.j) + 1L);
             if (k > MethodProfiler.a) {
-                MethodProfiler.LOGGER.warn("Something's taking too long! '{}' took aprox {} ms", this.j, (double) k / 1000000.0D);
+                MethodProfiler.LOGGER.warn("Something's taking too long! '{}' took aprox {} ms", new Supplier[]{() -> {
+                            return MethodProfilerResults.b(this.j);
+                        }, () -> {
+                            return (double) k / 1000000.0D;
+                        }});
             }
 
             this.j = this.c.isEmpty() ? "" : (String) this.c.get(this.c.size() - 1);

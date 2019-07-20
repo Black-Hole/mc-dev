@@ -43,7 +43,7 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
             MinecraftKey minecraftkey = argumentblock.d();
 
             return (tagregistry) -> {
-                Tag<Block> tag = tagregistry.a().a(minecraftkey);
+                Tag<Block> tag = tagregistry.getBlockTags().a(minecraftkey);
 
                 if (tag == null) {
                     throw ArgumentBlockPredicate.b.create(minecraftkey.toString());

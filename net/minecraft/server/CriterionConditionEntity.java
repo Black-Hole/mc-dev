@@ -35,7 +35,7 @@ public class CriterionConditionEntity {
     }
 
     public boolean a(WorldServer worldserver, Vec3D vec3d, @Nullable Entity entity) {
-        return this == CriterionConditionEntity.a ? true : (entity == null ? false : (!this.c.a(entity.getEntityType()) ? false : (!this.d.a(vec3d.x, vec3d.y, vec3d.z, entity.locX, entity.locY, entity.locZ) ? false : (!this.e.a(worldserver, entity.locX, entity.locY, entity.locZ) ? false : (!this.f.a(entity) ? false : (!this.g.a(entity) ? false : (!this.h.a(entity) ? false : (!this.i.a(entity) ? false : this.j == null || entity instanceof EntityCat && ((EntityCat) entity).ef().equals(this.j)))))))));
+        return this == CriterionConditionEntity.a ? true : (entity == null ? false : (!this.c.a(entity.getEntityType()) ? false : (!this.d.a(vec3d.x, vec3d.y, vec3d.z, entity.locX, entity.locY, entity.locZ) ? false : (!this.e.a(worldserver, entity.locX, entity.locY, entity.locZ) ? false : (!this.f.a(entity) ? false : (!this.g.a(entity) ? false : (!this.h.a(entity) ? false : (!this.i.a(entity) ? false : this.j == null || entity instanceof EntityCat && ((EntityCat) entity).ee().equals(this.j)))))))));
     }
 
     public static CriterionConditionEntity a(@Nullable JsonElement jsonelement) {

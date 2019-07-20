@@ -71,7 +71,7 @@ public class EntityTippedArrow extends EntityArrow {
         this.datawatcher.set(EntityTippedArrow.COLOR, PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects)));
     }
 
-    public void a(MobEffect mobeffect) {
+    public void addEffect(MobEffect mobeffect) {
         this.effects.add(mobeffect);
         this.getDataWatcher().set(EntityTippedArrow.COLOR, PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects)));
     }
@@ -88,10 +88,10 @@ public class EntityTippedArrow extends EntityArrow {
         if (this.world.isClientSide) {
             if (this.inGround) {
                 if (this.d % 5 == 0) {
-                    this.b((int) 1);
+                    this.b(1);
                 }
             } else {
-                this.b((int) 2);
+                this.b(2);
             }
         } else if (this.inGround && this.d != 0 && !this.effects.isEmpty() && this.d >= 600) {
             this.world.broadcastEntityEffect(this, (byte) 0);
@@ -164,7 +164,7 @@ public class EntityTippedArrow extends EntityArrow {
         while (iterator.hasNext()) {
             MobEffect mobeffect = (MobEffect) iterator.next();
 
-            this.a(mobeffect);
+            this.addEffect(mobeffect);
         }
 
         if (nbttagcompound.hasKeyOfType("Color", 99)) {

@@ -331,4 +331,8 @@ public class BiomeDecoratorGroups {
     public static void ap(BiomeBase biomebase) {
         biomebase.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, BiomeBase.a(WorldGenerator.FREEZE_TOP_LAYER, WorldGenFeatureConfiguration.e, WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e));
     }
+
+    public static void aq(BiomeBase biomebase) {
+        biomebase.a(WorldGenStage.Decoration.SURFACE_STRUCTURES, BiomeBase.a(WorldGenerator.END_CITY, WorldGenFeatureConfiguration.e, WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e));
+    }
 }

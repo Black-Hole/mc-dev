@@ -17,11 +17,11 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(15.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
-        this.getAttributeInstance(EntityHorseSkeleton.attributeJumpStrength).setValue(this.ez());
+        this.getAttributeInstance(EntityHorseSkeleton.attributeJumpStrength).setValue(this.ey());
     }
 
     @Override
-    protected void ef() {}
+    protected void ee() {}
 
     @Override
     protected SoundEffect getSoundAmbient() {
@@ -72,11 +72,11 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
     }
 
     @Override
-    protected void ew() {
+    protected void ev() {
         if (this.isInWater()) {
             this.a(SoundEffects.ENTITY_SKELETON_HORSE_JUMP_WATER, 0.4F, 1.0F);
         } else {
-            super.ew();
+            super.ev();
         }
 
     }
@@ -94,7 +94,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
     @Override
     public void movementTick() {
         super.movementTick();
-        if (this.dW() && this.bK++ >= 18000) {
+        if (this.dV() && this.bK++ >= 18000) {
             this.die();
         }
 
@@ -103,7 +103,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
     @Override
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setBoolean("SkeletonTrap", this.dW());
+        nbttagcompound.setBoolean("SkeletonTrap", this.dV());
         nbttagcompound.setInt("SkeletonTrapTime", this.bK);
     }
 
@@ -124,7 +124,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
         return 0.96F;
     }
 
-    public boolean dW() {
+    public boolean dV() {
         return this.bJ;
     }
 
@@ -163,7 +163,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
             return super.a(entityhuman, enumhand);
         } else {
             if (!itemstack.isEmpty()) {
-                if (itemstack.getItem() == Items.SADDLE && !this.er()) {
+                if (itemstack.getItem() == Items.SADDLE && !this.eq()) {
                     this.e(entityhuman);
                     return true;
                 }

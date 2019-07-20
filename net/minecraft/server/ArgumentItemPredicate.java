@@ -39,7 +39,7 @@ public class ArgumentItemPredicate implements ArgumentType<ArgumentItemPredicate
             MinecraftKey minecraftkey = argumentparseritemstack.d();
 
             return (commandcontext) -> {
-                Tag<Item> tag = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getTagRegistry().b().a(minecraftkey);
+                Tag<Item> tag = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getTagRegistry().getItemTags().a(minecraftkey);
 
                 if (tag == null) {
                     throw ArgumentItemPredicate.b.create(minecraftkey.toString());

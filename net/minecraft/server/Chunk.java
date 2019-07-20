@@ -52,7 +52,7 @@ public class Chunk implements IChunkAccess {
     private volatile boolean x;
 
     public Chunk(World world, ChunkCoordIntPair chunkcoordintpair, BiomeBase[] abiomebase) {
-        this(world, chunkcoordintpair, abiomebase, ChunkConverter.a, TickListEmpty.a(), TickListEmpty.a(), 0L, (ChunkSection[]) null, (Consumer) null);
+        this(world, chunkcoordintpair, abiomebase, ChunkConverter.a, TickListEmpty.b(), TickListEmpty.b(), 0L, (ChunkSection[]) null, (Consumer) null);
     }
 
     public Chunk(World world, ChunkCoordIntPair chunkcoordintpair, BiomeBase[] abiomebase, ChunkConverter chunkconverter, TickList<Block> ticklist, TickList<FluidType> ticklist1, long i, @Nullable ChunkSection[] achunksection, @Nullable Consumer<Chunk> consumer) {
@@ -502,7 +502,7 @@ public class Chunk implements IChunkAccess {
                         }
 
                         if (entity1 instanceof EntityEnderDragon) {
-                            EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity1).dU();
+                            EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity1).dT();
                             int l = aentitycomplexpart.length;
 
                             for (int i1 = 0; i1 < l; ++i1) {
@@ -770,31 +770,31 @@ public class Chunk implements IChunkAccess {
             ((ProtoChunkTickList) this.o).a(this.world.getBlockTickList(), (blockposition) -> {
                 return this.getType(blockposition).getBlock();
             });
-            this.o = TickListEmpty.a();
+            this.o = TickListEmpty.b();
         } else if (this.o instanceof TickListChunk) {
-            this.world.getBlockTickList().a(((TickListChunk) this.o).a());
-            this.o = TickListEmpty.a();
+            this.world.getBlockTickList().a(((TickListChunk) this.o).b());
+            this.o = TickListEmpty.b();
         }
 
         if (this.p instanceof ProtoChunkTickList) {
             ((ProtoChunkTickList) this.p).a(this.world.getFluidTickList(), (blockposition) -> {
                 return this.getFluid(blockposition).getType();
             });
-            this.p = TickListEmpty.a();
+            this.p = TickListEmpty.b();
         } else if (this.p instanceof TickListChunk) {
-            this.world.getFluidTickList().a(((TickListChunk) this.p).a());
-            this.p = TickListEmpty.a();
+            this.world.getFluidTickList().a(((TickListChunk) this.p).b());
+            this.p = TickListEmpty.b();
         }
 
     }
 
     public void a(WorldServer worldserver) {
-        if (this.o == TickListEmpty.a()) {
+        if (this.o == TickListEmpty.b()) {
             this.o = new TickListChunk<>(IRegistry.BLOCK::getKey, worldserver.getBlockTickList().a(this.loc, true, false));
             this.setNeedsSaving(true);
         }
 
-        if (this.p == TickListEmpty.a()) {
+        if (this.p == TickListEmpty.b()) {
             this.p = new TickListChunk<>(IRegistry.FLUID::getKey, worldserver.getFluidTickList().a(this.loc, true, false));
             this.setNeedsSaving(true);
         }

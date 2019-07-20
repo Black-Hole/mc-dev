@@ -22,7 +22,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
     private int bH;
     public final BossBattleServer bossBattle;
     private static final Predicate<EntityLiving> bJ = (entityliving) -> {
-        return entityliving.getMonsterType() != EnumMonsterType.UNDEAD && entityliving.dv();
+        return entityliving.getMonsterType() != EnumMonsterType.UNDEAD && entityliving.du();
     };
     private static final PathfinderTargetCondition bK = (new PathfinderTargetCondition()).a(20.0D).a(EntityWither.bJ);
 
@@ -57,7 +57,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
     @Override
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("Invul", this.dW());
+        nbttagcompound.setInt("Invul", this.dV());
     }
 
     @Override
@@ -101,7 +101,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
             if (entity != null) {
                 double d0 = vec3d.y;
 
-                if (this.locY < entity.locY || !this.dX() && this.locY < entity.locY + 5.0D) {
+                if (this.locY < entity.locY || !this.dW() && this.locY < entity.locY + 5.0D) {
                     d0 = Math.max(0.0D, d0);
                     d0 += 0.3D - d0 * 0.6000000238418579D;
                 }
@@ -159,7 +159,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
             }
         }
 
-        boolean flag = this.dX();
+        boolean flag = this.dW();
 
         for (j = 0; j < 3; ++j) {
             double d8 = this.t(j);
@@ -172,7 +172,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
             }
         }
 
-        if (this.dW() > 0) {
+        if (this.dV() > 0) {
             for (j = 0; j < 3; ++j) {
                 this.world.addParticle(Particles.ENTITY_EFFECT, this.locX + this.random.nextGaussian(), this.locY + (double) (this.random.nextFloat() * 3.3F), this.locZ + this.random.nextGaussian(), 0.699999988079071D, 0.699999988079071D, 0.8999999761581421D);
             }
@@ -184,8 +184,8 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
     protected void mobTick() {
         int i;
 
-        if (this.dW() > 0) {
-            i = this.dW() - 1;
+        if (this.dV() > 0) {
+            i = this.dV() - 1;
             if (i <= 0) {
                 Explosion.Effect explosion_effect = this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) ? Explosion.Effect.DESTROY : Explosion.Effect.NONE;
 
@@ -403,12 +403,12 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else if (damagesource != DamageSource.DROWN && !(damagesource.getEntity() instanceof EntityWither)) {
-            if (this.dW() > 0 && damagesource != DamageSource.OUT_OF_WORLD) {
+            if (this.dV() > 0 && damagesource != DamageSource.OUT_OF_WORLD) {
                 return false;
             } else {
                 Entity entity;
 
-                if (this.dX()) {
+                if (this.dW()) {
                     entity = damagesource.j();
                     if (entity instanceof EntityArrow) {
                         return false;
@@ -468,7 +468,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         this.getAttributeInstance(GenericAttributes.ARMOR).setValue(4.0D);
     }
 
-    public int dW() {
+    public int dV() {
         return (Integer) this.datawatcher.get(EntityWither.bA);
     }
 
@@ -484,7 +484,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         this.datawatcher.set((DataWatcherObject) EntityWither.bz.get(i), j);
     }
 
-    public boolean dX() {
+    public boolean dW() {
         return this.getHealth() <= this.getMaxHealth() / 2.0F;
     }
 
@@ -516,7 +516,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
 
         @Override
         public boolean a() {
-            return EntityWither.this.dW() > 0;
+            return EntityWither.this.dV() > 0;
         }
     }
 }

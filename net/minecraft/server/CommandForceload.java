@@ -24,15 +24,11 @@ public class CommandForceload {
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("forceload").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(((LiteralArgumentBuilder) CommandDispatcher.a("add").requires((commandlistenerwrapper) -> {
-            return commandlistenerwrapper.hasPermission(4);
-        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("from", (ArgumentType) ArgumentVec2I.a()).executes((commandcontext) -> {
+        })).then(CommandDispatcher.a("add").then(((RequiredArgumentBuilder) CommandDispatcher.a("from", (ArgumentType) ArgumentVec2I.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentVec2I.a(commandcontext, "from"), ArgumentVec2I.a(commandcontext, "from"), true);
         })).then(CommandDispatcher.a("to", (ArgumentType) ArgumentVec2I.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentVec2I.a(commandcontext, "from"), ArgumentVec2I.a(commandcontext, "to"), true);
-        }))))).then(((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("remove").requires((commandlistenerwrapper) -> {
-            return commandlistenerwrapper.hasPermission(4);
-        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("from", (ArgumentType) ArgumentVec2I.a()).executes((commandcontext) -> {
+        }))))).then(((LiteralArgumentBuilder) CommandDispatcher.a("remove").then(((RequiredArgumentBuilder) CommandDispatcher.a("from", (ArgumentType) ArgumentVec2I.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentVec2I.a(commandcontext, "from"), ArgumentVec2I.a(commandcontext, "from"), false);
         })).then(CommandDispatcher.a("to", (ArgumentType) ArgumentVec2I.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentVec2I.a(commandcontext, "from"), ArgumentVec2I.a(commandcontext, "to"), false);

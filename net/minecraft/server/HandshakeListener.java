@@ -41,4 +41,9 @@ public class HandshakeListener implements PacketHandshakingInListener {
 
     @Override
     public void a(IChatBaseComponent ichatbasecomponent) {}
+
+    @Override
+    public NetworkManager a() {
+        return this.b;
+    }
 }

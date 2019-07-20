@@ -5,7 +5,7 @@ import java.util.List;
 
 public class EntityGuardianElder extends EntityGuardian {
 
-    public static final float b = EntityTypes.ELDER_GUARDIAN.h() / EntityTypes.GUARDIAN.h();
+    public static final float b = EntityTypes.ELDER_GUARDIAN.i() / EntityTypes.GUARDIAN.i();
 
     public EntityGuardianElder(EntityTypes<? extends EntityGuardianElder> entitytypes, World world) {
         super(entitytypes, world);
@@ -74,7 +74,7 @@ public class EntityGuardianElder extends EntityGuardian {
             }
         }
 
-        if (!this.dM()) {
+        if (!this.dL()) {
             this.a(new BlockPosition(this), 16);
         }
 

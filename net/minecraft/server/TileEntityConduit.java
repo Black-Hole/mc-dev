@@ -106,7 +106,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
                 for (k = -1; k <= 1; ++k) {
                     BlockPosition blockposition = this.position.b(i, j, k);
 
-                    if (!this.world.y(blockposition)) {
+                    if (!this.world.x(blockposition)) {
                         return false;
                     }
                 }
@@ -187,7 +187,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         }
 
         if (this.target != null) {
-            this.world.a((EntityHuman) null, this.target.locX, this.target.locY, this.target.locZ, SoundEffects.BLOCK_CONDUIT_ATTACK_TARGET, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            this.world.playSound((EntityHuman) null, this.target.locX, this.target.locY, this.target.locZ, SoundEffects.BLOCK_CONDUIT_ATTACK_TARGET, SoundCategory.BLOCKS, 1.0F, 1.0F);
             this.target.damageEntity(DamageSource.MAGIC, 4.0F);
         }
 
@@ -283,6 +283,6 @@ public class TileEntityConduit extends TileEntity implements ITickable {
     }
 
     public void a(SoundEffect soundeffect) {
-        this.world.a((EntityHuman) null, this.position, soundeffect, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        this.world.playSound((EntityHuman) null, this.position, soundeffect, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 }

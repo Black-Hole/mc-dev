@@ -10,8 +10,9 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     private static final DataWatcherObject<VillagerData> c = DataWatcher.a(EntityZombieVillager.class, DataWatcherRegistry.q);
     public int conversionTime;
     public UUID conversionPlayer;
-    private NBTTagCompound bB;
-    private int bC;
+    private NBTBase bB;
+    private NBTTagCompound bC;
+    private int bD;
 
     public EntityZombieVillager(EntityTypes<? extends EntityZombieVillager> entitytypes, World world) {
         super(entitytypes, world);
@@ -29,8 +30,12 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.set("VillagerData", (NBTBase) this.getVillagerData().a(DynamicOpsNBT.a));
+        if (this.bC != null) {
+            nbttagcompound.set("Offers", this.bC);
+        }
+
         if (this.bB != null) {
-            nbttagcompound.set("Offers", this.bB);
+            nbttagcompound.set("Gossips", this.bB);
         }
 
         nbttagcompound.setInt("ConversionTime", this.isConverting() ? this.conversionTime : -1);
@@ -38,7 +43,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
             nbttagcompound.a("ConversionPlayer", this.conversionPlayer);
         }
 
-        nbttagcompound.setInt("Xp", this.bC);
+        nbttagcompound.setInt("Xp", this.bD);
     }
 
     @Override
@@ -49,7 +54,11 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
         }
 
         if (nbttagcompound.hasKeyOfType("Offers", 10)) {
-            this.bB = nbttagcompound.getCompound("Offers");
+            this.bC = nbttagcompound.getCompound("Offers");
+        }
+
+        if (nbttagcompound.hasKeyOfType("Gossips", 10)) {
+            this.bB = nbttagcompound.getList("Gossips", 10);
         }
 
         if (nbttagcompound.hasKeyOfType("ConversionTime", 99) && nbttagcompound.getInt("ConversionTime") > -1) {
@@ -57,7 +66,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
         }
 
         if (nbttagcompound.hasKeyOfType("Xp", 3)) {
-            this.bC = nbttagcompound.getInt("Xp");
+            this.bD = nbttagcompound.getInt("Xp");
         }
 
     }
@@ -96,7 +105,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     }
 
     @Override
-    protected boolean dZ() {
+    protected boolean dY() {
         return false;
     }
 
@@ -118,16 +127,20 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
         this.world.broadcastEntityEffect(this, (byte) 16);
     }
 
-    protected void a(WorldServer worldserver) {
+    private void a(WorldServer worldserver) {
         EntityVillager entityvillager = (EntityVillager) EntityTypes.VILLAGER.a((World) worldserver);
 
         entityvillager.u(this);
         entityvillager.setVillagerData(this.getVillagerData());
         if (this.bB != null) {
-            entityvillager.b(new MerchantRecipeList(this.bB));
+            entityvillager.a(this.bB);
         }
 
-        entityvillager.setExperience(this.bC);
+        if (this.bC != null) {
+            entityvillager.b(new MerchantRecipeList(this.bC));
+        }
+
+        entityvillager.setExperience(this.bD);
         entityvillager.prepare(worldserver, worldserver.getDamageScaler(new BlockPosition(entityvillager)), EnumMobSpawn.CONVERSION, (GroupDataEntity) null, (NBTTagCompound) null);
         if (this.isBaby()) {
             entityvillager.setAgeRaw(-24000);
@@ -154,7 +167,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
         worldserver.a((EntityHuman) null, 1027, new BlockPosition(this), 0);
     }
 
-    protected int getConversionProgress() {
+    private int getConversionProgress() {
         int i = 1;
 
         if (this.random.nextFloat() < 0.01F) {
@@ -207,12 +220,16 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     }
 
     @Override
-    protected ItemStack dY() {
+    protected ItemStack dX() {
         return ItemStack.a;
     }
 
     public void setOffers(NBTTagCompound nbttagcompound) {
-        this.bB = nbttagcompound;
+        this.bC = nbttagcompound;
+    }
+
+    public void a(NBTBase nbtbase) {
+        this.bB = nbtbase;
     }
 
     @Nullable
@@ -226,7 +243,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
         VillagerData villagerdata1 = this.getVillagerData();
 
         if (villagerdata1.getProfession() != villagerdata.getProfession()) {
-            this.bB = null;
+            this.bC = null;
         }
 
         this.datawatcher.set(EntityZombieVillager.c, villagerdata);
@@ -238,6 +255,6 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     }
 
     public void a(int i) {
-        this.bC = i;
+        this.bD = i;
     }
 }

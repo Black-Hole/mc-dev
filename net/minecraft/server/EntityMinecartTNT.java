@@ -114,7 +114,7 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
         if (!this.world.isClientSide) {
             this.world.broadcastEntityEffect(this, (byte) 10);
             if (!this.isSilent()) {
-                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                this.world.playSound((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }
         }
 

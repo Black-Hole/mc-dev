@@ -58,11 +58,15 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
         }).orElseGet(Stream::empty);
     }
 
-    public Optional<BlockPosition> a(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
-        return this.b(predicate, blockposition, i, villageplace_occupancy).map(VillagePlaceRecord::f).filter(predicate1).findFirst();
+    public Stream<BlockPosition> a(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
+        return this.b(predicate, blockposition, i, villageplace_occupancy).map(VillagePlaceRecord::f).filter(predicate1);
     }
 
     public Optional<BlockPosition> b(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
+        return this.a(predicate, predicate1, blockposition, i, villageplace_occupancy).findFirst();
+    }
+
+    public Optional<BlockPosition> c(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
         return this.b(predicate, blockposition, i, villageplace_occupancy).map(VillagePlaceRecord::f).sorted(Comparator.comparingDouble((blockposition1) -> {
             return blockposition1.m(blockposition);
         })).filter(predicate1).findFirst();
@@ -70,17 +74,6 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
 
     public Optional<BlockPosition> a(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i) {
         return this.b(predicate, blockposition, i, VillagePlace.Occupancy.HAS_SPACE).filter((villageplacerecord) -> {
-            return predicate1.test(villageplacerecord.f());
-        }).findFirst().map((villageplacerecord) -> {
-            villageplacerecord.b();
-            return villageplacerecord.f();
-        });
-    }
-
-    public Optional<BlockPosition> b(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i) {
-        return this.b(predicate, blockposition, i, VillagePlace.Occupancy.HAS_SPACE).sorted(Comparator.comparingDouble((villageplacerecord) -> {
-            return villageplacerecord.f().m(blockposition);
-        })).filter((villageplacerecord) -> {
             return predicate1.test(villageplacerecord.f());
         }).findFirst().map((villageplacerecord) -> {
             villageplacerecord.b();
@@ -164,7 +157,7 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
     }
 
     private static boolean a(ChunkSection chunksection) {
-        Stream stream = VillagePlaceType.e();
+        Stream stream = VillagePlaceType.f();
 
         chunksection.getClass();
         return stream.anyMatch(chunksection::a);

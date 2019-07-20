@@ -20,18 +20,36 @@ public class BehaviorWalkAwayBlock extends Behavior<EntityVillager> {
         this.e = k;
     }
 
+    private void a(EntityVillager entityvillager, long i) {
+        BehaviorController<?> behaviorcontroller = entityvillager.getBehaviorController();
+
+        entityvillager.a(this.a);
+        behaviorcontroller.removeMemory(this.a);
+        behaviorcontroller.setMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, (Object) i);
+    }
+
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
         BehaviorController<?> behaviorcontroller = entityvillager.getBehaviorController();
 
         behaviorcontroller.getMemory(this.a).ifPresent((globalpos) -> {
-            if (!this.a(worldserver, entityvillager, globalpos) && !this.a(worldserver, entityvillager)) {
-                if (!this.b(worldserver, entityvillager, globalpos)) {
-                    behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(globalpos.getBlockPosition(), this.b, this.c)));
+            if (this.a(worldserver, entityvillager)) {
+                this.a(entityvillager, i);
+            } else if (this.a(worldserver, entityvillager, globalpos)) {
+                Vec3D vec3d = null;
+                int j = 0;
+
+                for (boolean flag = true; j < 1000 && (vec3d == null || this.a(worldserver, entityvillager, GlobalPos.create(entityvillager.dimension, new BlockPosition(vec3d)))); ++j) {
+                    vec3d = RandomPositionGenerator.a(entityvillager, 15, 7, new Vec3D(globalpos.getBlockPosition()));
                 }
-            } else {
-                entityvillager.a(this.a);
-                behaviorcontroller.removeMemory(this.a);
-                behaviorcontroller.setMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, (Object) i);
+
+                if (j == 1000) {
+                    this.a(entityvillager, i);
+                    return;
+                }
+
+                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(vec3d, this.b, this.c)));
+            } else if (!this.b(worldserver, entityvillager, globalpos)) {
+                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(globalpos.getBlockPosition(), this.b, this.c)));
             }
 
         });

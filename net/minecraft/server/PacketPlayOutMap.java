@@ -75,13 +75,13 @@ public class PacketPlayOutMap implements Packet<PacketListenerPlayOut> {
         for (int j = 0; j < i; ++j) {
             MapIcon mapicon = amapicon[j];
 
-            packetdataserializer.a((Enum) mapicon.b());
+            packetdataserializer.a((Enum) mapicon.getType());
             packetdataserializer.writeByte(mapicon.getX());
             packetdataserializer.writeByte(mapicon.getY());
             packetdataserializer.writeByte(mapicon.getRotation() & 15);
-            if (mapicon.g() != null) {
+            if (mapicon.getName() != null) {
                 packetdataserializer.writeBoolean(true);
-                packetdataserializer.a(mapicon.g());
+                packetdataserializer.a(mapicon.getName());
             } else {
                 packetdataserializer.writeBoolean(false);
             }

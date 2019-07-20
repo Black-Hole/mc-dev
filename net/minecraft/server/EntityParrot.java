@@ -117,19 +117,19 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
     @Override
     public void movementTick() {
         b(this.world, (Entity) this);
-        if (this.bN == null || !this.bN.a((IPosition) this.ci(), 3.46D) || this.world.getType(this.bN).getBlock() != Blocks.JUKEBOX) {
+        if (this.bN == null || !this.bN.a((IPosition) this.getPositionVector(), 3.46D) || this.world.getType(this.bN).getBlock() != Blocks.JUKEBOX) {
             this.bM = false;
             this.bN = null;
         }
 
         super.movementTick();
-        this.ej();
+        this.ei();
     }
 
-    private void ej() {
+    private void ei() {
         this.bF = this.bC;
         this.bE = this.bD;
-        this.bD = (float) ((double) this.bD + (double) (this.onGround ? -1 : 4) * 0.3D);
+        this.bD = (float) ((double) this.bD + (double) (!this.onGround && !this.isPassenger() ? 4 : -1) * 0.3D);
         this.bD = MathHelper.a(this.bD, 0.0F, 1.0F);
         if (!this.onGround && this.bG < 1.0F) {
             this.bG = 1.0F;
@@ -155,7 +155,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
                 if (!entityinsentient.isSilent()) {
                     SoundEffect soundeffect = b(entityinsentient.getEntityType());
 
-                    world.a((EntityHuman) null, entity.locX, entity.locY, entity.locZ, soundeffect, entity.getSoundCategory(), 0.7F, b(world.random));
+                    world.playSound((EntityHuman) null, entity.locX, entity.locY, entity.locZ, soundeffect, entity.getSoundCategory(), 0.7F, b(world.random));
                     return true;
                 }
             }
@@ -176,7 +176,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
             }
 
             if (!this.isSilent()) {
-                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_PARROT_EAT, this.getSoundCategory(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+                this.world.playSound((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_PARROT_EAT, this.getSoundCategory(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
             }
 
             if (!this.world.isClientSide) {
@@ -241,7 +241,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
 
     public static void a(World world, Entity entity) {
         if (!entity.isSilent() && !b(world, entity) && world.random.nextInt(200) == 0) {
-            world.a((EntityHuman) null, entity.locX, entity.locY, entity.locZ, a(world.random), entity.getSoundCategory(), 1.0F, b(world.random));
+            world.playSound((EntityHuman) null, entity.locX, entity.locY, entity.locZ, a(world.random), entity.getSoundCategory(), 1.0F, b(world.random));
         }
 
     }

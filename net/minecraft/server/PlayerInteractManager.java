@@ -1,24 +1,28 @@
 package net.minecraft.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class PlayerInteractManager {
 
+    private static final Logger LOGGER = LogManager.getLogger();
     public WorldServer world;
     public EntityPlayer player;
     private EnumGamemode gamemode;
-    private boolean d;
+    private boolean e;
     private int lastDigTick;
-    private BlockPosition f;
+    private BlockPosition g;
     private int currentTick;
-    private boolean h;
-    private BlockPosition i;
-    private int j;
+    private boolean i;
+    private BlockPosition j;
     private int k;
+    private int l;
 
     public PlayerInteractManager(WorldServer worldserver) {
         this.gamemode = EnumGamemode.NOT_SET;
-        this.f = BlockPosition.ZERO;
-        this.i = BlockPosition.ZERO;
-        this.k = -1;
+        this.g = BlockPosition.ZERO;
+        this.j = BlockPosition.ZERO;
+        this.l = -1;
         this.world = worldserver;
     }
 
@@ -52,140 +56,142 @@ public class PlayerInteractManager {
 
     public void a() {
         ++this.currentTick;
-        float f;
-        int i;
+        IBlockData iblockdata;
 
-        if (this.h) {
-            int j = this.currentTick - this.j;
-            IBlockData iblockdata = this.world.getType(this.i);
-
+        if (this.i) {
+            iblockdata = this.world.getType(this.j);
             if (iblockdata.isAir()) {
-                this.h = false;
+                this.i = false;
             } else {
-                f = iblockdata.getDamage(this.player, this.player.world, this.i) * (float) (j + 1);
-                i = (int) (f * 10.0F);
-                if (i != this.k) {
-                    this.world.a(this.player.getId(), this.i, i);
-                    this.k = i;
-                }
+                float f = this.a(iblockdata, this.j);
 
                 if (f >= 1.0F) {
-                    this.h = false;
-                    this.breakBlock(this.i);
+                    this.i = false;
+                    this.breakBlock(this.j);
                 }
             }
-        } else if (this.d) {
-            IBlockData iblockdata1 = this.world.getType(this.f);
-
-            if (iblockdata1.isAir()) {
-                this.world.a(this.player.getId(), this.f, -1);
-                this.k = -1;
-                this.d = false;
+        } else if (this.e) {
+            iblockdata = this.world.getType(this.g);
+            if (iblockdata.isAir()) {
+                this.world.a(this.player.getId(), this.g, -1);
+                this.l = -1;
+                this.e = false;
             } else {
-                int k = this.currentTick - this.lastDigTick;
-
-                f = iblockdata1.getDamage(this.player, this.player.world, this.i) * (float) (k + 1);
-                i = (int) (f * 10.0F);
-                if (i != this.k) {
-                    this.world.a(this.player.getId(), this.f, i);
-                    this.k = i;
-                }
+                this.a(iblockdata, this.g);
             }
         }
 
     }
 
-    public void a(BlockPosition blockposition, EnumDirection enumdirection) {
-        if (this.isCreative()) {
-            if (!this.world.douseFire((EntityHuman) null, blockposition, enumdirection)) {
-                this.breakBlock(blockposition);
-            }
+    private float a(IBlockData iblockdata, BlockPosition blockposition) {
+        int i = this.currentTick - this.k;
+        float f = iblockdata.getDamage(this.player, this.player.world, blockposition) * (float) (i + 1);
+        int j = (int) (f * 10.0F);
 
+        if (j != this.l) {
+            this.world.a(this.player.getId(), blockposition, j);
+            this.l = j;
+        }
+
+        return f;
+    }
+
+    public void a(BlockPosition blockposition, PacketPlayInBlockDig.EnumPlayerDigType packetplayinblockdig_enumplayerdigtype, EnumDirection enumdirection, int i) {
+        double d0 = this.player.locX - ((double) blockposition.getX() + 0.5D);
+        double d1 = this.player.locY - ((double) blockposition.getY() + 0.5D) + 1.5D;
+        double d2 = this.player.locZ - ((double) blockposition.getZ() + 0.5D);
+        double d3 = d0 * d0 + d1 * d1 + d2 * d2;
+
+        if (d3 > 36.0D) {
+            this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, false));
+        } else if (blockposition.getY() >= i) {
+            this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, false));
         } else {
-            if (this.gamemode.d()) {
-                if (this.gamemode == EnumGamemode.SPECTATOR) {
+            IBlockData iblockdata;
+
+            if (packetplayinblockdig_enumplayerdigtype == PacketPlayInBlockDig.EnumPlayerDigType.START_DESTROY_BLOCK) {
+                if (!this.world.a((EntityHuman) this.player, blockposition)) {
+                    this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, false));
                     return;
                 }
 
-                if (!this.player.dR()) {
-                    ItemStack itemstack = this.player.getItemInMainHand();
-
-                    if (itemstack.isEmpty()) {
-                        return;
+                if (this.isCreative()) {
+                    if (!this.world.douseFire((EntityHuman) null, blockposition, enumdirection)) {
+                        this.a(blockposition, packetplayinblockdig_enumplayerdigtype);
+                    } else {
+                        this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, true));
                     }
 
-                    ShapeDetectorBlock shapedetectorblock = new ShapeDetectorBlock(this.world, blockposition, false);
+                    return;
+                }
 
-                    if (!itemstack.a(this.world.t(), shapedetectorblock)) {
-                        return;
+                if (this.player.a((World) this.world, blockposition, this.gamemode)) {
+                    this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, false));
+                    return;
+                }
+
+                this.world.douseFire((EntityHuman) null, blockposition, enumdirection);
+                this.lastDigTick = this.currentTick;
+                float f = 1.0F;
+
+                iblockdata = this.world.getType(blockposition);
+                if (!iblockdata.isAir()) {
+                    iblockdata.attack(this.world, blockposition, this.player);
+                    f = iblockdata.getDamage(this.player, this.player.world, blockposition);
+                }
+
+                if (!iblockdata.isAir() && f >= 1.0F) {
+                    this.a(blockposition, packetplayinblockdig_enumplayerdigtype);
+                } else {
+                    this.e = true;
+                    this.g = blockposition;
+                    int j = (int) (f * 10.0F);
+
+                    this.world.a(this.player.getId(), blockposition, j);
+                    this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, true));
+                    this.l = j;
+                }
+            } else if (packetplayinblockdig_enumplayerdigtype == PacketPlayInBlockDig.EnumPlayerDigType.STOP_DESTROY_BLOCK) {
+                if (blockposition.equals(this.g)) {
+                    int k = this.currentTick - this.lastDigTick;
+
+                    iblockdata = this.world.getType(blockposition);
+                    if (!iblockdata.isAir()) {
+                        float f1 = iblockdata.getDamage(this.player, this.player.world, blockposition) * (float) (k + 1);
+
+                        if (f1 >= 0.7F) {
+                            this.e = false;
+                            this.world.a(this.player.getId(), blockposition, -1);
+                            this.a(blockposition, packetplayinblockdig_enumplayerdigtype);
+                            return;
+                        }
+
+                        if (!this.i) {
+                            this.e = false;
+                            this.i = true;
+                            this.j = blockposition;
+                            this.k = this.lastDigTick;
+                        }
                     }
                 }
-            }
 
-            this.world.douseFire((EntityHuman) null, blockposition, enumdirection);
-            this.lastDigTick = this.currentTick;
-            float f = 1.0F;
-            IBlockData iblockdata = this.world.getType(blockposition);
-
-            if (!iblockdata.isAir()) {
-                iblockdata.attack(this.world, blockposition, this.player);
-                f = iblockdata.getDamage(this.player, this.player.world, blockposition);
-            }
-
-            if (!iblockdata.isAir() && f >= 1.0F) {
-                this.breakBlock(blockposition);
-            } else {
-                this.d = true;
-                this.f = blockposition;
-                int i = (int) (f * 10.0F);
-
-                this.world.a(this.player.getId(), blockposition, i);
-                this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(this.world, blockposition));
-                this.k = i;
+                this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, true));
+            } else if (packetplayinblockdig_enumplayerdigtype == PacketPlayInBlockDig.EnumPlayerDigType.ABORT_DESTROY_BLOCK) {
+                this.e = false;
+                this.world.a(this.player.getId(), this.g, -1);
+                this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, true));
             }
 
         }
     }
 
-    public void a(BlockPosition blockposition) {
-        if (blockposition.equals(this.f)) {
-            int i = this.currentTick - this.lastDigTick;
-            IBlockData iblockdata = this.world.getType(blockposition);
-
-            if (!iblockdata.isAir()) {
-                float f = iblockdata.getDamage(this.player, this.player.world, blockposition) * (float) (i + 1);
-
-                if (f >= 0.7F) {
-                    this.d = false;
-                    this.world.a(this.player.getId(), blockposition, -1);
-                    this.breakBlock(blockposition);
-                } else if (!this.h) {
-                    this.d = false;
-                    this.h = true;
-                    this.i = blockposition;
-                    this.j = this.lastDigTick;
-                }
-            }
+    public void a(BlockPosition blockposition, PacketPlayInBlockDig.EnumPlayerDigType packetplayinblockdig_enumplayerdigtype) {
+        if (this.breakBlock(blockposition)) {
+            this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, true));
+        } else {
+            this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, false));
         }
 
-    }
-
-    public void e() {
-        this.d = false;
-        this.world.a(this.player.getId(), this.f, -1);
-    }
-
-    private boolean c(BlockPosition blockposition) {
-        IBlockData iblockdata = this.world.getType(blockposition);
-
-        iblockdata.getBlock().a((World) this.world, blockposition, iblockdata, (EntityHuman) this.player);
-        boolean flag = this.world.a(blockposition, false);
-
-        if (flag) {
-            iblockdata.getBlock().postBreak(this.world, blockposition, iblockdata);
-        }
-
-        return flag;
     }
 
     public boolean breakBlock(BlockPosition blockposition) {
@@ -200,42 +206,31 @@ public class PlayerInteractManager {
             if ((block instanceof BlockCommand || block instanceof BlockStructure || block instanceof BlockJigsaw) && !this.player.isCreativeAndOp()) {
                 this.world.notify(blockposition, iblockdata, iblockdata, 3);
                 return false;
+            } else if (this.player.a((World) this.world, blockposition, this.gamemode)) {
+                return false;
             } else {
-                if (this.gamemode.d()) {
-                    if (this.gamemode == EnumGamemode.SPECTATOR) {
-                        return false;
-                    }
+                block.a((World) this.world, blockposition, iblockdata, (EntityHuman) this.player);
+                boolean flag = this.world.a(blockposition, false);
 
-                    if (!this.player.dR()) {
-                        ItemStack itemstack = this.player.getItemInMainHand();
-
-                        if (itemstack.isEmpty()) {
-                            return false;
-                        }
-
-                        ShapeDetectorBlock shapedetectorblock = new ShapeDetectorBlock(this.world, blockposition, false);
-
-                        if (!itemstack.a(this.world.t(), shapedetectorblock)) {
-                            return false;
-                        }
-                    }
+                if (flag) {
+                    block.postBreak(this.world, blockposition, iblockdata);
                 }
 
-                boolean flag = this.c(blockposition);
-
-                if (!this.isCreative()) {
-                    ItemStack itemstack1 = this.player.getItemInMainHand();
+                if (this.isCreative()) {
+                    return true;
+                } else {
+                    ItemStack itemstack = this.player.getItemInMainHand();
                     boolean flag1 = this.player.hasBlock(iblockdata);
 
-                    itemstack1.a(this.world, iblockdata, blockposition, this.player);
+                    itemstack.a(this.world, iblockdata, blockposition, this.player);
                     if (flag && flag1) {
-                        ItemStack itemstack2 = itemstack1.isEmpty() ? ItemStack.a : itemstack1.cloneItemStack();
+                        ItemStack itemstack1 = itemstack.isEmpty() ? ItemStack.a : itemstack.cloneItemStack();
 
-                        iblockdata.getBlock().a(this.world, this.player, blockposition, iblockdata, tileentity, itemstack2);
+                        block.a(this.world, this.player, blockposition, iblockdata, tileentity, itemstack1);
                     }
-                }
 
-                return flag;
+                    return true;
+                }
             }
         }
     }
@@ -243,7 +238,7 @@ public class PlayerInteractManager {
     public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand) {
         if (this.gamemode == EnumGamemode.SPECTATOR) {
             return EnumInteractionResult.PASS;
-        } else if (entityhuman.getCooldownTracker().a(itemstack.getItem())) {
+        } else if (entityhuman.getCooldownTracker().hasCooldown(itemstack.getItem())) {
             return EnumInteractionResult.PASS;
         } else {
             int i = itemstack.getCount();
@@ -296,7 +291,7 @@ public class PlayerInteractManager {
 
             if (!flag1 && iblockdata.interact(world, entityhuman, enumhand, movingobjectpositionblock)) {
                 return EnumInteractionResult.SUCCESS;
-            } else if (!itemstack.isEmpty() && !entityhuman.getCooldownTracker().a(itemstack.getItem())) {
+            } else if (!itemstack.isEmpty() && !entityhuman.getCooldownTracker().hasCooldown(itemstack.getItem())) {
                 ItemActionContext itemactioncontext = new ItemActionContext(entityhuman, enumhand, movingobjectpositionblock);
 
                 if (this.isCreative()) {

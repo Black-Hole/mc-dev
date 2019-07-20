@@ -34,19 +34,19 @@ public class AttributeModifier {
         this.b = attributemodifier_operation;
     }
 
-    public UUID a() {
+    public UUID getUniqueId() {
         return this.d;
     }
 
-    public String b() {
+    public String getName() {
         return (String) this.c.get();
     }
 
-    public AttributeModifier.Operation c() {
+    public AttributeModifier.Operation getOperation() {
         return this.b;
     }
 
-    public double d() {
+    public double getAmount() {
         return this.a;
     }
 

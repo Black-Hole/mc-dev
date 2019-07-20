@@ -8,7 +8,7 @@ import com.mojang.datafixers.util.Pair;
 public class Behaviors {
 
     public static ImmutableList<Pair<Integer, ? extends Behavior<? super EntityVillager>>> a(VillagerProfession villagerprofession, float f) {
-        return ImmutableList.of(Pair.of(0, new BehaviorSwim(0.4F, 0.8F)), Pair.of(0, new BehaviorInteractDoor()), Pair.of(0, new BehaviorLook(45, 90)), Pair.of(0, new BehaviorPanic()), Pair.of(0, new BehaviorWake()), Pair.of(0, new BehaviorBellAlert()), Pair.of(0, new BehaviorRaid()), Pair.of(1, new BehavorMove(200)), Pair.of(2, new BehaviorInteractPlayer(f)), Pair.of(10, new BehaviorFindPosition(villagerprofession.b(), MemoryModuleType.JOB_SITE, true)), Pair.of(10, new BehaviorFindPosition(VillagePlaceType.q, MemoryModuleType.HOME, false)), Pair.of(10, new BehaviorFindPosition(VillagePlaceType.r, MemoryModuleType.MEETING_POINT, true)), new Pair[]{Pair.of(10, new BehaviorCareer()), Pair.of(10, new BehaviorProfession())});
+        return ImmutableList.of(Pair.of(0, new BehaviorSwim(0.4F, 0.8F)), Pair.of(0, new BehaviorInteractDoor()), Pair.of(0, new BehaviorLook(45, 90)), Pair.of(0, new BehaviorPanic()), Pair.of(0, new BehaviorWake()), Pair.of(0, new BehaviorBellAlert()), Pair.of(0, new BehaviorRaid()), Pair.of(1, new BehavorMove(200)), Pair.of(2, new BehaviorInteractPlayer(f)), Pair.of(5, new BehaviorPickupItem()), Pair.of(10, new BehaviorFindPosition(villagerprofession.b(), MemoryModuleType.JOB_SITE, true)), Pair.of(10, new BehaviorFindPosition(VillagePlaceType.q, MemoryModuleType.HOME, false)), new Pair[]{Pair.of(10, new BehaviorFindPosition(VillagePlaceType.r, MemoryModuleType.MEETING_POINT, true)), Pair.of(10, new BehaviorCareer()), Pair.of(10, new BehaviorProfession())});
     }
 
     public static ImmutableList<Pair<Integer, ? extends Behavior<? super EntityVillager>>> b(VillagerProfession villagerprofession, float f) {
@@ -20,7 +20,7 @@ public class Behaviors {
     }
 
     public static ImmutableList<Pair<Integer, ? extends Behavior<? super EntityVillager>>> c(VillagerProfession villagerprofession, float f) {
-        return ImmutableList.of(Pair.of(2, new BehaviorWalkAwayBlock(MemoryModuleType.HOME, f, 1, 150, 1200)), Pair.of(3, new BehaviorPositionValidate(VillagePlaceType.q, MemoryModuleType.HOME)), Pair.of(3, new BehaviorSleep()), Pair.of(5, new BehaviorGateSingle<>(ImmutableMap.of(MemoryModuleType.HOME, MemoryStatus.VALUE_ABSENT), ImmutableList.of(Pair.of(new BehaviourWalkHome(f), 1), Pair.of(new BehaviorStrollInside(f), 4), Pair.of(new BehaviorNop(20, 40), 2)))), b(), Pair.of(99, new BehaviorSchedule()));
+        return ImmutableList.of(Pair.of(2, new BehaviorWalkAwayBlock(MemoryModuleType.HOME, f, 1, 150, 1200)), Pair.of(3, new BehaviorPositionValidate(VillagePlaceType.q, MemoryModuleType.HOME)), Pair.of(3, new BehaviorSleep()), Pair.of(5, new BehaviorGateSingle<>(ImmutableMap.of(MemoryModuleType.HOME, MemoryStatus.VALUE_ABSENT), ImmutableList.of(Pair.of(new BehaviorWalkHome(f), 1), Pair.of(new BehaviorStrollInside(f), 4), Pair.of(new BehaviorNearestVillage(f, 4), 2), Pair.of(new BehaviorNop(20, 40), 2)))), b(), Pair.of(99, new BehaviorSchedule()));
     }
 
     public static ImmutableList<Pair<Integer, ? extends Behavior<? super EntityVillager>>> d(VillagerProfession villagerprofession, float f) {
@@ -48,7 +48,7 @@ public class Behaviors {
     public static ImmutableList<Pair<Integer, ? extends Behavior<? super EntityVillager>>> i(VillagerProfession villagerprofession, float f) {
         boolean flag = true;
 
-        return ImmutableList.of(Pair.of(0, new BehaviourHide(15, 2)), Pair.of(1, new BehaviorHome(32, f * 1.25F, 2)), b());
+        return ImmutableList.of(Pair.of(0, new BehaviorHide(15, 2)), Pair.of(1, new BehaviorHome(32, f * 1.25F, 2)), b());
     }
 
     private static Pair<Integer, Behavior<EntityLiving>> a() {

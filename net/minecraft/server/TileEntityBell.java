@@ -61,7 +61,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
     }
 
     private void d() {
-        this.world.a((EntityHuman) null, this.getPosition(), SoundEffects.BLOCK_BELL_RESONATE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        this.world.playSound((EntityHuman) null, this.getPosition(), SoundEffects.BLOCK_BELL_RESONATE, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
     public void a(EnumDirection enumdirection) {
@@ -93,7 +93,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
             while (iterator.hasNext()) {
                 EntityLiving entityliving = (EntityLiving) iterator.next();
 
-                if (entityliving.isAlive() && !entityliving.dead && blockposition.a((IPosition) entityliving.ci(), 32.0D)) {
+                if (entityliving.isAlive() && !entityliving.dead && blockposition.a((IPosition) entityliving.getPositionVector(), 32.0D)) {
                     entityliving.getBehaviorController().setMemory(MemoryModuleType.HEARD_BELL_TIME, (Object) this.world.getTime());
                 }
             }
@@ -113,7 +113,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
             }
 
             entityliving = (EntityLiving) iterator.next();
-        } while (!entityliving.isAlive() || entityliving.dead || !blockposition.a((IPosition) entityliving.ci(), 32.0D) || !entityliving.getEntityType().a(TagsEntity.RADIERS));
+        } while (!entityliving.isAlive() || entityliving.dead || !blockposition.a((IPosition) entityliving.getPositionVector(), 32.0D) || !entityliving.getEntityType().a(TagsEntity.RADIERS));
 
         return true;
     }
@@ -129,7 +129,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
             BlockPosition blockposition = this.getPosition();
             AtomicInteger atomicinteger = new AtomicInteger(16700985);
             int i = (int) this.h.stream().filter((entityliving) -> {
-                return blockposition.a((IPosition) entityliving.ci(), 48.0D);
+                return blockposition.a((IPosition) entityliving.getPositionVector(), 48.0D);
             }).count();
 
             this.h.stream().filter(this::a).forEach((entityliving) -> {
@@ -153,7 +153,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
     }
 
     private boolean a(EntityLiving entityliving) {
-        return entityliving.isAlive() && !entityliving.dead && this.getPosition().a((IPosition) entityliving.ci(), 48.0D) && entityliving.getEntityType().a(TagsEntity.RADIERS);
+        return entityliving.isAlive() && !entityliving.dead && this.getPosition().a((IPosition) entityliving.getPositionVector(), 48.0D) && entityliving.getEntityType().a(TagsEntity.RADIERS);
     }
 
     private void b(EntityLiving entityliving) {

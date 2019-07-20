@@ -105,7 +105,7 @@ public class BlockLectern extends BlockTileEntity {
 
             tileentitylectern.setBook(itemstack.cloneAndSubtract(1));
             setHasBook(world, blockposition, iblockdata, true);
-            world.a((EntityHuman) null, blockposition, SoundEffects.ITEM_BOOK_PUT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.ITEM_BOOK_PUT, SoundCategory.BLOCKS, 1.0F, 1.0F);
         }
 
     }

@@ -122,7 +122,7 @@ public abstract class Container {
                 while (iterator1.hasNext()) {
                     ICrafting icrafting1 = (ICrafting) iterator1.next();
 
-                    icrafting1.setContainerData(this, i, containerproperty.b());
+                    icrafting1.setContainerData(this, i, containerproperty.get());
                 }
             }
         }
@@ -439,7 +439,7 @@ public abstract class Container {
     }
 
     public void a(int i, int j) {
-        ((ContainerProperty) this.d.get(i)).a(j);
+        ((ContainerProperty) this.d.get(i)).set(j);
     }
 
     public boolean c(EntityHuman entityhuman) {

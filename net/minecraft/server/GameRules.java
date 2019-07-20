@@ -73,7 +73,7 @@ public class GameRules {
 
     public GameRules() {
         this.A = (Map) GameRules.z.entrySet().stream().collect(ImmutableMap.toImmutableMap(Entry::getKey, (entry) -> {
-            return ((GameRules.GameRuleDefinition) entry.getValue()).a();
+            return ((GameRules.GameRuleDefinition) entry.getValue()).getValue();
         }));
     }
 
@@ -145,7 +145,7 @@ public class GameRules {
 
         public void a(boolean flag, @Nullable MinecraftServer minecraftserver) {
             this.a = flag;
-            this.a(minecraftserver);
+            this.onChange(minecraftserver);
         }
 
         @Override
@@ -243,10 +243,10 @@ public class GameRules {
 
         public void b(CommandContext<CommandListenerWrapper> commandcontext, String s) {
             this.a(commandcontext, s);
-            this.a(((CommandListenerWrapper) commandcontext.getSource()).getServer());
+            this.onChange(((CommandListenerWrapper) commandcontext.getSource()).getServer());
         }
 
-        protected void a(@Nullable MinecraftServer minecraftserver) {
+        public void onChange(@Nullable MinecraftServer minecraftserver) {
             if (minecraftserver != null) {
                 this.a.c.accept(minecraftserver, this.e());
             }
@@ -282,7 +282,7 @@ public class GameRules {
             return CommandDispatcher.a(s, (ArgumentType) this.a.get());
         }
 
-        public T a() {
+        public T getValue() {
             return (GameRules.GameRuleValue) this.b.apply(this);
         }
     }
@@ -312,6 +312,7 @@ public class GameRules {
         }
     }
 
+    @FunctionalInterface
     public interface GameRuleVisitor {
 
         <T extends GameRules.GameRuleValue<T>> void a(GameRules.GameRuleKey<T> gamerules_gamerulekey, GameRules.GameRuleDefinition<T> gamerules_gameruledefinition);

@@ -13,7 +13,7 @@ public class BlockStateBoolean extends BlockState<Boolean> {
     }
 
     @Override
-    public Collection<Boolean> d() {
+    public Collection<Boolean> getValues() {
         return this.a;
     }
 

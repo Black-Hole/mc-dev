@@ -19,6 +19,7 @@ public class ChunkProviderGenerate extends ChunkGeneratorAbstract<GeneratorSetti
     private final MobSpawnerPhantom k = new MobSpawnerPhantom();
     private final MobSpawnerPatrol l = new MobSpawnerPatrol();
     private final MobSpawnerCat m = new MobSpawnerCat();
+    private final VillageSiege n = new VillageSiege();
 
     public ChunkProviderGenerate(GeneratorAccess generatoraccess, WorldChunkManager worldchunkmanager, GeneratorSettingsOverworld generatorsettingsoverworld) {
         super(generatoraccess, worldchunkmanager, 4, 8, 256, generatorsettingsoverworld, true);
@@ -152,6 +153,7 @@ public class ChunkProviderGenerate extends ChunkGeneratorAbstract<GeneratorSetti
         this.k.a(worldserver, flag, flag1);
         this.l.a(worldserver, flag, flag1);
         this.m.a(worldserver, flag, flag1);
+        this.n.a(worldserver, flag, flag1);
     }
 
     @Override

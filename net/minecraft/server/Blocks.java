@@ -124,7 +124,7 @@ public class Blocks {
     public static final Block BLACK_WOOL = a("black_wool", new Block(Block.Info.a(Material.CLOTH, MaterialMapColor.E).b(0.8F).a(SoundEffectType.g)));
     public static final Block MOVING_PISTON = a("moving_piston", new BlockPistonMoving(Block.Info.a(Material.PISTON).b(-1.0F).d().e()));
     public static final Block DANDELION = a("dandelion", new BlockFlowers(MobEffects.SATURATION, 7, Block.Info.a(Material.PLANT).a().b().a(SoundEffectType.c)));
-    public static final Block POPPY = a("poppy", new BlockFlowers(MobEffects.FASTER_MOVEMENT, 6, Block.Info.a(Material.PLANT).a().b().a(SoundEffectType.c)));
+    public static final Block POPPY = a("poppy", new BlockFlowers(MobEffects.NIGHT_VISION, 5, Block.Info.a(Material.PLANT).a().b().a(SoundEffectType.c)));
     public static final Block BLUE_ORCHID = a("blue_orchid", new BlockFlowers(MobEffects.SATURATION, 7, Block.Info.a(Material.PLANT).a().b().a(SoundEffectType.c)));
     public static final Block ALLIUM = a("allium", new BlockFlowers(MobEffects.FIRE_RESISTANCE, 4, Block.Info.a(Material.PLANT).a().b().a(SoundEffectType.c)));
     public static final Block AZURE_BLUET = a("azure_bluet", new BlockFlowers(MobEffects.BLINDNESS, 8, Block.Info.a(Material.PLANT).a().b().a(SoundEffectType.c)));
@@ -169,11 +169,11 @@ public class Blocks {
     public static final Block RAIL = a("rail", new BlockMinecartTrack(Block.Info.a(Material.ORIENTABLE).a().b(0.7F).a(SoundEffectType.e)));
     public static final Block COBBLESTONE_STAIRS = a("cobblestone_stairs", new BlockStairs(Blocks.COBBLESTONE.getBlockData(), Block.Info.a(Blocks.COBBLESTONE)));
     public static final Block OAK_WALL_SIGN = a("oak_wall_sign", new BlockWallSign(Block.Info.a(Material.WOOD).a().b(1.0F).a(SoundEffectType.a).b(Blocks.OAK_SIGN)));
-    public static final Block SPRUCE_WALL_SIGN = a("spruce_wall_sign", new BlockWallSign(Block.Info.a(Material.WOOD).a().b(1.0F).a(SoundEffectType.a).b(Blocks.SPRUCE_SIGN)));
-    public static final Block BIRCH_WALL_SIGN = a("birch_wall_sign", new BlockWallSign(Block.Info.a(Material.WOOD).a().b(1.0F).a(SoundEffectType.a).b(Blocks.BIRCH_SIGN)));
-    public static final Block ACACIA_WALL_SIGN = a("acacia_wall_sign", new BlockWallSign(Block.Info.a(Material.WOOD).a().b(1.0F).a(SoundEffectType.a).b(Blocks.ACACIA_SIGN)));
-    public static final Block JUNGLE_WALL_SIGN = a("jungle_wall_sign", new BlockWallSign(Block.Info.a(Material.WOOD).a().b(1.0F).a(SoundEffectType.a).b(Blocks.JUNGLE_SIGN)));
-    public static final Block DARK_OAK_WALL_SIGN = a("dark_oak_wall_sign", new BlockWallSign(Block.Info.a(Material.WOOD).a().b(1.0F).a(SoundEffectType.a).b(Blocks.DARK_OAK_SIGN)));
+    public static final Block SPRUCE_WALL_SIGN = a("spruce_wall_sign", new BlockWallSign(Block.Info.a(Material.WOOD, Blocks.SPRUCE_LOG.t).a().b(1.0F).a(SoundEffectType.a).b(Blocks.SPRUCE_SIGN)));
+    public static final Block BIRCH_WALL_SIGN = a("birch_wall_sign", new BlockWallSign(Block.Info.a(Material.WOOD, MaterialMapColor.d).a().b(1.0F).a(SoundEffectType.a).b(Blocks.BIRCH_SIGN)));
+    public static final Block ACACIA_WALL_SIGN = a("acacia_wall_sign", new BlockWallSign(Block.Info.a(Material.WOOD, MaterialMapColor.q).a().b(1.0F).a(SoundEffectType.a).b(Blocks.ACACIA_SIGN)));
+    public static final Block JUNGLE_WALL_SIGN = a("jungle_wall_sign", new BlockWallSign(Block.Info.a(Material.WOOD, Blocks.JUNGLE_LOG.t).a().b(1.0F).a(SoundEffectType.a).b(Blocks.JUNGLE_SIGN)));
+    public static final Block DARK_OAK_WALL_SIGN = a("dark_oak_wall_sign", new BlockWallSign(Block.Info.a(Material.WOOD, Blocks.DARK_OAK_LOG.t).a().b(1.0F).a(SoundEffectType.a).b(Blocks.DARK_OAK_SIGN)));
     public static final Block LEVER = a("lever", new BlockLever(Block.Info.a(Material.ORIENTABLE).a().b(0.5F).a(SoundEffectType.a)));
     public static final Block STONE_PRESSURE_PLATE = a("stone_pressure_plate", new BlockPressurePlateBinary(BlockPressurePlateBinary.EnumMobType.MOBS, Block.Info.a(Material.STONE).a().b(0.5F)));
     public static final Block IRON_DOOR = a("iron_door", new BlockDoor(Block.Info.a(Material.ORE, MaterialMapColor.h).b(5.0F).a(SoundEffectType.e)));

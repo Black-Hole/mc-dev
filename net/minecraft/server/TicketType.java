@@ -6,7 +6,7 @@ public class TicketType<T> {
 
     private final String i;
     private final Comparator<T> j;
-    private final long k;
+    public long loadPeriod;
     public static final TicketType<Unit> START = a("start", (unit, unit1) -> {
         return 0;
     });
@@ -31,7 +31,7 @@ public class TicketType<T> {
     protected TicketType(String s, Comparator<T> comparator, long i) {
         this.i = s;
         this.j = comparator;
-        this.k = i;
+        this.loadPeriod = i;
     }
 
     public String toString() {
@@ -43,6 +43,6 @@ public class TicketType<T> {
     }
 
     public long b() {
-        return this.k;
+        return this.loadPeriod;
     }
 }

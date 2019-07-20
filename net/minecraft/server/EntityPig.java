@@ -42,7 +42,7 @@ public class EntityPig extends EntityAnimal {
     }
 
     @Override
-    public boolean dE() {
+    public boolean dD() {
         Entity entity = this.getRidingPassenger();
 
         if (!(entity instanceof EntityHuman)) {
@@ -172,7 +172,7 @@ public class EntityPig extends EntityAnimal {
         if (this.isAlive()) {
             Entity entity = this.getPassengers().isEmpty() ? null : (Entity) this.getPassengers().get(0);
 
-            if (this.isVehicle() && this.dE()) {
+            if (this.isVehicle() && this.dD()) {
                 this.yaw = entity.yaw;
                 this.lastYaw = this.yaw;
                 this.pitch = entity.pitch * 0.5F;
@@ -217,7 +217,7 @@ public class EntityPig extends EntityAnimal {
         }
     }
 
-    public boolean dX() {
+    public boolean dW() {
         if (this.bC) {
             return false;
         } else {

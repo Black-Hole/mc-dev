@@ -107,7 +107,7 @@ public class CommandClone {
 
                                         list1.add(new CommandClone.CommandCloneStoredTileEntity(blockposition6, iblockdata, nbttagcompound));
                                         deque.addLast(blockposition5);
-                                    } else if (!iblockdata.g(worldserver, blockposition5) && !Block.a(iblockdata.getCollisionShape(worldserver, blockposition5))) {
+                                    } else if (!iblockdata.g(worldserver, blockposition5) && !iblockdata.o(worldserver, blockposition5)) {
                                         list2.add(new CommandClone.CommandCloneStoredTileEntity(blockposition6, iblockdata, (NBTTagCompound) null));
                                         deque.addFirst(blockposition5);
                                     } else {

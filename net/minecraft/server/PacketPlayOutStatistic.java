@@ -36,7 +36,7 @@ public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
         int i = packetdataserializer.i();
         int j = packetdataserializer.i();
 
-        this.a.put(statisticwrapper.b(statisticwrapper.a().fromId(i)), j);
+        this.a.put(statisticwrapper.b(statisticwrapper.getRegistry().fromId(i)), j);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
             Entry<Statistic<?>> entry = (Entry) objectiterator.next();
             Statistic<?> statistic = (Statistic) entry.getKey();
 
-            packetdataserializer.d(IRegistry.STATS.a((Object) statistic.a()));
+            packetdataserializer.d(IRegistry.STATS.a((Object) statistic.getWrapper()));
             packetdataserializer.d(this.a(statistic));
             packetdataserializer.d(entry.getIntValue());
         }
@@ -56,6 +56,6 @@ public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
     }
 
     private <T> int a(Statistic<T> statistic) {
-        return statistic.a().a().a(statistic.b());
+        return statistic.getWrapper().getRegistry().a(statistic.b());
     }
 }

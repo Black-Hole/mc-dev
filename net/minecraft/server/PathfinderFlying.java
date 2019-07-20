@@ -64,8 +64,8 @@ public class PathfinderFlying extends PathfinderNormal {
     }
 
     @Override
-    public PathPoint a(double d0, double d1, double d2) {
-        return super.a(MathHelper.floor(d0), MathHelper.floor(d1), MathHelper.floor(d2));
+    public PathDestination a(double d0, double d1, double d2) {
+        return new PathDestination(super.a(MathHelper.floor(d0), MathHelper.floor(d1), MathHelper.floor(d2)));
     }
 
     @Override

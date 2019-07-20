@@ -22,7 +22,7 @@ public class ItemBoneMeal extends Item {
             return EnumInteractionResult.SUCCESS;
         } else {
             IBlockData iblockdata = world.getType(blockposition);
-            boolean flag = Block.d(iblockdata, world, blockposition, itemactioncontext.getClickedFace());
+            boolean flag = iblockdata.d(world, blockposition, itemactioncontext.getClickedFace());
 
             if (flag && a(itemactioncontext.getItemStack(), world, blockposition1, itemactioncontext.getClickedFace())) {
                 if (!world.isClientSide) {
@@ -72,7 +72,7 @@ public class ItemBoneMeal extends Item {
                     for (j = 0; j < i / 16; ++j) {
                         blockposition1 = blockposition1.b(ItemBoneMeal.i.nextInt(3) - 1, (ItemBoneMeal.i.nextInt(3) - 1) * ItemBoneMeal.i.nextInt(3) / 2, ItemBoneMeal.i.nextInt(3) - 1);
                         biomebase = world.getBiome(blockposition1);
-                        if (Block.a(world.getType(blockposition1).getCollisionShape(world, blockposition1))) {
+                        if (world.getType(blockposition1).o(world, blockposition1)) {
                             continue label77;
                         }
                     }

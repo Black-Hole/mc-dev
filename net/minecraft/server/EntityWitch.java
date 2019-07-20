@@ -22,7 +22,7 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
     protected void initPathfinder() {
         super.initPathfinder();
         this.bC = new PathfinderGoalNearestHealableRaider<>(this, EntityRaider.class, true, (entityliving) -> {
-            return entityliving != null && this.el() && entityliving.getEntityType() != EntityTypes.WITCH;
+            return entityliving != null && this.ek() && entityliving.getEntityType() != EntityTypes.WITCH;
         });
         this.bD = new PathfinderGoalNearestAttackableTargetWitch<>(this, EntityHuman.class, 10, true, false, (Predicate) null);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
@@ -101,7 +101,7 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
                         }
                     }
 
-                    this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).c(EntityWitch.bz);
+                    this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).removeModifier(EntityWitch.bz);
                 }
             } else {
                 PotionRegistry potionregistry = null;
@@ -120,11 +120,11 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
                     this.setSlot(EnumItemSlot.MAINHAND, PotionUtil.a(new ItemStack(Items.POTION), potionregistry));
                     this.bB = this.getItemInMainHand().k();
                     this.s(true);
-                    this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_WITCH_DRINK, this.getSoundCategory(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+                    this.world.playSound((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_WITCH_DRINK, this.getSoundCategory(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
                     AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
-                    attributeinstance.c(EntityWitch.bz);
-                    attributeinstance.b(EntityWitch.bz);
+                    attributeinstance.removeModifier(EntityWitch.bz);
+                    attributeinstance.addModifier(EntityWitch.bz);
                 }
             }
 
@@ -137,7 +137,7 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
     }
 
     @Override
-    public SoundEffect dW() {
+    public SoundEffect dV() {
         return SoundEffects.ENTITY_WITCH_CELEBRATE;
     }
 
@@ -186,7 +186,7 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
             entitypotion.setItem(PotionUtil.a(new ItemStack(Items.SPLASH_POTION), potionregistry));
             entitypotion.pitch -= -20.0F;
             entitypotion.shoot(d0, d1 + (double) (f1 * 0.2F), d2, 0.75F, 8.0F);
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_WITCH_THROW, this.getSoundCategory(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+            this.world.playSound((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_WITCH_THROW, this.getSoundCategory(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
             this.world.addEntity(entitypotion);
         }
     }
@@ -200,7 +200,7 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
     public void a(int i, boolean flag) {}
 
     @Override
-    public boolean dY() {
+    public boolean dX() {
         return false;
     }
 }

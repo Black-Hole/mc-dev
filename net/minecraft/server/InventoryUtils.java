@@ -28,7 +28,7 @@ public class InventoryUtils {
     }
 
     public static void dropItem(World world, double d0, double d1, double d2, ItemStack itemstack) {
-        double d3 = (double) EntityTypes.ITEM.h();
+        double d3 = (double) EntityTypes.ITEM.i();
         double d4 = 1.0D - d3;
         double d5 = d3 / 2.0D;
         double d6 = Math.floor(d0) + InventoryUtils.a.nextDouble() * d4 + d5;

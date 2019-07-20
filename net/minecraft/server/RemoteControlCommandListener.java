@@ -17,7 +17,7 @@ public class RemoteControlCommandListener implements ICommandListener {
         return this.buffer.toString();
     }
 
-    public CommandListenerWrapper f() {
+    public CommandListenerWrapper getWrapper() {
         WorldServer worldserver = this.server.getWorldServer(DimensionManager.OVERWORLD);
 
         return new CommandListenerWrapper(this, new Vec3D(worldserver.getSpawn()), Vec2F.a, worldserver, 4, "Recon", new ChatComponentText("Rcon"), this.server, (Entity) null);
@@ -40,6 +40,6 @@ public class RemoteControlCommandListener implements ICommandListener {
 
     @Override
     public boolean shouldBroadcastCommands() {
-        return this.server.k();
+        return this.server.l();
     }
 }

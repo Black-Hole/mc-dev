@@ -59,7 +59,7 @@ public class DefinedStructure {
                         nbttagcompound.remove("y");
                         nbttagcompound.remove("z");
                         list1.add(new DefinedStructure.BlockInfo(blockposition6, iblockdata, nbttagcompound));
-                    } else if (!iblockdata.g(world, blockposition5) && !Block.a(iblockdata.getCollisionShape(world, blockposition5))) {
+                    } else if (!iblockdata.g(world, blockposition5) && !iblockdata.o(world, blockposition5)) {
                         list2.add(new DefinedStructure.BlockInfo(blockposition6, iblockdata, (NBTTagCompound) null));
                     } else {
                         list.add(new DefinedStructure.BlockInfo(blockposition6, iblockdata, (NBTTagCompound) null));

@@ -28,7 +28,7 @@ public class TileEntityEnderChest extends TileEntity implements ITickable {
             double d1 = (double) i + 0.5D;
 
             d0 = (double) k + 0.5D;
-            this.world.a((EntityHuman) null, d1, (double) j + 0.5D, d0, SoundEffects.BLOCK_ENDER_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+            this.world.playSound((EntityHuman) null, d1, (double) j + 0.5D, d0, SoundEffects.BLOCK_ENDER_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
         }
 
         if (this.c == 0 && this.a > 0.0F || this.c > 0 && this.a < 1.0F) {
@@ -50,7 +50,7 @@ public class TileEntityEnderChest extends TileEntity implements ITickable {
                 d0 = (double) i + 0.5D;
                 double d2 = (double) k + 0.5D;
 
-                this.world.a((EntityHuman) null, d0, (double) j + 0.5D, d2, SoundEffects.BLOCK_ENDER_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+                this.world.playSound((EntityHuman) null, d0, (double) j + 0.5D, d2, SoundEffects.BLOCK_ENDER_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
             }
 
             if (this.a < 0.0F) {

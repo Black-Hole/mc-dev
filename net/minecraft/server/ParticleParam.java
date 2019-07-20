@@ -5,7 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 public interface ParticleParam {
 
-    Particle<?> b();
+    Particle<?> getParticle();
 
     void a(PacketDataSerializer packetdataserializer);
 

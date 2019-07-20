@@ -18,7 +18,6 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import java.net.SocketAddress;
 import java.util.Queue;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nullable;
 import javax.crypto.SecretKey;
 import org.apache.commons.lang3.Validate;
@@ -44,19 +43,18 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     });
     private final EnumProtocolDirection h;
     private final Queue<NetworkManager.QueuedPacket> packetQueue = Queues.newConcurrentLinkedQueue();
-    private final ReentrantReadWriteLock j = new ReentrantReadWriteLock();
     public Channel channel;
     public SocketAddress socketAddress;
     private PacketListener packetListener;
-    private IChatBaseComponent n;
+    private IChatBaseComponent m;
+    private boolean n;
     private boolean o;
-    private boolean p;
+    private int p;
     private int q;
-    private int r;
+    private float r;
     private float s;
-    private float t;
-    private int u;
-    private boolean v;
+    private int t;
+    private boolean u;
 
     public NetworkManager(EnumProtocolDirection enumprotocoldirection) {
         this.h = enumprotocoldirection;
@@ -89,9 +87,9 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
         if (throwable instanceof SkipEncodeException) {
             NetworkManager.LOGGER.debug("Skipping packet due to errors", throwable.getCause());
         } else {
-            boolean flag = !this.v;
+            boolean flag = !this.u;
 
-            this.v = true;
+            this.u = true;
             if (this.channel.isOpen()) {
                 if (throwable instanceof TimeoutException) {
                     NetworkManager.LOGGER.debug("Timeout", throwable);
@@ -123,7 +121,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
                 ;
             }
 
-            ++this.q;
+            ++this.p;
         }
 
     }
@@ -147,13 +145,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
             this.o();
             this.b(packet, genericfuturelistener);
         } else {
-            this.j.writeLock().lock();
-
-            try {
-                this.packetQueue.add(new NetworkManager.QueuedPacket(packet, genericfuturelistener));
-            } finally {
-                this.j.writeLock().unlock();
-            }
+            this.packetQueue.add(new NetworkManager.QueuedPacket(packet, genericfuturelistener));
         }
 
     }
@@ -162,7 +154,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
         EnumProtocol enumprotocol = EnumProtocol.a(packet);
         EnumProtocol enumprotocol1 = (EnumProtocol) this.channel.attr(NetworkManager.c).get();
 
-        ++this.r;
+        ++this.q;
         if (enumprotocol1 != enumprotocol) {
             NetworkManager.LOGGER.debug("Disabled auto read");
             this.channel.config().setAutoRead(false);
@@ -200,18 +192,16 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
     private void o() {
         if (this.channel != null && this.channel.isOpen()) {
-            this.j.readLock().lock();
+            Queue queue = this.packetQueue;
 
-            try {
-                while (!this.packetQueue.isEmpty()) {
-                    NetworkManager.QueuedPacket networkmanager_queuedpacket = (NetworkManager.QueuedPacket) this.packetQueue.poll();
+            synchronized (this.packetQueue) {
+                NetworkManager.QueuedPacket networkmanager_queuedpacket;
 
+                while ((networkmanager_queuedpacket = (NetworkManager.QueuedPacket) this.packetQueue.poll()) != null) {
                     this.b(networkmanager_queuedpacket.a, networkmanager_queuedpacket.b);
                 }
-            } finally {
-                this.j.readLock().unlock();
-            }
 
+            }
         }
     }
 
@@ -229,11 +219,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
             this.channel.flush();
         }
 
-        if (this.u++ % 20 == 0) {
-            this.t = this.t * 0.75F + (float) this.r * 0.25F;
+        if (this.t++ % 20 == 0) {
             this.s = this.s * 0.75F + (float) this.q * 0.25F;
-            this.r = 0;
+            this.r = this.r * 0.75F + (float) this.p * 0.25F;
             this.q = 0;
+            this.p = 0;
         }
 
     }
@@ -245,7 +235,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     public void close(IChatBaseComponent ichatbasecomponent) {
         if (this.channel.isOpen()) {
             this.channel.close().awaitUninterruptibly();
-            this.n = ichatbasecomponent;
+            this.m = ichatbasecomponent;
         }
 
     }
@@ -255,7 +245,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     }
 
     public void a(SecretKey secretkey) {
-        this.o = true;
+        this.n = true;
         this.channel.pipeline().addBefore("splitter", "decrypt", new PacketDecrypter(MinecraftEncryption.a(2, secretkey)));
         this.channel.pipeline().addBefore("prepender", "encrypt", new PacketEncrypter(MinecraftEncryption.a(1, secretkey)));
     }
@@ -274,7 +264,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
     @Nullable
     public IChatBaseComponent j() {
-        return this.n;
+        return this.m;
     }
 
     public void stopReading() {
@@ -308,10 +298,10 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
     public void handleDisconnection() {
         if (this.channel != null && !this.channel.isOpen()) {
-            if (this.p) {
+            if (this.o) {
                 NetworkManager.LOGGER.warn("handleDisconnection() called twice");
             } else {
-                this.p = true;
+                this.o = true;
                 if (this.j() != null) {
                     this.i().a(this.j());
                 } else if (this.i() != null) {

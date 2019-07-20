@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.function.IntConsumer;
 import org.apache.commons.lang3.Validate;
 
 public class DataBits {
@@ -92,5 +93,37 @@ public class DataBits {
 
     public int c() {
         return this.b;
+    }
+
+    public void a(IntConsumer intconsumer) {
+        int i = this.a.length;
+
+        if (i != 0) {
+            int j = 0;
+            long k = this.a[0];
+            long l = i > 1 ? this.a[1] : 0L;
+
+            for (int i1 = 0; i1 < this.d; ++i1) {
+                int j1 = i1 * this.b;
+                int k1 = j1 >> 6;
+                int l1 = (i1 + 1) * this.b - 1 >> 6;
+                int i2 = j1 ^ k1 << 6;
+
+                if (k1 != j) {
+                    k = l;
+                    l = k1 + 1 < i ? this.a[k1 + 1] : 0L;
+                    j = k1;
+                }
+
+                if (k1 == l1) {
+                    intconsumer.accept((int) (k >>> i2 & this.c));
+                } else {
+                    int j2 = 64 - i2;
+
+                    intconsumer.accept((int) ((k >>> i2 | l << j2) & this.c));
+                }
+            }
+
+        }
     }
 }

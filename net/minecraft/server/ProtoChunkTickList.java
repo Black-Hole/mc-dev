@@ -31,7 +31,7 @@ public class ProtoChunkTickList<T> implements TickList<T> {
 
     }
 
-    public NBTTagList a() {
+    public NBTTagList b() {
         return ChunkRegionLoader.a(this.c);
     }
 

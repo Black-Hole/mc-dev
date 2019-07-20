@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
-import java.util.Arrays;
 import java.util.function.Function;
 import javax.annotation.Nullable;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class DataPaletteLinear<T> implements DataPalette<T> {
 
@@ -43,9 +43,7 @@ public class DataPaletteLinear<T> implements DataPalette<T> {
 
     @Override
     public boolean b(T t0) {
-        return Arrays.stream(this.b).anyMatch((object) -> {
-            return object == t0;
-        });
+        return ArrayUtils.contains(this.b, t0);
     }
 
     @Nullable

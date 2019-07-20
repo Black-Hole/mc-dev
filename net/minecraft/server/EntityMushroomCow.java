@@ -17,7 +17,7 @@ public class EntityMushroomCow extends EntityCow {
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return iworldreader.getType(blockposition.down()).getBlock() == Blocks.MYCELIUM ? 10.0F : iworldreader.w(blockposition) - 0.5F;
+        return iworldreader.getType(blockposition.down()).getBlock() == Blocks.MYCELIUM ? 10.0F : iworldreader.v(blockposition) - 0.5F;
     }
 
     public static boolean c(EntityTypes<EntityMushroomCow> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {

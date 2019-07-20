@@ -2,10 +2,10 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -135,37 +135,26 @@ public class Raid {
     }
 
     private void y() {
-        Collection<EntityPlayer> collection = this.r.getPlayers();
-        Set<EntityPlayer> set = Sets.newHashSet(collection);
-        Iterator iterator = collection.iterator();
+        Set<EntityPlayer> set = Sets.newHashSet(this.r.getPlayers());
+        List<EntityPlayer> list = this.k.a(this.x());
+        Iterator iterator = list.iterator();
+
+        EntityPlayer entityplayer;
 
         while (iterator.hasNext()) {
-            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
-            BlockPosition blockposition = new BlockPosition(entityplayer);
-
-            if (this.k.c_(blockposition) != this) {
-                set.remove(entityplayer);
-                this.r.removePlayer(entityplayer);
+            entityplayer = (EntityPlayer) iterator.next();
+            if (!set.contains(entityplayer)) {
+                this.r.addPlayer(entityplayer);
             }
         }
 
-        Set<EntityPlayer> set1 = Sets.newHashSet();
-        Iterator iterator1 = this.k.a(this.x()).iterator();
+        iterator = set.iterator();
 
-        EntityPlayer entityplayer1;
-
-        while (iterator1.hasNext()) {
-            entityplayer1 = (EntityPlayer) iterator1.next();
-            this.r.addPlayer(entityplayer1);
-            set1.add(entityplayer1);
-        }
-
-        set.removeAll(set1);
-        iterator1 = set.iterator();
-
-        while (iterator1.hasNext()) {
-            entityplayer1 = (EntityPlayer) iterator1.next();
-            this.r.removePlayer(entityplayer1);
+        while (iterator.hasNext()) {
+            entityplayer = (EntityPlayer) iterator.next();
+            if (!list.contains(entityplayer)) {
+                this.r.removePlayer(entityplayer);
+            }
         }
 
     }
@@ -414,10 +403,10 @@ public class Raid {
                         }
 
                         if (!this.k.b_(blockposition) && entityraider.cw() > 2400) {
-                            entityraider.b(entityraider.eo() + 1);
+                            entityraider.b(entityraider.en() + 1);
                         }
 
-                        if (entityraider.eo() >= 30) {
+                        if (entityraider.en() >= 30) {
                             hashset.add(entityraider);
                         }
                     }
@@ -475,7 +464,7 @@ public class Raid {
             for (int j1 = 0; j1 < l; ++j1) {
                 EntityRaider entityraider = (EntityRaider) raid_wave.g.a((World) this.k);
 
-                if (!flag && entityraider.dY()) {
+                if (!flag && entityraider.dX()) {
                     entityraider.setPatrolLeader(true);
                     this.a(i, entityraider);
                     flag = true;
@@ -560,7 +549,7 @@ public class Raid {
     }
 
     public void a(@Nonnull EntityRaider entityraider, boolean flag) {
-        Set<EntityRaider> set = (Set) this.g.get(entityraider.em());
+        Set<EntityRaider> set = (Set) this.g.get(entityraider.el());
 
         if (set != null) {
             boolean flag1 = set.remove(entityraider);

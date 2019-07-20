@@ -7,7 +7,7 @@ public class ItemTrident extends Item {
     public ItemTrident(Item.Info item_info) {
         super(item_info);
         this.a(new MinecraftKey("throwing"), (itemstack, world, entityliving) -> {
-            return entityliving != null && entityliving.isHandRaised() && entityliving.dm() == itemstack ? 1.0F : 0.0F;
+            return entityliving != null && entityliving.isHandRaised() && entityliving.dl() == itemstack ? 1.0F : 0.0F;
         });
     }
 
@@ -49,7 +49,7 @@ public class ItemTrident extends Item {
                             }
 
                             world.addEntity(entitythrowntrident);
-                            world.a((EntityHuman) null, (Entity) entitythrowntrident, SoundEffects.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                            world.playSound((EntityHuman) null, (Entity) entitythrowntrident, SoundEffects.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);
                             if (!entityhuman.abilities.canInstantlyBuild) {
                                 entityhuman.inventory.f(itemstack);
                             }
@@ -87,7 +87,7 @@ public class ItemTrident extends Item {
                             soundeffect = SoundEffects.ITEM_TRIDENT_RIPTIDE_1;
                         }
 
-                        world.a((EntityHuman) null, (Entity) entityhuman, soundeffect, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                        world.playSound((EntityHuman) null, (Entity) entityhuman, soundeffect, SoundCategory.PLAYERS, 1.0F, 1.0F);
                     }
 
                 }

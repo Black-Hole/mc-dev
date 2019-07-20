@@ -226,7 +226,7 @@ public abstract class EntityInsentient extends EntityLiving {
     public void tick() {
         super.tick();
         if (!this.world.isClientSide) {
-            this.dN();
+            this.dM();
             if (this.ticksLived % 5 == 0) {
                 this.F();
             }
@@ -534,7 +534,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return true;
     }
 
-    protected boolean I() {
+    public boolean I() {
         return false;
     }
 
@@ -604,11 +604,11 @@ public abstract class EntityInsentient extends EntityLiving {
         return 40;
     }
 
-    public int dB() {
+    public int dA() {
         return 75;
     }
 
-    public int dC() {
+    public int dB() {
         return 10;
     }
 
@@ -661,7 +661,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return !iworldreader.containsLiquid(this.getBoundingBox()) && iworldreader.i(this);
     }
 
-    public int dD() {
+    public int dC() {
         return 4;
     }
 
@@ -892,7 +892,7 @@ public abstract class EntityInsentient extends EntityLiving {
 
     @Nullable
     public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).b(new AttributeModifier("Random spawn bonus", this.random.nextGaussian() * 0.05D, AttributeModifier.Operation.MULTIPLY_BASE));
+        this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).addModifier(new AttributeModifier("Random spawn bonus", this.random.nextGaussian() * 0.05D, AttributeModifier.Operation.MULTIPLY_BASE));
         if (this.random.nextFloat() < 0.05F) {
             this.p(true);
         } else {
@@ -902,7 +902,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return groupdataentity;
     }
 
-    public boolean dE() {
+    public boolean dD() {
         return false;
     }
 
@@ -964,7 +964,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return false;
     }
 
-    public boolean dI() {
+    public boolean dH() {
         return this.a(new BlockPosition(this));
     }
 
@@ -977,21 +977,21 @@ public abstract class EntityInsentient extends EntityLiving {
         this.bL = (float) i;
     }
 
-    public BlockPosition dJ() {
+    public BlockPosition dI() {
         return this.bK;
     }
 
-    public float dK() {
+    public float dJ() {
         return this.bL;
     }
 
-    public boolean dM() {
+    public boolean dL() {
         return this.bL != -1.0F;
     }
 
-    protected void dN() {
+    protected void dM() {
         if (this.bJ != null) {
-            this.dU();
+            this.dT();
         }
 
         if (this.leashHolder != null) {
@@ -1066,7 +1066,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return flag1;
     }
 
-    private void dU() {
+    private void dT() {
         if (this.bJ != null && this.world instanceof WorldServer) {
             if (this.bJ.b("UUID")) {
                 UUID uuid = this.bJ.a("UUID");
@@ -1120,7 +1120,7 @@ public abstract class EntityInsentient extends EntityLiving {
 
     @Override
     public boolean ca() {
-        return this.dE() && super.ca();
+        return this.dD() && super.ca();
     }
 
     public static boolean b(EnumItemSlot enumitemslot, ItemStack itemstack) {
@@ -1160,7 +1160,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return ((Byte) this.datawatcher.get(EntityInsentient.b) & 2) != 0;
     }
 
-    public boolean dS() {
+    public boolean dR() {
         return ((Byte) this.datawatcher.get(EntityInsentient.b) & 4) != 0;
     }
 
@@ -1201,13 +1201,13 @@ public abstract class EntityInsentient extends EntityLiving {
             if (entity instanceof EntityHuman) {
                 EntityHuman entityhuman = (EntityHuman) entity;
                 ItemStack itemstack = this.getItemInMainHand();
-                ItemStack itemstack1 = entityhuman.isHandRaised() ? entityhuman.dm() : ItemStack.a;
+                ItemStack itemstack1 = entityhuman.isHandRaised() ? entityhuman.dl() : ItemStack.a;
 
                 if (!itemstack.isEmpty() && !itemstack1.isEmpty() && itemstack.getItem() instanceof ItemAxe && itemstack1.getItem() == Items.SHIELD) {
                     float f2 = 0.25F + (float) EnchantmentManager.getDigSpeedEnchantmentLevel(this) * 0.05F;
 
                     if (this.random.nextFloat() < f2) {
-                        entityhuman.getCooldownTracker().a(Items.SHIELD, 100);
+                        entityhuman.getCooldownTracker().setCooldown(Items.SHIELD, 100);
                         this.world.broadcastEntityEffect(entityhuman, (byte) 30);
                     }
                 }
@@ -1219,7 +1219,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return flag;
     }
 
-    protected boolean dT() {
+    protected boolean dS() {
         if (this.world.J() && !this.world.isClientSide) {
             float f = this.aF();
             BlockPosition blockposition = this.getVehicle() instanceof EntityBoat ? (new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ)).up() : new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);

@@ -176,6 +176,11 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
     }
 
     @Override
+    public boolean isFilteredNBT() {
+        return true;
+    }
+
+    @Override
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("Book", 10)) {

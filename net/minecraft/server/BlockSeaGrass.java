@@ -18,7 +18,7 @@ public class BlockSeaGrass extends BlockPlant implements IBlockFragilePlantEleme
 
     @Override
     protected boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return Block.d(iblockdata, iblockaccess, blockposition, EnumDirection.UP) && iblockdata.getBlock() != Blocks.MAGMA_BLOCK;
+        return iblockdata.d(iblockaccess, blockposition, EnumDirection.UP) && iblockdata.getBlock() != Blocks.MAGMA_BLOCK;
     }
 
     @Nullable

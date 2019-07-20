@@ -32,7 +32,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         nbttagcompound.setInt("SpellTicks", this.b);
     }
 
-    public boolean eg() {
+    public boolean ef() {
         return this.world.isClientSide ? (Byte) this.datawatcher.get(EntityIllagerWizard.bz) > 0 : this.b > 0;
     }
 
@@ -57,7 +57,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
     @Override
     public void tick() {
         super.tick();
-        if (this.world.isClientSide && this.eg()) {
+        if (this.world.isClientSide && this.ef()) {
             EntityIllagerWizard.Spell entityillagerwizard_spell = this.getSpell();
             double d0 = entityillagerwizard_spell.h[0];
             double d1 = entityillagerwizard_spell.h[1];
@@ -72,7 +72,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
     }
 
-    protected int ei() {
+    protected int eh() {
         return this.b;
     }
 
@@ -117,7 +117,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         public boolean a() {
             EntityLiving entityliving = EntityIllagerWizard.this.getGoalTarget();
 
-            return entityliving != null && entityliving.isAlive() ? (EntityIllagerWizard.this.eg() ? false : EntityIllagerWizard.this.ticksLived >= this.c) : false;
+            return entityliving != null && entityliving.isAlive() ? (EntityIllagerWizard.this.ef() ? false : EntityIllagerWizard.this.ticksLived >= this.c) : false;
         }
 
         @Override
@@ -175,7 +175,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
         @Override
         public boolean a() {
-            return EntityIllagerWizard.this.ei() > 0;
+            return EntityIllagerWizard.this.eh() > 0;
         }
 
         @Override
@@ -193,7 +193,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         @Override
         public void e() {
             if (EntityIllagerWizard.this.getGoalTarget() != null) {
-                EntityIllagerWizard.this.getControllerLook().a(EntityIllagerWizard.this.getGoalTarget(), (float) EntityIllagerWizard.this.dB(), (float) EntityIllagerWizard.this.M());
+                EntityIllagerWizard.this.getControllerLook().a(EntityIllagerWizard.this.getGoalTarget(), (float) EntityIllagerWizard.this.dA(), (float) EntityIllagerWizard.this.M());
             }
 
         }

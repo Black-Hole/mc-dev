@@ -33,7 +33,7 @@ public class BehaviorCelebrate extends Behavior<EntityVillager> {
         Random random = entityvillager.getRandom();
 
         if (random.nextInt(100) == 0) {
-            entityvillager.ed();
+            entityvillager.ec();
         }
 
         if (random.nextInt(200) == 0 && BehaviorOutside.b(worldserver, entityvillager)) {

@@ -48,10 +48,10 @@ public class BlockCobbleWall extends BlockTall {
         IBlockData iblockdata1 = world.getType(blockposition2);
         IBlockData iblockdata2 = world.getType(blockposition3);
         IBlockData iblockdata3 = world.getType(blockposition4);
-        boolean flag = this.a(iblockdata, Block.d(iblockdata, world, blockposition1, EnumDirection.SOUTH), EnumDirection.SOUTH);
-        boolean flag1 = this.a(iblockdata1, Block.d(iblockdata1, world, blockposition2, EnumDirection.WEST), EnumDirection.WEST);
-        boolean flag2 = this.a(iblockdata2, Block.d(iblockdata2, world, blockposition3, EnumDirection.NORTH), EnumDirection.NORTH);
-        boolean flag3 = this.a(iblockdata3, Block.d(iblockdata3, world, blockposition4, EnumDirection.EAST), EnumDirection.EAST);
+        boolean flag = this.a(iblockdata, iblockdata.d(world, blockposition1, EnumDirection.SOUTH), EnumDirection.SOUTH);
+        boolean flag1 = this.a(iblockdata1, iblockdata1.d(world, blockposition2, EnumDirection.WEST), EnumDirection.WEST);
+        boolean flag2 = this.a(iblockdata2, iblockdata2.d(world, blockposition3, EnumDirection.NORTH), EnumDirection.NORTH);
+        boolean flag3 = this.a(iblockdata3, iblockdata3.d(world, blockposition4, EnumDirection.EAST), EnumDirection.EAST);
         boolean flag4 = (!flag || flag1 || !flag2 || flag3) && (flag || !flag1 || flag2 || !flag3);
 
         return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockCobbleWall.UP, flag4 || !world.isEmpty(blockposition.up()))).set(BlockCobbleWall.NORTH, flag)).set(BlockCobbleWall.EAST, flag1)).set(BlockCobbleWall.SOUTH, flag2)).set(BlockCobbleWall.WEST, flag3)).set(BlockCobbleWall.e, fluid.getType() == FluidTypes.WATER);
@@ -67,10 +67,10 @@ public class BlockCobbleWall extends BlockTall {
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
         } else {
             EnumDirection enumdirection1 = enumdirection.opposite();
-            boolean flag = enumdirection == EnumDirection.NORTH ? this.a(iblockdata1, Block.d(iblockdata1, generatoraccess, blockposition1, enumdirection1), enumdirection1) : (Boolean) iblockdata.get(BlockCobbleWall.NORTH);
-            boolean flag1 = enumdirection == EnumDirection.EAST ? this.a(iblockdata1, Block.d(iblockdata1, generatoraccess, blockposition1, enumdirection1), enumdirection1) : (Boolean) iblockdata.get(BlockCobbleWall.EAST);
-            boolean flag2 = enumdirection == EnumDirection.SOUTH ? this.a(iblockdata1, Block.d(iblockdata1, generatoraccess, blockposition1, enumdirection1), enumdirection1) : (Boolean) iblockdata.get(BlockCobbleWall.SOUTH);
-            boolean flag3 = enumdirection == EnumDirection.WEST ? this.a(iblockdata1, Block.d(iblockdata1, generatoraccess, blockposition1, enumdirection1), enumdirection1) : (Boolean) iblockdata.get(BlockCobbleWall.WEST);
+            boolean flag = enumdirection == EnumDirection.NORTH ? this.a(iblockdata1, iblockdata1.d(generatoraccess, blockposition1, enumdirection1), enumdirection1) : (Boolean) iblockdata.get(BlockCobbleWall.NORTH);
+            boolean flag1 = enumdirection == EnumDirection.EAST ? this.a(iblockdata1, iblockdata1.d(generatoraccess, blockposition1, enumdirection1), enumdirection1) : (Boolean) iblockdata.get(BlockCobbleWall.EAST);
+            boolean flag2 = enumdirection == EnumDirection.SOUTH ? this.a(iblockdata1, iblockdata1.d(generatoraccess, blockposition1, enumdirection1), enumdirection1) : (Boolean) iblockdata.get(BlockCobbleWall.SOUTH);
+            boolean flag3 = enumdirection == EnumDirection.WEST ? this.a(iblockdata1, iblockdata1.d(generatoraccess, blockposition1, enumdirection1), enumdirection1) : (Boolean) iblockdata.get(BlockCobbleWall.WEST);
             boolean flag4 = (!flag || flag1 || !flag2 || flag3) && (flag || !flag1 || flag2 || !flag3);
 
             return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockCobbleWall.UP, flag4 || !generatoraccess.isEmpty(blockposition.up()))).set(BlockCobbleWall.NORTH, flag)).set(BlockCobbleWall.EAST, flag1)).set(BlockCobbleWall.SOUTH, flag2)).set(BlockCobbleWall.WEST, flag3);

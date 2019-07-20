@@ -152,7 +152,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
                 d2 += (double) enumdirection.getAdjacentZ() * 0.5D;
             }
 
-            this.world.a((EntityHuman) null, d0, d1, d2, soundeffect, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+            this.world.playSound((EntityHuman) null, d0, d1, d2, soundeffect, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
         }
     }
 

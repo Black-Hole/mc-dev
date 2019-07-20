@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.mojang.datafixers.Dynamic;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 public class MemoryModuleType<U> {
@@ -23,6 +24,7 @@ public class MemoryModuleType<U> {
     public static final MemoryModuleType<EntityVillager> BREED_TARGET = a("breed_target");
     public static final MemoryModuleType<PathEntity> PATH = a("path");
     public static final MemoryModuleType<List<GlobalPos>> INTERACTABLE_DOORS = a("interactable_doors");
+    public static final MemoryModuleType<Set<GlobalPos>> OPENED_DOORS = a("opened_doors");
     public static final MemoryModuleType<BlockPosition> NEAREST_BED = a("nearest_bed");
     public static final MemoryModuleType<DamageSource> HURT_BY = a("hurt_by");
     public static final MemoryModuleType<EntityLiving> HURT_BY_ENTITY = a("hurt_by_entity");
@@ -33,10 +35,10 @@ public class MemoryModuleType<U> {
     public static final MemoryModuleType<Long> GOLEM_LAST_SEEN_TIME = a("golem_last_seen_time");
     public static final MemoryModuleType<MinecraftSerializableLong> LAST_SLEPT = a("last_slept", Optional.of(MinecraftSerializableLong::a));
     public static final MemoryModuleType<MinecraftSerializableLong> LAST_WORKED_AT_POI = a("last_worked_at_poi", Optional.of(MinecraftSerializableLong::a));
-    private final Optional<Function<Dynamic<?>, U>> A;
+    private final Optional<Function<Dynamic<?>, U>> B;
 
     private MemoryModuleType(Optional<Function<Dynamic<?>, U>> optional) {
-        this.A = optional;
+        this.B = optional;
     }
 
     public String toString() {
@@ -44,7 +46,7 @@ public class MemoryModuleType<U> {
     }
 
     public Optional<Function<Dynamic<?>, U>> getSerializer() {
-        return this.A;
+        return this.B;
     }
 
     private static <U extends MinecraftSerializable> MemoryModuleType<U> a(String s, Optional<Function<Dynamic<?>, U>> optional) {

@@ -38,7 +38,7 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
             } else if (!entityliving.isAlive()) {
                 return false;
             } else {
-                this.f = this.a.getNavigation().a((Entity) entityliving);
+                this.f = this.a.getNavigation().a((Entity) entityliving, 0);
                 return this.f != null ? true : this.a(entityliving) >= this.a.e(entityliving.locX, entityliving.getBoundingBox().minY, entityliving.locZ);
             }
         }

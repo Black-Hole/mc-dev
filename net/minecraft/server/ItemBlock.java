@@ -55,7 +55,7 @@ public class ItemBlock extends Item {
 
                     SoundEffectType soundeffecttype = iblockdata1.r();
 
-                    world.a(entityhuman, blockposition, this.a(iblockdata1), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
+                    world.playSound(entityhuman, blockposition, this.a(iblockdata1), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
                     itemstack.subtract(1);
                     return EnumInteractionResult.SUCCESS;
                 }

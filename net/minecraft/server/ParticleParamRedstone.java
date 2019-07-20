@@ -52,11 +52,11 @@ public class ParticleParamRedstone implements ParticleParam {
 
     @Override
     public String a() {
-        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", IRegistry.PARTICLE_TYPE.getKey(this.b()), this.c, this.d, this.e, this.f);
+        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", IRegistry.PARTICLE_TYPE.getKey(this.getParticle()), this.c, this.d, this.e, this.f);
     }
 
     @Override
-    public Particle<ParticleParamRedstone> b() {
+    public Particle<ParticleParamRedstone> getParticle() {
         return Particles.DUST;
     }
 }

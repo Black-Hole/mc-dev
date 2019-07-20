@@ -62,6 +62,6 @@ public class ChatComponentSelector extends ChatBaseComponent implements ChatComp
 
     @Override
     public String toString() {
-        return "SelectorComponent{pattern='" + this.c + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
+        return "SelectorComponent{pattern='" + this.c + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
     }
 }

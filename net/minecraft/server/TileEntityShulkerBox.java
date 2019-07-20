@@ -180,7 +180,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
             ++this.c;
             this.world.playBlockAction(this.position, this.getBlock().getBlock(), 1, this.c);
             if (this.c == 1) {
-                this.world.a((EntityHuman) null, this.position, SoundEffects.BLOCK_SHULKER_BOX_OPEN, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+                this.world.playSound((EntityHuman) null, this.position, SoundEffects.BLOCK_SHULKER_BOX_OPEN, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
             }
         }
 
@@ -192,7 +192,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
             --this.c;
             this.world.playBlockAction(this.position, this.getBlock().getBlock(), 1, this.c);
             if (this.c <= 0) {
-                this.world.a((EntityHuman) null, this.position, SoundEffects.BLOCK_SHULKER_BOX_CLOSE, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+                this.world.playSound((EntityHuman) null, this.position, SoundEffects.BLOCK_SHULKER_BOX_CLOSE, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
             }
         }
 

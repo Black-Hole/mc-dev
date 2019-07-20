@@ -98,7 +98,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
         return stringbuilder.toString();
     }
 
-    List<IChatBaseComponent> a();
+    List<IChatBaseComponent> getSiblings();
 
     Stream<IChatBaseComponent> c();
 
@@ -116,7 +116,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
         IChatBaseComponent ichatbasecomponent = this.g();
 
         ichatbasecomponent.setChatModifier(this.getChatModifier().clone());
-        Iterator iterator = this.a().iterator();
+        Iterator iterator = this.getSiblings().iterator();
 
         while (iterator.hasNext()) {
             IChatBaseComponent ichatbasecomponent1 = (IChatBaseComponent) iterator.next();
@@ -246,14 +246,14 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                 Object object;
 
                 if (jsonobject.has("text")) {
-                    object = new ChatComponentText(jsonobject.get("text").getAsString());
+                    object = new ChatComponentText(ChatDeserializer.h(jsonobject, "text"));
                 } else {
                     String s;
 
                     if (jsonobject.has("translate")) {
-                        s = jsonobject.get("translate").getAsString();
+                        s = ChatDeserializer.h(jsonobject, "translate");
                         if (jsonobject.has("with")) {
-                            JsonArray jsonarray1 = jsonobject.getAsJsonArray("with");
+                            JsonArray jsonarray1 = ChatDeserializer.u(jsonobject, "with");
                             Object[] aobject = new Object[jsonarray1.size()];
 
                             for (int i = 0; i < aobject.length; ++i) {
@@ -261,7 +261,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                                 if (aobject[i] instanceof ChatComponentText) {
                                     ChatComponentText chatcomponenttext = (ChatComponentText) aobject[i];
 
-                                    if (chatcomponenttext.getChatModifier().g() && chatcomponenttext.a().isEmpty()) {
+                                    if (chatcomponenttext.getChatModifier().g() && chatcomponenttext.getSiblings().isEmpty()) {
                                         aobject[i] = chatcomponenttext.i();
                                     }
                                 }
@@ -272,7 +272,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                             object = new ChatMessage(s, new Object[0]);
                         }
                     } else if (jsonobject.has("score")) {
-                        JsonObject jsonobject1 = jsonobject.getAsJsonObject("score");
+                        JsonObject jsonobject1 = ChatDeserializer.t(jsonobject, "score");
 
                         if (!jsonobject1.has("name") || !jsonobject1.has("objective")) {
                             throw new JsonParseException("A score component needs a least a name and an objective");
@@ -307,7 +307,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                 }
 
                 if (jsonobject.has("extra")) {
-                    JsonArray jsonarray2 = jsonobject.getAsJsonArray("extra");
+                    JsonArray jsonarray2 = ChatDeserializer.u(jsonobject, "extra");
 
                     if (jsonarray2.size() <= 0) {
                         throw new JsonParseException("Unexpected empty array of components");
@@ -346,9 +346,9 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                 this.a(ichatbasecomponent.getChatModifier(), jsonobject, jsonserializationcontext);
             }
 
-            if (!ichatbasecomponent.a().isEmpty()) {
+            if (!ichatbasecomponent.getSiblings().isEmpty()) {
                 JsonArray jsonarray = new JsonArray();
-                Iterator iterator = ichatbasecomponent.a().iterator();
+                Iterator iterator = ichatbasecomponent.getSiblings().iterator();
 
                 while (iterator.hasNext()) {
                     IChatBaseComponent ichatbasecomponent1 = (IChatBaseComponent) iterator.next();
@@ -364,10 +364,10 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
             } else if (ichatbasecomponent instanceof ChatMessage) {
                 ChatMessage chatmessage = (ChatMessage) ichatbasecomponent;
 
-                jsonobject.addProperty("translate", chatmessage.k());
-                if (chatmessage.l() != null && chatmessage.l().length > 0) {
+                jsonobject.addProperty("translate", chatmessage.getKey());
+                if (chatmessage.getArgs() != null && chatmessage.getArgs().length > 0) {
                     JsonArray jsonarray1 = new JsonArray();
-                    Object[] aobject = chatmessage.l();
+                    Object[] aobject = chatmessage.getArgs();
                     int i = aobject.length;
 
                     for (int j = 0; j < i; ++j) {

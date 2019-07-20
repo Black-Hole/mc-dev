@@ -12,7 +12,7 @@ public class ItemCooldown {
 
     public ItemCooldown() {}
 
-    public boolean a(Item item) {
+    public boolean hasCooldown(Item item) {
         return this.a(item, 0.0F) > 0.0F;
     }
 
@@ -46,7 +46,7 @@ public class ItemCooldown {
 
     }
 
-    public void a(Item item, int i) {
+    public void setCooldown(Item item, int i) {
         this.cooldowns.put(item, new ItemCooldown.Info(this.currentTick, this.currentTick + i));
         this.b(item, i);
     }

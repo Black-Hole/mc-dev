@@ -35,11 +35,11 @@ public class ParticleParamItem implements ParticleParam {
 
     @Override
     public String a() {
-        return IRegistry.PARTICLE_TYPE.getKey(this.b()) + " " + (new ArgumentPredicateItemStack(this.c.getItem(), this.c.getTag())).c();
+        return IRegistry.PARTICLE_TYPE.getKey(this.getParticle()) + " " + (new ArgumentPredicateItemStack(this.c.getItem(), this.c.getTag())).c();
     }
 
     @Override
-    public Particle<ParticleParamItem> b() {
+    public Particle<ParticleParamItem> getParticle() {
         return this.b;
     }
 }

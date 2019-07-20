@@ -806,7 +806,7 @@ public abstract class EntityLiving extends Entity {
             return false;
         } else {
             if (this.isSleeping() && !this.world.isClientSide) {
-                this.dz();
+                this.dy();
             }
 
             this.ticksFarFromPlayer = 0;
@@ -1031,7 +1031,7 @@ public abstract class EntityLiving extends Entity {
         if (entity instanceof EntityArrow) {
             EntityArrow entityarrow = (EntityArrow) entity;
 
-            if (entityarrow.s() > 0) {
+            if (entityarrow.getPierceLevel() > 0) {
                 flag = true;
             }
         }
@@ -1067,7 +1067,7 @@ public abstract class EntityLiving extends Entity {
             }
 
             if (this.isSleeping()) {
-                this.dz();
+                this.dy();
             }
 
             this.killed = true;
@@ -1125,7 +1125,7 @@ public abstract class EntityLiving extends Entity {
     protected void dropDeathLoot(DamageSource damagesource, int i, boolean flag) {}
 
     public MinecraftKey cG() {
-        return this.getEntityType().g();
+        return this.getEntityType().h();
     }
 
     protected void a(DamageSource damagesource, boolean flag) {
@@ -1140,7 +1140,7 @@ public abstract class EntityLiving extends Entity {
         LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).a(this.random).set(LootContextParameters.THIS_ENTITY, this).set(LootContextParameters.POSITION, new BlockPosition(this)).set(LootContextParameters.DAMAGE_SOURCE, damagesource).setOptional(LootContextParameters.KILLER_ENTITY, damagesource.getEntity()).setOptional(LootContextParameters.DIRECT_KILLER_ENTITY, damagesource.j());
 
         if (flag && this.killer != null) {
-            loottableinfo_builder = loottableinfo_builder.set(LootContextParameters.LAST_DAMAGE_PLAYER, this.killer).a(this.killer.ec());
+            loottableinfo_builder = loottableinfo_builder.set(LootContextParameters.LAST_DAMAGE_PLAYER, this.killer).a(this.killer.eb());
         }
 
         return loottableinfo_builder;
@@ -1452,11 +1452,11 @@ public abstract class EntityLiving extends Entity {
         AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
         if (attributeinstance.a(EntityLiving.b) != null) {
-            attributeinstance.c(EntityLiving.c);
+            attributeinstance.removeModifier(EntityLiving.c);
         }
 
         if (flag) {
-            attributeinstance.b(EntityLiving.c);
+            attributeinstance.addModifier(EntityLiving.c);
         }
 
     }
@@ -1812,8 +1812,8 @@ public abstract class EntityLiving extends Entity {
     @Override
     public void tick() {
         super.tick();
-        this.dl();
         this.o();
+        this.p();
         if (!this.world.isClientSide) {
             int i = this.getArrowCount();
 
@@ -1880,8 +1880,8 @@ public abstract class EntityLiving extends Entity {
                 }
             }
 
-            if (this.isSleeping() && !this.p()) {
-                this.dz();
+            if (this.isSleeping() && !this.r()) {
+                this.dy();
             }
         }
 
@@ -2292,11 +2292,11 @@ public abstract class EntityLiving extends Entity {
         return ((Byte) this.datawatcher.get(EntityLiving.ar) & 2) > 0 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
     }
 
-    protected void dl() {
+    private void o() {
         if (this.isHandRaised()) {
-            if (this.b(this.getRaisedHand()) == this.activeItem) {
-                this.activeItem.b(this.world, this, this.dn());
-                if (this.dn() <= 25 && this.dn() % 4 == 0) {
+            if (ItemStack.d(this.b(this.getRaisedHand()), this.activeItem)) {
+                this.activeItem.b(this.world, this, this.dm());
+                if (this.dm() <= 25 && this.dm() % 4 == 0) {
                     this.b(this.activeItem, 5);
                 }
 
@@ -2304,13 +2304,13 @@ public abstract class EntityLiving extends Entity {
                     this.q();
                 }
             } else {
-                this.dq();
+                this.dp();
             }
         }
 
     }
 
-    private void o() {
+    private void p() {
         this.bK = this.bJ;
         if (this.bk()) {
             this.bJ = Math.min(1.0F, this.bJ + 0.09F);
@@ -2411,35 +2411,35 @@ public abstract class EntityLiving extends Entity {
         if (!this.activeItem.isEmpty() && this.isHandRaised()) {
             this.b(this.activeItem, 16);
             this.a(this.getRaisedHand(), this.activeItem.a(this.world, this));
-            this.dq();
+            this.dp();
         }
 
     }
 
-    public ItemStack dm() {
+    public ItemStack dl() {
         return this.activeItem;
     }
 
-    public int dn() {
+    public int dm() {
         return this.bo;
     }
 
-    public int do_() {
-        return this.isHandRaised() ? this.activeItem.k() - this.dn() : 0;
+    public int dn() {
+        return this.isHandRaised() ? this.activeItem.k() - this.dm() : 0;
     }
 
     public void clearActiveItem() {
         if (!this.activeItem.isEmpty()) {
-            this.activeItem.a(this.world, this, this.dn());
+            this.activeItem.a(this.world, this, this.dm());
             if (this.activeItem.m()) {
-                this.dl();
+                this.o();
             }
         }
 
-        this.dq();
+        this.dp();
     }
 
-    public void dq() {
+    public void dp() {
         if (!this.world.isClientSide) {
             this.c(1, false);
         }
@@ -2518,11 +2518,11 @@ public abstract class EntityLiving extends Entity {
         }
     }
 
-    public boolean du() {
+    public boolean dt() {
         return true;
     }
 
-    public boolean dv() {
+    public boolean du() {
         return true;
     }
 
@@ -2548,7 +2548,7 @@ public abstract class EntityLiving extends Entity {
         this.datawatcher.set(EntityLiving.bs, Optional.of(blockposition));
     }
 
-    public void dx() {
+    public void dw() {
         this.datawatcher.set(EntityLiving.bs, Optional.empty());
     }
 
@@ -2578,13 +2578,13 @@ public abstract class EntityLiving extends Entity {
         this.setPosition((double) blockposition.getX() + 0.5D, (double) ((float) blockposition.getY() + 0.6875F), (double) blockposition.getZ() + 0.5D);
     }
 
-    private boolean p() {
+    private boolean r() {
         return (Boolean) this.getBedPosition().map((blockposition) -> {
             return this.world.getType(blockposition).getBlock() instanceof BlockBed;
         }).orElse(false);
     }
 
-    public void dz() {
+    public void dy() {
         Optional optional = this.getBedPosition();
         World world = this.world;
 
@@ -2605,7 +2605,7 @@ public abstract class EntityLiving extends Entity {
 
         });
         this.setPose(EntityPose.STANDING);
-        this.dx();
+        this.dw();
     }
 
     @Override
@@ -2628,7 +2628,7 @@ public abstract class EntityLiving extends Entity {
 
     public ItemStack a(World world, ItemStack itemstack) {
         if (itemstack.E()) {
-            world.a((EntityHuman) null, this.locX, this.locY, this.locZ, this.d(itemstack), SoundCategory.NEUTRAL, 1.0F, 1.0F + (world.random.nextFloat() - world.random.nextFloat()) * 0.4F);
+            world.playSound((EntityHuman) null, this.locX, this.locY, this.locZ, this.d(itemstack), SoundCategory.NEUTRAL, 1.0F, 1.0F + (world.random.nextFloat() - world.random.nextFloat()) * 0.4F);
             this.a(itemstack, world, this);
             itemstack.subtract(1);
         }

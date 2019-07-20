@@ -53,7 +53,7 @@ public class BlockFence extends BlockTall {
         IBlockData iblockdata2 = world.getType(blockposition3);
         IBlockData iblockdata3 = world.getType(blockposition4);
 
-        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) super.getPlacedState(blockactioncontext).set(BlockFence.NORTH, this.a(iblockdata, Block.d(iblockdata, world, blockposition1, EnumDirection.SOUTH), EnumDirection.SOUTH))).set(BlockFence.EAST, this.a(iblockdata1, Block.d(iblockdata1, world, blockposition2, EnumDirection.WEST), EnumDirection.WEST))).set(BlockFence.SOUTH, this.a(iblockdata2, Block.d(iblockdata2, world, blockposition3, EnumDirection.NORTH), EnumDirection.NORTH))).set(BlockFence.WEST, this.a(iblockdata3, Block.d(iblockdata3, world, blockposition4, EnumDirection.EAST), EnumDirection.EAST))).set(BlockFence.e, fluid.getType() == FluidTypes.WATER);
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) super.getPlacedState(blockactioncontext).set(BlockFence.NORTH, this.a(iblockdata, iblockdata.d(world, blockposition1, EnumDirection.SOUTH), EnumDirection.SOUTH))).set(BlockFence.EAST, this.a(iblockdata1, iblockdata1.d(world, blockposition2, EnumDirection.WEST), EnumDirection.WEST))).set(BlockFence.SOUTH, this.a(iblockdata2, iblockdata2.d(world, blockposition3, EnumDirection.NORTH), EnumDirection.NORTH))).set(BlockFence.WEST, this.a(iblockdata3, iblockdata3.d(world, blockposition4, EnumDirection.EAST), EnumDirection.EAST))).set(BlockFence.e, fluid.getType() == FluidTypes.WATER);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class BlockFence extends BlockTall {
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
-        return enumdirection.k().d() == EnumDirection.EnumDirectionLimit.HORIZONTAL ? (IBlockData) iblockdata.set((IBlockState) BlockFence.f.get(enumdirection), this.a(iblockdata1, Block.d(iblockdata1, generatoraccess, blockposition1, enumdirection.opposite()), enumdirection.opposite())) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return enumdirection.k().d() == EnumDirection.EnumDirectionLimit.HORIZONTAL ? (IBlockData) iblockdata.set((IBlockState) BlockFence.f.get(enumdirection), this.a(iblockdata1, iblockdata1.d(generatoraccess, blockposition1, enumdirection.opposite()), enumdirection.opposite())) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     @Override

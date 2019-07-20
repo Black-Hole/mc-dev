@@ -97,9 +97,10 @@ public class ControllerMove {
             this.a.o((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
             BlockPosition blockposition = new BlockPosition(this.a);
             IBlockData iblockdata = this.a.world.getType(blockposition);
+            Block block = iblockdata.getBlock();
             VoxelShape voxelshape = iblockdata.getCollisionShape(this.a.world, blockposition);
 
-            if (d2 > (double) this.a.K && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.a.getWidth()) || !voxelshape.isEmpty() && this.a.locY < voxelshape.c(EnumDirection.EnumAxis.Y) + (double) blockposition.getY()) {
+            if (d2 > (double) this.a.K && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.a.getWidth()) || !voxelshape.isEmpty() && this.a.locY < voxelshape.c(EnumDirection.EnumAxis.Y) + (double) blockposition.getY() && !block.a(TagsBlock.DOORS) && !block.a(TagsBlock.FENCES)) {
                 this.a.getControllerJump().jump();
                 this.h = ControllerMove.Operation.JUMPING;
             }

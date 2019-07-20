@@ -50,7 +50,7 @@ public class SystemUtils {
     }
 
     public static String a(String s, @Nullable MinecraftKey minecraftkey) {
-        return minecraftkey == null ? s + ".unregistered_sadface" : s + '.' + minecraftkey.b() + '.' + minecraftkey.getKey().replace('/', '.');
+        return minecraftkey == null ? s + ".unregistered_sadface" : s + '.' + minecraftkey.getNamespace() + '.' + minecraftkey.getKey().replace('/', '.');
     }
 
     public static long getMonotonicMillis() {

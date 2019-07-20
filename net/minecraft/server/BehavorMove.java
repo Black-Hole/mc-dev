@@ -80,11 +80,11 @@ public class BehavorMove extends Behavior<EntityInsentient> {
     private boolean a(EntityInsentient entityinsentient, MemoryTarget memorytarget, long i) {
         BlockPosition blockposition = memorytarget.a().a();
 
-        this.a = entityinsentient.getNavigation().b(blockposition);
+        this.a = entityinsentient.getNavigation().a(blockposition, 0);
         this.c = memorytarget.b();
         if (!this.a(entityinsentient, memorytarget)) {
             BehaviorController<?> behaviorcontroller = entityinsentient.getBehaviorController();
-            boolean flag = this.a != null && this.a.a(memorytarget.a().a());
+            boolean flag = this.a != null && this.a.h();
 
             if (flag) {
                 behaviorcontroller.setMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, Optional.empty());
@@ -99,7 +99,7 @@ public class BehavorMove extends Behavior<EntityInsentient> {
             Vec3D vec3d = RandomPositionGenerator.a((EntityCreature) entityinsentient, 10, 7, new Vec3D(blockposition));
 
             if (vec3d != null) {
-                this.a = entityinsentient.getNavigation().a(vec3d.x, vec3d.y, vec3d.z);
+                this.a = entityinsentient.getNavigation().a(vec3d.x, vec3d.y, vec3d.z, 0);
                 return this.a != null;
             }
         }

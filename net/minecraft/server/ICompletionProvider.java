@@ -57,7 +57,7 @@ public interface ICompletionProvider {
                 if (s1.startsWith(s)) {
                     consumer.accept(t0);
                 }
-            } else if (minecraftkey.b().startsWith(s) || minecraftkey.b().equals("minecraft") && minecraftkey.getKey().startsWith(s)) {
+            } else if (minecraftkey.getNamespace().startsWith(s) || minecraftkey.getNamespace().equals("minecraft") && minecraftkey.getKey().startsWith(s)) {
                 consumer.accept(t0);
             }
         }

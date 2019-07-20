@@ -38,7 +38,7 @@ public abstract class ResourceDataJson extends ResourceDataAbstract<Map<Minecraf
         while (iterator.hasNext()) {
             MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
             String s = minecraftkey.getKey();
-            MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.b(), s.substring(i, s.length() - ResourceDataJson.b));
+            MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.getNamespace(), s.substring(i, s.length() - ResourceDataJson.b));
 
             try {
                 IResource iresource = iresourcemanager.a(minecraftkey);

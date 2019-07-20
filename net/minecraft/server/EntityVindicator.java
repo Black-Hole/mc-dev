@@ -76,7 +76,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
     }
 
     @Override
-    public SoundEffect dW() {
+    public SoundEffect dV() {
         return SoundEffects.ENTITY_VINDICATOR_CELEBRATE;
     }
 
@@ -93,7 +93,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
 
     @Override
     protected void a(DifficultyDamageScaler difficultydamagescaler) {
-        if (this.ek() == null) {
+        if (this.ej() == null) {
             this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
         }
 
@@ -131,7 +131,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
     @Override
     public void a(int i, boolean flag) {
         ItemStack itemstack = new ItemStack(Items.IRON_AXE);
-        Raid raid = this.ek();
+        Raid raid = this.ej();
         byte b0 = 1;
 
         if (i > raid.a(EnumDifficulty.NORMAL)) {
@@ -153,7 +153,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
     static class b extends PathfinderGoalNearestAttackableTarget<EntityLiving> {
 
         public b(EntityVindicator entityvindicator) {
-            super(entityvindicator, EntityLiving.class, 0, true, true, EntityLiving::dv);
+            super(entityvindicator, EntityLiving.class, 0, true, true, EntityLiving::du);
         }
 
         @Override
@@ -179,14 +179,14 @@ public class EntityVindicator extends EntityIllagerAbstract {
         public boolean b() {
             EntityVindicator entityvindicator = (EntityVindicator) this.entity;
 
-            return entityvindicator.el() && super.b();
+            return entityvindicator.ek() && super.b();
         }
 
         @Override
         public boolean a() {
             EntityVindicator entityvindicator = (EntityVindicator) this.entity;
 
-            return entityvindicator.el() && entityvindicator.random.nextInt(10) == 0 && super.a();
+            return entityvindicator.ek() && entityvindicator.random.nextInt(10) == 0 && super.a();
         }
 
         @Override

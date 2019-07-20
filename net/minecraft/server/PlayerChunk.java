@@ -61,6 +61,10 @@ public class PlayerChunk {
         return completablefuture == null ? PlayerChunk.UNLOADED_CHUNK_ACCESS_FUTURE : completablefuture;
     }
 
+    public CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> b(ChunkStatus chunkstatus) {
+        return getChunkStatus(this.ticketLevel).b(chunkstatus) ? this.getStatusFutureUnchecked(chunkstatus) : PlayerChunk.UNLOADED_CHUNK_ACCESS_FUTURE;
+    }
+
     public CompletableFuture<Either<Chunk, PlayerChunk.Failure>> a() {
         return this.tickingFuture;
     }
@@ -79,6 +83,24 @@ public class PlayerChunk {
         Either<Chunk, PlayerChunk.Failure> either = (Either) completablefuture.getNow((Object) null);
 
         return either == null ? null : (Chunk) either.left().orElse((Object) null);
+    }
+
+    @Nullable
+    public IChunkAccess f() {
+        for (int i = PlayerChunk.CHUNK_STATUSES.size() - 1; i >= 0; --i) {
+            ChunkStatus chunkstatus = (ChunkStatus) PlayerChunk.CHUNK_STATUSES.get(i);
+            CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> completablefuture = this.getStatusFutureUnchecked(chunkstatus);
+
+            if (!completablefuture.isCompletedExceptionally()) {
+                Optional<IChunkAccess> optional = ((Either) completablefuture.getNow(PlayerChunk.UNLOADED_CHUNK_ACCESS)).left();
+
+                if (optional.isPresent()) {
+                    return (IChunkAccess) optional.get();
+                }
+            }
+        }
+
+        return null;
     }
 
     public CompletableFuture<IChunkAccess> getChunkSave() {

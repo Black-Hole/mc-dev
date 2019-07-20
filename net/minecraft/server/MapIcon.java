@@ -9,17 +9,17 @@ public class MapIcon {
     private byte x;
     private byte y;
     private byte rotation;
-    private final IChatBaseComponent e;
+    private final IChatBaseComponent name;
 
     public MapIcon(MapIcon.Type mapicon_type, byte b0, byte b1, byte b2, @Nullable IChatBaseComponent ichatbasecomponent) {
         this.type = mapicon_type;
         this.x = b0;
         this.y = b1;
         this.rotation = b2;
-        this.e = ichatbasecomponent;
+        this.name = ichatbasecomponent;
     }
 
-    public MapIcon.Type b() {
+    public MapIcon.Type getType() {
         return this.type;
     }
 
@@ -36,8 +36,8 @@ public class MapIcon {
     }
 
     @Nullable
-    public IChatBaseComponent g() {
-        return this.e;
+    public IChatBaseComponent getName() {
+        return this.name;
     }
 
     public boolean equals(Object object) {
@@ -48,7 +48,7 @@ public class MapIcon {
         } else {
             MapIcon mapicon = (MapIcon) object;
 
-            return this.type != mapicon.type ? false : (this.rotation != mapicon.rotation ? false : (this.x != mapicon.x ? false : (this.y != mapicon.y ? false : Objects.equals(this.e, mapicon.e))));
+            return this.type != mapicon.type ? false : (this.rotation != mapicon.rotation ? false : (this.x != mapicon.x ? false : (this.y != mapicon.y ? false : Objects.equals(this.name, mapicon.name))));
         }
     }
 
@@ -58,7 +58,7 @@ public class MapIcon {
 
         i = 31 * i + this.y;
         i = 31 * i + this.rotation;
-        i = 31 * i + Objects.hashCode(this.e);
+        i = 31 * i + Objects.hashCode(this.name);
         return i;
     }
 

@@ -17,16 +17,16 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
 
     private static final LocaleLanguage d = new LocaleLanguage();
     private static final LocaleLanguage e = LocaleLanguage.a();
-    private final String f;
-    private final Object[] g;
+    private final String key;
+    private final Object[] args;
     private final Object h = new Object();
     private long i = -1L;
     protected final List<IChatBaseComponent> b = Lists.newArrayList();
     public static final Pattern c = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
 
     public ChatMessage(String s, Object... aobject) {
-        this.f = s;
-        this.g = aobject;
+        this.key = s;
+        this.args = aobject;
 
         for (int i = 0; i < aobject.length; ++i) {
             Object object = aobject[i];
@@ -34,10 +34,10 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
             if (object instanceof IChatBaseComponent) {
                 IChatBaseComponent ichatbasecomponent = ((IChatBaseComponent) object).h();
 
-                this.g[i] = ichatbasecomponent;
+                this.args[i] = ichatbasecomponent;
                 ichatbasecomponent.getChatModifier().setChatModifier(this.getChatModifier());
             } else if (object == null) {
-                this.g[i] = "null";
+                this.args[i] = "null";
             }
         }
 
@@ -59,12 +59,12 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
         }
 
         try {
-            this.b(ChatMessage.e.a(this.f));
+            this.b(ChatMessage.e.a(this.key));
         } catch (ChatMessageException chatmessageexception) {
             this.b.clear();
 
             try {
-                this.b(ChatMessage.d.a(this.f));
+                this.b(ChatMessage.d.a(this.key));
             } catch (ChatMessageException chatmessageexception1) {
                 throw chatmessageexception;
             }
@@ -108,7 +108,7 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
                     String s3 = matcher.group(1);
                     int i1 = s3 != null ? Integer.parseInt(s3) - 1 : i++;
 
-                    if (i1 < this.g.length) {
+                    if (i1 < this.args.length) {
                         this.b.add(this.b(i1));
                     }
                 }
@@ -127,10 +127,10 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
     }
 
     private IChatBaseComponent b(int i) {
-        if (i >= this.g.length) {
+        if (i >= this.args.length) {
             throw new ChatMessageException(this, i);
         } else {
-            Object object = this.g[i];
+            Object object = this.args[i];
             Object object1;
 
             if (object instanceof IChatBaseComponent) {
@@ -147,7 +147,7 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
     @Override
     public IChatBaseComponent setChatModifier(ChatModifier chatmodifier) {
         super.setChatModifier(chatmodifier);
-        Object[] aobject = this.g;
+        Object[] aobject = this.args;
         int i = aobject.length;
 
         for (int j = 0; j < i; ++j) {
@@ -174,7 +174,7 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
     @Override
     public Stream<IChatBaseComponent> c() {
         this.i();
-        return Streams.concat(new Stream[]{this.b.stream(), this.a.stream()}).flatMap(IChatBaseComponent::c);
+        return Streams.concat(new Stream[]{this.b.stream(), this.siblings.stream()}).flatMap(IChatBaseComponent::c);
     }
 
     @Override
@@ -194,25 +194,25 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
 
     @Override
     public ChatMessage g() {
-        Object[] aobject = new Object[this.g.length];
+        Object[] aobject = new Object[this.args.length];
 
-        for (int i = 0; i < this.g.length; ++i) {
-            if (this.g[i] instanceof IChatBaseComponent) {
-                aobject[i] = ((IChatBaseComponent) this.g[i]).h();
+        for (int i = 0; i < this.args.length; ++i) {
+            if (this.args[i] instanceof IChatBaseComponent) {
+                aobject[i] = ((IChatBaseComponent) this.args[i]).h();
             } else {
-                aobject[i] = this.g[i];
+                aobject[i] = this.args[i];
             }
         }
 
-        return new ChatMessage(this.f, aobject);
+        return new ChatMessage(this.key, aobject);
     }
 
     @Override
     public IChatBaseComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity, int i) throws CommandSyntaxException {
-        Object[] aobject = new Object[this.g.length];
+        Object[] aobject = new Object[this.args.length];
 
         for (int j = 0; j < aobject.length; ++j) {
-            Object object = this.g[j];
+            Object object = this.args[j];
 
             if (object instanceof IChatBaseComponent) {
                 aobject[j] = ChatComponentUtils.filterForDisplay(commandlistenerwrapper, (IChatBaseComponent) object, entity, i);
@@ -221,7 +221,7 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
             }
         }
 
-        return new ChatMessage(this.f, aobject);
+        return new ChatMessage(this.key, aobject);
     }
 
     @Override
@@ -233,7 +233,7 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
         } else {
             ChatMessage chatmessage = (ChatMessage) object;
 
-            return Arrays.equals(this.g, chatmessage.g) && this.f.equals(chatmessage.f) && super.equals(object);
+            return Arrays.equals(this.args, chatmessage.args) && this.key.equals(chatmessage.key) && super.equals(object);
         }
     }
 
@@ -241,21 +241,21 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
     public int hashCode() {
         int i = super.hashCode();
 
-        i = 31 * i + this.f.hashCode();
-        i = 31 * i + Arrays.hashCode(this.g);
+        i = 31 * i + this.key.hashCode();
+        i = 31 * i + Arrays.hashCode(this.args);
         return i;
     }
 
     @Override
     public String toString() {
-        return "TranslatableComponent{key='" + this.f + '\'' + ", args=" + Arrays.toString(this.g) + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
+        return "TranslatableComponent{key='" + this.key + '\'' + ", args=" + Arrays.toString(this.args) + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
     }
 
-    public String k() {
-        return this.f;
+    public String getKey() {
+        return this.key;
     }
 
-    public Object[] l() {
-        return this.g;
+    public Object[] getArgs() {
+        return this.args;
     }
 }

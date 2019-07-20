@@ -80,7 +80,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
     }
 
     protected void a(@Nullable EntityHuman entityhuman, GeneratorAccess generatoraccess, BlockPosition blockposition, boolean flag) {
-        generatoraccess.a(flag ? entityhuman : null, blockposition, this.a(flag), SoundCategory.BLOCKS, 0.3F, flag ? 0.6F : 0.5F);
+        generatoraccess.playSound(flag ? entityhuman : null, blockposition, this.a(flag), SoundCategory.BLOCKS, 0.3F, flag ? 0.6F : 0.5F);
     }
 
     protected abstract SoundEffect a(boolean flag);

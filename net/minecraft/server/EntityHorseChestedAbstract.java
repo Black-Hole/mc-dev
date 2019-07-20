@@ -18,7 +18,7 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
     @Override
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.ey());
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.ex());
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.17499999701976776D);
         this.getAttributeInstance(EntityHorseChestedAbstract.attributeJumpStrength).setValue(0.5D);
     }
@@ -103,7 +103,7 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
             }
         }
 
-        this.eo();
+        this.en();
     }
 
     @Override
@@ -152,18 +152,18 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
                             return true;
                         }
 
-                        this.ev();
+                        this.eu();
                         return true;
                     }
 
                     if (!this.isCarryingChest() && itemstack.getItem() == Blocks.CHEST.getItem()) {
                         this.setCarryingChest(true);
-                        this.dZ();
+                        this.dY();
                         flag = true;
                         this.loadChest();
                     }
 
-                    if (!this.isBaby() && !this.er() && itemstack.getItem() == Items.SADDLE) {
+                    if (!this.isBaby() && !this.eq() && itemstack.getItem() == Items.SADDLE) {
                         this.e(entityhuman);
                         return true;
                     }
@@ -187,11 +187,11 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
         }
     }
 
-    protected void dZ() {
+    protected void dY() {
         this.a(SoundEffects.ENTITY_DONKEY_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 
-    public int ea() {
+    public int dZ() {
         return 5;
     }
 }

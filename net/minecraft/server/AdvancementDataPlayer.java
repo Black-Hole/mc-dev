@@ -144,7 +144,7 @@ public class AdvancementDataPlayer {
                         dynamic = dynamic.set("DataVersion", dynamic.createInt(1343));
                     }
 
-                    dynamic = this.d.aA().update(DataFixTypes.ADVANCEMENTS.a(), dynamic, dynamic.get("DataVersion").asInt(0), SharedConstants.a().getWorldVersion());
+                    dynamic = this.d.aB().update(DataFixTypes.ADVANCEMENTS.a(), dynamic, dynamic.get("DataVersion").asInt(0), SharedConstants.a().getWorldVersion());
                     dynamic = dynamic.remove("DataVersion");
                     Map<MinecraftKey, AdvancementProgress> map = (Map) AdvancementDataPlayer.b.getAdapter(AdvancementDataPlayer.c).fromJsonTree((JsonElement) dynamic.getValue());
 

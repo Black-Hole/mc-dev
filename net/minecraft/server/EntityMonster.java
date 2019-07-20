@@ -18,11 +18,11 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     @Override
     public void movementTick() {
         this.cO();
-        this.ec();
+        this.eb();
         super.movementTick();
     }
 
-    protected void ec() {
+    protected void eb() {
         float f = this.aF();
 
         if (f > 0.5F) {
@@ -72,7 +72,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return 0.5F - iworldreader.w(blockposition);
+        return 0.5F - iworldreader.v(blockposition);
     }
 
     public static boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, Random random) {

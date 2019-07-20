@@ -24,7 +24,7 @@ public abstract class EntityIllagerAbstract extends EntityRaider {
 
         @Override
         public boolean a() {
-            return super.a() && EntityIllagerAbstract.this.el();
+            return super.a() && EntityIllagerAbstract.this.ek();
         }
     }
 }

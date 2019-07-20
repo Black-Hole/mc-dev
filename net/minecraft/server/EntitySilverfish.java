@@ -5,8 +5,7 @@ import java.util.Random;
 
 public class EntitySilverfish extends EntityMonster {
 
-    private static final PathfinderTargetCondition b = (new PathfinderTargetCondition()).a(5.0D).e();
-    private EntitySilverfish.PathfinderGoalSilverfishWakeOthers c;
+    private EntitySilverfish.PathfinderGoalSilverfishWakeOthers b;
 
     public EntitySilverfish(EntityTypes<? extends EntitySilverfish> entitytypes, World world) {
         super(entitytypes, world);
@@ -14,9 +13,9 @@ public class EntitySilverfish extends EntityMonster {
 
     @Override
     protected void initPathfinder() {
-        this.c = new EntitySilverfish.PathfinderGoalSilverfishWakeOthers(this);
+        this.b = new EntitySilverfish.PathfinderGoalSilverfishWakeOthers(this);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(3, this.c);
+        this.goalSelector.a(3, this.b);
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.goalSelector.a(5, new EntitySilverfish.PathfinderGoalSilverfishHideInBlock(this));
         this.targetSelector.a(1, (new PathfinderGoalHurtByTarget(this, new Class[0])).a());
@@ -71,8 +70,8 @@ public class EntitySilverfish extends EntityMonster {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            if ((damagesource instanceof EntityDamageSource || damagesource == DamageSource.MAGIC) && this.c != null) {
-                this.c.g();
+            if ((damagesource instanceof EntityDamageSource || damagesource == DamageSource.MAGIC) && this.b != null) {
+                this.b.g();
             }
 
             return super.damageEntity(damagesource, f);
@@ -98,7 +97,7 @@ public class EntitySilverfish extends EntityMonster {
 
     public static boolean b(EntityTypes<EntitySilverfish> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
         if (d(entitytypes, generatoraccess, enummobspawn, blockposition, random)) {
-            EntityHuman entityhuman = generatoraccess.a(EntitySilverfish.b, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
+            EntityHuman entityhuman = generatoraccess.a((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, 5.0D, true);
 
             return entityhuman == null;
         } else {

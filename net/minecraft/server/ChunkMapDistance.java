@@ -36,8 +36,8 @@ public abstract class ChunkMapDistance {
     private final ChunkMapDistance.a e = new ChunkMapDistance.a();
     private final ChunkMapDistance.b f = new ChunkMapDistance.b(8);
     private final ChunkMapDistance.c g = new ChunkMapDistance.c(33);
-    private final Set<PlayerChunk> h = Sets.newHashSet();
-    private final PlayerChunk.c i;
+    private final Set<PlayerChunk> pendingChunkUpdates = Sets.newHashSet();
+    private final ChunkTaskQueueSorter i;
     private final Mailbox<ChunkTaskQueueSorter.a<Runnable>> j;
     private final Mailbox<ChunkTaskQueueSorter.b> k;
     private final LongSet l = new LongOpenHashSet();
@@ -45,12 +45,13 @@ public abstract class ChunkMapDistance {
     private long currentTick;
 
     protected ChunkMapDistance(Executor executor, Executor executor1) {
-        ThreadedMailbox<Runnable> threadedmailbox = ThreadedMailbox.a(executor1, "player ticket throttler");
-        ChunkTaskQueueSorter chunktaskqueuesorter = new ChunkTaskQueueSorter(ImmutableList.of(threadedmailbox), executor, 15);
+        executor1.getClass();
+        Mailbox<Runnable> mailbox = Mailbox.a("player ticket throttler", executor1::execute);
+        ChunkTaskQueueSorter chunktaskqueuesorter = new ChunkTaskQueueSorter(ImmutableList.of(mailbox), executor, 4);
 
         this.i = chunktaskqueuesorter;
-        this.j = chunktaskqueuesorter.a(threadedmailbox, true);
-        this.k = chunktaskqueuesorter.a((Mailbox) threadedmailbox);
+        this.j = chunktaskqueuesorter.a(mailbox, true);
+        this.k = chunktaskqueuesorter.a(mailbox);
         this.m = executor1;
     }
 
@@ -98,11 +99,11 @@ public abstract class ChunkMapDistance {
             ;
         }
 
-        if (!this.h.isEmpty()) {
-            this.h.forEach((playerchunk) -> {
+        if (!this.pendingChunkUpdates.isEmpty()) {
+            this.pendingChunkUpdates.forEach((playerchunk) -> {
                 playerchunk.a(playerchunkmap);
             });
-            this.h.clear();
+            this.pendingChunkUpdates.clear();
             return true;
         } else {
             if (!this.l.isEmpty()) {
@@ -138,7 +139,7 @@ public abstract class ChunkMapDistance {
         }
     }
 
-    private void a(long i, Ticket<?> ticket) {
+    private void addTicket(long i, Ticket<?> ticket) {
         ObjectSortedSet<Ticket<?>> objectsortedset = this.e(i);
         ObjectBidirectionalIterator<Ticket<?>> objectbidirectionaliterator = objectsortedset.iterator();
         int j;
@@ -159,7 +160,7 @@ public abstract class ChunkMapDistance {
 
     }
 
-    private void b(long i, Ticket<?> ticket) {
+    private void removeTicket(long i, Ticket<?> ticket) {
         ObjectSortedSet<Ticket<?>> objectsortedset = this.e(i);
 
         if (objectsortedset.remove(ticket)) {
@@ -174,23 +175,23 @@ public abstract class ChunkMapDistance {
     }
 
     public <T> void a(TicketType<T> tickettype, ChunkCoordIntPair chunkcoordintpair, int i, T t0) {
-        this.a(chunkcoordintpair.pair(), new Ticket<>(tickettype, i, t0, this.currentTick));
+        this.addTicket(chunkcoordintpair.pair(), new Ticket<>(tickettype, i, t0, this.currentTick));
     }
 
     public <T> void b(TicketType<T> tickettype, ChunkCoordIntPair chunkcoordintpair, int i, T t0) {
         Ticket<T> ticket = new Ticket<>(tickettype, i, t0, this.currentTick);
 
-        this.b(chunkcoordintpair.pair(), ticket);
+        this.removeTicket(chunkcoordintpair.pair(), ticket);
     }
 
     public <T> void addTicket(TicketType<T> tickettype, ChunkCoordIntPair chunkcoordintpair, int i, T t0) {
-        this.a(chunkcoordintpair.pair(), new Ticket<>(tickettype, 33 - i, t0, this.currentTick));
+        this.addTicket(chunkcoordintpair.pair(), new Ticket<>(tickettype, 33 - i, t0, this.currentTick));
     }
 
     public <T> void removeTicket(TicketType<T> tickettype, ChunkCoordIntPair chunkcoordintpair, int i, T t0) {
         Ticket<T> ticket = new Ticket<>(tickettype, 33 - i, t0, this.currentTick);
 
-        this.b(chunkcoordintpair.pair(), ticket);
+        this.removeTicket(chunkcoordintpair.pair(), ticket);
     }
 
     private ObjectSortedSet<Ticket<?>> e(long i) {
@@ -203,9 +204,9 @@ public abstract class ChunkMapDistance {
         Ticket<ChunkCoordIntPair> ticket = new Ticket<>(TicketType.FORCED, 31, chunkcoordintpair, this.currentTick);
 
         if (flag) {
-            this.a(chunkcoordintpair.pair(), ticket);
+            this.addTicket(chunkcoordintpair.pair(), ticket);
         } else {
-            this.b(chunkcoordintpair.pair(), ticket);
+            this.removeTicket(chunkcoordintpair.pair(), ticket);
         }
 
     }
@@ -233,6 +234,19 @@ public abstract class ChunkMapDistance {
 
     }
 
+    protected String c(long i) {
+        ObjectSortedSet<Ticket<?>> objectsortedset = (ObjectSortedSet) this.tickets.get(i);
+        String s;
+
+        if (objectsortedset != null && !objectsortedset.isEmpty()) {
+            s = ((Ticket) objectsortedset.first()).toString();
+        } else {
+            s = "no_ticket";
+        }
+
+        return s;
+    }
+
     protected void a(int i) {
         this.g.a(i);
     }
@@ -245,6 +259,10 @@ public abstract class ChunkMapDistance {
     public boolean d(long i) {
         this.f.a();
         return this.f.a.containsKey(i);
+    }
+
+    public String c() {
+        return this.i.a();
     }
 
     class a extends ChunkMap {
@@ -287,7 +305,7 @@ public abstract class ChunkMapDistance {
             if (k != j) {
                 playerchunk = ChunkMapDistance.this.a(i, j, playerchunk, k);
                 if (playerchunk != null) {
-                    ChunkMapDistance.this.h.add(playerchunk);
+                    ChunkMapDistance.this.pendingChunkUpdates.add(playerchunk);
                 }
 
             }
@@ -335,8 +353,14 @@ public abstract class ChunkMapDistance {
                 if (flag1) {
                     ChunkMapDistance.this.j.a((Object) ChunkTaskQueueSorter.a(() -> {
                         ChunkMapDistance.this.m.execute(() -> {
-                            ChunkMapDistance.this.a(i, ticket);
-                            ChunkMapDistance.this.l.add(i);
+                            if (this.c(this.c(i))) {
+                                ChunkMapDistance.this.addTicket(i, ticket);
+                                ChunkMapDistance.this.l.add(i);
+                            } else {
+                                ChunkMapDistance.this.k.a((Object) ChunkTaskQueueSorter.a(() -> {
+                                }, i, false));
+                            }
+
                         });
                     }, i, () -> {
                         return j;
@@ -344,7 +368,7 @@ public abstract class ChunkMapDistance {
                 } else {
                     ChunkMapDistance.this.k.a((Object) ChunkTaskQueueSorter.a(() -> {
                         ChunkMapDistance.this.m.execute(() -> {
-                            ChunkMapDistance.this.b(i, ticket);
+                            ChunkMapDistance.this.removeTicket(i, ticket);
                         });
                     }, i, true));
                 }
@@ -367,7 +391,12 @@ public abstract class ChunkMapDistance {
                         ChunkMapDistance.this.i.a(new ChunkCoordIntPair(i), () -> {
                             return this.f.get(i);
                         }, k, (l) -> {
-                            this.f.put(i, l);
+                            if (l >= this.f.defaultReturnValue()) {
+                                this.f.remove(i);
+                            } else {
+                                this.f.put(i, l);
+                            }
+
                         });
                         this.a(i, k, this.c(j), this.c(k));
                     }

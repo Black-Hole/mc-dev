@@ -340,7 +340,7 @@ public class EnchantmentManager {
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
-            if (!weightedrandomenchant.enchantment.b(((WeightedRandomEnchant) iterator.next()).enchantment)) {
+            if (!weightedrandomenchant.enchantment.isCompatible(((WeightedRandomEnchant) iterator.next()).enchantment)) {
                 iterator.remove();
             }
         }
@@ -358,7 +358,7 @@ public class EnchantmentManager {
             }
 
             enchantment1 = (Enchantment) iterator.next();
-        } while (enchantment1.b(enchantment));
+        } while (enchantment1.isCompatible(enchantment));
 
         return false;
     }

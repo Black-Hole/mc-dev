@@ -31,7 +31,7 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
 
                 for (int j = 0; j < i; ++j) {
                     blockposition1 = blockposition1.b(random.nextInt(3) - 1, 1, random.nextInt(3) - 1);
-                    if (!world.o(blockposition1)) {
+                    if (!world.n(blockposition1)) {
                         return;
                     }
 
@@ -50,7 +50,7 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
                 for (int k = 0; k < 3; ++k) {
                     BlockPosition blockposition2 = blockposition.b(random.nextInt(3) - 1, 0, random.nextInt(3) - 1);
 
-                    if (!world.o(blockposition2)) {
+                    if (!world.n(blockposition2)) {
                         return;
                     }
 

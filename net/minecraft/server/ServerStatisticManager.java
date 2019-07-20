@@ -36,7 +36,7 @@ public class ServerStatisticManager extends StatisticManager {
         this.d = file;
         if (file.isFile()) {
             try {
-                this.a(minecraftserver.aA(), org.apache.commons.io.FileUtils.readFileToString(file));
+                this.a(minecraftserver.aB(), org.apache.commons.io.FileUtils.readFileToString(file));
             } catch (IOException ioexception) {
                 ServerStatisticManager.LOGGER.error("Couldn't read statistics file {}", file, ioexception);
             } catch (JsonParseException jsonparseexception) {
@@ -147,7 +147,7 @@ public class ServerStatisticManager extends StatisticManager {
 
     private <T> Optional<Statistic<T>> a(StatisticWrapper<T> statisticwrapper, String s) {
         Optional optional = Optional.ofNullable(MinecraftKey.a(s));
-        IRegistry iregistry = statisticwrapper.a();
+        IRegistry iregistry = statisticwrapper.getRegistry();
 
         iregistry.getClass();
         optional = optional.flatMap(iregistry::getOptional);
@@ -185,7 +185,7 @@ public class ServerStatisticManager extends StatisticManager {
             it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<Statistic<?>> it_unimi_dsi_fastutil_objects_object2intmap_entry = (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry) objectiterator.next();
             Statistic<?> statistic = (Statistic) it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey();
 
-            ((JsonObject) map.computeIfAbsent(statistic.a(), (statisticwrapper) -> {
+            ((JsonObject) map.computeIfAbsent(statistic.getWrapper(), (statisticwrapper) -> {
                 return new JsonObject();
             })).addProperty(b(statistic).toString(), it_unimi_dsi_fastutil_objects_object2intmap_entry.getIntValue());
         }
@@ -207,7 +207,7 @@ public class ServerStatisticManager extends StatisticManager {
     }
 
     private static <T> MinecraftKey b(Statistic<T> statistic) {
-        return statistic.a().a().getKey(statistic.b());
+        return statistic.getWrapper().getRegistry().getKey(statistic.b());
     }
 
     public void c() {
@@ -215,7 +215,7 @@ public class ServerStatisticManager extends StatisticManager {
     }
 
     public void a(EntityPlayer entityplayer) {
-        int i = this.c.ai();
+        int i = this.c.aj();
         Object2IntMap<Statistic<?>> object2intmap = new Object2IntOpenHashMap();
 
         if (i - this.f > 300) {

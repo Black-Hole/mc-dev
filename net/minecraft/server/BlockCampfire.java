@@ -116,7 +116,7 @@ public class BlockCampfire extends BlockTileEntity implements IBlockWaterlogged 
                         a(generatoraccess.getMinecraftWorld(), blockposition, (Boolean) iblockdata.get(BlockCampfire.c), true);
                     }
                 } else {
-                    generatoraccess.a((EntityHuman) null, blockposition, SoundEffects.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
 
                 TileEntity tileentity = generatoraccess.getTileEntity(blockposition);

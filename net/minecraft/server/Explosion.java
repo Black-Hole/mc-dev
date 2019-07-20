@@ -178,7 +178,7 @@ public class Explosion {
     }
 
     public void a(boolean flag) {
-        this.world.a((EntityHuman) null, this.posX, this.posY, this.posZ, SoundEffects.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F);
+        this.world.playSound((EntityHuman) null, this.posX, this.posY, this.posZ, SoundEffects.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F);
         boolean flag1 = this.b != Explosion.Effect.NONE;
 
         if (this.size >= 2.0F && flag1) {

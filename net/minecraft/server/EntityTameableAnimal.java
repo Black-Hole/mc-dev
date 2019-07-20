@@ -12,7 +12,7 @@ public abstract class EntityTameableAnimal extends EntityAnimal {
 
     protected EntityTameableAnimal(EntityTypes<? extends EntityTameableAnimal> entitytypes, World world) {
         super(entitytypes, world);
-        this.dX();
+        this.dW();
     }
 
     @Override
@@ -98,10 +98,10 @@ public abstract class EntityTameableAnimal extends EntityAnimal {
             this.datawatcher.set(EntityTameableAnimal.bz, (byte) (b0 & -5));
         }
 
-        this.dX();
+        this.dW();
     }
 
-    protected void dX() {}
+    protected void dW() {}
 
     public boolean isSitting() {
         return ((Byte) this.datawatcher.get(EntityTameableAnimal.bz) & 1) != 0;

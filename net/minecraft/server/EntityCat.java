@@ -42,7 +42,7 @@ public class EntityCat extends EntityTameableAnimal {
         super(entitytypes, world);
     }
 
-    public MinecraftKey ef() {
+    public MinecraftKey ee() {
         return (MinecraftKey) EntityCat.bC.get(this.getCatType());
     }
 
@@ -82,7 +82,7 @@ public class EntityCat extends EntityTameableAnimal {
         this.datawatcher.set(EntityCat.bF, flag);
     }
 
-    public boolean eh() {
+    public boolean eg() {
         return (Boolean) this.datawatcher.get(EntityCat.bF);
     }
 
@@ -90,7 +90,7 @@ public class EntityCat extends EntityTameableAnimal {
         this.datawatcher.set(EntityCat.bG, flag);
     }
 
-    public boolean ei() {
+    public boolean eh() {
         return (Boolean) this.datawatcher.get(EntityCat.bG);
     }
 
@@ -161,7 +161,7 @@ public class EntityCat extends EntityTameableAnimal {
         return 120;
     }
 
-    public void ek() {
+    public void ej() {
         this.a(SoundEffects.ENTITY_CAT_HISS, this.getSoundVolume(), this.cV());
     }
 
@@ -206,22 +206,22 @@ public class EntityCat extends EntityTameableAnimal {
             this.a(SoundEffects.ENTITY_CAT_BEG_FOR_FOOD, 1.0F, 1.0F);
         }
 
-        this.el();
+        this.ek();
     }
 
-    private void el() {
-        if ((this.eh() || this.ei()) && this.ticksLived % 5 == 0) {
+    private void ek() {
+        if ((this.eg() || this.eh()) && this.ticksLived % 5 == 0) {
             this.a(SoundEffects.ENTITY_CAT_PURR, 0.6F + 0.4F * (this.random.nextFloat() - this.random.nextFloat()), 1.0F);
         }
 
+        this.el();
         this.em();
-        this.en();
     }
 
-    private void em() {
+    private void el() {
         this.bL = this.bK;
         this.bN = this.bM;
-        if (this.eh()) {
+        if (this.eg()) {
             this.bK = Math.min(1.0F, this.bK + 0.15F);
             this.bM = Math.min(1.0F, this.bM + 0.08F);
         } else {
@@ -231,9 +231,9 @@ public class EntityCat extends EntityTameableAnimal {
 
     }
 
-    private void en() {
+    private void em() {
         this.bP = this.bO;
-        if (this.ei()) {
+        if (this.eh()) {
             this.bO = Math.min(1.0F, this.bO + 0.1F);
         } else {
             this.bO = Math.max(0.0F, this.bO - 0.13F);
@@ -369,7 +369,7 @@ public class EntityCat extends EntityTameableAnimal {
     }
 
     @Override
-    protected void dX() {
+    protected void dW() {
         if (this.bI == null) {
             this.bI = new EntityCat.a<>(this, EntityHuman.class, 16.0F, 0.8D, 1.33D);
         }
@@ -440,7 +440,7 @@ public class EntityCat extends EntityTameableAnimal {
 
                     entitycat = (EntityCat) iterator.next();
                 } while (entitycat == this.a);
-            } while (!entitycat.eh() && !entitycat.ei());
+            } while (!entitycat.eg() && !entitycat.eh());
 
             return true;
         }
@@ -464,7 +464,7 @@ public class EntityCat extends EntityTameableAnimal {
             this.a.u(false);
             float f = this.a.world.j(1.0F);
 
-            if (this.b.dK() >= 100 && (double) f > 0.77D && (double) f < 0.8D && (double) this.a.world.getRandom().nextFloat() < 0.7D) {
+            if (this.b.dJ() >= 100 && (double) f > 0.77D && (double) f < 0.8D && (double) this.a.world.getRandom().nextFloat() < 0.7D) {
                 this.h();
             }
 

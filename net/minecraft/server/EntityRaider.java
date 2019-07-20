@@ -42,7 +42,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
 
     public abstract void a(int i, boolean flag);
 
-    public boolean ej() {
+    public boolean ei() {
         return this.bA;
     }
 
@@ -53,9 +53,9 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     @Override
     public void movementTick() {
         if (this.world instanceof WorldServer && this.isAlive()) {
-            Raid raid = this.ek();
+            Raid raid = this.ej();
 
-            if (this.ej()) {
+            if (this.ei()) {
                 if (raid == null) {
                     if (this.world.getTime() % 20L == 0L) {
                         Raid raid1 = ((WorldServer) this.world).c_(new BlockPosition(this));
@@ -78,7 +78,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     }
 
     @Override
-    protected void ec() {
+    protected void eb() {
         this.ticksFarFromPlayer += 2;
     }
 
@@ -86,11 +86,11 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     public void die(DamageSource damagesource) {
         if (this.world instanceof WorldServer) {
             Entity entity = damagesource.getEntity();
-            Raid raid = this.ek();
+            Raid raid = this.ej();
 
             if (raid != null) {
                 if (this.isPatrolLeader()) {
-                    raid.c(this.em());
+                    raid.c(this.el());
                 }
 
                 if (entity != null && entity.getEntityType() == EntityTypes.PLAYER) {
@@ -130,7 +130,9 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
                     i = MathHelper.clamp(i, 0, 5);
                     MobEffect mobeffect1 = new MobEffect(MobEffects.BAD_OMEN, 120000, i, false, false, true);
 
-                    entityhuman.addEffect(mobeffect1);
+                    if (!this.world.getGameRules().getBoolean(GameRules.x)) {
+                        entityhuman.addEffect(mobeffect1);
+                    }
                 }
             }
         }
@@ -139,8 +141,8 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     }
 
     @Override
-    public boolean ed() {
-        return !this.el();
+    public boolean ec() {
+        return !this.ek();
     }
 
     public void a(@Nullable Raid raid) {
@@ -148,19 +150,19 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     }
 
     @Nullable
-    public Raid ek() {
+    public Raid ej() {
         return this.d;
     }
 
-    public boolean el() {
-        return this.ek() != null && this.ek().v();
+    public boolean ek() {
+        return this.ej() != null && this.ej().v();
     }
 
     public void a(int i) {
         this.bz = i;
     }
 
-    public int em() {
+    public int el() {
         return this.bz;
     }
 
@@ -202,9 +204,9 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     @Override
     protected void a(EntityItem entityitem) {
         ItemStack itemstack = entityitem.getItemStack();
-        boolean flag = this.el() && this.ek().b(this.em()) != null;
+        boolean flag = this.ek() && this.ej().b(this.el()) != null;
 
-        if (this.el() && !flag && ItemStack.matches(itemstack, Raid.s())) {
+        if (this.ek() && !flag && ItemStack.matches(itemstack, Raid.s())) {
             EnumItemSlot enumitemslot = EnumItemSlot.HEAD;
             ItemStack itemstack1 = this.getEquipment(enumitemslot);
             double d0 = (double) this.d(enumitemslot);
@@ -216,7 +218,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
             this.setSlot(enumitemslot, itemstack);
             this.receive(entityitem, itemstack.getCount());
             entityitem.die();
-            this.ek().a(this.em(), this);
+            this.ej().a(this.el(), this);
             this.setPatrolLeader(true);
         } else {
             super.a(entityitem);
@@ -226,15 +228,15 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
 
     @Override
     public boolean isTypeNotPersistent(double d0) {
-        return this.ek() == null ? super.isTypeNotPersistent(d0) : false;
+        return this.ej() == null ? super.isTypeNotPersistent(d0) : false;
     }
 
     @Override
     public boolean I() {
-        return this.ek() != null;
+        return this.ej() != null;
     }
 
-    public int eo() {
+    public int en() {
         return this.bB;
     }
 
@@ -244,8 +246,8 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
 
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
-        if (this.el()) {
-            this.ek().p();
+        if (this.ek()) {
+            this.ej().p();
         }
 
         return super.damageEntity(damagesource, f);
@@ -258,7 +260,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
         return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
-    public abstract SoundEffect dW();
+    public abstract SoundEffect dV();
 
     static class d extends PathfinderGoal {
 
@@ -283,7 +285,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
         }
 
         private boolean g() {
-            return this.a.el() && !this.a.ek().a();
+            return this.a.ek() && !this.a.ej().a();
         }
 
         private boolean h() {
@@ -303,12 +305,12 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
 
         @Override
         public boolean b() {
-            return this.a.getNavigation().n() ? false : this.a.getGoalTarget() == null && !this.c.a((IPosition) this.a.ci(), (double) (this.a.getWidth() + (float) this.e)) && !this.f;
+            return this.a.getNavigation().n() ? false : this.a.getGoalTarget() == null && !this.c.a((IPosition) this.a.getPositionVector(), (double) (this.a.getWidth() + (float) this.e)) && !this.f;
         }
 
         @Override
         public void d() {
-            if (this.c.a((IPosition) this.a.ci(), (double) this.e)) {
+            if (this.c.a((IPosition) this.a.getPositionVector(), (double) this.e)) {
                 this.d.add(this.c);
             }
 
@@ -384,7 +386,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
         public boolean a() {
             EntityLiving entityliving = this.c.getLastDamager();
 
-            return this.c.ek() == null && this.c.isPatrolling() && this.c.getGoalTarget() != null && !this.c.dS() && (entityliving == null || entityliving.getEntityType() != EntityTypes.PLAYER);
+            return this.c.ej() == null && this.c.isPatrolling() && this.c.getGoalTarget() != null && !this.c.dR() && (entityliving == null || entityliving.getEntityType() != EntityTypes.PLAYER);
         }
 
         @Override
@@ -453,7 +455,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
 
         @Override
         public boolean a() {
-            Raid raid = this.b.ek();
+            Raid raid = this.b.ej();
 
             return this.b.isAlive() && this.b.getGoalTarget() == null && raid != null && raid.f();
         }
@@ -473,7 +475,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
         @Override
         public void e() {
             if (!this.b.isSilent() && this.b.random.nextInt(100) == 0) {
-                EntityRaider.this.a(EntityRaider.this.dW(), EntityRaider.this.getSoundVolume(), EntityRaider.this.cV());
+                EntityRaider.this.a(EntityRaider.this.dV(), EntityRaider.this.getSoundVolume(), EntityRaider.this.cV());
             }
 
             if (!this.b.isPassenger() && this.b.random.nextInt(50) == 0) {
@@ -495,10 +497,10 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
 
         @Override
         public boolean a() {
-            Raid raid = this.b.ek();
+            Raid raid = this.b.ej();
 
-            if (this.b.el() && !this.b.ek().a() && this.b.dY() && !ItemStack.matches(this.b.getEquipment(EnumItemSlot.HEAD), Raid.s())) {
-                EntityRaider entityraider = raid.b(this.b.em());
+            if (this.b.ek() && !this.b.ej().a() && this.b.dX() && !ItemStack.matches(this.b.getEquipment(EnumItemSlot.HEAD), Raid.s())) {
+                EntityRaider entityraider = raid.b(this.b.el());
 
                 if (entityraider == null || !entityraider.isAlive()) {
                     List<EntityItem> list = this.b.world.a(EntityItem.class, this.b.getBoundingBox().grow(16.0D, 8.0D, 16.0D), EntityRaider.b);
@@ -516,7 +518,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
 
         @Override
         public void e() {
-            if (this.b.getNavigation().h().a((IPosition) this.b.ci(), 1.414D)) {
+            if (this.b.getNavigation().h().a((IPosition) this.b.getPositionVector(), 1.414D)) {
                 List<EntityItem> list = this.b.world.a(EntityItem.class, this.b.getBoundingBox().grow(4.0D, 4.0D, 4.0D), EntityRaider.b);
 
                 if (!list.isEmpty()) {

@@ -61,7 +61,7 @@ public class ContainerStonecutter extends Container {
                     long j = world.getTime();
 
                     if (ContainerStonecutter.this.l != j) {
-                        world.a((EntityHuman) null, blockposition, SoundEffects.UI_STONECUTTER_TAKE_RESULT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        world.playSound((EntityHuman) null, blockposition, SoundEffects.UI_STONECUTTER_TAKE_RESULT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                         ContainerStonecutter.this.l = j;
                     }
 
@@ -93,7 +93,7 @@ public class ContainerStonecutter extends Container {
     @Override
     public boolean a(EntityHuman entityhuman, int i) {
         if (i >= 0 && i < this.j.size()) {
-            this.containerProperty.a(i);
+            this.containerProperty.set(i);
             this.i();
         }
 
@@ -113,7 +113,7 @@ public class ContainerStonecutter extends Container {
 
     private void a(IInventory iinventory, ItemStack itemstack) {
         this.j.clear();
-        this.containerProperty.a(-1);
+        this.containerProperty.set(-1);
         this.e.set(ItemStack.a);
         if (!itemstack.isEmpty()) {
             this.j = this.world.getCraftingManager().b(Recipes.STONECUTTING, iinventory, this.world);
@@ -123,7 +123,7 @@ public class ContainerStonecutter extends Container {
 
     private void i() {
         if (!this.j.isEmpty()) {
-            RecipeStonecutting recipestonecutting = (RecipeStonecutting) this.j.get(this.containerProperty.b());
+            RecipeStonecutting recipestonecutting = (RecipeStonecutting) this.j.get(this.containerProperty.get());
 
             this.e.set(recipestonecutting.a(this.inventory));
         } else {

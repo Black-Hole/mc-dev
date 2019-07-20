@@ -13,6 +13,10 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -42,15 +46,14 @@ public class WorldServer extends World {
     private final MinecraftServer server;
     private final WorldNBTStorage dataManager;
     public boolean savingDisabled;
-    private boolean D;
+    private boolean C;
     private int emptyTime;
     private final PortalTravelAgent portalTravelAgent;
     private final TickListServer<Block> nextTickListBlock;
     private final TickListServer<FluidType> nextTickListFluid;
-    private final Set<NavigationAbstract> I;
+    private final Set<NavigationAbstract> H;
     protected final PersistentRaid c;
-    protected final VillageSiege siegeManager;
-    private final ObjectLinkedOpenHashSet<BlockActionData> J;
+    private final ObjectLinkedOpenHashSet<BlockActionData> I;
     private boolean ticking;
     @Nullable
     private final MobSpawnerTrader mobSpawnerTrader;
@@ -67,15 +70,14 @@ public class WorldServer extends World {
         this.nextTickListFluid = new TickListServer<>(this, (fluidtype) -> {
             return fluidtype == null || fluidtype == FluidTypes.EMPTY;
         }, IRegistry.FLUID::getKey, IRegistry.FLUID::get, this::a);
-        this.I = Sets.newHashSet();
-        this.siegeManager = new VillageSiege(this);
-        this.J = new ObjectLinkedOpenHashSet();
+        this.H = Sets.newHashSet();
+        this.I = new ObjectLinkedOpenHashSet();
         this.dataManager = worldnbtstorage;
         this.server = minecraftserver;
         this.portalTravelAgent = new PortalTravelAgent(this);
         this.M();
         this.N();
-        this.getWorldBorder().a(minecraftserver.av());
+        this.getWorldBorder().a(minecraftserver.aw());
         this.c = (PersistentRaid) this.getWorldPersistentData().a(() -> {
             return new PersistentRaid(this);
         }, PersistentRaid.a(this.worldProvider));
@@ -183,10 +185,10 @@ public class WorldServer extends World {
             this.getWorldData().setDifficulty(EnumDifficulty.HARD);
         }
 
-        if (this.D && this.players.stream().noneMatch((entityplayer) -> {
+        if (this.C && this.players.stream().noneMatch((entityplayer) -> {
             return !entityplayer.isSpectator() && !entityplayer.isDeeplySleeping();
         })) {
-            this.D = false;
+            this.C = false;
             if (this.getGameRules().getBoolean(GameRules.DO_DAYLIGHT_CYCLE)) {
                 long l = this.worldData.getDayTime() + 24000L;
 
@@ -207,12 +209,10 @@ public class WorldServer extends World {
         this.getChunkProvider().tick(booleansupplier);
         gameprofilerfiller.exitEnter("tickPending");
         if (this.worldData.getType() != WorldType.DEBUG_ALL_BLOCK_STATES) {
-            this.nextTickListBlock.a();
-            this.nextTickListFluid.a();
+            this.nextTickListBlock.b();
+            this.nextTickListFluid.b();
         }
 
-        gameprofilerfiller.exitEnter("village");
-        this.siegeManager.a();
         gameprofilerfiller.exitEnter("portalForcer");
         this.portalTravelAgent.a(this.getTime());
         gameprofilerfiller.exitEnter("raid");
@@ -371,7 +371,7 @@ public class WorldServer extends World {
                             iblockdata.b((World) this, blockposition2, this.random);
                         }
 
-                        Fluid fluid = chunksection.b(blockposition2.getX() - j, blockposition2.getY() - j1, blockposition2.getZ() - k);
+                        Fluid fluid = iblockdata.p();
 
                         if (fluid.h()) {
                             fluid.b(this, blockposition2, this.random);
@@ -409,7 +409,7 @@ public class WorldServer extends World {
     }
 
     public void everyoneSleeping() {
-        this.D = false;
+        this.C = false;
         if (!this.players.isEmpty()) {
             int i = 0;
             int j = 0;
@@ -425,7 +425,7 @@ public class WorldServer extends World {
                 }
             }
 
-            this.D = j > 0 && j >= this.players.size() - i;
+            this.C = j > 0 && j >= this.players.size() - i;
         }
 
     }
@@ -716,12 +716,18 @@ public class WorldServer extends World {
         while (objectiterator.hasNext()) {
             Entity entity = (Entity) objectiterator.next();
 
-            if (!(entity instanceof EntityInsentient) || !((EntityInsentient) entity).isPersistent()) {
-                EnumCreatureType enumcreaturetype = entity.getEntityType().d();
+            if (entity instanceof EntityInsentient) {
+                EntityInsentient entityinsentient = (EntityInsentient) entity;
 
-                if (enumcreaturetype != EnumCreatureType.MISC && this.getChunkProvider().b(entity)) {
-                    object2intmap.mergeInt(enumcreaturetype, 1, Integer::sum);
+                if (entityinsentient.isPersistent() || entityinsentient.I()) {
+                    continue;
                 }
+            }
+
+            EnumCreatureType enumcreaturetype = entity.getEntityType().e();
+
+            if (enumcreaturetype != EnumCreatureType.MISC && this.getChunkProvider().b(entity)) {
+                object2intmap.mergeInt(enumcreaturetype, 1, Integer::sum);
             }
         }
 
@@ -850,7 +856,7 @@ public class WorldServer extends World {
 
     public void unregisterEntity(Entity entity) {
         if (entity instanceof EntityEnderDragon) {
-            EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).dU();
+            EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).dT();
             int i = aentitycomplexpart.length;
 
             for (int j = 0; j < i; ++j) {
@@ -870,7 +876,7 @@ public class WorldServer extends World {
 
         this.getScoreboard().a(entity);
         if (entity instanceof EntityInsentient) {
-            this.I.remove(((EntityInsentient) entity).getNavigation());
+            this.H.remove(((EntityInsentient) entity).getNavigation());
         }
 
     }
@@ -881,7 +887,7 @@ public class WorldServer extends World {
         } else {
             this.entitiesById.put(entity.getId(), entity);
             if (entity instanceof EntityEnderDragon) {
-                EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).dU();
+                EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).dT();
                 int i = aentitycomplexpart.length;
 
                 for (int j = 0; j < i; ++j) {
@@ -894,7 +900,7 @@ public class WorldServer extends World {
             this.entitiesByUUID.put(entity.getUniqueID(), entity);
             this.getChunkProvider().addEntity(entity);
             if (entity instanceof EntityInsentient) {
-                this.I.add(((EntityInsentient) entity).getNavigation());
+                this.H.add(((EntityInsentient) entity).getNavigation());
             }
         }
 
@@ -951,12 +957,12 @@ public class WorldServer extends World {
     }
 
     @Override
-    public void a(@Nullable EntityHuman entityhuman, double d0, double d1, double d2, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1) {
+    public void playSound(@Nullable EntityHuman entityhuman, double d0, double d1, double d2, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1) {
         this.server.getPlayerList().sendPacketNearby(entityhuman, d0, d1, d2, f > 1.0F ? (double) (16.0F * f) : 16.0D, this.worldProvider.getDimensionManager(), new PacketPlayOutNamedSoundEffect(soundeffect, soundcategory, d0, d1, d2, f, f1));
     }
 
     @Override
-    public void a(@Nullable EntityHuman entityhuman, Entity entity, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1) {
+    public void playSound(@Nullable EntityHuman entityhuman, Entity entity, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1) {
         this.server.getPlayerList().sendPacketNearby(entityhuman, entity.locX, entity.locY, entity.locZ, f > 1.0F ? (double) (16.0F * f) : 16.0D, this.worldProvider.getDimensionManager(), new PacketPlayOutEntitySound(soundeffect, soundcategory, entity, f, f1));
     }
 
@@ -977,13 +983,13 @@ public class WorldServer extends World {
         VoxelShape voxelshape1 = iblockdata1.getCollisionShape(this, blockposition);
 
         if (VoxelShapes.c(voxelshape, voxelshape1, OperatorBoolean.NOT_SAME)) {
-            Iterator iterator = this.I.iterator();
+            Iterator iterator = this.H.iterator();
 
             while (iterator.hasNext()) {
                 NavigationAbstract navigationabstract = (NavigationAbstract) iterator.next();
 
                 if (!navigationabstract.j()) {
-                    navigationabstract.c(blockposition);
+                    navigationabstract.b(blockposition);
                 }
             }
 
@@ -1029,12 +1035,12 @@ public class WorldServer extends World {
 
     @Override
     public void playBlockAction(BlockPosition blockposition, Block block, int i, int j) {
-        this.J.add(new BlockActionData(blockposition, block, i, j));
+        this.I.add(new BlockActionData(blockposition, block, i, j));
     }
 
     private void ae() {
-        while (!this.J.isEmpty()) {
-            BlockActionData blockactiondata = (BlockActionData) this.J.removeFirst();
+        while (!this.I.isEmpty()) {
+            BlockActionData blockactiondata = (BlockActionData) this.I.removeFirst();
 
             if (this.a(blockactiondata)) {
                 this.server.getPlayerList().sendPacketNearby((EntityHuman) null, (double) blockactiondata.a().getX(), (double) blockactiondata.a().getY(), (double) blockactiondata.a().getZ(), 64.0D, this.worldProvider.getDimensionManager(), new PacketPlayOutBlockAction(blockactiondata.a(), blockactiondata.b(), blockactiondata.c(), blockactiondata.d()));
@@ -1244,7 +1250,7 @@ public class WorldServer extends World {
     }
 
     public VillagePlace B() {
-        return this.getChunkProvider().i();
+        return this.getChunkProvider().j();
     }
 
     public boolean b_(BlockPosition blockposition) {
@@ -1278,5 +1284,195 @@ public class WorldServer extends World {
 
     public void a(ReputationEvent reputationevent, Entity entity, ReputationHandler reputationhandler) {
         reputationhandler.a(reputationevent, entity);
+    }
+
+    public void a(java.nio.file.Path java_nio_file_path) throws IOException {
+        PlayerChunkMap playerchunkmap = this.getChunkProvider().playerChunkMap;
+        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path.resolve("stats.txt"));
+        Throwable throwable = null;
+
+        try {
+            bufferedwriter.write(String.format("spawning_chunks: %d\n", playerchunkmap.e().b()));
+            ObjectIterator objectiterator = this.l().object2IntEntrySet().iterator();
+
+            while (objectiterator.hasNext()) {
+                it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<EnumCreatureType> it_unimi_dsi_fastutil_objects_object2intmap_entry = (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry) objectiterator.next();
+
+                bufferedwriter.write(String.format("spawn_count.%s: %d\n", ((EnumCreatureType) it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey()).a(), it_unimi_dsi_fastutil_objects_object2intmap_entry.getIntValue()));
+            }
+
+            bufferedwriter.write(String.format("entities: %d\n", this.entitiesById.size()));
+            bufferedwriter.write(String.format("block_entities: %d\n", this.tileEntityList.size()));
+            bufferedwriter.write(String.format("block_ticks: %d\n", this.getBlockTickList().a()));
+            bufferedwriter.write(String.format("fluid_ticks: %d\n", this.getFluidTickList().a()));
+            bufferedwriter.write("distance_manager: " + playerchunkmap.e().c() + "\n");
+            bufferedwriter.write(String.format("pending_tasks: %d\n", this.getChunkProvider().f()));
+        } catch (Throwable throwable1) {
+            throwable = throwable1;
+            throw throwable1;
+        } finally {
+            if (bufferedwriter != null) {
+                if (throwable != null) {
+                    try {
+                        bufferedwriter.close();
+                    } catch (Throwable throwable2) {
+                        throwable.addSuppressed(throwable2);
+                    }
+                } else {
+                    bufferedwriter.close();
+                }
+            }
+
+        }
+
+        CrashReport crashreport = new CrashReport("Level dump", new Exception("dummy"));
+
+        this.a(crashreport);
+        BufferedWriter bufferedwriter1 = Files.newBufferedWriter(java_nio_file_path.resolve("example_crash.txt"));
+        Throwable throwable3 = null;
+
+        try {
+            bufferedwriter1.write(crashreport.e());
+        } catch (Throwable throwable4) {
+            throwable3 = throwable4;
+            throw throwable4;
+        } finally {
+            if (bufferedwriter1 != null) {
+                if (throwable3 != null) {
+                    try {
+                        bufferedwriter1.close();
+                    } catch (Throwable throwable5) {
+                        throwable3.addSuppressed(throwable5);
+                    }
+                } else {
+                    bufferedwriter1.close();
+                }
+            }
+
+        }
+
+        java.nio.file.Path java_nio_file_path1 = java_nio_file_path.resolve("chunks.csv");
+        BufferedWriter bufferedwriter2 = Files.newBufferedWriter(java_nio_file_path1);
+        Throwable throwable6 = null;
+
+        try {
+            playerchunkmap.a((Writer) bufferedwriter2);
+        } catch (Throwable throwable7) {
+            throwable6 = throwable7;
+            throw throwable7;
+        } finally {
+            if (bufferedwriter2 != null) {
+                if (throwable6 != null) {
+                    try {
+                        bufferedwriter2.close();
+                    } catch (Throwable throwable8) {
+                        throwable6.addSuppressed(throwable8);
+                    }
+                } else {
+                    bufferedwriter2.close();
+                }
+            }
+
+        }
+
+        java.nio.file.Path java_nio_file_path2 = java_nio_file_path.resolve("entities.csv");
+        BufferedWriter bufferedwriter3 = Files.newBufferedWriter(java_nio_file_path2);
+        Throwable throwable9 = null;
+
+        try {
+            a((Writer) bufferedwriter3, (Iterable) this.entitiesById.values());
+        } catch (Throwable throwable10) {
+            throwable9 = throwable10;
+            throw throwable10;
+        } finally {
+            if (bufferedwriter3 != null) {
+                if (throwable9 != null) {
+                    try {
+                        bufferedwriter3.close();
+                    } catch (Throwable throwable11) {
+                        throwable9.addSuppressed(throwable11);
+                    }
+                } else {
+                    bufferedwriter3.close();
+                }
+            }
+
+        }
+
+        java.nio.file.Path java_nio_file_path3 = java_nio_file_path.resolve("global_entities.csv");
+        BufferedWriter bufferedwriter4 = Files.newBufferedWriter(java_nio_file_path3);
+        Throwable throwable12 = null;
+
+        try {
+            a((Writer) bufferedwriter4, (Iterable) this.globalEntityList);
+        } catch (Throwable throwable13) {
+            throwable12 = throwable13;
+            throw throwable13;
+        } finally {
+            if (bufferedwriter4 != null) {
+                if (throwable12 != null) {
+                    try {
+                        bufferedwriter4.close();
+                    } catch (Throwable throwable14) {
+                        throwable12.addSuppressed(throwable14);
+                    }
+                } else {
+                    bufferedwriter4.close();
+                }
+            }
+
+        }
+
+        java.nio.file.Path java_nio_file_path4 = java_nio_file_path.resolve("block_entities.csv");
+        BufferedWriter bufferedwriter5 = Files.newBufferedWriter(java_nio_file_path4);
+        Throwable throwable15 = null;
+
+        try {
+            this.a((Writer) bufferedwriter5);
+        } catch (Throwable throwable16) {
+            throwable15 = throwable16;
+            throw throwable16;
+        } finally {
+            if (bufferedwriter5 != null) {
+                if (throwable15 != null) {
+                    try {
+                        bufferedwriter5.close();
+                    } catch (Throwable throwable17) {
+                        throwable15.addSuppressed(throwable17);
+                    }
+                } else {
+                    bufferedwriter5.close();
+                }
+            }
+
+        }
+
+    }
+
+    private static void a(Writer writer, Iterable<Entity> iterable) throws IOException {
+        CSVWriter csvwriter = CSVWriter.a().a("x").a("y").a("z").a("uuid").a("type").a("alive").a("display_name").a("custom_name").a(writer);
+        Iterator iterator = iterable.iterator();
+
+        while (iterator.hasNext()) {
+            Entity entity = (Entity) iterator.next();
+            IChatBaseComponent ichatbasecomponent = entity.getCustomName();
+            IChatBaseComponent ichatbasecomponent1 = entity.getScoreboardDisplayName();
+
+            csvwriter.a(entity.locX, entity.locY, entity.locZ, entity.getUniqueID(), IRegistry.ENTITY_TYPE.getKey(entity.getEntityType()), entity.isAlive(), ichatbasecomponent1.getString(), ichatbasecomponent != null ? ichatbasecomponent.getString() : null);
+        }
+
+    }
+
+    private void a(Writer writer) throws IOException {
+        CSVWriter csvwriter = CSVWriter.a().a("x").a("y").a("z").a("type").a(writer);
+        Iterator iterator = this.tileEntityList.iterator();
+
+        while (iterator.hasNext()) {
+            TileEntity tileentity = (TileEntity) iterator.next();
+            BlockPosition blockposition = tileentity.getPosition();
+
+            csvwriter.a(blockposition.getX(), blockposition.getY(), blockposition.getZ(), IRegistry.BLOCK_ENTITY_TYPE.getKey(tileentity.q()));
+        }
+
     }
 }

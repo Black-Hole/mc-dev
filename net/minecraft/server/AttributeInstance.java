@@ -8,22 +8,22 @@ public interface AttributeInstance {
 
     IAttribute getAttribute();
 
-    double b();
+    double getBaseValue();
 
     void setValue(double d0);
 
     Collection<AttributeModifier> a(AttributeModifier.Operation attributemodifier_operation);
 
-    Collection<AttributeModifier> c();
+    Collection<AttributeModifier> getModifiers();
 
     boolean a(AttributeModifier attributemodifier);
 
     @Nullable
     AttributeModifier a(UUID uuid);
 
-    void b(AttributeModifier attributemodifier);
+    void addModifier(AttributeModifier attributemodifier);
 
-    void c(AttributeModifier attributemodifier);
+    void removeModifier(AttributeModifier attributemodifier);
 
     void b(UUID uuid);
 

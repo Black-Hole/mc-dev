@@ -157,7 +157,7 @@ public class BlockComposter extends Block implements IInventoryHolder {
             }
 
             d(iblockdata, (GeneratorAccess) world, blockposition);
-            world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_COMPOSTER_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_COMPOSTER_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
             return true;
         } else {
             return false;
@@ -190,7 +190,7 @@ public class BlockComposter extends Block implements IInventoryHolder {
     public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if ((Integer) iblockdata.get(BlockComposter.a) == 7) {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.a((IBlockState) BlockComposter.a), 3);
-            world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_COMPOSTER_READY, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_COMPOSTER_READY, SoundCategory.BLOCKS, 1.0F, 1.0F);
         }
 
         super.tick(iblockdata, world, blockposition, random);

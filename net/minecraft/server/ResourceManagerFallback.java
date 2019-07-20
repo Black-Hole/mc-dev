@@ -111,7 +111,7 @@ public class ResourceManagerFallback implements IResourceManager {
     }
 
     static MinecraftKey d(MinecraftKey minecraftkey) {
-        return new MinecraftKey(minecraftkey.b(), minecraftkey.getKey() + ".mcmeta");
+        return new MinecraftKey(minecraftkey.getNamespace(), minecraftkey.getKey() + ".mcmeta");
     }
 
     static class a extends InputStream {

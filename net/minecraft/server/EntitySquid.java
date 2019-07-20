@@ -138,7 +138,7 @@ public class EntitySquid extends EntityWaterAnimal {
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (super.damageEntity(damagesource, f) && this.getLastDamager() != null) {
-            this.dW();
+            this.dV();
             return true;
         } else {
             return false;
@@ -152,7 +152,7 @@ public class EntitySquid extends EntityWaterAnimal {
         return vec3d1;
     }
 
-    private void dW() {
+    private void dV() {
         this.a(SoundEffects.ENTITY_SQUID_SQUIRT, this.getSoundVolume(), this.cV());
         Vec3D vec3d = this.f(new Vec3D(0.0D, -1.0D, 0.0D)).add(this.locX, this.locY, this.locZ);
 

@@ -56,7 +56,7 @@ public class DragonControllerHold extends AbstractDragonController {
             EntityHuman entityhuman = this.a.world.a(DragonControllerHold.b, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
 
             if (entityhuman != null) {
-                d0 = blockposition.a(entityhuman.ci(), true) / 512.0D;
+                d0 = blockposition.a(entityhuman.getPositionVector(), true) / 512.0D;
             }
 
             if (entityhuman != null && !entityhuman.abilities.isInvulnerable && (this.a.getRandom().nextInt(MathHelper.a((int) d0) + 2) == 0 || this.a.getRandom().nextInt(i + 2) == 0)) {

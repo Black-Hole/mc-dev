@@ -214,7 +214,7 @@ public class ArgumentBlock {
     }
 
     private static <T extends Comparable<T>> SuggestionsBuilder a(SuggestionsBuilder suggestionsbuilder, IBlockState<T> iblockstate) {
-        Iterator iterator = iblockstate.d().iterator();
+        Iterator iterator = iblockstate.getValues().iterator();
 
         while (iterator.hasNext()) {
             T t0 = (Comparable) iterator.next();

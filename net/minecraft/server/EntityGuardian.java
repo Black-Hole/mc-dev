@@ -74,7 +74,7 @@ public class EntityGuardian extends EntityMonster {
         return EnumMonsterType.e;
     }
 
-    public boolean dY() {
+    public boolean dX() {
         return (Boolean) this.datawatcher.get(EntityGuardian.b);
     }
 
@@ -90,13 +90,13 @@ public class EntityGuardian extends EntityMonster {
         this.datawatcher.set(EntityGuardian.bD, i);
     }
 
-    public boolean dZ() {
+    public boolean dY() {
         return (Integer) this.datawatcher.get(EntityGuardian.bD) != 0;
     }
 
     @Nullable
-    public EntityLiving ea() {
-        if (!this.dZ()) {
+    public EntityLiving dZ() {
+        if (!this.dY()) {
             return null;
         } else if (this.world.isClientSide) {
             if (this.bE != null) {
@@ -158,7 +158,7 @@ public class EntityGuardian extends EntityMonster {
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return iworldreader.getFluid(blockposition).a(TagsFluid.WATER) ? 10.0F + iworldreader.w(blockposition) - 0.5F : super.a(blockposition, iworldreader);
+        return iworldreader.getFluid(blockposition).a(TagsFluid.WATER) ? 10.0F + iworldreader.v(blockposition) - 0.5F : super.a(blockposition, iworldreader);
     }
 
     @Override
@@ -176,7 +176,7 @@ public class EntityGuardian extends EntityMonster {
                     }
 
                     this.bG = vec3d.y < 0.0D && this.world.a((new BlockPosition(this)).down(), (Entity) this);
-                } else if (this.dY()) {
+                } else if (this.dX()) {
                     if (this.bz < 0.5F) {
                         this.bz = 4.0F;
                     } else {
@@ -190,13 +190,13 @@ public class EntityGuardian extends EntityMonster {
                 this.bB = this.bA;
                 if (!this.av()) {
                     this.bA = this.random.nextFloat();
-                } else if (this.dY()) {
+                } else if (this.dX()) {
                     this.bA += (0.0F - this.bA) * 0.25F;
                 } else {
                     this.bA += (1.0F - this.bA) * 0.06F;
                 }
 
-                if (this.dY() && this.isInWater()) {
+                if (this.dX() && this.isInWater()) {
                     vec3d = this.f(0.0F);
 
                     for (int i = 0; i < 2; ++i) {
@@ -204,12 +204,12 @@ public class EntityGuardian extends EntityMonster {
                     }
                 }
 
-                if (this.dZ()) {
+                if (this.dY()) {
                     if (this.bF < this.l()) {
                         ++this.bF;
                     }
 
-                    EntityLiving entityliving = this.ea();
+                    EntityLiving entityliving = this.dZ();
 
                     if (entityliving != null) {
                         this.getControllerLook().a(entityliving, 90.0F, 90.0F);
@@ -242,7 +242,7 @@ public class EntityGuardian extends EntityMonster {
                 this.impulse = true;
             }
 
-            if (this.dZ()) {
+            if (this.dY()) {
                 this.yaw = this.aM;
             }
         }
@@ -264,12 +264,12 @@ public class EntityGuardian extends EntityMonster {
     }
 
     public static boolean b(EntityTypes<? extends EntityGuardian> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
-        return (random.nextInt(20) == 0 || !generatoraccess.v(blockposition)) && generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL && (enummobspawn == EnumMobSpawn.SPAWNER || generatoraccess.getFluid(blockposition).a(TagsFluid.WATER));
+        return (random.nextInt(20) == 0 || !generatoraccess.u(blockposition)) && generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL && (enummobspawn == EnumMobSpawn.SPAWNER || generatoraccess.getFluid(blockposition).a(TagsFluid.WATER));
     }
 
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
-        if (!this.dY() && !damagesource.isMagic() && damagesource.j() instanceof EntityLiving) {
+        if (!this.dX() && !damagesource.isMagic() && damagesource.j() instanceof EntityLiving) {
             EntityLiving entityliving = (EntityLiving) damagesource.j();
 
             if (!damagesource.isExplosion()) {
@@ -295,7 +295,7 @@ public class EntityGuardian extends EntityMonster {
             this.a(0.1F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.9D));
-            if (!this.dY() && this.getGoalTarget() == null) {
+            if (!this.dX() && this.getGoalTarget() == null) {
                 this.setMot(this.getMot().add(0.0D, -0.005D, 0.0D));
             }
         } else {

@@ -24,9 +24,9 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
     protected final List<TileEntity> tileEntityListUnload = Lists.newArrayList();
     private final long b = 16777215L;
     private final Thread serverThread;
-    private int d;
-    protected int j = (new Random()).nextInt();
-    protected final int k = 1013904223;
+    private int u;
+    protected int i = (new Random()).nextInt();
+    protected final int j = 1013904223;
     protected float lastRainLevel;
     protected float rainLevel;
     protected float lastThunderLevel;
@@ -141,7 +141,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
 
                 if (iblockdata2 == iblockdata) {
                     if (iblockdata1 != iblockdata2) {
-                        this.m(blockposition);
+                        this.b(blockposition, iblockdata1, iblockdata2);
                     }
 
                     if ((i & 2) != 0 && (!this.isClientSide || (i & 4) == 0) && (this.isClientSide || chunk.getState() != null && chunk.getState().isAtLeast(PlayerChunk.State.TICKING))) {
@@ -214,7 +214,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
 
     }
 
-    public void m(BlockPosition blockposition) {}
+    public void b(BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {}
 
     public void applyPhysics(BlockPosition blockposition, Block block) {
         this.a(blockposition.west(), block, blockposition);
@@ -337,17 +337,17 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
     }
 
     public boolean J() {
-        return this.d < 4;
+        return this.u < 4;
     }
 
     @Override
-    public void a(@Nullable EntityHuman entityhuman, BlockPosition blockposition, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1) {
-        this.a(entityhuman, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, soundeffect, soundcategory, f, f1);
+    public void playSound(@Nullable EntityHuman entityhuman, BlockPosition blockposition, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1) {
+        this.playSound(entityhuman, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, soundeffect, soundcategory, f, f1);
     }
 
-    public abstract void a(@Nullable EntityHuman entityhuman, double d0, double d1, double d2, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1);
+    public abstract void playSound(@Nullable EntityHuman entityhuman, double d0, double d1, double d2, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1);
 
-    public abstract void a(@Nullable EntityHuman entityhuman, Entity entity, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1);
+    public abstract void playSound(@Nullable EntityHuman entityhuman, Entity entity, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1);
 
     public void a(double d0, double d1, double d2, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1, boolean flag) {}
 
@@ -642,7 +642,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
             TileEntity tileentity = null;
 
             if (this.tickingTileEntities) {
-                tileentity = this.B(blockposition);
+                tileentity = this.A(blockposition);
             }
 
             if (tileentity == null) {
@@ -650,7 +650,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
             }
 
             if (tileentity == null) {
-                tileentity = this.B(blockposition);
+                tileentity = this.A(blockposition);
             }
 
             return tileentity;
@@ -658,7 +658,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
     }
 
     @Nullable
-    private TileEntity B(BlockPosition blockposition) {
+    private TileEntity A(BlockPosition blockposition) {
         for (int i = 0; i < this.tileEntityListPending.size(); ++i) {
             TileEntity tileentity = (TileEntity) this.tileEntityListPending.get(i);
 
@@ -714,8 +714,8 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
 
     }
 
-    public boolean o(BlockPosition blockposition) {
-        return isOutsideWorld(blockposition) ? false : this.chunkProvider.a(blockposition.getX() >> 4, blockposition.getZ() >> 4);
+    public boolean n(BlockPosition blockposition) {
+        return isOutsideWorld(blockposition) ? false : this.chunkProvider.b(blockposition.getX() >> 4, blockposition.getZ() >> 4);
     }
 
     public boolean a(BlockPosition blockposition, Entity entity) {
@@ -733,7 +733,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
         double d1 = 1.0D - (double) (this.f(1.0F) * 5.0F) / 16.0D;
         double d2 = 0.5D + 2.0D * MathHelper.a((double) MathHelper.cos(this.j(1.0F) * 6.2831855F), -0.25D, 0.25D);
 
-        this.d = (int) ((1.0D - d2 * d0 * d1) * 11.0D);
+        this.u = (int) ((1.0D - d2 * d0 * d1) * 11.0D);
     }
 
     public void setSpawnFlags(boolean flag, boolean flag1) {
@@ -807,10 +807,33 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
         int k = MathHelper.floor((axisalignedbb.minZ - 2.0D) / 16.0D);
         int l = MathHelper.f((axisalignedbb.maxZ + 2.0D) / 16.0D);
         List<T> list = Lists.newArrayList();
+        IChunkProvider ichunkprovider = this.getChunkProvider();
 
         for (int i1 = i; i1 < j; ++i1) {
             for (int j1 = k; j1 < l; ++j1) {
-                Chunk chunk = this.getChunkProvider().getChunkAt(i1, j1, false);
+                Chunk chunk = ichunkprovider.getChunkAt(i1, j1, false);
+
+                if (chunk != null) {
+                    chunk.a(oclass, axisalignedbb, list, predicate);
+                }
+            }
+        }
+
+        return list;
+    }
+
+    @Override
+    public <T extends Entity> List<T> b(Class<? extends T> oclass, AxisAlignedBB axisalignedbb, @Nullable Predicate<? super T> predicate) {
+        int i = MathHelper.floor((axisalignedbb.minX - 2.0D) / 16.0D);
+        int j = MathHelper.f((axisalignedbb.maxX + 2.0D) / 16.0D);
+        int k = MathHelper.floor((axisalignedbb.minZ - 2.0D) / 16.0D);
+        int l = MathHelper.f((axisalignedbb.maxZ + 2.0D) / 16.0D);
+        List<T> list = Lists.newArrayList();
+        IChunkProvider ichunkprovider = this.getChunkProvider();
+
+        for (int i1 = i; i1 < j; ++i1) {
+            for (int j1 = k; j1 < l; ++j1) {
+                Chunk chunk = ichunkprovider.a(i1, j1);
 
                 if (chunk != null) {
                     chunk.a(oclass, axisalignedbb, list, predicate);
@@ -891,7 +914,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
         return this.getBlockFacePower(blockposition.down(), EnumDirection.DOWN) > 0 ? true : (this.getBlockFacePower(blockposition.up(), EnumDirection.UP) > 0 ? true : (this.getBlockFacePower(blockposition.north(), EnumDirection.NORTH) > 0 ? true : (this.getBlockFacePower(blockposition.south(), EnumDirection.SOUTH) > 0 ? true : (this.getBlockFacePower(blockposition.west(), EnumDirection.WEST) > 0 ? true : this.getBlockFacePower(blockposition.east(), EnumDirection.EAST) > 0))));
     }
 
-    public int r(BlockPosition blockposition) {
+    public int q(BlockPosition blockposition) {
         int i = 0;
         EnumDirection[] aenumdirection = World.a;
         int j = aenumdirection.length;
@@ -999,7 +1022,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
         return !this.isRaining() ? false : (!this.f(blockposition) ? false : (this.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition).getY() > blockposition.getY() ? false : this.getBiome(blockposition).b() == BiomeBase.Precipitation.RAIN));
     }
 
-    public boolean t(BlockPosition blockposition) {
+    public boolean s(BlockPosition blockposition) {
         BiomeBase biomebase = this.getBiome(blockposition);
 
         return biomebase.c();
@@ -1084,7 +1107,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
 
     @Override
     public int c() {
-        return this.d;
+        return this.u;
     }
 
     public void c(int i) {
@@ -1125,8 +1148,8 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
     public abstract TagRegistry t();
 
     public BlockPosition a(int i, int j, int k, int l) {
-        this.j = this.j * 3 + 1013904223;
-        int i1 = this.j >> 2;
+        this.i = this.i * 3 + 1013904223;
+        int i1 = this.i >> 2;
 
         return new BlockPosition(i + (i1 & 15), j + (i1 >> 16 & l), k + (i1 >> 8 & 15));
     }

@@ -37,7 +37,7 @@ public class EntitySkeletonStray extends EntitySkeletonAbstract {
         EntityArrow entityarrow = super.b(itemstack, f);
 
         if (entityarrow instanceof EntityTippedArrow) {
-            ((EntityTippedArrow) entityarrow).a(new MobEffect(MobEffects.SLOWER_MOVEMENT, 600));
+            ((EntityTippedArrow) entityarrow).addEffect(new MobEffect(MobEffects.SLOWER_MOVEMENT, 600));
         }
 
         return entityarrow;

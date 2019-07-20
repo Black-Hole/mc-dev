@@ -43,7 +43,7 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
 
     protected void g() {
         if (this.a != EntityHuman.class && this.a != EntityPlayer.class) {
-            this.c = this.e.world.a(this.a, this.d, this.e, this.e.locX, this.e.locY + (double) this.e.getHeadHeight(), this.e.locZ, this.a(this.k()));
+            this.c = this.e.world.b(this.a, this.d, this.e, this.e.locX, this.e.locY + (double) this.e.getHeadHeight(), this.e.locZ, this.a(this.k()));
         } else {
             this.c = this.e.world.a(this.d, this.e, this.e.locX, this.e.locY + (double) this.e.getHeadHeight(), this.e.locZ);
         }

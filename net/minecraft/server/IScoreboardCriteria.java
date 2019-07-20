@@ -50,7 +50,7 @@ public class IScoreboardCriteria {
     }
 
     private static <T> Optional<IScoreboardCriteria> a(StatisticWrapper<T> statisticwrapper, MinecraftKey minecraftkey) {
-        Optional optional = statisticwrapper.a().getOptional(minecraftkey);
+        Optional optional = statisticwrapper.getRegistry().getOptional(minecraftkey);
 
         statisticwrapper.getClass();
         return optional.map(statisticwrapper::b);

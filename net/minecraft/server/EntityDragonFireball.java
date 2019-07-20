@@ -25,7 +25,7 @@ public class EntityDragonFireball extends EntityFireball {
                 entityareaeffectcloud.setRadius(3.0F);
                 entityareaeffectcloud.setDuration(600);
                 entityareaeffectcloud.setRadiusPerTick((7.0F - entityareaeffectcloud.getRadius()) / (float) entityareaeffectcloud.getDuration());
-                entityareaeffectcloud.a(new MobEffect(MobEffects.HARM, 1, 1));
+                entityareaeffectcloud.addEffect(new MobEffect(MobEffects.HARM, 1, 1));
                 if (!list.isEmpty()) {
                     Iterator iterator = list.iterator();
 

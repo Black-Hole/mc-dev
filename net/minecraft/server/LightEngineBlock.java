@@ -15,7 +15,7 @@ public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageB
         int j = BlockPosition.b(i);
         int k = BlockPosition.c(i);
         int l = BlockPosition.d(i);
-        IBlockAccess iblockaccess = this.a.b(j >> 4, l >> 4);
+        IBlockAccess iblockaccess = this.a.c(j >> 4, l >> 4);
 
         return iblockaccess != null ? iblockaccess.h(this.f.d(j, k, l)) : 0;
     }

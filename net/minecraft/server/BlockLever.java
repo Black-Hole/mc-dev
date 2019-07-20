@@ -67,7 +67,7 @@ public class BlockLever extends BlockAttachable {
             world.setTypeAndData(blockposition, iblockdata, 3);
             float f = flag ? 0.6F : 0.5F;
 
-            world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, f);
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, f);
             this.d(iblockdata, world, blockposition);
             return true;
         }

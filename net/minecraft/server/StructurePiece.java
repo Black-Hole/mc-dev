@@ -200,7 +200,7 @@ public abstract class StructurePiece {
             }
 
             if (StructurePiece.e.contains(iblockdata.getBlock())) {
-                generatoraccess.x(blockposition).f(blockposition);
+                generatoraccess.w(blockposition).f(blockposition);
             }
 
         }

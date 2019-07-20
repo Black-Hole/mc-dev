@@ -123,7 +123,7 @@ public abstract class FluidTypeFlowing extends FluidType {
         IBlockData iblockdata = iblockaccess.getType(blockposition);
         Fluid fluid = iblockaccess.getFluid(blockposition);
 
-        return fluid.getType().a((FluidType) this) ? false : (enumdirection == EnumDirection.UP ? true : (iblockdata.getMaterial() == Material.ICE ? false : Block.d(iblockdata, iblockaccess, blockposition, enumdirection)));
+        return fluid.getType().a((FluidType) this) ? false : (enumdirection == EnumDirection.UP ? true : (iblockdata.getMaterial() == Material.ICE ? false : iblockdata.d(iblockaccess, blockposition, enumdirection)));
     }
 
     protected void a(GeneratorAccess generatoraccess, BlockPosition blockposition, Fluid fluid) {

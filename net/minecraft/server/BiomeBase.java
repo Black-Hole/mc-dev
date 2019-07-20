@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import it.unimi.dsi.fastutil.longs.Long2FloatLinkedOpenHashMap;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -39,6 +40,16 @@ public abstract class BiomeBase {
     protected final List<WorldGenFeatureConfigured<?>> s = Lists.newArrayList();
     protected final Map<StructureGenerator<?>, WorldGenFeatureConfiguration> t = Maps.newHashMap();
     private final Map<EnumCreatureType, List<BiomeBase.BiomeMeta>> u = Maps.newHashMap();
+    private final ThreadLocal<Long2FloatLinkedOpenHashMap> v = ThreadLocal.withInitial(() -> {
+        return (Long2FloatLinkedOpenHashMap) SystemUtils.a(() -> {
+            Long2FloatLinkedOpenHashMap long2floatlinkedopenhashmap = new Long2FloatLinkedOpenHashMap(1024, 0.25F) {
+                protected void rehash(int i) {}
+            };
+
+            long2floatlinkedopenhashmap.defaultReturnValue(Float.NaN);
+            return long2floatlinkedopenhashmap;
+        });
+    });
 
     @Nullable
     public static BiomeBase a(BiomeBase biomebase) {
@@ -117,13 +128,32 @@ public abstract class BiomeBase {
         return 0.1F;
     }
 
-    public float getAdjustedTemperature(BlockPosition blockposition) {
+    protected float c(BlockPosition blockposition) {
         if (blockposition.getY() > 64) {
             float f = (float) (BiomeBase.d.a((double) ((float) blockposition.getX() / 8.0F), (double) ((float) blockposition.getZ() / 8.0F)) * 4.0D);
 
             return this.getTemperature() - (f + (float) blockposition.getY() - 64.0F) * 0.05F / 30.0F;
         } else {
             return this.getTemperature();
+        }
+    }
+
+    public final float getAdjustedTemperature(BlockPosition blockposition) {
+        long i = blockposition.asLong();
+        Long2FloatLinkedOpenHashMap long2floatlinkedopenhashmap = (Long2FloatLinkedOpenHashMap) this.v.get();
+        float f = long2floatlinkedopenhashmap.get(i);
+
+        if (!Float.isNaN(f)) {
+            return f;
+        } else {
+            float f1 = this.c(blockposition);
+
+            if (long2floatlinkedopenhashmap.size() == 1024) {
+                long2floatlinkedopenhashmap.removeFirstFloat();
+            }
+
+            long2floatlinkedopenhashmap.put(i, f1);
+            return f1;
         }
     }
 
@@ -144,7 +174,7 @@ public abstract class BiomeBase {
                         return true;
                     }
 
-                    boolean flag1 = iworldreader.y(blockposition.west()) && iworldreader.y(blockposition.east()) && iworldreader.y(blockposition.north()) && iworldreader.y(blockposition.south());
+                    boolean flag1 = iworldreader.x(blockposition.west()) && iworldreader.x(blockposition.east()) && iworldreader.x(blockposition.north()) && iworldreader.x(blockposition.south());
 
                     if (!flag1) {
                         return true;
@@ -220,7 +250,18 @@ public abstract class BiomeBase {
             WorldGenFeatureConfigured<?> worldgenfeatureconfigured = (WorldGenFeatureConfigured) iterator.next();
 
             seededrandom.b(i, j, worldgenstage_decoration.ordinal());
-            worldgenfeatureconfigured.a(generatoraccess, chunkgenerator, seededrandom, blockposition);
+
+            try {
+                worldgenfeatureconfigured.a(generatoraccess, chunkgenerator, seededrandom, blockposition);
+            } catch (Exception exception) {
+                CrashReport crashreport = CrashReport.a(exception, "Feature placement");
+                CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Feature").a("Id", (Object) IRegistry.FEATURE.getKey(worldgenfeatureconfigured.a));
+                WorldGenerator worldgenerator = worldgenfeatureconfigured.a;
+
+                worldgenfeatureconfigured.a.getClass();
+                crashreportsystemdetails.a("Description", worldgenerator::toString);
+                throw new ReportedException(crashreport);
+            }
         }
 
     }

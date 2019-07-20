@@ -27,11 +27,6 @@ public abstract class EntityWaterAnimal extends EntityCreature {
     }
 
     @Override
-    public boolean isTypeNotPersistent(double d0) {
-        return true;
-    }
-
-    @Override
     protected int getExpValue(EntityHuman entityhuman) {
         return 1 + this.world.random.nextInt(3);
     }

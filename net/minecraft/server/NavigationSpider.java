@@ -9,20 +9,20 @@ public class NavigationSpider extends Navigation {
     }
 
     @Override
-    public PathEntity b(BlockPosition blockposition) {
+    public PathEntity a(BlockPosition blockposition, int i) {
         this.p = blockposition;
-        return super.b(blockposition);
+        return super.a(blockposition, i);
     }
 
     @Override
-    public PathEntity a(Entity entity) {
+    public PathEntity a(Entity entity, int i) {
         this.p = new BlockPosition(entity);
-        return super.a(entity);
+        return super.a(entity, i);
     }
 
     @Override
     public boolean a(Entity entity, double d0) {
-        PathEntity pathentity = this.a(entity);
+        PathEntity pathentity = this.a(entity, 0);
 
         if (pathentity != null) {
             return this.a(pathentity, d0);
@@ -39,7 +39,7 @@ public class NavigationSpider extends Navigation {
             super.c();
         } else {
             if (this.p != null) {
-                if (!this.p.a((IPosition) this.a.ci(), (double) this.a.getWidth()) && (this.a.locY <= (double) this.p.getY() || !(new BlockPosition((double) this.p.getX(), this.a.locY, (double) this.p.getZ())).a((IPosition) this.a.ci(), (double) this.a.getWidth()))) {
+                if (!this.p.a((IPosition) this.a.getPositionVector(), (double) this.a.getWidth()) && (this.a.locY <= (double) this.p.getY() || !(new BlockPosition((double) this.p.getX(), this.a.locY, (double) this.p.getZ())).a((IPosition) this.a.getPositionVector(), (double) this.a.getWidth()))) {
                     this.a.getControllerMove().a((double) this.p.getX(), (double) this.p.getY(), (double) this.p.getZ(), this.d);
                 } else {
                     this.p = null;

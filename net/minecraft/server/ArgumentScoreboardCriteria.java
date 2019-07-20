@@ -52,7 +52,7 @@ public class ArgumentScoreboardCriteria implements ArgumentType<IScoreboardCrite
 
         while (iterator.hasNext()) {
             StatisticWrapper<?> statisticwrapper = (StatisticWrapper) iterator.next();
-            Iterator iterator1 = statisticwrapper.a().iterator();
+            Iterator iterator1 = statisticwrapper.getRegistry().iterator();
 
             while (iterator1.hasNext()) {
                 Object object = iterator1.next();

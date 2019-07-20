@@ -16,8 +16,8 @@ public class PathfinderWater extends PathfinderAbstract {
     }
 
     @Override
-    public PathPoint a(double d0, double d1, double d2) {
-        return super.a(MathHelper.floor(d0 - (double) (this.b.getWidth() / 2.0F)), MathHelper.floor(d1 + 0.5D), MathHelper.floor(d2 - (double) (this.b.getWidth() / 2.0F)));
+    public PathDestination a(double d0, double d1, double d2) {
+        return new PathDestination(super.a(MathHelper.floor(d0 - (double) (this.b.getWidth() / 2.0F)), MathHelper.floor(d1 + 0.5D), MathHelper.floor(d2 - (double) (this.b.getWidth() / 2.0F))));
     }
 
     @Override

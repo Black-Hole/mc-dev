@@ -23,7 +23,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
 
     protected EntitySkeletonAbstract(EntityTypes<? extends EntitySkeletonAbstract> entitytypes, World world) {
         super(entitytypes, world);
-        this.dW();
+        this.dV();
     }
 
     @Override
@@ -60,7 +60,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
 
     @Override
     public void movementTick() {
-        boolean flag = this.dT();
+        boolean flag = this.dS();
 
         if (flag) {
             ItemStack itemstack = this.getEquipment(EnumItemSlot.HEAD);
@@ -108,7 +108,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         groupdataentity = super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
         this.a(difficultydamagescaler);
         this.b(difficultydamagescaler);
-        this.dW();
+        this.dV();
         this.setCanPickupLoot(this.random.nextFloat() < 0.55F * difficultydamagescaler.d());
         if (this.getEquipment(EnumItemSlot.HEAD).isEmpty()) {
             LocalDate localdate = LocalDate.now();
@@ -124,7 +124,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         return groupdataentity;
     }
 
-    public void dW() {
+    public void dV() {
         if (this.world != null && !this.world.isClientSide) {
             this.goalSelector.a((PathfinderGoal) this.c);
             this.goalSelector.a((PathfinderGoal) this.b);
@@ -167,14 +167,14 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
     @Override
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.dW();
+        this.dV();
     }
 
     @Override
     public void setSlot(EnumItemSlot enumitemslot, ItemStack itemstack) {
         super.setSlot(enumitemslot, itemstack);
         if (!this.world.isClientSide) {
-            this.dW();
+            this.dV();
         }
 
     }

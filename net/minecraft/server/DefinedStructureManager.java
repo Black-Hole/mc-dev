@@ -59,7 +59,7 @@ public class DefinedStructureManager implements IResourcePackListener {
 
     @Nullable
     private DefinedStructure e(MinecraftKey minecraftkey) {
-        MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.b(), "structures/" + minecraftkey.getKey() + ".nbt");
+        MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.getNamespace(), "structures/" + minecraftkey.getKey() + ".nbt");
 
         try {
             IResource iresource = this.d.getResourceManager().a(minecraftkey1);
@@ -207,7 +207,7 @@ public class DefinedStructureManager implements IResourcePackListener {
 
     private java.nio.file.Path a(MinecraftKey minecraftkey, String s) {
         try {
-            java.nio.file.Path java_nio_file_path = this.e.resolve(minecraftkey.b());
+            java.nio.file.Path java_nio_file_path = this.e.resolve(minecraftkey.getNamespace());
             java.nio.file.Path java_nio_file_path1 = java_nio_file_path.resolve("structures");
 
             return FileUtils.b(java_nio_file_path1, minecraftkey.getKey(), s);

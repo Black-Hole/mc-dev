@@ -191,7 +191,7 @@ public class ResourcePackVanilla implements IResourcePack {
         String s = d(enumresourcepacktype, minecraftkey);
 
         if (ResourcePackVanilla.a != null) {
-            java.nio.file.Path java_nio_file_path = ResourcePackVanilla.a.resolve(enumresourcepacktype.a() + "/" + minecraftkey.b() + "/" + minecraftkey.getKey());
+            java.nio.file.Path java_nio_file_path = ResourcePackVanilla.a.resolve(enumresourcepacktype.a() + "/" + minecraftkey.getNamespace() + "/" + minecraftkey.getKey());
 
             if (Files.exists(java_nio_file_path, new LinkOption[0])) {
                 try {
@@ -212,7 +212,7 @@ public class ResourcePackVanilla implements IResourcePack {
     }
 
     private static String d(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) {
-        return "/" + enumresourcepacktype.a() + "/" + minecraftkey.b() + "/" + minecraftkey.getKey();
+        return "/" + enumresourcepacktype.a() + "/" + minecraftkey.getNamespace() + "/" + minecraftkey.getKey();
     }
 
     private static boolean a(String s, @Nullable URL url) throws IOException {
@@ -229,7 +229,7 @@ public class ResourcePackVanilla implements IResourcePack {
         String s = d(enumresourcepacktype, minecraftkey);
 
         if (ResourcePackVanilla.a != null) {
-            java.nio.file.Path java_nio_file_path = ResourcePackVanilla.a.resolve(enumresourcepacktype.a() + "/" + minecraftkey.b() + "/" + minecraftkey.getKey());
+            java.nio.file.Path java_nio_file_path = ResourcePackVanilla.a.resolve(enumresourcepacktype.a() + "/" + minecraftkey.getNamespace() + "/" + minecraftkey.getKey());
 
             if (Files.exists(java_nio_file_path, new LinkOption[0])) {
                 return true;

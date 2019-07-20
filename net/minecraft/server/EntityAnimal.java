@@ -54,7 +54,7 @@ public abstract class EntityAnimal extends EntityAgeable {
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return iworldreader.getType(blockposition.down()).getBlock() == Blocks.GRASS_BLOCK ? 10.0F : iworldreader.w(blockposition) - 0.5F;
+        return iworldreader.getType(blockposition.down()).getBlock() == Blocks.GRASS_BLOCK ? 10.0F : iworldreader.v(blockposition) - 0.5F;
     }
 
     @Override
@@ -107,7 +107,7 @@ public abstract class EntityAnimal extends EntityAgeable {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (this.i(itemstack)) {
-            if (this.getAge() == 0 && this.eb()) {
+            if (this.getAge() == 0 && this.ea()) {
                 this.a(entityhuman, itemstack);
                 this.f(entityhuman);
                 return true;
@@ -130,7 +130,7 @@ public abstract class EntityAnimal extends EntityAgeable {
 
     }
 
-    public boolean eb() {
+    public boolean ea() {
         return this.loveTicks <= 0;
     }
 

@@ -65,7 +65,7 @@ public class ContainerEnchantTable extends Container {
         this.a(ContainerProperty.a(this.costs, 0));
         this.a(ContainerProperty.a(this.costs, 1));
         this.a(ContainerProperty.a(this.costs, 2));
-        this.a(this.i).a(playerinventory.player.dN());
+        this.a(this.i).set(playerinventory.player.dM());
         this.a(ContainerProperty.a(this.enchantments, 0));
         this.a(ContainerProperty.a(this.enchantments, 1));
         this.a(ContainerProperty.a(this.enchantments, 2));
@@ -117,7 +117,7 @@ public class ContainerEnchantTable extends Container {
                         }
                     }
 
-                    this.h.setSeed((long) this.i.b());
+                    this.h.setSeed((long) this.i.get());
 
                     for (j = 0; j < 3; ++j) {
                         this.costs[j] = EnchantmentManager.a(this.h, j, i, itemstack);
@@ -199,9 +199,9 @@ public class ContainerEnchantTable extends Container {
                     }
 
                     this.enchantSlots.update();
-                    this.i.a(entityhuman.dN());
+                    this.i.set(entityhuman.dM());
                     this.a(this.enchantSlots);
-                    world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
+                    world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
                 }
 
             });
@@ -212,7 +212,7 @@ public class ContainerEnchantTable extends Container {
     }
 
     private List<WeightedRandomEnchant> a(ItemStack itemstack, int i, int j) {
-        this.h.setSeed((long) (this.i.b() + i));
+        this.h.setSeed((long) (this.i.get() + i));
         List<WeightedRandomEnchant> list = EnchantmentManager.b(this.h, itemstack, j, false);
 
         if (itemstack.getItem() == Items.BOOK && list.size() > 1) {
