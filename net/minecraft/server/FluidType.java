@@ -18,7 +18,7 @@ public abstract class FluidType {
 
     protected void a(BlockStateList.a<FluidType, Fluid> blockstatelist_a) {}
 
-    public BlockStateList<FluidType, Fluid> h() {
+    public BlockStateList<FluidType, Fluid> g() {
         return this.d;
     }
 
@@ -26,11 +26,11 @@ public abstract class FluidType {
         this.a = fluid;
     }
 
-    public final Fluid i() {
+    public final Fluid h() {
         return this.a;
     }
 
-    public abstract Item b();
+    public abstract Item a();
 
     protected void a(World world, BlockPosition blockposition, Fluid fluid) {}
 
@@ -42,15 +42,15 @@ public abstract class FluidType {
 
     public abstract int a(IWorldReader iworldreader);
 
-    protected boolean k() {
+    protected boolean j() {
         return false;
     }
 
-    protected boolean c() {
+    protected boolean b() {
         return false;
     }
 
-    protected abstract float d();
+    protected abstract float c();
 
     public abstract float a(Fluid fluid, IBlockAccess iblockaccess, BlockPosition blockposition);
 

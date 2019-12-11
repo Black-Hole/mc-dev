@@ -83,7 +83,7 @@ public abstract class Biomes {
 
     private static BiomeBase a(int i, String s, BiomeBase biomebase) {
         IRegistry.a(IRegistry.BIOME, i, s, biomebase);
-        if (biomebase.a()) {
+        if (biomebase.b()) {
             BiomeBase.c.a(biomebase, IRegistry.BIOME.a(IRegistry.BIOME.get(new MinecraftKey(biomebase.m))));
         }
 

@@ -14,11 +14,11 @@ public class BlockMonsterEggs extends Block {
         BlockMonsterEggs.b.put(block, this);
     }
 
-    public Block d() {
+    public Block c() {
         return this.a;
     }
 
-    public static boolean j(IBlockData iblockdata) {
+    public static boolean h(IBlockData iblockdata) {
         return BlockMonsterEggs.b.containsKey(iblockdata.getBlock());
     }
 
@@ -35,7 +35,7 @@ public class BlockMonsterEggs extends Block {
 
     }
 
-    public static IBlockData e(Block block) {
+    public static IBlockData d(Block block) {
         return ((Block) BlockMonsterEggs.b.get(block)).getBlockData();
     }
 }

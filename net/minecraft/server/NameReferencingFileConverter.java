@@ -75,7 +75,7 @@ public class NameReferencingFileConverter {
     }
 
     public static boolean a(final MinecraftServer minecraftserver) {
-        final GameProfileBanList gameprofilebanlist = new GameProfileBanList(PlayerList.a);
+        final GameProfileBanList gameprofilebanlist = new GameProfileBanList(PlayerList.b);
 
         if (NameReferencingFileConverter.b.exists() && NameReferencingFileConverter.b.isFile()) {
             if (gameprofilebanlist.c().exists()) {
@@ -133,7 +133,7 @@ public class NameReferencingFileConverter {
     }
 
     public static boolean b(MinecraftServer minecraftserver) {
-        IpBanList ipbanlist = new IpBanList(PlayerList.b);
+        IpBanList ipbanlist = new IpBanList(PlayerList.c);
 
         if (NameReferencingFileConverter.a.exists() && NameReferencingFileConverter.a.isFile()) {
             if (ipbanlist.c().exists()) {
@@ -174,7 +174,7 @@ public class NameReferencingFileConverter {
     }
 
     public static boolean c(final MinecraftServer minecraftserver) {
-        final OpList oplist = new OpList(PlayerList.c);
+        final OpList oplist = new OpList(PlayerList.d);
 
         if (NameReferencingFileConverter.c.exists() && NameReferencingFileConverter.c.isFile()) {
             if (oplist.c().exists()) {
@@ -218,7 +218,7 @@ public class NameReferencingFileConverter {
     }
 
     public static boolean d(final MinecraftServer minecraftserver) {
-        final WhiteList whitelist = new WhiteList(PlayerList.d);
+        final WhiteList whitelist = new WhiteList(PlayerList.e);
 
         if (NameReferencingFileConverter.d.exists() && NameReferencingFileConverter.d.isFile()) {
             if (whitelist.c().exists()) {

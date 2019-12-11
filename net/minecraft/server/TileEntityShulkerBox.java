@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.IntStream;
 import javax.annotation.Nullable;
@@ -13,6 +12,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
     private TileEntityShulkerBox.AnimationPhase i;
     private float j;
     private float k;
+    @Nullable
     private EnumColor l;
     private boolean m;
 
@@ -32,7 +32,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
     public void tick() {
         this.h();
         if (this.i == TileEntityShulkerBox.AnimationPhase.OPENING || this.i == TileEntityShulkerBox.AnimationPhase.CLOSING) {
-            this.u();
+            this.l();
         }
 
     }
@@ -46,10 +46,10 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
             case OPENING:
                 this.j += 0.1F;
                 if (this.j >= 1.0F) {
-                    this.u();
+                    this.l();
                     this.i = TileEntityShulkerBox.AnimationPhase.OPENED;
                     this.j = 1.0F;
-                    this.v();
+                    this.m();
                 }
                 break;
             case CLOSING:
@@ -57,7 +57,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
                 if (this.j <= 0.0F) {
                     this.i = TileEntityShulkerBox.AnimationPhase.CLOSED;
                     this.j = 0.0F;
-                    this.v();
+                    this.m();
                 }
                 break;
             case OPENED:
@@ -66,7 +66,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
 
     }
 
-    public TileEntityShulkerBox.AnimationPhase s() {
+    public TileEntityShulkerBox.AnimationPhase j() {
         return this.i;
     }
 
@@ -86,7 +86,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
         return this.b(enumdirection).a((double) enumdirection1.getAdjacentX(), (double) enumdirection1.getAdjacentY(), (double) enumdirection1.getAdjacentZ());
     }
 
-    private void u() {
+    private void l() {
         IBlockData iblockdata = this.world.getType(this.getPosition());
 
         if (iblockdata.getBlock() instanceof BlockShulkerBox) {
@@ -104,9 +104,9 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
                         double d2 = 0.0D;
                         AxisAlignedBB axisalignedbb1 = entity.getBoundingBox();
 
-                        switch (enumdirection.k()) {
+                        switch (enumdirection.m()) {
                             case X:
-                                if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
+                                if (enumdirection.d() == EnumDirection.EnumAxisDirection.POSITIVE) {
                                     d0 = axisalignedbb.maxX - axisalignedbb1.minX;
                                 } else {
                                     d0 = axisalignedbb1.maxX - axisalignedbb.minX;
@@ -115,7 +115,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
                                 d0 += 0.01D;
                                 break;
                             case Y:
-                                if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
+                                if (enumdirection.d() == EnumDirection.EnumAxisDirection.POSITIVE) {
                                     d1 = axisalignedbb.maxY - axisalignedbb1.minY;
                                 } else {
                                     d1 = axisalignedbb1.maxY - axisalignedbb.minY;
@@ -124,7 +124,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
                                 d1 += 0.01D;
                                 break;
                             case Z:
-                                if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
+                                if (enumdirection.d() == EnumDirection.EnumAxisDirection.POSITIVE) {
                                     d2 = axisalignedbb.maxZ - axisalignedbb1.minZ;
                                 } else {
                                     d2 = axisalignedbb1.maxZ - axisalignedbb.minZ;
@@ -152,12 +152,12 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
             this.c = j;
             if (j == 0) {
                 this.i = TileEntityShulkerBox.AnimationPhase.CLOSING;
-                this.v();
+                this.m();
             }
 
             if (j == 1) {
                 this.i = TileEntityShulkerBox.AnimationPhase.OPENING;
-                this.v();
+                this.m();
             }
 
             return true;
@@ -166,7 +166,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
         }
     }
 
-    private void v() {
+    private void m() {
         this.getBlock().a(this.getWorld(), this.getPosition(), 3);
     }
 
@@ -239,23 +239,6 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
     @Override
     protected void a(NonNullList<ItemStack> nonnulllist) {
         this.contents = nonnulllist;
-    }
-
-    @Override
-    public boolean isNotEmpty() {
-        Iterator iterator = this.contents.iterator();
-
-        ItemStack itemstack;
-
-        do {
-            if (!iterator.hasNext()) {
-                return true;
-            }
-
-            itemstack = (ItemStack) iterator.next();
-        } while (itemstack.isEmpty());
-
-        return false;
     }
 
     @Override

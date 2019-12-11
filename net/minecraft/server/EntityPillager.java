@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, IRangedEntity {
 
     private static final DataWatcherObject<Boolean> b = DataWatcher.a(EntityPillager.class, DataWatcherRegistry.i);
-    private final InventorySubcontainer inventory = new InventorySubcontainer(5);
+    public final InventorySubcontainer inventory = new InventorySubcontainer(5);
 
     public EntityPillager(EntityTypes<? extends EntityPillager> entitytypes, World world) {
         super(entitytypes, world);
@@ -84,11 +84,11 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
         Block block = iworldreader.getType(blockposition.down()).getBlock();
 
-        return block != Blocks.GRASS_BLOCK && block != Blocks.SAND ? 0.5F - iworldreader.v(blockposition) : 10.0F;
+        return block != Blocks.GRASS_BLOCK && block != Blocks.SAND ? 0.5F - iworldreader.w(blockposition) : 10.0F;
     }
 
     @Override
-    public int dC() {
+    public int getMaxSpawnGroup() {
         return 1;
     }
 
@@ -149,10 +149,10 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
     @Override
     public void a(EntityLiving entityliving, ItemStack itemstack, IProjectile iprojectile, float f) {
         Entity entity = (Entity) iprojectile;
-        double d0 = entityliving.locX - this.locX;
-        double d1 = entityliving.locZ - this.locZ;
+        double d0 = entityliving.locX() - this.locX();
+        double d1 = entityliving.locZ() - this.locZ();
         double d2 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1);
-        double d3 = entityliving.getBoundingBox().minY + (double) (entityliving.getHeight() / 3.0F) - entity.locY + d2 * 0.20000000298023224D;
+        double d3 = entityliving.e(0.3333333333333333D) - entity.locY() + d2 * 0.20000000298023224D;
         Vector3fa vector3fa = this.a(new Vec3D(d0, d3, d1), f);
 
         iprojectile.shoot((double) vector3fa.a(), (double) vector3fa.b(), (double) vector3fa.c(), 1.6F, (float) (14 - this.world.getDifficulty().a() * 4));
@@ -178,10 +178,6 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
         return vector3fa1;
     }
 
-    public InventorySubcontainer getInventory() {
-        return this.inventory;
-    }
-
     @Override
     protected void a(EntityItem entityitem) {
         ItemStack itemstack = entityitem.getItemStack();
@@ -205,7 +201,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
     }
 
     private boolean b(Item item) {
-        return this.ek() && item == Items.WHITE_BANNER;
+        return this.eF() && item == Items.WHITE_BANNER;
     }
 
     @Override
@@ -226,7 +222,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
 
     @Override
     public void a(int i, boolean flag) {
-        Raid raid = this.ej();
+        Raid raid = this.eE();
         boolean flag1 = this.random.nextFloat() <= raid.w();
 
         if (flag1) {
@@ -247,17 +243,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
     }
 
     @Override
-    public boolean I() {
-        return super.I() && this.getInventory().isNotEmpty();
-    }
-
-    @Override
-    public SoundEffect dV() {
+    public SoundEffect eq() {
         return SoundEffects.ENTITY_PILLAGER_CELEBRATE;
-    }
-
-    @Override
-    public boolean isTypeNotPersistent(double d0) {
-        return super.isTypeNotPersistent(d0) && this.getInventory().isNotEmpty();
     }
 }

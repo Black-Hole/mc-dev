@@ -9,8 +9,8 @@ public class EntityVex extends EntityMonster {
     private EntityInsentient c;
     @Nullable
     private BlockPosition d;
-    private boolean bz;
-    private int bA;
+    private boolean bw;
+    private int bx;
 
     public EntityVex(EntityTypes<? extends EntityVex> entitytypes, World world) {
         super(entitytypes, world);
@@ -30,8 +30,8 @@ public class EntityVex extends EntityMonster {
         super.tick();
         this.noclip = false;
         this.setNoGravity(true);
-        if (this.bz && --this.bA <= 0) {
-            this.bA = 20;
+        if (this.bw && --this.bx <= 0) {
+            this.bx = 20;
             this.damageEntity(DamageSource.STARVE, 1.0F);
         }
 
@@ -85,8 +85,8 @@ public class EntityVex extends EntityMonster {
             nbttagcompound.setInt("BoundZ", this.d.getZ());
         }
 
-        if (this.bz) {
-            nbttagcompound.setInt("LifeTicks", this.bA);
+        if (this.bw) {
+            nbttagcompound.setInt("LifeTicks", this.bx);
         }
 
     }
@@ -96,7 +96,7 @@ public class EntityVex extends EntityMonster {
     }
 
     @Nullable
-    public BlockPosition dV() {
+    public BlockPosition eq() {
         return this.d;
     }
 
@@ -136,8 +136,8 @@ public class EntityVex extends EntityMonster {
     }
 
     public void a(int i) {
-        this.bz = true;
-        this.bA = i;
+        this.bw = true;
+        this.bx = i;
     }
 
     @Override
@@ -156,7 +156,7 @@ public class EntityVex extends EntityMonster {
     }
 
     @Override
-    public float aF() {
+    public float aI() {
         return 1.0F;
     }
 
@@ -212,7 +212,7 @@ public class EntityVex extends EntityMonster {
 
         @Override
         public void e() {
-            BlockPosition blockposition = EntityVex.this.dV();
+            BlockPosition blockposition = EntityVex.this.eq();
 
             if (blockposition == null) {
                 blockposition = new BlockPosition(EntityVex.this);
@@ -269,7 +269,7 @@ public class EntityVex extends EntityMonster {
             EntityLiving entityliving = EntityVex.this.getGoalTarget();
 
             if (EntityVex.this.getBoundingBox().c(entityliving.getBoundingBox())) {
-                EntityVex.this.C(entityliving);
+                EntityVex.this.B(entityliving);
                 EntityVex.this.setCharging(false);
             } else {
                 double d0 = EntityVex.this.h((Entity) entityliving);
@@ -293,7 +293,7 @@ public class EntityVex extends EntityMonster {
         @Override
         public void a() {
             if (this.h == ControllerMove.Operation.MOVE_TO) {
-                Vec3D vec3d = new Vec3D(this.b - EntityVex.this.locX, this.c - EntityVex.this.locY, this.d - EntityVex.this.locZ);
+                Vec3D vec3d = new Vec3D(this.b - EntityVex.this.locX(), this.c - EntityVex.this.locY(), this.d - EntityVex.this.locZ());
                 double d0 = vec3d.f();
 
                 if (d0 < EntityVex.this.getBoundingBox().a()) {
@@ -305,13 +305,13 @@ public class EntityVex extends EntityMonster {
                         Vec3D vec3d1 = EntityVex.this.getMot();
 
                         EntityVex.this.yaw = -((float) MathHelper.d(vec3d1.x, vec3d1.z)) * 57.295776F;
-                        EntityVex.this.aK = EntityVex.this.yaw;
+                        EntityVex.this.aI = EntityVex.this.yaw;
                     } else {
-                        double d1 = EntityVex.this.getGoalTarget().locX - EntityVex.this.locX;
-                        double d2 = EntityVex.this.getGoalTarget().locZ - EntityVex.this.locZ;
+                        double d1 = EntityVex.this.getGoalTarget().locX() - EntityVex.this.locX();
+                        double d2 = EntityVex.this.getGoalTarget().locZ() - EntityVex.this.locZ();
 
                         EntityVex.this.yaw = -((float) MathHelper.d(d1, d2)) * 57.295776F;
-                        EntityVex.this.aK = EntityVex.this.yaw;
+                        EntityVex.this.aI = EntityVex.this.yaw;
                     }
                 }
 

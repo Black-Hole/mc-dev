@@ -22,7 +22,7 @@ public class WorldGenFeatureRandomChoice extends WorldGenerator<WorldGenFeatureR
             }
 
             worldgenfeaturerandomchoiceconfigurationweight = (WorldGenFeatureRandomChoiceConfigurationWeight) iterator.next();
-        } while (random.nextFloat() >= worldgenfeaturerandomchoiceconfigurationweight.c);
+        } while (random.nextFloat() >= worldgenfeaturerandomchoiceconfigurationweight.b);
 
         return worldgenfeaturerandomchoiceconfigurationweight.a(generatoraccess, chunkgenerator, random, blockposition);
     }

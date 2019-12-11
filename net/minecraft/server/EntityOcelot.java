@@ -6,23 +6,23 @@ import javax.annotation.Nullable;
 
 public class EntityOcelot extends EntityAnimal {
 
-    private static final RecipeItemStack bz = RecipeItemStack.a(Items.COD, Items.SALMON);
-    private static final DataWatcherObject<Boolean> bA = DataWatcher.a(EntityOcelot.class, DataWatcherRegistry.i);
-    private EntityOcelot.a<EntityHuman> bB;
-    private EntityOcelot.b bC;
+    private static final RecipeItemStack bw = RecipeItemStack.a(Items.COD, Items.SALMON);
+    private static final DataWatcherObject<Boolean> bx = DataWatcher.a(EntityOcelot.class, DataWatcherRegistry.i);
+    private EntityOcelot.a<EntityHuman> by;
+    private EntityOcelot.b bz;
 
     public EntityOcelot(EntityTypes<? extends EntityOcelot> entitytypes, World world) {
         super(entitytypes, world);
-        this.dV();
+        this.eq();
     }
 
     private boolean isTrusting() {
-        return (Boolean) this.datawatcher.get(EntityOcelot.bA);
+        return (Boolean) this.datawatcher.get(EntityOcelot.bx);
     }
 
     private void setTrusting(boolean flag) {
-        this.datawatcher.set(EntityOcelot.bA, flag);
-        this.dV();
+        this.datawatcher.set(EntityOcelot.bx, flag);
+        this.eq();
     }
 
     @Override
@@ -40,21 +40,21 @@ public class EntityOcelot extends EntityAnimal {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityOcelot.bA, false);
+        this.datawatcher.register(EntityOcelot.bx, false);
     }
 
     @Override
     protected void initPathfinder() {
-        this.bC = new EntityOcelot.b(this, 0.6D, EntityOcelot.bz, true);
+        this.bz = new EntityOcelot.b(this, 0.6D, EntityOcelot.bw, true);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(3, this.bC);
+        this.goalSelector.a(3, this.bz);
         this.goalSelector.a(7, new PathfinderGoalLeapAtTarget(this, 0.3F));
         this.goalSelector.a(8, new PathfinderGoalOcelotAttack(this));
         this.goalSelector.a(9, new PathfinderGoalBreed(this, 0.8D));
         this.goalSelector.a(10, new PathfinderGoalRandomStrollLand(this, 0.8D, 1.0000001E-5F));
         this.goalSelector.a(11, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 10.0F));
         this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget<>(this, EntityChicken.class, false));
-        this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget<>(this, EntityTurtle.class, 10, false, false, EntityTurtle.bz));
+        this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget<>(this, EntityTurtle.class, 10, false, false, EntityTurtle.bw));
     }
 
     @Override
@@ -63,17 +63,17 @@ public class EntityOcelot extends EntityAnimal {
             double d0 = this.getControllerMove().c();
 
             if (d0 == 0.6D) {
-                this.setSneaking(true);
+                this.setPose(EntityPose.CROUCHING);
                 this.setSprinting(false);
             } else if (d0 == 1.33D) {
-                this.setSneaking(false);
+                this.setPose(EntityPose.STANDING);
                 this.setSprinting(true);
             } else {
-                this.setSneaking(false);
+                this.setPose(EntityPose.STANDING);
                 this.setSprinting(false);
             }
         } else {
-            this.setSneaking(false);
+            this.setPose(EntityPose.STANDING);
             this.setSprinting(false);
         }
 
@@ -89,10 +89,13 @@ public class EntityOcelot extends EntityAnimal {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(10.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.30000001192092896D);
+        this.getAttributeMap().b(GenericAttributes.ATTACK_DAMAGE).setValue(3.0D);
     }
 
     @Override
-    public void b(float f, float f1) {}
+    public boolean b(float f, float f1) {
+        return false;
+    }
 
     @Nullable
     @Override
@@ -115,9 +118,13 @@ public class EntityOcelot extends EntityAnimal {
         return SoundEffects.ENTITY_OCELOT_DEATH;
     }
 
+    private float es() {
+        return (float) this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
+    }
+
     @Override
-    public boolean C(Entity entity) {
-        return entity.damageEntity(DamageSource.mobAttack(this), 3.0F);
+    public boolean B(Entity entity) {
+        return entity.damageEntity(DamageSource.mobAttack(this), this.es());
     }
 
     @Override
@@ -129,7 +136,7 @@ public class EntityOcelot extends EntityAnimal {
     public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if ((this.bC == null || this.bC.h()) && !this.isTrusting() && this.i(itemstack) && entityhuman.h((Entity) this) < 9.0D) {
+        if ((this.bz == null || this.bz.h()) && !this.isTrusting() && this.i(itemstack) && entityhuman.h((Entity) this) < 9.0D) {
             this.a(entityhuman, itemstack);
             if (!this.world.isClientSide) {
                 if (this.random.nextInt(3) == 0) {
@@ -160,19 +167,19 @@ public class EntityOcelot extends EntityAnimal {
             double d1 = this.random.nextGaussian() * 0.02D;
             double d2 = this.random.nextGaussian() * 0.02D;
 
-            this.world.addParticle(particletype, this.locX + (double) (this.random.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.locY + 0.5D + (double) (this.random.nextFloat() * this.getHeight()), this.locZ + (double) (this.random.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d0, d1, d2);
+            this.world.addParticle(particletype, this.d(1.0D), this.cv() + 0.5D, this.g(1.0D), d0, d1, d2);
         }
 
     }
 
-    protected void dV() {
-        if (this.bB == null) {
-            this.bB = new EntityOcelot.a<>(this, EntityHuman.class, 16.0F, 0.8D, 1.33D);
+    protected void eq() {
+        if (this.by == null) {
+            this.by = new EntityOcelot.a<>(this, EntityHuman.class, 16.0F, 0.8D, 1.33D);
         }
 
-        this.goalSelector.a((PathfinderGoal) this.bB);
+        this.goalSelector.a((PathfinderGoal) this.by);
         if (!this.isTrusting()) {
-            this.goalSelector.a(4, this.bB);
+            this.goalSelector.a(4, this.by);
         }
 
     }
@@ -184,7 +191,7 @@ public class EntityOcelot extends EntityAnimal {
 
     @Override
     public boolean i(ItemStack itemstack) {
-        return EntityOcelot.bz.test(itemstack);
+        return EntityOcelot.bw.test(itemstack);
     }
 
     public static boolean c(EntityTypes<EntityOcelot> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
@@ -194,7 +201,7 @@ public class EntityOcelot extends EntityAnimal {
     @Override
     public boolean a(IWorldReader iworldreader) {
         if (iworldreader.i(this) && !iworldreader.containsLiquid(this.getBoundingBox())) {
-            BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().minY, this.locZ);
+            BlockPosition blockposition = new BlockPosition(this);
 
             if (blockposition.getY() < iworldreader.getSeaLevel()) {
                 return false;
@@ -211,26 +218,15 @@ public class EntityOcelot extends EntityAnimal {
         return false;
     }
 
-    protected void dW() {
-        for (int i = 0; i < 2; ++i) {
-            EntityOcelot entityocelot = (EntityOcelot) EntityTypes.OCELOT.a(this.world);
-
-            entityocelot.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, 0.0F);
-            entityocelot.setAgeRaw(-24000);
-            this.world.addEntity(entityocelot);
-        }
-
-    }
-
     @Nullable
     @Override
     public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        groupdataentity = super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
-        if (generatoraccess.getRandom().nextInt(7) == 0) {
-            this.dW();
+        if (groupdataentity == null) {
+            groupdataentity = new EntityAgeable.a();
+            ((EntityAgeable.a) groupdataentity).a(1.0F);
         }
 
-        return groupdataentity;
+        return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
     }
 
     static class b extends PathfinderGoalTempt {

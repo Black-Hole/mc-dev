@@ -4,8 +4,8 @@ public final class BiomeSavannaPlateauMutated extends BiomeBase {
 
     public BiomeSavannaPlateauMutated() {
         super((new BiomeBase.a()).a(WorldGenSurface.I, WorldGenSurface.v).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.SAVANNA).a(1.05F).b(1.2125001F).c(1.0F).d(0.0F).a(4159204).b(329011).a("savanna_plateau"));
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
-        this.a(WorldGenerator.STRONGHOLD, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
+        this.a(WorldGenerator.STRONGHOLD.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);

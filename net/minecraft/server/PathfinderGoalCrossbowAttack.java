@@ -30,7 +30,7 @@ public class PathfinderGoalCrossbowAttack<T extends EntityMonster & IRangedEntit
 
     @Override
     public boolean b() {
-        return this.h() && (this.a() || !this.a.getNavigation().n()) && this.g();
+        return this.h() && (this.a() || !this.a.getNavigation().m()) && this.g();
     }
 
     private boolean h() {
@@ -44,9 +44,9 @@ public class PathfinderGoalCrossbowAttack<T extends EntityMonster & IRangedEntit
         this.a.setGoalTarget((EntityLiving) null);
         this.e = 0;
         if (this.a.isHandRaised()) {
-            this.a.dp();
+            this.a.dH();
             ((ICrossbow) this.a).a(false);
-            ItemCrossbow.a(this.a.dl(), false);
+            ItemCrossbow.a(this.a.dD(), false);
         }
 
     }
@@ -90,8 +90,8 @@ public class PathfinderGoalCrossbowAttack<T extends EntityMonster & IRangedEntit
                     this.b = PathfinderGoalCrossbowAttack.State.UNCHARGED;
                 }
 
-                int i = this.a.dn();
-                ItemStack itemstack = this.a.dl();
+                int i = this.a.dF();
+                ItemStack itemstack = this.a.dD();
 
                 if (i >= ItemCrossbow.e(itemstack)) {
                     this.a.clearActiveItem();

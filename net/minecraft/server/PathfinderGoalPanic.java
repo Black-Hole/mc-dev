@@ -57,7 +57,7 @@ public class PathfinderGoalPanic extends PathfinderGoal {
 
     @Override
     public boolean b() {
-        return !this.a.getNavigation().n();
+        return !this.a.getNavigation().m();
     }
 
     @Nullable

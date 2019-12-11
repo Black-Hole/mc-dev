@@ -8,7 +8,7 @@ public class BlockCauldron extends Block {
 
     public BlockCauldron(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCauldron.LEVEL, 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCauldron.LEVEL, 0));
     }
 
     @Override
@@ -17,12 +17,7 @@ public class BlockCauldron extends Block {
     }
 
     @Override
-    public boolean f(IBlockData iblockdata) {
-        return false;
-    }
-
-    @Override
-    public VoxelShape i(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockCauldron.c;
     }
 
@@ -31,7 +26,7 @@ public class BlockCauldron extends Block {
         int i = (Integer) iblockdata.get(BlockCauldron.LEVEL);
         float f = (float) blockposition.getY() + (6.0F + (float) (3 * i)) / 16.0F;
 
-        if (!world.isClientSide && entity.isBurning() && i > 0 && entity.getBoundingBox().minY <= (double) f) {
+        if (!world.isClientSide && entity.isBurning() && i > 0 && entity.locY() <= (double) f) {
             entity.extinguish();
             this.a(world, blockposition, iblockdata, i - 1);
         }
@@ -39,11 +34,11 @@ public class BlockCauldron extends Block {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (itemstack.isEmpty()) {
-            return true;
+            return EnumInteractionResult.PASS;
         } else {
             int i = (Integer) iblockdata.get(BlockCauldron.LEVEL);
             Item item = itemstack.getItem();
@@ -59,7 +54,7 @@ public class BlockCauldron extends Block {
                     world.playSound((EntityHuman) null, blockposition, SoundEffects.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
 
-                return true;
+                return EnumInteractionResult.SUCCESS;
             } else if (item == Items.BUCKET) {
                 if (i == 3 && !world.isClientSide) {
                     if (!entityhuman.abilities.canInstantlyBuild) {
@@ -76,7 +71,7 @@ public class BlockCauldron extends Block {
                     world.playSound((EntityHuman) null, blockposition, SoundEffects.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
 
-                return true;
+                return EnumInteractionResult.SUCCESS;
             } else {
                 ItemStack itemstack1;
 
@@ -99,7 +94,7 @@ public class BlockCauldron extends Block {
                         this.a(world, blockposition, iblockdata, i - 1);
                     }
 
-                    return true;
+                    return EnumInteractionResult.SUCCESS;
                 } else if (item == Items.POTION && PotionUtil.d(itemstack) == Potions.WATER) {
                     if (i < 3 && !world.isClientSide) {
                         if (!entityhuman.abilities.canInstantlyBuild) {
@@ -115,7 +110,7 @@ public class BlockCauldron extends Block {
                         this.a(world, blockposition, iblockdata, i + 1);
                     }
 
-                    return true;
+                    return EnumInteractionResult.SUCCESS;
                 } else {
                     if (i > 0 && item instanceof IDyeable) {
                         IDyeable idyeable = (IDyeable) item;
@@ -124,7 +119,7 @@ public class BlockCauldron extends Block {
                             idyeable.c(itemstack);
                             this.a(world, blockposition, iblockdata, i - 1);
                             entityhuman.a(StatisticList.CLEAN_ARMOR);
-                            return true;
+                            return EnumInteractionResult.SUCCESS;
                         }
                     }
 
@@ -148,11 +143,11 @@ public class BlockCauldron extends Block {
                             }
                         }
 
-                        return true;
+                        return EnumInteractionResult.SUCCESS;
                     } else if (i > 0 && item instanceof ItemBlock) {
                         Block block = ((ItemBlock) item).getBlock();
 
-                        if (block instanceof BlockShulkerBox && !world.e()) {
+                        if (block instanceof BlockShulkerBox && !world.p_()) {
                             ItemStack itemstack2 = new ItemStack(Blocks.SHULKER_BOX, 1);
 
                             if (itemstack.hasTag()) {
@@ -162,11 +157,12 @@ public class BlockCauldron extends Block {
                             entityhuman.a(enumhand, itemstack2);
                             this.a(world, blockposition, iblockdata, i - 1);
                             entityhuman.a(StatisticList.CLEAN_SHULKER_BOX);
+                            return EnumInteractionResult.SUCCESS;
+                        } else {
+                            return EnumInteractionResult.CONSUME;
                         }
-
-                        return true;
                     } else {
-                        return false;
+                        return EnumInteractionResult.PASS;
                     }
                 }
             }

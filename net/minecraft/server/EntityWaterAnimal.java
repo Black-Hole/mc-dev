@@ -4,10 +4,11 @@ public abstract class EntityWaterAnimal extends EntityCreature {
 
     protected EntityWaterAnimal(EntityTypes<? extends EntityWaterAnimal> entitytypes, World world) {
         super(entitytypes, world);
+        this.a(PathType.WATER, 0.0F);
     }
 
     @Override
-    public boolean cm() {
+    public boolean cB() {
         return true;
     }
 
@@ -32,7 +33,7 @@ public abstract class EntityWaterAnimal extends EntityCreature {
     }
 
     protected void a(int i) {
-        if (this.isAlive() && !this.av()) {
+        if (this.isAlive() && !this.az()) {
             this.setAirTicks(i - 1);
             if (this.getAirTicks() == -20) {
                 this.setAirTicks(0);
@@ -53,7 +54,7 @@ public abstract class EntityWaterAnimal extends EntityCreature {
     }
 
     @Override
-    public boolean bE() {
+    public boolean bM() {
         return false;
     }
 

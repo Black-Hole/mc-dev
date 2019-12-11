@@ -23,7 +23,7 @@ public class BehaviorNearestVillage extends Behavior<EntityVillager> {
         Vec3D vec3d = null;
 
         for (int k = 0; k < 5; ++k) {
-            Vec3D vec3d1 = RandomPositionGenerator.a(entityvillager, 15, 7, (blockposition) -> {
+            Vec3D vec3d1 = RandomPositionGenerator.a((EntityCreature) entityvillager, 15, 7, (blockposition) -> {
                 return (double) (-worldserver.b(SectionPosition.a(blockposition)));
             });
 

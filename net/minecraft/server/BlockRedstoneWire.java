@@ -17,7 +17,7 @@ public class BlockRedstoneWire extends Block {
     public static final BlockStateEnum<BlockPropertyRedstoneSide> EAST = BlockProperties.Q;
     public static final BlockStateEnum<BlockPropertyRedstoneSide> SOUTH = BlockProperties.S;
     public static final BlockStateEnum<BlockPropertyRedstoneSide> WEST = BlockProperties.T;
-    public static final BlockStateInteger POWER = BlockProperties.as;
+    public static final BlockStateInteger POWER = BlockProperties.at;
     public static final Map<EnumDirection, BlockStateEnum<BlockPropertyRedstoneSide>> f = Maps.newEnumMap(ImmutableMap.of(EnumDirection.NORTH, BlockRedstoneWire.NORTH, EnumDirection.EAST, BlockRedstoneWire.EAST, EnumDirection.SOUTH, BlockRedstoneWire.SOUTH, EnumDirection.WEST, BlockRedstoneWire.WEST));
     protected static final VoxelShape[] g = new VoxelShape[]{Block.a(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.a(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), Block.a(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D), Block.a(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), Block.a(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.a(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Block.a(0.0D, 0.0D, 0.0D, 13.0D, 1.0D, 16.0D), Block.a(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.a(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), Block.a(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Block.a(0.0D, 0.0D, 3.0D, 16.0D, 1.0D, 16.0D), Block.a(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.a(3.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 13.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D)};
     private boolean h = true;
@@ -25,15 +25,15 @@ public class BlockRedstoneWire extends Block {
 
     public BlockRedstoneWire(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneWire.NORTH, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.EAST, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.SOUTH, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.WEST, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.POWER, 0));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneWire.NORTH, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.EAST, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.SOUTH, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.WEST, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.POWER, 0));
     }
 
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockRedstoneWire.g[q(iblockdata)];
+        return BlockRedstoneWire.g[i(iblockdata)];
     }
 
-    private static int q(IBlockData iblockdata) {
+    private static int i(IBlockData iblockdata) {
         int i = 0;
         boolean flag = iblockdata.get(BlockRedstoneWire.NORTH) != BlockPropertyRedstoneSide.NONE;
         boolean flag1 = iblockdata.get(BlockRedstoneWire.EAST) != BlockPropertyRedstoneSide.NONE;
@@ -135,8 +135,8 @@ public class BlockRedstoneWire extends Block {
         if (!iblockdata1.isOccluding(iblockaccess, blockposition2)) {
             boolean flag = iblockdata.d(iblockaccess, blockposition1, EnumDirection.UP) || iblockdata.getBlock() == Blocks.HOPPER;
 
-            if (flag && j(iblockaccess.getType(blockposition1.up()))) {
-                if (iblockdata.o(iblockaccess, blockposition1)) {
+            if (flag && h(iblockaccess.getType(blockposition1.up()))) {
+                if (iblockdata.p(iblockaccess, blockposition1)) {
                     return BlockPropertyRedstoneSide.UP;
                 }
 
@@ -144,7 +144,7 @@ public class BlockRedstoneWire extends Block {
             }
         }
 
-        return !a(iblockdata, enumdirection) && (iblockdata.isOccluding(iblockaccess, blockposition1) || !j(iblockaccess.getType(blockposition1.down()))) ? BlockPropertyRedstoneSide.NONE : BlockPropertyRedstoneSide.SIDE;
+        return !a(iblockdata, enumdirection) && (iblockdata.isOccluding(iblockaccess, blockposition1) || !h(iblockaccess.getType(blockposition1.down()))) ? BlockPropertyRedstoneSide.NONE : BlockPropertyRedstoneSide.SIDE;
     }
 
     @Override
@@ -369,9 +369,9 @@ public class BlockRedstoneWire extends Block {
                     }
                 }
 
-                if (enumdirection.k().c() && enumset.isEmpty()) {
+                if (enumdirection.m().c() && enumset.isEmpty()) {
                     return i;
-                } else if (enumset.contains(enumdirection) && !enumset.contains(enumdirection.f()) && !enumset.contains(enumdirection.e())) {
+                } else if (enumset.contains(enumdirection) && !enumset.contains(enumdirection.g()) && !enumset.contains(enumdirection.f())) {
                     return i;
                 } else {
                     return 0;
@@ -391,10 +391,10 @@ public class BlockRedstoneWire extends Block {
     }
 
     protected static boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return j(iblockaccess.getType(blockposition));
+        return h(iblockaccess.getType(blockposition));
     }
 
-    protected static boolean j(IBlockData iblockdata) {
+    protected static boolean h(IBlockData iblockdata) {
         return a(iblockdata, (EnumDirection) null);
     }
 
@@ -415,11 +415,6 @@ public class BlockRedstoneWire extends Block {
     @Override
     public boolean isPowerSource(IBlockData iblockdata) {
         return this.h;
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 
     @Override

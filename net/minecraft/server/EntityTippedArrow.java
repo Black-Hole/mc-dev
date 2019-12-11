@@ -68,7 +68,12 @@ public class EntityTippedArrow extends EntityArrow {
 
     private void z() {
         this.hasColor = false;
-        this.datawatcher.set(EntityTippedArrow.COLOR, PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects)));
+        if (this.potionRegistry == Potions.EMPTY && this.effects.isEmpty()) {
+            this.datawatcher.set(EntityTippedArrow.COLOR, -1);
+        } else {
+            this.datawatcher.set(EntityTippedArrow.COLOR, PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects)));
+        }
+
     }
 
     public void addEffect(MobEffect mobeffect) {
@@ -111,7 +116,7 @@ public class EntityTippedArrow extends EntityArrow {
             double d2 = (double) (j >> 0 & 255) / 255.0D;
 
             for (int k = 0; k < i; ++k) {
-                this.world.addParticle(Particles.ENTITY_EFFECT, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.getWidth(), this.locY + this.random.nextDouble() * (double) this.getHeight(), this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.getWidth(), d0, d1, d2);
+                this.world.addParticle(Particles.ENTITY_EFFECT, this.d(0.5D), this.cv(), this.g(0.5D), d0, d1, d2);
             }
 
         }

@@ -11,7 +11,7 @@ public class InventoryUtils {
     }
 
     public static void dropEntity(World world, Entity entity, IInventory iinventory) {
-        dropInventory(world, entity.locX, entity.locY, entity.locZ, iinventory);
+        dropInventory(world, entity.locX(), entity.locY(), entity.locZ(), iinventory);
     }
 
     private static void dropInventory(World world, double d0, double d1, double d2, IInventory iinventory) {

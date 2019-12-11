@@ -13,10 +13,12 @@ public class TileEntityBanner extends TileEntity implements INamableTileEntity {
     private List<EnumBannerPatternType> h;
     private List<EnumColor> i;
     private String j;
+    private boolean k;
 
     public TileEntityBanner() {
         super(TileEntityTypes.BANNER);
         this.color = EnumColor.WHITE;
+        this.k = false;
     }
 
     public TileEntityBanner(EnumColor enumcolor) {

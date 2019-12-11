@@ -16,7 +16,7 @@ public class PathfinderGoalFloat extends PathfinderGoal {
     public boolean a() {
         double d0 = (double) this.a.getHeadHeight() < 0.4D ? 0.2D : 0.4D;
 
-        return this.a.isInWater() && this.a.cf() > d0 || this.a.aD();
+        return this.a.isInWater() && this.a.co() > d0 || this.a.aH();
     }
 
     @Override

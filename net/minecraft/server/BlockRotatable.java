@@ -6,7 +6,7 @@ public class BlockRotatable extends Block {
 
     public BlockRotatable(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) this.getBlockData().set(BlockRotatable.AXIS, EnumDirection.EnumAxis.Y));
+        this.p((IBlockData) this.getBlockData().set(BlockRotatable.AXIS, EnumDirection.EnumAxis.Y));
     }
 
     @Override
@@ -34,6 +34,6 @@ public class BlockRotatable extends Block {
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockRotatable.AXIS, blockactioncontext.getClickedFace().k());
+        return (IBlockData) this.getBlockData().set(BlockRotatable.AXIS, blockactioncontext.getClickedFace().m());
     }
 }

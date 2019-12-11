@@ -59,7 +59,7 @@ public class WorldGenEnder extends WorldGenerator<WorldGenFeatureEndSpikeConfigu
         while (iterator.hasNext()) {
             BlockPosition blockposition = (BlockPosition) iterator.next();
 
-            if (blockposition.a((BaseBlockPosition) (new BlockPosition(worldgenender_spike.a(), blockposition.getY(), worldgenender_spike.b())), (double) i) && blockposition.getY() < worldgenender_spike.d()) {
+            if (blockposition.distanceSquared((double) worldgenender_spike.a(), (double) blockposition.getY(), (double) worldgenender_spike.b(), false) <= (double) (i * i + 1) && blockposition.getY() < worldgenender_spike.d()) {
                 this.a(generatoraccess, blockposition, Blocks.OBSIDIAN.getBlockData());
             } else if (blockposition.getY() > 65) {
                 this.a(generatoraccess, blockposition, Blocks.AIR.getBlockData());
@@ -171,7 +171,7 @@ public class WorldGenEnder extends WorldGenerator<WorldGenFeatureEndSpikeConfigu
             return this.f;
         }
 
-        <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
+        public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
             Builder<T, T> builder = ImmutableMap.builder();
 
             builder.put(dynamicops.createString("centerX"), dynamicops.createInt(this.a));

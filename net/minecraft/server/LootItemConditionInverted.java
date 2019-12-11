@@ -4,7 +4,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import java.util.Set;
-import java.util.function.Function;
 
 public class LootItemConditionInverted implements LootItemCondition {
 
@@ -24,9 +23,9 @@ public class LootItemConditionInverted implements LootItemCondition {
     }
 
     @Override
-    public void a(LootCollector lootcollector, Function<MinecraftKey, LootTable> function, Set<MinecraftKey> set, LootContextParameterSet lootcontextparameterset) {
-        LootItemCondition.super.a(lootcollector, function, set, lootcontextparameterset);
-        this.a.a(lootcollector, function, set, lootcontextparameterset);
+    public void a(LootCollector lootcollector) {
+        LootItemCondition.super.a(lootcollector);
+        this.a.a(lootcollector);
     }
 
     public static LootItemCondition.a a(LootItemCondition.a lootitemcondition_a) {

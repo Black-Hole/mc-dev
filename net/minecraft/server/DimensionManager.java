@@ -8,25 +8,27 @@ import javax.annotation.Nullable;
 
 public class DimensionManager implements MinecraftSerializable {
 
-    public static final DimensionManager OVERWORLD = register("overworld", new DimensionManager(1, "", "", WorldProviderNormal::new, true));
-    public static final DimensionManager NETHER = register("the_nether", new DimensionManager(0, "_nether", "DIM-1", WorldProviderHell::new, false));
-    public static final DimensionManager THE_END = register("the_end", new DimensionManager(2, "_end", "DIM1", WorldProviderTheEnd::new, false));
+    public static final DimensionManager OVERWORLD = register("overworld", new DimensionManager(1, "", "", WorldProviderNormal::new, true, GenLayerZoomVoronoiFixed.INSTANCE));
+    public static final DimensionManager NETHER = register("the_nether", new DimensionManager(0, "_nether", "DIM-1", WorldProviderHell::new, false, GenLayerZoomVoronoi.INSTANCE));
+    public static final DimensionManager THE_END = register("the_end", new DimensionManager(2, "_end", "DIM1", WorldProviderTheEnd::new, false, GenLayerZoomVoronoi.INSTANCE));
     private final int id;
     private final String suffix;
     public final String folder;
     public final BiFunction<World, DimensionManager, ? extends WorldProvider> providerFactory;
     private final boolean hasSkyLight;
+    private final GenLayerZoomer genLayerZoomer;
 
     public static DimensionManager register(String s, DimensionManager dimensionmanager) {
         return (DimensionManager) IRegistry.a(IRegistry.DIMENSION_TYPE, dimensionmanager.id, s, dimensionmanager);
     }
 
-    public DimensionManager(int i, String s, String s1, BiFunction<World, DimensionManager, ? extends WorldProvider> bifunction, boolean flag) {
+    public DimensionManager(int i, String s, String s1, BiFunction<World, DimensionManager, ? extends WorldProvider> bifunction, boolean flag, GenLayerZoomer genlayerzoomer) {
         this.id = i;
         this.suffix = s;
         this.folder = s1;
         this.providerFactory = bifunction;
         this.hasSkyLight = flag;
+        this.genLayerZoomer = genlayerzoomer;
     }
 
     public static DimensionManager a(Dynamic<?> dynamic) {
@@ -74,6 +76,10 @@ public class DimensionManager implements MinecraftSerializable {
 
     public boolean hasSkyLight() {
         return this.hasSkyLight;
+    }
+
+    public GenLayerZoomer getGenLayerZoomer() {
+        return this.genLayerZoomer;
     }
 
     @Override

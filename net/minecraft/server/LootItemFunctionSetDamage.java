@@ -19,7 +19,7 @@ public class LootItemFunctionSetDamage extends LootItemFunctionConditional {
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
         if (itemstack.e()) {
-            float f = 1.0F - this.c.b(loottableinfo.b());
+            float f = 1.0F - this.c.b(loottableinfo.a());
 
             itemstack.setDamage(MathHelper.d(f * (float) itemstack.h()));
         } else {

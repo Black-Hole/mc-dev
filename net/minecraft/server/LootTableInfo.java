@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import javax.annotation.Nullable;
 
 public class LootTableInfo {
@@ -18,27 +19,31 @@ public class LootTableInfo {
     private final Random a;
     private final float b;
     private final WorldServer c;
-    private final LootTableRegistry d;
+    private final Function<MinecraftKey, LootTable> d;
     private final Set<LootTable> e;
-    private final Map<LootContextParameter<?>, Object> f;
-    private final Map<MinecraftKey, LootTableInfo.b> g;
+    private final Function<MinecraftKey, LootItemCondition> f;
+    private final Set<LootItemCondition> g;
+    private final Map<LootContextParameter<?>, Object> h;
+    private final Map<MinecraftKey, LootTableInfo.b> i;
 
-    private LootTableInfo(Random random, float f, WorldServer worldserver, LootTableRegistry loottableregistry, Map<LootContextParameter<?>, Object> map, Map<MinecraftKey, LootTableInfo.b> map1) {
+    private LootTableInfo(Random random, float f, WorldServer worldserver, Function<MinecraftKey, LootTable> function, Function<MinecraftKey, LootItemCondition> function1, Map<LootContextParameter<?>, Object> map, Map<MinecraftKey, LootTableInfo.b> map1) {
         this.e = Sets.newLinkedHashSet();
+        this.g = Sets.newLinkedHashSet();
         this.a = random;
         this.b = f;
         this.c = worldserver;
-        this.d = loottableregistry;
-        this.f = ImmutableMap.copyOf(map);
-        this.g = ImmutableMap.copyOf(map1);
+        this.d = function;
+        this.f = function1;
+        this.h = ImmutableMap.copyOf(map);
+        this.i = ImmutableMap.copyOf(map1);
     }
 
     public boolean hasContextParameter(LootContextParameter<?> lootcontextparameter) {
-        return this.f.containsKey(lootcontextparameter);
+        return this.h.containsKey(lootcontextparameter);
     }
 
     public void a(MinecraftKey minecraftkey, Consumer<ItemStack> consumer) {
-        LootTableInfo.b loottableinfo_b = (LootTableInfo.b) this.g.get(minecraftkey);
+        LootTableInfo.b loottableinfo_b = (LootTableInfo.b) this.i.get(minecraftkey);
 
         if (loottableinfo_b != null) {
             loottableinfo_b.add(this, consumer);
@@ -48,7 +53,7 @@ public class LootTableInfo {
 
     @Nullable
     public <T> T getContextParameter(LootContextParameter<T> lootcontextparameter) {
-        return this.f.get(lootcontextparameter);
+        return this.h.get(lootcontextparameter);
     }
 
     public boolean a(LootTable loottable) {
@@ -59,19 +64,31 @@ public class LootTableInfo {
         this.e.remove(loottable);
     }
 
-    public LootTableRegistry a() {
-        return this.d;
+    public boolean a(LootItemCondition lootitemcondition) {
+        return this.g.add(lootitemcondition);
     }
 
-    public Random b() {
+    public void b(LootItemCondition lootitemcondition) {
+        this.g.remove(lootitemcondition);
+    }
+
+    public LootTable a(MinecraftKey minecraftkey) {
+        return (LootTable) this.d.apply(minecraftkey);
+    }
+
+    public LootItemCondition b(MinecraftKey minecraftkey) {
+        return (LootItemCondition) this.f.apply(minecraftkey);
+    }
+
+    public Random a() {
         return this.a;
     }
 
-    public float c() {
+    public float b() {
         return this.b;
     }
 
-    public WorldServer d() {
+    public WorldServer c() {
         return this.c;
     }
 
@@ -221,7 +238,9 @@ public class LootTableInfo {
                         random = new Random();
                     }
 
-                    return new LootTableInfo(random, this.e, this.a, this.a.getMinecraftServer().getLootTableRegistry(), this.b, this.c);
+                    MinecraftServer minecraftserver = this.a.getMinecraftServer();
+
+                    return new LootTableInfo(random, this.e, this.a, minecraftserver.getLootTableRegistry()::getLootTable, minecraftserver.aP()::a, this.b, this.c);
                 }
             }
         }

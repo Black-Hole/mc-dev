@@ -25,7 +25,7 @@ public class WorldGenFeatureDefinedStructurePoolEmpty extends WorldGenFeatureDef
     }
 
     @Override
-    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccess generatoraccess, BlockPosition blockposition, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random) {
+    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, BlockPosition blockposition, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random) {
         return true;
     }
 

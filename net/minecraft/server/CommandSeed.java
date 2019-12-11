@@ -11,7 +11,7 @@ public class CommandSeed {
         })).executes((commandcontext) -> {
             long i = ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getSeed();
             IChatBaseComponent ichatbasecomponent = ChatComponentUtils.a((new ChatComponentText(String.valueOf(i))).a((chatmodifier) -> {
-                chatmodifier.setColor(EnumChatFormat.GREEN).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, String.valueOf(i))).setInsertion(String.valueOf(i));
+                chatmodifier.setColor(EnumChatFormat.GREEN).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.COPY_TO_CLIPBOARD, String.valueOf(i))).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatMessage("chat.copy.click", new Object[0]))).setInsertion(String.valueOf(i));
             }));
 
             ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.seed.success", new Object[]{ichatbasecomponent}), false);

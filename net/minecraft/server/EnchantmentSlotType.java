@@ -90,7 +90,7 @@ public enum EnchantmentSlotType {
         public boolean canEnchant(Item item) {
             Block block = Block.asBlock(item);
 
-            return item instanceof ItemArmor || item instanceof ItemElytra || block instanceof BlockSkullAbstract || block instanceof BlockPumpkin;
+            return item instanceof ItemArmor || item instanceof ItemElytra || block instanceof BlockSkullAbstract || block instanceof BlockPumpkinCarved;
         }
     },
     CROSSBOW {

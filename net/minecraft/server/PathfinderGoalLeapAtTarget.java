@@ -38,7 +38,7 @@ public class PathfinderGoalLeapAtTarget extends PathfinderGoal {
     @Override
     public void c() {
         Vec3D vec3d = this.a.getMot();
-        Vec3D vec3d1 = new Vec3D(this.b.locX - this.a.locX, 0.0D, this.b.locZ - this.a.locZ);
+        Vec3D vec3d1 = new Vec3D(this.b.locX() - this.a.locX(), 0.0D, this.b.locZ() - this.a.locZ());
 
         if (vec3d1.g() > 1.0E-7D) {
             vec3d1 = vec3d1.d().a(0.4D).e(vec3d.a(0.2D));

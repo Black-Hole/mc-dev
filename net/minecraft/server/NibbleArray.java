@@ -12,7 +12,7 @@ public class NibbleArray {
     public NibbleArray(byte[] abyte) {
         this.a = abyte;
         if (abyte.length != 2048) {
-            throw new IllegalArgumentException("ChunkNibbleArrays should be 2048 bytes not: " + abyte.length);
+            throw (IllegalArgumentException) SystemUtils.c(new IllegalArgumentException("ChunkNibbleArrays should be 2048 bytes not: " + abyte.length));
         }
     }
 

@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 public class ResourcePackLoader implements AutoCloseable {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final ResourcePackInfo b = new ResourcePackInfo((new ChatMessage("resourcePack.broken_assets", new Object[0])).a(new EnumChatFormat[]{EnumChatFormat.RED, EnumChatFormat.ITALIC}), SharedConstants.a().getPackVersion());
+    private static final ResourcePackInfo b = new ResourcePackInfo((new ChatMessage("resourcePack.broken_assets", new Object[0])).a(new EnumChatFormat[]{EnumChatFormat.RED, EnumChatFormat.ITALIC}), SharedConstants.getGameVersion().getPackVersion());
     private final String c;
     private final Supplier<IResourcePack> d;
     private final IChatBaseComponent e;

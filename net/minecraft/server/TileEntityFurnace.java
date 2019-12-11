@@ -114,7 +114,7 @@ public abstract class TileEntityFurnace extends TileEntityContainer implements I
         a(map, (IMaterial) Items.WOODEN_AXE, 200);
         a(map, (IMaterial) Items.WOODEN_PICKAXE, 200);
         a(map, TagsItem.WOODEN_DOORS, 200);
-        a(map, TagsItem.BOATS, 200);
+        a(map, TagsItem.BOATS, 1200);
         a(map, TagsItem.WOOL, 100);
         a(map, TagsItem.WOODEN_BUTTONS, 100);
         a(map, (IMaterial) Items.STICK, 100);
@@ -125,7 +125,7 @@ public abstract class TileEntityFurnace extends TileEntityContainer implements I
         a(map, (IMaterial) Items.CROSSBOW, 300);
         a(map, (IMaterial) Blocks.BAMBOO, 50);
         a(map, (IMaterial) Blocks.DEAD_BUSH, 100);
-        a(map, (IMaterial) Blocks.SCAFFOLDING, 50);
+        a(map, (IMaterial) Blocks.SCAFFOLDING, 400);
         a(map, (IMaterial) Blocks.LOOM, 300);
         a(map, (IMaterial) Blocks.BARREL, 300);
         a(map, (IMaterial) Blocks.CARTOGRAPHY_TABLE, 300);
@@ -223,7 +223,7 @@ public abstract class TileEntityFurnace extends TileEntityContainer implements I
 
                             itemstack.subtract(1);
                             if (itemstack.isEmpty()) {
-                                Item item1 = item.n();
+                                Item item1 = item.p();
 
                                 this.items.set(1, item1 == null ? ItemStack.a : new ItemStack(item1));
                             }
@@ -258,7 +258,7 @@ public abstract class TileEntityFurnace extends TileEntityContainer implements I
 
     protected boolean canBurn(@Nullable IRecipe<?> irecipe) {
         if (!((ItemStack) this.items.get(0)).isEmpty() && irecipe != null) {
-            ItemStack itemstack = irecipe.c();
+            ItemStack itemstack = irecipe.getResult();
 
             if (itemstack.isEmpty()) {
                 return false;
@@ -275,7 +275,7 @@ public abstract class TileEntityFurnace extends TileEntityContainer implements I
     private void burn(@Nullable IRecipe<?> irecipe) {
         if (irecipe != null && this.canBurn(irecipe)) {
             ItemStack itemstack = (ItemStack) this.items.get(0);
-            ItemStack itemstack1 = irecipe.c();
+            ItemStack itemstack1 = irecipe.getResult();
             ItemStack itemstack2 = (ItemStack) this.items.get(2);
 
             if (itemstack2.isEmpty()) {
@@ -394,7 +394,7 @@ public abstract class TileEntityFurnace extends TileEntityContainer implements I
 
     @Override
     public boolean a(EntityHuman entityhuman) {
-        return this.world.getTileEntity(this.position) != this ? false : entityhuman.e((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
+        return this.world.getTileEntity(this.position) != this ? false : entityhuman.g((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
     }
 
     @Override
@@ -427,7 +427,7 @@ public abstract class TileEntityFurnace extends TileEntityContainer implements I
 
     @Nullable
     @Override
-    public IRecipe<?> U_() {
+    public IRecipe<?> aa_() {
         return null;
     }
 
@@ -468,7 +468,7 @@ public abstract class TileEntityFurnace extends TileEntityContainer implements I
         while (i > 0) {
             j = EntityExperienceOrb.getOrbValue(i);
             i -= j;
-            entityhuman.world.addEntity(new EntityExperienceOrb(entityhuman.world, entityhuman.locX, entityhuman.locY + 0.5D, entityhuman.locZ + 0.5D, j));
+            entityhuman.world.addEntity(new EntityExperienceOrb(entityhuman.world, entityhuman.locX(), entityhuman.locY() + 0.5D, entityhuman.locZ() + 0.5D, j));
         }
 
     }

@@ -4,22 +4,12 @@ import javax.annotation.Nullable;
 
 public class WorldProviderHell extends WorldProvider {
 
+    private static final Vec3D f = new Vec3D(0.20000000298023224D, 0.029999999329447746D, 0.029999999329447746D);
+
     public WorldProviderHell(World world, DimensionManager dimensionmanager) {
-        super(world, dimensionmanager);
+        super(world, dimensionmanager, 0.1F);
         this.c = true;
         this.d = true;
-    }
-
-    @Override
-    protected void a() {
-        float f = 0.1F;
-
-        for (int i = 0; i <= 15; ++i) {
-            float f1 = 1.0F - (float) i / 15.0F;
-
-            this.e[i] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * 0.9F + 0.1F;
-        }
-
     }
 
     @Override
@@ -28,7 +18,7 @@ public class WorldProviderHell extends WorldProvider {
 
         generatorsettingsnether.a(Blocks.NETHERRACK.getBlockData());
         generatorsettingsnether.b(Blocks.LAVA.getBlockData());
-        return ChunkGeneratorType.b.create(this.b, BiomeLayout.b.a(((BiomeLayoutFixedConfiguration) BiomeLayout.b.a()).a(Biomes.NETHER)), generatorsettingsnether);
+        return ChunkGeneratorType.b.create(this.b, BiomeLayout.b.a((BiomeLayoutConfiguration) ((BiomeLayoutFixedConfiguration) BiomeLayout.b.a(this.b.getWorldData())).a(Biomes.NETHER)), generatorsettingsnether);
     }
 
     @Override

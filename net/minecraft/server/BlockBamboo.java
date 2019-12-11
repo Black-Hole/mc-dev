@@ -9,12 +9,12 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
     protected static final VoxelShape b = Block.a(3.0D, 0.0D, 3.0D, 13.0D, 16.0D, 13.0D);
     protected static final VoxelShape c = Block.a(6.5D, 0.0D, 6.5D, 9.5D, 16.0D, 9.5D);
     public static final BlockStateInteger d = BlockProperties.Y;
-    public static final BlockStateEnum<BlockPropertyBambooSize> e = BlockProperties.aF;
-    public static final BlockStateInteger f = BlockProperties.at;
+    public static final BlockStateEnum<BlockPropertyBambooSize> e = BlockProperties.aG;
+    public static final BlockStateInteger f = BlockProperties.au;
 
     public BlockBamboo(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBamboo.d, 0)).set(BlockBamboo.e, BlockPropertyBambooSize.NONE)).set(BlockBamboo.f, 0));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBamboo.d, 0)).set(BlockBamboo.e, BlockPropertyBambooSize.NONE)).set(BlockBamboo.f, 0));
     }
 
     @Override
@@ -23,7 +23,7 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
     }
 
     @Override
-    public Block.EnumRandomOffset R_() {
+    public Block.EnumRandomOffset X_() {
         return Block.EnumRandomOffset.XZ;
     }
 
@@ -81,15 +81,15 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!iblockdata.canPlace(world, blockposition)) {
-            world.b(blockposition, true);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!iblockdata.canPlace(worldserver, blockposition)) {
+            worldserver.b(blockposition, true);
         } else if ((Integer) iblockdata.get(BlockBamboo.f) == 0) {
-            if (random.nextInt(3) == 0 && world.isEmpty(blockposition.up()) && world.getLightLevel(blockposition.up(), 0) >= 9) {
-                int i = this.b((IBlockAccess) world, blockposition) + 1;
+            if (random.nextInt(3) == 0 && worldserver.isEmpty(blockposition.up()) && worldserver.getLightLevel(blockposition.up(), 0) >= 9) {
+                int i = this.b(worldserver, blockposition) + 1;
 
                 if (i < 16) {
-                    this.a(iblockdata, world, blockposition, random, i);
+                    this.a(iblockdata, (World) worldserver, blockposition, random, i);
                 }
             }
 
@@ -128,21 +128,21 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
     }
 
     @Override
-    public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        int i = this.a((IBlockAccess) world, blockposition);
-        int j = this.b((IBlockAccess) world, blockposition);
+    public void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata) {
+        int i = this.a((IBlockAccess) worldserver, blockposition);
+        int j = this.b(worldserver, blockposition);
         int k = i + j + 1;
         int l = 1 + random.nextInt(2);
 
         for (int i1 = 0; i1 < l; ++i1) {
             BlockPosition blockposition1 = blockposition.up(i);
-            IBlockData iblockdata1 = world.getType(blockposition1);
+            IBlockData iblockdata1 = worldserver.getType(blockposition1);
 
-            if (k >= 16 || (Integer) iblockdata1.get(BlockBamboo.f) == 1 || !world.isEmpty(blockposition1.up())) {
+            if (k >= 16 || (Integer) iblockdata1.get(BlockBamboo.f) == 1 || !worldserver.isEmpty(blockposition1.up())) {
                 return;
             }
 
-            this.a(iblockdata1, world, blockposition1, random, k);
+            this.a(iblockdata1, (World) worldserver, blockposition1, random, k);
             ++i;
             ++k;
         }
@@ -152,11 +152,6 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
     @Override
     public float getDamage(IBlockData iblockdata, EntityHuman entityhuman, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return entityhuman.getItemInMainHand().getItem() instanceof ItemSword ? 1.0F : super.getDamage(iblockdata, entityhuman, iblockaccess, blockposition);
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 
     protected void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random, int i) {

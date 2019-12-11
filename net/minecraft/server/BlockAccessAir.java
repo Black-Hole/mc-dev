@@ -21,6 +21,6 @@ public enum BlockAccessAir implements IBlockAccess {
 
     @Override
     public Fluid getFluid(BlockPosition blockposition) {
-        return FluidTypes.EMPTY.i();
+        return FluidTypes.EMPTY.h();
     }
 }

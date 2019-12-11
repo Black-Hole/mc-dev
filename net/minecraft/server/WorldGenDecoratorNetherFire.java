@@ -17,11 +17,11 @@ public class WorldGenDecoratorNetherFire extends WorldGenDecoratorFeatureSimple<
         List<BlockPosition> list = Lists.newArrayList();
 
         for (int i = 0; i < random.nextInt(random.nextInt(worldgendecoratorfrequencyconfiguration.a) + 1) + 1; ++i) {
-            int j = random.nextInt(16);
-            int k = random.nextInt(120) + 4;
-            int l = random.nextInt(16);
+            int j = random.nextInt(16) + blockposition.getX();
+            int k = random.nextInt(16) + blockposition.getZ();
+            int l = random.nextInt(120) + 4;
 
-            list.add(blockposition.b(j, k, l));
+            list.add(new BlockPosition(j, l, k));
         }
 
         return list.stream();

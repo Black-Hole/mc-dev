@@ -4,9 +4,9 @@ public final class BiomeBeach extends BiomeBase {
 
     public BiomeBeach() {
         super((new BiomeBase.a()).a(WorldGenSurface.G, WorldGenSurface.z).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.BEACH).a(0.0F).b(0.025F).c(0.8F).d(0.4F).a(4159204).b(329011).a((String) null));
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
-        this.a(WorldGenerator.BURIED_TREASURE, (WorldGenFeatureConfiguration) (new WorldGenBuriedTreasureConfiguration(0.01F)));
-        this.a(WorldGenerator.SHIPWRECK, (WorldGenFeatureConfiguration) (new WorldGenFeatureShipwreckConfiguration(true)));
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
+        this.a(WorldGenerator.BURIED_TREASURE.b((WorldGenFeatureConfiguration) (new WorldGenBuriedTreasureConfiguration(0.01F))));
+        this.a(WorldGenerator.SHIPWRECK.b((WorldGenFeatureConfiguration) (new WorldGenFeatureShipwreckConfiguration(true))));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);

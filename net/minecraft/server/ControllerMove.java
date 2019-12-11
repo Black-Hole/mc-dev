@@ -69,7 +69,7 @@ public class ControllerMove {
             if (navigationabstract != null) {
                 PathfinderAbstract pathfinderabstract = navigationabstract.q();
 
-                if (pathfinderabstract != null && pathfinderabstract.a(this.a.world, MathHelper.floor(this.a.locX + (double) f8), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ + (double) f)) != PathType.WALKABLE) {
+                if (pathfinderabstract != null && pathfinderabstract.a(this.a.world, MathHelper.floor(this.a.locX() + (double) f8), MathHelper.floor(this.a.locY()), MathHelper.floor(this.a.locZ() + (double) f)) != PathType.WALKABLE) {
                     this.f = 1.0F;
                     this.g = 0.0F;
                     f2 = f1;
@@ -82,9 +82,9 @@ public class ControllerMove {
             this.h = ControllerMove.Operation.WAIT;
         } else if (this.h == ControllerMove.Operation.MOVE_TO) {
             this.h = ControllerMove.Operation.WAIT;
-            double d0 = this.b - this.a.locX;
-            double d1 = this.d - this.a.locZ;
-            double d2 = this.c - this.a.locY;
+            double d0 = this.b - this.a.locX();
+            double d1 = this.d - this.a.locZ();
+            double d2 = this.c - this.a.locY();
             double d3 = d0 * d0 + d2 * d2 + d1 * d1;
 
             if (d3 < 2.500000277905201E-7D) {
@@ -100,7 +100,7 @@ public class ControllerMove {
             Block block = iblockdata.getBlock();
             VoxelShape voxelshape = iblockdata.getCollisionShape(this.a.world, blockposition);
 
-            if (d2 > (double) this.a.K && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.a.getWidth()) || !voxelshape.isEmpty() && this.a.locY < voxelshape.c(EnumDirection.EnumAxis.Y) + (double) blockposition.getY() && !block.a(TagsBlock.DOORS) && !block.a(TagsBlock.FENCES)) {
+            if (d2 > (double) this.a.H && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.a.getWidth()) || !voxelshape.isEmpty() && this.a.locY() < voxelshape.c(EnumDirection.EnumAxis.Y) + (double) blockposition.getY() && !block.a(TagsBlock.DOORS) && !block.a(TagsBlock.FENCES)) {
                 this.a.getControllerJump().jump();
                 this.h = ControllerMove.Operation.JUMPING;
             }

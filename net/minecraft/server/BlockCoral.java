@@ -13,9 +13,9 @@ public class BlockCoral extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!this.a((IBlockAccess) world, blockposition)) {
-            world.setTypeAndData(blockposition, this.a.getBlockData(), 2);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!this.a((IBlockAccess) worldserver, blockposition)) {
+            worldserver.setTypeAndData(blockposition, this.a.getBlockData(), 2);
         }
 
     }

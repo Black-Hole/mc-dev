@@ -24,11 +24,11 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
     public IBlockData(Block block, ImmutableMap<IBlockState<?>, Comparable<?>> immutablemap) {
         super(block, immutablemap);
         this.d = block.a(this);
-        this.e = block.n(this);
+        this.e = block.o(this);
     }
 
     public void c() {
-        if (!this.getBlock().p()) {
+        if (!this.getBlock().q()) {
             this.c = new IBlockData.a(this);
         }
 
@@ -39,7 +39,7 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
     }
 
     public Material getMaterial() {
-        return this.getBlock().l(this);
+        return this.getBlock().k(this);
     }
 
     public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, EntityTypes<?> entitytypes) {
@@ -51,7 +51,7 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
     }
 
     public int b(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.c != null ? this.c.e : this.getBlock().k(this, iblockaccess, blockposition);
+        return this.c != null ? this.c.e : this.getBlock().l(this, iblockaccess, blockposition);
     }
 
     public VoxelShape a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
@@ -71,7 +71,7 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
     }
 
     public boolean isAir() {
-        return this.getBlock().e(this);
+        return this.getBlock().d(this);
     }
 
     public MaterialMapColor c(IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -86,7 +86,7 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
         return this.getBlock().a(this, enumblockmirror);
     }
 
-    public EnumRenderType k() {
+    public EnumRenderType j() {
         return this.getBlock().c(this);
     }
 
@@ -111,7 +111,7 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
     }
 
     public float f(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.getBlock().f(this, iblockaccess, blockposition);
+        return this.getBlock().g(this, iblockaccess, blockposition);
     }
 
     public float getDamage(EntityHuman entityhuman, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -127,11 +127,11 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
     }
 
     public boolean g(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.c != null ? this.c.c : this.getBlock().j(this, iblockaccess, blockposition);
+        return this.c != null ? this.c.c : this.getBlock().k(this, iblockaccess, blockposition);
     }
 
     public boolean o() {
-        return this.c != null ? this.c.b : this.getBlock().f(this);
+        return this.c != null ? this.c.b : this.getBlock().n(this);
     }
 
     public VoxelShape getShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -151,11 +151,11 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
     }
 
     public VoxelShape j(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.getBlock().h(this, iblockaccess, blockposition);
+        return this.getBlock().i(this, iblockaccess, blockposition);
     }
 
     public VoxelShape k(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.getBlock().i(this, iblockaccess, blockposition);
+        return this.getBlock().j(this, iblockaccess, blockposition);
     }
 
     public final boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, Entity entity) {
@@ -163,7 +163,7 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
     }
 
     public Vec3D l(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.getBlock().l(this, iblockaccess, blockposition);
+        return this.getBlock().m(this, iblockaccess, blockposition);
     }
 
     public boolean a(World world, BlockPosition blockposition, int i, int j) {
@@ -190,12 +190,12 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
         this.getBlock().remove(this, world, blockposition, iblockdata, flag);
     }
 
-    public void a(World world, BlockPosition blockposition, Random random) {
-        this.getBlock().tick(this, world, blockposition, random);
+    public void a(WorldServer worldserver, BlockPosition blockposition, Random random) {
+        this.getBlock().tick(this, worldserver, blockposition, random);
     }
 
-    public void b(World world, BlockPosition blockposition, Random random) {
-        this.getBlock().c(this, world, blockposition, random);
+    public void b(WorldServer worldserver, BlockPosition blockposition, Random random) {
+        this.getBlock().b(this, worldserver, blockposition, random);
     }
 
     public void a(World world, BlockPosition blockposition, Entity entity) {
@@ -210,7 +210,7 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
         return this.getBlock().a(this, loottableinfo_builder);
     }
 
-    public boolean interact(World world, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(World world, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         return this.getBlock().interact(this, world, movingobjectpositionblock.getBlockPosition(), entityhuman, enumhand, movingobjectpositionblock);
     }
 
@@ -234,12 +234,16 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
         return this.getBlock().a(this, blockactioncontext);
     }
 
+    public boolean a(FluidType fluidtype) {
+        return this.getBlock().a(this, fluidtype);
+    }
+
     public boolean canPlace(IWorldReader iworldreader, BlockPosition blockposition) {
         return this.getBlock().canPlace(this, iworldreader, blockposition);
     }
 
-    public boolean n(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.getBlock().g(this, iblockaccess, blockposition);
+    public boolean o(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return this.getBlock().h(this, iblockaccess, blockposition);
     }
 
     @Nullable
@@ -251,8 +255,8 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
         return this.getBlock().a(tag);
     }
 
-    public Fluid p() {
-        return this.getBlock().g(this);
+    public Fluid getFluid() {
+        return this.getBlock().a_(this);
     }
 
     public boolean q() {
@@ -271,7 +275,7 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
         return this.c != null ? this.c.i[enumdirection.ordinal()] : Block.d(this, iblockaccess, blockposition, enumdirection);
     }
 
-    public boolean o(IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public boolean p(IBlockAccess iblockaccess, BlockPosition blockposition) {
         return this.c != null ? this.c.j : Block.a(this.getCollisionShape(iblockaccess, blockposition));
     }
 
@@ -335,17 +339,17 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
         private a(IBlockData iblockdata) {
             Block block = iblockdata.getBlock();
 
-            this.b = block.f(iblockdata);
-            this.c = block.j(iblockdata, BlockAccessAir.INSTANCE, BlockPosition.ZERO);
+            this.b = block.n(iblockdata);
+            this.c = block.k(iblockdata, BlockAccessAir.INSTANCE, BlockPosition.ZERO);
             this.d = block.b(iblockdata, (IBlockAccess) BlockAccessAir.INSTANCE, BlockPosition.ZERO);
-            this.e = block.k(iblockdata, BlockAccessAir.INSTANCE, BlockPosition.ZERO);
+            this.e = block.l(iblockdata, BlockAccessAir.INSTANCE, BlockPosition.ZERO);
             int i;
 
             if (!iblockdata.o()) {
                 this.f = null;
             } else {
                 this.f = new VoxelShape[IBlockData.a.a.length];
-                VoxelShape voxelshape = block.h(iblockdata, BlockAccessAir.INSTANCE, BlockPosition.ZERO);
+                VoxelShape voxelshape = block.i(iblockdata, BlockAccessAir.INSTANCE, BlockPosition.ZERO);
                 EnumDirection[] aenumdirection = IBlockData.a.a;
 
                 i = aenumdirection.length;
@@ -357,7 +361,7 @@ public class IBlockData extends BlockDataAbstract<Block, IBlockData> implements 
                 }
             }
 
-            this.g = block.b(iblockdata, BlockAccessAir.INSTANCE, BlockPosition.ZERO, VoxelShapeCollision.a());
+            this.g = block.b(iblockdata, (IBlockAccess) BlockAccessAir.INSTANCE, BlockPosition.ZERO, VoxelShapeCollision.a());
             this.h = Arrays.stream(EnumDirection.EnumAxis.values()).anyMatch((enumdirection_enumaxis) -> {
                 return this.g.b(enumdirection_enumaxis) < 0.0D || this.g.c(enumdirection_enumaxis) > 1.0D;
             });

@@ -28,24 +28,22 @@ public abstract class BlockDirtSnowSpreadable extends BlockDirtSnow {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!world.isClientSide) {
-            if (!b(iblockdata, (IWorldReader) world, blockposition)) {
-                world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
-            } else {
-                if (world.getLightLevel(blockposition.up()) >= 9) {
-                    IBlockData iblockdata1 = this.getBlockData();
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!b(iblockdata, (IWorldReader) worldserver, blockposition)) {
+            worldserver.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
+        } else {
+            if (worldserver.getLightLevel(blockposition.up()) >= 9) {
+                IBlockData iblockdata1 = this.getBlockData();
 
-                    for (int i = 0; i < 4; ++i) {
-                        BlockPosition blockposition1 = blockposition.b(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
+                for (int i = 0; i < 4; ++i) {
+                    BlockPosition blockposition1 = blockposition.b(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
 
-                        if (world.getType(blockposition1).getBlock() == Blocks.DIRT && c(iblockdata1, (IWorldReader) world, blockposition1)) {
-                            world.setTypeUpdate(blockposition1, (IBlockData) iblockdata1.set(BlockDirtSnowSpreadable.a, world.getType(blockposition1.up()).getBlock() == Blocks.SNOW));
-                        }
+                    if (worldserver.getType(blockposition1).getBlock() == Blocks.DIRT && c(iblockdata1, (IWorldReader) worldserver, blockposition1)) {
+                        worldserver.setTypeUpdate(blockposition1, (IBlockData) iblockdata1.set(BlockDirtSnowSpreadable.a, worldserver.getType(blockposition1.up()).getBlock() == Blocks.SNOW));
                     }
                 }
-
             }
+
         }
     }
 }

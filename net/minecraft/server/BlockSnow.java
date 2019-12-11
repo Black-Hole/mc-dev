@@ -10,7 +10,7 @@ public class BlockSnow extends Block {
 
     protected BlockSnow(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSnow.LAYERS, 1));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSnow.LAYERS, 1));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class BlockSnow extends Block {
     }
 
     @Override
-    public boolean n(IBlockData iblockdata) {
+    public boolean o(IBlockData iblockdata) {
         return true;
     }
 
@@ -47,7 +47,7 @@ public class BlockSnow extends Block {
         IBlockData iblockdata1 = iworldreader.getType(blockposition.down());
         Block block = iblockdata1.getBlock();
 
-        return block != Blocks.ICE && block != Blocks.PACKED_ICE && block != Blocks.BARRIER ? Block.a(iblockdata1.getCollisionShape(iworldreader, blockposition.down()), EnumDirection.UP) || block == this && (Integer) iblockdata1.get(BlockSnow.LAYERS) == 8 : false;
+        return block != Blocks.ICE && block != Blocks.PACKED_ICE && block != Blocks.BARRIER ? (block != Blocks.HONEY_BLOCK && block != Blocks.SOUL_SAND ? Block.a(iblockdata1.getCollisionShape(iworldreader, blockposition.down()), EnumDirection.UP) || block == this && (Integer) iblockdata1.get(BlockSnow.LAYERS) == 8 : true) : false;
     }
 
     @Override
@@ -56,10 +56,10 @@ public class BlockSnow extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (world.getBrightness(EnumSkyBlock.BLOCK, blockposition) > 11) {
-            c(iblockdata, world, blockposition);
-            world.a(blockposition, false);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (worldserver.getBrightness(EnumSkyBlock.BLOCK, blockposition) > 11) {
+            c(iblockdata, (World) worldserver, blockposition);
+            worldserver.a(blockposition, false);
         }
 
     }

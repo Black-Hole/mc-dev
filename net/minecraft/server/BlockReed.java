@@ -10,7 +10,7 @@ public class BlockReed extends Block {
 
     protected BlockReed(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockReed.AGE, 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockReed.AGE, 0));
     }
 
     @Override
@@ -19,13 +19,13 @@ public class BlockReed extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!iblockdata.canPlace(world, blockposition)) {
-            world.b(blockposition, true);
-        } else if (world.isEmpty(blockposition.up())) {
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!iblockdata.canPlace(worldserver, blockposition)) {
+            worldserver.b(blockposition, true);
+        } else if (worldserver.isEmpty(blockposition.up())) {
             int i;
 
-            for (i = 1; world.getType(blockposition.down(i)).getBlock() == this; ++i) {
+            for (i = 1; worldserver.getType(blockposition.down(i)).getBlock() == this; ++i) {
                 ;
             }
 
@@ -33,10 +33,10 @@ public class BlockReed extends Block {
                 int j = (Integer) iblockdata.get(BlockReed.AGE);
 
                 if (j == 15) {
-                    world.setTypeUpdate(blockposition.up(), this.getBlockData());
-                    world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockReed.AGE, 0), 4);
+                    worldserver.setTypeUpdate(blockposition.up(), this.getBlockData());
+                    worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockReed.AGE, 0), 4);
                 } else {
-                    world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockReed.AGE, j + 1), 4);
+                    worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockReed.AGE, j + 1), 4);
                 }
             }
         }
@@ -76,11 +76,6 @@ public class BlockReed extends Block {
 
             return false;
         }
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 
     @Override

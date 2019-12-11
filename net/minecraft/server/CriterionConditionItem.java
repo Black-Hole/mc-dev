@@ -21,28 +21,31 @@ public class CriterionConditionItem {
     private final CriterionConditionValue.IntegerRange d;
     private final CriterionConditionValue.IntegerRange e;
     private final CriterionConditionEnchantments[] f;
+    private final CriterionConditionEnchantments[] g;
     @Nullable
-    private final PotionRegistry g;
-    private final CriterionConditionNBT h;
+    private final PotionRegistry h;
+    private final CriterionConditionNBT i;
 
     public CriterionConditionItem() {
         this.b = null;
         this.c = null;
-        this.g = null;
+        this.h = null;
         this.d = CriterionConditionValue.IntegerRange.e;
         this.e = CriterionConditionValue.IntegerRange.e;
-        this.f = new CriterionConditionEnchantments[0];
-        this.h = CriterionConditionNBT.a;
+        this.f = CriterionConditionEnchantments.b;
+        this.g = CriterionConditionEnchantments.b;
+        this.i = CriterionConditionNBT.a;
     }
 
-    public CriterionConditionItem(@Nullable Tag<Item> tag, @Nullable Item item, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1, CriterionConditionEnchantments[] acriterionconditionenchantments, @Nullable PotionRegistry potionregistry, CriterionConditionNBT criterionconditionnbt) {
+    public CriterionConditionItem(@Nullable Tag<Item> tag, @Nullable Item item, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1, CriterionConditionEnchantments[] acriterionconditionenchantments, CriterionConditionEnchantments[] acriterionconditionenchantments1, @Nullable PotionRegistry potionregistry, CriterionConditionNBT criterionconditionnbt) {
         this.b = tag;
         this.c = item;
         this.d = criterionconditionvalue_integerrange;
         this.e = criterionconditionvalue_integerrange1;
         this.f = acriterionconditionenchantments;
-        this.g = potionregistry;
-        this.h = criterionconditionnbt;
+        this.g = acriterionconditionenchantments1;
+        this.h = potionregistry;
+        this.i = criterionconditionnbt;
     }
 
     public boolean a(ItemStack itemstack) {
@@ -58,24 +61,44 @@ public class CriterionConditionItem {
             return false;
         } else if (!this.e.d(itemstack.h() - itemstack.getDamage())) {
             return false;
-        } else if (!this.h.a(itemstack)) {
+        } else if (!this.i.a(itemstack)) {
             return false;
         } else {
-            Map<Enchantment, Integer> map = EnchantmentManager.a(itemstack);
+            Map map;
+            CriterionConditionEnchantments[] acriterionconditionenchantments;
+            int i;
+            CriterionConditionEnchantments criterionconditionenchantments;
+            int j;
 
-            for (int i = 0; i < this.f.length; ++i) {
-                if (!this.f[i].a(map)) {
-                    return false;
+            if (this.f.length > 0) {
+                map = EnchantmentManager.a(itemstack.getEnchantments());
+                acriterionconditionenchantments = this.f;
+                i = acriterionconditionenchantments.length;
+
+                for (j = 0; j < i; ++j) {
+                    criterionconditionenchantments = acriterionconditionenchantments[j];
+                    if (!criterionconditionenchantments.a(map)) {
+                        return false;
+                    }
+                }
+            }
+
+            if (this.g.length > 0) {
+                map = EnchantmentManager.a(ItemEnchantedBook.e(itemstack));
+                acriterionconditionenchantments = this.g;
+                i = acriterionconditionenchantments.length;
+
+                for (j = 0; j < i; ++j) {
+                    criterionconditionenchantments = acriterionconditionenchantments[j];
+                    if (!criterionconditionenchantments.a(map)) {
+                        return false;
+                    }
                 }
             }
 
             PotionRegistry potionregistry = PotionUtil.d(itemstack);
 
-            if (this.g != null && this.g != potionregistry) {
-                return false;
-            } else {
-                return true;
-            }
+            return this.h == null || this.h == potionregistry;
         }
     }
 
@@ -110,7 +133,6 @@ public class CriterionConditionItem {
                     }
                 }
 
-                CriterionConditionEnchantments[] acriterionconditionenchantments = CriterionConditionEnchantments.b(jsonobject.get("enchantments"));
                 PotionRegistry potionregistry = null;
 
                 if (jsonobject.has("potion")) {
@@ -121,7 +143,10 @@ public class CriterionConditionItem {
                     });
                 }
 
-                return new CriterionConditionItem(tag, item, criterionconditionvalue_integerrange, criterionconditionvalue_integerrange1, acriterionconditionenchantments, potionregistry, criterionconditionnbt);
+                CriterionConditionEnchantments[] acriterionconditionenchantments = CriterionConditionEnchantments.b(jsonobject.get("enchantments"));
+                CriterionConditionEnchantments[] acriterionconditionenchantments1 = CriterionConditionEnchantments.b(jsonobject.get("stored_enchantments"));
+
+                return new CriterionConditionItem(tag, item, criterionconditionvalue_integerrange, criterionconditionvalue_integerrange1, acriterionconditionenchantments, acriterionconditionenchantments1, potionregistry, criterionconditionnbt);
             }
         } else {
             return CriterionConditionItem.a;
@@ -144,23 +169,41 @@ public class CriterionConditionItem {
 
             jsonobject.add("count", this.d.d());
             jsonobject.add("durability", this.e.d());
-            jsonobject.add("nbt", this.h.a());
+            jsonobject.add("nbt", this.i.a());
+            JsonArray jsonarray;
+            CriterionConditionEnchantments[] acriterionconditionenchantments;
+            int i;
+            CriterionConditionEnchantments criterionconditionenchantments;
+            int j;
+
             if (this.f.length > 0) {
-                JsonArray jsonarray = new JsonArray();
-                CriterionConditionEnchantments[] acriterionconditionenchantments = this.f;
-                int i = acriterionconditionenchantments.length;
+                jsonarray = new JsonArray();
+                acriterionconditionenchantments = this.f;
+                i = acriterionconditionenchantments.length;
 
-                for (int j = 0; j < i; ++j) {
-                    CriterionConditionEnchantments criterionconditionenchantments = acriterionconditionenchantments[j];
-
+                for (j = 0; j < i; ++j) {
+                    criterionconditionenchantments = acriterionconditionenchantments[j];
                     jsonarray.add(criterionconditionenchantments.a());
                 }
 
                 jsonobject.add("enchantments", jsonarray);
             }
 
-            if (this.g != null) {
-                jsonobject.addProperty("potion", IRegistry.POTION.getKey(this.g).toString());
+            if (this.g.length > 0) {
+                jsonarray = new JsonArray();
+                acriterionconditionenchantments = this.g;
+                i = acriterionconditionenchantments.length;
+
+                for (j = 0; j < i; ++j) {
+                    criterionconditionenchantments = acriterionconditionenchantments[j];
+                    jsonarray.add(criterionconditionenchantments.a());
+                }
+
+                jsonobject.add("stored_enchantments", jsonarray);
+            }
+
+            if (this.h != null) {
+                jsonobject.addProperty("potion", IRegistry.POTION.getKey(this.h).toString());
             }
 
             return jsonobject;
@@ -185,20 +228,21 @@ public class CriterionConditionItem {
     public static class a {
 
         private final List<CriterionConditionEnchantments> a = Lists.newArrayList();
+        private final List<CriterionConditionEnchantments> b = Lists.newArrayList();
         @Nullable
-        private Item b;
+        private Item c;
         @Nullable
-        private Tag<Item> c;
-        private CriterionConditionValue.IntegerRange d;
+        private Tag<Item> d;
         private CriterionConditionValue.IntegerRange e;
+        private CriterionConditionValue.IntegerRange f;
         @Nullable
-        private PotionRegistry f;
-        private CriterionConditionNBT g;
+        private PotionRegistry g;
+        private CriterionConditionNBT h;
 
         private a() {
-            this.d = CriterionConditionValue.IntegerRange.e;
             this.e = CriterionConditionValue.IntegerRange.e;
-            this.g = CriterionConditionNBT.a;
+            this.f = CriterionConditionValue.IntegerRange.e;
+            this.h = CriterionConditionNBT.a;
         }
 
         public static CriterionConditionItem.a a() {
@@ -206,22 +250,17 @@ public class CriterionConditionItem {
         }
 
         public CriterionConditionItem.a a(IMaterial imaterial) {
-            this.b = imaterial.getItem();
+            this.c = imaterial.getItem();
             return this;
         }
 
         public CriterionConditionItem.a a(Tag<Item> tag) {
-            this.c = tag;
-            return this;
-        }
-
-        public CriterionConditionItem.a a(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
-            this.d = criterionconditionvalue_integerrange;
+            this.d = tag;
             return this;
         }
 
         public CriterionConditionItem.a a(NBTTagCompound nbttagcompound) {
-            this.g = new CriterionConditionNBT(nbttagcompound);
+            this.h = new CriterionConditionNBT(nbttagcompound);
             return this;
         }
 
@@ -231,7 +270,7 @@ public class CriterionConditionItem {
         }
 
         public CriterionConditionItem b() {
-            return new CriterionConditionItem(this.c, this.b, this.d, this.e, (CriterionConditionEnchantments[]) this.a.toArray(new CriterionConditionEnchantments[0]), this.f, this.g);
+            return new CriterionConditionItem(this.d, this.c, this.e, this.f, (CriterionConditionEnchantments[]) this.a.toArray(CriterionConditionEnchantments.b), (CriterionConditionEnchantments[]) this.b.toArray(CriterionConditionEnchantments.b), this.g, this.h);
         }
     }
 }

@@ -20,7 +20,7 @@ public class EntitySpectralArrow extends EntityArrow {
     public void tick() {
         super.tick();
         if (this.world.isClientSide && !this.inGround) {
-            this.world.addParticle(Particles.INSTANT_EFFECT, this.locX, this.locY, this.locZ, 0.0D, 0.0D, 0.0D);
+            this.world.addParticle(Particles.INSTANT_EFFECT, this.locX(), this.locY(), this.locZ(), 0.0D, 0.0D, 0.0D);
         }
 
     }

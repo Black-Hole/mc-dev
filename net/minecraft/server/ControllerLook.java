@@ -19,11 +19,11 @@ public class ControllerLook {
     }
 
     public void a(Entity entity, float f, float f1) {
-        this.a(entity.locX, b(entity), entity.locZ, f, f1);
+        this.a(entity.locX(), b(entity), entity.locZ(), f, f1);
     }
 
     public void a(double d0, double d1, double d2) {
-        this.a(d0, d1, d2, (float) this.a.dB(), (float) this.a.M());
+        this.a(d0, d1, d2, (float) this.a.dW(), (float) this.a.dU());
     }
 
     public void a(double d0, double d1, double d2, float f, float f1) {
@@ -42,14 +42,14 @@ public class ControllerLook {
 
         if (this.d) {
             this.d = false;
-            this.a.aM = this.a(this.a.aM, this.h(), this.b);
+            this.a.aK = this.a(this.a.aK, this.h(), this.b);
             this.a.pitch = this.a(this.a.pitch, this.g(), this.c);
         } else {
-            this.a.aM = this.a(this.a.aM, this.a.aK, 10.0F);
+            this.a.aK = this.a(this.a.aK, this.a.aI, 10.0F);
         }
 
-        if (!this.a.getNavigation().n()) {
-            this.a.aM = MathHelper.b(this.a.aM, this.a.aK, (float) this.a.dA());
+        if (!this.a.getNavigation().m()) {
+            this.a.aK = MathHelper.b(this.a.aK, this.a.aI, (float) this.a.dV());
         }
 
     }
@@ -75,17 +75,17 @@ public class ControllerLook {
     }
 
     protected float g() {
-        double d0 = this.e - this.a.locX;
-        double d1 = this.f - (this.a.locY + (double) this.a.getHeadHeight());
-        double d2 = this.g - this.a.locZ;
+        double d0 = this.e - this.a.locX();
+        double d1 = this.f - this.a.getHeadY();
+        double d2 = this.g - this.a.locZ();
         double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
 
         return (float) (-(MathHelper.d(d1, d3) * 57.2957763671875D));
     }
 
     protected float h() {
-        double d0 = this.e - this.a.locX;
-        double d1 = this.g - this.a.locZ;
+        double d0 = this.e - this.a.locX();
+        double d1 = this.g - this.a.locZ();
 
         return (float) (MathHelper.d(d1, d0) * 57.2957763671875D) - 90.0F;
     }
@@ -98,6 +98,6 @@ public class ControllerLook {
     }
 
     private static double b(Entity entity) {
-        return entity instanceof EntityLiving ? entity.locY + (double) entity.getHeadHeight() : (entity.getBoundingBox().minY + entity.getBoundingBox().maxY) / 2.0D;
+        return entity instanceof EntityLiving ? entity.getHeadY() : (entity.getBoundingBox().minY + entity.getBoundingBox().maxY) / 2.0D;
     }
 }

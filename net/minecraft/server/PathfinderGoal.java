@@ -14,7 +14,7 @@ public abstract class PathfinderGoal {
         return this.a();
     }
 
-    public boolean C_() {
+    public boolean E_() {
         return true;
     }
 
@@ -27,6 +27,10 @@ public abstract class PathfinderGoal {
     public void a(EnumSet<PathfinderGoal.Type> enumset) {
         this.a.clear();
         this.a.addAll(enumset);
+    }
+
+    public String toString() {
+        return this.getClass().getSimpleName();
     }
 
     public EnumSet<PathfinderGoal.Type> i() {

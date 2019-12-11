@@ -21,12 +21,12 @@ public enum EnumBlockMirror {
     }
 
     public EnumBlockRotation a(EnumDirection enumdirection) {
-        EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
+        EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.m();
 
         return (this != EnumBlockMirror.LEFT_RIGHT || enumdirection_enumaxis != EnumDirection.EnumAxis.Z) && (this != EnumBlockMirror.FRONT_BACK || enumdirection_enumaxis != EnumDirection.EnumAxis.X) ? EnumBlockRotation.NONE : EnumBlockRotation.CLOCKWISE_180;
     }
 
     public EnumDirection b(EnumDirection enumdirection) {
-        return this == EnumBlockMirror.FRONT_BACK && enumdirection.k() == EnumDirection.EnumAxis.X ? enumdirection.opposite() : (this == EnumBlockMirror.LEFT_RIGHT && enumdirection.k() == EnumDirection.EnumAxis.Z ? enumdirection.opposite() : enumdirection);
+        return this == EnumBlockMirror.FRONT_BACK && enumdirection.m() == EnumDirection.EnumAxis.X ? enumdirection.opposite() : (this == EnumBlockMirror.LEFT_RIGHT && enumdirection.m() == EnumDirection.EnumAxis.Z ? enumdirection.opposite() : enumdirection);
     }
 }

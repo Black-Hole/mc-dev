@@ -14,6 +14,7 @@ public class EntityLargeFireball extends EntityFireballFireball {
 
     @Override
     protected void a(MovingObjectPosition movingobjectposition) {
+        super.a(movingobjectposition);
         if (!this.world.isClientSide) {
             if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.ENTITY) {
                 Entity entity = ((MovingObjectPositionEntity) movingobjectposition).getEntity();
@@ -24,7 +25,7 @@ public class EntityLargeFireball extends EntityFireballFireball {
 
             boolean flag = this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING);
 
-            this.world.createExplosion((Entity) null, this.locX, this.locY, this.locZ, (float) this.yield, flag, flag ? Explosion.Effect.DESTROY : Explosion.Effect.NONE);
+            this.world.createExplosion((Entity) null, this.locX(), this.locY(), this.locZ(), (float) this.yield, flag, flag ? Explosion.Effect.DESTROY : Explosion.Effect.NONE);
             this.die();
         }
 

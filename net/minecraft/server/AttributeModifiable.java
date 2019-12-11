@@ -54,12 +54,12 @@ public class AttributeModifiable implements AttributeInstance {
     }
 
     @Override
-    public Collection<AttributeModifier> a(AttributeModifier.Operation attributemodifier_operation) {
-        return (Collection) this.c.get(attributemodifier_operation);
+    public Set<AttributeModifier> a(AttributeModifier.Operation attributemodifier_operation) {
+        return (Set) this.c.get(attributemodifier_operation);
     }
 
     @Override
-    public Collection<AttributeModifier> getModifiers() {
+    public Set<AttributeModifier> getModifiers() {
         Set<AttributeModifier> set = Sets.newHashSet();
         AttributeModifier.Operation[] aattributemodifier_operation = AttributeModifier.Operation.values();
         int i = aattributemodifier_operation.length;

@@ -18,11 +18,11 @@ public class WorldGenDecoratorHeightAverage extends WorldGenDecoratorFeatureSimp
         int k = worldgendecoratorheightaverageconfiguration.c;
 
         return IntStream.range(0, i).mapToObj((l) -> {
-            int i1 = random.nextInt(16);
-            int j1 = random.nextInt(k) + random.nextInt(k) - k + j;
-            int k1 = random.nextInt(16);
+            int i1 = random.nextInt(16) + blockposition.getX();
+            int j1 = random.nextInt(16) + blockposition.getZ();
+            int k1 = random.nextInt(k) + random.nextInt(k) - k + j;
 
-            return blockposition.b(i1, j1, k1);
+            return new BlockPosition(i1, k1, j1);
         });
     }
 }

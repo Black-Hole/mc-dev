@@ -1,12 +1,12 @@
 package net.minecraft.server;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.List;
 
 public class BehaviorPickupItem extends Behavior<EntityVillager> {
 
-    private List<EntityItem> a = new ArrayList();
+    private List<EntityItem> a = Lists.newArrayList();
 
     public BehaviorPickupItem() {
         super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));

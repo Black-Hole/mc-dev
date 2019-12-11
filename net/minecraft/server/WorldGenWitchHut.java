@@ -25,7 +25,7 @@ public class WorldGenWitchHut extends WorldGenScatteredPiece {
     }
 
     @Override
-    public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
         if (!this.a(generatoraccess, structureboundingbox, 0)) {
             return false;
         } else {

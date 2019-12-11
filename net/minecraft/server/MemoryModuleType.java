@@ -34,11 +34,12 @@ public class MemoryModuleType<U> {
     public static final MemoryModuleType<Long> CANT_REACH_WALK_TARGET_SINCE = a("cant_reach_walk_target_since");
     public static final MemoryModuleType<Long> GOLEM_LAST_SEEN_TIME = a("golem_last_seen_time");
     public static final MemoryModuleType<MinecraftSerializableLong> LAST_SLEPT = a("last_slept", Optional.of(MinecraftSerializableLong::a));
+    public static final MemoryModuleType<MinecraftSerializableLong> LAST_WOKEN = a("last_woken", Optional.of(MinecraftSerializableLong::a));
     public static final MemoryModuleType<MinecraftSerializableLong> LAST_WORKED_AT_POI = a("last_worked_at_poi", Optional.of(MinecraftSerializableLong::a));
-    private final Optional<Function<Dynamic<?>, U>> B;
+    private final Optional<Function<Dynamic<?>, U>> C;
 
     private MemoryModuleType(Optional<Function<Dynamic<?>, U>> optional) {
-        this.B = optional;
+        this.C = optional;
     }
 
     public String toString() {
@@ -46,7 +47,7 @@ public class MemoryModuleType<U> {
     }
 
     public Optional<Function<Dynamic<?>, U>> getSerializer() {
-        return this.B;
+        return this.C;
     }
 
     private static <U extends MinecraftSerializable> MemoryModuleType<U> a(String s, Optional<Function<Dynamic<?>, U>> optional) {

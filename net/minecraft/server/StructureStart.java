@@ -7,7 +7,7 @@ import java.util.Random;
 
 public abstract class StructureStart {
 
-    public static final StructureStart a = new StructureStart(WorldGenerator.MINESHAFT, 0, 0, Biomes.PLAINS, StructureBoundingBox.a(), 0, 0L) {
+    public static final StructureStart a = new StructureStart(WorldGenerator.MINESHAFT, 0, 0, StructureBoundingBox.a(), 0, 0L) {
         @Override
         public void a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase) {}
     };
@@ -16,16 +16,14 @@ public abstract class StructureStart {
     protected StructureBoundingBox c;
     private final int f;
     private final int g;
-    private final BiomeBase h;
-    private int i;
+    private int h;
     protected final SeededRandom d;
 
-    public StructureStart(StructureGenerator<?> structuregenerator, int i, int j, BiomeBase biomebase, StructureBoundingBox structureboundingbox, int k, long l) {
+    public StructureStart(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
         this.e = structuregenerator;
         this.f = i;
         this.g = j;
-        this.i = k;
-        this.h = biomebase;
+        this.h = k;
         this.d = new SeededRandom();
         this.d.c(l, i, j);
         this.c = structureboundingbox;
@@ -41,7 +39,7 @@ public abstract class StructureStart {
         return this.b;
     }
 
-    public void a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+    public void a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
         List list = this.b;
 
         synchronized (this.b) {
@@ -50,7 +48,7 @@ public abstract class StructureStart {
             while (iterator.hasNext()) {
                 StructurePiece structurepiece = (StructurePiece) iterator.next();
 
-                if (structurepiece.g().b(structureboundingbox) && !structurepiece.a(generatoraccess, random, structureboundingbox, chunkcoordintpair)) {
+                if (structurepiece.g().b(structureboundingbox) && !structurepiece.a(generatoraccess, chunkgenerator, random, structureboundingbox, chunkcoordintpair)) {
                     iterator.remove();
                 }
             }
@@ -75,11 +73,10 @@ public abstract class StructureStart {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         if (this.e()) {
-            nbttagcompound.setString("id", IRegistry.STRUCTURE_FEATURE.getKey(this.k()).toString());
-            nbttagcompound.setString("biome", IRegistry.BIOME.getKey(this.h).toString());
+            nbttagcompound.setString("id", IRegistry.STRUCTURE_FEATURE.getKey(this.l()).toString());
             nbttagcompound.setInt("ChunkX", i);
             nbttagcompound.setInt("ChunkZ", j);
-            nbttagcompound.setInt("references", this.i);
+            nbttagcompound.setInt("references", this.h);
             nbttagcompound.set("BB", this.c.g());
             NBTTagList nbttaglist = new NBTTagList();
             List list = this.b;
@@ -163,18 +160,22 @@ public abstract class StructureStart {
     }
 
     public boolean h() {
-        return this.i < this.j();
+        return this.h < this.k();
     }
 
     public void i() {
-        ++this.i;
+        ++this.h;
     }
 
-    protected int j() {
+    public int j() {
+        return this.h;
+    }
+
+    protected int k() {
         return 1;
     }
 
-    public StructureGenerator<?> k() {
+    public StructureGenerator<?> l() {
         return this.e;
     }
 }

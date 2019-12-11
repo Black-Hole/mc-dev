@@ -6,8 +6,8 @@ import javax.annotation.Nullable;
 public class EntityVillagerTrader extends EntityVillagerAbstract {
 
     @Nullable
-    private BlockPosition bA;
-    private int bB;
+    private BlockPosition bx;
+    private int by;
 
     public EntityVillagerTrader(EntityTypes<? extends EntityVillagerTrader> entitytypes, World world) {
         super(entitytypes, world);
@@ -33,7 +33,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 0.5D));
         this.goalSelector.a(1, new PathfinderGoalLookAtTradingPlayer(this));
         this.goalSelector.a(2, new EntityVillagerTrader.a(this, 2.0D, 0.35D));
-        this.goalSelector.a(4, new PathfinderGoalMoveTowardsRestriction(this, 1.0D));
+        this.goalSelector.a(4, new PathfinderGoalMoveTowardsRestriction(this, 0.35D));
         this.goalSelector.a(8, new PathfinderGoalRandomStrollLand(this, 0.35D));
         this.goalSelector.a(9, new PathfinderGoalInteract(this, EntityHuman.class, 3.0F, 1.0F));
         this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityInsentient.class, 8.0F));
@@ -46,7 +46,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     @Override
-    public boolean ea() {
+    public boolean isRegularVillager() {
         return false;
     }
 
@@ -58,7 +58,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
         if (flag) {
             itemstack.a(entityhuman, (EntityLiving) this, enumhand);
             return true;
-        } else if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.dY() && !this.isBaby()) {
+        } else if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.et() && !this.isBaby()) {
             if (enumhand == EnumHand.MAIN_HAND) {
                 entityhuman.a(StatisticList.TALKED_TO_VILLAGER);
             }
@@ -79,7 +79,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     @Override
-    protected void eh() {
+    protected void eC() {
         VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption = (VillagerTrades.IMerchantRecipeOption[]) VillagerTrades.b.get(1);
         VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption1 = (VillagerTrades.IMerchantRecipeOption[]) VillagerTrades.b.get(2);
 
@@ -101,9 +101,9 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     @Override
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("DespawnDelay", this.bB);
-        if (this.bA != null) {
-            nbttagcompound.set("WanderTarget", GameProfileSerializer.a(this.bA));
+        nbttagcompound.setInt("DespawnDelay", this.by);
+        if (this.bx != null) {
+            nbttagcompound.set("WanderTarget", GameProfileSerializer.a(this.bx));
         }
 
     }
@@ -112,11 +112,11 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("DespawnDelay", 99)) {
-            this.bB = nbttagcompound.getInt("DespawnDelay");
+            this.by = nbttagcompound.getInt("DespawnDelay");
         }
 
         if (nbttagcompound.hasKey("WanderTarget")) {
-            this.bA = GameProfileSerializer.c(nbttagcompound.getCompound("WanderTarget"));
+            this.bx = GameProfileSerializer.c(nbttagcompound.getCompound("WanderTarget"));
         }
 
         this.setAgeRaw(Math.max(0, this.getAge()));
@@ -132,14 +132,14 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
         if (merchantrecipe.isRewardExp()) {
             int i = 3 + this.random.nextInt(4);
 
-            this.world.addEntity(new EntityExperienceOrb(this.world, this.locX, this.locY + 0.5D, this.locZ, i));
+            this.world.addEntity(new EntityExperienceOrb(this.world, this.locX(), this.locY() + 0.5D, this.locZ(), i));
         }
 
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return this.dY() ? SoundEffects.ENTITY_WANDERING_TRADER_TRADE : SoundEffects.ENTITY_WANDERING_TRADER_AMBIENT;
+        return this.et() ? SoundEffects.ENTITY_WANDERING_TRADER_TRADE : SoundEffects.ENTITY_WANDERING_TRADER_AMBIENT;
     }
 
     @Override
@@ -165,41 +165,41 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     @Override
-    public SoundEffect eb() {
+    public SoundEffect getTradeSound() {
         return SoundEffects.ENTITY_WANDERING_TRADER_YES;
     }
 
-    public void t(int i) {
-        this.bB = i;
+    public void u(int i) {
+        this.by = i;
     }
 
-    public int ef() {
-        return this.bB;
+    public int eA() {
+        return this.by;
     }
 
     @Override
     public void movementTick() {
         super.movementTick();
         if (!this.world.isClientSide) {
-            this.ej();
+            this.eE();
         }
 
     }
 
-    private void ej() {
-        if (this.bB > 0 && !this.dY() && --this.bB == 0) {
+    private void eE() {
+        if (this.by > 0 && !this.et() && --this.by == 0) {
             this.die();
         }
 
     }
 
     public void g(@Nullable BlockPosition blockposition) {
-        this.bA = blockposition;
+        this.bx = blockposition;
     }
 
     @Nullable
-    private BlockPosition ek() {
-        return this.bA;
+    private BlockPosition eF() {
+        return this.bx;
     }
 
     class a extends PathfinderGoal {
@@ -223,19 +223,19 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
 
         @Override
         public boolean a() {
-            BlockPosition blockposition = this.a.ek();
+            BlockPosition blockposition = this.a.eF();
 
             return blockposition != null && this.a(blockposition, this.b);
         }
 
         @Override
         public void e() {
-            BlockPosition blockposition = this.a.ek();
+            BlockPosition blockposition = this.a.eF();
 
-            if (blockposition != null && EntityVillagerTrader.this.navigation.n()) {
+            if (blockposition != null && EntityVillagerTrader.this.navigation.m()) {
                 if (this.a(blockposition, 10.0D)) {
-                    Vec3D vec3d = (new Vec3D((double) blockposition.getX() - this.a.locX, (double) blockposition.getY() - this.a.locY, (double) blockposition.getZ() - this.a.locZ)).d();
-                    Vec3D vec3d1 = vec3d.a(10.0D).add(this.a.locX, this.a.locY, this.a.locZ);
+                    Vec3D vec3d = (new Vec3D((double) blockposition.getX() - this.a.locX(), (double) blockposition.getY() - this.a.locY(), (double) blockposition.getZ() - this.a.locZ())).d();
+                    Vec3D vec3d1 = vec3d.a(10.0D).add(this.a.locX(), this.a.locY(), this.a.locZ());
 
                     EntityVillagerTrader.this.navigation.a(vec3d1.x, vec3d1.y, vec3d1.z, this.c);
                 } else {

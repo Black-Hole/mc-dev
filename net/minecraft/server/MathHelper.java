@@ -328,6 +328,58 @@ public class MathHelper {
         return d0;
     }
 
+    public static int f(float f, float f1, float f2) {
+        int i = (int) (f * 6.0F) % 6;
+        float f3 = f * 6.0F - (float) i;
+        float f4 = f2 * (1.0F - f1);
+        float f5 = f2 * (1.0F - f3 * f1);
+        float f6 = f2 * (1.0F - (1.0F - f3) * f1);
+        float f7;
+        float f8;
+        float f9;
+
+        switch (i) {
+            case 0:
+                f7 = f2;
+                f8 = f6;
+                f9 = f4;
+                break;
+            case 1:
+                f7 = f5;
+                f8 = f2;
+                f9 = f4;
+                break;
+            case 2:
+                f7 = f4;
+                f8 = f2;
+                f9 = f6;
+                break;
+            case 3:
+                f7 = f4;
+                f8 = f5;
+                f9 = f2;
+                break;
+            case 4:
+                f7 = f6;
+                f8 = f4;
+                f9 = f2;
+                break;
+            case 5:
+                f7 = f2;
+                f8 = f4;
+                f9 = f5;
+                break;
+            default:
+                throw new RuntimeException("Something went wrong when converting from HSV to RGB. Input was " + f + ", " + f1 + ", " + f2);
+        }
+
+        int j = clamp((int) (f7 * 255.0F), 0, 255);
+        int k = clamp((int) (f8 * 255.0F), 0, 255);
+        int l = clamp((int) (f9 * 255.0F), 0, 255);
+
+        return j << 16 | k << 8 | l;
+    }
+
     public static int f(int i) {
         i ^= i >>> 16;
         i *= -2048144789;
@@ -377,6 +429,21 @@ public class MathHelper {
 
     public static int k(double d0) {
         return d0 == 0.0D ? 0 : (d0 > 0.0D ? 1 : -1);
+    }
+
+    @Deprecated
+    public static float j(float f, float f1, float f2) {
+        float f3;
+
+        for (f3 = f1 - f; f3 < -180.0F; f3 += 360.0F) {
+            ;
+        }
+
+        while (f3 >= 180.0F) {
+            f3 -= 360.0F;
+        }
+
+        return f + f2 * f3;
     }
 
     static {

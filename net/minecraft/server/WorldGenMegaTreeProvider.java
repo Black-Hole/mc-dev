@@ -8,25 +8,25 @@ public abstract class WorldGenMegaTreeProvider extends WorldGenTreeProvider {
     public WorldGenMegaTreeProvider() {}
 
     @Override
-    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         for (int i = 0; i >= -1; --i) {
             for (int j = 0; j >= -1; --j) {
                 if (a(iblockdata, generatoraccess, blockposition, i, j)) {
-                    return this.a(generatoraccess, blockposition, iblockdata, random, i, j);
+                    return this.a(generatoraccess, chunkgenerator, blockposition, iblockdata, random, i, j);
                 }
             }
         }
 
-        return super.a(generatoraccess, blockposition, iblockdata, random);
+        return super.a(generatoraccess, chunkgenerator, blockposition, iblockdata, random);
     }
 
     @Nullable
-    protected abstract WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> a(Random random);
+    protected abstract WorldGenFeatureConfigured<WorldGenMegaTreeConfiguration, ?> a(Random random);
 
-    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random, int i, int j) {
-        WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> worldgentreeabstract = this.a(random);
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, BlockPosition blockposition, IBlockData iblockdata, Random random, int i, int j) {
+        WorldGenFeatureConfigured<WorldGenMegaTreeConfiguration, ?> worldgenfeatureconfigured = this.a(random);
 
-        if (worldgentreeabstract == null) {
+        if (worldgenfeatureconfigured == null) {
             return false;
         } else {
             IBlockData iblockdata1 = Blocks.AIR.getBlockData();
@@ -35,7 +35,7 @@ public abstract class WorldGenMegaTreeProvider extends WorldGenTreeProvider {
             generatoraccess.setTypeAndData(blockposition.b(i + 1, 0, j), iblockdata1, 4);
             generatoraccess.setTypeAndData(blockposition.b(i, 0, j + 1), iblockdata1, 4);
             generatoraccess.setTypeAndData(blockposition.b(i + 1, 0, j + 1), iblockdata1, 4);
-            if (worldgentreeabstract.generate(generatoraccess, generatoraccess.getChunkProvider().getChunkGenerator(), random, blockposition.b(i, 0, j), WorldGenFeatureConfiguration.e)) {
+            if (worldgenfeatureconfigured.a(generatoraccess, chunkgenerator, random, blockposition.b(i, 0, j))) {
                 return true;
             } else {
                 generatoraccess.setTypeAndData(blockposition.b(i, 0, j), iblockdata, 4);

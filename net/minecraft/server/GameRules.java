@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 public class GameRules {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Map<GameRules.GameRuleKey<?>, GameRules.GameRuleDefinition<?>> z = Maps.newTreeMap(Comparator.comparing((gamerules_gamerulekey) -> {
+    private static final Map<GameRules.GameRuleKey<?>, GameRules.GameRuleDefinition<?>> E = Maps.newTreeMap(Comparator.comparing((gamerules_gamerulekey) -> {
         return gamerules_gamerulekey.a;
     }));
     public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> DO_FIRE_TICK = a("doFireTick", GameRules.GameRuleBoolean.b(true));
@@ -57,12 +57,26 @@ public class GameRules {
     public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> DO_LIMITED_CRAFTING = a("doLimitedCrafting", GameRules.GameRuleBoolean.b(false));
     public static final GameRules.GameRuleKey<GameRules.GameRuleInt> MAX_COMMAND_CHAIN_LENGTH = a("maxCommandChainLength", GameRules.GameRuleInt.b(65536));
     public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> ANNOUNCE_ADVANCEMENTS = a("announceAdvancements", GameRules.GameRuleBoolean.b(true));
-    public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> x = a("disableRaids", GameRules.GameRuleBoolean.b(false));
-    private final Map<GameRules.GameRuleKey<?>, GameRules.GameRuleValue<?>> A;
+    public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> DISABLE_RAIDS = a("disableRaids", GameRules.GameRuleBoolean.b(false));
+    public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> DO_INSOMNIA = a("doInsomnia", GameRules.GameRuleBoolean.b(true));
+    public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> DO_IMMEDIATE_RESPAWN = a("doImmediateRespawn", GameRules.GameRuleBoolean.b(false, (minecraftserver, gamerules_gameruleboolean) -> {
+        Iterator iterator = minecraftserver.getPlayerList().getPlayers().iterator();
+
+        while (iterator.hasNext()) {
+            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(11, gamerules_gameruleboolean.a() ? 1.0F : 0.0F));
+        }
+
+    }));
+    public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> DROWNING_DAMAGE = a("drowningDamage", GameRules.GameRuleBoolean.b(true));
+    public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> FALL_DAMAGE = a("fallDamage", GameRules.GameRuleBoolean.b(true));
+    public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> FIRE_DAMAGE = a("fireDamage", GameRules.GameRuleBoolean.b(true));
+    private final Map<GameRules.GameRuleKey<?>, GameRules.GameRuleValue<?>> F;
 
     private static <T extends GameRules.GameRuleValue<T>> GameRules.GameRuleKey<T> a(String s, GameRules.GameRuleDefinition<T> gamerules_gameruledefinition) {
         GameRules.GameRuleKey<T> gamerules_gamerulekey = new GameRules.GameRuleKey<>(s);
-        GameRules.GameRuleDefinition<?> gamerules_gameruledefinition1 = (GameRules.GameRuleDefinition) GameRules.z.put(gamerules_gamerulekey, gamerules_gameruledefinition);
+        GameRules.GameRuleDefinition<?> gamerules_gameruledefinition1 = (GameRules.GameRuleDefinition) GameRules.E.put(gamerules_gamerulekey, gamerules_gameruledefinition);
 
         if (gamerules_gameruledefinition1 != null) {
             throw new IllegalStateException("Duplicate game rule registration for " + s);
@@ -72,32 +86,35 @@ public class GameRules {
     }
 
     public GameRules() {
-        this.A = (Map) GameRules.z.entrySet().stream().collect(ImmutableMap.toImmutableMap(Entry::getKey, (entry) -> {
+        this.F = (Map) GameRules.E.entrySet().stream().collect(ImmutableMap.toImmutableMap(Entry::getKey, (entry) -> {
             return ((GameRules.GameRuleDefinition) entry.getValue()).getValue();
         }));
     }
 
     public <T extends GameRules.GameRuleValue<T>> T get(GameRules.GameRuleKey<T> gamerules_gamerulekey) {
-        return (GameRules.GameRuleValue) this.A.get(gamerules_gamerulekey);
+        return (GameRules.GameRuleValue) this.F.get(gamerules_gamerulekey);
     }
 
     public NBTTagCompound a() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        this.A.forEach((gamerules_gamerulekey, gamerules_gamerulevalue) -> {
+        this.F.forEach((gamerules_gamerulekey, gamerules_gamerulevalue) -> {
             nbttagcompound.setString(gamerules_gamerulekey.a, gamerules_gamerulevalue.getValue());
         });
         return nbttagcompound;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
-        this.A.forEach((gamerules_gamerulekey, gamerules_gamerulevalue) -> {
-            gamerules_gamerulevalue.setValue(nbttagcompound.getString(gamerules_gamerulekey.a));
+        this.F.forEach((gamerules_gamerulekey, gamerules_gamerulevalue) -> {
+            if (nbttagcompound.hasKey(gamerules_gamerulekey.a)) {
+                gamerules_gamerulevalue.setValue(nbttagcompound.getString(gamerules_gamerulekey.a));
+            }
+
         });
     }
 
     public static void a(GameRules.GameRuleVisitor gamerules_gamerulevisitor) {
-        GameRules.z.forEach((gamerules_gamerulekey, gamerules_gameruledefinition) -> {
+        GameRules.E.forEach((gamerules_gamerulekey, gamerules_gameruledefinition) -> {
             a(gamerules_gamerulevisitor, gamerules_gamerulekey, gamerules_gameruledefinition);
         });
     }

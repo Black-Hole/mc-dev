@@ -8,11 +8,11 @@ public class EntityCreeper extends EntityMonster {
     private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Boolean> POWERED = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.i);
     private static final DataWatcherObject<Boolean> d = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.i);
-    private int bz;
+    private int bw;
     private int fuseTicks;
     public int maxFuseTicks = 30;
     public int explosionRadius = 3;
-    private int bD;
+    private int bA;
 
     public EntityCreeper(EntityTypes<? extends EntityCreeper> entitytypes, World world) {
         super(entitytypes, world);
@@ -39,18 +39,20 @@ public class EntityCreeper extends EntityMonster {
     }
 
     @Override
-    public int bv() {
+    public int bD() {
         return this.getGoalTarget() == null ? 3 : 3 + (int) (this.getHealth() - 1.0F);
     }
 
     @Override
-    public void b(float f, float f1) {
-        super.b(f, f1);
+    public boolean b(float f, float f1) {
+        boolean flag = super.b(f, f1);
+
         this.fuseTicks = (int) ((float) this.fuseTicks + f * 1.5F);
         if (this.fuseTicks > this.maxFuseTicks - 5) {
             this.fuseTicks = this.maxFuseTicks - 5;
         }
 
+        return flag;
     }
 
     @Override
@@ -94,12 +96,12 @@ public class EntityCreeper extends EntityMonster {
     @Override
     public void tick() {
         if (this.isAlive()) {
-            this.bz = this.fuseTicks;
+            this.bw = this.fuseTicks;
             if (this.isIgnited()) {
                 this.a(1);
             }
 
-            int i = this.dV();
+            int i = this.l();
 
             if (i > 0 && this.fuseTicks == 0) {
                 this.a(SoundEffects.ENTITY_CREEPER_PRIMED, 1.0F, 0.5F);
@@ -146,7 +148,7 @@ public class EntityCreeper extends EntityMonster {
     }
 
     @Override
-    public boolean C(Entity entity) {
+    public boolean B(Entity entity) {
         return true;
     }
 
@@ -154,7 +156,7 @@ public class EntityCreeper extends EntityMonster {
         return (Boolean) this.datawatcher.get(EntityCreeper.POWERED);
     }
 
-    public int dV() {
+    public int l() {
         return (Integer) this.datawatcher.get(EntityCreeper.b);
     }
 
@@ -173,18 +175,18 @@ public class EntityCreeper extends EntityMonster {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (itemstack.getItem() == Items.FLINT_AND_STEEL) {
-            this.world.playSound(entityhuman, this.locX, this.locY, this.locZ, SoundEffects.ITEM_FLINTANDSTEEL_USE, this.getSoundCategory(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
-            entityhuman.a(enumhand);
+            this.world.playSound(entityhuman, this.locX(), this.locY(), this.locZ(), SoundEffects.ITEM_FLINTANDSTEEL_USE, this.getSoundCategory(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
             if (!this.world.isClientSide) {
                 this.ignite();
                 itemstack.damage(1, entityhuman, (entityhuman1) -> {
                     entityhuman1.d(enumhand);
                 });
-                return true;
             }
-        }
 
-        return super.a(entityhuman, enumhand);
+            return true;
+        } else {
+            return super.a(entityhuman, enumhand);
+        }
     }
 
     public void explode() {
@@ -193,7 +195,7 @@ public class EntityCreeper extends EntityMonster {
             float f = this.isPowered() ? 2.0F : 1.0F;
 
             this.killed = true;
-            this.world.explode(this, this.locX, this.locY, this.locZ, (float) this.explosionRadius * f, explosion_effect);
+            this.world.explode(this, this.locX(), this.locY(), this.locZ(), (float) this.explosionRadius * f, explosion_effect);
             this.die();
             this.createEffectCloud();
         }
@@ -204,7 +206,7 @@ public class EntityCreeper extends EntityMonster {
         Collection<MobEffect> collection = this.getEffects();
 
         if (!collection.isEmpty()) {
-            EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX, this.locY, this.locZ);
+            EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX(), this.locY(), this.locZ());
 
             entityareaeffectcloud.setRadius(2.5F);
             entityareaeffectcloud.setRadiusOnUse(-0.5F);
@@ -233,10 +235,10 @@ public class EntityCreeper extends EntityMonster {
     }
 
     public boolean canCauseHeadDrop() {
-        return this.isPowered() && this.bD < 1;
+        return this.isPowered() && this.bA < 1;
     }
 
     public void setCausedHeadDrop() {
-        ++this.bD;
+        ++this.bA;
     }
 }

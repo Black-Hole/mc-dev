@@ -38,7 +38,7 @@ public class CommandBossBar {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("bossbar").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
         })).then(CommandDispatcher.a("add").then(CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).then(CommandDispatcher.a("name", (ArgumentType) ArgumentChatComponent.a()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentMinecraftKeyRegistered.c(commandcontext, "id"), ArgumentChatComponent.a(commandcontext, "name"));
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentMinecraftKeyRegistered.d(commandcontext, "id"), ArgumentChatComponent.a(commandcontext, "name"));
         }))))).then(CommandDispatcher.a("remove").then(CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandBossBar.a).executes((commandcontext) -> {
             return e((CommandListenerWrapper) commandcontext.getSource(), a(commandcontext));
         })))).then(CommandDispatcher.a("list").executes((commandcontext) -> {
@@ -242,7 +242,7 @@ public class CommandBossBar {
     }
 
     public static BossBattleCustom a(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException {
-        MinecraftKey minecraftkey = ArgumentMinecraftKeyRegistered.c(commandcontext, "id");
+        MinecraftKey minecraftkey = ArgumentMinecraftKeyRegistered.d(commandcontext, "id");
         BossBattleCustom bossbattlecustom = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getBossBattleCustomData().a(minecraftkey);
 
         if (bossbattlecustom == null) {

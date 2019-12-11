@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElement, IBlockWaterlogged {
 
-    public static final BlockStateInteger a = BlockProperties.ar;
+    public static final BlockStateInteger a = BlockProperties.as;
     public static final BlockStateBoolean b = BlockProperties.C;
     protected static final VoxelShape c = Block.a(6.0D, 0.0D, 6.0D, 10.0D, 6.0D, 10.0D);
     protected static final VoxelShape d = Block.a(3.0D, 0.0D, 3.0D, 13.0D, 6.0D, 13.0D);
@@ -14,12 +14,12 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
 
     protected BlockSeaPickle(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSeaPickle.a, 1)).set(BlockSeaPickle.b, true));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSeaPickle.a, 1)).set(BlockSeaPickle.b, true));
     }
 
     @Override
     public int a(IBlockData iblockdata) {
-        return this.j(iblockdata) ? 0 : super.a(iblockdata) + 3 * (Integer) iblockdata.get(BlockSeaPickle.a);
+        return this.h(iblockdata) ? 0 : super.a(iblockdata) + 3 * (Integer) iblockdata.get(BlockSeaPickle.a);
     }
 
     @Nullable
@@ -37,7 +37,7 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
         }
     }
 
-    private boolean j(IBlockData iblockdata) {
+    private boolean h(IBlockData iblockdata) {
         return !(Boolean) iblockdata.get(BlockSeaPickle.b);
     }
 
@@ -87,8 +87,8 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
     }
 
     @Override
-    public Fluid g(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockSeaPickle.b) ? FluidTypes.WATER.a(false) : super.g(iblockdata);
+    public Fluid a_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockSeaPickle.b) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
     }
 
     @Override
@@ -107,8 +107,8 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
     }
 
     @Override
-    public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!this.j(iblockdata) && world.getType(blockposition.down()).a(TagsBlock.CORAL_BLOCKS)) {
+    public void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata) {
+        if (!this.h(iblockdata) && worldserver.getType(blockposition.down()).a(TagsBlock.CORAL_BLOCKS)) {
             boolean flag = true;
             int i = 1;
             boolean flag1 = true;
@@ -123,11 +123,11 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
                     for (int l1 = k1 - 2; l1 < k1; ++l1) {
                         BlockPosition blockposition1 = new BlockPosition(k + i1, l1, blockposition.getZ() - l + j1);
 
-                        if (blockposition1 != blockposition && random.nextInt(6) == 0 && world.getType(blockposition1).getBlock() == Blocks.WATER) {
-                            IBlockData iblockdata1 = world.getType(blockposition1.down());
+                        if (blockposition1 != blockposition && random.nextInt(6) == 0 && worldserver.getType(blockposition1).getBlock() == Blocks.WATER) {
+                            IBlockData iblockdata1 = worldserver.getType(blockposition1.down());
 
                             if (iblockdata1.a(TagsBlock.CORAL_BLOCKS)) {
-                                world.setTypeAndData(blockposition1, (IBlockData) Blocks.SEA_PICKLE.getBlockData().set(BlockSeaPickle.a, random.nextInt(4) + 1), 3);
+                                worldserver.setTypeAndData(blockposition1, (IBlockData) Blocks.SEA_PICKLE.getBlockData().set(BlockSeaPickle.a, random.nextInt(4) + 1), 3);
                             }
                         }
                     }
@@ -144,7 +144,7 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
                 ++j;
             }
 
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSeaPickle.a, 4), 2);
+            worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSeaPickle.a, 4), 2);
         }
 
     }

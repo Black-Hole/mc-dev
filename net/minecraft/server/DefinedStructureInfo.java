@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import javax.annotation.Nullable;
@@ -19,17 +20,16 @@ public class DefinedStructureInfo {
     @Nullable
     private Random h;
     @Nullable
-    private Integer i;
-    private int j;
-    private final List<DefinedStructureProcessor> k;
-    private boolean l;
+    private int i;
+    private final List<DefinedStructureProcessor> j;
+    private boolean k;
 
     public DefinedStructureInfo() {
         this.a = EnumBlockMirror.NONE;
         this.b = EnumBlockRotation.NONE;
         this.c = BlockPosition.ZERO;
         this.g = true;
-        this.k = Lists.newArrayList();
+        this.j = Lists.newArrayList();
     }
 
     public DefinedStructureInfo a() {
@@ -44,9 +44,8 @@ public class DefinedStructureInfo {
         definedstructureinfo.g = this.g;
         definedstructureinfo.h = this.h;
         definedstructureinfo.i = this.i;
-        definedstructureinfo.j = this.j;
-        definedstructureinfo.k.addAll(this.k);
-        definedstructureinfo.l = this.l;
+        definedstructureinfo.j.addAll(this.j);
+        definedstructureinfo.k = this.k;
         return definedstructureinfo;
     }
 
@@ -86,22 +85,22 @@ public class DefinedStructureInfo {
     }
 
     public DefinedStructureInfo c(boolean flag) {
-        this.l = flag;
+        this.k = flag;
         return this;
     }
 
     public DefinedStructureInfo b() {
-        this.k.clear();
+        this.j.clear();
         return this;
     }
 
     public DefinedStructureInfo a(DefinedStructureProcessor definedstructureprocessor) {
-        this.k.add(definedstructureprocessor);
+        this.j.add(definedstructureprocessor);
         return this;
     }
 
     public DefinedStructureInfo b(DefinedStructureProcessor definedstructureprocessor) {
-        this.k.remove(definedstructureprocessor);
+        this.j.remove(definedstructureprocessor);
         return this;
     }
 
@@ -135,11 +134,11 @@ public class DefinedStructureInfo {
     }
 
     public boolean i() {
-        return this.l;
+        return this.k;
     }
 
     public List<DefinedStructureProcessor> j() {
-        return this.k;
+        return this.j;
     }
 
     void k() {
@@ -154,13 +153,9 @@ public class DefinedStructureInfo {
     }
 
     public List<DefinedStructure.BlockInfo> a(List<List<DefinedStructure.BlockInfo>> list, @Nullable BlockPosition blockposition) {
-        this.i = 8;
-        if (this.i != null && this.i >= 0 && this.i < list.size()) {
-            return (List) list.get(this.i);
-        } else {
-            this.i = this.b(blockposition).nextInt(list.size());
-            return (List) list.get(this.i);
-        }
+        int i = list.size();
+
+        return i > 0 ? (List) list.get(this.b(blockposition).nextInt(i)) : Collections.emptyList();
     }
 
     @Nullable

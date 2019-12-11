@@ -54,7 +54,7 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
 
     @Override
     public boolean b() {
-        return this.c != null && !this.e.n() && this.a.h((Entity) this.c) > (double) (this.g * this.g);
+        return this.c != null && !this.e.m() && this.a.h((Entity) this.c) > (double) (this.g * this.g);
     }
 
     @Override
@@ -74,12 +74,12 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
     @Override
     public void e() {
         if (this.c != null && !this.a.isLeashed()) {
-            this.a.getControllerLook().a(this.c, 10.0F, (float) this.a.M());
+            this.a.getControllerLook().a(this.c, 10.0F, (float) this.a.dU());
             if (--this.f <= 0) {
                 this.f = 10;
-                double d0 = this.a.locX - this.c.locX;
-                double d1 = this.a.locY - this.c.locY;
-                double d2 = this.a.locZ - this.c.locZ;
+                double d0 = this.a.locX() - this.c.locX();
+                double d1 = this.a.locY() - this.c.locY();
+                double d2 = this.a.locZ() - this.c.locZ();
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
 
                 if (d3 > (double) (this.g * this.g)) {
@@ -88,11 +88,11 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
                     this.e.o();
                     ControllerLook controllerlook = this.c.getControllerLook();
 
-                    if (d3 <= (double) this.g || controllerlook.d() == this.a.locX && controllerlook.e() == this.a.locY && controllerlook.f() == this.a.locZ) {
-                        double d4 = this.c.locX - this.a.locX;
-                        double d5 = this.c.locZ - this.a.locZ;
+                    if (d3 <= (double) this.g || controllerlook.d() == this.a.locX() && controllerlook.e() == this.a.locY() && controllerlook.f() == this.a.locZ()) {
+                        double d4 = this.c.locX() - this.a.locX();
+                        double d5 = this.c.locZ() - this.a.locZ();
 
-                        this.e.a(this.a.locX - d4, this.a.locY, this.a.locZ - d5, this.d);
+                        this.e.a(this.a.locX() - d4, this.a.locY(), this.a.locZ() - d5, this.d);
                     }
 
                 }

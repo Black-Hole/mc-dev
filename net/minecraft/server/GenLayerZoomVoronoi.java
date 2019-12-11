@@ -1,52 +1,87 @@
 package net.minecraft.server;
 
-public enum GenLayerZoomVoronoi implements AreaTransformer2 {
+public enum GenLayerZoomVoronoi implements GenLayerZoomer {
 
     INSTANCE;
 
     private GenLayerZoomVoronoi() {}
 
     @Override
-    public int a(AreaContextTransformed<?> areacontexttransformed, Area area, int i, int j) {
-        int k = i - 2;
-        int l = j - 2;
-        int i1 = k >> 2;
-        int j1 = l >> 2;
-        int k1 = i1 << 2;
-        int l1 = j1 << 2;
+    public BiomeBase a(long i, int j, int k, int l, BiomeManager.Provider biomemanager_provider) {
+        int i1 = j - 2;
+        int j1 = k - 2;
+        int k1 = l - 2;
+        int l1 = i1 >> 2;
+        int i2 = j1 >> 2;
+        int j2 = k1 >> 2;
+        double d0 = (double) (i1 & 3) / 4.0D;
+        double d1 = (double) (j1 & 3) / 4.0D;
+        double d2 = (double) (k1 & 3) / 4.0D;
+        double[] adouble = new double[8];
 
-        areacontexttransformed.a((long) k1, (long) l1);
-        double d0 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D;
-        double d1 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D;
+        int k2;
+        int l2;
+        int i3;
 
-        areacontexttransformed.a((long) (k1 + 4), (long) l1);
-        double d2 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
-        double d3 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D;
+        for (k2 = 0; k2 < 8; ++k2) {
+            boolean flag = (k2 & 4) == 0;
+            boolean flag1 = (k2 & 2) == 0;
+            boolean flag2 = (k2 & 1) == 0;
 
-        areacontexttransformed.a((long) k1, (long) (l1 + 4));
-        double d4 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D;
-        double d5 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
+            l2 = flag ? l1 : l1 + 1;
+            i3 = flag1 ? i2 : i2 + 1;
+            int j3 = flag2 ? j2 : j2 + 1;
+            double d3 = flag ? d0 : d0 - 1.0D;
+            double d4 = flag1 ? d1 : d1 - 1.0D;
+            double d5 = flag2 ? d2 : d2 - 1.0D;
 
-        areacontexttransformed.a((long) (k1 + 4), (long) (l1 + 4));
-        double d6 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
-        double d7 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
-        int i2 = k & 3;
-        int j2 = l & 3;
-        double d8 = ((double) j2 - d1) * ((double) j2 - d1) + ((double) i2 - d0) * ((double) i2 - d0);
-        double d9 = ((double) j2 - d3) * ((double) j2 - d3) + ((double) i2 - d2) * ((double) i2 - d2);
-        double d10 = ((double) j2 - d5) * ((double) j2 - d5) + ((double) i2 - d4) * ((double) i2 - d4);
-        double d11 = ((double) j2 - d7) * ((double) j2 - d7) + ((double) i2 - d6) * ((double) i2 - d6);
+            adouble[k2] = a(i, l2, i3, j3, d3, d4, d5);
+        }
 
-        return d8 < d9 && d8 < d10 && d8 < d11 ? area.a(this.a(k1), this.b(l1)) : (d9 < d8 && d9 < d10 && d9 < d11 ? area.a(this.a(k1 + 4), this.b(l1)) & 255 : (d10 < d8 && d10 < d9 && d10 < d11 ? area.a(this.a(k1), this.b(l1 + 4)) : area.a(this.a(k1 + 4), this.b(l1 + 4)) & 255));
+        k2 = 0;
+        double d6 = adouble[0];
+
+        int k3;
+
+        for (k3 = 1; k3 < 8; ++k3) {
+            if (d6 > adouble[k3]) {
+                k2 = k3;
+                d6 = adouble[k3];
+            }
+        }
+
+        k3 = (k2 & 4) == 0 ? l1 : l1 + 1;
+        l2 = (k2 & 2) == 0 ? i2 : i2 + 1;
+        i3 = (k2 & 1) == 0 ? j2 : j2 + 1;
+        return biomemanager_provider.getBiome(k3, l2, i3);
     }
 
-    @Override
-    public int a(int i) {
-        return i >> 2;
+    private static double a(long i, int j, int k, int l, double d0, double d1, double d2) {
+        long i1 = LinearCongruentialGenerator.a(i, (long) j);
+
+        i1 = LinearCongruentialGenerator.a(i1, (long) k);
+        i1 = LinearCongruentialGenerator.a(i1, (long) l);
+        i1 = LinearCongruentialGenerator.a(i1, (long) j);
+        i1 = LinearCongruentialGenerator.a(i1, (long) k);
+        i1 = LinearCongruentialGenerator.a(i1, (long) l);
+        double d3 = a(i1);
+
+        i1 = LinearCongruentialGenerator.a(i1, i);
+        double d4 = a(i1);
+
+        i1 = LinearCongruentialGenerator.a(i1, i);
+        double d5 = a(i1);
+
+        return a(d2 + d5) + a(d1 + d4) + a(d0 + d3);
     }
 
-    @Override
-    public int b(int i) {
-        return i >> 2;
+    private static double a(long i) {
+        double d0 = (double) ((int) Math.floorMod(i >> 24, 1024L)) / 1024.0D;
+
+        return (d0 - 0.5D) * 0.9D;
+    }
+
+    private static double a(double d0) {
+        return d0 * d0;
     }
 }

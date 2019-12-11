@@ -4,10 +4,10 @@ public final class BiomePlains extends BiomeBase {
 
     protected BiomePlains() {
         super((new BiomeBase.a()).a(WorldGenSurface.G, WorldGenSurface.v).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.PLAINS).a(0.125F).b(0.05F).c(0.8F).d(0.4F).a(4159204).b(329011).a((String) null));
-        this.a(WorldGenerator.VILLAGE, (WorldGenFeatureConfiguration) (new WorldGenFeatureVillageConfiguration("village/plains/town_centers", 6)));
-        this.a(WorldGenerator.PILLAGER_OUTPOST, (WorldGenFeatureConfiguration) (new WorldGenFeaturePillagerOutpostConfiguration(0.004D)));
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
-        this.a(WorldGenerator.STRONGHOLD, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
+        this.a(WorldGenerator.VILLAGE.b((WorldGenFeatureConfiguration) (new WorldGenFeatureVillageConfiguration("village/plains/town_centers", 6))));
+        this.a(WorldGenerator.PILLAGER_OUTPOST.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
+        this.a(WorldGenerator.STRONGHOLD.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);

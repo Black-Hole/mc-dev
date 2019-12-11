@@ -2,12 +2,12 @@ package net.minecraft.server;
 
 public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
 
-    public static final BlockStateInteger POWER = BlockProperties.as;
+    public static final BlockStateInteger POWER = BlockProperties.at;
     private final int weight;
 
     protected BlockPressurePlateWeighted(int i, Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateWeighted.POWER, 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateWeighted.POWER, 0));
         this.weight = i;
     }
 

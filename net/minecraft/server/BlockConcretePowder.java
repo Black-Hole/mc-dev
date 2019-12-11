@@ -49,7 +49,7 @@ public class BlockConcretePowder extends BlockFalling {
     }
 
     private static boolean canHarden(IBlockData iblockdata) {
-        return iblockdata.p().a(TagsFluid.WATER);
+        return iblockdata.getFluid().a(TagsFluid.WATER);
     }
 
     @Override

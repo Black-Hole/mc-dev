@@ -24,7 +24,7 @@ public class EntityTrackerEntry {
     private int xRot;
     private int headYaw;
     private Vec3D m;
-    private int n;
+    private int tickCounter;
     private int o;
     private List<Entity> p;
     private boolean q;
@@ -53,7 +53,7 @@ public class EntityTrackerEntry {
             this.f.accept(new PacketPlayOutMount(this.tracker));
         }
 
-        if (this.tracker instanceof EntityItemFrame && this.n % 10 == 0) {
+        if (this.tracker instanceof EntityItemFrame && this.tickCounter % 10 == 0) {
             EntityItemFrame entityitemframe = (EntityItemFrame) this.tracker;
             ItemStack itemstack = entityitemframe.getItem();
 
@@ -76,7 +76,7 @@ public class EntityTrackerEntry {
             this.c();
         }
 
-        if (this.n % this.d == 0 || this.tracker.impulse || this.tracker.getDataWatcher().a()) {
+        if (this.tickCounter % this.d == 0 || this.tracker.impulse || this.tracker.getDataWatcher().a()) {
             int i;
             int j;
 
@@ -98,13 +98,13 @@ public class EntityTrackerEntry {
                 ++this.o;
                 i = MathHelper.d(this.tracker.yaw * 256.0F / 360.0F);
                 j = MathHelper.d(this.tracker.pitch * 256.0F / 360.0F);
-                Vec3D vec3d = (new Vec3D(this.tracker.locX, this.tracker.locY, this.tracker.locZ)).d(PacketPlayOutEntity.a(this.xLoc, this.yLoc, this.zLoc));
+                Vec3D vec3d = this.tracker.getPositionVector().d(PacketPlayOutEntity.a(this.xLoc, this.yLoc, this.zLoc));
                 boolean flag1 = vec3d.g() >= 7.62939453125E-6D;
                 Packet<?> packet1 = null;
-                boolean flag2 = flag1 || this.n % 60 == 0;
+                boolean flag2 = flag1 || this.tickCounter % 60 == 0;
                 boolean flag3 = Math.abs(i - this.yRot) >= 1 || Math.abs(j - this.xRot) >= 1;
 
-                if (this.n > 0 || this.tracker instanceof EntityArrow) {
+                if (this.tickCounter > 0 || this.tracker instanceof EntityArrow) {
                     long k = PacketPlayOutEntity.a(vec3d.x);
                     long l = PacketPlayOutEntity.a(vec3d.y);
                     long i1 = PacketPlayOutEntity.a(vec3d.z);
@@ -127,7 +127,7 @@ public class EntityTrackerEntry {
                     }
                 }
 
-                if ((this.e || this.tracker.impulse || this.tracker instanceof EntityLiving && ((EntityLiving) this.tracker).isGliding()) && this.n > 0) {
+                if ((this.e || this.tracker.impulse || this.tracker instanceof EntityLiving && ((EntityLiving) this.tracker).isGliding()) && this.tickCounter > 0) {
                     Vec3D vec3d1 = this.tracker.getMot();
                     double d0 = vec3d1.distanceSquared(this.m);
 
@@ -163,7 +163,7 @@ public class EntityTrackerEntry {
             this.tracker.impulse = false;
         }
 
-        ++this.n;
+        ++this.tickCounter;
         if (this.tracker.velocityChanged) {
             this.broadcastIncludingSelf(new PacketPlayOutEntityVelocity(this.tracker));
             this.tracker.velocityChanged = false;
@@ -190,7 +190,7 @@ public class EntityTrackerEntry {
             EntityTrackerEntry.LOGGER.warn("Fetching packet for removed entity " + this.tracker);
         }
 
-        Packet<?> packet = this.tracker.N();
+        Packet<?> packet = this.tracker.L();
 
         this.headYaw = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
         consumer.accept(packet);
@@ -251,6 +251,14 @@ public class EntityTrackerEntry {
             consumer.accept(new PacketPlayOutMount(this.tracker.getVehicle()));
         }
 
+        if (this.tracker instanceof EntityInsentient) {
+            EntityInsentient entityinsentient = (EntityInsentient) this.tracker;
+
+            if (entityinsentient.isLeashed()) {
+                consumer.accept(new PacketPlayOutAttachEntity(entityinsentient, entityinsentient.getLeashHolder()));
+            }
+        }
+
     }
 
     private void c() {
@@ -274,9 +282,9 @@ public class EntityTrackerEntry {
     }
 
     private void d() {
-        this.xLoc = PacketPlayOutEntity.a(this.tracker.locX);
-        this.yLoc = PacketPlayOutEntity.a(this.tracker.locY);
-        this.zLoc = PacketPlayOutEntity.a(this.tracker.locZ);
+        this.xLoc = PacketPlayOutEntity.a(this.tracker.locX());
+        this.yLoc = PacketPlayOutEntity.a(this.tracker.locY());
+        this.zLoc = PacketPlayOutEntity.a(this.tracker.locZ());
     }
 
     public Vec3D b() {

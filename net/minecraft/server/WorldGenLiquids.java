@@ -4,39 +4,43 @@ import com.mojang.datafixers.Dynamic;
 import java.util.Random;
 import java.util.function.Function;
 
-public class WorldGenLiquids extends WorldGenerator<WorldGenFeatureFlowingConfiguration> {
+public class WorldGenLiquids extends WorldGenerator<WorldGenFeatureHellFlowingLavaConfiguration> {
 
-    public WorldGenLiquids(Function<Dynamic<?>, ? extends WorldGenFeatureFlowingConfiguration> function) {
+    public WorldGenLiquids(Function<Dynamic<?>, ? extends WorldGenFeatureHellFlowingLavaConfiguration> function) {
         super(function);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureFlowingConfiguration worldgenfeatureflowingconfiguration) {
-        if (!Block.b(generatoraccess.getType(blockposition.up()).getBlock())) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureHellFlowingLavaConfiguration worldgenfeaturehellflowinglavaconfiguration) {
+        if (!worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccess.getType(blockposition.up()).getBlock())) {
             return false;
-        } else if (!Block.b(generatoraccess.getType(blockposition.down()).getBlock())) {
+        } else if (worldgenfeaturehellflowinglavaconfiguration.b && !worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccess.getType(blockposition.down()).getBlock())) {
             return false;
         } else {
             IBlockData iblockdata = generatoraccess.getType(blockposition);
 
-            if (!iblockdata.isAir() && !Block.b(iblockdata.getBlock())) {
+            if (!iblockdata.isAir() && !worldgenfeaturehellflowinglavaconfiguration.f.contains(iblockdata.getBlock())) {
                 return false;
             } else {
                 int i = 0;
                 int j = 0;
 
-                if (Block.b(generatoraccess.getType(blockposition.west()).getBlock())) {
+                if (worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccess.getType(blockposition.west()).getBlock())) {
                     ++j;
                 }
 
-                if (Block.b(generatoraccess.getType(blockposition.east()).getBlock())) {
+                if (worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccess.getType(blockposition.east()).getBlock())) {
                     ++j;
                 }
 
-                if (Block.b(generatoraccess.getType(blockposition.north()).getBlock())) {
+                if (worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccess.getType(blockposition.north()).getBlock())) {
                     ++j;
                 }
 
-                if (Block.b(generatoraccess.getType(blockposition.south()).getBlock())) {
+                if (worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccess.getType(blockposition.south()).getBlock())) {
+                    ++j;
+                }
+
+                if (worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccess.getType(blockposition.down()).getBlock())) {
                     ++j;
                 }
 
@@ -58,9 +62,13 @@ public class WorldGenLiquids extends WorldGenerator<WorldGenFeatureFlowingConfig
                     ++k;
                 }
 
-                if (j == 3 && k == 1) {
-                    generatoraccess.setTypeAndData(blockposition, worldgenfeatureflowingconfiguration.a.getBlockData(), 2);
-                    generatoraccess.getFluidTickList().a(blockposition, worldgenfeatureflowingconfiguration.a.getType(), 0);
+                if (generatoraccess.isEmpty(blockposition.down())) {
+                    ++k;
+                }
+
+                if (j == worldgenfeaturehellflowinglavaconfiguration.c && k == worldgenfeaturehellflowinglavaconfiguration.d) {
+                    generatoraccess.setTypeAndData(blockposition, worldgenfeaturehellflowinglavaconfiguration.a.getBlockData(), 2);
+                    generatoraccess.getFluidTickList().a(blockposition, worldgenfeaturehellflowinglavaconfiguration.a.getType(), 0);
                     ++i;
                 }
 

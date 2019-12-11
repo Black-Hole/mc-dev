@@ -124,8 +124,8 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
             if (pathpoint == null) {
                 return false;
             } else {
-                int i = pathpoint.a - MathHelper.floor(entityliving.locX);
-                int j = pathpoint.c - MathHelper.floor(entityliving.locZ);
+                int i = pathpoint.a - MathHelper.floor(entityliving.locX());
+                int j = pathpoint.c - MathHelper.floor(entityliving.locZ());
 
                 return (double) (i * i + j * j) <= 2.25D;
             }

@@ -50,7 +50,7 @@ public class BlockActionContextDirectional extends BlockActionContext {
 
     @Override
     public EnumDirection f() {
-        return this.g.k() == EnumDirection.EnumAxis.Y ? EnumDirection.NORTH : this.g;
+        return this.g.m() == EnumDirection.EnumAxis.Y ? EnumDirection.NORTH : this.g;
     }
 
     @Override

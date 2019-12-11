@@ -6,12 +6,36 @@ import java.io.IOException;
 
 public class NBTTagLong extends NBTNumber {
 
-    private long data;
+    public static final NBTTagType<NBTTagLong> a = new NBTTagType<NBTTagLong>() {
+        @Override
+        public NBTTagLong b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+            nbtreadlimiter.a(128L);
+            return NBTTagLong.a(datainput.readLong());
+        }
 
-    NBTTagLong() {}
+        @Override
+        public String a() {
+            return "LONG";
+        }
 
-    public NBTTagLong(long i) {
+        @Override
+        public String b() {
+            return "TAG_Long";
+        }
+
+        @Override
+        public boolean c() {
+            return true;
+        }
+    };
+    private final long data;
+
+    private NBTTagLong(long i) {
         this.data = i;
+    }
+
+    public static NBTTagLong a(long i) {
+        return i >= -128L && i <= 1024L ? NBTTagLong.a.a[(int) i + 128] : new NBTTagLong(i);
     }
 
     @Override
@@ -20,14 +44,13 @@ public class NBTTagLong extends NBTNumber {
     }
 
     @Override
-    public void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
-        nbtreadlimiter.a(128L);
-        this.data = datainput.readLong();
+    public byte getTypeId() {
+        return 4;
     }
 
     @Override
-    public byte getTypeId() {
-        return 4;
+    public NBTTagType<NBTTagLong> b() {
+        return NBTTagLong.a;
     }
 
     @Override
@@ -37,7 +60,7 @@ public class NBTTagLong extends NBTNumber {
 
     @Override
     public NBTTagLong clone() {
-        return new NBTTagLong(this.data);
+        return this;
     }
 
     public boolean equals(Object object) {
@@ -50,9 +73,9 @@ public class NBTTagLong extends NBTNumber {
 
     @Override
     public IChatBaseComponent a(String s, int i) {
-        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("L")).a(NBTTagLong.e);
+        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("L")).a(NBTTagLong.g);
 
-        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatbasecomponent).a(NBTTagLong.d);
+        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatbasecomponent).a(NBTTagLong.f);
     }
 
     @Override
@@ -86,7 +109,19 @@ public class NBTTagLong extends NBTNumber {
     }
 
     @Override
-    public Number j() {
+    public Number k() {
         return this.data;
+    }
+
+    static class a {
+
+        static final NBTTagLong[] a = new NBTTagLong[1153];
+
+        static {
+            for (int i = 0; i < NBTTagLong.a.a.length; ++i) {
+                NBTTagLong.a.a[i] = new NBTTagLong((long) (-128 + i));
+            }
+
+        }
     }
 }

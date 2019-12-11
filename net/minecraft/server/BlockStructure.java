@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class BlockStructure extends BlockTileEntity {
 
-    public static final BlockStateEnum<BlockPropertyStructureMode> a = BlockProperties.aE;
+    public static final BlockStateEnum<BlockPropertyStructureMode> a = BlockProperties.aF;
 
     protected BlockStructure(Block.Info block_info) {
         super(block_info);
@@ -16,10 +16,10 @@ public class BlockStructure extends BlockTileEntity {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
-        return tileentity instanceof TileEntityStructure ? ((TileEntityStructure) tileentity).a(entityhuman) : false;
+        return tileentity instanceof TileEntityStructure ? (((TileEntityStructure) tileentity).a(entityhuman) ? EnumInteractionResult.SUCCESS : EnumInteractionResult.PASS) : EnumInteractionResult.PASS;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class BlockStructure extends BlockTileEntity {
             if (tileentity instanceof TileEntityStructure) {
                 TileEntityStructure tileentitystructure = (TileEntityStructure) tileentity;
                 boolean flag1 = world.isBlockIndirectlyPowered(blockposition);
-                boolean flag2 = tileentitystructure.G();
+                boolean flag2 = tileentitystructure.H();
 
                 if (flag1 && !flag2) {
                     tileentitystructure.d(true);
@@ -81,7 +81,7 @@ public class BlockStructure extends BlockTileEntity {
                 tileentitystructure.c(false);
                 break;
             case CORNER:
-                tileentitystructure.E();
+                tileentitystructure.F();
             case DATA:
         }
 

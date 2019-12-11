@@ -9,16 +9,16 @@ import java.io.File;
 import java.io.IOException;
 import javax.annotation.Nullable;
 
-public abstract class RegionFileCache implements AutoCloseable {
+public final class RegionFileCache implements AutoCloseable {
 
     public final Long2ObjectLinkedOpenHashMap<RegionFile> cache = new Long2ObjectLinkedOpenHashMap();
-    private final File a;
+    private final File b;
 
-    protected RegionFileCache(File file) {
-        this.a = file;
+    RegionFileCache(File file) {
+        this.b = file;
     }
 
-    private RegionFile a(ChunkCoordIntPair chunkcoordintpair) throws IOException {
+    private RegionFile getFile(ChunkCoordIntPair chunkcoordintpair) throws IOException {
         long i = ChunkCoordIntPair.pair(chunkcoordintpair.getRegionX(), chunkcoordintpair.getRegionZ());
         RegionFile regionfile = (RegionFile) this.cache.getAndMoveToFirst(i);
 
@@ -29,12 +29,12 @@ public abstract class RegionFileCache implements AutoCloseable {
                 ((RegionFile) this.cache.removeLast()).close();
             }
 
-            if (!this.a.exists()) {
-                this.a.mkdirs();
+            if (!this.b.exists()) {
+                this.b.mkdirs();
             }
 
-            File file = new File(this.a, "r." + chunkcoordintpair.getRegionX() + "." + chunkcoordintpair.getRegionZ() + ".mca");
-            RegionFile regionfile1 = new RegionFile(file);
+            File file = new File(this.b, "r." + chunkcoordintpair.getRegionX() + "." + chunkcoordintpair.getRegionZ() + ".mca");
+            RegionFile regionfile1 = new RegionFile(file, this.b);
 
             this.cache.putAndMoveToFirst(i, regionfile1);
             return regionfile1;
@@ -43,7 +43,7 @@ public abstract class RegionFileCache implements AutoCloseable {
 
     @Nullable
     public NBTTagCompound read(ChunkCoordIntPair chunkcoordintpair) throws IOException {
-        RegionFile regionfile = this.a(chunkcoordintpair);
+        RegionFile regionfile = this.getFile(chunkcoordintpair);
         DataInputStream datainputstream = regionfile.a(chunkcoordintpair);
         Throwable throwable = null;
 
@@ -78,7 +78,7 @@ public abstract class RegionFileCache implements AutoCloseable {
     }
 
     protected void write(ChunkCoordIntPair chunkcoordintpair, NBTTagCompound nbttagcompound) throws IOException {
-        RegionFile regionfile = this.a(chunkcoordintpair);
+        RegionFile regionfile = this.getFile(chunkcoordintpair);
         DataOutputStream dataoutputstream = regionfile.c(chunkcoordintpair);
         Throwable throwable = null;
 

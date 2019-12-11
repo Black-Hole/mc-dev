@@ -12,7 +12,7 @@ public class WorldGenFeatureRandom2Configuration extends WorldGenerator<WorldGen
 
     public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRandom2 worldgenfeaturerandom2) {
         int i = random.nextInt(worldgenfeaturerandom2.a.size());
-        WorldGenFeatureConfigured<?> worldgenfeatureconfigured = (WorldGenFeatureConfigured) worldgenfeaturerandom2.a.get(i);
+        WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured = (WorldGenFeatureConfigured) worldgenfeaturerandom2.a.get(i);
 
         return worldgenfeatureconfigured.a(generatoraccess, chunkgenerator, random, blockposition);
     }

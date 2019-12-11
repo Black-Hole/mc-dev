@@ -7,8 +7,11 @@ import javax.annotation.concurrent.Immutable;
 public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
 
     public static final BaseBlockPosition ZERO = new BaseBlockPosition(0, 0, 0);
+    @Deprecated
     private final int a;
+    @Deprecated
     private final int b;
+    @Deprecated
     private final int c;
 
     public BaseBlockPosition(int i, int j, int k) {
@@ -53,12 +56,24 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
         return this.c;
     }
 
+    public BaseBlockPosition down() {
+        return this.down(1);
+    }
+
+    public BaseBlockPosition down(int i) {
+        return this.shift(EnumDirection.DOWN, i);
+    }
+
+    public BaseBlockPosition shift(EnumDirection enumdirection, int i) {
+        return i == 0 ? this : new BaseBlockPosition(this.getX() + enumdirection.getAdjacentX() * i, this.getY() + enumdirection.getAdjacentY() * i, this.getZ() + enumdirection.getAdjacentZ() * i);
+    }
+
     public BaseBlockPosition d(BaseBlockPosition baseblockposition) {
         return new BaseBlockPosition(this.getY() * baseblockposition.getZ() - this.getZ() * baseblockposition.getY(), this.getZ() * baseblockposition.getX() - this.getX() * baseblockposition.getZ(), this.getX() * baseblockposition.getY() - this.getY() * baseblockposition.getX());
     }
 
     public boolean a(BaseBlockPosition baseblockposition, double d0) {
-        return this.distanceSquared((double) baseblockposition.a, (double) baseblockposition.b, (double) baseblockposition.c, false) < d0 * d0;
+        return this.distanceSquared((double) baseblockposition.getX(), (double) baseblockposition.getY(), (double) baseblockposition.getZ(), false) < d0 * d0;
     }
 
     public boolean a(IPosition iposition, double d0) {
@@ -83,9 +98,9 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
     }
 
     public int n(BaseBlockPosition baseblockposition) {
-        float f = (float) Math.abs(baseblockposition.getX() - this.a);
-        float f1 = (float) Math.abs(baseblockposition.getY() - this.b);
-        float f2 = (float) Math.abs(baseblockposition.getZ() - this.c);
+        float f = (float) Math.abs(baseblockposition.getX() - this.getX());
+        float f1 = (float) Math.abs(baseblockposition.getY() - this.getY());
+        float f2 = (float) Math.abs(baseblockposition.getZ() - this.getZ());
 
         return (int) (f + f1 + f2);
     }

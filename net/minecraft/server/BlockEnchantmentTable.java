@@ -11,7 +11,7 @@ public class BlockEnchantmentTable extends BlockTileEntity {
     }
 
     @Override
-    public boolean n(IBlockData iblockdata) {
+    public boolean o(IBlockData iblockdata) {
         return true;
     }
 
@@ -31,12 +31,12 @@ public class BlockEnchantmentTable extends BlockTileEntity {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (world.isClientSide) {
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
             entityhuman.openContainer(iblockdata.b(world, blockposition));
-            return true;
+            return EnumInteractionResult.SUCCESS;
         }
     }
 

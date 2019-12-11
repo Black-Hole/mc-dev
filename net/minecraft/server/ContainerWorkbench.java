@@ -115,13 +115,15 @@ public class ContainerWorkbench extends ContainerRecipeBook<InventoryCrafting> {
                 }
 
                 slot.a(itemstack1, itemstack);
-            } else if (i >= 10 && i < 37) {
-                if (!this.a(itemstack1, 37, 46, false)) {
-                    return ItemStack.a;
-                }
-            } else if (i >= 37 && i < 46) {
-                if (!this.a(itemstack1, 10, 37, false)) {
-                    return ItemStack.a;
+            } else if (i >= 10 && i < 46) {
+                if (!this.a(itemstack1, 1, 10, false)) {
+                    if (i < 37) {
+                        if (!this.a(itemstack1, 37, 46, false)) {
+                            return ItemStack.a;
+                        }
+                    } else if (!this.a(itemstack1, 10, 37, false)) {
+                        return ItemStack.a;
+                    }
                 }
             } else if (!this.a(itemstack1, 10, 46, false)) {
                 return ItemStack.a;

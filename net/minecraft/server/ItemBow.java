@@ -7,10 +7,10 @@ public class ItemBow extends ItemProjectileWeapon {
     public ItemBow(Item.Info item_info) {
         super(item_info);
         this.a(new MinecraftKey("pull"), (itemstack, world, entityliving) -> {
-            return entityliving == null ? 0.0F : (entityliving.dl().getItem() != Items.BOW ? 0.0F : (float) (itemstack.k() - entityliving.dm()) / 20.0F);
+            return entityliving == null ? 0.0F : (entityliving.dD().getItem() != Items.BOW ? 0.0F : (float) (itemstack.k() - entityliving.dE()) / 20.0F);
         });
         this.a(new MinecraftKey("pulling"), (itemstack, world, entityliving) -> {
-            return entityliving != null && entityliving.isHandRaised() && entityliving.dl() == itemstack ? 1.0F : 0.0F;
+            return entityliving != null && entityliving.isHandRaised() && entityliving.dD() == itemstack ? 1.0F : 0.0F;
         });
     }
 
@@ -67,7 +67,7 @@ public class ItemBow extends ItemProjectileWeapon {
                         world.addEntity(entityarrow);
                     }
 
-                    world.playSound((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (ItemBow.i.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (ItemBow.i.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
                     if (!flag1 && !entityhuman.abilities.canInstantlyBuild) {
                         itemstack1.subtract(1);
                         if (itemstack1.isEmpty()) {
@@ -108,10 +108,10 @@ public class ItemBow extends ItemProjectileWeapon {
         boolean flag = !entityhuman.f(itemstack).isEmpty();
 
         if (!entityhuman.abilities.canInstantlyBuild && !flag) {
-            return flag ? new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack) : new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
+            return InteractionResultWrapper.d(itemstack);
         } else {
             entityhuman.c(enumhand);
-            return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
+            return InteractionResultWrapper.b(itemstack);
         }
     }
 

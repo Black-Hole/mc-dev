@@ -13,8 +13,8 @@ public class PathfinderNormal extends PathfinderAbstract {
     public PathfinderNormal() {}
 
     @Override
-    public void a(IWorldReader iworldreader, EntityInsentient entityinsentient) {
-        super.a(iworldreader, entityinsentient);
+    public void a(ChunkCache chunkcache, EntityInsentient entityinsentient) {
+        super.a(chunkcache, entityinsentient);
         this.j = entityinsentient.a(PathType.WATER);
     }
 
@@ -30,17 +30,17 @@ public class PathfinderNormal extends PathfinderAbstract {
         BlockPosition blockposition;
 
         if (this.e() && this.b.isInWater()) {
-            i = MathHelper.floor(this.b.getBoundingBox().minY);
-            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(this.b.locX, (double) i, this.b.locZ);
+            i = MathHelper.floor(this.b.locY());
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(this.b.locX(), (double) i, this.b.locZ());
 
-            for (IBlockData iblockdata = this.a.getType(blockposition_mutableblockposition); iblockdata.getBlock() == Blocks.WATER || iblockdata.p() == FluidTypes.WATER.a(false); iblockdata = this.a.getType(blockposition_mutableblockposition)) {
+            for (IBlockData iblockdata = this.a.getType(blockposition_mutableblockposition); iblockdata.getBlock() == Blocks.WATER || iblockdata.getFluid() == FluidTypes.WATER.a(false); iblockdata = this.a.getType(blockposition_mutableblockposition)) {
                 ++i;
-                blockposition_mutableblockposition.c(this.b.locX, (double) i, this.b.locZ);
+                blockposition_mutableblockposition.c(this.b.locX(), (double) i, this.b.locZ());
             }
 
             --i;
         } else if (this.b.onGround) {
-            i = MathHelper.floor(this.b.getBoundingBox().minY + 0.5D);
+            i = MathHelper.floor(this.b.locY() + 0.5D);
         } else {
             for (blockposition = new BlockPosition(this.b); (this.a.getType(blockposition).isAir() || this.a.getType(blockposition).a((IBlockAccess) this.a, blockposition, PathMode.LAND)) && blockposition.getY() > 0; blockposition = blockposition.down()) {
                 ;
@@ -86,7 +86,13 @@ public class PathfinderNormal extends PathfinderAbstract {
         PathType pathtype = this.a(this.b, pathpoint.a, pathpoint.b + 1, pathpoint.c);
 
         if (this.b.a(pathtype) >= 0.0F) {
-            j = MathHelper.d(Math.max(1.0F, this.b.K));
+            PathType pathtype1 = this.a(this.b, pathpoint.a, pathpoint.b, pathpoint.c);
+
+            if (pathtype1 == PathType.STICKY_HONEY) {
+                j = 0;
+            } else {
+                j = MathHelper.d(Math.max(1.0F, this.b.H));
+            }
         }
 
         double d0 = a((IBlockAccess) this.a, new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c));
@@ -238,7 +244,7 @@ public class PathfinderNormal extends PathfinderAbstract {
                         }
 
                         pathpoint1 = this.a(i, j, k);
-                        if (i1++ >= this.b.bv()) {
+                        if (i1++ >= this.b.bD()) {
                             pathpoint1.l = PathType.BLOCKED;
                             pathpoint1.k = -1.0F;
                             return pathpoint1;
@@ -352,11 +358,15 @@ public class PathfinderNormal extends PathfinderAbstract {
 
     @Override
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k) {
-        PathType pathtype = this.b(iblockaccess, i, j, k);
+        return b(iblockaccess, i, j, k);
+    }
+
+    public static PathType b(IBlockAccess iblockaccess, int i, int j, int k) {
+        PathType pathtype = c(iblockaccess, i, j, k);
 
         if (pathtype == PathType.OPEN && j >= 1) {
             Block block = iblockaccess.getType(new BlockPosition(i, j - 1, k)).getBlock();
-            PathType pathtype1 = this.b(iblockaccess, i, j - 1, k);
+            PathType pathtype1 = c(iblockaccess, i, j - 1, k);
 
             pathtype = pathtype1 != PathType.WALKABLE && pathtype1 != PathType.OPEN && pathtype1 != PathType.WATER && pathtype1 != PathType.LAVA ? PathType.WALKABLE : PathType.OPEN;
             if (pathtype1 == PathType.DAMAGE_FIRE || block == Blocks.MAGMA_BLOCK || block == Blocks.CAMPFIRE) {
@@ -370,56 +380,65 @@ public class PathfinderNormal extends PathfinderAbstract {
             if (pathtype1 == PathType.DAMAGE_OTHER) {
                 pathtype = PathType.DAMAGE_OTHER;
             }
+
+            if (pathtype1 == PathType.STICKY_HONEY) {
+                pathtype = PathType.STICKY_HONEY;
+            }
         }
 
-        pathtype = this.a(iblockaccess, i, j, k, pathtype);
+        if (pathtype == PathType.WALKABLE) {
+            pathtype = a(iblockaccess, i, j, k, pathtype);
+        }
+
         return pathtype;
     }
 
-    public PathType a(IBlockAccess iblockaccess, int i, int j, int k, PathType pathtype) {
-        if (pathtype == PathType.WALKABLE) {
-            BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
-            Throwable throwable = null;
+    public static PathType a(IBlockAccess iblockaccess, int i, int j, int k, PathType pathtype) {
+        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
+        Throwable throwable = null;
 
-            try {
-                for (int l = -1; l <= 1; ++l) {
-                    for (int i1 = -1; i1 <= 1; ++i1) {
-                        if (l != 0 || i1 != 0) {
-                            Block block = iblockaccess.getType(blockposition_pooledblockposition.d(l + i, j, i1 + k)).getBlock();
+        try {
+            for (int l = -1; l <= 1; ++l) {
+                for (int i1 = -1; i1 <= 1; ++i1) {
+                    for (int j1 = -1; j1 <= 1; ++j1) {
+                        if (l != 0 || j1 != 0) {
+                            Block block = iblockaccess.getType(blockposition_pooledblockposition.d(l + i, i1 + j, j1 + k)).getBlock();
 
                             if (block == Blocks.CACTUS) {
                                 pathtype = PathType.DANGER_CACTUS;
-                            } else if (block == Blocks.FIRE) {
+                            } else if (block != Blocks.FIRE && block != Blocks.LAVA) {
+                                if (block == Blocks.SWEET_BERRY_BUSH) {
+                                    pathtype = PathType.DANGER_OTHER;
+                                }
+                            } else {
                                 pathtype = PathType.DANGER_FIRE;
-                            } else if (block == Blocks.SWEET_BERRY_BUSH) {
-                                pathtype = PathType.DANGER_OTHER;
                             }
                         }
                     }
                 }
-            } catch (Throwable throwable1) {
-                throwable = throwable1;
-                throw throwable1;
-            } finally {
-                if (blockposition_pooledblockposition != null) {
-                    if (throwable != null) {
-                        try {
-                            blockposition_pooledblockposition.close();
-                        } catch (Throwable throwable2) {
-                            throwable.addSuppressed(throwable2);
-                        }
-                    } else {
-                        blockposition_pooledblockposition.close();
-                    }
-                }
-
             }
+        } catch (Throwable throwable1) {
+            throwable = throwable1;
+            throw throwable1;
+        } finally {
+            if (blockposition_pooledblockposition != null) {
+                if (throwable != null) {
+                    try {
+                        blockposition_pooledblockposition.close();
+                    } catch (Throwable throwable2) {
+                        throwable.addSuppressed(throwable2);
+                    }
+                } else {
+                    blockposition_pooledblockposition.close();
+                }
+            }
+
         }
 
         return pathtype;
     }
 
-    protected PathType b(IBlockAccess iblockaccess, int i, int j, int k) {
+    protected static PathType c(IBlockAccess iblockaccess, int i, int j, int k) {
         BlockPosition blockposition = new BlockPosition(i, j, k);
         IBlockData iblockdata = iblockaccess.getType(blockposition);
         Block block = iblockdata.getBlock();
@@ -434,6 +453,10 @@ public class PathfinderNormal extends PathfinderAbstract {
                 return PathType.DAMAGE_CACTUS;
             } else if (block == Blocks.SWEET_BERRY_BUSH) {
                 return PathType.DAMAGE_OTHER;
+            } else if (block == Blocks.HONEY_BLOCK) {
+                return PathType.STICKY_HONEY;
+            } else if (block == Blocks.COCOA) {
+                return PathType.COCOA;
             } else if (block instanceof BlockDoor && material == Material.WOOD && !(Boolean) iblockdata.get(BlockDoor.OPEN)) {
                 return PathType.DOOR_WOOD_CLOSED;
             } else if (block instanceof BlockDoor && material == Material.ORE && !(Boolean) iblockdata.get(BlockDoor.OPEN)) {

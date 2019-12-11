@@ -10,10 +10,10 @@ public class EntityDolphin extends EntityWaterAnimal {
 
     private static final DataWatcherObject<BlockPosition> c = DataWatcher.a(EntityDolphin.class, DataWatcherRegistry.l);
     private static final DataWatcherObject<Boolean> d = DataWatcher.a(EntityDolphin.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Integer> bz = DataWatcher.a(EntityDolphin.class, DataWatcherRegistry.b);
-    private static final PathfinderTargetCondition bA = (new PathfinderTargetCondition()).a(10.0D).b().a().c();
+    private static final DataWatcherObject<Integer> bw = DataWatcher.a(EntityDolphin.class, DataWatcherRegistry.b);
+    private static final PathfinderTargetCondition bx = (new PathfinderTargetCondition()).a(10.0D).b().a().c();
     public static final Predicate<EntityItem> b = (entityitem) -> {
-        return !entityitem.q() && entityitem.isAlive() && entityitem.isInWater();
+        return !entityitem.p() && entityitem.isAlive() && entityitem.isInWater();
     };
 
     public EntityDolphin(EntityTypes<? extends EntityDolphin> entitytypes, World world) {
@@ -26,13 +26,13 @@ public class EntityDolphin extends EntityWaterAnimal {
     @Nullable
     @Override
     public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        this.setAirTicks(this.bp());
+        this.setAirTicks(this.bw());
         this.pitch = 0.0F;
         return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
     @Override
-    public boolean cm() {
+    public boolean cB() {
         return false;
     }
 
@@ -47,7 +47,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         return (BlockPosition) this.datawatcher.get(EntityDolphin.c);
     }
 
-    public boolean dV() {
+    public boolean eq() {
         return (Boolean) this.datawatcher.get(EntityDolphin.d);
     }
 
@@ -55,12 +55,12 @@ public class EntityDolphin extends EntityWaterAnimal {
         this.datawatcher.set(EntityDolphin.d, flag);
     }
 
-    public int dW() {
-        return (Integer) this.datawatcher.get(EntityDolphin.bz);
+    public int er() {
+        return (Integer) this.datawatcher.get(EntityDolphin.bw);
     }
 
     public void b(int i) {
-        this.datawatcher.set(EntityDolphin.bz, i);
+        this.datawatcher.set(EntityDolphin.bw, i);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         super.initDatawatcher();
         this.datawatcher.register(EntityDolphin.c, BlockPosition.ZERO);
         this.datawatcher.register(EntityDolphin.d, false);
-        this.datawatcher.register(EntityDolphin.bz, 2400);
+        this.datawatcher.register(EntityDolphin.bw, 2400);
     }
 
     @Override
@@ -77,8 +77,8 @@ public class EntityDolphin extends EntityWaterAnimal {
         nbttagcompound.setInt("TreasurePosX", this.l().getX());
         nbttagcompound.setInt("TreasurePosY", this.l().getY());
         nbttagcompound.setInt("TreasurePosZ", this.l().getZ());
-        nbttagcompound.setBoolean("GotFish", this.dV());
-        nbttagcompound.setInt("Moistness", this.dW());
+        nbttagcompound.setBoolean("GotFish", this.eq());
+        nbttagcompound.setInt("Moistness", this.er());
     }
 
     @Override
@@ -125,7 +125,7 @@ public class EntityDolphin extends EntityWaterAnimal {
     }
 
     @Override
-    public boolean C(Entity entity) {
+    public boolean B(Entity entity) {
         boolean flag = entity.damageEntity(DamageSource.mobAttack(this), (float) ((int) this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue()));
 
         if (flag) {
@@ -137,13 +137,13 @@ public class EntityDolphin extends EntityWaterAnimal {
     }
 
     @Override
-    public int bp() {
+    public int bw() {
         return 4800;
     }
 
     @Override
     protected int m(int i) {
-        return this.bp();
+        return this.bw();
     }
 
     @Override
@@ -152,12 +152,12 @@ public class EntityDolphin extends EntityWaterAnimal {
     }
 
     @Override
-    public int M() {
+    public int dU() {
         return 1;
     }
 
     @Override
-    public int dA() {
+    public int dV() {
         return 1;
     }
 
@@ -192,11 +192,11 @@ public class EntityDolphin extends EntityWaterAnimal {
     public void tick() {
         super.tick();
         if (!this.isNoAI()) {
-            if (this.au()) {
+            if (this.ay()) {
                 this.b(2400);
             } else {
-                this.b(this.dW() - 1);
-                if (this.dW() <= 0) {
+                this.b(this.er() - 1);
+                if (this.er() <= 0) {
                     this.damageEntity(DamageSource.DRYOUT, 1.0F);
                 }
 
@@ -215,8 +215,8 @@ public class EntityDolphin extends EntityWaterAnimal {
                 float f2 = 1.2F - this.random.nextFloat() * 0.7F;
 
                 for (int i = 0; i < 2; ++i) {
-                    this.world.addParticle(Particles.DOLPHIN, this.locX - vec3d.x * (double) f2 + (double) f, this.locY - vec3d.y, this.locZ - vec3d.z * (double) f2 + (double) f1, 0.0D, 0.0D, 0.0D);
-                    this.world.addParticle(Particles.DOLPHIN, this.locX - vec3d.x * (double) f2 - (double) f, this.locY - vec3d.y, this.locZ - vec3d.z * (double) f2 - (double) f1, 0.0D, 0.0D, 0.0D);
+                    this.world.addParticle(Particles.DOLPHIN, this.locX() - vec3d.x * (double) f2 + (double) f, this.locY() - vec3d.y, this.locZ() - vec3d.z * (double) f2 + (double) f1, 0.0D, 0.0D, 0.0D);
+                    this.world.addParticle(Particles.DOLPHIN, this.locX() - vec3d.x * (double) f2 - (double) f, this.locY() - vec3d.y, this.locZ() - vec3d.z * (double) f2 - (double) f1, 0.0D, 0.0D, 0.0D);
                 }
             }
 
@@ -274,7 +274,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         return SoundEffects.ENTITY_DOLPHIN_SWIM;
     }
 
-    protected boolean dX() {
+    protected boolean es() {
         BlockPosition blockposition = this.getNavigation().h();
 
         return blockposition != null ? blockposition.a((IPosition) this.getPositionVector(), 12.0D) : false;
@@ -282,8 +282,8 @@ public class EntityDolphin extends EntityWaterAnimal {
 
     @Override
     public void e(Vec3D vec3d) {
-        if (this.df() && this.isInWater()) {
-            this.a(this.db(), vec3d);
+        if (this.doAITick() && this.isInWater()) {
+            this.a(this.dt(), vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.9D));
             if (this.getGoalTarget() == null) {
@@ -311,52 +311,55 @@ public class EntityDolphin extends EntityWaterAnimal {
         }
 
         @Override
-        public boolean C_() {
+        public boolean E_() {
             return false;
         }
 
         @Override
         public boolean a() {
-            return this.a.dV() && this.a.getAirTicks() >= 100;
+            return this.a.eq() && this.a.getAirTicks() >= 100;
         }
 
         @Override
         public boolean b() {
             BlockPosition blockposition = this.a.l();
 
-            return !(new BlockPosition((double) blockposition.getX(), this.a.locY, (double) blockposition.getZ())).a((IPosition) this.a.getPositionVector(), 4.0D) && !this.b && this.a.getAirTicks() >= 100;
+            return !(new BlockPosition((double) blockposition.getX(), this.a.locY(), (double) blockposition.getZ())).a((IPosition) this.a.getPositionVector(), 4.0D) && !this.b && this.a.getAirTicks() >= 100;
         }
 
         @Override
         public void c() {
-            this.b = false;
-            this.a.getNavigation().o();
-            World world = this.a.world;
-            BlockPosition blockposition = new BlockPosition(this.a);
-            String s = (double) world.random.nextFloat() >= 0.5D ? "Ocean_Ruin" : "Shipwreck";
-            BlockPosition blockposition1 = world.a(s, blockposition, 50, false);
+            if (this.a.world instanceof WorldServer) {
+                WorldServer worldserver = (WorldServer) this.a.world;
 
-            if (blockposition1 == null) {
-                BlockPosition blockposition2 = world.a(s.equals("Ocean_Ruin") ? "Shipwreck" : "Ocean_Ruin", blockposition, 50, false);
+                this.b = false;
+                this.a.getNavigation().o();
+                BlockPosition blockposition = new BlockPosition(this.a);
+                String s = (double) worldserver.random.nextFloat() >= 0.5D ? "Ocean_Ruin" : "Shipwreck";
+                BlockPosition blockposition1 = worldserver.a(s, blockposition, 50, false);
 
-                if (blockposition2 == null) {
-                    this.b = true;
-                    return;
+                if (blockposition1 == null) {
+                    BlockPosition blockposition2 = worldserver.a(s.equals("Ocean_Ruin") ? "Shipwreck" : "Ocean_Ruin", blockposition, 50, false);
+
+                    if (blockposition2 == null) {
+                        this.b = true;
+                        return;
+                    }
+
+                    this.a.g(blockposition2);
+                } else {
+                    this.a.g(blockposition1);
                 }
 
-                this.a.g(blockposition2);
-            } else {
-                this.a.g(blockposition1);
+                worldserver.broadcastEntityEffect(this.a, (byte) 38);
             }
-
-            world.broadcastEntityEffect(this.a, (byte) 38);
         }
 
         @Override
         public void d() {
             BlockPosition blockposition = this.a.l();
 
-            if ((new BlockPosition((double) blockposition.getX(), this.a.locY, (double) blockposition.getZ())).a((IPosition) this.a.getPositionVector(), 4.0D) || this.b) {
+            if ((new BlockPosition((double) blockposition.getX(), this.a.locY(), (double) blockposition.getZ())).a((IPosition) this.a.getPositionVector(), 4.0D) || this.b) {
                 this.a.r(false);
             }
 
@@ -364,31 +367,31 @@ public class EntityDolphin extends EntityWaterAnimal {
 
         @Override
         public void e() {
-            BlockPosition blockposition = this.a.l();
             World world = this.a.world;
 
-            if (this.a.dX() || this.a.getNavigation().n()) {
-                Vec3D vec3d = RandomPositionGenerator.a((EntityCreature) this.a, 16, 1, new Vec3D((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()), 0.39269909262657166D);
+            if (this.a.es() || this.a.getNavigation().m()) {
+                Vec3D vec3d = new Vec3D(this.a.l());
+                Vec3D vec3d1 = RandomPositionGenerator.a(this.a, 16, 1, vec3d, 0.39269909262657166D);
 
-                if (vec3d == null) {
-                    vec3d = RandomPositionGenerator.a(this.a, 8, 4, new Vec3D((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()));
+                if (vec3d1 == null) {
+                    vec3d1 = RandomPositionGenerator.a((EntityCreature) this.a, 8, 4, vec3d);
                 }
 
-                if (vec3d != null) {
-                    BlockPosition blockposition1 = new BlockPosition(vec3d);
+                if (vec3d1 != null) {
+                    BlockPosition blockposition = new BlockPosition(vec3d1);
 
-                    if (!world.getFluid(blockposition1).a(TagsFluid.WATER) || !world.getType(blockposition1).a((IBlockAccess) world, blockposition1, PathMode.WATER)) {
-                        vec3d = RandomPositionGenerator.a(this.a, 8, 5, new Vec3D((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()));
+                    if (!world.getFluid(blockposition).a(TagsFluid.WATER) || !world.getType(blockposition).a((IBlockAccess) world, blockposition, PathMode.WATER)) {
+                        vec3d1 = RandomPositionGenerator.a((EntityCreature) this.a, 8, 5, vec3d);
                     }
                 }
 
-                if (vec3d == null) {
+                if (vec3d1 == null) {
                     this.b = true;
                     return;
                 }
 
-                this.a.getControllerLook().a(vec3d.x, vec3d.y, vec3d.z, (float) (this.a.dA() + 20), (float) this.a.M());
-                this.a.getNavigation().a(vec3d.x, vec3d.y, vec3d.z, 1.3D);
+                this.a.getControllerLook().a(vec3d1.x, vec3d1.y, vec3d1.z, (float) (this.a.dV() + 20), (float) this.a.dU());
+                this.a.getNavigation().a(vec3d1.x, vec3d1.y, vec3d1.z, 1.3D);
                 if (world.random.nextInt(80) == 0) {
                     world.broadcastEntityEffect(this.a, (byte) 38);
                 }
@@ -411,7 +414,7 @@ public class EntityDolphin extends EntityWaterAnimal {
 
         @Override
         public boolean a() {
-            this.c = this.a.world.a(EntityDolphin.bA, (EntityLiving) this.a);
+            this.c = this.a.world.a(EntityDolphin.bx, (EntityLiving) this.a);
             return this.c == null ? false : this.c.isSwimming();
         }
 
@@ -433,7 +436,7 @@ public class EntityDolphin extends EntityWaterAnimal {
 
         @Override
         public void e() {
-            this.a.getControllerLook().a(this.c, (float) (this.a.dA() + 20), (float) this.a.M());
+            this.a.getControllerLook().a(this.c, (float) (this.a.dV() + 20), (float) this.a.dU());
             if (this.a.h((Entity) this.c) < 6.25D) {
                 this.a.getNavigation().o();
             } else {
@@ -504,8 +507,8 @@ public class EntityDolphin extends EntityWaterAnimal {
 
         private void a(ItemStack itemstack) {
             if (!itemstack.isEmpty()) {
-                double d0 = EntityDolphin.this.locY - 0.30000001192092896D + (double) EntityDolphin.this.getHeadHeight();
-                EntityItem entityitem = new EntityItem(EntityDolphin.this.world, EntityDolphin.this.locX, d0, EntityDolphin.this.locZ, itemstack);
+                double d0 = EntityDolphin.this.getHeadY() - 0.30000001192092896D;
+                EntityItem entityitem = new EntityItem(EntityDolphin.this.world, EntityDolphin.this.locX(), d0, EntityDolphin.this.locZ(), itemstack);
 
                 entityitem.setPickupDelay(40);
                 entityitem.setThrower(EntityDolphin.this.getUniqueID());
@@ -534,10 +537,10 @@ public class EntityDolphin extends EntityWaterAnimal {
                 this.i.setMot(this.i.getMot().add(0.0D, 0.005D, 0.0D));
             }
 
-            if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().n()) {
-                double d0 = this.b - this.i.locX;
-                double d1 = this.c - this.i.locY;
-                double d2 = this.d - this.i.locZ;
+            if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().m()) {
+                double d0 = this.b - this.i.locX();
+                double d1 = this.c - this.i.locY();
+                double d2 = this.d - this.i.locZ();
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
 
                 if (d3 < 2.500000277905201E-7D) {
@@ -546,8 +549,8 @@ public class EntityDolphin extends EntityWaterAnimal {
                     float f = (float) (MathHelper.d(d2, d0) * 57.2957763671875D) - 90.0F;
 
                     this.i.yaw = this.a(this.i.yaw, f, 10.0F);
+                    this.i.aI = this.i.yaw;
                     this.i.aK = this.i.yaw;
-                    this.i.aM = this.i.yaw;
                     float f1 = (float) (this.e * this.i.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
 
                     if (this.i.isInWater()) {
@@ -559,8 +562,8 @@ public class EntityDolphin extends EntityWaterAnimal {
                         float f3 = MathHelper.cos(this.i.pitch * 0.017453292F);
                         float f4 = MathHelper.sin(this.i.pitch * 0.017453292F);
 
-                        this.i.bd = f3 * f1;
-                        this.i.bc = -f4 * f1;
+                        this.i.bb = f3 * f1;
+                        this.i.ba = -f4 * f1;
                     } else {
                         this.i.o(f1 * 0.1F);
                     }

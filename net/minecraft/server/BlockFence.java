@@ -6,13 +6,13 @@ public class BlockFence extends BlockTall {
 
     public BlockFence(Block.Info block_info) {
         super(2.0F, 2.0F, 16.0F, 16.0F, 24.0F, block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFence.NORTH, false)).set(BlockFence.EAST, false)).set(BlockFence.SOUTH, false)).set(BlockFence.WEST, false)).set(BlockFence.e, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFence.NORTH, false)).set(BlockFence.EAST, false)).set(BlockFence.SOUTH, false)).set(BlockFence.WEST, false)).set(BlockFence.e, false));
         this.i = this.a(2.0F, 1.0F, 16.0F, 6.0F, 15.0F);
     }
 
     @Override
-    public VoxelShape h(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.i[this.j(iblockdata)];
+    public VoxelShape i(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return this.i[this.h(iblockdata)];
     }
 
     @Override
@@ -29,13 +29,13 @@ public class BlockFence extends BlockTall {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        if (!world.isClientSide) {
-            return ItemLeash.a(entityhuman, world, blockposition);
-        } else {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+        if (world.isClientSide) {
             ItemStack itemstack = entityhuman.b(enumhand);
 
-            return itemstack.getItem() == Items.LEAD || itemstack.isEmpty();
+            return itemstack.getItem() == Items.LEAD ? EnumInteractionResult.SUCCESS : EnumInteractionResult.PASS;
+        } else {
+            return ItemLeash.a(entityhuman, world, blockposition);
         }
     }
 
@@ -62,7 +62,7 @@ public class BlockFence extends BlockTall {
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
-        return enumdirection.k().d() == EnumDirection.EnumDirectionLimit.HORIZONTAL ? (IBlockData) iblockdata.set((IBlockState) BlockFence.f.get(enumdirection), this.a(iblockdata1, iblockdata1.d(generatoraccess, blockposition1, enumdirection.opposite()), enumdirection.opposite())) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return enumdirection.m().d() == EnumDirection.EnumDirectionLimit.HORIZONTAL ? (IBlockData) iblockdata.set((IBlockState) BlockFence.f.get(enumdirection), this.a(iblockdata1, iblockdata1.d(generatoraccess, blockposition1, enumdirection.opposite()), enumdirection.opposite())) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     @Override

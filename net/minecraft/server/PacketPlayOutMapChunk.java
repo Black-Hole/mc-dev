@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import javax.annotation.Nullable;
 
 public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
 
@@ -14,9 +15,11 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
     private int b;
     private int c;
     private NBTTagCompound d;
-    private byte[] e;
-    private List<NBTTagCompound> f;
-    private boolean g;
+    @Nullable
+    private BiomeStorage e;
+    private byte[] f;
+    private List<NBTTagCompound> g;
+    private boolean h;
 
     public PacketPlayOutMapChunk() {}
 
@@ -25,7 +28,7 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
 
         this.a = chunkcoordintpair.x;
         this.b = chunkcoordintpair.z;
-        this.g = i == 65535;
+        this.h = i == 65535;
         this.d = new NBTTagCompound();
         Iterator iterator = chunk.f().iterator();
 
@@ -38,9 +41,13 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
             }
         }
 
-        this.e = new byte[this.a(chunk, i)];
-        this.c = this.a(new PacketDataSerializer(this.i()), chunk, i);
-        this.f = Lists.newArrayList();
+        if (this.h) {
+            this.e = chunk.getBiomeIndex().b();
+        }
+
+        this.f = new byte[this.a(chunk, i)];
+        this.c = this.a(new PacketDataSerializer(this.j()), chunk, i);
+        this.g = Lists.newArrayList();
         iterator = chunk.getTileEntities().entrySet().iterator();
 
         while (iterator.hasNext()) {
@@ -52,7 +59,7 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
             if (this.f() || (i & 1 << j) != 0) {
                 NBTTagCompound nbttagcompound = tileentity.b();
 
-                this.f.add(nbttagcompound);
+                this.g.add(nbttagcompound);
             }
         }
 
@@ -62,22 +69,26 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readInt();
         this.b = packetdataserializer.readInt();
-        this.g = packetdataserializer.readBoolean();
+        this.h = packetdataserializer.readBoolean();
         this.c = packetdataserializer.i();
         this.d = packetdataserializer.l();
+        if (this.h) {
+            this.e = new BiomeStorage(packetdataserializer);
+        }
+
         int i = packetdataserializer.i();
 
         if (i > 2097152) {
             throw new RuntimeException("Chunk Packet trying to allocate too much memory on read.");
         } else {
-            this.e = new byte[i];
-            packetdataserializer.readBytes(this.e);
+            this.f = new byte[i];
+            packetdataserializer.readBytes(this.f);
             int j = packetdataserializer.i();
 
-            this.f = Lists.newArrayList();
+            this.g = Lists.newArrayList();
 
             for (int k = 0; k < j; ++k) {
-                this.f.add(packetdataserializer.l());
+                this.g.add(packetdataserializer.l());
             }
 
         }
@@ -87,13 +98,17 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeInt(this.a);
         packetdataserializer.writeInt(this.b);
-        packetdataserializer.writeBoolean(this.g);
+        packetdataserializer.writeBoolean(this.h);
         packetdataserializer.d(this.c);
         packetdataserializer.a(this.d);
-        packetdataserializer.d(this.e.length);
-        packetdataserializer.writeBytes(this.e);
-        packetdataserializer.d(this.f.size());
-        Iterator iterator = this.f.iterator();
+        if (this.e != null) {
+            this.e.a(packetdataserializer);
+        }
+
+        packetdataserializer.d(this.f.length);
+        packetdataserializer.writeBytes(this.f);
+        packetdataserializer.d(this.g.size());
+        Iterator iterator = this.g.iterator();
 
         while (iterator.hasNext()) {
             NBTTagCompound nbttagcompound = (NBTTagCompound) iterator.next();
@@ -107,8 +122,8 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         packetlistenerplayout.a(this);
     }
 
-    private ByteBuf i() {
-        ByteBuf bytebuf = Unpooled.wrappedBuffer(this.e);
+    private ByteBuf j() {
+        ByteBuf bytebuf = Unpooled.wrappedBuffer(this.f);
 
         bytebuf.writerIndex(0);
         return bytebuf;
@@ -119,22 +134,12 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         ChunkSection[] achunksection = chunk.getSections();
         int k = 0;
 
-        int l;
-
-        for (l = achunksection.length; k < l; ++k) {
+        for (int l = achunksection.length; k < l; ++k) {
             ChunkSection chunksection = achunksection[k];
 
             if (chunksection != Chunk.a && (!this.f() || !chunksection.c()) && (i & 1 << k) != 0) {
                 j |= 1 << k;
                 chunksection.b(packetdataserializer);
-            }
-        }
-
-        if (this.f()) {
-            BiomeBase[] abiomebase = chunk.getBiomeIndex();
-
-            for (l = 0; l < abiomebase.length; ++l) {
-                packetdataserializer.writeInt(IRegistry.BIOME.a((Object) abiomebase[l]));
             }
         }
 
@@ -154,14 +159,10 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
             }
         }
 
-        if (this.f()) {
-            j += chunk.getBiomeIndex().length * 4;
-        }
-
         return j;
     }
 
     public boolean f() {
-        return this.g;
+        return this.h;
     }
 }

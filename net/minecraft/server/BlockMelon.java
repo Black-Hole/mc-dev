@@ -7,12 +7,12 @@ public class BlockMelon extends BlockStemmed {
     }
 
     @Override
-    public BlockStem d() {
+    public BlockStem c() {
         return (BlockStem) Blocks.MELON_STEM;
     }
 
     @Override
-    public BlockStemAttached e() {
+    public BlockStemAttached d() {
         return (BlockStemAttached) Blocks.ATTACHED_MELON_STEM;
     }
 }

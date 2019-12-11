@@ -78,7 +78,7 @@ public class WorldGenNetherPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.SOUTH, true);
             IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true)).set(BlockFence.EAST, true);
 
@@ -138,7 +138,7 @@ public class WorldGenNetherPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             IBlockData iblockdata = (IBlockData) Blocks.NETHER_BRICK_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.SOUTH);
             IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.SOUTH, true);
 
@@ -206,7 +206,7 @@ public class WorldGenNetherPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 4, 1, 4, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 4, 5, 4, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true)).set(BlockFence.EAST, true);
@@ -270,7 +270,7 @@ public class WorldGenNetherPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 4, 1, 4, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 4, 5, 4, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true)).set(BlockFence.EAST, true);
@@ -326,7 +326,7 @@ public class WorldGenNetherPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 4, 1, 4, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 4, 5, 4, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 0, 5, 0, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
@@ -369,7 +369,7 @@ public class WorldGenNetherPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 4, 1, 4, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 4, 5, 4, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.SOUTH, true);
@@ -417,7 +417,7 @@ public class WorldGenNetherPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 3, 0, 12, 4, 12, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 5, 0, 12, 13, 12, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 5, 0, 1, 12, 12, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
@@ -565,7 +565,7 @@ public class WorldGenNetherPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 3, 0, 12, 4, 12, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 5, 0, 12, 13, 12, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 5, 0, 1, 12, 12, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
@@ -675,7 +675,7 @@ public class WorldGenNetherPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 6, 7, 7, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 1, 0, 0, 5, 1, 7, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 1, 2, 1, 5, 2, 7, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
@@ -754,7 +754,7 @@ public class WorldGenNetherPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 6, 1, 6, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 6, 10, 6, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 1, 8, 0, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
@@ -814,7 +814,7 @@ public class WorldGenNetherPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 6, 1, 6, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 6, 7, 6, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 1, 6, 0, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
@@ -858,7 +858,7 @@ public class WorldGenNetherPieces {
         protected WorldGenNetherPiece1(Random random, int i, int j) {
             super(WorldGenFeatureStructurePieceType.g, 0);
             this.a(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
-            if (this.i().k() == EnumDirection.EnumAxis.Z) {
+            if (this.i().m() == EnumDirection.EnumAxis.Z) {
                 this.n = new StructureBoundingBox(i, 64, j, i + 19 - 1, 73, j + 19 - 1);
             } else {
                 this.n = new StructureBoundingBox(i, 64, j, i + 19 - 1, 73, j + 19 - 1);
@@ -888,7 +888,7 @@ public class WorldGenNetherPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 7, 3, 0, 11, 4, 18, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 3, 7, 18, 4, 11, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 8, 5, 0, 10, 7, 18, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
@@ -961,7 +961,7 @@ public class WorldGenNetherPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             Random random1 = new Random((long) this.a);
 
             int i;
@@ -1020,7 +1020,7 @@ public class WorldGenNetherPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 3, 0, 4, 4, 18, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 1, 5, 0, 3, 7, 18, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 5, 0, 0, 5, 18, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);

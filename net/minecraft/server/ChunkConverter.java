@@ -277,13 +277,13 @@ public class ChunkConverter {
         CHEST(new Block[]{Blocks.CHEST, Blocks.TRAPPED_CHEST}) {
             @Override
             public IBlockData a(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-                if (iblockdata1.getBlock() == iblockdata.getBlock() && enumdirection.k().c() && iblockdata.get(BlockChest.b) == BlockPropertyChestType.SINGLE && iblockdata1.get(BlockChest.b) == BlockPropertyChestType.SINGLE) {
+                if (iblockdata1.getBlock() == iblockdata.getBlock() && enumdirection.m().c() && iblockdata.get(BlockChest.c) == BlockPropertyChestType.SINGLE && iblockdata1.get(BlockChest.c) == BlockPropertyChestType.SINGLE) {
                     EnumDirection enumdirection1 = (EnumDirection) iblockdata.get(BlockChest.FACING);
 
-                    if (enumdirection.k() != enumdirection1.k() && enumdirection1 == iblockdata1.get(BlockChest.FACING)) {
-                        BlockPropertyChestType blockpropertychesttype = enumdirection == enumdirection1.e() ? BlockPropertyChestType.LEFT : BlockPropertyChestType.RIGHT;
+                    if (enumdirection.m() != enumdirection1.m() && enumdirection1 == iblockdata1.get(BlockChest.FACING)) {
+                        BlockPropertyChestType blockpropertychesttype = enumdirection == enumdirection1.f() ? BlockPropertyChestType.LEFT : BlockPropertyChestType.RIGHT;
 
-                        generatoraccess.setTypeAndData(blockposition1, (IBlockData) iblockdata1.set(BlockChest.b, blockpropertychesttype.a()), 18);
+                        generatoraccess.setTypeAndData(blockposition1, (IBlockData) iblockdata1.set(BlockChest.c, blockpropertychesttype.a()), 18);
                         if (enumdirection1 == EnumDirection.NORTH || enumdirection1 == EnumDirection.EAST) {
                             TileEntity tileentity = generatoraccess.getTileEntity(blockposition);
                             TileEntity tileentity1 = generatoraccess.getTileEntity(blockposition1);
@@ -293,7 +293,7 @@ public class ChunkConverter {
                             }
                         }
 
-                        return (IBlockData) iblockdata.set(BlockChest.b, blockpropertychesttype);
+                        return (IBlockData) iblockdata.set(BlockChest.c, blockpropertychesttype);
                     }
                 }
 
@@ -368,10 +368,10 @@ public class ChunkConverter {
             @Override
             public IBlockData a(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
                 if ((Integer) iblockdata.get(BlockStem.AGE) == 7) {
-                    BlockStemmed blockstemmed = ((BlockStem) iblockdata.getBlock()).e();
+                    BlockStemmed blockstemmed = ((BlockStem) iblockdata.getBlock()).d();
 
                     if (iblockdata1.getBlock() == blockstemmed) {
-                        return (IBlockData) blockstemmed.e().getBlockData().set(BlockFacingHorizontal.FACING, enumdirection);
+                        return (IBlockData) blockstemmed.d().getBlockData().set(BlockFacingHorizontal.FACING, enumdirection);
                     }
                 }
 

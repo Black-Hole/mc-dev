@@ -9,7 +9,7 @@ public class ItemToolMaterial extends Item {
         this.a = toolmaterial;
     }
 
-    public ToolMaterial e() {
+    public ToolMaterial g() {
         return this.a;
     }
 

@@ -23,7 +23,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
 
     protected EntitySkeletonAbstract(EntityTypes<? extends EntitySkeletonAbstract> entitytypes, World world) {
         super(entitytypes, world);
-        this.dV();
+        this.eq();
     }
 
     @Override
@@ -37,7 +37,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, new Class[0]));
         this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, true));
-        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityTurtle.class, 10, true, false, EntityTurtle.bz));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityTurtle.class, 10, true, false, EntityTurtle.bw));
     }
 
     @Override
@@ -60,7 +60,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
 
     @Override
     public void movementTick() {
-        boolean flag = this.dS();
+        boolean flag = this.en();
 
         if (flag) {
             ItemStack itemstack = this.getEquipment(EnumItemSlot.HEAD);
@@ -91,7 +91,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         if (this.getVehicle() instanceof EntityCreature) {
             EntityCreature entitycreature = (EntityCreature) this.getVehicle();
 
-            this.aK = entitycreature.aK;
+            this.aI = entitycreature.aI;
         }
 
     }
@@ -108,7 +108,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         groupdataentity = super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
         this.a(difficultydamagescaler);
         this.b(difficultydamagescaler);
-        this.dV();
+        this.eq();
         this.setCanPickupLoot(this.random.nextFloat() < 0.55F * difficultydamagescaler.d());
         if (this.getEquipment(EnumItemSlot.HEAD).isEmpty()) {
             LocalDate localdate = LocalDate.now();
@@ -124,7 +124,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         return groupdataentity;
     }
 
-    public void dV() {
+    public void eq() {
         if (this.world != null && !this.world.isClientSide) {
             this.goalSelector.a((PathfinderGoal) this.c);
             this.goalSelector.a((PathfinderGoal) this.b);
@@ -150,9 +150,9 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
     public void a(EntityLiving entityliving, float f) {
         ItemStack itemstack = this.f(this.b(ProjectileHelper.a(this, Items.BOW)));
         EntityArrow entityarrow = this.b(itemstack, f);
-        double d0 = entityliving.locX - this.locX;
-        double d1 = entityliving.getBoundingBox().minY + (double) (entityliving.getHeight() / 3.0F) - entityarrow.locY;
-        double d2 = entityliving.locZ - this.locZ;
+        double d0 = entityliving.locX() - this.locX();
+        double d1 = entityliving.e(0.3333333333333333D) - entityarrow.locY();
+        double d2 = entityliving.locZ() - this.locZ();
         double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
 
         entityarrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, (float) (14 - this.world.getDifficulty().a() * 4));
@@ -167,14 +167,14 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
     @Override
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.dV();
+        this.eq();
     }
 
     @Override
     public void setSlot(EnumItemSlot enumitemslot, ItemStack itemstack) {
         super.setSlot(enumitemslot, itemstack);
         if (!this.world.isClientSide) {
-            this.dV();
+            this.eq();
         }
 
     }
@@ -185,7 +185,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
     }
 
     @Override
-    public double aO() {
+    public double aR() {
         return -0.6D;
     }
 }

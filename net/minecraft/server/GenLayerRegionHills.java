@@ -52,7 +52,7 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
         if (!GenLayers.b(k) && l >= 2 && i1 == 1) {
             BiomeBase biomebase1 = (BiomeBase) IRegistry.BIOME.fromId(k);
 
-            if (biomebase1 == null || !biomebase1.a()) {
+            if (biomebase1 == null || !biomebase1.b()) {
                 biomebase = BiomeBase.a(biomebase1);
                 return biomebase == null ? k : IRegistry.BIOME.a((Object) biomebase);
             }

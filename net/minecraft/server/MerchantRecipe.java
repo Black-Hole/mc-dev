@@ -112,7 +112,7 @@ public class MerchantRecipe {
         ++this.uses;
     }
 
-    public int k() {
+    public int getDemand() {
         return this.demand;
     }
 
@@ -148,11 +148,15 @@ public class MerchantRecipe {
         this.uses = this.maxUses;
     }
 
+    public boolean r() {
+        return this.uses > 0;
+    }
+
     public boolean isRewardExp() {
         return this.rewardExp;
     }
 
-    public NBTTagCompound s() {
+    public NBTTagCompound t() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.set("buy", this.buyingItem1.save(new NBTTagCompound()));

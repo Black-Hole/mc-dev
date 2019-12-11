@@ -43,7 +43,7 @@ public class LootItemFunctionSetLore extends LootItemFunctionConditional {
 
             UnaryOperator<IChatBaseComponent> unaryoperator = LootItemFunctionSetName.a(loottableinfo, this.d);
 
-            this.c.stream().map(unaryoperator).map(IChatBaseComponent.ChatSerializer::a).map(NBTTagString::new).forEach(nbttaglist::add);
+            this.c.stream().map(unaryoperator).map(IChatBaseComponent.ChatSerializer::a).map(NBTTagString::a).forEach(nbttaglist::add);
         }
 
         return itemstack;

@@ -17,7 +17,7 @@ public class BlockAir extends Block {
     }
 
     @Override
-    public boolean e(IBlockData iblockdata) {
+    public boolean d(IBlockData iblockdata) {
         return true;
     }
 }

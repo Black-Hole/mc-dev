@@ -47,15 +47,15 @@ public class PathfinderGoalAvoidTarget<T extends EntityLiving> extends Pathfinde
 
     @Override
     public boolean a() {
-        this.b = this.a.world.b(this.f, this.k, this.a, this.a.locX, this.a.locY, this.a.locZ, this.a.getBoundingBox().grow((double) this.c, 3.0D, (double) this.c));
+        this.b = this.a.world.b(this.f, this.k, this.a, this.a.locX(), this.a.locY(), this.a.locZ(), this.a.getBoundingBox().grow((double) this.c, 3.0D, (double) this.c));
         if (this.b == null) {
             return false;
         } else {
-            Vec3D vec3d = RandomPositionGenerator.c(this.a, 16, 7, new Vec3D(this.b.locX, this.b.locY, this.b.locZ));
+            Vec3D vec3d = RandomPositionGenerator.b(this.a, 16, 7, this.b.getPositionVector());
 
             if (vec3d == null) {
                 return false;
-            } else if (this.b.e(vec3d.x, vec3d.y, vec3d.z) < this.b.h((Entity) this.a)) {
+            } else if (this.b.g(vec3d.x, vec3d.y, vec3d.z) < this.b.h((Entity) this.a)) {
                 return false;
             } else {
                 this.d = this.e.a(vec3d.x, vec3d.y, vec3d.z, 0);
@@ -66,7 +66,7 @@ public class PathfinderGoalAvoidTarget<T extends EntityLiving> extends Pathfinde
 
     @Override
     public boolean b() {
-        return !this.e.n();
+        return !this.e.m();
     }
 
     @Override

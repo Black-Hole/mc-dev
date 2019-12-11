@@ -64,10 +64,10 @@ public class BlockSprawling extends Block {
 
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return this.h[this.j(iblockdata)];
+        return this.h[this.h(iblockdata)];
     }
 
-    protected int j(IBlockData iblockdata) {
+    protected int h(IBlockData iblockdata) {
         int i = 0;
 
         for (int j = 0; j < BlockSprawling.i.length; ++j) {

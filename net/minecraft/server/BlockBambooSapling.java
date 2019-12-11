@@ -11,7 +11,7 @@ public class BlockBambooSapling extends Block implements IBlockFragilePlantEleme
     }
 
     @Override
-    public Block.EnumRandomOffset R_() {
+    public Block.EnumRandomOffset X_() {
         return Block.EnumRandomOffset.XZ;
     }
 
@@ -23,9 +23,9 @@ public class BlockBambooSapling extends Block implements IBlockFragilePlantEleme
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (random.nextInt(3) == 0 && world.isEmpty(blockposition.up()) && world.getLightLevel(blockposition.up(), 0) >= 9) {
-            this.a(world, blockposition);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (random.nextInt(3) == 0 && worldserver.isEmpty(blockposition.up()) && worldserver.getLightLevel(blockposition.up(), 0) >= 9) {
+            this.a((World) worldserver, blockposition);
         }
 
     }
@@ -59,18 +59,13 @@ public class BlockBambooSapling extends Block implements IBlockFragilePlantEleme
     }
 
     @Override
-    public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        this.a(world, blockposition);
+    public void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata) {
+        this.a((World) worldserver, blockposition);
     }
 
     @Override
     public float getDamage(IBlockData iblockdata, EntityHuman entityhuman, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return entityhuman.getItemInMainHand().getItem() instanceof ItemSword ? 1.0F : super.getDamage(iblockdata, entityhuman, iblockaccess, blockposition);
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 
     protected void a(World world, BlockPosition blockposition) {

@@ -13,7 +13,7 @@ public class BlockTall extends Block implements IBlockWaterlogged {
     public static final BlockStateBoolean WEST = BlockSprawling.d;
     public static final BlockStateBoolean e = BlockProperties.C;
     protected static final Map<EnumDirection, BlockStateBoolean> f = (Map) BlockSprawling.g.entrySet().stream().filter((entry) -> {
-        return ((EnumDirection) entry.getKey()).k().c();
+        return ((EnumDirection) entry.getKey()).m().c();
     }).collect(SystemUtils.a());
     protected final VoxelShape[] g;
     protected final VoxelShape[] h;
@@ -53,19 +53,19 @@ public class BlockTall extends Block implements IBlockWaterlogged {
 
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return this.h[this.j(iblockdata)];
+        return this.h[this.h(iblockdata)];
     }
 
     @Override
     public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return this.g[this.j(iblockdata)];
+        return this.g[this.h(iblockdata)];
     }
 
     private static int a(EnumDirection enumdirection) {
         return 1 << enumdirection.get2DRotationValue();
     }
 
-    protected int j(IBlockData iblockdata) {
+    protected int h(IBlockData iblockdata) {
         return this.i.computeIntIfAbsent(iblockdata, (iblockdata1) -> {
             int i = 0;
 
@@ -90,8 +90,8 @@ public class BlockTall extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public Fluid g(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockTall.e) ? FluidTypes.WATER.a(false) : super.g(iblockdata);
+    public Fluid a_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockTall.e) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
     }
 
     @Override

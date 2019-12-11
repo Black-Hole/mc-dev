@@ -16,10 +16,11 @@ public class WorldGenFeatureChanceDecorator extends WorldGenDecorator<WorldGenDe
         return IntStream.range(0, worldgendecoratorfrequencychanceconfiguration.a).filter((i) -> {
             return random.nextFloat() < worldgendecoratorfrequencychanceconfiguration.b;
         }).mapToObj((i) -> {
-            int j = random.nextInt(16);
-            int k = random.nextInt(16);
+            int j = random.nextInt(16) + blockposition.getX();
+            int k = random.nextInt(16) + blockposition.getZ();
+            int l = generatoraccess.a(HeightMap.Type.MOTION_BLOCKING, j, k);
 
-            return generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition.b(j, 0, k));
+            return new BlockPosition(j, l, k);
         });
     }
 }

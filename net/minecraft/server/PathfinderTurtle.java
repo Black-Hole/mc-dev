@@ -10,8 +10,8 @@ public class PathfinderTurtle extends PathfinderNormal {
     public PathfinderTurtle() {}
 
     @Override
-    public void a(IWorldReader iworldreader, EntityInsentient entityinsentient) {
-        super.a(iworldreader, entityinsentient);
+    public void a(ChunkCache chunkcache, EntityInsentient entityinsentient) {
+        super.a(chunkcache, entityinsentient);
         entityinsentient.a(PathType.WATER, 0.0F);
         this.k = entityinsentient.a(PathType.WALKABLE);
         entityinsentient.a(PathType.WALKABLE, 6.0F);
@@ -172,7 +172,7 @@ public class PathfinderTurtle extends PathfinderNormal {
 
                     while (j > 0 && pathtype == PathType.OPEN) {
                         --j;
-                        if (i1++ >= this.b.bv()) {
+                        if (i1++ >= this.b.bD()) {
                             return null;
                         }
 
@@ -221,7 +221,7 @@ public class PathfinderTurtle extends PathfinderNormal {
 
     @Override
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k) {
-        PathType pathtype = this.b(iblockaccess, i, j, k);
+        PathType pathtype = c(iblockaccess, i, j, k);
 
         if (pathtype == PathType.WATER) {
             EnumDirection[] aenumdirection = EnumDirection.values();
@@ -229,7 +229,7 @@ public class PathfinderTurtle extends PathfinderNormal {
 
             for (int i1 = 0; i1 < l; ++i1) {
                 EnumDirection enumdirection = aenumdirection[i1];
-                PathType pathtype1 = this.b(iblockaccess, i + enumdirection.getAdjacentX(), j + enumdirection.getAdjacentY(), k + enumdirection.getAdjacentZ());
+                PathType pathtype1 = c(iblockaccess, i + enumdirection.getAdjacentX(), j + enumdirection.getAdjacentY(), k + enumdirection.getAdjacentZ());
 
                 if (pathtype1 == PathType.BLOCKED) {
                     return PathType.WATER_BORDER;
@@ -240,7 +240,7 @@ public class PathfinderTurtle extends PathfinderNormal {
         } else {
             if (pathtype == PathType.OPEN && j >= 1) {
                 Block block = iblockaccess.getType(new BlockPosition(i, j - 1, k)).getBlock();
-                PathType pathtype2 = this.b(iblockaccess, i, j - 1, k);
+                PathType pathtype2 = c(iblockaccess, i, j - 1, k);
 
                 if (pathtype2 != PathType.WALKABLE && pathtype2 != PathType.OPEN && pathtype2 != PathType.LAVA) {
                     pathtype = PathType.WALKABLE;
@@ -261,7 +261,10 @@ public class PathfinderTurtle extends PathfinderNormal {
                 }
             }
 
-            pathtype = this.a(iblockaccess, i, j, k, pathtype);
+            if (pathtype == PathType.WALKABLE) {
+                pathtype = a(iblockaccess, i, j, k, pathtype);
+            }
+
             return pathtype;
         }
     }

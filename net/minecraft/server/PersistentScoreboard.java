@@ -195,7 +195,7 @@ public class PersistentScoreboard extends PersistentBase {
             while (iterator1.hasNext()) {
                 String s = (String) iterator1.next();
 
-                nbttaglist1.add(new NBTTagString(s));
+                nbttaglist1.add(NBTTagString.a(s));
             }
 
             nbttagcompound.set("Players", nbttaglist1);

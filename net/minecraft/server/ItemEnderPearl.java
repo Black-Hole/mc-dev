@@ -10,11 +10,7 @@ public class ItemEnderPearl extends Item {
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (!entityhuman.abilities.canInstantlyBuild) {
-            itemstack.subtract(1);
-        }
-
-        world.playSound((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_ENDER_PEARL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderPearl.i.nextFloat() * 0.4F + 0.8F));
+        world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ENTITY_ENDER_PEARL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderPearl.i.nextFloat() * 0.4F + 0.8F));
         entityhuman.getCooldownTracker().setCooldown(this, 20);
         if (!world.isClientSide) {
             EntityEnderPearl entityenderpearl = new EntityEnderPearl(world, entityhuman);
@@ -25,6 +21,10 @@ public class ItemEnderPearl extends Item {
         }
 
         entityhuman.b(StatisticList.ITEM_USED.b(this));
-        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
+        if (!entityhuman.abilities.canInstantlyBuild) {
+            itemstack.subtract(1);
+        }
+
+        return InteractionResultWrapper.a(itemstack);
     }
 }

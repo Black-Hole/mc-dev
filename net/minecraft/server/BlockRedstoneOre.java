@@ -8,7 +8,7 @@ public class BlockRedstoneOre extends Block {
 
     public BlockRedstoneOre(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) this.getBlockData().set(BlockRedstoneOre.a, false));
+        this.p((IBlockData) this.getBlockData().set(BlockRedstoneOre.a, false));
     }
 
     @Override
@@ -29,9 +29,14 @@ public class BlockRedstoneOre extends Block {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        interact(iblockdata, world, blockposition);
-        return super.interact(iblockdata, world, blockposition, entityhuman, enumhand, movingobjectpositionblock);
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+        if (world.isClientSide) {
+            playEffect(world, blockposition);
+            return EnumInteractionResult.SUCCESS;
+        } else {
+            interact(iblockdata, world, blockposition);
+            return EnumInteractionResult.PASS;
+        }
     }
 
     private static void interact(IBlockData iblockdata, World world, BlockPosition blockposition) {
@@ -43,9 +48,9 @@ public class BlockRedstoneOre extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if ((Boolean) iblockdata.get(BlockRedstoneOre.a)) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneOre.a, false), 3);
+            worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneOre.a, false), 3);
         }
 
     }
@@ -72,7 +77,7 @@ public class BlockRedstoneOre extends Block {
             BlockPosition blockposition1 = blockposition.shift(enumdirection);
 
             if (!world.getType(blockposition1).g(world, blockposition1)) {
-                EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
+                EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.m();
                 double d1 = enumdirection_enumaxis == EnumDirection.EnumAxis.X ? 0.5D + 0.5625D * (double) enumdirection.getAdjacentX() : (double) random.nextFloat();
                 double d2 = enumdirection_enumaxis == EnumDirection.EnumAxis.Y ? 0.5D + 0.5625D * (double) enumdirection.getAdjacentY() : (double) random.nextFloat();
                 double d3 = enumdirection_enumaxis == EnumDirection.EnumAxis.Z ? 0.5D + 0.5625D * (double) enumdirection.getAdjacentZ() : (double) random.nextFloat();

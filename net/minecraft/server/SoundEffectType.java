@@ -14,51 +14,52 @@ public class SoundEffectType {
     public static final SoundEffectType j = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_LADDER_BREAK, SoundEffects.BLOCK_LADDER_STEP, SoundEffects.BLOCK_LADDER_PLACE, SoundEffects.BLOCK_LADDER_HIT, SoundEffects.BLOCK_LADDER_FALL);
     public static final SoundEffectType k = new SoundEffectType(0.3F, 1.0F, SoundEffects.BLOCK_ANVIL_BREAK, SoundEffects.BLOCK_ANVIL_STEP, SoundEffects.BLOCK_ANVIL_PLACE, SoundEffects.BLOCK_ANVIL_HIT, SoundEffects.BLOCK_ANVIL_FALL);
     public static final SoundEffectType l = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_SLIME_BLOCK_BREAK, SoundEffects.BLOCK_SLIME_BLOCK_STEP, SoundEffects.BLOCK_SLIME_BLOCK_PLACE, SoundEffects.BLOCK_SLIME_BLOCK_HIT, SoundEffects.BLOCK_SLIME_BLOCK_FALL);
-    public static final SoundEffectType m = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_WET_GRASS_BREAK, SoundEffects.BLOCK_WET_GRASS_STEP, SoundEffects.BLOCK_WET_GRASS_PLACE, SoundEffects.BLOCK_WET_GRASS_HIT, SoundEffects.BLOCK_WET_GRASS_FALL);
-    public static final SoundEffectType n = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_CORAL_BLOCK_BREAK, SoundEffects.BLOCK_CORAL_BLOCK_STEP, SoundEffects.BLOCK_CORAL_BLOCK_PLACE, SoundEffects.BLOCK_CORAL_BLOCK_HIT, SoundEffects.BLOCK_CORAL_BLOCK_FALL);
-    public static final SoundEffectType o = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_BAMBOO_BREAK, SoundEffects.BLOCK_BAMBOO_STEP, SoundEffects.BLOCK_BAMBOO_PLACE, SoundEffects.BLOCK_BAMBOO_HIT, SoundEffects.BLOCK_BAMBOO_FALL);
-    public static final SoundEffectType p = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_BAMBOO_SAPLING_BREAK, SoundEffects.BLOCK_BAMBOO_STEP, SoundEffects.BLOCK_BAMBOO_SAPLING_PLACE, SoundEffects.BLOCK_BAMBOO_SAPLING_HIT, SoundEffects.BLOCK_BAMBOO_FALL);
-    public static final SoundEffectType q = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_SCAFFOLDING_BREAK, SoundEffects.BLOCK_SCAFFOLDING_STEP, SoundEffects.BLOCK_SCAFFOLDING_PLACE, SoundEffects.BLOCK_SCAFFOLDING_HIT, SoundEffects.BLOCK_SCAFFOLDING_FALL);
-    public static final SoundEffectType r = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_SWEET_BERRY_BUSH_BREAK, SoundEffects.BLOCK_GRASS_STEP, SoundEffects.BLOCK_SWEET_BERRY_BUSH_PLACE, SoundEffects.BLOCK_GRASS_HIT, SoundEffects.BLOCK_GRASS_FALL);
-    public static final SoundEffectType s = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_CROP_BREAK, SoundEffects.BLOCK_GRASS_STEP, SoundEffects.ITEM_CROP_PLANT, SoundEffects.BLOCK_GRASS_HIT, SoundEffects.BLOCK_GRASS_FALL);
-    public static final SoundEffectType t = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_WOOD_BREAK, SoundEffects.BLOCK_WOOD_STEP, SoundEffects.ITEM_CROP_PLANT, SoundEffects.BLOCK_WOOD_HIT, SoundEffects.BLOCK_WOOD_FALL);
-    public static final SoundEffectType u = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_NETHER_WART_BREAK, SoundEffects.BLOCK_STONE_STEP, SoundEffects.ITEM_NETHER_WART_PLANT, SoundEffects.BLOCK_STONE_HIT, SoundEffects.BLOCK_STONE_FALL);
-    public static final SoundEffectType v = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_LANTERN_BREAK, SoundEffects.BLOCK_LANTERN_STEP, SoundEffects.BLOCK_LANTERN_PLACE, SoundEffects.BLOCK_LANTERN_HIT, SoundEffects.BLOCK_LANTERN_FALL);
-    public final float w;
+    public static final SoundEffectType m = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_HONEY_BLOCK_BREAK, SoundEffects.BLOCK_HONEY_BLOCK_STEP, SoundEffects.BLOCK_HONEY_BLOCK_PLACE, SoundEffects.BLOCK_HONEY_BLOCK_HIT, SoundEffects.BLOCK_HONEY_BLOCK_FALL);
+    public static final SoundEffectType n = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_WET_GRASS_BREAK, SoundEffects.BLOCK_WET_GRASS_STEP, SoundEffects.BLOCK_WET_GRASS_PLACE, SoundEffects.BLOCK_WET_GRASS_HIT, SoundEffects.BLOCK_WET_GRASS_FALL);
+    public static final SoundEffectType o = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_CORAL_BLOCK_BREAK, SoundEffects.BLOCK_CORAL_BLOCK_STEP, SoundEffects.BLOCK_CORAL_BLOCK_PLACE, SoundEffects.BLOCK_CORAL_BLOCK_HIT, SoundEffects.BLOCK_CORAL_BLOCK_FALL);
+    public static final SoundEffectType p = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_BAMBOO_BREAK, SoundEffects.BLOCK_BAMBOO_STEP, SoundEffects.BLOCK_BAMBOO_PLACE, SoundEffects.BLOCK_BAMBOO_HIT, SoundEffects.BLOCK_BAMBOO_FALL);
+    public static final SoundEffectType q = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_BAMBOO_SAPLING_BREAK, SoundEffects.BLOCK_BAMBOO_STEP, SoundEffects.BLOCK_BAMBOO_SAPLING_PLACE, SoundEffects.BLOCK_BAMBOO_SAPLING_HIT, SoundEffects.BLOCK_BAMBOO_FALL);
+    public static final SoundEffectType r = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_SCAFFOLDING_BREAK, SoundEffects.BLOCK_SCAFFOLDING_STEP, SoundEffects.BLOCK_SCAFFOLDING_PLACE, SoundEffects.BLOCK_SCAFFOLDING_HIT, SoundEffects.BLOCK_SCAFFOLDING_FALL);
+    public static final SoundEffectType s = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_SWEET_BERRY_BUSH_BREAK, SoundEffects.BLOCK_GRASS_STEP, SoundEffects.BLOCK_SWEET_BERRY_BUSH_PLACE, SoundEffects.BLOCK_GRASS_HIT, SoundEffects.BLOCK_GRASS_FALL);
+    public static final SoundEffectType t = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_CROP_BREAK, SoundEffects.BLOCK_GRASS_STEP, SoundEffects.ITEM_CROP_PLANT, SoundEffects.BLOCK_GRASS_HIT, SoundEffects.BLOCK_GRASS_FALL);
+    public static final SoundEffectType u = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_WOOD_BREAK, SoundEffects.BLOCK_WOOD_STEP, SoundEffects.ITEM_CROP_PLANT, SoundEffects.BLOCK_WOOD_HIT, SoundEffects.BLOCK_WOOD_FALL);
+    public static final SoundEffectType v = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_NETHER_WART_BREAK, SoundEffects.BLOCK_STONE_STEP, SoundEffects.ITEM_NETHER_WART_PLANT, SoundEffects.BLOCK_STONE_HIT, SoundEffects.BLOCK_STONE_FALL);
+    public static final SoundEffectType w = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_LANTERN_BREAK, SoundEffects.BLOCK_LANTERN_STEP, SoundEffects.BLOCK_LANTERN_PLACE, SoundEffects.BLOCK_LANTERN_HIT, SoundEffects.BLOCK_LANTERN_FALL);
     public final float x;
-    private final SoundEffect y;
+    public final float y;
     private final SoundEffect z;
     private final SoundEffect A;
     private final SoundEffect B;
     private final SoundEffect C;
+    private final SoundEffect D;
 
     public SoundEffectType(float f, float f1, SoundEffect soundeffect, SoundEffect soundeffect1, SoundEffect soundeffect2, SoundEffect soundeffect3, SoundEffect soundeffect4) {
-        this.w = f;
-        this.x = f1;
-        this.y = soundeffect;
-        this.z = soundeffect1;
-        this.A = soundeffect2;
-        this.B = soundeffect3;
-        this.C = soundeffect4;
+        this.x = f;
+        this.y = f1;
+        this.z = soundeffect;
+        this.A = soundeffect1;
+        this.B = soundeffect2;
+        this.C = soundeffect3;
+        this.D = soundeffect4;
     }
 
     public float a() {
-        return this.w;
-    }
-
-    public float b() {
         return this.x;
     }
 
-    public SoundEffect d() {
-        return this.z;
+    public float b() {
+        return this.y;
     }
 
-    public SoundEffect e() {
+    public SoundEffect d() {
         return this.A;
     }
 
+    public SoundEffect e() {
+        return this.B;
+    }
+
     public SoundEffect g() {
-        return this.C;
+        return this.D;
     }
 }

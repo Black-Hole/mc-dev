@@ -20,10 +20,11 @@ import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class RegionFileSection<R extends MinecraftSerializable> extends RegionFileCache {
+public class RegionFileSection<R extends MinecraftSerializable> implements AutoCloseable {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final Long2ObjectMap<Optional<R>> b = new Long2ObjectOpenHashMap();
+    private final IOWorker b;
+    private final Long2ObjectMap<Optional<R>> c = new Long2ObjectOpenHashMap();
     private final LongLinkedOpenHashSet d = new LongLinkedOpenHashSet();
     private final BiFunction<Runnable, Dynamic<?>, R> e;
     private final Function<Runnable, R> f;
@@ -31,11 +32,11 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
     private final DataFixTypes h;
 
     public RegionFileSection(File file, BiFunction<Runnable, Dynamic<?>, R> bifunction, Function<Runnable, R> function, DataFixer datafixer, DataFixTypes datafixtypes) {
-        super(file);
         this.e = bifunction;
         this.f = function;
         this.g = datafixer;
         this.h = datafixtypes;
+        this.b = new IOWorker(new RegionFileCache(file), file.getName());
     }
 
     protected void a(BooleanSupplier booleansupplier) {
@@ -49,7 +50,7 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
 
     @Nullable
     protected Optional<R> c(long i) {
-        return (Optional) this.b.get(i);
+        return (Optional) this.c.get(i);
     }
 
     protected Optional<R> d(long i) {
@@ -66,7 +67,7 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
                 this.b(sectionposition.u());
                 optional = this.c(i);
                 if (optional == null) {
-                    throw new IllegalStateException();
+                    throw (IllegalStateException) SystemUtils.c(new IllegalStateException());
                 } else {
                     return optional;
                 }
@@ -88,7 +89,7 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
                 this.a(i);
             });
 
-            this.b.put(i, Optional.of(r0));
+            this.c.put(i, Optional.of(r0));
             return r0;
         }
     }
@@ -100,7 +101,7 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
     @Nullable
     private NBTTagCompound c(ChunkCoordIntPair chunkcoordintpair) {
         try {
-            return this.read(chunkcoordintpair);
+            return this.b.a(chunkcoordintpair);
         } catch (IOException ioexception) {
             RegionFileSection.LOGGER.error("Error reading chunk {} data from disk", chunkcoordintpair, ioexception);
             return null;
@@ -110,12 +111,12 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
     private <T> void a(ChunkCoordIntPair chunkcoordintpair, DynamicOps<T> dynamicops, @Nullable T t0) {
         if (t0 == null) {
             for (int i = 0; i < 16; ++i) {
-                this.b.put(SectionPosition.a(chunkcoordintpair, i).v(), Optional.empty());
+                this.c.put(SectionPosition.a(chunkcoordintpair, i).v(), Optional.empty());
             }
         } else {
             Dynamic<T> dynamic = new Dynamic(dynamicops, t0);
             int j = a(dynamic);
-            int k = SharedConstants.a().getWorldVersion();
+            int k = SharedConstants.getGameVersion().getWorldVersion();
             boolean flag = j != k;
             Dynamic<T> dynamic1 = this.g.update(this.h.a(), dynamic, j, k);
             OptionalDynamic<T> optionaldynamic = dynamic1.get("Sections");
@@ -128,7 +129,7 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
                     }, dynamic2);
                 });
 
-                this.b.put(i1, optional);
+                this.c.put(i1, optional);
                 optional.ifPresent((minecraftserializable) -> {
                     this.b(i1);
                     if (flag) {
@@ -146,11 +147,7 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
         NBTBase nbtbase = (NBTBase) dynamic.getValue();
 
         if (nbtbase instanceof NBTTagCompound) {
-            try {
-                this.write(chunkcoordintpair, (NBTTagCompound) nbtbase);
-            } catch (IOException ioexception) {
-                RegionFileSection.LOGGER.error("Error writing data to disk", ioexception);
-            }
+            this.b.a(chunkcoordintpair, (NBTTagCompound) nbtbase);
         } else {
             RegionFileSection.LOGGER.error("Expected compound tag, got {}", nbtbase);
         }
@@ -164,20 +161,20 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
             long j = SectionPosition.a(chunkcoordintpair, i).v();
 
             this.d.remove(j);
-            Optional<R> optional = (Optional) this.b.get(j);
+            Optional<R> optional = (Optional) this.c.get(j);
 
             if (optional != null && optional.isPresent()) {
                 map.put(dynamicops.createString(Integer.toString(i)), ((MinecraftSerializable) optional.get()).a(dynamicops));
             }
         }
 
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("Sections"), dynamicops.createMap(map), dynamicops.createString("DataVersion"), dynamicops.createInt(SharedConstants.a().getWorldVersion()))));
+        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("Sections"), dynamicops.createMap(map), dynamicops.createString("DataVersion"), dynamicops.createInt(SharedConstants.getGameVersion().getWorldVersion()))));
     }
 
     protected void b(long i) {}
 
     protected void a(long i) {
-        Optional<R> optional = (Optional) this.b.get(i);
+        Optional<R> optional = (Optional) this.c.get(i);
 
         if (optional != null && optional.isPresent()) {
             this.d.add(i);
@@ -202,5 +199,9 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
             }
         }
 
+    }
+
+    public void close() throws IOException {
+        this.b.close();
     }
 }

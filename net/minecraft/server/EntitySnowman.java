@@ -53,11 +53,11 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
     public void movementTick() {
         super.movementTick();
         if (!this.world.isClientSide) {
-            int i = MathHelper.floor(this.locX);
-            int j = MathHelper.floor(this.locY);
-            int k = MathHelper.floor(this.locZ);
+            int i = MathHelper.floor(this.locX());
+            int j = MathHelper.floor(this.locY());
+            int k = MathHelper.floor(this.locZ());
 
-            if (this.au()) {
+            if (this.ay()) {
                 this.damageEntity(DamageSource.DROWN, 1.0F);
             }
 
@@ -72,9 +72,9 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
             IBlockData iblockdata = Blocks.SNOW.getBlockData();
 
             for (int l = 0; l < 4; ++l) {
-                i = MathHelper.floor(this.locX + (double) ((float) (l % 2 * 2 - 1) * 0.25F));
-                j = MathHelper.floor(this.locY);
-                k = MathHelper.floor(this.locZ + (double) ((float) (l / 2 % 2 * 2 - 1) * 0.25F));
+                i = MathHelper.floor(this.locX() + (double) ((float) (l % 2 * 2 - 1) * 0.25F));
+                j = MathHelper.floor(this.locY());
+                k = MathHelper.floor(this.locZ() + (double) ((float) (l / 2 % 2 * 2 - 1) * 0.25F));
                 BlockPosition blockposition = new BlockPosition(i, j, k);
 
                 if (this.world.getType(blockposition).isAir() && this.world.getBiome(blockposition).getAdjustedTemperature(blockposition) < 0.8F && iblockdata.canPlace(this.world, blockposition)) {
@@ -88,10 +88,10 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
     @Override
     public void a(EntityLiving entityliving, float f) {
         EntitySnowball entitysnowball = new EntitySnowball(this.world, this);
-        double d0 = entityliving.locY + (double) entityliving.getHeadHeight() - 1.100000023841858D;
-        double d1 = entityliving.locX - this.locX;
-        double d2 = d0 - entitysnowball.locY;
-        double d3 = entityliving.locZ - this.locZ;
+        double d0 = entityliving.getHeadY() - 1.100000023841858D;
+        double d1 = entityliving.locX() - this.locX();
+        double d2 = d0 - entitysnowball.locY();
+        double d3 = entityliving.locZ() - this.locZ();
         float f1 = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
 
         entitysnowball.shoot(d1, d2 + (double) f1, d3, 1.6F, 12.0F);
@@ -108,14 +108,18 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
     protected boolean a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getItem() == Items.SHEARS && this.hasPumpkin() && !this.world.isClientSide) {
-            this.setHasPumpkin(false);
-            itemstack.damage(1, entityhuman, (entityhuman1) -> {
-                entityhuman1.d(enumhand);
-            });
-        }
+        if (itemstack.getItem() == Items.SHEARS && this.hasPumpkin()) {
+            if (!this.world.isClientSide) {
+                this.setHasPumpkin(false);
+                itemstack.damage(1, entityhuman, (entityhuman1) -> {
+                    entityhuman1.d(enumhand);
+                });
+            }
 
-        return super.a(entityhuman, enumhand);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean hasPumpkin() {

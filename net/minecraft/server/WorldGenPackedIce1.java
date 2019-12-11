@@ -34,7 +34,7 @@ public class WorldGenPackedIce1 extends WorldGenerator<WorldGenFeatureRadiusConf
                             BlockPosition blockposition1 = new BlockPosition(j, j1, k);
                             Block block = generatoraccess.getType(blockposition1).getBlock();
 
-                            if (Block.c(block) || block == Blocks.SNOW_BLOCK || block == Blocks.ICE) {
+                            if (b(block) || block == Blocks.SNOW_BLOCK || block == Blocks.ICE) {
                                 generatoraccess.setTypeAndData(blockposition1, this.a.getBlockData(), 2);
                             }
                         }

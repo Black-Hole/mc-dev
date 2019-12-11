@@ -8,10 +8,10 @@ import java.util.List;
 
 public class WorldGenFeatureBlockConfiguration implements WorldGenFeatureConfiguration {
 
-    protected final IBlockData a;
-    protected final List<IBlockData> b;
-    protected final List<IBlockData> c;
-    protected final List<IBlockData> d;
+    public final IBlockData a;
+    public final List<IBlockData> b;
+    public final List<IBlockData> c;
+    public final List<IBlockData> d;
 
     public WorldGenFeatureBlockConfiguration(IBlockData iblockdata, List<IBlockData> list, List<IBlockData> list1, List<IBlockData> list2) {
         this.a = iblockdata;

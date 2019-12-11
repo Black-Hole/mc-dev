@@ -3,9 +3,7 @@ package net.minecraft.server;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public abstract class LootEntryChildrenAbstract extends LootEntryAbstract {
 
@@ -19,14 +17,14 @@ public abstract class LootEntryChildrenAbstract extends LootEntryAbstract {
     }
 
     @Override
-    public void a(LootCollector lootcollector, Function<MinecraftKey, LootTable> function, Set<MinecraftKey> set, LootContextParameterSet lootcontextparameterset) {
-        super.a(lootcollector, function, set, lootcontextparameterset);
+    public void a(LootCollector lootcollector) {
+        super.a(lootcollector);
         if (this.c.length == 0) {
             lootcollector.a("Empty children list");
         }
 
         for (int i = 0; i < this.c.length; ++i) {
-            this.c[i].a(lootcollector.b(".entry[" + i + "]"), function, set, lootcontextparameterset);
+            this.c[i].a(lootcollector.b(".entry[" + i + "]"));
         }
 
     }

@@ -4,8 +4,8 @@ public final class BiomeBirchForestHillsMutated extends BiomeBase {
 
     public BiomeBirchForestHillsMutated() {
         super((new BiomeBase.a()).a(WorldGenSurface.G, WorldGenSurface.v).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.FOREST).a(0.55F).b(0.5F).c(0.6F).d(0.6F).a(4159204).b(329011).a("birch_forest_hills"));
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
-        this.a(WorldGenerator.STRONGHOLD, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
+        this.a(WorldGenerator.STRONGHOLD.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);

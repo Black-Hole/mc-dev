@@ -5,40 +5,26 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
-public class WorldGenGroundBush extends WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> {
+public class WorldGenGroundBush extends WorldGenTreeAbstract<WorldGenFeatureTreeConfiguration> {
 
-    private final IBlockData a;
-    private final IBlockData aS;
-
-    public WorldGenGroundBush(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function, IBlockData iblockdata, IBlockData iblockdata1) {
-        super(function, false);
-        this.aS = iblockdata;
-        this.a = iblockdata1;
+    public WorldGenGroundBush(Function<Dynamic<?>, ? extends WorldGenFeatureTreeConfiguration> function) {
+        super(function);
     }
 
     @Override
-    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, StructureBoundingBox structureboundingbox) {
+    public boolean a(VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, Set<BlockPosition> set, Set<BlockPosition> set1, StructureBoundingBox structureboundingbox, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
         blockposition = virtuallevelwritable.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, blockposition).down();
-        if (h(virtuallevelwritable, blockposition)) {
+        if (g(virtuallevelwritable, blockposition)) {
             blockposition = blockposition.up();
-            this.a(set, (IWorldWriter) virtuallevelwritable, blockposition, this.aS, structureboundingbox);
+            this.a(virtuallevelwritable, random, blockposition, set, structureboundingbox, worldgenfeaturetreeconfiguration);
 
-            for (int i = blockposition.getY(); i <= blockposition.getY() + 2; ++i) {
-                int j = i - blockposition.getY();
-                int k = 2 - j;
+            for (int i = 0; i <= 2; ++i) {
+                int j = 2 - i;
 
-                for (int l = blockposition.getX() - k; l <= blockposition.getX() + k; ++l) {
-                    int i1 = l - blockposition.getX();
-
-                    for (int j1 = blockposition.getZ() - k; j1 <= blockposition.getZ() + k; ++j1) {
-                        int k1 = j1 - blockposition.getZ();
-
-                        if (Math.abs(i1) != k || Math.abs(k1) != k || random.nextInt(2) != 0) {
-                            BlockPosition blockposition1 = new BlockPosition(l, i, j1);
-
-                            if (g(virtuallevelwritable, blockposition1)) {
-                                this.a(set, (IWorldWriter) virtuallevelwritable, blockposition1, this.a, structureboundingbox);
-                            }
+                for (int k = -j; k <= j; ++k) {
+                    for (int l = -j; l <= j; ++l) {
+                        if (Math.abs(k) != j || Math.abs(l) != j || random.nextInt(2) != 0) {
+                            this.b(virtuallevelwritable, random, new BlockPosition(k + blockposition.getX(), i + blockposition.getY(), l + blockposition.getZ()), set1, structureboundingbox, worldgenfeaturetreeconfiguration);
                         }
                     }
                 }

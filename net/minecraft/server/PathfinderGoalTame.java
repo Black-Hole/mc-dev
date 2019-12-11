@@ -41,7 +41,7 @@ public class PathfinderGoalTame extends PathfinderGoal {
 
     @Override
     public boolean b() {
-        return !this.entity.isTamed() && !this.entity.getNavigation().n() && this.entity.isVehicle();
+        return !this.entity.isTamed() && !this.entity.getNavigation().m() && this.entity.isVehicle();
     }
 
     @Override
@@ -62,11 +62,11 @@ public class PathfinderGoalTame extends PathfinderGoal {
                     return;
                 }
 
-                this.entity.u(5);
+                this.entity.v(5);
             }
 
             this.entity.ejectPassengers();
-            this.entity.eu();
+            this.entity.eP();
             this.entity.world.broadcastEntityEffect(this.entity, (byte) 6);
         }
 

@@ -8,15 +8,18 @@ import javax.annotation.Nullable;
 public abstract class CommandBlockListenerAbstract implements ICommandListener {
 
     private static final SimpleDateFormat b = new SimpleDateFormat("HH:mm:ss");
+    private static final IChatBaseComponent c = new ChatComponentText("@");
     private long lastExecution = -1L;
     private boolean updateLastExecution = true;
     private int successCount;
     private boolean trackOutput = true;
     private IChatBaseComponent lastOutput;
     private String command = "";
-    private IChatBaseComponent customName = new ChatComponentText("@");
+    private IChatBaseComponent customName;
 
-    public CommandBlockListenerAbstract() {}
+    public CommandBlockListenerAbstract() {
+        this.customName = CommandBlockListenerAbstract.c;
+    }
 
     public int i() {
         return this.successCount;
@@ -51,7 +54,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
         this.command = nbttagcompound.getString("Command");
         this.successCount = nbttagcompound.getInt("SuccessCount");
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
-            this.customName = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("CustomName"));
+            this.setName(IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("CustomName")));
         }
 
         if (nbttagcompound.hasKeyOfType("TrackOutput", 1)) {
@@ -99,7 +102,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
                 this.successCount = 0;
                 MinecraftServer minecraftserver = this.d().getMinecraftServer();
 
-                if (minecraftserver != null && minecraftserver.F() && minecraftserver.getEnableCommandBlock() && !UtilColor.b(this.command)) {
+                if (minecraftserver != null && minecraftserver.J() && minecraftserver.getEnableCommandBlock() && !UtilColor.b(this.command)) {
                     try {
                         this.lastOutput = null;
                         CommandListenerWrapper commandlistenerwrapper = this.getWrapper().a((commandcontext, flag, i) -> {
@@ -139,8 +142,13 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
         return this.customName;
     }
 
-    public void setName(IChatBaseComponent ichatbasecomponent) {
-        this.customName = ichatbasecomponent;
+    public void setName(@Nullable IChatBaseComponent ichatbasecomponent) {
+        if (ichatbasecomponent != null) {
+            this.customName = ichatbasecomponent;
+        } else {
+            this.customName = CommandBlockListenerAbstract.c;
+        }
+
     }
 
     @Override

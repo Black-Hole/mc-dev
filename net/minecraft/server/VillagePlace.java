@@ -1,8 +1,11 @@
 package net.minecraft.server;
 
 import com.mojang.datafixers.DataFixer;
+import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.longs.Long2ByteMap;
 import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,6 +22,7 @@ import java.util.stream.Stream;
 public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
 
     private final VillagePlace.a a = new VillagePlace.a();
+    private final LongSet b = new LongOpenHashSet();
 
     public VillagePlace(File file, DataFixer datafixer) {
         super(file, VillagePlaceSection::new, VillagePlaceSection::new, datafixer, DataFixTypes.POI_CHUNK);
@@ -33,16 +37,20 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
     }
 
     public long a(Predicate<VillagePlaceType> predicate, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
-        return this.b(predicate, blockposition, i, villageplace_occupancy).count();
+        return this.c(predicate, blockposition, i, villageplace_occupancy).count();
     }
 
     public Stream<VillagePlaceRecord> b(Predicate<VillagePlaceType> predicate, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
+        return ChunkCoordIntPair.a(new ChunkCoordIntPair(blockposition), Math.floorDiv(i, 16)).flatMap((chunkcoordintpair) -> {
+            return this.a(predicate, chunkcoordintpair, villageplace_occupancy);
+        });
+    }
+
+    public Stream<VillagePlaceRecord> c(Predicate<VillagePlaceType> predicate, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
         int j = i * i;
 
-        return ChunkCoordIntPair.a(new ChunkCoordIntPair(blockposition), Math.floorDiv(i, 16)).flatMap((chunkcoordintpair) -> {
-            return this.a(predicate, chunkcoordintpair, villageplace_occupancy).filter((villageplacerecord) -> {
-                return villageplacerecord.f().m(blockposition) <= (double) j;
-            });
+        return this.b(predicate, blockposition, i, villageplace_occupancy).filter((villageplacerecord) -> {
+            return villageplacerecord.f().m(blockposition) <= (double) j;
         });
     }
 
@@ -59,7 +67,7 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
     }
 
     public Stream<BlockPosition> a(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
-        return this.b(predicate, blockposition, i, villageplace_occupancy).map(VillagePlaceRecord::f).filter(predicate1);
+        return this.c(predicate, blockposition, i, villageplace_occupancy).map(VillagePlaceRecord::f).filter(predicate1);
     }
 
     public Optional<BlockPosition> b(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
@@ -67,13 +75,13 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
     }
 
     public Optional<BlockPosition> c(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
-        return this.b(predicate, blockposition, i, villageplace_occupancy).map(VillagePlaceRecord::f).sorted(Comparator.comparingDouble((blockposition1) -> {
+        return this.c(predicate, blockposition, i, villageplace_occupancy).map(VillagePlaceRecord::f).sorted(Comparator.comparingDouble((blockposition1) -> {
             return blockposition1.m(blockposition);
         })).filter(predicate1).findFirst();
     }
 
     public Optional<BlockPosition> a(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i) {
-        return this.b(predicate, blockposition, i, VillagePlace.Occupancy.HAS_SPACE).filter((villageplacerecord) -> {
+        return this.c(predicate, blockposition, i, VillagePlace.Occupancy.HAS_SPACE).filter((villageplacerecord) -> {
             return predicate1.test(villageplacerecord.f());
         }).findFirst().map((villageplacerecord) -> {
             villageplacerecord.b();
@@ -82,7 +90,7 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
     }
 
     public Optional<BlockPosition> a(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, VillagePlace.Occupancy villageplace_occupancy, BlockPosition blockposition, int i, Random random) {
-        List<VillagePlaceRecord> list = (List) this.b(predicate, blockposition, i, villageplace_occupancy).collect(Collectors.toList());
+        List<VillagePlaceRecord> list = (List) this.c(predicate, blockposition, i, villageplace_occupancy).collect(Collectors.toList());
 
         Collections.shuffle(list, random);
         return list.stream().filter((villageplacerecord) -> {
@@ -157,7 +165,7 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
     }
 
     private static boolean a(ChunkSection chunksection) {
-        Stream stream = VillagePlaceType.f();
+        Stream stream = VillagePlaceType.e();
 
         chunksection.getClass();
         return stream.anyMatch(chunksection::a);
@@ -170,6 +178,20 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
             VillagePlaceType.b(iblockdata).ifPresent((villageplacetype) -> {
                 biconsumer.accept(blockposition, villageplacetype);
             });
+        });
+    }
+
+    public void a(IWorldReader iworldreader, BlockPosition blockposition, int i) {
+        SectionPosition.b(new ChunkCoordIntPair(blockposition), Math.floorDiv(i, 16)).map((sectionposition) -> {
+            return Pair.of(sectionposition, this.d(sectionposition.v()));
+        }).filter((pair) -> {
+            return !(Boolean) ((Optional) pair.getSecond()).map(VillagePlaceSection::a).orElse(false);
+        }).map((pair) -> {
+            return ((SectionPosition) pair.getFirst()).u();
+        }).filter((chunkcoordintpair) -> {
+            return this.b.add(chunkcoordintpair.pair());
+        }).forEach((chunkcoordintpair) -> {
+            iworldreader.getChunkAt(chunkcoordintpair.x, chunkcoordintpair.z, ChunkStatus.EMPTY);
         });
     }
 

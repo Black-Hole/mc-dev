@@ -21,7 +21,7 @@ public class WorldGenFeatureCoralClaw extends WorldGenFeatureCoral {
         } else {
             EnumDirection enumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
             int i = random.nextInt(2) + 2;
-            List<EnumDirection> list = Lists.newArrayList(new EnumDirection[]{enumdirection, enumdirection.e(), enumdirection.f()});
+            List<EnumDirection> list = Lists.newArrayList(new EnumDirection[]{enumdirection, enumdirection.f(), enumdirection.g()});
 
             Collections.shuffle(list, random);
             List<EnumDirection> list1 = list.subList(0, i);

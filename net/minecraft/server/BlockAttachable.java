@@ -12,7 +12,7 @@ public class BlockAttachable extends BlockFacingHorizontal {
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        return b(iworldreader, blockposition, j(iblockdata).opposite());
+        return b(iworldreader, blockposition, h(iblockdata).opposite());
     }
 
     public static boolean b(IWorldReader iworldreader, BlockPosition blockposition, EnumDirection enumdirection) {
@@ -31,7 +31,7 @@ public class BlockAttachable extends BlockFacingHorizontal {
             EnumDirection enumdirection = aenumdirection[j];
             IBlockData iblockdata;
 
-            if (enumdirection.k() == EnumDirection.EnumAxis.Y) {
+            if (enumdirection.m() == EnumDirection.EnumAxis.Y) {
                 iblockdata = (IBlockData) ((IBlockData) this.getBlockData().set(BlockAttachable.FACE, enumdirection == EnumDirection.UP ? BlockPropertyAttachPosition.CEILING : BlockPropertyAttachPosition.FLOOR)).set(BlockAttachable.FACING, blockactioncontext.f());
             } else {
                 iblockdata = (IBlockData) ((IBlockData) this.getBlockData().set(BlockAttachable.FACE, BlockPropertyAttachPosition.WALL)).set(BlockAttachable.FACING, enumdirection.opposite());
@@ -47,10 +47,10 @@ public class BlockAttachable extends BlockFacingHorizontal {
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        return j(iblockdata).opposite() == enumdirection && !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return h(iblockdata).opposite() == enumdirection && !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    protected static EnumDirection j(IBlockData iblockdata) {
+    protected static EnumDirection h(IBlockData iblockdata) {
         switch ((BlockPropertyAttachPosition) iblockdata.get(BlockAttachable.FACE)) {
             case CEILING:
                 return EnumDirection.DOWN;

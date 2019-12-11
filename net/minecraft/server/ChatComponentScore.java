@@ -49,7 +49,7 @@ public class ChatComponentScore extends ChatBaseComponent implements ChatCompone
     private void b(CommandListenerWrapper commandlistenerwrapper) {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
-        if (minecraftserver != null && minecraftserver.F() && UtilColor.b(this.e)) {
+        if (minecraftserver != null && minecraftserver.J() && UtilColor.b(this.e)) {
             ScoreboardServer scoreboardserver = minecraftserver.getScoreboard();
             ScoreboardObjective scoreboardobjective = scoreboardserver.getObjective(this.d);
 

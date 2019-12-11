@@ -12,7 +12,7 @@ public class BlockStemAttached extends BlockPlant {
 
     protected BlockStemAttached(BlockStemmed blockstemmed, Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStemAttached.a, EnumDirection.NORTH));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStemAttached.a, EnumDirection.NORTH));
         this.b = blockstemmed;
     }
 
@@ -23,7 +23,7 @@ public class BlockStemAttached extends BlockPlant {
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        return iblockdata1.getBlock() != this.b && enumdirection == iblockdata.get(BlockStemAttached.a) ? (IBlockData) this.b.d().getBlockData().set(BlockStem.AGE, 7) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return iblockdata1.getBlock() != this.b && enumdirection == iblockdata.get(BlockStemAttached.a) ? (IBlockData) this.b.c().getBlockData().set(BlockStem.AGE, 7) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     @Override

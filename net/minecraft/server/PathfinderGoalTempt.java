@@ -28,7 +28,7 @@ public class PathfinderGoalTempt extends PathfinderGoal {
         this.l = recipeitemstack;
         this.m = flag;
         this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
-        if (!(entitycreature.getNavigation() instanceof Navigation)) {
+        if (!(entitycreature.getNavigation() instanceof Navigation) && !(entitycreature.getNavigation() instanceof NavigationFlying)) {
             throw new IllegalArgumentException("Unsupported mob type for TemptGoal");
         }
     }
@@ -52,7 +52,7 @@ public class PathfinderGoalTempt extends PathfinderGoal {
     public boolean b() {
         if (this.g()) {
             if (this.a.h((Entity) this.target) < 36.0D) {
-                if (this.target.e(this.e, this.f, this.g) > 0.010000000000000002D) {
+                if (this.target.g(this.e, this.f, this.g) > 0.010000000000000002D) {
                     return false;
                 }
 
@@ -60,9 +60,9 @@ public class PathfinderGoalTempt extends PathfinderGoal {
                     return false;
                 }
             } else {
-                this.e = this.target.locX;
-                this.f = this.target.locY;
-                this.g = this.target.locZ;
+                this.e = this.target.locX();
+                this.f = this.target.locY();
+                this.g = this.target.locZ();
             }
 
             this.h = (double) this.target.pitch;
@@ -78,9 +78,9 @@ public class PathfinderGoalTempt extends PathfinderGoal {
 
     @Override
     public void c() {
-        this.e = this.target.locX;
-        this.f = this.target.locY;
-        this.g = this.target.locZ;
+        this.e = this.target.locX();
+        this.f = this.target.locY();
+        this.g = this.target.locZ();
         this.k = true;
     }
 
@@ -94,7 +94,7 @@ public class PathfinderGoalTempt extends PathfinderGoal {
 
     @Override
     public void e() {
-        this.a.getControllerLook().a(this.target, (float) (this.a.dA() + 20), (float) this.a.M());
+        this.a.getControllerLook().a(this.target, (float) (this.a.dV() + 20), (float) this.a.dU());
         if (this.a.h((Entity) this.target) < 6.25D) {
             this.a.getNavigation().o();
         } else {

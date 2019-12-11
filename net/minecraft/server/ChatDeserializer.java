@@ -130,6 +130,14 @@ public class ChatDeserializer {
         }
     }
 
+    public static long m(JsonObject jsonobject, String s) {
+        if (jsonobject.has(s)) {
+            return f(jsonobject.get(s), s);
+        } else {
+            throw new JsonSyntaxException("Missing " + s + ", expected to find a Long");
+        }
+    }
+
     public static long a(JsonObject jsonobject, String s, long i) {
         return jsonobject.has(s) ? f(jsonobject.get(s), s) : i;
     }
@@ -202,6 +210,7 @@ public class ChatDeserializer {
         }
     }
 
+    @Nullable
     public static JsonArray a(JsonObject jsonobject, String s, @Nullable JsonArray jsonarray) {
         return jsonobject.has(s) ? n(jsonobject.get(s), s) : jsonarray;
     }

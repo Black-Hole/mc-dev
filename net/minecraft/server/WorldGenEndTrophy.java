@@ -6,11 +6,11 @@ import java.util.Random;
 public class WorldGenEndTrophy extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     public static final BlockPosition a = BlockPosition.ZERO;
-    private final boolean aS;
+    private final boolean aq;
 
     public WorldGenEndTrophy(boolean flag) {
         super(WorldGenFeatureEmptyConfiguration::a);
-        this.aS = flag;
+        this.aq = flag;
     }
 
     public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
@@ -31,7 +31,7 @@ public class WorldGenEndTrophy extends WorldGenerator<WorldGenFeatureEmptyConfig
                     this.a(generatoraccess, blockposition1, Blocks.AIR.getBlockData());
                 } else if (!flag) {
                     this.a(generatoraccess, blockposition1, Blocks.BEDROCK.getBlockData());
-                } else if (this.aS) {
+                } else if (this.aq) {
                     this.a(generatoraccess, new BlockPosition(blockposition1), Blocks.END_PORTAL.getBlockData());
                 } else {
                     this.a(generatoraccess, new BlockPosition(blockposition1), Blocks.AIR.getBlockData());

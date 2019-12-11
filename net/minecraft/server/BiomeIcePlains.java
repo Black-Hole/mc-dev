@@ -4,11 +4,11 @@ public final class BiomeIcePlains extends BiomeBase {
 
     public BiomeIcePlains() {
         super((new BiomeBase.a()).a(WorldGenSurface.G, WorldGenSurface.v).a(BiomeBase.Precipitation.SNOW).a(BiomeBase.Geography.ICY).a(0.125F).b(0.05F).c(0.0F).d(0.5F).a(4159204).b(329011).a((String) null));
-        this.a(WorldGenerator.VILLAGE, (WorldGenFeatureConfiguration) (new WorldGenFeatureVillageConfiguration("village/snowy/town_centers", 6)));
-        this.a(WorldGenerator.IGLOO, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
-        this.a(WorldGenerator.STRONGHOLD, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
-        this.a(WorldGenerator.PILLAGER_OUTPOST, (WorldGenFeatureConfiguration) (new WorldGenFeaturePillagerOutpostConfiguration(0.004D)));
+        this.a(WorldGenerator.VILLAGE.b((WorldGenFeatureConfiguration) (new WorldGenFeatureVillageConfiguration("village/snowy/town_centers", 6))));
+        this.a(WorldGenerator.IGLOO.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
+        this.a(WorldGenerator.STRONGHOLD.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
+        this.a(WorldGenerator.PILLAGER_OUTPOST.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);
@@ -38,7 +38,7 @@ public final class BiomeIcePlains extends BiomeBase {
     }
 
     @Override
-    public float d() {
+    public float f() {
         return 0.07F;
     }
 }

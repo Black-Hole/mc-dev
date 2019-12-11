@@ -31,7 +31,7 @@ public class WorldGenFactory {
     public static void a() {}
 
     @Nullable
-    public static StructureStart a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, WorldChunkManager worldchunkmanager, NBTTagCompound nbttagcompound) {
+    public static StructureStart a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
         String s = nbttagcompound.getString("id");
 
         if ("INVALID".equals(s)) {
@@ -45,15 +45,15 @@ public class WorldGenFactory {
             } else {
                 int i = nbttagcompound.getInt("ChunkX");
                 int j = nbttagcompound.getInt("ChunkZ");
-                BiomeBase biomebase = nbttagcompound.hasKey("biome") ? (BiomeBase) IRegistry.BIOME.get(new MinecraftKey(nbttagcompound.getString("biome"))) : worldchunkmanager.getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9));
+                int k = nbttagcompound.getInt("references");
                 StructureBoundingBox structureboundingbox = nbttagcompound.hasKey("BB") ? new StructureBoundingBox(nbttagcompound.getIntArray("BB")) : StructureBoundingBox.a();
                 NBTTagList nbttaglist = nbttagcompound.getList("Children", 10);
 
                 try {
-                    StructureStart structurestart = structuregenerator.a().create(structuregenerator, i, j, biomebase, structureboundingbox, 0, chunkgenerator.getSeed());
+                    StructureStart structurestart = structuregenerator.a().create(structuregenerator, i, j, structureboundingbox, k, chunkgenerator.getSeed());
 
-                    for (int k = 0; k < nbttaglist.size(); ++k) {
-                        NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(k);
+                    for (int l = 0; l < nbttaglist.size(); ++l) {
+                        NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(l);
                         String s1 = nbttagcompound1.getString("id");
                         WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype = (WorldGenFeatureStructurePieceType) IRegistry.STRUCTURE_PIECE.get(new MinecraftKey(s1.toLowerCase(Locale.ROOT)));
 

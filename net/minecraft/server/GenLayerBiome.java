@@ -23,24 +23,24 @@ public class GenLayerBiome implements AreaTransformer5 {
     private static final int[] s = new int[]{GenLayerBiome.d, GenLayerBiome.l, GenLayerBiome.c, GenLayerBiome.j, GenLayerBiome.a, GenLayerBiome.n};
     private static final int[] t = new int[]{GenLayerBiome.d, GenLayerBiome.c, GenLayerBiome.o, GenLayerBiome.j};
     private static final int[] u = new int[]{GenLayerBiome.e, GenLayerBiome.e, GenLayerBiome.e, GenLayerBiome.p};
-    private final GeneratorSettingsOverworld v;
+    private final int v;
     private int[] w;
 
-    public GenLayerBiome(WorldType worldtype, GeneratorSettingsOverworld generatorsettingsoverworld) {
+    public GenLayerBiome(WorldType worldtype, int i) {
         this.w = GenLayerBiome.r;
         if (worldtype == WorldType.NORMAL_1_1) {
             this.w = GenLayerBiome.q;
-            this.v = null;
+            this.v = -1;
         } else {
-            this.v = generatorsettingsoverworld;
+            this.v = i;
         }
 
     }
 
     @Override
     public int a(WorldGenContext worldgencontext, int i) {
-        if (this.v != null && this.v.x() >= 0) {
-            return this.v.x();
+        if (this.v >= 0) {
+            return this.v;
         } else {
             int j = (i & 3840) >> 8;
 

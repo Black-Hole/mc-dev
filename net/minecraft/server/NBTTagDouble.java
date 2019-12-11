@@ -6,12 +6,37 @@ import java.io.IOException;
 
 public class NBTTagDouble extends NBTNumber {
 
-    private double data;
+    public static final NBTTagDouble a = new NBTTagDouble(0.0D);
+    public static final NBTTagType<NBTTagDouble> b = new NBTTagType<NBTTagDouble>() {
+        @Override
+        public NBTTagDouble b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+            nbtreadlimiter.a(128L);
+            return NBTTagDouble.a(datainput.readDouble());
+        }
 
-    NBTTagDouble() {}
+        @Override
+        public String a() {
+            return "DOUBLE";
+        }
 
-    public NBTTagDouble(double d0) {
+        @Override
+        public String b() {
+            return "TAG_Double";
+        }
+
+        @Override
+        public boolean c() {
+            return true;
+        }
+    };
+    private final double data;
+
+    private NBTTagDouble(double d0) {
         this.data = d0;
+    }
+
+    public static NBTTagDouble a(double d0) {
+        return d0 == 0.0D ? NBTTagDouble.a : new NBTTagDouble(d0);
     }
 
     @Override
@@ -20,14 +45,13 @@ public class NBTTagDouble extends NBTNumber {
     }
 
     @Override
-    public void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
-        nbtreadlimiter.a(128L);
-        this.data = datainput.readDouble();
+    public byte getTypeId() {
+        return 6;
     }
 
     @Override
-    public byte getTypeId() {
-        return 6;
+    public NBTTagType<NBTTagDouble> b() {
+        return NBTTagDouble.b;
     }
 
     @Override
@@ -37,7 +61,7 @@ public class NBTTagDouble extends NBTNumber {
 
     @Override
     public NBTTagDouble clone() {
-        return new NBTTagDouble(this.data);
+        return this;
     }
 
     public boolean equals(Object object) {
@@ -52,9 +76,9 @@ public class NBTTagDouble extends NBTNumber {
 
     @Override
     public IChatBaseComponent a(String s, int i) {
-        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("d")).a(NBTTagDouble.e);
+        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("d")).a(NBTTagDouble.g);
 
-        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatbasecomponent).a(NBTTagDouble.d);
+        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatbasecomponent).a(NBTTagDouble.f);
     }
 
     @Override
@@ -88,7 +112,7 @@ public class NBTTagDouble extends NBTNumber {
     }
 
     @Override
-    public Number j() {
+    public Number k() {
         return this.data;
     }
 }

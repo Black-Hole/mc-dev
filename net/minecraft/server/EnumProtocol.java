@@ -1,228 +1,49 @@
 package net.minecraft.server;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import java.util.Iterator;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 
 public enum EnumProtocol {
 
-    HANDSHAKING(-1) {
-        {
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketHandshakingInSetProtocol.class);
-        }
-    },
-    PLAY(0) {
-        {
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutSpawnEntity.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutSpawnEntityExperienceOrb.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutSpawnEntityWeather.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutSpawnEntityLiving.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutSpawnEntityPainting.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutNamedEntitySpawn.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutAnimation.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutStatistic.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutBlockBreakAnimation.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutTileEntityData.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutBlockAction.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutBlockChange.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutBoss.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutServerDifficulty.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutChat.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutMultiBlockChange.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutTabComplete.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutCommands.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutTransaction.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutCloseWindow.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutWindowItems.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutWindowData.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutSetSlot.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutSetCooldown.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutCustomPayload.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutCustomSoundEffect.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutKickDisconnect.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntityStatus.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutExplosion.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutUnloadChunk.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutGameStateChange.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutOpenWindowHorse.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutKeepAlive.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutMapChunk.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutWorldEvent.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutWorldParticles.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutLightUpdate.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutLogin.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutMap.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutOpenWindowMerchant.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntity.PacketPlayOutRelEntityMove.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntity.PacketPlayOutEntityLook.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntity.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutVehicleMove.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutOpenBook.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutOpenWindow.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutOpenSignEditor.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutAutoRecipe.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutAbilities.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutCombatEvent.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutPlayerInfo.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutLookAt.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutPosition.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutRecipes.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntityDestroy.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutRemoveEntityEffect.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutResourcePackSend.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutRespawn.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntityHeadRotation.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutSelectAdvancementTab.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutWorldBorder.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutCamera.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutHeldItemSlot.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutViewCentre.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutViewDistance.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutScoreboardDisplayObjective.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntityMetadata.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutAttachEntity.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntityVelocity.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntityEquipment.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutExperience.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutUpdateHealth.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutScoreboardObjective.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutMount.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutScoreboardTeam.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutScoreboardScore.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutSpawnPosition.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutUpdateTime.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutTitle.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntitySound.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutNamedSoundEffect.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutStopSound.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutPlayerListHeaderFooter.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutNBTQuery.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutCollect.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntityTeleport.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutAdvancements.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutUpdateAttributes.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntityEffect.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutRecipeUpdate.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutTags.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutBlockBreak.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInTeleportAccept.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInTileNBTQuery.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInDifficultyChange.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInChat.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInClientCommand.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInSettings.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInTabComplete.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInTransaction.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInEnchantItem.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInWindowClick.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInCloseWindow.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInCustomPayload.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInBEdit.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInEntityNBTQuery.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInUseEntity.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInKeepAlive.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInDifficultyLock.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInFlying.PacketPlayInPosition.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInFlying.PacketPlayInPositionLook.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInFlying.PacketPlayInLook.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInFlying.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInVehicleMove.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInBoatMove.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInPickItem.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInAutoRecipe.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInAbilities.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInBlockDig.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInEntityAction.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInSteerVehicle.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInRecipeDisplayed.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInItemName.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInResourcePackStatus.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInAdvancements.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInTrSel.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInBeacon.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInHeldItemSlot.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInSetCommandBlock.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInSetCommandMinecart.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInSetCreativeSlot.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInSetJigsaw.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInStruct.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInUpdateSign.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInArmAnimation.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInSpectate.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInUseItem.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInBlockPlace.class);
-        }
-    },
-    STATUS(1) {
-        {
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketStatusInStart.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketStatusOutServerInfo.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketStatusInPing.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketStatusOutPong.class);
-        }
-    },
-    LOGIN(2) {
-        {
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketLoginOutDisconnect.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketLoginOutEncryptionBegin.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketLoginOutSuccess.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketLoginOutSetCompression.class);
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketLoginOutCustomPayload.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketLoginInStart.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketLoginInEncryptionBegin.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketLoginInCustomPayload.class);
-        }
-    };
+    HANDSHAKING(-1, b().a(EnumProtocolDirection.SERVERBOUND, (new EnumProtocol.a<>()).a(PacketHandshakingInSetProtocol.class, PacketHandshakingInSetProtocol::new))), PLAY(0, b().a(EnumProtocolDirection.CLIENTBOUND, (new EnumProtocol.a<>()).a(PacketPlayOutSpawnEntity.class, PacketPlayOutSpawnEntity::new).a(PacketPlayOutSpawnEntityExperienceOrb.class, PacketPlayOutSpawnEntityExperienceOrb::new).a(PacketPlayOutSpawnEntityWeather.class, PacketPlayOutSpawnEntityWeather::new).a(PacketPlayOutSpawnEntityLiving.class, PacketPlayOutSpawnEntityLiving::new).a(PacketPlayOutSpawnEntityPainting.class, PacketPlayOutSpawnEntityPainting::new).a(PacketPlayOutNamedEntitySpawn.class, PacketPlayOutNamedEntitySpawn::new).a(PacketPlayOutAnimation.class, PacketPlayOutAnimation::new).a(PacketPlayOutStatistic.class, PacketPlayOutStatistic::new).a(PacketPlayOutBlockBreak.class, PacketPlayOutBlockBreak::new).a(PacketPlayOutBlockBreakAnimation.class, PacketPlayOutBlockBreakAnimation::new).a(PacketPlayOutTileEntityData.class, PacketPlayOutTileEntityData::new).a(PacketPlayOutBlockAction.class, PacketPlayOutBlockAction::new).a(PacketPlayOutBlockChange.class, PacketPlayOutBlockChange::new).a(PacketPlayOutBoss.class, PacketPlayOutBoss::new).a(PacketPlayOutServerDifficulty.class, PacketPlayOutServerDifficulty::new).a(PacketPlayOutChat.class, PacketPlayOutChat::new).a(PacketPlayOutMultiBlockChange.class, PacketPlayOutMultiBlockChange::new).a(PacketPlayOutTabComplete.class, PacketPlayOutTabComplete::new).a(PacketPlayOutCommands.class, PacketPlayOutCommands::new).a(PacketPlayOutTransaction.class, PacketPlayOutTransaction::new).a(PacketPlayOutCloseWindow.class, PacketPlayOutCloseWindow::new).a(PacketPlayOutWindowItems.class, PacketPlayOutWindowItems::new).a(PacketPlayOutWindowData.class, PacketPlayOutWindowData::new).a(PacketPlayOutSetSlot.class, PacketPlayOutSetSlot::new).a(PacketPlayOutSetCooldown.class, PacketPlayOutSetCooldown::new).a(PacketPlayOutCustomPayload.class, PacketPlayOutCustomPayload::new).a(PacketPlayOutCustomSoundEffect.class, PacketPlayOutCustomSoundEffect::new).a(PacketPlayOutKickDisconnect.class, PacketPlayOutKickDisconnect::new).a(PacketPlayOutEntityStatus.class, PacketPlayOutEntityStatus::new).a(PacketPlayOutExplosion.class, PacketPlayOutExplosion::new).a(PacketPlayOutUnloadChunk.class, PacketPlayOutUnloadChunk::new).a(PacketPlayOutGameStateChange.class, PacketPlayOutGameStateChange::new).a(PacketPlayOutOpenWindowHorse.class, PacketPlayOutOpenWindowHorse::new).a(PacketPlayOutKeepAlive.class, PacketPlayOutKeepAlive::new).a(PacketPlayOutMapChunk.class, PacketPlayOutMapChunk::new).a(PacketPlayOutWorldEvent.class, PacketPlayOutWorldEvent::new).a(PacketPlayOutWorldParticles.class, PacketPlayOutWorldParticles::new).a(PacketPlayOutLightUpdate.class, PacketPlayOutLightUpdate::new).a(PacketPlayOutLogin.class, PacketPlayOutLogin::new).a(PacketPlayOutMap.class, PacketPlayOutMap::new).a(PacketPlayOutOpenWindowMerchant.class, PacketPlayOutOpenWindowMerchant::new).a(PacketPlayOutEntity.PacketPlayOutRelEntityMove.class, PacketPlayOutEntity.PacketPlayOutRelEntityMove::new).a(PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook.class, PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook::new).a(PacketPlayOutEntity.PacketPlayOutEntityLook.class, PacketPlayOutEntity.PacketPlayOutEntityLook::new).a(PacketPlayOutEntity.class, PacketPlayOutEntity::new).a(PacketPlayOutVehicleMove.class, PacketPlayOutVehicleMove::new).a(PacketPlayOutOpenBook.class, PacketPlayOutOpenBook::new).a(PacketPlayOutOpenWindow.class, PacketPlayOutOpenWindow::new).a(PacketPlayOutOpenSignEditor.class, PacketPlayOutOpenSignEditor::new).a(PacketPlayOutAutoRecipe.class, PacketPlayOutAutoRecipe::new).a(PacketPlayOutAbilities.class, PacketPlayOutAbilities::new).a(PacketPlayOutCombatEvent.class, PacketPlayOutCombatEvent::new).a(PacketPlayOutPlayerInfo.class, PacketPlayOutPlayerInfo::new).a(PacketPlayOutLookAt.class, PacketPlayOutLookAt::new).a(PacketPlayOutPosition.class, PacketPlayOutPosition::new).a(PacketPlayOutRecipes.class, PacketPlayOutRecipes::new).a(PacketPlayOutEntityDestroy.class, PacketPlayOutEntityDestroy::new).a(PacketPlayOutRemoveEntityEffect.class, PacketPlayOutRemoveEntityEffect::new).a(PacketPlayOutResourcePackSend.class, PacketPlayOutResourcePackSend::new).a(PacketPlayOutRespawn.class, PacketPlayOutRespawn::new).a(PacketPlayOutEntityHeadRotation.class, PacketPlayOutEntityHeadRotation::new).a(PacketPlayOutSelectAdvancementTab.class, PacketPlayOutSelectAdvancementTab::new).a(PacketPlayOutWorldBorder.class, PacketPlayOutWorldBorder::new).a(PacketPlayOutCamera.class, PacketPlayOutCamera::new).a(PacketPlayOutHeldItemSlot.class, PacketPlayOutHeldItemSlot::new).a(PacketPlayOutViewCentre.class, PacketPlayOutViewCentre::new).a(PacketPlayOutViewDistance.class, PacketPlayOutViewDistance::new).a(PacketPlayOutScoreboardDisplayObjective.class, PacketPlayOutScoreboardDisplayObjective::new).a(PacketPlayOutEntityMetadata.class, PacketPlayOutEntityMetadata::new).a(PacketPlayOutAttachEntity.class, PacketPlayOutAttachEntity::new).a(PacketPlayOutEntityVelocity.class, PacketPlayOutEntityVelocity::new).a(PacketPlayOutEntityEquipment.class, PacketPlayOutEntityEquipment::new).a(PacketPlayOutExperience.class, PacketPlayOutExperience::new).a(PacketPlayOutUpdateHealth.class, PacketPlayOutUpdateHealth::new).a(PacketPlayOutScoreboardObjective.class, PacketPlayOutScoreboardObjective::new).a(PacketPlayOutMount.class, PacketPlayOutMount::new).a(PacketPlayOutScoreboardTeam.class, PacketPlayOutScoreboardTeam::new).a(PacketPlayOutScoreboardScore.class, PacketPlayOutScoreboardScore::new).a(PacketPlayOutSpawnPosition.class, PacketPlayOutSpawnPosition::new).a(PacketPlayOutUpdateTime.class, PacketPlayOutUpdateTime::new).a(PacketPlayOutTitle.class, PacketPlayOutTitle::new).a(PacketPlayOutEntitySound.class, PacketPlayOutEntitySound::new).a(PacketPlayOutNamedSoundEffect.class, PacketPlayOutNamedSoundEffect::new).a(PacketPlayOutStopSound.class, PacketPlayOutStopSound::new).a(PacketPlayOutPlayerListHeaderFooter.class, PacketPlayOutPlayerListHeaderFooter::new).a(PacketPlayOutNBTQuery.class, PacketPlayOutNBTQuery::new).a(PacketPlayOutCollect.class, PacketPlayOutCollect::new).a(PacketPlayOutEntityTeleport.class, PacketPlayOutEntityTeleport::new).a(PacketPlayOutAdvancements.class, PacketPlayOutAdvancements::new).a(PacketPlayOutUpdateAttributes.class, PacketPlayOutUpdateAttributes::new).a(PacketPlayOutEntityEffect.class, PacketPlayOutEntityEffect::new).a(PacketPlayOutRecipeUpdate.class, PacketPlayOutRecipeUpdate::new).a(PacketPlayOutTags.class, PacketPlayOutTags::new)).a(EnumProtocolDirection.SERVERBOUND, (new EnumProtocol.a<>()).a(PacketPlayInTeleportAccept.class, PacketPlayInTeleportAccept::new).a(PacketPlayInTileNBTQuery.class, PacketPlayInTileNBTQuery::new).a(PacketPlayInDifficultyChange.class, PacketPlayInDifficultyChange::new).a(PacketPlayInChat.class, PacketPlayInChat::new).a(PacketPlayInClientCommand.class, PacketPlayInClientCommand::new).a(PacketPlayInSettings.class, PacketPlayInSettings::new).a(PacketPlayInTabComplete.class, PacketPlayInTabComplete::new).a(PacketPlayInTransaction.class, PacketPlayInTransaction::new).a(PacketPlayInEnchantItem.class, PacketPlayInEnchantItem::new).a(PacketPlayInWindowClick.class, PacketPlayInWindowClick::new).a(PacketPlayInCloseWindow.class, PacketPlayInCloseWindow::new).a(PacketPlayInCustomPayload.class, PacketPlayInCustomPayload::new).a(PacketPlayInBEdit.class, PacketPlayInBEdit::new).a(PacketPlayInEntityNBTQuery.class, PacketPlayInEntityNBTQuery::new).a(PacketPlayInUseEntity.class, PacketPlayInUseEntity::new).a(PacketPlayInKeepAlive.class, PacketPlayInKeepAlive::new).a(PacketPlayInDifficultyLock.class, PacketPlayInDifficultyLock::new).a(PacketPlayInFlying.PacketPlayInPosition.class, PacketPlayInFlying.PacketPlayInPosition::new).a(PacketPlayInFlying.PacketPlayInPositionLook.class, PacketPlayInFlying.PacketPlayInPositionLook::new).a(PacketPlayInFlying.PacketPlayInLook.class, PacketPlayInFlying.PacketPlayInLook::new).a(PacketPlayInFlying.class, PacketPlayInFlying::new).a(PacketPlayInVehicleMove.class, PacketPlayInVehicleMove::new).a(PacketPlayInBoatMove.class, PacketPlayInBoatMove::new).a(PacketPlayInPickItem.class, PacketPlayInPickItem::new).a(PacketPlayInAutoRecipe.class, PacketPlayInAutoRecipe::new).a(PacketPlayInAbilities.class, PacketPlayInAbilities::new).a(PacketPlayInBlockDig.class, PacketPlayInBlockDig::new).a(PacketPlayInEntityAction.class, PacketPlayInEntityAction::new).a(PacketPlayInSteerVehicle.class, PacketPlayInSteerVehicle::new).a(PacketPlayInRecipeDisplayed.class, PacketPlayInRecipeDisplayed::new).a(PacketPlayInItemName.class, PacketPlayInItemName::new).a(PacketPlayInResourcePackStatus.class, PacketPlayInResourcePackStatus::new).a(PacketPlayInAdvancements.class, PacketPlayInAdvancements::new).a(PacketPlayInTrSel.class, PacketPlayInTrSel::new).a(PacketPlayInBeacon.class, PacketPlayInBeacon::new).a(PacketPlayInHeldItemSlot.class, PacketPlayInHeldItemSlot::new).a(PacketPlayInSetCommandBlock.class, PacketPlayInSetCommandBlock::new).a(PacketPlayInSetCommandMinecart.class, PacketPlayInSetCommandMinecart::new).a(PacketPlayInSetCreativeSlot.class, PacketPlayInSetCreativeSlot::new).a(PacketPlayInSetJigsaw.class, PacketPlayInSetJigsaw::new).a(PacketPlayInStruct.class, PacketPlayInStruct::new).a(PacketPlayInUpdateSign.class, PacketPlayInUpdateSign::new).a(PacketPlayInArmAnimation.class, PacketPlayInArmAnimation::new).a(PacketPlayInSpectate.class, PacketPlayInSpectate::new).a(PacketPlayInUseItem.class, PacketPlayInUseItem::new).a(PacketPlayInBlockPlace.class, PacketPlayInBlockPlace::new))), STATUS(1, b().a(EnumProtocolDirection.SERVERBOUND, (new EnumProtocol.a<>()).a(PacketStatusInStart.class, PacketStatusInStart::new).a(PacketStatusInPing.class, PacketStatusInPing::new)).a(EnumProtocolDirection.CLIENTBOUND, (new EnumProtocol.a<>()).a(PacketStatusOutServerInfo.class, PacketStatusOutServerInfo::new).a(PacketStatusOutPong.class, PacketStatusOutPong::new))), LOGIN(2, b().a(EnumProtocolDirection.CLIENTBOUND, (new EnumProtocol.a<>()).a(PacketLoginOutDisconnect.class, PacketLoginOutDisconnect::new).a(PacketLoginOutEncryptionBegin.class, PacketLoginOutEncryptionBegin::new).a(PacketLoginOutSuccess.class, PacketLoginOutSuccess::new).a(PacketLoginOutSetCompression.class, PacketLoginOutSetCompression::new).a(PacketLoginOutCustomPayload.class, PacketLoginOutCustomPayload::new)).a(EnumProtocolDirection.SERVERBOUND, (new EnumProtocol.a<>()).a(PacketLoginInStart.class, PacketLoginInStart::new).a(PacketLoginInEncryptionBegin.class, PacketLoginInEncryptionBegin::new).a(PacketLoginInCustomPayload.class, PacketLoginInCustomPayload::new)));
 
     private static final EnumProtocol[] e = new EnumProtocol[4];
     private static final Map<Class<? extends Packet<?>>, EnumProtocol> f = Maps.newHashMap();
     private final int g;
-    private final Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>> h;
+    private final Map<EnumProtocolDirection, ? extends EnumProtocol.a<?>> h;
 
-    private EnumProtocol(int i) {
-        this.h = Maps.newEnumMap(EnumProtocolDirection.class);
+    private static EnumProtocol.b b() {
+        return new EnumProtocol.b();
+    }
+
+    private EnumProtocol(int i, EnumProtocol.b enumprotocol_b) {
         this.g = i;
-    }
-
-    protected EnumProtocol a(EnumProtocolDirection enumprotocoldirection, Class<? extends Packet<?>> oclass) {
-        BiMap<Integer, Class<? extends Packet<?>>> bimap = (BiMap) this.h.get(enumprotocoldirection);
-
-        if (bimap == null) {
-            bimap = HashBiMap.create();
-            this.h.put(enumprotocoldirection, bimap);
-        }
-
-        if (((BiMap) bimap).containsValue(oclass)) {
-            String s = enumprotocoldirection + " packet " + oclass + " is already known to ID " + ((BiMap) bimap).inverse().get(oclass);
-
-            LogManager.getLogger().fatal(s);
-            throw new IllegalArgumentException(s);
-        } else {
-            ((BiMap) bimap).put(((BiMap) bimap).size(), oclass);
-            return this;
-        }
-    }
-
-    public Integer a(EnumProtocolDirection enumprotocoldirection, Packet<?> packet) throws Exception {
-        return (Integer) ((BiMap) this.h.get(enumprotocoldirection)).inverse().get(packet.getClass());
+        this.h = enumprotocol_b.a;
     }
 
     @Nullable
-    public Packet<?> a(EnumProtocolDirection enumprotocoldirection, int i) throws IllegalAccessException, InstantiationException {
-        Class<? extends Packet<?>> oclass = (Class) ((BiMap) this.h.get(enumprotocoldirection)).get(i);
+    public Integer a(EnumProtocolDirection enumprotocoldirection, Packet<?> packet) {
+        return ((EnumProtocol.a) this.h.get(enumprotocoldirection)).a(packet.getClass());
+    }
 
-        return oclass == null ? null : (Packet) oclass.newInstance();
+    @Nullable
+    public Packet<?> a(EnumProtocolDirection enumprotocoldirection, int i) {
+        return ((EnumProtocol.a) this.h.get(enumprotocoldirection)).a(i);
     }
 
     public int a() {
         return this.g;
     }
 
+    @Nullable
     public static EnumProtocol a(int i) {
         return i >= -1 && i <= 2 ? EnumProtocol.e[i - -1] : null;
     }
@@ -244,27 +65,76 @@ public enum EnumProtocol {
             }
 
             EnumProtocol.e[k - -1] = enumprotocol;
-            Iterator iterator = enumprotocol.h.keySet().iterator();
-
-            while (iterator.hasNext()) {
-                EnumProtocolDirection enumprotocoldirection = (EnumProtocolDirection) iterator.next();
-
-                Class oclass;
-
-                for (Iterator iterator1 = ((BiMap) enumprotocol.h.get(enumprotocoldirection)).values().iterator(); iterator1.hasNext(); EnumProtocol.f.put(oclass, enumprotocol)) {
-                    oclass = (Class) iterator1.next();
+            enumprotocol.h.forEach((enumprotocoldirection, enumprotocol_a) -> {
+                enumprotocol_a.a().forEach((oclass) -> {
                     if (EnumProtocol.f.containsKey(oclass) && EnumProtocol.f.get(oclass) != enumprotocol) {
-                        throw new Error("Packet " + oclass + " is already assigned to protocol " + EnumProtocol.f.get(oclass) + " - can't reassign to " + enumprotocol);
+                        throw new IllegalStateException("Packet " + oclass + " is already assigned to protocol " + EnumProtocol.f.get(oclass) + " - can't reassign to " + enumprotocol);
+                    } else {
+                        EnumProtocol.f.put(oclass, enumprotocol);
                     }
+                });
+            });
+        }
 
-                    try {
-                        oclass.newInstance();
-                    } catch (Throwable throwable) {
-                        throw new Error("Packet " + oclass + " fails instantiation checks! " + oclass);
-                    }
-                }
+    }
+
+    static class b {
+
+        private final Map<EnumProtocolDirection, EnumProtocol.a<?>> a;
+
+        private b() {
+            this.a = Maps.newEnumMap(EnumProtocolDirection.class);
+        }
+
+        public <T extends PacketListener> EnumProtocol.b a(EnumProtocolDirection enumprotocoldirection, EnumProtocol.a<T> enumprotocol_a) {
+            this.a.put(enumprotocoldirection, enumprotocol_a);
+            return this;
+        }
+    }
+
+    static class a<T extends PacketListener> {
+
+        private final Object2IntMap<Class<? extends Packet<T>>> a;
+        private final List<Supplier<? extends Packet<T>>> b;
+
+        private a() {
+            this.a = (Object2IntMap) SystemUtils.a((Object) (new Object2IntOpenHashMap()), (object2intopenhashmap) -> {
+                object2intopenhashmap.defaultReturnValue(-1);
+            });
+            this.b = Lists.newArrayList();
+        }
+
+        public <P extends Packet<T>> EnumProtocol.a<T> a(Class<P> oclass, Supplier<P> supplier) {
+            int i = this.b.size();
+            int j = this.a.put(oclass, i);
+
+            if (j != -1) {
+                String s = "Packet " + oclass + " is already registered to ID " + j;
+
+                LogManager.getLogger().fatal(s);
+                throw new IllegalArgumentException(s);
+            } else {
+                this.b.add(supplier);
+                return this;
             }
         }
 
+        @Nullable
+        public Integer a(Class<?> oclass) {
+            int i = this.a.getInt(oclass);
+
+            return i == -1 ? null : i;
+        }
+
+        @Nullable
+        public Packet<?> a(int i) {
+            Supplier<? extends Packet<T>> supplier = (Supplier) this.b.get(i);
+
+            return supplier != null ? (Packet) supplier.get() : null;
+        }
+
+        public Iterable<Class<? extends Packet<?>>> a() {
+            return Iterables.unmodifiableIterable(this.a.keySet());
+        }
     }
 }

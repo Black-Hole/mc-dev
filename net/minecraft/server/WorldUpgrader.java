@@ -124,11 +124,16 @@ public class WorldUpgrader {
                                 NBTTagCompound nbttagcompound1 = ichunkloader.getChunkData(dimensionmanager2, () -> {
                                     return this.q;
                                 }, nbttagcompound);
-                                boolean flag2 = j < SharedConstants.a().getWorldVersion();
+                                NBTTagCompound nbttagcompound2 = nbttagcompound1.getCompound("Level");
+                                ChunkCoordIntPair chunkcoordintpair1 = new ChunkCoordIntPair(nbttagcompound2.getInt("xPos"), nbttagcompound2.getInt("zPos"));
+
+                                if (!chunkcoordintpair1.equals(chunkcoordintpair)) {
+                                    WorldUpgrader.LOGGER.warn("Chunk {} has invalid position {}", chunkcoordintpair, chunkcoordintpair1);
+                                }
+
+                                boolean flag2 = j < SharedConstants.getGameVersion().getWorldVersion();
 
                                 if (this.d) {
-                                    NBTTagCompound nbttagcompound2 = nbttagcompound1.getCompound("Level");
-
                                     flag2 = flag2 || nbttagcompound2.hasKey("Heightmaps");
                                     nbttagcompound2.remove("Heightmaps");
                                     flag2 = flag2 || nbttagcompound2.hasKey("isLightOn");
@@ -136,7 +141,7 @@ public class WorldUpgrader {
                                 }
 
                                 if (flag2) {
-                                    ichunkloader.write(chunkcoordintpair, nbttagcompound1);
+                                    ichunkloader.a(chunkcoordintpair, nbttagcompound1);
                                     flag1 = true;
                                 }
                             }
@@ -214,7 +219,7 @@ public class WorldUpgrader {
                     int l = Integer.parseInt(matcher.group(2)) << 5;
 
                     try {
-                        RegionFile regionfile = new RegionFile(file2);
+                        RegionFile regionfile = new RegionFile(file2, file1);
                         Throwable throwable = null;
 
                         try {

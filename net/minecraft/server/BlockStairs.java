@@ -7,7 +7,7 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
     public static final BlockStateEnum<BlockPropertyHalf> HALF = BlockProperties.V;
-    public static final BlockStateEnum<BlockPropertyStairsShape> SHAPE = BlockProperties.aD;
+    public static final BlockStateEnum<BlockPropertyStairsShape> SHAPE = BlockProperties.aE;
     public static final BlockStateBoolean d = BlockProperties.C;
     protected static final VoxelShape e = BlockStepAbstract.d;
     protected static final VoxelShape f = BlockStepAbstract.c;
@@ -57,22 +57,22 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
 
     protected BlockStairs(IBlockData iblockdata, Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStairs.FACING, EnumDirection.NORTH)).set(BlockStairs.HALF, BlockPropertyHalf.BOTTOM)).set(BlockStairs.SHAPE, BlockPropertyStairsShape.STRAIGHT)).set(BlockStairs.d, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStairs.FACING, EnumDirection.NORTH)).set(BlockStairs.HALF, BlockPropertyHalf.BOTTOM)).set(BlockStairs.SHAPE, BlockPropertyStairsShape.STRAIGHT)).set(BlockStairs.d, false));
         this.C = iblockdata.getBlock();
         this.D = iblockdata;
     }
 
     @Override
-    public boolean n(IBlockData iblockdata) {
+    public boolean o(IBlockData iblockdata) {
         return true;
     }
 
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return (iblockdata.get(BlockStairs.HALF) == BlockPropertyHalf.TOP ? BlockStairs.z : BlockStairs.A)[BlockStairs.B[this.q(iblockdata)]];
+        return (iblockdata.get(BlockStairs.HALF) == BlockPropertyHalf.TOP ? BlockStairs.z : BlockStairs.A)[BlockStairs.B[this.i(iblockdata)]];
     }
 
-    private int q(IBlockData iblockdata) {
+    private int i(IBlockData iblockdata) {
         return ((BlockPropertyStairsShape) iblockdata.get(BlockStairs.SHAPE)).ordinal() * 4 + ((EnumDirection) iblockdata.get(BlockStairs.FACING)).get2DRotationValue();
     }
 
@@ -89,11 +89,6 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
     @Override
     public float getDurability() {
         return this.C.getDurability();
-    }
-
-    @Override
-    public TextureType c() {
-        return this.C.c();
     }
 
     @Override
@@ -122,12 +117,12 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        this.C.tick(iblockdata, world, blockposition, random);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        this.C.tick(iblockdata, worldserver, blockposition, random);
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         return this.D.interact(world, entityhuman, enumhand, movingobjectpositionblock);
     }
 
@@ -143,7 +138,7 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockposition);
         IBlockData iblockdata = (IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockStairs.FACING, blockactioncontext.f())).set(BlockStairs.HALF, enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || blockactioncontext.j().y - (double) blockposition.getY() <= 0.5D) ? BlockPropertyHalf.BOTTOM : BlockPropertyHalf.TOP)).set(BlockStairs.d, fluid.getType() == FluidTypes.WATER);
 
-        return (IBlockData) iblockdata.set(BlockStairs.SHAPE, m(iblockdata, blockactioncontext.getWorld(), blockposition));
+        return (IBlockData) iblockdata.set(BlockStairs.SHAPE, n(iblockdata, blockactioncontext.getWorld(), blockposition));
     }
 
     @Override
@@ -152,18 +147,18 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
-        return enumdirection.k().c() ? (IBlockData) iblockdata.set(BlockStairs.SHAPE, m(iblockdata, generatoraccess, blockposition)) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return enumdirection.m().c() ? (IBlockData) iblockdata.set(BlockStairs.SHAPE, n(iblockdata, generatoraccess, blockposition)) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    private static BlockPropertyStairsShape m(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    private static BlockPropertyStairsShape n(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockStairs.FACING);
         IBlockData iblockdata1 = iblockaccess.getType(blockposition.shift(enumdirection));
 
-        if (j(iblockdata1) && iblockdata.get(BlockStairs.HALF) == iblockdata1.get(BlockStairs.HALF)) {
+        if (h(iblockdata1) && iblockdata.get(BlockStairs.HALF) == iblockdata1.get(BlockStairs.HALF)) {
             EnumDirection enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
 
-            if (enumdirection1.k() != ((EnumDirection) iblockdata.get(BlockStairs.FACING)).k() && e(iblockdata, iblockaccess, blockposition, enumdirection1.opposite())) {
-                if (enumdirection1 == enumdirection.f()) {
+            if (enumdirection1.m() != ((EnumDirection) iblockdata.get(BlockStairs.FACING)).m() && e(iblockdata, iblockaccess, blockposition, enumdirection1.opposite())) {
+                if (enumdirection1 == enumdirection.g()) {
                     return BlockPropertyStairsShape.OUTER_LEFT;
                 }
 
@@ -173,11 +168,11 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
 
         IBlockData iblockdata2 = iblockaccess.getType(blockposition.shift(enumdirection.opposite()));
 
-        if (j(iblockdata2) && iblockdata.get(BlockStairs.HALF) == iblockdata2.get(BlockStairs.HALF)) {
+        if (h(iblockdata2) && iblockdata.get(BlockStairs.HALF) == iblockdata2.get(BlockStairs.HALF)) {
             EnumDirection enumdirection2 = (EnumDirection) iblockdata2.get(BlockStairs.FACING);
 
-            if (enumdirection2.k() != ((EnumDirection) iblockdata.get(BlockStairs.FACING)).k() && e(iblockdata, iblockaccess, blockposition, enumdirection2)) {
-                if (enumdirection2 == enumdirection.f()) {
+            if (enumdirection2.m() != ((EnumDirection) iblockdata.get(BlockStairs.FACING)).m() && e(iblockdata, iblockaccess, blockposition, enumdirection2)) {
+                if (enumdirection2 == enumdirection.g()) {
                     return BlockPropertyStairsShape.INNER_LEFT;
                 }
 
@@ -191,10 +186,10 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
     private static boolean e(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         IBlockData iblockdata1 = iblockaccess.getType(blockposition.shift(enumdirection));
 
-        return !j(iblockdata1) || iblockdata1.get(BlockStairs.FACING) != iblockdata.get(BlockStairs.FACING) || iblockdata1.get(BlockStairs.HALF) != iblockdata.get(BlockStairs.HALF);
+        return !h(iblockdata1) || iblockdata1.get(BlockStairs.FACING) != iblockdata.get(BlockStairs.FACING) || iblockdata1.get(BlockStairs.HALF) != iblockdata.get(BlockStairs.HALF);
     }
 
-    public static boolean j(IBlockData iblockdata) {
+    public static boolean h(IBlockData iblockdata) {
         return iblockdata.getBlock() instanceof BlockStairs;
     }
 
@@ -210,7 +205,7 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
 
         switch (enumblockmirror) {
             case LEFT_RIGHT:
-                if (enumdirection.k() == EnumDirection.EnumAxis.Z) {
+                if (enumdirection.m() == EnumDirection.EnumAxis.Z) {
                     switch (blockpropertystairsshape) {
                         case INNER_LEFT:
                             return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_RIGHT);
@@ -226,7 +221,7 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
                 }
                 break;
             case FRONT_BACK:
-                if (enumdirection.k() == EnumDirection.EnumAxis.X) {
+                if (enumdirection.m() == EnumDirection.EnumAxis.X) {
                     switch (blockpropertystairsshape) {
                         case INNER_LEFT:
                             return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_LEFT);
@@ -251,8 +246,8 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public Fluid g(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockStairs.d) ? FluidTypes.WATER.a(false) : super.g(iblockdata);
+    public Fluid a_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockStairs.d) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
     }
 
     @Override

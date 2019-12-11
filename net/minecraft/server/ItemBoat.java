@@ -20,7 +20,7 @@ public class ItemBoat extends Item {
         MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.ANY);
 
         if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
-            return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
+            return InteractionResultWrapper.c(itemstack);
         } else {
             Vec3D vec3d = entityhuman.f(1.0F);
             double d0 = 5.0D;
@@ -32,10 +32,10 @@ public class ItemBoat extends Item {
 
                 while (iterator.hasNext()) {
                     Entity entity = (Entity) iterator.next();
-                    AxisAlignedBB axisalignedbb = entity.getBoundingBox().g((double) entity.aS());
+                    AxisAlignedBB axisalignedbb = entity.getBoundingBox().g((double) entity.aV());
 
                     if (axisalignedbb.c(vec3d1)) {
-                        return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
+                        return InteractionResultWrapper.c(itemstack);
                     }
                 }
             }
@@ -46,21 +46,20 @@ public class ItemBoat extends Item {
                 entityboat.setType(this.b);
                 entityboat.yaw = entityhuman.yaw;
                 if (!world.getCubes(entityboat, entityboat.getBoundingBox().g(-0.1D))) {
-                    return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
+                    return InteractionResultWrapper.d(itemstack);
                 } else {
                     if (!world.isClientSide) {
                         world.addEntity(entityboat);
-                    }
-
-                    if (!entityhuman.abilities.canInstantlyBuild) {
-                        itemstack.subtract(1);
+                        if (!entityhuman.abilities.canInstantlyBuild) {
+                            itemstack.subtract(1);
+                        }
                     }
 
                     entityhuman.b(StatisticList.ITEM_USED.b(this));
-                    return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
+                    return InteractionResultWrapper.a(itemstack);
                 }
             } else {
-                return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
+                return InteractionResultWrapper.c(itemstack);
             }
         }
     }

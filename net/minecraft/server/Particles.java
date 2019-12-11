@@ -60,6 +60,10 @@ public class Particles {
     public static final ParticleType DOLPHIN = a("dolphin", false);
     public static final ParticleType CAMPFIRE_COSY_SMOKE = a("campfire_cosy_smoke", true);
     public static final ParticleType CAMPFIRE_SIGNAL_SMOKE = a("campfire_signal_smoke", true);
+    public static final ParticleType DRIPPING_HONEY = a("dripping_honey", false);
+    public static final ParticleType FALLING_HONEY = a("falling_honey", false);
+    public static final ParticleType LANDING_HONEY = a("landing_honey", false);
+    public static final ParticleType FALLING_NECTAR = a("falling_nectar", false);
 
     private static ParticleType a(String s, boolean flag) {
         return (ParticleType) IRegistry.a(IRegistry.PARTICLE_TYPE, s, (Object) (new ParticleType(flag)));

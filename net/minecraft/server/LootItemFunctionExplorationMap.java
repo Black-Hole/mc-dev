@@ -41,7 +41,7 @@ public class LootItemFunctionExplorationMap extends LootItemFunctionConditional 
             BlockPosition blockposition = (BlockPosition) loottableinfo.getContextParameter(LootContextParameters.POSITION);
 
             if (blockposition != null) {
-                WorldServer worldserver = loottableinfo.d();
+                WorldServer worldserver = loottableinfo.c();
                 BlockPosition blockposition1 = worldserver.a(this.d, blockposition, this.g, this.h);
 
                 if (blockposition1 != null) {
@@ -96,7 +96,7 @@ public class LootItemFunctionExplorationMap extends LootItemFunctionConditional 
         public LootItemFunctionExplorationMap b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
             String s = jsonobject.has("destination") ? ChatDeserializer.h(jsonobject, "destination") : "Buried_Treasure";
 
-            s = WorldGenerator.aP.containsKey(s.toLowerCase(Locale.ROOT)) ? s : "Buried_Treasure";
+            s = WorldGenerator.ao.containsKey(s.toLowerCase(Locale.ROOT)) ? s : "Buried_Treasure";
             String s1 = jsonobject.has("decoration") ? ChatDeserializer.h(jsonobject, "decoration") : "mansion";
             MapIcon.Type mapicon_type = LootItemFunctionExplorationMap.a;
 

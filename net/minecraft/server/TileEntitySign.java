@@ -6,12 +6,9 @@ import javax.annotation.Nullable;
 public class TileEntitySign extends TileEntity {
 
     public final IChatBaseComponent[] lines = new IChatBaseComponent[]{new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")};
-    private int c = -1;
-    private int g = -1;
-    private int h = -1;
     public boolean isEditable = true;
-    private EntityHuman j;
-    private final String[] k = new String[4];
+    private EntityHuman c;
+    private final String[] g = new String[4];
     private EnumColor color;
 
     public TileEntitySign() {
@@ -53,14 +50,14 @@ public class TileEntitySign extends TileEntity {
                 this.lines[i] = ichatbasecomponent;
             }
 
-            this.k[i] = null;
+            this.g[i] = null;
         }
 
     }
 
     public void a(int i, IChatBaseComponent ichatbasecomponent) {
         this.lines[i] = ichatbasecomponent;
-        this.k[i] = null;
+        this.g[i] = null;
     }
 
     @Nullable
@@ -84,11 +81,11 @@ public class TileEntitySign extends TileEntity {
     }
 
     public void a(EntityHuman entityhuman) {
-        this.j = entityhuman;
+        this.c = entityhuman;
     }
 
     public EntityHuman f() {
-        return this.j;
+        return this.c;
     }
 
     public boolean b(EntityHuman entityhuman) {

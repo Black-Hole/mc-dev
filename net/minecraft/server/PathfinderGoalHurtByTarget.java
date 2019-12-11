@@ -20,7 +20,7 @@ public class PathfinderGoalHurtByTarget extends PathfinderGoalTarget {
 
     @Override
     public boolean a() {
-        int i = this.e.ct();
+        int i = this.e.cI();
         EntityLiving entityliving = this.e.getLastDamager();
 
         if (i != this.c && entityliving != null) {
@@ -51,7 +51,7 @@ public class PathfinderGoalHurtByTarget extends PathfinderGoalTarget {
     public void c() {
         this.e.setGoalTarget(this.e.getLastDamager());
         this.g = this.e.getGoalTarget();
-        this.c = this.e.ct();
+        this.c = this.e.cI();
         this.h = 300;
         if (this.b) {
             this.g();
@@ -62,7 +62,7 @@ public class PathfinderGoalHurtByTarget extends PathfinderGoalTarget {
 
     protected void g() {
         double d0 = this.k();
-        List<EntityInsentient> list = this.e.world.b(this.e.getClass(), (new AxisAlignedBB(this.e.locX, this.e.locY, this.e.locZ, this.e.locX + 1.0D, this.e.locY + 1.0D, this.e.locZ + 1.0D)).grow(d0, 10.0D, d0));
+        List<EntityInsentient> list = this.e.world.b(this.e.getClass(), (new AxisAlignedBB(this.e.locX(), this.e.locY(), this.e.locZ(), this.e.locX() + 1.0D, this.e.locY() + 1.0D, this.e.locZ() + 1.0D)).grow(d0, 10.0D, d0));
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {

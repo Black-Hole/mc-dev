@@ -8,7 +8,7 @@ public class BlockEndRod extends BlockDirectional {
 
     protected BlockEndRod(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockEndRod.FACING, EnumDirection.UP));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockEndRod.FACING, EnumDirection.UP));
     }
 
     @Override
@@ -23,7 +23,7 @@ public class BlockEndRod extends BlockDirectional {
 
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        switch (((EnumDirection) iblockdata.get(BlockEndRod.FACING)).k()) {
+        switch (((EnumDirection) iblockdata.get(BlockEndRod.FACING)).m()) {
             case X:
             default:
                 return BlockEndRod.d;
@@ -40,11 +40,6 @@ public class BlockEndRod extends BlockDirectional {
         IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition().shift(enumdirection.opposite()));
 
         return iblockdata.getBlock() == this && iblockdata.get(BlockEndRod.FACING) == enumdirection ? (IBlockData) this.getBlockData().set(BlockEndRod.FACING, enumdirection.opposite()) : (IBlockData) this.getBlockData().set(BlockEndRod.FACING, enumdirection);
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 
     @Override

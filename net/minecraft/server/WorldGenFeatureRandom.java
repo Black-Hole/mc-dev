@@ -15,7 +15,7 @@ public class WorldGenFeatureRandom extends WorldGenerator<WorldGenFeatureRandomC
 
         for (int j = 0; j < i; ++j) {
             int k = random.nextInt(worldgenfeaturerandomconfiguration.a.size());
-            WorldGenFeatureConfigured<?> worldgenfeatureconfigured = (WorldGenFeatureConfigured) worldgenfeaturerandomconfiguration.a.get(k);
+            WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured = (WorldGenFeatureConfigured) worldgenfeaturerandomconfiguration.a.get(k);
 
             worldgenfeatureconfigured.a(generatoraccess, chunkgenerator, random, blockposition);
         }

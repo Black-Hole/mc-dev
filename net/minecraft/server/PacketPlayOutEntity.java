@@ -12,6 +12,7 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
     protected byte f;
     protected boolean g;
     protected boolean h;
+    protected boolean i;
 
     public static long a(double d0) {
         return MathHelper.d(d0 * 4096.0D);
@@ -78,7 +79,9 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
 
     public static class PacketPlayOutRelEntityMove extends PacketPlayOutEntity {
 
-        public PacketPlayOutRelEntityMove() {}
+        public PacketPlayOutRelEntityMove() {
+            this.i = true;
+        }
 
         public PacketPlayOutRelEntityMove(int i, short short0, short short1, short short2, boolean flag) {
             super(i);
@@ -86,6 +89,7 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
             this.c = short1;
             this.d = short2;
             this.g = flag;
+            this.i = true;
         }
 
         @Override
@@ -111,6 +115,7 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
 
         public PacketPlayOutRelEntityMoveLook() {
             this.h = true;
+            this.i = true;
         }
 
         public PacketPlayOutRelEntityMoveLook(int i, short short0, short short1, short short2, byte b0, byte b1, boolean flag) {
@@ -122,6 +127,7 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
             this.f = b1;
             this.g = flag;
             this.h = true;
+            this.i = true;
         }
 
         @Override

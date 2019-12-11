@@ -244,7 +244,7 @@ public class PacketDataSerializer extends ByteBuf {
             this.writeByte(itemstack.getCount());
             NBTTagCompound nbttagcompound = null;
 
-            if (item.usesDurability() || item.m()) {
+            if (item.usesDurability() || item.o()) {
                 nbttagcompound = itemstack.getTag();
             }
 

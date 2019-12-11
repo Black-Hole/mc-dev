@@ -12,23 +12,23 @@ public class BlockChorusFlower extends Block {
     protected BlockChorusFlower(BlockChorusFruit blockchorusfruit, Block.Info block_info) {
         super(block_info);
         this.b = blockchorusfruit;
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChorusFlower.AGE, 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChorusFlower.AGE, 0));
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!iblockdata.canPlace(world, blockposition)) {
-            world.b(blockposition, true);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!iblockdata.canPlace(worldserver, blockposition)) {
+            worldserver.b(blockposition, true);
         } else {
             BlockPosition blockposition1 = blockposition.up();
 
-            if (world.isEmpty(blockposition1) && blockposition1.getY() < 256) {
+            if (worldserver.isEmpty(blockposition1) && blockposition1.getY() < 256) {
                 int i = (Integer) iblockdata.get(BlockChorusFlower.AGE);
 
                 if (i < 5) {
                     boolean flag = false;
                     boolean flag1 = false;
-                    IBlockData iblockdata1 = world.getType(blockposition.down());
+                    IBlockData iblockdata1 = worldserver.getType(blockposition.down());
                     Block block = iblockdata1.getBlock();
                     int j;
 
@@ -38,7 +38,7 @@ public class BlockChorusFlower extends Block {
                         j = 1;
 
                         for (int k = 0; k < 4; ++k) {
-                            Block block1 = world.getType(blockposition.down(j + 1)).getBlock();
+                            Block block1 = worldserver.getType(blockposition.down(j + 1)).getBlock();
 
                             if (block1 != this.b) {
                                 if (block1 == Blocks.END_STONE) {
@@ -57,9 +57,9 @@ public class BlockChorusFlower extends Block {
                         flag = true;
                     }
 
-                    if (flag && b((IWorldReader) world, blockposition1, (EnumDirection) null) && world.isEmpty(blockposition.up(2))) {
-                        world.setTypeAndData(blockposition, this.b.a((IBlockAccess) world, blockposition), 2);
-                        this.b(world, blockposition1, i);
+                    if (flag && b((IWorldReader) worldserver, blockposition1, (EnumDirection) null) && worldserver.isEmpty(blockposition.up(2))) {
+                        worldserver.setTypeAndData(blockposition, this.b.a((IBlockAccess) worldserver, blockposition), 2);
+                        this.b(worldserver, blockposition1, i);
                     } else if (i < 4) {
                         j = random.nextInt(4);
                         if (flag1) {
@@ -72,19 +72,19 @@ public class BlockChorusFlower extends Block {
                             EnumDirection enumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
                             BlockPosition blockposition2 = blockposition.shift(enumdirection);
 
-                            if (world.isEmpty(blockposition2) && world.isEmpty(blockposition2.down()) && b((IWorldReader) world, blockposition2, enumdirection.opposite())) {
-                                this.b(world, blockposition2, i + 1);
+                            if (worldserver.isEmpty(blockposition2) && worldserver.isEmpty(blockposition2.down()) && b((IWorldReader) worldserver, blockposition2, enumdirection.opposite())) {
+                                this.b(worldserver, blockposition2, i + 1);
                                 flag2 = true;
                             }
                         }
 
                         if (flag2) {
-                            world.setTypeAndData(blockposition, this.b.a((IBlockAccess) world, blockposition), 2);
+                            worldserver.setTypeAndData(blockposition, this.b.a((IBlockAccess) worldserver, blockposition), 2);
                         } else {
-                            this.a(world, blockposition);
+                            this.a((World) worldserver, blockposition);
                         }
                     } else {
-                        this.a(world, blockposition);
+                        this.a((World) worldserver, blockposition);
                     }
 
                 }
@@ -162,11 +162,6 @@ public class BlockChorusFlower extends Block {
     }
 
     @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
-    }
-
-    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockChorusFlower.AGE);
     }
@@ -227,7 +222,6 @@ public class BlockChorusFlower extends Block {
     public void a(World world, IBlockData iblockdata, MovingObjectPositionBlock movingobjectpositionblock, Entity entity) {
         BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
 
-        a(world, blockposition, new ItemStack(this));
-        world.b(blockposition, true);
+        world.a(blockposition, true, entity);
     }
 }

@@ -28,7 +28,7 @@ public class ChunkSection {
     }
 
     public Fluid b(int i, int j, int k) {
-        return ((IBlockData) this.blockIds.a(i, j, k)).p();
+        return ((IBlockData) this.blockIds.a(i, j, k)).getFluid();
     }
 
     public void a() {
@@ -52,8 +52,8 @@ public class ChunkSection {
             iblockdata1 = (IBlockData) this.blockIds.b(i, j, k, iblockdata);
         }
 
-        Fluid fluid = iblockdata1.p();
-        Fluid fluid1 = iblockdata.p();
+        Fluid fluid = iblockdata1.getFluid();
+        Fluid fluid1 = iblockdata.getFluid();
 
         if (!iblockdata1.isAir()) {
             --this.nonEmptyBlockCount;
@@ -109,7 +109,7 @@ public class ChunkSection {
         this.tickingBlockCount = 0;
         this.e = 0;
         this.blockIds.a((iblockdata, i) -> {
-            Fluid fluid = iblockdata.p();
+            Fluid fluid = iblockdata.getFluid();
 
             if (!iblockdata.isAir()) {
                 this.nonEmptyBlockCount = (short) (this.nonEmptyBlockCount + i);
@@ -142,6 +142,6 @@ public class ChunkSection {
     }
 
     public boolean a(IBlockData iblockdata) {
-        return this.blockIds.a((Object) iblockdata);
+        return this.blockIds.contains(iblockdata);
     }
 }

@@ -15,14 +15,6 @@ public class BlockPosition2D {
         this.b = blockposition.getZ();
     }
 
-    public long b() {
-        return a(this.a, this.b);
-    }
-
-    public static long a(int i, int j) {
-        return (long) i & 4294967295L | ((long) j & 4294967295L) << 32;
-    }
-
     public String toString() {
         return "[" + this.a + ", " + this.b + "]";
     }

@@ -28,7 +28,7 @@ public abstract class Container {
 
     protected static boolean a(ContainerAccess containeraccess, EntityHuman entityhuman, Block block) {
         return (Boolean) containeraccess.a((world, blockposition) -> {
-            return world.getType(blockposition).getBlock() != block ? false : entityhuman.e((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) <= 64.0D;
+            return world.getType(blockposition).getBlock() != block ? false : entityhuman.g((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) <= 64.0D;
         }, true);
     }
 
@@ -101,7 +101,7 @@ public abstract class Container {
             ItemStack itemstack1 = (ItemStack) this.items.get(i);
 
             if (!ItemStack.matches(itemstack1, itemstack)) {
-                itemstack1 = itemstack.isEmpty() ? ItemStack.a : itemstack.cloneItemStack();
+                itemstack1 = itemstack.cloneItemStack();
                 this.items.set(i, itemstack1);
                 Iterator iterator = this.listeners.iterator();
 

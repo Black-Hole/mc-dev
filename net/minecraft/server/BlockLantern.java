@@ -10,7 +10,7 @@ public class BlockLantern extends Block {
 
     public BlockLantern(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLantern.a, false));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLantern.a, false));
     }
 
     @Nullable
@@ -22,7 +22,7 @@ public class BlockLantern extends Block {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection[j];
 
-            if (enumdirection.k() == EnumDirection.EnumAxis.Y) {
+            if (enumdirection.m() == EnumDirection.EnumAxis.Y) {
                 IBlockData iblockdata = (IBlockData) this.getBlockData().set(BlockLantern.a, enumdirection == EnumDirection.UP);
 
                 if (iblockdata.canPlace(blockactioncontext.getWorld(), blockactioncontext.getClickPosition())) {
@@ -45,18 +45,13 @@ public class BlockLantern extends Block {
     }
 
     @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
-    }
-
-    @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        EnumDirection enumdirection = j(iblockdata).opposite();
+        EnumDirection enumdirection = h(iblockdata).opposite();
 
         return Block.a(iworldreader, blockposition.shift(enumdirection), enumdirection.opposite());
     }
 
-    protected static EnumDirection j(IBlockData iblockdata) {
+    protected static EnumDirection h(IBlockData iblockdata) {
         return (Boolean) iblockdata.get(BlockLantern.a) ? EnumDirection.DOWN : EnumDirection.UP;
     }
 
@@ -67,7 +62,7 @@ public class BlockLantern extends Block {
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        return j(iblockdata).opposite() == enumdirection && !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return h(iblockdata).opposite() == enumdirection && !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     @Override

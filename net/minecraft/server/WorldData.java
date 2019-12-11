@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.hash.Hashing;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.types.JsonOps;
@@ -61,7 +62,7 @@ public class WorldData {
     private final Set<String> Q;
     private final Set<String> R;
     private final Map<DimensionManager, NBTTagCompound> S;
-    private NBTTagCompound T;
+    private NBTTagCompound customBossEvents;
     private int U;
     private int V;
     private UUID W;
@@ -82,7 +83,7 @@ public class WorldData {
         this.X = new GameRules();
         this.Y = new CustomFunctionCallbackTimerQueue<>(CustomFunctionCallbackTimers.a);
         this.p = null;
-        this.q = SharedConstants.a().getWorldVersion();
+        this.q = SharedConstants.getGameVersion().getWorldVersion();
         this.b(new NBTTagCompound());
     }
 
@@ -254,7 +255,7 @@ public class WorldData {
         }
 
         if (nbttagcompound.hasKeyOfType("CustomBossEvents", 10)) {
-            this.T = nbttagcompound.getCompound("CustomBossEvents");
+            this.customBossEvents = nbttagcompound.getCompound("CustomBossEvents");
         }
 
         if (nbttagcompound.hasKeyOfType("ScheduledEvents", 9)) {
@@ -289,7 +290,7 @@ public class WorldData {
         this.X = new GameRules();
         this.Y = new CustomFunctionCallbackTimerQueue<>(CustomFunctionCallbackTimers.a);
         this.p = null;
-        this.q = SharedConstants.a().getWorldVersion();
+        this.q = SharedConstants.getGameVersion().getWorldVersion();
         this.a(worldsettings);
         this.levelName = s;
         this.F = WorldData.a;
@@ -321,11 +322,11 @@ public class WorldData {
     private void a(NBTTagCompound nbttagcompound, NBTTagCompound nbttagcompound1) {
         NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 
-        nbttagcompound2.setString("Name", SharedConstants.a().getName());
-        nbttagcompound2.setInt("Id", SharedConstants.a().getWorldVersion());
-        nbttagcompound2.setBoolean("Snapshot", !SharedConstants.a().isStable());
+        nbttagcompound2.setString("Name", SharedConstants.getGameVersion().getName());
+        nbttagcompound2.setInt("Id", SharedConstants.getGameVersion().getWorldVersion());
+        nbttagcompound2.setBoolean("Snapshot", !SharedConstants.getGameVersion().isStable());
         nbttagcompound.set("Version", nbttagcompound2);
-        nbttagcompound.setInt("DataVersion", SharedConstants.a().getWorldVersion());
+        nbttagcompound.setInt("DataVersion", SharedConstants.getGameVersion().getWorldVersion());
         nbttagcompound.setLong("RandomSeed", this.e);
         nbttagcompound.setString("generatorName", this.f.b());
         nbttagcompound.setInt("generatorVersion", this.f.getVersion());
@@ -392,7 +393,7 @@ public class WorldData {
         while (iterator1.hasNext()) {
             String s = (String) iterator1.next();
 
-            nbttaglist.add(new NBTTagString(s));
+            nbttaglist.add(NBTTagString.a(s));
         }
 
         nbttagcompound4.set("Enabled", nbttaglist);
@@ -402,13 +403,13 @@ public class WorldData {
         while (iterator2.hasNext()) {
             String s1 = (String) iterator2.next();
 
-            nbttaglist1.add(new NBTTagString(s1));
+            nbttaglist1.add(NBTTagString.a(s1));
         }
 
         nbttagcompound4.set("Disabled", nbttaglist1);
         nbttagcompound.set("DataPacks", nbttagcompound4);
-        if (this.T != null) {
-            nbttagcompound.set("CustomBossEvents", this.T);
+        if (this.customBossEvents != null) {
+            nbttagcompound.set("CustomBossEvents", this.customBossEvents);
         }
 
         nbttagcompound.set("ScheduledEvents", this.Y.b());
@@ -422,6 +423,10 @@ public class WorldData {
 
     public long getSeed() {
         return this.e;
+    }
+
+    public static long c(long i) {
+        return Hashing.sha256().hashLong(i).asLong();
     }
 
     public int b() {
@@ -446,9 +451,9 @@ public class WorldData {
 
     private void T() {
         if (!this.r && this.s != null) {
-            if (this.q < SharedConstants.a().getWorldVersion()) {
+            if (this.q < SharedConstants.getGameVersion().getWorldVersion()) {
                 if (this.p == null) {
-                    throw new NullPointerException("Fixer Upper not set inside LevelData, and the player tag is not upgraded.");
+                    throw (NullPointerException) SystemUtils.c(new NullPointerException("Fixer Upper not set inside LevelData, and the player tag is not upgraded."));
                 }
 
                 this.s = GameProfileSerializer.a(this.p, DataFixTypes.PLAYER, this.s, this.q);
@@ -613,7 +618,7 @@ public class WorldData {
         return this.K;
     }
 
-    public void c(long i) {
+    public void d(long i) {
         this.K = i;
     }
 
@@ -749,11 +754,11 @@ public class WorldData {
 
     @Nullable
     public NBTTagCompound getCustomBossEvents() {
-        return this.T;
+        return this.customBossEvents;
     }
 
-    public void c(@Nullable NBTTagCompound nbttagcompound) {
-        this.T = nbttagcompound;
+    public void setCustomBossEvents(@Nullable NBTTagCompound nbttagcompound) {
+        this.customBossEvents = nbttagcompound;
     }
 
     public int Q() {

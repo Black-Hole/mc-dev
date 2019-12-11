@@ -21,10 +21,10 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class PlayerList {
 
-    public static final File a = new File("banned-players.json");
-    public static final File b = new File("banned-ips.json");
-    public static final File c = new File("ops.json");
-    public static final File d = new File("whitelist.json");
+    public static final File b = new File("banned-players.json");
+    public static final File c = new File("banned-ips.json");
+    public static final File d = new File("ops.json");
+    public static final File e = new File("whitelist.json");
     private static final Logger LOGGER = LogManager.getLogger();
     private static final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
     private final MinecraftServer server;
@@ -45,10 +45,10 @@ public abstract class PlayerList {
     private int v;
 
     public PlayerList(MinecraftServer minecraftserver, int i) {
-        this.k = new GameProfileBanList(PlayerList.a);
-        this.l = new IpBanList(PlayerList.b);
-        this.operators = new OpList(PlayerList.c);
-        this.whitelist = new WhiteList(PlayerList.d);
+        this.k = new GameProfileBanList(PlayerList.b);
+        this.l = new IpBanList(PlayerList.c);
+        this.operators = new OpList(PlayerList.d);
+        this.whitelist = new WhiteList(PlayerList.e);
         this.o = Maps.newHashMap();
         this.p = Maps.newHashMap();
         this.server = minecraftserver;
@@ -60,7 +60,7 @@ public abstract class PlayerList {
     public void a(NetworkManager networkmanager, EntityPlayer entityplayer) {
         GameProfile gameprofile = entityplayer.getProfile();
         UserCache usercache = this.server.getUserCache();
-        GameProfile gameprofile1 = usercache.a(gameprofile.getId());
+        GameProfile gameprofile1 = usercache.getProfile(gameprofile.getId());
         String s = gameprofile1 == null ? gameprofile.getName() : gameprofile1.getName();
 
         usercache.a(gameprofile);
@@ -75,13 +75,16 @@ public abstract class PlayerList {
             s1 = networkmanager.getSocketAddress().toString();
         }
 
-        PlayerList.LOGGER.info("{}[{}] logged in with entity id {} at ({}, {}, {})", entityplayer.getDisplayName().getString(), s1, entityplayer.getId(), entityplayer.locX, entityplayer.locY, entityplayer.locZ);
+        PlayerList.LOGGER.info("{}[{}] logged in with entity id {} at ({}, {}, {})", entityplayer.getDisplayName().getString(), s1, entityplayer.getId(), entityplayer.locX(), entityplayer.locY(), entityplayer.locZ());
         WorldData worlddata = worldserver.getWorldData();
 
         this.a(entityplayer, (EntityPlayer) null, worldserver);
         PlayerConnection playerconnection = new PlayerConnection(this.server, networkmanager, entityplayer);
+        GameRules gamerules = worldserver.getGameRules();
+        boolean flag = gamerules.getBoolean(GameRules.DO_IMMEDIATE_RESPAWN);
+        boolean flag1 = gamerules.getBoolean(GameRules.REDUCED_DEBUG_INFO);
 
-        playerconnection.sendPacket(new PacketPlayOutLogin(entityplayer.getId(), entityplayer.playerInteractManager.getGameMode(), worlddata.isHardcore(), worldserver.worldProvider.getDimensionManager(), this.getMaxPlayers(), worlddata.getType(), this.viewDistance, worldserver.getGameRules().getBoolean(GameRules.REDUCED_DEBUG_INFO)));
+        playerconnection.sendPacket(new PacketPlayOutLogin(entityplayer.getId(), entityplayer.playerInteractManager.getGameMode(), WorldData.c(worlddata.getSeed()), worlddata.isHardcore(), worldserver.worldProvider.getDimensionManager(), this.getMaxPlayers(), worlddata.getType(), this.viewDistance, flag1, !flag));
         playerconnection.sendPacket(new PacketPlayOutCustomPayload(PacketPlayOutCustomPayload.a, (new PacketDataSerializer(Unpooled.buffer())).a(this.getServer().getServerModName())));
         playerconnection.sendPacket(new PacketPlayOutServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
         playerconnection.sendPacket(new PacketPlayOutAbilities(entityplayer.abilities));
@@ -102,7 +105,7 @@ public abstract class PlayerList {
         }
 
         this.sendMessage(chatmessage.a(EnumChatFormat.YELLOW));
-        playerconnection.a(entityplayer.locX, entityplayer.locY, entityplayer.locZ, entityplayer.yaw, entityplayer.pitch);
+        playerconnection.a(entityplayer.locX(), entityplayer.locY(), entityplayer.locZ(), entityplayer.yaw, entityplayer.pitch);
         this.players.add(entityplayer);
         this.j.put(entityplayer.getUniqueID(), entityplayer);
         this.sendAll(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, new EntityPlayer[]{entityplayer}));
@@ -410,22 +413,22 @@ public abstract class PlayerList {
                 Vec3D vec3d = (Vec3D) optional.get();
 
                 entityplayer1.setPositionRotation(vec3d.x, vec3d.y, vec3d.z, 0.0F, 0.0F);
-                entityplayer1.setRespawnPosition(blockposition, flag1);
+                entityplayer1.setRespawnPosition(blockposition, flag1, false);
             } else {
                 entityplayer1.playerConnection.sendPacket(new PacketPlayOutGameStateChange(0, 0.0F));
             }
         }
 
-        while (!worldserver.getCubes(entityplayer1) && entityplayer1.locY < 256.0D) {
-            entityplayer1.setPosition(entityplayer1.locX, entityplayer1.locY + 1.0D, entityplayer1.locZ);
+        while (!worldserver.getCubes(entityplayer1) && entityplayer1.locY() < 256.0D) {
+            entityplayer1.setPosition(entityplayer1.locX(), entityplayer1.locY() + 1.0D, entityplayer1.locZ());
         }
 
         WorldData worlddata = entityplayer1.world.getWorldData();
 
-        entityplayer1.playerConnection.sendPacket(new PacketPlayOutRespawn(entityplayer1.dimension, worlddata.getType(), entityplayer1.playerInteractManager.getGameMode()));
+        entityplayer1.playerConnection.sendPacket(new PacketPlayOutRespawn(entityplayer1.dimension, WorldData.c(worlddata.getSeed()), worlddata.getType(), entityplayer1.playerInteractManager.getGameMode()));
         BlockPosition blockposition1 = worldserver.getSpawn();
 
-        entityplayer1.playerConnection.a(entityplayer1.locX, entityplayer1.locY, entityplayer1.locZ, entityplayer1.yaw, entityplayer1.pitch);
+        entityplayer1.playerConnection.a(entityplayer1.locX(), entityplayer1.locY(), entityplayer1.locZ(), entityplayer1.yaw, entityplayer1.pitch);
         entityplayer1.playerConnection.sendPacket(new PacketPlayOutSpawnPosition(blockposition1));
         entityplayer1.playerConnection.sendPacket(new PacketPlayOutServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
         entityplayer1.playerConnection.sendPacket(new PacketPlayOutExperience(entityplayer1.exp, entityplayer1.expTotal, entityplayer1.expLevel));
@@ -441,7 +444,7 @@ public abstract class PlayerList {
 
     public void d(EntityPlayer entityplayer) {
         GameProfile gameprofile = entityplayer.getProfile();
-        int i = this.server.a(gameprofile);
+        int i = this.server.b(gameprofile);
 
         this.a(entityplayer, i);
     }
@@ -569,7 +572,7 @@ public abstract class PlayerList {
     }
 
     public boolean isOp(GameProfile gameprofile) {
-        return this.operators.d(gameprofile) || this.server.b(gameprofile) && this.server.getWorldServer(DimensionManager.OVERWORLD).getWorldData().t() || this.u;
+        return this.operators.d(gameprofile) || this.server.a(gameprofile) && this.server.getWorldServer(DimensionManager.OVERWORLD).getWorldData().t() || this.u;
     }
 
     @Nullable
@@ -594,9 +597,9 @@ public abstract class PlayerList {
             EntityPlayer entityplayer = (EntityPlayer) this.players.get(i);
 
             if (entityplayer != entityhuman && entityplayer.dimension == dimensionmanager) {
-                double d4 = d0 - entityplayer.locX;
-                double d5 = d1 - entityplayer.locY;
-                double d6 = d2 - entityplayer.locZ;
+                double d4 = d0 - entityplayer.locX();
+                double d5 = d1 - entityplayer.locY();
+                double d6 = d2 - entityplayer.locZ();
 
                 if (d4 * d4 + d5 * d5 + d6 * d6 < d3 * d3) {
                     entityplayer.playerConnection.sendPacket(packet);
@@ -641,8 +644,8 @@ public abstract class PlayerList {
         entityplayer.playerConnection.sendPacket(new PacketPlayOutSpawnPosition(blockposition));
         if (worldserver.isRaining()) {
             entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(1, 0.0F));
-            entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(7, worldserver.h(1.0F)));
-            entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(8, worldserver.f(1.0F)));
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(7, worldserver.d(1.0F)));
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(8, worldserver.b(1.0F)));
         }
 
     }
@@ -692,7 +695,7 @@ public abstract class PlayerList {
         return this.server;
     }
 
-    public NBTTagCompound r() {
+    public NBTTagCompound save() {
         return null;
     }
 

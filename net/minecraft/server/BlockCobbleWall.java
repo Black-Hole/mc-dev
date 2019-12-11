@@ -8,19 +8,19 @@ public class BlockCobbleWall extends BlockTall {
 
     public BlockCobbleWall(Block.Info block_info) {
         super(0.0F, 3.0F, 0.0F, 14.0F, 24.0F, block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCobbleWall.UP, true)).set(BlockCobbleWall.NORTH, false)).set(BlockCobbleWall.EAST, false)).set(BlockCobbleWall.SOUTH, false)).set(BlockCobbleWall.WEST, false)).set(BlockCobbleWall.e, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCobbleWall.UP, true)).set(BlockCobbleWall.NORTH, false)).set(BlockCobbleWall.EAST, false)).set(BlockCobbleWall.SOUTH, false)).set(BlockCobbleWall.WEST, false)).set(BlockCobbleWall.e, false));
         this.j = this.a(4.0F, 3.0F, 16.0F, 0.0F, 14.0F);
         this.k = this.a(4.0F, 3.0F, 24.0F, 0.0F, 24.0F);
     }
 
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return (Boolean) iblockdata.get(BlockCobbleWall.UP) ? this.j[this.j(iblockdata)] : super.a(iblockdata, iblockaccess, blockposition, voxelshapecollision);
+        return (Boolean) iblockdata.get(BlockCobbleWall.UP) ? this.j[this.h(iblockdata)] : super.a(iblockdata, iblockaccess, blockposition, voxelshapecollision);
     }
 
     @Override
     public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return (Boolean) iblockdata.get(BlockCobbleWall.UP) ? this.k[this.j(iblockdata)] : super.b(iblockdata, iblockaccess, blockposition, voxelshapecollision);
+        return (Boolean) iblockdata.get(BlockCobbleWall.UP) ? this.k[this.h(iblockdata)] : super.b(iblockdata, iblockaccess, blockposition, voxelshapecollision);
     }
 
     @Override

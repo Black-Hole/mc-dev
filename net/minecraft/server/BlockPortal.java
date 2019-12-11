@@ -12,7 +12,7 @@ public class BlockPortal extends Block {
 
     public BlockPortal(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPortal.AXIS, EnumDirection.EnumAxis.X));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPortal.AXIS, EnumDirection.EnumAxis.X));
     }
 
     @Override
@@ -27,17 +27,17 @@ public class BlockPortal extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (world.worldProvider.isOverworld() && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && random.nextInt(2000) < world.getDifficulty().a()) {
-            while (world.getType(blockposition).getBlock() == this) {
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (worldserver.worldProvider.isOverworld() && worldserver.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && random.nextInt(2000) < worldserver.getDifficulty().a()) {
+            while (worldserver.getType(blockposition).getBlock() == this) {
                 blockposition = blockposition.down();
             }
 
-            if (world.getType(blockposition).a((IBlockAccess) world, blockposition, EntityTypes.ZOMBIE_PIGMAN)) {
-                Entity entity = EntityTypes.ZOMBIE_PIGMAN.spawnCreature(world, (NBTTagCompound) null, (IChatBaseComponent) null, (EntityHuman) null, blockposition.up(), EnumMobSpawn.STRUCTURE, false, false);
+            if (worldserver.getType(blockposition).a((IBlockAccess) worldserver, blockposition, EntityTypes.ZOMBIE_PIGMAN)) {
+                Entity entity = EntityTypes.ZOMBIE_PIGMAN.spawnCreature(worldserver, (NBTTagCompound) null, (IChatBaseComponent) null, (EntityHuman) null, blockposition.up(), EnumMobSpawn.STRUCTURE, false, false);
 
                 if (entity != null) {
-                    entity.portalCooldown = entity.aX();
+                    entity.portalCooldown = entity.ba();
                 }
             }
         }
@@ -70,16 +70,11 @@ public class BlockPortal extends Block {
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
+        EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.m();
         EnumDirection.EnumAxis enumdirection_enumaxis1 = (EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS);
         boolean flag = enumdirection_enumaxis1 != enumdirection_enumaxis && enumdirection_enumaxis.c();
 
         return !flag && iblockdata1.getBlock() != this && !(new BlockPortal.Shape(generatoraccess, blockposition, enumdirection_enumaxis1)).f() ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.TRANSLUCENT;
     }
 
     @Override
@@ -113,7 +108,7 @@ public class BlockPortal extends Block {
         blockstatelist_a.a(BlockPortal.AXIS);
     }
 
-    public ShapeDetector.ShapeDetectorCollection c(GeneratorAccess generatoraccess, BlockPosition blockposition) {
+    public static ShapeDetector.ShapeDetectorCollection c(GeneratorAccess generatoraccess, BlockPosition blockposition) {
         EnumDirection.EnumAxis enumdirection_enumaxis = EnumDirection.EnumAxis.Z;
         BlockPortal.Shape blockportal_shape = new BlockPortal.Shape(generatoraccess, blockposition, EnumDirection.EnumAxis.X);
         LoadingCache<BlockPosition, ShapeDetectorBlock> loadingcache = ShapeDetector.a(generatoraccess, true);
@@ -127,7 +122,7 @@ public class BlockPortal extends Block {
             return new ShapeDetector.ShapeDetectorCollection(blockposition, EnumDirection.NORTH, EnumDirection.UP, loadingcache, 1, 1, 1);
         } else {
             int[] aint = new int[EnumDirection.EnumAxisDirection.values().length];
-            EnumDirection enumdirection = blockportal_shape.c.f();
+            EnumDirection enumdirection = blockportal_shape.c.g();
             BlockPosition blockposition1 = blockportal_shape.position.up(blockportal_shape.a() - 1);
             EnumDirection.EnumAxisDirection[] aenumdirection_enumaxisdirection = EnumDirection.EnumAxisDirection.values();
             int i = aenumdirection_enumaxisdirection.length;
@@ -136,7 +131,7 @@ public class BlockPortal extends Block {
 
             for (j = 0; j < i; ++j) {
                 EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection = aenumdirection_enumaxisdirection[j];
-                ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = new ShapeDetector.ShapeDetectorCollection(enumdirection.c() == enumdirection_enumaxisdirection ? blockposition1 : blockposition1.shift(blockportal_shape.c, blockportal_shape.b() - 1), EnumDirection.a(enumdirection_enumaxisdirection, enumdirection_enumaxis), EnumDirection.UP, loadingcache, blockportal_shape.b(), blockportal_shape.a(), 1);
+                ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = new ShapeDetector.ShapeDetectorCollection(enumdirection.d() == enumdirection_enumaxisdirection ? blockposition1 : blockposition1.shift(blockportal_shape.c, blockportal_shape.b() - 1), EnumDirection.a(enumdirection_enumaxisdirection, enumdirection_enumaxis), EnumDirection.UP, loadingcache, blockportal_shape.b(), blockportal_shape.a(), 1);
 
                 for (int k = 0; k < blockportal_shape.b(); ++k) {
                     for (int l = 0; l < blockportal_shape.a(); ++l) {
@@ -162,7 +157,7 @@ public class BlockPortal extends Block {
                 }
             }
 
-            return new ShapeDetector.ShapeDetectorCollection(enumdirection.c() == enumdirection_enumaxisdirection1 ? blockposition1 : blockposition1.shift(blockportal_shape.c, blockportal_shape.b() - 1), EnumDirection.a(enumdirection_enumaxisdirection1, enumdirection_enumaxis), EnumDirection.UP, loadingcache, blockportal_shape.b(), blockportal_shape.a(), 1);
+            return new ShapeDetector.ShapeDetectorCollection(enumdirection.d() == enumdirection_enumaxisdirection1 ? blockposition1 : blockposition1.shift(blockportal_shape.c, blockportal_shape.b() - 1), EnumDirection.a(enumdirection_enumaxisdirection1, enumdirection_enumaxis), EnumDirection.UP, loadingcache, blockportal_shape.b(), blockportal_shape.a(), 1);
         }
     }
 

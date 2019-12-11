@@ -22,9 +22,4 @@ public class BlockTorch extends Block {
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         return a(iworldreader, blockposition.down(), EnumDirection.UP);
     }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
-    }
 }

@@ -16,7 +16,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
     public EntityLlamaSpit(World world, EntityLlama entityllama) {
         this(EntityTypes.LLAMA_SPIT, world);
         this.shooter = entityllama;
-        this.setPosition(entityllama.locX - (double) (entityllama.getWidth() + 1.0F) * 0.5D * (double) MathHelper.sin(entityllama.aK * 0.017453292F), entityllama.locY + (double) entityllama.getHeadHeight() - 0.10000000149011612D, entityllama.locZ + (double) (entityllama.getWidth() + 1.0F) * 0.5D * (double) MathHelper.cos(entityllama.aK * 0.017453292F));
+        this.setPosition(entityllama.locX() - (double) (entityllama.getWidth() + 1.0F) * 0.5D * (double) MathHelper.sin(entityllama.aI * 0.017453292F), entityllama.getHeadY() - 0.10000000149011612D, entityllama.locZ() + (double) (entityllama.getWidth() + 1.0F) * 0.5D * (double) MathHelper.cos(entityllama.aI * 0.017453292F));
     }
 
     @Override
@@ -35,9 +35,9 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
             this.a(movingobjectposition);
         }
 
-        this.locX += vec3d.x;
-        this.locY += vec3d.y;
-        this.locZ += vec3d.z;
+        double d0 = this.locX() + vec3d.x;
+        double d1 = this.locY() + vec3d.y;
+        double d2 = this.locZ() + vec3d.z;
         float f = MathHelper.sqrt(b(vec3d));
 
         this.yaw = (float) (MathHelper.d(vec3d.x, vec3d.z) * 57.2957763671875D);
@@ -65,7 +65,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
 
         if (!this.world.a(this.getBoundingBox(), Material.AIR)) {
             this.die();
-        } else if (this.av()) {
+        } else if (this.az()) {
             this.die();
         } else {
             this.setMot(vec3d.a(0.9900000095367432D));
@@ -73,7 +73,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
                 this.setMot(this.getMot().add(0.0D, -0.05999999865889549D, 0.0D));
             }
 
-            this.setPosition(this.locX, this.locY, this.locZ);
+            this.setPosition(d0, d1, d2);
         }
     }
 
@@ -144,7 +144,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
     }
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

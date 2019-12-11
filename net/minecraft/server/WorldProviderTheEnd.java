@@ -9,7 +9,7 @@ public class WorldProviderTheEnd extends WorldProvider {
     private final EnderDragonBattle g;
 
     public WorldProviderTheEnd(World world, DimensionManager dimensionmanager) {
-        super(world, dimensionmanager);
+        super(world, dimensionmanager, 0.0F);
         NBTTagCompound nbttagcompound = world.getWorldData().a(DimensionManager.THE_END);
 
         this.g = world instanceof WorldServer ? new EnderDragonBattle((WorldServer) world, nbttagcompound.getCompound("DragonFight")) : null;
@@ -21,8 +21,8 @@ public class WorldProviderTheEnd extends WorldProvider {
 
         generatorsettingsend.a(Blocks.END_STONE.getBlockData());
         generatorsettingsend.b(Blocks.AIR.getBlockData());
-        generatorsettingsend.a(this.d());
-        return ChunkGeneratorType.c.create(this.b, BiomeLayout.d.a(((BiomeLayoutTheEndConfiguration) BiomeLayout.d.a()).a(this.b.getSeed())), generatorsettingsend);
+        generatorsettingsend.a(this.c());
+        return ChunkGeneratorType.c.create(this.b, BiomeLayout.d.a(BiomeLayout.d.a(this.b.getWorldData())), generatorsettingsend);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class WorldProviderTheEnd extends WorldProvider {
     }
 
     @Override
-    public BlockPosition d() {
+    public BlockPosition c() {
         return WorldProviderTheEnd.f;
     }
 
@@ -66,7 +66,7 @@ public class WorldProviderTheEnd extends WorldProvider {
     }
 
     @Override
-    public void k() {
+    public void i() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         if (this.g != null) {
@@ -77,7 +77,7 @@ public class WorldProviderTheEnd extends WorldProvider {
     }
 
     @Override
-    public void l() {
+    public void j() {
         if (this.g != null) {
             this.g.b();
         }
@@ -85,7 +85,7 @@ public class WorldProviderTheEnd extends WorldProvider {
     }
 
     @Nullable
-    public EnderDragonBattle q() {
+    public EnderDragonBattle o() {
         return this.g;
     }
 }

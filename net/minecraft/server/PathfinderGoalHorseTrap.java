@@ -10,7 +10,7 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        return this.a.world.isPlayerNearby(this.a.locX, this.a.locY, this.a.locZ, 10.0D);
+        return this.a.world.isPlayerNearby(this.a.locX(), this.a.locY(), this.a.locZ(), 10.0D);
     }
 
     @Override
@@ -20,7 +20,7 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
         this.a.r(false);
         this.a.setTamed(true);
         this.a.setAgeRaw(0);
-        ((WorldServer) this.a.world).strikeLightning(new EntityLightning(this.a.world, this.a.locX, this.a.locY, this.a.locZ, true));
+        ((WorldServer) this.a.world).strikeLightning(new EntityLightning(this.a.world, this.a.locX(), this.a.locY(), this.a.locZ(), true));
         EntitySkeleton entityskeleton = this.a(difficultydamagescaler, this.a);
 
         entityskeleton.startRiding(this.a);
@@ -30,7 +30,7 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
             EntitySkeleton entityskeleton1 = this.a(difficultydamagescaler, entityhorseabstract);
 
             entityskeleton1.startRiding(entityhorseabstract);
-            entityhorseabstract.f(this.a.getRandom().nextGaussian() * 0.5D, 0.0D, this.a.getRandom().nextGaussian() * 0.5D);
+            entityhorseabstract.h(this.a.getRandom().nextGaussian() * 0.5D, 0.0D, this.a.getRandom().nextGaussian() * 0.5D);
         }
 
     }
@@ -39,7 +39,7 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
         EntityHorseSkeleton entityhorseskeleton = (EntityHorseSkeleton) EntityTypes.SKELETON_HORSE.a(this.a.world);
 
         entityhorseskeleton.prepare(this.a.world, difficultydamagescaler, EnumMobSpawn.TRIGGERED, (GroupDataEntity) null, (NBTTagCompound) null);
-        entityhorseskeleton.setPosition(this.a.locX, this.a.locY, this.a.locZ);
+        entityhorseskeleton.setPosition(this.a.locX(), this.a.locY(), this.a.locZ());
         entityhorseskeleton.noDamageTicks = 60;
         entityhorseskeleton.setPersistent();
         entityhorseskeleton.setTamed(true);
@@ -52,7 +52,7 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
         EntitySkeleton entityskeleton = (EntitySkeleton) EntityTypes.SKELETON.a(entityhorseabstract.world);
 
         entityskeleton.prepare(entityhorseabstract.world, difficultydamagescaler, EnumMobSpawn.TRIGGERED, (GroupDataEntity) null, (NBTTagCompound) null);
-        entityskeleton.setPosition(entityhorseabstract.locX, entityhorseabstract.locY, entityhorseabstract.locZ);
+        entityskeleton.setPosition(entityhorseabstract.locX(), entityhorseabstract.locY(), entityhorseabstract.locZ());
         entityskeleton.noDamageTicks = 60;
         entityskeleton.setPersistent();
         if (entityskeleton.getEquipment(EnumItemSlot.HEAD).isEmpty()) {

@@ -166,7 +166,7 @@ public class CustomFunctionData implements IResourcePackListener {
                 return a(iresourcemanager, minecraftkey);
             }, Resource.a).thenApplyAsync((list1) -> {
                 return CustomFunction.a(minecraftkey1, this, list1);
-            }, this.server.aU()).handle((customfunction, throwable) -> {
+            }, this.server.aW()).handle((customfunction, throwable) -> {
                 return this.a(customfunction, throwable, minecraftkey);
             }));
         }
@@ -176,7 +176,7 @@ public class CustomFunctionData implements IResourcePackListener {
             CustomFunctionData.LOGGER.info("Loaded {} custom command functions", this.g.size());
         }
 
-        this.k.a((Map) this.k.a(iresourcemanager, this.server.aU()).join());
+        this.k.a((Map) this.k.a(iresourcemanager, this.server.aW()).join());
         this.l.addAll(this.k.b(CustomFunctionData.d).a());
         this.m = true;
     }

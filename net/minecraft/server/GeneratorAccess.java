@@ -9,11 +9,11 @@ public interface GeneratorAccess extends IEntityAccess, IWorldReader, VirtualLev
 
     long getSeed();
 
-    default float aa() {
+    default float Y() {
         return WorldProvider.a[this.getWorldProvider().a(this.getWorldData().getDayTime())];
     }
 
-    default float j(float f) {
+    default float f(float f) {
         return this.getWorldProvider().a(this.getWorldData().getDayTime(), f);
     }
 
@@ -53,12 +53,17 @@ public interface GeneratorAccess extends IEntityAccess, IWorldReader, VirtualLev
     }
 
     @Override
-    default Stream<VoxelShape> a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
-        return IEntityAccess.super.a(entity, axisalignedbb, set);
+    default Stream<VoxelShape> b(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
+        return IEntityAccess.super.b(entity, axisalignedbb, set);
     }
 
     @Override
     default boolean a(@Nullable Entity entity, VoxelShape voxelshape) {
         return IEntityAccess.super.a(entity, voxelshape);
+    }
+
+    @Override
+    default BlockPosition getHighestBlockYAt(HeightMap.Type heightmap_type, BlockPosition blockposition) {
+        return IWorldReader.super.getHighestBlockYAt(heightmap_type, blockposition);
     }
 }

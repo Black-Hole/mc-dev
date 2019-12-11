@@ -38,7 +38,13 @@ public class PathfinderGoalDefendVillage extends PathfinderGoalTarget {
             }
         }
 
-        return this.b != null;
+        if (this.b == null) {
+            return false;
+        } else if (this.b instanceof EntityHuman && (this.b.isSpectator() || ((EntityHuman) this.b).isCreative())) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override

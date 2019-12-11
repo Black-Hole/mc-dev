@@ -43,10 +43,10 @@ public abstract class ChunkGeneratorAbstract<T extends GeneratorSettingsDefault>
         this.m = k / this.j;
         this.n = 16 / this.k;
         this.e = new SeededRandom(this.seed);
-        this.o = new NoiseGeneratorOctaves(this.e, 16);
-        this.p = new NoiseGeneratorOctaves(this.e, 16);
-        this.q = new NoiseGeneratorOctaves(this.e, 8);
-        this.r = (NoiseGenerator) (flag ? new NoiseGenerator3(this.e, 4) : new NoiseGeneratorOctaves(this.e, 4));
+        this.o = new NoiseGeneratorOctaves(this.e, 15, 0);
+        this.p = new NoiseGeneratorOctaves(this.e, 15, 0);
+        this.q = new NoiseGeneratorOctaves(this.e, 7, 0);
+        this.r = (NoiseGenerator) (flag ? new NoiseGenerator3(this.e, 3, 0) : new NoiseGeneratorOctaves(this.e, 3, 0));
     }
 
     private double a(int i, int j, int k, double d0, double d1, double d2, double d3) {
@@ -60,11 +60,24 @@ public abstract class ChunkGeneratorAbstract<T extends GeneratorSettingsDefault>
             double d9 = NoiseGeneratorOctaves.a((double) j * d1 * d7);
             double d10 = NoiseGeneratorOctaves.a((double) k * d0 * d7);
             double d11 = d1 * d7;
+            NoiseGeneratorPerlin noisegeneratorperlin = this.o.a(l);
 
-            d4 += this.o.a(l).a(d8, d9, d10, d11, (double) j * d11) / d7;
-            d5 += this.p.a(l).a(d8, d9, d10, d11, (double) j * d11) / d7;
+            if (noisegeneratorperlin != null) {
+                d4 += noisegeneratorperlin.a(d8, d9, d10, d11, (double) j * d11) / d7;
+            }
+
+            NoiseGeneratorPerlin noisegeneratorperlin1 = this.p.a(l);
+
+            if (noisegeneratorperlin1 != null) {
+                d5 += noisegeneratorperlin1.a(d8, d9, d10, d11, (double) j * d11) / d7;
+            }
+
             if (l < 8) {
-                d6 += this.q.a(l).a(NoiseGeneratorOctaves.a((double) i * d2 * d7), NoiseGeneratorOctaves.a((double) j * d3 * d7), NoiseGeneratorOctaves.a((double) k * d2 * d7), d3 * d7, (double) j * d3 * d7) / d7;
+                NoiseGeneratorPerlin noisegeneratorperlin2 = this.q.a(l);
+
+                if (noisegeneratorperlin2 != null) {
+                    d6 += noisegeneratorperlin2.a(NoiseGeneratorOctaves.a((double) i * d2 * d7), NoiseGeneratorOctaves.a((double) j * d3 * d7), NoiseGeneratorOctaves.a((double) k * d2 * d7), d3 * d7, (double) j * d3 * d7) / d7;
+                }
             }
 
             d7 /= 2.0D;
@@ -166,7 +179,7 @@ public abstract class ChunkGeneratorAbstract<T extends GeneratorSettingsDefault>
     }
 
     @Override
-    public void buildBase(IChunkAccess ichunkaccess) {
+    public void buildBase(RegionLimitedWorldAccess regionlimitedworldaccess, IChunkAccess ichunkaccess) {
         ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
         int i = chunkcoordintpair.x;
         int j = chunkcoordintpair.z;
@@ -177,16 +190,16 @@ public abstract class ChunkGeneratorAbstract<T extends GeneratorSettingsDefault>
         int k = chunkcoordintpair1.d();
         int l = chunkcoordintpair1.e();
         double d0 = 0.0625D;
-        BiomeBase[] abiomebase = ichunkaccess.getBiomeIndex();
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
         for (int i1 = 0; i1 < 16; ++i1) {
             for (int j1 = 0; j1 < 16; ++j1) {
                 int k1 = k + i1;
                 int l1 = l + j1;
                 int i2 = ichunkaccess.a(HeightMap.Type.WORLD_SURFACE_WG, i1, j1) + 1;
-                double d1 = this.r.a((double) k1 * 0.0625D, (double) l1 * 0.0625D, 0.0625D, (double) i1 * 0.0625D);
+                double d1 = this.r.a((double) k1 * 0.0625D, (double) l1 * 0.0625D, 0.0625D, (double) i1 * 0.0625D) * 15.0D;
 
-                abiomebase[j1 * 16 + i1].a(seededrandom, ichunkaccess, k1, l1, i2, d1, this.getSettings().r(), this.getSettings().s(), this.getSeaLevel(), this.a.getSeed());
+                regionlimitedworldaccess.getBiome(blockposition_mutableblockposition.d(k + i1, i2, l + j1)).a(seededrandom, ichunkaccess, k1, l1, i2, d1, this.getSettings().r(), this.getSettings().s(), this.getSeaLevel(), this.a.getSeed());
             }
         }
 
@@ -235,7 +248,7 @@ public abstract class ChunkGeneratorAbstract<T extends GeneratorSettingsDefault>
         int k = chunkcoordintpair.z;
         int l = j << 4;
         int i1 = k << 4;
-        Iterator iterator = WorldGenerator.aQ.iterator();
+        Iterator iterator = WorldGenerator.ap.iterator();
 
         while (iterator.hasNext()) {
             StructureGenerator<?> structuregenerator = (StructureGenerator) iterator.next();
@@ -288,8 +301,8 @@ public abstract class ChunkGeneratorAbstract<T extends GeneratorSettingsDefault>
         }
 
         ProtoChunk protochunk = (ProtoChunk) ichunkaccess;
-        HeightMap heightmap = protochunk.b(HeightMap.Type.OCEAN_FLOOR_WG);
-        HeightMap heightmap1 = protochunk.b(HeightMap.Type.WORLD_SURFACE_WG);
+        HeightMap heightmap = protochunk.a(HeightMap.Type.OCEAN_FLOOR_WG);
+        HeightMap heightmap1 = protochunk.a(HeightMap.Type.WORLD_SURFACE_WG);
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
         ObjectListIterator<WorldGenFeaturePillagerOutpostPoolPiece> objectlistiterator = objectlist.iterator();
         ObjectListIterator<WorldGenFeatureDefinedStructureJigsawJunction> objectlistiterator1 = objectlist1.iterator();
@@ -385,7 +398,7 @@ public abstract class ChunkGeneratorAbstract<T extends GeneratorSettingsDefault>
                                 if (iblockdata != ChunkGeneratorAbstract.i) {
                                     if (iblockdata.h() != 0) {
                                         blockposition_mutableblockposition.d(j4, j3, i5);
-                                        protochunk.k(blockposition_mutableblockposition);
+                                        protochunk.j(blockposition_mutableblockposition);
                                     }
 
                                     chunksection.setType(k4, k3, j5, iblockdata, false);

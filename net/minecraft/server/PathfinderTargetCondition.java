@@ -81,7 +81,7 @@ public class PathfinderTargetCondition {
                 if (this.b > 0.0D) {
                     double d0 = this.g ? entityliving1.A(entityliving) : 1.0D;
                     double d1 = this.b * d0;
-                    double d2 = entityliving.e(entityliving1.locX, entityliving1.locY, entityliving1.locZ);
+                    double d2 = entityliving.g(entityliving1.locX(), entityliving1.locY(), entityliving1.locZ());
 
                     if (d2 > d1 * d1) {
                         return false;

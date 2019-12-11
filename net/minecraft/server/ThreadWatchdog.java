@@ -56,7 +56,7 @@ public class ThreadWatchdog implements Runnable {
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Thread Dump");
 
                 crashreportsystemdetails.a("Threads", (Object) stringbuilder);
-                File file = new File(new File(this.b.t(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
+                File file = new File(new File(this.b.y(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
 
                 if (crashreport.a(file)) {
                     ThreadWatchdog.LOGGER.error("This crash report has been saved to: {}", file.getAbsolutePath());

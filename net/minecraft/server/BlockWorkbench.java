@@ -9,10 +9,14 @@ public class BlockWorkbench extends Block {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        entityhuman.openContainer(iblockdata.b(world, blockposition));
-        entityhuman.a(StatisticList.INTERACT_WITH_CRAFTING_TABLE);
-        return true;
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+        if (world.isClientSide) {
+            return EnumInteractionResult.SUCCESS;
+        } else {
+            entityhuman.openContainer(iblockdata.b(world, blockposition));
+            entityhuman.a(StatisticList.INTERACT_WITH_CRAFTING_TABLE);
+            return EnumInteractionResult.SUCCESS;
+        }
     }
 
     @Override

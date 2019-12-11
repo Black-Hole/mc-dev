@@ -42,7 +42,7 @@ public interface IEntityAccess {
         return this.b(oclass, axisalignedbb, IEntitySelector.f);
     }
 
-    default Stream<VoxelShape> a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
+    default Stream<VoxelShape> b(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
         if (axisalignedbb.a() < 1.0E-7D) {
             return Stream.empty();
         } else {
@@ -52,7 +52,7 @@ public interface IEntityAccess {
             }).filter((entity1) -> {
                 return entity == null || !entity.x(entity1);
             }).flatMap((entity1) -> {
-                return Stream.of(entity1.aq(), entity == null ? null : entity.j(entity1));
+                return Stream.of(entity1.au(), entity == null ? null : entity.j(entity1));
             }).filter(Objects::nonNull);
 
             axisalignedbb1.getClass();
@@ -70,7 +70,7 @@ public interface IEntityAccess {
             EntityHuman entityhuman1 = (EntityHuman) iterator.next();
 
             if (predicate == null || predicate.test(entityhuman1)) {
-                double d5 = entityhuman1.e(d0, d1, d2);
+                double d5 = entityhuman1.g(d0, d1, d2);
 
                 if ((d3 < 0.0D || d5 < d3 * d3) && (d4 == -1.0D || d5 < d4)) {
                     d4 = d5;
@@ -84,7 +84,7 @@ public interface IEntityAccess {
 
     @Nullable
     default EntityHuman findNearbyPlayer(Entity entity, double d0) {
-        return this.a(entity.locX, entity.locY, entity.locZ, d0, false);
+        return this.a(entity.locX(), entity.locY(), entity.locZ(), d0, false);
     }
 
     @Nullable
@@ -104,7 +104,7 @@ public interface IEntityAccess {
             EntityHuman entityhuman1 = (EntityHuman) iterator.next();
 
             if (IEntitySelector.f.test(entityhuman1)) {
-                double d4 = entityhuman1.e(d0, entityhuman1.locY, d1);
+                double d4 = entityhuman1.g(d0, entityhuman1.locY(), d1);
 
                 if ((d2 < 0.0D || d4 < d2 * d2) && (d3 == -1.0D || d4 < d3)) {
                     d3 = d4;
@@ -134,7 +134,7 @@ public interface IEntityAccess {
                 } while (!IEntitySelector.f.test(entityhuman));
             } while (!IEntitySelector.b.test(entityhuman));
 
-            d4 = entityhuman.e(d0, d1, d2);
+            d4 = entityhuman.g(d0, d1, d2);
         } while (d3 >= 0.0D && d4 >= d3 * d3);
 
         return true;
@@ -142,7 +142,7 @@ public interface IEntityAccess {
 
     @Nullable
     default EntityHuman a(PathfinderTargetCondition pathfindertargetcondition, EntityLiving entityliving) {
-        return (EntityHuman) this.a(this.getPlayers(), pathfindertargetcondition, entityliving, entityliving.locX, entityliving.locY, entityliving.locZ);
+        return (EntityHuman) this.a(this.getPlayers(), pathfindertargetcondition, entityliving, entityliving.locX(), entityliving.locY(), entityliving.locZ());
     }
 
     @Nullable
@@ -175,7 +175,7 @@ public interface IEntityAccess {
             T t1 = (EntityLiving) iterator.next();
 
             if (pathfindertargetcondition.a(entityliving, t1)) {
-                double d4 = t1.e(d0, d1, d2);
+                double d4 = t1.g(d0, d1, d2);
 
                 if (d3 == -1.0D || d4 < d3) {
                     d3 = d4;
@@ -194,7 +194,7 @@ public interface IEntityAccess {
         while (iterator.hasNext()) {
             EntityHuman entityhuman = (EntityHuman) iterator.next();
 
-            if (axisalignedbb.e(entityhuman.locX, entityhuman.locY, entityhuman.locZ) && pathfindertargetcondition.a(entityliving, entityhuman)) {
+            if (axisalignedbb.e(entityhuman.locX(), entityhuman.locY(), entityhuman.locZ()) && pathfindertargetcondition.a(entityliving, entityhuman)) {
                 list.add(entityhuman);
             }
         }

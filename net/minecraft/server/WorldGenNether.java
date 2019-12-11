@@ -15,23 +15,13 @@ public class WorldGenNether extends StructureGenerator<WorldGenFeatureEmptyConfi
     }
 
     @Override
-    public boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
+    public boolean a(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, Random random, int i, int j, BiomeBase biomebase) {
         int k = i >> 4;
         int l = j >> 4;
 
         random.setSeed((long) (k ^ l << 4) ^ chunkgenerator.getSeed());
         random.nextInt();
-        if (random.nextInt(3) != 0) {
-            return false;
-        } else if (i != (k << 4) + 4 + random.nextInt(8)) {
-            return false;
-        } else if (j != (l << 4) + 4 + random.nextInt(8)) {
-            return false;
-        } else {
-            BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9));
-
-            return chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.NETHER_BRIDGE);
-        }
+        return random.nextInt(3) != 0 ? false : (i != (k << 4) + 4 + random.nextInt(8) ? false : (j != (l << 4) + 4 + random.nextInt(8) ? false : chunkgenerator.canSpawnStructure(biomebase, this)));
     }
 
     @Override
@@ -56,8 +46,8 @@ public class WorldGenNether extends StructureGenerator<WorldGenFeatureEmptyConfi
 
     public static class a extends StructureStart {
 
-        public a(StructureGenerator<?> structuregenerator, int i, int j, BiomeBase biomebase, StructureBoundingBox structureboundingbox, int k, long l) {
-            super(structuregenerator, i, j, biomebase, structureboundingbox, k, l);
+        public a(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+            super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
         @Override

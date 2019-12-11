@@ -7,23 +7,23 @@ import java.util.function.Function;
 public class WorldGenFossils extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     private static final MinecraftKey a = new MinecraftKey("fossil/spine_1");
-    private static final MinecraftKey aS = new MinecraftKey("fossil/spine_2");
-    private static final MinecraftKey aT = new MinecraftKey("fossil/spine_3");
-    private static final MinecraftKey aU = new MinecraftKey("fossil/spine_4");
-    private static final MinecraftKey aV = new MinecraftKey("fossil/spine_1_coal");
-    private static final MinecraftKey aW = new MinecraftKey("fossil/spine_2_coal");
-    private static final MinecraftKey aX = new MinecraftKey("fossil/spine_3_coal");
-    private static final MinecraftKey aY = new MinecraftKey("fossil/spine_4_coal");
-    private static final MinecraftKey aZ = new MinecraftKey("fossil/skull_1");
-    private static final MinecraftKey ba = new MinecraftKey("fossil/skull_2");
-    private static final MinecraftKey bb = new MinecraftKey("fossil/skull_3");
-    private static final MinecraftKey bc = new MinecraftKey("fossil/skull_4");
-    private static final MinecraftKey bd = new MinecraftKey("fossil/skull_1_coal");
-    private static final MinecraftKey be = new MinecraftKey("fossil/skull_2_coal");
-    private static final MinecraftKey bf = new MinecraftKey("fossil/skull_3_coal");
-    private static final MinecraftKey bg = new MinecraftKey("fossil/skull_4_coal");
-    private static final MinecraftKey[] bh = new MinecraftKey[]{WorldGenFossils.a, WorldGenFossils.aS, WorldGenFossils.aT, WorldGenFossils.aU, WorldGenFossils.aZ, WorldGenFossils.ba, WorldGenFossils.bb, WorldGenFossils.bc};
-    private static final MinecraftKey[] bi = new MinecraftKey[]{WorldGenFossils.aV, WorldGenFossils.aW, WorldGenFossils.aX, WorldGenFossils.aY, WorldGenFossils.bd, WorldGenFossils.be, WorldGenFossils.bf, WorldGenFossils.bg};
+    private static final MinecraftKey aq = new MinecraftKey("fossil/spine_2");
+    private static final MinecraftKey ar = new MinecraftKey("fossil/spine_3");
+    private static final MinecraftKey as = new MinecraftKey("fossil/spine_4");
+    private static final MinecraftKey at = new MinecraftKey("fossil/spine_1_coal");
+    private static final MinecraftKey au = new MinecraftKey("fossil/spine_2_coal");
+    private static final MinecraftKey av = new MinecraftKey("fossil/spine_3_coal");
+    private static final MinecraftKey aw = new MinecraftKey("fossil/spine_4_coal");
+    private static final MinecraftKey ax = new MinecraftKey("fossil/skull_1");
+    private static final MinecraftKey ay = new MinecraftKey("fossil/skull_2");
+    private static final MinecraftKey az = new MinecraftKey("fossil/skull_3");
+    private static final MinecraftKey aA = new MinecraftKey("fossil/skull_4");
+    private static final MinecraftKey aB = new MinecraftKey("fossil/skull_1_coal");
+    private static final MinecraftKey aC = new MinecraftKey("fossil/skull_2_coal");
+    private static final MinecraftKey aD = new MinecraftKey("fossil/skull_3_coal");
+    private static final MinecraftKey aE = new MinecraftKey("fossil/skull_4_coal");
+    private static final MinecraftKey[] aF = new MinecraftKey[]{WorldGenFossils.a, WorldGenFossils.aq, WorldGenFossils.ar, WorldGenFossils.as, WorldGenFossils.ax, WorldGenFossils.ay, WorldGenFossils.az, WorldGenFossils.aA};
+    private static final MinecraftKey[] aG = new MinecraftKey[]{WorldGenFossils.at, WorldGenFossils.au, WorldGenFossils.av, WorldGenFossils.aw, WorldGenFossils.aB, WorldGenFossils.aC, WorldGenFossils.aD, WorldGenFossils.aE};
 
     public WorldGenFossils(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
         super(function);
@@ -33,10 +33,10 @@ public class WorldGenFossils extends WorldGenerator<WorldGenFeatureEmptyConfigur
         Random random1 = generatoraccess.getRandom();
         EnumBlockRotation[] aenumblockrotation = EnumBlockRotation.values();
         EnumBlockRotation enumblockrotation = aenumblockrotation[random1.nextInt(aenumblockrotation.length)];
-        int i = random1.nextInt(WorldGenFossils.bh.length);
+        int i = random1.nextInt(WorldGenFossils.aF.length);
         DefinedStructureManager definedstructuremanager = ((WorldServer) generatoraccess.getMinecraftWorld()).getDataManager().f();
-        DefinedStructure definedstructure = definedstructuremanager.a(WorldGenFossils.bh[i]);
-        DefinedStructure definedstructure1 = definedstructuremanager.a(WorldGenFossils.bi[i]);
+        DefinedStructure definedstructure = definedstructuremanager.a(WorldGenFossils.aF[i]);
+        DefinedStructure definedstructure1 = definedstructuremanager.a(WorldGenFossils.aG[i]);
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition);
         StructureBoundingBox structureboundingbox = new StructureBoundingBox(chunkcoordintpair.d(), 0, chunkcoordintpair.e(), chunkcoordintpair.f(), 256, chunkcoordintpair.g());
         DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(enumblockrotation).a(structureboundingbox).a(random1).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.c);

@@ -18,7 +18,7 @@ public class BlockComposter extends Block implements IInventoryHolder {
         avoxelshape[8] = avoxelshape[7];
     });
 
-    public static void d() {
+    public static void c() {
         BlockComposter.b.defaultReturnValue(-1.0F);
         float f = 0.3F;
         float f1 = 0.5F;
@@ -102,7 +102,7 @@ public class BlockComposter extends Block implements IInventoryHolder {
 
     public BlockComposter(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockComposter.a, 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockComposter.a, 0));
     }
 
     @Override
@@ -111,7 +111,7 @@ public class BlockComposter extends Block implements IInventoryHolder {
     }
 
     @Override
-    public VoxelShape i(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockComposter.c;
     }
 
@@ -129,7 +129,7 @@ public class BlockComposter extends Block implements IInventoryHolder {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         int i = (Integer) iblockdata.get(BlockComposter.a);
         ItemStack itemstack = entityhuman.b(enumhand);
 
@@ -143,7 +143,7 @@ public class BlockComposter extends Block implements IInventoryHolder {
                 }
             }
 
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else if (i == 8) {
             if (!world.isClientSide) {
                 float f = 0.7F;
@@ -158,9 +158,9 @@ public class BlockComposter extends Block implements IInventoryHolder {
 
             d(iblockdata, (GeneratorAccess) world, blockposition);
             world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_COMPOSTER_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
-            return false;
+            return EnumInteractionResult.PASS;
         }
     }
 
@@ -187,13 +187,13 @@ public class BlockComposter extends Block implements IInventoryHolder {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if ((Integer) iblockdata.get(BlockComposter.a) == 7) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.a((IBlockState) BlockComposter.a), 3);
-            world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_COMPOSTER_READY, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.a((IBlockState) BlockComposter.a), 3);
+            worldserver.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_COMPOSTER_READY, SoundCategory.BLOCKS, 1.0F, 1.0F);
         }
 
-        super.tick(iblockdata, world, blockposition, random);
+        super.tick(iblockdata, worldserver, blockposition, random);
     }
 
     @Override

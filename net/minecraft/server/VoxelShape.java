@@ -30,7 +30,7 @@ public abstract class VoxelShape {
 
     public AxisAlignedBB getBoundingBox() {
         if (this.isEmpty()) {
-            throw new UnsupportedOperationException("No bounds for empty shape.");
+            throw (UnsupportedOperationException) SystemUtils.c(new UnsupportedOperationException("No bounds for empty shape."));
         } else {
             return new AxisAlignedBB(this.b(EnumDirection.EnumAxis.X), this.b(EnumDirection.EnumAxis.Y), this.b(EnumDirection.EnumAxis.Z), this.c(EnumDirection.EnumAxis.X), this.c(EnumDirection.EnumAxis.Y), this.c(EnumDirection.EnumAxis.Z));
         }
@@ -127,8 +127,8 @@ public abstract class VoxelShape {
     }
 
     private VoxelShape b(EnumDirection enumdirection) {
-        EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
-        EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection = enumdirection.c();
+        EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.m();
+        EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection = enumdirection.d();
         DoubleList doublelist = this.a(enumdirection_enumaxis);
 
         if (doublelist.size() == 2 && DoubleMath.fuzzyEquals(doublelist.getDouble(0), 0.0D, 1.0E-7D) && DoubleMath.fuzzyEquals(doublelist.getDouble(1), 1.0D, 1.0E-7D)) {

@@ -16,11 +16,11 @@ public class WorldGenDecoratorSolidTopHeight extends WorldGenDecorator<WorldGenD
         int i = random.nextInt(worldgendecoratorrangeconfiguration.b - worldgendecoratorrangeconfiguration.a) + worldgendecoratorrangeconfiguration.a;
 
         return IntStream.range(0, i).mapToObj((j) -> {
-            int k = random.nextInt(16);
-            int l = random.nextInt(16);
-            int i1 = generatoraccess.a(HeightMap.Type.OCEAN_FLOOR_WG, blockposition.getX() + k, blockposition.getZ() + l);
+            int k = random.nextInt(16) + blockposition.getX();
+            int l = random.nextInt(16) + blockposition.getZ();
+            int i1 = generatoraccess.a(HeightMap.Type.OCEAN_FLOOR_WG, k, l);
 
-            return new BlockPosition(blockposition.getX() + k, i1, blockposition.getZ() + l);
+            return new BlockPosition(k, i1, l);
         });
     }
 }

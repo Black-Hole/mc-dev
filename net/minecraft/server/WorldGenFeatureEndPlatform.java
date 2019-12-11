@@ -7,7 +7,7 @@ import java.util.function.Function;
 public class WorldGenFeatureEndPlatform extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     private static final BlockPosition a = new BlockPosition(8, 3, 8);
-    private static final ChunkCoordIntPair aS = new ChunkCoordIntPair(WorldGenFeatureEndPlatform.a);
+    private static final ChunkCoordIntPair aq = new ChunkCoordIntPair(WorldGenFeatureEndPlatform.a);
 
     public WorldGenFeatureEndPlatform(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
         super(function);
@@ -20,7 +20,7 @@ public class WorldGenFeatureEndPlatform extends WorldGenerator<WorldGenFeatureEm
     public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition);
 
-        if (a(chunkcoordintpair.x, chunkcoordintpair.z, WorldGenFeatureEndPlatform.aS.x, WorldGenFeatureEndPlatform.aS.z) > 1) {
+        if (a(chunkcoordintpair.x, chunkcoordintpair.z, WorldGenFeatureEndPlatform.aq.x, WorldGenFeatureEndPlatform.aq.z) > 1) {
             return true;
         } else {
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();

@@ -17,11 +17,11 @@ public class WorldGenSurfaceMesaBryce extends WorldGenSurfaceMesa {
     @Override
     public void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, long i1, WorldGenSurfaceConfigurationBase worldgensurfaceconfigurationbase) {
         double d1 = 0.0D;
-        double d2 = Math.min(Math.abs(d0), this.c.a((double) i * 0.25D, (double) j * 0.25D));
+        double d2 = Math.min(Math.abs(d0), this.c.a((double) i * 0.25D, (double) j * 0.25D, false) * 15.0D);
 
         if (d2 > 0.0D) {
             double d3 = 0.001953125D;
-            double d4 = Math.abs(this.d.a((double) i * 0.001953125D, (double) j * 0.001953125D));
+            double d4 = Math.abs(this.d.a((double) i * 0.001953125D, (double) j * 0.001953125D, false));
 
             d1 = d2 * d2 * 2.5D;
             double d5 = Math.ceil(d4 * 50.0D) + 14.0D;
@@ -36,7 +36,7 @@ public class WorldGenSurfaceMesaBryce extends WorldGenSurfaceMesa {
         int j1 = i & 15;
         int k1 = j & 15;
         IBlockData iblockdata2 = WorldGenSurfaceMesaBryce.S;
-        IBlockData iblockdata3 = biomebase.q().b();
+        IBlockData iblockdata3 = biomebase.s().b();
         int l1 = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
         boolean flag = Math.cos(d0 / 3.0D * 3.141592653589793D) > 0.0D;
         int i2 = -1;
@@ -61,7 +61,7 @@ public class WorldGenSurfaceMesaBryce extends WorldGenSurfaceMesa {
                         iblockdata3 = iblockdata;
                     } else if (j2 >= l - 4 && j2 <= l + 1) {
                         iblockdata2 = WorldGenSurfaceMesaBryce.S;
-                        iblockdata3 = biomebase.q().b();
+                        iblockdata3 = biomebase.s().b();
                     }
 
                     if (j2 < l && (iblockdata2 == null || iblockdata2.isAir())) {
@@ -85,7 +85,7 @@ public class WorldGenSurfaceMesaBryce extends WorldGenSurfaceMesa {
 
                             ichunkaccess.setType(blockposition_mutableblockposition, iblockdata5, false);
                         } else {
-                            ichunkaccess.setType(blockposition_mutableblockposition, biomebase.q().a(), false);
+                            ichunkaccess.setType(blockposition_mutableblockposition, biomebase.s().a(), false);
                             flag1 = true;
                         }
                     } else {

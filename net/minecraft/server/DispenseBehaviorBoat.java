@@ -32,7 +32,7 @@ public class DispenseBehaviorBoat extends DispenseBehaviorItem {
         EntityBoat entityboat = new EntityBoat(world, d0, d1 + d3, d2);
 
         entityboat.setType(this.c);
-        entityboat.yaw = enumdirection.l();
+        entityboat.yaw = enumdirection.n();
         world.addEntity(entityboat);
         itemstack.subtract(1);
         return itemstack;

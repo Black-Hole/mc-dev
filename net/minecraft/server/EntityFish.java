@@ -38,7 +38,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
     }
 
     @Override
-    public int dC() {
+    public int getMaxSpawnGroup() {
         return 8;
     }
 
@@ -87,7 +87,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
     @Override
     public void e(Vec3D vec3d) {
-        if (this.df() && this.isInWater()) {
+        if (this.doAITick() && this.isInWater()) {
             this.a(0.01F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.9D));
@@ -102,11 +102,11 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
     @Override
     public void movementTick() {
-        if (!this.isInWater() && this.onGround && this.y) {
+        if (!this.isInWater() && this.onGround && this.v) {
             this.setMot(this.getMot().add((double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F), 0.4000000059604645D, (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F)));
             this.onGround = false;
             this.impulse = true;
-            this.a(this.getSoundFlop(), this.getSoundVolume(), this.cV());
+            this.a(this.getSoundFlop(), this.getSoundVolume(), this.dn());
         }
 
         super.movementTick();
@@ -148,7 +148,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
     protected abstract ItemStack l();
 
-    protected boolean dV() {
+    protected boolean eq() {
         return true;
     }
 
@@ -174,21 +174,21 @@ public abstract class EntityFish extends EntityWaterAnimal {
                 this.i.setMot(this.i.getMot().add(0.0D, 0.005D, 0.0D));
             }
 
-            if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().n()) {
-                double d0 = this.b - this.i.locX;
-                double d1 = this.c - this.i.locY;
-                double d2 = this.d - this.i.locZ;
+            if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().m()) {
+                double d0 = this.b - this.i.locX();
+                double d1 = this.c - this.i.locY();
+                double d2 = this.d - this.i.locZ();
                 double d3 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
 
                 d1 /= d3;
                 float f = (float) (MathHelper.d(d2, d0) * 57.2957763671875D) - 90.0F;
 
                 this.i.yaw = this.a(this.i.yaw, f, 90.0F);
-                this.i.aK = this.i.yaw;
+                this.i.aI = this.i.yaw;
                 float f1 = (float) (this.e * this.i.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
 
-                this.i.o(MathHelper.g(0.125F, this.i.db(), f1));
-                this.i.setMot(this.i.getMot().add(0.0D, (double) this.i.db() * d1 * 0.1D, 0.0D));
+                this.i.o(MathHelper.g(0.125F, this.i.dt(), f1));
+                this.i.setMot(this.i.getMot().add(0.0D, (double) this.i.dt() * d1 * 0.1D, 0.0D));
             } else {
                 this.i.o(0.0F);
             }
@@ -206,7 +206,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
         @Override
         public boolean a() {
-            return this.h.dV() && super.a();
+            return this.h.eq() && super.a();
         }
     }
 }

@@ -40,9 +40,9 @@ public class EntityExperienceOrb extends Entity {
             --this.d;
         }
 
-        this.lastX = this.locX;
-        this.lastY = this.locY;
-        this.lastZ = this.locZ;
+        this.lastX = this.locX();
+        this.lastY = this.locY();
+        this.lastZ = this.locZ();
         if (this.a(TagsFluid.WATER)) {
             this.k();
         } else if (!this.isNoGravity()) {
@@ -54,8 +54,8 @@ public class EntityExperienceOrb extends Entity {
             this.a(SoundEffects.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
         }
 
-        if (!this.world.c(this.getBoundingBox())) {
-            this.i(this.locX, (this.getBoundingBox().minY + this.getBoundingBox().maxY) / 2.0D, this.locZ);
+        if (!this.world.a(this.getBoundingBox())) {
+            this.k(this.locX(), (this.getBoundingBox().minY + this.getBoundingBox().maxY) / 2.0D, this.locZ());
         }
 
         double d0 = 8.0D;
@@ -73,7 +73,7 @@ public class EntityExperienceOrb extends Entity {
         }
 
         if (this.targetPlayer != null) {
-            Vec3D vec3d = new Vec3D(this.targetPlayer.locX - this.locX, this.targetPlayer.locY + (double) this.targetPlayer.getHeadHeight() / 2.0D - this.locY, this.targetPlayer.locZ - this.locZ);
+            Vec3D vec3d = new Vec3D(this.targetPlayer.locX() - this.locX(), this.targetPlayer.locY() + (double) this.targetPlayer.getHeadHeight() / 2.0D - this.locY(), this.targetPlayer.locZ() - this.locZ());
             double d1 = vec3d.g();
 
             if (d1 < 64.0D) {
@@ -87,7 +87,7 @@ public class EntityExperienceOrb extends Entity {
         float f = 0.98F;
 
         if (this.onGround) {
-            f = this.world.getType(new BlockPosition(this.locX, this.getBoundingBox().minY - 1.0D, this.locZ)).getBlock().m() * 0.98F;
+            f = this.world.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().l() * 0.98F;
         }
 
         this.setMot(this.getMot().d((double) f, 0.98D, (double) f));
@@ -110,7 +110,7 @@ public class EntityExperienceOrb extends Entity {
     }
 
     @Override
-    protected void az() {}
+    protected void aD() {}
 
     @Override
     protected void burn(int i) {
@@ -149,8 +149,8 @@ public class EntityExperienceOrb extends Entity {
     @Override
     public void pickup(EntityHuman entityhuman) {
         if (!this.world.isClientSide) {
-            if (this.d == 0 && entityhuman.bF == 0) {
-                entityhuman.bF = 2;
+            if (this.d == 0 && entityhuman.bC == 0) {
+                entityhuman.bC = 2;
                 entityhuman.receive(this, 1);
                 Entry<EnumItemSlot, ItemStack> entry = EnchantmentManager.b(Enchantments.MENDING, (EntityLiving) entityhuman);
 
@@ -192,12 +192,12 @@ public class EntityExperienceOrb extends Entity {
     }
 
     @Override
-    public boolean bs() {
+    public boolean bA() {
         return false;
     }
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         return new PacketPlayOutSpawnEntityExperienceOrb(this);
     }
 }

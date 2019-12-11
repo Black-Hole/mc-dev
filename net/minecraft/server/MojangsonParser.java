@@ -68,7 +68,7 @@ public class MojangsonParser {
         int i = this.n.getCursor();
 
         if (StringReader.isQuotedStringStart(this.n.peek())) {
-            return new NBTTagString(this.n.readQuotedString());
+            return NBTTagString.a(this.n.readQuotedString());
         } else {
             String s = this.n.readUnquotedString();
 
@@ -84,45 +84,45 @@ public class MojangsonParser {
     public NBTBase parseLiteral(String s) {
         try {
             if (MojangsonParser.i.matcher(s).matches()) {
-                return new NBTTagFloat(Float.parseFloat(s.substring(0, s.length() - 1)));
+                return NBTTagFloat.a(Float.parseFloat(s.substring(0, s.length() - 1)));
             }
 
             if (MojangsonParser.j.matcher(s).matches()) {
-                return new NBTTagByte(Byte.parseByte(s.substring(0, s.length() - 1)));
+                return NBTTagByte.a(Byte.parseByte(s.substring(0, s.length() - 1)));
             }
 
             if (MojangsonParser.k.matcher(s).matches()) {
-                return new NBTTagLong(Long.parseLong(s.substring(0, s.length() - 1)));
+                return NBTTagLong.a(Long.parseLong(s.substring(0, s.length() - 1)));
             }
 
             if (MojangsonParser.l.matcher(s).matches()) {
-                return new NBTTagShort(Short.parseShort(s.substring(0, s.length() - 1)));
+                return NBTTagShort.a(Short.parseShort(s.substring(0, s.length() - 1)));
             }
 
             if (MojangsonParser.m.matcher(s).matches()) {
-                return new NBTTagInt(Integer.parseInt(s));
+                return NBTTagInt.a(Integer.parseInt(s));
             }
 
             if (MojangsonParser.h.matcher(s).matches()) {
-                return new NBTTagDouble(Double.parseDouble(s.substring(0, s.length() - 1)));
+                return NBTTagDouble.a(Double.parseDouble(s.substring(0, s.length() - 1)));
             }
 
             if (MojangsonParser.g.matcher(s).matches()) {
-                return new NBTTagDouble(Double.parseDouble(s));
+                return NBTTagDouble.a(Double.parseDouble(s));
             }
 
             if ("true".equalsIgnoreCase(s)) {
-                return new NBTTagByte((byte) 1);
+                return NBTTagByte.c;
             }
 
             if ("false".equalsIgnoreCase(s)) {
-                return new NBTTagByte((byte) 0);
+                return NBTTagByte.b;
             }
         } catch (NumberFormatException numberformatexception) {
             ;
         }
 
-        return new NBTTagString(s);
+        return NBTTagString.a(s);
     }
 
     public NBTBase d() throws CommandSyntaxException {
@@ -177,18 +177,18 @@ public class MojangsonParser {
             throw MojangsonParser.c.createWithContext(this.n);
         } else {
             NBTTagList nbttaglist = new NBTTagList();
-            byte b0 = -1;
+            NBTTagType nbttagtype = null;
 
             while (this.n.peek() != ']') {
                 int i = this.n.getCursor();
                 NBTBase nbtbase = this.d();
-                byte b1 = nbtbase.getTypeId();
+                NBTTagType<?> nbttagtype1 = nbtbase.b();
 
-                if (b0 < 0) {
-                    b0 = b1;
-                } else if (b1 != b0) {
+                if (nbttagtype == null) {
+                    nbttagtype = nbttagtype1;
+                } else if (nbttagtype1 != nbttagtype) {
                     this.n.setCursor(i);
-                    throw MojangsonParser.d.createWithContext(this.n, NBTBase.l(b1), NBTBase.l(b0));
+                    throw MojangsonParser.d.createWithContext(this.n, nbttagtype1.b(), nbttagtype.b());
                 }
 
                 nbttaglist.add(nbtbase);
@@ -216,34 +216,34 @@ public class MojangsonParser {
         if (!this.n.canRead()) {
             throw MojangsonParser.c.createWithContext(this.n);
         } else if (c0 == 'B') {
-            return new NBTTagByteArray(this.a((byte) 7, (byte) 1));
+            return new NBTTagByteArray(this.a(NBTTagByteArray.a, NBTTagByte.a));
         } else if (c0 == 'L') {
-            return new NBTTagLongArray(this.a((byte) 12, (byte) 4));
+            return new NBTTagLongArray(this.a(NBTTagLongArray.a, NBTTagLong.a));
         } else if (c0 == 'I') {
-            return new NBTTagIntArray(this.a((byte) 11, (byte) 3));
+            return new NBTTagIntArray(this.a(NBTTagIntArray.a, NBTTagInt.a));
         } else {
             this.n.setCursor(i);
             throw MojangsonParser.f.createWithContext(this.n, String.valueOf(c0));
         }
     }
 
-    private <T extends Number> List<T> a(byte b0, byte b1) throws CommandSyntaxException {
+    private <T extends Number> List<T> a(NBTTagType<?> nbttagtype, NBTTagType<?> nbttagtype1) throws CommandSyntaxException {
         ArrayList arraylist = Lists.newArrayList();
 
         while (true) {
             if (this.n.peek() != ']') {
                 int i = this.n.getCursor();
                 NBTBase nbtbase = this.d();
-                byte b2 = nbtbase.getTypeId();
+                NBTTagType<?> nbttagtype2 = nbtbase.b();
 
-                if (b2 != b1) {
+                if (nbttagtype2 != nbttagtype1) {
                     this.n.setCursor(i);
-                    throw MojangsonParser.e.createWithContext(this.n, NBTBase.l(b2), NBTBase.l(b0));
+                    throw MojangsonParser.e.createWithContext(this.n, nbttagtype2.b(), nbttagtype.b());
                 }
 
-                if (b1 == 1) {
+                if (nbttagtype1 == NBTTagByte.a) {
                     arraylist.add(((NBTNumber) nbtbase).asByte());
-                } else if (b1 == 4) {
+                } else if (nbttagtype1 == NBTTagLong.a) {
                     arraylist.add(((NBTNumber) nbtbase).asLong());
                 } else {
                     arraylist.add(((NBTNumber) nbtbase).asInt());

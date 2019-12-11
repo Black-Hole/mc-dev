@@ -14,11 +14,11 @@ public class WorldGenDecoratorHeightBiased2 extends WorldGenDecoratorFeatureSimp
 
     public Stream<BlockPosition> a(Random random, WorldGenFeatureChanceDecoratorCountConfiguration worldgenfeaturechancedecoratorcountconfiguration, BlockPosition blockposition) {
         return IntStream.range(0, worldgenfeaturechancedecoratorcountconfiguration.a).mapToObj((i) -> {
-            int j = random.nextInt(16);
-            int k = random.nextInt(16);
+            int j = random.nextInt(16) + blockposition.getX();
+            int k = random.nextInt(16) + blockposition.getZ();
             int l = random.nextInt(random.nextInt(random.nextInt(worldgenfeaturechancedecoratorcountconfiguration.d - worldgenfeaturechancedecoratorcountconfiguration.c) + worldgenfeaturechancedecoratorcountconfiguration.b) + worldgenfeaturechancedecoratorcountconfiguration.b);
 
-            return blockposition.b(j, l, k);
+            return new BlockPosition(j, l, k);
         });
     }
 }

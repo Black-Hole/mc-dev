@@ -12,7 +12,7 @@ public class BlockTurtleEgg extends Block {
 
     public BlockTurtleEgg(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTurtleEgg.a, 0)).set(BlockTurtleEgg.b, 1));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTurtleEgg.a, 0)).set(BlockTurtleEgg.b, 1));
     }
 
     @Override
@@ -55,26 +55,25 @@ public class BlockTurtleEgg extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (this.a(world) && this.a((IBlockAccess) world, blockposition)) {
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (this.a((World) worldserver) && this.a((IBlockAccess) worldserver, blockposition)) {
             int i = (Integer) iblockdata.get(BlockTurtleEgg.a);
 
             if (i < 2) {
-                world.playSound((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_CRACK, SoundCategory.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
-                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTurtleEgg.a, i + 1), 2);
+                worldserver.playSound((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_CRACK, SoundCategory.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
+                worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTurtleEgg.a, i + 1), 2);
             } else {
-                world.playSound((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_HATCH, SoundCategory.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
-                world.a(blockposition, false);
-                if (!world.isClientSide) {
-                    for (int j = 0; j < (Integer) iblockdata.get(BlockTurtleEgg.b); ++j) {
-                        world.triggerEffect(2001, blockposition, Block.getCombinedId(iblockdata));
-                        EntityTurtle entityturtle = (EntityTurtle) EntityTypes.TURTLE.a(world);
+                worldserver.playSound((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_HATCH, SoundCategory.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
+                worldserver.a(blockposition, false);
 
-                        entityturtle.setAgeRaw(-24000);
-                        entityturtle.g(blockposition);
-                        entityturtle.setPositionRotation((double) blockposition.getX() + 0.3D + (double) j * 0.2D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.3D, 0.0F, 0.0F);
-                        world.addEntity(entityturtle);
-                    }
+                for (int j = 0; j < (Integer) iblockdata.get(BlockTurtleEgg.b); ++j) {
+                    worldserver.triggerEffect(2001, blockposition, Block.getCombinedId(iblockdata));
+                    EntityTurtle entityturtle = (EntityTurtle) EntityTypes.TURTLE.a((World) worldserver);
+
+                    entityturtle.setAgeRaw(-24000);
+                    entityturtle.g(blockposition);
+                    entityturtle.setPositionRotation((double) blockposition.getX() + 0.3D + (double) j * 0.2D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.3D, 0.0F, 0.0F);
+                    worldserver.addEntity(entityturtle);
                 }
             }
         }
@@ -94,7 +93,7 @@ public class BlockTurtleEgg extends Block {
     }
 
     private boolean a(World world) {
-        float f = world.j(1.0F);
+        float f = world.f(1.0F);
 
         return (double) f < 0.69D && (double) f > 0.65D ? true : world.random.nextInt(500) == 0;
     }
@@ -116,11 +115,6 @@ public class BlockTurtleEgg extends Block {
         IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition());
 
         return iblockdata.getBlock() == this ? (IBlockData) iblockdata.set(BlockTurtleEgg.b, Math.min(4, (Integer) iblockdata.get(BlockTurtleEgg.b) + 1)) : super.getPlacedState(blockactioncontext);
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 
     @Override

@@ -9,6 +9,7 @@ public class ContainerLoom extends Container {
     private final Slot g;
     private final Slot h;
     private final Slot i;
+    private long j;
     private final IInventory craftInventory;
     private final IInventory resultInventory;
 
@@ -70,7 +71,13 @@ public class ContainerLoom extends Container {
                 }
 
                 containeraccess.a((world, blockposition) -> {
-                    world.playSound((EntityHuman) null, blockposition, SoundEffects.UI_LOOM_TAKE_RESULT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    long j = world.getTime();
+
+                    if (ContainerLoom.this.j != j) {
+                        world.playSound((EntityHuman) null, blockposition, SoundEffects.UI_LOOM_TAKE_RESULT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        ContainerLoom.this.j = j;
+                    }
+
                 });
                 return super.a(entityhuman, itemstack);
             }

@@ -33,17 +33,20 @@ public class Block implements IMaterial {
     protected final Material material;
     protected final MaterialMapColor t;
     private final float frictionFactor;
+    private final float f;
+    private final float g;
     protected final BlockStateList<Block, IBlockData> blockStateList;
     private IBlockData blockData;
     protected final boolean v;
-    private final boolean g;
+    private final boolean i;
+    private final boolean j;
     @Nullable
-    private MinecraftKey h;
+    private MinecraftKey k;
     @Nullable
     private String name;
     @Nullable
-    private Item j;
-    private static final ThreadLocal<Object2ByteLinkedOpenHashMap<Block.a>> k = ThreadLocal.withInitial(() -> {
+    private Item x;
+    private static final ThreadLocal<Object2ByteLinkedOpenHashMap<Block.a>> y = ThreadLocal.withInitial(() -> {
         Object2ByteLinkedOpenHashMap<Block.a> object2bytelinkedopenhashmap = new Object2ByteLinkedOpenHashMap<Block.a>(200) {
             protected void rehash(int i) {}
         };
@@ -81,7 +84,7 @@ public class Block implements IMaterial {
             Entity entity = (Entity) iterator.next();
             double d0 = VoxelShapes.a(EnumDirection.EnumAxis.Y, entity.getBoundingBox().d(0.0D, 1.0D, 0.0D), Stream.of(voxelshape), -1.0D);
 
-            entity.enderTeleportTo(entity.locX, entity.locY + 1.0D + d0, entity.locZ);
+            entity.enderTeleportTo(entity.locX(), entity.locY() + 1.0D + d0, entity.locZ());
         }
 
         return iblockdata1;
@@ -97,7 +100,7 @@ public class Block implements IMaterial {
     }
 
     @Deprecated
-    public boolean e(IBlockData iblockdata) {
+    public boolean d(IBlockData iblockdata) {
         return false;
     }
 
@@ -107,7 +110,7 @@ public class Block implements IMaterial {
     }
 
     @Deprecated
-    public Material l(IBlockData iblockdata) {
+    public Material k(IBlockData iblockdata) {
         return this.material;
     }
 
@@ -177,7 +180,7 @@ public class Block implements IMaterial {
     public static void a(IBlockData iblockdata, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, int i) {
         if (iblockdata1 != iblockdata) {
             if (iblockdata1.isAir()) {
-                if (!generatoraccess.e()) {
+                if (!generatoraccess.p_()) {
                     generatoraccess.b(blockposition, (i & 32) == 0);
                 }
             } else {
@@ -218,35 +221,38 @@ public class Block implements IMaterial {
         this.strength = block_info.g;
         this.q = block_info.h;
         this.frictionFactor = block_info.i;
+        this.f = block_info.j;
         this.g = block_info.k;
-        this.h = block_info.j;
+        this.i = block_info.n;
+        this.k = block_info.l;
+        this.j = block_info.m;
         this.blockStateList = blockstatelist_a.a(IBlockData::new);
-        this.o((IBlockData) this.blockStateList.getBlockData());
+        this.p((IBlockData) this.blockStateList.getBlockData());
     }
 
     public static boolean a(Block block) {
-        return block instanceof BlockLeaves || block == Blocks.BARRIER || block == Blocks.CARVED_PUMPKIN || block == Blocks.JACK_O_LANTERN || block == Blocks.MELON || block == Blocks.PUMPKIN;
+        return block instanceof BlockLeaves || block == Blocks.BARRIER || block == Blocks.CARVED_PUMPKIN || block == Blocks.JACK_O_LANTERN || block == Blocks.MELON || block == Blocks.PUMPKIN || block.a(TagsBlock.SHULKER_BOXES);
     }
 
     @Deprecated
     public boolean isOccluding(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.getMaterial().f() && iblockdata.o(iblockaccess, blockposition) && !iblockdata.isPowerSource();
+        return iblockdata.getMaterial().f() && iblockdata.p(iblockaccess, blockposition) && !iblockdata.isPowerSource();
     }
 
     @Deprecated
     public boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.material.isSolid() && iblockdata.o(iblockaccess, blockposition);
+        return this.material.isSolid() && iblockdata.p(iblockaccess, blockposition);
     }
 
     @Deprecated
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         switch (pathmode) {
             case LAND:
-                return !iblockdata.o(iblockaccess, blockposition);
+                return !iblockdata.p(iblockaccess, blockposition);
             case WATER:
                 return iblockaccess.getFluid(blockposition).a(TagsFluid.WATER);
             case AIR:
-                return !iblockdata.o(iblockaccess, blockposition);
+                return !iblockdata.p(iblockaccess, blockposition);
             default:
                 return false;
         }
@@ -263,7 +269,12 @@ public class Block implements IMaterial {
     }
 
     @Deprecated
-    public float f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public boolean a(IBlockData iblockdata, FluidType fluidtype) {
+        return this.material.isReplaceable() || !this.material.isBuildable();
+    }
+
+    @Deprecated
+    public float g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return this.strength;
     }
 
@@ -276,13 +287,13 @@ public class Block implements IMaterial {
     }
 
     @Deprecated
-    public boolean g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public boolean h(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return false;
     }
 
     @Deprecated
-    public boolean f(IBlockData iblockdata) {
-        return this.v && this.c() == TextureType.SOLID;
+    public final boolean n(IBlockData iblockdata) {
+        return this.j;
     }
 
     @Deprecated
@@ -296,12 +307,12 @@ public class Block implements IMaterial {
     }
 
     @Deprecated
-    public VoxelShape h(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape i(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata.getShape(iblockaccess, blockposition);
     }
 
     @Deprecated
-    public VoxelShape i(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return VoxelShapes.a();
     }
 
@@ -332,31 +343,31 @@ public class Block implements IMaterial {
     }
 
     @Deprecated
-    public final boolean j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public final boolean k(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata.o() ? a(iblockdata.j(iblockaccess, blockposition)) : false;
     }
 
     public boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return !a(iblockdata.getShape(iblockaccess, blockposition)) && iblockdata.p().isEmpty();
+        return !a(iblockdata.getShape(iblockaccess, blockposition)) && iblockdata.getFluid().isEmpty();
     }
 
     @Deprecated
-    public int k(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public int l(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata.g(iblockaccess, blockposition) ? iblockaccess.H() : (iblockdata.a(iblockaccess, blockposition) ? 0 : 1);
     }
 
     @Deprecated
-    public boolean n(IBlockData iblockdata) {
+    public boolean o(IBlockData iblockdata) {
         return false;
     }
 
     @Deprecated
-    public void c(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        this.tick(iblockdata, world, blockposition, random);
+    public void b(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        this.tick(iblockdata, worldserver, blockposition, random);
     }
 
     @Deprecated
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {}
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {}
 
     public void postBreak(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {}
 
@@ -402,25 +413,25 @@ public class Block implements IMaterial {
     @Deprecated
     public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, ItemStack itemstack) {}
 
-    public MinecraftKey i() {
-        if (this.h == null) {
+    public MinecraftKey g() {
+        if (this.k == null) {
             MinecraftKey minecraftkey = IRegistry.BLOCK.getKey(this);
 
-            this.h = new MinecraftKey(minecraftkey.getNamespace(), "blocks/" + minecraftkey.getKey());
+            this.k = new MinecraftKey(minecraftkey.getNamespace(), "blocks/" + minecraftkey.getKey());
         }
 
-        return this.h;
+        return this.k;
     }
 
     @Deprecated
     public List<ItemStack> a(IBlockData iblockdata, LootTableInfo.Builder loottableinfo_builder) {
-        MinecraftKey minecraftkey = this.i();
+        MinecraftKey minecraftkey = this.g();
 
         if (minecraftkey == LootTables.a) {
             return Collections.emptyList();
         } else {
             LootTableInfo loottableinfo = loottableinfo_builder.set(LootContextParameters.BLOCK_STATE, iblockdata).build(LootContextParameterSets.BLOCK);
-            WorldServer worldserver = loottableinfo.d();
+            WorldServer worldserver = loottableinfo.c();
             LootTable loottable = worldserver.getMinecraftServer().getLootTableRegistry().getLootTable(minecraftkey);
 
             return loottable.populateLoot(loottableinfo);
@@ -433,20 +444,10 @@ public class Block implements IMaterial {
         return iblockdata.a(loottableinfo_builder);
     }
 
-    public static List<ItemStack> getDrops(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, @Nullable TileEntity tileentity, Entity entity, ItemStack itemstack) {
-        LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder(worldserver)).a(worldserver.random).set(LootContextParameters.POSITION, blockposition).set(LootContextParameters.TOOL, itemstack).set(LootContextParameters.THIS_ENTITY, entity).setOptional(LootContextParameters.BLOCK_ENTITY, tileentity);
+    public static List<ItemStack> getDrops(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, @Nullable TileEntity tileentity, @Nullable Entity entity, ItemStack itemstack) {
+        LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder(worldserver)).a(worldserver.random).set(LootContextParameters.POSITION, blockposition).set(LootContextParameters.TOOL, itemstack).setOptional(LootContextParameters.THIS_ENTITY, entity).setOptional(LootContextParameters.BLOCK_ENTITY, tileentity);
 
         return iblockdata.a(loottableinfo_builder);
-    }
-
-    public static void b(IBlockData iblockdata, LootTableInfo.Builder loottableinfo_builder) {
-        WorldServer worldserver = loottableinfo_builder.a();
-        BlockPosition blockposition = (BlockPosition) loottableinfo_builder.a(LootContextParameters.POSITION);
-
-        iblockdata.a(loottableinfo_builder).forEach((itemstack) -> {
-            a((World) worldserver, blockposition, itemstack);
-        });
-        iblockdata.dropNaturally(worldserver, blockposition, ItemStack.a);
     }
 
     public static void c(IBlockData iblockdata, World world, BlockPosition blockposition) {
@@ -510,18 +511,14 @@ public class Block implements IMaterial {
 
     public void wasExploded(World world, BlockPosition blockposition, Explosion explosion) {}
 
-    public TextureType c() {
-        return TextureType.SOLID;
-    }
-
     @Deprecated
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         return true;
     }
 
     @Deprecated
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        return false;
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+        return EnumInteractionResult.PASS;
     }
 
     public void stepOn(World world, BlockPosition blockposition, Entity entity) {}
@@ -560,11 +557,11 @@ public class Block implements IMaterial {
 
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, @Nullable EntityLiving entityliving, ItemStack itemstack) {}
 
-    public boolean S_() {
+    public boolean Y_() {
         return !this.material.isBuildable() && !this.material.isLiquid();
     }
 
-    public String l() {
+    public String k() {
         if (this.name == null) {
             this.name = SystemUtils.a("block", IRegistry.BLOCK.getKey(this));
         }
@@ -595,12 +592,20 @@ public class Block implements IMaterial {
     }
 
     @Deprecated
-    public Fluid g(IBlockData iblockdata) {
-        return FluidTypes.EMPTY.i();
+    public Fluid a_(IBlockData iblockdata) {
+        return FluidTypes.EMPTY.h();
+    }
+
+    public float l() {
+        return this.frictionFactor;
     }
 
     public float m() {
-        return this.frictionFactor;
+        return this.f;
+    }
+
+    public float n() {
+        return this.g;
     }
 
     public void a(World world, IBlockData iblockdata, MovingObjectPositionBlock movingobjectpositionblock, Entity entity) {}
@@ -631,7 +636,7 @@ public class Block implements IMaterial {
         return this.blockStateList;
     }
 
-    protected final void o(IBlockData iblockdata) {
+    protected final void p(IBlockData iblockdata) {
         this.blockData = iblockdata;
     }
 
@@ -639,13 +644,13 @@ public class Block implements IMaterial {
         return this.blockData;
     }
 
-    public Block.EnumRandomOffset R_() {
+    public Block.EnumRandomOffset X_() {
         return Block.EnumRandomOffset.NONE;
     }
 
     @Deprecated
-    public Vec3D l(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        Block.EnumRandomOffset block_enumrandomoffset = this.R_();
+    public Vec3D m(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        Block.EnumRandomOffset block_enumrandomoffset = this.X_();
 
         if (block_enumrandomoffset == Block.EnumRandomOffset.NONE) {
             return Vec3D.a;
@@ -662,27 +667,19 @@ public class Block implements IMaterial {
 
     @Override
     public Item getItem() {
-        if (this.j == null) {
-            this.j = Item.getItemOf(this);
+        if (this.x == null) {
+            this.x = Item.getItemOf(this);
         }
 
-        return this.j;
+        return this.x;
     }
 
-    public boolean p() {
-        return this.g;
+    public boolean q() {
+        return this.i;
     }
 
     public String toString() {
         return "Block{" + IRegistry.BLOCK.getKey(this) + "}";
-    }
-
-    public static boolean b(Block block) {
-        return block == Blocks.STONE || block == Blocks.GRANITE || block == Blocks.DIORITE || block == Blocks.ANDESITE;
-    }
-
-    public static boolean c(Block block) {
-        return block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL;
     }
 
     public static enum EnumRandomOffset {
@@ -703,12 +700,18 @@ public class Block implements IMaterial {
         private float g;
         private boolean h;
         private float i;
-        private MinecraftKey j;
-        private boolean k;
+        private float j;
+        private float k;
+        private MinecraftKey l;
+        private boolean m;
+        private boolean n;
 
         private Info(Material material, MaterialMapColor materialmapcolor) {
             this.d = SoundEffectType.d;
             this.i = 0.6F;
+            this.j = 1.0F;
+            this.k = 1.0F;
+            this.m = true;
             this.a = material;
             this.b = materialmapcolor;
         }
@@ -736,18 +739,36 @@ public class Block implements IMaterial {
             block_info.e = block.n;
             block_info.b = block.t;
             block_info.d = block.stepSound;
-            block_info.i = block.m();
-            block_info.k = block.g;
+            block_info.i = block.l();
+            block_info.j = block.m();
+            block_info.n = block.i;
+            block_info.m = block.j;
             return block_info;
         }
 
         public Block.Info a() {
             this.c = false;
+            this.m = false;
+            return this;
+        }
+
+        public Block.Info b() {
+            this.m = false;
             return this;
         }
 
         public Block.Info a(float f) {
             this.i = f;
+            return this;
+        }
+
+        public Block.Info b(float f) {
+            this.j = f;
+            return this;
+        }
+
+        public Block.Info c(float f) {
+            this.k = f;
             return this;
         }
 
@@ -767,32 +788,32 @@ public class Block implements IMaterial {
             return this;
         }
 
-        protected Block.Info b() {
-            return this.b(0.0F);
+        protected Block.Info c() {
+            return this.d(0.0F);
         }
 
-        protected Block.Info b(float f) {
+        protected Block.Info d(float f) {
             this.a(f, f);
             return this;
         }
 
-        protected Block.Info c() {
+        protected Block.Info d() {
             this.h = true;
             return this;
         }
 
-        protected Block.Info d() {
-            this.k = true;
+        protected Block.Info e() {
+            this.n = true;
             return this;
         }
 
-        protected Block.Info e() {
-            this.j = LootTables.a;
+        protected Block.Info f() {
+            this.l = LootTables.a;
             return this;
         }
 
         public Block.Info b(Block block) {
-            this.j = block.i();
+            this.l = block.g();
             return this;
         }
     }

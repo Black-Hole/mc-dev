@@ -11,12 +11,12 @@ import javax.annotation.Nullable;
 
 public class EntityCat extends EntityTameableAnimal {
 
-    private static final RecipeItemStack bD = RecipeItemStack.a(Items.COD, Items.SALMON);
+    private static final RecipeItemStack bA = RecipeItemStack.a(Items.COD, Items.SALMON);
+    private static final DataWatcherObject<Integer> bB = DataWatcher.a(EntityCat.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Boolean> bC = DataWatcher.a(EntityCat.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> bD = DataWatcher.a(EntityCat.class, DataWatcherRegistry.i);
     private static final DataWatcherObject<Integer> bE = DataWatcher.a(EntityCat.class, DataWatcherRegistry.b);
-    private static final DataWatcherObject<Boolean> bF = DataWatcher.a(EntityCat.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Boolean> bG = DataWatcher.a(EntityCat.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Integer> bH = DataWatcher.a(EntityCat.class, DataWatcherRegistry.b);
-    public static final Map<Integer, MinecraftKey> bC = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+    public static final Map<Integer, MinecraftKey> bz = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         hashmap.put(0, new MinecraftKey("textures/entity/cat/tabby.png"));
         hashmap.put(1, new MinecraftKey("textures/entity/cat/black.png"));
         hashmap.put(2, new MinecraftKey("textures/entity/cat/red.png"));
@@ -29,33 +29,33 @@ public class EntityCat extends EntityTameableAnimal {
         hashmap.put(9, new MinecraftKey("textures/entity/cat/jellie.png"));
         hashmap.put(10, new MinecraftKey("textures/entity/cat/all_black.png"));
     });
-    private EntityCat.a<EntityHuman> bI;
-    private PathfinderGoalTempt bJ;
+    private EntityCat.a<EntityHuman> bF;
+    private PathfinderGoalTempt bG;
+    private float bH;
+    private float bI;
+    private float bJ;
     private float bK;
     private float bL;
     private float bM;
-    private float bN;
-    private float bO;
-    private float bP;
 
     public EntityCat(EntityTypes<? extends EntityCat> entitytypes, World world) {
         super(entitytypes, world);
     }
 
-    public MinecraftKey ee() {
-        return (MinecraftKey) EntityCat.bC.get(this.getCatType());
+    public MinecraftKey ez() {
+        return (MinecraftKey) EntityCat.bz.getOrDefault(this.getCatType(), EntityCat.bz.get(0));
     }
 
     @Override
     protected void initPathfinder() {
         this.goalSit = new PathfinderGoalSit(this);
-        this.bJ = new EntityCat.PathfinderGoalTemptChance(this, 0.6D, EntityCat.bD, true);
+        this.bG = new EntityCat.PathfinderGoalTemptChance(this, 0.6D, EntityCat.bA, true);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new EntityCat.b(this));
         this.goalSelector.a(2, this.goalSit);
-        this.goalSelector.a(3, this.bJ);
+        this.goalSelector.a(3, this.bG);
         this.goalSelector.a(5, new PathfinderGoalCatSitOnBed(this, 1.1D, 8));
-        this.goalSelector.a(6, new PathfinderGoalFollowOwner(this, 1.0D, 10.0F, 5.0F));
+        this.goalSelector.a(6, new PathfinderGoalFollowOwner(this, 1.0D, 10.0F, 5.0F, false));
         this.goalSelector.a(7, new PathfinderGoalJumpOnBlock(this, 0.8D));
         this.goalSelector.a(8, new PathfinderGoalLeapAtTarget(this, 0.3F));
         this.goalSelector.a(9, new PathfinderGoalOcelotAttack(this));
@@ -63,11 +63,11 @@ public class EntityCat extends EntityTameableAnimal {
         this.goalSelector.a(11, new PathfinderGoalRandomStrollLand(this, 0.8D, 1.0000001E-5F));
         this.goalSelector.a(12, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 10.0F));
         this.targetSelector.a(1, new PathfinderGoalRandomTargetNonTamed<>(this, EntityRabbit.class, false, (Predicate) null));
-        this.targetSelector.a(1, new PathfinderGoalRandomTargetNonTamed<>(this, EntityTurtle.class, false, EntityTurtle.bz));
+        this.targetSelector.a(1, new PathfinderGoalRandomTargetNonTamed<>(this, EntityTurtle.class, false, EntityTurtle.bw));
     }
 
     public int getCatType() {
-        return (Integer) this.datawatcher.get(EntityCat.bE);
+        return (Integer) this.datawatcher.get(EntityCat.bB);
     }
 
     public void setCatType(int i) {
@@ -75,40 +75,40 @@ public class EntityCat extends EntityTameableAnimal {
             i = this.random.nextInt(10);
         }
 
-        this.datawatcher.set(EntityCat.bE, i);
+        this.datawatcher.set(EntityCat.bB, i);
     }
 
     public void u(boolean flag) {
-        this.datawatcher.set(EntityCat.bF, flag);
+        this.datawatcher.set(EntityCat.bC, flag);
     }
 
-    public boolean eg() {
-        return (Boolean) this.datawatcher.get(EntityCat.bF);
+    public boolean eB() {
+        return (Boolean) this.datawatcher.get(EntityCat.bC);
     }
 
     public void v(boolean flag) {
-        this.datawatcher.set(EntityCat.bG, flag);
+        this.datawatcher.set(EntityCat.bD, flag);
     }
 
-    public boolean eh() {
-        return (Boolean) this.datawatcher.get(EntityCat.bG);
+    public boolean eC() {
+        return (Boolean) this.datawatcher.get(EntityCat.bD);
     }
 
     public EnumColor getCollarColor() {
-        return EnumColor.fromColorIndex((Integer) this.datawatcher.get(EntityCat.bH));
+        return EnumColor.fromColorIndex((Integer) this.datawatcher.get(EntityCat.bE));
     }
 
     public void setCollarColor(EnumColor enumcolor) {
-        this.datawatcher.set(EntityCat.bH, enumcolor.getColorIndex());
+        this.datawatcher.set(EntityCat.bE, enumcolor.getColorIndex());
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityCat.bE, 1);
-        this.datawatcher.register(EntityCat.bF, false);
-        this.datawatcher.register(EntityCat.bG, false);
-        this.datawatcher.register(EntityCat.bH, EnumColor.RED.getColorIndex());
+        this.datawatcher.register(EntityCat.bB, 1);
+        this.datawatcher.register(EntityCat.bC, false);
+        this.datawatcher.register(EntityCat.bD, false);
+        this.datawatcher.register(EntityCat.bE, EnumColor.RED.getColorIndex());
     }
 
     @Override
@@ -134,17 +134,17 @@ public class EntityCat extends EntityTameableAnimal {
             double d0 = this.getControllerMove().c();
 
             if (d0 == 0.6D) {
-                this.setSneaking(true);
+                this.setPose(EntityPose.CROUCHING);
                 this.setSprinting(false);
             } else if (d0 == 1.33D) {
-                this.setSneaking(false);
+                this.setPose(EntityPose.STANDING);
                 this.setSprinting(true);
             } else {
-                this.setSneaking(false);
+                this.setPose(EntityPose.STANDING);
                 this.setSprinting(false);
             }
         } else {
-            this.setSneaking(false);
+            this.setPose(EntityPose.STANDING);
             this.setSprinting(false);
         }
 
@@ -161,8 +161,8 @@ public class EntityCat extends EntityTameableAnimal {
         return 120;
     }
 
-    public void ej() {
-        this.a(SoundEffects.ENTITY_CAT_HISS, this.getSoundVolume(), this.cV());
+    public void eE() {
+        this.a(SoundEffects.ENTITY_CAT_HISS, this.getSoundVolume(), this.dn());
     }
 
     @Override
@@ -180,10 +180,13 @@ public class EntityCat extends EntityTameableAnimal {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(10.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.30000001192092896D);
+        this.getAttributeMap().b(GenericAttributes.ATTACK_DAMAGE).setValue(3.0D);
     }
 
     @Override
-    public void b(float f, float f1) {}
+    public boolean b(float f, float f1) {
+        return false;
+    }
 
     @Override
     protected void a(EntityHuman entityhuman, ItemStack itemstack) {
@@ -194,49 +197,53 @@ public class EntityCat extends EntityTameableAnimal {
         super.a(entityhuman, itemstack);
     }
 
+    private float eF() {
+        return (float) this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
+    }
+
     @Override
-    public boolean C(Entity entity) {
-        return entity.damageEntity(DamageSource.mobAttack(this), 3.0F);
+    public boolean B(Entity entity) {
+        return entity.damageEntity(DamageSource.mobAttack(this), this.eF());
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.bJ != null && this.bJ.h() && !this.isTamed() && this.ticksLived % 100 == 0) {
+        if (this.bG != null && this.bG.h() && !this.isTamed() && this.ticksLived % 100 == 0) {
             this.a(SoundEffects.ENTITY_CAT_BEG_FOR_FOOD, 1.0F, 1.0F);
         }
 
-        this.ek();
+        this.eG();
     }
 
-    private void ek() {
-        if ((this.eg() || this.eh()) && this.ticksLived % 5 == 0) {
+    private void eG() {
+        if ((this.eB() || this.eC()) && this.ticksLived % 5 == 0) {
             this.a(SoundEffects.ENTITY_CAT_PURR, 0.6F + 0.4F * (this.random.nextFloat() - this.random.nextFloat()), 1.0F);
         }
 
-        this.el();
-        this.em();
+        this.eH();
+        this.eI();
     }
 
-    private void el() {
-        this.bL = this.bK;
-        this.bN = this.bM;
-        if (this.eg()) {
-            this.bK = Math.min(1.0F, this.bK + 0.15F);
-            this.bM = Math.min(1.0F, this.bM + 0.08F);
+    private void eH() {
+        this.bI = this.bH;
+        this.bK = this.bJ;
+        if (this.eB()) {
+            this.bH = Math.min(1.0F, this.bH + 0.15F);
+            this.bJ = Math.min(1.0F, this.bJ + 0.08F);
         } else {
-            this.bK = Math.max(0.0F, this.bK - 0.22F);
-            this.bM = Math.max(0.0F, this.bM - 0.13F);
+            this.bH = Math.max(0.0F, this.bH - 0.22F);
+            this.bJ = Math.max(0.0F, this.bJ - 0.13F);
         }
 
     }
 
-    private void em() {
-        this.bP = this.bO;
-        if (this.eh()) {
-            this.bO = Math.min(1.0F, this.bO + 0.1F);
+    private void eI() {
+        this.bM = this.bL;
+        if (this.eC()) {
+            this.bL = Math.min(1.0F, this.bL + 0.1F);
         } else {
-            this.bO = Math.max(0.0F, this.bO - 0.13F);
+            this.bL = Math.max(0.0F, this.bL - 0.13F);
         }
 
     }
@@ -283,7 +290,7 @@ public class EntityCat extends EntityTameableAnimal {
     @Override
     public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         groupdataentity = super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
-        if (generatoraccess.aa() > 0.9F) {
+        if (generatoraccess.Y() > 0.9F) {
             this.setCatType(this.random.nextInt(11));
         } else {
             this.setCatType(this.random.nextInt(10));
@@ -302,9 +309,30 @@ public class EntityCat extends EntityTameableAnimal {
         ItemStack itemstack = entityhuman.b(enumhand);
         Item item = itemstack.getItem();
 
-        if (this.isTamed()) {
-            if (this.h((EntityLiving) entityhuman)) {
-                if (item instanceof ItemDye) {
+        if (itemstack.getItem() instanceof ItemMonsterEgg) {
+            return super.a(entityhuman, enumhand);
+        } else if (this.world.isClientSide) {
+            return this.isTamed() && this.i((EntityLiving) entityhuman) || this.i(itemstack);
+        } else {
+            boolean flag;
+
+            if (this.isTamed()) {
+                if (this.i((EntityLiving) entityhuman)) {
+                    if (!(item instanceof ItemDye)) {
+                        if (item.isFood() && this.i(itemstack) && this.getHealth() < this.getMaxHealth()) {
+                            this.a(entityhuman, itemstack);
+                            this.heal((float) item.getFoodInfo().getNutrition());
+                            return true;
+                        }
+
+                        flag = super.a(entityhuman, enumhand);
+                        if (!flag || this.isBaby()) {
+                            this.goalSit.setSitting(!this.isSitting());
+                        }
+
+                        return flag;
+                    }
+
                     EnumColor enumcolor = ((ItemDye) item).d();
 
                     if (enumcolor != this.getCollarColor()) {
@@ -316,46 +344,33 @@ public class EntityCat extends EntityTameableAnimal {
                         this.setPersistent();
                         return true;
                     }
-                } else if (this.i(itemstack)) {
-                    if (this.getHealth() < this.getMaxHealth() && item.isFood()) {
-                        this.a(entityhuman, itemstack);
-                        this.heal((float) item.getFoodInfo().getNutrition());
-                        return true;
-                    }
-                } else if (!this.world.isClientSide) {
-                    this.goalSit.setSitting(!this.isSitting());
                 }
-            }
-        } else if (this.i(itemstack)) {
-            this.a(entityhuman, itemstack);
-            if (!this.world.isClientSide) {
+            } else if (this.i(itemstack)) {
+                this.a(entityhuman, itemstack);
                 if (this.random.nextInt(3) == 0) {
                     this.tame(entityhuman);
-                    this.r(true);
                     this.goalSit.setSitting(true);
                     this.world.broadcastEntityEffect(this, (byte) 7);
                 } else {
-                    this.r(false);
                     this.world.broadcastEntityEffect(this, (byte) 6);
                 }
+
+                this.setPersistent();
+                return true;
             }
 
-            this.setPersistent();
-            return true;
+            flag = super.a(entityhuman, enumhand);
+            if (flag) {
+                this.setPersistent();
+            }
+
+            return flag;
         }
-
-        boolean flag = super.a(entityhuman, enumhand);
-
-        if (flag) {
-            this.setPersistent();
-        }
-
-        return flag;
     }
 
     @Override
     public boolean i(ItemStack itemstack) {
-        return EntityCat.bD.test(itemstack);
+        return EntityCat.bA.test(itemstack);
     }
 
     @Override
@@ -369,14 +384,14 @@ public class EntityCat extends EntityTameableAnimal {
     }
 
     @Override
-    protected void dW() {
-        if (this.bI == null) {
-            this.bI = new EntityCat.a<>(this, EntityHuman.class, 16.0F, 0.8D, 1.33D);
+    protected void er() {
+        if (this.bF == null) {
+            this.bF = new EntityCat.a<>(this, EntityHuman.class, 16.0F, 0.8D, 1.33D);
         }
 
-        this.goalSelector.a((PathfinderGoal) this.bI);
+        this.goalSelector.a((PathfinderGoal) this.bF);
         if (!this.isTamed()) {
-            this.goalSelector.a(4, this.bI);
+            this.goalSelector.a(4, this.bF);
         }
 
     }
@@ -440,7 +455,7 @@ public class EntityCat extends EntityTameableAnimal {
 
                     entitycat = (EntityCat) iterator.next();
                 } while (entitycat == this.a);
-            } while (!entitycat.eg() && !entitycat.eh());
+            } while (!entitycat.eB() && !entitycat.eC());
 
             return true;
         }
@@ -462,9 +477,9 @@ public class EntityCat extends EntityTameableAnimal {
         @Override
         public void d() {
             this.a.u(false);
-            float f = this.a.world.j(1.0F);
+            float f = this.a.world.f(1.0F);
 
-            if (this.b.dJ() >= 100 && (double) f > 0.77D && (double) f < 0.8D && (double) this.a.world.getRandom().nextFloat() < 0.7D) {
+            if (this.b.ef() >= 100 && (double) f > 0.77D && (double) f < 0.8D && (double) this.a.world.getRandom().nextFloat() < 0.7D) {
                 this.h();
             }
 
@@ -488,7 +503,7 @@ public class EntityCat extends EntityTameableAnimal {
             while (iterator.hasNext()) {
                 ItemStack itemstack = (ItemStack) iterator.next();
 
-                this.a.world.addEntity(new EntityItem(this.a.world, (double) ((float) blockposition_mutableblockposition.getX() - MathHelper.sin(this.a.aK * 0.017453292F)), (double) blockposition_mutableblockposition.getY(), (double) ((float) blockposition_mutableblockposition.getZ() + MathHelper.cos(this.a.aK * 0.017453292F)), itemstack));
+                this.a.world.addEntity(new EntityItem(this.a.world, (double) ((float) blockposition_mutableblockposition.getX() - MathHelper.sin(this.a.aI * 0.017453292F)), (double) blockposition_mutableblockposition.getY(), (double) ((float) blockposition_mutableblockposition.getZ() + MathHelper.cos(this.a.aI * 0.017453292F)), itemstack));
             }
 
         }

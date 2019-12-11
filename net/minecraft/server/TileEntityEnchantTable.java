@@ -48,8 +48,8 @@ public class TileEntityEnchantTable extends TileEntity implements INamableTileEn
         EntityHuman entityhuman = this.world.a((double) ((float) this.position.getX() + 0.5F), (double) ((float) this.position.getY() + 0.5F), (double) ((float) this.position.getZ() + 0.5F), 3.0D, false);
 
         if (entityhuman != null) {
-            double d0 = entityhuman.locX - (double) ((float) this.position.getX() + 0.5F);
-            double d1 = entityhuman.locZ - (double) ((float) this.position.getZ() + 0.5F);
+            double d0 = entityhuman.locX() - ((double) this.position.getX() + 0.5D);
+            double d1 = entityhuman.locZ() - ((double) this.position.getZ() + 0.5D);
 
             this.m = (float) MathHelper.d(d1, d0);
             this.i += 0.1F;

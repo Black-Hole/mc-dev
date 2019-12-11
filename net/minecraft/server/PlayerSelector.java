@@ -560,6 +560,29 @@ public class PlayerSelector {
             }, (argumentparserselector) -> {
                 return !argumentparserselector.H();
             }, new ChatMessage("argument.entity.options.advancements.description", new Object[0]));
+            a("predicate", (argumentparserselector) -> {
+                boolean flag = argumentparserselector.e();
+                MinecraftKey minecraftkey = MinecraftKey.a(argumentparserselector.g());
+
+                argumentparserselector.a((entity) -> {
+                    if (!(entity.world instanceof WorldServer)) {
+                        return false;
+                    } else {
+                        WorldServer worldserver = (WorldServer) entity.world;
+                        LootItemCondition lootitemcondition = worldserver.getMinecraftServer().aP().a(minecraftkey);
+
+                        if (lootitemcondition == null) {
+                            return false;
+                        } else {
+                            LootTableInfo loottableinfo = (new LootTableInfo.Builder(worldserver)).set(LootContextParameters.THIS_ENTITY, entity).set(LootContextParameters.POSITION, new BlockPosition(entity)).build(LootContextParameterSets.SELECTOR);
+
+                            return flag ^ lootitemcondition.test(loottableinfo);
+                        }
+                    }
+                });
+            }, (argumentparserselector) -> {
+                return true;
+            }, new ChatMessage("argument.entity.options.predicate.description", new Object[0]));
         }
     }
 

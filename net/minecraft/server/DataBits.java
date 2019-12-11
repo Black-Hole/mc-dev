@@ -23,7 +23,7 @@ public class DataBits {
         int k = MathHelper.c(j * i, 64) / 64;
 
         if (along.length != k) {
-            throw new RuntimeException("Invalid length given for storage, got: " + along.length + " but expected: " + k);
+            throw (RuntimeException) SystemUtils.c(new RuntimeException("Invalid length given for storage, got: " + along.length + " but expected: " + k));
         }
     }
 

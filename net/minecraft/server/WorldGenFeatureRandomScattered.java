@@ -30,18 +30,10 @@ public abstract class WorldGenFeatureRandomScattered<C extends WorldGenFeatureCo
     }
 
     @Override
-    public boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
+    public boolean a(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, Random random, int i, int j, BiomeBase biomebase) {
         ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, random, i, j, 0, 0);
 
-        if (i == chunkcoordintpair.x && j == chunkcoordintpair.z) {
-            BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition(i * 16 + 9, 0, j * 16 + 9));
-
-            if (chunkgenerator.canSpawnStructure(biomebase, this)) {
-                return true;
-            }
-        }
-
-        return false;
+        return i == chunkcoordintpair.x && j == chunkcoordintpair.z && chunkgenerator.canSpawnStructure(biomebase, this);
     }
 
     protected int a(ChunkGenerator<?> chunkgenerator) {

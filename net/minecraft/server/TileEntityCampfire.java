@@ -24,7 +24,7 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
 
         if (flag1) {
             if (flag) {
-                this.s();
+                this.j();
             }
 
         } else {
@@ -57,14 +57,14 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
 
                     InventoryUtils.dropItem(this.world, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), itemstack1);
                     this.items.set(i, ItemStack.a);
-                    this.t();
+                    this.k();
                 }
             }
         }
 
     }
 
-    private void s() {
+    private void j() {
         World world = this.getWorld();
 
         if (world != null) {
@@ -84,9 +84,9 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
                 if (!((ItemStack) this.items.get(j)).isEmpty() && random.nextFloat() < 0.2F) {
                     EnumDirection enumdirection = EnumDirection.fromType2(Math.floorMod(j + i, 4));
                     float f = 0.3125F;
-                    double d0 = (double) blockposition.getX() + 0.5D - (double) ((float) enumdirection.getAdjacentX() * 0.3125F) + (double) ((float) enumdirection.e().getAdjacentX() * 0.3125F);
+                    double d0 = (double) blockposition.getX() + 0.5D - (double) ((float) enumdirection.getAdjacentX() * 0.3125F) + (double) ((float) enumdirection.f().getAdjacentX() * 0.3125F);
                     double d1 = (double) blockposition.getY() + 0.5D;
-                    double d2 = (double) blockposition.getZ() + 0.5D - (double) ((float) enumdirection.getAdjacentZ() * 0.3125F) + (double) ((float) enumdirection.e().getAdjacentZ() * 0.3125F);
+                    double d2 = (double) blockposition.getZ() + 0.5D - (double) ((float) enumdirection.getAdjacentZ() * 0.3125F) + (double) ((float) enumdirection.f().getAdjacentZ() * 0.3125F);
 
                     for (int k = 0; k < 4; ++k) {
                         world.addParticle(Particles.SMOKE, d0, d1, d2, 0.0D, 5.0E-4D, 0.0D);
@@ -157,7 +157,7 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
                 this.cookingTotalTimes[j] = i;
                 this.cookingTimes[j] = 0;
                 this.items.set(j, itemstack.cloneAndSubtract(1));
-                this.t();
+                this.k();
                 return true;
             }
         }
@@ -165,7 +165,7 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
         return false;
     }
 
-    private void t() {
+    private void k() {
         this.update();
         this.getWorld().notify(this.getPosition(), this.getBlock(), this.getBlock(), 3);
     }
@@ -180,6 +180,6 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
             InventoryUtils.a(this.getWorld(), this.getPosition(), this.getItems());
         }
 
-        this.t();
+        this.k();
     }
 }

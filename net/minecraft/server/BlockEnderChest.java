@@ -1,20 +1,22 @@
 package net.minecraft.server;
 
-public class BlockEnderChest extends BlockTileEntity implements IBlockWaterlogged {
+public class BlockEnderChest extends BlockChestAbstract<TileEntityEnderChest> implements IBlockWaterlogged {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
-    public static final BlockStateBoolean b = BlockProperties.C;
-    protected static final VoxelShape c = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
-    public static final ChatMessage d = new ChatMessage("container.enderchest", new Object[0]);
+    public static final BlockStateBoolean c = BlockProperties.C;
+    protected static final VoxelShape d = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
+    public static final ChatMessage e = new ChatMessage("container.enderchest", new Object[0]);
 
     protected BlockEnderChest(Block.Info block_info) {
-        super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockEnderChest.FACING, EnumDirection.NORTH)).set(BlockEnderChest.b, false));
+        super(block_info, () -> {
+            return TileEntityTypes.ENDER_CHEST;
+        });
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockEnderChest.FACING, EnumDirection.NORTH)).set(BlockEnderChest.c, false));
     }
 
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockEnderChest.c;
+        return BlockEnderChest.d;
     }
 
     @Override
@@ -26,11 +28,11 @@ public class BlockEnderChest extends BlockTileEntity implements IBlockWaterlogge
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
-        return (IBlockData) ((IBlockData) this.getBlockData().set(BlockEnderChest.FACING, blockactioncontext.f().opposite())).set(BlockEnderChest.b, fluid.getType() == FluidTypes.WATER);
+        return (IBlockData) ((IBlockData) this.getBlockData().set(BlockEnderChest.FACING, blockactioncontext.f().opposite())).set(BlockEnderChest.c, fluid.getType() == FluidTypes.WATER);
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         InventoryEnderChest inventoryenderchest = entityhuman.getEnderChest();
         TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -38,21 +40,21 @@ public class BlockEnderChest extends BlockTileEntity implements IBlockWaterlogge
             BlockPosition blockposition1 = blockposition.up();
 
             if (world.getType(blockposition1).isOccluding(world, blockposition1)) {
-                return true;
+                return EnumInteractionResult.SUCCESS;
             } else if (world.isClientSide) {
-                return true;
+                return EnumInteractionResult.SUCCESS;
             } else {
                 TileEntityEnderChest tileentityenderchest = (TileEntityEnderChest) tileentity;
 
                 inventoryenderchest.a(tileentityenderchest);
                 entityhuman.openContainer(new TileInventory((i, playerinventory, entityhuman1) -> {
                     return ContainerChest.a(i, playerinventory, inventoryenderchest);
-                }, BlockEnderChest.d));
+                }, BlockEnderChest.e));
                 entityhuman.a(StatisticList.OPEN_ENDERCHEST);
-                return true;
+                return EnumInteractionResult.SUCCESS;
             }
         } else {
-            return true;
+            return EnumInteractionResult.SUCCESS;
         }
     }
 
@@ -73,17 +75,17 @@ public class BlockEnderChest extends BlockTileEntity implements IBlockWaterlogge
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockEnderChest.FACING, BlockEnderChest.b);
+        blockstatelist_a.a(BlockEnderChest.FACING, BlockEnderChest.c);
     }
 
     @Override
-    public Fluid g(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockEnderChest.b) ? FluidTypes.WATER.a(false) : super.g(iblockdata);
+    public Fluid a_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockEnderChest.c) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
     }
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if ((Boolean) iblockdata.get(BlockEnderChest.b)) {
+        if ((Boolean) iblockdata.get(BlockEnderChest.c)) {
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 

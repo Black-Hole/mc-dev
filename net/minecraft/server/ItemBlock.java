@@ -121,10 +121,10 @@ public class ItemBlock extends Item {
         EntityHuman entityhuman = blockactioncontext.getEntity();
         VoxelShapeCollision voxelshapecollision = entityhuman == null ? VoxelShapeCollision.a() : VoxelShapeCollision.a((Entity) entityhuman);
 
-        return (!this.d() || iblockdata.canPlace(blockactioncontext.getWorld(), blockactioncontext.getClickPosition())) && blockactioncontext.getWorld().a(iblockdata, blockactioncontext.getClickPosition(), voxelshapecollision);
+        return (!this.T_() || iblockdata.canPlace(blockactioncontext.getWorld(), blockactioncontext.getClickPosition())) && blockactioncontext.getWorld().a(iblockdata, blockactioncontext.getClickPosition(), voxelshapecollision);
     }
 
-    protected boolean d() {
+    protected boolean T_() {
         return true;
     }
 
@@ -169,7 +169,7 @@ public class ItemBlock extends Item {
 
     @Override
     public String getName() {
-        return this.getBlock().l();
+        return this.getBlock().k();
     }
 
     @Override

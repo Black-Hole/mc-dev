@@ -14,7 +14,7 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
     private static final Set<MobEffectList> b = (Set) Arrays.stream(TileEntityBeacon.a).flatMap(Arrays::stream).collect(Collectors.toSet());
     private List<TileEntityBeacon.BeaconColorTracker> c = Lists.newArrayList();
     private List<TileEntityBeacon.BeaconColorTracker> g = Lists.newArrayList();
-    public int levels = 0;
+    public int levels;
     private int i = -1;
     @Nullable
     public MobEffectList primaryEffect;
@@ -189,9 +189,9 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
     }
 
     @Override
-    public void V_() {
+    public void ab_() {
         this.a(SoundEffects.BLOCK_BEACON_DEACTIVATE);
-        super.V_();
+        super.ab_();
     }
 
     private void applyEffects() {

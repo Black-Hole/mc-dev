@@ -11,8 +11,8 @@ import javax.annotation.Nullable;
 
 public class EntitySheep extends EntityAnimal {
 
-    private static final DataWatcherObject<Byte> bz = DataWatcher.a(EntitySheep.class, DataWatcherRegistry.a);
-    private static final Map<EnumColor, IMaterial> bA = (Map) SystemUtils.a((Object) Maps.newEnumMap(EnumColor.class), (enummap) -> {
+    private static final DataWatcherObject<Byte> bw = DataWatcher.a(EntitySheep.class, DataWatcherRegistry.a);
+    private static final Map<EnumColor, IMaterial> bx = (Map) SystemUtils.a((Object) Maps.newEnumMap(EnumColor.class), (enummap) -> {
         enummap.put(EnumColor.WHITE, Blocks.WHITE_WOOL);
         enummap.put(EnumColor.ORANGE, Blocks.ORANGE_WOOL);
         enummap.put(EnumColor.MAGENTA, Blocks.MAGENTA_WOOL);
@@ -30,11 +30,11 @@ public class EntitySheep extends EntityAnimal {
         enummap.put(EnumColor.RED, Blocks.RED_WOOL);
         enummap.put(EnumColor.BLACK, Blocks.BLACK_WOOL);
     });
-    private static final Map<EnumColor, float[]> bB = Maps.newEnumMap((Map) Arrays.stream(EnumColor.values()).collect(Collectors.toMap((enumcolor) -> {
+    private static final Map<EnumColor, float[]> by = Maps.newEnumMap((Map) Arrays.stream(EnumColor.values()).collect(Collectors.toMap((enumcolor) -> {
         return enumcolor;
     }, EntitySheep::c)));
-    private int bC;
-    private PathfinderGoalEatTile bD;
+    private int bz;
+    private PathfinderGoalEatTile bA;
 
     private static float[] c(EnumColor enumcolor) {
         if (enumcolor == EnumColor.WHITE) {
@@ -53,13 +53,13 @@ public class EntitySheep extends EntityAnimal {
 
     @Override
     protected void initPathfinder() {
-        this.bD = new PathfinderGoalEatTile(this);
+        this.bA = new PathfinderGoalEatTile(this);
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 1.25D));
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
         this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.1D, RecipeItemStack.a(Items.WHEAT), false));
         this.goalSelector.a(4, new PathfinderGoalFollowParent(this, 1.1D));
-        this.goalSelector.a(5, this.bD);
+        this.goalSelector.a(5, this.bA);
         this.goalSelector.a(6, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(7, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
@@ -67,14 +67,14 @@ public class EntitySheep extends EntityAnimal {
 
     @Override
     protected void mobTick() {
-        this.bC = this.bD.g();
+        this.bz = this.bA.g();
         super.mobTick();
     }
 
     @Override
     public void movementTick() {
         if (this.world.isClientSide) {
-            this.bC = Math.max(0, this.bC - 1);
+            this.bz = Math.max(0, this.bz - 1);
         }
 
         super.movementTick();
@@ -90,7 +90,7 @@ public class EntitySheep extends EntityAnimal {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntitySheep.bz, (byte) 0);
+        this.datawatcher.register(EntitySheep.bw, (byte) 0);
     }
 
     @Override
@@ -147,9 +147,11 @@ public class EntitySheep extends EntityAnimal {
                     entityhuman1.d(enumhand);
                 });
             }
-        }
 
-        return super.a(entityhuman, enumhand);
+            return true;
+        } else {
+            return super.a(entityhuman, enumhand);
+        }
     }
 
     public void shear() {
@@ -158,7 +160,7 @@ public class EntitySheep extends EntityAnimal {
             int i = 1 + this.random.nextInt(3);
 
             for (int j = 0; j < i; ++j) {
-                EntityItem entityitem = this.a((IMaterial) EntitySheep.bA.get(this.getColor()), 1);
+                EntityItem entityitem = this.a((IMaterial) EntitySheep.bx.get(this.getColor()), 1);
 
                 if (entityitem != null) {
                     entityitem.setMot(entityitem.getMot().add((double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F), (double) (this.random.nextFloat() * 0.05F), (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F)));
@@ -204,26 +206,26 @@ public class EntitySheep extends EntityAnimal {
     }
 
     public EnumColor getColor() {
-        return EnumColor.fromColorIndex((Byte) this.datawatcher.get(EntitySheep.bz) & 15);
+        return EnumColor.fromColorIndex((Byte) this.datawatcher.get(EntitySheep.bw) & 15);
     }
 
     public void setColor(EnumColor enumcolor) {
-        byte b0 = (Byte) this.datawatcher.get(EntitySheep.bz);
+        byte b0 = (Byte) this.datawatcher.get(EntitySheep.bw);
 
-        this.datawatcher.set(EntitySheep.bz, (byte) (b0 & 240 | enumcolor.getColorIndex() & 15));
+        this.datawatcher.set(EntitySheep.bw, (byte) (b0 & 240 | enumcolor.getColorIndex() & 15));
     }
 
     public boolean isSheared() {
-        return ((Byte) this.datawatcher.get(EntitySheep.bz) & 16) != 0;
+        return ((Byte) this.datawatcher.get(EntitySheep.bw) & 16) != 0;
     }
 
     public void setSheared(boolean flag) {
-        byte b0 = (Byte) this.datawatcher.get(EntitySheep.bz);
+        byte b0 = (Byte) this.datawatcher.get(EntitySheep.bw);
 
         if (flag) {
-            this.datawatcher.set(EntitySheep.bz, (byte) (b0 | 16));
+            this.datawatcher.set(EntitySheep.bw, (byte) (b0 | 16));
         } else {
-            this.datawatcher.set(EntitySheep.bz, (byte) (b0 & -17));
+            this.datawatcher.set(EntitySheep.bw, (byte) (b0 & -17));
         }
 
     }
@@ -255,9 +257,8 @@ public class EntitySheep extends EntityAnimal {
     @Nullable
     @Override
     public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        groupdataentity = super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
         this.setColor(a(generatoraccess.getRandom()));
-        return groupdataentity;
+        return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
     private EnumColor a(EntityAnimal entityanimal, EntityAnimal entityanimal1) {

@@ -14,7 +14,7 @@ public class PacketPlayOutBlockBreak implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutBlockBreak() {}
 
-    public PacketPlayOutBlockBreak(BlockPosition blockposition, IBlockData iblockdata, PacketPlayInBlockDig.EnumPlayerDigType packetplayinblockdig_enumplayerdigtype, boolean flag) {
+    public PacketPlayOutBlockBreak(BlockPosition blockposition, IBlockData iblockdata, PacketPlayInBlockDig.EnumPlayerDigType packetplayinblockdig_enumplayerdigtype, boolean flag, String s) {
         this.c = blockposition.immutableCopy();
         this.d = iblockdata;
         this.a = packetplayinblockdig_enumplayerdigtype;

@@ -37,7 +37,7 @@ public enum GenLayerMushroomShore implements AreaTransformer7 {
             if (GenLayers.b(i) || GenLayers.b(j) || GenLayers.b(k) || GenLayers.b(l)) {
                 return GenLayerMushroomShore.r;
             }
-        } else if (biomebase != null && biomebase.o() == BiomeBase.Geography.JUNGLE) {
+        } else if (biomebase != null && biomebase.q() == BiomeBase.Geography.JUNGLE) {
             if (!c(i) || !c(j) || !c(k) || !c(l)) {
                 return GenLayerMushroomShore.i;
             }
@@ -46,7 +46,7 @@ public enum GenLayerMushroomShore implements AreaTransformer7 {
                 return GenLayerMushroomShore.b;
             }
         } else if (i1 != GenLayerMushroomShore.e && i1 != GenLayerMushroomShore.f && i1 != GenLayerMushroomShore.t) {
-            if (biomebase != null && biomebase.b() == BiomeBase.Precipitation.SNOW) {
+            if (biomebase != null && biomebase.d() == BiomeBase.Precipitation.SNOW) {
                 if (!GenLayers.a(i1) && (GenLayers.a(i) || GenLayers.a(j) || GenLayers.a(k) || GenLayers.a(l))) {
                     return GenLayerMushroomShore.c;
                 }
@@ -65,7 +65,7 @@ public enum GenLayerMushroomShore implements AreaTransformer7 {
     }
 
     private static boolean c(int i) {
-        return IRegistry.BIOME.fromId(i) != null && ((BiomeBase) IRegistry.BIOME.fromId(i)).o() == BiomeBase.Geography.JUNGLE ? true : i == GenLayerMushroomShore.i || i == GenLayerMushroomShore.h || i == GenLayerMushroomShore.j || i == GenLayerMushroomShore.g || i == GenLayerMushroomShore.w || GenLayers.a(i);
+        return IRegistry.BIOME.fromId(i) != null && ((BiomeBase) IRegistry.BIOME.fromId(i)).q() == BiomeBase.Geography.JUNGLE ? true : i == GenLayerMushroomShore.i || i == GenLayerMushroomShore.h || i == GenLayerMushroomShore.j || i == GenLayerMushroomShore.g || i == GenLayerMushroomShore.w || GenLayers.a(i);
     }
 
     private boolean d(int i) {

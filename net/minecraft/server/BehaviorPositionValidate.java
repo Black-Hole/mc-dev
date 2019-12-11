@@ -26,10 +26,15 @@ public class BehaviorPositionValidate extends Behavior<EntityLiving> {
     protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
         GlobalPos globalpos = (GlobalPos) behaviorcontroller.getMemory(this.a).get();
+        BlockPosition blockposition = globalpos.getBlockPosition();
         WorldServer worldserver1 = worldserver.getMinecraftServer().getWorldServer(globalpos.getDimensionManager());
 
-        if (this.a(worldserver1, globalpos.getBlockPosition()) || this.a(worldserver1, globalpos.getBlockPosition(), entityliving)) {
+        if (this.a(worldserver1, blockposition)) {
             behaviorcontroller.removeMemory(this.a);
+        } else if (this.a(worldserver1, blockposition, entityliving)) {
+            behaviorcontroller.removeMemory(this.a);
+            worldserver.B().b(blockposition);
+            PacketDebug.c(worldserver, blockposition);
         }
 
     }

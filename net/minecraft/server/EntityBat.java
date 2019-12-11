@@ -28,8 +28,8 @@ public class EntityBat extends EntityAmbient {
     }
 
     @Override
-    protected float cV() {
-        return super.cV() * 0.95F;
+    protected float dn() {
+        return super.dn() * 0.95F;
     }
 
     @Nullable
@@ -54,7 +54,7 @@ public class EntityBat extends EntityAmbient {
     }
 
     @Override
-    protected void D(Entity entity) {}
+    protected void C(Entity entity) {}
 
     @Override
     protected void collideNearby() {}
@@ -85,7 +85,7 @@ public class EntityBat extends EntityAmbient {
         super.tick();
         if (this.isAsleep()) {
             this.setMot(Vec3D.a);
-            this.locY = (double) MathHelper.floor(this.locY) + 1.0D - (double) this.getHeight();
+            this.setPositionRaw(this.locX(), (double) MathHelper.floor(this.locY()) + 1.0D - (double) this.getHeight(), this.locZ());
         } else {
             this.setMot(this.getMot().d(1.0D, 0.6D, 1.0D));
         }
@@ -101,7 +101,7 @@ public class EntityBat extends EntityAmbient {
         if (this.isAsleep()) {
             if (this.world.getType(blockposition1).isOccluding(this.world, blockposition)) {
                 if (this.random.nextInt(200) == 0) {
-                    this.aM = (float) this.random.nextInt(360);
+                    this.aK = (float) this.random.nextInt(360);
                 }
 
                 if (this.world.a(EntityBat.c, (EntityLiving) this) != null) {
@@ -118,12 +118,12 @@ public class EntityBat extends EntityAmbient {
             }
 
             if (this.d == null || this.random.nextInt(30) == 0 || this.d.a((IPosition) this.getPositionVector(), 2.0D)) {
-                this.d = new BlockPosition(this.locX + (double) this.random.nextInt(7) - (double) this.random.nextInt(7), this.locY + (double) this.random.nextInt(6) - 2.0D, this.locZ + (double) this.random.nextInt(7) - (double) this.random.nextInt(7));
+                this.d = new BlockPosition(this.locX() + (double) this.random.nextInt(7) - (double) this.random.nextInt(7), this.locY() + (double) this.random.nextInt(6) - 2.0D, this.locZ() + (double) this.random.nextInt(7) - (double) this.random.nextInt(7));
             }
 
-            double d0 = (double) this.d.getX() + 0.5D - this.locX;
-            double d1 = (double) this.d.getY() + 0.1D - this.locY;
-            double d2 = (double) this.d.getZ() + 0.5D - this.locZ;
+            double d0 = (double) this.d.getX() + 0.5D - this.locX();
+            double d1 = (double) this.d.getY() + 0.1D - this.locY();
+            double d2 = (double) this.d.getZ() + 0.5D - this.locZ();
             Vec3D vec3d = this.getMot();
             Vec3D vec3d1 = vec3d.add((Math.signum(d0) * 0.5D - vec3d.x) * 0.10000000149011612D, (Math.signum(d1) * 0.699999988079071D - vec3d.y) * 0.10000000149011612D, (Math.signum(d2) * 0.5D - vec3d.z) * 0.10000000149011612D);
 
@@ -131,7 +131,7 @@ public class EntityBat extends EntityAmbient {
             float f = (float) (MathHelper.d(vec3d1.z, vec3d1.x) * 57.2957763671875D) - 90.0F;
             float f1 = MathHelper.g(f - this.yaw);
 
-            this.bd = 0.5F;
+            this.bb = 0.5F;
             this.yaw += f1;
             if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).isOccluding(this.world, blockposition1)) {
                 this.setAsleep(true);
@@ -146,7 +146,9 @@ public class EntityBat extends EntityAmbient {
     }
 
     @Override
-    public void b(float f, float f1) {}
+    public boolean b(float f, float f1) {
+        return false;
+    }
 
     @Override
     protected void a(double d0, boolean flag, IBlockData iblockdata, BlockPosition blockposition) {}
@@ -188,7 +190,7 @@ public class EntityBat extends EntityAmbient {
             int i = generatoraccess.getLightLevel(blockposition);
             byte b0 = 4;
 
-            if (dT()) {
+            if (eo()) {
                 b0 = 7;
             } else if (random.nextBoolean()) {
                 return false;
@@ -198,7 +200,7 @@ public class EntityBat extends EntityAmbient {
         }
     }
 
-    private static boolean dT() {
+    private static boolean eo() {
         LocalDate localdate = LocalDate.now();
         int i = localdate.get(ChronoField.DAY_OF_MONTH);
         int j = localdate.get(ChronoField.MONTH_OF_YEAR);

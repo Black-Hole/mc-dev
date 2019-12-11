@@ -7,13 +7,13 @@ public class BlockPumpkin extends BlockStemmed {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (itemstack.getItem() == Items.SHEARS) {
             if (!world.isClientSide) {
                 EnumDirection enumdirection = movingobjectpositionblock.getDirection();
-                EnumDirection enumdirection1 = enumdirection.k() == EnumDirection.EnumAxis.Y ? entityhuman.getDirection().opposite() : enumdirection;
+                EnumDirection enumdirection1 = enumdirection.m() == EnumDirection.EnumAxis.Y ? entityhuman.getDirection().opposite() : enumdirection;
 
                 world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 world.setTypeAndData(blockposition, (IBlockData) Blocks.CARVED_PUMPKIN.getBlockData().set(BlockPumpkinCarved.a, enumdirection1), 11);
@@ -26,19 +26,19 @@ public class BlockPumpkin extends BlockStemmed {
                 });
             }
 
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
             return super.interact(iblockdata, world, blockposition, entityhuman, enumhand, movingobjectpositionblock);
         }
     }
 
     @Override
-    public BlockStem d() {
+    public BlockStem c() {
         return (BlockStem) Blocks.PUMPKIN_STEM;
     }
 
     @Override
-    public BlockStemAttached e() {
+    public BlockStemAttached d() {
         return (BlockStemAttached) Blocks.ATTACHED_PUMPKIN_STEM;
     }
 }

@@ -69,7 +69,7 @@ public class CraftingManager extends ResourceDataJson {
         return (List) this.a(recipes).values().stream().flatMap((irecipe) -> {
             return SystemUtils.a(recipes.a(irecipe, world, c0));
         }).sorted(Comparator.comparing((irecipe) -> {
-            return irecipe.c().j();
+            return irecipe.getResult().j();
         })).collect(Collectors.toList());
     }
 

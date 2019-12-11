@@ -14,7 +14,7 @@ public class CommandStopSound {
         RequiredArgumentBuilder<CommandListenerWrapper, EntitySelector> requiredargumentbuilder = (RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), (SoundCategory) null, (MinecraftKey) null);
         })).then(CommandDispatcher.a("*").then(CommandDispatcher.a("sound", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.c).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), (SoundCategory) null, ArgumentMinecraftKeyRegistered.c(commandcontext, "sound"));
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), (SoundCategory) null, ArgumentMinecraftKeyRegistered.d(commandcontext, "sound"));
         })));
         SoundCategory[] asoundcategory = SoundCategory.values();
         int i = asoundcategory.length;
@@ -25,7 +25,7 @@ public class CommandStopSound {
             requiredargumentbuilder.then(((LiteralArgumentBuilder) CommandDispatcher.a(soundcategory.a()).executes((commandcontext) -> {
                 return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), soundcategory, (MinecraftKey) null);
             })).then(CommandDispatcher.a("sound", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.c).executes((commandcontext) -> {
-                return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), soundcategory, ArgumentMinecraftKeyRegistered.c(commandcontext, "sound"));
+                return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), soundcategory, ArgumentMinecraftKeyRegistered.d(commandcontext, "sound"));
             })));
         }
 

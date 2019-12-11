@@ -59,29 +59,29 @@ public class ChatClickable {
 
     public static enum EnumClickAction {
 
-        OPEN_URL("open_url", true), OPEN_FILE("open_file", false), RUN_COMMAND("run_command", true), SUGGEST_COMMAND("suggest_command", true), CHANGE_PAGE("change_page", true);
+        OPEN_URL("open_url", true), OPEN_FILE("open_file", false), RUN_COMMAND("run_command", true), SUGGEST_COMMAND("suggest_command", true), CHANGE_PAGE("change_page", true), COPY_TO_CLIPBOARD("copy_to_clipboard", true);
 
-        private static final Map<String, ChatClickable.EnumClickAction> f = (Map) Arrays.stream(values()).collect(Collectors.toMap(ChatClickable.EnumClickAction::b, (chatclickable_enumclickaction) -> {
+        private static final Map<String, ChatClickable.EnumClickAction> g = (Map) Arrays.stream(values()).collect(Collectors.toMap(ChatClickable.EnumClickAction::b, (chatclickable_enumclickaction) -> {
             return chatclickable_enumclickaction;
         }));
-        private final boolean g;
-        private final String h;
+        private final boolean h;
+        private final String i;
 
         private EnumClickAction(String s, boolean flag) {
-            this.h = s;
-            this.g = flag;
+            this.i = s;
+            this.h = flag;
         }
 
         public boolean a() {
-            return this.g;
-        }
-
-        public String b() {
             return this.h;
         }
 
+        public String b() {
+            return this.i;
+        }
+
         public static ChatClickable.EnumClickAction a(String s) {
-            return (ChatClickable.EnumClickAction) ChatClickable.EnumClickAction.f.get(s);
+            return (ChatClickable.EnumClickAction) ChatClickable.EnumClickAction.g.get(s);
         }
     }
 }

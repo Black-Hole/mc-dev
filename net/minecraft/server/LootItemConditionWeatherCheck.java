@@ -18,7 +18,7 @@ public class LootItemConditionWeatherCheck implements LootItemCondition {
     }
 
     public boolean test(LootTableInfo loottableinfo) {
-        WorldServer worldserver = loottableinfo.d();
+        WorldServer worldserver = loottableinfo.c();
 
         return this.a != null && this.a != worldserver.isRaining() ? false : this.b == null || this.b == worldserver.U();
     }

@@ -11,12 +11,10 @@ public class WorldGenBuriedTreasure extends StructureGenerator<WorldGenBuriedTre
     }
 
     @Override
-    public boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
-        BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9));
-
-        if (chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.BURIED_TREASURE)) {
+    public boolean a(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, Random random, int i, int j, BiomeBase biomebase) {
+        if (chunkgenerator.canSpawnStructure(biomebase, this)) {
             ((SeededRandom) random).a(chunkgenerator.getSeed(), i, j, 10387320);
-            WorldGenBuriedTreasureConfiguration worldgenburiedtreasureconfiguration = (WorldGenBuriedTreasureConfiguration) chunkgenerator.getFeatureConfiguration(biomebase, WorldGenerator.BURIED_TREASURE);
+            WorldGenBuriedTreasureConfiguration worldgenburiedtreasureconfiguration = (WorldGenBuriedTreasureConfiguration) chunkgenerator.getFeatureConfiguration(biomebase, this);
 
             return random.nextFloat() < worldgenburiedtreasureconfiguration.a;
         } else {
@@ -41,8 +39,8 @@ public class WorldGenBuriedTreasure extends StructureGenerator<WorldGenBuriedTre
 
     public static class a extends StructureStart {
 
-        public a(StructureGenerator<?> structuregenerator, int i, int j, BiomeBase biomebase, StructureBoundingBox structureboundingbox, int k, long l) {
-            super(structuregenerator, i, j, biomebase, structureboundingbox, k, l);
+        public a(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+            super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
         @Override

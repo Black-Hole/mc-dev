@@ -83,7 +83,7 @@ public class AdvancementDataPlayer {
     }
 
     private void d() {
-        Iterator iterator = this.d.getAdvancementData().a().iterator();
+        Iterator iterator = this.d.getAdvancementData().getAdvancements().iterator();
 
         while (iterator.hasNext()) {
             Advancement advancement = (Advancement) iterator.next();
@@ -117,7 +117,7 @@ public class AdvancementDataPlayer {
     }
 
     private void f() {
-        Iterator iterator = this.d.getAdvancementData().a().iterator();
+        Iterator iterator = this.d.getAdvancementData().getAdvancements().iterator();
 
         while (iterator.hasNext()) {
             Advancement advancement = (Advancement) iterator.next();
@@ -144,7 +144,7 @@ public class AdvancementDataPlayer {
                         dynamic = dynamic.set("DataVersion", dynamic.createInt(1343));
                     }
 
-                    dynamic = this.d.aB().update(DataFixTypes.ADVANCEMENTS.a(), dynamic, dynamic.get("DataVersion").asInt(0), SharedConstants.a().getWorldVersion());
+                    dynamic = this.d.aB().update(DataFixTypes.ADVANCEMENTS.a(), dynamic, dynamic.get("DataVersion").asInt(0), SharedConstants.getGameVersion().getWorldVersion());
                     dynamic = dynamic.remove("DataVersion");
                     Map<MinecraftKey, AdvancementProgress> map = (Map) AdvancementDataPlayer.b.getAdapter(AdvancementDataPlayer.c).fromJsonTree((JsonElement) dynamic.getValue());
 
@@ -213,7 +213,7 @@ public class AdvancementDataPlayer {
 
         JsonElement jsonelement = AdvancementDataPlayer.b.toJsonTree(map);
 
-        jsonelement.getAsJsonObject().addProperty("DataVersion", SharedConstants.a().getWorldVersion());
+        jsonelement.getAsJsonObject().addProperty("DataVersion", SharedConstants.getGameVersion().getWorldVersion());
 
         try {
             FileOutputStream fileoutputstream = new FileOutputStream(this.e);

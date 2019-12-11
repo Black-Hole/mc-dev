@@ -82,7 +82,7 @@ public class GameProfiler implements GameProfilerFiller {
         @Override
         public void d() {
             if (this.a == GameProfilerDisabled.a) {
-                this.a = new MethodProfiler(SystemUtils.getMonotonicNanos(), GameProfiler.this.c);
+                this.a = new MethodProfiler(SystemUtils.getMonotonicNanos(), GameProfiler.this.c, true);
             }
 
         }

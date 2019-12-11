@@ -20,7 +20,7 @@ public class WeightedRandom {
 
     public static <T extends WeightedRandom.WeightedRandomChoice> T a(Random random, List<T> list, int i) {
         if (i <= 0) {
-            throw new IllegalArgumentException();
+            throw (IllegalArgumentException) SystemUtils.c(new IllegalArgumentException());
         } else {
             int j = random.nextInt(i);
 

@@ -25,7 +25,7 @@ public class LootItemConditionEntityProperty implements LootItemCondition {
         Entity entity = (Entity) loottableinfo.getContextParameter(this.b.a());
         BlockPosition blockposition = (BlockPosition) loottableinfo.getContextParameter(LootContextParameters.POSITION);
 
-        return blockposition != null && this.a.a(loottableinfo.d(), new Vec3D(blockposition), entity);
+        return this.a.a(loottableinfo.c(), blockposition != null ? new Vec3D(blockposition) : null, entity);
     }
 
     public static LootItemCondition.a a(LootTableInfo.EntityTarget loottableinfo_entitytarget) {

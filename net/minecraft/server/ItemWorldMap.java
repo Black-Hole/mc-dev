@@ -60,11 +60,11 @@ public class ItemWorldMap extends ItemWorldMapBase {
             int i = 1 << worldmap.scale;
             int j = worldmap.centerX;
             int k = worldmap.centerZ;
-            int l = MathHelper.floor(entity.locX - (double) j) / i + 64;
-            int i1 = MathHelper.floor(entity.locZ - (double) k) / i + 64;
+            int l = MathHelper.floor(entity.locX() - (double) j) / i + 64;
+            int i1 = MathHelper.floor(entity.locZ() - (double) k) / i + 64;
             int j1 = 128 / i;
 
-            if (world.worldProvider.h()) {
+            if (world.worldProvider.g()) {
                 j1 /= 2;
             }
 
@@ -95,7 +95,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                 int k3 = 0;
                                 double d1 = 0.0D;
 
-                                if (world.worldProvider.h()) {
+                                if (world.worldProvider.g()) {
                                     int l3 = k2 + l2 * 231871;
 
                                     l3 = l3 * l3 * 31287121 + l3 * 11;
@@ -122,7 +122,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                                     iblockdata = chunk.getType(blockposition_mutableblockposition);
                                                 } while (iblockdata.c((IBlockAccess) world, (BlockPosition) blockposition_mutableblockposition) == MaterialMapColor.b && k4 > 0);
 
-                                                if (k4 > 0 && !iblockdata.p().isEmpty()) {
+                                                if (k4 > 0 && !iblockdata.getFluid().isEmpty()) {
                                                     int l4 = k4 - 1;
 
                                                     blockposition_mutableblockposition1.g(blockposition_mutableblockposition);
@@ -133,7 +133,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                                         blockposition_mutableblockposition1.p(l4--);
                                                         iblockdata1 = chunk.getType(blockposition_mutableblockposition1);
                                                         ++k3;
-                                                    } while (l4 > 0 && !iblockdata1.p().isEmpty());
+                                                    } while (l4 > 0 && !iblockdata1.getFluid().isEmpty());
 
                                                     iblockdata = this.a(world, iblockdata, (BlockPosition) blockposition_mutableblockposition);
                                                 }
@@ -195,27 +195,36 @@ public class ItemWorldMap extends ItemWorldMapBase {
     }
 
     private IBlockData a(World world, IBlockData iblockdata, BlockPosition blockposition) {
-        Fluid fluid = iblockdata.p();
+        Fluid fluid = iblockdata.getFluid();
 
         return !fluid.isEmpty() && !iblockdata.d(world, blockposition, EnumDirection.UP) ? fluid.getBlockData() : iblockdata;
     }
 
     private static boolean a(BiomeBase[] abiomebase, int i, int j, int k) {
-        return abiomebase[j * i + k * i * 128 * i].g() >= 0.0F;
+        return abiomebase[j * i + k * i * 128 * i].i() >= 0.0F;
     }
 
-    public static void applySepiaFilter(World world, ItemStack itemstack) {
-        WorldMap worldmap = getSavedMap(itemstack, world);
+    public static void applySepiaFilter(WorldServer worldserver, ItemStack itemstack) {
+        WorldMap worldmap = getSavedMap(itemstack, worldserver);
 
         if (worldmap != null) {
-            if (world.worldProvider.getDimensionManager() == worldmap.map) {
+            if (worldserver.worldProvider.getDimensionManager() == worldmap.map) {
                 int i = 1 << worldmap.scale;
                 int j = worldmap.centerX;
                 int k = worldmap.centerZ;
-                BiomeBase[] abiomebase = world.getChunkProvider().getChunkGenerator().getWorldChunkManager().a((j / i - 64) * i, (k / i - 64) * i, 128 * i, 128 * i, false);
+                BiomeBase[] abiomebase = new BiomeBase[128 * i * 128 * i];
 
-                for (int l = 0; l < 128; ++l) {
-                    for (int i1 = 0; i1 < 128; ++i1) {
+                int l;
+                int i1;
+
+                for (l = 0; l < 128 * i; ++l) {
+                    for (i1 = 0; i1 < 128 * i; ++i1) {
+                        abiomebase[l * 128 * i + i1] = worldserver.getBiome(new BlockPosition((j / i - 64) * i + i1, 0, (k / i - 64) * i + l));
+                    }
+                }
+
+                for (l = 0; l < 128; ++l) {
+                    for (i1 = 0; i1 < 128; ++i1) {
                         if (l > 0 && i1 > 0 && l < 127 && i1 < 127) {
                             BiomeBase biomebase = abiomebase[l * i + i1 * i * 128 * i];
                             int j1 = 8;
@@ -255,7 +264,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                             int k1 = 3;
                             MaterialMapColor materialmapcolor = MaterialMapColor.b;
 
-                            if (biomebase.g() < 0.0F) {
+                            if (biomebase.i() < 0.0F) {
                                 materialmapcolor = MaterialMapColor.q;
                                 if (j1 > 7 && i1 % 2 == 0) {
                                     k1 = (l + (int) (MathHelper.sin((float) i1 + 0.0F) * 7.0F)) / 8 % 5;
@@ -341,7 +350,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
     }
 
     @Nullable
-    public static ItemStack b(World world, ItemStack itemstack) {
+    public static ItemStack a(World world, ItemStack itemstack) {
         WorldMap worldmap = getSavedMap(itemstack, world);
 
         if (worldmap != null) {

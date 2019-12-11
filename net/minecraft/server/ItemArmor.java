@@ -10,9 +10,7 @@ public class ItemArmor extends Item {
     public static final IDispenseBehavior a = new DispenseBehaviorItem() {
         @Override
         protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-            ItemStack itemstack1 = ItemArmor.a(isourceblock, itemstack);
-
-            return itemstack1.isEmpty() ? super.a(isourceblock, itemstack) : itemstack1;
+            return ItemArmor.a(isourceblock, itemstack) ? itemstack : super.a(isourceblock, itemstack);
         }
     };
     protected final EnumItemSlot b;
@@ -20,12 +18,12 @@ public class ItemArmor extends Item {
     protected final float d;
     protected final ArmorMaterial e;
 
-    public static ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
+    public static boolean a(ISourceBlock isourceblock, ItemStack itemstack) {
         BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
         List<EntityLiving> list = isourceblock.getWorld().a(EntityLiving.class, new AxisAlignedBB(blockposition), IEntitySelector.f.and(new IEntitySelector.EntitySelectorEquipable(itemstack)));
 
         if (list.isEmpty()) {
-            return ItemStack.a;
+            return false;
         } else {
             EntityLiving entityliving = (EntityLiving) list.get(0);
             EnumItemSlot enumitemslot = EntityInsentient.h(itemstack);
@@ -37,7 +35,7 @@ public class ItemArmor extends Item {
                 ((EntityInsentient) entityliving).setPersistent();
             }
 
-            return itemstack;
+            return true;
         }
     }
 
@@ -59,7 +57,7 @@ public class ItemArmor extends Item {
         return this.e.a();
     }
 
-    public ArmorMaterial d() {
+    public ArmorMaterial Q_() {
         return this.e;
     }
 
@@ -77,9 +75,9 @@ public class ItemArmor extends Item {
         if (itemstack1.isEmpty()) {
             entityhuman.setSlot(enumitemslot, itemstack.cloneItemStack());
             itemstack.setCount(0);
-            return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
+            return InteractionResultWrapper.a(itemstack);
         } else {
-            return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
+            return InteractionResultWrapper.d(itemstack);
         }
     }
 

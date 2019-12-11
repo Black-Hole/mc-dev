@@ -105,7 +105,7 @@ public class ChunkProviderServer extends IChunkProvider {
                 return ichunkaccess1;
             }, (playerchunk_failure) -> {
                 if (flag) {
-                    throw new IllegalStateException("Chunk not there when requested: " + playerchunk_failure);
+                    throw (IllegalStateException) SystemUtils.c(new IllegalStateException("Chunk not there when requested: " + playerchunk_failure));
                 } else {
                     return null;
                 }
@@ -178,7 +178,7 @@ public class ChunkProviderServer extends IChunkProvider {
                 playerchunk = this.getChunk(k);
                 gameprofilerfiller.exit();
                 if (this.a(playerchunk, l)) {
-                    throw new IllegalStateException("No chunk holder after ticket has been added");
+                    throw (IllegalStateException) SystemUtils.c(new IllegalStateException("No chunk holder after ticket has been added"));
                 }
             }
         }
@@ -247,7 +247,7 @@ public class ChunkProviderServer extends IChunkProvider {
 
     @Override
     public boolean a(Entity entity) {
-        long i = ChunkCoordIntPair.pair(MathHelper.floor(entity.locX) >> 4, MathHelper.floor(entity.locZ) >> 4);
+        long i = ChunkCoordIntPair.pair(MathHelper.floor(entity.locX()) >> 4, MathHelper.floor(entity.locZ()) >> 4);
 
         return this.a(i, PlayerChunk::b);
     }
@@ -265,7 +265,7 @@ public class ChunkProviderServer extends IChunkProvider {
     }
 
     public boolean b(Entity entity) {
-        long i = ChunkCoordIntPair.pair(MathHelper.floor(entity.locX) >> 4, MathHelper.floor(entity.locZ) >> 4);
+        long i = ChunkCoordIntPair.pair(MathHelper.floor(entity.locX()) >> 4, MathHelper.floor(entity.locZ()) >> 4);
 
         return this.a(i, PlayerChunk::c);
     }
@@ -339,7 +339,7 @@ public class ChunkProviderServer extends IChunkProvider {
                     ChunkCoordIntPair chunkcoordintpair = playerchunk.i();
 
                     if (!this.playerChunkMap.isOutsideOfRange(chunkcoordintpair)) {
-                        chunk.b(chunk.q() + j);
+                        chunk.setInhabitedTime(chunk.getInhabitedTime() + j);
                         if (flag1 && (this.allowMonsters || this.allowAnimals) && this.world.getWorldBorder().isInBounds(chunk.getPos())) {
                             this.world.getMethodProfiler().enter("spawner");
                             EnumCreatureType[] aenumcreaturetype1 = aenumcreaturetype;
@@ -352,7 +352,7 @@ public class ChunkProviderServer extends IChunkProvider {
                                     int k1 = enumcreaturetype.b() * l / ChunkProviderServer.b;
 
                                     if (object2intmap.getInt(enumcreaturetype) <= k1) {
-                                        SpawnerCreature.a(enumcreaturetype, (World) this.world, chunk, blockposition);
+                                        SpawnerCreature.a(enumcreaturetype, this.world, chunk, blockposition);
                                     }
                                 }
                             }
@@ -383,10 +383,9 @@ public class ChunkProviderServer extends IChunkProvider {
 
     @VisibleForTesting
     public int f() {
-        return this.serverThreadQueue.be();
+        return this.serverThreadQueue.bg();
     }
 
-    @Override
     public ChunkGenerator<?> getChunkGenerator() {
         return this.chunkGenerator;
     }

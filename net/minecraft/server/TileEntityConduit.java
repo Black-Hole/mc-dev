@@ -70,8 +70,8 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         if (i % 40L == 0L) {
             this.a(this.h());
             if (!this.world.isClientSide && this.d()) {
-                this.s();
-                this.t();
+                this.j();
+                this.k();
             }
         }
 
@@ -85,7 +85,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         }
 
         if (this.world.isClientSide) {
-            this.u();
+            this.l();
             this.y();
             if (this.d()) {
                 ++this.c;
@@ -106,7 +106,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
                 for (k = -1; k <= 1; ++k) {
                     BlockPosition blockposition = this.position.b(i, j, k);
 
-                    if (!this.world.x(blockposition)) {
+                    if (!this.world.y(blockposition)) {
                         return false;
                     }
                 }
@@ -142,7 +142,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         return this.i.size() >= 16;
     }
 
-    private void s() {
+    private void j() {
         int i = this.i.size();
         int j = i / 7 * 16;
         int k = this.position.getX();
@@ -165,7 +165,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         }
     }
 
-    private void t() {
+    private void k() {
         EntityLiving entityliving = this.target;
         int i = this.i.size();
 
@@ -175,7 +175,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
             this.target = this.x();
             this.k = null;
         } else if (this.target == null) {
-            List<EntityLiving> list = this.world.a(EntityLiving.class, this.v(), (entityliving1) -> {
+            List<EntityLiving> list = this.world.a(EntityLiving.class, this.m(), (entityliving1) -> {
                 return entityliving1 instanceof IMonster && entityliving1.isInWaterOrRain();
             });
 
@@ -187,7 +187,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         }
 
         if (this.target != null) {
-            this.world.playSound((EntityHuman) null, this.target.locX, this.target.locY, this.target.locZ, SoundEffects.BLOCK_CONDUIT_ATTACK_TARGET, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            this.world.playSound((EntityHuman) null, this.target.locX(), this.target.locY(), this.target.locZ(), SoundEffects.BLOCK_CONDUIT_ATTACK_TARGET, SoundCategory.BLOCKS, 1.0F, 1.0F);
             this.target.damageEntity(DamageSource.MAGIC, 4.0F);
         }
 
@@ -199,7 +199,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
 
     }
 
-    private void u() {
+    private void l() {
         if (this.k == null) {
             this.target = null;
         } else if (this.target == null || !this.target.getUniqueID().equals(this.k)) {
@@ -211,7 +211,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
 
     }
 
-    private AxisAlignedBB v() {
+    private AxisAlignedBB m() {
         int i = this.position.getX();
         int j = this.position.getY();
         int k = this.position.getZ();
@@ -221,7 +221,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
 
     @Nullable
     private EntityLiving x() {
-        List<EntityLiving> list = this.world.a(EntityLiving.class, this.v(), (entityliving) -> {
+        List<EntityLiving> list = this.world.a(EntityLiving.class, this.m(), (entityliving) -> {
             return entityliving.getUniqueID().equals(this.k);
         });
 
@@ -230,36 +230,36 @@ public class TileEntityConduit extends TileEntity implements ITickable {
 
     private void y() {
         Random random = this.world.random;
-        float f = MathHelper.sin((float) (this.a + 35) * 0.1F) / 2.0F + 0.5F;
+        double d0 = (double) (MathHelper.sin((float) (this.a + 35) * 0.1F) / 2.0F + 0.5F);
 
-        f = (f * f + f) * 0.3F;
-        Vec3D vec3d = new Vec3D((double) ((float) this.position.getX() + 0.5F), (double) ((float) this.position.getY() + 1.5F + f), (double) ((float) this.position.getZ() + 0.5F));
+        d0 = (d0 * d0 + d0) * 0.30000001192092896D;
+        Vec3D vec3d = new Vec3D((double) this.position.getX() + 0.5D, (double) this.position.getY() + 1.5D + d0, (double) this.position.getZ() + 0.5D);
         Iterator iterator = this.i.iterator();
 
+        float f;
         float f1;
-        float f2;
 
         while (iterator.hasNext()) {
             BlockPosition blockposition = (BlockPosition) iterator.next();
 
             if (random.nextInt(50) == 0) {
-                f1 = -0.5F + random.nextFloat();
-                f2 = -2.0F + random.nextFloat();
-                float f3 = -0.5F + random.nextFloat();
+                f = -0.5F + random.nextFloat();
+                f1 = -2.0F + random.nextFloat();
+                float f2 = -0.5F + random.nextFloat();
                 BlockPosition blockposition1 = blockposition.b(this.position);
-                Vec3D vec3d1 = (new Vec3D((double) f1, (double) f2, (double) f3)).add((double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
+                Vec3D vec3d1 = (new Vec3D((double) f, (double) f1, (double) f2)).add((double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
 
                 this.world.addParticle(Particles.NAUTILUS, vec3d.x, vec3d.y, vec3d.z, vec3d1.x, vec3d1.y, vec3d1.z);
             }
         }
 
         if (this.target != null) {
-            Vec3D vec3d2 = new Vec3D(this.target.locX, this.target.locY + (double) this.target.getHeadHeight(), this.target.locZ);
-            float f4 = (-0.5F + random.nextFloat()) * (3.0F + this.target.getWidth());
+            Vec3D vec3d2 = new Vec3D(this.target.locX(), this.target.getHeadY(), this.target.locZ());
+            float f3 = (-0.5F + random.nextFloat()) * (3.0F + this.target.getWidth());
 
-            f1 = -1.0F + random.nextFloat() * this.target.getHeight();
-            f2 = (-0.5F + random.nextFloat()) * (3.0F + this.target.getWidth());
-            Vec3D vec3d3 = new Vec3D((double) f4, (double) f1, (double) f2);
+            f = -1.0F + random.nextFloat() * this.target.getHeight();
+            f1 = (-0.5F + random.nextFloat()) * (3.0F + this.target.getWidth());
+            Vec3D vec3d3 = new Vec3D((double) f3, (double) f, (double) f1);
 
             this.world.addParticle(Particles.NAUTILUS, vec3d2.x, vec3d2.y, vec3d2.z, vec3d3.x, vec3d3.y, vec3d3.z);
         }

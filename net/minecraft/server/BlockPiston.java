@@ -1,10 +1,11 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class BlockPiston extends BlockDirectional {
 
@@ -19,7 +20,7 @@ public class BlockPiston extends BlockDirectional {
 
     public BlockPiston(boolean flag, Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPiston.FACING, EnumDirection.NORTH)).set(BlockPiston.EXTENDED, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPiston.FACING, EnumDirection.NORTH)).set(BlockPiston.EXTENDED, false));
         this.sticky = flag;
     }
 
@@ -93,7 +94,7 @@ public class BlockPiston extends BlockDirectional {
 
         if (flag && !(Boolean) iblockdata.get(BlockPiston.EXTENDED)) {
             if ((new PistonExtendsChecker(world, blockposition, enumdirection, true)).a()) {
-                world.playBlockAction(blockposition, this, 0, enumdirection.a());
+                world.playBlockAction(blockposition, this, 0, enumdirection.b());
             }
         } else if (!flag && (Boolean) iblockdata.get(BlockPiston.EXTENDED)) {
             BlockPosition blockposition1 = blockposition.shift(enumdirection, 2);
@@ -106,13 +107,13 @@ public class BlockPiston extends BlockDirectional {
                 if (tileentity instanceof TileEntityPiston) {
                     TileEntityPiston tileentitypiston = (TileEntityPiston) tileentity;
 
-                    if (tileentitypiston.d() && (tileentitypiston.a(0.0F) < 0.5F || world.getTime() == tileentitypiston.v() || ((WorldServer) world).b())) {
+                    if (tileentitypiston.d() && (tileentitypiston.a(0.0F) < 0.5F || world.getTime() == tileentitypiston.m() || ((WorldServer) world).b())) {
                         b0 = 2;
                     }
                 }
             }
 
-            world.playBlockAction(blockposition, this, b0, enumdirection.a());
+            world.playBlockAction(blockposition, this, b0, enumdirection.b());
         }
 
     }
@@ -179,7 +180,7 @@ public class BlockPiston extends BlockDirectional {
             TileEntity tileentity = world.getTileEntity(blockposition.shift(enumdirection));
 
             if (tileentity instanceof TileEntityPiston) {
-                ((TileEntityPiston) tileentity).u();
+                ((TileEntityPiston) tileentity).l();
             }
 
             world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) Blocks.MOVING_PISTON.getBlockData().set(BlockPistonMoving.a, enumdirection)).set(BlockPistonMoving.b, this.sticky ? BlockPropertyPistonType.STICKY : BlockPropertyPistonType.DEFAULT), 3);
@@ -197,7 +198,7 @@ public class BlockPiston extends BlockDirectional {
                         TileEntityPiston tileentitypiston = (TileEntityPiston) tileentity1;
 
                         if (tileentitypiston.f() == enumdirection && tileentitypiston.d()) {
-                            tileentitypiston.u();
+                            tileentitypiston.l();
                             flag1 = true;
                         }
                     }
@@ -267,76 +268,94 @@ public class BlockPiston extends BlockDirectional {
         if (!pistonextendschecker.a()) {
             return false;
         } else {
+            Map<BlockPosition, IBlockData> map = Maps.newHashMap();
             List<BlockPosition> list = pistonextendschecker.getMovedBlocks();
             List<IBlockData> list1 = Lists.newArrayList();
 
             for (int i = 0; i < list.size(); ++i) {
                 BlockPosition blockposition2 = (BlockPosition) list.get(i);
+                IBlockData iblockdata = world.getType(blockposition2);
 
-                list1.add(world.getType(blockposition2));
+                list1.add(iblockdata);
+                map.put(blockposition2, iblockdata);
             }
 
             List<BlockPosition> list2 = pistonextendschecker.getBrokenBlocks();
             int j = list.size() + list2.size();
             IBlockData[] aiblockdata = new IBlockData[j];
             EnumDirection enumdirection1 = flag ? enumdirection : enumdirection.opposite();
-            Set<BlockPosition> set = Sets.newHashSet(list);
 
             BlockPosition blockposition3;
             int k;
-            IBlockData iblockdata;
+            IBlockData iblockdata1;
 
             for (k = list2.size() - 1; k >= 0; --k) {
                 blockposition3 = (BlockPosition) list2.get(k);
-                iblockdata = world.getType(blockposition3);
-                TileEntity tileentity = iblockdata.getBlock().isTileEntity() ? world.getTileEntity(blockposition3) : null;
+                iblockdata1 = world.getType(blockposition3);
+                TileEntity tileentity = iblockdata1.getBlock().isTileEntity() ? world.getTileEntity(blockposition3) : null;
 
-                a(iblockdata, world, blockposition3, tileentity);
+                a(iblockdata1, world, blockposition3, tileentity);
                 world.setTypeAndData(blockposition3, Blocks.AIR.getBlockData(), 18);
                 --j;
-                aiblockdata[j] = iblockdata;
+                aiblockdata[j] = iblockdata1;
             }
 
             for (k = list.size() - 1; k >= 0; --k) {
                 blockposition3 = (BlockPosition) list.get(k);
-                iblockdata = world.getType(blockposition3);
+                iblockdata1 = world.getType(blockposition3);
                 blockposition3 = blockposition3.shift(enumdirection1);
-                set.remove(blockposition3);
+                map.remove(blockposition3);
                 world.setTypeAndData(blockposition3, (IBlockData) Blocks.MOVING_PISTON.getBlockData().set(BlockPiston.FACING, enumdirection), 68);
                 world.setTileEntity(blockposition3, BlockPistonMoving.a((IBlockData) list1.get(k), enumdirection, flag, false));
                 --j;
-                aiblockdata[j] = iblockdata;
+                aiblockdata[j] = iblockdata1;
             }
-
-            IBlockData iblockdata1;
 
             if (flag) {
                 BlockPropertyPistonType blockpropertypistontype = this.sticky ? BlockPropertyPistonType.STICKY : BlockPropertyPistonType.DEFAULT;
+                IBlockData iblockdata2 = (IBlockData) ((IBlockData) Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.FACING, enumdirection)).set(BlockPistonExtension.TYPE, blockpropertypistontype);
 
-                iblockdata1 = (IBlockData) ((IBlockData) Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.FACING, enumdirection)).set(BlockPistonExtension.TYPE, blockpropertypistontype);
-                iblockdata = (IBlockData) ((IBlockData) Blocks.MOVING_PISTON.getBlockData().set(BlockPistonMoving.a, enumdirection)).set(BlockPistonMoving.b, this.sticky ? BlockPropertyPistonType.STICKY : BlockPropertyPistonType.DEFAULT);
-                set.remove(blockposition1);
-                world.setTypeAndData(blockposition1, iblockdata, 68);
-                world.setTileEntity(blockposition1, BlockPistonMoving.a(iblockdata1, enumdirection, true, true));
+                iblockdata1 = (IBlockData) ((IBlockData) Blocks.MOVING_PISTON.getBlockData().set(BlockPistonMoving.a, enumdirection)).set(BlockPistonMoving.b, this.sticky ? BlockPropertyPistonType.STICKY : BlockPropertyPistonType.DEFAULT);
+                map.remove(blockposition1);
+                world.setTypeAndData(blockposition1, iblockdata1, 68);
+                world.setTileEntity(blockposition1, BlockPistonMoving.a(iblockdata2, enumdirection, true, true));
             }
 
-            Iterator iterator = set.iterator();
+            IBlockData iblockdata3 = Blocks.AIR.getBlockData();
+            Iterator iterator = map.keySet().iterator();
 
             while (iterator.hasNext()) {
-                blockposition3 = (BlockPosition) iterator.next();
-                world.setTypeAndData(blockposition3, Blocks.AIR.getBlockData(), 66);
+                BlockPosition blockposition4 = (BlockPosition) iterator.next();
+
+                world.setTypeAndData(blockposition4, iblockdata3, 82);
             }
 
-            for (k = list2.size() - 1; k >= 0; --k) {
+            iterator = map.entrySet().iterator();
+
+            BlockPosition blockposition5;
+
+            while (iterator.hasNext()) {
+                Entry<BlockPosition, IBlockData> entry = (Entry) iterator.next();
+
+                blockposition5 = (BlockPosition) entry.getKey();
+                IBlockData iblockdata4 = (IBlockData) entry.getValue();
+
+                iblockdata4.b(world, blockposition5, 2);
+                iblockdata3.a(world, blockposition5, 2);
+                iblockdata3.b(world, blockposition5, 2);
+            }
+
+            int l;
+
+            for (l = list2.size() - 1; l >= 0; --l) {
                 iblockdata1 = aiblockdata[j++];
-                BlockPosition blockposition4 = (BlockPosition) list2.get(k);
-
-                iblockdata1.b(world, blockposition4, 2);
-                world.applyPhysics(blockposition4, iblockdata1.getBlock());
+                blockposition5 = (BlockPosition) list2.get(l);
+                iblockdata1.b(world, blockposition5, 2);
+                world.applyPhysics(blockposition5, iblockdata1.getBlock());
             }
 
-            for (k = list.size() - 1; k >= 0; --k) {
-                world.applyPhysics((BlockPosition) list.get(k), aiblockdata[j++].getBlock());
+            for (l = list.size() - 1; l >= 0; --l) {
+                world.applyPhysics((BlockPosition) list.get(l), aiblockdata[j++].getBlock());
             }
 
             if (flag) {
@@ -363,7 +382,7 @@ public class BlockPiston extends BlockDirectional {
     }
 
     @Override
-    public boolean n(IBlockData iblockdata) {
+    public boolean o(IBlockData iblockdata) {
         return (Boolean) iblockdata.get(BlockPiston.EXTENDED);
     }
 

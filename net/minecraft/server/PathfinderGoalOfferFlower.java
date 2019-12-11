@@ -21,7 +21,7 @@ public class PathfinderGoalOfferFlower extends PathfinderGoal {
         } else if (this.b.getRandom().nextInt(8000) != 0) {
             return false;
         } else {
-            this.c = (EntityVillager) this.b.world.a(EntityVillager.class, PathfinderGoalOfferFlower.a, this.b, this.b.locX, this.b.locY, this.b.locZ, this.b.getBoundingBox().grow(6.0D, 2.0D, 6.0D));
+            this.c = (EntityVillager) this.b.world.a(EntityVillager.class, PathfinderGoalOfferFlower.a, this.b, this.b.locX(), this.b.locY(), this.b.locZ(), this.b.getBoundingBox().grow(6.0D, 2.0D, 6.0D));
             return this.c != null;
         }
     }

@@ -4,12 +4,12 @@ import javax.annotation.Nullable;
 
 public class EntityPig extends EntityAnimal {
 
-    private static final DataWatcherObject<Boolean> bz = DataWatcher.a(EntityPig.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Integer> bA = DataWatcher.a(EntityPig.class, DataWatcherRegistry.b);
-    private static final RecipeItemStack bB = RecipeItemStack.a(Items.CARROT, Items.POTATO, Items.BEETROOT);
-    private boolean bC;
-    private int bD;
-    private int bE;
+    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityPig.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Integer> bx = DataWatcher.a(EntityPig.class, DataWatcherRegistry.b);
+    private static final RecipeItemStack by = RecipeItemStack.a(Items.CARROT, Items.POTATO, Items.BEETROOT);
+    private boolean bz;
+    private int bA;
+    private int bB;
 
     public EntityPig(EntityTypes<? extends EntityPig> entitytypes, World world) {
         super(entitytypes, world);
@@ -21,7 +21,7 @@ public class EntityPig extends EntityAnimal {
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 1.25D));
         this.goalSelector.a(3, new PathfinderGoalBreed(this, 1.0D));
         this.goalSelector.a(4, new PathfinderGoalTempt(this, 1.2D, RecipeItemStack.a(Items.CARROT_ON_A_STICK), false));
-        this.goalSelector.a(4, new PathfinderGoalTempt(this, 1.2D, false, EntityPig.bB));
+        this.goalSelector.a(4, new PathfinderGoalTempt(this, 1.2D, false, EntityPig.by));
         this.goalSelector.a(5, new PathfinderGoalFollowParent(this, 1.1D));
         this.goalSelector.a(6, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(7, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
@@ -42,7 +42,7 @@ public class EntityPig extends EntityAnimal {
     }
 
     @Override
-    public boolean dD() {
+    public boolean dY() {
         Entity entity = this.getRidingPassenger();
 
         if (!(entity instanceof EntityHuman)) {
@@ -56,10 +56,10 @@ public class EntityPig extends EntityAnimal {
 
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityPig.bA.equals(datawatcherobject) && this.world.isClientSide) {
-            this.bC = true;
-            this.bD = 0;
-            this.bE = (Integer) this.datawatcher.get(EntityPig.bA);
+        if (EntityPig.bx.equals(datawatcherobject) && this.world.isClientSide) {
+            this.bz = true;
+            this.bA = 0;
+            this.bB = (Integer) this.datawatcher.get(EntityPig.bx);
         }
 
         super.a(datawatcherobject);
@@ -68,8 +68,8 @@ public class EntityPig extends EntityAnimal {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityPig.bz, false);
-        this.datawatcher.register(EntityPig.bA, 0);
+        this.datawatcher.register(EntityPig.bw, false);
+        this.datawatcher.register(EntityPig.bx, 0);
     }
 
     @Override
@@ -106,7 +106,9 @@ public class EntityPig extends EntityAnimal {
 
     @Override
     public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
-        if (!super.a(entityhuman, enumhand)) {
+        if (super.a(entityhuman, enumhand)) {
+            return true;
+        } else {
             ItemStack itemstack = entityhuman.b(enumhand);
 
             if (itemstack.getItem() == Items.NAME_TAG) {
@@ -118,20 +120,15 @@ public class EntityPig extends EntityAnimal {
                 }
 
                 return true;
-            } else if (itemstack.getItem() == Items.SADDLE) {
-                itemstack.a(entityhuman, (EntityLiving) this, enumhand);
-                return true;
             } else {
-                return false;
+                return itemstack.getItem() == Items.SADDLE && itemstack.a(entityhuman, (EntityLiving) this, enumhand);
             }
-        } else {
-            return true;
         }
     }
 
     @Override
-    protected void cF() {
-        super.cF();
+    protected void dropInventory() {
+        super.dropInventory();
         if (this.hasSaddle()) {
             this.a((IMaterial) Items.SADDLE);
         }
@@ -139,14 +136,14 @@ public class EntityPig extends EntityAnimal {
     }
 
     public boolean hasSaddle() {
-        return (Boolean) this.datawatcher.get(EntityPig.bz);
+        return (Boolean) this.datawatcher.get(EntityPig.bw);
     }
 
     public void setSaddle(boolean flag) {
         if (flag) {
-            this.datawatcher.set(EntityPig.bz, true);
+            this.datawatcher.set(EntityPig.bw, true);
         } else {
-            this.datawatcher.set(EntityPig.bz, false);
+            this.datawatcher.set(EntityPig.bw, false);
         }
 
     }
@@ -156,7 +153,7 @@ public class EntityPig extends EntityAnimal {
         EntityPigZombie entitypigzombie = (EntityPigZombie) EntityTypes.ZOMBIE_PIGMAN.a(this.world);
 
         entitypigzombie.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
-        entitypigzombie.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
+        entitypigzombie.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.yaw, this.pitch);
         entitypigzombie.setNoAI(this.isNoAI());
         if (this.hasCustomName()) {
             entitypigzombie.setCustomName(this.getCustomName());
@@ -172,59 +169,60 @@ public class EntityPig extends EntityAnimal {
         if (this.isAlive()) {
             Entity entity = this.getPassengers().isEmpty() ? null : (Entity) this.getPassengers().get(0);
 
-            if (this.isVehicle() && this.dD()) {
+            if (this.isVehicle() && this.dY()) {
                 this.yaw = entity.yaw;
                 this.lastYaw = this.yaw;
                 this.pitch = entity.pitch * 0.5F;
                 this.setYawPitch(this.yaw, this.pitch);
+                this.aI = this.yaw;
                 this.aK = this.yaw;
-                this.aM = this.yaw;
-                this.K = 1.0F;
-                this.aO = this.db() * 0.1F;
-                if (this.bC && this.bD++ > this.bE) {
-                    this.bC = false;
+                this.H = 1.0F;
+                this.aM = this.dt() * 0.1F;
+                if (this.bz && this.bA++ > this.bB) {
+                    this.bz = false;
                 }
 
-                if (this.ca()) {
+                if (this.cj()) {
                     float f = (float) this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue() * 0.225F;
 
-                    if (this.bC) {
-                        f += f * 1.15F * MathHelper.sin((float) this.bD / (float) this.bE * 3.1415927F);
+                    if (this.bz) {
+                        f += f * 1.15F * MathHelper.sin((float) this.bA / (float) this.bB * 3.1415927F);
                     }
 
                     this.o(f);
                     super.e(new Vec3D(0.0D, 0.0D, 1.0D));
+                    this.bc = 0;
                 } else {
                     this.setMot(Vec3D.a);
                 }
 
-                this.aE = this.aF;
-                double d0 = this.locX - this.lastX;
-                double d1 = this.locZ - this.lastZ;
+                this.aC = this.aD;
+                double d0 = this.locX() - this.lastX;
+                double d1 = this.locZ() - this.lastZ;
                 float f1 = MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0F;
 
                 if (f1 > 1.0F) {
                     f1 = 1.0F;
                 }
 
-                this.aF += (f1 - this.aF) * 0.4F;
-                this.aG += this.aF;
+                this.aD += (f1 - this.aD) * 0.4F;
+                this.aE += this.aD;
             } else {
-                this.K = 0.5F;
-                this.aO = 0.02F;
+                this.H = 0.5F;
+                this.aM = 0.02F;
                 super.e(vec3d);
             }
         }
     }
 
-    public boolean dW() {
-        if (this.bC) {
+    public boolean er() {
+        if (this.bz) {
             return false;
         } else {
-            this.bC = true;
-            this.bD = 0;
-            this.bE = this.getRandom().nextInt(841) + 140;
-            this.getDataWatcher().set(EntityPig.bA, this.bE);
+            this.bz = true;
+            this.bA = 0;
+            this.bB = this.getRandom().nextInt(841) + 140;
+            this.getDataWatcher().set(EntityPig.bx, this.bB);
             return true;
         }
     }
@@ -236,6 +234,6 @@ public class EntityPig extends EntityAnimal {
 
     @Override
     public boolean i(ItemStack itemstack) {
-        return EntityPig.bB.test(itemstack);
+        return EntityPig.by.test(itemstack);
     }
 }

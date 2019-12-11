@@ -8,7 +8,7 @@ public class BlockTNT extends Block {
 
     public BlockTNT(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) this.getBlockData().set(BlockTNT.a, false));
+        this.p((IBlockData) this.getBlockData().set(BlockTNT.a, false));
     }
 
     @Override
@@ -33,7 +33,7 @@ public class BlockTNT extends Block {
 
     @Override
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
-        if (!world.e() && !entityhuman.isCreative() && (Boolean) iblockdata.get(BlockTNT.a)) {
+        if (!world.p_() && !entityhuman.isCreative() && (Boolean) iblockdata.get(BlockTNT.a)) {
             a(world, blockposition);
         }
 
@@ -56,15 +56,15 @@ public class BlockTNT extends Block {
 
     private static void a(World world, BlockPosition blockposition, @Nullable EntityLiving entityliving) {
         if (!world.isClientSide) {
-            EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) blockposition.getX() + 0.5F), (double) blockposition.getY(), (double) ((float) blockposition.getZ() + 0.5F), entityliving);
+            EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, entityliving);
 
             world.addEntity(entitytntprimed);
-            world.playSound((EntityHuman) null, entitytntprimed.locX, entitytntprimed.locY, entitytntprimed.locZ, SoundEffects.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            world.playSound((EntityHuman) null, entitytntprimed.locX(), entitytntprimed.locY(), entitytntprimed.locZ(), SoundEffects.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
         }
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         ItemStack itemstack = entityhuman.b(enumhand);
         Item item = itemstack.getItem();
 
@@ -73,15 +73,17 @@ public class BlockTNT extends Block {
         } else {
             a(world, blockposition, (EntityLiving) entityhuman);
             world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 11);
-            if (item == Items.FLINT_AND_STEEL) {
-                itemstack.damage(1, entityhuman, (entityhuman1) -> {
-                    entityhuman1.d(enumhand);
-                });
-            } else {
-                itemstack.subtract(1);
+            if (!entityhuman.isCreative()) {
+                if (item == Items.FLINT_AND_STEEL) {
+                    itemstack.damage(1, entityhuman, (entityhuman1) -> {
+                        entityhuman1.d(enumhand);
+                    });
+                } else {
+                    itemstack.subtract(1);
+                }
             }
 
-            return true;
+            return EnumInteractionResult.SUCCESS;
         }
     }
 

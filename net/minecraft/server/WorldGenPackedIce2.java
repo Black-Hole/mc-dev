@@ -44,14 +44,14 @@ public class WorldGenPackedIce2 extends WorldGenerator<WorldGenFeatureEmptyConfi
                             IBlockData iblockdata = generatoraccess.getType(blockposition.b(i1, k, j1));
                             Block block = iblockdata.getBlock();
 
-                            if (iblockdata.isAir() || Block.c(block) || block == Blocks.SNOW_BLOCK || block == Blocks.ICE) {
+                            if (iblockdata.isAir() || b(block) || block == Blocks.SNOW_BLOCK || block == Blocks.ICE) {
                                 this.a(generatoraccess, blockposition.b(i1, k, j1), Blocks.PACKED_ICE.getBlockData());
                             }
 
                             if (k != 0 && l > 1) {
                                 iblockdata = generatoraccess.getType(blockposition.b(i1, -k, j1));
                                 block = iblockdata.getBlock();
-                                if (iblockdata.isAir() || Block.c(block) || block == Blocks.SNOW_BLOCK || block == Blocks.ICE) {
+                                if (iblockdata.isAir() || b(block) || block == Blocks.SNOW_BLOCK || block == Blocks.ICE) {
                                     this.a(generatoraccess, blockposition.b(i1, -k, j1), Blocks.PACKED_ICE.getBlockData());
                                 }
                             }
@@ -83,7 +83,7 @@ public class WorldGenPackedIce2 extends WorldGenerator<WorldGenFeatureEmptyConfi
                             IBlockData iblockdata1 = generatoraccess.getType(blockposition1);
                             Block block1 = iblockdata1.getBlock();
 
-                            if (iblockdata1.isAir() || Block.c(block1) || block1 == Blocks.SNOW_BLOCK || block1 == Blocks.ICE || block1 == Blocks.PACKED_ICE) {
+                            if (iblockdata1.isAir() || b(block1) || block1 == Blocks.SNOW_BLOCK || block1 == Blocks.ICE || block1 == Blocks.PACKED_ICE) {
                                 this.a(generatoraccess, blockposition1, Blocks.PACKED_ICE.getBlockData());
                                 blockposition1 = blockposition1.down();
                                 --l1;

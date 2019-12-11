@@ -9,15 +9,15 @@ import java.util.Random;
 
 public class WorldGenFeatureDefinedStructurePoolFeature extends WorldGenFeatureDefinedStructurePoolStructure {
 
-    private final WorldGenFeatureConfigured<?> a;
+    private final WorldGenFeatureConfigured<?, ?> a;
     private final NBTTagCompound b;
 
     @Deprecated
-    public WorldGenFeatureDefinedStructurePoolFeature(WorldGenFeatureConfigured<?> worldgenfeatureconfigured) {
+    public WorldGenFeatureDefinedStructurePoolFeature(WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured) {
         this(worldgenfeatureconfigured, WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID);
     }
 
-    public WorldGenFeatureDefinedStructurePoolFeature(WorldGenFeatureConfigured<?> worldgenfeatureconfigured, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
+    public WorldGenFeatureDefinedStructurePoolFeature(WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
         super(worldgenfeaturedefinedstructurepooltemplate_matching);
         this.a = worldgenfeatureconfigured;
         this.b = this.b();
@@ -58,9 +58,7 @@ public class WorldGenFeatureDefinedStructurePoolFeature extends WorldGenFeatureD
     }
 
     @Override
-    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccess generatoraccess, BlockPosition blockposition, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random) {
-        ChunkGenerator<?> chunkgenerator = generatoraccess.getChunkProvider().getChunkGenerator();
-
+    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, BlockPosition blockposition, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random) {
         return this.a.a(generatoraccess, chunkgenerator, random, blockposition);
     }
 
@@ -75,6 +73,6 @@ public class WorldGenFeatureDefinedStructurePoolFeature extends WorldGenFeatureD
     }
 
     public String toString() {
-        return "Feature[" + IRegistry.FEATURE.getKey(this.a.a) + "]";
+        return "Feature[" + IRegistry.FEATURE.getKey(this.a.b) + "]";
     }
 }

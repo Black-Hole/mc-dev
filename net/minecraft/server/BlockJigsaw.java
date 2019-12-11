@@ -6,7 +6,7 @@ public class BlockJigsaw extends BlockDirectional implements ITileEntity {
 
     protected BlockJigsaw(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockJigsaw.FACING, EnumDirection.UP));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockJigsaw.FACING, EnumDirection.UP));
     }
 
     @Override
@@ -31,14 +31,14 @@ public class BlockJigsaw extends BlockDirectional implements ITileEntity {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityJigsaw && entityhuman.isCreativeAndOp()) {
             entityhuman.a((TileEntityJigsaw) tileentity);
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
-            return false;
+            return EnumInteractionResult.PASS;
         }
     }
 

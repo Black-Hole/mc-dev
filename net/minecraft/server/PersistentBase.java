@@ -42,7 +42,7 @@ public abstract class PersistentBase {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
             nbttagcompound.set("data", this.b(new NBTTagCompound()));
-            nbttagcompound.setInt("DataVersion", SharedConstants.a().getWorldVersion());
+            nbttagcompound.setInt("DataVersion", SharedConstants.getGameVersion().getWorldVersion());
 
             try {
                 FileOutputStream fileoutputstream = new FileOutputStream(file);

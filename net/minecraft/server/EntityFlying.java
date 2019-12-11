@@ -7,7 +7,9 @@ public abstract class EntityFlying extends EntityInsentient {
     }
 
     @Override
-    public void b(float f, float f1) {}
+    public boolean b(float f, float f1) {
+        return false;
+    }
 
     @Override
     protected void a(double d0, boolean flag, IBlockData iblockdata, BlockPosition blockposition) {}
@@ -18,7 +20,7 @@ public abstract class EntityFlying extends EntityInsentient {
             this.a(0.02F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.800000011920929D));
-        } else if (this.aD()) {
+        } else if (this.aH()) {
             this.a(0.02F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.5D));
@@ -26,14 +28,14 @@ public abstract class EntityFlying extends EntityInsentient {
             float f = 0.91F;
 
             if (this.onGround) {
-                f = this.world.getType(new BlockPosition(this.locX, this.getBoundingBox().minY - 1.0D, this.locZ)).getBlock().m() * 0.91F;
+                f = this.world.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().l() * 0.91F;
             }
 
             float f1 = 0.16277137F / (f * f * f);
 
             f = 0.91F;
             if (this.onGround) {
-                f = this.world.getType(new BlockPosition(this.locX, this.getBoundingBox().minY - 1.0D, this.locZ)).getBlock().m() * 0.91F;
+                f = this.world.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().l() * 0.91F;
             }
 
             this.a(this.onGround ? 0.1F * f1 : 0.02F, vec3d);
@@ -41,17 +43,17 @@ public abstract class EntityFlying extends EntityInsentient {
             this.setMot(this.getMot().a((double) f));
         }
 
-        this.aE = this.aF;
-        double d0 = this.locX - this.lastX;
-        double d1 = this.locZ - this.lastZ;
+        this.aC = this.aD;
+        double d0 = this.locX() - this.lastX;
+        double d1 = this.locZ() - this.lastZ;
         float f2 = MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0F;
 
         if (f2 > 1.0F) {
             f2 = 1.0F;
         }
 
-        this.aF += (f2 - this.aF) * 0.4F;
-        this.aG += this.aF;
+        this.aD += (f2 - this.aD) * 0.4F;
+        this.aE += this.aD;
     }
 
     @Override

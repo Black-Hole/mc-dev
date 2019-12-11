@@ -24,7 +24,7 @@ public class Navigation extends NavigationAbstract {
 
     @Override
     protected Vec3D b() {
-        return new Vec3D(this.a.locX, (double) this.t(), this.a.locZ);
+        return new Vec3D(this.a.locX(), (double) this.t(), this.a.locZ());
     }
 
     @Override
@@ -65,8 +65,8 @@ public class Navigation extends NavigationAbstract {
 
     private int t() {
         if (this.a.isInWater() && this.r()) {
-            int i = MathHelper.floor(this.a.getBoundingBox().minY);
-            Block block = this.b.getType(new BlockPosition(this.a.locX, (double) i, this.a.locZ)).getBlock();
+            int i = MathHelper.floor(this.a.locY());
+            Block block = this.b.getType(new BlockPosition(this.a.locX(), (double) i, this.a.locZ())).getBlock();
             int j = 0;
 
             do {
@@ -75,21 +75,21 @@ public class Navigation extends NavigationAbstract {
                 }
 
                 ++i;
-                block = this.b.getType(new BlockPosition(this.a.locX, (double) i, this.a.locZ)).getBlock();
+                block = this.b.getType(new BlockPosition(this.a.locX(), (double) i, this.a.locZ())).getBlock();
                 ++j;
             } while (j <= 16);
 
-            return MathHelper.floor(this.a.getBoundingBox().minY);
+            return MathHelper.floor(this.a.locY());
         } else {
-            return MathHelper.floor(this.a.getBoundingBox().minY + 0.5D);
+            return MathHelper.floor(this.a.locY() + 0.5D);
         }
     }
 
     @Override
-    protected void D_() {
-        super.D_();
+    protected void F_() {
+        super.F_();
         if (this.p) {
-            if (this.b.f(new BlockPosition(this.a.locX, this.a.getBoundingBox().minY + 0.5D, this.a.locZ))) {
+            if (this.b.f(new BlockPosition(this.a.locX(), this.a.locY() + 0.5D, this.a.locZ()))) {
                 return;
             }
 

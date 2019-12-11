@@ -8,7 +8,7 @@ import org.apache.logging.log4j.util.Supplier;
 public abstract class TileEntity {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final TileEntityTypes<?> b;
+    private final TileEntityTypes<?> tileType;
     @Nullable
     protected World world;
     protected BlockPosition position;
@@ -19,7 +19,7 @@ public abstract class TileEntity {
 
     public TileEntity(TileEntityTypes<?> tileentitytypes) {
         this.position = BlockPosition.ZERO;
-        this.b = tileentitytypes;
+        this.tileType = tileentitytypes;
     }
 
     @Nullable
@@ -27,8 +27,9 @@ public abstract class TileEntity {
         return this.world;
     }
 
-    public void setWorld(World world) {
+    public void setLocation(World world, BlockPosition blockposition) {
         this.world = world;
+        this.position = blockposition.immutableCopy();
     }
 
     public boolean hasWorld() {
@@ -44,7 +45,7 @@ public abstract class TileEntity {
     }
 
     private NBTTagCompound d(NBTTagCompound nbttagcompound) {
-        MinecraftKey minecraftkey = TileEntityTypes.a(this.q());
+        MinecraftKey minecraftkey = TileEntityTypes.a(this.getTileType());
 
         if (minecraftkey == null) {
             throw new RuntimeException(this.getClass() + " is missing a mapping! This is a bug!");
@@ -118,11 +119,11 @@ public abstract class TileEntity {
         return this.f;
     }
 
-    public void V_() {
+    public void ab_() {
         this.f = true;
     }
 
-    public void n() {
+    public void r() {
         this.f = false;
     }
 
@@ -136,7 +137,7 @@ public abstract class TileEntity {
 
     public void a(CrashReportSystemDetails crashreportsystemdetails) {
         crashreportsystemdetails.a("Name", () -> {
-            return IRegistry.BLOCK_ENTITY_TYPE.getKey(this.q()) + " // " + this.getClass().getCanonicalName();
+            return IRegistry.BLOCK_ENTITY_TYPE.getKey(this.getTileType()) + " // " + this.getClass().getCanonicalName();
         });
         if (this.world != null) {
             CrashReportSystemDetails.a(crashreportsystemdetails, this.position, this.getBlock());
@@ -156,15 +157,15 @@ public abstract class TileEntity {
 
     public void a(EnumBlockMirror enumblockmirror) {}
 
-    public TileEntityTypes<?> q() {
-        return this.b;
+    public TileEntityTypes<?> getTileType() {
+        return this.tileType;
     }
 
-    public void r() {
+    public void v() {
         if (!this.g) {
             this.g = true;
             TileEntity.LOGGER.warn("Block entity invalid: {} @ {}", new Supplier[]{() -> {
-                        return IRegistry.BLOCK_ENTITY_TYPE.getKey(this.q());
+                        return IRegistry.BLOCK_ENTITY_TYPE.getKey(this.getTileType());
                     }, this::getPosition});
         }
     }

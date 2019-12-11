@@ -14,13 +14,13 @@ public class WorldGenTaigaStructure extends WorldGenerator<WorldGenFeatureBlockO
     public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureBlockOffsetConfiguration worldgenfeatureblockoffsetconfiguration) {
         while (true) {
             if (blockposition.getY() > 3) {
-                label47:
+                label44:
                 {
                     if (!generatoraccess.isEmpty(blockposition.down())) {
                         Block block = generatoraccess.getType(blockposition.down()).getBlock();
 
-                        if (block == Blocks.GRASS_BLOCK || Block.c(block) || Block.b(block)) {
-                            break label47;
+                        if (b(block) || a(block)) {
+                            break label44;
                         }
                     }
 

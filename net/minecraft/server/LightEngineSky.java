@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky.a, LightEngineStorageSky> {
 
@@ -27,10 +27,10 @@ public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky
             if (k >= 15) {
                 return k;
             } else {
-                AtomicInteger atomicinteger = new AtomicInteger();
-                IBlockData iblockdata = this.a(j, atomicinteger);
+                MutableInt mutableint = new MutableInt();
+                IBlockData iblockdata = this.a(j, mutableint);
 
-                if (atomicinteger.get() >= 15) {
+                if (mutableint.getValue() >= 15) {
                     return 15;
                 } else {
                     int l = BlockPosition.b(i);
@@ -51,7 +51,7 @@ public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky
                         enumdirection = EnumDirection.a(j2, k2, l2);
                     }
 
-                    IBlockData iblockdata1 = this.a(i, (AtomicInteger) null);
+                    IBlockData iblockdata1 = this.a(i, (MutableInt) null);
                     VoxelShape voxelshape;
 
                     if (enumdirection != null) {
@@ -83,7 +83,7 @@ public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky
 
                     boolean flag1 = i == Long.MAX_VALUE || flag && i1 > l1;
 
-                    return flag1 && k == 0 && atomicinteger.get() == 0 ? 0 : k + Math.max(1, atomicinteger.get());
+                    return flag1 && k == 0 && mutableint.getValue() == 0 ? 0 : k + Math.max(1, mutableint.getValue());
                 }
             }
         }
@@ -232,7 +232,7 @@ public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky
 
     @Override
     protected void f(long i) {
-        ((LightEngineStorageSky) this.c).c();
+        ((LightEngineStorageSky) this.c).d();
         long j = SectionPosition.e(i);
 
         if (((LightEngineStorageSky) this.c).g(j)) {

@@ -53,7 +53,7 @@ public class CommandClear {
 
         if (j == 0) {
             if (collection.size() == 1) {
-                throw CommandClear.a.create(((EntityPlayer) collection.iterator().next()).getDisplayName().e());
+                throw CommandClear.a.create(((EntityPlayer) collection.iterator().next()).getDisplayName().getLegacyString());
             } else {
                 throw CommandClear.b.create(collection.size());
             }

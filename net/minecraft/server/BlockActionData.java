@@ -40,6 +40,15 @@ public class BlockActionData {
         }
     }
 
+    public int hashCode() {
+        int i = this.a.hashCode();
+
+        i = 31 * i + this.b.hashCode();
+        i = 31 * i + this.c;
+        i = 31 * i + this.d;
+        return i;
+    }
+
     public String toString() {
         return "TE(" + this.a + ")," + this.c + "," + this.d + "," + this.b;
     }

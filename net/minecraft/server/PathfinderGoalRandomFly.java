@@ -30,7 +30,7 @@ public class PathfinderGoalRandomFly extends PathfinderGoalRandomStrollLand {
         BlockPosition blockposition = new BlockPosition(this.a);
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition1 = new BlockPosition.MutableBlockPosition();
-        Iterable<BlockPosition> iterable = BlockPosition.b(MathHelper.floor(this.a.locX - 3.0D), MathHelper.floor(this.a.locY - 6.0D), MathHelper.floor(this.a.locZ - 3.0D), MathHelper.floor(this.a.locX + 3.0D), MathHelper.floor(this.a.locY + 6.0D), MathHelper.floor(this.a.locZ + 3.0D));
+        Iterable<BlockPosition> iterable = BlockPosition.b(MathHelper.floor(this.a.locX() - 3.0D), MathHelper.floor(this.a.locY() - 6.0D), MathHelper.floor(this.a.locZ() - 3.0D), MathHelper.floor(this.a.locX() + 3.0D), MathHelper.floor(this.a.locY() + 6.0D), MathHelper.floor(this.a.locZ() + 3.0D));
         Iterator iterator = iterable.iterator();
 
         while (iterator.hasNext()) {
@@ -41,7 +41,7 @@ public class PathfinderGoalRandomFly extends PathfinderGoalRandomStrollLand {
                 boolean flag = block instanceof BlockLeaves || block.a(TagsBlock.LOGS);
 
                 if (flag && this.a.world.isEmpty(blockposition1) && this.a.world.isEmpty(blockposition_mutableblockposition.g(blockposition1).c(EnumDirection.UP))) {
-                    return new Vec3D((double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
+                    return new Vec3D(blockposition1);
                 }
             }
         }

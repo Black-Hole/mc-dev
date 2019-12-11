@@ -31,7 +31,7 @@ public class WorldBorder {
     }
 
     public double a(Entity entity) {
-        return this.b(entity.locX, entity.locZ);
+        return this.b(entity.locX(), entity.locZ());
     }
 
     public VoxelShape a() {
@@ -208,7 +208,7 @@ public class WorldBorder {
         this.i = this.i.l();
     }
 
-    public void a(WorldData worlddata) {
+    public void save(WorldData worlddata) {
         worlddata.a(this.getSize());
         worlddata.d(this.getCenterX());
         worlddata.c(this.getCenterZ());
@@ -217,7 +217,7 @@ public class WorldBorder {
         worlddata.h(this.getWarningDistance());
         worlddata.i(this.getWarningTime());
         worlddata.b(this.k());
-        worlddata.c(this.j());
+        worlddata.d(this.j());
     }
 
     public void b(WorldData worlddata) {

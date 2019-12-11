@@ -7,13 +7,12 @@ public final class Ticket<T> implements Comparable<Ticket<?>> {
     private final TicketType<T> a;
     private final int b;
     public final T identifier;
-    private final long d;
+    private long d;
 
-    protected Ticket(TicketType<T> tickettype, int i, T t0, long j) {
+    protected Ticket(TicketType<T> tickettype, int i, T t0) {
         this.a = tickettype;
         this.b = i;
         this.identifier = t0;
-        this.d = j;
     }
 
     public int compareTo(Ticket<?> ticket) {
@@ -56,7 +55,11 @@ public final class Ticket<T> implements Comparable<Ticket<?>> {
         return this.b;
     }
 
-    public boolean a(long i) {
+    protected void a(long i) {
+        this.d = i;
+    }
+
+    protected boolean b(long i) {
         long j = this.a.b();
 
         return j != 0L && i - this.d > j;

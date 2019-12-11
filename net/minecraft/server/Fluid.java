@@ -20,7 +20,7 @@ public interface Fluid extends IBlockDataHolder<Fluid> {
     }
 
     default boolean isEmpty() {
-        return this.getType().c();
+        return this.getType().b();
     }
 
     default float getHeight(IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -40,7 +40,7 @@ public interface Fluid extends IBlockDataHolder<Fluid> {
     }
 
     default boolean h() {
-        return this.getType().k();
+        return this.getType().j();
     }
 
     default void b(World world, BlockPosition blockposition, Random random) {
@@ -59,8 +59,8 @@ public interface Fluid extends IBlockDataHolder<Fluid> {
         return this.getType().a(tag);
     }
 
-    default float l() {
-        return this.getType().d();
+    default float k() {
+        return this.getType().c();
     }
 
     default boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, FluidType fluidtype, EnumDirection enumdirection) {
@@ -94,8 +94,8 @@ public interface Fluid extends IBlockDataHolder<Fluid> {
         }, (dynamic1) -> {
             return dynamic1.asString("");
         });
-        Fluid fluid = fluidtype.i();
-        BlockStateList<FluidType, Fluid> blockstatelist = fluidtype.h();
+        Fluid fluid = fluidtype.h();
+        BlockStateList<FluidType, Fluid> blockstatelist = fluidtype.g();
         Iterator iterator = map.entrySet().iterator();
 
         while (iterator.hasNext()) {

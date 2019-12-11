@@ -37,7 +37,7 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
 
     @Override
     public boolean b() {
-        return (this.a() || !this.a.getNavigation().n()) && this.g();
+        return (this.a() || !this.a.getNavigation().m()) && this.g();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
         this.a.q(false);
         this.f = 0;
         this.e = -1;
-        this.a.dp();
+        this.a.dH();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
         EntityLiving entityliving = this.a.getGoalTarget();
 
         if (entityliving != null) {
-            double d0 = this.a.e(entityliving.locX, entityliving.getBoundingBox().minY, entityliving.locZ);
+            double d0 = this.a.g(entityliving.locX(), entityliving.locY(), entityliving.locZ());
             boolean flag = this.a.getEntitySenses().a(entityliving);
             boolean flag1 = this.f > 0;
 
@@ -109,12 +109,12 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
 
             if (this.a.isHandRaised()) {
                 if (!flag && this.f < -60) {
-                    this.a.dp();
+                    this.a.dH();
                 } else if (flag) {
-                    int i = this.a.dn();
+                    int i = this.a.dF();
 
                     if (i >= 20) {
-                        this.a.dp();
+                        this.a.dH();
                         ((IRangedEntity) this.a).a(entityliving, ItemBow.a(i));
                         this.e = this.c;
                     }

@@ -32,15 +32,15 @@ public class CommandPlaySound {
 
     private static LiteralArgumentBuilder<CommandListenerWrapper> a(SoundCategory soundcategory) {
         return (LiteralArgumentBuilder) CommandDispatcher.a(soundcategory.a()).then(((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentMinecraftKeyRegistered.c(commandcontext, "sound"), soundcategory, ((CommandListenerWrapper) commandcontext.getSource()).getPosition(), 1.0F, 1.0F, 0.0F);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentMinecraftKeyRegistered.d(commandcontext, "sound"), soundcategory, ((CommandListenerWrapper) commandcontext.getSource()).getPosition(), 1.0F, 1.0F, 0.0F);
         })).then(((RequiredArgumentBuilder) CommandDispatcher.a("pos", (ArgumentType) ArgumentVec3.a()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentMinecraftKeyRegistered.c(commandcontext, "sound"), soundcategory, ArgumentVec3.a(commandcontext, "pos"), 1.0F, 1.0F, 0.0F);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentMinecraftKeyRegistered.d(commandcontext, "sound"), soundcategory, ArgumentVec3.a(commandcontext, "pos"), 1.0F, 1.0F, 0.0F);
         })).then(((RequiredArgumentBuilder) CommandDispatcher.a("volume", (ArgumentType) FloatArgumentType.floatArg(0.0F)).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentMinecraftKeyRegistered.c(commandcontext, "sound"), soundcategory, ArgumentVec3.a(commandcontext, "pos"), (Float) commandcontext.getArgument("volume", Float.class), 1.0F, 0.0F);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentMinecraftKeyRegistered.d(commandcontext, "sound"), soundcategory, ArgumentVec3.a(commandcontext, "pos"), (Float) commandcontext.getArgument("volume", Float.class), 1.0F, 0.0F);
         })).then(((RequiredArgumentBuilder) CommandDispatcher.a("pitch", (ArgumentType) FloatArgumentType.floatArg(0.0F, 2.0F)).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentMinecraftKeyRegistered.c(commandcontext, "sound"), soundcategory, ArgumentVec3.a(commandcontext, "pos"), (Float) commandcontext.getArgument("volume", Float.class), (Float) commandcontext.getArgument("pitch", Float.class), 0.0F);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentMinecraftKeyRegistered.d(commandcontext, "sound"), soundcategory, ArgumentVec3.a(commandcontext, "pos"), (Float) commandcontext.getArgument("volume", Float.class), (Float) commandcontext.getArgument("pitch", Float.class), 0.0F);
         })).then(CommandDispatcher.a("minVolume", (ArgumentType) FloatArgumentType.floatArg(0.0F, 1.0F)).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentMinecraftKeyRegistered.c(commandcontext, "sound"), soundcategory, ArgumentVec3.a(commandcontext, "pos"), (Float) commandcontext.getArgument("volume", Float.class), (Float) commandcontext.getArgument("pitch", Float.class), (Float) commandcontext.getArgument("minVolume", Float.class));
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentMinecraftKeyRegistered.d(commandcontext, "sound"), soundcategory, ArgumentVec3.a(commandcontext, "pos"), (Float) commandcontext.getArgument("volume", Float.class), (Float) commandcontext.getArgument("pitch", Float.class), (Float) commandcontext.getArgument("minVolume", Float.class));
         }))))));
     }
 
@@ -51,9 +51,9 @@ public class CommandPlaySound {
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
-            double d1 = vec3d.x - entityplayer.locX;
-            double d2 = vec3d.y - entityplayer.locY;
-            double d3 = vec3d.z - entityplayer.locZ;
+            double d1 = vec3d.x - entityplayer.locX();
+            double d2 = vec3d.y - entityplayer.locY();
+            double d3 = vec3d.z - entityplayer.locZ();
             double d4 = d1 * d1 + d2 * d2 + d3 * d3;
             Vec3D vec3d1 = vec3d;
             float f3 = f;
@@ -65,7 +65,7 @@ public class CommandPlaySound {
 
                 double d5 = (double) MathHelper.sqrt(d4);
 
-                vec3d1 = new Vec3D(entityplayer.locX + d1 / d5 * 2.0D, entityplayer.locY + d2 / d5 * 2.0D, entityplayer.locZ + d3 / d5 * 2.0D);
+                vec3d1 = new Vec3D(entityplayer.locX() + d1 / d5 * 2.0D, entityplayer.locY() + d2 / d5 * 2.0D, entityplayer.locZ() + d3 / d5 * 2.0D);
                 f3 = f2;
             }
 
@@ -79,7 +79,7 @@ public class CommandPlaySound {
             if (collection.size() == 1) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.playsound.success.single", new Object[]{minecraftkey, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.playsound.success.single", new Object[]{minecraftkey, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.playsound.success.multiple", new Object[]{minecraftkey, collection.size()}), true);
             }
 
             return i;

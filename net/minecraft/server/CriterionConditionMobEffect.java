@@ -30,11 +30,11 @@ public class CriterionConditionMobEffect {
     }
 
     public boolean a(Entity entity) {
-        return this == CriterionConditionMobEffect.a ? true : (entity instanceof EntityLiving ? this.a(((EntityLiving) entity).cB()) : false);
+        return this == CriterionConditionMobEffect.a ? true : (entity instanceof EntityLiving ? this.a(((EntityLiving) entity).cQ()) : false);
     }
 
     public boolean a(EntityLiving entityliving) {
-        return this == CriterionConditionMobEffect.a ? true : this.a(entityliving.cB());
+        return this == CriterionConditionMobEffect.a ? true : this.a(entityliving.cQ());
     }
 
     public boolean a(Map<MobEffectList, MobEffect> map) {

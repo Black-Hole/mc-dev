@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.ImmutableMap;
-import java.util.Iterator;
 
 public class BehaviorBellRing extends Behavior<EntityLiving> {
 
@@ -24,15 +23,8 @@ public class BehaviorBellRing extends Behavior<EntityLiving> {
 
             if (iblockdata.getBlock() == Blocks.BELL) {
                 BlockBell blockbell = (BlockBell) iblockdata.getBlock();
-                Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
-                while (iterator.hasNext()) {
-                    EnumDirection enumdirection = (EnumDirection) iterator.next();
-
-                    if (blockbell.a(worldserver, iblockdata, worldserver.getTileEntity(blockposition), new MovingObjectPositionBlock(new Vec3D(0.5D, 0.5D, 0.5D), enumdirection, blockposition, false), (EntityHuman) null, false)) {
-                        break;
-                    }
-                }
+                blockbell.a((World) worldserver, blockposition, (EnumDirection) null);
             }
         }
 

@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -19,9 +20,11 @@ public class ResourceManagerFallback implements IResourceManager {
     private static final Logger LOGGER = LogManager.getLogger();
     protected final List<IResourcePack> a = Lists.newArrayList();
     private final EnumResourcePackType c;
+    private final String d;
 
-    public ResourceManagerFallback(EnumResourcePackType enumresourcepacktype) {
+    public ResourceManagerFallback(EnumResourcePackType enumresourcepacktype, String s) {
         this.c = enumresourcepacktype;
+        this.d = s;
     }
 
     public void a(IResourcePack iresourcepack) {
@@ -103,7 +106,7 @@ public class ResourceManagerFallback implements IResourceManager {
         while (iterator.hasNext()) {
             IResourcePack iresourcepack = (IResourcePack) iterator.next();
 
-            list.addAll(iresourcepack.a(this.c, s, Integer.MAX_VALUE, predicate));
+            list.addAll(iresourcepack.a(this.c, this.d, s, Integer.MAX_VALUE, predicate));
         }
 
         Collections.sort(list);
@@ -114,35 +117,30 @@ public class ResourceManagerFallback implements IResourceManager {
         return new MinecraftKey(minecraftkey.getNamespace(), minecraftkey.getKey() + ".mcmeta");
     }
 
-    static class a extends InputStream {
+    static class a extends FilterInputStream {
 
-        private final InputStream a;
-        private final String b;
-        private boolean c;
+        private final String a;
+        private boolean b;
 
         public a(InputStream inputstream, MinecraftKey minecraftkey, String s) {
-            this.a = inputstream;
+            super(inputstream);
             ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
 
             (new Exception()).printStackTrace(new PrintStream(bytearrayoutputstream));
-            this.b = "Leaked resource: '" + minecraftkey + "' loaded from pack: '" + s + "'\n" + bytearrayoutputstream;
+            this.a = "Leaked resource: '" + minecraftkey + "' loaded from pack: '" + s + "'\n" + bytearrayoutputstream;
         }
 
         public void close() throws IOException {
-            this.a.close();
-            this.c = true;
+            super.close();
+            this.b = true;
         }
 
         protected void finalize() throws Throwable {
-            if (!this.c) {
-                ResourceManagerFallback.LOGGER.warn(this.b);
+            if (!this.b) {
+                ResourceManagerFallback.LOGGER.warn(this.a);
             }
 
             super.finalize();
-        }
-
-        public int read() throws IOException {
-            return this.a.read();
         }
     }
 }

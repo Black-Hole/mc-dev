@@ -28,18 +28,18 @@ public class DragonControllerStrafe extends AbstractDragonController {
             double d2;
 
             if (this.d != null && this.d.b()) {
-                d0 = this.f.locX;
-                d1 = this.f.locZ;
-                double d3 = d0 - this.a.locX;
-                double d4 = d1 - this.a.locZ;
+                d0 = this.f.locX();
+                d1 = this.f.locZ();
+                double d3 = d0 - this.a.locX();
+                double d4 = d1 - this.a.locZ();
 
                 d2 = (double) MathHelper.sqrt(d3 * d3 + d4 * d4);
                 double d5 = Math.min(0.4000000059604645D + d2 / 80.0D - 1.0D, 10.0D);
 
-                this.e = new Vec3D(d0, this.f.locY + d5, d1);
+                this.e = new Vec3D(d0, this.f.locY() + d5, d1);
             }
 
-            d0 = this.e == null ? 0.0D : this.e.c(this.a.locX, this.a.locY, this.a.locZ);
+            d0 = this.e == null ? 0.0D : this.e.c(this.a.locX(), this.a.locY(), this.a.locZ());
             if (d0 < 100.0D || d0 > 22500.0D) {
                 this.j();
             }
@@ -48,7 +48,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
             if (this.f.h((Entity) this.a) < 4096.0D) {
                 if (this.a.hasLineOfSight(this.f)) {
                     ++this.c;
-                    Vec3D vec3d = (new Vec3D(this.f.locX - this.a.locX, 0.0D, this.f.locZ - this.a.locZ)).d();
+                    Vec3D vec3d = (new Vec3D(this.f.locX() - this.a.locX(), 0.0D, this.f.locZ() - this.a.locZ())).d();
                     Vec3D vec3d1 = (new Vec3D((double) MathHelper.sin(this.a.yaw * 0.017453292F), 0.0D, (double) (-MathHelper.cos(this.a.yaw * 0.017453292F)))).d();
                     float f = (float) vec3d1.b(vec3d);
                     float f1 = (float) (Math.acos((double) f) * 57.2957763671875D);
@@ -57,12 +57,12 @@ public class DragonControllerStrafe extends AbstractDragonController {
                     if (this.c >= 5 && f1 >= 0.0F && f1 < 10.0F) {
                         d2 = 1.0D;
                         Vec3D vec3d2 = this.a.f(1.0F);
-                        double d6 = this.a.bA.locX - vec3d2.x * 1.0D;
-                        double d7 = this.a.bA.locY + (double) (this.a.bA.getHeight() / 2.0F) + 0.5D;
-                        double d8 = this.a.bA.locZ - vec3d2.z * 1.0D;
-                        double d9 = this.f.locX - d6;
-                        double d10 = this.f.locY + (double) (this.f.getHeight() / 2.0F) - (d7 + (double) (this.a.bA.getHeight() / 2.0F));
-                        double d11 = this.f.locZ - d8;
+                        double d6 = this.a.bw.locX() - vec3d2.x * 1.0D;
+                        double d7 = this.a.bw.e(0.5D) + 0.5D;
+                        double d8 = this.a.bw.locZ() - vec3d2.z * 1.0D;
+                        double d9 = this.f.locX() - d6;
+                        double d10 = this.f.e(0.5D) - d7;
+                        double d11 = this.f.locZ() - d8;
 
                         this.a.world.a((EntityHuman) null, 1017, new BlockPosition(this.a), 0);
                         EntityDragonFireball entitydragonfireball = new EntityDragonFireball(this.a.world, this.a, d9, d10, d11);
@@ -154,14 +154,14 @@ public class DragonControllerStrafe extends AbstractDragonController {
     public void a(EntityLiving entityliving) {
         this.f = entityliving;
         int i = this.a.l();
-        int j = this.a.l(this.f.locX, this.f.locY, this.f.locZ);
-        int k = MathHelper.floor(this.f.locX);
-        int l = MathHelper.floor(this.f.locZ);
-        double d0 = (double) k - this.a.locX;
-        double d1 = (double) l - this.a.locZ;
+        int j = this.a.o(this.f.locX(), this.f.locY(), this.f.locZ());
+        int k = MathHelper.floor(this.f.locX());
+        int l = MathHelper.floor(this.f.locZ());
+        double d0 = (double) k - this.a.locX();
+        double d1 = (double) l - this.a.locZ();
         double d2 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1);
         double d3 = Math.min(0.4000000059604645D + d2 / 80.0D - 1.0D, 10.0D);
-        int i1 = MathHelper.floor(this.f.locY + d3);
+        int i1 = MathHelper.floor(this.f.locY() + d3);
         PathPoint pathpoint = new PathPoint(k, i1, l);
 
         this.d = this.a.a(i, j, pathpoint);

@@ -53,7 +53,7 @@ public class ChatComponentUtils {
             List<T> list = Lists.newArrayList(collection);
 
             list.sort(Comparable::compareTo);
-            return b(collection, function);
+            return b(list, function);
         }
     }
 

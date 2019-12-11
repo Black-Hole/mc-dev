@@ -57,7 +57,7 @@ public class EntityEnderPearl extends EntityProjectileThrowable {
         }
 
         for (int i = 0; i < 32; ++i) {
-            this.world.addParticle(Particles.PORTAL, this.locX, this.locY + this.random.nextDouble() * 2.0D, this.locZ, this.random.nextGaussian(), 0.0D, this.random.nextGaussian());
+            this.world.addParticle(Particles.PORTAL, this.locX(), this.locY() + this.random.nextDouble() * 2.0D, this.locZ(), this.random.nextGaussian(), 0.0D, this.random.nextGaussian());
         }
 
         if (!this.world.isClientSide) {
@@ -69,7 +69,7 @@ public class EntityEnderPearl extends EntityProjectileThrowable {
                         EntityEndermite entityendermite = (EntityEndermite) EntityTypes.ENDERMITE.a(this.world);
 
                         entityendermite.setPlayerSpawned(true);
-                        entityendermite.setPositionRotation(entityliving.locX, entityliving.locY, entityliving.locZ, entityliving.yaw, entityliving.pitch);
+                        entityendermite.setPositionRotation(entityliving.locX(), entityliving.locY(), entityliving.locZ(), entityliving.yaw, entityliving.pitch);
                         this.world.addEntity(entityendermite);
                     }
 
@@ -77,12 +77,12 @@ public class EntityEnderPearl extends EntityProjectileThrowable {
                         entityliving.stopRiding();
                     }
 
-                    entityliving.enderTeleportTo(this.locX, this.locY, this.locZ);
+                    entityliving.enderTeleportTo(this.locX(), this.locY(), this.locZ());
                     entityliving.fallDistance = 0.0F;
                     entityliving.damageEntity(DamageSource.FALL, 5.0F);
                 }
             } else if (entityliving != null) {
-                entityliving.enderTeleportTo(this.locX, this.locY, this.locZ);
+                entityliving.enderTeleportTo(this.locX(), this.locY(), this.locZ());
                 entityliving.fallDistance = 0.0F;
             }
 

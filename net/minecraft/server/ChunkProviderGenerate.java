@@ -24,7 +24,7 @@ public class ChunkProviderGenerate extends ChunkGeneratorAbstract<GeneratorSetti
     public ChunkProviderGenerate(GeneratorAccess generatoraccess, WorldChunkManager worldchunkmanager, GeneratorSettingsOverworld generatorsettingsoverworld) {
         super(generatoraccess, worldchunkmanager, 4, 8, 256, generatorsettingsoverworld, true);
         this.e.a(2620);
-        this.i = new NoiseGeneratorOctaves(this.e, 16);
+        this.i = new NoiseGeneratorOctaves(this.e, 15, 0);
         this.j = generatoraccess.getWorldData().getType() == WorldType.AMPLIFIED;
     }
 
@@ -32,7 +32,7 @@ public class ChunkProviderGenerate extends ChunkGeneratorAbstract<GeneratorSetti
     public void addMobs(RegionLimitedWorldAccess regionlimitedworldaccess) {
         int i = regionlimitedworldaccess.a();
         int j = regionlimitedworldaccess.b();
-        BiomeBase biomebase = regionlimitedworldaccess.getChunkAt(i, j).getBiomeIndex()[0];
+        BiomeBase biomebase = regionlimitedworldaccess.getBiome((new ChunkCoordIntPair(i, j)).l());
         SeededRandom seededrandom = new SeededRandom();
 
         seededrandom.a(regionlimitedworldaccess.getSeed(), i << 4, j << 4);
@@ -70,22 +70,23 @@ public class ChunkProviderGenerate extends ChunkGeneratorAbstract<GeneratorSetti
         float f1 = 0.0F;
         float f2 = 0.0F;
         boolean flag = true;
-        float f3 = this.c.b(i, j).g();
+        int k = this.getSeaLevel();
+        float f3 = this.c.getBiome(i, k, j).i();
 
-        for (int k = -2; k <= 2; ++k) {
-            for (int l = -2; l <= 2; ++l) {
-                BiomeBase biomebase = this.c.b(i + k, j + l);
-                float f4 = biomebase.g();
-                float f5 = biomebase.k();
+        for (int l = -2; l <= 2; ++l) {
+            for (int i1 = -2; i1 <= 2; ++i1) {
+                BiomeBase biomebase = this.c.getBiome(i + l, k, j + i1);
+                float f4 = biomebase.i();
+                float f5 = biomebase.m();
 
                 if (this.j && f4 > 0.0F) {
                     f4 = 1.0F + f4 * 2.0F;
                     f5 = 1.0F + f5 * 4.0F;
                 }
 
-                float f6 = ChunkProviderGenerate.h[k + 2 + (l + 2) * 5] / (f4 + 2.0F);
+                float f6 = ChunkProviderGenerate.h[l + 2 + (i1 + 2) * 5] / (f4 + 2.0F);
 
-                if (biomebase.g() > f3) {
+                if (biomebase.i() > f3) {
                     f6 /= 2.0F;
                 }
 
@@ -105,7 +106,7 @@ public class ChunkProviderGenerate extends ChunkGeneratorAbstract<GeneratorSetti
     }
 
     private double c(int i, int j) {
-        double d0 = this.i.a((double) (i * 200), 10.0D, (double) (j * 200), 1.0D, 0.0D, true) / 8000.0D;
+        double d0 = this.i.a((double) (i * 200), 10.0D, (double) (j * 200), 1.0D, 0.0D, true) * 65535.0D / 8000.0D;
 
         if (d0 < 0.0D) {
             d0 = -d0 * 0.3D;

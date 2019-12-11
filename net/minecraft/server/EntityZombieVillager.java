@@ -10,9 +10,9 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     private static final DataWatcherObject<VillagerData> c = DataWatcher.a(EntityZombieVillager.class, DataWatcherRegistry.q);
     public int conversionTime;
     public UUID conversionPlayer;
-    private NBTBase bB;
-    private NBTTagCompound bC;
-    private int bD;
+    private NBTBase by;
+    private NBTTagCompound bz;
+    private int bA;
 
     public EntityZombieVillager(EntityTypes<? extends EntityZombieVillager> entitytypes, World world) {
         super(entitytypes, world);
@@ -30,12 +30,12 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.set("VillagerData", (NBTBase) this.getVillagerData().a(DynamicOpsNBT.a));
-        if (this.bC != null) {
-            nbttagcompound.set("Offers", this.bC);
+        if (this.bz != null) {
+            nbttagcompound.set("Offers", this.bz);
         }
 
-        if (this.bB != null) {
-            nbttagcompound.set("Gossips", this.bB);
+        if (this.by != null) {
+            nbttagcompound.set("Gossips", this.by);
         }
 
         nbttagcompound.setInt("ConversionTime", this.isConverting() ? this.conversionTime : -1);
@@ -43,7 +43,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
             nbttagcompound.a("ConversionPlayer", this.conversionPlayer);
         }
 
-        nbttagcompound.setInt("Xp", this.bD);
+        nbttagcompound.setInt("Xp", this.bA);
     }
 
     @Override
@@ -54,11 +54,11 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
         }
 
         if (nbttagcompound.hasKeyOfType("Offers", 10)) {
-            this.bC = nbttagcompound.getCompound("Offers");
+            this.bz = nbttagcompound.getCompound("Offers");
         }
 
         if (nbttagcompound.hasKeyOfType("Gossips", 10)) {
-            this.bB = nbttagcompound.getList("Gossips", 10);
+            this.by = nbttagcompound.getList("Gossips", 10);
         }
 
         if (nbttagcompound.hasKeyOfType("ConversionTime", 99) && nbttagcompound.getInt("ConversionTime") > -1) {
@@ -66,7 +66,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
         }
 
         if (nbttagcompound.hasKeyOfType("Xp", 3)) {
-            this.bD = nbttagcompound.getInt("Xp");
+            this.bA = nbttagcompound.getInt("Xp");
         }
 
     }
@@ -96,16 +96,17 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
 
             if (!this.world.isClientSide) {
                 this.startConversion(entityhuman.getUniqueID(), this.random.nextInt(2401) + 3600);
+                entityhuman.a(enumhand, true);
             }
 
             return true;
         } else {
-            return false;
+            return super.a(entityhuman, enumhand);
         }
     }
 
     @Override
-    protected boolean dY() {
+    protected boolean et() {
         return false;
     }
 
@@ -129,18 +130,37 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
 
     private void a(WorldServer worldserver) {
         EntityVillager entityvillager = (EntityVillager) EntityTypes.VILLAGER.a((World) worldserver);
+        EnumItemSlot[] aenumitemslot = EnumItemSlot.values();
+        int i = aenumitemslot.length;
+
+        for (int j = 0; j < i; ++j) {
+            EnumItemSlot enumitemslot = aenumitemslot[j];
+            ItemStack itemstack = this.getEquipment(enumitemslot);
+
+            if (!itemstack.isEmpty()) {
+                if (EnchantmentManager.d(itemstack)) {
+                    entityvillager.a_(enumitemslot.b() + 300, itemstack);
+                } else {
+                    double d0 = (double) this.d(enumitemslot);
+
+                    if (d0 > 1.0D) {
+                        this.a(itemstack);
+                    }
+                }
+            }
+        }
 
         entityvillager.u(this);
         entityvillager.setVillagerData(this.getVillagerData());
-        if (this.bB != null) {
-            entityvillager.a(this.bB);
+        if (this.by != null) {
+            entityvillager.a(this.by);
         }
 
-        if (this.bC != null) {
-            entityvillager.b(new MerchantRecipeList(this.bC));
+        if (this.bz != null) {
+            entityvillager.b(new MerchantRecipeList(this.bz));
         }
 
-        entityvillager.setExperience(this.bD);
+        entityvillager.setExperience(this.bA);
         entityvillager.prepare(worldserver, worldserver.getDamageScaler(new BlockPosition(entityvillager)), EnumMobSpawn.CONVERSION, (GroupDataEntity) null, (NBTTagCompound) null);
         if (this.isBaby()) {
             entityvillager.setAgeRaw(-24000);
@@ -153,6 +173,11 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
             entityvillager.setCustomNameVisible(this.getCustomNameVisible());
         }
 
+        if (this.isPersistent()) {
+            entityvillager.setPersistent();
+        }
+
+        entityvillager.setInvulnerable(this.isInvulnerable());
         worldserver.addEntity(entityvillager);
         if (this.conversionPlayer != null) {
             EntityHuman entityhuman = worldserver.b(this.conversionPlayer);
@@ -174,9 +199,9 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
             int j = 0;
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-            for (int k = (int) this.locX - 4; k < (int) this.locX + 4 && j < 14; ++k) {
-                for (int l = (int) this.locY - 4; l < (int) this.locY + 4 && j < 14; ++l) {
-                    for (int i1 = (int) this.locZ - 4; i1 < (int) this.locZ + 4 && j < 14; ++i1) {
+            for (int k = (int) this.locX() - 4; k < (int) this.locX() + 4 && j < 14; ++k) {
+                for (int l = (int) this.locY() - 4; l < (int) this.locY() + 4 && j < 14; ++l) {
+                    for (int i1 = (int) this.locZ() - 4; i1 < (int) this.locZ() + 4 && j < 14; ++i1) {
                         Block block = this.world.getType(blockposition_mutableblockposition.d(k, l, i1)).getBlock();
 
                         if (block == Blocks.IRON_BARS || block instanceof BlockBed) {
@@ -195,7 +220,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     }
 
     @Override
-    protected float cV() {
+    protected float dn() {
         return this.isBaby() ? (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 2.0F : (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F;
     }
 
@@ -220,16 +245,16 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     }
 
     @Override
-    protected ItemStack dX() {
+    protected ItemStack es() {
         return ItemStack.a;
     }
 
     public void setOffers(NBTTagCompound nbttagcompound) {
-        this.bC = nbttagcompound;
+        this.bz = nbttagcompound;
     }
 
     public void a(NBTBase nbtbase) {
-        this.bB = nbtbase;
+        this.by = nbtbase;
     }
 
     @Nullable
@@ -243,7 +268,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
         VillagerData villagerdata1 = this.getVillagerData();
 
         if (villagerdata1.getProfession() != villagerdata.getProfession()) {
-            this.bC = null;
+            this.bz = null;
         }
 
         this.datawatcher.set(EntityZombieVillager.c, villagerdata);
@@ -255,6 +280,6 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     }
 
     public void a(int i) {
-        this.bD = i;
+        this.bA = i;
     }
 }

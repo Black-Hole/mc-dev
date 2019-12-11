@@ -4,13 +4,29 @@ import javax.annotation.Nullable;
 
 public abstract class EntityAgeable extends EntityCreature {
 
-    private static final DataWatcherObject<Boolean> bz = DataWatcher.a(EntityAgeable.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityAgeable.class, DataWatcherRegistry.i);
     protected int b;
     protected int c;
     protected int d;
 
     protected EntityAgeable(EntityTypes<? extends EntityAgeable> entitytypes, World world) {
         super(entitytypes, world);
+    }
+
+    @Override
+    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        if (groupdataentity == null) {
+            groupdataentity = new EntityAgeable.a();
+        }
+
+        EntityAgeable.a entityageable_a = (EntityAgeable.a) groupdataentity;
+
+        if (entityageable_a.c() && entityageable_a.a() > 0 && this.random.nextFloat() <= entityageable_a.d()) {
+            this.setAgeRaw(-24000);
+        }
+
+        entityageable_a.b();
+        return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
     }
 
     @Nullable
@@ -29,7 +45,7 @@ public abstract class EntityAgeable extends EntityCreature {
 
                 if (entityageable != null) {
                     entityageable.setAgeRaw(-24000);
-                    entityageable.setPositionRotation(this.locX, this.locY, this.locZ, 0.0F, 0.0F);
+                    entityageable.setPositionRotation(this.locX(), this.locY(), this.locZ(), 0.0F, 0.0F);
                     this.world.addEntity(entityageable);
                     if (itemstack.hasName()) {
                         entityageable.setCustomName(itemstack.getName());
@@ -51,11 +67,11 @@ public abstract class EntityAgeable extends EntityCreature {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityAgeable.bz, false);
+        this.datawatcher.register(EntityAgeable.bw, false);
     }
 
     public int getAge() {
-        return this.world.isClientSide ? ((Boolean) this.datawatcher.get(EntityAgeable.bz) ? -1 : 1) : this.b;
+        return this.world.isClientSide ? ((Boolean) this.datawatcher.get(EntityAgeable.bw) ? -1 : 1) : this.b;
     }
 
     public void setAge(int i, boolean flag) {
@@ -92,7 +108,7 @@ public abstract class EntityAgeable extends EntityCreature {
 
         this.b = i;
         if (j < 0 && i >= 0 || j >= 0 && i < 0) {
-            this.datawatcher.set(EntityAgeable.bz, i < 0);
+            this.datawatcher.set(EntityAgeable.bw, i < 0);
             this.l();
         }
 
@@ -114,7 +130,7 @@ public abstract class EntityAgeable extends EntityCreature {
 
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityAgeable.bz.equals(datawatcherobject)) {
+        if (EntityAgeable.bw.equals(datawatcherobject)) {
             this.updateSize();
         }
 
@@ -127,7 +143,7 @@ public abstract class EntityAgeable extends EntityCreature {
         if (this.world.isClientSide) {
             if (this.d > 0) {
                 if (this.d % 4 == 0) {
-                    this.world.addParticle(Particles.HAPPY_VILLAGER, this.locX + (double) (this.random.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.locY + 0.5D + (double) (this.random.nextFloat() * this.getHeight()), this.locZ + (double) (this.random.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0.0D, 0.0D, 0.0D);
+                    this.world.addParticle(Particles.HAPPY_VILLAGER, this.d(1.0D), this.cv() + 0.5D, this.g(1.0D), 0.0D, 0.0D, 0.0D);
                 }
 
                 --this.d;
@@ -151,5 +167,38 @@ public abstract class EntityAgeable extends EntityCreature {
     @Override
     public boolean isBaby() {
         return this.getAge() < 0;
+    }
+
+    public static class a implements GroupDataEntity {
+
+        private int a;
+        private boolean b = true;
+        private float c = 0.05F;
+
+        public a() {}
+
+        public int a() {
+            return this.a;
+        }
+
+        public void b() {
+            ++this.a;
+        }
+
+        public boolean c() {
+            return this.b;
+        }
+
+        public void a(boolean flag) {
+            this.b = flag;
+        }
+
+        public float d() {
+            return this.c;
+        }
+
+        public void a(float f) {
+            this.c = f;
+        }
     }
 }

@@ -53,7 +53,7 @@ public abstract class TileEntityLootable extends TileEntityContainer {
             LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).set(LootContextParameters.POSITION, new BlockPosition(this.position)).a(this.lootTableSeed);
 
             if (entityhuman != null) {
-                loottableinfo_builder.a(entityhuman.eb()).set(LootContextParameters.THIS_ENTITY, entityhuman);
+                loottableinfo_builder.a(entityhuman.eA()).set(LootContextParameters.THIS_ENTITY, entityhuman);
             }
 
             loottable.fillInventory(this, loottableinfo_builder.build(LootContextParameterSets.CHEST));
@@ -64,6 +64,12 @@ public abstract class TileEntityLootable extends TileEntityContainer {
     public void setLootTable(MinecraftKey minecraftkey, long i) {
         this.lootTable = minecraftkey;
         this.lootTableSeed = i;
+    }
+
+    @Override
+    public boolean isNotEmpty() {
+        this.d((EntityHuman) null);
+        return this.f().stream().allMatch(ItemStack::isEmpty);
     }
 
     @Override
@@ -103,7 +109,7 @@ public abstract class TileEntityLootable extends TileEntityContainer {
 
     @Override
     public boolean a(EntityHuman entityhuman) {
-        return this.world.getTileEntity(this.position) != this ? false : entityhuman.e((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
+        return this.world.getTileEntity(this.position) != this ? false : entityhuman.g((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
     }
 
     @Override

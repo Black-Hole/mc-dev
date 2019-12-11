@@ -66,7 +66,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
         return stringbuilder.toString();
     }
 
-    default String e() {
+    default String getLegacyString() {
         StringBuilder stringbuilder = new StringBuilder();
         String s = "";
         Iterator iterator = this.c().iterator();
@@ -296,12 +296,14 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
 
                         if (jsonobject.has("block")) {
                             object = new ChatComponentNBT.a(s, flag, ChatDeserializer.h(jsonobject, "block"));
+                        } else if (jsonobject.has("entity")) {
+                            object = new ChatComponentNBT.b(s, flag, ChatDeserializer.h(jsonobject, "entity"));
                         } else {
-                            if (!jsonobject.has("entity")) {
+                            if (!jsonobject.has("storage")) {
                                 throw new JsonParseException("Don't know how to turn " + jsonelement + " into a Component");
                             }
 
-                            object = new ChatComponentNBT.b(s, flag, ChatDeserializer.h(jsonobject, "entity"));
+                            object = new ChatComponentNBT.c(s, flag, new MinecraftKey(ChatDeserializer.h(jsonobject, "storage")));
                         }
                     }
                 }
@@ -411,14 +413,18 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                     ChatComponentNBT.a chatcomponentnbt_a = (ChatComponentNBT.a) ichatbasecomponent;
 
                     jsonobject.addProperty("block", chatcomponentnbt_a.k());
-                } else {
-                    if (!(ichatbasecomponent instanceof ChatComponentNBT.b)) {
-                        throw new IllegalArgumentException("Don't know how to serialize " + ichatbasecomponent + " as a Component");
-                    }
-
+                } else if (ichatbasecomponent instanceof ChatComponentNBT.b) {
                     ChatComponentNBT.b chatcomponentnbt_b = (ChatComponentNBT.b) ichatbasecomponent;
 
                     jsonobject.addProperty("entity", chatcomponentnbt_b.k());
+                } else {
+                    if (!(ichatbasecomponent instanceof ChatComponentNBT.c)) {
+                        throw new IllegalArgumentException("Don't know how to serialize " + ichatbasecomponent + " as a Component");
+                    }
+
+                    ChatComponentNBT.c chatcomponentnbt_c = (ChatComponentNBT.c) ichatbasecomponent;
+
+                    jsonobject.addProperty("storage", chatcomponentnbt_c.k().toString());
                 }
             }
 
@@ -457,7 +463,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
 
                 com_mojang_brigadier_stringreader.setCursor(com_mojang_brigadier_stringreader.getCursor() + a(jsonreader));
                 return ichatbasecomponent;
-            } catch (IOException ioexception) {
+            } catch (StackOverflowError | IOException ioexception) {
                 throw new JsonParseException(ioexception);
             }
         }

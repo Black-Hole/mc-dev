@@ -27,11 +27,10 @@ public class BehaviorWalkAwayEntity extends Behavior<EntityCreature> {
 
     public static void a(EntityCreature entitycreature, Entity entity, float f) {
         for (int i = 0; i < 10; ++i) {
-            Vec3D vec3d = new Vec3D(entity.locX, entity.locY, entity.locZ);
-            Vec3D vec3d1 = RandomPositionGenerator.b(entitycreature, 16, 7, vec3d);
+            Vec3D vec3d = RandomPositionGenerator.c(entitycreature, 16, 7, entity.getPositionVector());
 
-            if (vec3d1 != null) {
-                entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(vec3d1, f, 0)));
+            if (vec3d != null) {
+                entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(vec3d, f, 0)));
                 return;
             }
         }

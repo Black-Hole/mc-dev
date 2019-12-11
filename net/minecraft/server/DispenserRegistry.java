@@ -19,8 +19,8 @@ public class DispenserRegistry {
             if (IRegistry.f.c()) {
                 throw new IllegalStateException("Unable to load registries");
             } else {
-                BlockFire.d();
-                BlockComposter.d();
+                BlockFire.c();
+                BlockComposter.c();
                 if (EntityTypes.getName(EntityTypes.PLAYER) == null) {
                     throw new IllegalStateException("Failed loading EntityTypes");
                 } else {
@@ -54,8 +54,8 @@ public class DispenserRegistry {
         a(IRegistry.MOB_EFFECT, MobEffectList::c, set);
         a(IRegistry.ITEM, Item::getName, set);
         a(IRegistry.ENCHANTMENT, Enchantment::g, set);
-        a(IRegistry.BIOME, BiomeBase::j, set);
-        a(IRegistry.BLOCK, Block::l, set);
+        a(IRegistry.BIOME, BiomeBase::l, set);
+        a(IRegistry.BLOCK, Block::k, set);
         a(IRegistry.CUSTOM_STAT, (minecraftkey) -> {
             return "stat." + minecraftkey.toString().replace(':', '.');
         }, set);
@@ -65,10 +65,13 @@ public class DispenserRegistry {
     public static void c() {
         if (!DispenserRegistry.b) {
             throw new IllegalArgumentException("Not bootstrapped");
-        } else if (!SharedConstants.b) {
-            b().forEach((s) -> {
-                DispenserRegistry.LOGGER.error("Missing translations: " + s);
-            });
+        } else {
+            if (SharedConstants.b) {
+                b().forEach((s) -> {
+                    DispenserRegistry.LOGGER.error("Missing translations: " + s);
+                });
+            }
+
         }
     }
 

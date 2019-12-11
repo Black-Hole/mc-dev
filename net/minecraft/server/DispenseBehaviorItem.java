@@ -27,7 +27,7 @@ public class DispenseBehaviorItem implements IDispenseBehavior {
         double d1 = iposition.getY();
         double d2 = iposition.getZ();
 
-        if (enumdirection.k() == EnumDirection.EnumAxis.Y) {
+        if (enumdirection.m() == EnumDirection.EnumAxis.Y) {
             d1 -= 0.125D;
         } else {
             d1 -= 0.15625D;
@@ -45,6 +45,6 @@ public class DispenseBehaviorItem implements IDispenseBehavior {
     }
 
     protected void a(ISourceBlock isourceblock, EnumDirection enumdirection) {
-        isourceblock.getWorld().triggerEffect(2000, isourceblock.getBlockPosition(), enumdirection.a());
+        isourceblock.getWorld().triggerEffect(2000, isourceblock.getBlockPosition(), enumdirection.b());
     }
 }

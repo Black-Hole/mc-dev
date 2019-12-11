@@ -147,7 +147,7 @@ public class WorldMap extends PersistentBase {
 
             if (!worldmap_worldmaphumantracker1.trackee.dead && (worldmap_worldmaphumantracker1.trackee.inventory.h(itemstack) || itemstack.y())) {
                 if (!itemstack.y() && worldmap_worldmaphumantracker1.trackee.dimension == this.map && this.track) {
-                    this.a(MapIcon.Type.PLAYER, worldmap_worldmaphumantracker1.trackee.world, s, worldmap_worldmaphumantracker1.trackee.locX, worldmap_worldmaphumantracker1.trackee.locZ, (double) worldmap_worldmaphumantracker1.trackee.yaw, (IChatBaseComponent) null);
+                    this.a(MapIcon.Type.PLAYER, worldmap_worldmaphumantracker1.trackee.world, s, worldmap_worldmaphumantracker1.trackee.locX(), worldmap_worldmaphumantracker1.trackee.locZ(), (double) worldmap_worldmaphumantracker1.trackee.yaw, (IChatBaseComponent) null);
                 }
             } else {
                 this.humans.remove(worldmap_worldmaphumantracker1.trackee);

@@ -27,16 +27,16 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
         super.tick();
         if (this.b > 0) {
             --this.b;
-            this.world.addParticle(Particles.SMOKE, this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D);
+            this.world.addParticle(Particles.SMOKE, this.locX(), this.locY() + 0.5D, this.locZ(), 0.0D, 0.0D, 0.0D);
         } else if (this.b == 0) {
-            this.c(b(this.getMot()));
+            this.h(b(this.getMot()));
         }
 
         if (this.positionChanged) {
             double d0 = b(this.getMot());
 
             if (d0 >= 0.009999999776482582D) {
-                this.c(d0);
+                this.h(d0);
             }
         }
 
@@ -50,7 +50,7 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
             EntityArrow entityarrow = (EntityArrow) entity;
 
             if (entityarrow.isBurning()) {
-                this.c(entityarrow.getMot().g());
+                this.h(entityarrow.getMot().g());
             }
         }
 
@@ -61,7 +61,7 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
     public void a(DamageSource damagesource) {
         double d0 = b(this.getMot());
 
-        if (!damagesource.p() && !damagesource.isExplosion() && d0 < 0.009999999776482582D) {
+        if (!damagesource.isFire() && !damagesource.isExplosion() && d0 < 0.009999999776482582D) {
             super.a(damagesource);
             if (!damagesource.isExplosion() && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
                 this.a((IMaterial) Blocks.TNT);
@@ -76,7 +76,7 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
         }
     }
 
-    protected void c(double d0) {
+    protected void h(double d0) {
         if (!this.world.isClientSide) {
             double d1 = Math.sqrt(d0);
 
@@ -84,21 +84,21 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
                 d1 = 5.0D;
             }
 
-            this.world.explode(this, this.locX, this.locY, this.locZ, (float) (4.0D + this.random.nextDouble() * 1.5D * d1), Explosion.Effect.BREAK);
+            this.world.explode(this, this.locX(), this.locY(), this.locZ(), (float) (4.0D + this.random.nextDouble() * 1.5D * d1), Explosion.Effect.BREAK);
             this.die();
         }
 
     }
 
     @Override
-    public void b(float f, float f1) {
+    public boolean b(float f, float f1) {
         if (f >= 3.0F) {
             float f2 = f / 10.0F;
 
-            this.c((double) (f2 * f2));
+            this.h((double) (f2 * f2));
         }
 
-        super.b(f, f1);
+        return super.b(f, f1);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
         if (!this.world.isClientSide) {
             this.world.broadcastEntityEffect(this, (byte) 10);
             if (!this.isSilent()) {
-                this.world.playSound((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                this.world.playSound((EntityHuman) null, this.locX(), this.locY(), this.locZ(), SoundEffects.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }
         }
 

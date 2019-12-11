@@ -16,7 +16,7 @@ public class DataConverterRegistry {
     private static final DataFixer c = b();
 
     private static DataFixer b() {
-        DataFixerBuilder datafixerbuilder = new DataFixerBuilder(SharedConstants.a().getWorldVersion());
+        DataFixerBuilder datafixerbuilder = new DataFixerBuilder(SharedConstants.getGameVersion().getWorldVersion());
 
         a(datafixerbuilder);
         return datafixerbuilder.build(SystemUtils.e());
@@ -407,5 +407,27 @@ public class DataConverterRegistry {
         Schema schema94 = datafixerbuilder.addSchema(1961, DataConverterRegistry.b);
 
         datafixerbuilder.addFixer(new DataConverterChunkLightRemove(schema94, false));
+        Schema schema95 = datafixerbuilder.addSchema(2100, DataConverterSchemaV2100::new);
+
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema95, "Added Bee and Bee Stinger", DataConverterTypes.ENTITY));
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema95, "Add beehive", DataConverterTypes.k));
+        Schema schema96 = datafixerbuilder.addSchema(2202, DataConverterRegistry.b);
+
+        datafixerbuilder.addFixer(new DataConverterLeavesBiome(schema96, false));
+        Schema schema97 = datafixerbuilder.addSchema(2209, DataConverterRegistry.b);
+
+        datafixerbuilder.addFixer(DataConverterItemName.a(schema97, "Rename bee_hive item to beehive", (s) -> {
+            return Objects.equals(s, "minecraft:bee_hive") ? "minecraft:beehive" : s;
+        }));
+        datafixerbuilder.addFixer(new DataConverterBeehive(schema97));
+        datafixerbuilder.addFixer(DataConverterBlockRename.a(schema97, "Rename bee_hive block to beehive", (s) -> {
+            return (String) ImmutableMap.of("minecraft:bee_hive", "minecraft:beehive").getOrDefault(s, s);
+        }));
+        Schema schema98 = datafixerbuilder.addSchema(2211, DataConverterRegistry.b);
+
+        datafixerbuilder.addFixer(new DataConverterStructureReference(schema98, false));
+        Schema schema99 = datafixerbuilder.addSchema(2218, DataConverterRegistry.b);
+
+        datafixerbuilder.addFixer(new DataConverterPOIRebuild(schema99, false));
     }
 }

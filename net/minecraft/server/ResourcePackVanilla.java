@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import java.io.File;
@@ -23,11 +22,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -103,13 +101,13 @@ public class ResourcePackVanilla implements IResourcePack {
     }
 
     @Override
-    public Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, int i, Predicate<String> predicate) {
+    public Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, String s1, int i, Predicate<String> predicate) {
         Set<MinecraftKey> set = Sets.newHashSet();
         URI uri;
 
         if (ResourcePackVanilla.a != null) {
             try {
-                set.addAll(this.a(i, "minecraft", ResourcePackVanilla.a.resolve(enumresourcepacktype.a()).resolve("minecraft"), s, predicate));
+                a(set, i, s, ResourcePackVanilla.a.resolve(enumresourcepacktype.a()), s1, predicate);
             } catch (IOException ioexception) {
                 ;
             }
@@ -118,7 +116,7 @@ public class ResourcePackVanilla implements IResourcePack {
                 Enumeration enumeration = null;
 
                 try {
-                    enumeration = ResourcePackVanilla.b.getClassLoader().getResources(enumresourcepacktype.a() + "/minecraft");
+                    enumeration = ResourcePackVanilla.b.getClassLoader().getResources(enumresourcepacktype.a() + "/");
                 } catch (IOException ioexception1) {
                     ;
                 }
@@ -127,7 +125,7 @@ public class ResourcePackVanilla implements IResourcePack {
                     try {
                         uri = ((URL) enumeration.nextElement()).toURI();
                         if ("file".equals(uri.getScheme())) {
-                            set.addAll(this.a(i, "minecraft", Paths.get(uri), s, predicate));
+                            a(set, i, s, Paths.get(uri), s1, predicate);
                         }
                     } catch (IOException | URISyntaxException urisyntaxexception) {
                         ;
@@ -146,19 +144,14 @@ public class ResourcePackVanilla implements IResourcePack {
 
             uri = url.toURI();
             if ("file".equals(uri.getScheme())) {
-                URL url1 = new URL(url.toString().substring(0, url.toString().length() - ".mcassetsroot".length()) + "minecraft");
-
-                if (url1 == null) {
-                    return set;
-                }
-
+                URL url1 = new URL(url.toString().substring(0, url.toString().length() - ".mcassetsroot".length()));
                 java.nio.file.Path java_nio_file_path = Paths.get(url1.toURI());
 
-                set.addAll(this.a(i, "minecraft", java_nio_file_path, s, predicate));
+                a(set, i, s, java_nio_file_path, s1, predicate);
             } else if ("jar".equals(uri.getScheme())) {
-                java.nio.file.Path java_nio_file_path1 = ((FileSystem) ResourcePackVanilla.e.get(enumresourcepacktype)).getPath("/" + enumresourcepacktype.a() + "/minecraft");
+                java.nio.file.Path java_nio_file_path1 = ((FileSystem) ResourcePackVanilla.e.get(enumresourcepacktype)).getPath("/" + enumresourcepacktype.a());
 
-                set.addAll(this.a(i, "minecraft", java_nio_file_path1, s, predicate));
+                a(set, i, "minecraft", java_nio_file_path1, s1, predicate);
             } else {
                 ResourcePackVanilla.LOGGER.error("Unsupported scheme {} trying to list vanilla resources (NYI?)", uri);
             }
@@ -171,19 +164,35 @@ public class ResourcePackVanilla implements IResourcePack {
         return set;
     }
 
-    private Collection<MinecraftKey> a(int i, String s, java.nio.file.Path java_nio_file_path, String s1, Predicate<String> predicate) throws IOException {
-        List<MinecraftKey> list = Lists.newArrayList();
-        Iterator iterator = Files.walk(java_nio_file_path.resolve(s1), i, new FileVisitOption[0]).iterator();
+    private static void a(Collection<MinecraftKey> collection, int i, String s, java.nio.file.Path java_nio_file_path, String s1, Predicate<String> predicate) throws IOException {
+        java.nio.file.Path java_nio_file_path1 = java_nio_file_path.resolve(s);
+        Stream<java.nio.file.Path> stream = Files.walk(java_nio_file_path1.resolve(s1), i, new FileVisitOption[0]);
+        Throwable throwable = null;
 
-        while (iterator.hasNext()) {
-            java.nio.file.Path java_nio_file_path1 = (java.nio.file.Path) iterator.next();
-
-            if (!java_nio_file_path1.endsWith(".mcmeta") && Files.isRegularFile(java_nio_file_path1, new LinkOption[0]) && predicate.test(java_nio_file_path1.getFileName().toString())) {
-                list.add(new MinecraftKey(s, java_nio_file_path.relativize(java_nio_file_path1).toString().replaceAll("\\\\", "/")));
+        try {
+            stream.filter((java_nio_file_path2) -> {
+                return !java_nio_file_path2.endsWith(".mcmeta") && Files.isRegularFile(java_nio_file_path2, new LinkOption[0]) && predicate.test(java_nio_file_path2.getFileName().toString());
+            }).map((java_nio_file_path2) -> {
+                return new MinecraftKey(s, java_nio_file_path1.relativize(java_nio_file_path2).toString().replaceAll("\\\\", "/"));
+            }).forEach(collection::add);
+        } catch (Throwable throwable1) {
+            throwable = throwable1;
+            throw throwable1;
+        } finally {
+            if (stream != null) {
+                if (throwable != null) {
+                    try {
+                        stream.close();
+                    } catch (Throwable throwable2) {
+                        throwable.addSuppressed(throwable2);
+                    }
+                } else {
+                    stream.close();
+                }
             }
+
         }
 
-        return list;
     }
 
     @Nullable

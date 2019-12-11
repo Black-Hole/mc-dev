@@ -21,7 +21,7 @@ public class BlockTripwire extends Block {
 
     public BlockTripwire(BlockTripwireHook blocktripwirehook, Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTripwire.POWERED, false)).set(BlockTripwire.ATTACHED, false)).set(BlockTripwire.DISARMED, false)).set(BlockTripwire.NORTH, false)).set(BlockTripwire.EAST, false)).set(BlockTripwire.SOUTH, false)).set(BlockTripwire.WEST, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTripwire.POWERED, false)).set(BlockTripwire.ATTACHED, false)).set(BlockTripwire.DISARMED, false)).set(BlockTripwire.NORTH, false)).set(BlockTripwire.EAST, false)).set(BlockTripwire.SOUTH, false)).set(BlockTripwire.WEST, false));
         this.k = blocktripwirehook;
     }
 
@@ -40,12 +40,7 @@ public class BlockTripwire extends Block {
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        return enumdirection.k().c() ? (IBlockData) iblockdata.set((IBlockState) BlockTripwire.j.get(enumdirection), this.a(iblockdata1, enumdirection)) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.TRANSLUCENT;
+        return enumdirection.m().c() ? (IBlockData) iblockdata.set((IBlockState) BlockTripwire.j.get(enumdirection), this.a(iblockdata1, enumdirection)) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     @Override
@@ -112,11 +107,9 @@ public class BlockTripwire extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!world.isClientSide) {
-            if ((Boolean) world.getType(blockposition).get(BlockTripwire.POWERED)) {
-                this.a(world, blockposition);
-            }
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if ((Boolean) worldserver.getType(blockposition).get(BlockTripwire.POWERED)) {
+            this.a((World) worldserver, blockposition);
         }
     }
 

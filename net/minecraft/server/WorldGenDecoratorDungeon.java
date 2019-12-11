@@ -16,11 +16,11 @@ public class WorldGenDecoratorDungeon extends WorldGenDecorator<WorldGenDecorato
         int i = worldgendecoratordungeonconfiguration.a;
 
         return IntStream.range(0, i).mapToObj((j) -> {
-            int k = random.nextInt(16);
-            int l = random.nextInt(chunkgenerator.getGenerationDepth());
-            int i1 = random.nextInt(16);
+            int k = random.nextInt(16) + blockposition.getX();
+            int l = random.nextInt(16) + blockposition.getZ();
+            int i1 = random.nextInt(chunkgenerator.getGenerationDepth());
 
-            return blockposition.b(k, l, i1);
+            return new BlockPosition(k, i1, l);
         });
     }
 }

@@ -14,7 +14,7 @@ public class ItemPickaxe extends ItemTool {
     @Override
     public boolean canDestroySpecialBlock(IBlockData iblockdata) {
         Block block = iblockdata.getBlock();
-        int i = this.e().d();
+        int i = this.g().d();
 
         if (block == Blocks.OBSIDIAN) {
             return i == 3;

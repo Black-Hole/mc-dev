@@ -84,8 +84,8 @@ public enum GenLayerDesert implements AreaTransformer7 {
             BiomeBase biomebase1 = (BiomeBase) IRegistry.BIOME.fromId(j);
 
             if (biomebase != null && biomebase1 != null) {
-                BiomeBase.EnumTemperature biomebase_enumtemperature = biomebase.f();
-                BiomeBase.EnumTemperature biomebase_enumtemperature1 = biomebase1.f();
+                BiomeBase.EnumTemperature biomebase_enumtemperature = biomebase.h();
+                BiomeBase.EnumTemperature biomebase_enumtemperature1 = biomebase1.h();
 
                 return biomebase_enumtemperature == biomebase_enumtemperature1 || biomebase_enumtemperature == BiomeBase.EnumTemperature.MEDIUM || biomebase_enumtemperature1 == BiomeBase.EnumTemperature.MEDIUM;
             } else {

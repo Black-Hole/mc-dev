@@ -17,9 +17,9 @@ public class BlockCoralFan extends BlockCoralFanAbstract {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!b_(iblockdata, world, blockposition)) {
-            world.setTypeAndData(blockposition, (IBlockData) this.a.getBlockData().set(BlockCoralFan.b, false), 2);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!b_(iblockdata, worldserver, blockposition)) {
+            worldserver.setTypeAndData(blockposition, (IBlockData) this.a.getBlockData().set(BlockCoralFan.b, false), 2);
         }
 
     }

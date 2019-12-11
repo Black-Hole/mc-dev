@@ -9,7 +9,7 @@ public class WorldGenTreeProviderBirch extends WorldGenTreeProvider {
 
     @Nullable
     @Override
-    protected WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> b(Random random) {
-        return new WorldGenForest(WorldGenFeatureEmptyConfiguration::a, true, false);
+    protected WorldGenFeatureConfigured<WorldGenFeatureSmallTreeConfigurationConfiguration, ?> b(Random random) {
+        return WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.BIRCH_TREE);
     }
 }

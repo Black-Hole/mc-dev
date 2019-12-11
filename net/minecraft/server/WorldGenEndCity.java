@@ -30,13 +30,11 @@ public class WorldGenEndCity extends StructureGenerator<WorldGenFeatureEmptyConf
     }
 
     @Override
-    public boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
+    public boolean a(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, Random random, int i, int j, BiomeBase biomebase) {
         ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, random, i, j, 0, 0);
 
         if (i == chunkcoordintpair.x && j == chunkcoordintpair.z) {
-            BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9));
-
-            if (!chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.END_CITY)) {
+            if (!chunkgenerator.canSpawnStructure(biomebase, this)) {
                 return false;
             } else {
                 int k = b(i, j, chunkgenerator);
@@ -90,8 +88,8 @@ public class WorldGenEndCity extends StructureGenerator<WorldGenFeatureEmptyConf
 
     public static class a extends StructureStart {
 
-        public a(StructureGenerator<?> structuregenerator, int i, int j, BiomeBase biomebase, StructureBoundingBox structureboundingbox, int k, long l) {
-            super(structuregenerator, i, j, biomebase, structureboundingbox, k, l);
+        public a(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+            super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
         @Override

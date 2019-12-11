@@ -42,7 +42,7 @@ public class ItemRecord extends Item {
         }
     }
 
-    public int d() {
+    public int f() {
         return this.b;
     }
 }

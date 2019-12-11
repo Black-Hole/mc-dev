@@ -12,20 +12,20 @@ public class BlockTorchWall extends BlockTorch {
 
     protected BlockTorchWall(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTorchWall.a, EnumDirection.NORTH));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTorchWall.a, EnumDirection.NORTH));
     }
 
     @Override
-    public String l() {
+    public String k() {
         return this.getItem().getName();
     }
 
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return j(iblockdata);
+        return h(iblockdata);
     }
 
-    public static VoxelShape j(IBlockData iblockdata) {
+    public static VoxelShape h(IBlockData iblockdata) {
         return (VoxelShape) BlockTorchWall.b.get(iblockdata.get(BlockTorchWall.a));
     }
 
@@ -51,7 +51,7 @@ public class BlockTorchWall extends BlockTorch {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection1[j];
 
-            if (enumdirection.k().c()) {
+            if (enumdirection.m().c()) {
                 EnumDirection enumdirection1 = enumdirection.opposite();
 
                 iblockdata = (IBlockData) iblockdata.set(BlockTorchWall.a, enumdirection1);

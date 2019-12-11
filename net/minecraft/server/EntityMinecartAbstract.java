@@ -1,7 +1,11 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Maps;
+import com.mojang.datafixers.util.Pair;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Nullable;
 
 public abstract class EntityMinecartAbstract extends Entity {
@@ -12,14 +16,34 @@ public abstract class EntityMinecartAbstract extends Entity {
     private static final DataWatcherObject<Integer> e = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Integer> f = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Boolean> g = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.i);
-    private boolean ar;
-    private static final int[][][] as = new int[][][]{{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
-    private int at;
+    private boolean ao;
+    private static final Map<BlockPropertyTrackPosition, Pair<BaseBlockPosition, BaseBlockPosition>> ap = (Map) SystemUtils.a((Object) Maps.newEnumMap(BlockPropertyTrackPosition.class), (enummap) -> {
+        BaseBlockPosition baseblockposition = EnumDirection.WEST.p();
+        BaseBlockPosition baseblockposition1 = EnumDirection.EAST.p();
+        BaseBlockPosition baseblockposition2 = EnumDirection.NORTH.p();
+        BaseBlockPosition baseblockposition3 = EnumDirection.SOUTH.p();
+        BaseBlockPosition baseblockposition4 = baseblockposition.down();
+        BaseBlockPosition baseblockposition5 = baseblockposition1.down();
+        BaseBlockPosition baseblockposition6 = baseblockposition2.down();
+        BaseBlockPosition baseblockposition7 = baseblockposition3.down();
+
+        enummap.put(BlockPropertyTrackPosition.NORTH_SOUTH, Pair.of(baseblockposition2, baseblockposition3));
+        enummap.put(BlockPropertyTrackPosition.EAST_WEST, Pair.of(baseblockposition, baseblockposition1));
+        enummap.put(BlockPropertyTrackPosition.ASCENDING_EAST, Pair.of(baseblockposition4, baseblockposition1));
+        enummap.put(BlockPropertyTrackPosition.ASCENDING_WEST, Pair.of(baseblockposition, baseblockposition5));
+        enummap.put(BlockPropertyTrackPosition.ASCENDING_NORTH, Pair.of(baseblockposition2, baseblockposition7));
+        enummap.put(BlockPropertyTrackPosition.ASCENDING_SOUTH, Pair.of(baseblockposition6, baseblockposition3));
+        enummap.put(BlockPropertyTrackPosition.SOUTH_EAST, Pair.of(baseblockposition3, baseblockposition1));
+        enummap.put(BlockPropertyTrackPosition.SOUTH_WEST, Pair.of(baseblockposition3, baseblockposition));
+        enummap.put(BlockPropertyTrackPosition.NORTH_WEST, Pair.of(baseblockposition2, baseblockposition));
+        enummap.put(BlockPropertyTrackPosition.NORTH_EAST, Pair.of(baseblockposition2, baseblockposition1));
+    });
+    private int aq;
+    private double ar;
+    private double as;
+    private double at;
     private double au;
     private double av;
-    private double aw;
-    private double ax;
-    private double ay;
 
     protected EntityMinecartAbstract(EntityTypes<?> entitytypes, World world) {
         super(entitytypes, world);
@@ -66,7 +90,7 @@ public abstract class EntityMinecartAbstract extends Entity {
     }
 
     @Override
-    public double aP() {
+    public double aS() {
         return 0.0D;
     }
 
@@ -117,9 +141,13 @@ public abstract class EntityMinecartAbstract extends Entity {
         return !this.dead;
     }
 
+    private static Pair<BaseBlockPosition, BaseBlockPosition> a(BlockPropertyTrackPosition blockpropertytrackposition) {
+        return (Pair) EntityMinecartAbstract.ap.get(blockpropertytrackposition);
+    }
+
     @Override
     public EnumDirection getAdjustedDirection() {
-        return this.ar ? this.getDirection().opposite().e() : this.getDirection().e();
+        return this.ao ? this.getDirection().opposite().f() : this.getDirection().f();
     }
 
     @Override
@@ -132,39 +160,36 @@ public abstract class EntityMinecartAbstract extends Entity {
             this.setDamage(this.getDamage() - 1.0F);
         }
 
-        if (this.locY < -64.0D) {
+        if (this.locY() < -64.0D) {
             this.af();
         }
 
         this.doPortalTick();
         if (this.world.isClientSide) {
-            if (this.at > 0) {
-                double d0 = this.locX + (this.au - this.locX) / (double) this.at;
-                double d1 = this.locY + (this.av - this.locY) / (double) this.at;
-                double d2 = this.locZ + (this.aw - this.locZ) / (double) this.at;
-                double d3 = MathHelper.g(this.ax - (double) this.yaw);
+            if (this.aq > 0) {
+                double d0 = this.locX() + (this.ar - this.locX()) / (double) this.aq;
+                double d1 = this.locY() + (this.as - this.locY()) / (double) this.aq;
+                double d2 = this.locZ() + (this.at - this.locZ()) / (double) this.aq;
+                double d3 = MathHelper.g(this.au - (double) this.yaw);
 
-                this.yaw = (float) ((double) this.yaw + d3 / (double) this.at);
-                this.pitch = (float) ((double) this.pitch + (this.ay - (double) this.pitch) / (double) this.at);
-                --this.at;
+                this.yaw = (float) ((double) this.yaw + d3 / (double) this.aq);
+                this.pitch = (float) ((double) this.pitch + (this.av - (double) this.pitch) / (double) this.aq);
+                --this.aq;
                 this.setPosition(d0, d1, d2);
                 this.setYawPitch(this.yaw, this.pitch);
             } else {
-                this.setPosition(this.locX, this.locY, this.locZ);
+                this.Z();
                 this.setYawPitch(this.yaw, this.pitch);
             }
 
         } else {
-            this.lastX = this.locX;
-            this.lastY = this.locY;
-            this.lastZ = this.locZ;
             if (!this.isNoGravity()) {
                 this.setMot(this.getMot().add(0.0D, -0.04D, 0.0D));
             }
 
-            int i = MathHelper.floor(this.locX);
-            int j = MathHelper.floor(this.locY);
-            int k = MathHelper.floor(this.locZ);
+            int i = MathHelper.floor(this.locX());
+            int j = MathHelper.floor(this.locY());
+            int k = MathHelper.floor(this.locZ());
 
             if (this.world.getType(new BlockPosition(i, j - 1, k)).a(TagsBlock.RAILS)) {
                 --j;
@@ -184,12 +209,12 @@ public abstract class EntityMinecartAbstract extends Entity {
 
             this.checkBlockCollisions();
             this.pitch = 0.0F;
-            double d4 = this.lastX - this.locX;
-            double d5 = this.lastZ - this.locZ;
+            double d4 = this.lastX - this.locX();
+            double d5 = this.lastZ - this.locZ();
 
             if (d4 * d4 + d5 * d5 > 0.001D) {
                 this.yaw = (float) (MathHelper.d(d5, d4) * 180.0D / 3.141592653589793D);
-                if (this.ar) {
+                if (this.ao) {
                     this.yaw += 180.0F;
                 }
             }
@@ -198,7 +223,7 @@ public abstract class EntityMinecartAbstract extends Entity {
 
             if (d6 < -170.0D || d6 >= 170.0D) {
                 this.yaw += 180.0F;
-                this.ar = !this.ar;
+                this.ao = !this.ao;
             }
 
             this.setYawPitch(this.yaw, this.pitch);
@@ -228,7 +253,7 @@ public abstract class EntityMinecartAbstract extends Entity {
                 }
             }
 
-            this.ay();
+            this.aC();
         }
     }
 
@@ -256,9 +281,12 @@ public abstract class EntityMinecartAbstract extends Entity {
 
     protected void b(BlockPosition blockposition, IBlockData iblockdata) {
         this.fallDistance = 0.0F;
-        Vec3D vec3d = this.l(this.locX, this.locY, this.locZ);
+        double d0 = this.locX();
+        double d1 = this.locY();
+        double d2 = this.locZ();
+        Vec3D vec3d = this.o(d0, d1, d2);
 
-        this.locY = (double) blockposition.getY();
+        d1 = (double) blockposition.getY();
         boolean flag = false;
         boolean flag1 = false;
         BlockMinecartTrackAbstract blockminecarttrackabstract = (BlockMinecartTrackAbstract) iblockdata.getBlock();
@@ -268,147 +296,147 @@ public abstract class EntityMinecartAbstract extends Entity {
             flag1 = !flag;
         }
 
-        double d0 = 0.0078125D;
+        double d3 = 0.0078125D;
         Vec3D vec3d1 = this.getMot();
-        BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(blockminecarttrackabstract.e());
+        BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(blockminecarttrackabstract.d());
 
         switch (blockpropertytrackposition) {
             case ASCENDING_EAST:
                 this.setMot(vec3d1.add(-0.0078125D, 0.0D, 0.0D));
-                ++this.locY;
+                ++d1;
                 break;
             case ASCENDING_WEST:
                 this.setMot(vec3d1.add(0.0078125D, 0.0D, 0.0D));
-                ++this.locY;
+                ++d1;
                 break;
             case ASCENDING_NORTH:
                 this.setMot(vec3d1.add(0.0D, 0.0D, 0.0078125D));
-                ++this.locY;
+                ++d1;
                 break;
             case ASCENDING_SOUTH:
                 this.setMot(vec3d1.add(0.0D, 0.0D, -0.0078125D));
-                ++this.locY;
+                ++d1;
         }
 
         vec3d1 = this.getMot();
-        int[][] aint = EntityMinecartAbstract.as[blockpropertytrackposition.a()];
-        double d1 = (double) (aint[1][0] - aint[0][0]);
-        double d2 = (double) (aint[1][2] - aint[0][2]);
-        double d3 = Math.sqrt(d1 * d1 + d2 * d2);
-        double d4 = vec3d1.x * d1 + vec3d1.z * d2;
+        Pair<BaseBlockPosition, BaseBlockPosition> pair = a(blockpropertytrackposition);
+        BaseBlockPosition baseblockposition = (BaseBlockPosition) pair.getFirst();
+        BaseBlockPosition baseblockposition1 = (BaseBlockPosition) pair.getSecond();
+        double d4 = (double) (baseblockposition1.getX() - baseblockposition.getX());
+        double d5 = (double) (baseblockposition1.getZ() - baseblockposition.getZ());
+        double d6 = Math.sqrt(d4 * d4 + d5 * d5);
+        double d7 = vec3d1.x * d4 + vec3d1.z * d5;
 
-        if (d4 < 0.0D) {
-            d1 = -d1;
-            d2 = -d2;
+        if (d7 < 0.0D) {
+            d4 = -d4;
+            d5 = -d5;
         }
 
-        double d5 = Math.min(2.0D, Math.sqrt(b(vec3d1)));
+        double d8 = Math.min(2.0D, Math.sqrt(b(vec3d1)));
 
-        vec3d1 = new Vec3D(d5 * d1 / d3, vec3d1.y, d5 * d2 / d3);
+        vec3d1 = new Vec3D(d8 * d4 / d6, vec3d1.y, d8 * d5 / d6);
         this.setMot(vec3d1);
         Entity entity = this.getPassengers().isEmpty() ? null : (Entity) this.getPassengers().get(0);
 
         if (entity instanceof EntityHuman) {
             Vec3D vec3d2 = entity.getMot();
-            double d6 = b(vec3d2);
-            double d7 = b(this.getMot());
+            double d9 = b(vec3d2);
+            double d10 = b(this.getMot());
 
-            if (d6 > 1.0E-4D && d7 < 0.01D) {
+            if (d9 > 1.0E-4D && d10 < 0.01D) {
                 this.setMot(this.getMot().add(vec3d2.x * 0.1D, 0.0D, vec3d2.z * 0.1D));
                 flag1 = false;
             }
         }
 
-        double d8;
+        double d11;
 
         if (flag1) {
-            d8 = Math.sqrt(b(this.getMot()));
-            if (d8 < 0.03D) {
+            d11 = Math.sqrt(b(this.getMot()));
+            if (d11 < 0.03D) {
                 this.setMot(Vec3D.a);
             } else {
                 this.setMot(this.getMot().d(0.5D, 0.0D, 0.5D));
             }
         }
 
-        d8 = (double) blockposition.getX() + 0.5D + (double) aint[0][0] * 0.5D;
-        double d9 = (double) blockposition.getZ() + 0.5D + (double) aint[0][2] * 0.5D;
-        double d10 = (double) blockposition.getX() + 0.5D + (double) aint[1][0] * 0.5D;
-        double d11 = (double) blockposition.getZ() + 0.5D + (double) aint[1][2] * 0.5D;
+        d11 = (double) blockposition.getX() + 0.5D + (double) baseblockposition.getX() * 0.5D;
+        double d12 = (double) blockposition.getZ() + 0.5D + (double) baseblockposition.getZ() * 0.5D;
+        double d13 = (double) blockposition.getX() + 0.5D + (double) baseblockposition1.getX() * 0.5D;
+        double d14 = (double) blockposition.getZ() + 0.5D + (double) baseblockposition1.getZ() * 0.5D;
 
-        d1 = d10 - d8;
-        d2 = d11 - d9;
-        double d12;
-        double d13;
-        double d14;
+        d4 = d13 - d11;
+        d5 = d14 - d12;
+        double d15;
+        double d16;
+        double d17;
 
-        if (d1 == 0.0D) {
-            this.locX = (double) blockposition.getX() + 0.5D;
-            d12 = this.locZ - (double) blockposition.getZ();
-        } else if (d2 == 0.0D) {
-            this.locZ = (double) blockposition.getZ() + 0.5D;
-            d12 = this.locX - (double) blockposition.getX();
+        if (d4 == 0.0D) {
+            d15 = d2 - (double) blockposition.getZ();
+        } else if (d5 == 0.0D) {
+            d15 = d0 - (double) blockposition.getX();
         } else {
-            d13 = this.locX - d8;
-            d14 = this.locZ - d9;
-            d12 = (d13 * d1 + d14 * d2) * 2.0D;
+            d16 = d0 - d11;
+            d17 = d2 - d12;
+            d15 = (d16 * d4 + d17 * d5) * 2.0D;
         }
 
-        this.locX = d8 + d1 * d12;
-        this.locZ = d9 + d2 * d12;
-        this.setPosition(this.locX, this.locY, this.locZ);
-        d13 = this.isVehicle() ? 0.75D : 1.0D;
-        d14 = this.getMaxSpeed();
+        d0 = d11 + d4 * d15;
+        d2 = d12 + d5 * d15;
+        this.setPosition(d0, d1, d2);
+        d16 = this.isVehicle() ? 0.75D : 1.0D;
+        d17 = this.getMaxSpeed();
         vec3d1 = this.getMot();
-        this.move(EnumMoveType.SELF, new Vec3D(MathHelper.a(d13 * vec3d1.x, -d14, d14), 0.0D, MathHelper.a(d13 * vec3d1.z, -d14, d14)));
-        if (aint[0][1] != 0 && MathHelper.floor(this.locX) - blockposition.getX() == aint[0][0] && MathHelper.floor(this.locZ) - blockposition.getZ() == aint[0][2]) {
-            this.setPosition(this.locX, this.locY + (double) aint[0][1], this.locZ);
-        } else if (aint[1][1] != 0 && MathHelper.floor(this.locX) - blockposition.getX() == aint[1][0] && MathHelper.floor(this.locZ) - blockposition.getZ() == aint[1][2]) {
-            this.setPosition(this.locX, this.locY + (double) aint[1][1], this.locZ);
+        this.move(EnumMoveType.SELF, new Vec3D(MathHelper.a(d16 * vec3d1.x, -d17, d17), 0.0D, MathHelper.a(d16 * vec3d1.z, -d17, d17)));
+        if (baseblockposition.getY() != 0 && MathHelper.floor(this.locX()) - blockposition.getX() == baseblockposition.getX() && MathHelper.floor(this.locZ()) - blockposition.getZ() == baseblockposition.getZ()) {
+            this.setPosition(this.locX(), this.locY() + (double) baseblockposition.getY(), this.locZ());
+        } else if (baseblockposition1.getY() != 0 && MathHelper.floor(this.locX()) - blockposition.getX() == baseblockposition1.getX() && MathHelper.floor(this.locZ()) - blockposition.getZ() == baseblockposition1.getZ()) {
+            this.setPosition(this.locX(), this.locY() + (double) baseblockposition1.getY(), this.locZ());
         }
 
         this.decelerate();
-        Vec3D vec3d3 = this.l(this.locX, this.locY, this.locZ);
+        Vec3D vec3d3 = this.o(this.locX(), this.locY(), this.locZ());
         Vec3D vec3d4;
-        double d15;
+        double d18;
 
         if (vec3d3 != null && vec3d != null) {
-            double d16 = (vec3d.y - vec3d3.y) * 0.05D;
+            double d19 = (vec3d.y - vec3d3.y) * 0.05D;
 
             vec3d4 = this.getMot();
-            d15 = Math.sqrt(b(vec3d4));
-            if (d15 > 0.0D) {
-                this.setMot(vec3d4.d((d15 + d16) / d15, 1.0D, (d15 + d16) / d15));
+            d18 = Math.sqrt(b(vec3d4));
+            if (d18 > 0.0D) {
+                this.setMot(vec3d4.d((d18 + d19) / d18, 1.0D, (d18 + d19) / d18));
             }
 
-            this.setPosition(this.locX, vec3d3.y, this.locZ);
+            this.setPosition(this.locX(), vec3d3.y, this.locZ());
         }
 
-        int i = MathHelper.floor(this.locX);
-        int j = MathHelper.floor(this.locZ);
+        int i = MathHelper.floor(this.locX());
+        int j = MathHelper.floor(this.locZ());
 
         if (i != blockposition.getX() || j != blockposition.getZ()) {
             vec3d4 = this.getMot();
-            d15 = Math.sqrt(b(vec3d4));
-            this.setMot(d15 * (double) (i - blockposition.getX()), vec3d4.y, d15 * (double) (j - blockposition.getZ()));
+            d18 = Math.sqrt(b(vec3d4));
+            this.setMot(d18 * (double) (i - blockposition.getX()), vec3d4.y, d18 * (double) (j - blockposition.getZ()));
         }
 
         if (flag) {
             vec3d4 = this.getMot();
-            d15 = Math.sqrt(b(vec3d4));
-            if (d15 > 0.01D) {
-                double d17 = 0.06D;
+            d18 = Math.sqrt(b(vec3d4));
+            if (d18 > 0.01D) {
+                double d20 = 0.06D;
 
-                this.setMot(vec3d4.add(vec3d4.x / d15 * 0.06D, 0.0D, vec3d4.z / d15 * 0.06D));
+                this.setMot(vec3d4.add(vec3d4.x / d18 * 0.06D, 0.0D, vec3d4.z / d18 * 0.06D));
             } else {
                 Vec3D vec3d5 = this.getMot();
-                double d18 = vec3d5.x;
-                double d19 = vec3d5.z;
+                double d21 = vec3d5.x;
+                double d22 = vec3d5.z;
 
                 if (blockpropertytrackposition == BlockPropertyTrackPosition.EAST_WEST) {
                     if (this.a(blockposition.west())) {
-                        d18 = 0.02D;
+                        d21 = 0.02D;
                     } else if (this.a(blockposition.east())) {
-                        d18 = -0.02D;
+                        d21 = -0.02D;
                     }
                 } else {
                     if (blockpropertytrackposition != BlockPropertyTrackPosition.NORTH_SOUTH) {
@@ -416,13 +444,13 @@ public abstract class EntityMinecartAbstract extends Entity {
                     }
 
                     if (this.a(blockposition.north())) {
-                        d19 = 0.02D;
+                        d22 = 0.02D;
                     } else if (this.a(blockposition.south())) {
-                        d19 = -0.02D;
+                        d22 = -0.02D;
                     }
                 }
 
-                this.setMot(d18, vec3d5.y, d19);
+                this.setMot(d21, vec3d5.y, d22);
             }
         }
 
@@ -439,7 +467,7 @@ public abstract class EntityMinecartAbstract extends Entity {
     }
 
     @Nullable
-    public Vec3D l(double d0, double d1, double d2) {
+    public Vec3D o(double d0, double d1, double d2) {
         int i = MathHelper.floor(d0);
         int j = MathHelper.floor(d1);
         int k = MathHelper.floor(d2);
@@ -451,14 +479,16 @@ public abstract class EntityMinecartAbstract extends Entity {
         IBlockData iblockdata = this.world.getType(new BlockPosition(i, j, k));
 
         if (iblockdata.a(TagsBlock.RAILS)) {
-            BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(((BlockMinecartTrackAbstract) iblockdata.getBlock()).e());
-            int[][] aint = EntityMinecartAbstract.as[blockpropertytrackposition.a()];
-            double d3 = (double) i + 0.5D + (double) aint[0][0] * 0.5D;
-            double d4 = (double) j + 0.0625D + (double) aint[0][1] * 0.5D;
-            double d5 = (double) k + 0.5D + (double) aint[0][2] * 0.5D;
-            double d6 = (double) i + 0.5D + (double) aint[1][0] * 0.5D;
-            double d7 = (double) j + 0.0625D + (double) aint[1][1] * 0.5D;
-            double d8 = (double) k + 0.5D + (double) aint[1][2] * 0.5D;
+            BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(((BlockMinecartTrackAbstract) iblockdata.getBlock()).d());
+            Pair<BaseBlockPosition, BaseBlockPosition> pair = a(blockpropertytrackposition);
+            BaseBlockPosition baseblockposition = (BaseBlockPosition) pair.getFirst();
+            BaseBlockPosition baseblockposition1 = (BaseBlockPosition) pair.getSecond();
+            double d3 = (double) i + 0.5D + (double) baseblockposition.getX() * 0.5D;
+            double d4 = (double) j + 0.0625D + (double) baseblockposition.getY() * 0.5D;
+            double d5 = (double) k + 0.5D + (double) baseblockposition.getZ() * 0.5D;
+            double d6 = (double) i + 0.5D + (double) baseblockposition1.getX() * 0.5D;
+            double d7 = (double) j + 0.0625D + (double) baseblockposition1.getY() * 0.5D;
+            double d8 = (double) k + 0.5D + (double) baseblockposition1.getZ() * 0.5D;
             double d9 = d6 - d3;
             double d10 = (d7 - d4) * 2.0D;
             double d11 = d8 - d5;
@@ -480,9 +510,7 @@ public abstract class EntityMinecartAbstract extends Entity {
             d2 = d5 + d11 * d12;
             if (d10 < 0.0D) {
                 ++d1;
-            }
-
-            if (d10 > 0.0D) {
+            } else if (d10 > 0.0D) {
                 d1 += 0.5D;
             }
 
@@ -516,8 +544,8 @@ public abstract class EntityMinecartAbstract extends Entity {
         if (!this.world.isClientSide) {
             if (!entity.noclip && !this.noclip) {
                 if (!this.w(entity)) {
-                    double d0 = entity.locX - this.locX;
-                    double d1 = entity.locZ - this.locZ;
+                    double d0 = entity.locX() - this.locX();
+                    double d1 = entity.locZ() - this.locZ();
                     double d2 = d0 * d0 + d1 * d1;
 
                     if (d2 >= 9.999999747378752E-5D) {
@@ -534,13 +562,13 @@ public abstract class EntityMinecartAbstract extends Entity {
                         d1 *= d3;
                         d0 *= 0.10000000149011612D;
                         d1 *= 0.10000000149011612D;
-                        d0 *= (double) (1.0F - this.M);
-                        d1 *= (double) (1.0F - this.M);
+                        d0 *= (double) (1.0F - this.J);
+                        d1 *= (double) (1.0F - this.J);
                         d0 *= 0.5D;
                         d1 *= 0.5D;
                         if (entity instanceof EntityMinecartAbstract) {
-                            double d4 = entity.locX - this.locX;
-                            double d5 = entity.locZ - this.locZ;
+                            double d4 = entity.locX() - this.locX();
+                            double d5 = entity.locZ() - this.locZ();
                             Vec3D vec3d = (new Vec3D(d4, 0.0D, d5)).d();
                             Vec3D vec3d1 = (new Vec3D((double) MathHelper.cos(this.yaw * 0.017453292F), 0.0D, (double) MathHelper.sin(this.yaw * 0.017453292F))).d();
                             double d6 = Math.abs(vec3d.b(vec3d1));
@@ -554,24 +582,24 @@ public abstract class EntityMinecartAbstract extends Entity {
 
                             if (((EntityMinecartAbstract) entity).getMinecartType() == EntityMinecartAbstract.EnumMinecartType.FURNACE && this.getMinecartType() != EntityMinecartAbstract.EnumMinecartType.FURNACE) {
                                 this.setMot(vec3d2.d(0.2D, 1.0D, 0.2D));
-                                this.f(vec3d3.x - d0, 0.0D, vec3d3.z - d1);
+                                this.h(vec3d3.x - d0, 0.0D, vec3d3.z - d1);
                                 entity.setMot(vec3d3.d(0.95D, 1.0D, 0.95D));
                             } else if (((EntityMinecartAbstract) entity).getMinecartType() != EntityMinecartAbstract.EnumMinecartType.FURNACE && this.getMinecartType() == EntityMinecartAbstract.EnumMinecartType.FURNACE) {
                                 entity.setMot(vec3d3.d(0.2D, 1.0D, 0.2D));
-                                entity.f(vec3d2.x + d0, 0.0D, vec3d2.z + d1);
+                                entity.h(vec3d2.x + d0, 0.0D, vec3d2.z + d1);
                                 this.setMot(vec3d2.d(0.95D, 1.0D, 0.95D));
                             } else {
                                 double d7 = (vec3d3.x + vec3d2.x) / 2.0D;
                                 double d8 = (vec3d3.z + vec3d2.z) / 2.0D;
 
                                 this.setMot(vec3d2.d(0.2D, 1.0D, 0.2D));
-                                this.f(d7 - d0, 0.0D, d8 - d1);
+                                this.h(d7 - d0, 0.0D, d8 - d1);
                                 entity.setMot(vec3d3.d(0.2D, 1.0D, 0.2D));
-                                entity.f(d7 + d0, 0.0D, d8 + d1);
+                                entity.h(d7 + d0, 0.0D, d8 + d1);
                             }
                         } else {
-                            this.f(-d0, 0.0D, -d1);
-                            entity.f(d0 / 4.0D, 0.0D, d1 / 4.0D);
+                            this.h(-d0, 0.0D, -d1);
+                            entity.h(d0 / 4.0D, 0.0D, d1 / 4.0D);
                         }
                     }
 
@@ -641,7 +669,7 @@ public abstract class EntityMinecartAbstract extends Entity {
     }
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         return new PacketPlayOutSpawnEntity(this);
     }
 

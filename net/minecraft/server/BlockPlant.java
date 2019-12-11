@@ -25,12 +25,12 @@ public class BlockPlant extends Block {
     }
 
     @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
+    public boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return true;
     }
 
     @Override
-    public boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return true;
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
+        return pathmode == PathMode.AIR && !this.v ? true : super.a(iblockdata, iblockaccess, blockposition, pathmode);
     }
 }

@@ -31,7 +31,7 @@ public class BlockWitherSkull extends BlockSkull {
             boolean flag = block == Blocks.WITHER_SKELETON_SKULL || block == Blocks.WITHER_SKELETON_WALL_SKULL;
 
             if (flag && blockposition.getY() >= 2 && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
-                ShapeDetector shapedetector = d();
+                ShapeDetector shapedetector = c();
                 ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = shapedetector.a(world, blockposition);
 
                 if (shapedetector_shapedetectorcollection != null) {
@@ -47,8 +47,8 @@ public class BlockWitherSkull extends BlockSkull {
                     EntityWither entitywither = (EntityWither) EntityTypes.WITHER.a(world);
                     BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a(1, 2, 0).getPosition();
 
-                    entitywither.setPositionRotation((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.55D, (double) blockposition1.getZ() + 0.5D, shapedetector_shapedetectorcollection.getFacing().k() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F, 0.0F);
-                    entitywither.aK = shapedetector_shapedetectorcollection.getFacing().k() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F;
+                    entitywither.setPositionRotation((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.55D, (double) blockposition1.getZ() + 0.5D, shapedetector_shapedetectorcollection.getFacing().m() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F, 0.0F);
+                    entitywither.aI = shapedetector_shapedetectorcollection.getFacing().m() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F;
                     entitywither.l();
                     Iterator iterator = world.a(EntityPlayer.class, entitywither.getBoundingBox().g(50.0D)).iterator();
 
@@ -72,10 +72,10 @@ public class BlockWitherSkull extends BlockSkull {
     }
 
     public static boolean b(World world, BlockPosition blockposition, ItemStack itemstack) {
-        return itemstack.getItem() == Items.WITHER_SKELETON_SKULL && blockposition.getY() >= 2 && world.getDifficulty() != EnumDifficulty.PEACEFUL && !world.isClientSide ? e().a(world, blockposition) != null : false;
+        return itemstack.getItem() == Items.WITHER_SKELETON_SKULL && blockposition.getY() >= 2 && world.getDifficulty() != EnumDifficulty.PEACEFUL && !world.isClientSide ? d().a(world, blockposition) != null : false;
     }
 
-    private static ShapeDetector d() {
+    private static ShapeDetector c() {
         if (BlockWitherSkull.c == null) {
             BlockWitherSkull.c = ShapeDetectorBuilder.a().a("^^^", "###", "~#~").a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SOUL_SAND))).a('^', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.WITHER_SKELETON_SKULL).or(BlockStatePredicate.a(Blocks.WITHER_SKELETON_WALL_SKULL)))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
         }
@@ -83,7 +83,7 @@ public class BlockWitherSkull extends BlockSkull {
         return BlockWitherSkull.c;
     }
 
-    private static ShapeDetector e() {
+    private static ShapeDetector d() {
         if (BlockWitherSkull.d == null) {
             BlockWitherSkull.d = ShapeDetectorBuilder.a().a("   ", "###", "~#~").a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SOUL_SAND))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
         }

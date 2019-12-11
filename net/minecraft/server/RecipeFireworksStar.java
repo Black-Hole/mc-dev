@@ -104,7 +104,7 @@ public class RecipeFireworksStar extends IRecipeComplex {
     }
 
     @Override
-    public ItemStack c() {
+    public ItemStack getResult() {
         return new ItemStack(Items.FIREWORK_STAR);
     }
 

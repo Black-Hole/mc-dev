@@ -56,7 +56,7 @@ public class MerchantRecipeList extends ArrayList<MerchantRecipe> {
             packetdataserializer.writeInt(merchantrecipe.getXp());
             packetdataserializer.writeInt(merchantrecipe.getSpecialPrice());
             packetdataserializer.writeFloat(merchantrecipe.getPriceMultiplier());
-            packetdataserializer.writeInt(merchantrecipe.k());
+            packetdataserializer.writeInt(merchantrecipe.getDemand());
         }
 
     }
@@ -101,7 +101,7 @@ public class MerchantRecipeList extends ArrayList<MerchantRecipe> {
         for (int i = 0; i < this.size(); ++i) {
             MerchantRecipe merchantrecipe = (MerchantRecipe) this.get(i);
 
-            nbttaglist.add(merchantrecipe.s());
+            nbttaglist.add(merchantrecipe.t());
         }
 
         nbttagcompound.set("Recipes", nbttaglist);

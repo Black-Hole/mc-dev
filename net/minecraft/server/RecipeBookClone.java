@@ -75,8 +75,8 @@ public class RecipeBookClone extends IRecipeComplex {
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
-            if (itemstack.getItem().o()) {
-                nonnulllist.set(i, new ItemStack(itemstack.getItem().n()));
+            if (itemstack.getItem().q()) {
+                nonnulllist.set(i, new ItemStack(itemstack.getItem().p()));
             } else if (itemstack.getItem() instanceof ItemWrittenBook) {
                 ItemStack itemstack1 = itemstack.cloneItemStack();
 

@@ -36,35 +36,35 @@ public class WorldGenMonument extends StructureGenerator<WorldGenFeatureEmptyCon
     }
 
     @Override
-    public boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
+    public boolean a(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, Random random, int i, int j, BiomeBase biomebase) {
         ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, random, i, j, 0, 0);
 
         if (i == chunkcoordintpair.x && j == chunkcoordintpair.z) {
-            Set<BiomeBase> set = chunkgenerator.getWorldChunkManager().a(i * 16 + 9, j * 16 + 9, 16);
+            Set<BiomeBase> set = chunkgenerator.getWorldChunkManager().a(i * 16 + 9, chunkgenerator.getSeaLevel(), j * 16 + 9, 16);
             Iterator iterator = set.iterator();
 
-            BiomeBase biomebase;
+            BiomeBase biomebase1;
 
             do {
                 if (!iterator.hasNext()) {
-                    Set<BiomeBase> set1 = chunkgenerator.getWorldChunkManager().a(i * 16 + 9, j * 16 + 9, 29);
+                    Set<BiomeBase> set1 = chunkgenerator.getWorldChunkManager().a(i * 16 + 9, chunkgenerator.getSeaLevel(), j * 16 + 9, 29);
                     Iterator iterator1 = set1.iterator();
 
-                    BiomeBase biomebase1;
+                    BiomeBase biomebase2;
 
                     do {
                         if (!iterator1.hasNext()) {
                             return true;
                         }
 
-                        biomebase1 = (BiomeBase) iterator1.next();
-                    } while (biomebase1.o() == BiomeBase.Geography.OCEAN || biomebase1.o() == BiomeBase.Geography.RIVER);
+                        biomebase2 = (BiomeBase) iterator1.next();
+                    } while (biomebase2.q() == BiomeBase.Geography.OCEAN || biomebase2.q() == BiomeBase.Geography.RIVER);
 
                     return false;
                 }
 
-                biomebase = (BiomeBase) iterator.next();
-            } while (chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.OCEAN_MONUMENT));
+                biomebase1 = (BiomeBase) iterator.next();
+            } while (chunkgenerator.canSpawnStructure(biomebase1, this));
 
             return false;
         } else {
@@ -96,8 +96,8 @@ public class WorldGenMonument extends StructureGenerator<WorldGenFeatureEmptyCon
 
         private boolean e;
 
-        public a(StructureGenerator<?> structuregenerator, int i, int j, BiomeBase biomebase, StructureBoundingBox structureboundingbox, int k, long l) {
-            super(structuregenerator, i, j, biomebase, structureboundingbox, k, l);
+        public a(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+            super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
         @Override
@@ -116,13 +116,13 @@ public class WorldGenMonument extends StructureGenerator<WorldGenFeatureEmptyCon
         }
 
         @Override
-        public void a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public void a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             if (!this.e) {
                 this.b.clear();
                 this.b(this.f(), this.g());
             }
 
-            super.a(generatoraccess, random, structureboundingbox, chunkcoordintpair);
+            super.a(generatoraccess, chunkgenerator, random, structureboundingbox, chunkcoordintpair);
         }
     }
 }

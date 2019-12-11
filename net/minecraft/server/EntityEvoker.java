@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 public class EntityEvoker extends EntityIllagerWizard {
 
-    private EntitySheep bz;
+    private EntitySheep bw;
 
     public EntityEvoker(EntityTypes<? extends EntityEvoker> entitytypes, World world) {
         super(entitytypes, world);
@@ -49,7 +49,7 @@ public class EntityEvoker extends EntityIllagerWizard {
     }
 
     @Override
-    public SoundEffect dV() {
+    public SoundEffect eq() {
         return SoundEffects.ENTITY_EVOKER_CELEBRATE;
     }
 
@@ -61,11 +61,6 @@ public class EntityEvoker extends EntityIllagerWizard {
     @Override
     protected void mobTick() {
         super.mobTick();
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
     }
 
     @Override
@@ -89,12 +84,12 @@ public class EntityEvoker extends EntityIllagerWizard {
     }
 
     private void a(@Nullable EntitySheep entitysheep) {
-        this.bz = entitysheep;
+        this.bw = entitysheep;
     }
 
     @Nullable
-    private EntitySheep ep() {
-        return this.bz;
+    private EntitySheep eK() {
+        return this.bw;
     }
 
     @Override
@@ -119,7 +114,7 @@ public class EntityEvoker extends EntityIllagerWizard {
         public boolean a() {
             if (EntityEvoker.this.getGoalTarget() != null) {
                 return false;
-            } else if (EntityEvoker.this.ef()) {
+            } else if (EntityEvoker.this.eA()) {
                 return false;
             } else if (EntityEvoker.this.ticksLived < this.c) {
                 return false;
@@ -139,7 +134,7 @@ public class EntityEvoker extends EntityIllagerWizard {
 
         @Override
         public boolean b() {
-            return EntityEvoker.this.ep() != null && this.b > 0;
+            return EntityEvoker.this.eK() != null && this.b > 0;
         }
 
         @Override
@@ -150,7 +145,7 @@ public class EntityEvoker extends EntityIllagerWizard {
 
         @Override
         protected void j() {
-            EntitySheep entitysheep = EntityEvoker.this.ep();
+            EntitySheep entitysheep = EntityEvoker.this.eK();
 
             if (entitysheep != null && entitysheep.isAlive()) {
                 entitysheep.setColor(EnumColor.RED);
@@ -260,9 +255,9 @@ public class EntityEvoker extends EntityIllagerWizard {
         @Override
         protected void j() {
             EntityLiving entityliving = EntityEvoker.this.getGoalTarget();
-            double d0 = Math.min(entityliving.locY, EntityEvoker.this.locY);
-            double d1 = Math.max(entityliving.locY, EntityEvoker.this.locY) + 1.0D;
-            float f = (float) MathHelper.d(entityliving.locZ - EntityEvoker.this.locZ, entityliving.locX - EntityEvoker.this.locX);
+            double d0 = Math.min(entityliving.locY(), EntityEvoker.this.locY());
+            double d1 = Math.max(entityliving.locY(), EntityEvoker.this.locY()) + 1.0D;
+            float f = (float) MathHelper.d(entityliving.locZ() - EntityEvoker.this.locZ(), entityliving.locX() - EntityEvoker.this.locX());
             int i;
 
             if (EntityEvoker.this.h((Entity) entityliving) < 9.0D) {
@@ -270,19 +265,19 @@ public class EntityEvoker extends EntityIllagerWizard {
 
                 for (i = 0; i < 5; ++i) {
                     f1 = f + (float) i * 3.1415927F * 0.4F;
-                    this.a(EntityEvoker.this.locX + (double) MathHelper.cos(f1) * 1.5D, EntityEvoker.this.locZ + (double) MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
+                    this.a(EntityEvoker.this.locX() + (double) MathHelper.cos(f1) * 1.5D, EntityEvoker.this.locZ() + (double) MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
                 }
 
                 for (i = 0; i < 8; ++i) {
                     f1 = f + (float) i * 3.1415927F * 2.0F / 8.0F + 1.2566371F;
-                    this.a(EntityEvoker.this.locX + (double) MathHelper.cos(f1) * 2.5D, EntityEvoker.this.locZ + (double) MathHelper.sin(f1) * 2.5D, d0, d1, f1, 3);
+                    this.a(EntityEvoker.this.locX() + (double) MathHelper.cos(f1) * 2.5D, EntityEvoker.this.locZ() + (double) MathHelper.sin(f1) * 2.5D, d0, d1, f1, 3);
                 }
             } else {
                 for (i = 0; i < 16; ++i) {
                     double d2 = 1.25D * (double) (i + 1);
                     int j = 1 * i;
 
-                    this.a(EntityEvoker.this.locX + (double) MathHelper.cos(f) * d2, EntityEvoker.this.locZ + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
+                    this.a(EntityEvoker.this.locX() + (double) MathHelper.cos(f) * d2, EntityEvoker.this.locZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
                 }
             }
 
@@ -340,9 +335,9 @@ public class EntityEvoker extends EntityIllagerWizard {
         @Override
         public void e() {
             if (EntityEvoker.this.getGoalTarget() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.dA(), (float) EntityEvoker.this.M());
-            } else if (EntityEvoker.this.ep() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.ep(), (float) EntityEvoker.this.dA(), (float) EntityEvoker.this.M());
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.dV(), (float) EntityEvoker.this.dU());
+            } else if (EntityEvoker.this.eK() != null) {
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.eK(), (float) EntityEvoker.this.dV(), (float) EntityEvoker.this.dU());
             }
 
         }

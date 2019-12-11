@@ -22,30 +22,30 @@ public class NavigationGuardian extends NavigationAbstract {
 
     @Override
     protected Vec3D b() {
-        return new Vec3D(this.a.locX, this.a.locY + (double) this.a.getHeight() * 0.5D, this.a.locZ);
+        return new Vec3D(this.a.locX(), this.a.e(0.5D), this.a.locZ());
     }
 
     @Override
     public void c() {
         ++this.e;
         if (this.m) {
-            this.k();
+            this.j();
         }
 
-        if (!this.n()) {
+        if (!this.m()) {
             Vec3D vec3d;
 
             if (this.a()) {
-                this.m();
+                this.l();
             } else if (this.c != null && this.c.f() < this.c.e()) {
                 vec3d = this.c.a(this.a, this.c.f());
-                if (MathHelper.floor(this.a.locX) == MathHelper.floor(vec3d.x) && MathHelper.floor(this.a.locY) == MathHelper.floor(vec3d.y) && MathHelper.floor(this.a.locZ) == MathHelper.floor(vec3d.z)) {
+                if (MathHelper.floor(this.a.locX()) == MathHelper.floor(vec3d.x) && MathHelper.floor(this.a.locY()) == MathHelper.floor(vec3d.y) && MathHelper.floor(this.a.locZ()) == MathHelper.floor(vec3d.z)) {
                     this.c.c(this.c.f() + 1);
                 }
             }
 
             PacketDebug.a(this.b, this.a, this.c, this.l);
-            if (!this.n()) {
+            if (!this.m()) {
                 vec3d = this.c.a((Entity) this.a);
                 this.a.getControllerMove().a(vec3d.x, vec3d.y, vec3d.z, this.d);
             }
@@ -53,7 +53,7 @@ public class NavigationGuardian extends NavigationAbstract {
     }
 
     @Override
-    protected void m() {
+    protected void l() {
         if (this.c != null) {
             Vec3D vec3d = this.b();
             float f = this.a.getWidth();
@@ -67,7 +67,7 @@ public class NavigationGuardian extends NavigationAbstract {
             boolean flag = true;
             Vec3D vec3d2 = this.c.g();
 
-            if (Math.abs(this.a.locX - (vec3d2.x + 0.5D)) < (double) f1 && Math.abs(this.a.locZ - (vec3d2.z + 0.5D)) < (double) f1 && Math.abs(this.a.locY - vec3d2.y) < (double) (f1 * 2.0F)) {
+            if (Math.abs(this.a.locX() - (vec3d2.x + 0.5D)) < (double) f1 && Math.abs(this.a.locZ() - (vec3d2.z + 0.5D)) < (double) f1 && Math.abs(this.a.locY() - vec3d2.y) < (double) (f1 * 2.0F)) {
                 this.c.a();
             }
 
@@ -103,7 +103,7 @@ public class NavigationGuardian extends NavigationAbstract {
                 this.h = vec3d1;
                 double d0 = vec3d.f(this.h);
 
-                this.k = this.a.db() > 0.0F ? d0 / (double) this.a.db() * 100.0D : 0.0D;
+                this.k = this.a.dt() > 0.0F ? d0 / (double) this.a.dt() * 100.0D : 0.0D;
             }
 
             if (this.k > 0.0D && (double) this.i > this.k * 2.0D) {

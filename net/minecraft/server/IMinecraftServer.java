@@ -6,7 +6,7 @@ public interface IMinecraftServer {
 
     String e_();
 
-    int e();
+    int q();
 
     String f_();
 

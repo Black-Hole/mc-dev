@@ -7,7 +7,7 @@ public class BlockChorusFruit extends BlockSprawling {
 
     protected BlockChorusFruit(Block.Info block_info) {
         super(0.3125F, block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChorusFruit.a, false)).set(BlockChorusFruit.b, false)).set(BlockChorusFruit.c, false)).set(BlockChorusFruit.d, false)).set(BlockChorusFruit.e, false)).set(BlockChorusFruit.f, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChorusFruit.a, false)).set(BlockChorusFruit.b, false)).set(BlockChorusFruit.c, false)).set(BlockChorusFruit.d, false)).set(BlockChorusFruit.e, false)).set(BlockChorusFruit.f, false));
     }
 
     @Override
@@ -40,9 +40,9 @@ public class BlockChorusFruit extends BlockSprawling {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!iblockdata.canPlace(world, blockposition)) {
-            world.b(blockposition, true);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!iblockdata.canPlace(worldserver, blockposition)) {
+            worldserver.b(blockposition, true);
         }
 
     }
@@ -80,11 +80,6 @@ public class BlockChorusFruit extends BlockSprawling {
         } while (block != this && block != Blocks.END_STONE);
 
         return true;
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 
     @Override

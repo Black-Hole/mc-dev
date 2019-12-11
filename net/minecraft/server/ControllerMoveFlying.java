@@ -2,8 +2,13 @@ package net.minecraft.server;
 
 public class ControllerMoveFlying extends ControllerMove {
 
-    public ControllerMoveFlying(EntityInsentient entityinsentient) {
+    private final int i;
+    private final boolean j;
+
+    public ControllerMoveFlying(EntityInsentient entityinsentient, int i, boolean flag) {
         super(entityinsentient);
+        this.i = i;
+        this.j = flag;
     }
 
     @Override
@@ -11,9 +16,9 @@ public class ControllerMoveFlying extends ControllerMove {
         if (this.h == ControllerMove.Operation.MOVE_TO) {
             this.h = ControllerMove.Operation.WAIT;
             this.a.setNoGravity(true);
-            double d0 = this.b - this.a.locX;
-            double d1 = this.c - this.a.locY;
-            double d2 = this.d - this.a.locZ;
+            double d0 = this.b - this.a.locX();
+            double d1 = this.c - this.a.locY();
+            double d2 = this.d - this.a.locZ();
             double d3 = d0 * d0 + d1 * d1 + d2 * d2;
 
             if (d3 < 2.500000277905201E-7D) {
@@ -24,7 +29,7 @@ public class ControllerMoveFlying extends ControllerMove {
 
             float f = (float) (MathHelper.d(d2, d0) * 57.2957763671875D) - 90.0F;
 
-            this.a.yaw = this.a(this.a.yaw, f, 10.0F);
+            this.a.yaw = this.a(this.a.yaw, f, 90.0F);
             float f1;
 
             if (this.a.onGround) {
@@ -37,10 +42,13 @@ public class ControllerMoveFlying extends ControllerMove {
             double d4 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
             float f2 = (float) (-(MathHelper.d(d1, d4) * 57.2957763671875D));
 
-            this.a.pitch = this.a(this.a.pitch, f2, 10.0F);
+            this.a.pitch = this.a(this.a.pitch, f2, (float) this.i);
             this.a.s(d1 > 0.0D ? f1 : -f1);
         } else {
-            this.a.setNoGravity(false);
+            if (!this.j) {
+                this.a.setNoGravity(false);
+            }
+
             this.a.s(0.0F);
             this.a.r(0.0F);
         }

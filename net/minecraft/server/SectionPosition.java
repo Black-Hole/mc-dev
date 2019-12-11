@@ -24,7 +24,7 @@ public class SectionPosition extends BaseBlockPosition {
     }
 
     public static SectionPosition a(Entity entity) {
-        return new SectionPosition(a(MathHelper.floor(entity.locX)), a(MathHelper.floor(entity.locY)), a(MathHelper.floor(entity.locZ)));
+        return new SectionPosition(a(MathHelper.floor(entity.locX())), a(MathHelper.floor(entity.locY())), a(MathHelper.floor(entity.locZ())));
     }
 
     public static SectionPosition a(long i) {
@@ -152,6 +152,13 @@ public class SectionPosition extends BaseBlockPosition {
         int l = sectionposition.c();
 
         return a(j - i, k - i, l - i, j + i, k + i, l + i);
+    }
+
+    public static Stream<SectionPosition> b(ChunkCoordIntPair chunkcoordintpair, int i) {
+        int j = chunkcoordintpair.x;
+        int k = chunkcoordintpair.z;
+
+        return a(j - i, 0, k - i, j + i, 15, k + i);
     }
 
     public static Stream<SectionPosition> a(final int i, final int j, final int k, final int l, final int i1, final int j1) {

@@ -25,7 +25,12 @@ public class EntityHorseMule extends EntityHorseChestedAbstract {
     }
 
     @Override
-    protected void dY() {
+    protected void et() {
         this.a(SoundEffects.ENTITY_MULE_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+    }
+
+    @Override
+    public EntityAgeable createChild(EntityAgeable entityageable) {
+        return (EntityAgeable) EntityTypes.MULE.a(this.world);
     }
 }

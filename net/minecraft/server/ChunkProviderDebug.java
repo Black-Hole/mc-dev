@@ -19,10 +19,10 @@ public class ChunkProviderDebug extends ChunkGenerator<GeneratorSettingsDebug> {
     }
 
     @Override
-    public void buildBase(IChunkAccess ichunkaccess) {}
+    public void buildBase(RegionLimitedWorldAccess regionlimitedworldaccess, IChunkAccess ichunkaccess) {}
 
     @Override
-    public void doCarving(IChunkAccess ichunkaccess, WorldGenStage.Features worldgenstage_features) {}
+    public void doCarving(BiomeManager biomemanager, IChunkAccess ichunkaccess, WorldGenStage.Features worldgenstage_features) {}
 
     @Override
     public int getSpawnHeight() {

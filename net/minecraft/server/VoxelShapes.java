@@ -105,7 +105,7 @@ public final class VoxelShapes {
 
     public static VoxelShape b(VoxelShape voxelshape, VoxelShape voxelshape1, OperatorBoolean operatorboolean) {
         if (operatorboolean.apply(false, false)) {
-            throw new IllegalArgumentException();
+            throw (IllegalArgumentException) SystemUtils.c(new IllegalArgumentException());
         } else if (voxelshape == voxelshape1) {
             return operatorboolean.apply(true, true) ? voxelshape : a();
         } else {
@@ -129,7 +129,7 @@ public final class VoxelShapes {
 
     public static boolean c(VoxelShape voxelshape, VoxelShape voxelshape1, OperatorBoolean operatorboolean) {
         if (operatorboolean.apply(false, false)) {
-            throw new IllegalArgumentException();
+            throw (IllegalArgumentException) SystemUtils.c(new IllegalArgumentException());
         } else if (voxelshape == voxelshape1) {
             return operatorboolean.apply(true, true);
         } else if (voxelshape.isEmpty()) {
@@ -272,11 +272,11 @@ public final class VoxelShapes {
         if (voxelshape == b()) {
             return b();
         } else {
-            EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
+            EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.m();
             boolean flag;
             int i;
 
-            if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
+            if (enumdirection.d() == EnumDirection.EnumAxisDirection.POSITIVE) {
                 flag = DoubleMath.fuzzyEquals(voxelshape.c(enumdirection_enumaxis), 1.0D, 1.0E-7D);
                 i = voxelshape.a.c(enumdirection_enumaxis) - 1;
             } else {
@@ -290,8 +290,8 @@ public final class VoxelShapes {
 
     public static boolean b(VoxelShape voxelshape, VoxelShape voxelshape1, EnumDirection enumdirection) {
         if (voxelshape != b() && voxelshape1 != b()) {
-            EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
-            EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection = enumdirection.c();
+            EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.m();
+            EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection = enumdirection.d();
             VoxelShape voxelshape2 = enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? voxelshape : voxelshape1;
             VoxelShape voxelshape3 = enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? voxelshape1 : voxelshape;
 

@@ -9,13 +9,13 @@ public class WorldGenTreeProviderSpruce extends WorldGenMegaTreeProvider {
 
     @Nullable
     @Override
-    protected WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> b(Random random) {
-        return new WorldGenTaiga2(WorldGenFeatureEmptyConfiguration::a, true);
+    protected WorldGenFeatureConfigured<WorldGenFeatureSmallTreeConfigurationConfiguration, ?> b(Random random) {
+        return WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.SPRUCE_TREE);
     }
 
     @Nullable
     @Override
-    protected WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> a(Random random) {
-        return new WorldGenMegaTree(WorldGenFeatureEmptyConfiguration::a, false, random.nextBoolean());
+    protected WorldGenFeatureConfigured<WorldGenMegaTreeConfiguration, ?> a(Random random) {
+        return WorldGenerator.MEGA_SPRUCE_TREE.b((WorldGenFeatureConfiguration) (random.nextBoolean() ? BiomeDecoratorGroups.MEGA_SPRUCE_TREE : BiomeDecoratorGroups.MEGA_PINE_TREE));
     }
 }

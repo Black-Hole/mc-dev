@@ -27,7 +27,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
 
     protected BlockButtonAbstract(boolean flag, Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockButtonAbstract.FACING, EnumDirection.NORTH)).set(BlockButtonAbstract.POWERED, false)).set(BlockButtonAbstract.FACE, BlockPropertyAttachPosition.WALL));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockButtonAbstract.FACING, EnumDirection.NORTH)).set(BlockButtonAbstract.POWERED, false)).set(BlockButtonAbstract.FACE, BlockPropertyAttachPosition.WALL));
         this.D = flag;
     }
 
@@ -43,7 +43,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
 
         switch ((BlockPropertyAttachPosition) iblockdata.get(BlockButtonAbstract.FACE)) {
             case FLOOR:
-                if (enumdirection.k() == EnumDirection.EnumAxis.X) {
+                if (enumdirection.m() == EnumDirection.EnumAxis.X) {
                     return flag ? BlockButtonAbstract.w : BlockButtonAbstract.d;
                 }
 
@@ -62,21 +62,25 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
                 }
             case CEILING:
             default:
-                return enumdirection.k() == EnumDirection.EnumAxis.X ? (flag ? BlockButtonAbstract.j : BlockButtonAbstract.b) : (flag ? BlockButtonAbstract.k : BlockButtonAbstract.c);
+                return enumdirection.m() == EnumDirection.EnumAxis.X ? (flag ? BlockButtonAbstract.j : BlockButtonAbstract.b) : (flag ? BlockButtonAbstract.k : BlockButtonAbstract.c);
         }
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if ((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)) {
-            return true;
+            return EnumInteractionResult.CONSUME;
         } else {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockButtonAbstract.POWERED, true), 3);
+            this.d(iblockdata, world, blockposition);
             this.a(entityhuman, world, blockposition, true);
-            this.e(iblockdata, world, blockposition);
-            world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
-            return true;
+            return EnumInteractionResult.SUCCESS;
         }
+    }
+
+    public void d(IBlockData iblockdata, World world, BlockPosition blockposition) {
+        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockButtonAbstract.POWERED, true), 3);
+        this.f(iblockdata, world, blockposition);
+        world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
     }
 
     protected void a(@Nullable EntityHuman entityhuman, GeneratorAccess generatoraccess, BlockPosition blockposition, boolean flag) {
@@ -89,7 +93,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (!flag && iblockdata.getBlock() != iblockdata1.getBlock()) {
             if ((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)) {
-                this.e(iblockdata, world, blockposition);
+                this.f(iblockdata, world, blockposition);
             }
 
             super.remove(iblockdata, world, blockposition, iblockdata1, flag);
@@ -103,7 +107,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
 
     @Override
     public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return (Boolean) iblockdata.get(BlockButtonAbstract.POWERED) && j(iblockdata) == enumdirection ? 15 : 0;
+        return (Boolean) iblockdata.get(BlockButtonAbstract.POWERED) && h(iblockdata) == enumdirection ? 15 : 0;
     }
 
     @Override
@@ -112,14 +116,14 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!world.isClientSide && (Boolean) iblockdata.get(BlockButtonAbstract.POWERED)) {
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if ((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)) {
             if (this.D) {
-                this.d(iblockdata, world, blockposition);
+                this.e(iblockdata, (World) worldserver, blockposition);
             } else {
-                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockButtonAbstract.POWERED, false), 3);
-                this.e(iblockdata, world, blockposition);
-                this.a((EntityHuman) null, world, blockposition, false);
+                worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockButtonAbstract.POWERED, false), 3);
+                this.f(iblockdata, worldserver, blockposition);
+                this.a((EntityHuman) null, worldserver, blockposition, false);
             }
 
         }
@@ -128,18 +132,18 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
     @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
         if (!world.isClientSide && this.D && !(Boolean) iblockdata.get(BlockButtonAbstract.POWERED)) {
-            this.d(iblockdata, world, blockposition);
+            this.e(iblockdata, world, blockposition);
         }
     }
 
-    private void d(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    private void e(IBlockData iblockdata, World world, BlockPosition blockposition) {
         List<? extends Entity> list = world.a(EntityArrow.class, iblockdata.getShape(world, blockposition).getBoundingBox().a(blockposition));
         boolean flag = !list.isEmpty();
         boolean flag1 = (Boolean) iblockdata.get(BlockButtonAbstract.POWERED);
 
         if (flag != flag1) {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockButtonAbstract.POWERED, flag), 3);
-            this.e(iblockdata, world, blockposition);
+            this.f(iblockdata, world, blockposition);
             this.a((EntityHuman) null, world, blockposition, flag);
         }
 
@@ -149,9 +153,9 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
 
     }
 
-    private void e(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    private void f(IBlockData iblockdata, World world, BlockPosition blockposition) {
         world.applyPhysics(blockposition, this);
-        world.applyPhysics(blockposition.shift(j(iblockdata).opposite()), this);
+        world.applyPhysics(blockposition.shift(h(iblockdata).opposite()), this);
     }
 
     @Override

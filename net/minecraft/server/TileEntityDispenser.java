@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import java.util.Iterator;
 import java.util.Random;
 
 public class TileEntityDispenser extends TileEntityLootable {
@@ -20,23 +19,6 @@ public class TileEntityDispenser extends TileEntityLootable {
     @Override
     public int getSize() {
         return 9;
-    }
-
-    @Override
-    public boolean isNotEmpty() {
-        Iterator iterator = this.items.iterator();
-
-        ItemStack itemstack;
-
-        do {
-            if (!iterator.hasNext()) {
-                return true;
-            }
-
-            itemstack = (ItemStack) iterator.next();
-        } while (itemstack.isEmpty());
-
-        return false;
     }
 
     public int h() {

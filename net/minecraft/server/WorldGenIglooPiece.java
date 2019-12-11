@@ -77,7 +77,7 @@ public class WorldGenIglooPiece {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.e).a(EnumBlockMirror.NONE).a((BlockPosition) WorldGenIglooPiece.d.get(this.d)).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.a);
             BlockPosition blockposition = (BlockPosition) WorldGenIglooPiece.e.get(this.d);
             BlockPosition blockposition1 = this.c.a((BaseBlockPosition) DefinedStructure.a(definedstructureinfo, new BlockPosition(3 - blockposition.getX(), 0, 0 - blockposition.getZ())));
@@ -85,7 +85,7 @@ public class WorldGenIglooPiece {
             BlockPosition blockposition2 = this.c;
 
             this.c = this.c.b(0, i - 90 - 1, 0);
-            boolean flag = super.a(generatoraccess, random, structureboundingbox, chunkcoordintpair);
+            boolean flag = super.a(generatoraccess, chunkgenerator, random, structureboundingbox, chunkcoordintpair);
 
             if (this.d.equals(WorldGenIglooPiece.a)) {
                 BlockPosition blockposition3 = this.c.a((BaseBlockPosition) DefinedStructure.a(definedstructureinfo, new BlockPosition(3, 0, 5)));

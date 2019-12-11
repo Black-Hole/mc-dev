@@ -12,19 +12,19 @@ public class BlockBeetroot extends BlockCrops {
     }
 
     @Override
-    public BlockStateInteger d() {
+    public BlockStateInteger c() {
         return BlockBeetroot.a;
     }
 
     @Override
-    public int e() {
+    public int d() {
         return 3;
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if (random.nextInt(3) != 0) {
-            super.tick(iblockdata, world, blockposition, random);
+            super.tick(iblockdata, worldserver, blockposition, random);
         }
 
     }
@@ -41,6 +41,6 @@ public class BlockBeetroot extends BlockCrops {
 
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockBeetroot.c[(Integer) iblockdata.get(this.d())];
+        return BlockBeetroot.c[(Integer) iblockdata.get(this.c())];
     }
 }

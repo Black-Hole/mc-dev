@@ -3,7 +3,9 @@ package net.minecraft.server;
 public class BlockChestTrapped extends BlockChest {
 
     public BlockChestTrapped(Block.Info block_info) {
-        super(block_info);
+        super(block_info, () -> {
+            return TileEntityTypes.TRAPPED_CHEST;
+        });
     }
 
     @Override
@@ -12,7 +14,7 @@ public class BlockChestTrapped extends BlockChest {
     }
 
     @Override
-    protected Statistic<MinecraftKey> d() {
+    protected Statistic<MinecraftKey> c() {
         return StatisticList.CUSTOM.b(StatisticList.TRIGGER_TRAPPED_CHEST);
     }
 

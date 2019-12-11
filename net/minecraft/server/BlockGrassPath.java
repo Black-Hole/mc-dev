@@ -11,7 +11,7 @@ public class BlockGrassPath extends Block {
     }
 
     @Override
-    public boolean n(IBlockData iblockdata) {
+    public boolean o(IBlockData iblockdata) {
         return true;
     }
 
@@ -30,8 +30,8 @@ public class BlockGrassPath extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        BlockSoil.fade(iblockdata, world, blockposition);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        BlockSoil.fade(iblockdata, worldserver, blockposition);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class BlockShulkerBox extends BlockTileEntity {
     public BlockShulkerBox(@Nullable EnumColor enumcolor, Block.Info block_info) {
         super(block_info);
         this.color = enumcolor;
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockShulkerBox.a, EnumDirection.UP));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockShulkerBox.a, EnumDirection.UP));
     }
 
     @Override
@@ -33,11 +33,11 @@ public class BlockShulkerBox extends BlockTileEntity {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (world.isClientSide) {
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else if (entityhuman.isSpectator()) {
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -46,10 +46,10 @@ public class BlockShulkerBox extends BlockTileEntity {
                 TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) tileentity;
                 boolean flag;
 
-                if (tileentityshulkerbox.s() == TileEntityShulkerBox.AnimationPhase.CLOSED) {
+                if (tileentityshulkerbox.j() == TileEntityShulkerBox.AnimationPhase.CLOSED) {
                     AxisAlignedBB axisalignedbb = VoxelShapes.b().getBoundingBox().b((double) (0.5F * (float) enumdirection.getAdjacentX()), (double) (0.5F * (float) enumdirection.getAdjacentY()), (double) (0.5F * (float) enumdirection.getAdjacentZ())).a((double) enumdirection.getAdjacentX(), (double) enumdirection.getAdjacentY(), (double) enumdirection.getAdjacentZ());
 
-                    flag = world.c(axisalignedbb.a(blockposition.shift(enumdirection)));
+                    flag = world.a(axisalignedbb.a(blockposition.shift(enumdirection)));
                 } else {
                     flag = true;
                 }
@@ -59,9 +59,9 @@ public class BlockShulkerBox extends BlockTileEntity {
                     entityhuman.a(StatisticList.OPEN_SHULKER_BOX);
                 }
 
-                return true;
+                return EnumInteractionResult.SUCCESS;
             } else {
-                return false;
+                return EnumInteractionResult.PASS;
             }
         }
     }
@@ -84,7 +84,7 @@ public class BlockShulkerBox extends BlockTileEntity {
             TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) tileentity;
 
             if (!world.isClientSide && entityhuman.isCreative() && !tileentityshulkerbox.isNotEmpty()) {
-                ItemStack itemstack = b(this.d());
+                ItemStack itemstack = b(this.c());
                 NBTTagCompound nbttagcompound = tileentityshulkerbox.g(new NBTTagCompound());
 
                 if (!nbttagcompound.isEmpty()) {
@@ -163,11 +163,6 @@ public class BlockShulkerBox extends BlockTileEntity {
     }
 
     @Override
-    public boolean f(IBlockData iblockdata) {
-        return false;
-    }
-
-    @Override
     public boolean isComplexRedstone(IBlockData iblockdata) {
         return true;
     }
@@ -220,7 +215,7 @@ public class BlockShulkerBox extends BlockTileEntity {
     }
 
     @Nullable
-    public EnumColor d() {
+    public EnumColor c() {
         return this.color;
     }
 

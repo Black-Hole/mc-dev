@@ -31,17 +31,17 @@ public class EntityGuardianElder extends EntityGuardian {
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return this.av() ? SoundEffects.ENTITY_ELDER_GUARDIAN_AMBIENT : SoundEffects.ENTITY_ELDER_GUARDIAN_AMBIENT_LAND;
+        return this.az() ? SoundEffects.ENTITY_ELDER_GUARDIAN_AMBIENT : SoundEffects.ENTITY_ELDER_GUARDIAN_AMBIENT_LAND;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return this.av() ? SoundEffects.ENTITY_ELDER_GUARDIAN_HURT : SoundEffects.ENTITY_ELDER_GUARDIAN_HURT_LAND;
+        return this.az() ? SoundEffects.ENTITY_ELDER_GUARDIAN_HURT : SoundEffects.ENTITY_ELDER_GUARDIAN_HURT_LAND;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return this.av() ? SoundEffects.ENTITY_ELDER_GUARDIAN_DEATH : SoundEffects.ENTITY_ELDER_GUARDIAN_DEATH_LAND;
+        return this.az() ? SoundEffects.ENTITY_ELDER_GUARDIAN_DEATH : SoundEffects.ENTITY_ELDER_GUARDIAN_DEATH_LAND;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class EntityGuardianElder extends EntityGuardian {
             }
         }
 
-        if (!this.dL()) {
+        if (!this.eg()) {
             this.a(new BlockPosition(this), 16);
         }
 

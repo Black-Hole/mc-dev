@@ -19,7 +19,7 @@ public class VillageSiege {
 
     public int a(WorldServer worldserver, boolean flag, boolean flag1) {
         if (!worldserver.J() && flag) {
-            float f = worldserver.j(0.0F);
+            float f = worldserver.f(0.0F);
 
             if ((double) f == 0.5D) {
                 this.b = worldserver.random.nextInt(10) == 0 ? VillageSiege.State.SIEGE_TONIGHT : VillageSiege.State.SIEGE_DONE;
@@ -67,7 +67,7 @@ public class VillageSiege {
             if (!entityhuman.isSpectator()) {
                 BlockPosition blockposition = entityhuman.getChunkCoordinates();
 
-                if (worldserver.b_(blockposition) && worldserver.getBiome(blockposition).o() != BiomeBase.Geography.MUSHROOM) {
+                if (worldserver.b_(blockposition) && worldserver.getBiome(blockposition).q() != BiomeBase.Geography.MUSHROOM) {
                     for (int i = 0; i < 10; ++i) {
                         float f = worldserver.random.nextFloat() * 6.2831855F;
 

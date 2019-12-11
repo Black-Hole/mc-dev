@@ -80,6 +80,55 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
         }
     }
 
+    public static class c extends ChatComponentNBT {
+
+        private final MinecraftKey e;
+
+        public c(String s, boolean flag, MinecraftKey minecraftkey) {
+            super(s, flag);
+            this.e = minecraftkey;
+        }
+
+        public c(String s, @Nullable ArgumentNBTKey.h argumentnbtkey_h, boolean flag, MinecraftKey minecraftkey) {
+            super(s, argumentnbtkey_h, flag);
+            this.e = minecraftkey;
+        }
+
+        public MinecraftKey k() {
+            return this.e;
+        }
+
+        @Override
+        public IChatBaseComponent g() {
+            return new ChatComponentNBT.c(this.c, this.d, this.b, this.e);
+        }
+
+        @Override
+        protected Stream<NBTTagCompound> a(CommandListenerWrapper commandlistenerwrapper) {
+            NBTTagCompound nbttagcompound = commandlistenerwrapper.getServer().aN().a(this.e);
+
+            return Stream.of(nbttagcompound);
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            if (this == object) {
+                return true;
+            } else if (!(object instanceof ChatComponentNBT.c)) {
+                return false;
+            } else {
+                ChatComponentNBT.c chatcomponentnbt_c = (ChatComponentNBT.c) object;
+
+                return Objects.equals(this.e, chatcomponentnbt_c.e) && Objects.equals(this.c, chatcomponentnbt_c.c) && super.equals(object);
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "StorageNbtComponent{id='" + this.e + '\'' + "path='" + this.c + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
+        }
+    }
+
     public static class a extends ChatComponentNBT {
 
         private final String e;

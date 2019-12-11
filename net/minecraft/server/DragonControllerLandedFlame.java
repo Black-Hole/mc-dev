@@ -17,9 +17,9 @@ public class DragonControllerLandedFlame extends AbstractDragonControllerLanded 
             Vec3D vec3d = this.a.u(1.0F).d();
 
             vec3d.b(-0.7853982F);
-            double d0 = this.a.bA.locX;
-            double d1 = this.a.bA.locY + (double) (this.a.bA.getHeight() / 2.0F);
-            double d2 = this.a.bA.locZ;
+            double d0 = this.a.bw.locX();
+            double d1 = this.a.bw.e(0.5D);
+            double d2 = this.a.bw.locZ();
 
             for (int i = 0; i < 8; ++i) {
                 double d3 = d0 + this.a.getRandom().nextGaussian() / 2.0D;
@@ -46,20 +46,26 @@ public class DragonControllerLandedFlame extends AbstractDragonControllerLanded 
                 this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.SITTING_SCANNING);
             }
         } else if (this.b == 10) {
-            Vec3D vec3d = (new Vec3D(this.a.bA.locX - this.a.locX, 0.0D, this.a.bA.locZ - this.a.locZ)).d();
+            Vec3D vec3d = (new Vec3D(this.a.bw.locX() - this.a.locX(), 0.0D, this.a.bw.locZ() - this.a.locZ())).d();
             float f = 5.0F;
-            double d0 = this.a.bA.locX + vec3d.x * 5.0D / 2.0D;
-            double d1 = this.a.bA.locZ + vec3d.z * 5.0D / 2.0D;
-            double d2 = this.a.bA.locY + (double) (this.a.bA.getHeight() / 2.0F);
+            double d0 = this.a.bw.locX() + vec3d.x * 5.0D / 2.0D;
+            double d1 = this.a.bw.locZ() + vec3d.z * 5.0D / 2.0D;
+            double d2 = this.a.bw.e(0.5D);
+            double d3 = d2;
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(d0, d2, d1);
 
             while (this.a.world.isEmpty(blockposition_mutableblockposition)) {
-                --d2;
-                blockposition_mutableblockposition.c(d0, d2, d1);
+                --d3;
+                if (d3 < 0.0D) {
+                    d3 = d2;
+                    break;
+                }
+
+                blockposition_mutableblockposition.c(d0, d3, d1);
             }
 
-            d2 = (double) (MathHelper.floor(d2) + 1);
-            this.d = new EntityAreaEffectCloud(this.a.world, d0, d2, d1);
+            d3 = (double) (MathHelper.floor(d3) + 1);
+            this.d = new EntityAreaEffectCloud(this.a.world, d0, d3, d1);
             this.d.setSource(this.a);
             this.d.setRadius(5.0F);
             this.d.setDuration(200);

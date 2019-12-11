@@ -72,7 +72,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         if (this.world != null && !this.world.isClientSide) {
             --this.j;
             this.k = this.world.getTime();
-            if (!this.v()) {
+            if (!this.l()) {
                 this.setCooldown(0);
                 this.a(() -> {
                     return a((IHopper) this);
@@ -84,14 +84,14 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
 
     private boolean a(Supplier<Boolean> supplier) {
         if (this.world != null && !this.world.isClientSide) {
-            if (!this.v() && (Boolean) this.getBlock().get(BlockHopper.ENABLED)) {
+            if (!this.l() && (Boolean) this.getBlock().get(BlockHopper.ENABLED)) {
                 boolean flag = false;
 
-                if (!this.h()) {
-                    flag = this.t();
+                if (!this.isNotEmpty()) {
+                    flag = this.j();
                 }
 
-                if (!this.s()) {
+                if (!this.h()) {
                     flag |= (Boolean) supplier.get();
                 }
 
@@ -119,34 +119,13 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
             }
 
             itemstack = (ItemStack) iterator.next();
-        } while (itemstack.isEmpty());
-
-        return false;
-    }
-
-    @Override
-    public boolean isNotEmpty() {
-        return this.h();
-    }
-
-    private boolean s() {
-        Iterator iterator = this.items.iterator();
-
-        ItemStack itemstack;
-
-        do {
-            if (!iterator.hasNext()) {
-                return true;
-            }
-
-            itemstack = (ItemStack) iterator.next();
         } while (!itemstack.isEmpty() && itemstack.getCount() == itemstack.getMaxStackSize());
 
         return false;
     }
 
-    private boolean t() {
-        IInventory iinventory = this.u();
+    private boolean j() {
+        IInventory iinventory = this.k();
 
         if (iinventory == null) {
             return false;
@@ -303,7 +282,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
                 if (flag1 && iinventory1 instanceof TileEntityHopper) {
                     TileEntityHopper tileentityhopper = (TileEntityHopper) iinventory1;
 
-                    if (!tileentityhopper.x()) {
+                    if (!tileentityhopper.m()) {
                         byte b0 = 0;
 
                         if (iinventory instanceof TileEntityHopper) {
@@ -326,10 +305,10 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
     }
 
     @Nullable
-    private IInventory u() {
+    private IInventory k() {
         EnumDirection enumdirection = (EnumDirection) this.getBlock().get(BlockHopper.FACING);
 
-        return a(this.getWorld(), this.position.shift(enumdirection));
+        return b(this.getWorld(), this.position.shift(enumdirection));
     }
 
     @Nullable
@@ -338,13 +317,13 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
     }
 
     public static List<EntityItem> c(IHopper ihopper) {
-        return (List) ihopper.N_().d().stream().flatMap((axisalignedbb) -> {
+        return (List) ihopper.P_().d().stream().flatMap((axisalignedbb) -> {
             return ihopper.getWorld().a(EntityItem.class, axisalignedbb.d(ihopper.z() - 0.5D, ihopper.A() - 0.5D, ihopper.B() - 0.5D), IEntitySelector.a).stream();
         }).collect(Collectors.toList());
     }
 
     @Nullable
-    public static IInventory a(World world, BlockPosition blockposition) {
+    public static IInventory b(World world, BlockPosition blockposition) {
         return a(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
     }
 
@@ -363,7 +342,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
             if (tileentity instanceof IInventory) {
                 object = (IInventory) tileentity;
                 if (object instanceof TileEntityChest && block instanceof BlockChest) {
-                    object = BlockChest.getInventory(iblockdata, world, blockposition, true);
+                    object = BlockChest.getInventory((BlockChest) block, iblockdata, world, blockposition, true);
                 }
             }
         }
@@ -402,11 +381,11 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         this.j = i;
     }
 
-    private boolean v() {
+    private boolean l() {
         return this.j > 0;
     }
 
-    private boolean x() {
+    private boolean m() {
         return this.j > 8;
     }
 
@@ -424,7 +403,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         if (entity instanceof EntityItem) {
             BlockPosition blockposition = this.getPosition();
 
-            if (VoxelShapes.c(VoxelShapes.a(entity.getBoundingBox().d((double) (-blockposition.getX()), (double) (-blockposition.getY()), (double) (-blockposition.getZ()))), this.N_(), OperatorBoolean.AND)) {
+            if (VoxelShapes.c(VoxelShapes.a(entity.getBoundingBox().d((double) (-blockposition.getX()), (double) (-blockposition.getY()), (double) (-blockposition.getZ()))), this.P_(), OperatorBoolean.AND)) {
                 this.a(() -> {
                     return a((IInventory) this, (EntityItem) entity);
                 });

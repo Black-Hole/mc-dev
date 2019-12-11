@@ -87,7 +87,7 @@ public class ArgumentAnchor implements ArgumentType<ArgumentAnchor.Anchor> {
         }
 
         public Vec3D a(Entity entity) {
-            return (Vec3D) this.e.apply(new Vec3D(entity.locX, entity.locY, entity.locZ), entity);
+            return (Vec3D) this.e.apply(entity.getPositionVector(), entity);
         }
 
         public Vec3D a(CommandListenerWrapper commandlistenerwrapper) {

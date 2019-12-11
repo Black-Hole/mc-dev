@@ -34,22 +34,22 @@ public class WorldGenWoodlandMansion extends StructureGenerator<WorldGenFeatureE
     }
 
     @Override
-    public boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
+    public boolean a(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, Random random, int i, int j, BiomeBase biomebase) {
         ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, random, i, j, 0, 0);
 
         if (i == chunkcoordintpair.x && j == chunkcoordintpair.z) {
-            Set<BiomeBase> set = chunkgenerator.getWorldChunkManager().a(i * 16 + 9, j * 16 + 9, 32);
+            Set<BiomeBase> set = chunkgenerator.getWorldChunkManager().a(i * 16 + 9, chunkgenerator.getSeaLevel(), j * 16 + 9, 32);
             Iterator iterator = set.iterator();
 
-            BiomeBase biomebase;
+            BiomeBase biomebase1;
 
             do {
                 if (!iterator.hasNext()) {
                     return true;
                 }
 
-                biomebase = (BiomeBase) iterator.next();
-            } while (chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.WOODLAND_MANSION));
+                biomebase1 = (BiomeBase) iterator.next();
+            } while (chunkgenerator.canSpawnStructure(biomebase1, this));
 
             return false;
         } else {
@@ -74,8 +74,8 @@ public class WorldGenWoodlandMansion extends StructureGenerator<WorldGenFeatureE
 
     public static class a extends StructureStart {
 
-        public a(StructureGenerator<?> structuregenerator, int i, int j, BiomeBase biomebase, StructureBoundingBox structureboundingbox, int k, long l) {
-            super(structuregenerator, i, j, biomebase, structureboundingbox, k, l);
+        public a(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+            super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
         @Override
@@ -112,8 +112,8 @@ public class WorldGenWoodlandMansion extends StructureGenerator<WorldGenFeatureE
         }
 
         @Override
-        public void a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
-            super.a(generatoraccess, random, structureboundingbox, chunkcoordintpair);
+        public void a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+            super.a(generatoraccess, chunkgenerator, random, structureboundingbox, chunkcoordintpair);
             int i = this.c.b;
 
             for (int j = structureboundingbox.a; j <= structureboundingbox.d; ++j) {

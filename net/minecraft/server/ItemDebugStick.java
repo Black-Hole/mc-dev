@@ -10,6 +10,11 @@ public class ItemDebugStick extends Item {
     }
 
     @Override
+    public boolean d_(ItemStack itemstack) {
+        return true;
+    }
+
+    @Override
     public boolean a(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman) {
         if (!world.isClientSide) {
             this.a(entityhuman, iblockdata, world, blockposition, false, entityhuman.b(EnumHand.MAIN_HAND));
@@ -51,12 +56,12 @@ public class ItemDebugStick extends Item {
                         iblockstate = (IBlockState) collection.iterator().next();
                     }
 
-                    IBlockData iblockdata1 = a(iblockdata, iblockstate, entityhuman.isSneaking());
+                    IBlockData iblockdata1 = a(iblockdata, iblockstate, entityhuman.dT());
 
                     generatoraccess.setTypeAndData(blockposition, iblockdata1, 18);
                     a(entityhuman, (IChatBaseComponent) (new ChatMessage(this.getName() + ".update", new Object[]{iblockstate.a(), a(iblockdata1, iblockstate)})));
                 } else {
-                    iblockstate = (IBlockState) a((Iterable) collection, (Object) iblockstate, entityhuman.isSneaking());
+                    iblockstate = (IBlockState) a((Iterable) collection, (Object) iblockstate, entityhuman.dT());
                     String s2 = iblockstate.a();
 
                     nbttagcompound.setString(s, s2);

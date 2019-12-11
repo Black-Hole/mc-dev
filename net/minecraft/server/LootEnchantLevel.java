@@ -18,7 +18,7 @@ public class LootEnchantLevel extends LootItemFunctionConditional {
 
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
-        Random random = loottableinfo.b();
+        Random random = loottableinfo.a();
 
         return EnchantmentManager.a(random, itemstack, this.a.a(random), this.c);
     }

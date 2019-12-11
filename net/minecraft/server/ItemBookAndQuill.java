@@ -23,7 +23,7 @@ public class ItemBookAndQuill extends Item {
 
         entityhuman.openBook(itemstack, enumhand);
         entityhuman.b(StatisticList.ITEM_USED.b(this));
-        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
+        return InteractionResultWrapper.a(itemstack);
     }
 
     public static boolean b(@Nullable NBTTagCompound nbttagcompound) {

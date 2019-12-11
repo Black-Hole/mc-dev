@@ -74,9 +74,9 @@ public class EntityEvokerFangs extends Entity {
                 --this.d;
                 if (this.d == 14) {
                     for (int i = 0; i < 12; ++i) {
-                        double d0 = this.locX + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth() * 0.5D;
-                        double d1 = this.locY + 0.05D + this.random.nextDouble();
-                        double d2 = this.locZ + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth() * 0.5D;
+                        double d0 = this.locX() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth() * 0.5D;
+                        double d1 = this.locY() + 0.05D + this.random.nextDouble();
+                        double d2 = this.locZ() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth() * 0.5D;
                         double d3 = (this.random.nextDouble() * 2.0D - 1.0D) * 0.3D;
                         double d4 = 0.3D + this.random.nextDouble() * 0.3D;
                         double d5 = (this.random.nextDouble() * 2.0D - 1.0D) * 0.3D;
@@ -127,7 +127,7 @@ public class EntityEvokerFangs extends Entity {
     }
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

@@ -6,10 +6,10 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class EntityMushroomCow extends EntityCow {
 
-    private static final DataWatcherObject<String> bz = DataWatcher.a(EntityMushroomCow.class, DataWatcherRegistry.d);
-    private MobEffectList bA;
-    private int bB;
-    private UUID bC;
+    private static final DataWatcherObject<String> bw = DataWatcher.a(EntityMushroomCow.class, DataWatcherRegistry.d);
+    private MobEffectList bx;
+    private int by;
+    private UUID bz;
 
     public EntityMushroomCow(EntityTypes<? extends EntityMushroomCow> entitytypes, World world) {
         super(entitytypes, world);
@@ -17,7 +17,7 @@ public class EntityMushroomCow extends EntityCow {
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return iworldreader.getType(blockposition.down()).getBlock() == Blocks.MYCELIUM ? 10.0F : iworldreader.v(blockposition) - 0.5F;
+        return iworldreader.getType(blockposition.down()).getBlock() == Blocks.MYCELIUM ? 10.0F : iworldreader.w(blockposition) - 0.5F;
     }
 
     public static boolean c(EntityTypes<EntityMushroomCow> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
@@ -28,9 +28,9 @@ public class EntityMushroomCow extends EntityCow {
     public void onLightningStrike(EntityLightning entitylightning) {
         UUID uuid = entitylightning.getUniqueID();
 
-        if (!uuid.equals(this.bC)) {
+        if (!uuid.equals(this.bz)) {
             this.setVariant(this.getVariant() == EntityMushroomCow.Type.RED ? EntityMushroomCow.Type.BROWN : EntityMushroomCow.Type.RED);
-            this.bC = uuid;
+            this.bz = uuid;
             this.a(SoundEffects.ENTITY_MOOSHROOM_CONVERT, 2.0F, 1.0F);
         }
 
@@ -39,24 +39,24 @@ public class EntityMushroomCow extends EntityCow {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityMushroomCow.bz, EntityMushroomCow.Type.RED.c);
+        this.datawatcher.register(EntityMushroomCow.bw, EntityMushroomCow.Type.RED.c);
     }
 
     @Override
     public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getItem() == Items.BOWL && this.getAge() >= 0 && !entityhuman.abilities.canInstantlyBuild) {
+        if (itemstack.getItem() == Items.BOWL && !this.isBaby() && !entityhuman.abilities.canInstantlyBuild) {
             itemstack.subtract(1);
             boolean flag = false;
             ItemStack itemstack1;
 
-            if (this.bA != null) {
+            if (this.bx != null) {
                 flag = true;
                 itemstack1 = new ItemStack(Items.SUSPICIOUS_STEW);
-                ItemSuspiciousStew.a(itemstack1, this.bA, this.bB);
-                this.bA = null;
-                this.bB = 0;
+                ItemSuspiciousStew.a(itemstack1, this.bx, this.by);
+                this.bx = null;
+                this.by = 0;
             } else {
                 itemstack1 = new ItemStack(Items.MUSHROOM_STEW);
             }
@@ -80,23 +80,29 @@ public class EntityMushroomCow extends EntityCow {
         } else {
             int i;
 
-            if (itemstack.getItem() == Items.SHEARS && this.getAge() >= 0) {
-                this.world.addParticle(Particles.EXPLOSION, this.locX, this.locY + (double) (this.getHeight() / 2.0F), this.locZ, 0.0D, 0.0D, 0.0D);
+            if (itemstack.getItem() == Items.SHEARS && !this.isBaby()) {
+                this.world.addParticle(Particles.EXPLOSION, this.locX(), this.e(0.5D), this.locZ(), 0.0D, 0.0D, 0.0D);
                 if (!this.world.isClientSide) {
                     this.die();
                     EntityCow entitycow = (EntityCow) EntityTypes.COW.a(this.world);
 
-                    entitycow.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
+                    entitycow.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.yaw, this.pitch);
                     entitycow.setHealth(this.getHealth());
-                    entitycow.aK = this.aK;
+                    entitycow.aI = this.aI;
                     if (this.hasCustomName()) {
                         entitycow.setCustomName(this.getCustomName());
+                        entitycow.setCustomNameVisible(this.getCustomNameVisible());
                     }
 
+                    if (this.isPersistent()) {
+                        entitycow.setPersistent();
+                    }
+
+                    entitycow.setInvulnerable(this.isInvulnerable());
                     this.world.addEntity(entitycow);
 
                     for (i = 0; i < 5; ++i) {
-                        this.world.addEntity(new EntityItem(this.world, this.locX, this.locY + (double) this.getHeight(), this.locZ, new ItemStack(this.getVariant().d.getBlock())));
+                        this.world.addEntity(new EntityItem(this.world, this.locX(), this.e(1.0D), this.locZ(), new ItemStack(this.getVariant().d.getBlock())));
                     }
 
                     itemstack.damage(1, entityhuman, (entityhuman1) -> {
@@ -108,9 +114,9 @@ public class EntityMushroomCow extends EntityCow {
                 return true;
             } else {
                 if (this.getVariant() == EntityMushroomCow.Type.BROWN && itemstack.getItem().a(TagsItem.SMALL_FLOWERS)) {
-                    if (this.bA != null) {
+                    if (this.bx != null) {
                         for (int j = 0; j < 2; ++j) {
-                            this.world.addParticle(Particles.SMOKE, this.locX + (double) (this.random.nextFloat() / 2.0F), this.locY + (double) (this.getHeight() / 2.0F), this.locZ + (double) (this.random.nextFloat() / 2.0F), 0.0D, (double) (this.random.nextFloat() / 5.0F), 0.0D);
+                            this.world.addParticle(Particles.SMOKE, this.locX() + (double) (this.random.nextFloat() / 2.0F), this.e(0.5D), this.locZ() + (double) (this.random.nextFloat() / 2.0F), 0.0D, (double) (this.random.nextFloat() / 5.0F), 0.0D);
                         }
                     } else {
                         Pair<MobEffectList, Integer> pair = this.j(itemstack);
@@ -120,11 +126,11 @@ public class EntityMushroomCow extends EntityCow {
                         }
 
                         for (i = 0; i < 4; ++i) {
-                            this.world.addParticle(Particles.EFFECT, this.locX + (double) (this.random.nextFloat() / 2.0F), this.locY + (double) (this.getHeight() / 2.0F), this.locZ + (double) (this.random.nextFloat() / 2.0F), 0.0D, (double) (this.random.nextFloat() / 5.0F), 0.0D);
+                            this.world.addParticle(Particles.EFFECT, this.locX() + (double) (this.random.nextFloat() / 2.0F), this.e(0.5D), this.locZ() + (double) (this.random.nextFloat() / 2.0F), 0.0D, (double) (this.random.nextFloat() / 5.0F), 0.0D);
                         }
 
-                        this.bA = (MobEffectList) pair.getLeft();
-                        this.bB = (Integer) pair.getRight();
+                        this.bx = (MobEffectList) pair.getLeft();
+                        this.by = (Integer) pair.getRight();
                         this.a(SoundEffects.ENTITY_MOOSHROOM_EAT, 2.0F, 1.0F);
                     }
                 }
@@ -138,9 +144,9 @@ public class EntityMushroomCow extends EntityCow {
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.setString("Type", this.getVariant().c);
-        if (this.bA != null) {
-            nbttagcompound.setByte("EffectId", (byte) MobEffectList.getId(this.bA));
-            nbttagcompound.setInt("EffectDuration", this.bB);
+        if (this.bx != null) {
+            nbttagcompound.setByte("EffectId", (byte) MobEffectList.getId(this.bx));
+            nbttagcompound.setInt("EffectDuration", this.by);
         }
 
     }
@@ -150,11 +156,11 @@ public class EntityMushroomCow extends EntityCow {
         super.a(nbttagcompound);
         this.setVariant(EntityMushroomCow.Type.b(nbttagcompound.getString("Type")));
         if (nbttagcompound.hasKeyOfType("EffectId", 1)) {
-            this.bA = MobEffectList.fromId(nbttagcompound.getByte("EffectId"));
+            this.bx = MobEffectList.fromId(nbttagcompound.getByte("EffectId"));
         }
 
         if (nbttagcompound.hasKeyOfType("EffectDuration", 3)) {
-            this.bB = nbttagcompound.getInt("EffectDuration");
+            this.by = nbttagcompound.getInt("EffectDuration");
         }
 
     }
@@ -162,15 +168,15 @@ public class EntityMushroomCow extends EntityCow {
     private Pair<MobEffectList, Integer> j(ItemStack itemstack) {
         BlockFlowers blockflowers = (BlockFlowers) ((ItemBlock) itemstack.getItem()).getBlock();
 
-        return Pair.of(blockflowers.d(), blockflowers.e());
+        return Pair.of(blockflowers.c(), blockflowers.d());
     }
 
     public void setVariant(EntityMushroomCow.Type entitymushroomcow_type) {
-        this.datawatcher.set(EntityMushroomCow.bz, entitymushroomcow_type.c);
+        this.datawatcher.set(EntityMushroomCow.bw, entitymushroomcow_type.c);
     }
 
     public EntityMushroomCow.Type getVariant() {
-        return EntityMushroomCow.Type.b((String) this.datawatcher.get(EntityMushroomCow.bz));
+        return EntityMushroomCow.Type.b((String) this.datawatcher.get(EntityMushroomCow.bw));
     }
 
     @Override

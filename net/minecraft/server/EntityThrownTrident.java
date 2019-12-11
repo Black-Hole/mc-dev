@@ -4,10 +4,11 @@ import javax.annotation.Nullable;
 
 public class EntityThrownTrident extends EntityArrow {
 
-    private static final DataWatcherObject<Byte> as = DataWatcher.a(EntityThrownTrident.class, DataWatcherRegistry.a);
+    private static final DataWatcherObject<Byte> ap = DataWatcher.a(EntityThrownTrident.class, DataWatcherRegistry.a);
+    private static final DataWatcherObject<Boolean> aq = DataWatcher.a(EntityThrownTrident.class, DataWatcherRegistry.i);
     public ItemStack trident;
-    private boolean au;
-    public int ar;
+    private boolean as;
+    public int ao;
 
     public EntityThrownTrident(EntityTypes<? extends EntityThrownTrident> entitytypes, World world) {
         super(entitytypes, world);
@@ -18,27 +19,29 @@ public class EntityThrownTrident extends EntityArrow {
         super(EntityTypes.TRIDENT, entityliving, world);
         this.trident = new ItemStack(Items.TRIDENT);
         this.trident = itemstack.cloneItemStack();
-        this.datawatcher.set(EntityThrownTrident.as, (byte) EnchantmentManager.f(itemstack));
+        this.datawatcher.set(EntityThrownTrident.ap, (byte) EnchantmentManager.f(itemstack));
+        this.datawatcher.set(EntityThrownTrident.aq, itemstack.u());
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityThrownTrident.as, (byte) 0);
+        this.datawatcher.register(EntityThrownTrident.ap, (byte) 0);
+        this.datawatcher.register(EntityThrownTrident.aq, false);
     }
 
     @Override
     public void tick() {
         if (this.d > 4) {
-            this.au = true;
+            this.as = true;
         }
 
         Entity entity = this.getShooter();
 
-        if ((this.au || this.v()) && entity != null) {
-            byte b0 = (Byte) this.datawatcher.get(EntityThrownTrident.as);
+        if ((this.as || this.v()) && entity != null) {
+            byte b0 = (Byte) this.datawatcher.get(EntityThrownTrident.ap);
 
-            if (b0 > 0 && !this.w()) {
+            if (b0 > 0 && !this.z()) {
                 if (!this.world.isClientSide && this.fromPlayer == EntityArrow.PickupStatus.ALLOWED) {
                     this.a(this.getItemStack(), 0.1F);
                 }
@@ -46,28 +49,28 @@ public class EntityThrownTrident extends EntityArrow {
                 this.die();
             } else if (b0 > 0) {
                 this.n(true);
-                Vec3D vec3d = new Vec3D(entity.locX - this.locX, entity.locY + (double) entity.getHeadHeight() - this.locY, entity.locZ - this.locZ);
+                Vec3D vec3d = new Vec3D(entity.locX() - this.locX(), entity.getHeadY() - this.locY(), entity.locZ() - this.locZ());
 
-                this.locY += vec3d.y * 0.015D * (double) b0;
+                this.setPositionRaw(this.locX(), this.locY() + vec3d.y * 0.015D * (double) b0, this.locZ());
                 if (this.world.isClientSide) {
-                    this.I = this.locY;
+                    this.F = this.locY();
                 }
 
                 double d0 = 0.05D * (double) b0;
 
                 this.setMot(this.getMot().a(0.95D).e(vec3d.d().a(d0)));
-                if (this.ar == 0) {
+                if (this.ao == 0) {
                     this.a(SoundEffects.ITEM_TRIDENT_RETURN, 10.0F, 1.0F);
                 }
 
-                ++this.ar;
+                ++this.ao;
             }
         }
 
         super.tick();
     }
 
-    private boolean w() {
+    private boolean z() {
         Entity entity = this.getShooter();
 
         return entity != null && entity.isAlive() ? !(entity instanceof EntityPlayer) || !entity.isSpectator() : false;
@@ -81,7 +84,7 @@ public class EntityThrownTrident extends EntityArrow {
     @Nullable
     @Override
     protected MovingObjectPositionEntity a(Vec3D vec3d, Vec3D vec3d1) {
-        return this.au ? null : super.a(vec3d, vec3d1);
+        return this.as ? null : super.a(vec3d, vec3d1);
     }
 
     @Override
@@ -98,18 +101,24 @@ public class EntityThrownTrident extends EntityArrow {
         Entity entity1 = this.getShooter();
         DamageSource damagesource = DamageSource.a(this, (Entity) (entity1 == null ? this : entity1));
 
-        this.au = true;
+        this.as = true;
         SoundEffect soundeffect = SoundEffects.ITEM_TRIDENT_HIT;
 
-        if (entity.damageEntity(damagesource, f) && entity instanceof EntityLiving) {
-            EntityLiving entityliving1 = (EntityLiving) entity;
-
-            if (entity1 instanceof EntityLiving) {
-                EnchantmentManager.a(entityliving1, entity1);
-                EnchantmentManager.b((EntityLiving) entity1, (Entity) entityliving1);
+        if (entity.damageEntity(damagesource, f)) {
+            if (entity.getEntityType() == EntityTypes.ENDERMAN) {
+                return;
             }
 
-            this.a(entityliving1);
+            if (entity instanceof EntityLiving) {
+                EntityLiving entityliving1 = (EntityLiving) entity;
+
+                if (entity1 instanceof EntityLiving) {
+                    EnchantmentManager.a(entityliving1, entity1);
+                    EnchantmentManager.b((EntityLiving) entity1, (Entity) entityliving1);
+                }
+
+                this.a(entityliving1);
+            }
         }
 
         this.setMot(this.getMot().d(-0.01D, -0.1D, -0.01D));
@@ -152,20 +161,20 @@ public class EntityThrownTrident extends EntityArrow {
             this.trident = ItemStack.a(nbttagcompound.getCompound("Trident"));
         }
 
-        this.au = nbttagcompound.getBoolean("DealtDamage");
-        this.datawatcher.set(EntityThrownTrident.as, (byte) EnchantmentManager.f(this.trident));
+        this.as = nbttagcompound.getBoolean("DealtDamage");
+        this.datawatcher.set(EntityThrownTrident.ap, (byte) EnchantmentManager.f(this.trident));
     }
 
     @Override
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.set("Trident", this.trident.save(new NBTTagCompound()));
-        nbttagcompound.setBoolean("DealtDamage", this.au);
+        nbttagcompound.setBoolean("DealtDamage", this.as);
     }
 
     @Override
-    protected void i() {
-        byte b0 = (Byte) this.datawatcher.get(EntityThrownTrident.as);
+    public void i() {
+        byte b0 = (Byte) this.datawatcher.get(EntityThrownTrident.ap);
 
         if (this.fromPlayer != EntityArrow.PickupStatus.ALLOWED || b0 <= 0) {
             super.i();

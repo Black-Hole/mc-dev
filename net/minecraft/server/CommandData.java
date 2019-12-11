@@ -38,7 +38,7 @@ public class CommandData {
     private static final DynamicCommandExceptionType j = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.data.modify.invalid_index", new Object[]{object});
     });
-    public static final List<Function<String, CommandData.c>> a = ImmutableList.of(CommandDataAccessorEntity.a, CommandDataAccessorTile.a);
+    public static final List<Function<String, CommandData.c>> a = ImmutableList.of(CommandDataAccessorEntity.a, CommandDataAccessorTile.a, CommandDataStorage.a);
     public static final List<CommandData.c> b = (List) CommandData.a.stream().map((function) -> {
         return (CommandData.c) function.apply("target");
     }).collect(ImmutableList.toImmutableList());
@@ -251,7 +251,7 @@ public class CommandData {
         } else if (nbtbase instanceof NBTList) {
             i = ((NBTList) nbtbase).size();
         } else if (nbtbase instanceof NBTTagCompound) {
-            i = ((NBTTagCompound) nbtbase).d();
+            i = ((NBTTagCompound) nbtbase).e();
         } else {
             if (!(nbtbase instanceof NBTTagString)) {
                 throw CommandData.f.create(argumentnbtkey_h.toString());

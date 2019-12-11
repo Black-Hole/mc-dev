@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
@@ -22,7 +23,7 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
     protected final M f;
     protected final LongSet g = new LongOpenHashSet();
     protected final LongSet h = new LongOpenHashSet();
-    protected final Long2ObjectMap<NibbleArray> i = new Long2ObjectOpenHashMap();
+    protected final Long2ObjectMap<NibbleArray> i = Long2ObjectMaps.synchronize(new Long2ObjectOpenHashMap());
     private final LongSet n = new LongOpenHashSet();
     private final LongSet o = new LongOpenHashSet();
     protected volatile boolean j;
@@ -143,20 +144,26 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
     }
 
     protected void a(LightEngineLayer<?, ?> lightenginelayer, long i) {
-        int j = SectionPosition.c(SectionPosition.b(i));
-        int k = SectionPosition.c(SectionPosition.c(i));
-        int l = SectionPosition.c(SectionPosition.d(i));
+        if (lightenginelayer.c() < 8192) {
+            lightenginelayer.a((j) -> {
+                return SectionPosition.e(j) == i;
+            });
+        } else {
+            int j = SectionPosition.c(SectionPosition.b(i));
+            int k = SectionPosition.c(SectionPosition.c(i));
+            int l = SectionPosition.c(SectionPosition.d(i));
 
-        for (int i1 = 0; i1 < 16; ++i1) {
-            for (int j1 = 0; j1 < 16; ++j1) {
-                for (int k1 = 0; k1 < 16; ++k1) {
-                    long l1 = BlockPosition.a(j + i1, k + j1, l + k1);
+            for (int i1 = 0; i1 < 16; ++i1) {
+                for (int j1 = 0; j1 < 16; ++j1) {
+                    for (int k1 = 0; k1 < 16; ++k1) {
+                        long l1 = BlockPosition.a(j + i1, k + j1, l + k1);
 
-                    lightenginelayer.e(l1);
+                        lightenginelayer.e(l1);
+                    }
                 }
             }
-        }
 
+        }
     }
 
     protected boolean a() {
@@ -324,14 +331,14 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
 
     }
 
-    protected void c() {
+    protected void d() {
         if (this.b()) {
             this.b(Integer.MAX_VALUE);
         }
 
     }
 
-    protected void d() {
+    protected void e() {
         if (!this.g.isEmpty()) {
             M m0 = this.f.b();
 

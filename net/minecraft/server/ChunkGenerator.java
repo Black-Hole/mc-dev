@@ -24,32 +24,26 @@ public abstract class ChunkGenerator<C extends GeneratorSettingsDefault> {
 
     public void createBiomes(IChunkAccess ichunkaccess) {
         ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
-        int i = chunkcoordintpair.x;
-        int j = chunkcoordintpair.z;
-        BiomeBase[] abiomebase = this.c.getBiomeBlock(i * 16, j * 16, 16, 16);
 
-        ichunkaccess.a(abiomebase);
+        ((ProtoChunk) ichunkaccess).a(new BiomeStorage(chunkcoordintpair, this.c));
     }
 
-    protected BiomeBase getCarvingBiome(IChunkAccess ichunkaccess) {
-        return ichunkaccess.getBiome(BlockPosition.ZERO);
+    protected BiomeBase getBiome(BiomeManager biomemanager, BlockPosition blockposition) {
+        return biomemanager.a(blockposition);
     }
 
-    protected BiomeBase getDecoratingBiome(RegionLimitedWorldAccess regionlimitedworldaccess, BlockPosition blockposition) {
-        return this.c.getBiome(blockposition);
-    }
-
-    public void doCarving(IChunkAccess ichunkaccess, WorldGenStage.Features worldgenstage_features) {
+    public void doCarving(BiomeManager biomemanager, IChunkAccess ichunkaccess, WorldGenStage.Features worldgenstage_features) {
         SeededRandom seededrandom = new SeededRandom();
         boolean flag = true;
         ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
         int i = chunkcoordintpair.x;
         int j = chunkcoordintpair.z;
+        BiomeBase biomebase = this.getBiome(biomemanager, chunkcoordintpair.l());
         BitSet bitset = ichunkaccess.a(worldgenstage_features);
 
         for (int k = i - 8; k <= i + 8; ++k) {
             for (int l = j - 8; l <= j + 8; ++l) {
-                List<WorldGenCarverWrapper<?>> list = this.getCarvingBiome(ichunkaccess).a(worldgenstage_features);
+                List<WorldGenCarverWrapper<?>> list = biomebase.a(worldgenstage_features);
                 ListIterator listiterator = list.listIterator();
 
                 while (listiterator.hasNext()) {
@@ -58,7 +52,9 @@ public abstract class ChunkGenerator<C extends GeneratorSettingsDefault> {
 
                     seededrandom.c(this.seed + (long) i1, k, l);
                     if (worldgencarverwrapper.a(seededrandom, k, l)) {
-                        worldgencarverwrapper.a(ichunkaccess, seededrandom, this.getSeaLevel(), k, l, i, j, bitset);
+                        worldgencarverwrapper.a(ichunkaccess, (blockposition) -> {
+                            return this.getBiome(biomemanager, blockposition);
+                        }, seededrandom, this.getSeaLevel(), k, l, i, j, bitset);
                     }
                 }
             }
@@ -68,7 +64,7 @@ public abstract class ChunkGenerator<C extends GeneratorSettingsDefault> {
 
     @Nullable
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, int i, boolean flag) {
-        StructureGenerator<?> structuregenerator = (StructureGenerator) WorldGenerator.aP.get(s.toLowerCase(Locale.ROOT));
+        StructureGenerator<?> structuregenerator = (StructureGenerator) WorldGenerator.ao.get(s.toLowerCase(Locale.ROOT));
 
         return structuregenerator != null ? structuregenerator.getNearestGeneratedFeature(world, this, blockposition, i, flag) : null;
     }
@@ -79,7 +75,7 @@ public abstract class ChunkGenerator<C extends GeneratorSettingsDefault> {
         int k = i * 16;
         int l = j * 16;
         BlockPosition blockposition = new BlockPosition(k, 0, l);
-        BiomeBase biomebase = this.getDecoratingBiome(regionlimitedworldaccess, blockposition.b(8, 8, 8));
+        BiomeBase biomebase = this.getBiome(regionlimitedworldaccess.d(), blockposition.b(8, 8, 8));
         SeededRandom seededrandom = new SeededRandom();
         long i1 = seededrandom.a(regionlimitedworldaccess.getSeed(), k, l);
         WorldGenStage.Decoration[] aworldgenstage_decoration = WorldGenStage.Decoration.values();
@@ -100,7 +96,7 @@ public abstract class ChunkGenerator<C extends GeneratorSettingsDefault> {
 
     }
 
-    public abstract void buildBase(IChunkAccess ichunkaccess);
+    public abstract void buildBase(RegionLimitedWorldAccess regionlimitedworldaccess, IChunkAccess ichunkaccess);
 
     public void addMobs(RegionLimitedWorldAccess regionlimitedworldaccess) {}
 
@@ -137,26 +133,28 @@ public abstract class ChunkGenerator<C extends GeneratorSettingsDefault> {
         return this.a.getBiome(blockposition).getMobs(enumcreaturetype);
     }
 
-    public void createStructures(IChunkAccess ichunkaccess, ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager) {
-        Iterator iterator = WorldGenerator.aP.values().iterator();
+    public void createStructures(BiomeManager biomemanager, IChunkAccess ichunkaccess, ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager) {
+        Iterator iterator = WorldGenerator.ao.values().iterator();
 
         while (iterator.hasNext()) {
             StructureGenerator<?> structuregenerator = (StructureGenerator) iterator.next();
 
             if (chunkgenerator.getWorldChunkManager().a(structuregenerator)) {
+                StructureStart structurestart = ichunkaccess.a(structuregenerator.b());
+                int i = structurestart != null ? structurestart.j() : 0;
                 SeededRandom seededrandom = new SeededRandom();
                 ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
-                StructureStart structurestart = StructureStart.a;
+                StructureStart structurestart1 = StructureStart.a;
+                BiomeBase biomebase = biomemanager.a(new BlockPosition(chunkcoordintpair.d() + 9, 0, chunkcoordintpair.e() + 9));
 
-                if (structuregenerator.a(chunkgenerator, seededrandom, chunkcoordintpair.x, chunkcoordintpair.z)) {
-                    BiomeBase biomebase = this.getWorldChunkManager().getBiome(new BlockPosition(chunkcoordintpair.d() + 9, 0, chunkcoordintpair.e() + 9));
-                    StructureStart structurestart1 = structuregenerator.a().create(structuregenerator, chunkcoordintpair.x, chunkcoordintpair.z, biomebase, StructureBoundingBox.a(), 0, chunkgenerator.getSeed());
+                if (structuregenerator.a(biomemanager, chunkgenerator, seededrandom, chunkcoordintpair.x, chunkcoordintpair.z, biomebase)) {
+                    StructureStart structurestart2 = structuregenerator.a().create(structuregenerator, chunkcoordintpair.x, chunkcoordintpair.z, StructureBoundingBox.a(), i, chunkgenerator.getSeed());
 
-                    structurestart1.a(this, definedstructuremanager, chunkcoordintpair.x, chunkcoordintpair.z, biomebase);
-                    structurestart = structurestart1.e() ? structurestart1 : StructureStart.a;
+                    structurestart2.a(this, definedstructuremanager, chunkcoordintpair.x, chunkcoordintpair.z, biomebase);
+                    structurestart1 = structurestart2.e() ? structurestart2 : StructureStart.a;
                 }
 
-                ichunkaccess.a(structuregenerator.b(), structurestart);
+                ichunkaccess.a(structuregenerator.b(), structurestart1);
             }
         }
 

@@ -63,7 +63,7 @@ public class WorldPersistentData {
 
             if (file.exists()) {
                 T t0 = (PersistentBase) supplier.get();
-                NBTTagCompound nbttagcompound = this.a(s, SharedConstants.a().getWorldVersion());
+                NBTTagCompound nbttagcompound = this.a(s, SharedConstants.getGameVersion().getWorldVersion());
 
                 t0.a(nbttagcompound.getCompound("data"));
                 return t0;

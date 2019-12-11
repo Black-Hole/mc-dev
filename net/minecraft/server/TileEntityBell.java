@@ -52,8 +52,8 @@ public class TileEntityBell extends TileEntity implements ITickable {
             if (this.j < 40) {
                 ++this.j;
             } else {
+                this.a(this.world);
                 this.b(this.world);
-                this.c(this.world);
                 this.i = false;
             }
         }
@@ -74,7 +74,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
             this.b = true;
         }
 
-        this.world.playBlockAction(blockposition, this.getBlock().getBlock(), 1, enumdirection.a());
+        this.world.playBlockAction(blockposition, this.getBlock().getBlock(), 1, enumdirection.b());
     }
 
     private void f() {
@@ -118,13 +118,13 @@ public class TileEntityBell extends TileEntity implements ITickable {
         return true;
     }
 
-    private void b(World world) {
+    private void a(World world) {
         if (!world.isClientSide) {
             this.h.stream().filter(this::a).forEach(this::b);
         }
     }
 
-    private void c(World world) {
+    private void b(World world) {
         if (world.isClientSide) {
             BlockPosition blockposition = this.getPosition();
             AtomicInteger atomicinteger = new AtomicInteger(16700985);
@@ -134,9 +134,9 @@ public class TileEntityBell extends TileEntity implements ITickable {
 
             this.h.stream().filter(this::a).forEach((entityliving) -> {
                 float f = 1.0F;
-                float f1 = MathHelper.sqrt((entityliving.locX - (double) blockposition.getX()) * (entityliving.locX - (double) blockposition.getX()) + (entityliving.locZ - (double) blockposition.getZ()) * (entityliving.locZ - (double) blockposition.getZ()));
-                double d0 = (double) ((float) blockposition.getX() + 0.5F) + (double) (1.0F / f1) * (entityliving.locX - (double) blockposition.getX());
-                double d1 = (double) ((float) blockposition.getZ() + 0.5F) + (double) (1.0F / f1) * (entityliving.locZ - (double) blockposition.getZ());
+                float f1 = MathHelper.sqrt((entityliving.locX() - (double) blockposition.getX()) * (entityliving.locX() - (double) blockposition.getX()) + (entityliving.locZ() - (double) blockposition.getZ()) * (entityliving.locZ() - (double) blockposition.getZ()));
+                double d0 = (double) ((float) blockposition.getX() + 0.5F) + (double) (1.0F / f1) * (entityliving.locX() - (double) blockposition.getX());
+                double d1 = (double) ((float) blockposition.getZ() + 0.5F) + (double) (1.0F / f1) * (entityliving.locZ() - (double) blockposition.getZ());
                 int j = MathHelper.clamp((i - 21) / -2, 3, 15);
 
                 for (int k = 0; k < j; ++k) {

@@ -1,16 +1,14 @@
 package net.minecraft.server;
 
-import java.util.Random;
-
 public final class BiomeFrozenOcean extends BiomeBase {
 
-    protected static final NoiseGenerator3 u = new NoiseGenerator3(new Random(3456L), 3);
+    protected static final NoiseGenerator3 u = new NoiseGenerator3(new SeededRandom(3456L), 2, 0);
 
     public BiomeFrozenOcean() {
         super((new BiomeBase.a()).a(WorldGenSurface.P, WorldGenSurface.v).a(BiomeBase.Precipitation.SNOW).a(BiomeBase.Geography.OCEAN).a(-1.0F).b(0.1F).c(0.0F).d(0.5F).a(3750089).b(329011).a((String) null));
-        this.a(WorldGenerator.OCEAN_RUIN, (WorldGenFeatureConfiguration) (new WorldGenFeatureOceanRuinConfiguration(WorldGenFeatureOceanRuin.Temperature.COLD, 0.3F, 0.9F)));
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
-        this.a(WorldGenerator.SHIPWRECK, (WorldGenFeatureConfiguration) (new WorldGenFeatureShipwreckConfiguration(false)));
+        this.a(WorldGenerator.OCEAN_RUIN.b((WorldGenFeatureConfiguration) (new WorldGenFeatureOceanRuinConfiguration(WorldGenFeatureOceanRuin.Temperature.COLD, 0.3F, 0.9F))));
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
+        this.a(WorldGenerator.SHIPWRECK.b((WorldGenFeatureConfiguration) (new WorldGenFeatureShipwreckConfiguration(false))));
         BiomeDecoratorGroups.b(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);
@@ -43,14 +41,14 @@ public final class BiomeFrozenOcean extends BiomeBase {
     }
 
     @Override
-    protected float c(BlockPosition blockposition) {
+    protected float a(BlockPosition blockposition) {
         float f = this.getTemperature();
-        double d0 = BiomeFrozenOcean.u.a((double) blockposition.getX() * 0.05D, (double) blockposition.getZ() * 0.05D);
-        double d1 = BiomeFrozenOcean.e.a((double) blockposition.getX() * 0.2D, (double) blockposition.getZ() * 0.2D);
+        double d0 = BiomeFrozenOcean.u.a((double) blockposition.getX() * 0.05D, (double) blockposition.getZ() * 0.05D, false) * 7.0D;
+        double d1 = BiomeFrozenOcean.e.a((double) blockposition.getX() * 0.2D, (double) blockposition.getZ() * 0.2D, false);
         double d2 = d0 + d1;
 
         if (d2 < 0.3D) {
-            double d3 = BiomeFrozenOcean.e.a((double) blockposition.getX() * 0.09D, (double) blockposition.getZ() * 0.09D);
+            double d3 = BiomeFrozenOcean.e.a((double) blockposition.getX() * 0.09D, (double) blockposition.getZ() * 0.09D, false);
 
             if (d3 < 0.8D) {
                 f = 0.2F;
@@ -58,7 +56,7 @@ public final class BiomeFrozenOcean extends BiomeBase {
         }
 
         if (blockposition.getY() > 64) {
-            float f1 = (float) (BiomeFrozenOcean.d.a((double) ((float) blockposition.getX() / 8.0F), (double) ((float) blockposition.getZ() / 8.0F)) * 4.0D);
+            float f1 = (float) (BiomeFrozenOcean.d.a((double) ((float) blockposition.getX() / 8.0F), (double) ((float) blockposition.getZ() / 8.0F), false) * 4.0D);
 
             return f - (f1 + (float) blockposition.getY() - 64.0F) * 0.05F / 30.0F;
         } else {

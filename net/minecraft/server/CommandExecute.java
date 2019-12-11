@@ -13,6 +13,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import java.util.Collection;
@@ -38,6 +40,11 @@ public class CommandExecute {
             resultconsumer.onCommandComplete(commandcontext, flag, i);
             resultconsumer1.onCommandComplete(commandcontext, flag, i);
         };
+    };
+    private static final SuggestionProvider<CommandListenerWrapper> e = (commandcontext, suggestionsbuilder) -> {
+        LootPredicateManager lootpredicatemanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aP();
+
+        return ICompletionProvider.a((Iterable) lootpredicatemanager.a(), suggestionsbuilder);
     };
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
@@ -65,12 +72,12 @@ public class CommandExecute {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.bP()).a(entity.aU()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.bX()).a(entity.aX()));
             }
 
             return list;
         })))).then(((LiteralArgumentBuilder) CommandDispatcher.a("store").then(a(literalcommandnode, CommandDispatcher.a("result"), true))).then(a(literalcommandnode, CommandDispatcher.a("success"), false)))).then(((LiteralArgumentBuilder) CommandDispatcher.a("positioned").then(CommandDispatcher.a("pos", (ArgumentType) ArgumentVec3.a()).redirect(literalcommandnode, (commandcontext) -> {
-            return ((CommandListenerWrapper) commandcontext.getSource()).a(ArgumentVec3.a(commandcontext, "pos"));
+            return ((CommandListenerWrapper) commandcontext.getSource()).a(ArgumentVec3.a(commandcontext, "pos")).a(ArgumentAnchor.Anchor.FEET);
         }))).then(CommandDispatcher.a("as").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).fork(literalcommandnode, (commandcontext) -> {
             List<CommandListenerWrapper> list = Lists.newArrayList();
             Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
@@ -78,7 +85,7 @@ public class CommandExecute {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.bP()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.bX()));
             }
 
             return list;
@@ -91,7 +98,7 @@ public class CommandExecute {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.aU()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.aX()));
             }
 
             return list;
@@ -135,27 +142,27 @@ public class CommandExecute {
             commanddata_c.a(literalargumentbuilder, (argumentbuilder) -> {
                 return argumentbuilder.then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("path", (ArgumentType) ArgumentNBTKey.a()).then(CommandDispatcher.a("int").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
                     return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_c.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
-                        return new NBTTagInt((int) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale")));
+                        return NBTTagInt.a((int) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale")));
                     }, flag);
                 })))).then(CommandDispatcher.a("float").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
                     return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_c.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
-                        return new NBTTagFloat((float) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale")));
+                        return NBTTagFloat.a((float) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale")));
                     }, flag);
                 })))).then(CommandDispatcher.a("short").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
                     return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_c.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
-                        return new NBTTagShort((short) ((int) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale"))));
+                        return NBTTagShort.a((short) ((int) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale"))));
                     }, flag);
                 })))).then(CommandDispatcher.a("long").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
                     return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_c.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
-                        return new NBTTagLong((long) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale")));
+                        return NBTTagLong.a((long) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale")));
                     }, flag);
                 })))).then(CommandDispatcher.a("double").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
                     return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_c.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
-                        return new NBTTagDouble((double) i * DoubleArgumentType.getDouble(commandcontext, "scale"));
+                        return NBTTagDouble.a((double) i * DoubleArgumentType.getDouble(commandcontext, "scale"));
                     }, flag);
                 })))).then(CommandDispatcher.a("byte").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
                     return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_c.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
-                        return new NBTTagByte((byte) ((int) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale"))));
+                        return NBTTagByte.a((byte) ((int) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale"))));
                     }, flag);
                 }))));
             });
@@ -212,7 +219,7 @@ public class CommandExecute {
     }
 
     private static ArgumentBuilder<CommandListenerWrapper, ?> a(CommandNode<CommandListenerWrapper> commandnode, LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder, boolean flag) {
-        ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) literalargumentbuilder.then(CommandDispatcher.a("block").then(CommandDispatcher.a("pos", (ArgumentType) ArgumentPosition.a()).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("block", (ArgumentType) ArgumentBlockPredicate.a()), flag, (commandcontext) -> {
+        ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) literalargumentbuilder.then(CommandDispatcher.a("block").then(CommandDispatcher.a("pos", (ArgumentType) ArgumentPosition.a()).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("block", (ArgumentType) ArgumentBlockPredicate.a()), flag, (commandcontext) -> {
             return ArgumentBlockPredicate.a(commandcontext, "block").test(new ShapeDetectorBlock(((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentPosition.a(commandcontext, "pos"), true));
         }))))).then(CommandDispatcher.a("score").then(CommandDispatcher.a("target", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("targetObjective", (ArgumentType) ArgumentScoreboardObjective.a()).then(CommandDispatcher.a("=").then(CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
             return a(commandcontext, Integer::equals);
@@ -238,7 +245,9 @@ public class CommandExecute {
             return a(commandcontext, flag, !ArgumentEntity.c(commandcontext, "entities").isEmpty());
         })).executes(a(flag, (commandcontext) -> {
             return ArgumentEntity.c(commandcontext, "entities").size();
-        }))));
+        }))))).then(CommandDispatcher.a("predicate").then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("predicate", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandExecute.e), flag, (commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentMinecraftKeyRegistered.c(commandcontext, "predicate"));
+        })));
         Iterator iterator = CommandData.c.iterator();
 
         while (iterator.hasNext()) {
@@ -305,6 +314,13 @@ public class CommandExecute {
         ScoreboardServer scoreboardserver = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getScoreboard();
 
         return !scoreboardserver.b(s, scoreboardobjective) ? false : criterionconditionvalue_integerrange.d(scoreboardserver.getPlayerScoreForObjective(s, scoreboardobjective).getScore());
+    }
+
+    private static boolean a(CommandListenerWrapper commandlistenerwrapper, LootItemCondition lootitemcondition) {
+        WorldServer worldserver = commandlistenerwrapper.getWorld();
+        LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder(worldserver)).set(LootContextParameters.POSITION, new BlockPosition(commandlistenerwrapper.getPosition())).setOptional(LootContextParameters.THIS_ENTITY, commandlistenerwrapper.getEntity());
+
+        return lootitemcondition.test(loottableinfo_builder.build(LootContextParameterSets.COMMAND));
     }
 
     private static Collection<CommandListenerWrapper> a(CommandContext<CommandListenerWrapper> commandcontext, boolean flag, boolean flag1) {

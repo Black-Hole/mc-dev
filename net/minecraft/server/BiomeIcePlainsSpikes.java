@@ -4,14 +4,14 @@ public final class BiomeIcePlainsSpikes extends BiomeBase {
 
     public BiomeIcePlainsSpikes() {
         super((new BiomeBase.a()).a(WorldGenSurface.G, new WorldGenSurfaceConfigurationBase(Blocks.SNOW_BLOCK.getBlockData(), Blocks.DIRT.getBlockData(), Blocks.GRAVEL.getBlockData())).a(BiomeBase.Precipitation.SNOW).a(BiomeBase.Geography.ICY).a(0.425F).b(0.45000002F).c(0.0F).d(0.5F).a(4159204).b(329011).a("snowy_tundra"));
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
-        this.a(WorldGenerator.STRONGHOLD, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
+        this.a(WorldGenerator.STRONGHOLD.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);
         BiomeDecoratorGroups.f(this);
-        this.a(WorldGenStage.Decoration.SURFACE_STRUCTURES, a(WorldGenerator.ICE_SPIKE, WorldGenFeatureConfiguration.e, WorldGenDecorator.a, new WorldGenDecoratorFrequencyConfiguration(3)));
-        this.a(WorldGenStage.Decoration.SURFACE_STRUCTURES, a(WorldGenerator.ICE_PATCH, new WorldGenFeatureRadiusConfiguration(2), WorldGenDecorator.a, new WorldGenDecoratorFrequencyConfiguration(2)));
+        this.a(WorldGenStage.Decoration.SURFACE_STRUCTURES, WorldGenerator.ICE_SPIKE.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e).a(WorldGenDecorator.b.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(3)))));
+        this.a(WorldGenStage.Decoration.SURFACE_STRUCTURES, WorldGenerator.ICE_PATCH.b((WorldGenFeatureConfiguration) (new WorldGenFeatureRadiusConfiguration(2))).a(WorldGenDecorator.b.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(2)))));
         BiomeDecoratorGroups.g(this);
         BiomeDecoratorGroups.h(this);
         BiomeDecoratorGroups.l(this);
@@ -37,7 +37,7 @@ public final class BiomeIcePlainsSpikes extends BiomeBase {
     }
 
     @Override
-    public float d() {
+    public float f() {
         return 0.07F;
     }
 }

@@ -44,7 +44,7 @@ public class ContainerLectern extends Container {
                     this.a(0, j + 1);
                     return true;
                 case 3:
-                    if (!entityhuman.dQ()) {
+                    if (!entityhuman.ep()) {
                         return false;
                     }
 

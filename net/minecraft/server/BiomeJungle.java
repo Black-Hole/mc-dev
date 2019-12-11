@@ -4,9 +4,9 @@ public final class BiomeJungle extends BiomeBase {
 
     public BiomeJungle() {
         super((new BiomeBase.a()).a(WorldGenSurface.G, WorldGenSurface.v).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.JUNGLE).a(0.1F).b(0.2F).c(0.95F).d(0.9F).a(4159204).b(329011).a((String) null));
-        this.a(WorldGenerator.JUNGLE_TEMPLE, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
-        this.a(WorldGenerator.STRONGHOLD, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
+        this.a(WorldGenerator.JUNGLE_TEMPLE.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
+        this.a(WorldGenerator.STRONGHOLD.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);
@@ -39,6 +39,6 @@ public final class BiomeJungle extends BiomeBase {
         this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.SLIME, 100, 4, 4));
         this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.ENDERMAN, 10, 1, 4));
         this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.WITCH, 5, 1, 1));
-        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.OCELOT, 2, 1, 1));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.OCELOT, 2, 1, 3));
     }
 }

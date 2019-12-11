@@ -266,7 +266,7 @@ public final class GameProfileSerializer {
     }
 
     public static NBTTagCompound a(DataFixer datafixer, DataFixTypes datafixtypes, NBTTagCompound nbttagcompound, int i) {
-        return a(datafixer, datafixtypes, nbttagcompound, i, SharedConstants.a().getWorldVersion());
+        return a(datafixer, datafixtypes, nbttagcompound, i, SharedConstants.getGameVersion().getWorldVersion());
     }
 
     public static NBTTagCompound a(DataFixer datafixer, DataFixTypes datafixtypes, NBTTagCompound nbttagcompound, int i, int j) {

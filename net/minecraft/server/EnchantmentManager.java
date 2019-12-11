@@ -26,7 +26,7 @@ public class EnchantmentManager {
                 MinecraftKey minecraftkey1 = MinecraftKey.a(nbttagcompound.getString("id"));
 
                 if (minecraftkey1 != null && minecraftkey1.equals(minecraftkey)) {
-                    return nbttagcompound.getInt("lvl");
+                    return MathHelper.clamp(nbttagcompound.getInt("lvl"), 0, 255);
                 }
             }
 
@@ -35,8 +35,13 @@ public class EnchantmentManager {
     }
 
     public static Map<Enchantment, Integer> a(ItemStack itemstack) {
-        Map<Enchantment, Integer> map = Maps.newLinkedHashMap();
         NBTTagList nbttaglist = itemstack.getItem() == Items.ENCHANTED_BOOK ? ItemEnchantedBook.e(itemstack) : itemstack.getEnchantments();
+
+        return a(nbttaglist);
+    }
+
+    public static Map<Enchantment, Integer> a(NBTTagList nbttaglist) {
+        Map<Enchantment, Integer> map = Maps.newLinkedHashMap();
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
@@ -135,7 +140,7 @@ public class EnchantmentManager {
         };
 
         if (entityliving != null) {
-            a(enchantmentmanager_a, entityliving.bb());
+            a(enchantmentmanager_a, entityliving.be());
         }
 
         if (entity instanceof EntityHuman) {
@@ -150,7 +155,7 @@ public class EnchantmentManager {
         };
 
         if (entityliving != null) {
-            a(enchantmentmanager_a, entityliving.bb());
+            a(enchantmentmanager_a, entityliving.be());
         }
 
         if (entityliving instanceof EntityHuman) {

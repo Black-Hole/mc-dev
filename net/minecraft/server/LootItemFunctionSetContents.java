@@ -7,8 +7,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
 
 public class LootItemFunctionSetContents extends LootItemFunctionConditional {
 
@@ -43,11 +41,11 @@ public class LootItemFunctionSetContents extends LootItemFunctionConditional {
     }
 
     @Override
-    public void a(LootCollector lootcollector, Function<MinecraftKey, LootTable> function, Set<MinecraftKey> set, LootContextParameterSet lootcontextparameterset) {
-        super.a(lootcollector, function, set, lootcontextparameterset);
+    public void a(LootCollector lootcollector) {
+        super.a(lootcollector);
 
         for (int i = 0; i < this.a.size(); ++i) {
-            ((LootEntryAbstract) this.a.get(i)).a(lootcollector.b(".entry[" + i + "]"), function, set, lootcontextparameterset);
+            ((LootEntryAbstract) this.a.get(i)).a(lootcollector.b(".entry[" + i + "]"));
         }
 
     }

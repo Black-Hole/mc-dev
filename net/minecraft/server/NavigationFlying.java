@@ -20,7 +20,7 @@ public class NavigationFlying extends NavigationAbstract {
 
     @Override
     protected Vec3D b() {
-        return new Vec3D(this.a.locX, this.a.locY, this.a.locZ);
+        return this.a.getPositionVector();
     }
 
     @Override
@@ -32,23 +32,23 @@ public class NavigationFlying extends NavigationAbstract {
     public void c() {
         ++this.e;
         if (this.m) {
-            this.k();
+            this.j();
         }
 
-        if (!this.n()) {
+        if (!this.m()) {
             Vec3D vec3d;
 
             if (this.a()) {
-                this.m();
+                this.l();
             } else if (this.c != null && this.c.f() < this.c.e()) {
                 vec3d = this.c.a(this.a, this.c.f());
-                if (MathHelper.floor(this.a.locX) == MathHelper.floor(vec3d.x) && MathHelper.floor(this.a.locY) == MathHelper.floor(vec3d.y) && MathHelper.floor(this.a.locZ) == MathHelper.floor(vec3d.z)) {
+                if (MathHelper.floor(this.a.locX()) == MathHelper.floor(vec3d.x) && MathHelper.floor(this.a.locY()) == MathHelper.floor(vec3d.y) && MathHelper.floor(this.a.locZ()) == MathHelper.floor(vec3d.z)) {
                     this.c.c(this.c.f() + 1);
                 }
             }
 
             PacketDebug.a(this.b, this.a, this.c, this.l);
-            if (!this.n()) {
+            if (!this.m()) {
                 vec3d = this.c.a((Entity) this.a);
                 this.a.getControllerMove().a(vec3d.x, vec3d.y, vec3d.z, this.d);
             }

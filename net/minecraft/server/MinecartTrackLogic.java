@@ -19,9 +19,9 @@ public class MinecartTrackLogic {
         this.b = blockposition;
         this.d = iblockdata;
         this.c = (BlockMinecartTrackAbstract) iblockdata.getBlock();
-        BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(this.c.e());
+        BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(this.c.d());
 
-        this.e = this.c.d();
+        this.e = this.c.c();
         this.a(blockpropertytrackposition);
     }
 
@@ -96,18 +96,18 @@ public class MinecartTrackLogic {
     private MinecartTrackLogic b(BlockPosition blockposition) {
         IBlockData iblockdata = this.a.getType(blockposition);
 
-        if (BlockMinecartTrackAbstract.j(iblockdata)) {
+        if (BlockMinecartTrackAbstract.h(iblockdata)) {
             return new MinecartTrackLogic(this.a, blockposition, iblockdata);
         } else {
             BlockPosition blockposition1 = blockposition.up();
 
             iblockdata = this.a.getType(blockposition1);
-            if (BlockMinecartTrackAbstract.j(iblockdata)) {
+            if (BlockMinecartTrackAbstract.h(iblockdata)) {
                 return new MinecartTrackLogic(this.a, blockposition1, iblockdata);
             } else {
                 blockposition1 = blockposition.down();
                 iblockdata = this.a.getType(blockposition1);
-                return BlockMinecartTrackAbstract.j(iblockdata) ? new MinecartTrackLogic(this.a, blockposition1, iblockdata) : null;
+                return BlockMinecartTrackAbstract.h(iblockdata) ? new MinecartTrackLogic(this.a, blockposition1, iblockdata) : null;
             }
         }
     }
@@ -209,7 +209,7 @@ public class MinecartTrackLogic {
             blockpropertytrackposition = BlockPropertyTrackPosition.NORTH_SOUTH;
         }
 
-        this.d = (IBlockData) this.d.set(this.c.e(), blockpropertytrackposition);
+        this.d = (IBlockData) this.d.set(this.c.d(), blockpropertytrackposition);
         this.a.setTypeAndData(this.b, this.d, 3);
     }
 
@@ -224,7 +224,7 @@ public class MinecartTrackLogic {
         }
     }
 
-    public MinecartTrackLogic a(boolean flag, boolean flag1) {
+    public MinecartTrackLogic a(boolean flag, boolean flag1, BlockPropertyTrackPosition blockpropertytrackposition) {
         BlockPosition blockposition = this.b.north();
         BlockPosition blockposition1 = this.b.south();
         BlockPosition blockposition2 = this.b.west();
@@ -233,106 +233,113 @@ public class MinecartTrackLogic {
         boolean flag3 = this.d(blockposition1);
         boolean flag4 = this.d(blockposition2);
         boolean flag5 = this.d(blockposition3);
-        BlockPropertyTrackPosition blockpropertytrackposition = null;
+        BlockPropertyTrackPosition blockpropertytrackposition1 = null;
+        boolean flag6 = flag2 || flag3;
+        boolean flag7 = flag4 || flag5;
 
-        if ((flag2 || flag3) && !flag4 && !flag5) {
-            blockpropertytrackposition = BlockPropertyTrackPosition.NORTH_SOUTH;
+        if (flag6 && !flag7) {
+            blockpropertytrackposition1 = BlockPropertyTrackPosition.NORTH_SOUTH;
         }
 
-        if ((flag4 || flag5) && !flag2 && !flag3) {
-            blockpropertytrackposition = BlockPropertyTrackPosition.EAST_WEST;
+        if (flag7 && !flag6) {
+            blockpropertytrackposition1 = BlockPropertyTrackPosition.EAST_WEST;
         }
+
+        boolean flag8 = flag3 && flag5;
+        boolean flag9 = flag3 && flag4;
+        boolean flag10 = flag2 && flag5;
+        boolean flag11 = flag2 && flag4;
 
         if (!this.e) {
-            if (flag3 && flag5 && !flag2 && !flag4) {
-                blockpropertytrackposition = BlockPropertyTrackPosition.SOUTH_EAST;
+            if (flag8 && !flag2 && !flag4) {
+                blockpropertytrackposition1 = BlockPropertyTrackPosition.SOUTH_EAST;
             }
 
-            if (flag3 && flag4 && !flag2 && !flag5) {
-                blockpropertytrackposition = BlockPropertyTrackPosition.SOUTH_WEST;
+            if (flag9 && !flag2 && !flag5) {
+                blockpropertytrackposition1 = BlockPropertyTrackPosition.SOUTH_WEST;
             }
 
-            if (flag2 && flag4 && !flag3 && !flag5) {
-                blockpropertytrackposition = BlockPropertyTrackPosition.NORTH_WEST;
+            if (flag11 && !flag3 && !flag5) {
+                blockpropertytrackposition1 = BlockPropertyTrackPosition.NORTH_WEST;
             }
 
-            if (flag2 && flag5 && !flag3 && !flag4) {
-                blockpropertytrackposition = BlockPropertyTrackPosition.NORTH_EAST;
+            if (flag10 && !flag3 && !flag4) {
+                blockpropertytrackposition1 = BlockPropertyTrackPosition.NORTH_EAST;
             }
         }
 
-        if (blockpropertytrackposition == null) {
-            if (flag2 || flag3) {
-                blockpropertytrackposition = BlockPropertyTrackPosition.NORTH_SOUTH;
-            }
-
-            if (flag4 || flag5) {
-                blockpropertytrackposition = BlockPropertyTrackPosition.EAST_WEST;
+        if (blockpropertytrackposition1 == null) {
+            if (flag6 && flag7) {
+                blockpropertytrackposition1 = blockpropertytrackposition;
+            } else if (flag6) {
+                blockpropertytrackposition1 = BlockPropertyTrackPosition.NORTH_SOUTH;
+            } else if (flag7) {
+                blockpropertytrackposition1 = BlockPropertyTrackPosition.EAST_WEST;
             }
 
             if (!this.e) {
                 if (flag) {
-                    if (flag3 && flag5) {
-                        blockpropertytrackposition = BlockPropertyTrackPosition.SOUTH_EAST;
+                    if (flag8) {
+                        blockpropertytrackposition1 = BlockPropertyTrackPosition.SOUTH_EAST;
                     }
 
-                    if (flag4 && flag3) {
-                        blockpropertytrackposition = BlockPropertyTrackPosition.SOUTH_WEST;
+                    if (flag9) {
+                        blockpropertytrackposition1 = BlockPropertyTrackPosition.SOUTH_WEST;
                     }
 
-                    if (flag5 && flag2) {
-                        blockpropertytrackposition = BlockPropertyTrackPosition.NORTH_EAST;
+                    if (flag10) {
+                        blockpropertytrackposition1 = BlockPropertyTrackPosition.NORTH_EAST;
                     }
 
-                    if (flag2 && flag4) {
-                        blockpropertytrackposition = BlockPropertyTrackPosition.NORTH_WEST;
+                    if (flag11) {
+                        blockpropertytrackposition1 = BlockPropertyTrackPosition.NORTH_WEST;
                     }
                 } else {
-                    if (flag2 && flag4) {
-                        blockpropertytrackposition = BlockPropertyTrackPosition.NORTH_WEST;
+                    if (flag11) {
+                        blockpropertytrackposition1 = BlockPropertyTrackPosition.NORTH_WEST;
                     }
 
-                    if (flag5 && flag2) {
-                        blockpropertytrackposition = BlockPropertyTrackPosition.NORTH_EAST;
+                    if (flag10) {
+                        blockpropertytrackposition1 = BlockPropertyTrackPosition.NORTH_EAST;
                     }
 
-                    if (flag4 && flag3) {
-                        blockpropertytrackposition = BlockPropertyTrackPosition.SOUTH_WEST;
+                    if (flag9) {
+                        blockpropertytrackposition1 = BlockPropertyTrackPosition.SOUTH_WEST;
                     }
 
-                    if (flag3 && flag5) {
-                        blockpropertytrackposition = BlockPropertyTrackPosition.SOUTH_EAST;
+                    if (flag8) {
+                        blockpropertytrackposition1 = BlockPropertyTrackPosition.SOUTH_EAST;
                     }
                 }
             }
         }
 
-        if (blockpropertytrackposition == BlockPropertyTrackPosition.NORTH_SOUTH) {
+        if (blockpropertytrackposition1 == BlockPropertyTrackPosition.NORTH_SOUTH) {
             if (BlockMinecartTrackAbstract.a(this.a, blockposition.up())) {
-                blockpropertytrackposition = BlockPropertyTrackPosition.ASCENDING_NORTH;
+                blockpropertytrackposition1 = BlockPropertyTrackPosition.ASCENDING_NORTH;
             }
 
             if (BlockMinecartTrackAbstract.a(this.a, blockposition1.up())) {
-                blockpropertytrackposition = BlockPropertyTrackPosition.ASCENDING_SOUTH;
+                blockpropertytrackposition1 = BlockPropertyTrackPosition.ASCENDING_SOUTH;
             }
         }
 
-        if (blockpropertytrackposition == BlockPropertyTrackPosition.EAST_WEST) {
+        if (blockpropertytrackposition1 == BlockPropertyTrackPosition.EAST_WEST) {
             if (BlockMinecartTrackAbstract.a(this.a, blockposition3.up())) {
-                blockpropertytrackposition = BlockPropertyTrackPosition.ASCENDING_EAST;
+                blockpropertytrackposition1 = BlockPropertyTrackPosition.ASCENDING_EAST;
             }
 
             if (BlockMinecartTrackAbstract.a(this.a, blockposition2.up())) {
-                blockpropertytrackposition = BlockPropertyTrackPosition.ASCENDING_WEST;
+                blockpropertytrackposition1 = BlockPropertyTrackPosition.ASCENDING_WEST;
             }
         }
 
-        if (blockpropertytrackposition == null) {
-            blockpropertytrackposition = BlockPropertyTrackPosition.NORTH_SOUTH;
+        if (blockpropertytrackposition1 == null) {
+            blockpropertytrackposition1 = blockpropertytrackposition;
         }
 
-        this.a(blockpropertytrackposition);
-        this.d = (IBlockData) this.d.set(this.c.e(), blockpropertytrackposition);
+        this.a(blockpropertytrackposition1);
+        this.d = (IBlockData) this.d.set(this.c.d(), blockpropertytrackposition1);
         if (flag1 || this.a.getType(this.b) != this.d) {
             this.a.setTypeAndData(this.b, this.d, 3);
 

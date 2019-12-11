@@ -218,7 +218,7 @@ public class WorldGenStrongholdPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 10, 7, 15, false, random, WorldGenStrongholdPieces.e);
             this.a(generatoraccess, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.GRATES, 4, 1, 0);
             byte b0 = 6;
@@ -388,7 +388,7 @@ public class WorldGenStrongholdPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 9, 8, 10, true, random, WorldGenStrongholdPieces.e);
             this.a(generatoraccess, random, structureboundingbox, this.d, 4, 3, 0);
             if (this.a) {
@@ -463,7 +463,7 @@ public class WorldGenStrongholdPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             byte b0 = 11;
 
             if (!this.a) {
@@ -604,7 +604,7 @@ public class WorldGenStrongholdPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 8, 4, 10, true, random, WorldGenStrongholdPieces.e);
             this.a(generatoraccess, random, structureboundingbox, this.d, 1, 1, 0);
             this.a(generatoraccess, structureboundingbox, 1, 1, 10, 3, 3, 10, WorldGenStrongholdPieces.WorldGenStrongholdPrison.m, WorldGenStrongholdPieces.WorldGenStrongholdPrison.m, false);
@@ -672,7 +672,7 @@ public class WorldGenStrongholdPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 10, 6, 10, true, random, WorldGenStrongholdPieces.e);
             this.a(generatoraccess, random, structureboundingbox, this.d, 4, 1, 0);
             this.a(generatoraccess, structureboundingbox, 4, 1, 10, 6, 3, 10, WorldGenStrongholdPieces.WorldGenStrongholdRoomCrossing.m, WorldGenStrongholdPieces.WorldGenStrongholdRoomCrossing.m, false);
@@ -797,7 +797,7 @@ public class WorldGenStrongholdPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 4, 4, 4, true, random, WorldGenStrongholdPieces.e);
             this.a(generatoraccess, random, structureboundingbox, this.d, 1, 1, 0);
             EnumDirection enumdirection = this.i();
@@ -844,7 +844,7 @@ public class WorldGenStrongholdPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 4, 4, 4, true, random, WorldGenStrongholdPieces.e);
             this.a(generatoraccess, random, structureboundingbox, this.d, 1, 1, 0);
             EnumDirection enumdirection = this.i();
@@ -895,7 +895,7 @@ public class WorldGenStrongholdPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 4, 10, 7, true, random, WorldGenStrongholdPieces.e);
             this.a(generatoraccess, random, structureboundingbox, this.d, 1, 7, 0);
             this.a(generatoraccess, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.OPENING, 1, 1, 7);
@@ -950,7 +950,7 @@ public class WorldGenStrongholdPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 4, 4, 6, true, random, WorldGenStrongholdPieces.e);
             this.a(generatoraccess, random, structureboundingbox, this.d, 1, 1, 0);
             this.a(generatoraccess, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.OPENING, 1, 1, 6);
@@ -1020,7 +1020,7 @@ public class WorldGenStrongholdPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 4, 4, 6, true, random, WorldGenStrongholdPieces.e);
             this.a(generatoraccess, random, structureboundingbox, this.d, 1, 1, 0);
             this.a(generatoraccess, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.OPENING, 1, 1, 6);
@@ -1068,7 +1068,7 @@ public class WorldGenStrongholdPieces {
             this.a = true;
             this.a(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
             this.d = WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.OPENING;
-            if (this.i().k() == EnumDirection.EnumAxis.Z) {
+            if (this.i().m() == EnumDirection.EnumAxis.Z) {
                 this.n = new StructureBoundingBox(j, 64, k, j + 5 - 1, 74, k + 5 - 1);
             } else {
                 this.n = new StructureBoundingBox(j, 64, k, j + 5 - 1, 74, k + 5 - 1);
@@ -1115,7 +1115,7 @@ public class WorldGenStrongholdPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 4, 10, 4, true, random, WorldGenStrongholdPieces.e);
             this.a(generatoraccess, random, structureboundingbox, this.d, 1, 7, 0);
             this.a(generatoraccess, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.OPENING, 1, 1, 4);
@@ -1184,7 +1184,7 @@ public class WorldGenStrongholdPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             for (int i = 0; i < this.a; ++i) {
                 this.a(generatoraccess, Blocks.STONE_BRICKS.getBlockData(), 0, 0, i, structureboundingbox);
                 this.a(generatoraccess, Blocks.STONE_BRICKS.getBlockData(), 1, 0, i, structureboundingbox);

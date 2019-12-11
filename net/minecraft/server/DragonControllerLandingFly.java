@@ -25,9 +25,9 @@ public class DragonControllerLandingFly extends AbstractDragonController {
 
     @Override
     public void c() {
-        double d0 = this.d == null ? 0.0D : this.d.c(this.a.locX, this.a.locY, this.a.locZ);
+        double d0 = this.d == null ? 0.0D : this.d.c(this.a.locX(), this.a.locY(), this.a.locZ());
 
-        if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.y) {
+        if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.v) {
             this.j();
         }
 
@@ -47,11 +47,11 @@ public class DragonControllerLandingFly extends AbstractDragonController {
             int j;
 
             if (entityhuman != null) {
-                Vec3D vec3d = (new Vec3D(entityhuman.locX, 0.0D, entityhuman.locZ)).d();
+                Vec3D vec3d = (new Vec3D(entityhuman.locX(), 0.0D, entityhuman.locZ())).d();
 
-                j = this.a.l(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
+                j = this.a.o(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
             } else {
-                j = this.a.l(40.0D, (double) blockposition.getY(), 0.0D);
+                j = this.a.o(40.0D, (double) blockposition.getY(), 0.0D);
             }
 
             PathPoint pathpoint = new PathPoint(blockposition.getX(), blockposition.getY(), blockposition.getZ());

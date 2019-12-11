@@ -23,7 +23,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
     }
 
     @Override
-    public boolean S_() {
+    public boolean Y_() {
         return true;
     }
 
@@ -40,15 +40,13 @@ public abstract class BlockPressurePlateAbstract extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!world.isClientSide) {
-            int i = this.getPower(iblockdata);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        int i = this.getPower(iblockdata);
 
-            if (i > 0) {
-                this.a(world, blockposition, iblockdata, i);
-            }
-
+        if (i > 0) {
+            this.a((World) worldserver, blockposition, iblockdata, i);
         }
+
     }
 
     @Override

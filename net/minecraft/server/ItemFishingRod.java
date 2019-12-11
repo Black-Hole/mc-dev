@@ -33,10 +33,9 @@ public class ItemFishingRod extends Item {
                 });
             }
 
-            entityhuman.a(enumhand);
-            world.playSound((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_FISHING_BOBBER_RETRIEVE, SoundCategory.NEUTRAL, 1.0F, 0.4F / (ItemFishingRod.i.nextFloat() * 0.4F + 0.8F));
+            world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ENTITY_FISHING_BOBBER_RETRIEVE, SoundCategory.NEUTRAL, 1.0F, 0.4F / (ItemFishingRod.i.nextFloat() * 0.4F + 0.8F));
         } else {
-            world.playSound((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_FISHING_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemFishingRod.i.nextFloat() * 0.4F + 0.8F));
+            world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ENTITY_FISHING_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemFishingRod.i.nextFloat() * 0.4F + 0.8F));
             if (!world.isClientSide) {
                 i = EnchantmentManager.c(itemstack);
                 int j = EnchantmentManager.b(itemstack);
@@ -44,11 +43,10 @@ public class ItemFishingRod extends Item {
                 world.addEntity(new EntityFishingHook(entityhuman, world, j, i));
             }
 
-            entityhuman.a(enumhand);
             entityhuman.b(StatisticList.ITEM_USED.b(this));
         }
 
-        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
+        return InteractionResultWrapper.a(itemstack);
     }
 
     @Override

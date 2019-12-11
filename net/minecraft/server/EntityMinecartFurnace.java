@@ -30,18 +30,21 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
     @Override
     public void tick() {
         super.tick();
-        if (this.e > 0) {
-            --this.e;
+        if (!this.world.p_()) {
+            if (this.e > 0) {
+                --this.e;
+            }
+
+            if (this.e <= 0) {
+                this.b = 0.0D;
+                this.c = 0.0D;
+            }
+
+            this.n(this.e > 0);
         }
 
-        if (this.e <= 0) {
-            this.b = 0.0D;
-            this.c = 0.0D;
-        }
-
-        this.n(this.e > 0);
         if (this.v() && this.random.nextInt(4) == 0) {
-            this.world.addParticle(Particles.LARGE_SMOKE, this.locX, this.locY + 0.8D, this.locZ, 0.0D, 0.0D, 0.0D);
+            this.world.addParticle(Particles.LARGE_SMOKE, this.locX(), this.locY() + 0.8D, this.locZ(), 0.0D, 0.0D, 0.0D);
         }
 
     }
@@ -111,8 +114,11 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
             this.e += 3600;
         }
 
-        this.b = this.locX - entityhuman.locX;
-        this.c = this.locZ - entityhuman.locZ;
+        if (this.e > 0) {
+            this.b = this.locX() - entityhuman.locX();
+            this.c = this.locZ() - entityhuman.locZ();
+        }
+
         return true;
     }
 

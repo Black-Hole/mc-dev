@@ -20,7 +20,7 @@ public class BlockGrass extends BlockDirtSnowSpreadable implements IBlockFragile
     }
 
     @Override
-    public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
+    public void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata) {
         BlockPosition blockposition1 = blockposition.up();
         IBlockData iblockdata1 = Blocks.GRASS.getBlockData();
         int i = 0;
@@ -32,15 +32,15 @@ public class BlockGrass extends BlockDirtSnowSpreadable implements IBlockFragile
             while (true) {
                 if (j < i / 16) {
                     blockposition2 = blockposition2.b(random.nextInt(3) - 1, (random.nextInt(3) - 1) * random.nextInt(3) / 2, random.nextInt(3) - 1);
-                    if (world.getType(blockposition2.down()).getBlock() == this && !world.getType(blockposition2).o(world, blockposition2)) {
+                    if (worldserver.getType(blockposition2.down()).getBlock() == this && !worldserver.getType(blockposition2).p(worldserver, blockposition2)) {
                         ++j;
                         continue;
                     }
                 } else {
-                    IBlockData iblockdata2 = world.getType(blockposition2);
+                    IBlockData iblockdata2 = worldserver.getType(blockposition2);
 
                     if (iblockdata2.getBlock() == iblockdata1.getBlock() && random.nextInt(10) == 0) {
-                        ((IBlockFragilePlantElement) iblockdata1.getBlock()).b(world, random, blockposition2, iblockdata2);
+                        ((IBlockFragilePlantElement) iblockdata1.getBlock()).a(worldserver, random, blockposition2, iblockdata2);
                     }
 
                     if (iblockdata2.isAir()) {
@@ -49,19 +49,21 @@ public class BlockGrass extends BlockDirtSnowSpreadable implements IBlockFragile
                             IBlockData iblockdata3;
 
                             if (random.nextInt(8) == 0) {
-                                List<WorldGenFeatureConfigured<?>> list = world.getBiome(blockposition2).e();
+                                List<WorldGenFeatureConfigured<?, ?>> list = worldserver.getBiome(blockposition2).g();
 
                                 if (list.isEmpty()) {
                                     break label38;
                                 }
 
-                                iblockdata3 = ((WorldGenFlowers) ((WorldGenFeatureCompositeConfiguration) ((WorldGenFeatureConfigured) list.get(0)).b).a.a).a(random, blockposition2);
+                                WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured = ((WorldGenFeatureCompositeConfiguration) ((WorldGenFeatureConfigured) list.get(0)).c).a;
+
+                                iblockdata3 = ((WorldGenFlowers) worldgenfeatureconfigured.b).b(random, blockposition2, worldgenfeatureconfigured.c);
                             } else {
                                 iblockdata3 = iblockdata1;
                             }
 
-                            if (iblockdata3.canPlace(world, blockposition2)) {
-                                world.setTypeAndData(blockposition2, iblockdata3, 3);
+                            if (iblockdata3.canPlace(worldserver, blockposition2)) {
+                                worldserver.setTypeAndData(blockposition2, iblockdata3, 3);
                             }
                         }
                     }
@@ -72,15 +74,5 @@ public class BlockGrass extends BlockDirtSnowSpreadable implements IBlockFragile
             }
         }
 
-    }
-
-    @Override
-    public boolean f(IBlockData iblockdata) {
-        return true;
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT_MIPPED;
     }
 }

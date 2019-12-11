@@ -12,7 +12,7 @@ public class BlockCoralFanWallAbstract extends BlockCoralFanAbstract {
 
     protected BlockCoralFanWallAbstract(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCoralFanWallAbstract.a, EnumDirection.NORTH)).set(BlockCoralFanWallAbstract.b, true));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCoralFanWallAbstract.a, EnumDirection.NORTH)).set(BlockCoralFanWallAbstract.b, true));
     }
 
     @Override
@@ -66,7 +66,7 @@ public class BlockCoralFanWallAbstract extends BlockCoralFanAbstract {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection1[j];
 
-            if (enumdirection.k().c()) {
+            if (enumdirection.m().c()) {
                 iblockdata = (IBlockData) iblockdata.set(BlockCoralFanWallAbstract.a, enumdirection.opposite());
                 if (iblockdata.canPlace(world, blockposition)) {
                     return iblockdata;

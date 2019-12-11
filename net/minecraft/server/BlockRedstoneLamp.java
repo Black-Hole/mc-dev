@@ -9,7 +9,7 @@ public class BlockRedstoneLamp extends Block {
 
     public BlockRedstoneLamp(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) this.getBlockData().set(BlockRedstoneLamp.a, false));
+        this.p((IBlockData) this.getBlockData().set(BlockRedstoneLamp.a, false));
     }
 
     @Override
@@ -45,17 +45,20 @@ public class BlockRedstoneLamp extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!world.isClientSide) {
-            if ((Boolean) iblockdata.get(BlockRedstoneLamp.a) && !world.isBlockIndirectlyPowered(blockposition)) {
-                world.setTypeAndData(blockposition, (IBlockData) iblockdata.a((IBlockState) BlockRedstoneLamp.a), 2);
-            }
-
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if ((Boolean) iblockdata.get(BlockRedstoneLamp.a) && !worldserver.isBlockIndirectlyPowered(blockposition)) {
+            worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.a((IBlockState) BlockRedstoneLamp.a), 2);
         }
+
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockRedstoneLamp.a);
+    }
+
+    @Override
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EntityTypes<?> entitytypes) {
+        return true;
     }
 }

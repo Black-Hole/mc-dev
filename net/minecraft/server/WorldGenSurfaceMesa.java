@@ -28,7 +28,7 @@ public class WorldGenSurfaceMesa extends WorldGenSurface<WorldGenSurfaceConfigur
         int j1 = i & 15;
         int k1 = j & 15;
         IBlockData iblockdata2 = WorldGenSurfaceMesa.S;
-        IBlockData iblockdata3 = biomebase.q().b();
+        IBlockData iblockdata3 = biomebase.s().b();
         int l1 = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
         boolean flag = Math.cos(d0 / 3.0D * 3.141592653589793D) > 0.0D;
         int i2 = -1;
@@ -51,7 +51,7 @@ public class WorldGenSurfaceMesa extends WorldGenSurface<WorldGenSurfaceConfigur
                             iblockdata3 = iblockdata;
                         } else if (k2 >= l - 4 && k2 <= l + 1) {
                             iblockdata2 = WorldGenSurfaceMesa.S;
-                            iblockdata3 = biomebase.q().b();
+                            iblockdata3 = biomebase.s().b();
                         }
 
                         if (k2 < l && (iblockdata2 == null || iblockdata2.isAir())) {
@@ -75,7 +75,7 @@ public class WorldGenSurfaceMesa extends WorldGenSurface<WorldGenSurfaceConfigur
 
                                 ichunkaccess.setType(blockposition_mutableblockposition, iblockdata5, false);
                             } else {
-                                ichunkaccess.setType(blockposition_mutableblockposition, biomebase.q().a(), false);
+                                ichunkaccess.setType(blockposition_mutableblockposition, biomebase.s().a(), false);
                                 flag1 = true;
                             }
                         } else {
@@ -111,8 +111,8 @@ public class WorldGenSurfaceMesa extends WorldGenSurface<WorldGenSurfaceConfigur
         if (this.b != i || this.c == null || this.d == null) {
             SeededRandom seededrandom = new SeededRandom(i);
 
-            this.c = new NoiseGenerator3(seededrandom, 4);
-            this.d = new NoiseGenerator3(seededrandom, 1);
+            this.c = new NoiseGenerator3(seededrandom, 3, 0);
+            this.d = new NoiseGenerator3(seededrandom, 0, 0);
         }
 
         this.b = i;
@@ -123,7 +123,7 @@ public class WorldGenSurfaceMesa extends WorldGenSurface<WorldGenSurfaceConfigur
         Arrays.fill(this.a, WorldGenSurfaceMesa.U);
         SeededRandom seededrandom = new SeededRandom(i);
 
-        this.e = new NoiseGenerator3(seededrandom, 1);
+        this.e = new NoiseGenerator3(seededrandom, 0, 0);
 
         int j;
 
@@ -197,7 +197,7 @@ public class WorldGenSurfaceMesa extends WorldGenSurface<WorldGenSurfaceConfigur
     }
 
     protected IBlockData a(int i, int j, int k) {
-        int l = (int) Math.round(this.e.a((double) i / 512.0D, (double) k / 512.0D) * 2.0D);
+        int l = (int) Math.round(this.e.a((double) i / 512.0D, (double) k / 512.0D, false) * 2.0D);
 
         return this.a[(j + l + 64) % 64];
     }

@@ -20,10 +20,11 @@ public class WorldGenDecoratorHeightExtraChance extends WorldGenDecorator<WorldG
         }
 
         return IntStream.range(0, i).mapToObj((j) -> {
-            int k = random.nextInt(16);
-            int l = random.nextInt(16);
+            int k = random.nextInt(16) + blockposition.getX();
+            int l = random.nextInt(16) + blockposition.getZ();
+            int i1 = generatoraccess.a(HeightMap.Type.MOTION_BLOCKING, k, l);
 
-            return generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition.b(k, 0, l));
+            return new BlockPosition(k, i1, l);
         });
     }
 }

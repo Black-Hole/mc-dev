@@ -2,9 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import org.apache.commons.lang3.ArrayUtils;
 
 public class LootEntryAlternatives extends LootEntryChildrenAbstract {
@@ -41,8 +39,8 @@ public class LootEntryAlternatives extends LootEntryChildrenAbstract {
     }
 
     @Override
-    public void a(LootCollector lootcollector, Function<MinecraftKey, LootTable> function, Set<MinecraftKey> set, LootContextParameterSet lootcontextparameterset) {
-        super.a(lootcollector, function, set, lootcontextparameterset);
+    public void a(LootCollector lootcollector) {
+        super.a(lootcollector);
 
         for (int i = 0; i < this.c.length - 1; ++i) {
             if (ArrayUtils.isEmpty(this.c[i].d)) {

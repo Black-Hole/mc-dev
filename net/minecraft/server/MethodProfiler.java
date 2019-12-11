@@ -25,11 +25,13 @@ public class MethodProfiler implements GameProfilerFillerActive {
     private final int i;
     private String j = "";
     private boolean k;
+    private final boolean l;
 
-    public MethodProfiler(long i, IntSupplier intsupplier) {
+    public MethodProfiler(long i, IntSupplier intsupplier, boolean flag) {
         this.h = i;
         this.i = intsupplier.getAsInt();
         this.g = intsupplier;
+        this.l = flag;
     }
 
     @Override
@@ -95,7 +97,7 @@ public class MethodProfiler implements GameProfilerFillerActive {
 
             this.e.put(this.j, this.e.getLong(this.j) + k);
             this.f.put(this.j, this.f.getLong(this.j) + 1L);
-            if (k > MethodProfiler.a) {
+            if (this.l && k > MethodProfiler.a) {
                 MethodProfiler.LOGGER.warn("Something's taking too long! '{}' took aprox {} ms", new Supplier[]{() -> {
                             return MethodProfilerResults.b(this.j);
                         }, () -> {

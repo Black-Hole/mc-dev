@@ -37,10 +37,10 @@ public class CrashReport {
 
     private void h() {
         this.d.a("Minecraft Version", () -> {
-            return SharedConstants.a().getName();
+            return SharedConstants.getGameVersion().getName();
         });
         this.d.a("Minecraft Version ID", () -> {
-            return SharedConstants.a().getId();
+            return SharedConstants.getGameVersion().getId();
         });
         this.d.a("Operating System", () -> {
             return System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version");

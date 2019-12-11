@@ -10,13 +10,13 @@ public class BlockWallSign extends BlockSign {
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
     private static final Map<EnumDirection, VoxelShape> d = Maps.newEnumMap(ImmutableMap.of(EnumDirection.NORTH, Block.a(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D), EnumDirection.SOUTH, Block.a(0.0D, 4.5D, 0.0D, 16.0D, 12.5D, 2.0D), EnumDirection.EAST, Block.a(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D), EnumDirection.WEST, Block.a(14.0D, 4.5D, 0.0D, 16.0D, 12.5D, 16.0D)));
 
-    public BlockWallSign(Block.Info block_info) {
-        super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockWallSign.FACING, EnumDirection.NORTH)).set(BlockWallSign.a, false));
+    public BlockWallSign(Block.Info block_info, BlockPropertyWood blockpropertywood) {
+        super(block_info, blockpropertywood);
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockWallSign.FACING, EnumDirection.NORTH)).set(BlockWallSign.a, false));
     }
 
     @Override
-    public String l() {
+    public String k() {
         return this.getItem().getName();
     }
 
@@ -44,7 +44,7 @@ public class BlockWallSign extends BlockSign {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection1[j];
 
-            if (enumdirection.k().c()) {
+            if (enumdirection.m().c()) {
                 EnumDirection enumdirection1 = enumdirection.opposite();
 
                 iblockdata = (IBlockData) iblockdata.set(BlockWallSign.FACING, enumdirection1);

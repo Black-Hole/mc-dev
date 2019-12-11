@@ -9,7 +9,7 @@ public class BlockNetherWart extends BlockPlant {
 
     protected BlockNetherWart(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockNetherWart.AGE, 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockNetherWart.AGE, 0));
     }
 
     @Override
@@ -23,15 +23,15 @@ public class BlockNetherWart extends BlockPlant {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         int i = (Integer) iblockdata.get(BlockNetherWart.AGE);
 
         if (i < 3 && random.nextInt(10) == 0) {
             iblockdata = (IBlockData) iblockdata.set(BlockNetherWart.AGE, i + 1);
-            world.setTypeAndData(blockposition, iblockdata, 2);
+            worldserver.setTypeAndData(blockposition, iblockdata, 2);
         }
 
-        super.tick(iblockdata, world, blockposition, random);
+        super.tick(iblockdata, worldserver, blockposition, random);
     }
 
     @Override

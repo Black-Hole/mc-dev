@@ -7,12 +7,12 @@ import javax.annotation.Nullable;
 
 public class ChunkEmpty extends Chunk {
 
-    private static final BiomeBase[] b = (BiomeBase[]) SystemUtils.a((Object) (new BiomeBase[256]), (abiomebase) -> {
+    private static final BiomeBase[] b = (BiomeBase[]) SystemUtils.a((Object) (new BiomeBase[BiomeStorage.a]), (abiomebase) -> {
         Arrays.fill(abiomebase, Biomes.PLAINS);
     });
 
     public ChunkEmpty(World world, ChunkCoordIntPair chunkcoordintpair) {
-        super(world, chunkcoordintpair, ChunkEmpty.b);
+        super(world, chunkcoordintpair, new BiomeStorage(ChunkEmpty.b));
     }
 
     @Override
@@ -28,7 +28,7 @@ public class ChunkEmpty extends Chunk {
 
     @Override
     public Fluid getFluid(BlockPosition blockposition) {
-        return FluidTypes.EMPTY.i();
+        return FluidTypes.EMPTY.h();
     }
 
     @Nullable

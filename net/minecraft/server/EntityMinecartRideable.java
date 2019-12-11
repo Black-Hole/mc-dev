@@ -12,7 +12,7 @@ public class EntityMinecartRideable extends EntityMinecartAbstract {
 
     @Override
     public boolean b(EntityHuman entityhuman, EnumHand enumhand) {
-        if (entityhuman.isSneaking()) {
+        if (entityhuman.dT()) {
             return false;
         } else if (this.isVehicle()) {
             return true;

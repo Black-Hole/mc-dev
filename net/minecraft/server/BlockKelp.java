@@ -10,7 +10,7 @@ public class BlockKelp extends Block implements IFluidContainer {
 
     protected BlockKelp(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockKelp.a, 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockKelp.a, 0));
     }
 
     @Override
@@ -31,25 +31,20 @@ public class BlockKelp extends Block implements IFluidContainer {
     }
 
     @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
-    }
-
-    @Override
-    public Fluid g(IBlockData iblockdata) {
+    public Fluid a_(IBlockData iblockdata) {
         return FluidTypes.WATER.a(false);
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!iblockdata.canPlace(world, blockposition)) {
-            world.b(blockposition, true);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!iblockdata.canPlace(worldserver, blockposition)) {
+            worldserver.b(blockposition, true);
         } else {
             BlockPosition blockposition1 = blockposition.up();
-            IBlockData iblockdata1 = world.getType(blockposition1);
+            IBlockData iblockdata1 = worldserver.getType(blockposition1);
 
             if (iblockdata1.getBlock() == Blocks.WATER && (Integer) iblockdata.get(BlockKelp.a) < 25 && random.nextDouble() < 0.14D) {
-                world.setTypeUpdate(blockposition1, (IBlockData) iblockdata.a((IBlockState) BlockKelp.a));
+                worldserver.setTypeUpdate(blockposition1, (IBlockData) iblockdata.a((IBlockState) BlockKelp.a));
             }
 
         }

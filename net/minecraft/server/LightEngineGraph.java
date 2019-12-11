@@ -1,14 +1,17 @@
 package net.minecraft.server;
 
-import it.unimi.dsi.fastutil.longs.Long2ByteFunction;
+import it.unimi.dsi.fastutil.longs.Long2ByteMap;
 import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongLinkedOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongList;
+import java.util.function.LongPredicate;
 
 public abstract class LightEngineGraph {
 
     private final int a;
     private final LongLinkedOpenHashSet[] b;
-    private final Long2ByteFunction c;
+    private final Long2ByteMap c;
     private int d;
     private volatile boolean e;
 
@@ -81,6 +84,18 @@ public abstract class LightEngineGraph {
             this.a(i, l, this.a, true);
             this.e = this.d < this.a;
         }
+    }
+
+    public void a(LongPredicate longpredicate) {
+        LongArrayList longarraylist = new LongArrayList(0);
+
+        this.c.keySet().forEach((i) -> {
+            if (longpredicate.test(i)) {
+                longarraylist.add(i);
+            }
+
+        });
+        longarraylist.forEach(this::e);
     }
 
     private void a(long i, int j, int k, boolean flag) {
@@ -209,6 +224,10 @@ public abstract class LightEngineGraph {
             this.e = this.d < this.a;
             return i;
         }
+    }
+
+    public int c() {
+        return this.c.size();
     }
 
     protected abstract boolean a(long i);

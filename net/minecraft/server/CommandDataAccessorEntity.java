@@ -55,7 +55,7 @@ public class CommandDataAccessorEntity implements CommandDataAccessor {
 
     @Override
     public IChatBaseComponent a(NBTBase nbtbase) {
-        return new ChatMessage("commands.data.entity.query", new Object[]{this.c.getScoreboardDisplayName(), nbtbase.k()});
+        return new ChatMessage("commands.data.entity.query", new Object[]{this.c.getScoreboardDisplayName(), nbtbase.l()});
     }
 
     @Override

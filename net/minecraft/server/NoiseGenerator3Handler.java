@@ -91,4 +91,95 @@ public class NoiseGenerator3Handler {
 
         return 70.0D * (d12 + d13 + d14);
     }
+
+    public double a(double d0, double d1, double d2) {
+        double d3 = 0.3333333333333333D;
+        double d4 = (d0 + d1 + d2) * 0.3333333333333333D;
+        int i = MathHelper.floor(d0 + d4);
+        int j = MathHelper.floor(d1 + d4);
+        int k = MathHelper.floor(d2 + d4);
+        double d5 = 0.16666666666666666D;
+        double d6 = (double) (i + j + k) * 0.16666666666666666D;
+        double d7 = (double) i - d6;
+        double d8 = (double) j - d6;
+        double d9 = (double) k - d6;
+        double d10 = d0 - d7;
+        double d11 = d1 - d8;
+        double d12 = d2 - d9;
+        byte b0;
+        byte b1;
+        byte b2;
+        byte b3;
+        byte b4;
+        byte b5;
+
+        if (d10 >= d11) {
+            if (d11 >= d12) {
+                b0 = 1;
+                b1 = 0;
+                b2 = 0;
+                b3 = 1;
+                b4 = 1;
+                b5 = 0;
+            } else if (d10 >= d12) {
+                b0 = 1;
+                b1 = 0;
+                b2 = 0;
+                b3 = 1;
+                b4 = 0;
+                b5 = 1;
+            } else {
+                b0 = 0;
+                b1 = 0;
+                b2 = 1;
+                b3 = 1;
+                b4 = 0;
+                b5 = 1;
+            }
+        } else if (d11 < d12) {
+            b0 = 0;
+            b1 = 0;
+            b2 = 1;
+            b3 = 0;
+            b4 = 1;
+            b5 = 1;
+        } else if (d10 < d12) {
+            b0 = 0;
+            b1 = 1;
+            b2 = 0;
+            b3 = 0;
+            b4 = 1;
+            b5 = 1;
+        } else {
+            b0 = 0;
+            b1 = 1;
+            b2 = 0;
+            b3 = 1;
+            b4 = 1;
+            b5 = 0;
+        }
+
+        double d13 = d10 - (double) b0 + 0.16666666666666666D;
+        double d14 = d11 - (double) b1 + 0.16666666666666666D;
+        double d15 = d12 - (double) b2 + 0.16666666666666666D;
+        double d16 = d10 - (double) b3 + 0.3333333333333333D;
+        double d17 = d11 - (double) b4 + 0.3333333333333333D;
+        double d18 = d12 - (double) b5 + 0.3333333333333333D;
+        double d19 = d10 - 1.0D + 0.5D;
+        double d20 = d11 - 1.0D + 0.5D;
+        double d21 = d12 - 1.0D + 0.5D;
+        int l = i & 255;
+        int i1 = j & 255;
+        int j1 = k & 255;
+        int k1 = this.a(l + this.a(i1 + this.a(j1))) % 12;
+        int l1 = this.a(l + b0 + this.a(i1 + b1 + this.a(j1 + b2))) % 12;
+        int i2 = this.a(l + b3 + this.a(i1 + b4 + this.a(j1 + b5))) % 12;
+        int j2 = this.a(l + 1 + this.a(i1 + 1 + this.a(j1 + 1))) % 12;
+        double d22 = this.a(k1, d10, d11, d12, 0.6D);
+        double d23 = this.a(l1, d13, d14, d15, 0.6D);
+        double d24 = this.a(i2, d16, d17, d18, 0.6D);
+        double d25 = this.a(j2, d19, d20, d21, 0.6D);
+
+        return 32.0D * (d22 + d23 + d24 + d25);
+    }
 }

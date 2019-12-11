@@ -13,13 +13,12 @@ public class ItemSaddle extends Item {
 
             if (entitypig.isAlive() && !entitypig.hasSaddle() && !entitypig.isBaby()) {
                 entitypig.setSaddle(true);
-                entitypig.world.playSound(entityhuman, entitypig.locX, entitypig.locY, entitypig.locZ, SoundEffects.ENTITY_PIG_SADDLE, SoundCategory.NEUTRAL, 0.5F, 1.0F);
+                entitypig.world.playSound(entityhuman, entitypig.locX(), entitypig.locY(), entitypig.locZ(), SoundEffects.ENTITY_PIG_SADDLE, SoundCategory.NEUTRAL, 0.5F, 1.0F);
                 itemstack.subtract(1);
+                return true;
             }
-
-            return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 }

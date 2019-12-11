@@ -17,6 +17,10 @@ public class TagsFluid {
         ++TagsFluid.d;
     }
 
+    public static Tags<FluidType> a() {
+        return TagsFluid.c;
+    }
+
     private static Tag<FluidType> a(String s) {
         return new TagsFluid.a(new MinecraftKey(s));
     }

@@ -9,7 +9,7 @@ public class EntityPufferFish extends EntityFish {
     private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityPufferFish.class, DataWatcherRegistry.b);
     private int c;
     private int d;
-    private static final Predicate<EntityLiving> bz = (entityliving) -> {
+    private static final Predicate<EntityLiving> bw = (entityliving) -> {
         return entityliving == null ? false : (entityliving instanceof EntityHuman && (entityliving.isSpectator() || ((EntityHuman) entityliving).isCreative()) ? false : entityliving.getMonsterType() != EnumMonsterType.e);
     };
 
@@ -65,23 +65,23 @@ public class EntityPufferFish extends EntityFish {
 
     @Override
     public void tick() {
-        if (!this.world.isClientSide && this.isAlive() && this.df()) {
+        if (!this.world.isClientSide && this.isAlive() && this.doAITick()) {
             if (this.c > 0) {
                 if (this.getPuffState() == 0) {
-                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.getSoundVolume(), this.cV());
+                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.getSoundVolume(), this.dn());
                     this.setPuffState(1);
                 } else if (this.c > 40 && this.getPuffState() == 1) {
-                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.getSoundVolume(), this.cV());
+                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.getSoundVolume(), this.dn());
                     this.setPuffState(2);
                 }
 
                 ++this.c;
             } else if (this.getPuffState() != 0) {
                 if (this.d > 60 && this.getPuffState() == 2) {
-                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.getSoundVolume(), this.cV());
+                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.getSoundVolume(), this.dn());
                     this.setPuffState(1);
                 } else if (this.d > 100 && this.getPuffState() == 1) {
-                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.getSoundVolume(), this.cV());
+                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.getSoundVolume(), this.dn());
                     this.setPuffState(0);
                 }
 
@@ -96,7 +96,7 @@ public class EntityPufferFish extends EntityFish {
     public void movementTick() {
         super.movementTick();
         if (this.isAlive() && this.getPuffState() > 0) {
-            List<EntityInsentient> list = this.world.a(EntityInsentient.class, this.getBoundingBox().g(0.3D), EntityPufferFish.bz);
+            List<EntityInsentient> list = this.world.a(EntityInsentient.class, this.getBoundingBox().g(0.3D), EntityPufferFish.bw);
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
@@ -153,10 +153,10 @@ public class EntityPufferFish extends EntityFish {
 
     @Override
     public EntitySize a(EntityPose entitypose) {
-        return super.a(entitypose).a(r(this.getPuffState()));
+        return super.a(entitypose).a(s(this.getPuffState()));
     }
 
-    private static float r(int i) {
+    private static float s(int i) {
         switch (i) {
             case 0:
                 return 0.5F;
@@ -177,7 +177,7 @@ public class EntityPufferFish extends EntityFish {
 
         @Override
         public boolean a() {
-            List<EntityLiving> list = this.a.world.a(EntityLiving.class, this.a.getBoundingBox().g(2.0D), EntityPufferFish.bz);
+            List<EntityLiving> list = this.a.world.a(EntityLiving.class, this.a.getBoundingBox().g(2.0D), EntityPufferFish.bw);
 
             return !list.isEmpty();
         }
@@ -195,7 +195,7 @@ public class EntityPufferFish extends EntityFish {
 
         @Override
         public boolean b() {
-            List<EntityLiving> list = this.a.world.a(EntityLiving.class, this.a.getBoundingBox().g(2.0D), EntityPufferFish.bz);
+            List<EntityLiving> list = this.a.world.a(EntityLiving.class, this.a.getBoundingBox().g(2.0D), EntityPufferFish.bw);
 
             return !list.isEmpty();
         }

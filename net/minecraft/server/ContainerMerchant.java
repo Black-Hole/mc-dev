@@ -99,7 +99,7 @@ public class ContainerMerchant extends Container {
         if (!this.merchant.getWorld().isClientSide) {
             Entity entity = (Entity) this.merchant;
 
-            this.merchant.getWorld().a(entity.locX, entity.locY, entity.locZ, this.merchant.eb(), SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
+            this.merchant.getWorld().a(entity.locX(), entity.locY(), entity.locZ(), this.merchant.getTradeSound(), SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
         }
 
     }

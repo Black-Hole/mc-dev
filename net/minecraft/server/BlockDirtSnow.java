@@ -6,7 +6,7 @@ public class BlockDirtSnow extends Block {
 
     protected BlockDirtSnow(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDirtSnow.a, false));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDirtSnow.a, false));
     }
 
     @Override

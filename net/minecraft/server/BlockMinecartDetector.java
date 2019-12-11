@@ -13,7 +13,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
 
     public BlockMinecartDetector(Block.Info block_info) {
         super(true, block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockMinecartDetector.POWERED, false)).set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockMinecartDetector.POWERED, false)).set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH));
     }
 
     @Override
@@ -36,9 +36,9 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!world.isClientSide && (Boolean) iblockdata.get(BlockMinecartDetector.POWERED)) {
-            this.a(world, blockposition, iblockdata);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if ((Boolean) iblockdata.get(BlockMinecartDetector.POWERED)) {
+            this.a((World) worldserver, blockposition, iblockdata);
         }
     }
 
@@ -111,7 +111,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
     }
 
     @Override
-    public IBlockState<BlockPropertyTrackPosition> e() {
+    public IBlockState<BlockPropertyTrackPosition> d() {
         return BlockMinecartDetector.SHAPE;
     }
 

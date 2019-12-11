@@ -1,17 +1,19 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableList;
+
 public final class BiomeRoofedForest extends BiomeBase {
 
     public BiomeRoofedForest() {
         super((new BiomeBase.a()).a(WorldGenSurface.G, WorldGenSurface.v).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.FOREST).a(0.1F).b(0.2F).c(0.7F).d(0.8F).a(4159204).b(329011).a((String) null));
-        this.a(WorldGenerator.WOODLAND_MANSION, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
-        this.a(WorldGenerator.STRONGHOLD, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
+        this.a(WorldGenerator.WOODLAND_MANSION.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
+        this.a(WorldGenerator.STRONGHOLD.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);
         BiomeDecoratorGroups.f(this);
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.HUGE_BROWN_MUSHROOM, WorldGenerator.HUGE_RED_MUSHROOM, WorldGenerator.DARK_OAK_TREE, WorldGenerator.FANCY_TREE}, new WorldGenFeatureConfiguration[]{new WorldGenHugeMushroomConfiguration(false), new WorldGenHugeMushroomConfiguration(false), WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[]{0.025F, 0.05F, 0.6666667F, 0.1F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.G, WorldGenFeatureDecoratorConfiguration.e));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_SELECTOR.b((WorldGenFeatureConfiguration) (new WorldGenFeatureRandomChoiceConfiguration(ImmutableList.of(WorldGenerator.HUGE_BROWN_MUSHROOM.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.HUGE_BROWN_MUSHROOM).a(0.025F), WorldGenerator.HUGE_RED_MUSHROOM.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.HUGE_RED_MUSHROOM).a(0.05F), WorldGenerator.DARK_OAK_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.DARK_OAK_TREE).a(0.6666667F), WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.BIRCH_TREE).a(0.2F), WorldGenerator.FANCY_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.FANCY_TREE).a(0.1F)), WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.NORMAL_TREE)))).a(WorldGenDecorator.G.a((WorldGenFeatureDecoratorConfiguration) WorldGenFeatureDecoratorConfiguration.e)));
         BiomeDecoratorGroups.N(this);
         BiomeDecoratorGroups.g(this);
         BiomeDecoratorGroups.h(this);

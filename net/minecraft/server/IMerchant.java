@@ -20,13 +20,13 @@ public interface IMerchant {
 
     int getExperience();
 
-    void s(int i);
+    void setExperience(int i);
 
-    boolean ea();
+    boolean isRegularVillager();
 
-    SoundEffect eb();
+    SoundEffect getTradeSound();
 
-    default boolean ei() {
+    default boolean eD() {
         return false;
     }
 
@@ -39,7 +39,7 @@ public interface IMerchant {
             MerchantRecipeList merchantrecipelist = this.getOffers();
 
             if (!merchantrecipelist.isEmpty()) {
-                entityhuman.openTrade(optionalint.getAsInt(), merchantrecipelist, i, this.getExperience(), this.ea(), this.ei());
+                entityhuman.openTrade(optionalint.getAsInt(), merchantrecipelist, i, this.getExperience(), this.isRegularVillager(), this.eD());
             }
         }
 

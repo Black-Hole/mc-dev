@@ -12,7 +12,7 @@ public abstract class BlockBannerAbstract extends BlockTileEntity {
     }
 
     @Override
-    public boolean S_() {
+    public boolean Y_() {
         return true;
     }
 

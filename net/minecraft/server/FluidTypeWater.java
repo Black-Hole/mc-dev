@@ -5,22 +5,22 @@ public abstract class FluidTypeWater extends FluidTypeFlowing {
     public FluidTypeWater() {}
 
     @Override
-    public FluidType e() {
+    public FluidType d() {
         return FluidTypes.FLOWING_WATER;
     }
 
     @Override
-    public FluidType f() {
+    public FluidType e() {
         return FluidTypes.WATER;
     }
 
     @Override
-    public Item b() {
+    public Item a() {
         return Items.WATER_BUCKET;
     }
 
     @Override
-    protected boolean g() {
+    protected boolean f() {
         return true;
     }
 
@@ -62,7 +62,7 @@ public abstract class FluidTypeWater extends FluidTypeFlowing {
     }
 
     @Override
-    protected float d() {
+    protected float c() {
         return 100.0F;
     }
 

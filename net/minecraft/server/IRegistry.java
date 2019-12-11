@@ -53,10 +53,22 @@ public abstract class IRegistry<T> implements Registry<T> {
         return WorldGenerator.ORE;
     });
     public static final IRegistry<WorldGenDecorator<?>> DECORATOR = a("decorator", () -> {
-        return WorldGenDecorator.h;
+        return WorldGenDecorator.a;
     });
     public static final IRegistry<BiomeBase> BIOME = a("biome", () -> {
         return Biomes.b;
+    });
+    public static final IRegistry<WorldGenFeatureStateProviders<?>> t = a("block_state_provider_type", () -> {
+        return WorldGenFeatureStateProviders.a;
+    });
+    public static final IRegistry<WorldGenBlockPlacers<?>> u = a("block_placer_type", () -> {
+        return WorldGenBlockPlacers.a;
+    });
+    public static final IRegistry<WorldGenFoilagePlacers<?>> v = a("foliage_placer_type", () -> {
+        return WorldGenFoilagePlacers.a;
+    });
+    public static final IRegistry<WorldGenFeatureTrees<?>> w = a("tree_decorator_type", () -> {
+        return WorldGenFeatureTrees.b;
     });
     public static final IRegistry<Particle<? extends ParticleParam>> PARTICLE_TYPE = a("particle_type", () -> {
         return Particles.BLOCK;

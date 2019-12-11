@@ -13,7 +13,7 @@ public class DragonControllerHover extends AbstractDragonController {
     @Override
     public void c() {
         if (this.b == null) {
-            this.b = new Vec3D(this.a.locX, this.a.locY, this.a.locZ);
+            this.b = this.a.getPositionVector();
         }
 
     }

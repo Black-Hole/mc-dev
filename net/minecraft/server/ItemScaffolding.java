@@ -52,7 +52,7 @@ public class ItemScaffolding extends ItemBlock {
                 }
 
                 blockposition_mutableblockposition.c(enumdirection);
-                if (enumdirection.k().c()) {
+                if (enumdirection.m().c()) {
                     ++i;
                 }
             }
@@ -62,7 +62,7 @@ public class ItemScaffolding extends ItemBlock {
     }
 
     @Override
-    protected boolean d() {
+    protected boolean T_() {
         return false;
     }
 }

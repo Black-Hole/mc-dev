@@ -24,7 +24,7 @@ public enum EnumDirection implements INamable {
     private final EnumDirection.EnumAxisDirection l;
     private final BaseBlockPosition m;
     private static final EnumDirection[] n = values();
-    private static final Map<String, EnumDirection> o = (Map) Arrays.stream(EnumDirection.n).collect(Collectors.toMap(EnumDirection::j, (enumdirection) -> {
+    private static final Map<String, EnumDirection> o = (Map) Arrays.stream(EnumDirection.n).collect(Collectors.toMap(EnumDirection::l, (enumdirection) -> {
         return enumdirection;
     }));
     private static final EnumDirection[] p = (EnumDirection[]) Arrays.stream(EnumDirection.n).sorted(Comparator.comparingInt((enumdirection) -> {
@@ -33,14 +33,14 @@ public enum EnumDirection implements INamable {
         return new EnumDirection[i];
     });
     private static final EnumDirection[] q = (EnumDirection[]) Arrays.stream(EnumDirection.n).filter((enumdirection) -> {
-        return enumdirection.k().c();
+        return enumdirection.m().c();
     }).sorted(Comparator.comparingInt((enumdirection) -> {
         return enumdirection.i;
     })).toArray((i) -> {
         return new EnumDirection[i];
     });
     private static final Long2ObjectMap<EnumDirection> r = (Long2ObjectMap) Arrays.stream(EnumDirection.n).collect(Collectors.toMap((enumdirection) -> {
-        return (new BlockPosition(enumdirection.n())).asLong();
+        return (new BlockPosition(enumdirection.p())).asLong();
     }, (enumdirection) -> {
         return enumdirection;
     }, (enumdirection, enumdirection1) -> {
@@ -83,7 +83,7 @@ public enum EnumDirection implements INamable {
         return new EnumDirection[]{enumdirection, enumdirection1, enumdirection2, enumdirection2.opposite(), enumdirection1.opposite(), enumdirection.opposite()};
     }
 
-    public int a() {
+    public int b() {
         return this.g;
     }
 
@@ -91,7 +91,7 @@ public enum EnumDirection implements INamable {
         return this.i;
     }
 
-    public EnumDirection.EnumAxisDirection c() {
+    public EnumDirection.EnumAxisDirection d() {
         return this.l;
     }
 
@@ -99,53 +99,53 @@ public enum EnumDirection implements INamable {
         return fromType1(this.h);
     }
 
-    public EnumDirection e() {
+    public EnumDirection f() {
         switch (this) {
             case NORTH:
                 return EnumDirection.EAST;
-            case EAST:
-                return EnumDirection.SOUTH;
             case SOUTH:
                 return EnumDirection.WEST;
             case WEST:
                 return EnumDirection.NORTH;
+            case EAST:
+                return EnumDirection.SOUTH;
             default:
                 throw new IllegalStateException("Unable to get Y-rotated facing of " + this);
         }
     }
 
-    public EnumDirection f() {
+    public EnumDirection g() {
         switch (this) {
             case NORTH:
                 return EnumDirection.WEST;
-            case EAST:
-                return EnumDirection.NORTH;
             case SOUTH:
                 return EnumDirection.EAST;
             case WEST:
                 return EnumDirection.SOUTH;
+            case EAST:
+                return EnumDirection.NORTH;
             default:
                 throw new IllegalStateException("Unable to get CCW facing of " + this);
         }
     }
 
     public int getAdjacentX() {
-        return this.k == EnumDirection.EnumAxis.X ? this.l.a() : 0;
+        return this.m.getX();
     }
 
     public int getAdjacentY() {
-        return this.k == EnumDirection.EnumAxis.Y ? this.l.a() : 0;
+        return this.m.getY();
     }
 
     public int getAdjacentZ() {
-        return this.k == EnumDirection.EnumAxis.Z ? this.l.a() : 0;
+        return this.m.getZ();
     }
 
-    public String j() {
+    public String l() {
         return this.j;
     }
 
-    public EnumDirection.EnumAxis k() {
+    public EnumDirection.EnumAxis m() {
         return this.k;
     }
 
@@ -178,7 +178,7 @@ public enum EnumDirection implements INamable {
         }
     }
 
-    public float l() {
+    public float n() {
         return (float) ((this.i & 3) * 90);
     }
 
@@ -225,7 +225,7 @@ public enum EnumDirection implements INamable {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection[j];
 
-            if (enumdirection.c() == enumdirection_enumaxisdirection && enumdirection.k() == enumdirection_enumaxis) {
+            if (enumdirection.d() == enumdirection_enumaxisdirection && enumdirection.m() == enumdirection_enumaxis) {
                 return enumdirection;
             }
         }
@@ -233,7 +233,7 @@ public enum EnumDirection implements INamable {
         throw new IllegalArgumentException("No such direction: " + enumdirection_enumaxisdirection + " " + enumdirection_enumaxis);
     }
 
-    public BaseBlockPosition n() {
+    public BaseBlockPosition p() {
         return this.m;
     }
 
@@ -254,7 +254,7 @@ public enum EnumDirection implements INamable {
         }
 
         public boolean test(@Nullable EnumDirection enumdirection) {
-            return enumdirection != null && enumdirection.k().d() == this;
+            return enumdirection != null && enumdirection.m().d() == this;
         }
 
         public Iterator<EnumDirection> iterator() {
@@ -349,7 +349,7 @@ public enum EnumDirection implements INamable {
         }
 
         public boolean test(@Nullable EnumDirection enumdirection) {
-            return enumdirection != null && enumdirection.k() == this;
+            return enumdirection != null && enumdirection.m() == this;
         }
 
         public EnumDirection.EnumDirectionLimit d() {

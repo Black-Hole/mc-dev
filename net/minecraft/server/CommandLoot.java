@@ -35,15 +35,15 @@ public class CommandLoot {
             return commandlistenerwrapper.hasPermission(2);
         }), (argumentbuilder, commandloot_b) -> {
             return argumentbuilder.then(CommandDispatcher.a("fish").then(CommandDispatcher.a("loot_table", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandLoot.a).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("pos", (ArgumentType) ArgumentPosition.a()).executes((commandcontext) -> {
-                return a(commandcontext, ArgumentMinecraftKeyRegistered.c(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), ItemStack.a, commandloot_b);
+                return a(commandcontext, ArgumentMinecraftKeyRegistered.d(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), ItemStack.a, commandloot_b);
             })).then(CommandDispatcher.a("tool", (ArgumentType) ArgumentItemStack.a()).executes((commandcontext) -> {
-                return a(commandcontext, ArgumentMinecraftKeyRegistered.c(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), ArgumentItemStack.a(commandcontext, "tool").a(1, false), commandloot_b);
+                return a(commandcontext, ArgumentMinecraftKeyRegistered.d(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), ArgumentItemStack.a(commandcontext, "tool").a(1, false), commandloot_b);
             }))).then(CommandDispatcher.a("mainhand").executes((commandcontext) -> {
-                return a(commandcontext, ArgumentMinecraftKeyRegistered.c(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), a((CommandListenerWrapper) commandcontext.getSource(), EnumItemSlot.MAINHAND), commandloot_b);
+                return a(commandcontext, ArgumentMinecraftKeyRegistered.d(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), a((CommandListenerWrapper) commandcontext.getSource(), EnumItemSlot.MAINHAND), commandloot_b);
             }))).then(CommandDispatcher.a("offhand").executes((commandcontext) -> {
-                return a(commandcontext, ArgumentMinecraftKeyRegistered.c(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), a((CommandListenerWrapper) commandcontext.getSource(), EnumItemSlot.OFFHAND), commandloot_b);
+                return a(commandcontext, ArgumentMinecraftKeyRegistered.d(commandcontext, "loot_table"), ArgumentPosition.a(commandcontext, "pos"), a((CommandListenerWrapper) commandcontext.getSource(), EnumItemSlot.OFFHAND), commandloot_b);
             }))))).then(CommandDispatcher.a("loot").then(CommandDispatcher.a("loot_table", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandLoot.a).executes((commandcontext) -> {
-                return a(commandcontext, ArgumentMinecraftKeyRegistered.c(commandcontext, "loot_table"), commandloot_b);
+                return a(commandcontext, ArgumentMinecraftKeyRegistered.d(commandcontext, "loot_table"), commandloot_b);
             }))).then(CommandDispatcher.a("kill").then(CommandDispatcher.a("target", (ArgumentType) ArgumentEntity.a()).executes((commandcontext) -> {
                 return a(commandcontext, ArgumentEntity.a(commandcontext, "target"), commandloot_b);
             }))).then(CommandDispatcher.a("mine").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("pos", (ArgumentType) ArgumentPosition.a()).executes((commandcontext) -> {
@@ -267,7 +267,7 @@ public class CommandLoot {
         List<ItemStack> list = iblockdata.a(loottableinfo_builder);
 
         return commandloot_b.accept(commandcontext, list, (list1) -> {
-            a(commandlistenerwrapper, list1, iblockdata.getBlock().i());
+            a(commandlistenerwrapper, list1, iblockdata.getBlock().g());
         });
     }
 
@@ -275,7 +275,7 @@ public class CommandLoot {
         if (!(entity instanceof EntityLiving)) {
             throw CommandLoot.c.create(entity.getScoreboardDisplayName());
         } else {
-            MinecraftKey minecraftkey = ((EntityLiving) entity).cG();
+            MinecraftKey minecraftkey = ((EntityLiving) entity).cW();
             CommandListenerWrapper commandlistenerwrapper = (CommandListenerWrapper) commandcontext.getSource();
             LootTableInfo.Builder loottableinfo_builder = new LootTableInfo.Builder(commandlistenerwrapper.getWorld());
             Entity entity1 = commandlistenerwrapper.getEntity();

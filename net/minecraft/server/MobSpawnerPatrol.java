@@ -39,14 +39,13 @@ public class MobSpawnerPatrol {
                             } else {
                                 int k = (24 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
                                 int l = (24 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
-                                BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+                                BlockPosition.MutableBlockPosition blockposition_mutableblockposition = (new BlockPosition.MutableBlockPosition(entityhuman)).e(k, 0, l);
 
-                                blockposition_mutableblockposition.c(entityhuman.locX, entityhuman.locY, entityhuman.locZ).e(k, 0, l);
                                 if (!worldserver.isAreaLoaded(blockposition_mutableblockposition.getX() - 10, blockposition_mutableblockposition.getY() - 10, blockposition_mutableblockposition.getZ() - 10, blockposition_mutableblockposition.getX() + 10, blockposition_mutableblockposition.getY() + 10, blockposition_mutableblockposition.getZ() + 10)) {
                                     return 0;
                                 } else {
                                     BiomeBase biomebase = worldserver.getBiome(blockposition_mutableblockposition);
-                                    BiomeBase.Geography biomebase_geography = biomebase.o();
+                                    BiomeBase.Geography biomebase_geography = biomebase.q();
 
                                     if (biomebase_geography == BiomeBase.Geography.MUSHROOM) {
                                         return 0;
@@ -83,7 +82,11 @@ public class MobSpawnerPatrol {
     }
 
     private boolean a(World world, BlockPosition blockposition, Random random, boolean flag) {
-        if (!EntityMonsterPatrolling.b(EntityTypes.PILLAGER, world, EnumMobSpawn.PATROL, blockposition, random)) {
+        IBlockData iblockdata = world.getType(blockposition);
+
+        if (!SpawnerCreature.a((IBlockAccess) world, blockposition, iblockdata, iblockdata.getFluid())) {
+            return false;
+        } else if (!EntityMonsterPatrolling.b(EntityTypes.PILLAGER, world, EnumMobSpawn.PATROL, blockposition, random)) {
             return false;
         } else {
             EntityMonsterPatrolling entitymonsterpatrolling = (EntityMonsterPatrolling) EntityTypes.PILLAGER.a(world);
@@ -91,7 +94,7 @@ public class MobSpawnerPatrol {
             if (entitymonsterpatrolling != null) {
                 if (flag) {
                     entitymonsterpatrolling.setPatrolLeader(true);
-                    entitymonsterpatrolling.ed();
+                    entitymonsterpatrolling.ey();
                 }
 
                 entitymonsterpatrolling.setPosition((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());

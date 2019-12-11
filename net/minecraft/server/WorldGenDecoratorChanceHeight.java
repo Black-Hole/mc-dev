@@ -5,25 +5,19 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class WorldGenDecoratorChanceHeight extends WorldGenDecorator<WorldGenDecoratorChanceConfiguration> {
+public class WorldGenDecoratorChanceHeight extends WorldGenDecorator<WorldGenDecoratorDungeonConfiguration> {
 
-    public WorldGenDecoratorChanceHeight(Function<Dynamic<?>, ? extends WorldGenDecoratorChanceConfiguration> function) {
+    public WorldGenDecoratorChanceHeight(Function<Dynamic<?>, ? extends WorldGenDecoratorDungeonConfiguration> function) {
         super(function);
     }
 
-    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenDecoratorChanceConfiguration worldgendecoratorchanceconfiguration, BlockPosition blockposition) {
-        if (random.nextFloat() < 1.0F / (float) worldgendecoratorchanceconfiguration.a) {
-            int i = random.nextInt(16);
-            int j = random.nextInt(16);
-            int k = generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition.b(i, 0, j)).getY() * 2;
+    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenDecoratorDungeonConfiguration worldgendecoratordungeonconfiguration, BlockPosition blockposition) {
+        if (random.nextFloat() < 1.0F / (float) worldgendecoratordungeonconfiguration.a) {
+            int i = random.nextInt(16) + blockposition.getX();
+            int j = random.nextInt(16) + blockposition.getZ();
+            int k = generatoraccess.a(HeightMap.Type.MOTION_BLOCKING, i, j) * 2;
 
-            if (k <= 0) {
-                return Stream.empty();
-            } else {
-                int l = random.nextInt(k);
-
-                return Stream.of(blockposition.b(i, l, j));
-            }
+            return k <= 0 ? Stream.empty() : Stream.of(new BlockPosition(i, random.nextInt(k), j));
         } else {
             return Stream.empty();
         }

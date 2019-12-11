@@ -105,7 +105,7 @@ public class ResourcePackFile extends ResourcePackAbstract {
     }
 
     @Override
-    public Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, int i, Predicate<String> predicate) {
+    public Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, String s1, int i, Predicate<String> predicate) {
         ZipFile zipfile;
 
         try {
@@ -116,29 +116,21 @@ public class ResourcePackFile extends ResourcePackAbstract {
 
         Enumeration<? extends ZipEntry> enumeration = zipfile.entries();
         List<MinecraftKey> list = Lists.newArrayList();
-        String s1 = enumresourcepacktype.a() + "/";
+        String s2 = enumresourcepacktype.a() + "/" + s + "/";
+        String s3 = s2 + s1 + "/";
 
         while (enumeration.hasMoreElements()) {
             ZipEntry zipentry = (ZipEntry) enumeration.nextElement();
 
-            if (!zipentry.isDirectory() && zipentry.getName().startsWith(s1)) {
-                String s2 = zipentry.getName().substring(s1.length());
+            if (!zipentry.isDirectory()) {
+                String s4 = zipentry.getName();
 
-                if (!s2.endsWith(".mcmeta")) {
-                    int j = s2.indexOf(47);
+                if (!s4.endsWith(".mcmeta") && s4.startsWith(s3)) {
+                    String s5 = s4.substring(s2.length());
+                    String[] astring = s5.split("/");
 
-                    if (j >= 0) {
-                        String s3 = s2.substring(j + 1);
-
-                        if (s3.startsWith(s + "/")) {
-                            String[] astring = s3.substring(s.length() + 2).split("/");
-
-                            if (astring.length >= i + 1 && predicate.test(s3)) {
-                                String s4 = s2.substring(0, j);
-
-                                list.add(new MinecraftKey(s4, s3));
-                            }
-                        }
+                    if (astring.length >= i + 1 && predicate.test(astring[astring.length - 1])) {
+                        list.add(new MinecraftKey(s, s5));
                     }
                 }
             }

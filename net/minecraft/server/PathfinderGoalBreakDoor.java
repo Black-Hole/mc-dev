@@ -52,7 +52,7 @@ public class PathfinderGoalBreakDoor extends PathfinderGoalDoorInteract {
         super.e();
         if (this.entity.getRandom().nextInt(20) == 0) {
             this.entity.world.triggerEffect(1019, this.door, 0);
-            if (!this.entity.at) {
+            if (!this.entity.aq) {
                 this.entity.a(this.entity.getRaisedHand());
             }
         }

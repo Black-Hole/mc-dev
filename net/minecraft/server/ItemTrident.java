@@ -7,7 +7,7 @@ public class ItemTrident extends Item {
     public ItemTrident(Item.Info item_info) {
         super(item_info);
         this.a(new MinecraftKey("throwing"), (itemstack, world, entityliving) -> {
-            return entityliving != null && entityliving.isHandRaised() && entityliving.dl() == itemstack ? 1.0F : 0.0F;
+            return entityliving != null && entityliving.isHandRaised() && entityliving.dD() == itemstack ? 1.0F : 0.0F;
         });
     }
 
@@ -69,8 +69,8 @@ public class ItemTrident extends Item {
                         f2 *= f6 / f5;
                         f3 *= f6 / f5;
                         f4 *= f6 / f5;
-                        entityhuman.f((double) f2, (double) f3, (double) f4);
-                        entityhuman.q(20);
+                        entityhuman.h((double) f2, (double) f3, (double) f4);
+                        entityhuman.r(20);
                         if (entityhuman.onGround) {
                             float f7 = 1.1999999F;
 
@@ -99,13 +99,13 @@ public class ItemTrident extends Item {
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getDamage() >= itemstack.h()) {
-            return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
+        if (itemstack.getDamage() >= itemstack.h() - 1) {
+            return InteractionResultWrapper.d(itemstack);
         } else if (EnchantmentManager.g(itemstack) > 0 && !entityhuman.isInWaterOrRain()) {
-            return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
+            return InteractionResultWrapper.d(itemstack);
         } else {
             entityhuman.c(enumhand);
-            return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
+            return InteractionResultWrapper.b(itemstack);
         }
     }
 

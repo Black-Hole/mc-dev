@@ -6,12 +6,31 @@ import java.io.IOException;
 
 public class NBTTagEnd implements NBTBase {
 
-    public NBTTagEnd() {}
+    public static final NBTTagType<NBTTagEnd> a = new NBTTagType<NBTTagEnd>() {
+        @Override
+        public NBTTagEnd b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) {
+            nbtreadlimiter.a(64L);
+            return NBTTagEnd.b;
+        }
 
-    @Override
-    public void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
-        nbtreadlimiter.a(64L);
-    }
+        @Override
+        public String a() {
+            return "END";
+        }
+
+        @Override
+        public String b() {
+            return "TAG_End";
+        }
+
+        @Override
+        public boolean c() {
+            return true;
+        }
+    };
+    public static final NBTTagEnd b = new NBTTagEnd();
+
+    private NBTTagEnd() {}
 
     @Override
     public void write(DataOutput dataoutput) throws IOException {}
@@ -22,25 +41,22 @@ public class NBTTagEnd implements NBTBase {
     }
 
     @Override
+    public NBTTagType<NBTTagEnd> b() {
+        return NBTTagEnd.a;
+    }
+
+    @Override
     public String toString() {
         return "END";
     }
 
     @Override
     public NBTTagEnd clone() {
-        return new NBTTagEnd();
+        return this;
     }
 
     @Override
     public IChatBaseComponent a(String s, int i) {
         return new ChatComponentText("");
-    }
-
-    public boolean equals(Object object) {
-        return object instanceof NBTTagEnd;
-    }
-
-    public int hashCode() {
-        return this.getTypeId();
     }
 }

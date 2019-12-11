@@ -13,16 +13,16 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
 
     public BlockCocoa(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCocoa.FACING, EnumDirection.NORTH)).set(BlockCocoa.AGE, 0));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCocoa.FACING, EnumDirection.NORTH)).set(BlockCocoa.AGE, 0));
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (world.random.nextInt(5) == 0) {
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (worldserver.random.nextInt(5) == 0) {
             int i = (Integer) iblockdata.get(BlockCocoa.AGE);
 
             if (i < 2) {
-                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCocoa.AGE, i + 1), 2);
+                worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCocoa.AGE, i + 1), 2);
             }
         }
 
@@ -64,7 +64,7 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection[j];
 
-            if (enumdirection.k().c()) {
+            if (enumdirection.m().c()) {
                 iblockdata = (IBlockData) iblockdata.set(BlockCocoa.FACING, enumdirection);
                 if (iblockdata.canPlace(world, blockposition)) {
                     return iblockdata;
@@ -91,13 +91,8 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
     }
 
     @Override
-    public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCocoa.AGE, (Integer) iblockdata.get(BlockCocoa.AGE) + 1), 2);
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
+    public void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata) {
+        worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCocoa.AGE, (Integer) iblockdata.get(BlockCocoa.AGE) + 1), 2);
     }
 
     @Override

@@ -12,27 +12,12 @@ public class GenLayer {
         this.b = (AreaLazy) areafactory.make();
     }
 
-    public BiomeBase[] a(int i, int j, int k, int l) {
-        BiomeBase[] abiomebase = new BiomeBase[k * l];
-
-        for (int i1 = 0; i1 < l; ++i1) {
-            for (int j1 = 0; j1 < k; ++j1) {
-                int k1 = this.b.a(i + j1, j + i1);
-                BiomeBase biomebase = this.a(k1);
-
-                abiomebase[j1 + i1 * k] = biomebase;
-            }
-        }
-
-        return abiomebase;
-    }
-
     private BiomeBase a(int i) {
         BiomeBase biomebase = (BiomeBase) IRegistry.BIOME.fromId(i);
 
         if (biomebase == null) {
             if (SharedConstants.b) {
-                throw new IllegalStateException("Unknown biome id: " + i);
+                throw (IllegalStateException) SystemUtils.c(new IllegalStateException("Unknown biome id: " + i));
             } else {
                 GenLayer.LOGGER.warn("Unknown biome id: ", i);
                 return Biomes.b;

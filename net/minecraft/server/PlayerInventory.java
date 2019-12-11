@@ -33,7 +33,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
         return 9;
     }
 
-    private boolean a(ItemStack itemstack, ItemStack itemstack1) {
+    private boolean isSimilarAndNotFull(ItemStack itemstack, ItemStack itemstack1) {
         return !itemstack.isEmpty() && this.b(itemstack, itemstack1) && itemstack.isStackable() && itemstack.getCount() < itemstack.getMaxStackSize() && itemstack.getCount() < this.getMaxStackSize();
     }
 
@@ -184,13 +184,13 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
     }
 
     public int firstPartial(ItemStack itemstack) {
-        if (this.a(this.getItem(this.itemInHandIndex), itemstack)) {
+        if (this.isSimilarAndNotFull(this.getItem(this.itemInHandIndex), itemstack)) {
             return this.itemInHandIndex;
-        } else if (this.a(this.getItem(40), itemstack)) {
+        } else if (this.isSimilarAndNotFull(this.getItem(40), itemstack)) {
             return 40;
         } else {
             for (int i = 0; i < this.items.size(); ++i) {
-                if (this.a((ItemStack) this.items.get(i), itemstack)) {
+                if (this.isSimilarAndNotFull((ItemStack) this.items.get(i), itemstack)) {
                     return i;
                 }
             }
@@ -499,7 +499,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
     }
 
     public boolean b(IBlockData iblockdata) {
-        return this.getItem(this.itemInHandIndex).b(iblockdata);
+        return this.getItem(this.itemInHandIndex).canDestroySpecialBlock(iblockdata);
     }
 
     public void a(float f) {

@@ -1,9 +1,13 @@
 package net.minecraft.server;
 
 import com.mojang.datafixers.Dynamic;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class WorldGenBonusChest extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
@@ -12,38 +16,46 @@ public class WorldGenBonusChest extends WorldGenerator<WorldGenFeatureEmptyConfi
     }
 
     public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-        for (IBlockData iblockdata = generatoraccess.getType(blockposition); (iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES)) && blockposition.getY() > 1; iblockdata = generatoraccess.getType(blockposition)) {
-            blockposition = blockposition.down();
-        }
+        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition);
+        List<Integer> list = (List) IntStream.rangeClosed(chunkcoordintpair.d(), chunkcoordintpair.f()).boxed().collect(Collectors.toList());
 
-        if (blockposition.getY() < 1) {
-            return false;
-        } else {
-            blockposition = blockposition.up();
+        Collections.shuffle(list, random);
+        List<Integer> list1 = (List) IntStream.rangeClosed(chunkcoordintpair.e(), chunkcoordintpair.g()).boxed().collect(Collectors.toList());
 
-            for (int i = 0; i < 4; ++i) {
-                BlockPosition blockposition1 = blockposition.b(random.nextInt(4) - random.nextInt(4), random.nextInt(3) - random.nextInt(3), random.nextInt(4) - random.nextInt(4));
+        Collections.shuffle(list1, random);
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+        Iterator iterator = list.iterator();
 
-                if (generatoraccess.isEmpty(blockposition1)) {
+        while (iterator.hasNext()) {
+            Integer integer = (Integer) iterator.next();
+            Iterator iterator1 = list1.iterator();
+
+            while (iterator1.hasNext()) {
+                Integer integer1 = (Integer) iterator1.next();
+
+                blockposition_mutableblockposition.d(integer, 0, integer1);
+                BlockPosition blockposition1 = generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, blockposition_mutableblockposition);
+
+                if (generatoraccess.isEmpty(blockposition1) || generatoraccess.getType(blockposition1).getCollisionShape(generatoraccess, blockposition1).isEmpty()) {
                     generatoraccess.setTypeAndData(blockposition1, Blocks.CHEST.getBlockData(), 2);
                     TileEntityLootable.a(generatoraccess, random, blockposition1, LootTables.b);
-                    IBlockData iblockdata1 = Blocks.TORCH.getBlockData();
-                    Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
+                    IBlockData iblockdata = Blocks.TORCH.getBlockData();
+                    Iterator iterator2 = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
-                    while (iterator.hasNext()) {
-                        EnumDirection enumdirection = (EnumDirection) iterator.next();
+                    while (iterator2.hasNext()) {
+                        EnumDirection enumdirection = (EnumDirection) iterator2.next();
                         BlockPosition blockposition2 = blockposition1.shift(enumdirection);
 
-                        if (iblockdata1.canPlace(generatoraccess, blockposition2)) {
-                            generatoraccess.setTypeAndData(blockposition2, iblockdata1, 2);
+                        if (iblockdata.canPlace(generatoraccess, blockposition2)) {
+                            generatoraccess.setTypeAndData(blockposition2, iblockdata, 2);
                         }
                     }
 
                     return true;
                 }
             }
-
-            return false;
         }
+
+        return false;
     }
 }

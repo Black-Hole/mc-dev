@@ -66,13 +66,13 @@ public class ProtoChunkExtension extends ProtoChunk {
     @Override
     public void a(HeightMap.Type heightmap_type, long[] along) {}
 
-    private HeightMap.Type d(HeightMap.Type heightmap_type) {
+    private HeightMap.Type c(HeightMap.Type heightmap_type) {
         return heightmap_type == HeightMap.Type.WORLD_SURFACE_WG ? HeightMap.Type.WORLD_SURFACE : (heightmap_type == HeightMap.Type.OCEAN_FLOOR_WG ? HeightMap.Type.OCEAN_FLOOR : heightmap_type);
     }
 
     @Override
     public int a(HeightMap.Type heightmap_type, int i, int j) {
-        return this.a.a(this.d(heightmap_type), i, j);
+        return this.a.a(this.c(heightmap_type), i, j);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class ProtoChunkExtension extends ProtoChunk {
     public void b(Map<String, LongSet> map) {}
 
     @Override
-    public BiomeBase[] getBiomeIndex() {
+    public BiomeStorage getBiomeIndex() {
         return this.a.getBiomeIndex();
     }
 
@@ -138,10 +138,16 @@ public class ProtoChunkExtension extends ProtoChunk {
     public void removeTileEntity(BlockPosition blockposition) {}
 
     @Override
-    public void f(BlockPosition blockposition) {}
+    public void e(BlockPosition blockposition) {}
 
     @Override
     public void a(NBTTagCompound nbttagcompound) {}
+
+    @Nullable
+    @Override
+    public NBTTagCompound f(BlockPosition blockposition) {
+        return this.a.f(blockposition);
+    }
 
     @Nullable
     @Override
@@ -149,14 +155,8 @@ public class ProtoChunkExtension extends ProtoChunk {
         return this.a.i(blockposition);
     }
 
-    @Nullable
     @Override
-    public NBTTagCompound j(BlockPosition blockposition) {
-        return this.a.j(blockposition);
-    }
-
-    @Override
-    public void a(BiomeBase[] abiomebase) {}
+    public void a(BiomeStorage biomestorage) {}
 
     @Override
     public Stream<BlockPosition> m() {

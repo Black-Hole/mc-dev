@@ -39,7 +39,7 @@ public class BehaviorWalkAwayBlock extends Behavior<EntityVillager> {
                 int j = 0;
 
                 for (boolean flag = true; j < 1000 && (vec3d == null || this.a(worldserver, entityvillager, GlobalPos.create(entityvillager.dimension, new BlockPosition(vec3d)))); ++j) {
-                    vec3d = RandomPositionGenerator.a(entityvillager, 15, 7, new Vec3D(globalpos.getBlockPosition()));
+                    vec3d = RandomPositionGenerator.a((EntityCreature) entityvillager, 15, 7, new Vec3D(globalpos.getBlockPosition()));
                 }
 
                 if (j == 1000) {

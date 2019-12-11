@@ -20,8 +20,8 @@ public abstract class BiomeBase {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final Set<BiomeBase> b = Sets.newHashSet();
     public static final RegistryBlockID<BiomeBase> c = new RegistryBlockID<>();
-    protected static final NoiseGenerator3 d = new NoiseGenerator3(new Random(1234L), 1);
-    public static final NoiseGenerator3 e = new NoiseGenerator3(new Random(2345L), 1);
+    protected static final NoiseGenerator3 d = new NoiseGenerator3(new SeededRandom(1234L), 0, 0);
+    public static final NoiseGenerator3 e = new NoiseGenerator3(new SeededRandom(2345L), 0, 0);
     @Nullable
     protected String f;
     protected final float g;
@@ -30,17 +30,18 @@ public abstract class BiomeBase {
     protected final float j;
     protected final int k;
     protected final int l;
+    private final int u;
     @Nullable
     protected final String m;
     protected final WorldGenSurfaceComposite<?> n;
     protected final BiomeBase.Geography o;
     protected final BiomeBase.Precipitation p;
     protected final Map<WorldGenStage.Features, List<WorldGenCarverWrapper<?>>> q = Maps.newHashMap();
-    protected final Map<WorldGenStage.Decoration, List<WorldGenFeatureConfigured<?>>> r = Maps.newHashMap();
-    protected final List<WorldGenFeatureConfigured<?>> s = Lists.newArrayList();
+    protected final Map<WorldGenStage.Decoration, List<WorldGenFeatureConfigured<?, ?>>> r = Maps.newHashMap();
+    protected final List<WorldGenFeatureConfigured<?, ?>> s = Lists.newArrayList();
     protected final Map<StructureGenerator<?>, WorldGenFeatureConfiguration> t = Maps.newHashMap();
-    private final Map<EnumCreatureType, List<BiomeBase.BiomeMeta>> u = Maps.newHashMap();
-    private final ThreadLocal<Long2FloatLinkedOpenHashMap> v = ThreadLocal.withInitial(() -> {
+    private final Map<EnumCreatureType, List<BiomeBase.BiomeMeta>> v = Maps.newHashMap();
+    private final ThreadLocal<Long2FloatLinkedOpenHashMap> w = ThreadLocal.withInitial(() -> {
         return (Long2FloatLinkedOpenHashMap) SystemUtils.a(() -> {
             Long2FloatLinkedOpenHashMap long2floatlinkedopenhashmap = new Long2FloatLinkedOpenHashMap(1024, 0.25F) {
                 protected void rehash(int i) {}
@@ -60,12 +61,6 @@ public abstract class BiomeBase {
         return new WorldGenCarverWrapper<>(worldgencarverabstract, c0);
     }
 
-    public static <F extends WorldGenFeatureConfiguration, D extends WorldGenFeatureDecoratorConfiguration> WorldGenFeatureConfigured<?> a(WorldGenerator<F> worldgenerator, F f0, WorldGenDecorator<D> worldgendecorator, D d0) {
-        WorldGenerator<WorldGenFeatureCompositeConfiguration> worldgenerator1 = worldgenerator instanceof WorldGenFlowers ? WorldGenerator.DECORATED_FLOWER : WorldGenerator.DECORATED;
-
-        return new WorldGenFeatureConfigured<>(worldgenerator1, new WorldGenFeatureCompositeConfiguration(worldgenerator, f0, worldgendecorator, d0));
-    }
-
     protected BiomeBase(BiomeBase.a biomebase_a) {
         if (biomebase_a.a != null && biomebase_a.b != null && biomebase_a.c != null && biomebase_a.d != null && biomebase_a.e != null && biomebase_a.f != null && biomebase_a.g != null && biomebase_a.h != null && biomebase_a.i != null) {
             this.n = biomebase_a.a;
@@ -77,6 +72,7 @@ public abstract class BiomeBase {
             this.j = biomebase_a.g;
             this.k = biomebase_a.h;
             this.l = biomebase_a.i;
+            this.u = this.u();
             this.m = biomebase_a.j;
             WorldGenStage.Decoration[] aworldgenstage_decoration = WorldGenStage.Decoration.values();
             int i = aworldgenstage_decoration.length;
@@ -96,7 +92,7 @@ public abstract class BiomeBase {
             for (j = 0; j < i; ++j) {
                 EnumCreatureType enumcreaturetype = aenumcreaturetype[j];
 
-                this.u.put(enumcreaturetype, Lists.newArrayList());
+                this.v.put(enumcreaturetype, Lists.newArrayList());
             }
 
         } else {
@@ -104,33 +100,41 @@ public abstract class BiomeBase {
         }
     }
 
-    public boolean a() {
+    public boolean b() {
         return this.m != null;
     }
 
+    private int u() {
+        float f = this.i;
+
+        f /= 3.0F;
+        f = MathHelper.a(f, -1.0F, 1.0F);
+        return MathHelper.f(0.62222224F - f * 0.05F, 0.5F + f * 0.1F, 1.0F);
+    }
+
     protected void a(EnumCreatureType enumcreaturetype, BiomeBase.BiomeMeta biomebase_biomemeta) {
-        ((List) this.u.get(enumcreaturetype)).add(biomebase_biomemeta);
+        ((List) this.v.get(enumcreaturetype)).add(biomebase_biomemeta);
     }
 
     public List<BiomeBase.BiomeMeta> getMobs(EnumCreatureType enumcreaturetype) {
-        return (List) this.u.get(enumcreaturetype);
+        return (List) this.v.get(enumcreaturetype);
     }
 
-    public BiomeBase.Precipitation b() {
+    public BiomeBase.Precipitation d() {
         return this.p;
     }
 
-    public boolean c() {
+    public boolean e() {
         return this.getHumidity() > 0.85F;
     }
 
-    public float d() {
+    public float f() {
         return 0.1F;
     }
 
-    protected float c(BlockPosition blockposition) {
+    protected float a(BlockPosition blockposition) {
         if (blockposition.getY() > 64) {
-            float f = (float) (BiomeBase.d.a((double) ((float) blockposition.getX() / 8.0F), (double) ((float) blockposition.getZ() / 8.0F)) * 4.0D);
+            float f = (float) (BiomeBase.d.a((double) ((float) blockposition.getX() / 8.0F), (double) ((float) blockposition.getZ() / 8.0F), false) * 4.0D);
 
             return this.getTemperature() - (f + (float) blockposition.getY() - 64.0F) * 0.05F / 30.0F;
         } else {
@@ -140,13 +144,13 @@ public abstract class BiomeBase {
 
     public final float getAdjustedTemperature(BlockPosition blockposition) {
         long i = blockposition.asLong();
-        Long2FloatLinkedOpenHashMap long2floatlinkedopenhashmap = (Long2FloatLinkedOpenHashMap) this.v.get();
+        Long2FloatLinkedOpenHashMap long2floatlinkedopenhashmap = (Long2FloatLinkedOpenHashMap) this.w.get();
         float f = long2floatlinkedopenhashmap.get(i);
 
         if (!Float.isNaN(f)) {
             return f;
         } else {
-            float f1 = this.c(blockposition);
+            float f1 = this.a(blockposition);
 
             if (long2floatlinkedopenhashmap.size() == 1024) {
                 long2floatlinkedopenhashmap.removeFirstFloat();
@@ -174,7 +178,7 @@ public abstract class BiomeBase {
                         return true;
                     }
 
-                    boolean flag1 = iworldreader.x(blockposition.west()) && iworldreader.x(blockposition.east()) && iworldreader.x(blockposition.north()) && iworldreader.x(blockposition.south());
+                    boolean flag1 = iworldreader.y(blockposition.west()) && iworldreader.y(blockposition.east()) && iworldreader.y(blockposition.north()) && iworldreader.y(blockposition.south());
 
                     if (!flag1) {
                         return true;
@@ -202,8 +206,8 @@ public abstract class BiomeBase {
         }
     }
 
-    public void a(WorldGenStage.Decoration worldgenstage_decoration, WorldGenFeatureConfigured<?> worldgenfeatureconfigured) {
-        if (worldgenfeatureconfigured.a == WorldGenerator.DECORATED_FLOWER) {
+    public void a(WorldGenStage.Decoration worldgenstage_decoration, WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured) {
+        if (worldgenfeatureconfigured.b == WorldGenerator.DECORATED_FLOWER) {
             this.s.add(worldgenfeatureconfigured);
         }
 
@@ -222,8 +226,8 @@ public abstract class BiomeBase {
         });
     }
 
-    public <C extends WorldGenFeatureConfiguration> void a(StructureGenerator<C> structuregenerator, C c0) {
-        this.t.put(structuregenerator, c0);
+    public <C extends WorldGenFeatureConfiguration> void a(WorldGenFeatureConfigured<C, ? extends StructureGenerator<C>> worldgenfeatureconfigured) {
+        this.t.put(worldgenfeatureconfigured.b, worldgenfeatureconfigured.c);
     }
 
     public <C extends WorldGenFeatureConfiguration> boolean a(StructureGenerator<C> structuregenerator) {
@@ -235,11 +239,11 @@ public abstract class BiomeBase {
         return (WorldGenFeatureConfiguration) this.t.get(structuregenerator);
     }
 
-    public List<WorldGenFeatureConfigured<?>> e() {
+    public List<WorldGenFeatureConfigured<?, ?>> g() {
         return this.s;
     }
 
-    public List<WorldGenFeatureConfigured<?>> a(WorldGenStage.Decoration worldgenstage_decoration) {
+    public List<WorldGenFeatureConfigured<?, ?>> a(WorldGenStage.Decoration worldgenstage_decoration) {
         return (List) this.r.get(worldgenstage_decoration);
     }
 
@@ -247,7 +251,7 @@ public abstract class BiomeBase {
         int j = 0;
 
         for (Iterator iterator = ((List) this.r.get(worldgenstage_decoration)).iterator(); iterator.hasNext(); ++j) {
-            WorldGenFeatureConfigured<?> worldgenfeatureconfigured = (WorldGenFeatureConfigured) iterator.next();
+            WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured = (WorldGenFeatureConfigured) iterator.next();
 
             seededrandom.b(i, j, worldgenstage_decoration.ordinal());
 
@@ -255,11 +259,10 @@ public abstract class BiomeBase {
                 worldgenfeatureconfigured.a(generatoraccess, chunkgenerator, seededrandom, blockposition);
             } catch (Exception exception) {
                 CrashReport crashreport = CrashReport.a(exception, "Feature placement");
-                CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Feature").a("Id", (Object) IRegistry.FEATURE.getKey(worldgenfeatureconfigured.a));
-                WorldGenerator worldgenerator = worldgenfeatureconfigured.a;
 
-                worldgenfeatureconfigured.a.getClass();
-                crashreportsystemdetails.a("Description", worldgenerator::toString);
+                crashreport.a("Feature").a("Id", (Object) IRegistry.FEATURE.getKey(worldgenfeatureconfigured.b)).a("Description", () -> {
+                    return worldgenfeatureconfigured.b.toString();
+                });
                 throw new ReportedException(crashreport);
             }
         }
@@ -271,11 +274,11 @@ public abstract class BiomeBase {
         this.n.a(random, ichunkaccess, this, i, j, k, d0, iblockdata, iblockdata1, l, i1);
     }
 
-    public BiomeBase.EnumTemperature f() {
+    public BiomeBase.EnumTemperature h() {
         return this.o == BiomeBase.Geography.OCEAN ? BiomeBase.EnumTemperature.OCEAN : ((double) this.getTemperature() < 0.2D ? BiomeBase.EnumTemperature.COLD : ((double) this.getTemperature() < 1.0D ? BiomeBase.EnumTemperature.MEDIUM : BiomeBase.EnumTemperature.WARM));
     }
 
-    public final float g() {
+    public final float i() {
         return this.g;
     }
 
@@ -283,7 +286,7 @@ public abstract class BiomeBase {
         return this.j;
     }
 
-    public String j() {
+    public String l() {
         if (this.f == null) {
             this.f = SystemUtils.a("biome", IRegistry.BIOME.getKey(this));
         }
@@ -291,7 +294,7 @@ public abstract class BiomeBase {
         return this.f;
     }
 
-    public final float k() {
+    public final float m() {
         return this.h;
     }
 
@@ -299,28 +302,28 @@ public abstract class BiomeBase {
         return this.i;
     }
 
-    public final int m() {
+    public final int o() {
         return this.k;
     }
 
-    public final int n() {
+    public final int p() {
         return this.l;
     }
 
-    public final BiomeBase.Geography o() {
+    public final BiomeBase.Geography q() {
         return this.o;
     }
 
-    public WorldGenSurfaceComposite<?> p() {
+    public WorldGenSurfaceComposite<?> r() {
         return this.n;
     }
 
-    public WorldGenSurfaceConfiguration q() {
+    public WorldGenSurfaceConfiguration s() {
         return this.n.a();
     }
 
     @Nullable
-    public String r() {
+    public String t() {
         return this.m;
     }
 

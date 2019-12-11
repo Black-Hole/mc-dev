@@ -9,13 +9,13 @@ public class BlockLoom extends BlockFacingHorizontal {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (world.isClientSide) {
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
             entityhuman.openContainer(iblockdata.b(world, blockposition));
             entityhuman.a(StatisticList.INTERACT_WITH_LOOM);
-            return true;
+            return EnumInteractionResult.SUCCESS;
         }
     }
 

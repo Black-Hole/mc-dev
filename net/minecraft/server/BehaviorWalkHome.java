@@ -31,7 +31,7 @@ public class BehaviorWalkHome extends Behavior<EntityLiving> {
                 return true;
             }, new BlockPosition(entityliving), 48, VillagePlace.Occupancy.ANY);
 
-            return optional.isPresent() && ((BlockPosition) optional.get()).m(new BaseBlockPosition(entitycreature.locX, entitycreature.locY, entitycreature.locZ)) > 4.0D;
+            return optional.isPresent() && ((BlockPosition) optional.get()).m(new BlockPosition(entitycreature)) > 4.0D;
         }
     }
 

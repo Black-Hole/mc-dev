@@ -9,13 +9,13 @@ public class WorldGenMegaTreeProviderJungle extends WorldGenMegaTreeProvider {
 
     @Nullable
     @Override
-    protected WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> b(Random random) {
-        return new WorldGenTrees(WorldGenFeatureEmptyConfiguration::a, true, 4 + random.nextInt(7), Blocks.JUNGLE_LOG.getBlockData(), Blocks.JUNGLE_LEAVES.getBlockData(), false);
+    protected WorldGenFeatureConfigured<WorldGenFeatureSmallTreeConfigurationConfiguration, ?> b(Random random) {
+        return (new WorldGenTrees(WorldGenFeatureSmallTreeConfigurationConfiguration::a)).b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.JUNGLE_TREE_NOVINE);
     }
 
     @Nullable
     @Override
-    protected WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> a(Random random) {
-        return new WorldGenJungleTree(WorldGenFeatureEmptyConfiguration::a, true, 10, 20, Blocks.JUNGLE_LOG.getBlockData(), Blocks.JUNGLE_LEAVES.getBlockData());
+    protected WorldGenFeatureConfigured<WorldGenMegaTreeConfiguration, ?> a(Random random) {
+        return WorldGenerator.MEGA_JUNGLE_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.MEGA_JUNGLE_TREE);
     }
 }

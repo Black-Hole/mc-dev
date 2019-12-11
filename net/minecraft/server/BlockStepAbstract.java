@@ -4,18 +4,18 @@ import javax.annotation.Nullable;
 
 public class BlockStepAbstract extends Block implements IBlockWaterlogged {
 
-    public static final BlockStateEnum<BlockPropertySlabType> a = BlockProperties.aC;
+    public static final BlockStateEnum<BlockPropertySlabType> a = BlockProperties.aD;
     public static final BlockStateBoolean b = BlockProperties.C;
     protected static final VoxelShape c = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
     protected static final VoxelShape d = Block.a(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 
     public BlockStepAbstract(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.getBlockData().set(BlockStepAbstract.a, BlockPropertySlabType.BOTTOM)).set(BlockStepAbstract.b, false));
+        this.p((IBlockData) ((IBlockData) this.getBlockData().set(BlockStepAbstract.a, BlockPropertySlabType.BOTTOM)).set(BlockStepAbstract.b, false));
     }
 
     @Override
-    public boolean n(IBlockData iblockdata) {
+    public boolean o(IBlockData iblockdata) {
         return iblockdata.get(BlockStepAbstract.a) != BlockPropertySlabType.DOUBLE;
     }
 
@@ -65,7 +65,7 @@ public class BlockStepAbstract extends Block implements IBlockWaterlogged {
                 boolean flag = blockactioncontext.j().y - (double) blockactioncontext.getClickPosition().getY() > 0.5D;
                 EnumDirection enumdirection = blockactioncontext.getClickedFace();
 
-                return blockpropertyslabtype == BlockPropertySlabType.BOTTOM ? enumdirection == EnumDirection.UP || flag && enumdirection.k().c() : enumdirection == EnumDirection.DOWN || !flag && enumdirection.k().c();
+                return blockpropertyslabtype == BlockPropertySlabType.BOTTOM ? enumdirection == EnumDirection.UP || flag && enumdirection.m().c() : enumdirection == EnumDirection.DOWN || !flag && enumdirection.m().c();
             } else {
                 return true;
             }
@@ -75,8 +75,8 @@ public class BlockStepAbstract extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public Fluid g(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockStepAbstract.b) ? FluidTypes.WATER.a(false) : super.g(iblockdata);
+    public Fluid a_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockStepAbstract.b) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
     }
 
     @Override

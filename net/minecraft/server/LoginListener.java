@@ -175,7 +175,7 @@ public class LoginListener implements PacketLoginInListener {
                 private InetAddress a() {
                     SocketAddress socketaddress = LoginListener.this.networkManager.getSocketAddress();
 
-                    return LoginListener.this.server.U() && socketaddress instanceof InetSocketAddress ? ((InetSocketAddress) socketaddress).getAddress() : null;
+                    return LoginListener.this.server.X() && socketaddress instanceof InetSocketAddress ? ((InetSocketAddress) socketaddress).getAddress() : null;
                 }
             };
 

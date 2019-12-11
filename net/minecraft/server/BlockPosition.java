@@ -38,7 +38,7 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
     }
 
     public BlockPosition(Entity entity) {
-        this(entity.locX, entity.locY, entity.locZ);
+        this(entity.locX(), entity.locY(), entity.locZ());
     }
 
     public BlockPosition(Vec3D vec3d) {
@@ -133,23 +133,25 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
     }
 
     public BlockPosition up() {
-        return this.up(1);
+        return this.shift(EnumDirection.UP);
     }
 
     public BlockPosition up(int i) {
         return this.shift(EnumDirection.UP, i);
     }
 
+    @Override
     public BlockPosition down() {
-        return this.down(1);
+        return this.shift(EnumDirection.DOWN);
     }
 
+    @Override
     public BlockPosition down(int i) {
         return this.shift(EnumDirection.DOWN, i);
     }
 
     public BlockPosition north() {
-        return this.north(1);
+        return this.shift(EnumDirection.NORTH);
     }
 
     public BlockPosition north(int i) {
@@ -157,7 +159,7 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
     }
 
     public BlockPosition south() {
-        return this.south(1);
+        return this.shift(EnumDirection.SOUTH);
     }
 
     public BlockPosition south(int i) {
@@ -165,7 +167,7 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
     }
 
     public BlockPosition west() {
-        return this.west(1);
+        return this.shift(EnumDirection.WEST);
     }
 
     public BlockPosition west(int i) {
@@ -173,7 +175,7 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
     }
 
     public BlockPosition east() {
-        return this.east(1);
+        return this.shift(EnumDirection.EAST);
     }
 
     public BlockPosition east(int i) {
@@ -181,9 +183,10 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
     }
 
     public BlockPosition shift(EnumDirection enumdirection) {
-        return this.shift(enumdirection, 1);
+        return new BlockPosition(this.getX() + enumdirection.getAdjacentX(), this.getY() + enumdirection.getAdjacentY(), this.getZ() + enumdirection.getAdjacentZ());
     }
 
+    @Override
     public BlockPosition shift(EnumDirection enumdirection, int i) {
         return i == 0 ? this : new BlockPosition(this.getX() + enumdirection.getAdjacentX() * i, this.getY() + enumdirection.getAdjacentY() * i, this.getZ() + enumdirection.getAdjacentZ() * i);
     }
@@ -217,6 +220,10 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
 
     public static Stream<BlockPosition> b(BlockPosition blockposition, BlockPosition blockposition1) {
         return a(Math.min(blockposition.getX(), blockposition1.getX()), Math.min(blockposition.getY(), blockposition1.getY()), Math.min(blockposition.getZ(), blockposition1.getZ()), Math.max(blockposition.getX(), blockposition1.getX()), Math.max(blockposition.getY(), blockposition1.getY()), Math.max(blockposition.getZ(), blockposition1.getZ()));
+    }
+
+    public static Stream<BlockPosition> a(StructureBoundingBox structureboundingbox) {
+        return a(Math.min(structureboundingbox.a, structureboundingbox.d), Math.min(structureboundingbox.b, structureboundingbox.e), Math.min(structureboundingbox.c, structureboundingbox.f), Math.max(structureboundingbox.a, structureboundingbox.d), Math.max(structureboundingbox.b, structureboundingbox.e), Math.max(structureboundingbox.c, structureboundingbox.f));
     }
 
     public static Stream<BlockPosition> a(final int i, final int j, final int k, final int l, final int i1, final int j1) {
@@ -262,7 +269,7 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
         }
 
         public static BlockPosition.PooledBlockPosition b(Entity entity) {
-            return d(entity.locX, entity.locY, entity.locZ);
+            return d(entity.locX(), entity.locY(), entity.locZ());
         }
 
         public static BlockPosition.PooledBlockPosition d(double d0, double d1, double d2) {
@@ -356,6 +363,10 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
             this(MathHelper.floor(d0), MathHelper.floor(d1), MathHelper.floor(d2));
         }
 
+        public MutableBlockPosition(Entity entity) {
+            this(entity.locX(), entity.locY(), entity.locZ());
+        }
+
         @Override
         public BlockPosition a(double d0, double d1, double d2) {
             return super.a(d0, d1, d2).immutableCopy();
@@ -399,7 +410,7 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
         }
 
         public BlockPosition.MutableBlockPosition a(Entity entity) {
-            return this.c(entity.locX, entity.locY, entity.locZ);
+            return this.c(entity.locX(), entity.locY(), entity.locZ());
         }
 
         public BlockPosition.MutableBlockPosition c(double d0, double d1, double d2) {

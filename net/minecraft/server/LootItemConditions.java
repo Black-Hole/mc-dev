@@ -123,6 +123,8 @@ public class LootItemConditions {
         a((LootItemCondition.b) (new LootItemConditionDamageSourceProperties.a()));
         a((LootItemCondition.b) (new LootItemConditionLocationCheck.a()));
         a((LootItemCondition.b) (new LootItemConditionWeatherCheck.b()));
+        a((LootItemCondition.b) (new LootItemConditionReference.a()));
+        a((LootItemCondition.b) (new LootItemConditionTimeCheck.b()));
     }
 
     public static class a implements JsonDeserializer<LootItemCondition>, JsonSerializer<LootItemCondition> {

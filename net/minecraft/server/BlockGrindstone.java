@@ -70,7 +70,7 @@ public class BlockGrindstone extends BlockAttachable {
 
     protected BlockGrindstone(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockGrindstone.FACING, EnumDirection.NORTH)).set(BlockGrindstone.FACE, BlockPropertyAttachPosition.WALL));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockGrindstone.FACING, EnumDirection.NORTH)).set(BlockGrindstone.FACE, BlockPropertyAttachPosition.WALL));
     }
 
     @Override
@@ -78,7 +78,7 @@ public class BlockGrindstone extends BlockAttachable {
         return EnumRenderType.MODEL;
     }
 
-    private VoxelShape q(IBlockData iblockdata) {
+    private VoxelShape i(IBlockData iblockdata) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockGrindstone.FACING);
 
         switch ((BlockPropertyAttachPosition) iblockdata.get(BlockGrindstone.FACE)) {
@@ -113,12 +113,12 @@ public class BlockGrindstone extends BlockAttachable {
 
     @Override
     public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return this.q(iblockdata);
+        return this.i(iblockdata);
     }
 
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return this.q(iblockdata);
+        return this.i(iblockdata);
     }
 
     @Override
@@ -127,9 +127,14 @@ public class BlockGrindstone extends BlockAttachable {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        entityhuman.openContainer(iblockdata.b(world, blockposition));
-        return true;
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+        if (world.isClientSide) {
+            return EnumInteractionResult.SUCCESS;
+        } else {
+            entityhuman.openContainer(iblockdata.b(world, blockposition));
+            entityhuman.a(StatisticList.INTERACT_WITH_GRINDSTONE);
+            return EnumInteractionResult.SUCCESS;
+        }
     }
 
     @Override

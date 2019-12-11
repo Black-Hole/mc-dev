@@ -63,17 +63,17 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
 
     @Override
     public double z() {
-        return this.locX;
+        return this.locX();
     }
 
     @Override
     public double A() {
-        return this.locY + 0.5D;
+        return this.locY() + 0.5D;
     }
 
     @Override
     public double B() {
-        return this.locZ;
+        return this.locZ();
     }
 
     @Override

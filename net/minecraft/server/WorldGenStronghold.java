@@ -11,17 +11,17 @@ import javax.annotation.Nullable;
 public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureEmptyConfiguration> {
 
     private boolean a;
-    private ChunkCoordIntPair[] aS;
-    private final List<StructureStart> aT = Lists.newArrayList();
-    private long aU;
+    private ChunkCoordIntPair[] aq;
+    private final List<StructureStart> ar = Lists.newArrayList();
+    private long as;
 
     public WorldGenStronghold(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
         super(function);
     }
 
     @Override
-    public boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
-        if (this.aU != chunkgenerator.getSeed()) {
+    public boolean a(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, Random random, int i, int j, BiomeBase biomebase) {
+        if (this.as != chunkgenerator.getSeed()) {
             this.d();
         }
 
@@ -30,7 +30,7 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureEmptyC
             this.a = true;
         }
 
-        ChunkCoordIntPair[] achunkcoordintpair = this.aS;
+        ChunkCoordIntPair[] achunkcoordintpair = this.aq;
         int k = achunkcoordintpair.length;
 
         for (int l = 0; l < k; ++l) {
@@ -46,8 +46,8 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureEmptyC
 
     private void d() {
         this.a = false;
-        this.aS = null;
-        this.aT.clear();
+        this.aq = null;
+        this.ar.clear();
     }
 
     @Override
@@ -71,7 +71,7 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureEmptyC
         if (!chunkgenerator.getWorldChunkManager().a(this)) {
             return null;
         } else {
-            if (this.aU != world.getSeed()) {
+            if (this.as != world.getSeed()) {
                 this.d();
             }
 
@@ -83,7 +83,7 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureEmptyC
             BlockPosition blockposition1 = null;
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
             double d0 = Double.MAX_VALUE;
-            ChunkCoordIntPair[] achunkcoordintpair = this.aS;
+            ChunkCoordIntPair[] achunkcoordintpair = this.aq;
             int j = achunkcoordintpair.length;
 
             for (int k = 0; k < j; ++k) {
@@ -106,14 +106,14 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureEmptyC
     }
 
     private void a(ChunkGenerator<?> chunkgenerator) {
-        this.aU = chunkgenerator.getSeed();
+        this.as = chunkgenerator.getSeed();
         List<BiomeBase> list = Lists.newArrayList();
         Iterator iterator = IRegistry.BIOME.iterator();
 
         while (iterator.hasNext()) {
             BiomeBase biomebase = (BiomeBase) iterator.next();
 
-            if (biomebase != null && chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.STRONGHOLD)) {
+            if (biomebase != null && chunkgenerator.canSpawnStructure(biomebase, this)) {
                 list.add(biomebase);
             }
         }
@@ -122,15 +122,15 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureEmptyC
         int j = chunkgenerator.getSettings().f();
         int k = chunkgenerator.getSettings().g();
 
-        this.aS = new ChunkCoordIntPair[j];
+        this.aq = new ChunkCoordIntPair[j];
         int l = 0;
-        Iterator iterator1 = this.aT.iterator();
+        Iterator iterator1 = this.ar.iterator();
 
         while (iterator1.hasNext()) {
             StructureStart structurestart = (StructureStart) iterator1.next();
 
-            if (l < this.aS.length) {
-                this.aS[l++] = new ChunkCoordIntPair(structurestart.f(), structurestart.g());
+            if (l < this.aq.length) {
+                this.aq[l++] = new ChunkCoordIntPair(structurestart.f(), structurestart.g());
             }
         }
 
@@ -140,15 +140,15 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureEmptyC
         double d0 = random.nextDouble() * 3.141592653589793D * 2.0D;
         int i1 = l;
 
-        if (l < this.aS.length) {
+        if (l < this.aq.length) {
             int j1 = 0;
             int k1 = 0;
 
-            for (int l1 = 0; l1 < this.aS.length; ++l1) {
+            for (int l1 = 0; l1 < this.aq.length; ++l1) {
                 double d1 = (double) (4 * i + i * k1 * 6) + (random.nextDouble() - 0.5D) * (double) i * 2.5D;
                 int i2 = (int) Math.round(Math.cos(d0) * d1);
                 int j2 = (int) Math.round(Math.sin(d0) * d1);
-                BlockPosition blockposition = chunkgenerator.getWorldChunkManager().a((i2 << 4) + 8, (j2 << 4) + 8, 112, list, random);
+                BlockPosition blockposition = chunkgenerator.getWorldChunkManager().a((i2 << 4) + 8, chunkgenerator.getSeaLevel(), (j2 << 4) + 8, 112, list, random);
 
                 if (blockposition != null) {
                     i2 = blockposition.getX() >> 4;
@@ -156,7 +156,7 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureEmptyC
                 }
 
                 if (l1 >= i1) {
-                    this.aS[l1] = new ChunkCoordIntPair(i2, j2);
+                    this.aq[l1] = new ChunkCoordIntPair(i2, j2);
                 }
 
                 d0 += 6.283185307179586D / (double) k;
@@ -165,7 +165,7 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureEmptyC
                     ++k1;
                     j1 = 0;
                     k += 2 * k / (k1 + 1);
-                    k = Math.min(k, this.aS.length - l1);
+                    k = Math.min(k, this.aq.length - l1);
                     d0 += random.nextDouble() * 3.141592653589793D * 2.0D;
                 }
             }
@@ -175,8 +175,8 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureEmptyC
 
     public static class a extends StructureStart {
 
-        public a(StructureGenerator<?> structuregenerator, int i, int j, BiomeBase biomebase, StructureBoundingBox structureboundingbox, int k, long l) {
-            super(structuregenerator, i, j, biomebase, structureboundingbox, k, l);
+        public a(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+            super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
         @Override
@@ -207,7 +207,7 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureEmptyC
                 this.a(chunkgenerator.getSeaLevel(), this.d, 10);
             } while (this.b.isEmpty() || worldgenstrongholdpieces_worldgenstrongholdstart.b == null);
 
-            ((WorldGenStronghold) this.k()).aT.add(this);
+            ((WorldGenStronghold) this.l()).ar.add(this);
         }
     }
 }

@@ -11,7 +11,7 @@ public class WorldGenSurfaceSwamp extends WorldGenSurface<WorldGenSurfaceConfigu
     }
 
     public void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, long i1, WorldGenSurfaceConfigurationBase worldgensurfaceconfigurationbase) {
-        double d1 = BiomeBase.e.a((double) i * 0.25D, (double) j * 0.25D);
+        double d1 = BiomeBase.e.a((double) i * 0.25D, (double) j * 0.25D, false);
 
         if (d1 > 0.0D) {
             int j1 = i & 15;

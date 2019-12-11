@@ -23,7 +23,7 @@ public class ItemEnderEye extends Item {
                 world.updateAdjacentComparators(blockposition, Blocks.END_PORTAL_FRAME);
                 itemactioncontext.getItemStack().subtract(1);
                 world.triggerEffect(1503, blockposition, 0);
-                ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = BlockEnderPortalFrame.d().a(world, blockposition);
+                ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = BlockEnderPortalFrame.c().a(world, blockposition);
 
                 if (shapedetector_shapedetectorcollection != null) {
                     BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a().b(-3, 0, -3);
@@ -50,14 +50,14 @@ public class ItemEnderEye extends Item {
         MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.NONE);
 
         if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK && world.getType(((MovingObjectPositionBlock) movingobjectposition).getBlockPosition()).getBlock() == Blocks.END_PORTAL_FRAME) {
-            return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
+            return InteractionResultWrapper.c(itemstack);
         } else {
             entityhuman.c(enumhand);
-            if (!world.isClientSide) {
-                BlockPosition blockposition = world.getChunkProvider().getChunkGenerator().findNearestMapFeature(world, "Stronghold", new BlockPosition(entityhuman), 100, false);
+            if (world instanceof WorldServer) {
+                BlockPosition blockposition = ((WorldServer) world).getChunkProvider().getChunkGenerator().findNearestMapFeature(world, "Stronghold", new BlockPosition(entityhuman), 100, false);
 
                 if (blockposition != null) {
-                    EntityEnderSignal entityendersignal = new EntityEnderSignal(world, entityhuman.locX, entityhuman.locY + (double) (entityhuman.getHeight() / 2.0F), entityhuman.locZ);
+                    EntityEnderSignal entityendersignal = new EntityEnderSignal(world, entityhuman.locX(), entityhuman.e(0.5D), entityhuman.locZ());
 
                     entityendersignal.b(itemstack);
                     entityendersignal.a(blockposition);
@@ -66,18 +66,19 @@ public class ItemEnderEye extends Item {
                         CriterionTriggers.m.a((EntityPlayer) entityhuman, blockposition);
                     }
 
-                    world.playSound((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_ENDER_EYE_LAUNCH, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderEye.i.nextFloat() * 0.4F + 0.8F));
+                    world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ENTITY_ENDER_EYE_LAUNCH, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderEye.i.nextFloat() * 0.4F + 0.8F));
                     world.a((EntityHuman) null, 1003, new BlockPosition(entityhuman), 0);
                     if (!entityhuman.abilities.canInstantlyBuild) {
                         itemstack.subtract(1);
                     }
 
                     entityhuman.b(StatisticList.ITEM_USED.b(this));
-                    return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
+                    entityhuman.a(enumhand, true);
+                    return InteractionResultWrapper.a(itemstack);
                 }
             }
 
-            return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
+            return InteractionResultWrapper.b(itemstack);
         }
     }
 }

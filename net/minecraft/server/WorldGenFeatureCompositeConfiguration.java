@@ -6,16 +6,12 @@ import com.mojang.datafixers.types.DynamicOps;
 
 public class WorldGenFeatureCompositeConfiguration implements WorldGenFeatureConfiguration {
 
-    public final WorldGenFeatureConfigured<?> a;
+    public final WorldGenFeatureConfigured<?, ?> a;
     public final WorldGenDecoratorConfigured<?> b;
 
-    public WorldGenFeatureCompositeConfiguration(WorldGenFeatureConfigured<?> worldgenfeatureconfigured, WorldGenDecoratorConfigured<?> worldgendecoratorconfigured) {
+    public WorldGenFeatureCompositeConfiguration(WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured, WorldGenDecoratorConfigured<?> worldgendecoratorconfigured) {
         this.a = worldgenfeatureconfigured;
         this.b = worldgendecoratorconfigured;
-    }
-
-    public <F extends WorldGenFeatureConfiguration, D extends WorldGenFeatureDecoratorConfiguration> WorldGenFeatureCompositeConfiguration(WorldGenerator<F> worldgenerator, F f0, WorldGenDecorator<D> worldgendecorator, D d0) {
-        this(new WorldGenFeatureConfigured<>(worldgenerator, f0), new WorldGenDecoratorConfigured<>(worldgendecorator, d0));
     }
 
     @Override
@@ -24,11 +20,11 @@ public class WorldGenFeatureCompositeConfiguration implements WorldGenFeatureCon
     }
 
     public String toString() {
-        return String.format("< %s [%s | %s] >", this.getClass().getSimpleName(), IRegistry.FEATURE.getKey(this.a.a), IRegistry.DECORATOR.getKey(this.b.a));
+        return String.format("< %s [%s | %s] >", this.getClass().getSimpleName(), IRegistry.FEATURE.getKey(this.a.b), IRegistry.DECORATOR.getKey(this.b.a));
     }
 
     public static <T> WorldGenFeatureCompositeConfiguration a(Dynamic<T> dynamic) {
-        WorldGenFeatureConfigured<?> worldgenfeatureconfigured = WorldGenFeatureConfigured.a(dynamic.get("feature").orElseEmptyMap());
+        WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured = WorldGenFeatureConfigured.a(dynamic.get("feature").orElseEmptyMap());
         WorldGenDecoratorConfigured<?> worldgendecoratorconfigured = WorldGenDecoratorConfigured.a(dynamic.get("decorator").orElseEmptyMap());
 
         return new WorldGenFeatureCompositeConfiguration(worldgenfeatureconfigured, worldgendecoratorconfigured);

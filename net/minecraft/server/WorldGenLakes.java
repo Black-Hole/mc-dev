@@ -95,10 +95,10 @@ public class WorldGenLakes extends WorldGenerator<WorldGenFeatureLakeConfigurati
                         for (j1 = 4; j1 < 8; ++j1) {
                             if (aboolean[(j * 16 + k1) * 8 + j1]) {
                                 blockposition1 = blockposition.b(j, j1 - 1, k1);
-                                if (Block.c(generatoraccess.getType(blockposition1).getBlock()) && generatoraccess.getBrightness(EnumSkyBlock.SKY, blockposition.b(j, j1, k1)) > 0) {
+                                if (b(generatoraccess.getType(blockposition1).getBlock()) && generatoraccess.getBrightness(EnumSkyBlock.SKY, blockposition.b(j, j1, k1)) > 0) {
                                     BiomeBase biomebase = generatoraccess.getBiome(blockposition1);
 
-                                    if (biomebase.q().a().getBlock() == Blocks.MYCELIUM) {
+                                    if (biomebase.s().a().getBlock() == Blocks.MYCELIUM) {
                                         generatoraccess.setTypeAndData(blockposition1, Blocks.MYCELIUM.getBlockData(), 2);
                                     } else {
                                         generatoraccess.setTypeAndData(blockposition1, Blocks.GRASS_BLOCK.getBlockData(), 2);

@@ -4,7 +4,7 @@ public class BlockIronBars extends BlockTall {
 
     protected BlockIronBars(Block.Info block_info) {
         super(1.0F, 1.0F, 16.0F, 16.0F, 16.0F, block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockIronBars.NORTH, false)).set(BlockIronBars.EAST, false)).set(BlockIronBars.SOUTH, false)).set(BlockIronBars.WEST, false)).set(BlockIronBars.e, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockIronBars.NORTH, false)).set(BlockIronBars.EAST, false)).set(BlockIronBars.SOUTH, false)).set(BlockIronBars.WEST, false)).set(BlockIronBars.e, false));
     }
 
     @Override
@@ -30,18 +30,13 @@ public class BlockIronBars extends BlockTall {
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
-        return enumdirection.k().c() ? (IBlockData) iblockdata.set((IBlockState) BlockIronBars.f.get(enumdirection), this.a(iblockdata1, iblockdata1.d(generatoraccess, blockposition1, enumdirection.opposite()))) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return enumdirection.m().c() ? (IBlockData) iblockdata.set((IBlockState) BlockIronBars.f.get(enumdirection), this.a(iblockdata1, iblockdata1.d(generatoraccess, blockposition1, enumdirection.opposite()))) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     public final boolean a(IBlockData iblockdata, boolean flag) {
         Block block = iblockdata.getBlock();
 
         return !a(block) && flag || block instanceof BlockIronBars;
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT_MIPPED;
     }
 
     @Override

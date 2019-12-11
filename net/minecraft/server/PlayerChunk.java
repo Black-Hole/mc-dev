@@ -333,7 +333,7 @@ public class PlayerChunk {
 
         if (!flag6 && flag7) {
             if (this.entityTickingFuture != PlayerChunk.UNLOADED_CHUNK_FUTURE) {
-                throw new IllegalStateException();
+                throw (IllegalStateException) SystemUtils.c(new IllegalStateException());
             }
 
             this.entityTickingFuture = playerchunkmap.b(this.location);

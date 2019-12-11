@@ -1,30 +1,20 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Maps;
-import it.unimi.dsi.fastutil.longs.LongIterator;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
-import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
-import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.util.Supplier;
 
 public class PortalTravelAgent {
 
-    private static final Logger LOGGER = LogManager.getLogger();
-    private static final BlockPortal b = (BlockPortal) Blocks.NETHER_PORTAL;
     private final WorldServer world;
-    private final Random d;
-    private final Map<BlockPosition2D, PortalTravelAgent.ChunkCoordinatesPortal> e = Maps.newHashMapWithExpectedSize(4096);
-    private final Object2LongMap<BlockPosition2D> f = new Object2LongOpenHashMap();
+    private final Random b;
 
     public PortalTravelAgent(WorldServer worldserver) {
         this.world = worldserver;
-        this.d = new Random(worldserver.getSeed());
+        this.b = new Random(worldserver.getSeed());
     }
 
     public boolean a(Entity entity, float f) {
@@ -40,97 +30,46 @@ public class PortalTravelAgent {
 
             entity.setMot(vec3d2);
             entity.yaw = f + (float) shapedetector_shape.yaw;
-            if (entity instanceof EntityPlayer) {
-                ((EntityPlayer) entity).playerConnection.a(vec3d1.x, vec3d1.y, vec3d1.z, entity.yaw, entity.pitch);
-                ((EntityPlayer) entity).playerConnection.syncPosition();
-            } else {
-                entity.setPositionRotation(vec3d1.x, vec3d1.y, vec3d1.z, entity.yaw, entity.pitch);
-            }
-
+            entity.b(vec3d1.x, vec3d1.y, vec3d1.z);
             return true;
         }
     }
 
     @Nullable
     public ShapeDetector.Shape a(BlockPosition blockposition, Vec3D vec3d, EnumDirection enumdirection, double d0, double d1, boolean flag) {
-        boolean flag1 = true;
-        boolean flag2 = true;
-        BlockPosition blockposition1 = null;
-        BlockPosition2D blockposition2d = new BlockPosition2D(blockposition);
+        VillagePlace villageplace = this.world.B();
 
-        if (!flag && this.f.containsKey(blockposition2d)) {
-            return null;
-        } else {
-            PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) this.e.get(blockposition2d);
+        villageplace.a(this.world, blockposition, 128);
+        List<VillagePlaceRecord> list = (List) villageplace.b((villageplacetype) -> {
+            return villageplacetype == VillagePlaceType.u;
+        }, blockposition, 128, VillagePlace.Occupancy.ANY).collect(Collectors.toList());
+        Optional<VillagePlaceRecord> optional = list.stream().min(Comparator.comparingDouble((villageplacerecord) -> {
+            return villageplacerecord.f().m(blockposition);
+        }).thenComparingInt((villageplacerecord) -> {
+            return villageplacerecord.f().getY();
+        }));
 
-            if (portaltravelagent_chunkcoordinatesportal != null) {
-                blockposition1 = portaltravelagent_chunkcoordinatesportal.a;
-                portaltravelagent_chunkcoordinatesportal.b = this.world.getTime();
-                flag2 = false;
-            } else {
-                double d2 = Double.MAX_VALUE;
+        return (ShapeDetector.Shape) optional.map((villageplacerecord) -> {
+            BlockPosition blockposition1 = villageplacerecord.f();
 
-                for (int i = -128; i <= 128; ++i) {
-                    BlockPosition blockposition2;
+            this.world.getChunkProvider().addTicket(TicketType.PORTAL, new ChunkCoordIntPair(blockposition1), 3, blockposition1);
+            ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = BlockPortal.c((GeneratorAccess) this.world, blockposition1);
 
-                    for (int j = -128; j <= 128; ++j) {
-                        for (BlockPosition blockposition3 = blockposition.b(i, this.world.getHeight() - 1 - blockposition.getY(), j); blockposition3.getY() >= 0; blockposition3 = blockposition2) {
-                            blockposition2 = blockposition3.down();
-                            if (this.world.getType(blockposition3).getBlock() == PortalTravelAgent.b) {
-                                for (blockposition2 = blockposition3.down(); this.world.getType(blockposition2).getBlock() == PortalTravelAgent.b; blockposition2 = blockposition2.down()) {
-                                    blockposition3 = blockposition2;
-                                }
-
-                                double d3 = blockposition3.m(blockposition);
-
-                                if (d2 < 0.0D || d3 < d2) {
-                                    d2 = d3;
-                                    blockposition1 = blockposition3;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (blockposition1 == null) {
-                long k = this.world.getTime() + 300L;
-
-                this.f.put(blockposition2d, k);
-                return null;
-            } else {
-                if (flag2) {
-                    this.e.put(blockposition2d, new PortalTravelAgent.ChunkCoordinatesPortal(blockposition1, this.world.getTime()));
-                    Logger logger = PortalTravelAgent.LOGGER;
-                    Supplier[] asupplier = new Supplier[2];
-                    WorldProvider worldprovider = this.world.getWorldProvider();
-
-                    asupplier[0] = worldprovider::getDimensionManager;
-                    asupplier[1] = () -> {
-                        return blockposition2d;
-                    };
-                    logger.debug("Adding nether portal ticket for {}:{}", asupplier);
-                    this.world.getChunkProvider().addTicket(TicketType.PORTAL, new ChunkCoordIntPair(blockposition1), 3, blockposition2d);
-                }
-
-                ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = PortalTravelAgent.b.c((GeneratorAccess) this.world, blockposition1);
-
-                return shapedetector_shapedetectorcollection.a(enumdirection, blockposition1, d1, vec3d, d0);
-            }
-        }
+            return shapedetector_shapedetectorcollection.a(enumdirection, blockposition1, d1, vec3d, d0);
+        }).orElse((Object) null);
     }
 
     public boolean a(Entity entity) {
         boolean flag = true;
         double d0 = -1.0D;
-        int i = MathHelper.floor(entity.locX);
-        int j = MathHelper.floor(entity.locY);
-        int k = MathHelper.floor(entity.locZ);
+        int i = MathHelper.floor(entity.locX());
+        int j = MathHelper.floor(entity.locY());
+        int k = MathHelper.floor(entity.locZ());
         int l = i;
         int i1 = j;
         int j1 = k;
         int k1 = 0;
-        int l1 = this.d.nextInt(4);
+        int l1 = this.b.nextInt(4);
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
         double d1;
@@ -150,10 +89,10 @@ public class PortalTravelAgent {
         double d4;
 
         for (i2 = i - 16; i2 <= i + 16; ++i2) {
-            d1 = (double) i2 + 0.5D - entity.locX;
+            d1 = (double) i2 + 0.5D - entity.locX();
 
             for (j2 = k - 16; j2 <= k + 16; ++j2) {
-                d2 = (double) j2 + 0.5D - entity.locZ;
+                d2 = (double) j2 + 0.5D - entity.locZ();
 
                 label257:
                 for (k2 = this.world.getHeight() - 1; k2 >= 0; --k2) {
@@ -185,7 +124,7 @@ public class PortalTravelAgent {
                                 }
                             }
 
-                            d3 = (double) k2 + 0.5D - entity.locY;
+                            d3 = (double) k2 + 0.5D - entity.locY();
                             d4 = d1 * d1 + d3 * d3 + d2 * d2;
                             if (d0 < 0.0D || d4 < d0) {
                                 d0 = d4;
@@ -202,10 +141,10 @@ public class PortalTravelAgent {
 
         if (d0 < 0.0D) {
             for (i2 = i - 16; i2 <= i + 16; ++i2) {
-                d1 = (double) i2 + 0.5D - entity.locX;
+                d1 = (double) i2 + 0.5D - entity.locX();
 
                 for (j2 = k - 16; j2 <= k + 16; ++j2) {
-                    d2 = (double) j2 + 0.5D - entity.locZ;
+                    d2 = (double) j2 + 0.5D - entity.locZ();
 
                     label205:
                     for (k2 = this.world.getHeight() - 1; k2 >= 0; --k2) {
@@ -230,7 +169,7 @@ public class PortalTravelAgent {
                                     }
                                 }
 
-                                d3 = (double) k2 + 0.5D - entity.locY;
+                                d3 = (double) k2 + 0.5D - entity.locY();
                                 d4 = d1 * d1 + d3 * d3 + d2 * d2;
                                 if (d0 < 0.0D || d4 < d0) {
                                     d0 = d4;
@@ -286,7 +225,7 @@ public class PortalTravelAgent {
             }
         }
 
-        IBlockData iblockdata = (IBlockData) PortalTravelAgent.b.getBlockData().set(BlockPortal.AXIS, k5 == 0 ? EnumDirection.EnumAxis.Z : EnumDirection.EnumAxis.X);
+        IBlockData iblockdata = (IBlockData) Blocks.NETHER_PORTAL.getBlockData().set(BlockPortal.AXIS, k5 == 0 ? EnumDirection.EnumAxis.Z : EnumDirection.EnumAxis.X);
 
         for (i3 = 0; i3 < 2; ++i3) {
             for (l2 = 0; l2 < 3; ++l2) {
@@ -296,63 +235,5 @@ public class PortalTravelAgent {
         }
 
         return true;
-    }
-
-    public void a(long i) {
-        if (i % 100L == 0L) {
-            this.b(i);
-            this.c(i);
-        }
-
-    }
-
-    private void b(long i) {
-        LongIterator longiterator = this.f.values().iterator();
-
-        while (longiterator.hasNext()) {
-            long j = longiterator.nextLong();
-
-            if (j <= i) {
-                longiterator.remove();
-            }
-        }
-
-    }
-
-    private void c(long i) {
-        long j = i - 300L;
-        Iterator iterator = this.e.entrySet().iterator();
-
-        while (iterator.hasNext()) {
-            Entry<BlockPosition2D, PortalTravelAgent.ChunkCoordinatesPortal> entry = (Entry) iterator.next();
-            PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) entry.getValue();
-
-            if (portaltravelagent_chunkcoordinatesportal.b < j) {
-                BlockPosition2D blockposition2d = (BlockPosition2D) entry.getKey();
-                Logger logger = PortalTravelAgent.LOGGER;
-                Supplier[] asupplier = new Supplier[2];
-                WorldProvider worldprovider = this.world.getWorldProvider();
-
-                asupplier[0] = worldprovider::getDimensionManager;
-                asupplier[1] = () -> {
-                    return blockposition2d;
-                };
-                logger.debug("Removing nether portal ticket for {}:{}", asupplier);
-                this.world.getChunkProvider().removeTicket(TicketType.PORTAL, new ChunkCoordIntPair(portaltravelagent_chunkcoordinatesportal.a), 3, blockposition2d);
-                iterator.remove();
-            }
-        }
-
-    }
-
-    static class ChunkCoordinatesPortal {
-
-        public final BlockPosition a;
-        public long b;
-
-        public ChunkCoordinatesPortal(BlockPosition blockposition, long i) {
-            this.a = blockposition;
-            this.b = i;
-        }
     }
 }

@@ -5,12 +5,12 @@ import java.util.Random;
 
 public class BlockSoil extends Block {
 
-    public static final BlockStateInteger MOISTURE = BlockProperties.ap;
+    public static final BlockStateInteger MOISTURE = BlockProperties.aq;
     protected static final VoxelShape b = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
 
     protected BlockSoil(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSoil.MOISTURE, 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSoil.MOISTURE, 0));
     }
 
     @Override
@@ -26,7 +26,7 @@ public class BlockSoil extends Block {
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         IBlockData iblockdata1 = iworldreader.getType(blockposition.up());
 
-        return !iblockdata1.getMaterial().isBuildable() || iblockdata1.getBlock() instanceof BlockFenceGate;
+        return !iblockdata1.getMaterial().isBuildable() || iblockdata1.getBlock() instanceof BlockFenceGate || iblockdata1.getBlock() instanceof BlockPistonMoving;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class BlockSoil extends Block {
     }
 
     @Override
-    public boolean n(IBlockData iblockdata) {
+    public boolean o(IBlockData iblockdata) {
         return true;
     }
 
@@ -45,20 +45,20 @@ public class BlockSoil extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!iblockdata.canPlace(world, blockposition)) {
-            fade(iblockdata, world, blockposition);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!iblockdata.canPlace(worldserver, blockposition)) {
+            fade(iblockdata, worldserver, blockposition);
         } else {
             int i = (Integer) iblockdata.get(BlockSoil.MOISTURE);
 
-            if (!a((IWorldReader) world, blockposition) && !world.isRainingAt(blockposition.up())) {
+            if (!a((IWorldReader) worldserver, blockposition) && !worldserver.isRainingAt(blockposition.up())) {
                 if (i > 0) {
-                    world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSoil.MOISTURE, i - 1), 2);
-                } else if (!a((IBlockAccess) world, blockposition)) {
-                    fade(iblockdata, world, blockposition);
+                    worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSoil.MOISTURE, i - 1), 2);
+                } else if (!a((IBlockAccess) worldserver, blockposition)) {
+                    fade(iblockdata, worldserver, blockposition);
                 }
             } else if (i < 7) {
-                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSoil.MOISTURE, 7), 2);
+                worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSoil.MOISTURE, 7), 2);
             }
 
         }

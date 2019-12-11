@@ -64,6 +64,9 @@ public class PlayerConnection implements PacketListenerPlayIn {
 
     public void tick() {
         this.syncPosition();
+        this.player.lastX = this.player.locX();
+        this.player.lastY = this.player.locY();
+        this.player.lastZ = this.player.locZ();
         this.player.playerTick();
         this.player.setLocation(this.l, this.m, this.n, this.player.yaw, this.player.pitch);
         ++this.e;
@@ -81,12 +84,12 @@ public class PlayerConnection implements PacketListenerPlayIn {
 
         this.r = this.player.getRootVehicle();
         if (this.r != this.player && this.r.getRidingPassenger() == this.player) {
-            this.s = this.r.locX;
-            this.t = this.r.locY;
-            this.u = this.r.locZ;
-            this.v = this.r.locX;
-            this.w = this.r.locY;
-            this.x = this.r.locZ;
+            this.s = this.r.locX();
+            this.t = this.r.locY();
+            this.u = this.r.locZ();
+            this.v = this.r.locX();
+            this.w = this.r.locY();
+            this.x = this.r.locZ();
             if (this.D && this.player.getRootVehicle().getRidingPassenger() == this.player) {
                 if (++this.E > 80) {
                     PlayerConnection.LOGGER.warn("{} was kicked for floating a vehicle too long!", this.player.getDisplayName().getString());
@@ -133,12 +136,12 @@ public class PlayerConnection implements PacketListenerPlayIn {
     }
 
     public void syncPosition() {
-        this.l = this.player.locX;
-        this.m = this.player.locY;
-        this.n = this.player.locZ;
-        this.o = this.player.locX;
-        this.p = this.player.locY;
-        this.q = this.player.locZ;
+        this.l = this.player.locX();
+        this.m = this.player.locY();
+        this.n = this.player.locZ();
+        this.o = this.player.locX();
+        this.p = this.player.locY();
+        this.q = this.player.locZ();
     }
 
     @Override
@@ -147,7 +150,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
     }
 
     private boolean isExemptPlayer() {
-        return this.minecraftServer.b(this.player.getProfile());
+        return this.minecraftServer.a(this.player.getProfile());
     }
 
     public void disconnect(IChatBaseComponent ichatbasecomponent) {
@@ -186,9 +189,9 @@ public class PlayerConnection implements PacketListenerPlayIn {
 
             if (entity != this.player && entity.getRidingPassenger() == this.player && entity == this.r) {
                 WorldServer worldserver = this.player.getWorldServer();
-                double d0 = entity.locX;
-                double d1 = entity.locY;
-                double d2 = entity.locZ;
+                double d0 = entity.locX();
+                double d1 = entity.locY();
+                double d2 = entity.locZ();
                 double d3 = packetplayinvehiclemove.getX();
                 double d4 = packetplayinvehiclemove.getY();
                 double d5 = packetplayinvehiclemove.getZ();
@@ -214,13 +217,13 @@ public class PlayerConnection implements PacketListenerPlayIn {
                 entity.move(EnumMoveType.PLAYER, new Vec3D(d6, d7, d8));
                 double d11 = d7;
 
-                d6 = d3 - entity.locX;
-                d7 = d4 - entity.locY;
+                d6 = d3 - entity.locX();
+                d7 = d4 - entity.locY();
                 if (d7 > -0.5D || d7 < 0.5D) {
                     d7 = 0.0D;
                 }
 
-                d8 = d5 - entity.locZ;
+                d8 = d5 - entity.locZ();
                 d10 = d6 * d6 + d7 * d7 + d8 * d8;
                 boolean flag1 = false;
 
@@ -239,11 +242,11 @@ public class PlayerConnection implements PacketListenerPlayIn {
                 }
 
                 this.player.getWorldServer().getChunkProvider().movePlayer(this.player);
-                this.player.checkMovement(this.player.locX - d0, this.player.locY - d1, this.player.locZ - d2);
-                this.D = d11 >= -0.03125D && !this.minecraftServer.getAllowFlight() && !worldserver.a(entity.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
-                this.v = entity.locX;
-                this.w = entity.locY;
-                this.x = entity.locZ;
+                this.player.checkMovement(this.player.locX() - d0, this.player.locY() - d1, this.player.locZ() - d2);
+                this.D = d11 >= -0.03125D && !this.minecraftServer.getAllowFlight() && !worldserver.b(entity.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
+                this.v = entity.locX();
+                this.w = entity.locY();
+                this.x = entity.locZ();
             }
 
         }
@@ -339,6 +342,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
             boolean flag = packetplayinsetcommandblock.d();
 
             if (commandblocklistenerabstract != null) {
+                TileEntityCommand.Type tileentitycommand_type = tileentitycommand.m();
                 EnumDirection enumdirection = (EnumDirection) this.player.world.getType(blockposition).get(BlockCommand.a);
                 IBlockData iblockdata;
 
@@ -357,7 +361,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
                         this.player.world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) iblockdata.set(BlockCommand.a, enumdirection)).set(BlockCommand.b, packetplayinsetcommandblock.e()), 2);
                 }
 
-                tileentity.n();
+                tileentity.r();
                 this.player.world.setTileEntity(blockposition, tileentity);
                 commandblocklistenerabstract.setCommand(s);
                 commandblocklistenerabstract.a(flag);
@@ -366,6 +370,10 @@ public class PlayerConnection implements PacketListenerPlayIn {
                 }
 
                 tileentitycommand.b(packetplayinsetcommandblock.f());
+                if (tileentitycommand_type != packetplayinsetcommandblock.g()) {
+                    tileentitycommand.h();
+                }
+
                 commandblocklistenerabstract.e();
                 if (!UtilColor.b(s)) {
                     this.player.sendMessage(new ChatMessage("advMode.setCommand.success", new Object[]{s}));
@@ -454,25 +462,25 @@ public class PlayerConnection implements PacketListenerPlayIn {
                 tileentitystructure.f(packetplayinstruct.m());
                 tileentitystructure.a(packetplayinstruct.n());
                 tileentitystructure.a(packetplayinstruct.o());
-                if (tileentitystructure.f()) {
+                if (tileentitystructure.g()) {
                     String s = tileentitystructure.getStructureName();
 
                     if (packetplayinstruct.c() == TileEntityStructure.UpdateType.SAVE_AREA) {
-                        if (tileentitystructure.C()) {
+                        if (tileentitystructure.D()) {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.save_success", new Object[]{s})), false);
                         } else {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.save_failure", new Object[]{s})), false);
                         }
                     } else if (packetplayinstruct.c() == TileEntityStructure.UpdateType.LOAD_AREA) {
-                        if (!tileentitystructure.F()) {
+                        if (!tileentitystructure.G()) {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.load_not_found", new Object[]{s})), false);
-                        } else if (tileentitystructure.D()) {
+                        } else if (tileentitystructure.E()) {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.load_success", new Object[]{s})), false);
                         } else {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.load_prepare", new Object[]{s})), false);
                         }
                     } else if (packetplayinstruct.c() == TileEntityStructure.UpdateType.SCAN_AREA) {
-                        if (tileentitystructure.B()) {
+                        if (tileentitystructure.C()) {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.size_success", new Object[]{s})), false);
                         } else {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.size_failure", new Object[0])), false);
@@ -527,6 +535,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
 
     @Override
     public void a(PacketPlayInBEdit packetplayinbedit) {
+        PlayerConnectionUtils.ensureMainThread(packetplayinbedit, this, this.player.getWorldServer());
         ItemStack itemstack = packetplayinbedit.b();
 
         if (!itemstack.isEmpty()) {
@@ -542,8 +551,8 @@ public class PlayerConnection implements PacketListenerPlayIn {
                             itemstack2.setTag(nbttagcompound.clone());
                         }
 
-                        itemstack2.a("author", (NBTBase) (new NBTTagString(this.player.getDisplayName().getString())));
-                        itemstack2.a("title", (NBTBase) (new NBTTagString(itemstack.getTag().getString("title"))));
+                        itemstack2.a("author", (NBTBase) NBTTagString.a(this.player.getDisplayName().getString()));
+                        itemstack2.a("title", (NBTBase) NBTTagString.a(itemstack.getTag().getString("title")));
                         NBTTagList nbttaglist = itemstack.getTag().getList("pages", 8);
 
                         for (int i = 0; i < nbttaglist.size(); ++i) {
@@ -551,7 +560,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
                             ChatComponentText chatcomponenttext = new ChatComponentText(s);
 
                             s = IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) chatcomponenttext);
-                            nbttaglist.set(i, (NBTBase) (new NBTTagString(s)));
+                            nbttaglist.set(i, (NBTBase) NBTTagString.a(s));
                         }
 
                         itemstack2.a("pages", (NBTBase) nbttaglist);
@@ -613,16 +622,16 @@ public class PlayerConnection implements PacketListenerPlayIn {
                 } else {
                     this.A = this.e;
                     if (this.player.isPassenger()) {
-                        this.player.setLocation(this.player.locX, this.player.locY, this.player.locZ, packetplayinflying.a(this.player.yaw), packetplayinflying.b(this.player.pitch));
+                        this.player.setLocation(this.player.locX(), this.player.locY(), this.player.locZ(), packetplayinflying.a(this.player.yaw), packetplayinflying.b(this.player.pitch));
                         this.player.getWorldServer().getChunkProvider().movePlayer(this.player);
                     } else {
-                        double d0 = this.player.locX;
-                        double d1 = this.player.locY;
-                        double d2 = this.player.locZ;
-                        double d3 = this.player.locY;
-                        double d4 = packetplayinflying.a(this.player.locX);
-                        double d5 = packetplayinflying.b(this.player.locY);
-                        double d6 = packetplayinflying.c(this.player.locZ);
+                        double d0 = this.player.locX();
+                        double d1 = this.player.locY();
+                        double d2 = this.player.locZ();
+                        double d3 = this.player.locY();
+                        double d4 = packetplayinflying.a(this.player.locX());
+                        double d5 = packetplayinflying.b(this.player.locY());
+                        double d6 = packetplayinflying.c(this.player.locZ());
                         float f = packetplayinflying.a(this.player.yaw);
                         float f1 = packetplayinflying.b(this.player.pitch);
                         double d7 = d4 - this.l;
@@ -633,7 +642,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
 
                         if (this.player.isSleeping()) {
                             if (d11 > 1.0D) {
-                                this.a(this.player.locX, this.player.locY, this.player.locZ, packetplayinflying.a(this.player.yaw), packetplayinflying.b(this.player.pitch));
+                                this.a(this.player.locX(), this.player.locY(), this.player.locZ(), packetplayinflying.a(this.player.yaw), packetplayinflying.b(this.player.pitch));
                             }
 
                         } else {
@@ -650,7 +659,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
 
                                 if (d11 - d10 > (double) (f2 * (float) i) && !this.isExemptPlayer()) {
                                     PlayerConnection.LOGGER.warn("{} moved too quickly! {},{},{}", this.player.getDisplayName().getString(), d7, d8, d9);
-                                    this.a(this.player.locX, this.player.locY, this.player.locZ, this.player.yaw, this.player.pitch);
+                                    this.a(this.player.locX(), this.player.locY(), this.player.locZ(), this.player.yaw, this.player.pitch);
                                     return;
                                 }
                             }
@@ -660,6 +669,10 @@ public class PlayerConnection implements PacketListenerPlayIn {
                             d7 = d4 - this.o;
                             d8 = d5 - this.p;
                             d9 = d6 - this.q;
+                            if (d8 > 0.0D) {
+                                this.player.fallDistance = 0.0F;
+                            }
+
                             if (this.player.onGround && !packetplayinflying.b() && d8 > 0.0D) {
                                 this.player.jump();
                             }
@@ -668,13 +681,13 @@ public class PlayerConnection implements PacketListenerPlayIn {
                             this.player.onGround = packetplayinflying.b();
                             double d12 = d8;
 
-                            d7 = d4 - this.player.locX;
-                            d8 = d5 - this.player.locY;
+                            d7 = d4 - this.player.locX();
+                            d8 = d5 - this.player.locY();
                             if (d8 > -0.5D || d8 < 0.5D) {
                                 d8 = 0.0D;
                             }
 
-                            d9 = d6 - this.player.locZ;
+                            d9 = d6 - this.player.locZ();
                             d11 = d7 * d7 + d8 * d8 + d9 * d9;
                             boolean flag1 = false;
 
@@ -684,7 +697,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
                             }
 
                             this.player.setLocation(d4, d5, d6, f, f1);
-                            this.player.checkMovement(this.player.locX - d0, this.player.locY - d1, this.player.locZ - d2);
+                            this.player.checkMovement(this.player.locX() - d0, this.player.locY() - d1, this.player.locZ() - d2);
                             if (!this.player.noclip && !this.player.isSleeping()) {
                                 boolean flag2 = this.a((IWorldReader) worldserver);
 
@@ -694,13 +707,13 @@ public class PlayerConnection implements PacketListenerPlayIn {
                                 }
                             }
 
-                            this.B = d12 >= -0.03125D && this.player.playerInteractManager.getGameMode() != EnumGamemode.SPECTATOR && !this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly && !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.isGliding() && !worldserver.a(this.player.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
+                            this.B = d12 >= -0.03125D && this.player.playerInteractManager.getGameMode() != EnumGamemode.SPECTATOR && !this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly && !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.isGliding() && !worldserver.b(this.player.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
                             this.player.onGround = packetplayinflying.b();
                             this.player.getWorldServer().getChunkProvider().movePlayer(this.player);
-                            this.player.a(this.player.locY - d3, packetplayinflying.b());
-                            this.o = this.player.locX;
-                            this.p = this.player.locY;
-                            this.q = this.player.locZ;
+                            this.player.a(this.player.locY() - d3, packetplayinflying.b());
+                            this.o = this.player.locX();
+                            this.p = this.player.locY();
+                            this.q = this.player.locZ();
                         }
                     }
                 }
@@ -717,9 +730,9 @@ public class PlayerConnection implements PacketListenerPlayIn {
     }
 
     public void a(double d0, double d1, double d2, float f, float f1, Set<PacketPlayOutPosition.EnumPlayerTeleportFlags> set) {
-        double d3 = set.contains(PacketPlayOutPosition.EnumPlayerTeleportFlags.X) ? this.player.locX : 0.0D;
-        double d4 = set.contains(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y) ? this.player.locY : 0.0D;
-        double d5 = set.contains(PacketPlayOutPosition.EnumPlayerTeleportFlags.Z) ? this.player.locZ : 0.0D;
+        double d3 = set.contains(PacketPlayOutPosition.EnumPlayerTeleportFlags.X) ? this.player.locX() : 0.0D;
+        double d4 = set.contains(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y) ? this.player.locY() : 0.0D;
+        double d5 = set.contains(PacketPlayOutPosition.EnumPlayerTeleportFlags.Z) ? this.player.locZ() : 0.0D;
         float f2 = set.contains(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y_ROT) ? this.player.yaw : 0.0F;
         float f3 = set.contains(PacketPlayOutPosition.EnumPlayerTeleportFlags.X_ROT) ? this.player.pitch : 0.0F;
 
@@ -791,8 +804,12 @@ public class PlayerConnection implements PacketListenerPlayIn {
             IChatBaseComponent ichatbasecomponent = (new ChatMessage("build.tooHigh", new Object[]{this.minecraftServer.getMaxBuildHeight()})).a(EnumChatFormat.RED);
 
             this.player.playerConnection.sendPacket(new PacketPlayOutChat(ichatbasecomponent, ChatMessageType.GAME_INFO));
-        } else if (this.teleportPos == null && this.player.e((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) < 64.0D && worldserver.a((EntityHuman) this.player, blockposition)) {
-            this.player.playerInteractManager.a(this.player, worldserver, itemstack, enumhand, movingobjectpositionblock);
+        } else if (this.teleportPos == null && this.player.g((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) < 64.0D && worldserver.a((EntityHuman) this.player, blockposition)) {
+            EnumInteractionResult enuminteractionresult = this.player.playerInteractManager.a(this.player, worldserver, itemstack, enumhand, movingobjectpositionblock);
+
+            if (enuminteractionresult.b()) {
+                this.player.a(enumhand, true);
+            }
         }
 
         this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(worldserver, blockposition));
@@ -823,7 +840,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
                 Entity entity = packetplayinspectate.a(worldserver);
 
                 if (entity != null) {
-                    this.player.a(worldserver, entity.locX, entity.locY, entity.locZ, entity.yaw, entity.pitch);
+                    this.player.a(worldserver, entity.locX(), entity.locY(), entity.locZ(), entity.yaw, entity.pitch);
                     return;
                 }
             }
@@ -953,10 +970,10 @@ public class PlayerConnection implements PacketListenerPlayIn {
         IJumpable ijumpable;
 
         switch (packetplayinentityaction.c()) {
-            case START_SNEAKING:
+            case PRESS_SHIFT_KEY:
                 this.player.setSneaking(true);
                 break;
-            case STOP_SNEAKING:
+            case RELEASE_SHIFT_KEY:
                 this.player.setSneaking(false);
                 break;
             case START_SPRINTING:
@@ -967,8 +984,8 @@ public class PlayerConnection implements PacketListenerPlayIn {
                 break;
             case STOP_SLEEPING:
                 if (this.player.isSleeping()) {
-                    this.player.wakeup(false, true, true);
-                    this.teleportPos = new Vec3D(this.player.locX, this.player.locY, this.player.locZ);
+                    this.player.wakeup(false, true);
+                    this.teleportPos = this.player.getPositionVector();
                 }
                 break;
             case START_RIDING_JUMP:
@@ -976,7 +993,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
                     ijumpable = (IJumpable) this.player.getVehicle();
                     int i = packetplayinentityaction.d();
 
-                    if (ijumpable.F_() && i > 0) {
+                    if (ijumpable.G_() && i > 0) {
                         ijumpable.b(i);
                     }
                 }
@@ -993,14 +1010,8 @@ public class PlayerConnection implements PacketListenerPlayIn {
                 }
                 break;
             case START_FALL_FLYING:
-                if (!this.player.onGround && this.player.getMot().y < 0.0D && !this.player.isGliding() && !this.player.isInWater()) {
-                    ItemStack itemstack = this.player.getEquipment(EnumItemSlot.CHEST);
-
-                    if (itemstack.getItem() == Items.ELYTRA && ItemElytra.e(itemstack)) {
-                        this.player.J();
-                    }
-                } else {
-                    this.player.K();
+                if (!this.player.ei()) {
+                    this.player.stopGliding();
                 }
                 break;
             default:
@@ -1032,7 +1043,11 @@ public class PlayerConnection implements PacketListenerPlayIn {
                     this.player.a(entity, enumhand);
                 } else if (packetplayinuseentity.b() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT_AT) {
                     enumhand = packetplayinuseentity.c();
-                    entity.a((EntityHuman) this.player, packetplayinuseentity.d(), enumhand);
+                    EnumInteractionResult enuminteractionresult = entity.a((EntityHuman) this.player, packetplayinuseentity.d(), enumhand);
+
+                    if (enuminteractionresult.b()) {
+                        this.player.a(enumhand, true);
+                    }
                 } else if (packetplayinuseentity.b() == PacketPlayInUseEntity.EnumEntityUseAction.ATTACK) {
                     if (entity instanceof EntityItem || entity instanceof EntityExperienceOrb || entity instanceof EntityArrow || entity == this.player) {
                         this.disconnect(new ChatMessage("multiplayer.disconnect.invalid_entity_attacked", new Object[0]));
@@ -1182,11 +1197,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
                 this.player.defaultContainer.c();
             } else if (flag && flag2 && this.j < 200) {
                 this.j += 20;
-                EntityItem entityitem = this.player.drop(itemstack, true);
-
-                if (entityitem != null) {
-                    entityitem.f();
-                }
+                this.player.drop(itemstack, true);
             }
         }
 

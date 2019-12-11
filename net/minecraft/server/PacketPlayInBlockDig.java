@@ -21,7 +21,7 @@ public class PacketPlayInBlockDig implements Packet<PacketListenerPlayIn> {
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a((Enum) this.c);
         packetdataserializer.a(this.a);
-        packetdataserializer.writeByte(this.b.a());
+        packetdataserializer.writeByte(this.b.b());
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {

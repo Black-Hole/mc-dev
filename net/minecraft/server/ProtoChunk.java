@@ -25,7 +25,8 @@ public class ProtoChunk implements IChunkAccess {
     private static final Logger LOGGER = LogManager.getLogger();
     private final ChunkCoordIntPair b;
     private volatile boolean c;
-    private BiomeBase[] d;
+    @Nullable
+    private BiomeStorage d;
     @Nullable
     private volatile LightEngine e;
     private final Map<HeightMap.Type, HeightMap> f;
@@ -97,11 +98,11 @@ public class ProtoChunk implements IChunkAccess {
         int i = blockposition.getY();
 
         if (World.b(i)) {
-            return FluidTypes.EMPTY.i();
+            return FluidTypes.EMPTY.h();
         } else {
             ChunkSection chunksection = this.getSections()[i >> 4];
 
-            return ChunkSection.a(chunksection) ? FluidTypes.EMPTY.i() : chunksection.b(blockposition.getX() & 15, i & 15, blockposition.getZ() & 15);
+            return ChunkSection.a(chunksection) ? FluidTypes.EMPTY.h() : chunksection.b(blockposition.getX() & 15, i & 15, blockposition.getZ() & 15);
         }
     }
 
@@ -117,17 +118,17 @@ public class ProtoChunk implements IChunkAccess {
         while (iterator.hasNext()) {
             BlockPosition blockposition = (BlockPosition) iterator.next();
 
-            IChunkAccess.a(ashortlist, blockposition.getY() >> 4).add(l(blockposition));
+            IChunkAccess.a(ashortlist, blockposition.getY() >> 4).add(k(blockposition));
         }
 
         return ashortlist;
     }
 
     public void b(short short0, int i) {
-        this.k(a(short0, i, this.b));
+        this.j(a(short0, i, this.b));
     }
 
-    public void k(BlockPosition blockposition) {
+    public void j(BlockPosition blockposition) {
         this.l.add(blockposition.immutableCopy());
     }
 
@@ -240,13 +241,13 @@ public class ProtoChunk implements IChunkAccess {
         return this.k;
     }
 
-    @Override
-    public void a(BiomeBase[] abiomebase) {
-        this.d = abiomebase;
+    public void a(BiomeStorage biomestorage) {
+        this.d = biomestorage;
     }
 
+    @Nullable
     @Override
-    public BiomeBase[] getBiomeIndex() {
+    public BiomeStorage getBiomeIndex() {
         return this.d;
     }
 
@@ -276,7 +277,6 @@ public class ProtoChunk implements IChunkAccess {
     }
 
     @Nullable
-    @Override
     public LightEngine e() {
         return this.e;
     }
@@ -288,11 +288,11 @@ public class ProtoChunk implements IChunkAccess {
 
     @Override
     public void a(HeightMap.Type heightmap_type, long[] along) {
-        this.b(heightmap_type).a(along);
+        this.a(heightmap_type).a(along);
     }
 
     @Override
-    public HeightMap b(HeightMap.Type heightmap_type) {
+    public HeightMap a(HeightMap.Type heightmap_type) {
         return (HeightMap) this.f.computeIfAbsent(heightmap_type, (heightmap_type1) -> {
             return new HeightMap(this, heightmap_type1);
         });
@@ -369,7 +369,7 @@ public class ProtoChunk implements IChunkAccess {
         this.c = true;
     }
 
-    public static short l(BlockPosition blockposition) {
+    public static short k(BlockPosition blockposition) {
         int i = blockposition.getX();
         int j = blockposition.getY();
         int k = blockposition.getZ();
@@ -389,9 +389,9 @@ public class ProtoChunk implements IChunkAccess {
     }
 
     @Override
-    public void f(BlockPosition blockposition) {
+    public void e(BlockPosition blockposition) {
         if (!World.isOutsideWorld(blockposition)) {
-            IChunkAccess.a(this.m, blockposition.getY() >> 4).add(l(blockposition));
+            IChunkAccess.a(this.m, blockposition.getY() >> 4).add(k(blockposition));
         }
 
     }
@@ -422,12 +422,12 @@ public class ProtoChunk implements IChunkAccess {
     }
 
     @Override
-    public void b(long i) {
+    public void setInhabitedTime(long i) {
         this.s = i;
     }
 
     @Override
-    public long q() {
+    public long getInhabitedTime() {
         return this.s;
     }
 
@@ -441,13 +441,13 @@ public class ProtoChunk implements IChunkAccess {
     }
 
     @Override
-    public NBTTagCompound i(BlockPosition blockposition) {
+    public NBTTagCompound f(BlockPosition blockposition) {
         return (NBTTagCompound) this.i.get(blockposition);
     }
 
     @Nullable
     @Override
-    public NBTTagCompound j(BlockPosition blockposition) {
+    public NBTTagCompound i(BlockPosition blockposition) {
         TileEntity tileentity = this.getTileEntity(blockposition);
 
         return tileentity != null ? tileentity.save(new NBTTagCompound()) : (NBTTagCompound) this.i.get(blockposition);
@@ -470,7 +470,6 @@ public class ProtoChunk implements IChunkAccess {
         this.t.put(worldgenstage_features, bitset);
     }
 
-    @Override
     public void a(LightEngine lightengine) {
         this.e = lightengine;
     }

@@ -51,9 +51,9 @@ public class RecipeSuspiciousStew extends IRecipeComplex {
 
         if (itemstack.getItem() instanceof ItemBlock && ((ItemBlock) itemstack.getItem()).getBlock() instanceof BlockFlowers) {
             BlockFlowers blockflowers = (BlockFlowers) ((ItemBlock) itemstack.getItem()).getBlock();
-            MobEffectList mobeffectlist = blockflowers.d();
+            MobEffectList mobeffectlist = blockflowers.c();
 
-            ItemSuspiciousStew.a(itemstack2, mobeffectlist, blockflowers.e());
+            ItemSuspiciousStew.a(itemstack2, mobeffectlist, blockflowers.d());
         }
 
         return itemstack2;

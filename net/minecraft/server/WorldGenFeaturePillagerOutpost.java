@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 
-public class WorldGenFeaturePillagerOutpost extends WorldGenFeatureRandomScattered<WorldGenFeaturePillagerOutpostConfiguration> {
+public class WorldGenFeaturePillagerOutpost extends WorldGenFeatureRandomScattered<WorldGenFeatureEmptyConfiguration> {
 
     private static final List<BiomeBase.BiomeMeta> a = Lists.newArrayList(new BiomeBase.BiomeMeta[]{new BiomeBase.BiomeMeta(EntityTypes.PILLAGER, 1, 1, 1)});
 
-    public WorldGenFeaturePillagerOutpost(Function<Dynamic<?>, ? extends WorldGenFeaturePillagerOutpostConfiguration> function) {
+    public WorldGenFeaturePillagerOutpost(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
         super(function);
     }
 
@@ -30,7 +30,7 @@ public class WorldGenFeaturePillagerOutpost extends WorldGenFeatureRandomScatter
     }
 
     @Override
-    public boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
+    public boolean a(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, Random random, int i, int j, BiomeBase biomebase) {
         ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, random, i, j, 0, 0);
 
         if (i == chunkcoordintpair.x && j == chunkcoordintpair.z) {
@@ -43,12 +43,10 @@ public class WorldGenFeaturePillagerOutpost extends WorldGenFeatureRandomScatter
                 return false;
             }
 
-            BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9));
-
-            if (chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.PILLAGER_OUTPOST)) {
+            if (chunkgenerator.canSpawnStructure(biomebase, this)) {
                 for (int i1 = i - 10; i1 <= i + 10; ++i1) {
                     for (int j1 = j - 10; j1 <= j + 10; ++j1) {
-                        if (WorldGenerator.VILLAGE.a(chunkgenerator, random, i1, j1)) {
+                        if (WorldGenerator.VILLAGE.a(biomemanager, chunkgenerator, random, i1, j1, biomemanager.a(new BlockPosition((i1 << 4) + 9, 0, (j1 << 4) + 9)))) {
                             return false;
                         }
                     }
@@ -73,8 +71,8 @@ public class WorldGenFeaturePillagerOutpost extends WorldGenFeatureRandomScatter
 
     public static class a extends StructureAbstract {
 
-        public a(StructureGenerator<?> structuregenerator, int i, int j, BiomeBase biomebase, StructureBoundingBox structureboundingbox, int k, long l) {
-            super(structuregenerator, i, j, biomebase, structureboundingbox, k, l);
+        public a(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+            super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
         @Override

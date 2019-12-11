@@ -4,7 +4,7 @@ public final class BiomeRiver extends BiomeBase {
 
     public BiomeRiver() {
         super((new BiomeBase.a()).a(WorldGenSurface.G, WorldGenSurface.v).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.RIVER).a(-0.5F).b(0.0F).c(0.5F).d(0.5F).a(4159204).b(329011).a((String) null));
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);
@@ -18,7 +18,7 @@ public final class BiomeRiver extends BiomeBase {
         BiomeDecoratorGroups.Z(this);
         BiomeDecoratorGroups.aa(this);
         BiomeDecoratorGroups.am(this);
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.SEAGRASS, new WorldGenFeatureSeaGrassConfiguration(48, 0.4D), WorldGenDecorator.v, WorldGenFeatureDecoratorConfiguration.e));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.SEAGRASS.b((WorldGenFeatureConfiguration) (new WorldGenFeatureSeaGrassConfiguration(48, 0.4D))).a(WorldGenDecorator.v.a((WorldGenFeatureDecoratorConfiguration) WorldGenFeatureDecoratorConfiguration.e)));
         BiomeDecoratorGroups.ap(this);
         this.a(EnumCreatureType.WATER_CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SQUID, 2, 1, 4));
         this.a(EnumCreatureType.WATER_CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SALMON, 5, 1, 5));

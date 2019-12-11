@@ -39,7 +39,7 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
                 return false;
             } else {
                 this.f = this.a.getNavigation().a((Entity) entityliving, 0);
-                return this.f != null ? true : this.a(entityliving) >= this.a.e(entityliving.locX, entityliving.getBoundingBox().minY, entityliving.locZ);
+                return this.f != null ? true : this.a(entityliving) >= this.a.g(entityliving.locX(), entityliving.locY(), entityliving.locZ());
             }
         }
     }
@@ -48,7 +48,7 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
     public boolean b() {
         EntityLiving entityliving = this.a.getGoalTarget();
 
-        return entityliving == null ? false : (!entityliving.isAlive() ? false : (!this.e ? !this.a.getNavigation().n() : (!this.a.a(new BlockPosition(entityliving)) ? false : !(entityliving instanceof EntityHuman) || !entityliving.isSpectator() && !((EntityHuman) entityliving).isCreative())));
+        return entityliving == null ? false : (!entityliving.isAlive() ? false : (!this.e ? !this.a.getNavigation().m() : (!this.a.a(new BlockPosition(entityliving)) ? false : !(entityliving instanceof EntityHuman) || !entityliving.isSpectator() && !((EntityHuman) entityliving).isCreative())));
     }
 
     @Override
@@ -75,13 +75,13 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
         EntityLiving entityliving = this.a.getGoalTarget();
 
         this.a.getControllerLook().a(entityliving, 30.0F, 30.0F);
-        double d0 = this.a.e(entityliving.locX, entityliving.getBoundingBox().minY, entityliving.locZ);
+        double d0 = this.a.g(entityliving.locX(), entityliving.locY(), entityliving.locZ());
 
         --this.g;
-        if ((this.e || this.a.getEntitySenses().a(entityliving)) && this.g <= 0 && (this.h == 0.0D && this.i == 0.0D && this.j == 0.0D || entityliving.e(this.h, this.i, this.j) >= 1.0D || this.a.getRandom().nextFloat() < 0.05F)) {
-            this.h = entityliving.locX;
-            this.i = entityliving.getBoundingBox().minY;
-            this.j = entityliving.locZ;
+        if ((this.e || this.a.getEntitySenses().a(entityliving)) && this.g <= 0 && (this.h == 0.0D && this.i == 0.0D && this.j == 0.0D || entityliving.g(this.h, this.i, this.j) >= 1.0D || this.a.getRandom().nextFloat() < 0.05F)) {
+            this.h = entityliving.locX();
+            this.i = entityliving.locY();
+            this.j = entityliving.locZ();
             this.g = 4 + this.a.getRandom().nextInt(7);
             if (d0 > 1024.0D) {
                 this.g += 10;
@@ -104,7 +104,7 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
         if (d0 <= d1 && this.b <= 0) {
             this.b = 20;
             this.a.a(EnumHand.MAIN_HAND);
-            this.a.C(entityliving);
+            this.a.B(entityliving);
         }
 
     }

@@ -20,7 +20,7 @@ public class BlockLectern extends BlockTileEntity {
 
     protected BlockLectern(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLectern.a, EnumDirection.NORTH)).set(BlockLectern.b, false)).set(BlockLectern.c, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLectern.a, EnumDirection.NORTH)).set(BlockLectern.b, false)).set(BlockLectern.c, false));
     }
 
     @Override
@@ -29,12 +29,12 @@ public class BlockLectern extends BlockTileEntity {
     }
 
     @Override
-    public VoxelShape h(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape i(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockLectern.f;
     }
 
     @Override
-    public boolean n(IBlockData iblockdata) {
+    public boolean o(IBlockData iblockdata) {
         return true;
     }
 
@@ -131,10 +131,8 @@ public class BlockLectern extends BlockTileEntity {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!world.isClientSide) {
-            b(world, blockposition, iblockdata, false);
-        }
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        b(worldserver, blockposition, iblockdata, false);
     }
 
     @Override
@@ -196,7 +194,7 @@ public class BlockLectern extends BlockTileEntity {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityLectern) {
-                return ((TileEntityLectern) tileentity).s();
+                return ((TileEntityLectern) tileentity).j();
             }
         }
 
@@ -204,15 +202,17 @@ public class BlockLectern extends BlockTileEntity {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if ((Boolean) iblockdata.get(BlockLectern.c)) {
             if (!world.isClientSide) {
                 this.a(world, blockposition, entityhuman);
             }
 
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
-            return false;
+            ItemStack itemstack = entityhuman.b(enumhand);
+
+            return !itemstack.isEmpty() && !itemstack.getItem().a(TagsItem.LECTERN_BOOKS) ? EnumInteractionResult.CONSUME : EnumInteractionResult.PASS;
         }
     }
 

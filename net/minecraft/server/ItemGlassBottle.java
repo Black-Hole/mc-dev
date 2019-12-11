@@ -19,28 +19,28 @@ public class ItemGlassBottle extends Item {
             EntityAreaEffectCloud entityareaeffectcloud = (EntityAreaEffectCloud) list.get(0);
 
             entityareaeffectcloud.setRadius(entityareaeffectcloud.getRadius() - 0.5F);
-            world.playSound((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-            return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, new ItemStack(Items.DRAGON_BREATH)));
+            world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            return InteractionResultWrapper.a(this.a(itemstack, entityhuman, new ItemStack(Items.DRAGON_BREATH)));
         } else {
             MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.SOURCE_ONLY);
 
             if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
-                return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
+                return InteractionResultWrapper.c(itemstack);
             } else {
                 if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
                     BlockPosition blockposition = ((MovingObjectPositionBlock) movingobjectposition).getBlockPosition();
 
                     if (!world.a(entityhuman, blockposition)) {
-                        return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
+                        return InteractionResultWrapper.c(itemstack);
                     }
 
                     if (world.getFluid(blockposition).a(TagsFluid.WATER)) {
-                        world.playSound(entityhuman, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-                        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, PotionUtil.a(new ItemStack(Items.POTION), Potions.WATER)));
+                        world.playSound(entityhuman, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                        return InteractionResultWrapper.a(this.a(itemstack, entityhuman, PotionUtil.a(new ItemStack(Items.POTION), Potions.WATER)));
                     }
                 }
 
-                return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
+                return InteractionResultWrapper.c(itemstack);
             }
         }
     }

@@ -11,7 +11,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
     protected BlockStem(BlockStemmed blockstemmed, Block.Info block_info) {
         super(block_info);
         this.blockFruit = blockstemmed;
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStem.AGE, 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStem.AGE, 0));
     }
 
     @Override
@@ -25,25 +25,25 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        super.tick(iblockdata, world, blockposition, random);
-        if (world.getLightLevel(blockposition, 0) >= 9) {
-            float f = BlockCrops.a((Block) this, (IBlockAccess) world, blockposition);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        super.tick(iblockdata, worldserver, blockposition, random);
+        if (worldserver.getLightLevel(blockposition, 0) >= 9) {
+            float f = BlockCrops.a((Block) this, (IBlockAccess) worldserver, blockposition);
 
             if (random.nextInt((int) (25.0F / f) + 1) == 0) {
                 int i = (Integer) iblockdata.get(BlockStem.AGE);
 
                 if (i < 7) {
                     iblockdata = (IBlockData) iblockdata.set(BlockStem.AGE, i + 1);
-                    world.setTypeAndData(blockposition, iblockdata, 2);
+                    worldserver.setTypeAndData(blockposition, iblockdata, 2);
                 } else {
                     EnumDirection enumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
                     BlockPosition blockposition1 = blockposition.shift(enumdirection);
-                    Block block = world.getType(blockposition1.down()).getBlock();
+                    Block block = worldserver.getType(blockposition1.down()).getBlock();
 
-                    if (world.getType(blockposition1).isAir() && (block == Blocks.FARMLAND || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL || block == Blocks.GRASS_BLOCK)) {
-                        world.setTypeUpdate(blockposition1, this.blockFruit.getBlockData());
-                        world.setTypeUpdate(blockposition, (IBlockData) this.blockFruit.e().getBlockData().set(BlockFacingHorizontal.FACING, enumdirection));
+                    if (worldserver.getType(blockposition1).isAir() && (block == Blocks.FARMLAND || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL || block == Blocks.GRASS_BLOCK)) {
+                        worldserver.setTypeUpdate(blockposition1, this.blockFruit.getBlockData());
+                        worldserver.setTypeUpdate(blockposition, (IBlockData) this.blockFruit.d().getBlockData().set(BlockFacingHorizontal.FACING, enumdirection));
                     }
                 }
             }
@@ -62,13 +62,13 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
     }
 
     @Override
-    public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        int i = Math.min(7, (Integer) iblockdata.get(BlockStem.AGE) + MathHelper.nextInt(world.random, 2, 5));
+    public void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata) {
+        int i = Math.min(7, (Integer) iblockdata.get(BlockStem.AGE) + MathHelper.nextInt(worldserver.random, 2, 5));
         IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockStem.AGE, i);
 
-        world.setTypeAndData(blockposition, iblockdata1, 2);
+        worldserver.setTypeAndData(blockposition, iblockdata1, 2);
         if (i == 7) {
-            iblockdata1.a(world, blockposition, world.random);
+            iblockdata1.a(worldserver, blockposition, worldserver.random);
         }
 
     }
@@ -78,7 +78,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
         blockstatelist_a.a(BlockStem.AGE);
     }
 
-    public BlockStemmed e() {
+    public BlockStemmed d() {
         return this.blockFruit;
     }
 }

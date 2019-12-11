@@ -1,21 +1,19 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import java.util.List;
 
 public class ContainerStonecutter extends Container {
 
-    static final ImmutableList<Item> c = ImmutableList.of(Items.b, Items.aq, Items.ge, Items.eq, Items.m, Items.cX, Items.bL, Items.ds, Items.gm, Items.bU, Items.fX, Items.fY, new Item[]{Items.fZ, Items.g, Items.h, Items.c, Items.d, Items.e, Items.f, Items.cY, Items.bO, Items.bJ, Items.bI, Items.bH, Items.dx, Items.dy, Items.bK, Items.as, Items.gg});
     private final ContainerAccess containerAccess;
     private final ContainerProperty containerProperty;
     private final World world;
-    private List<RecipeStonecutting> j;
-    private ItemStack k;
-    private long l;
+    private List<RecipeStonecutting> i;
+    private ItemStack j;
+    private long k;
+    final Slot c;
     final Slot d;
-    final Slot e;
-    private Runnable m;
+    private Runnable l;
     public final IInventory inventory;
     private final InventoryCraftResult resultInventory;
 
@@ -26,23 +24,23 @@ public class ContainerStonecutter extends Container {
     public ContainerStonecutter(int i, PlayerInventory playerinventory, final ContainerAccess containeraccess) {
         super(Containers.STONECUTTER, i);
         this.containerProperty = ContainerProperty.a();
-        this.j = Lists.newArrayList();
-        this.k = ItemStack.a;
-        this.m = () -> {
+        this.i = Lists.newArrayList();
+        this.j = ItemStack.a;
+        this.l = () -> {
         };
         this.inventory = new InventorySubcontainer(1) {
             @Override
             public void update() {
                 super.update();
                 ContainerStonecutter.this.a((IInventory) this);
-                ContainerStonecutter.this.m.run();
+                ContainerStonecutter.this.l.run();
             }
         };
         this.resultInventory = new InventoryCraftResult();
         this.containerAccess = containeraccess;
         this.world = playerinventory.player.world;
-        this.d = this.a(new Slot(this.inventory, 0, 20, 33));
-        this.e = this.a(new Slot(this.resultInventory, 1, 143, 33) {
+        this.c = this.a(new Slot(this.inventory, 0, 20, 33));
+        this.d = this.a(new Slot(this.resultInventory, 1, 143, 33) {
             @Override
             public boolean isAllowed(ItemStack itemstack) {
                 return false;
@@ -50,7 +48,7 @@ public class ContainerStonecutter extends Container {
 
             @Override
             public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
-                ItemStack itemstack1 = ContainerStonecutter.this.d.a(1);
+                ItemStack itemstack1 = ContainerStonecutter.this.c.a(1);
 
                 if (!itemstack1.isEmpty()) {
                     ContainerStonecutter.this.i();
@@ -60,9 +58,9 @@ public class ContainerStonecutter extends Container {
                 containeraccess.a((world, blockposition) -> {
                     long j = world.getTime();
 
-                    if (ContainerStonecutter.this.l != j) {
+                    if (ContainerStonecutter.this.k != j) {
                         world.playSound((EntityHuman) null, blockposition, SoundEffects.UI_STONECUTTER_TAKE_RESULT, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                        ContainerStonecutter.this.l = j;
+                        ContainerStonecutter.this.k = j;
                     }
 
                 });
@@ -92,7 +90,7 @@ public class ContainerStonecutter extends Container {
 
     @Override
     public boolean a(EntityHuman entityhuman, int i) {
-        if (i >= 0 && i < this.j.size()) {
+        if (i >= 0 && i < this.i.size()) {
             this.containerProperty.set(i);
             this.i();
         }
@@ -102,32 +100,32 @@ public class ContainerStonecutter extends Container {
 
     @Override
     public void a(IInventory iinventory) {
-        ItemStack itemstack = this.d.getItem();
+        ItemStack itemstack = this.c.getItem();
 
-        if (itemstack.getItem() != this.k.getItem()) {
-            this.k = itemstack.cloneItemStack();
+        if (itemstack.getItem() != this.j.getItem()) {
+            this.j = itemstack.cloneItemStack();
             this.a(iinventory, itemstack);
         }
 
     }
 
     private void a(IInventory iinventory, ItemStack itemstack) {
-        this.j.clear();
+        this.i.clear();
         this.containerProperty.set(-1);
-        this.e.set(ItemStack.a);
+        this.d.set(ItemStack.a);
         if (!itemstack.isEmpty()) {
-            this.j = this.world.getCraftingManager().b(Recipes.STONECUTTING, iinventory, this.world);
+            this.i = this.world.getCraftingManager().b(Recipes.STONECUTTING, iinventory, this.world);
         }
 
     }
 
     private void i() {
-        if (!this.j.isEmpty()) {
-            RecipeStonecutting recipestonecutting = (RecipeStonecutting) this.j.get(this.containerProperty.get());
+        if (!this.i.isEmpty()) {
+            RecipeStonecutting recipestonecutting = (RecipeStonecutting) this.i.get(this.containerProperty.get());
 
-            this.e.set(recipestonecutting.a(this.inventory));
+            this.d.set(recipestonecutting.a(this.inventory));
         } else {
-            this.e.set(ItemStack.a);
+            this.d.set(ItemStack.a);
         }
 
         this.c();
@@ -140,7 +138,7 @@ public class ContainerStonecutter extends Container {
 
     @Override
     public boolean a(ItemStack itemstack, Slot slot) {
-        return false;
+        return slot.inventory != this.resultInventory && super.a(itemstack, slot);
     }
 
     @Override
@@ -164,7 +162,7 @@ public class ContainerStonecutter extends Container {
                 if (!this.a(itemstack1, 2, 38, false)) {
                     return ItemStack.a;
                 }
-            } else if (ContainerStonecutter.c.contains(item)) {
+            } else if (this.world.getCraftingManager().craft(Recipes.STONECUTTING, new InventorySubcontainer(new ItemStack[]{itemstack1}), this.world).isPresent()) {
                 if (!this.a(itemstack1, 0, 1, false)) {
                     return ItemStack.a;
                 }

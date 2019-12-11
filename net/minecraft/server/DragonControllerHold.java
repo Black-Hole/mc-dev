@@ -20,9 +20,9 @@ public class DragonControllerHold extends AbstractDragonController {
 
     @Override
     public void c() {
-        double d0 = this.d == null ? 0.0D : this.d.c(this.a.locX, this.a.locY, this.a.locZ);
+        double d0 = this.d == null ? 0.0D : this.d.c(this.a.locX(), this.a.locY(), this.a.locZ());
 
-        if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.y) {
+        if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.v) {
             this.j();
         }
 

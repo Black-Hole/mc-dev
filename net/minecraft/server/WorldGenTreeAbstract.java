@@ -3,51 +3,60 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.Dynamic;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
-public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguration> extends WorldGenerator<T> {
+public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureTreeConfiguration> extends WorldGenerator<T> {
 
-    public WorldGenTreeAbstract(Function<Dynamic<?>, ? extends T> function, boolean flag) {
-        super(function, flag);
+    public WorldGenTreeAbstract(Function<Dynamic<?>, ? extends T> function) {
+        super(function);
     }
 
     protected static boolean a(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
         return virtuallevelreadable.a(blockposition, (iblockdata) -> {
             Block block = iblockdata.getBlock();
 
-            return iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES) || block == Blocks.GRASS_BLOCK || Block.c(block) || block.a(TagsBlock.LOGS) || block.a(TagsBlock.SAPLINGS) || block == Blocks.VINE;
+            return iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES) || b(block) || block.a(TagsBlock.LOGS) || block.a(TagsBlock.SAPLINGS) || block == Blocks.VINE;
         });
     }
 
-    protected static boolean b(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
+    public static boolean b(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
         return virtuallevelreadable.a(blockposition, IBlockData::isAir);
     }
 
     protected static boolean c(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
         return virtuallevelreadable.a(blockposition, (iblockdata) -> {
-            return Block.c(iblockdata.getBlock());
+            Block block = iblockdata.getBlock();
+
+            return b(block) && block != Blocks.GRASS_BLOCK && block != Blocks.MYCELIUM;
         });
     }
 
-    protected static boolean e(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
+    protected static boolean d(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
+        return virtuallevelreadable.a(blockposition, (iblockdata) -> {
+            return iblockdata.getBlock() == Blocks.VINE;
+        });
+    }
+
+    public static boolean e(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
         return virtuallevelreadable.a(blockposition, (iblockdata) -> {
             return iblockdata.getBlock() == Blocks.WATER;
         });
     }
 
-    protected static boolean f(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
+    public static boolean f(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
         return virtuallevelreadable.a(blockposition, (iblockdata) -> {
-            return iblockdata.a(TagsBlock.LEAVES);
+            return iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES);
         });
     }
 
-    protected static boolean g(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
+    public static boolean g(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
         return virtuallevelreadable.a(blockposition, (iblockdata) -> {
-            return iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES);
+            return b(iblockdata.getBlock());
         });
     }
 
@@ -55,19 +64,11 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
         return virtuallevelreadable.a(blockposition, (iblockdata) -> {
             Block block = iblockdata.getBlock();
 
-            return Block.c(block) || block == Blocks.GRASS_BLOCK;
+            return b(block) || block == Blocks.FARMLAND;
         });
     }
 
-    protected static boolean i(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
-        return virtuallevelreadable.a(blockposition, (iblockdata) -> {
-            Block block = iblockdata.getBlock();
-
-            return Block.c(block) || block == Blocks.GRASS_BLOCK || block == Blocks.FARMLAND;
-        });
-    }
-
-    protected static boolean j(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
+    public static boolean i(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
         return virtuallevelreadable.a(blockposition, (iblockdata) -> {
             Material material = iblockdata.getMaterial();
 
@@ -82,159 +83,196 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
 
     }
 
+    protected boolean a(VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, Set<BlockPosition> set, StructureBoundingBox structureboundingbox, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
+        if (!f(virtuallevelwritable, blockposition) && !i(virtuallevelwritable, blockposition) && !e(virtuallevelwritable, blockposition)) {
+            return false;
+        } else {
+            this.a((IWorldWriter) virtuallevelwritable, blockposition, worldgenfeaturetreeconfiguration.m.a(random, blockposition), structureboundingbox);
+            set.add(blockposition.immutableCopy());
+            return true;
+        }
+    }
+
+    protected boolean b(VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, Set<BlockPosition> set, StructureBoundingBox structureboundingbox, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
+        if (!f(virtuallevelwritable, blockposition) && !i(virtuallevelwritable, blockposition) && !e(virtuallevelwritable, blockposition)) {
+            return false;
+        } else {
+            this.a((IWorldWriter) virtuallevelwritable, blockposition, worldgenfeaturetreeconfiguration.n.a(random, blockposition), structureboundingbox);
+            set.add(blockposition.immutableCopy());
+            return true;
+        }
+    }
+
     @Override
     protected void a(IWorldWriter iworldwriter, BlockPosition blockposition, IBlockData iblockdata) {
         this.b(iworldwriter, blockposition, iblockdata);
     }
 
-    protected final void a(Set<BlockPosition> set, IWorldWriter iworldwriter, BlockPosition blockposition, IBlockData iblockdata, StructureBoundingBox structureboundingbox) {
+    protected final void a(IWorldWriter iworldwriter, BlockPosition blockposition, IBlockData iblockdata, StructureBoundingBox structureboundingbox) {
         this.b(iworldwriter, blockposition, iblockdata);
         structureboundingbox.c(new StructureBoundingBox(blockposition, blockposition));
-        if (TagsBlock.LOGS.isTagged(iblockdata.getBlock())) {
-            set.add(blockposition.immutableCopy());
-        }
-
     }
 
     private void b(IWorldWriter iworldwriter, BlockPosition blockposition, IBlockData iblockdata) {
-        if (this.aR) {
-            iworldwriter.setTypeAndData(blockposition, iblockdata, 19);
-        } else {
-            iworldwriter.setTypeAndData(blockposition, iblockdata, 18);
-        }
-
+        iworldwriter.setTypeAndData(blockposition, iblockdata, 19);
     }
 
-    @Override
-    public final boolean generate(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, T t0) {
+    public final boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, T t0) {
         Set<BlockPosition> set = Sets.newHashSet();
+        Set<BlockPosition> set1 = Sets.newHashSet();
+        Set<BlockPosition> set2 = Sets.newHashSet();
         StructureBoundingBox structureboundingbox = StructureBoundingBox.a();
-        boolean flag = this.a(set, (VirtualLevelWritable) generatoraccess, random, blockposition, structureboundingbox);
+        boolean flag = this.a((VirtualLevelWritable) generatoraccess, random, blockposition, (Set) set, set1, structureboundingbox, t0);
 
-        if (structureboundingbox.a > structureboundingbox.d) {
-            return false;
-        } else {
-            List<Set<BlockPosition>> list = Lists.newArrayList();
-            boolean flag1 = true;
+        if (structureboundingbox.a <= structureboundingbox.d && flag && !set.isEmpty()) {
+            if (!t0.o.isEmpty()) {
+                List<BlockPosition> list = Lists.newArrayList(set);
+                List<BlockPosition> list1 = Lists.newArrayList(set1);
 
-            for (int i = 0; i < 6; ++i) {
-                list.add(Sets.newHashSet());
+                list.sort(Comparator.comparingInt(BaseBlockPosition::getY));
+                list1.sort(Comparator.comparingInt(BaseBlockPosition::getY));
+                t0.o.forEach((worldgenfeaturetree) -> {
+                    worldgenfeaturetree.a(generatoraccess, random, list, list1, set2, structureboundingbox);
+                });
             }
 
-            VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(structureboundingbox.c(), structureboundingbox.d(), structureboundingbox.e());
-            BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
-            Throwable throwable = null;
+            VoxelShapeDiscrete voxelshapediscrete = this.a(generatoraccess, structureboundingbox, (Set) set, (Set) set2);
 
-            try {
-                if (flag && !set.isEmpty()) {
-                    Iterator iterator = Lists.newArrayList(set).iterator();
+            DefinedStructure.a(generatoraccess, 3, voxelshapediscrete, structureboundingbox.a, structureboundingbox.b, structureboundingbox.c);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-                    while (iterator.hasNext()) {
-                        BlockPosition blockposition1 = (BlockPosition) iterator.next();
+    private VoxelShapeDiscrete a(GeneratorAccess generatoraccess, StructureBoundingBox structureboundingbox, Set<BlockPosition> set, Set<BlockPosition> set1) {
+        List<Set<BlockPosition>> list = Lists.newArrayList();
+        VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(structureboundingbox.c(), structureboundingbox.d(), structureboundingbox.e());
+        boolean flag = true;
+
+        for (int i = 0; i < 6; ++i) {
+            list.add(Sets.newHashSet());
+        }
+
+        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
+        Throwable throwable = null;
+
+        try {
+            Iterator iterator = Lists.newArrayList(set1).iterator();
+
+            BlockPosition blockposition;
+
+            while (iterator.hasNext()) {
+                blockposition = (BlockPosition) iterator.next();
+                if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
+                    voxelshapebitset.a(blockposition.getX() - structureboundingbox.a, blockposition.getY() - structureboundingbox.b, blockposition.getZ() - structureboundingbox.c, true, true);
+                }
+            }
+
+            iterator = Lists.newArrayList(set).iterator();
+
+            while (iterator.hasNext()) {
+                blockposition = (BlockPosition) iterator.next();
+                if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
+                    voxelshapebitset.a(blockposition.getX() - structureboundingbox.a, blockposition.getY() - structureboundingbox.b, blockposition.getZ() - structureboundingbox.c, true, true);
+                }
+
+                EnumDirection[] aenumdirection = EnumDirection.values();
+                int j = aenumdirection.length;
+
+                for (int k = 0; k < j; ++k) {
+                    EnumDirection enumdirection = aenumdirection[k];
+
+                    blockposition_pooledblockposition.g(blockposition).c(enumdirection);
+                    if (!set.contains(blockposition_pooledblockposition)) {
+                        IBlockData iblockdata = generatoraccess.getType(blockposition_pooledblockposition);
+
+                        if (iblockdata.b((IBlockState) BlockProperties.ah)) {
+                            ((Set) list.get(0)).add(blockposition_pooledblockposition.immutableCopy());
+                            this.b(generatoraccess, blockposition_pooledblockposition, (IBlockData) iblockdata.set(BlockProperties.ah, 1));
+                            if (structureboundingbox.b((BaseBlockPosition) blockposition_pooledblockposition)) {
+                                voxelshapebitset.a(blockposition_pooledblockposition.getX() - structureboundingbox.a, blockposition_pooledblockposition.getY() - structureboundingbox.b, blockposition_pooledblockposition.getZ() - structureboundingbox.c, true, true);
+                            }
+                        }
+                    }
+                }
+            }
+
+            int l = 1;
+
+            while (l < 6) {
+                Set<BlockPosition> set2 = (Set) list.get(l - 1);
+                Set<BlockPosition> set3 = (Set) list.get(l);
+                Iterator iterator1 = set2.iterator();
+
+                label217:
+                while (true) {
+                    if (iterator1.hasNext()) {
+                        BlockPosition blockposition1 = (BlockPosition) iterator1.next();
 
                         if (structureboundingbox.b((BaseBlockPosition) blockposition1)) {
                             voxelshapebitset.a(blockposition1.getX() - structureboundingbox.a, blockposition1.getY() - structureboundingbox.b, blockposition1.getZ() - structureboundingbox.c, true, true);
                         }
 
-                        EnumDirection[] aenumdirection = EnumDirection.values();
-                        int j = aenumdirection.length;
+                        EnumDirection[] aenumdirection1 = EnumDirection.values();
+                        int i1 = aenumdirection1.length;
+                        int j1 = 0;
 
-                        for (int k = 0; k < j; ++k) {
-                            EnumDirection enumdirection = aenumdirection[k];
-
-                            blockposition_pooledblockposition.g(blockposition1).c(enumdirection);
-                            if (!set.contains(blockposition_pooledblockposition)) {
-                                IBlockData iblockdata = generatoraccess.getType(blockposition_pooledblockposition);
-
-                                if (iblockdata.b((IBlockState) BlockProperties.ah)) {
-                                    ((Set) list.get(0)).add(blockposition_pooledblockposition.immutableCopy());
-                                    this.b(generatoraccess, blockposition_pooledblockposition, (IBlockData) iblockdata.set(BlockProperties.ah, 1));
-                                    if (structureboundingbox.b((BaseBlockPosition) blockposition_pooledblockposition)) {
-                                        voxelshapebitset.a(blockposition_pooledblockposition.getX() - structureboundingbox.a, blockposition_pooledblockposition.getY() - structureboundingbox.b, blockposition_pooledblockposition.getZ() - structureboundingbox.c, true, true);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                int l = 1;
-
-                while (l < 6) {
-                    Set<BlockPosition> set1 = (Set) list.get(l - 1);
-                    Set<BlockPosition> set2 = (Set) list.get(l);
-                    Iterator iterator1 = set1.iterator();
-
-                    label213:
-                    while (true) {
-                        if (iterator1.hasNext()) {
-                            BlockPosition blockposition2 = (BlockPosition) iterator1.next();
-
-                            if (structureboundingbox.b((BaseBlockPosition) blockposition2)) {
-                                voxelshapebitset.a(blockposition2.getX() - structureboundingbox.a, blockposition2.getY() - structureboundingbox.b, blockposition2.getZ() - structureboundingbox.c, true, true);
+                        while (true) {
+                            if (j1 >= i1) {
+                                continue label217;
                             }
 
-                            EnumDirection[] aenumdirection1 = EnumDirection.values();
-                            int i1 = aenumdirection1.length;
-                            int j1 = 0;
+                            EnumDirection enumdirection1 = aenumdirection1[j1];
 
-                            while (true) {
-                                if (j1 >= i1) {
-                                    continue label213;
-                                }
+                            blockposition_pooledblockposition.g(blockposition1).c(enumdirection1);
+                            if (!set2.contains(blockposition_pooledblockposition) && !set3.contains(blockposition_pooledblockposition)) {
+                                IBlockData iblockdata1 = generatoraccess.getType(blockposition_pooledblockposition);
 
-                                EnumDirection enumdirection1 = aenumdirection1[j1];
+                                if (iblockdata1.b((IBlockState) BlockProperties.ah)) {
+                                    int k1 = (Integer) iblockdata1.get(BlockProperties.ah);
 
-                                blockposition_pooledblockposition.g(blockposition2).c(enumdirection1);
-                                if (!set1.contains(blockposition_pooledblockposition) && !set2.contains(blockposition_pooledblockposition)) {
-                                    IBlockData iblockdata1 = generatoraccess.getType(blockposition_pooledblockposition);
+                                    if (k1 > l + 1) {
+                                        IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockProperties.ah, l + 1);
 
-                                    if (iblockdata1.b((IBlockState) BlockProperties.ah)) {
-                                        int k1 = (Integer) iblockdata1.get(BlockProperties.ah);
-
-                                        if (k1 > l + 1) {
-                                            IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockProperties.ah, l + 1);
-
-                                            this.b(generatoraccess, blockposition_pooledblockposition, iblockdata2);
-                                            if (structureboundingbox.b((BaseBlockPosition) blockposition_pooledblockposition)) {
-                                                voxelshapebitset.a(blockposition_pooledblockposition.getX() - structureboundingbox.a, blockposition_pooledblockposition.getY() - structureboundingbox.b, blockposition_pooledblockposition.getZ() - structureboundingbox.c, true, true);
-                                            }
-
-                                            set2.add(blockposition_pooledblockposition.immutableCopy());
+                                        this.b(generatoraccess, blockposition_pooledblockposition, iblockdata2);
+                                        if (structureboundingbox.b((BaseBlockPosition) blockposition_pooledblockposition)) {
+                                            voxelshapebitset.a(blockposition_pooledblockposition.getX() - structureboundingbox.a, blockposition_pooledblockposition.getY() - structureboundingbox.b, blockposition_pooledblockposition.getZ() - structureboundingbox.c, true, true);
                                         }
+
+                                        set3.add(blockposition_pooledblockposition.immutableCopy());
                                     }
                                 }
-
-                                ++j1;
                             }
-                        }
 
-                        ++l;
-                        break;
-                    }
-                }
-            } catch (Throwable throwable1) {
-                throwable = throwable1;
-                throw throwable1;
-            } finally {
-                if (blockposition_pooledblockposition != null) {
-                    if (throwable != null) {
-                        try {
-                            blockposition_pooledblockposition.close();
-                        } catch (Throwable throwable2) {
-                            throwable.addSuppressed(throwable2);
+                            ++j1;
                         }
-                    } else {
+                    }
+
+                    ++l;
+                    break;
+                }
+            }
+        } catch (Throwable throwable1) {
+            throwable = throwable1;
+            throw throwable1;
+        } finally {
+            if (blockposition_pooledblockposition != null) {
+                if (throwable != null) {
+                    try {
                         blockposition_pooledblockposition.close();
+                    } catch (Throwable throwable2) {
+                        throwable.addSuppressed(throwable2);
                     }
+                } else {
+                    blockposition_pooledblockposition.close();
                 }
-
             }
 
-            DefinedStructure.a(generatoraccess, 3, voxelshapebitset, structureboundingbox.a, structureboundingbox.b, structureboundingbox.c);
-            return flag;
         }
+
+        return voxelshapebitset;
     }
 
-    protected abstract boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, StructureBoundingBox structureboundingbox);
+    protected abstract boolean a(VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, Set<BlockPosition> set, Set<BlockPosition> set1, StructureBoundingBox structureboundingbox, T t0);
 }

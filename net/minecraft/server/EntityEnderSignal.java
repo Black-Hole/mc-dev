@@ -47,14 +47,14 @@ public class EntityEnderSignal extends Entity {
         double d0 = (double) blockposition.getX();
         int i = blockposition.getY();
         double d1 = (double) blockposition.getZ();
-        double d2 = d0 - this.locX;
-        double d3 = d1 - this.locZ;
+        double d2 = d0 - this.locX();
+        double d3 = d1 - this.locZ();
         float f = MathHelper.sqrt(d2 * d2 + d3 * d3);
 
         if (f > 12.0F) {
-            this.targetX = this.locX + d2 / (double) f * 12.0D;
-            this.targetZ = this.locZ + d3 / (double) f * 12.0D;
-            this.targetY = this.locY + 8.0D;
+            this.targetX = this.locX() + d2 / (double) f * 12.0D;
+            this.targetZ = this.locZ() + d3 / (double) f * 12.0D;
+            this.targetY = this.locY() + 8.0D;
         } else {
             this.targetX = d0;
             this.targetY = (double) i;
@@ -67,15 +67,11 @@ public class EntityEnderSignal extends Entity {
 
     @Override
     public void tick() {
-        this.H = this.locX;
-        this.I = this.locY;
-        this.J = this.locZ;
         super.tick();
         Vec3D vec3d = this.getMot();
-
-        this.locX += vec3d.x;
-        this.locY += vec3d.y;
-        this.locZ += vec3d.z;
+        double d0 = this.locX() + vec3d.x;
+        double d1 = this.locY() + vec3d.y;
+        double d2 = this.locZ() + vec3d.z;
         float f = MathHelper.sqrt(b(vec3d));
 
         this.yaw = (float) (MathHelper.d(vec3d.x, vec3d.z) * 57.2957763671875D);
@@ -99,21 +95,21 @@ public class EntityEnderSignal extends Entity {
         this.pitch = MathHelper.g(0.2F, this.lastPitch, this.pitch);
         this.yaw = MathHelper.g(0.2F, this.lastYaw, this.yaw);
         if (!this.world.isClientSide) {
-            double d0 = this.targetX - this.locX;
-            double d1 = this.targetZ - this.locZ;
-            float f1 = (float) Math.sqrt(d0 * d0 + d1 * d1);
-            float f2 = (float) MathHelper.d(d1, d0);
-            double d2 = MathHelper.d(0.0025D, (double) f, (double) f1);
-            double d3 = vec3d.y;
+            double d3 = this.targetX - d0;
+            double d4 = this.targetZ - d2;
+            float f1 = (float) Math.sqrt(d3 * d3 + d4 * d4);
+            float f2 = (float) MathHelper.d(d4, d3);
+            double d5 = MathHelper.d(0.0025D, (double) f, (double) f1);
+            double d6 = vec3d.y;
 
             if (f1 < 1.0F) {
-                d2 *= 0.8D;
-                d3 *= 0.8D;
+                d5 *= 0.8D;
+                d6 *= 0.8D;
             }
 
-            int i = this.locY < this.targetY ? 1 : -1;
+            int i = this.locY() < this.targetY ? 1 : -1;
 
-            vec3d = new Vec3D(Math.cos((double) f2) * d2, d3 + ((double) i - d3) * 0.014999999664723873D, Math.sin((double) f2) * d2);
+            vec3d = new Vec3D(Math.cos((double) f2) * d5, d6 + ((double) i - d6) * 0.014999999664723873D, Math.sin((double) f2) * d5);
             this.setMot(vec3d);
         }
 
@@ -121,24 +117,26 @@ public class EntityEnderSignal extends Entity {
 
         if (this.isInWater()) {
             for (int j = 0; j < 4; ++j) {
-                this.world.addParticle(Particles.BUBBLE, this.locX - vec3d.x * 0.25D, this.locY - vec3d.y * 0.25D, this.locZ - vec3d.z * 0.25D, vec3d.x, vec3d.y, vec3d.z);
+                this.world.addParticle(Particles.BUBBLE, d0 - vec3d.x * 0.25D, d1 - vec3d.y * 0.25D, d2 - vec3d.z * 0.25D, vec3d.x, vec3d.y, vec3d.z);
             }
         } else {
-            this.world.addParticle(Particles.PORTAL, this.locX - vec3d.x * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, this.locY - vec3d.y * 0.25D - 0.5D, this.locZ - vec3d.z * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, vec3d.x, vec3d.y, vec3d.z);
+            this.world.addParticle(Particles.PORTAL, d0 - vec3d.x * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, d1 - vec3d.y * 0.25D - 0.5D, d2 - vec3d.z * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, vec3d.x, vec3d.y, vec3d.z);
         }
 
         if (!this.world.isClientSide) {
-            this.setPosition(this.locX, this.locY, this.locZ);
+            this.setPosition(d0, d1, d2);
             ++this.despawnTimer;
             if (this.despawnTimer > 80 && !this.world.isClientSide) {
                 this.a(SoundEffects.ENTITY_ENDER_EYE_DEATH, 1.0F, 1.0F);
                 this.die();
                 if (this.shouldDropItem) {
-                    this.world.addEntity(new EntityItem(this.world, this.locX, this.locY, this.locZ, this.f()));
+                    this.world.addEntity(new EntityItem(this.world, this.locX(), this.locY(), this.locZ(), this.f()));
                 } else {
                     this.world.triggerEffect(2003, new BlockPosition(this), 0);
                 }
             }
+        } else {
+            this.setPositionRaw(d0, d1, d2);
         }
 
     }
@@ -161,17 +159,17 @@ public class EntityEnderSignal extends Entity {
     }
 
     @Override
-    public float aF() {
+    public float aI() {
         return 1.0F;
     }
 
     @Override
-    public boolean bs() {
+    public boolean bA() {
         return false;
     }
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

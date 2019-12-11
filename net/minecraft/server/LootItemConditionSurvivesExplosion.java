@@ -22,7 +22,7 @@ public class LootItemConditionSurvivesExplosion implements LootItemCondition {
         Float ofloat = (Float) loottableinfo.getContextParameter(LootContextParameters.EXPLOSION_RADIUS);
 
         if (ofloat != null) {
-            Random random = loottableinfo.b();
+            Random random = loottableinfo.a();
             float f = 1.0F / ofloat;
 
             return random.nextFloat() <= f;

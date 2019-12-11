@@ -107,10 +107,10 @@ public class TileEntityStructure extends TileEntity {
         }
 
         this.seed = nbttagcompound.getLong("seed");
-        this.K();
+        this.L();
     }
 
-    private void K() {
+    private void L() {
         if (this.world != null) {
             BlockPosition blockposition = this.getPosition();
             IBlockData iblockdata = this.world.getType(blockposition);
@@ -149,7 +149,11 @@ public class TileEntityStructure extends TileEntity {
         return this.structureName == null ? "" : this.structureName.toString();
     }
 
-    public boolean f() {
+    public String f() {
+        return this.structureName == null ? "" : this.structureName.getKey();
+    }
+
+    public boolean g() {
         return this.structureName != null;
     }
 
@@ -165,8 +169,16 @@ public class TileEntityStructure extends TileEntity {
         this.author = entityliving.getDisplayName().getString();
     }
 
+    public BlockPosition h() {
+        return this.relativePosition;
+    }
+
     public void b(BlockPosition blockposition) {
         this.relativePosition = blockposition;
+    }
+
+    public BlockPosition j() {
+        return this.size;
     }
 
     public void c(BlockPosition blockposition) {
@@ -211,7 +223,7 @@ public class TileEntityStructure extends TileEntity {
         this.seed = i;
     }
 
-    public boolean B() {
+    public boolean C() {
         if (this.usageMode != BlockPropertyStructureMode.SAVE) {
             return false;
         } else {
@@ -309,7 +321,7 @@ public class TileEntityStructure extends TileEntity {
         return structureboundingbox;
     }
 
-    public boolean C() {
+    public boolean D() {
         return this.b(true);
     }
 
@@ -343,7 +355,7 @@ public class TileEntityStructure extends TileEntity {
         }
     }
 
-    public boolean D() {
+    public boolean E() {
         return this.c(true);
     }
 
@@ -353,8 +365,6 @@ public class TileEntityStructure extends TileEntity {
 
     public boolean c(boolean flag) {
         if (this.usageMode == BlockPropertyStructureMode.LOAD && !this.world.isClientSide && this.structureName != null) {
-            BlockPosition blockposition = this.getPosition();
-            BlockPosition blockposition1 = blockposition.a((BaseBlockPosition) this.relativePosition);
             WorldServer worldserver = (WorldServer) this.world;
             DefinedStructureManager definedstructuremanager = worldserver.r();
 
@@ -366,43 +376,47 @@ public class TileEntityStructure extends TileEntity {
                 return false;
             }
 
-            if (definedstructure == null) {
-                return false;
-            } else {
-                if (!UtilColor.b(definedstructure.b())) {
-                    this.author = definedstructure.b();
-                }
-
-                BlockPosition blockposition2 = definedstructure.a();
-                boolean flag1 = this.size.equals(blockposition2);
-
-                if (!flag1) {
-                    this.size = blockposition2;
-                    this.update();
-                    IBlockData iblockdata = this.world.getType(blockposition);
-
-                    this.world.notify(blockposition, iblockdata, iblockdata, 3);
-                }
-
-                if (flag && !flag1) {
-                    return false;
-                } else {
-                    DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.mirror).a(this.rotation).a(this.ignoreEntities).a((ChunkCoordIntPair) null);
-
-                    if (this.integrity < 1.0F) {
-                        definedstructureinfo.b().a((DefinedStructureProcessor) (new DefinedStructureProcessorRotation(MathHelper.a(this.integrity, 0.0F, 1.0F)))).a(b(this.seed));
-                    }
-
-                    definedstructure.a((GeneratorAccess) this.world, blockposition1, definedstructureinfo);
-                    return true;
-                }
-            }
+            return definedstructure == null ? false : this.a(flag, definedstructure);
         } else {
             return false;
         }
     }
 
-    public void E() {
+    public boolean a(boolean flag, DefinedStructure definedstructure) {
+        BlockPosition blockposition = this.getPosition();
+
+        if (!UtilColor.b(definedstructure.b())) {
+            this.author = definedstructure.b();
+        }
+
+        BlockPosition blockposition1 = definedstructure.a();
+        boolean flag1 = this.size.equals(blockposition1);
+
+        if (!flag1) {
+            this.size = blockposition1;
+            this.update();
+            IBlockData iblockdata = this.world.getType(blockposition);
+
+            this.world.notify(blockposition, iblockdata, iblockdata, 3);
+        }
+
+        if (flag && !flag1) {
+            return false;
+        } else {
+            DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.mirror).a(this.rotation).a(this.ignoreEntities).a((ChunkCoordIntPair) null);
+
+            if (this.integrity < 1.0F) {
+                definedstructureinfo.b().a((DefinedStructureProcessor) (new DefinedStructureProcessorRotation(MathHelper.a(this.integrity, 0.0F, 1.0F)))).a(b(this.seed));
+            }
+
+            BlockPosition blockposition2 = blockposition.a((BaseBlockPosition) this.relativePosition);
+
+            definedstructure.a((GeneratorAccess) this.world, blockposition2, definedstructureinfo);
+            return true;
+        }
+    }
+
+    public void F() {
         if (this.structureName != null) {
             WorldServer worldserver = (WorldServer) this.world;
             DefinedStructureManager definedstructuremanager = worldserver.r();
@@ -411,7 +425,7 @@ public class TileEntityStructure extends TileEntity {
         }
     }
 
-    public boolean F() {
+    public boolean G() {
         if (this.usageMode == BlockPropertyStructureMode.LOAD && !this.world.isClientSide && this.structureName != null) {
             WorldServer worldserver = (WorldServer) this.world;
             DefinedStructureManager definedstructuremanager = worldserver.r();
@@ -426,7 +440,7 @@ public class TileEntityStructure extends TileEntity {
         }
     }
 
-    public boolean G() {
+    public boolean H() {
         return this.powered;
     }
 

@@ -15,8 +15,8 @@ public class EntityCaveSpider extends EntitySpider {
     }
 
     @Override
-    public boolean C(Entity entity) {
-        if (super.C(entity)) {
+    public boolean B(Entity entity) {
+        if (super.B(entity)) {
             if (entity instanceof EntityLiving) {
                 byte b0 = 0;
 

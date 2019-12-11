@@ -26,16 +26,26 @@ public class ItemSpade extends ItemTool {
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         World world = itemactioncontext.getWorld();
         BlockPosition blockposition = itemactioncontext.getClickPosition();
+        IBlockData iblockdata = world.getType(blockposition);
 
-        if (itemactioncontext.getClickedFace() != EnumDirection.DOWN && world.getType(blockposition.up()).isAir()) {
-            IBlockData iblockdata = (IBlockData) ItemSpade.a.get(world.getType(blockposition).getBlock());
+        if (itemactioncontext.getClickedFace() == EnumDirection.DOWN) {
+            return EnumInteractionResult.PASS;
+        } else {
+            EntityHuman entityhuman = itemactioncontext.getEntity();
+            IBlockData iblockdata1 = (IBlockData) ItemSpade.a.get(iblockdata.getBlock());
+            IBlockData iblockdata2 = null;
 
-            if (iblockdata != null) {
-                EntityHuman entityhuman = itemactioncontext.getEntity();
-
+            if (iblockdata1 != null && world.getType(blockposition.up()).isAir()) {
                 world.playSound(entityhuman, blockposition, SoundEffects.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                iblockdata2 = iblockdata1;
+            } else if (iblockdata.getBlock() instanceof BlockCampfire && (Boolean) iblockdata.get(BlockCampfire.b)) {
+                world.a((EntityHuman) null, 1009, blockposition, 0);
+                iblockdata2 = (IBlockData) iblockdata.set(BlockCampfire.b, false);
+            }
+
+            if (iblockdata2 != null) {
                 if (!world.isClientSide) {
-                    world.setTypeAndData(blockposition, iblockdata, 11);
+                    world.setTypeAndData(blockposition, iblockdata2, 11);
                     if (entityhuman != null) {
                         itemactioncontext.getItemStack().damage(1, entityhuman, (entityhuman1) -> {
                             entityhuman1.d(itemactioncontext.n());
@@ -44,9 +54,9 @@ public class ItemSpade extends ItemTool {
                 }
 
                 return EnumInteractionResult.SUCCESS;
+            } else {
+                return EnumInteractionResult.PASS;
             }
         }
-
-        return EnumInteractionResult.PASS;
     }
 }

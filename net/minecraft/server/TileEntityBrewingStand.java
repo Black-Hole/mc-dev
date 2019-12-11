@@ -97,7 +97,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
             boolean flag2 = this.brewTime == 0;
 
             if (flag2 && flag) {
-                this.s();
+                this.j();
                 this.update();
             } else if (!flag) {
                 this.brewTime = 0;
@@ -166,7 +166,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         }
     }
 
-    private void s() {
+    private void j() {
         ItemStack itemstack = (ItemStack) this.items.get(3);
 
         for (int i = 0; i < 3; ++i) {
@@ -176,8 +176,8 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         itemstack.subtract(1);
         BlockPosition blockposition = this.getPosition();
 
-        if (itemstack.getItem().o()) {
-            ItemStack itemstack1 = new ItemStack(itemstack.getItem().n());
+        if (itemstack.getItem().q()) {
+            ItemStack itemstack1 = new ItemStack(itemstack.getItem().p());
 
             if (itemstack.isEmpty()) {
                 itemstack = itemstack1;
@@ -233,7 +233,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
 
     @Override
     public boolean a(EntityHuman entityhuman) {
-        return this.world.getTileEntity(this.position) != this ? false : entityhuman.e((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
+        return this.world.getTileEntity(this.position) != this ? false : entityhuman.g((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
     }
 
     @Override

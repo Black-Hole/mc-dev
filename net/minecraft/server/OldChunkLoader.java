@@ -40,21 +40,18 @@ public class OldChunkLoader {
         nbttagcompound.setBoolean("TerrainPopulated", oldchunkloader_oldchunk.b);
         NBTTagList nbttaglist = new NBTTagList();
 
-        int j;
-        int k;
-
-        for (int l = 0; l < 8; ++l) {
+        for (int j = 0; j < 8; ++j) {
             boolean flag = true;
 
-            for (k = 0; k < 16 && flag; ++k) {
-                j = 0;
+            for (int k = 0; k < 16 && flag; ++k) {
+                int l = 0;
 
-                while (j < 16 && flag) {
+                while (l < 16 && flag) {
                     int i1 = 0;
 
                     while (true) {
                         if (i1 < 16) {
-                            int j1 = k << 11 | i1 << 7 | j + (l << 4);
+                            int j1 = k << 11 | i1 << 7 | l + (j << 4);
                             byte b0 = oldchunkloader_oldchunk.g[j1];
 
                             if (b0 == 0) {
@@ -65,7 +62,7 @@ public class OldChunkLoader {
                             flag = false;
                         }
 
-                        ++j;
+                        ++l;
                         break;
                     }
                 }
@@ -80,20 +77,20 @@ public class OldChunkLoader {
                 for (int k1 = 0; k1 < 16; ++k1) {
                     for (int l1 = 0; l1 < 16; ++l1) {
                         for (int i2 = 0; i2 < 16; ++i2) {
-                            int j2 = k1 << 11 | i2 << 7 | l1 + (l << 4);
+                            int j2 = k1 << 11 | i2 << 7 | l1 + (j << 4);
                             byte b1 = oldchunkloader_oldchunk.g[j2];
 
                             abyte[l1 << 8 | i2 << 4 | k1] = (byte) (b1 & 255);
-                            nibblearray.a(k1, l1, i2, oldchunkloader_oldchunk.f.a(k1, l1 + (l << 4), i2));
-                            nibblearray1.a(k1, l1, i2, oldchunkloader_oldchunk.e.a(k1, l1 + (l << 4), i2));
-                            nibblearray2.a(k1, l1, i2, oldchunkloader_oldchunk.d.a(k1, l1 + (l << 4), i2));
+                            nibblearray.a(k1, l1, i2, oldchunkloader_oldchunk.f.a(k1, l1 + (j << 4), i2));
+                            nibblearray1.a(k1, l1, i2, oldchunkloader_oldchunk.e.a(k1, l1 + (j << 4), i2));
+                            nibblearray2.a(k1, l1, i2, oldchunkloader_oldchunk.d.a(k1, l1 + (j << 4), i2));
                         }
                     }
                 }
 
                 NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-                nbttagcompound1.setByte("Y", (byte) (l & 255));
+                nbttagcompound1.setByte("Y", (byte) (j & 255));
                 nbttagcompound1.setByteArray("Blocks", abyte);
                 nbttagcompound1.setByteArray("Data", nibblearray.asBytes());
                 nbttagcompound1.setByteArray("SkyLight", nibblearray1.asBytes());
@@ -103,17 +100,7 @@ public class OldChunkLoader {
         }
 
         nbttagcompound.set("Sections", nbttaglist);
-        byte[] abyte1 = new byte[256];
-        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-
-        for (k = 0; k < 16; ++k) {
-            for (j = 0; j < 16; ++j) {
-                blockposition_mutableblockposition.d(oldchunkloader_oldchunk.k << 4 | k, 0, oldchunkloader_oldchunk.l << 4 | j);
-                abyte1[j << 4 | k] = (byte) (IRegistry.BIOME.a((Object) worldchunkmanager.getBiome(blockposition_mutableblockposition)) & 255);
-            }
-        }
-
-        nbttagcompound.setByteArray("Biomes", abyte1);
+        nbttagcompound.setIntArray("Biomes", (new BiomeStorage(new ChunkCoordIntPair(oldchunkloader_oldchunk.k, oldchunkloader_oldchunk.l), worldchunkmanager)).a());
         nbttagcompound.set("Entities", oldchunkloader_oldchunk.h);
         nbttagcompound.set("TileEntities", oldchunkloader_oldchunk.i);
         if (oldchunkloader_oldchunk.j != null) {

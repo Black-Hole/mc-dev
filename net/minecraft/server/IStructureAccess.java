@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.longs.LongSet;
 import java.util.Map;
 import javax.annotation.Nullable;
 
-public interface IStructureAccess extends IBlockAccess {
+public interface IStructureAccess {
 
     @Nullable
     StructureStart a(String s);

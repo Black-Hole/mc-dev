@@ -16,6 +16,7 @@ public class EntitySmallFireball extends EntityFireballFireball {
 
     @Override
     protected void a(MovingObjectPosition movingobjectposition) {
+        super.a(movingobjectposition);
         if (!this.world.isClientSide) {
             if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.ENTITY) {
                 Entity entity = ((MovingObjectPositionEntity) movingobjectposition).getEntity();

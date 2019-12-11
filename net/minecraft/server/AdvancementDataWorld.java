@@ -63,7 +63,7 @@ public class AdvancementDataWorld extends ResourceDataJson {
         return this.REGISTRY.a(minecraftkey);
     }
 
-    public Collection<Advancement> a() {
+    public Collection<Advancement> getAdvancements() {
         return this.REGISTRY.c();
     }
 }

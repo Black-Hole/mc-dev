@@ -17,13 +17,13 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
 
     @Override
     public void movementTick() {
-        this.cO();
-        this.eb();
+        this.dg();
+        this.ew();
         super.movementTick();
     }
 
-    protected void eb() {
-        float f = this.aF();
+    protected void ew() {
+        float f = this.aI();
 
         if (f > 0.5F) {
             this.ticksFarFromPlayer += 2;
@@ -32,12 +32,8 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (!this.world.isClientSide && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-            this.die();
-        }
-
+    protected boolean J() {
+        return true;
     }
 
     @Override
@@ -72,14 +68,14 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return 0.5F - iworldreader.v(blockposition);
+        return 0.5F - iworldreader.w(blockposition);
     }
 
     public static boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, Random random) {
         if (generatoraccess.getBrightness(EnumSkyBlock.SKY, blockposition) > random.nextInt(32)) {
             return false;
         } else {
-            int i = generatoraccess.getMinecraftWorld().U() ? generatoraccess.d(blockposition, 10) : generatoraccess.getLightLevel(blockposition);
+            int i = generatoraccess.getMinecraftWorld().U() ? generatoraccess.c(blockposition, 10) : generatoraccess.getLightLevel(blockposition);
 
             return i <= random.nextInt(8);
         }

@@ -4,8 +4,8 @@ public final class BiomeStoneBeach extends BiomeBase {
 
     public BiomeStoneBeach() {
         super((new BiomeBase.a()).a(WorldGenSurface.G, WorldGenSurface.x).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.NONE).a(0.1F).b(0.8F).c(0.2F).d(0.3F).a(4159204).b(329011).a((String) null));
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
-        this.a(WorldGenerator.STRONGHOLD, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
+        this.a(WorldGenerator.STRONGHOLD.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);

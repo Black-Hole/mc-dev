@@ -7,7 +7,7 @@ public class BlockBrewingStand extends BlockTileEntity {
 
     public BlockBrewingStand(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBrewingStand.HAS_BOTTLE[0], false)).set(BlockBrewingStand.HAS_BOTTLE[1], false)).set(BlockBrewingStand.HAS_BOTTLE[2], false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBrewingStand.HAS_BOTTLE[0], false)).set(BlockBrewingStand.HAS_BOTTLE[1], false)).set(BlockBrewingStand.HAS_BOTTLE[2], false));
     }
 
     @Override
@@ -26,9 +26,9 @@ public class BlockBrewingStand extends BlockTileEntity {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (world.isClientSide) {
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -37,7 +37,7 @@ public class BlockBrewingStand extends BlockTileEntity {
                 entityhuman.a(StatisticList.INTERACT_WITH_BREWINGSTAND);
             }
 
-            return true;
+            return EnumInteractionResult.SUCCESS;
         }
     }
 
@@ -74,11 +74,6 @@ public class BlockBrewingStand extends BlockTileEntity {
     @Override
     public int a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return Container.a(world.getTileEntity(blockposition));
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 
     @Override

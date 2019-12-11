@@ -19,7 +19,7 @@ public class ItemSuspiciousStew extends Item {
 
     @Override
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
-        super.a(itemstack, world, entityliving);
+        ItemStack itemstack1 = super.a(itemstack, world, entityliving);
         NBTTagCompound nbttagcompound = itemstack.getTag();
 
         if (nbttagcompound != null && nbttagcompound.hasKeyOfType("Effects", 9)) {
@@ -41,6 +41,6 @@ public class ItemSuspiciousStew extends Item {
             }
         }
 
-        return new ItemStack(Items.BOWL);
+        return entityliving instanceof EntityHuman && ((EntityHuman) entityliving).abilities.canInstantlyBuild ? itemstack1 : new ItemStack(Items.BOWL);
     }
 }

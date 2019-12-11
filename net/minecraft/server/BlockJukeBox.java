@@ -6,18 +6,18 @@ public class BlockJukeBox extends BlockTileEntity {
 
     protected BlockJukeBox(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockJukeBox.HAS_RECORD, false));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockJukeBox.HAS_RECORD, false));
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if ((Boolean) iblockdata.get(BlockJukeBox.HAS_RECORD)) {
             this.dropRecord(world, blockposition);
             iblockdata = (IBlockData) iblockdata.set(BlockJukeBox.HAS_RECORD, false);
             world.setTypeAndData(blockposition, iblockdata, 2);
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
-            return false;
+            return EnumInteractionResult.PASS;
         }
     }
 
@@ -81,7 +81,7 @@ public class BlockJukeBox extends BlockTileEntity {
             Item item = ((TileEntityJukeBox) tileentity).getRecord().getItem();
 
             if (item instanceof ItemRecord) {
-                return ((ItemRecord) item).d();
+                return ((ItemRecord) item).f();
             }
         }
 

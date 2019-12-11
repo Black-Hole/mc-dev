@@ -5,10 +5,10 @@ import java.util.Optional;
 
 public class TagsItem {
 
-    private static Tags<Item> N = new Tags<>((minecraftkey) -> {
+    private static Tags<Item> Q = new Tags<>((minecraftkey) -> {
         return Optional.empty();
     }, "", false, "");
-    private static int O;
+    private static int R;
     public static final Tag<Item> WOOL = a("wool");
     public static final Tag<Item> PLANKS = a("planks");
     public static final Tag<Item> STONE_BRICKS = a("stone_bricks");
@@ -42,20 +42,23 @@ public class TagsItem {
     public static final Tag<Item> SMALL_FLOWERS = a("small_flowers");
     public static final Tag<Item> BEDS = a("beds");
     public static final Tag<Item> FENCES = a("fences");
+    public static final Tag<Item> TALL_FLOWERS = a("tall_flowers");
+    public static final Tag<Item> FLOWERS = a("flowers");
     public static final Tag<Item> BOATS = a("boats");
     public static final Tag<Item> FISHES = a("fishes");
     public static final Tag<Item> SIGNS = a("signs");
     public static final Tag<Item> MUSIC_DISCS = a("music_discs");
     public static final Tag<Item> COALS = a("coals");
     public static final Tag<Item> ARROWS = a("arrows");
+    public static final Tag<Item> LECTERN_BOOKS = a("lectern_books");
 
     public static void a(Tags<Item> tags) {
-        TagsItem.N = tags;
-        ++TagsItem.O;
+        TagsItem.Q = tags;
+        ++TagsItem.R;
     }
 
     public static Tags<Item> a() {
-        return TagsItem.N;
+        return TagsItem.Q;
     }
 
     private static Tag<Item> a(String s) {
@@ -72,9 +75,9 @@ public class TagsItem {
         }
 
         public boolean a(Item item) {
-            if (this.a != TagsItem.O) {
-                this.b = TagsItem.N.b(this.c());
-                this.a = TagsItem.O;
+            if (this.a != TagsItem.R) {
+                this.b = TagsItem.Q.b(this.c());
+                this.a = TagsItem.R;
             }
 
             return this.b.isTagged(item);
@@ -82,9 +85,9 @@ public class TagsItem {
 
         @Override
         public Collection<Item> a() {
-            if (this.a != TagsItem.O) {
-                this.b = TagsItem.N.b(this.c());
-                this.a = TagsItem.O;
+            if (this.a != TagsItem.R) {
+                this.b = TagsItem.Q.b(this.c());
+                this.a = TagsItem.R;
             }
 
             return this.b.a();
@@ -92,9 +95,9 @@ public class TagsItem {
 
         @Override
         public Collection<Tag.b<Item>> b() {
-            if (this.a != TagsItem.O) {
-                this.b = TagsItem.N.b(this.c());
-                this.a = TagsItem.O;
+            if (this.a != TagsItem.R) {
+                this.b = TagsItem.Q.b(this.c());
+                this.a = TagsItem.R;
             }
 
             return this.b.b();

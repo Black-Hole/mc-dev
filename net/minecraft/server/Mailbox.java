@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 public interface Mailbox<Msg> extends AutoCloseable {
 
-    String bf();
+    String bh();
 
     void a(Msg msg);
 
@@ -25,7 +25,7 @@ public interface Mailbox<Msg> extends AutoCloseable {
     static <Msg> Mailbox<Msg> a(final String s, final Consumer<Msg> consumer) {
         return new Mailbox<Msg>() {
             @Override
-            public String bf() {
+            public String bh() {
                 return s;
             }
 

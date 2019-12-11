@@ -2,13 +2,10 @@ package net.minecraft.server;
 
 public class BiomeLayoutTheEndConfiguration implements BiomeLayoutConfiguration {
 
-    private long a;
+    private final long a;
 
-    public BiomeLayoutTheEndConfiguration() {}
-
-    public BiomeLayoutTheEndConfiguration a(long i) {
-        this.a = i;
-        return this;
+    public BiomeLayoutTheEndConfiguration(WorldData worlddata) {
+        this.a = worlddata.getSeed();
     }
 
     public long a() {

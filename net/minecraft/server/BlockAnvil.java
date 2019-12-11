@@ -18,18 +18,23 @@ public class BlockAnvil extends BlockFalling {
 
     public BlockAnvil(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockAnvil.FACING, EnumDirection.NORTH));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockAnvil.FACING, EnumDirection.NORTH));
     }
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockAnvil.FACING, blockactioncontext.f().e());
+        return (IBlockData) this.getBlockData().set(BlockAnvil.FACING, blockactioncontext.f().f());
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        entityhuman.openContainer(iblockdata.b(world, blockposition));
-        return true;
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+        if (world.isClientSide) {
+            return EnumInteractionResult.SUCCESS;
+        } else {
+            entityhuman.openContainer(iblockdata.b(world, blockposition));
+            entityhuman.a(StatisticList.INTERACT_WITH_ANVIL);
+            return EnumInteractionResult.SUCCESS;
+        }
     }
 
     @Nullable
@@ -44,7 +49,7 @@ public class BlockAnvil extends BlockFalling {
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockAnvil.FACING);
 
-        return enumdirection.k() == EnumDirection.EnumAxis.X ? BlockAnvil.i : BlockAnvil.j;
+        return enumdirection.m() == EnumDirection.EnumAxis.X ? BlockAnvil.i : BlockAnvil.j;
     }
 
     @Override
@@ -63,7 +68,7 @@ public class BlockAnvil extends BlockFalling {
     }
 
     @Nullable
-    public static IBlockData a_(IBlockData iblockdata) {
+    public static IBlockData e(IBlockData iblockdata) {
         Block block = iblockdata.getBlock();
 
         return block == Blocks.ANVIL ? (IBlockData) Blocks.CHIPPED_ANVIL.getBlockData().set(BlockAnvil.FACING, iblockdata.get(BlockAnvil.FACING)) : (block == Blocks.CHIPPED_ANVIL ? (IBlockData) Blocks.DAMAGED_ANVIL.getBlockData().set(BlockAnvil.FACING, iblockdata.get(BlockAnvil.FACING)) : null);

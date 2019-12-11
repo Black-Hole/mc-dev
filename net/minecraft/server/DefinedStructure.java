@@ -59,7 +59,7 @@ public class DefinedStructure {
                         nbttagcompound.remove("y");
                         nbttagcompound.remove("z");
                         list1.add(new DefinedStructure.BlockInfo(blockposition6, iblockdata, nbttagcompound));
-                    } else if (!iblockdata.g(world, blockposition5) && !iblockdata.o(world, blockposition5)) {
+                    } else if (!iblockdata.g(world, blockposition5) && !iblockdata.p(world, blockposition5)) {
                         list2.add(new DefinedStructure.BlockInfo(blockposition6, iblockdata, (NBTTagCompound) null));
                     } else {
                         list.add(new DefinedStructure.BlockInfo(blockposition6, iblockdata, (NBTTagCompound) null));
@@ -97,7 +97,7 @@ public class DefinedStructure {
         for (Iterator iterator = list.iterator(); iterator.hasNext(); this.b.add(new DefinedStructure.EntityInfo(vec3d, blockposition2, nbttagcompound))) {
             Entity entity = (Entity) iterator.next();
 
-            vec3d = new Vec3D(entity.locX - (double) blockposition.getX(), entity.locY - (double) blockposition.getY(), entity.locZ - (double) blockposition.getZ());
+            vec3d = new Vec3D(entity.locX() - (double) blockposition.getX(), entity.locY() - (double) blockposition.getY(), entity.locZ() - (double) blockposition.getZ());
             nbttagcompound = new NBTTagCompound();
             entity.d(nbttagcompound);
             if (entity instanceof EntityPainting) {
@@ -369,9 +369,9 @@ public class DefinedStructure {
                 Vec3D vec3d1 = vec3d.add((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
                 NBTTagList nbttaglist = new NBTTagList();
 
-                nbttaglist.add(new NBTTagDouble(vec3d1.x));
-                nbttaglist.add(new NBTTagDouble(vec3d1.y));
-                nbttaglist.add(new NBTTagDouble(vec3d1.z));
+                nbttaglist.add(NBTTagDouble.a(vec3d1.x));
+                nbttaglist.add(NBTTagDouble.a(vec3d1.y));
+                nbttaglist.add(NBTTagDouble.a(vec3d1.z));
                 nbttagcompound.set("Pos", nbttaglist);
                 nbttagcompound.remove("UUIDMost");
                 nbttagcompound.remove("UUIDLeast");
@@ -644,7 +644,7 @@ public class DefinedStructure {
 
         nbttagcompound.set("entities", nbttaglist3);
         nbttagcompound.set("size", this.a(this.c.getX(), this.c.getY(), this.c.getZ()));
-        nbttagcompound.setInt("DataVersion", SharedConstants.a().getWorldVersion());
+        nbttagcompound.setInt("DataVersion", SharedConstants.getGameVersion().getWorldVersion());
         return nbttagcompound;
     }
 
@@ -726,7 +726,7 @@ public class DefinedStructure {
         for (int j = 0; j < i; ++j) {
             int k = aint1[j];
 
-            nbttaglist.add(new NBTTagInt(k));
+            nbttaglist.add(NBTTagInt.a(k));
         }
 
         return nbttaglist;
@@ -740,7 +740,7 @@ public class DefinedStructure {
         for (int j = 0; j < i; ++j) {
             double d0 = adouble1[j];
 
-            nbttaglist.add(new NBTTagDouble(d0));
+            nbttaglist.add(NBTTagDouble.a(d0));
         }
 
         return nbttaglist;

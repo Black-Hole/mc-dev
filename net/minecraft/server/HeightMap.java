@@ -43,7 +43,7 @@ public class HeightMap {
                     while (iterator.hasNext()) {
                         HeightMap.Type heightmap_type = (HeightMap.Type) iterator.next();
 
-                        objectlist.add(ichunkaccess.b(heightmap_type));
+                        objectlist.add(ichunkaccess.a(heightmap_type));
                     }
 
                     for (int i1 = j - 1; i1 >= 0; --i1) {
@@ -146,9 +146,9 @@ public class HeightMap {
     public static enum Type {
 
         WORLD_SURFACE_WG("WORLD_SURFACE_WG", HeightMap.Use.WORLDGEN, HeightMap.a), WORLD_SURFACE("WORLD_SURFACE", HeightMap.Use.CLIENT, HeightMap.a), OCEAN_FLOOR_WG("OCEAN_FLOOR_WG", HeightMap.Use.WORLDGEN, HeightMap.b), OCEAN_FLOOR("OCEAN_FLOOR", HeightMap.Use.LIVE_WORLD, HeightMap.b), MOTION_BLOCKING("MOTION_BLOCKING", HeightMap.Use.CLIENT, (iblockdata) -> {
-            return iblockdata.getMaterial().isSolid() || !iblockdata.p().isEmpty();
+            return iblockdata.getMaterial().isSolid() || !iblockdata.getFluid().isEmpty();
         }), MOTION_BLOCKING_NO_LEAVES("MOTION_BLOCKING_NO_LEAVES", HeightMap.Use.LIVE_WORLD, (iblockdata) -> {
-            return (iblockdata.getMaterial().isSolid() || !iblockdata.p().isEmpty()) && !(iblockdata.getBlock() instanceof BlockLeaves);
+            return (iblockdata.getMaterial().isSolid() || !iblockdata.getFluid().isEmpty()) && !(iblockdata.getBlock() instanceof BlockLeaves);
         });
 
         private final String g;

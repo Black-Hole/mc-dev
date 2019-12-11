@@ -27,7 +27,7 @@ public class LootItemFunctionSetStewEffect extends LootItemFunctionConditional {
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
         if (itemstack.getItem() == Items.SUSPICIOUS_STEW && !this.a.isEmpty()) {
-            Random random = loottableinfo.b();
+            Random random = loottableinfo.a();
             int i = random.nextInt(this.a.size());
             Entry<MobEffectList, LootValueBounds> entry = (Entry) Iterables.get(this.a.entrySet(), i);
             MobEffectList mobeffectlist = (MobEffectList) entry.getKey();

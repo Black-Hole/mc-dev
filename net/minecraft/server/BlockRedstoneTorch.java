@@ -13,7 +13,7 @@ public class BlockRedstoneTorch extends BlockTorch {
 
     protected BlockRedstoneTorch(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneTorch.LIT, true));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneTorch.LIT, true));
     }
 
     @Override
@@ -59,8 +59,8 @@ public class BlockRedstoneTorch extends BlockTorch {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        a(iblockdata, world, blockposition, random, this.a(world, blockposition, iblockdata));
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        a(iblockdata, worldserver, blockposition, random, this.a((World) worldserver, blockposition, iblockdata));
     }
 
     public static void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random, boolean flag) {

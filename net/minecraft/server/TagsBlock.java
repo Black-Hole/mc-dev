@@ -5,10 +5,10 @@ import java.util.Optional;
 
 public class TagsBlock {
 
-    private static Tags<Block> Y = new Tags<>((minecraftkey) -> {
+    private static Tags<Block> ae = new Tags<>((minecraftkey) -> {
         return Optional.empty();
     }, "", false, "");
-    private static int Z;
+    private static int af;
     public static final Tag<Block> WOOL = a("wool");
     public static final Tag<Block> PLANKS = a("planks");
     public static final Tag<Block> STONE_BRICKS = a("stone_bricks");
@@ -42,6 +42,9 @@ public class TagsBlock {
     public static final Tag<Block> SMALL_FLOWERS = a("small_flowers");
     public static final Tag<Block> BEDS = a("beds");
     public static final Tag<Block> FENCES = a("fences");
+    public static final Tag<Block> TALL_FLOWERS = a("tall_flowers");
+    public static final Tag<Block> FLOWERS = a("flowers");
+    public static final Tag<Block> SHULKER_BOXES = a("shulker_boxes");
     public static final Tag<Block> FLOWER_POTS = a("flower_pots");
     public static final Tag<Block> ENDERMAN_HOLDABLE = a("enderman_holdable");
     public static final Tag<Block> ICE = a("ice");
@@ -53,20 +56,23 @@ public class TagsBlock {
     public static final Tag<Block> CORAL_PLANTS = a("coral_plants");
     public static final Tag<Block> CORALS = a("corals");
     public static final Tag<Block> BAMBOO_PLANTABLE_ON = a("bamboo_plantable_on");
-    public static final Tag<Block> DIRT_LIKE = a("dirt_like");
     public static final Tag<Block> STANDING_SIGNS = a("standing_signs");
     public static final Tag<Block> WALL_SIGNS = a("wall_signs");
     public static final Tag<Block> SIGNS = a("signs");
     public static final Tag<Block> DRAGON_IMMUNE = a("dragon_immune");
     public static final Tag<Block> WITHER_IMMUNE = a("wither_immune");
+    public static final Tag<Block> BEEHIVES = a("beehives");
+    public static final Tag<Block> CROPS = a("crops");
+    public static final Tag<Block> BEE_GROWABLES = a("bee_growables");
+    public static final Tag<Block> PORTALS = a("portals");
 
     public static void a(Tags<Block> tags) {
-        TagsBlock.Y = tags;
-        ++TagsBlock.Z;
+        TagsBlock.ae = tags;
+        ++TagsBlock.af;
     }
 
     public static Tags<Block> a() {
-        return TagsBlock.Y;
+        return TagsBlock.ae;
     }
 
     private static Tag<Block> a(String s) {
@@ -83,9 +89,9 @@ public class TagsBlock {
         }
 
         public boolean a(Block block) {
-            if (this.a != TagsBlock.Z) {
-                this.b = TagsBlock.Y.b(this.c());
-                this.a = TagsBlock.Z;
+            if (this.a != TagsBlock.af) {
+                this.b = TagsBlock.ae.b(this.c());
+                this.a = TagsBlock.af;
             }
 
             return this.b.isTagged(block);
@@ -93,9 +99,9 @@ public class TagsBlock {
 
         @Override
         public Collection<Block> a() {
-            if (this.a != TagsBlock.Z) {
-                this.b = TagsBlock.Y.b(this.c());
-                this.a = TagsBlock.Z;
+            if (this.a != TagsBlock.af) {
+                this.b = TagsBlock.ae.b(this.c());
+                this.a = TagsBlock.af;
             }
 
             return this.b.a();
@@ -103,9 +109,9 @@ public class TagsBlock {
 
         @Override
         public Collection<Tag.b<Block>> b() {
-            if (this.a != TagsBlock.Z) {
-                this.b = TagsBlock.Y.b(this.c());
-                this.a = TagsBlock.Z;
+            if (this.a != TagsBlock.af) {
+                this.b = TagsBlock.ae.b(this.c());
+                this.a = TagsBlock.af;
             }
 
             return this.b.b();

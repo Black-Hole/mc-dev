@@ -16,7 +16,7 @@ public class EntityLightning extends Entity {
 
     public EntityLightning(World world, double d0, double d1, double d2, boolean flag) {
         super(EntityTypes.LIGHTNING_BOLT, world);
-        this.af = true;
+        this.ac = true;
         this.setPositionRotation(d0, d1, d2, 0.0F, 0.0F);
         this.lifeTicks = 2;
         this.b = this.random.nextLong();
@@ -43,8 +43,8 @@ public class EntityLightning extends Entity {
     public void tick() {
         super.tick();
         if (this.lifeTicks == 2) {
-            this.world.playSound((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + this.random.nextFloat() * 0.2F);
-            this.world.playSound((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_LIGHTNING_BOLT_IMPACT, SoundCategory.WEATHER, 2.0F, 0.5F + this.random.nextFloat() * 0.2F);
+            this.world.playSound((EntityHuman) null, this.locX(), this.locY(), this.locZ(), SoundEffects.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + this.random.nextFloat() * 0.2F);
+            this.world.playSound((EntityHuman) null, this.locX(), this.locY(), this.locZ(), SoundEffects.ENTITY_LIGHTNING_BOLT_IMPACT, SoundCategory.WEATHER, 2.0F, 0.5F + this.random.nextFloat() * 0.2F);
         }
 
         --this.lifeTicks;
@@ -64,7 +64,7 @@ public class EntityLightning extends Entity {
                 this.world.c(2);
             } else if (!this.e) {
                 double d0 = 3.0D;
-                List<Entity> list = this.world.getEntities(this, new AxisAlignedBB(this.locX - 3.0D, this.locY - 3.0D, this.locZ - 3.0D, this.locX + 3.0D, this.locY + 6.0D + 3.0D, this.locZ + 3.0D), Entity::isAlive);
+                List<Entity> list = this.world.getEntities(this, new AxisAlignedBB(this.locX() - 3.0D, this.locY() - 3.0D, this.locZ() - 3.0D, this.locX() + 3.0D, this.locY() + 6.0D + 3.0D, this.locZ() + 3.0D), Entity::isAlive);
                 Iterator iterator = list.iterator();
 
                 while (iterator.hasNext()) {
@@ -111,7 +111,7 @@ public class EntityLightning extends Entity {
     protected void b(NBTTagCompound nbttagcompound) {}
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         return new PacketPlayOutSpawnEntityWeather(this);
     }
 }

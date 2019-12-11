@@ -16,12 +16,14 @@ public class BehaviorCelebrate extends Behavior<EntityVillager> {
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
-        this.a = worldserver.c_(new BlockPosition(entityvillager));
-        return this.a != null && this.a.e() && BehaviorOutside.b(worldserver, entityvillager);
+        BlockPosition blockposition = new BlockPosition(entityvillager);
+
+        this.a = worldserver.c_(blockposition);
+        return this.a != null && this.a.isVictory() && BehaviorOutside.a(worldserver, entityvillager, blockposition);
     }
 
     protected boolean g(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        return this.a != null && !this.a.d();
+        return this.a != null && !this.a.isStopped();
     }
 
     protected void f(WorldServer worldserver, EntityVillager entityvillager, long i) {
@@ -33,14 +35,14 @@ public class BehaviorCelebrate extends Behavior<EntityVillager> {
         Random random = entityvillager.getRandom();
 
         if (random.nextInt(100) == 0) {
-            entityvillager.ec();
+            entityvillager.ex();
         }
 
-        if (random.nextInt(200) == 0 && BehaviorOutside.b(worldserver, entityvillager)) {
+        if (random.nextInt(200) == 0 && BehaviorOutside.a(worldserver, entityvillager, new BlockPosition(entityvillager))) {
             EnumColor enumcolor = EnumColor.values()[random.nextInt(EnumColor.values().length)];
             int j = random.nextInt(3);
             ItemStack itemstack = this.a(enumcolor, j);
-            EntityFireworks entityfireworks = new EntityFireworks(entityvillager.world, entityvillager.locX, entityvillager.locY + (double) entityvillager.getHeadHeight(), entityvillager.locZ, itemstack);
+            EntityFireworks entityfireworks = new EntityFireworks(entityvillager.world, entityvillager.locX(), entityvillager.getHeadY(), entityvillager.locZ(), itemstack);
 
             entityvillager.world.addEntity(entityfireworks);
         }

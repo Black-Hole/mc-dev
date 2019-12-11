@@ -38,7 +38,7 @@ public class ServerConnection {
     private final MinecraftServer e;
     public volatile boolean c;
     private final List<ChannelFuture> f = Collections.synchronizedList(Lists.newArrayList());
-    private final List<NetworkManager> g = Collections.synchronizedList(Lists.newArrayList());
+    private final List<NetworkManager> listeningChannels = Collections.synchronizedList(Lists.newArrayList());
 
     public ServerConnection(MinecraftServer minecraftserver) {
         this.e = minecraftserver;
@@ -52,7 +52,7 @@ public class ServerConnection {
             Class oclass;
             LazyInitVar lazyinitvar;
 
-            if (Epoll.isAvailable() && this.e.X()) {
+            if (Epoll.isAvailable() && this.e.n()) {
                 oclass = EpollServerSocketChannel.class;
                 lazyinitvar = ServerConnection.b;
                 ServerConnection.LOGGER.info("Using epoll channel type");
@@ -73,7 +73,7 @@ public class ServerConnection {
                     channel.pipeline().addLast("timeout", new ReadTimeoutHandler(30)).addLast("legacy_query", new LegacyPingHandler(ServerConnection.this)).addLast("splitter", new PacketSplitter()).addLast("decoder", new PacketDecoder(EnumProtocolDirection.SERVERBOUND)).addLast("prepender", new PacketPrepender()).addLast("encoder", new PacketEncoder(EnumProtocolDirection.CLIENTBOUND));
                     NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
 
-                    ServerConnection.this.g.add(networkmanager);
+                    ServerConnection.this.listeningChannels.add(networkmanager);
                     channel.pipeline().addLast("packet_handler", networkmanager);
                     networkmanager.setPacketListener(new HandshakeListener(ServerConnection.this.e, networkmanager));
                 }
@@ -98,10 +98,10 @@ public class ServerConnection {
     }
 
     public void c() {
-        List list = this.g;
+        List list = this.listeningChannels;
 
-        synchronized (this.g) {
-            Iterator iterator = this.g.iterator();
+        synchronized (this.listeningChannels) {
+            Iterator iterator = this.listeningChannels.iterator();
 
             while (iterator.hasNext()) {
                 NetworkManager networkmanager = (NetworkManager) iterator.next();

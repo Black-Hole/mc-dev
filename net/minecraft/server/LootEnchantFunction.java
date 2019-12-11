@@ -37,7 +37,7 @@ public class LootEnchantFunction extends LootItemFunctionConditional {
                 return itemstack;
             }
 
-            float f = (float) i * this.a.b(loottableinfo.b());
+            float f = (float) i * this.a.b(loottableinfo.a());
 
             itemstack.add(Math.round(f));
             if (this.b() && itemstack.getCount() > this.c) {

@@ -32,9 +32,4 @@ public class MethodProfilerResultsEmpty implements MethodProfilerResults {
     public int d() {
         return 0;
     }
-
-    @Override
-    public String e() {
-        return "";
-    }
 }

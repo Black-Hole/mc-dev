@@ -39,6 +39,6 @@ public class ItemMilkBucket extends Item {
     @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         entityhuman.c(enumhand);
-        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, entityhuman.b(enumhand));
+        return InteractionResultWrapper.a(entityhuman.b(enumhand));
     }
 }

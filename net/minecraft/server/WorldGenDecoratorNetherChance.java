@@ -13,11 +13,11 @@ public class WorldGenDecoratorNetherChance extends WorldGenDecoratorFeatureSimpl
 
     public Stream<BlockPosition> a(Random random, WorldGenFeatureChanceDecoratorRangeConfiguration worldgenfeaturechancedecoratorrangeconfiguration, BlockPosition blockposition) {
         if (random.nextFloat() < worldgenfeaturechancedecoratorrangeconfiguration.a) {
-            int i = random.nextInt(16);
-            int j = random.nextInt(worldgenfeaturechancedecoratorrangeconfiguration.d - worldgenfeaturechancedecoratorrangeconfiguration.c) + worldgenfeaturechancedecoratorrangeconfiguration.b;
-            int k = random.nextInt(16);
+            int i = random.nextInt(16) + blockposition.getX();
+            int j = random.nextInt(16) + blockposition.getZ();
+            int k = random.nextInt(worldgenfeaturechancedecoratorrangeconfiguration.d - worldgenfeaturechancedecoratorrangeconfiguration.c) + worldgenfeaturechancedecoratorrangeconfiguration.b;
 
-            return Stream.of(blockposition.b(i, j, k));
+            return Stream.of(new BlockPosition(i, k, j));
         } else {
             return Stream.empty();
         }

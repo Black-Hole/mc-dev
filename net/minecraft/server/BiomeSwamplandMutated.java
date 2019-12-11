@@ -4,7 +4,7 @@ public final class BiomeSwamplandMutated extends BiomeBase {
 
     protected BiomeSwamplandMutated() {
         super((new BiomeBase.a()).a(WorldGenSurface.L, WorldGenSurface.v).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.SWAMP).a(-0.1F).b(0.3F).c(0.8F).d(0.9F).a(6388580).b(2302743).a("swamp"));
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);

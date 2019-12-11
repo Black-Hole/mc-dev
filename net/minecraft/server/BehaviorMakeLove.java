@@ -36,8 +36,8 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
         if (entityvillager.h((Entity) entityvillager1) <= 5.0D) {
             BehaviorUtil.a((EntityLiving) entityvillager, (EntityLiving) entityvillager1);
             if (i >= this.a) {
-                entityvillager.eo();
-                entityvillager1.eo();
+                entityvillager.eJ();
+                entityvillager1.eJ();
                 this.a(worldserver, entityvillager, entityvillager1);
             } else if (entityvillager.getRandom().nextInt(35) == 0) {
                 worldserver.broadcastEntityEffect(entityvillager1, (byte) 12);
@@ -60,6 +60,7 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
                 this.a(worldserver, (EntityVillager) optional1.get(), (BlockPosition) optional.get());
             } else {
                 worldserver.B().b((BlockPosition) optional.get());
+                PacketDebug.c(worldserver, (BlockPosition) optional.get());
             }
         }
 
@@ -106,7 +107,7 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
             entityvillager.setAgeRaw(6000);
             entityvillager1.setAgeRaw(6000);
             entityvillager2.setAgeRaw(-24000);
-            entityvillager2.setPositionRotation(entityvillager.locX, entityvillager.locY, entityvillager.locZ, 0.0F, 0.0F);
+            entityvillager2.setPositionRotation(entityvillager.locX(), entityvillager.locY(), entityvillager.locZ(), 0.0F, 0.0F);
             entityvillager.world.addEntity(entityvillager2);
             entityvillager.world.broadcastEntityEffect(entityvillager2, (byte) 12);
             return Optional.of(entityvillager2);

@@ -37,7 +37,7 @@ public abstract class RecipeSingleItem implements IRecipe<IInventory> {
     }
 
     @Override
-    public ItemStack c() {
+    public ItemStack getResult() {
         return this.result;
     }
 

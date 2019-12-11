@@ -52,16 +52,16 @@ public enum EnumBlockRotation {
     }
 
     public EnumDirection a(EnumDirection enumdirection) {
-        if (enumdirection.k() == EnumDirection.EnumAxis.Y) {
+        if (enumdirection.m() == EnumDirection.EnumAxis.Y) {
             return enumdirection;
         } else {
             switch (this) {
                 case CLOCKWISE_90:
-                    return enumdirection.e();
+                    return enumdirection.f();
                 case CLOCKWISE_180:
                     return enumdirection.opposite();
                 case COUNTERCLOCKWISE_90:
-                    return enumdirection.f();
+                    return enumdirection.g();
                 default:
                     return enumdirection;
             }

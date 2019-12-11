@@ -17,7 +17,7 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IBlockWaterl
 
     protected BlockTrapdoor(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTrapdoor.FACING, EnumDirection.NORTH)).set(BlockTrapdoor.OPEN, false)).set(BlockTrapdoor.HALF, BlockPropertyHalf.BOTTOM)).set(BlockTrapdoor.c, false)).set(BlockTrapdoor.d, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTrapdoor.FACING, EnumDirection.NORTH)).set(BlockTrapdoor.OPEN, false)).set(BlockTrapdoor.HALF, BlockPropertyHalf.BOTTOM)).set(BlockTrapdoor.c, false)).set(BlockTrapdoor.d, false));
     }
 
     @Override
@@ -54,9 +54,9 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IBlockWaterl
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (this.material == Material.ORE) {
-            return false;
+            return EnumInteractionResult.PASS;
         } else {
             iblockdata = (IBlockData) iblockdata.a((IBlockState) BlockTrapdoor.OPEN);
             world.setTypeAndData(blockposition, iblockdata, 2);
@@ -65,7 +65,7 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IBlockWaterl
             }
 
             this.a(entityhuman, world, blockposition, (Boolean) iblockdata.get(BlockTrapdoor.OPEN));
-            return true;
+            return EnumInteractionResult.SUCCESS;
         }
     }
 
@@ -108,7 +108,7 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IBlockWaterl
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
         EnumDirection enumdirection = blockactioncontext.getClickedFace();
 
-        if (!blockactioncontext.c() && enumdirection.k().c()) {
+        if (!blockactioncontext.c() && enumdirection.m().c()) {
             iblockdata = (IBlockData) ((IBlockData) iblockdata.set(BlockTrapdoor.FACING, enumdirection)).set(BlockTrapdoor.HALF, blockactioncontext.j().y - (double) blockactioncontext.getClickPosition().getY() > 0.5D ? BlockPropertyHalf.TOP : BlockPropertyHalf.BOTTOM);
         } else {
             iblockdata = (IBlockData) ((IBlockData) iblockdata.set(BlockTrapdoor.FACING, blockactioncontext.f().opposite())).set(BlockTrapdoor.HALF, enumdirection == EnumDirection.UP ? BlockPropertyHalf.BOTTOM : BlockPropertyHalf.TOP);
@@ -122,18 +122,13 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IBlockWaterl
     }
 
     @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
-    }
-
-    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockTrapdoor.FACING, BlockTrapdoor.OPEN, BlockTrapdoor.HALF, BlockTrapdoor.c, BlockTrapdoor.d);
     }
 
     @Override
-    public Fluid g(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockTrapdoor.d) ? FluidTypes.WATER.a(false) : super.g(iblockdata);
+    public Fluid a_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockTrapdoor.d) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
     }
 
     @Override

@@ -15,6 +15,10 @@ public class Vec3D implements IPosition {
         this.z = d2;
     }
 
+    public Vec3D(Vector3fa vector3fa) {
+        this((double) vector3fa.a(), (double) vector3fa.b(), (double) vector3fa.c());
+    }
+
     public Vec3D(BaseBlockPosition baseblockposition) {
         this((double) baseblockposition.getX(), (double) baseblockposition.getY(), (double) baseblockposition.getZ());
     }

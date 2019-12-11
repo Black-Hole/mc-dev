@@ -24,11 +24,11 @@ public class WorldGenSurfaceFrozenOcean extends WorldGenSurface<WorldGenSurfaceC
         double d2 = 0.0D;
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
         float f = biomebase.getAdjustedTemperature(blockposition_mutableblockposition.d(i, 63, j));
-        double d3 = Math.min(Math.abs(d0), this.S.a((double) i * 0.1D, (double) j * 0.1D));
+        double d3 = Math.min(Math.abs(d0), this.S.a((double) i * 0.1D, (double) j * 0.1D, false) * 15.0D);
 
         if (d3 > 1.8D) {
             double d4 = 0.09765625D;
-            double d5 = Math.abs(this.T.a((double) i * 0.09765625D, (double) j * 0.09765625D));
+            double d5 = Math.abs(this.T.a((double) i * 0.09765625D, (double) j * 0.09765625D, false));
 
             d1 = d3 * d3 * 1.2D;
             double d6 = Math.ceil(d5 * 40.0D) + 14.0D;
@@ -51,8 +51,8 @@ public class WorldGenSurfaceFrozenOcean extends WorldGenSurface<WorldGenSurfaceC
 
         int j1 = i & 15;
         int k1 = j & 15;
-        IBlockData iblockdata2 = biomebase.q().b();
-        IBlockData iblockdata3 = biomebase.q().a();
+        IBlockData iblockdata2 = biomebase.s().b();
+        IBlockData iblockdata3 = biomebase.s().a();
         int l1 = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
         int i2 = -1;
         int j2 = 0;
@@ -77,8 +77,8 @@ public class WorldGenSurfaceFrozenOcean extends WorldGenSurface<WorldGenSurfaceC
                         iblockdata3 = WorldGenSurfaceFrozenOcean.c;
                         iblockdata2 = iblockdata;
                     } else if (i3 >= l - 4 && i3 <= l + 1) {
-                        iblockdata3 = biomebase.q().a();
-                        iblockdata2 = biomebase.q().b();
+                        iblockdata3 = biomebase.s().a();
+                        iblockdata2 = biomebase.s().b();
                     }
 
                     if (i3 < l && (iblockdata3 == null || iblockdata3.isAir())) {
@@ -120,8 +120,8 @@ public class WorldGenSurfaceFrozenOcean extends WorldGenSurface<WorldGenSurfaceC
         if (this.U != i || this.S == null || this.T == null) {
             SeededRandom seededrandom = new SeededRandom(i);
 
-            this.S = new NoiseGenerator3(seededrandom, 4);
-            this.T = new NoiseGenerator3(seededrandom, 1);
+            this.S = new NoiseGenerator3(seededrandom, 3, 0);
+            this.T = new NoiseGenerator3(seededrandom, 0, 0);
         }
 
         this.U = i;

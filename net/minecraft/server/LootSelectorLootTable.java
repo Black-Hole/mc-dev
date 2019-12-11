@@ -1,12 +1,9 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class LootSelectorLootTable extends LootSelectorEntry {
 
@@ -19,25 +16,23 @@ public class LootSelectorLootTable extends LootSelectorEntry {
 
     @Override
     public void a(Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {
-        LootTable loottable = loottableinfo.a().getLootTable(this.c);
+        LootTable loottable = loottableinfo.a(this.c);
 
         loottable.populateLootDirect(loottableinfo, consumer);
     }
 
     @Override
-    public void a(LootCollector lootcollector, Function<MinecraftKey, LootTable> function, Set<MinecraftKey> set, LootContextParameterSet lootcontextparameterset) {
-        if (set.contains(this.c)) {
+    public void a(LootCollector lootcollector) {
+        if (lootcollector.a(this.c)) {
             lootcollector.a("Table " + this.c + " is recursively called");
         } else {
-            super.a(lootcollector, function, set, lootcontextparameterset);
-            LootTable loottable = (LootTable) function.apply(this.c);
+            super.a(lootcollector);
+            LootTable loottable = lootcollector.c(this.c);
 
             if (loottable == null) {
                 lootcollector.a("Unknown loot table called " + this.c);
             } else {
-                Set<MinecraftKey> set1 = ImmutableSet.builder().addAll(set).add(this.c).build();
-
-                loottable.a(lootcollector.b("->{" + this.c + "}"), function, set1, lootcontextparameterset);
+                loottable.a(lootcollector.a("->{" + this.c + "}", this.c));
             }
 
         }

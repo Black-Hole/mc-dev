@@ -46,14 +46,14 @@ public class WorldUpgraderIterator {
         WorldChunkManager worldchunkmanager;
 
         if (worlddata != null && worlddata.getType() == WorldType.FLAT) {
-            worldchunkmanager = biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.PLAINS));
+            worldchunkmanager = biomelayout.a((BiomeLayoutConfiguration) ((BiomeLayoutFixedConfiguration) biomelayout.a(worlddata)).a(Biomes.PLAINS));
         } else {
-            worldchunkmanager = biomelayout1.a(((BiomeLayoutOverworldConfiguration) biomelayout1.a()).a(worlddata).a((GeneratorSettingsOverworld) ChunkGeneratorType.a.a()));
+            worldchunkmanager = biomelayout1.a(biomelayout1.a(worlddata));
         }
 
         a(new File(file, "region"), (Iterable) list, worldchunkmanager, 0, i, iprogressupdate);
-        a(new File(file1, "region"), (Iterable) list1, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.NETHER)), list.size(), i, iprogressupdate);
-        a(new File(file2, "region"), (Iterable) list2, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.THE_END)), list.size() + list1.size(), i, iprogressupdate);
+        a(new File(file1, "region"), (Iterable) list1, biomelayout.a((BiomeLayoutConfiguration) ((BiomeLayoutFixedConfiguration) biomelayout.a(worlddata)).a(Biomes.NETHER)), list.size(), i, iprogressupdate);
+        a(new File(file2, "region"), (Iterable) list2, biomelayout.a((BiomeLayoutConfiguration) ((BiomeLayoutFixedConfiguration) biomelayout.a(worlddata)).a(Biomes.THE_END)), list.size() + list1.size(), i, iprogressupdate);
         worlddata.d(19133);
         if (worlddata.getType() == WorldType.NORMAL_1_1) {
             worlddata.a(WorldType.NORMAL);
@@ -106,11 +106,11 @@ public class WorldUpgraderIterator {
         String s = file1.getName();
 
         try {
-            RegionFile regionfile = new RegionFile(file1);
+            RegionFile regionfile = new RegionFile(file1, file);
             Throwable throwable = null;
 
             try {
-                RegionFile regionfile1 = new RegionFile(new File(file, s.substring(0, s.length() - ".mcr".length()) + ".mca"));
+                RegionFile regionfile1 = new RegionFile(new File(file, s.substring(0, s.length() - ".mcr".length()) + ".mca"), file);
                 Throwable throwable1 = null;
 
                 try {
@@ -120,7 +120,7 @@ public class WorldUpgraderIterator {
                         for (l = 0; l < 32; ++l) {
                             ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(k, l);
 
-                            if (regionfile.d(chunkcoordintpair) && !regionfile1.d(chunkcoordintpair)) {
+                            if (regionfile.chunkExists(chunkcoordintpair) && !regionfile1.chunkExists(chunkcoordintpair)) {
                                 NBTTagCompound nbttagcompound;
 
                                 try {

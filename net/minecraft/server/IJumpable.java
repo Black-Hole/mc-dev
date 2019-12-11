@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public interface IJumpable {
 
-    boolean F_();
+    boolean G_();
 
     void b(int i);
 

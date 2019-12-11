@@ -26,7 +26,7 @@ public class BlockFlowerPot extends Block {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         ItemStack itemstack = entityhuman.b(enumhand);
         Item item = itemstack.getItem();
         Block block = item instanceof ItemBlock ? (Block) BlockFlowerPot.b.getOrDefault(((ItemBlock) item).getBlock(), Blocks.AIR) : Blocks.AIR;
@@ -51,9 +51,11 @@ public class BlockFlowerPot extends Block {
 
                 world.setTypeAndData(blockposition, Blocks.FLOWER_POT.getBlockData(), 3);
             }
-        }
 
-        return true;
+            return EnumInteractionResult.SUCCESS;
+        } else {
+            return EnumInteractionResult.CONSUME;
+        }
     }
 
     @Override
@@ -61,12 +63,7 @@ public class BlockFlowerPot extends Block {
         return enumdirection == EnumDirection.DOWN && !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
-    }
-
-    public Block d() {
+    public Block c() {
         return this.c;
     }
 }

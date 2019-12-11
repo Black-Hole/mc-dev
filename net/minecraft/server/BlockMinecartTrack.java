@@ -6,7 +6,7 @@ public class BlockMinecartTrack extends BlockMinecartTrackAbstract {
 
     protected BlockMinecartTrack(Block.Info block_info) {
         super(false, block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockMinecartTrack.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockMinecartTrack.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH));
     }
 
     @Override
@@ -18,7 +18,7 @@ public class BlockMinecartTrack extends BlockMinecartTrackAbstract {
     }
 
     @Override
-    public IBlockState<BlockPropertyTrackPosition> e() {
+    public IBlockState<BlockPropertyTrackPosition> d() {
         return BlockMinecartTrack.SHAPE;
     }
 

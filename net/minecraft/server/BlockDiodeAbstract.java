@@ -22,17 +22,17 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!this.a((IWorldReader) world, blockposition, iblockdata)) {
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!this.a((IWorldReader) worldserver, blockposition, iblockdata)) {
             boolean flag = (Boolean) iblockdata.get(BlockDiodeAbstract.c);
-            boolean flag1 = this.a(world, blockposition, iblockdata);
+            boolean flag1 = this.a((World) worldserver, blockposition, iblockdata);
 
             if (flag && !flag1) {
-                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDiodeAbstract.c, false), 2);
+                worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDiodeAbstract.c, false), 2);
             } else if (!flag) {
-                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDiodeAbstract.c, true), 2);
+                worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDiodeAbstract.c, true), 2);
                 if (!flag1) {
-                    world.getBlockTickList().a(blockposition, this, this.j(iblockdata), TickListPriority.HIGH);
+                    worldserver.getBlockTickList().a(blockposition, this, this.h(iblockdata), TickListPriority.VERY_HIGH);
                 }
             }
 
@@ -84,7 +84,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
                     ticklistpriority = TickListPriority.VERY_HIGH;
                 }
 
-                world.getBlockTickList().a(blockposition, this, this.j(iblockdata), ticklistpriority);
+                world.getBlockTickList().a(blockposition, this, this.h(iblockdata), ticklistpriority);
             }
 
         }
@@ -114,8 +114,8 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
 
     protected int b(IWorldReader iworldreader, BlockPosition blockposition, IBlockData iblockdata) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockDiodeAbstract.FACING);
-        EnumDirection enumdirection1 = enumdirection.e();
-        EnumDirection enumdirection2 = enumdirection.f();
+        EnumDirection enumdirection1 = enumdirection.f();
+        EnumDirection enumdirection2 = enumdirection.g();
 
         return Math.max(this.b(iworldreader, blockposition.shift(enumdirection1), enumdirection1), this.b(iworldreader, blockposition.shift(enumdirection2), enumdirection2));
     }
@@ -124,7 +124,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
         IBlockData iblockdata = iworldreader.getType(blockposition);
         Block block = iblockdata.getBlock();
 
-        return this.q(iblockdata) ? (block == Blocks.REDSTONE_BLOCK ? 15 : (block == Blocks.REDSTONE_WIRE ? (Integer) iblockdata.get(BlockRedstoneWire.POWER) : iworldreader.c(blockposition, enumdirection))) : 0;
+        return this.i(iblockdata) ? (block == Blocks.REDSTONE_BLOCK ? 15 : (block == Blocks.REDSTONE_WIRE ? (Integer) iblockdata.get(BlockRedstoneWire.POWER) : iworldreader.c(blockposition, enumdirection))) : 0;
     }
 
     @Override
@@ -166,7 +166,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
         world.a(blockposition1, (Block) this, enumdirection);
     }
 
-    protected boolean q(IBlockData iblockdata) {
+    protected boolean i(IBlockData iblockdata) {
         return iblockdata.isPowerSource();
     }
 
@@ -185,15 +185,5 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
         return isDiode(iblockdata1) && iblockdata1.get(BlockDiodeAbstract.FACING) != enumdirection;
     }
 
-    protected abstract int j(IBlockData iblockdata);
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
-    }
-
-    @Override
-    public boolean f(IBlockData iblockdata) {
-        return true;
-    }
+    protected abstract int h(IBlockData iblockdata);
 }

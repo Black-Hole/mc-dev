@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageBlock.a, LightEngineStorageBlock> {
 
@@ -37,17 +37,17 @@ public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageB
             if (enumdirection == null) {
                 return 15;
             } else {
-                AtomicInteger atomicinteger = new AtomicInteger();
-                IBlockData iblockdata = this.a(j, atomicinteger);
+                MutableInt mutableint = new MutableInt();
+                IBlockData iblockdata = this.a(j, mutableint);
 
-                if (atomicinteger.get() >= 15) {
+                if (mutableint.getValue() >= 15) {
                     return 15;
                 } else {
-                    IBlockData iblockdata1 = this.a(i, (AtomicInteger) null);
+                    IBlockData iblockdata1 = this.a(i, (MutableInt) null);
                     VoxelShape voxelshape = this.a(iblockdata1, i, enumdirection);
                     VoxelShape voxelshape1 = this.a(iblockdata, j, enumdirection.opposite());
 
-                    return VoxelShapes.b(voxelshape, voxelshape1) ? 15 : k + Math.max(1, atomicinteger.get());
+                    return VoxelShapes.b(voxelshape, voxelshape1) ? 15 : k + Math.max(1, mutableint.getValue());
                 }
             }
         }
@@ -125,7 +125,7 @@ public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageB
 
     @Override
     public void a(BlockPosition blockposition, int i) {
-        ((LightEngineStorageBlock) this.c).c();
+        ((LightEngineStorageBlock) this.c).d();
         this.a(Long.MAX_VALUE, blockposition.asLong(), 15 - i, true);
     }
 }

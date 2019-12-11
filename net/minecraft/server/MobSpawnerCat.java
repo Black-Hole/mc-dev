@@ -16,7 +16,7 @@ public class MobSpawnerCat {
                 return 0;
             } else {
                 this.a = 1200;
-                EntityPlayer entityplayer = worldserver.l_();
+                EntityPlayer entityplayer = worldserver.k();
 
                 if (entityplayer == null) {
                     return 0;

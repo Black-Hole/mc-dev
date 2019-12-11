@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
@@ -53,13 +54,13 @@ public class EntityItem extends Entity {
                 --this.pickupDelay;
             }
 
-            this.lastX = this.locX;
-            this.lastY = this.locY;
-            this.lastZ = this.locZ;
+            this.lastX = this.locX();
+            this.lastY = this.locY();
+            this.lastZ = this.locZ();
             Vec3D vec3d = this.getMot();
 
             if (this.a(TagsFluid.WATER)) {
-                this.v();
+                this.u();
             } else if (!this.isNoGravity()) {
                 this.setMot(this.getMot().add(0.0D, -0.04D, 0.0D));
             }
@@ -69,7 +70,7 @@ public class EntityItem extends Entity {
             } else {
                 this.noclip = !this.world.getCubes(this);
                 if (this.noclip) {
-                    this.i(this.locX, (this.getBoundingBox().minY + this.getBoundingBox().maxY) / 2.0D, this.locZ);
+                    this.k(this.locX(), (this.getBoundingBox().minY + this.getBoundingBox().maxY) / 2.0D, this.locZ());
                 }
             }
 
@@ -78,7 +79,7 @@ public class EntityItem extends Entity {
                 float f = 0.98F;
 
                 if (this.onGround) {
-                    f = this.world.getType(new BlockPosition(this.locX, this.getBoundingBox().minY - 1.0D, this.locZ)).getBlock().m() * 0.98F;
+                    f = this.world.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().l() * 0.98F;
                 }
 
                 this.setMot(this.getMot().d((double) f, 0.98D, (double) f));
@@ -87,7 +88,7 @@ public class EntityItem extends Entity {
                 }
             }
 
-            boolean flag = MathHelper.floor(this.lastX) != MathHelper.floor(this.locX) || MathHelper.floor(this.lastY) != MathHelper.floor(this.locY) || MathHelper.floor(this.lastZ) != MathHelper.floor(this.locZ);
+            boolean flag = MathHelper.floor(this.lastX) != MathHelper.floor(this.locX()) || MathHelper.floor(this.lastY) != MathHelper.floor(this.locY()) || MathHelper.floor(this.lastZ) != MathHelper.floor(this.locZ());
             int i = flag ? 2 : 40;
 
             if (this.ticksLived % i == 0) {
@@ -96,7 +97,7 @@ public class EntityItem extends Entity {
                     this.a(SoundEffects.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
                 }
 
-                if (!this.world.isClientSide && this.z()) {
+                if (!this.world.isClientSide && this.w()) {
                     this.mergeNearby();
                 }
             }
@@ -105,7 +106,7 @@ public class EntityItem extends Entity {
                 ++this.age;
             }
 
-            this.impulse |= this.ay();
+            this.impulse |= this.aC();
             if (!this.world.isClientSide) {
                 double d0 = this.getMot().d(vec3d).g();
 
@@ -121,34 +122,34 @@ public class EntityItem extends Entity {
         }
     }
 
-    private void v() {
+    private void u() {
         Vec3D vec3d = this.getMot();
 
         this.setMot(vec3d.x * 0.9900000095367432D, vec3d.y + (double) (vec3d.y < 0.05999999865889549D ? 5.0E-4F : 0.0F), vec3d.z * 0.9900000095367432D);
     }
 
     private void mergeNearby() {
-        List<EntityItem> list = this.world.a(EntityItem.class, this.getBoundingBox().grow(0.5D, 0.0D, 0.5D), (entityitem) -> {
-            return entityitem != this && entityitem.z();
-        });
-
-        if (!list.isEmpty()) {
+        if (this.w()) {
+            List<EntityItem> list = this.world.a(EntityItem.class, this.getBoundingBox().grow(0.5D, 0.0D, 0.5D), (entityitem) -> {
+                return entityitem != this && entityitem.w();
+            });
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 EntityItem entityitem = (EntityItem) iterator.next();
 
-                if (!this.z()) {
-                    return;
+                if (entityitem.w()) {
+                    this.a(entityitem);
+                    if (this.dead) {
+                        break;
+                    }
                 }
-
-                this.a(entityitem);
             }
-        }
 
+        }
     }
 
-    private boolean z() {
+    private boolean w() {
         ItemStack itemstack = this.getItemStack();
 
         return this.isAlive() && this.pickupDelay != 32767 && this.age != -32768 && this.age < 6000 && itemstack.getCount() < itemstack.getMaxStackSize();
@@ -158,40 +159,43 @@ public class EntityItem extends Entity {
         ItemStack itemstack = this.getItemStack();
         ItemStack itemstack1 = entityitem.getItemStack();
 
-        if (itemstack1.getItem() == itemstack.getItem()) {
-            if (itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize()) {
-                if (!(itemstack1.hasTag() ^ itemstack.hasTag())) {
-                    if (!itemstack1.hasTag() || itemstack1.getTag().equals(itemstack.getTag())) {
-                        if (itemstack1.getCount() < itemstack.getCount()) {
-                            a(this, itemstack, entityitem, itemstack1);
-                        } else {
-                            a(entityitem, itemstack1, this, itemstack);
-                        }
-
-                    }
-                }
+        if (Objects.equals(this.getOwner(), entityitem.getOwner()) && a(itemstack, itemstack1)) {
+            if (itemstack1.getCount() < itemstack.getCount()) {
+                a(this, itemstack, entityitem, itemstack1);
+            } else {
+                a(entityitem, itemstack1, this, itemstack);
             }
+
         }
     }
 
-    private static void a(EntityItem entityitem, ItemStack itemstack, EntityItem entityitem1, ItemStack itemstack1) {
-        int i = Math.min(itemstack.getMaxStackSize() - itemstack.getCount(), itemstack1.getCount());
+    public static boolean a(ItemStack itemstack, ItemStack itemstack1) {
+        return itemstack1.getItem() != itemstack.getItem() ? false : (itemstack1.getCount() + itemstack.getCount() > itemstack1.getMaxStackSize() ? false : (itemstack1.hasTag() ^ itemstack.hasTag() ? false : !itemstack1.hasTag() || itemstack1.getTag().equals(itemstack.getTag())));
+    }
+
+    public static ItemStack a(ItemStack itemstack, ItemStack itemstack1, int i) {
+        int j = Math.min(Math.min(itemstack.getMaxStackSize(), i) - itemstack.getCount(), itemstack1.getCount());
         ItemStack itemstack2 = itemstack.cloneItemStack();
 
-        itemstack2.add(i);
+        itemstack2.add(j);
+        itemstack1.subtract(j);
+        return itemstack2;
+    }
+
+    private static void a(EntityItem entityitem, ItemStack itemstack, ItemStack itemstack1) {
+        ItemStack itemstack2 = a(itemstack, itemstack1, 64);
+
         entityitem.setItemStack(itemstack2);
-        itemstack1.subtract(i);
-        entityitem1.setItemStack(itemstack1);
+    }
+
+    private static void a(EntityItem entityitem, ItemStack itemstack, EntityItem entityitem1, ItemStack itemstack1) {
+        a(entityitem, itemstack, itemstack1);
         entityitem.pickupDelay = Math.max(entityitem.pickupDelay, entityitem1.pickupDelay);
         entityitem.age = Math.min(entityitem.age, entityitem1.age);
         if (itemstack1.isEmpty()) {
             entityitem1.die();
         }
 
-    }
-
-    public void f() {
-        this.age = 4800;
     }
 
     @Override
@@ -267,7 +271,7 @@ public class EntityItem extends Entity {
             Item item = itemstack.getItem();
             int i = itemstack.getCount();
 
-            if (this.pickupDelay == 0 && (this.owner == null || 6000 - this.age <= 200 || this.owner.equals(entityhuman.getUniqueID())) && entityhuman.inventory.pickup(itemstack)) {
+            if (this.pickupDelay == 0 && (this.owner == null || this.owner.equals(entityhuman.getUniqueID())) && entityhuman.inventory.pickup(itemstack)) {
                 entityhuman.receive(this, i);
                 if (itemstack.isEmpty()) {
                     this.die();
@@ -288,7 +292,7 @@ public class EntityItem extends Entity {
     }
 
     @Override
-    public boolean bs() {
+    public boolean bA() {
         return false;
     }
 
@@ -334,11 +338,11 @@ public class EntityItem extends Entity {
         this.pickupDelay = 10;
     }
 
-    public void o() {
+    public void n() {
         this.pickupDelay = 0;
     }
 
-    public void p() {
+    public void o() {
         this.pickupDelay = 32767;
     }
 
@@ -346,21 +350,21 @@ public class EntityItem extends Entity {
         this.pickupDelay = i;
     }
 
-    public boolean q() {
+    public boolean p() {
         return this.pickupDelay > 0;
     }
 
-    public void s() {
+    public void r() {
         this.age = -6000;
     }
 
-    public void u() {
-        this.p();
+    public void s() {
+        this.o();
         this.age = 5999;
     }
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

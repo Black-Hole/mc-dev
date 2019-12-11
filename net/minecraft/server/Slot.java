@@ -5,8 +5,8 @@ public class Slot {
     public final int index;
     public final IInventory inventory;
     public int rawSlotIndex;
-    public int e;
-    public int f;
+    public final int e;
+    public final int f;
 
     public Slot(IInventory iinventory, int i, int j, int k) {
         this.inventory = iinventory;

@@ -26,17 +26,17 @@ public class BlockLongGrass extends BlockPlant implements IBlockFragilePlantElem
     }
 
     @Override
-    public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
+    public void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata) {
         BlockTallPlant blocktallplant = (BlockTallPlant) ((BlockTallPlant) (this == Blocks.FERN ? Blocks.LARGE_FERN : Blocks.TALL_GRASS));
 
-        if (blocktallplant.getBlockData().canPlace(world, blockposition) && world.isEmpty(blockposition.up())) {
-            blocktallplant.a(world, blockposition, 2);
+        if (blocktallplant.getBlockData().canPlace(worldserver, blockposition) && worldserver.isEmpty(blockposition.up())) {
+            blocktallplant.a(worldserver, blockposition, 2);
         }
 
     }
 
     @Override
-    public Block.EnumRandomOffset R_() {
+    public Block.EnumRandomOffset X_() {
         return Block.EnumRandomOffset.XYZ;
     }
 }

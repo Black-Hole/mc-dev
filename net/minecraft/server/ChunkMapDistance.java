@@ -14,12 +14,9 @@ import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap.Entry;
-import it.unimi.dsi.fastutil.objects.ObjectAVLTreeSet;
-import it.unimi.dsi.fastutil.objects.ObjectBidirectionalIterator;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
-import it.unimi.dsi.fastutil.objects.ObjectSortedSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -32,7 +29,7 @@ public abstract class ChunkMapDistance {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int b = 33 + ChunkStatus.a(ChunkStatus.FULL) - 2;
     private final Long2ObjectMap<ObjectSet<EntityPlayer>> c = new Long2ObjectOpenHashMap();
-    private final Long2ObjectOpenHashMap<ObjectSortedSet<Ticket<?>>> tickets = new Long2ObjectOpenHashMap();
+    public final Long2ObjectOpenHashMap<ArraySetSorted<Ticket<?>>> tickets = new Long2ObjectOpenHashMap();
     private final ChunkMapDistance.a e = new ChunkMapDistance.a();
     private final ChunkMapDistance.b f = new ChunkMapDistance.b(8);
     private final ChunkMapDistance.c g = new ChunkMapDistance.c(33);
@@ -60,25 +57,23 @@ public abstract class ChunkMapDistance {
         ObjectIterator objectiterator = this.tickets.long2ObjectEntrySet().fastIterator();
 
         while (objectiterator.hasNext()) {
-            Entry<ObjectSortedSet<Ticket<?>>> entry = (Entry) objectiterator.next();
+            Entry<ArraySetSorted<Ticket<?>>> entry = (Entry) objectiterator.next();
 
-            if (((ObjectSortedSet) entry.getValue()).removeIf((ticket) -> {
-                return ticket.a(this.currentTick);
+            if (((ArraySetSorted) entry.getValue()).removeIf((ticket) -> {
+                return ticket.b(this.currentTick);
             })) {
-                this.e.b(entry.getLongKey(), this.a((ObjectSortedSet) entry.getValue()), false);
+                this.e.b(entry.getLongKey(), a((ArraySetSorted) entry.getValue()), false);
             }
 
-            if (((ObjectSortedSet) entry.getValue()).isEmpty()) {
+            if (((ArraySetSorted) entry.getValue()).isEmpty()) {
                 objectiterator.remove();
             }
         }
 
     }
 
-    private int a(ObjectSortedSet<Ticket<?>> objectsortedset) {
-        ObjectBidirectionalIterator<Ticket<?>> objectbidirectionaliterator = objectsortedset.iterator();
-
-        return objectbidirectionaliterator.hasNext() ? ((Ticket) objectbidirectionaliterator.next()).b() : PlayerChunkMap.GOLDEN_TICKET + 1;
+    private static int a(ArraySetSorted<Ticket<?>> arraysetsorted) {
+        return !arraysetsorted.isEmpty() ? ((Ticket) arraysetsorted.b()).b() : PlayerChunkMap.GOLDEN_TICKET + 1;
     }
 
     protected abstract boolean a(long i);
@@ -140,20 +135,11 @@ public abstract class ChunkMapDistance {
     }
 
     private void addTicket(long i, Ticket<?> ticket) {
-        ObjectSortedSet<Ticket<?>> objectsortedset = this.e(i);
-        ObjectBidirectionalIterator<Ticket<?>> objectbidirectionaliterator = objectsortedset.iterator();
-        int j;
+        ArraySetSorted<Ticket<?>> arraysetsorted = this.e(i);
+        int j = a(arraysetsorted);
+        Ticket<?> ticket1 = (Ticket) arraysetsorted.a((Object) ticket);
 
-        if (objectbidirectionaliterator.hasNext()) {
-            j = ((Ticket) objectbidirectionaliterator.next()).b();
-        } else {
-            j = PlayerChunkMap.GOLDEN_TICKET + 1;
-        }
-
-        if (objectsortedset.add(ticket)) {
-            ;
-        }
-
+        ticket1.a(this.currentTick);
         if (ticket.b() < j) {
             this.e.b(i, ticket.b(), true);
         }
@@ -161,47 +147,47 @@ public abstract class ChunkMapDistance {
     }
 
     private void removeTicket(long i, Ticket<?> ticket) {
-        ObjectSortedSet<Ticket<?>> objectsortedset = this.e(i);
+        ArraySetSorted<Ticket<?>> arraysetsorted = this.e(i);
 
-        if (objectsortedset.remove(ticket)) {
+        if (arraysetsorted.remove(ticket)) {
             ;
         }
 
-        if (objectsortedset.isEmpty()) {
+        if (arraysetsorted.isEmpty()) {
             this.tickets.remove(i);
         }
 
-        this.e.b(i, this.a(objectsortedset), false);
+        this.e.b(i, a(arraysetsorted), false);
     }
 
     public <T> void a(TicketType<T> tickettype, ChunkCoordIntPair chunkcoordintpair, int i, T t0) {
-        this.addTicket(chunkcoordintpair.pair(), new Ticket<>(tickettype, i, t0, this.currentTick));
+        this.addTicket(chunkcoordintpair.pair(), new Ticket<>(tickettype, i, t0));
     }
 
     public <T> void b(TicketType<T> tickettype, ChunkCoordIntPair chunkcoordintpair, int i, T t0) {
-        Ticket<T> ticket = new Ticket<>(tickettype, i, t0, this.currentTick);
+        Ticket<T> ticket = new Ticket<>(tickettype, i, t0);
 
         this.removeTicket(chunkcoordintpair.pair(), ticket);
     }
 
     public <T> void addTicket(TicketType<T> tickettype, ChunkCoordIntPair chunkcoordintpair, int i, T t0) {
-        this.addTicket(chunkcoordintpair.pair(), new Ticket<>(tickettype, 33 - i, t0, this.currentTick));
+        this.addTicket(chunkcoordintpair.pair(), new Ticket<>(tickettype, 33 - i, t0));
     }
 
     public <T> void removeTicket(TicketType<T> tickettype, ChunkCoordIntPair chunkcoordintpair, int i, T t0) {
-        Ticket<T> ticket = new Ticket<>(tickettype, 33 - i, t0, this.currentTick);
+        Ticket<T> ticket = new Ticket<>(tickettype, 33 - i, t0);
 
         this.removeTicket(chunkcoordintpair.pair(), ticket);
     }
 
-    private ObjectSortedSet<Ticket<?>> e(long i) {
-        return (ObjectSortedSet) this.tickets.computeIfAbsent(i, (j) -> {
-            return new ObjectAVLTreeSet();
+    private ArraySetSorted<Ticket<?>> e(long i) {
+        return (ArraySetSorted) this.tickets.computeIfAbsent(i, (j) -> {
+            return ArraySetSorted.a(4);
         });
     }
 
     protected void a(ChunkCoordIntPair chunkcoordintpair, boolean flag) {
-        Ticket<ChunkCoordIntPair> ticket = new Ticket<>(TicketType.FORCED, 31, chunkcoordintpair, this.currentTick);
+        Ticket<ChunkCoordIntPair> ticket = new Ticket<>(TicketType.FORCED, 31, chunkcoordintpair);
 
         if (flag) {
             this.addTicket(chunkcoordintpair.pair(), ticket);
@@ -235,11 +221,11 @@ public abstract class ChunkMapDistance {
     }
 
     protected String c(long i) {
-        ObjectSortedSet<Ticket<?>> objectsortedset = (ObjectSortedSet) this.tickets.get(i);
+        ArraySetSorted<Ticket<?>> arraysetsorted = (ArraySetSorted) this.tickets.get(i);
         String s;
 
-        if (objectsortedset != null && !objectsortedset.isEmpty()) {
-            s = ((Ticket) objectsortedset.first()).toString();
+        if (arraysetsorted != null && !arraysetsorted.isEmpty()) {
+            s = ((Ticket) arraysetsorted.b()).toString();
         } else {
             s = "no_ticket";
         }
@@ -273,15 +259,9 @@ public abstract class ChunkMapDistance {
 
         @Override
         protected int b(long i) {
-            ObjectSortedSet<Ticket<?>> objectsortedset = (ObjectSortedSet) ChunkMapDistance.this.tickets.get(i);
+            ArraySetSorted<Ticket<?>> arraysetsorted = (ArraySetSorted) ChunkMapDistance.this.tickets.get(i);
 
-            if (objectsortedset == null) {
-                return Integer.MAX_VALUE;
-            } else {
-                ObjectBidirectionalIterator<Ticket<?>> objectbidirectionaliterator = objectsortedset.iterator();
-
-                return !objectbidirectionaliterator.hasNext() ? Integer.MAX_VALUE : ((Ticket) objectbidirectionaliterator.next()).b();
-            }
+            return arraysetsorted == null ? Integer.MAX_VALUE : (arraysetsorted.isEmpty() ? Integer.MAX_VALUE : ((Ticket) arraysetsorted.b()).b());
         }
 
         @Override
@@ -348,7 +328,7 @@ public abstract class ChunkMapDistance {
 
         private void a(long i, int j, boolean flag, boolean flag1) {
             if (flag != flag1) {
-                Ticket<?> ticket = new Ticket<>(TicketType.PLAYER, ChunkMapDistance.b, new ChunkCoordIntPair(i), ChunkMapDistance.this.currentTick);
+                Ticket<?> ticket = new Ticket<>(TicketType.PLAYER, ChunkMapDistance.b, new ChunkCoordIntPair(i));
 
                 if (flag1) {
                     ChunkMapDistance.this.j.a((Object) ChunkTaskQueueSorter.a(() -> {

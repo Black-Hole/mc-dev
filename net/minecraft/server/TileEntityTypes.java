@@ -44,9 +44,10 @@ public class TileEntityTypes<T extends TileEntity> {
     public static final TileEntityTypes<TileEntityBell> BELL = a("bell", TileEntityTypes.a.a(TileEntityBell::new, Blocks.BELL));
     public static final TileEntityTypes<TileEntityJigsaw> JIGSAW = a("jigsaw", TileEntityTypes.a.a(TileEntityJigsaw::new, Blocks.JIGSAW));
     public static final TileEntityTypes<TileEntityCampfire> CAMPFIRE = a("campfire", TileEntityTypes.a.a(TileEntityCampfire::new, Blocks.CAMPFIRE));
-    private final Supplier<? extends T> H;
-    private final Set<Block> I;
-    private final Type<?> J;
+    public static final TileEntityTypes<TileEntityBeehive> BEEHIVE = a("beehive", TileEntityTypes.a.a(TileEntityBeehive::new, Blocks.BEE_NEST, Blocks.BEEHIVE));
+    private final Supplier<? extends T> I;
+    private final Set<Block> J;
+    private final Type<?> K;
 
     @Nullable
     public static MinecraftKey a(TileEntityTypes<?> tileentitytypes) {
@@ -57,13 +58,12 @@ public class TileEntityTypes<T extends TileEntity> {
         Type type = null;
 
         try {
-            type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.a().getWorldVersion())).getChoiceType(DataConverterTypes.k, s);
-        } catch (IllegalStateException illegalstateexception) {
+            type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.getGameVersion().getWorldVersion())).getChoiceType(DataConverterTypes.k, s);
+        } catch (IllegalArgumentException illegalargumentexception) {
+            TileEntityTypes.LOGGER.error("No data fixer registered for block entity {}", s);
             if (SharedConstants.b) {
-                throw illegalstateexception;
+                throw illegalargumentexception;
             }
-
-            TileEntityTypes.LOGGER.warn("No data fixer registered for block entity {}", s);
         }
 
         if (tileentitytypes_a.b.isEmpty()) {
@@ -74,18 +74,25 @@ public class TileEntityTypes<T extends TileEntity> {
     }
 
     public TileEntityTypes(Supplier<? extends T> supplier, Set<Block> set, Type<?> type) {
-        this.H = supplier;
-        this.I = set;
-        this.J = type;
+        this.I = supplier;
+        this.J = set;
+        this.K = type;
     }
 
     @Nullable
     public T a() {
-        return (TileEntity) this.H.get();
+        return (TileEntity) this.I.get();
     }
 
-    public boolean a(Block block) {
-        return this.I.contains(block);
+    public boolean isValidBlock(Block block) {
+        return this.J.contains(block);
+    }
+
+    @Nullable
+    public T a(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
+
+        return tileentity != null && tileentity.getTileType() == this ? tileentity : null;
     }
 
     public static final class a<T extends TileEntity> {

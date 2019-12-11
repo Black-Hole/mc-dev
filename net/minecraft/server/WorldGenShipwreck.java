@@ -67,25 +67,34 @@ public class WorldGenShipwreck {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             int i = 256;
             int j = 0;
-            BlockPosition blockposition = this.c.b(this.a.a().getX() - 1, 0, this.a.a().getZ() - 1);
+            BlockPosition blockposition = this.a.a();
+            HeightMap.Type heightmap_type = this.f ? HeightMap.Type.WORLD_SURFACE_WG : HeightMap.Type.OCEAN_FLOOR_WG;
+            int k = blockposition.getX() * blockposition.getZ();
 
-            int k;
+            if (k == 0) {
+                j = generatoraccess.a(heightmap_type, this.c.getX(), this.c.getZ());
+            } else {
+                BlockPosition blockposition1 = this.c.b(blockposition.getX() - 1, 0, blockposition.getZ() - 1);
 
-            for (Iterator iterator = BlockPosition.a(this.c, blockposition).iterator(); iterator.hasNext(); i = Math.min(i, k)) {
-                BlockPosition blockposition1 = (BlockPosition) iterator.next();
+                int l;
 
-                k = generatoraccess.a(this.f ? HeightMap.Type.WORLD_SURFACE_WG : HeightMap.Type.OCEAN_FLOOR_WG, blockposition1.getX(), blockposition1.getZ());
-                j += k;
+                for (Iterator iterator = BlockPosition.a(this.c, blockposition1).iterator(); iterator.hasNext(); i = Math.min(i, l)) {
+                    BlockPosition blockposition2 = (BlockPosition) iterator.next();
+
+                    l = generatoraccess.a(heightmap_type, blockposition2.getX(), blockposition2.getZ());
+                    j += l;
+                }
+
+                j /= k;
             }
 
-            j /= this.a.a().getX() * this.a.a().getZ();
-            int l = this.f ? i - this.a.a().getY() / 2 - random.nextInt(3) : j;
+            int i1 = this.f ? i - blockposition.getY() / 2 - random.nextInt(3) : j;
 
-            this.c = new BlockPosition(this.c.getX(), l, this.c.getZ());
-            return super.a(generatoraccess, random, structureboundingbox, chunkcoordintpair);
+            this.c = new BlockPosition(this.c.getX(), i1, this.c.getZ());
+            return super.a(generatoraccess, chunkgenerator, random, structureboundingbox, chunkcoordintpair);
         }
     }
 }

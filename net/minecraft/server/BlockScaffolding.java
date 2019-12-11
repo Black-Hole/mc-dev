@@ -9,13 +9,13 @@ public class BlockScaffolding extends Block implements IBlockWaterlogged {
     private static final VoxelShape e;
     private static final VoxelShape f = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
     private static final VoxelShape g = VoxelShapes.b().a(0.0D, -1.0D, 0.0D);
-    public static final BlockStateInteger a = BlockProperties.au;
+    public static final BlockStateInteger a = BlockProperties.av;
     public static final BlockStateBoolean b = BlockProperties.C;
     public static final BlockStateBoolean c = BlockProperties.b;
 
     protected BlockScaffolding(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockScaffolding.a, 7)).set(BlockScaffolding.b, false)).set(BlockScaffolding.c, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockScaffolding.a, 7)).set(BlockScaffolding.b, false)).set(BlockScaffolding.c, false));
     }
 
     @Override
@@ -29,13 +29,8 @@ public class BlockScaffolding extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public VoxelShape i(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return VoxelShapes.b();
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 
     @Override
@@ -66,7 +61,7 @@ public class BlockScaffolding extends Block implements IBlockWaterlogged {
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
-        if (!generatoraccess.e()) {
+        if (!generatoraccess.p_()) {
             generatoraccess.getBlockTickList().a(blockposition, this, 1);
         }
 
@@ -74,18 +69,18 @@ public class BlockScaffolding extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        int i = a((IBlockAccess) world, blockposition);
-        IBlockData iblockdata1 = (IBlockData) ((IBlockData) iblockdata.set(BlockScaffolding.a, i)).set(BlockScaffolding.c, this.a(world, blockposition, i));
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        int i = a((IBlockAccess) worldserver, blockposition);
+        IBlockData iblockdata1 = (IBlockData) ((IBlockData) iblockdata.set(BlockScaffolding.a, i)).set(BlockScaffolding.c, this.a(worldserver, blockposition, i));
 
         if ((Integer) iblockdata1.get(BlockScaffolding.a) == 7) {
             if ((Integer) iblockdata.get(BlockScaffolding.a) == 7) {
-                world.addEntity(new EntityFallingBlock(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, (IBlockData) iblockdata1.set(BlockScaffolding.b, false)));
+                worldserver.addEntity(new EntityFallingBlock(worldserver, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, (IBlockData) iblockdata1.set(BlockScaffolding.b, false)));
             } else {
-                world.b(blockposition, true);
+                worldserver.b(blockposition, true);
             }
         } else if (iblockdata != iblockdata1) {
-            world.setTypeAndData(blockposition, iblockdata1, 3);
+            worldserver.setTypeAndData(blockposition, iblockdata1, 3);
         }
 
     }
@@ -101,8 +96,8 @@ public class BlockScaffolding extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public Fluid g(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockScaffolding.b) ? FluidTypes.WATER.a(false) : super.g(iblockdata);
+    public Fluid a_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockScaffolding.b) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
     }
 
     private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, int i) {

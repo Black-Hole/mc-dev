@@ -1,11 +1,12 @@
 package net.minecraft.server;
 
+import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nullable;
 
 public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
 
-    public static final BlockStateEnum<BlockPropertyBedPart> PART = BlockProperties.aw;
+    public static final BlockStateEnum<BlockPropertyBedPart> PART = BlockProperties.ax;
     public static final BlockStateBoolean OCCUPIED = BlockProperties.t;
     protected static final VoxelShape c = Block.a(0.0D, 3.0D, 0.0D, 16.0D, 9.0D, 16.0D);
     protected static final VoxelShape d = Block.a(0.0D, 0.0D, 0.0D, 3.0D, 3.0D, 3.0D);
@@ -21,7 +22,7 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
     public BlockBed(EnumColor enumcolor, Block.Info block_info) {
         super(block_info);
         this.color = enumcolor;
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBed.PART, BlockPropertyBedPart.FOOT)).set(BlockBed.OCCUPIED, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBed.PART, BlockPropertyBedPart.FOOT)).set(BlockBed.OCCUPIED, false));
     }
 
     @Override
@@ -30,22 +31,25 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (world.isClientSide) {
-            return true;
+            return EnumInteractionResult.CONSUME;
         } else {
             if (iblockdata.get(BlockBed.PART) != BlockPropertyBedPart.HEAD) {
                 blockposition = blockposition.shift((EnumDirection) iblockdata.get(BlockBed.FACING));
                 iblockdata = world.getType(blockposition);
                 if (iblockdata.getBlock() != this) {
-                    return true;
+                    return EnumInteractionResult.CONSUME;
                 }
             }
 
             if (world.worldProvider.canRespawn() && world.getBiome(blockposition) != Biomes.NETHER) {
                 if ((Boolean) iblockdata.get(BlockBed.OCCUPIED)) {
-                    entityhuman.a((IChatBaseComponent) (new ChatMessage("block.minecraft.bed.occupied", new Object[0])), true);
-                    return true;
+                    if (!this.a(world, blockposition)) {
+                        entityhuman.a((IChatBaseComponent) (new ChatMessage("block.minecraft.bed.occupied", new Object[0])), true);
+                    }
+
+                    return EnumInteractionResult.SUCCESS;
                 } else {
                     entityhuman.sleep(blockposition).ifLeft((entityhuman_enumbedresult) -> {
                         if (entityhuman_enumbedresult != null) {
@@ -53,7 +57,7 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
                         }
 
                     });
-                    return true;
+                    return EnumInteractionResult.SUCCESS;
                 }
             } else {
                 world.a(blockposition, false);
@@ -64,8 +68,19 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
                 }
 
                 world.createExplosion((Entity) null, DamageSource.a(), (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, 5.0F, true, Explosion.Effect.DESTROY);
-                return true;
+                return EnumInteractionResult.SUCCESS;
             }
+        }
+    }
+
+    private boolean a(World world, BlockPosition blockposition) {
+        List<EntityVillager> list = world.a(EntityVillager.class, new AxisAlignedBB(blockposition), EntityLiving::isSleeping);
+
+        if (list.isEmpty()) {
+            return false;
+        } else {
+            ((EntityVillager) list.get(0)).entityWakeup();
+            return true;
         }
     }
 
@@ -76,16 +91,21 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
 
     @Override
     public void a(IBlockAccess iblockaccess, Entity entity) {
-        if (entity.isSneaking()) {
+        if (entity.bl()) {
             super.a(iblockaccess, entity);
         } else {
-            Vec3D vec3d = entity.getMot();
+            this.a(entity);
+        }
 
-            if (vec3d.y < 0.0D) {
-                double d0 = entity instanceof EntityLiving ? 1.0D : 0.8D;
+    }
 
-                entity.setMot(vec3d.x, -vec3d.y * 0.6600000262260437D * d0, vec3d.z);
-            }
+    private void a(Entity entity) {
+        Vec3D vec3d = entity.getMot();
+
+        if (vec3d.y < 0.0D) {
+            double d0 = entity instanceof EntityLiving ? 1.0D : 0.8D;
+
+            entity.setMot(vec3d.x, -vec3d.y * 0.6600000262260437D * d0, vec3d.z);
         }
 
     }
@@ -138,10 +158,9 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
 
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockBed.FACING);
-        EnumDirection enumdirection1 = iblockdata.get(BlockBed.PART) == BlockPropertyBedPart.HEAD ? enumdirection : enumdirection.opposite();
+        EnumDirection enumdirection = h(iblockdata).opposite();
 
-        switch (enumdirection1) {
+        switch (enumdirection) {
             case NORTH:
                 return BlockBed.h;
             case SOUTH:
@@ -151,6 +170,12 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
             default:
                 return BlockBed.k;
         }
+    }
+
+    public static EnumDirection h(IBlockData iblockdata) {
+        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockBed.FACING);
+
+        return iblockdata.get(BlockBed.PART) == BlockPropertyBedPart.HEAD ? enumdirection.opposite() : enumdirection;
     }
 
     public static Optional<Vec3D> a(EntityTypes<?> entitytypes, IWorldReader iworldreader, BlockPosition blockposition, int i) {
@@ -209,7 +234,7 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
                     float f = entitytypes.i() / 2.0F;
                     Vec3D vec3d = new Vec3D((double) blockposition_mutableblockposition.getX() + 0.5D, d0, (double) blockposition_mutableblockposition.getZ() + 0.5D);
 
-                    return iworldreader.c(new AxisAlignedBB(vec3d.x - (double) f, vec3d.y, vec3d.z - (double) f, vec3d.x + (double) f, vec3d.y + (double) entitytypes.j(), vec3d.z + (double) f)) ? Optional.of(vec3d) : Optional.empty();
+                    return iworldreader.a(new AxisAlignedBB(vec3d.x - (double) f, vec3d.y, vec3d.z - (double) f, vec3d.x + (double) f, vec3d.y + (double) entitytypes.j(), vec3d.z + (double) f)) ? Optional.of(vec3d) : Optional.empty();
                 }
             }
         }
@@ -218,11 +243,6 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
     @Override
     public EnumPistonReaction getPushReaction(IBlockData iblockdata) {
         return EnumPistonReaction.DESTROY;
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 
     @Override

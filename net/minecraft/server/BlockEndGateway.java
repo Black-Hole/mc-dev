@@ -10,4 +10,9 @@ public class BlockEndGateway extends BlockTileEntity {
     public TileEntity createTile(IBlockAccess iblockaccess) {
         return new TileEntityEndGateway();
     }
+
+    @Override
+    public boolean a(IBlockData iblockdata, FluidType fluidtype) {
+        return false;
+    }
 }

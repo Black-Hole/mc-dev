@@ -5,25 +5,29 @@ import java.io.IOException;
 public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
 
     private int a;
-    private boolean b;
-    private EnumGamemode c;
-    private DimensionManager d;
-    private int e;
-    private WorldType f;
-    private int g;
-    private boolean h;
+    private long b;
+    private boolean c;
+    private EnumGamemode d;
+    private DimensionManager e;
+    private int f;
+    private WorldType g;
+    private int h;
+    private boolean i;
+    private boolean j;
 
     public PacketPlayOutLogin() {}
 
-    public PacketPlayOutLogin(int i, EnumGamemode enumgamemode, boolean flag, DimensionManager dimensionmanager, int j, WorldType worldtype, int k, boolean flag1) {
+    public PacketPlayOutLogin(int i, EnumGamemode enumgamemode, long j, boolean flag, DimensionManager dimensionmanager, int k, WorldType worldtype, int l, boolean flag1, boolean flag2) {
         this.a = i;
-        this.d = dimensionmanager;
-        this.c = enumgamemode;
-        this.e = j;
-        this.b = flag;
-        this.f = worldtype;
-        this.g = k;
-        this.h = flag1;
+        this.e = dimensionmanager;
+        this.b = j;
+        this.d = enumgamemode;
+        this.f = k;
+        this.c = flag;
+        this.g = worldtype;
+        this.h = l;
+        this.i = flag1;
+        this.j = flag2;
     }
 
     @Override
@@ -31,36 +35,40 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
         this.a = packetdataserializer.readInt();
         short short0 = packetdataserializer.readUnsignedByte();
 
-        this.b = (short0 & 8) == 8;
+        this.c = (short0 & 8) == 8;
         int i = short0 & -9;
 
-        this.c = EnumGamemode.getById(i);
-        this.d = DimensionManager.a(packetdataserializer.readInt());
-        this.e = packetdataserializer.readUnsignedByte();
-        this.f = WorldType.getType(packetdataserializer.e(16));
-        if (this.f == null) {
-            this.f = WorldType.NORMAL;
+        this.d = EnumGamemode.getById(i);
+        this.e = DimensionManager.a(packetdataserializer.readInt());
+        this.b = packetdataserializer.readLong();
+        this.f = packetdataserializer.readUnsignedByte();
+        this.g = WorldType.getType(packetdataserializer.e(16));
+        if (this.g == null) {
+            this.g = WorldType.NORMAL;
         }
 
-        this.g = packetdataserializer.i();
-        this.h = packetdataserializer.readBoolean();
+        this.h = packetdataserializer.i();
+        this.i = packetdataserializer.readBoolean();
+        this.j = packetdataserializer.readBoolean();
     }
 
     @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeInt(this.a);
-        int i = this.c.getId();
+        int i = this.d.getId();
 
-        if (this.b) {
+        if (this.c) {
             i |= 8;
         }
 
         packetdataserializer.writeByte(i);
-        packetdataserializer.writeInt(this.d.getDimensionID());
-        packetdataserializer.writeByte(this.e);
-        packetdataserializer.a(this.f.name());
-        packetdataserializer.d(this.g);
-        packetdataserializer.writeBoolean(this.h);
+        packetdataserializer.writeInt(this.e.getDimensionID());
+        packetdataserializer.writeLong(this.b);
+        packetdataserializer.writeByte(this.f);
+        packetdataserializer.a(this.g.name());
+        packetdataserializer.d(this.h);
+        packetdataserializer.writeBoolean(this.i);
+        packetdataserializer.writeBoolean(this.j);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

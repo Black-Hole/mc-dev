@@ -4,14 +4,14 @@ import java.util.Random;
 
 public class BlockSapling extends BlockPlant implements IBlockFragilePlantElement {
 
-    public static final BlockStateInteger STAGE = BlockProperties.at;
+    public static final BlockStateInteger STAGE = BlockProperties.au;
     protected static final VoxelShape b = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
     private final WorldGenTreeProvider c;
 
     protected BlockSapling(WorldGenTreeProvider worldgentreeprovider, Block.Info block_info) {
         super(block_info);
         this.c = worldgentreeprovider;
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSapling.STAGE, 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSapling.STAGE, 0));
     }
 
     @Override
@@ -20,19 +20,19 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        super.tick(iblockdata, world, blockposition, random);
-        if (world.getLightLevel(blockposition.up()) >= 9 && random.nextInt(7) == 0) {
-            this.grow(world, blockposition, iblockdata, random);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        super.tick(iblockdata, worldserver, blockposition, random);
+        if (worldserver.getLightLevel(blockposition.up()) >= 9 && random.nextInt(7) == 0) {
+            this.grow(worldserver, blockposition, iblockdata, random);
         }
 
     }
 
-    public void grow(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+    public void grow(WorldServer worldserver, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         if ((Integer) iblockdata.get(BlockSapling.STAGE) == 0) {
-            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.a((IBlockState) BlockSapling.STAGE), 4);
+            worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.a((IBlockState) BlockSapling.STAGE), 4);
         } else {
-            this.c.a(generatoraccess, blockposition, iblockdata, random);
+            this.c.a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), blockposition, iblockdata, random);
         }
 
     }
@@ -48,8 +48,8 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
     }
 
     @Override
-    public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        this.grow(world, blockposition, iblockdata, random);
+    public void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata) {
+        this.grow(worldserver, blockposition, iblockdata, random);
     }
 
     @Override

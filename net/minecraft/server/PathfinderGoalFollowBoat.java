@@ -22,24 +22,25 @@ public class PathfinderGoalFollowBoat extends PathfinderGoal {
 
         while (iterator.hasNext()) {
             EntityBoat entityboat = (EntityBoat) iterator.next();
+            Entity entity = entityboat.getRidingPassenger();
 
-            if (entityboat.getRidingPassenger() != null && (MathHelper.e(((EntityLiving) entityboat.getRidingPassenger()).bb) > 0.0F || MathHelper.e(((EntityLiving) entityboat.getRidingPassenger()).bd) > 0.0F)) {
+            if (entity instanceof EntityLiving && (MathHelper.e(((EntityLiving) entity).aZ) > 0.0F || MathHelper.e(((EntityLiving) entity).bb) > 0.0F)) {
                 flag = true;
                 break;
             }
         }
 
-        return this.c != null && (MathHelper.e(this.c.bb) > 0.0F || MathHelper.e(this.c.bd) > 0.0F) || flag;
+        return this.c != null && (MathHelper.e(this.c.aZ) > 0.0F || MathHelper.e(this.c.bb) > 0.0F) || flag;
     }
 
     @Override
-    public boolean C_() {
+    public boolean E_() {
         return true;
     }
 
     @Override
     public boolean b() {
-        return this.c != null && this.c.isPassenger() && (MathHelper.e(this.c.bb) > 0.0F || MathHelper.e(this.c.bd) > 0.0F);
+        return this.c != null && this.c.isPassenger() && (MathHelper.e(this.c.aZ) > 0.0F || MathHelper.e(this.c.bb) > 0.0F);
     }
 
     @Override
@@ -67,10 +68,10 @@ public class PathfinderGoalFollowBoat extends PathfinderGoal {
 
     @Override
     public void e() {
-        boolean flag = MathHelper.e(this.c.bb) > 0.0F || MathHelper.e(this.c.bd) > 0.0F;
+        boolean flag = MathHelper.e(this.c.aZ) > 0.0F || MathHelper.e(this.c.bb) > 0.0F;
         float f = this.d == PathfinderGoalBoat.GO_IN_BOAT_DIRECTION ? (flag ? 0.17999999F : 0.0F) : 0.135F;
 
-        this.b.a(f, new Vec3D((double) this.b.bb, (double) this.b.bc, (double) this.b.bd));
+        this.b.a(f, new Vec3D((double) this.b.aZ, (double) this.b.ba, (double) this.b.bb));
         this.b.move(EnumMoveType.SELF, this.b.getMot());
         if (--this.a <= 0) {
             this.a = 10;

@@ -10,16 +10,40 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public class NBTTagLongArray extends NBTList<NBTTagLong> {
 
-    private long[] f;
+    public static final NBTTagType<NBTTagLongArray> a = new NBTTagType<NBTTagLongArray>() {
+        @Override
+        public NBTTagLongArray b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+            nbtreadlimiter.a(192L);
+            int j = datainput.readInt();
 
-    NBTTagLongArray() {}
+            nbtreadlimiter.a(64L * (long) j);
+            long[] along = new long[j];
+
+            for (int k = 0; k < j; ++k) {
+                along[k] = datainput.readLong();
+            }
+
+            return new NBTTagLongArray(along);
+        }
+
+        @Override
+        public String a() {
+            return "LONG[]";
+        }
+
+        @Override
+        public String b() {
+            return "TAG_Long_Array";
+        }
+    };
+    private long[] b;
 
     public NBTTagLongArray(long[] along) {
-        this.f = along;
+        this.b = along;
     }
 
     public NBTTagLongArray(LongSet longset) {
-        this.f = longset.toLongArray();
+        this.b = longset.toLongArray();
     }
 
     public NBTTagLongArray(List<Long> list) {
@@ -40,8 +64,8 @@ public class NBTTagLongArray extends NBTList<NBTTagLong> {
 
     @Override
     public void write(DataOutput dataoutput) throws IOException {
-        dataoutput.writeInt(this.f.length);
-        long[] along = this.f;
+        dataoutput.writeInt(this.b.length);
+        long[] along = this.b;
         int i = along.length;
 
         for (int j = 0; j < i; ++j) {
@@ -53,34 +77,25 @@ public class NBTTagLongArray extends NBTList<NBTTagLong> {
     }
 
     @Override
-    public void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
-        nbtreadlimiter.a(192L);
-        int j = datainput.readInt();
-
-        nbtreadlimiter.a((long) (64 * j));
-        this.f = new long[j];
-
-        for (int k = 0; k < j; ++k) {
-            this.f[k] = datainput.readLong();
-        }
-
+    public byte getTypeId() {
+        return 12;
     }
 
     @Override
-    public byte getTypeId() {
-        return 12;
+    public NBTTagType<NBTTagLongArray> b() {
+        return NBTTagLongArray.a;
     }
 
     @Override
     public String toString() {
         StringBuilder stringbuilder = new StringBuilder("[L;");
 
-        for (int i = 0; i < this.f.length; ++i) {
+        for (int i = 0; i < this.b.length; ++i) {
             if (i != 0) {
                 stringbuilder.append(',');
             }
 
-            stringbuilder.append(this.f[i]).append('L');
+            stringbuilder.append(this.b[i]).append('L');
         }
 
         return stringbuilder.append(']').toString();
@@ -88,30 +103,30 @@ public class NBTTagLongArray extends NBTList<NBTTagLong> {
 
     @Override
     public NBTTagLongArray clone() {
-        long[] along = new long[this.f.length];
+        long[] along = new long[this.b.length];
 
-        System.arraycopy(this.f, 0, along, 0, this.f.length);
+        System.arraycopy(this.b, 0, along, 0, this.b.length);
         return new NBTTagLongArray(along);
     }
 
     public boolean equals(Object object) {
-        return this == object ? true : object instanceof NBTTagLongArray && Arrays.equals(this.f, ((NBTTagLongArray) object).f);
+        return this == object ? true : object instanceof NBTTagLongArray && Arrays.equals(this.b, ((NBTTagLongArray) object).b);
     }
 
     public int hashCode() {
-        return Arrays.hashCode(this.f);
+        return Arrays.hashCode(this.b);
     }
 
     @Override
     public IChatBaseComponent a(String s, int i) {
-        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("L")).a(NBTTagLongArray.e);
+        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("L")).a(NBTTagLongArray.g);
         IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText("[")).addSibling(ichatbasecomponent).a(";");
 
-        for (int j = 0; j < this.f.length; ++j) {
-            IChatBaseComponent ichatbasecomponent2 = (new ChatComponentText(String.valueOf(this.f[j]))).a(NBTTagLongArray.d);
+        for (int j = 0; j < this.b.length; ++j) {
+            IChatBaseComponent ichatbasecomponent2 = (new ChatComponentText(String.valueOf(this.b[j]))).a(NBTTagLongArray.f);
 
             ichatbasecomponent1.a(" ").addSibling(ichatbasecomponent2).addSibling(ichatbasecomponent);
-            if (j != this.f.length - 1) {
+            if (j != this.b.length - 1) {
                 ichatbasecomponent1.a(",");
             }
         }
@@ -121,32 +136,32 @@ public class NBTTagLongArray extends NBTList<NBTTagLong> {
     }
 
     public long[] getLongs() {
-        return this.f;
+        return this.b;
     }
 
     public int size() {
-        return this.f.length;
+        return this.b.length;
     }
 
     public NBTTagLong get(int i) {
-        return new NBTTagLong(this.f[i]);
+        return NBTTagLong.a(this.b[i]);
     }
 
     public NBTTagLong set(int i, NBTTagLong nbttaglong) {
-        long j = this.f[i];
+        long j = this.b[i];
 
-        this.f[i] = nbttaglong.asLong();
-        return new NBTTagLong(j);
+        this.b[i] = nbttaglong.asLong();
+        return NBTTagLong.a(j);
     }
 
     public void add(int i, NBTTagLong nbttaglong) {
-        this.f = ArrayUtils.add(this.f, i, nbttaglong.asLong());
+        this.b = ArrayUtils.add(this.b, i, nbttaglong.asLong());
     }
 
     @Override
     public boolean a(int i, NBTBase nbtbase) {
         if (nbtbase instanceof NBTNumber) {
-            this.f[i] = ((NBTNumber) nbtbase).asLong();
+            this.b[i] = ((NBTNumber) nbtbase).asLong();
             return true;
         } else {
             return false;
@@ -156,7 +171,7 @@ public class NBTTagLongArray extends NBTList<NBTTagLong> {
     @Override
     public boolean b(int i, NBTBase nbtbase) {
         if (nbtbase instanceof NBTNumber) {
-            this.f = ArrayUtils.add(this.f, i, ((NBTNumber) nbtbase).asLong());
+            this.b = ArrayUtils.add(this.b, i, ((NBTNumber) nbtbase).asLong());
             return true;
         } else {
             return false;
@@ -165,13 +180,13 @@ public class NBTTagLongArray extends NBTList<NBTTagLong> {
 
     @Override
     public NBTTagLong remove(int i) {
-        long j = this.f[i];
+        long j = this.b[i];
 
-        this.f = ArrayUtils.remove(this.f, i);
-        return new NBTTagLong(j);
+        this.b = ArrayUtils.remove(this.b, i);
+        return NBTTagLong.a(j);
     }
 
     public void clear() {
-        this.f = new long[0];
+        this.b = new long[0];
     }
 }

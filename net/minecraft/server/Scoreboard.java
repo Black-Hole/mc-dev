@@ -96,7 +96,7 @@ public class Scoreboard {
             }
         }
 
-        Collections.sort(list, ScoreboardScore.a);
+        list.sort(ScoreboardScore.a);
         return list;
     }
 

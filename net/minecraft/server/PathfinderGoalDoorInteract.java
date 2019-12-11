@@ -49,14 +49,14 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
             return false;
         } else {
             Navigation navigation = (Navigation) this.entity.getNavigation();
-            PathEntity pathentity = navigation.l();
+            PathEntity pathentity = navigation.k();
 
             if (pathentity != null && !pathentity.b() && navigation.f()) {
                 for (int i = 0; i < Math.min(pathentity.f() + 2, pathentity.e()); ++i) {
                     PathPoint pathpoint = pathentity.a(i);
 
                     this.door = new BlockPosition(pathpoint.a, pathpoint.b + 1, pathpoint.c);
-                    if (this.entity.e((double) this.door.getX(), this.entity.locY, (double) this.door.getZ()) <= 2.25D) {
+                    if (this.entity.g((double) this.door.getX(), this.entity.locY(), (double) this.door.getZ()) <= 2.25D) {
                         this.f = a(this.entity.world, this.door);
                         if (this.f) {
                             return true;
@@ -81,14 +81,14 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
     @Override
     public void c() {
         this.a = false;
-        this.b = (float) ((double) ((float) this.door.getX() + 0.5F) - this.entity.locX);
-        this.c = (float) ((double) ((float) this.door.getZ() + 0.5F) - this.entity.locZ);
+        this.b = (float) ((double) ((float) this.door.getX() + 0.5F) - this.entity.locX());
+        this.c = (float) ((double) ((float) this.door.getZ() + 0.5F) - this.entity.locZ());
     }
 
     @Override
     public void e() {
-        float f = (float) ((double) ((float) this.door.getX() + 0.5F) - this.entity.locX);
-        float f1 = (float) ((double) ((float) this.door.getZ() + 0.5F) - this.entity.locZ);
+        float f = (float) ((double) ((float) this.door.getX() + 0.5F) - this.entity.locX());
+        float f1 = (float) ((double) ((float) this.door.getZ() + 0.5F) - this.entity.locZ());
         float f2 = this.b * f + this.c * f1;
 
         if (f2 < 0.0F) {

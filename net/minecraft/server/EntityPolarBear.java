@@ -8,10 +8,10 @@ import javax.annotation.Nullable;
 
 public class EntityPolarBear extends EntityAnimal {
 
-    private static final DataWatcherObject<Boolean> bz = DataWatcher.a(EntityPolarBear.class, DataWatcherRegistry.i);
-    private float bA;
-    private float bB;
-    private int bC;
+    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityPolarBear.class, DataWatcherRegistry.i);
+    private float bx;
+    private float by;
+    private int bz;
 
     public EntityPolarBear(EntityTypes<? extends EntityPolarBear> entitytypes, World world) {
         super(entitytypes, world);
@@ -31,13 +31,13 @@ public class EntityPolarBear extends EntityAnimal {
     protected void initPathfinder() {
         super.initPathfinder();
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
+        this.goalSelector.a(1, new EntityPolarBear.c());
         this.goalSelector.a(1, new EntityPolarBear.d());
-        this.goalSelector.a(1, new EntityPolarBear.e());
         this.goalSelector.a(4, new PathfinderGoalFollowParent(this, 1.25D));
         this.goalSelector.a(5, new PathfinderGoalRandomStroll(this, 1.0D));
         this.goalSelector.a(6, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
         this.goalSelector.a(7, new PathfinderGoalRandomLookaround(this));
-        this.targetSelector.a(1, new EntityPolarBear.c());
+        this.targetSelector.a(1, new EntityPolarBear.b());
         this.targetSelector.a(2, new EntityPolarBear.a());
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityFox.class, 10, true, true, (Predicate) null));
     }
@@ -78,10 +78,10 @@ public class EntityPolarBear extends EntityAnimal {
         this.a(SoundEffects.ENTITY_POLAR_BEAR_STEP, 0.15F, 1.0F);
     }
 
-    protected void dV() {
-        if (this.bC <= 0) {
-            this.a(SoundEffects.ENTITY_POLAR_BEAR_WARNING, 1.0F, this.cV());
-            this.bC = 40;
+    protected void eq() {
+        if (this.bz <= 0) {
+            this.a(SoundEffects.ENTITY_POLAR_BEAR_WARNING, 1.0F, this.dn());
+            this.bz = 40;
         }
 
     }
@@ -89,35 +89,35 @@ public class EntityPolarBear extends EntityAnimal {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityPolarBear.bz, false);
+        this.datawatcher.register(EntityPolarBear.bw, false);
     }
 
     @Override
     public void tick() {
         super.tick();
         if (this.world.isClientSide) {
-            if (this.bB != this.bA) {
+            if (this.by != this.bx) {
                 this.updateSize();
             }
 
-            this.bA = this.bB;
-            if (this.dW()) {
-                this.bB = MathHelper.a(this.bB + 1.0F, 0.0F, 6.0F);
+            this.bx = this.by;
+            if (this.er()) {
+                this.by = MathHelper.a(this.by + 1.0F, 0.0F, 6.0F);
             } else {
-                this.bB = MathHelper.a(this.bB - 1.0F, 0.0F, 6.0F);
+                this.by = MathHelper.a(this.by - 1.0F, 0.0F, 6.0F);
             }
         }
 
-        if (this.bC > 0) {
-            --this.bC;
+        if (this.bz > 0) {
+            --this.bz;
         }
 
     }
 
     @Override
     public EntitySize a(EntityPose entitypose) {
-        if (this.bB > 0.0F) {
-            float f = this.bB / 6.0F;
+        if (this.by > 0.0F) {
+            float f = this.by / 6.0F;
             float f1 = 1.0F + f;
 
             return super.a(entitypose).a(1.0F, f1);
@@ -127,7 +127,7 @@ public class EntityPolarBear extends EntityAnimal {
     }
 
     @Override
-    public boolean C(Entity entity) {
+    public boolean B(Entity entity) {
         boolean flag = entity.damageEntity(DamageSource.mobAttack(this), (float) ((int) this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue()));
 
         if (flag) {
@@ -137,33 +137,32 @@ public class EntityPolarBear extends EntityAnimal {
         return flag;
     }
 
-    public boolean dW() {
-        return (Boolean) this.datawatcher.get(EntityPolarBear.bz);
+    public boolean er() {
+        return (Boolean) this.datawatcher.get(EntityPolarBear.bw);
     }
 
     public void r(boolean flag) {
-        this.datawatcher.set(EntityPolarBear.bz, flag);
+        this.datawatcher.set(EntityPolarBear.bw, flag);
     }
 
     @Override
-    protected float da() {
+    protected float ds() {
         return 0.98F;
     }
 
     @Override
     public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        if (groupdataentity instanceof EntityPolarBear.b) {
-            this.setAgeRaw(-24000);
-        } else {
-            groupdataentity = new EntityPolarBear.b();
+        if (groupdataentity == null) {
+            groupdataentity = new EntityAgeable.a();
+            ((EntityAgeable.a) groupdataentity).a(1.0F);
         }
 
-        return (GroupDataEntity) groupdataentity;
+        return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
     }
 
-    class e extends PathfinderGoalPanic {
+    class d extends PathfinderGoalPanic {
 
-        public e() {
+        public d() {
             super(EntityPolarBear.this, 2.0D);
         }
 
@@ -173,9 +172,9 @@ public class EntityPolarBear extends EntityAnimal {
         }
     }
 
-    class d extends PathfinderGoalMeleeAttack {
+    class c extends PathfinderGoalMeleeAttack {
 
-        public d() {
+        public c() {
             super(EntityPolarBear.this, 1.25D, true);
         }
 
@@ -185,7 +184,7 @@ public class EntityPolarBear extends EntityAnimal {
 
             if (d0 <= d1 && this.b <= 0) {
                 this.b = 20;
-                this.a.C(entityliving);
+                this.a.B(entityliving);
                 EntityPolarBear.this.r(false);
             } else if (d0 <= d1 * 2.0D) {
                 if (this.b <= 0) {
@@ -195,7 +194,7 @@ public class EntityPolarBear extends EntityAnimal {
 
                 if (this.b <= 10) {
                     EntityPolarBear.this.r(true);
-                    EntityPolarBear.this.dV();
+                    EntityPolarBear.this.eq();
                 }
             } else {
                 this.b = 20;
@@ -250,9 +249,9 @@ public class EntityPolarBear extends EntityAnimal {
         }
     }
 
-    class c extends PathfinderGoalHurtByTarget {
+    class b extends PathfinderGoalHurtByTarget {
 
-        public c() {
+        public b() {
             super(EntityPolarBear.this);
         }
 
@@ -273,10 +272,5 @@ public class EntityPolarBear extends EntityAnimal {
             }
 
         }
-    }
-
-    static class b implements GroupDataEntity {
-
-        private b() {}
     }
 }

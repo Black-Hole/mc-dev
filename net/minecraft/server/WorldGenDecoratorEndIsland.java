@@ -5,13 +5,13 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class WorldGenDecoratorEndIsland extends WorldGenDecoratorFeatureSimple<WorldGenFeatureDecoratorEmptyConfiguration> {
+public class WorldGenDecoratorEndIsland extends WorldGenDecoratorFeatureSimple<WorldGenFeatureEmptyConfiguration2> {
 
-    public WorldGenDecoratorEndIsland(Function<Dynamic<?>, ? extends WorldGenFeatureDecoratorEmptyConfiguration> function) {
+    public WorldGenDecoratorEndIsland(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration2> function) {
         super(function);
     }
 
-    public Stream<BlockPosition> a(Random random, WorldGenFeatureDecoratorEmptyConfiguration worldgenfeaturedecoratoremptyconfiguration, BlockPosition blockposition) {
+    public Stream<BlockPosition> a(Random random, WorldGenFeatureEmptyConfiguration2 worldgenfeatureemptyconfiguration2, BlockPosition blockposition) {
         Stream<BlockPosition> stream = Stream.empty();
 
         if (random.nextInt(14) == 0) {

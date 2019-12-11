@@ -10,15 +10,15 @@ import java.util.Collection;
 
 public class ArgumentMinecraftKeyRegistered implements ArgumentType<MinecraftKey> {
 
-    private static final Collection<String> d = Arrays.asList("foo", "foo:bar", "012");
-    public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("argument.id.unknown", new Object[]{object});
-    });
-    public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    private static final Collection<String> a = Arrays.asList("foo", "foo:bar", "012");
+    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("advancement.advancementNotFound", new Object[]{object});
     });
-    public static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("recipe.notFound", new Object[]{object});
+    });
+    private static final DynamicCommandExceptionType d = new DynamicCommandExceptionType((object) -> {
+        return new ChatMessage("predicate.unknown", new Object[]{object});
     });
 
     public ArgumentMinecraftKeyRegistered() {}
@@ -47,7 +47,19 @@ public class ArgumentMinecraftKeyRegistered implements ArgumentType<MinecraftKey
         });
     }
 
-    public static MinecraftKey c(CommandContext<CommandListenerWrapper> commandcontext, String s) {
+    public static LootItemCondition c(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
+        MinecraftKey minecraftkey = (MinecraftKey) commandcontext.getArgument(s, MinecraftKey.class);
+        LootPredicateManager lootpredicatemanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aP();
+        LootItemCondition lootitemcondition = lootpredicatemanager.a(minecraftkey);
+
+        if (lootitemcondition == null) {
+            throw ArgumentMinecraftKeyRegistered.d.create(minecraftkey);
+        } else {
+            return lootitemcondition;
+        }
+    }
+
+    public static MinecraftKey d(CommandContext<CommandListenerWrapper> commandcontext, String s) {
         return (MinecraftKey) commandcontext.getArgument(s, MinecraftKey.class);
     }
 
@@ -56,6 +68,6 @@ public class ArgumentMinecraftKeyRegistered implements ArgumentType<MinecraftKey
     }
 
     public Collection<String> getExamples() {
-        return ArgumentMinecraftKeyRegistered.d;
+        return ArgumentMinecraftKeyRegistered.a;
     }
 }

@@ -21,7 +21,7 @@ public class BlockHopper extends BlockTileEntity {
 
     public BlockHopper(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockHopper.FACING, EnumDirection.DOWN)).set(BlockHopper.ENABLED, true));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockHopper.FACING, EnumDirection.DOWN)).set(BlockHopper.ENABLED, true));
     }
 
     @Override
@@ -43,7 +43,7 @@ public class BlockHopper extends BlockTileEntity {
     }
 
     @Override
-    public VoxelShape i(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         switch ((EnumDirection) iblockdata.get(BlockHopper.FACING)) {
             case DOWN:
                 return BlockHopper.w;
@@ -64,7 +64,7 @@ public class BlockHopper extends BlockTileEntity {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         EnumDirection enumdirection = blockactioncontext.getClickedFace().opposite();
 
-        return (IBlockData) ((IBlockData) this.getBlockData().set(BlockHopper.FACING, enumdirection.k() == EnumDirection.EnumAxis.Y ? EnumDirection.DOWN : enumdirection)).set(BlockHopper.ENABLED, true);
+        return (IBlockData) ((IBlockData) this.getBlockData().set(BlockHopper.FACING, enumdirection.m() == EnumDirection.EnumAxis.Y ? EnumDirection.DOWN : enumdirection)).set(BlockHopper.ENABLED, true);
     }
 
     @Override
@@ -92,9 +92,9 @@ public class BlockHopper extends BlockTileEntity {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (world.isClientSide) {
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -103,7 +103,7 @@ public class BlockHopper extends BlockTileEntity {
                 entityhuman.a(StatisticList.INSPECT_HOPPER);
             }
 
-            return true;
+            return EnumInteractionResult.SUCCESS;
         }
     }
 
@@ -148,11 +148,6 @@ public class BlockHopper extends BlockTileEntity {
     @Override
     public int a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return Container.a(world.getTileEntity(blockposition));
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT_MIPPED;
     }
 
     @Override

@@ -19,7 +19,7 @@ public class WorldGenSurfaceMesaForest extends WorldGenSurfaceMesa {
         int j1 = i & 15;
         int k1 = j & 15;
         IBlockData iblockdata2 = WorldGenSurfaceMesaForest.S;
-        IBlockData iblockdata3 = biomebase.q().b();
+        IBlockData iblockdata3 = biomebase.s().b();
         int l1 = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
         boolean flag = Math.cos(d0 / 3.0D * 3.141592653589793D) > 0.0D;
         int i2 = -1;
@@ -42,7 +42,7 @@ public class WorldGenSurfaceMesaForest extends WorldGenSurfaceMesa {
                             iblockdata3 = iblockdata;
                         } else if (k2 >= l - 4 && k2 <= l + 1) {
                             iblockdata2 = WorldGenSurfaceMesaForest.S;
-                            iblockdata3 = biomebase.q().b();
+                            iblockdata3 = biomebase.s().b();
                         }
 
                         if (k2 < l && (iblockdata2 == null || iblockdata2.isAir())) {
@@ -72,7 +72,7 @@ public class WorldGenSurfaceMesaForest extends WorldGenSurfaceMesa {
 
                                 ichunkaccess.setType(blockposition_mutableblockposition, iblockdata5, false);
                             } else {
-                                ichunkaccess.setType(blockposition_mutableblockposition, biomebase.q().a(), false);
+                                ichunkaccess.setType(blockposition_mutableblockposition, biomebase.s().a(), false);
                                 flag1 = true;
                             }
                         } else {

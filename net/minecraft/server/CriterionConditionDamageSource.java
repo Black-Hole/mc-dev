@@ -33,11 +33,11 @@ public class CriterionConditionDamageSource {
     }
 
     public boolean a(EntityPlayer entityplayer, DamageSource damagesource) {
-        return this.a(entityplayer.getWorldServer(), new Vec3D(entityplayer.locX, entityplayer.locY, entityplayer.locZ), damagesource);
+        return this.a(entityplayer.getWorldServer(), entityplayer.getPositionVector(), damagesource);
     }
 
     public boolean a(WorldServer worldserver, Vec3D vec3d, DamageSource damagesource) {
-        return this == CriterionConditionDamageSource.a ? true : (this.b != null && this.b != damagesource.b() ? false : (this.c != null && this.c != damagesource.isExplosion() ? false : (this.d != null && this.d != damagesource.ignoresArmor() ? false : (this.e != null && this.e != damagesource.ignoresInvulnerability() ? false : (this.f != null && this.f != damagesource.isStarvation() ? false : (this.g != null && this.g != damagesource.p() ? false : (this.h != null && this.h != damagesource.isMagic() ? false : (this.i != null && this.i != (damagesource == DamageSource.LIGHTNING) ? false : (!this.j.a(worldserver, vec3d, damagesource.j()) ? false : this.k.a(worldserver, vec3d, damagesource.getEntity()))))))))));
+        return this == CriterionConditionDamageSource.a ? true : (this.b != null && this.b != damagesource.b() ? false : (this.c != null && this.c != damagesource.isExplosion() ? false : (this.d != null && this.d != damagesource.ignoresArmor() ? false : (this.e != null && this.e != damagesource.ignoresInvulnerability() ? false : (this.f != null && this.f != damagesource.isStarvation() ? false : (this.g != null && this.g != damagesource.isFire() ? false : (this.h != null && this.h != damagesource.isMagic() ? false : (this.i != null && this.i != (damagesource == DamageSource.LIGHTNING) ? false : (!this.j.a(worldserver, vec3d, damagesource.j()) ? false : this.k.a(worldserver, vec3d, damagesource.getEntity()))))))))));
     }
 
     public static CriterionConditionDamageSource a(@Nullable JsonElement jsonelement) {

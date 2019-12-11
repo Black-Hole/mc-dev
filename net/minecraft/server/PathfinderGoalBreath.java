@@ -23,7 +23,7 @@ public class PathfinderGoalBreath extends PathfinderGoal {
     }
 
     @Override
-    public boolean C_() {
+    public boolean E_() {
         return false;
     }
 
@@ -33,7 +33,7 @@ public class PathfinderGoalBreath extends PathfinderGoal {
     }
 
     private void g() {
-        Iterable<BlockPosition> iterable = BlockPosition.b(MathHelper.floor(this.a.locX - 1.0D), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ - 1.0D), MathHelper.floor(this.a.locX + 1.0D), MathHelper.floor(this.a.locY + 8.0D), MathHelper.floor(this.a.locZ + 1.0D));
+        Iterable<BlockPosition> iterable = BlockPosition.b(MathHelper.floor(this.a.locX() - 1.0D), MathHelper.floor(this.a.locY()), MathHelper.floor(this.a.locZ() - 1.0D), MathHelper.floor(this.a.locX() + 1.0D), MathHelper.floor(this.a.locY() + 8.0D), MathHelper.floor(this.a.locZ() + 1.0D));
         BlockPosition blockposition = null;
         Iterator iterator = iterable.iterator();
 
@@ -47,7 +47,7 @@ public class PathfinderGoalBreath extends PathfinderGoal {
         }
 
         if (blockposition == null) {
-            blockposition = new BlockPosition(this.a.locX, this.a.locY + 8.0D, this.a.locZ);
+            blockposition = new BlockPosition(this.a.locX(), this.a.locY() + 8.0D, this.a.locZ());
         }
 
         this.a.getNavigation().a((double) blockposition.getX(), (double) (blockposition.getY() + 1), (double) blockposition.getZ(), 1.0D);
@@ -56,7 +56,7 @@ public class PathfinderGoalBreath extends PathfinderGoal {
     @Override
     public void e() {
         this.g();
-        this.a.a(0.02F, new Vec3D((double) this.a.bb, (double) this.a.bc, (double) this.a.bd));
+        this.a.a(0.02F, new Vec3D((double) this.a.aZ, (double) this.a.ba, (double) this.a.bb));
         this.a.move(EnumMoveType.SELF, this.a.getMot());
     }
 

@@ -6,12 +6,42 @@ import java.io.IOException;
 
 public class NBTTagByte extends NBTNumber {
 
-    private byte data;
+    public static final NBTTagType<NBTTagByte> a = new NBTTagType<NBTTagByte>() {
+        @Override
+        public NBTTagByte b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+            nbtreadlimiter.a(72L);
+            return NBTTagByte.a(datainput.readByte());
+        }
 
-    NBTTagByte() {}
+        @Override
+        public String a() {
+            return "BYTE";
+        }
 
-    public NBTTagByte(byte b0) {
+        @Override
+        public String b() {
+            return "TAG_Byte";
+        }
+
+        @Override
+        public boolean c() {
+            return true;
+        }
+    };
+    public static final NBTTagByte b = a((byte) 0);
+    public static final NBTTagByte c = a((byte) 1);
+    private final byte data;
+
+    private NBTTagByte(byte b0) {
         this.data = b0;
+    }
+
+    public static NBTTagByte a(byte b0) {
+        return NBTTagByte.a.a[128 + b0];
+    }
+
+    public static NBTTagByte a(boolean flag) {
+        return flag ? NBTTagByte.c : NBTTagByte.b;
     }
 
     @Override
@@ -20,14 +50,13 @@ public class NBTTagByte extends NBTNumber {
     }
 
     @Override
-    public void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
-        nbtreadlimiter.a(72L);
-        this.data = datainput.readByte();
+    public byte getTypeId() {
+        return 1;
     }
 
     @Override
-    public byte getTypeId() {
-        return 1;
+    public NBTTagType<NBTTagByte> b() {
+        return NBTTagByte.a;
     }
 
     @Override
@@ -37,7 +66,7 @@ public class NBTTagByte extends NBTNumber {
 
     @Override
     public NBTTagByte clone() {
-        return new NBTTagByte(this.data);
+        return this;
     }
 
     public boolean equals(Object object) {
@@ -50,9 +79,9 @@ public class NBTTagByte extends NBTNumber {
 
     @Override
     public IChatBaseComponent a(String s, int i) {
-        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("b")).a(NBTTagByte.e);
+        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("b")).a(NBTTagByte.g);
 
-        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatbasecomponent).a(NBTTagByte.d);
+        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatbasecomponent).a(NBTTagByte.f);
     }
 
     @Override
@@ -86,7 +115,19 @@ public class NBTTagByte extends NBTNumber {
     }
 
     @Override
-    public Number j() {
+    public Number k() {
         return this.data;
+    }
+
+    static class a {
+
+        private static final NBTTagByte[] a = new NBTTagByte[256];
+
+        static {
+            for (int i = 0; i < NBTTagByte.a.a.length; ++i) {
+                NBTTagByte.a.a[i] = new NBTTagByte((byte) (i - 128));
+            }
+
+        }
     }
 }

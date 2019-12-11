@@ -32,7 +32,7 @@ public class EntityEgg extends EntityProjectileThrowable {
                     EntityChicken entitychicken = (EntityChicken) EntityTypes.CHICKEN.a(this.world);
 
                     entitychicken.setAgeRaw(-24000);
-                    entitychicken.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, 0.0F);
+                    entitychicken.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.yaw, 0.0F);
                     this.world.addEntity(entitychicken);
                 }
             }

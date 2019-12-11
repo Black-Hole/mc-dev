@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nullable;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S extends LightEngineStorage<M>> extends LightEngineGraph implements LightEngineLayerEventListener {
 
@@ -20,12 +20,12 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
         this.a = ilightaccess;
         this.b = enumskyblock;
         this.c = s0;
-        this.c();
+        this.d();
     }
 
     @Override
     protected void f(long i) {
-        this.c.c();
+        this.c.d();
         if (this.c.g(SectionPosition.e(i))) {
             super.f(i);
         }
@@ -54,15 +54,15 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
         return iblockaccess;
     }
 
-    private void c() {
+    private void d() {
         Arrays.fill(this.g, ChunkCoordIntPair.a);
         Arrays.fill(this.h, (Object) null);
     }
 
-    protected IBlockData a(long i, @Nullable AtomicInteger atomicinteger) {
+    protected IBlockData a(long i, @Nullable MutableInt mutableint) {
         if (i == Long.MAX_VALUE) {
-            if (atomicinteger != null) {
-                atomicinteger.set(0);
+            if (mutableint != null) {
+                mutableint.setValue(0);
             }
 
             return Blocks.AIR.getBlockData();
@@ -72,8 +72,8 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
             IBlockAccess iblockaccess = this.a(j, k);
 
             if (iblockaccess == null) {
-                if (atomicinteger != null) {
-                    atomicinteger.set(16);
+                if (mutableint != null) {
+                    mutableint.setValue(16);
                 }
 
                 return Blocks.BEDROCK.getBlockData();
@@ -82,8 +82,8 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
                 IBlockData iblockdata = iblockaccess.getType(this.d);
                 boolean flag = iblockdata.o() && iblockdata.g();
 
-                if (atomicinteger != null) {
-                    atomicinteger.set(iblockdata.b(this.a.getWorld(), (BlockPosition) this.d));
+                if (mutableint != null) {
+                    mutableint.setValue(iblockdata.b(this.a.getWorld(), (BlockPosition) this.d));
                 }
 
                 return flag ? iblockdata : Blocks.AIR.getBlockData();
@@ -157,14 +157,14 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
         this.f = true;
         if (this.b()) {
             i = this.b(i);
-            this.c();
+            this.d();
             if (i == 0) {
                 return i;
             }
         }
 
         this.f = false;
-        this.c.d();
+        this.c.e();
         return i;
     }
 
@@ -208,7 +208,6 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
     public void a(ChunkCoordIntPair chunkcoordintpair, boolean flag) {
         long i = SectionPosition.f(SectionPosition.b(chunkcoordintpair.x, 0, chunkcoordintpair.z));
 
-        this.c.c();
         this.c.b(i, flag);
     }
 

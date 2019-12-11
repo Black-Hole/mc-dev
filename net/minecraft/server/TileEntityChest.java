@@ -26,23 +26,6 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
     }
 
     @Override
-    public boolean isNotEmpty() {
-        Iterator iterator = this.items.iterator();
-
-        ItemStack itemstack;
-
-        do {
-            if (!iterator.hasNext()) {
-                return true;
-            }
-
-            itemstack = (ItemStack) iterator.next();
-        } while (itemstack.isEmpty());
-
-        return false;
-    }
-
-    @Override
     protected IChatBaseComponent getContainerName() {
         return new ChatMessage("container.chest", new Object[0]);
     }
@@ -138,7 +121,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
     }
 
     private void a(SoundEffect soundeffect) {
-        BlockPropertyChestType blockpropertychesttype = (BlockPropertyChestType) this.getBlock().get(BlockChest.b);
+        BlockPropertyChestType blockpropertychesttype = (BlockPropertyChestType) this.getBlock().get(BlockChest.c);
 
         if (blockpropertychesttype != BlockPropertyChestType.LEFT) {
             double d0 = (double) this.position.getX() + 0.5D;
@@ -146,7 +129,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
             double d2 = (double) this.position.getZ() + 0.5D;
 
             if (blockpropertychesttype == BlockPropertyChestType.RIGHT) {
-                EnumDirection enumdirection = BlockChest.j(this.getBlock());
+                EnumDirection enumdirection = BlockChest.i(this.getBlock());
 
                 d0 += (double) enumdirection.getAdjacentX() * 0.5D;
                 d2 += (double) enumdirection.getAdjacentZ() * 0.5D;

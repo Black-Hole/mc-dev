@@ -6,12 +6,37 @@ import java.io.IOException;
 
 public class NBTTagFloat extends NBTNumber {
 
-    private float data;
+    public static final NBTTagFloat a = new NBTTagFloat(0.0F);
+    public static final NBTTagType<NBTTagFloat> b = new NBTTagType<NBTTagFloat>() {
+        @Override
+        public NBTTagFloat b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+            nbtreadlimiter.a(96L);
+            return NBTTagFloat.a(datainput.readFloat());
+        }
 
-    NBTTagFloat() {}
+        @Override
+        public String a() {
+            return "FLOAT";
+        }
 
-    public NBTTagFloat(float f) {
+        @Override
+        public String b() {
+            return "TAG_Float";
+        }
+
+        @Override
+        public boolean c() {
+            return true;
+        }
+    };
+    private final float data;
+
+    private NBTTagFloat(float f) {
         this.data = f;
+    }
+
+    public static NBTTagFloat a(float f) {
+        return f == 0.0F ? NBTTagFloat.a : new NBTTagFloat(f);
     }
 
     @Override
@@ -20,14 +45,13 @@ public class NBTTagFloat extends NBTNumber {
     }
 
     @Override
-    public void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
-        nbtreadlimiter.a(96L);
-        this.data = datainput.readFloat();
+    public byte getTypeId() {
+        return 5;
     }
 
     @Override
-    public byte getTypeId() {
-        return 5;
+    public NBTTagType<NBTTagFloat> b() {
+        return NBTTagFloat.b;
     }
 
     @Override
@@ -37,7 +61,7 @@ public class NBTTagFloat extends NBTNumber {
 
     @Override
     public NBTTagFloat clone() {
-        return new NBTTagFloat(this.data);
+        return this;
     }
 
     public boolean equals(Object object) {
@@ -50,9 +74,9 @@ public class NBTTagFloat extends NBTNumber {
 
     @Override
     public IChatBaseComponent a(String s, int i) {
-        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("f")).a(NBTTagFloat.e);
+        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("f")).a(NBTTagFloat.g);
 
-        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatbasecomponent).a(NBTTagFloat.d);
+        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatbasecomponent).a(NBTTagFloat.f);
     }
 
     @Override
@@ -86,7 +110,7 @@ public class NBTTagFloat extends NBTNumber {
     }
 
     @Override
-    public Number j() {
+    public Number k() {
         return this.data;
     }
 }

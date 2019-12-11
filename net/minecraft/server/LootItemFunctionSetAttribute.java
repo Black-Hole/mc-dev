@@ -26,7 +26,7 @@ public class LootItemFunctionSetAttribute extends LootItemFunctionConditional {
 
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
-        Random random = loottableinfo.b();
+        Random random = loottableinfo.a();
         Iterator iterator = this.a.iterator();
 
         while (iterator.hasNext()) {

@@ -11,29 +11,29 @@ import javax.annotation.Nullable;
 
 public abstract class EntityArrow extends Entity implements IProjectile {
 
-    private static final DataWatcherObject<Byte> ar = DataWatcher.a(EntityArrow.class, DataWatcherRegistry.a);
+    private static final DataWatcherObject<Byte> ao = DataWatcher.a(EntityArrow.class, DataWatcherRegistry.a);
     protected static final DataWatcherObject<Optional<UUID>> b = DataWatcher.a(EntityArrow.class, DataWatcherRegistry.o);
-    private static final DataWatcherObject<Byte> as = DataWatcher.a(EntityArrow.class, DataWatcherRegistry.a);
+    private static final DataWatcherObject<Byte> ap = DataWatcher.a(EntityArrow.class, DataWatcherRegistry.a);
     @Nullable
-    private IBlockData at;
+    private IBlockData aq;
     public boolean inGround;
     protected int d;
     public EntityArrow.PickupStatus fromPlayer;
     public int shake;
     public UUID shooter;
     public int despawnCounter;
-    private int av;
+    private int as;
     private double damage;
     public int knockbackStrength;
-    private SoundEffect ay;
-    private IntOpenHashSet az;
-    private List<Entity> aA;
+    private SoundEffect av;
+    private IntOpenHashSet aw;
+    private List<Entity> ax;
 
     protected EntityArrow(EntityTypes<? extends EntityArrow> entitytypes, World world) {
         super(entitytypes, world);
         this.fromPlayer = EntityArrow.PickupStatus.DISALLOWED;
         this.damage = 2.0D;
-        this.ay = this.k();
+        this.av = this.k();
     }
 
     protected EntityArrow(EntityTypes<? extends EntityArrow> entitytypes, double d0, double d1, double d2, World world) {
@@ -42,7 +42,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     }
 
     protected EntityArrow(EntityTypes<? extends EntityArrow> entitytypes, EntityLiving entityliving, World world) {
-        this(entitytypes, entityliving.locX, entityliving.locY + (double) entityliving.getHeadHeight() - 0.10000000149011612D, entityliving.locZ, world);
+        this(entitytypes, entityliving.locX(), entityliving.getHeadY() - 0.10000000149011612D, entityliving.locZ(), world);
         this.setShooter(entityliving);
         if (entityliving instanceof EntityHuman) {
             this.fromPlayer = EntityArrow.PickupStatus.ALLOWED;
@@ -51,14 +51,14 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     }
 
     public void a(SoundEffect soundeffect) {
-        this.ay = soundeffect;
+        this.av = soundeffect;
     }
 
     @Override
     protected void initDatawatcher() {
-        this.datawatcher.register(EntityArrow.ar, (byte) 0);
+        this.datawatcher.register(EntityArrow.ao, (byte) 0);
         this.datawatcher.register(EntityArrow.b, Optional.empty());
-        this.datawatcher.register(EntityArrow.as, (byte) 0);
+        this.datawatcher.register(EntityArrow.ap, (byte) 0);
     }
 
     public void a(Entity entity, float f, float f1, float f2, float f3, float f4) {
@@ -99,19 +99,21 @@ public abstract class EntityArrow extends Entity implements IProjectile {
             this.lastPitch = this.pitch;
         }
 
-        BlockPosition blockposition = new BlockPosition(this.locX, this.locY, this.locZ);
+        BlockPosition blockposition = new BlockPosition(this);
         IBlockData iblockdata = this.world.getType(blockposition);
+        Vec3D vec3d1;
 
         if (!iblockdata.isAir() && !flag) {
             VoxelShape voxelshape = iblockdata.getCollisionShape(this.world, blockposition);
 
             if (!voxelshape.isEmpty()) {
+                vec3d1 = this.getPositionVector();
                 Iterator iterator = voxelshape.d().iterator();
 
                 while (iterator.hasNext()) {
                     AxisAlignedBB axisalignedbb = (AxisAlignedBB) iterator.next();
 
-                    if (axisalignedbb.a(blockposition).c(new Vec3D(this.locX, this.locY, this.locZ))) {
+                    if (axisalignedbb.a(blockposition).c(vec3d1)) {
                         this.inGround = true;
                         break;
                     }
@@ -128,11 +130,11 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         }
 
         if (this.inGround && !flag) {
-            if (this.at != iblockdata && this.world.c(this.getBoundingBox().g(0.06D))) {
+            if (this.aq != iblockdata && this.world.a(this.getBoundingBox().g(0.06D))) {
                 this.inGround = false;
                 this.setMot(vec3d.d((double) (this.random.nextFloat() * 0.2F), (double) (this.random.nextFloat() * 0.2F), (double) (this.random.nextFloat() * 0.2F)));
                 this.despawnCounter = 0;
-                this.av = 0;
+                this.as = 0;
             } else if (!this.world.isClientSide) {
                 this.i();
             }
@@ -140,17 +142,18 @@ public abstract class EntityArrow extends Entity implements IProjectile {
             ++this.d;
         } else {
             this.d = 0;
-            ++this.av;
-            Vec3D vec3d1 = new Vec3D(this.locX, this.locY, this.locZ);
-            Vec3D vec3d2 = vec3d1.e(vec3d);
-            Object object = this.world.rayTrace(new RayTrace(vec3d1, vec3d2, RayTrace.BlockCollisionOption.COLLIDER, RayTrace.FluidCollisionOption.NONE, this));
+            ++this.as;
+            Vec3D vec3d2 = this.getPositionVector();
+
+            vec3d1 = vec3d2.e(vec3d);
+            Object object = this.world.rayTrace(new RayTrace(vec3d2, vec3d1, RayTrace.BlockCollisionOption.COLLIDER, RayTrace.FluidCollisionOption.NONE, this));
 
             if (((MovingObjectPosition) object).getType() != MovingObjectPosition.EnumMovingObjectType.MISS) {
-                vec3d2 = ((MovingObjectPosition) object).getPos();
+                vec3d1 = ((MovingObjectPosition) object).getPos();
             }
 
             while (!this.dead) {
-                MovingObjectPositionEntity movingobjectpositionentity = this.a(vec3d1, vec3d2);
+                MovingObjectPositionEntity movingobjectpositionentity = this.a(vec3d2, vec3d1);
 
                 if (movingobjectpositionentity != null) {
                     object = movingobjectpositionentity;
@@ -185,13 +188,13 @@ public abstract class EntityArrow extends Entity implements IProjectile {
 
             if (this.isCritical()) {
                 for (int i = 0; i < 4; ++i) {
-                    this.world.addParticle(Particles.CRIT, this.locX + d0 * (double) i / 4.0D, this.locY + d1 * (double) i / 4.0D, this.locZ + d2 * (double) i / 4.0D, -d0, -d1 + 0.2D, -d2);
+                    this.world.addParticle(Particles.CRIT, this.locX() + d0 * (double) i / 4.0D, this.locY() + d1 * (double) i / 4.0D, this.locZ() + d2 * (double) i / 4.0D, -d0, -d1 + 0.2D, -d2);
                 }
             }
 
-            this.locX += d0;
-            this.locY += d1;
-            this.locZ += d2;
+            double d3 = this.locX() + d0;
+            double d4 = this.locY() + d1;
+            double d5 = this.locZ() + d2;
             float f1 = MathHelper.sqrt(b(vec3d));
 
             if (flag) {
@@ -225,7 +228,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
                 for (int j = 0; j < 4; ++j) {
                     float f4 = 0.25F;
 
-                    this.world.addParticle(Particles.BUBBLE, this.locX - d0 * 0.25D, this.locY - d1 * 0.25D, this.locZ - d2 * 0.25D, d0, d1, d2);
+                    this.world.addParticle(Particles.BUBBLE, d3 - d0 * 0.25D, d4 - d1 * 0.25D, d5 - d2 * 0.25D, d0, d1, d2);
                 }
 
                 f2 = this.u();
@@ -238,7 +241,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
                 this.setMot(vec3d3.x, vec3d3.y - 0.05000000074505806D, vec3d3.z);
             }
 
-            this.setPosition(this.locX, this.locY, this.locZ);
+            this.setPosition(d3, d4, d5);
             this.checkBlockCollisions();
         }
     }
@@ -260,15 +263,13 @@ public abstract class EntityArrow extends Entity implements IProjectile {
             MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;
             IBlockData iblockdata = this.world.getType(movingobjectpositionblock.getBlockPosition());
 
-            this.at = iblockdata;
-            Vec3D vec3d = movingobjectpositionblock.getPos().a(this.locX, this.locY, this.locZ);
+            this.aq = iblockdata;
+            Vec3D vec3d = movingobjectpositionblock.getPos().a(this.locX(), this.locY(), this.locZ());
 
             this.setMot(vec3d);
             Vec3D vec3d1 = vec3d.d().a(0.05000000074505806D);
 
-            this.locX -= vec3d1.x;
-            this.locY -= vec3d1.y;
-            this.locZ -= vec3d1.z;
+            this.setPositionRaw(this.locX() - vec3d1.x, this.locY() - vec3d1.y, this.locZ() - vec3d1.z);
             this.a(this.getSoundHit(), 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
             this.inGround = true;
             this.shake = 7;
@@ -283,12 +284,12 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     }
 
     private void w() {
-        if (this.aA != null) {
-            this.aA.clear();
+        if (this.ax != null) {
+            this.ax.clear();
         }
 
-        if (this.az != null) {
-            this.az.clear();
+        if (this.aw != null) {
+            this.aw.clear();
         }
 
     }
@@ -299,20 +300,20 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         int i = MathHelper.f(Math.max((double) f * this.damage, 0.0D));
 
         if (this.getPierceLevel() > 0) {
-            if (this.az == null) {
-                this.az = new IntOpenHashSet(5);
+            if (this.aw == null) {
+                this.aw = new IntOpenHashSet(5);
             }
 
-            if (this.aA == null) {
-                this.aA = Lists.newArrayListWithCapacity(5);
+            if (this.ax == null) {
+                this.ax = Lists.newArrayListWithCapacity(5);
             }
 
-            if (this.az.size() >= this.getPierceLevel() + 1) {
+            if (this.aw.size() >= this.getPierceLevel() + 1) {
                 this.die();
                 return;
             }
 
-            this.az.add(entity.getId());
+            this.aw.add(entity.getId());
         }
 
         if (this.isCritical()) {
@@ -331,13 +332,18 @@ public abstract class EntityArrow extends Entity implements IProjectile {
             }
         }
 
+        boolean flag = entity.getEntityType() == EntityTypes.ENDERMAN;
         int j = entity.ad();
 
-        if (this.isBurning() && !(entity instanceof EntityEnderman)) {
+        if (this.isBurning() && !flag) {
             entity.setOnFire(5);
         }
 
         if (entity.damageEntity(damagesource, (float) i)) {
+            if (flag) {
+                return;
+            }
+
             if (entity instanceof EntityLiving) {
                 EntityLiving entityliving = (EntityLiving) entity;
 
@@ -349,7 +355,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
                     Vec3D vec3d = this.getMot().d(1.0D, 0.0D, 1.0D).d().a((double) this.knockbackStrength * 0.6D);
 
                     if (vec3d.g() > 0.0D) {
-                        entityliving.f(vec3d.x, 0.1D, vec3d.z);
+                        entityliving.h(vec3d.x, 0.1D, vec3d.z);
                     }
                 }
 
@@ -363,23 +369,23 @@ public abstract class EntityArrow extends Entity implements IProjectile {
                     ((EntityPlayer) entity1).playerConnection.sendPacket(new PacketPlayOutGameStateChange(6, 0.0F));
                 }
 
-                if (!entity.isAlive() && this.aA != null) {
-                    this.aA.add(entityliving);
+                if (!entity.isAlive() && this.ax != null) {
+                    this.ax.add(entityliving);
                 }
 
                 if (!this.world.isClientSide && entity1 instanceof EntityPlayer) {
                     EntityPlayer entityplayer = (EntityPlayer) entity1;
 
-                    if (this.aA != null && this.r()) {
-                        CriterionTriggers.G.a(entityplayer, this.aA, this.aA.size());
+                    if (this.ax != null && this.r()) {
+                        CriterionTriggers.G.a(entityplayer, this.ax, this.ax.size());
                     } else if (!entity.isAlive() && this.r()) {
                         CriterionTriggers.G.a(entityplayer, Arrays.asList(entity), 0);
                     }
                 }
             }
 
-            this.a(this.ay, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
-            if (this.getPierceLevel() <= 0 && !(entity instanceof EntityEnderman)) {
+            this.a(this.av, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+            if (this.getPierceLevel() <= 0) {
                 this.die();
             }
         } else {
@@ -387,7 +393,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
             this.setMot(this.getMot().a(-0.1D));
             this.yaw += 180.0F;
             this.lastYaw += 180.0F;
-            this.av = 0;
+            this.as = 0;
             if (!this.world.isClientSide && this.getMot().g() < 1.0E-7D) {
                 if (this.fromPlayer == EntityArrow.PickupStatus.ALLOWED) {
                     this.a(this.getItemStack(), 0.1F);
@@ -404,7 +410,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     }
 
     protected final SoundEffect getSoundHit() {
-        return this.ay;
+        return this.av;
     }
 
     protected void a(EntityLiving entityliving) {}
@@ -412,19 +418,19 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     @Nullable
     protected MovingObjectPositionEntity a(Vec3D vec3d, Vec3D vec3d1) {
         return ProjectileHelper.a(this.world, this, vec3d, vec3d1, this.getBoundingBox().a(this.getMot()).g(1.0D), (entity) -> {
-            return !entity.isSpectator() && entity.isAlive() && entity.isInteractable() && (entity != this.getShooter() || this.av >= 5) && (this.az == null || !this.az.contains(entity.getId()));
+            return !entity.isSpectator() && entity.isAlive() && entity.isInteractable() && (entity != this.getShooter() || this.as >= 5) && (this.aw == null || !this.aw.contains(entity.getId()));
         });
     }
 
     @Override
     public void b(NBTTagCompound nbttagcompound) {
         nbttagcompound.setShort("life", (short) this.despawnCounter);
-        if (this.at != null) {
-            nbttagcompound.set("inBlockState", GameProfileSerializer.a(this.at));
+        if (this.aq != null) {
+            nbttagcompound.set("inBlockState", GameProfileSerializer.a(this.aq));
         }
 
         nbttagcompound.setByte("shake", (byte) this.shake);
-        nbttagcompound.setByte("inGround", (byte) (this.inGround ? 1 : 0));
+        nbttagcompound.setBoolean("inGround", this.inGround);
         nbttagcompound.setByte("pickup", (byte) this.fromPlayer.ordinal());
         nbttagcompound.setDouble("damage", this.damage);
         nbttagcompound.setBoolean("crit", this.isCritical());
@@ -433,7 +439,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
             nbttagcompound.a("OwnerUUID", this.shooter);
         }
 
-        nbttagcompound.setString("SoundEvent", IRegistry.SOUND_EVENT.getKey(this.ay).toString());
+        nbttagcompound.setString("SoundEvent", IRegistry.SOUND_EVENT.getKey(this.av).toString());
         nbttagcompound.setBoolean("ShotFromCrossbow", this.r());
     }
 
@@ -441,11 +447,11 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     public void a(NBTTagCompound nbttagcompound) {
         this.despawnCounter = nbttagcompound.getShort("life");
         if (nbttagcompound.hasKeyOfType("inBlockState", 10)) {
-            this.at = GameProfileSerializer.d(nbttagcompound.getCompound("inBlockState"));
+            this.aq = GameProfileSerializer.d(nbttagcompound.getCompound("inBlockState"));
         }
 
         this.shake = nbttagcompound.getByte("shake") & 255;
-        this.inGround = nbttagcompound.getByte("inGround") == 1;
+        this.inGround = nbttagcompound.getBoolean("inGround");
         if (nbttagcompound.hasKeyOfType("damage", 99)) {
             this.damage = nbttagcompound.getDouble("damage");
         }
@@ -463,7 +469,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         }
 
         if (nbttagcompound.hasKeyOfType("SoundEvent", 8)) {
-            this.ay = (SoundEffect) IRegistry.SOUND_EVENT.getOptional(new MinecraftKey(nbttagcompound.getString("SoundEvent"))).orElse(this.k());
+            this.av = (SoundEffect) IRegistry.SOUND_EVENT.getOptional(new MinecraftKey(nbttagcompound.getString("SoundEvent"))).orElse(this.k());
         }
 
         this.o(nbttagcompound.getBoolean("ShotFromCrossbow"));
@@ -519,7 +525,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     }
 
     @Override
-    public boolean bs() {
+    public boolean bA() {
         return false;
     }
 
@@ -533,34 +539,34 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     }
 
     public void setPierceLevel(byte b0) {
-        this.datawatcher.set(EntityArrow.as, b0);
+        this.datawatcher.set(EntityArrow.ap, b0);
     }
 
     private void a(int i, boolean flag) {
-        byte b0 = (Byte) this.datawatcher.get(EntityArrow.ar);
+        byte b0 = (Byte) this.datawatcher.get(EntityArrow.ao);
 
         if (flag) {
-            this.datawatcher.set(EntityArrow.ar, (byte) (b0 | i));
+            this.datawatcher.set(EntityArrow.ao, (byte) (b0 | i));
         } else {
-            this.datawatcher.set(EntityArrow.ar, (byte) (b0 & ~i));
+            this.datawatcher.set(EntityArrow.ao, (byte) (b0 & ~i));
         }
 
     }
 
     public boolean isCritical() {
-        byte b0 = (Byte) this.datawatcher.get(EntityArrow.ar);
+        byte b0 = (Byte) this.datawatcher.get(EntityArrow.ao);
 
         return (b0 & 1) != 0;
     }
 
     public boolean r() {
-        byte b0 = (Byte) this.datawatcher.get(EntityArrow.ar);
+        byte b0 = (Byte) this.datawatcher.get(EntityArrow.ao);
 
         return (b0 & 4) != 0;
     }
 
     public byte getPierceLevel() {
-        return (Byte) this.datawatcher.get(EntityArrow.as);
+        return (Byte) this.datawatcher.get(EntityArrow.ap);
     }
 
     public void a(EntityLiving entityliving, float f) {
@@ -592,7 +598,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     }
 
     public boolean v() {
-        return !this.world.isClientSide ? this.noclip : ((Byte) this.datawatcher.get(EntityArrow.ar) & 2) != 0;
+        return !this.world.isClientSide ? this.noclip : ((Byte) this.datawatcher.get(EntityArrow.ao) & 2) != 0;
     }
 
     public void o(boolean flag) {
@@ -600,7 +606,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     }
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         Entity entity = this.getShooter();
 
         return new PacketPlayOutSpawnEntity(this, entity == null ? 0 : entity.getId());

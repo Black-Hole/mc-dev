@@ -28,7 +28,7 @@ public class ItemLeash extends Item {
         }
     }
 
-    public static boolean a(EntityHuman entityhuman, World world, BlockPosition blockposition) {
+    public static EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition) {
         EntityLeash entityleash = null;
         boolean flag = false;
         double d0 = 7.0D;
@@ -51,6 +51,6 @@ public class ItemLeash extends Item {
             }
         }
 
-        return flag;
+        return flag ? EnumInteractionResult.SUCCESS : EnumInteractionResult.PASS;
     }
 }

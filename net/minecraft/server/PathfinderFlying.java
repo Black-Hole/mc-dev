@@ -11,8 +11,8 @@ public class PathfinderFlying extends PathfinderNormal {
     public PathfinderFlying() {}
 
     @Override
-    public void a(IWorldReader iworldreader, EntityInsentient entityinsentient) {
-        super.a(iworldreader, entityinsentient);
+    public void a(ChunkCache chunkcache, EntityInsentient entityinsentient) {
+        super.a(chunkcache, entityinsentient);
         this.j = entityinsentient.a(PathType.WATER);
     }
 
@@ -27,15 +27,15 @@ public class PathfinderFlying extends PathfinderNormal {
         int i;
 
         if (this.e() && this.b.isInWater()) {
-            i = MathHelper.floor(this.b.getBoundingBox().minY);
-            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(this.b.locX, (double) i, this.b.locZ);
+            i = MathHelper.floor(this.b.locY());
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(this.b.locX(), (double) i, this.b.locZ());
 
             for (Block block = this.a.getType(blockposition_mutableblockposition).getBlock(); block == Blocks.WATER; block = this.a.getType(blockposition_mutableblockposition).getBlock()) {
                 ++i;
-                blockposition_mutableblockposition.c(this.b.locX, (double) i, this.b.locZ);
+                blockposition_mutableblockposition.c(this.b.locX(), (double) i, this.b.locZ());
             }
         } else {
-            i = MathHelper.floor(this.b.getBoundingBox().minY + 0.5D);
+            i = MathHelper.floor(this.b.locY() + 0.5D);
         }
 
         BlockPosition blockposition = new BlockPosition(this.b);
@@ -72,129 +72,170 @@ public class PathfinderFlying extends PathfinderNormal {
     public int a(PathPoint[] apathpoint, PathPoint pathpoint) {
         int i = 0;
         PathPoint pathpoint1 = this.a(pathpoint.a, pathpoint.b, pathpoint.c + 1);
-        PathPoint pathpoint2 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c);
-        PathPoint pathpoint3 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c);
-        PathPoint pathpoint4 = this.a(pathpoint.a, pathpoint.b, pathpoint.c - 1);
-        PathPoint pathpoint5 = this.a(pathpoint.a, pathpoint.b + 1, pathpoint.c);
-        PathPoint pathpoint6 = this.a(pathpoint.a, pathpoint.b - 1, pathpoint.c);
 
-        if (pathpoint1 != null && !pathpoint1.i) {
+        if (this.b(pathpoint1)) {
             apathpoint[i++] = pathpoint1;
         }
 
-        if (pathpoint2 != null && !pathpoint2.i) {
+        PathPoint pathpoint2 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c);
+
+        if (this.b(pathpoint2)) {
             apathpoint[i++] = pathpoint2;
         }
 
-        if (pathpoint3 != null && !pathpoint3.i) {
+        PathPoint pathpoint3 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c);
+
+        if (this.b(pathpoint3)) {
             apathpoint[i++] = pathpoint3;
         }
 
-        if (pathpoint4 != null && !pathpoint4.i) {
+        PathPoint pathpoint4 = this.a(pathpoint.a, pathpoint.b, pathpoint.c - 1);
+
+        if (this.b(pathpoint4)) {
             apathpoint[i++] = pathpoint4;
         }
 
-        if (pathpoint5 != null && !pathpoint5.i) {
+        PathPoint pathpoint5 = this.a(pathpoint.a, pathpoint.b + 1, pathpoint.c);
+
+        if (this.b(pathpoint5)) {
             apathpoint[i++] = pathpoint5;
         }
 
-        if (pathpoint6 != null && !pathpoint6.i) {
+        PathPoint pathpoint6 = this.a(pathpoint.a, pathpoint.b - 1, pathpoint.c);
+
+        if (this.b(pathpoint6)) {
             apathpoint[i++] = pathpoint6;
         }
 
-        boolean flag = pathpoint4 == null || pathpoint4.k != 0.0F;
-        boolean flag1 = pathpoint1 == null || pathpoint1.k != 0.0F;
-        boolean flag2 = pathpoint3 == null || pathpoint3.k != 0.0F;
-        boolean flag3 = pathpoint2 == null || pathpoint2.k != 0.0F;
-        boolean flag4 = pathpoint5 == null || pathpoint5.k != 0.0F;
-        boolean flag5 = pathpoint6 == null || pathpoint6.k != 0.0F;
-        PathPoint pathpoint7;
+        PathPoint pathpoint7 = this.a(pathpoint.a, pathpoint.b + 1, pathpoint.c + 1);
 
-        if (flag && flag3) {
-            pathpoint7 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c - 1);
-            if (pathpoint7 != null && !pathpoint7.i) {
-                apathpoint[i++] = pathpoint7;
-            }
+        if (this.b(pathpoint7) && this.a(pathpoint1) && this.a(pathpoint5)) {
+            apathpoint[i++] = pathpoint7;
         }
 
-        if (flag && flag2) {
-            pathpoint7 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c - 1);
-            if (pathpoint7 != null && !pathpoint7.i) {
-                apathpoint[i++] = pathpoint7;
-            }
+        PathPoint pathpoint8 = this.a(pathpoint.a - 1, pathpoint.b + 1, pathpoint.c);
+
+        if (this.b(pathpoint8) && this.a(pathpoint2) && this.a(pathpoint5)) {
+            apathpoint[i++] = pathpoint8;
         }
 
-        if (flag1 && flag3) {
-            pathpoint7 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c + 1);
-            if (pathpoint7 != null && !pathpoint7.i) {
-                apathpoint[i++] = pathpoint7;
-            }
+        PathPoint pathpoint9 = this.a(pathpoint.a + 1, pathpoint.b + 1, pathpoint.c);
+
+        if (this.b(pathpoint9) && this.a(pathpoint3) && this.a(pathpoint5)) {
+            apathpoint[i++] = pathpoint9;
         }
 
-        if (flag1 && flag2) {
-            pathpoint7 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c + 1);
-            if (pathpoint7 != null && !pathpoint7.i) {
-                apathpoint[i++] = pathpoint7;
-            }
+        PathPoint pathpoint10 = this.a(pathpoint.a, pathpoint.b + 1, pathpoint.c - 1);
+
+        if (this.b(pathpoint10) && this.a(pathpoint4) && this.a(pathpoint5)) {
+            apathpoint[i++] = pathpoint10;
         }
 
-        if (flag && flag4) {
-            pathpoint7 = this.a(pathpoint.a, pathpoint.b + 1, pathpoint.c - 1);
-            if (pathpoint7 != null && !pathpoint7.i) {
-                apathpoint[i++] = pathpoint7;
-            }
+        PathPoint pathpoint11 = this.a(pathpoint.a, pathpoint.b - 1, pathpoint.c + 1);
+
+        if (this.b(pathpoint11) && this.a(pathpoint1) && this.a(pathpoint6)) {
+            apathpoint[i++] = pathpoint11;
         }
 
-        if (flag1 && flag4) {
-            pathpoint7 = this.a(pathpoint.a, pathpoint.b + 1, pathpoint.c + 1);
-            if (pathpoint7 != null && !pathpoint7.i) {
-                apathpoint[i++] = pathpoint7;
-            }
+        PathPoint pathpoint12 = this.a(pathpoint.a - 1, pathpoint.b - 1, pathpoint.c);
+
+        if (this.b(pathpoint12) && this.a(pathpoint2) && this.a(pathpoint6)) {
+            apathpoint[i++] = pathpoint12;
         }
 
-        if (flag2 && flag4) {
-            pathpoint7 = this.a(pathpoint.a + 1, pathpoint.b + 1, pathpoint.c);
-            if (pathpoint7 != null && !pathpoint7.i) {
-                apathpoint[i++] = pathpoint7;
-            }
+        PathPoint pathpoint13 = this.a(pathpoint.a + 1, pathpoint.b - 1, pathpoint.c);
+
+        if (this.b(pathpoint13) && this.a(pathpoint3) && this.a(pathpoint6)) {
+            apathpoint[i++] = pathpoint13;
         }
 
-        if (flag3 && flag4) {
-            pathpoint7 = this.a(pathpoint.a - 1, pathpoint.b + 1, pathpoint.c);
-            if (pathpoint7 != null && !pathpoint7.i) {
-                apathpoint[i++] = pathpoint7;
-            }
+        PathPoint pathpoint14 = this.a(pathpoint.a, pathpoint.b - 1, pathpoint.c - 1);
+
+        if (this.b(pathpoint14) && this.a(pathpoint4) && this.a(pathpoint6)) {
+            apathpoint[i++] = pathpoint14;
         }
 
-        if (flag && flag5) {
-            pathpoint7 = this.a(pathpoint.a, pathpoint.b - 1, pathpoint.c - 1);
-            if (pathpoint7 != null && !pathpoint7.i) {
-                apathpoint[i++] = pathpoint7;
-            }
+        PathPoint pathpoint15 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c - 1);
+
+        if (this.b(pathpoint15) && this.a(pathpoint4) && this.a(pathpoint3)) {
+            apathpoint[i++] = pathpoint15;
         }
 
-        if (flag1 && flag5) {
-            pathpoint7 = this.a(pathpoint.a, pathpoint.b - 1, pathpoint.c + 1);
-            if (pathpoint7 != null && !pathpoint7.i) {
-                apathpoint[i++] = pathpoint7;
-            }
+        PathPoint pathpoint16 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c + 1);
+
+        if (this.b(pathpoint16) && this.a(pathpoint1) && this.a(pathpoint3)) {
+            apathpoint[i++] = pathpoint16;
         }
 
-        if (flag2 && flag5) {
-            pathpoint7 = this.a(pathpoint.a + 1, pathpoint.b - 1, pathpoint.c);
-            if (pathpoint7 != null && !pathpoint7.i) {
-                apathpoint[i++] = pathpoint7;
-            }
+        PathPoint pathpoint17 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c - 1);
+
+        if (this.b(pathpoint17) && this.a(pathpoint4) && this.a(pathpoint2)) {
+            apathpoint[i++] = pathpoint17;
         }
 
-        if (flag3 && flag5) {
-            pathpoint7 = this.a(pathpoint.a - 1, pathpoint.b - 1, pathpoint.c);
-            if (pathpoint7 != null && !pathpoint7.i) {
-                apathpoint[i++] = pathpoint7;
-            }
+        PathPoint pathpoint18 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c + 1);
+
+        if (this.b(pathpoint18) && this.a(pathpoint1) && this.a(pathpoint2)) {
+            apathpoint[i++] = pathpoint18;
+        }
+
+        PathPoint pathpoint19 = this.a(pathpoint.a + 1, pathpoint.b + 1, pathpoint.c - 1);
+
+        if (this.b(pathpoint19) && this.a(pathpoint15) && this.a(pathpoint10) && this.a(pathpoint9)) {
+            apathpoint[i++] = pathpoint19;
+        }
+
+        PathPoint pathpoint20 = this.a(pathpoint.a + 1, pathpoint.b + 1, pathpoint.c + 1);
+
+        if (this.b(pathpoint20) && this.a(pathpoint16) && this.a(pathpoint7) && this.a(pathpoint9)) {
+            apathpoint[i++] = pathpoint20;
+        }
+
+        PathPoint pathpoint21 = this.a(pathpoint.a - 1, pathpoint.b + 1, pathpoint.c - 1);
+
+        if (this.b(pathpoint21) && this.a(pathpoint17) && this.a(pathpoint10) && this.a(pathpoint8)) {
+            apathpoint[i++] = pathpoint21;
+        }
+
+        PathPoint pathpoint22 = this.a(pathpoint.a - 1, pathpoint.b + 1, pathpoint.c + 1);
+
+        if (this.b(pathpoint22) && this.a(pathpoint18) && this.a(pathpoint7) && this.a(pathpoint8)) {
+            apathpoint[i++] = pathpoint22;
+        }
+
+        PathPoint pathpoint23 = this.a(pathpoint.a + 1, pathpoint.b - 1, pathpoint.c - 1);
+
+        if (this.b(pathpoint23) && this.a(pathpoint15) && this.a(pathpoint14) && this.a(pathpoint13)) {
+            apathpoint[i++] = pathpoint23;
+        }
+
+        PathPoint pathpoint24 = this.a(pathpoint.a + 1, pathpoint.b - 1, pathpoint.c + 1);
+
+        if (this.b(pathpoint24) && this.a(pathpoint16) && this.a(pathpoint11) && this.a(pathpoint13)) {
+            apathpoint[i++] = pathpoint24;
+        }
+
+        PathPoint pathpoint25 = this.a(pathpoint.a - 1, pathpoint.b - 1, pathpoint.c - 1);
+
+        if (this.b(pathpoint25) && this.a(pathpoint17) && this.a(pathpoint14) && this.a(pathpoint12)) {
+            apathpoint[i++] = pathpoint25;
+        }
+
+        PathPoint pathpoint26 = this.a(pathpoint.a - 1, pathpoint.b - 1, pathpoint.c + 1);
+
+        if (this.b(pathpoint26) && this.a(pathpoint18) && this.a(pathpoint11) && this.a(pathpoint12)) {
+            apathpoint[i++] = pathpoint26;
         }
 
         return i;
+    }
+
+    private boolean a(@Nullable PathPoint pathpoint) {
+        return pathpoint != null && pathpoint.k >= 0.0F;
+    }
+
+    private boolean b(@Nullable PathPoint pathpoint) {
+        return pathpoint != null && !pathpoint.i;
     }
 
     @Nullable
@@ -251,17 +292,21 @@ public class PathfinderFlying extends PathfinderNormal {
 
     @Override
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k) {
-        PathType pathtype = this.b(iblockaccess, i, j, k);
+        PathType pathtype = c(iblockaccess, i, j, k);
 
         if (pathtype == PathType.OPEN && j >= 1) {
             Block block = iblockaccess.getType(new BlockPosition(i, j - 1, k)).getBlock();
-            PathType pathtype1 = this.b(iblockaccess, i, j - 1, k);
+            PathType pathtype1 = c(iblockaccess, i, j - 1, k);
 
             if (pathtype1 != PathType.DAMAGE_FIRE && block != Blocks.MAGMA_BLOCK && pathtype1 != PathType.LAVA && block != Blocks.CAMPFIRE) {
                 if (pathtype1 == PathType.DAMAGE_CACTUS) {
                     pathtype = PathType.DAMAGE_CACTUS;
                 } else if (pathtype1 == PathType.DAMAGE_OTHER) {
                     pathtype = PathType.DAMAGE_OTHER;
+                } else if (pathtype1 == PathType.COCOA) {
+                    pathtype = PathType.COCOA;
+                } else if (pathtype1 == PathType.FENCE) {
+                    pathtype = PathType.FENCE;
                 } else {
                     pathtype = pathtype1 != PathType.WALKABLE && pathtype1 != PathType.OPEN && pathtype1 != PathType.WATER ? PathType.WALKABLE : PathType.OPEN;
                 }
@@ -270,7 +315,10 @@ public class PathfinderFlying extends PathfinderNormal {
             }
         }
 
-        pathtype = this.a(iblockaccess, i, j, k, pathtype);
+        if (pathtype == PathType.WALKABLE || pathtype == PathType.OPEN) {
+            pathtype = a(iblockaccess, i, j, k, pathtype);
+        }
+
         return pathtype;
     }
 

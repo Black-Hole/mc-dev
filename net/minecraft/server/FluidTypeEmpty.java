@@ -5,7 +5,7 @@ public class FluidTypeEmpty extends FluidType {
     public FluidTypeEmpty() {}
 
     @Override
-    public Item b() {
+    public Item a() {
         return Items.AIR;
     }
 
@@ -25,12 +25,12 @@ public class FluidTypeEmpty extends FluidType {
     }
 
     @Override
-    protected boolean c() {
+    protected boolean b() {
         return true;
     }
 
     @Override
-    protected float d() {
+    protected float c() {
         return 0.0F;
     }
 

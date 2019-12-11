@@ -7,17 +7,17 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
     public FluidTypeLava() {}
 
     @Override
-    public FluidType e() {
+    public FluidType d() {
         return FluidTypes.FLOWING_LAVA;
     }
 
     @Override
-    public FluidType f() {
+    public FluidType e() {
         return FluidTypes.LAVA;
     }
 
     @Override
-    public Item b() {
+    public Item a() {
         return Items.LAVA_BUCKET;
     }
 
@@ -114,7 +114,7 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
 
     @Override
     public int a(IWorldReader iworldreader) {
-        return iworldreader.getWorldProvider().h() ? 10 : 30;
+        return iworldreader.getWorldProvider().g() ? 10 : 30;
     }
 
     @Override
@@ -133,7 +133,7 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
     }
 
     @Override
-    protected boolean g() {
+    protected boolean f() {
         return false;
     }
 
@@ -156,12 +156,12 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
     }
 
     @Override
-    protected boolean k() {
+    protected boolean j() {
         return true;
     }
 
     @Override
-    protected float d() {
+    protected float c() {
         return 100.0F;
     }
 

@@ -13,22 +13,22 @@ public class ControllerLookDolphin extends ControllerLook {
     public void a() {
         if (this.d) {
             this.d = false;
-            this.a.aM = this.a(this.a.aM, this.h() + 20.0F, this.b);
+            this.a.aK = this.a(this.a.aK, this.h() + 20.0F, this.b);
             this.a.pitch = this.a(this.a.pitch, this.g() + 10.0F, this.c);
         } else {
-            if (this.a.getNavigation().n()) {
+            if (this.a.getNavigation().m()) {
                 this.a.pitch = this.a(this.a.pitch, 0.0F, 5.0F);
             }
 
-            this.a.aM = this.a(this.a.aM, this.a.aK, this.b);
+            this.a.aK = this.a(this.a.aK, this.a.aI, this.b);
         }
 
-        float f = MathHelper.g(this.a.aM - this.a.aK);
+        float f = MathHelper.g(this.a.aK - this.a.aI);
 
         if (f < (float) (-this.h)) {
-            this.a.aK -= 4.0F;
+            this.a.aI -= 4.0F;
         } else if (f > (float) this.h) {
-            this.a.aK += 4.0F;
+            this.a.aI += 4.0F;
         }
 
     }

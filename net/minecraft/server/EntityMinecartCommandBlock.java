@@ -81,7 +81,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
     }
 
     @Override
-    public boolean bT() {
+    public boolean cb() {
         return true;
     }
 
@@ -102,7 +102,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
         @Override
         public CommandListenerWrapper getWrapper() {
-            return new CommandListenerWrapper(this, new Vec3D(EntityMinecartCommandBlock.this.locX, EntityMinecartCommandBlock.this.locY, EntityMinecartCommandBlock.this.locZ), EntityMinecartCommandBlock.this.aU(), this.d(), 2, this.getName().getString(), EntityMinecartCommandBlock.this.getScoreboardDisplayName(), this.d().getMinecraftServer(), EntityMinecartCommandBlock.this);
+            return new CommandListenerWrapper(this, EntityMinecartCommandBlock.this.getPositionVector(), EntityMinecartCommandBlock.this.aX(), this.d(), 2, this.getName().getString(), EntityMinecartCommandBlock.this.getScoreboardDisplayName(), this.d().getMinecraftServer(), EntityMinecartCommandBlock.this);
         }
     }
 }

@@ -44,7 +44,7 @@ public class PathfinderGoalNearestVillage extends PathfinderGoal {
 
     @Override
     public boolean b() {
-        return this.c != null && !this.a.getNavigation().n() && this.a.getNavigation().h().equals(this.c);
+        return this.c != null && !this.a.getNavigation().m() && this.a.getNavigation().h().equals(this.c);
     }
 
     @Override
@@ -52,9 +52,9 @@ public class PathfinderGoalNearestVillage extends PathfinderGoal {
         if (this.c != null) {
             NavigationAbstract navigationabstract = this.a.getNavigation();
 
-            if (navigationabstract.n() && !this.c.a((IPosition) this.a.getPositionVector(), 10.0D)) {
+            if (navigationabstract.m() && !this.c.a((IPosition) this.a.getPositionVector(), 10.0D)) {
                 Vec3D vec3d = new Vec3D(this.c);
-                Vec3D vec3d1 = new Vec3D(this.a.locX, this.a.locY, this.a.locZ);
+                Vec3D vec3d1 = this.a.getPositionVector();
                 Vec3D vec3d2 = vec3d1.d(vec3d);
 
                 vec3d = vec3d2.a(0.4D).e(vec3d);

@@ -2,30 +2,24 @@ package net.minecraft.server;
 
 public enum BlockPropertyTrackPosition implements INamable {
 
-    NORTH_SOUTH(0, "north_south"), EAST_WEST(1, "east_west"), ASCENDING_EAST(2, "ascending_east"), ASCENDING_WEST(3, "ascending_west"), ASCENDING_NORTH(4, "ascending_north"), ASCENDING_SOUTH(5, "ascending_south"), SOUTH_EAST(6, "south_east"), SOUTH_WEST(7, "south_west"), NORTH_WEST(8, "north_west"), NORTH_EAST(9, "north_east");
+    NORTH_SOUTH("north_south"), EAST_WEST("east_west"), ASCENDING_EAST("ascending_east"), ASCENDING_WEST("ascending_west"), ASCENDING_NORTH("ascending_north"), ASCENDING_SOUTH("ascending_south"), SOUTH_EAST("south_east"), SOUTH_WEST("south_west"), NORTH_WEST("north_west"), NORTH_EAST("north_east");
 
-    private final int k;
-    private final String l;
+    private final String k;
 
-    private BlockPropertyTrackPosition(int i, String s) {
-        this.k = i;
-        this.l = s;
-    }
-
-    public int a() {
-        return this.k;
+    private BlockPropertyTrackPosition(String s) {
+        this.k = s;
     }
 
     public String toString() {
-        return this.l;
+        return this.k;
     }
 
-    public boolean c() {
+    public boolean b() {
         return this == BlockPropertyTrackPosition.ASCENDING_NORTH || this == BlockPropertyTrackPosition.ASCENDING_EAST || this == BlockPropertyTrackPosition.ASCENDING_SOUTH || this == BlockPropertyTrackPosition.ASCENDING_WEST;
     }
 
     @Override
     public String getName() {
-        return this.l;
+        return this.k;
     }
 }

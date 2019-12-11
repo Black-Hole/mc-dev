@@ -32,12 +32,12 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
 
     @Override
     public int a(int i, boolean flag, boolean flag1) {
-        throw new UnsupportedOperationException("Ran authomatically on a different thread!");
+        throw (UnsupportedOperationException) SystemUtils.c(new UnsupportedOperationException("Ran authomatically on a different thread!"));
     }
 
     @Override
     public void a(BlockPosition blockposition, int i) {
-        throw new UnsupportedOperationException("Ran authomatically on a different thread!");
+        throw (UnsupportedOperationException) SystemUtils.c(new UnsupportedOperationException("Ran authomatically on a different thread!"));
     }
 
     @Override

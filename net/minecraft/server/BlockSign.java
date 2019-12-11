@@ -4,9 +4,11 @@ public abstract class BlockSign extends BlockTileEntity implements IBlockWaterlo
 
     public static final BlockStateBoolean a = BlockProperties.C;
     protected static final VoxelShape b = Block.a(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
+    private final BlockPropertyWood c;
 
-    protected BlockSign(Block.Info block_info) {
+    protected BlockSign(Block.Info block_info, BlockPropertyWood blockpropertywood) {
         super(block_info);
+        this.c = blockpropertywood;
     }
 
     @Override
@@ -24,7 +26,7 @@ public abstract class BlockSign extends BlockTileEntity implements IBlockWaterlo
     }
 
     @Override
-    public boolean S_() {
+    public boolean Y_() {
         return true;
     }
 
@@ -34,33 +36,35 @@ public abstract class BlockSign extends BlockTileEntity implements IBlockWaterlo
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+        boolean flag = itemstack.getItem() instanceof ItemDye && entityhuman.abilities.mayBuild;
+
         if (world.isClientSide) {
-            return true;
+            return flag ? EnumInteractionResult.SUCCESS : EnumInteractionResult.CONSUME;
         } else {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntitySign) {
                 TileEntitySign tileentitysign = (TileEntitySign) tileentity;
-                ItemStack itemstack = entityhuman.b(enumhand);
 
-                if (itemstack.getItem() instanceof ItemDye && entityhuman.abilities.mayBuild) {
-                    boolean flag = tileentitysign.setColor(((ItemDye) itemstack.getItem()).d());
+                if (flag) {
+                    boolean flag1 = tileentitysign.setColor(((ItemDye) itemstack.getItem()).d());
 
-                    if (flag && !entityhuman.isCreative()) {
+                    if (flag1 && !entityhuman.isCreative()) {
                         itemstack.subtract(1);
                     }
                 }
 
-                return tileentitysign.b(entityhuman);
+                return tileentitysign.b(entityhuman) ? EnumInteractionResult.SUCCESS : EnumInteractionResult.PASS;
             } else {
-                return false;
+                return EnumInteractionResult.PASS;
             }
         }
     }
 
     @Override
-    public Fluid g(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockSign.a) ? FluidTypes.WATER.a(false) : super.g(iblockdata);
+    public Fluid a_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockSign.a) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
     }
 }

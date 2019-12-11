@@ -52,16 +52,16 @@ public class ContainerBrewingStand extends Container {
 
             itemstack = itemstack1.cloneItemStack();
             if ((i < 0 || i > 2) && i != 3 && i != 4) {
-                if (this.e.isAllowed(itemstack1)) {
+                if (ContainerBrewingStand.a.a_(itemstack)) {
+                    if (this.a(itemstack1, 4, 5, false) || this.e.isAllowed(itemstack1) && !this.a(itemstack1, 3, 4, false)) {
+                        return ItemStack.a;
+                    }
+                } else if (this.e.isAllowed(itemstack1)) {
                     if (!this.a(itemstack1, 3, 4, false)) {
                         return ItemStack.a;
                     }
                 } else if (ContainerBrewingStand.SlotPotionBottle.b_(itemstack) && itemstack.getCount() == 1) {
                     if (!this.a(itemstack1, 0, 3, false)) {
-                        return ItemStack.a;
-                    }
-                } else if (ContainerBrewingStand.a.a_(itemstack)) {
-                    if (!this.a(itemstack1, 4, 5, false)) {
                         return ItemStack.a;
                     }
                 } else if (i >= 5 && i < 32) {

@@ -11,10 +11,14 @@ public class BlockCartographyTable extends Block {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        entityhuman.openContainer(iblockdata.b(world, blockposition));
-        entityhuman.a(StatisticList.INTERACT_WITH_CARTOGRAPHY_TABLE);
-        return true;
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+        if (world.isClientSide) {
+            return EnumInteractionResult.SUCCESS;
+        } else {
+            entityhuman.openContainer(iblockdata.b(world, blockposition));
+            entityhuman.a(StatisticList.INTERACT_WITH_CARTOGRAPHY_TABLE);
+            return EnumInteractionResult.SUCCESS;
+        }
     }
 
     @Nullable

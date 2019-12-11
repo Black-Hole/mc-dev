@@ -11,11 +11,11 @@ public class BlockBannerWall extends BlockBannerAbstract {
 
     public BlockBannerWall(EnumColor enumcolor, Block.Info block_info) {
         super(enumcolor, block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBannerWall.a, EnumDirection.NORTH));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBannerWall.a, EnumDirection.NORTH));
     }
 
     @Override
-    public String l() {
+    public String k() {
         return this.getItem().getName();
     }
 
@@ -46,7 +46,7 @@ public class BlockBannerWall extends BlockBannerAbstract {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection1[j];
 
-            if (enumdirection.k().c()) {
+            if (enumdirection.m().c()) {
                 EnumDirection enumdirection1 = enumdirection.opposite();
 
                 iblockdata = (IBlockData) iblockdata.set(BlockBannerWall.a, enumdirection1);

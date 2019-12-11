@@ -24,7 +24,7 @@ public class BlockVine extends Block {
 
     public BlockVine(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockVine.UP, false)).set(BlockVine.NORTH, false)).set(BlockVine.EAST, false)).set(BlockVine.SOUTH, false)).set(BlockVine.WEST, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockVine.UP, false)).set(BlockVine.NORTH, false)).set(BlockVine.EAST, false)).set(BlockVine.SOUTH, false)).set(BlockVine.WEST, false));
     }
 
     @Override
@@ -56,14 +56,14 @@ public class BlockVine extends Block {
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        return this.j(this.m(iblockdata, iworldreader, blockposition));
+        return this.h(this.n(iblockdata, iworldreader, blockposition));
     }
 
-    private boolean j(IBlockData iblockdata) {
-        return this.q(iblockdata) > 0;
+    private boolean h(IBlockData iblockdata) {
+        return this.i(iblockdata) > 0;
     }
 
-    private int q(IBlockData iblockdata) {
+    private int i(IBlockData iblockdata) {
         int i = 0;
         Iterator iterator = BlockVine.f.values().iterator();
 
@@ -86,7 +86,7 @@ public class BlockVine extends Block {
 
             if (a(iblockaccess, blockposition1, enumdirection)) {
                 return true;
-            } else if (enumdirection.k() == EnumDirection.EnumAxis.Y) {
+            } else if (enumdirection.m() == EnumDirection.EnumAxis.Y) {
                 return false;
             } else {
                 BlockStateBoolean blockstateboolean = (BlockStateBoolean) BlockVine.f.get(enumdirection);
@@ -103,7 +103,7 @@ public class BlockVine extends Block {
         return Block.a(iblockdata.getCollisionShape(iblockaccess, blockposition), enumdirection.opposite());
     }
 
-    private IBlockData m(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    private IBlockData n(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.up();
 
         if ((Boolean) iblockdata.get(BlockVine.UP)) {
@@ -140,108 +140,106 @@ public class BlockVine extends Block {
         if (enumdirection == EnumDirection.DOWN) {
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
         } else {
-            IBlockData iblockdata2 = this.m(iblockdata, generatoraccess, blockposition);
+            IBlockData iblockdata2 = this.n(iblockdata, generatoraccess, blockposition);
 
-            return !this.j(iblockdata2) ? Blocks.AIR.getBlockData() : iblockdata2;
+            return !this.h(iblockdata2) ? Blocks.AIR.getBlockData() : iblockdata2;
         }
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!world.isClientSide) {
-            IBlockData iblockdata1 = this.m(iblockdata, world, blockposition);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        IBlockData iblockdata1 = this.n(iblockdata, worldserver, blockposition);
 
-            if (iblockdata1 != iblockdata) {
-                if (this.j(iblockdata1)) {
-                    world.setTypeAndData(blockposition, iblockdata1, 2);
-                } else {
-                    c(iblockdata, world, blockposition);
-                    world.a(blockposition, false);
-                }
+        if (iblockdata1 != iblockdata) {
+            if (this.h(iblockdata1)) {
+                worldserver.setTypeAndData(blockposition, iblockdata1, 2);
+            } else {
+                c(iblockdata, (World) worldserver, blockposition);
+                worldserver.a(blockposition, false);
+            }
 
-            } else if (world.random.nextInt(4) == 0) {
-                EnumDirection enumdirection = EnumDirection.a(random);
-                BlockPosition blockposition1 = blockposition.up();
-                BlockPosition blockposition2;
-                IBlockData iblockdata2;
-                EnumDirection enumdirection1;
+        } else if (worldserver.random.nextInt(4) == 0) {
+            EnumDirection enumdirection = EnumDirection.a(random);
+            BlockPosition blockposition1 = blockposition.up();
+            BlockPosition blockposition2;
+            IBlockData iblockdata2;
+            EnumDirection enumdirection1;
 
-                if (enumdirection.k().c() && !(Boolean) iblockdata.get(getDirection(enumdirection))) {
-                    if (this.a((IBlockAccess) world, blockposition)) {
-                        blockposition2 = blockposition.shift(enumdirection);
-                        iblockdata2 = world.getType(blockposition2);
-                        if (iblockdata2.isAir()) {
-                            enumdirection1 = enumdirection.e();
-                            EnumDirection enumdirection2 = enumdirection.f();
-                            boolean flag = (Boolean) iblockdata.get(getDirection(enumdirection1));
-                            boolean flag1 = (Boolean) iblockdata.get(getDirection(enumdirection2));
-                            BlockPosition blockposition3 = blockposition2.shift(enumdirection1);
-                            BlockPosition blockposition4 = blockposition2.shift(enumdirection2);
+            if (enumdirection.m().c() && !(Boolean) iblockdata.get(getDirection(enumdirection))) {
+                if (this.a((IBlockAccess) worldserver, blockposition)) {
+                    blockposition2 = blockposition.shift(enumdirection);
+                    iblockdata2 = worldserver.getType(blockposition2);
+                    if (iblockdata2.isAir()) {
+                        enumdirection1 = enumdirection.f();
+                        EnumDirection enumdirection2 = enumdirection.g();
+                        boolean flag = (Boolean) iblockdata.get(getDirection(enumdirection1));
+                        boolean flag1 = (Boolean) iblockdata.get(getDirection(enumdirection2));
+                        BlockPosition blockposition3 = blockposition2.shift(enumdirection1);
+                        BlockPosition blockposition4 = blockposition2.shift(enumdirection2);
 
-                            if (flag && a((IBlockAccess) world, blockposition3, enumdirection1)) {
-                                world.setTypeAndData(blockposition2, (IBlockData) this.getBlockData().set(getDirection(enumdirection1), true), 2);
-                            } else if (flag1 && a((IBlockAccess) world, blockposition4, enumdirection2)) {
-                                world.setTypeAndData(blockposition2, (IBlockData) this.getBlockData().set(getDirection(enumdirection2), true), 2);
-                            } else {
-                                EnumDirection enumdirection3 = enumdirection.opposite();
+                        if (flag && a((IBlockAccess) worldserver, blockposition3, enumdirection1)) {
+                            worldserver.setTypeAndData(blockposition2, (IBlockData) this.getBlockData().set(getDirection(enumdirection1), true), 2);
+                        } else if (flag1 && a((IBlockAccess) worldserver, blockposition4, enumdirection2)) {
+                            worldserver.setTypeAndData(blockposition2, (IBlockData) this.getBlockData().set(getDirection(enumdirection2), true), 2);
+                        } else {
+                            EnumDirection enumdirection3 = enumdirection.opposite();
 
-                                if (flag && world.isEmpty(blockposition3) && a((IBlockAccess) world, blockposition.shift(enumdirection1), enumdirection3)) {
-                                    world.setTypeAndData(blockposition3, (IBlockData) this.getBlockData().set(getDirection(enumdirection3), true), 2);
-                                } else if (flag1 && world.isEmpty(blockposition4) && a((IBlockAccess) world, blockposition.shift(enumdirection2), enumdirection3)) {
-                                    world.setTypeAndData(blockposition4, (IBlockData) this.getBlockData().set(getDirection(enumdirection3), true), 2);
-                                } else if ((double) world.random.nextFloat() < 0.05D && a((IBlockAccess) world, blockposition2.up(), EnumDirection.UP)) {
-                                    world.setTypeAndData(blockposition2, (IBlockData) this.getBlockData().set(BlockVine.UP, true), 2);
-                                }
-                            }
-                        } else if (a((IBlockAccess) world, blockposition2, enumdirection)) {
-                            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(getDirection(enumdirection), true), 2);
-                        }
-
-                    }
-                } else {
-                    if (enumdirection == EnumDirection.UP && blockposition.getY() < 255) {
-                        if (this.b((IBlockAccess) world, blockposition, enumdirection)) {
-                            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockVine.UP, true), 2);
-                            return;
-                        }
-
-                        if (world.isEmpty(blockposition1)) {
-                            if (!this.a((IBlockAccess) world, blockposition)) {
-                                return;
-                            }
-
-                            IBlockData iblockdata3 = iblockdata;
-                            Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
-
-                            while (iterator.hasNext()) {
-                                enumdirection1 = (EnumDirection) iterator.next();
-                                if (random.nextBoolean() || !a((IBlockAccess) world, blockposition1.shift(enumdirection1), EnumDirection.UP)) {
-                                    iblockdata3 = (IBlockData) iblockdata3.set(getDirection(enumdirection1), false);
-                                }
-                            }
-
-                            if (this.canSpread(iblockdata3)) {
-                                world.setTypeAndData(blockposition1, iblockdata3, 2);
-                            }
-
-                            return;
-                        }
-                    }
-
-                    if (blockposition.getY() > 0) {
-                        blockposition2 = blockposition.down();
-                        iblockdata2 = world.getType(blockposition2);
-                        if (iblockdata2.isAir() || iblockdata2.getBlock() == this) {
-                            IBlockData iblockdata4 = iblockdata2.isAir() ? this.getBlockData() : iblockdata2;
-                            IBlockData iblockdata5 = this.a(iblockdata, iblockdata4, random);
-
-                            if (iblockdata4 != iblockdata5 && this.canSpread(iblockdata5)) {
-                                world.setTypeAndData(blockposition2, iblockdata5, 2);
+                            if (flag && worldserver.isEmpty(blockposition3) && a((IBlockAccess) worldserver, blockposition.shift(enumdirection1), enumdirection3)) {
+                                worldserver.setTypeAndData(blockposition3, (IBlockData) this.getBlockData().set(getDirection(enumdirection3), true), 2);
+                            } else if (flag1 && worldserver.isEmpty(blockposition4) && a((IBlockAccess) worldserver, blockposition.shift(enumdirection2), enumdirection3)) {
+                                worldserver.setTypeAndData(blockposition4, (IBlockData) this.getBlockData().set(getDirection(enumdirection3), true), 2);
+                            } else if ((double) worldserver.random.nextFloat() < 0.05D && a((IBlockAccess) worldserver, blockposition2.up(), EnumDirection.UP)) {
+                                worldserver.setTypeAndData(blockposition2, (IBlockData) this.getBlockData().set(BlockVine.UP, true), 2);
                             }
                         }
+                    } else if (a((IBlockAccess) worldserver, blockposition2, enumdirection)) {
+                        worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(getDirection(enumdirection), true), 2);
                     }
 
                 }
+            } else {
+                if (enumdirection == EnumDirection.UP && blockposition.getY() < 255) {
+                    if (this.b((IBlockAccess) worldserver, blockposition, enumdirection)) {
+                        worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockVine.UP, true), 2);
+                        return;
+                    }
+
+                    if (worldserver.isEmpty(blockposition1)) {
+                        if (!this.a((IBlockAccess) worldserver, blockposition)) {
+                            return;
+                        }
+
+                        IBlockData iblockdata3 = iblockdata;
+                        Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
+
+                        while (iterator.hasNext()) {
+                            enumdirection1 = (EnumDirection) iterator.next();
+                            if (random.nextBoolean() || !a((IBlockAccess) worldserver, blockposition1.shift(enumdirection1), EnumDirection.UP)) {
+                                iblockdata3 = (IBlockData) iblockdata3.set(getDirection(enumdirection1), false);
+                            }
+                        }
+
+                        if (this.canSpread(iblockdata3)) {
+                            worldserver.setTypeAndData(blockposition1, iblockdata3, 2);
+                        }
+
+                        return;
+                    }
+                }
+
+                if (blockposition.getY() > 0) {
+                    blockposition2 = blockposition.down();
+                    iblockdata2 = worldserver.getType(blockposition2);
+                    if (iblockdata2.isAir() || iblockdata2.getBlock() == this) {
+                        IBlockData iblockdata4 = iblockdata2.isAir() ? this.getBlockData() : iblockdata2;
+                        IBlockData iblockdata5 = this.a(iblockdata, iblockdata4, random);
+
+                        if (iblockdata4 != iblockdata5 && this.canSpread(iblockdata5)) {
+                            worldserver.setTypeAndData(blockposition2, iblockdata5, 2);
+                        }
+                    }
+                }
+
             }
         }
     }
@@ -292,7 +290,7 @@ public class BlockVine extends Block {
     public boolean a(IBlockData iblockdata, BlockActionContext blockactioncontext) {
         IBlockData iblockdata1 = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition());
 
-        return iblockdata1.getBlock() == this ? this.q(iblockdata1) < BlockVine.f.size() : super.a(iblockdata, blockactioncontext);
+        return iblockdata1.getBlock() == this ? this.i(iblockdata1) < BlockVine.f.size() : super.a(iblockdata, blockactioncontext);
     }
 
     @Nullable
@@ -318,11 +316,6 @@ public class BlockVine extends Block {
         }
 
         return flag ? iblockdata1 : null;
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 
     @Override

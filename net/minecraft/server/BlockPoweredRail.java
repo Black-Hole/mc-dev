@@ -7,7 +7,7 @@ public class BlockPoweredRail extends BlockMinecartTrackAbstract {
 
     protected BlockPoweredRail(Block.Info block_info) {
         super(true, block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPoweredRail.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH)).set(BlockPoweredRail.POWERED, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPoweredRail.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH)).set(BlockPoweredRail.POWERED, false));
     }
 
     protected boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag, int i) {
@@ -104,7 +104,7 @@ public class BlockPoweredRail extends BlockMinecartTrackAbstract {
         if (flag1 != flag) {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockPoweredRail.POWERED, flag1), 3);
             world.applyPhysics(blockposition.down(), this);
-            if (((BlockPropertyTrackPosition) iblockdata.get(BlockPoweredRail.SHAPE)).c()) {
+            if (((BlockPropertyTrackPosition) iblockdata.get(BlockPoweredRail.SHAPE)).b()) {
                 world.applyPhysics(blockposition.up(), this);
             }
         }
@@ -112,7 +112,7 @@ public class BlockPoweredRail extends BlockMinecartTrackAbstract {
     }
 
     @Override
-    public IBlockState<BlockPropertyTrackPosition> e() {
+    public IBlockState<BlockPropertyTrackPosition> d() {
         return BlockPoweredRail.SHAPE;
     }
 

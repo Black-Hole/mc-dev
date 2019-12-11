@@ -51,8 +51,8 @@ public class BehaviorUtil {
     }
 
     public static void a(EntityLiving entityliving, ItemStack itemstack, EntityLiving entityliving1) {
-        double d0 = entityliving.locY - 0.30000001192092896D + (double) entityliving.getHeadHeight();
-        EntityItem entityitem = new EntityItem(entityliving.world, entityliving.locX, d0, entityliving.locZ, itemstack);
+        double d0 = entityliving.getHeadY() - 0.30000001192092896D;
+        EntityItem entityitem = new EntityItem(entityliving.world, entityliving.locX(), d0, entityliving.locZ(), itemstack);
         BlockPosition blockposition = new BlockPosition(entityliving1);
         BlockPosition blockposition1 = new BlockPosition(entityliving);
         float f = 0.3F;

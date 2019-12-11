@@ -9,7 +9,9 @@ public abstract class EntityGolem extends EntityCreature {
     }
 
     @Override
-    public void b(float f, float f1) {}
+    public boolean b(float f, float f1) {
+        return false;
+    }
 
     @Nullable
     @Override

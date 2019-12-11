@@ -74,11 +74,21 @@ public class SystemUtils {
         } else {
             object = new ForkJoinPool(i, (forkjoinpool) -> {
                 ForkJoinWorkerThread forkjoinworkerthread = new ForkJoinWorkerThread(forkjoinpool) {
+                    protected void onTermination(Throwable throwable) {
+                        if (throwable != null) {
+                            SystemUtils.LOGGER.warn("{} died", this.getName(), throwable);
+                        } else {
+                            SystemUtils.LOGGER.debug("{} shutdown", this.getName());
+                        }
+
+                        super.onTermination(throwable);
+                    }
                 };
 
                 forkjoinworkerthread.setName("Server-Worker-" + SystemUtils.b.getAndIncrement());
                 return forkjoinworkerthread;
             }, (thread, throwable) -> {
+                c(throwable);
                 if (throwable instanceof CompletionException) {
                     throwable = throwable.getCause();
                 }
@@ -238,6 +248,27 @@ public class SystemUtils {
 
     public static <T> Dynamic<T> a(String s, UUID uuid, Dynamic<T> dynamic) {
         return dynamic.set(s + "Most", dynamic.createLong(uuid.getMostSignificantBits())).set(s + "Least", dynamic.createLong(uuid.getLeastSignificantBits()));
+    }
+
+    public static <T extends Throwable> T c(T t0) {
+        if (SharedConstants.b) {
+            SystemUtils.LOGGER.error("Trying to throw a fatal exception, pausing in IDE", t0);
+
+            while (true) {
+                try {
+                    Thread.sleep(1000L);
+                    SystemUtils.LOGGER.error("paused");
+                } catch (InterruptedException interruptedexception) {
+                    return t0;
+                }
+            }
+        } else {
+            return t0;
+        }
+    }
+
+    public static String d(Throwable throwable) {
+        return throwable.getCause() != null ? d(throwable.getCause()) : (throwable.getMessage() != null ? throwable.getMessage() : throwable.toString());
     }
 
     static enum IdentityHashingStrategy implements Strategy<Object> {

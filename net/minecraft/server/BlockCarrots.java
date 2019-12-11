@@ -10,6 +10,6 @@ public class BlockCarrots extends BlockCrops {
 
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockCarrots.a[(Integer) iblockdata.get(this.d())];
+        return BlockCarrots.a[(Integer) iblockdata.get(this.c())];
     }
 }

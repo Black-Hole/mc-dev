@@ -23,7 +23,7 @@ public abstract class WorldGenFeatureDefinedStructurePoolStructure {
 
     public abstract StructureBoundingBox a(DefinedStructureManager definedstructuremanager, BlockPosition blockposition, EnumBlockRotation enumblockrotation);
 
-    public abstract boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccess generatoraccess, BlockPosition blockposition, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random);
+    public abstract boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, BlockPosition blockposition, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random);
 
     public abstract WorldGenFeatureDefinedStructurePools a();
 

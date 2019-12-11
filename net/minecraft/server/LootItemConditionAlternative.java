@@ -5,8 +5,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class LootItemConditionAlternative implements LootItemCondition {
@@ -24,11 +22,11 @@ public class LootItemConditionAlternative implements LootItemCondition {
     }
 
     @Override
-    public void a(LootCollector lootcollector, Function<MinecraftKey, LootTable> function, Set<MinecraftKey> set, LootContextParameterSet lootcontextparameterset) {
-        LootItemCondition.super.a(lootcollector, function, set, lootcontextparameterset);
+    public void a(LootCollector lootcollector) {
+        LootItemCondition.super.a(lootcollector);
 
         for (int i = 0; i < this.a.length; ++i) {
-            this.a[i].a(lootcollector.b(".term[" + i + "]"), function, set, lootcontextparameterset);
+            this.a[i].a(lootcollector.b(".term[" + i + "]"));
         }
 
     }

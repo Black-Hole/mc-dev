@@ -9,12 +9,12 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
 
     protected BlockCrops(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(this.d(), 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(this.c(), 0));
     }
 
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockCrops.a[(Integer) iblockdata.get(this.d())];
+        return BlockCrops.a[(Integer) iblockdata.get(this.c())];
     }
 
     @Override
@@ -22,37 +22,37 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
         return iblockdata.getBlock() == Blocks.FARMLAND;
     }
 
-    public BlockStateInteger d() {
+    public BlockStateInteger c() {
         return BlockCrops.AGE;
     }
 
-    public int e() {
+    public int d() {
         return 7;
     }
 
-    protected int j(IBlockData iblockdata) {
-        return (Integer) iblockdata.get(this.d());
+    protected int h(IBlockData iblockdata) {
+        return (Integer) iblockdata.get(this.c());
     }
 
     public IBlockData setAge(int i) {
-        return (IBlockData) this.getBlockData().set(this.d(), i);
+        return (IBlockData) this.getBlockData().set(this.c(), i);
     }
 
     public boolean isRipe(IBlockData iblockdata) {
-        return (Integer) iblockdata.get(this.d()) >= this.e();
+        return (Integer) iblockdata.get(this.c()) >= this.d();
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        super.tick(iblockdata, world, blockposition, random);
-        if (world.getLightLevel(blockposition, 0) >= 9) {
-            int i = this.j(iblockdata);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        super.tick(iblockdata, worldserver, blockposition, random);
+        if (worldserver.getLightLevel(blockposition, 0) >= 9) {
+            int i = this.h(iblockdata);
 
-            if (i < this.e()) {
-                float f = a((Block) this, (IBlockAccess) world, blockposition);
+            if (i < this.d()) {
+                float f = a((Block) this, (IBlockAccess) worldserver, blockposition);
 
                 if (random.nextInt((int) (25.0F / f) + 1) == 0) {
-                    world.setTypeAndData(blockposition, this.setAge(i + 1), 2);
+                    worldserver.setTypeAndData(blockposition, this.setAge(i + 1), 2);
                 }
             }
         }
@@ -60,8 +60,8 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        int i = this.j(iblockdata) + this.a(world);
-        int j = this.e();
+        int i = this.h(iblockdata) + this.a(world);
+        int j = this.d();
 
         if (i > j) {
             i = j;
@@ -126,7 +126,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
         if (entity instanceof EntityRavager && world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
-            world.b(blockposition, true);
+            world.a(blockposition, true, entity);
         }
 
         super.a(iblockdata, world, blockposition, entity);
@@ -143,8 +143,8 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     @Override
-    public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        this.a(world, blockposition, iblockdata);
+    public void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata) {
+        this.a((World) worldserver, blockposition, iblockdata);
     }
 
     @Override

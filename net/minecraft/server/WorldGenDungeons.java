@@ -10,8 +10,8 @@ import org.apache.logging.log4j.Logger;
 public class WorldGenDungeons extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final EntityTypes<?>[] aS = new EntityTypes[]{EntityTypes.SKELETON, EntityTypes.ZOMBIE, EntityTypes.ZOMBIE, EntityTypes.SPIDER};
-    private static final IBlockData aT = Blocks.CAVE_AIR.getBlockData();
+    private static final EntityTypes<?>[] aq = new EntityTypes[]{EntityTypes.SKELETON, EntityTypes.ZOMBIE, EntityTypes.ZOMBIE, EntityTypes.SPIDER};
+    private static final IBlockData ar = Blocks.CAVE_AIR.getBlockData();
 
     public WorldGenDungeons(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
         super(function);
@@ -63,10 +63,10 @@ public class WorldGenDungeons extends WorldGenerator<WorldGenFeatureEmptyConfigu
                         blockposition1 = blockposition.b(l1, i2, j2);
                         if (l1 != j && i2 != -1 && j2 != i1 && l1 != k && i2 != 4 && j2 != j1) {
                             if (generatoraccess.getType(blockposition1).getBlock() != Blocks.CHEST) {
-                                generatoraccess.setTypeAndData(blockposition1, WorldGenDungeons.aT, 2);
+                                generatoraccess.setTypeAndData(blockposition1, WorldGenDungeons.ar, 2);
                             }
                         } else if (blockposition1.getY() >= 0 && !generatoraccess.getType(blockposition1.down()).getMaterial().isBuildable()) {
-                            generatoraccess.setTypeAndData(blockposition1, WorldGenDungeons.aT, 2);
+                            generatoraccess.setTypeAndData(blockposition1, WorldGenDungeons.ar, 2);
                         } else if (generatoraccess.getType(blockposition1).getMaterial().isBuildable() && generatoraccess.getType(blockposition1).getBlock() != Blocks.CHEST) {
                             if (i2 == -1 && random.nextInt(4) != 0) {
                                 generatoraccess.setTypeAndData(blockposition1, Blocks.MOSSY_COBBLESTONE.getBlockData(), 2);
@@ -137,6 +137,6 @@ public class WorldGenDungeons extends WorldGenerator<WorldGenFeatureEmptyConfigu
     }
 
     private EntityTypes<?> a(Random random) {
-        return WorldGenDungeons.aS[random.nextInt(WorldGenDungeons.aS.length)];
+        return WorldGenDungeons.aq[random.nextInt(WorldGenDungeons.aq.length)];
     }
 }

@@ -112,7 +112,7 @@ public class WorldGenMineshaftPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             if (this.a((IBlockAccess) generatoraccess, structureboundingbox)) {
                 return false;
             } else {
@@ -234,7 +234,7 @@ public class WorldGenMineshaftPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             if (this.a((IBlockAccess) generatoraccess, structureboundingbox)) {
                 return false;
             } else {
@@ -306,7 +306,7 @@ public class WorldGenMineshaftPieces {
             this.n = structureboundingbox;
             this.b = random.nextInt(3) == 0;
             this.c = !this.b && random.nextInt(23) == 0;
-            if (this.i().k() == EnumDirection.EnumAxis.Z) {
+            if (this.i().m() == EnumDirection.EnumAxis.Z) {
                 this.e = structureboundingbox.e() / 5;
             } else {
                 this.e = structureboundingbox.c() / 5;
@@ -442,7 +442,7 @@ public class WorldGenMineshaftPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             if (this.a((IBlockAccess) generatoraccess, structureboundingbox)) {
                 return false;
             } else {
@@ -646,7 +646,7 @@ public class WorldGenMineshaftPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             if (this.a((IBlockAccess) generatoraccess, structureboundingbox)) {
                 return false;
             } else {

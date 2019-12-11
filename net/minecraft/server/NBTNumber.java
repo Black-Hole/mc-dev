@@ -16,5 +16,5 @@ public abstract class NBTNumber implements NBTBase {
 
     public abstract float asFloat();
 
-    public abstract Number j();
+    public abstract Number k();
 }

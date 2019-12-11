@@ -75,8 +75,8 @@ public class RecipeBannerDuplicate extends IRecipeComplex {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
             if (!itemstack.isEmpty()) {
-                if (itemstack.getItem().o()) {
-                    nonnulllist.set(i, new ItemStack(itemstack.getItem().n()));
+                if (itemstack.getItem().q()) {
+                    nonnulllist.set(i, new ItemStack(itemstack.getItem().p()));
                 } else if (itemstack.hasTag() && TileEntityBanner.a(itemstack) > 0) {
                     ItemStack itemstack1 = itemstack.cloneItemStack();
 

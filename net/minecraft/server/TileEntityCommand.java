@@ -42,7 +42,7 @@ public class TileEntityCommand extends TileEntity {
         super.save(nbttagcompound);
         this.h.a(nbttagcompound);
         nbttagcompound.setBoolean("powered", this.f());
-        nbttagcompound.setBoolean("conditionMet", this.h());
+        nbttagcompound.setBoolean("conditionMet", this.j());
         nbttagcompound.setBoolean("auto", this.g());
         return nbttagcompound;
     }
@@ -59,7 +59,7 @@ public class TileEntityCommand extends TileEntity {
     @Nullable
     @Override
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        if (this.t()) {
+        if (this.l()) {
             this.c(false);
             NBTTagCompound nbttagcompound = this.save(new NBTTagCompound());
 
@@ -94,24 +94,38 @@ public class TileEntityCommand extends TileEntity {
         boolean flag1 = this.b;
 
         this.b = flag;
-        if (!flag1 && flag && !this.a && this.world != null && this.u() != TileEntityCommand.Type.SEQUENCE) {
-            Block block = this.getBlock().getBlock();
-
-            if (block instanceof BlockCommand) {
-                this.s();
-                this.world.getBlockTickList().a(this.position, block, block.a((IWorldReader) this.world));
-            }
+        if (!flag1 && flag && !this.a && this.world != null && this.m() != TileEntityCommand.Type.SEQUENCE) {
+            this.y();
         }
 
     }
 
-    public boolean h() {
+    public void h() {
+        TileEntityCommand.Type tileentitycommand_type = this.m();
+
+        if (tileentitycommand_type == TileEntityCommand.Type.AUTO && (this.a || this.b) && this.world != null) {
+            this.y();
+        }
+
+    }
+
+    private void y() {
+        Block block = this.getBlock().getBlock();
+
+        if (block instanceof BlockCommand) {
+            this.k();
+            this.world.getBlockTickList().a(this.position, block, block.a((IWorldReader) this.world));
+        }
+
+    }
+
+    public boolean j() {
         return this.c;
     }
 
-    public boolean s() {
+    public boolean k() {
         this.c = true;
-        if (this.v()) {
+        if (this.x()) {
             BlockPosition blockposition = this.position.shift(((EnumDirection) this.world.getType(this.position).get(BlockCommand.a)).opposite());
 
             if (this.world.getType(blockposition).getBlock() instanceof BlockCommand) {
@@ -126,7 +140,7 @@ public class TileEntityCommand extends TileEntity {
         return this.c;
     }
 
-    public boolean t() {
+    public boolean l() {
         return this.g;
     }
 
@@ -134,22 +148,22 @@ public class TileEntityCommand extends TileEntity {
         this.g = flag;
     }
 
-    public TileEntityCommand.Type u() {
+    public TileEntityCommand.Type m() {
         Block block = this.getBlock().getBlock();
 
         return block == Blocks.COMMAND_BLOCK ? TileEntityCommand.Type.REDSTONE : (block == Blocks.REPEATING_COMMAND_BLOCK ? TileEntityCommand.Type.AUTO : (block == Blocks.CHAIN_COMMAND_BLOCK ? TileEntityCommand.Type.SEQUENCE : TileEntityCommand.Type.REDSTONE));
     }
 
-    public boolean v() {
+    public boolean x() {
         IBlockData iblockdata = this.world.getType(this.getPosition());
 
         return iblockdata.getBlock() instanceof BlockCommand ? (Boolean) iblockdata.get(BlockCommand.b) : false;
     }
 
     @Override
-    public void n() {
+    public void r() {
         this.invalidateBlockCache();
-        super.n();
+        super.r();
     }
 
     public static enum Type {

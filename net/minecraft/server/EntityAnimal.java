@@ -36,7 +36,7 @@ public abstract class EntityAnimal extends EntityAgeable {
                 double d1 = this.random.nextGaussian() * 0.02D;
                 double d2 = this.random.nextGaussian() * 0.02D;
 
-                this.world.addParticle(Particles.HEART, this.locX + (double) (this.random.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.locY + 0.5D + (double) (this.random.nextFloat() * this.getHeight()), this.locZ + (double) (this.random.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d0, d1, d2);
+                this.world.addParticle(Particles.HEART, this.d(1.0D), this.cv() + 0.5D, this.g(1.0D), d0, d1, d2);
             }
         }
 
@@ -54,7 +54,7 @@ public abstract class EntityAnimal extends EntityAgeable {
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return iworldreader.getType(blockposition.down()).getBlock() == Blocks.GRASS_BLOCK ? 10.0F : iworldreader.v(blockposition) - 0.5F;
+        return iworldreader.getType(blockposition.down()).getBlock() == Blocks.GRASS_BLOCK ? 10.0F : iworldreader.w(blockposition) - 0.5F;
     }
 
     @Override
@@ -68,7 +68,7 @@ public abstract class EntityAnimal extends EntityAgeable {
     }
 
     @Override
-    public double aO() {
+    public double aR() {
         return 0.14D;
     }
 
@@ -107,9 +107,10 @@ public abstract class EntityAnimal extends EntityAgeable {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (this.i(itemstack)) {
-            if (this.getAge() == 0 && this.ea()) {
+            if (!this.world.isClientSide && this.getAge() == 0 && this.ev()) {
                 this.a(entityhuman, itemstack);
                 this.f(entityhuman);
+                entityhuman.a(enumhand, true);
                 return true;
             }
 
@@ -130,7 +131,7 @@ public abstract class EntityAnimal extends EntityAgeable {
 
     }
 
-    public boolean ea() {
+    public boolean ev() {
         return this.loveTicks <= 0;
     }
 

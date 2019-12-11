@@ -6,15 +6,15 @@ import javax.annotation.Nullable;
 
 public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITileEntity {
 
-    public static final BlockStateEnum<BlockPropertyComparatorMode> MODE = BlockProperties.ay;
+    public static final BlockStateEnum<BlockPropertyComparatorMode> MODE = BlockProperties.az;
 
     public BlockRedstoneComparator(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneComparator.FACING, EnumDirection.NORTH)).set(BlockRedstoneComparator.c, false)).set(BlockRedstoneComparator.MODE, BlockPropertyComparatorMode.COMPARE));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneComparator.FACING, EnumDirection.NORTH)).set(BlockRedstoneComparator.c, false)).set(BlockRedstoneComparator.MODE, BlockPropertyComparatorMode.COMPARE));
     }
 
     @Override
-    protected int j(IBlockData iblockdata) {
+    protected int h(IBlockData iblockdata) {
         return 2;
     }
 
@@ -33,7 +33,13 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
     protected boolean a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         int i = this.b(world, blockposition, iblockdata);
 
-        return i >= 15 ? true : (i == 0 ? false : i >= this.b((IWorldReader) world, blockposition, iblockdata));
+        if (i == 0) {
+            return false;
+        } else {
+            int j = this.b((IWorldReader) world, blockposition, iblockdata);
+
+            return i > j ? true : i == j && iblockdata.get(BlockRedstoneComparator.MODE) == BlockPropertyComparatorMode.COMPARE;
+        }
     }
 
     @Override
@@ -72,9 +78,9 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (!entityhuman.abilities.mayBuild) {
-            return false;
+            return EnumInteractionResult.PASS;
         } else {
             iblockdata = (IBlockData) iblockdata.a((IBlockState) BlockRedstoneComparator.MODE);
             float f = iblockdata.get(BlockRedstoneComparator.MODE) == BlockPropertyComparatorMode.SUBTRACT ? 0.55F : 0.5F;
@@ -82,7 +88,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
             world.playSound(entityhuman, blockposition, SoundEffects.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3F, f);
             world.setTypeAndData(blockposition, iblockdata, 2);
             this.f(world, blockposition, iblockdata);
-            return true;
+            return EnumInteractionResult.SUCCESS;
         }
     }
 
@@ -130,8 +136,8 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        this.f(world, blockposition, iblockdata);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        this.f(worldserver, blockposition, iblockdata);
     }
 
     @Override

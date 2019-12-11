@@ -143,7 +143,7 @@ public class WorldGenFeatureOceanRuinPieces {
         @Override
         protected void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
             if ("chest".equals(s)) {
-                generatoraccess.setTypeAndData(blockposition, (IBlockData) Blocks.CHEST.getBlockData().set(BlockChest.c, generatoraccess.getFluid(blockposition).a(TagsFluid.WATER)), 2);
+                generatoraccess.setTypeAndData(blockposition, (IBlockData) Blocks.CHEST.getBlockData().set(BlockChest.d, generatoraccess.getFluid(blockposition).a(TagsFluid.WATER)), 2);
                 TileEntity tileentity = generatoraccess.getTileEntity(blockposition);
 
                 if (tileentity instanceof TileEntityChest) {
@@ -166,7 +166,7 @@ public class WorldGenFeatureOceanRuinPieces {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.b.b().a((DefinedStructureProcessor) (new DefinedStructureProcessorRotation(this.e))).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.c);
             int i = generatoraccess.a(HeightMap.Type.OCEAN_FLOOR_WG, this.c.getX(), this.c.getZ());
 
@@ -174,7 +174,7 @@ public class WorldGenFeatureOceanRuinPieces {
             BlockPosition blockposition = DefinedStructure.a(new BlockPosition(this.a.a().getX() - 1, 0, this.a.a().getZ() - 1), EnumBlockMirror.NONE, this.g, BlockPosition.ZERO).a((BaseBlockPosition) this.c);
 
             this.c = new BlockPosition(this.c.getX(), this.a(this.c, (IBlockAccess) generatoraccess, blockposition), this.c.getZ());
-            return super.a(generatoraccess, random, structureboundingbox, chunkcoordintpair);
+            return super.a(generatoraccess, chunkgenerator, random, structureboundingbox, chunkcoordintpair);
         }
 
         private int a(BlockPosition blockposition, IBlockAccess iblockaccess, BlockPosition blockposition1) {

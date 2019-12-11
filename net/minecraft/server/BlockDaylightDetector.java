@@ -2,13 +2,13 @@ package net.minecraft.server;
 
 public class BlockDaylightDetector extends BlockTileEntity {
 
-    public static final BlockStateInteger POWER = BlockProperties.as;
+    public static final BlockStateInteger POWER = BlockProperties.at;
     public static final BlockStateBoolean b = BlockProperties.p;
     protected static final VoxelShape c = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D);
 
     public BlockDaylightDetector(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDaylightDetector.POWER, 0)).set(BlockDaylightDetector.b, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDaylightDetector.POWER, 0)).set(BlockDaylightDetector.b, false));
     }
 
     @Override
@@ -17,7 +17,7 @@ public class BlockDaylightDetector extends BlockTileEntity {
     }
 
     @Override
-    public boolean n(IBlockData iblockdata) {
+    public boolean o(IBlockData iblockdata) {
         return true;
     }
 
@@ -27,9 +27,9 @@ public class BlockDaylightDetector extends BlockTileEntity {
     }
 
     public static void d(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        if (world.worldProvider.g()) {
+        if (world.worldProvider.f()) {
             int i = world.getBrightness(EnumSkyBlock.SKY, blockposition) - world.c();
-            float f = world.b(1.0F);
+            float f = world.a(1.0F);
             boolean flag = (Boolean) iblockdata.get(BlockDaylightDetector.b);
 
             if (flag) {
@@ -50,16 +50,16 @@ public class BlockDaylightDetector extends BlockTileEntity {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        if (entityhuman.dQ()) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+        if (entityhuman.ep()) {
             if (world.isClientSide) {
-                return true;
+                return EnumInteractionResult.SUCCESS;
             } else {
                 IBlockData iblockdata1 = (IBlockData) iblockdata.a((IBlockState) BlockDaylightDetector.b);
 
                 world.setTypeAndData(blockposition, iblockdata1, 4);
                 d(iblockdata1, world, blockposition);
-                return true;
+                return EnumInteractionResult.SUCCESS;
             }
         } else {
             return super.interact(iblockdata, world, blockposition, entityhuman, enumhand, movingobjectpositionblock);

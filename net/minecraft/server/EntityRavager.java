@@ -10,13 +10,13 @@ public class EntityRavager extends EntityRaider {
     private static final Predicate<Entity> b = (entity) -> {
         return entity.isAlive() && !(entity instanceof EntityRavager);
     };
-    private int bz;
-    private int bA;
-    private int bB;
+    private int bw;
+    private int bx;
+    private int by;
 
     public EntityRavager(EntityTypes<? extends EntityRavager> entitytypes, World world) {
         super(entitytypes, world);
-        this.K = 1.0F;
+        this.H = 1.0F;
         this.f = 20;
     }
 
@@ -59,21 +59,21 @@ public class EntityRavager extends EntityRaider {
     @Override
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("AttackTick", this.bz);
-        nbttagcompound.setInt("StunTick", this.bA);
-        nbttagcompound.setInt("RoarTick", this.bB);
+        nbttagcompound.setInt("AttackTick", this.bw);
+        nbttagcompound.setInt("StunTick", this.bx);
+        nbttagcompound.setInt("RoarTick", this.by);
     }
 
     @Override
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.bz = nbttagcompound.getInt("AttackTick");
-        this.bA = nbttagcompound.getInt("StunTick");
-        this.bB = nbttagcompound.getInt("RoarTick");
+        this.bw = nbttagcompound.getInt("AttackTick");
+        this.bx = nbttagcompound.getInt("StunTick");
+        this.by = nbttagcompound.getInt("RoarTick");
     }
 
     @Override
-    public SoundEffect dV() {
+    public SoundEffect eq() {
         return SoundEffects.ENTITY_RAVAGER_CELEBRATE;
     }
 
@@ -83,17 +83,17 @@ public class EntityRavager extends EntityRaider {
     }
 
     @Override
-    public int dA() {
+    public int dV() {
         return 45;
     }
 
     @Override
-    public double aP() {
+    public double aS() {
         return 2.1D;
     }
 
     @Override
-    public boolean dD() {
+    public boolean dY() {
         return !this.isNoAI() && this.getRidingPassenger() instanceof EntityLiving;
     }
 
@@ -127,7 +127,7 @@ public class EntityRavager extends EntityRaider {
                     Block block = iblockdata.getBlock();
 
                     if (block instanceof BlockLeaves) {
-                        flag = this.world.b(blockposition, true) || flag;
+                        flag = this.world.a(blockposition, true, this) || flag;
                     }
                 }
 
@@ -136,34 +136,34 @@ public class EntityRavager extends EntityRaider {
                 }
             }
 
-            if (this.bB > 0) {
-                --this.bB;
-                if (this.bB == 10) {
-                    this.eh();
+            if (this.by > 0) {
+                --this.by;
+                if (this.by == 10) {
+                    this.eC();
                 }
             }
 
-            if (this.bz > 0) {
-                --this.bz;
+            if (this.bw > 0) {
+                --this.bw;
             }
 
-            if (this.bA > 0) {
-                --this.bA;
-                this.eg();
-                if (this.bA == 0) {
+            if (this.bx > 0) {
+                --this.bx;
+                this.eB();
+                if (this.bx == 0) {
                     this.a(SoundEffects.ENTITY_RAVAGER_ROAR, 1.0F, 1.0F);
-                    this.bB = 20;
+                    this.by = 20;
                 }
             }
 
         }
     }
 
-    private void eg() {
+    private void eB() {
         if (this.random.nextInt(6) == 0) {
-            double d0 = this.locX - (double) this.getWidth() * Math.sin((double) (this.aK * 0.017453292F)) + (this.random.nextDouble() * 0.6D - 0.3D);
-            double d1 = this.locY + (double) this.getHeight() - 0.3D;
-            double d2 = this.locZ + (double) this.getWidth() * Math.cos((double) (this.aK * 0.017453292F)) + (this.random.nextDouble() * 0.6D - 0.3D);
+            double d0 = this.locX() - (double) this.getWidth() * Math.sin((double) (this.aI * 0.017453292F)) + (this.random.nextDouble() * 0.6D - 0.3D);
+            double d1 = this.locY() + (double) this.getHeight() - 0.3D;
+            double d2 = this.locZ() + (double) this.getWidth() * Math.cos((double) (this.aI * 0.017453292F)) + (this.random.nextDouble() * 0.6D - 0.3D);
 
             this.world.addParticle(Particles.ENTITY_EFFECT, d0, d1, d2, 0.4980392156862745D, 0.5137254901960784D, 0.5725490196078431D);
         }
@@ -172,19 +172,19 @@ public class EntityRavager extends EntityRaider {
 
     @Override
     protected boolean isFrozen() {
-        return super.isFrozen() || this.bz > 0 || this.bA > 0 || this.bB > 0;
+        return super.isFrozen() || this.bw > 0 || this.bx > 0 || this.by > 0;
     }
 
     @Override
     public boolean hasLineOfSight(Entity entity) {
-        return this.bA <= 0 && this.bB <= 0 ? super.hasLineOfSight(entity) : false;
+        return this.bx <= 0 && this.by <= 0 ? super.hasLineOfSight(entity) : false;
     }
 
     @Override
     protected void e(EntityLiving entityliving) {
-        if (this.bB == 0) {
+        if (this.by == 0) {
             if (this.random.nextDouble() < 0.5D) {
-                this.bA = 40;
+                this.bx = 40;
                 this.a(SoundEffects.ENTITY_RAVAGER_STUNNED, 1.0F, 1.0F);
                 this.world.broadcastEntityEffect(this, (byte) 39);
                 entityliving.collide(this);
@@ -197,7 +197,7 @@ public class EntityRavager extends EntityRaider {
 
     }
 
-    private void eh() {
+    private void eC() {
         if (this.isAlive()) {
             List<Entity> list = this.world.a(EntityLiving.class, this.getBoundingBox().g(4.0D), EntityRavager.b);
 
@@ -224,19 +224,19 @@ public class EntityRavager extends EntityRaider {
     }
 
     private void a(Entity entity) {
-        double d0 = entity.locX - this.locX;
-        double d1 = entity.locZ - this.locZ;
+        double d0 = entity.locX() - this.locX();
+        double d1 = entity.locZ() - this.locZ();
         double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
 
-        entity.f(d0 / d2 * 4.0D, 0.2D, d1 / d2 * 4.0D);
+        entity.h(d0 / d2 * 4.0D, 0.2D, d1 / d2 * 4.0D);
     }
 
     @Override
-    public boolean C(Entity entity) {
-        this.bz = 10;
+    public boolean B(Entity entity) {
+        this.bw = 10;
         this.world.broadcastEntityEffect(this, (byte) 4);
         this.a(SoundEffects.ENTITY_RAVAGER_ATTACK, 1.0F, 1.0F);
-        return super.C(entity);
+        return super.B(entity);
     }
 
     @Nullable
@@ -269,7 +269,7 @@ public class EntityRavager extends EntityRaider {
     public void a(int i, boolean flag) {}
 
     @Override
-    public boolean dX() {
+    public boolean es() {
         return false;
     }
 

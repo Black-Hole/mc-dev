@@ -6,12 +6,36 @@ import java.io.IOException;
 
 public class NBTTagInt extends NBTNumber {
 
-    private int data;
+    public static final NBTTagType<NBTTagInt> a = new NBTTagType<NBTTagInt>() {
+        @Override
+        public NBTTagInt b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+            nbtreadlimiter.a(96L);
+            return NBTTagInt.a(datainput.readInt());
+        }
 
-    NBTTagInt() {}
+        @Override
+        public String a() {
+            return "INT";
+        }
 
-    public NBTTagInt(int i) {
+        @Override
+        public String b() {
+            return "TAG_Int";
+        }
+
+        @Override
+        public boolean c() {
+            return true;
+        }
+    };
+    private final int data;
+
+    private NBTTagInt(int i) {
         this.data = i;
+    }
+
+    public static NBTTagInt a(int i) {
+        return i >= -128 && i <= 1024 ? NBTTagInt.a.a[i + 128] : new NBTTagInt(i);
     }
 
     @Override
@@ -20,14 +44,13 @@ public class NBTTagInt extends NBTNumber {
     }
 
     @Override
-    public void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
-        nbtreadlimiter.a(96L);
-        this.data = datainput.readInt();
+    public byte getTypeId() {
+        return 3;
     }
 
     @Override
-    public byte getTypeId() {
-        return 3;
+    public NBTTagType<NBTTagInt> b() {
+        return NBTTagInt.a;
     }
 
     @Override
@@ -37,7 +60,7 @@ public class NBTTagInt extends NBTNumber {
 
     @Override
     public NBTTagInt clone() {
-        return new NBTTagInt(this.data);
+        return this;
     }
 
     public boolean equals(Object object) {
@@ -50,7 +73,7 @@ public class NBTTagInt extends NBTNumber {
 
     @Override
     public IChatBaseComponent a(String s, int i) {
-        return (new ChatComponentText(String.valueOf(this.data))).a(NBTTagInt.d);
+        return (new ChatComponentText(String.valueOf(this.data))).a(NBTTagInt.f);
     }
 
     @Override
@@ -84,7 +107,19 @@ public class NBTTagInt extends NBTNumber {
     }
 
     @Override
-    public Number j() {
+    public Number k() {
         return this.data;
+    }
+
+    static class a {
+
+        static final NBTTagInt[] a = new NBTTagInt[1153];
+
+        static {
+            for (int i = 0; i < NBTTagInt.a.a.length; ++i) {
+                NBTTagInt.a.a[i] = new NBTTagInt(-128 + i);
+            }
+
+        }
     }
 }

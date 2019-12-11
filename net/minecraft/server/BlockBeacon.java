@@ -17,9 +17,9 @@ public class BlockBeacon extends BlockTileEntity implements IBeaconBeam {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (world.isClientSide) {
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -28,7 +28,7 @@ public class BlockBeacon extends BlockTileEntity implements IBeaconBeam {
                 entityhuman.a(StatisticList.INTERACT_WITH_BEACON);
             }
 
-            return true;
+            return EnumInteractionResult.SUCCESS;
         }
     }
 
@@ -52,10 +52,5 @@ public class BlockBeacon extends BlockTileEntity implements IBeaconBeam {
             }
         }
 
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 }

@@ -7,7 +7,7 @@ public class BlockCake extends Block {
 
     protected BlockCake(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCake.BITES, 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCake.BITES, 0));
     }
 
     @Override
@@ -16,19 +16,25 @@ public class BlockCake extends Block {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        if (!world.isClientSide) {
-            return this.a((GeneratorAccess) world, blockposition, iblockdata, entityhuman);
-        } else {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+        if (world.isClientSide) {
             ItemStack itemstack = entityhuman.b(enumhand);
 
-            return this.a((GeneratorAccess) world, blockposition, iblockdata, entityhuman) || itemstack.isEmpty();
+            if (this.a((GeneratorAccess) world, blockposition, iblockdata, entityhuman) == EnumInteractionResult.SUCCESS) {
+                return EnumInteractionResult.SUCCESS;
+            }
+
+            if (itemstack.isEmpty()) {
+                return EnumInteractionResult.CONSUME;
+            }
         }
+
+        return this.a((GeneratorAccess) world, blockposition, iblockdata, entityhuman);
     }
 
-    private boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
+    private EnumInteractionResult a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
         if (!entityhuman.p(false)) {
-            return false;
+            return EnumInteractionResult.PASS;
         } else {
             entityhuman.a(StatisticList.EAT_CAKE_SLICE);
             entityhuman.getFoodData().eat(2, 0.1F);
@@ -40,7 +46,7 @@ public class BlockCake extends Block {
                 generatoraccess.a(blockposition, false);
             }
 
-            return true;
+            return EnumInteractionResult.SUCCESS;
         }
     }
 

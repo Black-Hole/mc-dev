@@ -106,6 +106,10 @@ public class ChunkCoordIntPair {
         return new BlockPosition(this.x << 4, 0, this.z << 4);
     }
 
+    public int a(ChunkCoordIntPair chunkcoordintpair) {
+        return Math.max(Math.abs(this.x - chunkcoordintpair.x), Math.abs(this.z - chunkcoordintpair.z));
+    }
+
     public static Stream<ChunkCoordIntPair> a(ChunkCoordIntPair chunkcoordintpair, int i) {
         return a(new ChunkCoordIntPair(chunkcoordintpair.x - i, chunkcoordintpair.z - i), new ChunkCoordIntPair(chunkcoordintpair.x + i, chunkcoordintpair.z + i));
     }

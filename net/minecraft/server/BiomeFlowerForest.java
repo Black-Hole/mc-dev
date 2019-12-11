@@ -1,21 +1,23 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableList;
+
 public final class BiomeFlowerForest extends BiomeBase {
 
     public BiomeFlowerForest() {
         super((new BiomeBase.a()).a(WorldGenSurface.G, WorldGenSurface.v).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.FOREST).a(0.1F).b(0.4F).c(0.7F).d(0.8F).a(4159204).b(329011).a("forest"));
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
-        this.a(WorldGenerator.STRONGHOLD, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
+        this.a(WorldGenerator.STRONGHOLD.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);
         BiomeDecoratorGroups.f(this);
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.RANDOM_RANDOM_SELECTOR, new WorldGenFeatureRandomConfiguration(new WorldGenerator[]{WorldGenerator.DOUBLE_PLANT, WorldGenerator.DOUBLE_PLANT, WorldGenerator.DOUBLE_PLANT, WorldGenerator.GENERAL_FOREST_FLOWER}, new WorldGenFeatureConfiguration[]{new WorldGenFeatureDoublePlantConfiguration(Blocks.LILAC.getBlockData()), new WorldGenFeatureDoublePlantConfiguration(Blocks.ROSE_BUSH.getBlockData()), new WorldGenFeatureDoublePlantConfiguration(Blocks.PEONY.getBlockData()), WorldGenFeatureConfiguration.e}, 2), WorldGenDecorator.c, new WorldGenDecoratorFrequencyConfiguration(5)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_RANDOM_SELECTOR.b((WorldGenFeatureConfiguration) (new WorldGenFeatureRandomConfiguration(ImmutableList.of(WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.K), WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.L), WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.M), WorldGenerator.FLOWER.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.x)), 2))).a(WorldGenDecorator.d.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(5)))));
         BiomeDecoratorGroups.g(this);
         BiomeDecoratorGroups.h(this);
         BiomeDecoratorGroups.l(this);
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[]{WorldGenerator.BIRCH_TREE, WorldGenerator.FANCY_TREE}, new WorldGenFeatureConfiguration[]{WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[]{0.2F, 0.1F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.m, new WorldGenDecoratorFrequencyExtraChanceConfiguration(6, 0.1F, 1)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.FOREST_FLOWER, WorldGenFeatureConfiguration.e, WorldGenDecorator.c, new WorldGenDecoratorFrequencyConfiguration(100)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_SELECTOR.b((WorldGenFeatureConfiguration) (new WorldGenFeatureRandomChoiceConfiguration(ImmutableList.of(WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.o).a(0.2F), WorldGenerator.FANCY_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.n).a(0.1F)), WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.m)))).a(WorldGenDecorator.m.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyExtraChanceConfiguration(6, 0.1F, 1)))));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.FLOWER.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.B).a(WorldGenDecorator.d.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(100)))));
         BiomeDecoratorGroups.W(this);
         BiomeDecoratorGroups.Z(this);
         BiomeDecoratorGroups.aa(this);

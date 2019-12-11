@@ -20,7 +20,7 @@ public final class ItemStack {
 
     private static final Logger LOGGER = LogManager.getLogger();
     public static final ItemStack a = new ItemStack((Item) null);
-    public static final DecimalFormat b = F();
+    public static final DecimalFormat b = H();
     private int count;
     private int e;
     @Deprecated
@@ -33,7 +33,7 @@ public final class ItemStack {
     private ShapeDetectorBlock l;
     private boolean m;
 
-    private static DecimalFormat F() {
+    private static DecimalFormat H() {
         DecimalFormat decimalformat = new DecimalFormat("#.##");
 
         decimalformat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ROOT));
@@ -47,6 +47,10 @@ public final class ItemStack {
     public ItemStack(IMaterial imaterial, int i) {
         this.item = imaterial == null ? null : imaterial.getItem();
         this.count = i;
+        if (this.item != null && this.item.usesDurability()) {
+            this.setDamage(this.getDamage());
+        }
+
         this.checkEmpty();
     }
 
@@ -133,7 +137,7 @@ public final class ItemStack {
         nbttagcompound.setString("id", minecraftkey == null ? "minecraft:air" : minecraftkey.toString());
         nbttagcompound.setByte("Count", (byte) this.count);
         if (this.tag != null) {
-            nbttagcompound.set("tag", this.tag);
+            nbttagcompound.set("tag", this.tag.clone());
         }
 
         return nbttagcompound;
@@ -242,7 +246,7 @@ public final class ItemStack {
 
     }
 
-    public boolean b(IBlockData iblockdata) {
+    public boolean canDestroySpecialBlock(IBlockData iblockdata) {
         return this.getItem().canDestroySpecialBlock(iblockdata);
     }
 
@@ -251,14 +255,18 @@ public final class ItemStack {
     }
 
     public ItemStack cloneItemStack() {
-        ItemStack itemstack = new ItemStack(this.getItem(), this.count);
+        if (this.isEmpty()) {
+            return ItemStack.a;
+        } else {
+            ItemStack itemstack = new ItemStack(this.getItem(), this.count);
 
-        itemstack.d(this.C());
-        if (this.tag != null) {
-            itemstack.tag = this.tag.clone();
+            itemstack.d(this.C());
+            if (this.tag != null) {
+                itemstack.tag = this.tag.clone();
+            }
+
+            return itemstack;
         }
-
-        return itemstack;
     }
 
     public static boolean equals(ItemStack itemstack, ItemStack itemstack1) {
@@ -434,6 +442,10 @@ public final class ItemStack {
         return nbttagcompound != null && nbttagcompound.hasKeyOfType("Name", 8);
     }
 
+    public boolean u() {
+        return this.getItem().d_(this);
+    }
+
     public EnumItemRarity v() {
         return this.getItem().h(this);
     }
@@ -504,6 +516,9 @@ public final class ItemStack {
             object = this.getItem().a(enumitemslot);
         }
 
+        ((Multimap) object).values().forEach((attributemodifier1) -> {
+            attributemodifier1.a(false);
+        });
         return (Multimap) object;
     }
 
@@ -637,5 +652,13 @@ public final class ItemStack {
 
     public boolean E() {
         return this.getItem().isFood();
+    }
+
+    public SoundEffect F() {
+        return this.getItem().U_();
+    }
+
+    public SoundEffect G() {
+        return this.getItem().S_();
     }
 }

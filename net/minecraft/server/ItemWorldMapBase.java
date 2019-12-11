@@ -9,7 +9,7 @@ public class ItemWorldMapBase extends Item {
     }
 
     @Override
-    public boolean O_() {
+    public boolean R_() {
         return true;
     }
 

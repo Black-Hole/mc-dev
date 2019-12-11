@@ -21,7 +21,7 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
 
     protected BlockPumpkinCarved(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPumpkinCarved.a, EnumDirection.NORTH));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPumpkinCarved.a, EnumDirection.NORTH));
     }
 
     @Override
@@ -32,7 +32,7 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
     }
 
     public boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
-        return this.d().a(iworldreader, blockposition) != null || this.f().a(iworldreader, blockposition) != null;
+        return this.c().a(iworldreader, blockposition) != null || this.e().a(iworldreader, blockposition) != null;
     }
 
     private void a(World world, BlockPosition blockposition) {
@@ -114,7 +114,7 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
         blockstatelist_a.a(BlockPumpkinCarved.a);
     }
 
-    private ShapeDetector d() {
+    private ShapeDetector c() {
         if (this.b == null) {
             this.b = ShapeDetectorBuilder.a().a(" ", "#", "#").a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SNOW_BLOCK))).b();
         }
@@ -130,7 +130,7 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
         return this.c;
     }
 
-    private ShapeDetector f() {
+    private ShapeDetector e() {
         if (this.d == null) {
             this.d = ShapeDetectorBuilder.a().a("~ ~", "###", "~#~").a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.IRON_BLOCK))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
         }
@@ -144,5 +144,10 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
         }
 
         return this.e;
+    }
+
+    @Override
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EntityTypes<?> entitytypes) {
+        return true;
     }
 }

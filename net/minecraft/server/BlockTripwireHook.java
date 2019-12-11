@@ -16,7 +16,7 @@ public class BlockTripwireHook extends Block {
 
     public BlockTripwireHook(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTripwireHook.FACING, EnumDirection.NORTH)).set(BlockTripwireHook.POWERED, false)).set(BlockTripwireHook.ATTACHED, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTripwireHook.FACING, EnumDirection.NORTH)).set(BlockTripwireHook.POWERED, false)).set(BlockTripwireHook.ATTACHED, false));
     }
 
     @Override
@@ -40,7 +40,7 @@ public class BlockTripwireHook extends Block {
         BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
 
-        return enumdirection.k().c() && iblockdata1.d(iworldreader, blockposition1, enumdirection) && !iblockdata1.isPowerSource();
+        return enumdirection.m().c() && iblockdata1.d(iworldreader, blockposition1, enumdirection) && !iblockdata1.isPowerSource();
     }
 
     @Override
@@ -61,7 +61,7 @@ public class BlockTripwireHook extends Block {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection1[j];
 
-            if (enumdirection.k().c()) {
+            if (enumdirection.m().c()) {
                 EnumDirection enumdirection1 = enumdirection.opposite();
 
                 iblockdata = (IBlockData) iblockdata.set(BlockTripwireHook.FACING, enumdirection1);
@@ -159,8 +159,8 @@ public class BlockTripwireHook extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        this.a(world, blockposition, iblockdata, false, true, -1, (IBlockData) null);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        this.a(worldserver, blockposition, iblockdata, false, true, -1, (IBlockData) null);
     }
 
     private void a(World world, BlockPosition blockposition, boolean flag, boolean flag1, boolean flag2, boolean flag3) {
@@ -213,11 +213,6 @@ public class BlockTripwireHook extends Block {
     @Override
     public boolean isPowerSource(IBlockData iblockdata) {
         return true;
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT_MIPPED;
     }
 
     @Override

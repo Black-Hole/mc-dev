@@ -165,7 +165,7 @@ public class UserCache {
     }
 
     @Nullable
-    public GameProfile a(UUID uuid) {
+    public GameProfile getProfile(UUID uuid) {
         UserCache.UserCacheEntry usercache_usercacheentry = (UserCache.UserCacheEntry) this.e.get(uuid);
 
         return usercache_usercacheentry == null ? null : usercache_usercacheentry.a();

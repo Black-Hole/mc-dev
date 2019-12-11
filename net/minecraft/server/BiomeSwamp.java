@@ -4,8 +4,8 @@ public final class BiomeSwamp extends BiomeBase {
 
     protected BiomeSwamp() {
         super((new BiomeBase.a()).a(WorldGenSurface.L, WorldGenSurface.v).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.SWAMP).a(-0.2F).b(0.1F).c(0.8F).d(0.9F).a(6388580).b(2302743).a((String) null));
-        this.a((StructureGenerator) WorldGenerator.SWAMP_HUT, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
+        this.a(WorldGenerator.SWAMP_HUT.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);
@@ -17,7 +17,7 @@ public final class BiomeSwamp extends BiomeBase {
         BiomeDecoratorGroups.Z(this);
         BiomeDecoratorGroups.ae(this);
         BiomeDecoratorGroups.am(this);
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.SEAGRASS, new WorldGenFeatureSeaGrassConfiguration(64, 0.6D), WorldGenDecorator.v, WorldGenFeatureDecoratorConfiguration.e));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.SEAGRASS.b((WorldGenFeatureConfiguration) (new WorldGenFeatureSeaGrassConfiguration(64, 0.6D))).a(WorldGenDecorator.v.a((WorldGenFeatureDecoratorConfiguration) WorldGenFeatureDecoratorConfiguration.e)));
         BiomeDecoratorGroups.ag(this);
         BiomeDecoratorGroups.ap(this);
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SHEEP, 12, 4, 4));

@@ -13,30 +13,31 @@ public class ItemFlintAndSteel extends Item {
         EntityHuman entityhuman = itemactioncontext.getEntity();
         World world = itemactioncontext.getWorld();
         BlockPosition blockposition = itemactioncontext.getClickPosition();
-        BlockPosition blockposition1 = blockposition.shift(itemactioncontext.getClickedFace());
-        IBlockData iblockdata;
+        IBlockData iblockdata = world.getType(blockposition);
 
-        if (a(world.getType(blockposition1), (GeneratorAccess) world, blockposition1)) {
-            world.playSound(entityhuman, blockposition1, SoundEffects.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, ItemFlintAndSteel.i.nextFloat() * 0.4F + 0.8F);
-            iblockdata = ((BlockFire) Blocks.FIRE).a((IBlockAccess) world, blockposition1);
-            world.setTypeAndData(blockposition1, iblockdata, 11);
-            ItemStack itemstack = itemactioncontext.getItemStack();
-
-            if (entityhuman instanceof EntityPlayer) {
-                CriterionTriggers.y.a((EntityPlayer) entityhuman, blockposition1, itemstack);
-                itemstack.damage(1, entityhuman, (entityhuman1) -> {
+        if (a(iblockdata)) {
+            world.playSound(entityhuman, blockposition, SoundEffects.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, ItemFlintAndSteel.i.nextFloat() * 0.4F + 0.8F);
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.r, true), 11);
+            if (entityhuman != null) {
+                itemactioncontext.getItemStack().damage(1, entityhuman, (entityhuman1) -> {
                     entityhuman1.d(itemactioncontext.n());
                 });
             }
 
             return EnumInteractionResult.SUCCESS;
         } else {
-            iblockdata = world.getType(blockposition);
-            if (a(iblockdata)) {
-                world.playSound(entityhuman, blockposition, SoundEffects.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, ItemFlintAndSteel.i.nextFloat() * 0.4F + 0.8F);
-                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.r, true), 11);
-                if (entityhuman != null) {
-                    itemactioncontext.getItemStack().damage(1, entityhuman, (entityhuman1) -> {
+            BlockPosition blockposition1 = blockposition.shift(itemactioncontext.getClickedFace());
+
+            if (a(world.getType(blockposition1), (GeneratorAccess) world, blockposition1)) {
+                world.playSound(entityhuman, blockposition1, SoundEffects.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, ItemFlintAndSteel.i.nextFloat() * 0.4F + 0.8F);
+                IBlockData iblockdata1 = ((BlockFire) Blocks.FIRE).a((IBlockAccess) world, blockposition1);
+
+                world.setTypeAndData(blockposition1, iblockdata1, 11);
+                ItemStack itemstack = itemactioncontext.getItemStack();
+
+                if (entityhuman instanceof EntityPlayer) {
+                    CriterionTriggers.y.a((EntityPlayer) entityhuman, blockposition1, itemstack);
+                    itemstack.damage(1, entityhuman, (entityhuman1) -> {
                         entityhuman1.d(itemactioncontext.n());
                     });
                 }

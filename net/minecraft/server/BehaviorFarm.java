@@ -25,7 +25,7 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
         } else if (entityvillager.getVillagerData().getProfession() != VillagerProfession.FARMER) {
             return false;
         } else {
-            this.b = entityvillager.er();
+            this.b = entityvillager.eM();
             this.c = false;
             InventorySubcontainer inventorysubcontainer = entityvillager.getInventory();
             int i = inventorysubcontainer.getSize();
@@ -44,14 +44,14 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
                 }
             }
 
-            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(entityvillager.locX, entityvillager.locY, entityvillager.locZ);
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(entityvillager);
 
             this.f.clear();
 
             for (int k = -1; k <= 1; ++k) {
                 for (int l = -1; l <= 1; ++l) {
                     for (int i1 = -1; i1 <= 1; ++i1) {
-                        blockposition_mutableblockposition.c(entityvillager.locX + (double) k, entityvillager.locY + (double) l, entityvillager.locZ + (double) i1);
+                        blockposition_mutableblockposition.c(entityvillager.locX() + (double) k, entityvillager.locY() + (double) l, entityvillager.locZ() + (double) i1);
                         if (this.a((BlockPosition) blockposition_mutableblockposition, worldserver)) {
                             this.f.add(new BlockPosition(blockposition_mutableblockposition));
                         }
@@ -99,7 +99,7 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
             Block block1 = worldserver.getType(this.a.down()).getBlock();
 
             if (block instanceof BlockCrops && ((BlockCrops) block).isRipe(iblockdata) && this.c) {
-                worldserver.b(this.a, true);
+                worldserver.a(this.a, true, entityvillager);
             }
 
             if (iblockdata.isAir() && block1 instanceof BlockSoil && this.b) {

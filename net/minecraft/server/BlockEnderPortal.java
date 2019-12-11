@@ -25,4 +25,9 @@ public class BlockEnderPortal extends BlockTileEntity {
         }
 
     }
+
+    @Override
+    public boolean a(IBlockData iblockdata, FluidType fluidtype) {
+        return false;
+    }
 }

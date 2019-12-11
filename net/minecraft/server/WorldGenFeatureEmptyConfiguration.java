@@ -13,6 +13,6 @@ public class WorldGenFeatureEmptyConfiguration implements WorldGenFeatureConfigu
     }
 
     public static <T> WorldGenFeatureEmptyConfiguration a(Dynamic<T> dynamic) {
-        return WorldGenFeatureConfiguration.e;
+        return WorldGenFeatureEmptyConfiguration.e;
     }
 }

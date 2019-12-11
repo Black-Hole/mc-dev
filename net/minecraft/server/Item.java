@@ -103,12 +103,12 @@ public class Item implements IMaterial {
 
             if (entityhuman.p(this.getFoodInfo().d())) {
                 entityhuman.c(enumhand);
-                return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
+                return InteractionResultWrapper.b(itemstack);
             } else {
-                return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
+                return InteractionResultWrapper.d(itemstack);
             }
         } else {
-            return new InteractionResultWrapper<>(EnumInteractionResult.PASS, entityhuman.b(enumhand));
+            return InteractionResultWrapper.c(entityhuman.b(enumhand));
         }
     }
 
@@ -148,7 +148,7 @@ public class Item implements IMaterial {
         return IRegistry.ITEM.getKey(this).getKey();
     }
 
-    protected String l() {
+    protected String n() {
         if (this.name == null) {
             this.name = SystemUtils.a("item", IRegistry.ITEM.getKey(this));
         }
@@ -157,23 +157,23 @@ public class Item implements IMaterial {
     }
 
     public String getName() {
-        return this.l();
+        return this.n();
     }
 
     public String f(ItemStack itemstack) {
         return this.getName();
     }
 
-    public boolean m() {
+    public boolean o() {
         return true;
     }
 
     @Nullable
-    public final Item n() {
+    public final Item p() {
         return this.craftingResult;
     }
 
-    public boolean o() {
+    public boolean q() {
         return this.craftingResult != null;
     }
 
@@ -181,7 +181,7 @@ public class Item implements IMaterial {
 
     public void b(ItemStack itemstack, World world, EntityHuman entityhuman) {}
 
-    public boolean O_() {
+    public boolean R_() {
         return false;
     }
 
@@ -197,6 +197,10 @@ public class Item implements IMaterial {
 
     public IChatBaseComponent g(ItemStack itemstack) {
         return new ChatMessage(this.f(itemstack), new Object[0]);
+    }
+
+    public boolean d_(ItemStack itemstack) {
+        return itemstack.hasEnchantments();
     }
 
     public EnumItemRarity h(ItemStack itemstack) {
@@ -248,13 +252,13 @@ public class Item implements IMaterial {
     }
 
     protected boolean a(CreativeModeTab creativemodetab) {
-        CreativeModeTab creativemodetab1 = this.p();
+        CreativeModeTab creativemodetab1 = this.r();
 
         return creativemodetab1 != null && (creativemodetab == CreativeModeTab.g || creativemodetab == creativemodetab1);
     }
 
     @Nullable
-    public final CreativeModeTab p() {
+    public final CreativeModeTab r() {
         return this.j;
     }
 
@@ -281,6 +285,14 @@ public class Item implements IMaterial {
     @Nullable
     public FoodInfo getFoodInfo() {
         return this.foodInfo;
+    }
+
+    public SoundEffect U_() {
+        return SoundEffects.ENTITY_GENERIC_DRINK;
+    }
+
+    public SoundEffect S_() {
+        return SoundEffects.ENTITY_GENERIC_EAT;
     }
 
     public static class Info {

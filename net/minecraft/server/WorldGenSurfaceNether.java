@@ -22,8 +22,8 @@ public class WorldGenSurfaceNether extends WorldGenSurface<WorldGenSurfaceConfig
         int k1 = i & 15;
         int l1 = j & 15;
         double d1 = 0.03125D;
-        boolean flag = this.b.a((double) i * 0.03125D, (double) j * 0.03125D, 0.0D) + random.nextDouble() * 0.2D > 0.0D;
-        boolean flag1 = this.b.a((double) i * 0.03125D, 109.0D, (double) j * 0.03125D) + random.nextDouble() * 0.2D > 0.0D;
+        boolean flag = this.b.a((double) i * 0.03125D, (double) j * 0.03125D, 0.0D) * 75.0D + random.nextDouble() > 0.0D;
+        boolean flag1 = this.b.a((double) i * 0.03125D, 109.0D, (double) j * 0.03125D) * 75.0D + random.nextDouble() > 0.0D;
         int i2 = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
         int j2 = -1;
@@ -79,7 +79,7 @@ public class WorldGenSurfaceNether extends WorldGenSurface<WorldGenSurfaceConfig
     @Override
     public void a(long i) {
         if (this.a != i || this.b == null) {
-            this.b = new NoiseGeneratorOctaves(new SeededRandom(i), 4);
+            this.b = new NoiseGeneratorOctaves(new SeededRandom(i), 3, 0);
         }
 
         this.a = i;

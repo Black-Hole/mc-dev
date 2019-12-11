@@ -7,11 +7,17 @@ import javax.annotation.Nullable;
 
 public class LootContextParameterSets {
 
-    private static final BiMap<MinecraftKey, LootContextParameterSet> i = HashBiMap.create();
+    private static final BiMap<MinecraftKey, LootContextParameterSet> k = HashBiMap.create();
     public static final LootContextParameterSet EMPTY = a("empty", (lootcontextparameterset_a) -> {
     });
     public static final LootContextParameterSet CHEST = a("chest", (lootcontextparameterset_a) -> {
         lootcontextparameterset_a.a(LootContextParameters.POSITION).b(LootContextParameters.THIS_ENTITY);
+    });
+    public static final LootContextParameterSet COMMAND = a("command", (lootcontextparameterset_a) -> {
+        lootcontextparameterset_a.a(LootContextParameters.POSITION).b(LootContextParameters.THIS_ENTITY);
+    });
+    public static final LootContextParameterSet SELECTOR = a("selector", (lootcontextparameterset_a) -> {
+        lootcontextparameterset_a.a(LootContextParameters.POSITION).a(LootContextParameters.THIS_ENTITY);
     });
     public static final LootContextParameterSet FISHING = a("fishing", (lootcontextparameterset_a) -> {
         lootcontextparameterset_a.a(LootContextParameters.POSITION).a(LootContextParameters.TOOL);
@@ -38,7 +44,7 @@ public class LootContextParameterSets {
         consumer.accept(lootcontextparameterset_a);
         LootContextParameterSet lootcontextparameterset = lootcontextparameterset_a.a();
         MinecraftKey minecraftkey = new MinecraftKey(s);
-        LootContextParameterSet lootcontextparameterset1 = (LootContextParameterSet) LootContextParameterSets.i.put(minecraftkey, lootcontextparameterset);
+        LootContextParameterSet lootcontextparameterset1 = (LootContextParameterSet) LootContextParameterSets.k.put(minecraftkey, lootcontextparameterset);
 
         if (lootcontextparameterset1 != null) {
             throw new IllegalStateException("Loot table parameter set " + minecraftkey + " is already registered");
@@ -49,11 +55,11 @@ public class LootContextParameterSets {
 
     @Nullable
     public static LootContextParameterSet a(MinecraftKey minecraftkey) {
-        return (LootContextParameterSet) LootContextParameterSets.i.get(minecraftkey);
+        return (LootContextParameterSet) LootContextParameterSets.k.get(minecraftkey);
     }
 
     @Nullable
     public static MinecraftKey a(LootContextParameterSet lootcontextparameterset) {
-        return (MinecraftKey) LootContextParameterSets.i.inverse().get(lootcontextparameterset);
+        return (MinecraftKey) LootContextParameterSets.k.inverse().get(lootcontextparameterset);
     }
 }

@@ -18,7 +18,7 @@ public class DragonControllerDying extends AbstractDragonController {
             float f1 = (this.a.getRandom().nextFloat() - 0.5F) * 4.0F;
             float f2 = (this.a.getRandom().nextFloat() - 0.5F) * 8.0F;
 
-            this.a.world.addParticle(Particles.EXPLOSION_EMITTER, this.a.locX + (double) f, this.a.locY + 2.0D + (double) f1, this.a.locZ + (double) f2, 0.0D, 0.0D, 0.0D);
+            this.a.world.addParticle(Particles.EXPLOSION_EMITTER, this.a.locX() + (double) f, this.a.locY() + 2.0D + (double) f1, this.a.locZ() + (double) f2, 0.0D, 0.0D, 0.0D);
         }
 
     }
@@ -32,9 +32,9 @@ public class DragonControllerDying extends AbstractDragonController {
             this.b = new Vec3D((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
         }
 
-        double d0 = this.b.c(this.a.locX, this.a.locY, this.a.locZ);
+        double d0 = this.b.c(this.a.locX(), this.a.locY(), this.a.locZ());
 
-        if (d0 >= 100.0D && d0 <= 22500.0D && !this.a.positionChanged && !this.a.y) {
+        if (d0 >= 100.0D && d0 <= 22500.0D && !this.a.positionChanged && !this.a.v) {
             this.a.setHealth(1.0F);
         } else {
             this.a.setHealth(0.0F);

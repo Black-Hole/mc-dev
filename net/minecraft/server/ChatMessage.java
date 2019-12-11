@@ -58,16 +58,13 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
             this.b.clear();
         }
 
+        String s = ChatMessage.e.a(this.key);
+
         try {
-            this.b(ChatMessage.e.a(this.key));
+            this.b(s);
         } catch (ChatMessageException chatmessageexception) {
             this.b.clear();
-
-            try {
-                this.b(ChatMessage.d.a(this.key));
-            } catch (ChatMessageException chatmessageexception1) {
-                throw chatmessageexception;
-            }
+            this.b.add(new ChatComponentText(s));
         }
 
     }

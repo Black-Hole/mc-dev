@@ -84,7 +84,7 @@ public class PersistentStructureLegacy {
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
-            StructureGenerator<?> structuregenerator = (StructureGenerator) WorldGenerator.aP.get(s.toLowerCase(Locale.ROOT));
+            StructureGenerator<?> structuregenerator = (StructureGenerator) WorldGenerator.ao.get(s.toLowerCase(Locale.ROOT));
 
             if (!nbttagcompound3.hasKeyOfType(s, 12) && structuregenerator != null) {
                 int i = structuregenerator.c();
@@ -98,7 +98,7 @@ public class PersistentStructureLegacy {
                     }
                 }
 
-                nbttagcompound3.c(s, longarraylist);
+                nbttagcompound3.c(s, (List) longarraylist);
             }
         }
 

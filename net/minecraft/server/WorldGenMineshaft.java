@@ -15,12 +15,10 @@ public class WorldGenMineshaft extends StructureGenerator<WorldGenMineshaftConfi
     }
 
     @Override
-    public boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
+    public boolean a(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, Random random, int i, int j, BiomeBase biomebase) {
         ((SeededRandom) random).c(chunkgenerator.getSeed(), i, j);
-        BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9));
-
-        if (chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.MINESHAFT)) {
-            WorldGenMineshaftConfiguration worldgenmineshaftconfiguration = (WorldGenMineshaftConfiguration) chunkgenerator.getFeatureConfiguration(biomebase, WorldGenerator.MINESHAFT);
+        if (chunkgenerator.canSpawnStructure(biomebase, this)) {
+            WorldGenMineshaftConfiguration worldgenmineshaftconfiguration = (WorldGenMineshaftConfiguration) chunkgenerator.getFeatureConfiguration(biomebase, this);
             double d0 = worldgenmineshaftconfiguration.a;
 
             return random.nextDouble() < d0;
@@ -46,8 +44,8 @@ public class WorldGenMineshaft extends StructureGenerator<WorldGenMineshaftConfi
 
     public static class a extends StructureStart {
 
-        public a(StructureGenerator<?> structuregenerator, int i, int j, BiomeBase biomebase, StructureBoundingBox structureboundingbox, int k, long l) {
-            super(structuregenerator, i, j, biomebase, structureboundingbox, k, l);
+        public a(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+            super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
         @Override

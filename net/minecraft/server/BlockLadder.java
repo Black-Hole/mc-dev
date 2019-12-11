@@ -13,7 +13,7 @@ public class BlockLadder extends Block implements IBlockWaterlogged {
 
     protected BlockLadder(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLadder.FACING, EnumDirection.NORTH)).set(BlockLadder.b, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLadder.FACING, EnumDirection.NORTH)).set(BlockLadder.b, false));
     }
 
     @Override
@@ -79,7 +79,7 @@ public class BlockLadder extends Block implements IBlockWaterlogged {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection[j];
 
-            if (enumdirection.k().c()) {
+            if (enumdirection.m().c()) {
                 iblockdata = (IBlockData) iblockdata.set(BlockLadder.FACING, enumdirection.opposite());
                 if (iblockdata.canPlace(world, blockposition)) {
                     return (IBlockData) iblockdata.set(BlockLadder.b, fluid.getType() == FluidTypes.WATER);
@@ -88,11 +88,6 @@ public class BlockLadder extends Block implements IBlockWaterlogged {
         }
 
         return null;
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 
     @Override
@@ -111,7 +106,7 @@ public class BlockLadder extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public Fluid g(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockLadder.b) ? FluidTypes.WATER.a(false) : super.g(iblockdata);
+    public Fluid a_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockLadder.b) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
     }
 }

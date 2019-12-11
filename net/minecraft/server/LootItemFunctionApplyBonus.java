@@ -33,7 +33,7 @@ public class LootItemFunctionApplyBonus extends LootItemFunctionConditional {
 
         if (itemstack1 != null) {
             int i = EnchantmentManager.getEnchantmentLevel(this.c, itemstack1);
-            int j = this.d.a(loottableinfo.b(), itemstack.getCount(), i);
+            int j = this.d.a(loottableinfo.a(), itemstack.getCount(), i);
 
             itemstack.setCount(j);
         }

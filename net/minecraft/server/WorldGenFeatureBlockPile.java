@@ -5,13 +5,13 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.function.Function;
 
-public abstract class WorldGenFeatureBlockPile extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
+public class WorldGenFeatureBlockPile extends WorldGenerator<WorldGenFeatureBlockPileConfiguration> {
 
-    public WorldGenFeatureBlockPile(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+    public WorldGenFeatureBlockPile(Function<Dynamic<?>, ? extends WorldGenFeatureBlockPileConfiguration> function) {
         super(function);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureBlockPileConfiguration worldgenfeatureblockpileconfiguration) {
         if (blockposition.getY() < 5) {
             return false;
         } else {
@@ -25,9 +25,9 @@ public abstract class WorldGenFeatureBlockPile extends WorldGenerator<WorldGenFe
                 int l = blockposition.getZ() - blockposition1.getZ();
 
                 if ((float) (k * k + l * l) <= random.nextFloat() * 10.0F - random.nextFloat() * 6.0F) {
-                    this.b(generatoraccess, blockposition1, random);
+                    this.a(generatoraccess, blockposition1, random, worldgenfeatureblockpileconfiguration);
                 } else if ((double) random.nextFloat() < 0.031D) {
-                    this.b(generatoraccess, blockposition1, random);
+                    this.a(generatoraccess, blockposition1, random, worldgenfeatureblockpileconfiguration);
                 }
             }
 
@@ -42,12 +42,10 @@ public abstract class WorldGenFeatureBlockPile extends WorldGenerator<WorldGenFe
         return iblockdata.getBlock() == Blocks.GRASS_PATH ? random.nextBoolean() : iblockdata.d(generatoraccess, blockposition1, EnumDirection.UP);
     }
 
-    private void b(GeneratorAccess generatoraccess, BlockPosition blockposition, Random random) {
+    private void a(GeneratorAccess generatoraccess, BlockPosition blockposition, Random random, WorldGenFeatureBlockPileConfiguration worldgenfeatureblockpileconfiguration) {
         if (generatoraccess.isEmpty(blockposition) && this.a(generatoraccess, blockposition, random)) {
-            generatoraccess.setTypeAndData(blockposition, this.a(generatoraccess), 4);
+            generatoraccess.setTypeAndData(blockposition, worldgenfeatureblockpileconfiguration.a.a(random, blockposition), 4);
         }
 
     }
-
-    protected abstract IBlockData a(GeneratorAccess generatoraccess);
 }

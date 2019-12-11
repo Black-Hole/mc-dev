@@ -20,22 +20,12 @@ public class BlockFalling extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!world.isClientSide) {
-            this.b(world, blockposition);
-        }
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (canFallThrough(worldserver.getType(blockposition.down())) && blockposition.getY() >= 0) {
+            EntityFallingBlock entityfallingblock = new EntityFallingBlock(worldserver, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, worldserver.getType(blockposition));
 
-    }
-
-    private void b(World world, BlockPosition blockposition) {
-        if (canFallThrough(world.getType(blockposition.down())) && blockposition.getY() >= 0) {
-            if (!world.isClientSide) {
-                EntityFallingBlock entityfallingblock = new EntityFallingBlock(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, world.getType(blockposition));
-
-                this.a(entityfallingblock);
-                world.addEntity(entityfallingblock);
-            }
-
+            this.a(entityfallingblock);
+            worldserver.addEntity(entityfallingblock);
         }
     }
 

@@ -12,31 +12,32 @@ import javax.annotation.Nullable;
 public class CriterionConditionEnchantments {
 
     public static final CriterionConditionEnchantments a = new CriterionConditionEnchantments();
-    private final Enchantment b;
-    private final CriterionConditionValue.IntegerRange c;
+    public static final CriterionConditionEnchantments[] b = new CriterionConditionEnchantments[0];
+    private final Enchantment c;
+    private final CriterionConditionValue.IntegerRange d;
 
     public CriterionConditionEnchantments() {
-        this.b = null;
-        this.c = CriterionConditionValue.IntegerRange.e;
+        this.c = null;
+        this.d = CriterionConditionValue.IntegerRange.e;
     }
 
     public CriterionConditionEnchantments(@Nullable Enchantment enchantment, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
-        this.b = enchantment;
-        this.c = criterionconditionvalue_integerrange;
+        this.c = enchantment;
+        this.d = criterionconditionvalue_integerrange;
     }
 
     public boolean a(Map<Enchantment, Integer> map) {
-        if (this.b != null) {
-            if (!map.containsKey(this.b)) {
+        if (this.c != null) {
+            if (!map.containsKey(this.c)) {
                 return false;
             }
 
-            int i = (Integer) map.get(this.b);
+            int i = (Integer) map.get(this.c);
 
-            if (this.c != null && !this.c.d(i)) {
+            if (this.d != null && !this.d.d(i)) {
                 return false;
             }
-        } else if (this.c != null) {
+        } else if (this.d != null) {
             Iterator iterator = map.values().iterator();
 
             Integer integer;
@@ -47,7 +48,7 @@ public class CriterionConditionEnchantments {
                 }
 
                 integer = (Integer) iterator.next();
-            } while (!this.c.d(integer));
+            } while (!this.d.d(integer));
 
             return true;
         }
@@ -61,11 +62,11 @@ public class CriterionConditionEnchantments {
         } else {
             JsonObject jsonobject = new JsonObject();
 
-            if (this.b != null) {
-                jsonobject.addProperty("enchantment", IRegistry.ENCHANTMENT.getKey(this.b).toString());
+            if (this.c != null) {
+                jsonobject.addProperty("enchantment", IRegistry.ENCHANTMENT.getKey(this.c).toString());
             }
 
-            jsonobject.add("levels", this.c.d());
+            jsonobject.add("levels", this.d.d());
             return jsonobject;
         }
     }
@@ -102,7 +103,7 @@ public class CriterionConditionEnchantments {
 
             return acriterionconditionenchantments;
         } else {
-            return new CriterionConditionEnchantments[0];
+            return CriterionConditionEnchantments.b;
         }
     }
 }

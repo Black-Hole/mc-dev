@@ -20,7 +20,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
         this.goalSelector.a(7, new EntityGhast.PathfinderGoalGhastMoveTowardsTarget(this));
         this.goalSelector.a(7, new EntityGhast.PathfinderGoalGhastAttackTarget(this));
         this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, 10, true, false, (entityliving) -> {
-            return Math.abs(entityliving.locY - this.locY) <= 4.0D;
+            return Math.abs(entityliving.locY() - this.locY()) <= 4.0D;
         }));
     }
 
@@ -33,12 +33,8 @@ public class EntityGhast extends EntityFlying implements IMonster {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (!this.world.isClientSide && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-            this.die();
-        }
-
+    protected boolean J() {
+        return true;
     }
 
     @Override
@@ -96,7 +92,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
     }
 
     @Override
-    public int dC() {
+    public int getMaxSpawnGroup() {
         return 1;
     }
 
@@ -160,17 +156,15 @@ public class EntityGhast extends EntityFlying implements IMonster {
                 if (this.a == 20) {
                     double d1 = 4.0D;
                     Vec3D vec3d = this.ghast.f(1.0F);
-                    double d2 = entityliving.locX - (this.ghast.locX + vec3d.x * 4.0D);
-                    double d3 = entityliving.getBoundingBox().minY + (double) (entityliving.getHeight() / 2.0F) - (0.5D + this.ghast.locY + (double) (this.ghast.getHeight() / 2.0F));
-                    double d4 = entityliving.locZ - (this.ghast.locZ + vec3d.z * 4.0D);
+                    double d2 = entityliving.locX() - (this.ghast.locX() + vec3d.x * 4.0D);
+                    double d3 = entityliving.e(0.5D) - (0.5D + this.ghast.e(0.5D));
+                    double d4 = entityliving.locZ() - (this.ghast.locZ() + vec3d.z * 4.0D);
 
                     world.a((EntityHuman) null, 1016, new BlockPosition(this.ghast), 0);
                     EntityLargeFireball entitylargefireball = new EntityLargeFireball(world, this.ghast, d2, d3, d4);
 
                     entitylargefireball.yield = this.ghast.getPower();
-                    entitylargefireball.locX = this.ghast.locX + vec3d.x * 4.0D;
-                    entitylargefireball.locY = this.ghast.locY + (double) (this.ghast.getHeight() / 2.0F) + 0.5D;
-                    entitylargefireball.locZ = this.ghast.locZ + vec3d.z * 4.0D;
+                    entitylargefireball.setPosition(this.ghast.locX() + vec3d.x * 4.0D, this.ghast.e(0.5D) + 0.5D, entitylargefireball.locZ() + vec3d.z * 4.0D);
                     world.addEntity(entitylargefireball);
                     this.a = -40;
                 }
@@ -202,17 +196,17 @@ public class EntityGhast extends EntityFlying implements IMonster {
                 Vec3D vec3d = this.a.getMot();
 
                 this.a.yaw = -((float) MathHelper.d(vec3d.x, vec3d.z)) * 57.295776F;
-                this.a.aK = this.a.yaw;
+                this.a.aI = this.a.yaw;
             } else {
                 EntityLiving entityliving = this.a.getGoalTarget();
                 double d0 = 64.0D;
 
                 if (entityliving.h((Entity) this.a) < 4096.0D) {
-                    double d1 = entityliving.locX - this.a.locX;
-                    double d2 = entityliving.locZ - this.a.locZ;
+                    double d1 = entityliving.locX() - this.a.locX();
+                    double d2 = entityliving.locZ() - this.a.locZ();
 
                     this.a.yaw = -((float) MathHelper.d(d1, d2)) * 57.295776F;
-                    this.a.aK = this.a.yaw;
+                    this.a.aI = this.a.yaw;
                 }
             }
 
@@ -235,9 +229,9 @@ public class EntityGhast extends EntityFlying implements IMonster {
             if (!controllermove.b()) {
                 return true;
             } else {
-                double d0 = controllermove.d() - this.a.locX;
-                double d1 = controllermove.e() - this.a.locY;
-                double d2 = controllermove.f() - this.a.locZ;
+                double d0 = controllermove.d() - this.a.locX();
+                double d1 = controllermove.e() - this.a.locY();
+                double d2 = controllermove.f() - this.a.locZ();
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
 
                 return d3 < 1.0D || d3 > 3600.0D;
@@ -252,9 +246,9 @@ public class EntityGhast extends EntityFlying implements IMonster {
         @Override
         public void c() {
             Random random = this.a.getRandom();
-            double d0 = this.a.locX + (double) ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
-            double d1 = this.a.locY + (double) ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
-            double d2 = this.a.locZ + (double) ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            double d0 = this.a.locX() + (double) ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            double d1 = this.a.locY() + (double) ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            double d2 = this.a.locZ() + (double) ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
 
             this.a.getControllerMove().a(d0, d1, d2, 1.0D);
         }
@@ -275,7 +269,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
             if (this.h == ControllerMove.Operation.MOVE_TO) {
                 if (this.j-- <= 0) {
                     this.j += this.i.getRandom().nextInt(5) + 2;
-                    Vec3D vec3d = new Vec3D(this.b - this.i.locX, this.c - this.i.locY, this.d - this.i.locZ);
+                    Vec3D vec3d = new Vec3D(this.b - this.i.locX(), this.c - this.i.locY(), this.d - this.i.locZ());
                     double d0 = vec3d.f();
 
                     vec3d = vec3d.d();

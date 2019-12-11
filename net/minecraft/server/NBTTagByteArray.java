@@ -9,9 +9,30 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public class NBTTagByteArray extends NBTList<NBTTagByte> {
 
-    private byte[] data;
+    public static final NBTTagType<NBTTagByteArray> a = new NBTTagType<NBTTagByteArray>() {
+        @Override
+        public NBTTagByteArray b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+            nbtreadlimiter.a(192L);
+            int j = datainput.readInt();
 
-    NBTTagByteArray() {}
+            nbtreadlimiter.a(8L * (long) j);
+            byte[] abyte = new byte[j];
+
+            datainput.readFully(abyte);
+            return new NBTTagByteArray(abyte);
+        }
+
+        @Override
+        public String a() {
+            return "BYTE[]";
+        }
+
+        @Override
+        public String b() {
+            return "TAG_Byte_Array";
+        }
+    };
+    private byte[] data;
 
     public NBTTagByteArray(byte[] abyte) {
         this.data = abyte;
@@ -40,18 +61,13 @@ public class NBTTagByteArray extends NBTList<NBTTagByte> {
     }
 
     @Override
-    public void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
-        nbtreadlimiter.a(192L);
-        int j = datainput.readInt();
-
-        nbtreadlimiter.a((long) (8 * j));
-        this.data = new byte[j];
-        datainput.readFully(this.data);
+    public byte getTypeId() {
+        return 7;
     }
 
     @Override
-    public byte getTypeId() {
-        return 7;
+    public NBTTagType<NBTTagByteArray> b() {
+        return NBTTagByteArray.a;
     }
 
     @Override
@@ -87,11 +103,11 @@ public class NBTTagByteArray extends NBTList<NBTTagByte> {
 
     @Override
     public IChatBaseComponent a(String s, int i) {
-        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("B")).a(NBTTagByteArray.e);
+        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("B")).a(NBTTagByteArray.g);
         IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText("[")).addSibling(ichatbasecomponent).a(";");
 
         for (int j = 0; j < this.data.length; ++j) {
-            IChatBaseComponent ichatbasecomponent2 = (new ChatComponentText(String.valueOf(this.data[j]))).a(NBTTagByteArray.d);
+            IChatBaseComponent ichatbasecomponent2 = (new ChatComponentText(String.valueOf(this.data[j]))).a(NBTTagByteArray.f);
 
             ichatbasecomponent1.a(" ").addSibling(ichatbasecomponent2).addSibling(ichatbasecomponent);
             if (j != this.data.length - 1) {
@@ -112,14 +128,14 @@ public class NBTTagByteArray extends NBTList<NBTTagByte> {
     }
 
     public NBTTagByte get(int i) {
-        return new NBTTagByte(this.data[i]);
+        return NBTTagByte.a(this.data[i]);
     }
 
     public NBTTagByte set(int i, NBTTagByte nbttagbyte) {
         byte b0 = this.data[i];
 
         this.data[i] = nbttagbyte.asByte();
-        return new NBTTagByte(b0);
+        return NBTTagByte.a(b0);
     }
 
     public void add(int i, NBTTagByte nbttagbyte) {
@@ -151,7 +167,7 @@ public class NBTTagByteArray extends NBTList<NBTTagByte> {
         byte b0 = this.data[i];
 
         this.data = ArrayUtils.remove(this.data, i);
-        return new NBTTagByte(b0);
+        return NBTTagByte.a(b0);
     }
 
     public void clear() {

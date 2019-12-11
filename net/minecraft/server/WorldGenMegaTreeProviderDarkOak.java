@@ -9,13 +9,13 @@ public class WorldGenMegaTreeProviderDarkOak extends WorldGenMegaTreeProvider {
 
     @Nullable
     @Override
-    protected WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> b(Random random) {
+    protected WorldGenFeatureConfigured<WorldGenFeatureSmallTreeConfigurationConfiguration, ?> b(Random random) {
         return null;
     }
 
     @Nullable
     @Override
-    protected WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> a(Random random) {
-        return new WorldGenForestTree(WorldGenFeatureEmptyConfiguration::a, true);
+    protected WorldGenFeatureConfigured<WorldGenMegaTreeConfiguration, ?> a(Random random) {
+        return WorldGenerator.DARK_OAK_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.DARK_OAK_TREE);
     }
 }

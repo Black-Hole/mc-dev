@@ -38,16 +38,13 @@ public class NextTickListEntry<T> {
     }
 
     public static <T> Comparator<NextTickListEntry<T>> a() {
-        return (nextticklistentry, nextticklistentry1) -> {
-            int i = Long.compare(nextticklistentry.b, nextticklistentry1.b);
-
-            if (i != 0) {
-                return i;
-            } else {
-                i = nextticklistentry.c.compareTo(nextticklistentry1.c);
-                return i != 0 ? i : Long.compare(nextticklistentry.f, nextticklistentry1.f);
-            }
-        };
+        return Comparator.comparingLong((nextticklistentry) -> {
+            return nextticklistentry.b;
+        }).thenComparing((nextticklistentry) -> {
+            return nextticklistentry.c;
+        }).thenComparingLong((nextticklistentry) -> {
+            return nextticklistentry.f;
+        });
     }
 
     public String toString() {

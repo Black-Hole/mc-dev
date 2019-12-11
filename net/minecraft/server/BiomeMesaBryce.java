@@ -4,8 +4,8 @@ public final class BiomeMesaBryce extends BiomeBase {
 
     public BiomeMesaBryce() {
         super((new BiomeBase.a()).a(WorldGenSurface.O, WorldGenSurface.C).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.MESA).a(0.1F).b(0.2F).c(2.0F).d(0.0F).a(4159204).b(329011).a("badlands"));
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.MESA)));
-        this.a(WorldGenerator.STRONGHOLD, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.MESA))));
+        this.a(WorldGenerator.STRONGHOLD.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);

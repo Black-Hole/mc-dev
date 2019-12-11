@@ -16,11 +16,11 @@ public class WorldGenDecoratorNetherRandomCount extends WorldGenDecoratorFeature
         int i = random.nextInt(Math.max(worldgenfeaturechancedecoratorcountconfiguration.a, 1));
 
         return IntStream.range(0, i).mapToObj((j) -> {
-            int k = random.nextInt(16);
-            int l = random.nextInt(worldgenfeaturechancedecoratorcountconfiguration.d - worldgenfeaturechancedecoratorcountconfiguration.c) + worldgenfeaturechancedecoratorcountconfiguration.b;
-            int i1 = random.nextInt(16);
+            int k = random.nextInt(16) + blockposition.getX();
+            int l = random.nextInt(16) + blockposition.getZ();
+            int i1 = random.nextInt(worldgenfeaturechancedecoratorcountconfiguration.d - worldgenfeaturechancedecoratorcountconfiguration.c) + worldgenfeaturechancedecoratorcountconfiguration.b;
 
-            return blockposition.b(k, l, i1);
+            return new BlockPosition(k, i1, l);
         });
     }
 }

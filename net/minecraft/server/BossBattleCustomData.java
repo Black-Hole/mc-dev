@@ -39,7 +39,7 @@ public class BossBattleCustomData {
         return this.b.values();
     }
 
-    public NBTTagCompound c() {
+    public NBTTagCompound save() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         Iterator iterator = this.b.values().iterator();
 
@@ -52,7 +52,7 @@ public class BossBattleCustomData {
         return nbttagcompound;
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
+    public void load(NBTTagCompound nbttagcompound) {
         Iterator iterator = nbttagcompound.getKeys().iterator();
 
         while (iterator.hasNext()) {

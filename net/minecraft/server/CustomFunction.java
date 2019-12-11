@@ -51,15 +51,7 @@ public class CustomFunction {
                     ParseResults<CommandListenerWrapper> parseresults = customfunctiondata.a().getCommandDispatcher().a().parse(stringreader, customfunctiondata.g());
 
                     if (parseresults.getReader().canRead()) {
-                        if (parseresults.getExceptions().size() == 1) {
-                            throw (CommandSyntaxException) parseresults.getExceptions().values().iterator().next();
-                        }
-
-                        if (parseresults.getContext().getRange().isEmpty()) {
-                            throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(parseresults.getReader());
-                        }
-
-                        throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().createWithContext(parseresults.getReader());
+                        throw CommandDispatcher.a(parseresults);
                     }
 
                     list1.add(new CustomFunction.b(parseresults));

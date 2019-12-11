@@ -27,7 +27,7 @@ public class LootItemConditionTableBonus implements LootItemCondition {
         int i = itemstack != null ? EnchantmentManager.getEnchantmentLevel(this.a, itemstack) : 0;
         float f = this.b[Math.min(i, this.b.length - 1)];
 
-        return loottableinfo.b().nextFloat() < f;
+        return loottableinfo.a().nextFloat() < f;
     }
 
     public static LootItemCondition.a a(Enchantment enchantment, float... afloat) {

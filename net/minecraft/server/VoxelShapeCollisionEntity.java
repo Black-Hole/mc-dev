@@ -20,7 +20,7 @@ public class VoxelShapeCollisionEntity implements VoxelShapeCollision {
 
     @Deprecated
     protected VoxelShapeCollisionEntity(Entity entity) {
-        this(entity.isSneaking(), entity.getBoundingBox().minY, entity instanceof EntityLiving ? ((EntityLiving) entity).getItemInMainHand().getItem() : Items.AIR);
+        this(entity.bn(), entity.locY(), entity instanceof EntityLiving ? ((EntityLiving) entity).getItemInMainHand().getItem() : Items.AIR);
     }
 
     @Override

@@ -19,9 +19,9 @@ public class Vector3f {
     public NBTTagList a() {
         NBTTagList nbttaglist = new NBTTagList();
 
-        nbttaglist.add(new NBTTagFloat(this.x));
-        nbttaglist.add(new NBTTagFloat(this.y));
-        nbttaglist.add(new NBTTagFloat(this.z));
+        nbttaglist.add(NBTTagFloat.a(this.x));
+        nbttaglist.add(NBTTagFloat.a(this.y));
+        nbttaglist.add(NBTTagFloat.a(this.z));
         return nbttaglist;
     }
 

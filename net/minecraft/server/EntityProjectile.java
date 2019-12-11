@@ -13,8 +13,8 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
     public int shake;
     public EntityLiving shooter;
     public UUID shooterId;
-    private Entity as;
-    private int at;
+    private Entity ap;
+    private int aq;
 
     protected EntityProjectile(EntityTypes<? extends EntityProjectile> entitytypes, World world) {
         super(entitytypes, world);
@@ -29,7 +29,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
     }
 
     protected EntityProjectile(EntityTypes<? extends EntityProjectile> entitytypes, EntityLiving entityliving, World world) {
-        this(entitytypes, entityliving.locX, entityliving.locY + (double) entityliving.getHeadHeight() - 0.10000000149011612D, entityliving.locZ, world);
+        this(entitytypes, entityliving.locX(), entityliving.getHeadY() - 0.10000000149011612D, entityliving.locZ(), world);
         this.shooter = entityliving;
         this.shooterId = entityliving.getUniqueID();
     }
@@ -60,9 +60,6 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
 
     @Override
     public void tick() {
-        this.H = this.locX;
-        this.I = this.locY;
-        this.J = this.locZ;
         super.tick();
         if (this.shake > 0) {
             --this.shake;
@@ -81,24 +78,24 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         while (iterator.hasNext()) {
             Entity entity = (Entity) iterator.next();
 
-            if (entity == this.as) {
-                ++this.at;
+            if (entity == this.ap) {
+                ++this.aq;
                 break;
             }
 
-            if (this.shooter != null && this.ticksLived < 2 && this.as == null) {
-                this.as = entity;
-                this.at = 3;
+            if (this.shooter != null && this.ticksLived < 2 && this.ap == null) {
+                this.ap = entity;
+                this.aq = 3;
                 break;
             }
         }
 
         MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, axisalignedbb, (entity1) -> {
-            return !entity1.isSpectator() && entity1.isInteractable() && entity1 != this.as;
+            return !entity1.isSpectator() && entity1.isInteractable() && entity1 != this.ap;
         }, RayTrace.BlockCollisionOption.OUTLINE, true);
 
-        if (this.as != null && this.at-- <= 0) {
-            this.as = null;
+        if (this.ap != null && this.aq-- <= 0) {
+            this.ap = null;
         }
 
         if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.MISS) {
@@ -110,10 +107,9 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         }
 
         Vec3D vec3d = this.getMot();
-
-        this.locX += vec3d.x;
-        this.locY += vec3d.y;
-        this.locZ += vec3d.z;
+        double d0 = this.locX() + vec3d.x;
+        double d1 = this.locY() + vec3d.y;
+        double d2 = this.locZ() + vec3d.z;
         float f = MathHelper.sqrt(b(vec3d));
 
         this.yaw = (float) (MathHelper.d(vec3d.x, vec3d.z) * 57.2957763671875D);
@@ -142,7 +138,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
             for (int i = 0; i < 4; ++i) {
                 float f2 = 0.25F;
 
-                this.world.addParticle(Particles.BUBBLE, this.locX - vec3d.x * 0.25D, this.locY - vec3d.y * 0.25D, this.locZ - vec3d.z * 0.25D, vec3d.x, vec3d.y, vec3d.z);
+                this.world.addParticle(Particles.BUBBLE, d0 - vec3d.x * 0.25D, d1 - vec3d.y * 0.25D, d2 - vec3d.z * 0.25D, vec3d.x, vec3d.y, vec3d.z);
             }
 
             f1 = 0.8F;
@@ -157,7 +153,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
             this.setMot(vec3d1.x, vec3d1.y - (double) this.l(), vec3d1.z);
         }
 
-        this.setPosition(this.locX, this.locY, this.locZ);
+        this.setPosition(d0, d1, d2);
     }
 
     protected float l() {
@@ -172,7 +168,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         nbttagcompound.setInt("yTile", this.blockY);
         nbttagcompound.setInt("zTile", this.blockZ);
         nbttagcompound.setByte("shake", (byte) this.shake);
-        nbttagcompound.setByte("inGround", (byte) (this.inGround ? 1 : 0));
+        nbttagcompound.setBoolean("inGround", this.inGround);
         if (this.shooterId != null) {
             nbttagcompound.set("owner", GameProfileSerializer.a(this.shooterId));
         }
@@ -185,7 +181,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         this.blockY = nbttagcompound.getInt("yTile");
         this.blockZ = nbttagcompound.getInt("zTile");
         this.shake = nbttagcompound.getByte("shake") & 255;
-        this.inGround = nbttagcompound.getByte("inGround") == 1;
+        this.inGround = nbttagcompound.getBoolean("inGround");
         this.shooter = null;
         if (nbttagcompound.hasKeyOfType("owner", 10)) {
             this.shooterId = GameProfileSerializer.b(nbttagcompound.getCompound("owner"));
@@ -195,13 +191,13 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
 
     @Nullable
     public EntityLiving getShooter() {
-        if (this.shooter == null && this.shooterId != null && this.world instanceof WorldServer) {
+        if ((this.shooter == null || this.shooter.dead) && this.shooterId != null && this.world instanceof WorldServer) {
             Entity entity = ((WorldServer) this.world).getEntity(this.shooterId);
 
             if (entity instanceof EntityLiving) {
                 this.shooter = (EntityLiving) entity;
             } else {
-                this.shooterId = null;
+                this.shooter = null;
             }
         }
 
@@ -209,7 +205,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
     }
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

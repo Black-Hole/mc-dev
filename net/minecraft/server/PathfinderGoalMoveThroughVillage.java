@@ -69,7 +69,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
                         this.c = navigation.a(this.d, 0);
                         navigation.a(flag);
                         if (this.c == null) {
-                            Vec3D vec3d1 = RandomPositionGenerator.a(this.a, 10, 7, new Vec3D((double) this.d.getX(), (double) this.d.getY(), (double) this.d.getZ()));
+                            Vec3D vec3d1 = RandomPositionGenerator.a(this.a, 10, 7, new Vec3D(this.d));
 
                             if (vec3d1 == null) {
                                 return false;
@@ -102,7 +102,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
 
     @Override
     public boolean b() {
-        return this.a.getNavigation().n() ? false : !this.d.a((IPosition) this.a.getPositionVector(), (double) (this.a.getWidth() + (float) this.g));
+        return this.a.getNavigation().m() ? false : !this.d.a((IPosition) this.a.getPositionVector(), (double) (this.a.getWidth() + (float) this.g));
     }
 
     @Override
@@ -112,7 +112,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
 
     @Override
     public void d() {
-        if (this.a.getNavigation().n() || this.d.a((IPosition) this.a.getPositionVector(), (double) this.g)) {
+        if (this.a.getNavigation().m() || this.d.a((IPosition) this.a.getPositionVector(), (double) this.g)) {
             this.f.add(this.d);
         }
 

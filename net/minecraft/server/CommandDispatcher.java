@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Maps;
+import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -14,6 +15,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Predicate;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,6 +65,7 @@ public class CommandDispatcher {
         CommandSetBlock.a(this.b);
         CommandSpawnpoint.a(this.b);
         CommandSetWorldSpawn.a(this.b);
+        CommandSpectate.a(this.b);
         CommandSpreadPlayers.a(this.b);
         CommandStopSound.a(this.b);
         CommandSummon.a(this.b);
@@ -76,6 +79,10 @@ public class CommandDispatcher {
         CommandTrigger.a(this.b);
         CommandWeather.a(this.b);
         CommandWorldBorder.a(this.b);
+        if (SharedConstants.b) {
+            GameTestHarnessTestCommand.a(this.b);
+        }
+
         if (flag) {
             CommandBanIp.a(this.b);
             CommandBanList.a(this.b);
@@ -156,6 +163,7 @@ public class CommandDispatcher {
             ChatComponentText chatcomponenttext1 = chatcomponenttext;
 
             if (CommandDispatcher.LOGGER.isDebugEnabled()) {
+                CommandDispatcher.LOGGER.error("Command exception: {}", s, exception);
                 StackTraceElement[] astacktraceelement = exception.getStackTrace();
 
                 for(int k = 0; k < Math.min(astacktraceelement.length, 3); ++k) {
@@ -166,6 +174,11 @@ public class CommandDispatcher {
             commandlistenerwrapper.sendFailureMessage((new ChatMessage("command.failed", new Object[0])).a((chatmodifier) -> {
                 chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, chatcomponenttext1));
             }));
+            if (SharedConstants.b) {
+                commandlistenerwrapper.sendFailureMessage(new ChatComponentText(SystemUtils.d(exception)));
+                CommandDispatcher.LOGGER.error("'" + s + "' threw an exception", exception);
+            }
+
             b0 = 0;
         } finally {
             commandlistenerwrapper.getServer().getMethodProfiler().exit();
@@ -246,6 +259,11 @@ public class CommandDispatcher {
 
     public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> a() {
         return this.b;
+    }
+
+    @Nullable
+    public static <S> CommandSyntaxException a(ParseResults<S> parseresults) {
+        return !parseresults.getReader().canRead() ? null : (parseresults.getExceptions().size() == 1 ? (CommandSyntaxException) parseresults.getExceptions().values().iterator().next() : (parseresults.getContext().getRange().isEmpty() ? CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(parseresults.getReader()) : CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().createWithContext(parseresults.getReader())));
     }
 
     @FunctionalInterface

@@ -51,19 +51,19 @@ public class BlockSeaGrass extends BlockPlant implements IBlockFragilePlantEleme
     }
 
     @Override
-    public Fluid g(IBlockData iblockdata) {
+    public Fluid a_(IBlockData iblockdata) {
         return FluidTypes.WATER.a(false);
     }
 
     @Override
-    public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
+    public void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata) {
         IBlockData iblockdata1 = Blocks.TALL_SEAGRASS.getBlockData();
         IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockTallSeaGrass.c, BlockPropertyDoubleBlockHalf.UPPER);
         BlockPosition blockposition1 = blockposition.up();
 
-        if (world.getType(blockposition1).getBlock() == Blocks.WATER) {
-            world.setTypeAndData(blockposition, iblockdata1, 2);
-            world.setTypeAndData(blockposition1, iblockdata2, 2);
+        if (worldserver.getType(blockposition1).getBlock() == Blocks.WATER) {
+            worldserver.setTypeAndData(blockposition, iblockdata1, 2);
+            worldserver.setTypeAndData(blockposition1, iblockdata2, 2);
         }
 
     }

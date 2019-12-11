@@ -17,6 +17,7 @@ public class EntityTypes<T extends Entity> {
     public static final EntityTypes<EntityArmorStand> ARMOR_STAND = a("armor_stand", EntityTypes.a.a(EntityArmorStand::new, EnumCreatureType.MISC).a(0.5F, 1.975F));
     public static final EntityTypes<EntityTippedArrow> ARROW = a("arrow", EntityTypes.a.a(EntityTippedArrow::new, EnumCreatureType.MISC).a(0.5F, 0.5F));
     public static final EntityTypes<EntityBat> BAT = a("bat", EntityTypes.a.a(EntityBat::new, EnumCreatureType.AMBIENT).a(0.5F, 0.9F));
+    public static final EntityTypes<EntityBee> BEE = a("bee", EntityTypes.a.a(EntityBee::new, EnumCreatureType.CREATURE).a(0.7F, 0.6F));
     public static final EntityTypes<EntityBlaze> BLAZE = a("blaze", EntityTypes.a.a(EntityBlaze::new, EnumCreatureType.MONSTER).c().a(0.6F, 1.8F));
     public static final EntityTypes<EntityBoat> BOAT = a("boat", EntityTypes.a.a(EntityBoat::new, EnumCreatureType.MISC).a(1.375F, 0.5625F));
     public static final EntityTypes<EntityCat> CAT = a("cat", EntityTypes.a.a(EntityCat::new, EnumCreatureType.CREATURE).a(0.6F, 0.7F));
@@ -115,19 +116,19 @@ public class EntityTypes<T extends Entity> {
     public static final EntityTypes<EntityLightning> LIGHTNING_BOLT = a("lightning_bolt", EntityTypes.a.a(EnumCreatureType.MISC).b().a(0.0F, 0.0F));
     public static final EntityTypes<EntityHuman> PLAYER = a("player", EntityTypes.a.a(EnumCreatureType.MISC).b().a().a(0.6F, 1.8F));
     public static final EntityTypes<EntityFishingHook> FISHING_BOBBER = a("fishing_bobber", EntityTypes.a.a(EnumCreatureType.MISC).b().a().a(0.25F, 0.25F));
-    private final EntityTypes.b<T> aZ;
-    private final EnumCreatureType ba;
-    private final boolean bb;
+    private final EntityTypes.b<T> ba;
+    private final EnumCreatureType bb;
     private final boolean bc;
     private final boolean bd;
     private final boolean be;
+    private final boolean bf;
     @Nullable
-    private String bf;
+    private String bg;
     @Nullable
-    private IChatBaseComponent bg;
+    private IChatBaseComponent bh;
     @Nullable
-    private MinecraftKey bh;
-    private final EntitySize bi;
+    private MinecraftKey bi;
+    private final EntitySize bj;
 
     private static <T extends Entity> EntityTypes<T> a(String s, EntityTypes.a<T> entitytypes_a) {
         return (EntityTypes) IRegistry.a((IRegistry) IRegistry.ENTITY_TYPE, s, (Object) entitytypes_a.a(s));
@@ -142,13 +143,13 @@ public class EntityTypes<T extends Entity> {
     }
 
     public EntityTypes(EntityTypes.b<T> entitytypes_b, EnumCreatureType enumcreaturetype, boolean flag, boolean flag1, boolean flag2, boolean flag3, EntitySize entitysize) {
-        this.aZ = entitytypes_b;
-        this.ba = enumcreaturetype;
-        this.be = flag3;
-        this.bb = flag;
-        this.bc = flag1;
-        this.bd = flag2;
-        this.bi = entitysize;
+        this.ba = entitytypes_b;
+        this.bb = enumcreaturetype;
+        this.bf = flag3;
+        this.bc = flag;
+        this.bd = flag1;
+        this.be = flag2;
+        this.bj = entitysize;
     }
 
     @Nullable
@@ -184,8 +185,8 @@ public class EntityTypes<T extends Entity> {
             if (t0 instanceof EntityInsentient) {
                 EntityInsentient entityinsentient = (EntityInsentient) t0;
 
-                entityinsentient.aM = entityinsentient.yaw;
                 entityinsentient.aK = entityinsentient.yaw;
+                entityinsentient.aI = entityinsentient.yaw;
                 entityinsentient.prepare(world, world.getDamageScaler(new BlockPosition(entityinsentient)), enummobspawn, (GroupDataEntity) null, nbttagcompound);
                 entityinsentient.B();
             }
@@ -216,7 +217,7 @@ public class EntityTypes<T extends Entity> {
             MinecraftServer minecraftserver = world.getMinecraftServer();
 
             if (minecraftserver != null && entity != null) {
-                if (world.isClientSide || !entity.bT() || entityhuman != null && minecraftserver.getPlayerList().isOp(entityhuman.getProfile())) {
+                if (world.isClientSide || !entity.cb() || entityhuman != null && minecraftserver.getPlayerList().isOp(entityhuman.getProfile())) {
                     NBTTagCompound nbttagcompound1 = entity.save(new NBTTagCompound());
                     UUID uuid = entity.getUniqueID();
 
@@ -229,62 +230,62 @@ public class EntityTypes<T extends Entity> {
     }
 
     public boolean a() {
-        return this.bb;
-    }
-
-    public boolean b() {
         return this.bc;
     }
 
-    public boolean c() {
+    public boolean b() {
         return this.bd;
     }
 
-    public boolean d() {
+    public boolean c() {
         return this.be;
     }
 
-    public EnumCreatureType e() {
-        return this.ba;
-    }
-
-    public String f() {
-        if (this.bf == null) {
-            this.bf = SystemUtils.a("entity", IRegistry.ENTITY_TYPE.getKey(this));
-        }
-
+    public boolean d() {
         return this.bf;
     }
 
-    public IChatBaseComponent g() {
+    public EnumCreatureType e() {
+        return this.bb;
+    }
+
+    public String f() {
         if (this.bg == null) {
-            this.bg = new ChatMessage(this.f(), new Object[0]);
+            this.bg = SystemUtils.a("entity", IRegistry.ENTITY_TYPE.getKey(this));
         }
 
         return this.bg;
     }
 
-    public MinecraftKey h() {
+    public IChatBaseComponent g() {
         if (this.bh == null) {
-            MinecraftKey minecraftkey = IRegistry.ENTITY_TYPE.getKey(this);
-
-            this.bh = new MinecraftKey(minecraftkey.getNamespace(), "entities/" + minecraftkey.getKey());
+            this.bh = new ChatMessage(this.f(), new Object[0]);
         }
 
         return this.bh;
     }
 
+    public MinecraftKey h() {
+        if (this.bi == null) {
+            MinecraftKey minecraftkey = IRegistry.ENTITY_TYPE.getKey(this);
+
+            this.bi = new MinecraftKey(minecraftkey.getNamespace(), "entities/" + minecraftkey.getKey());
+        }
+
+        return this.bi;
+    }
+
     public float i() {
-        return this.bi.width;
+        return this.bj.width;
     }
 
     public float j() {
-        return this.bi.height;
+        return this.bj.height;
     }
 
     @Nullable
     public T a(World world) {
-        return this.aZ.create(this, world);
+        return this.ba.create(this, world);
     }
 
     public static Optional<Entity> a(NBTTagCompound nbttagcompound, World world) {
@@ -304,7 +305,7 @@ public class EntityTypes<T extends Entity> {
     }
 
     public EntitySize k() {
-        return this.bi;
+        return this.bj;
     }
 
     public static Optional<EntityTypes<?>> a(NBTTagCompound nbttagcompound) {
@@ -414,7 +415,7 @@ public class EntityTypes<T extends Entity> {
         public EntityTypes<T> a(String s) {
             if (this.c) {
                 try {
-                    DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.a().getWorldVersion())).getChoiceType(DataConverterTypes.o, s);
+                    DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.getGameVersion().getWorldVersion())).getChoiceType(DataConverterTypes.o, s);
                 } catch (IllegalStateException illegalstateexception) {
                     if (SharedConstants.b) {
                         throw illegalstateexception;

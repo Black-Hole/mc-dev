@@ -154,21 +154,13 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
         stringbuilder.append("// ");
         stringbuilder.append(h());
         stringbuilder.append("\n\n");
-        stringbuilder.append("Version: ").append(SharedConstants.a().getId()).append('\n');
+        stringbuilder.append("Version: ").append(SharedConstants.getGameVersion().getId()).append('\n');
         stringbuilder.append("Time span: ").append(i / 1000000L).append(" ms\n");
         stringbuilder.append("Tick span: ").append(j).append(" ticks\n");
         stringbuilder.append("// This is approximately ").append(String.format(Locale.ROOT, "%.2f", (float) j / ((float) i / 1.0E9F))).append(" ticks per second. It should be ").append(20).append(" ticks per second\n\n");
         stringbuilder.append("--- BEGIN PROFILE DUMP ---\n\n");
         this.a(0, "root", stringbuilder);
         stringbuilder.append("--- END PROFILE DUMP ---\n\n");
-        return stringbuilder.toString();
-    }
-
-    @Override
-    public String e() {
-        StringBuilder stringbuilder = new StringBuilder();
-
-        this.a(0, "root", stringbuilder);
         return stringbuilder.toString();
     }
 

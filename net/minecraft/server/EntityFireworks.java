@@ -8,7 +8,7 @@ public class EntityFireworks extends Entity implements IProjectile {
 
     public static final DataWatcherObject<ItemStack> FIREWORK_ITEM = DataWatcher.a(EntityFireworks.class, DataWatcherRegistry.g);
     private static final DataWatcherObject<OptionalInt> c = DataWatcher.a(EntityFireworks.class, DataWatcherRegistry.r);
-    private static final DataWatcherObject<Boolean> d = DataWatcher.a(EntityFireworks.class, DataWatcherRegistry.i);
+    public static final DataWatcherObject<Boolean> SHOT_AT_ANGLE = DataWatcher.a(EntityFireworks.class, DataWatcherRegistry.i);
     private int ticksFlown;
     public int expectedLifespan;
     private EntityLiving ridingEntity;
@@ -21,7 +21,7 @@ public class EntityFireworks extends Entity implements IProjectile {
     protected void initDatawatcher() {
         this.datawatcher.register(EntityFireworks.FIREWORK_ITEM, ItemStack.a);
         this.datawatcher.register(EntityFireworks.c, OptionalInt.empty());
-        this.datawatcher.register(EntityFireworks.d, false);
+        this.datawatcher.register(EntityFireworks.SHOT_AT_ANGLE, false);
     }
 
     public EntityFireworks(World world, double d0, double d1, double d2, ItemStack itemstack) {
@@ -40,21 +40,18 @@ public class EntityFireworks extends Entity implements IProjectile {
     }
 
     public EntityFireworks(World world, ItemStack itemstack, EntityLiving entityliving) {
-        this(world, entityliving.locX, entityliving.locY, entityliving.locZ, itemstack);
+        this(world, entityliving.locX(), entityliving.locY(), entityliving.locZ(), itemstack);
         this.datawatcher.set(EntityFireworks.c, OptionalInt.of(entityliving.getId()));
         this.ridingEntity = entityliving;
     }
 
     public EntityFireworks(World world, ItemStack itemstack, double d0, double d1, double d2, boolean flag) {
         this(world, d0, d1, d2, itemstack);
-        this.datawatcher.set(EntityFireworks.d, flag);
+        this.datawatcher.set(EntityFireworks.SHOT_AT_ANGLE, flag);
     }
 
     @Override
     public void tick() {
-        this.H = this.locX;
-        this.I = this.locY;
-        this.J = this.locZ;
         super.tick();
         Vec3D vec3d;
 
@@ -80,11 +77,11 @@ public class EntityFireworks extends Entity implements IProjectile {
                     this.ridingEntity.setMot(vec3d1.add(vec3d.x * 0.1D + (vec3d.x * 1.5D - vec3d1.x) * 0.5D, vec3d.y * 0.1D + (vec3d.y * 1.5D - vec3d1.y) * 0.5D, vec3d.z * 0.1D + (vec3d.z * 1.5D - vec3d1.z) * 0.5D));
                 }
 
-                this.setPosition(this.ridingEntity.locX, this.ridingEntity.locY, this.ridingEntity.locZ);
+                this.setPosition(this.ridingEntity.locX(), this.ridingEntity.locY(), this.ridingEntity.locZ());
                 this.setMot(this.ridingEntity.getMot());
             }
         } else {
-            if (!this.i()) {
+            if (!this.isShotAtAngle()) {
                 this.setMot(this.getMot().d(1.15D, 1.0D, 1.15D).add(0.0D, 0.04D, 0.0D));
             }
 
@@ -124,12 +121,12 @@ public class EntityFireworks extends Entity implements IProjectile {
         this.pitch = MathHelper.g(0.2F, this.lastPitch, this.pitch);
         this.yaw = MathHelper.g(0.2F, this.lastYaw, this.yaw);
         if (this.ticksFlown == 0 && !this.isSilent()) {
-            this.world.playSound((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.AMBIENT, 3.0F, 1.0F);
+            this.world.playSound((EntityHuman) null, this.locX(), this.locY(), this.locZ(), SoundEffects.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.AMBIENT, 3.0F, 1.0F);
         }
 
         ++this.ticksFlown;
         if (this.world.isClientSide && this.ticksFlown % 2 < 2) {
-            this.world.addParticle(Particles.FIREWORK, this.locX, this.locY - 0.3D, this.locZ, this.random.nextGaussian() * 0.05D, -this.getMot().y * 0.5D, this.random.nextGaussian() * 0.05D);
+            this.world.addParticle(Particles.FIREWORK, this.locX(), this.locY() - 0.3D, this.locZ(), this.random.nextGaussian() * 0.05D, -this.getMot().y * 0.5D, this.random.nextGaussian() * 0.05D);
         }
 
         if (!this.world.isClientSide && this.ticksFlown > this.expectedLifespan) {
@@ -147,7 +144,7 @@ public class EntityFireworks extends Entity implements IProjectile {
     protected void a(MovingObjectPosition movingobjectposition) {
         if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.ENTITY && !this.world.isClientSide) {
             this.explode();
-        } else if (this.z) {
+        } else if (this.w) {
             BlockPosition blockposition;
 
             if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
@@ -157,14 +154,14 @@ public class EntityFireworks extends Entity implements IProjectile {
             }
 
             this.world.getType(blockposition).a(this.world, blockposition, (Entity) this);
-            if (this.l()) {
+            if (this.hasExplosions()) {
                 this.explode();
             }
         }
 
     }
 
-    private boolean l() {
+    private boolean hasExplosions() {
         ItemStack itemstack = (ItemStack) this.datawatcher.get(EntityFireworks.FIREWORK_ITEM);
         NBTTagCompound nbttagcompound = itemstack.isEmpty() ? null : itemstack.b("Fireworks");
         NBTTagList nbttaglist = nbttagcompound != null ? nbttagcompound.getList("Explosions", 10) : null;
@@ -188,7 +185,7 @@ public class EntityFireworks extends Entity implements IProjectile {
             }
 
             double d0 = 5.0D;
-            Vec3D vec3d = new Vec3D(this.locX, this.locY, this.locZ);
+            Vec3D vec3d = this.getPositionVector();
             List<EntityLiving> list = this.world.a(EntityLiving.class, this.getBoundingBox().g(5.0D));
             Iterator iterator = list.iterator();
 
@@ -199,7 +196,7 @@ public class EntityFireworks extends Entity implements IProjectile {
                     boolean flag = false;
 
                     for (int i = 0; i < 2; ++i) {
-                        Vec3D vec3d1 = new Vec3D(entityliving.locX, entityliving.locY + (double) entityliving.getHeight() * 0.5D * (double) i, entityliving.locZ);
+                        Vec3D vec3d1 = new Vec3D(entityliving.locX(), entityliving.e(0.5D * (double) i), entityliving.locZ());
                         MovingObjectPositionBlock movingobjectpositionblock = this.world.rayTrace(new RayTrace(vec3d, vec3d1, RayTrace.BlockCollisionOption.COLLIDER, RayTrace.FluidCollisionOption.NONE, this));
 
                         if (movingobjectpositionblock.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
@@ -223,8 +220,8 @@ public class EntityFireworks extends Entity implements IProjectile {
         return ((OptionalInt) this.datawatcher.get(EntityFireworks.c)).isPresent();
     }
 
-    public boolean i() {
-        return (Boolean) this.datawatcher.get(EntityFireworks.d);
+    public boolean isShotAtAngle() {
+        return (Boolean) this.datawatcher.get(EntityFireworks.SHOT_AT_ANGLE);
     }
 
     @Override
@@ -237,7 +234,7 @@ public class EntityFireworks extends Entity implements IProjectile {
             nbttagcompound.set("FireworksItem", itemstack.save(new NBTTagCompound()));
         }
 
-        nbttagcompound.setBoolean("ShotAtAngle", (Boolean) this.datawatcher.get(EntityFireworks.d));
+        nbttagcompound.setBoolean("ShotAtAngle", (Boolean) this.datawatcher.get(EntityFireworks.SHOT_AT_ANGLE));
     }
 
     @Override
@@ -251,18 +248,18 @@ public class EntityFireworks extends Entity implements IProjectile {
         }
 
         if (nbttagcompound.hasKey("ShotAtAngle")) {
-            this.datawatcher.set(EntityFireworks.d, nbttagcompound.getBoolean("ShotAtAngle"));
+            this.datawatcher.set(EntityFireworks.SHOT_AT_ANGLE, nbttagcompound.getBoolean("ShotAtAngle"));
         }
 
     }
 
     @Override
-    public boolean bs() {
+    public boolean bA() {
         return false;
     }
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         return new PacketPlayOutSpawnEntity(this);
     }
 

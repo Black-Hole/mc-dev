@@ -21,10 +21,10 @@ public class ReloadableProfiled extends Reloadable<ReloadableProfiled.a> {
             AtomicLong atomiclong1 = new AtomicLong();
             MethodProfiler methodprofiler = new MethodProfiler(SystemUtils.getMonotonicNanos(), () -> {
                 return 0;
-            });
+            }, false);
             MethodProfiler methodprofiler1 = new MethodProfiler(SystemUtils.getMonotonicNanos(), () -> {
                 return 0;
-            });
+            }, false);
             CompletableFuture<Void> completablefuture1 = ireloadlistener.a(ireloadlistener_a, iresourcemanager1, methodprofiler, methodprofiler1, (runnable) -> {
                 executor2.execute(() -> {
                     long i = SystemUtils.getMonotonicNanos();
@@ -42,7 +42,7 @@ public class ReloadableProfiled extends Reloadable<ReloadableProfiled.a> {
             });
 
             return completablefuture1.thenApplyAsync((ovoid) -> {
-                return new ReloadableProfiled.a(ireloadlistener.getClass().getSimpleName(), methodprofiler.d(), methodprofiler1.d(), atomiclong, atomiclong1);
+                return new ReloadableProfiled.a(ireloadlistener.i(), methodprofiler.d(), methodprofiler1.d(), atomiclong, atomiclong1);
             }, executor1);
         }, completablefuture);
         this.e.start();
@@ -68,19 +68,6 @@ public class ReloadableProfiled extends Reloadable<ReloadableProfiled.a> {
             String s = reloadableprofiled_a.a;
 
             ReloadableProfiled.LOGGER.info(s + " took approximately " + l + " ms (" + k + " ms preparing, " + j + " ms applying)");
-            String s1 = methodprofilerresults.e();
-
-            if (s1.length() > 0) {
-                ReloadableProfiled.LOGGER.debug(s + " preparations:\n" + s1);
-            }
-
-            String s2 = methodprofilerresults1.e();
-
-            if (s2.length() > 0) {
-                ReloadableProfiled.LOGGER.debug(s + " reload:\n" + s2);
-            }
-
-            ReloadableProfiled.LOGGER.info("----------");
         }
 
         ReloadableProfiled.LOGGER.info("Total blocking time: " + i + " ms");

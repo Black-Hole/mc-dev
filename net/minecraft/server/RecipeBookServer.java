@@ -30,7 +30,7 @@ public class RecipeBookServer extends RecipeBook {
 
             if (!this.a.contains(minecraftkey) && !irecipe.isComplex()) {
                 this.a(minecraftkey);
-                this.c(minecraftkey);
+                this.d(minecraftkey);
                 list.add(minecraftkey);
                 CriterionTriggers.f.a(entityplayer, irecipe);
                 ++i;
@@ -51,7 +51,7 @@ public class RecipeBookServer extends RecipeBook {
             MinecraftKey minecraftkey = irecipe.getKey();
 
             if (this.a.contains(minecraftkey)) {
-                this.b(minecraftkey);
+                this.c(minecraftkey);
                 list.add(minecraftkey);
                 ++i;
             }
@@ -78,7 +78,7 @@ public class RecipeBookServer extends RecipeBook {
         while (iterator.hasNext()) {
             MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
 
-            nbttaglist.add(new NBTTagString(minecraftkey.toString()));
+            nbttaglist.add(NBTTagString.a(minecraftkey.toString()));
         }
 
         nbttagcompound.set("recipes", nbttaglist);
@@ -88,7 +88,7 @@ public class RecipeBookServer extends RecipeBook {
         while (iterator1.hasNext()) {
             MinecraftKey minecraftkey1 = (MinecraftKey) iterator1.next();
 
-            nbttaglist1.add(new NBTTagString(minecraftkey1.toString()));
+            nbttaglist1.add(NBTTagString.a(minecraftkey1.toString()));
         }
 
         nbttagcompound.set("toBeDisplayed", nbttaglist1);

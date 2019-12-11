@@ -13,10 +13,6 @@ public class ItemPotion extends Item {
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
         EntityHuman entityhuman = entityliving instanceof EntityHuman ? (EntityHuman) entityliving : null;
 
-        if (entityhuman == null || !entityhuman.abilities.canInstantlyBuild) {
-            itemstack.subtract(1);
-        }
-
         if (entityhuman instanceof EntityPlayer) {
             CriterionTriggers.z.a((EntityPlayer) entityhuman, itemstack);
         }
@@ -38,6 +34,9 @@ public class ItemPotion extends Item {
 
         if (entityhuman != null) {
             entityhuman.b(StatisticList.ITEM_USED.b(this));
+            if (!entityhuman.abilities.canInstantlyBuild) {
+                itemstack.subtract(1);
+            }
         }
 
         if (entityhuman == null || !entityhuman.abilities.canInstantlyBuild) {
@@ -66,12 +65,17 @@ public class ItemPotion extends Item {
     @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         entityhuman.c(enumhand);
-        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, entityhuman.b(enumhand));
+        return InteractionResultWrapper.a(entityhuman.b(enumhand));
     }
 
     @Override
     public String f(ItemStack itemstack) {
         return PotionUtil.d(itemstack).b(this.getName() + ".effect.");
+    }
+
+    @Override
+    public boolean d_(ItemStack itemstack) {
+        return super.d_(itemstack) || !PotionUtil.getEffects(itemstack).isEmpty();
     }
 
     @Override

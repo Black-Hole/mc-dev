@@ -17,7 +17,7 @@ public class ItemWaterLily extends ItemBlock {
         MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.SOURCE_ONLY);
 
         if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
-            return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
+            return InteractionResultWrapper.c(itemstack);
         } else {
             if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
                 MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;
@@ -25,7 +25,7 @@ public class ItemWaterLily extends ItemBlock {
                 EnumDirection enumdirection = movingobjectpositionblock.getDirection();
 
                 if (!world.a(entityhuman, blockposition) || !entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
-                    return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
+                    return InteractionResultWrapper.d(itemstack);
                 }
 
                 BlockPosition blockposition1 = blockposition.up();
@@ -45,11 +45,11 @@ public class ItemWaterLily extends ItemBlock {
 
                     entityhuman.b(StatisticList.ITEM_USED.b(this));
                     world.playSound(entityhuman, blockposition, SoundEffects.BLOCK_LILY_PAD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                    return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
+                    return InteractionResultWrapper.a(itemstack);
                 }
             }
 
-            return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
+            return InteractionResultWrapper.d(itemstack);
         }
     }
 }

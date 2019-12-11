@@ -13,9 +13,4 @@ public class BlockStainedGlass extends BlockGlassAbstract implements IBeaconBeam
     public EnumColor a() {
         return this.color;
     }
-
-    @Override
-    public TextureType c() {
-        return TextureType.TRANSLUCENT;
-    }
 }

@@ -19,7 +19,7 @@ public class WorldGenDecoratorConfigured<DC extends WorldGenFeatureDecoratorConf
         this.b = dc;
     }
 
-    public <FC extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureConfigured<FC> worldgenfeatureconfigured) {
+    public <FC extends WorldGenFeatureConfiguration, F extends WorldGenerator<FC>> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureConfigured<FC, F> worldgenfeatureconfigured) {
         return this.a.a(generatoraccess, chunkgenerator, random, blockposition, this.b, worldgenfeatureconfigured);
     }
 

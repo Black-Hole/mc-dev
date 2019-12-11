@@ -10,11 +10,6 @@ public class BlockIce extends BlockHalfTransparent {
     }
 
     @Override
-    public TextureType c() {
-        return TextureType.TRANSLUCENT;
-    }
-
-    @Override
     public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
         super.a(world, entityhuman, blockposition, iblockdata, tileentity, itemstack);
         if (EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) == 0) {
@@ -33,9 +28,9 @@ public class BlockIce extends BlockHalfTransparent {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (world.getBrightness(EnumSkyBlock.BLOCK, blockposition) > 11 - iblockdata.b((IBlockAccess) world, blockposition)) {
-            this.melt(iblockdata, world, blockposition);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (worldserver.getBrightness(EnumSkyBlock.BLOCK, blockposition) > 11 - iblockdata.b((IBlockAccess) worldserver, blockposition)) {
+            this.melt(iblockdata, worldserver, blockposition);
         }
 
     }

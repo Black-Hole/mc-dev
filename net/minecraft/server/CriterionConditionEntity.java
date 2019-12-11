@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 
 public class CriterionConditionEntity {
 
-    public static final CriterionConditionEntity a = new CriterionConditionEntity(CriterionConditionEntityType.a, CriterionConditionDistance.a, CriterionConditionLocation.a, CriterionConditionMobEffect.a, CriterionConditionNBT.a, CriterionConditionEntityFlags.a, CriterionConditionEntityEquipment.a, (MinecraftKey) null);
+    public static final CriterionConditionEntity a = new CriterionConditionEntity(CriterionConditionEntityType.a, CriterionConditionDistance.a, CriterionConditionLocation.a, CriterionConditionMobEffect.a, CriterionConditionNBT.a, CriterionConditionEntityFlags.a, CriterionConditionEntityEquipment.a, CriterionConditionPlayer.a, (String) null, (MinecraftKey) null);
     public static final CriterionConditionEntity[] b = new CriterionConditionEntity[0];
     private final CriterionConditionEntityType c;
     private final CriterionConditionDistance d;
@@ -17,9 +17,13 @@ public class CriterionConditionEntity {
     private final CriterionConditionNBT g;
     private final CriterionConditionEntityFlags h;
     private final CriterionConditionEntityEquipment i;
-    private final MinecraftKey j;
+    private final CriterionConditionPlayer j;
+    @Nullable
+    private final String k;
+    @Nullable
+    private final MinecraftKey l;
 
-    private CriterionConditionEntity(CriterionConditionEntityType criterionconditionentitytype, CriterionConditionDistance criterionconditiondistance, CriterionConditionLocation criterionconditionlocation, CriterionConditionMobEffect criterionconditionmobeffect, CriterionConditionNBT criterionconditionnbt, CriterionConditionEntityFlags criterionconditionentityflags, CriterionConditionEntityEquipment criterionconditionentityequipment, @Nullable MinecraftKey minecraftkey) {
+    private CriterionConditionEntity(CriterionConditionEntityType criterionconditionentitytype, CriterionConditionDistance criterionconditiondistance, CriterionConditionLocation criterionconditionlocation, CriterionConditionMobEffect criterionconditionmobeffect, CriterionConditionNBT criterionconditionnbt, CriterionConditionEntityFlags criterionconditionentityflags, CriterionConditionEntityEquipment criterionconditionentityequipment, CriterionConditionPlayer criterionconditionplayer, @Nullable String s, @Nullable MinecraftKey minecraftkey) {
         this.c = criterionconditionentitytype;
         this.d = criterionconditiondistance;
         this.e = criterionconditionlocation;
@@ -27,15 +31,55 @@ public class CriterionConditionEntity {
         this.g = criterionconditionnbt;
         this.h = criterionconditionentityflags;
         this.i = criterionconditionentityequipment;
-        this.j = minecraftkey;
+        this.j = criterionconditionplayer;
+        this.k = s;
+        this.l = minecraftkey;
     }
 
     public boolean a(EntityPlayer entityplayer, @Nullable Entity entity) {
-        return this.a(entityplayer.getWorldServer(), new Vec3D(entityplayer.locX, entityplayer.locY, entityplayer.locZ), entity);
+        return this.a(entityplayer.getWorldServer(), entityplayer.getPositionVector(), entity);
     }
 
-    public boolean a(WorldServer worldserver, Vec3D vec3d, @Nullable Entity entity) {
-        return this == CriterionConditionEntity.a ? true : (entity == null ? false : (!this.c.a(entity.getEntityType()) ? false : (!this.d.a(vec3d.x, vec3d.y, vec3d.z, entity.locX, entity.locY, entity.locZ) ? false : (!this.e.a(worldserver, entity.locX, entity.locY, entity.locZ) ? false : (!this.f.a(entity) ? false : (!this.g.a(entity) ? false : (!this.h.a(entity) ? false : (!this.i.a(entity) ? false : this.j == null || entity instanceof EntityCat && ((EntityCat) entity).ee().equals(this.j)))))))));
+    public boolean a(WorldServer worldserver, @Nullable Vec3D vec3d, @Nullable Entity entity) {
+        if (this == CriterionConditionEntity.a) {
+            return true;
+        } else if (entity == null) {
+            return false;
+        } else if (!this.c.a(entity.getEntityType())) {
+            return false;
+        } else {
+            if (vec3d == null) {
+                if (this.d != CriterionConditionDistance.a) {
+                    return false;
+                }
+            } else if (!this.d.a(vec3d.x, vec3d.y, vec3d.z, entity.locX(), entity.locY(), entity.locZ())) {
+                return false;
+            }
+
+            if (!this.e.a(worldserver, entity.locX(), entity.locY(), entity.locZ())) {
+                return false;
+            } else if (!this.f.a(entity)) {
+                return false;
+            } else if (!this.g.a(entity)) {
+                return false;
+            } else if (!this.h.a(entity)) {
+                return false;
+            } else if (!this.i.a(entity)) {
+                return false;
+            } else if (!this.j.a(entity)) {
+                return false;
+            } else {
+                if (this.k != null) {
+                    ScoreboardTeamBase scoreboardteambase = entity.getScoreboardTeam();
+
+                    if (scoreboardteambase == null || !this.k.equals(scoreboardteambase.getName())) {
+                        return false;
+                    }
+                }
+
+                return this.l == null || entity instanceof EntityCat && ((EntityCat) entity).ez().equals(this.l);
+            }
+        }
     }
 
     public static CriterionConditionEntity a(@Nullable JsonElement jsonelement) {
@@ -48,9 +92,11 @@ public class CriterionConditionEntity {
             CriterionConditionNBT criterionconditionnbt = CriterionConditionNBT.a(jsonobject.get("nbt"));
             CriterionConditionEntityFlags criterionconditionentityflags = CriterionConditionEntityFlags.a(jsonobject.get("flags"));
             CriterionConditionEntityEquipment criterionconditionentityequipment = CriterionConditionEntityEquipment.a(jsonobject.get("equipment"));
+            CriterionConditionPlayer criterionconditionplayer = CriterionConditionPlayer.a(jsonobject.get("player"));
+            String s = ChatDeserializer.a(jsonobject, "team", (String) null);
             MinecraftKey minecraftkey = jsonobject.has("catType") ? new MinecraftKey(ChatDeserializer.h(jsonobject, "catType")) : null;
 
-            return (new CriterionConditionEntity.a()).a(criterionconditionentitytype).a(criterionconditiondistance).a(criterionconditionlocation).a(criterionconditionmobeffect).a(criterionconditionnbt).a(criterionconditionentityflags).a(criterionconditionentityequipment).b(minecraftkey).b();
+            return (new CriterionConditionEntity.a()).a(criterionconditionentitytype).a(criterionconditiondistance).a(criterionconditionlocation).a(criterionconditionmobeffect).a(criterionconditionnbt).a(criterionconditionentityflags).a(criterionconditionentityequipment).a(criterionconditionplayer).a(s).b(minecraftkey).b();
         } else {
             return CriterionConditionEntity.a;
         }
@@ -84,8 +130,10 @@ public class CriterionConditionEntity {
             jsonobject.add("nbt", this.g.a());
             jsonobject.add("flags", this.h.a());
             jsonobject.add("equipment", this.i.a());
-            if (this.j != null) {
-                jsonobject.addProperty("catType", this.j.toString());
+            jsonobject.add("player", this.j.a());
+            jsonobject.addProperty("team", this.k);
+            if (this.l != null) {
+                jsonobject.addProperty("catType", this.l.toString());
             }
 
             return jsonobject;
@@ -122,8 +170,9 @@ public class CriterionConditionEntity {
         private CriterionConditionNBT e;
         private CriterionConditionEntityFlags f;
         private CriterionConditionEntityEquipment g;
-        @Nullable
-        private MinecraftKey h;
+        private CriterionConditionPlayer h;
+        private String i;
+        private MinecraftKey j;
 
         public a() {
             this.a = CriterionConditionEntityType.a;
@@ -133,6 +182,7 @@ public class CriterionConditionEntity {
             this.e = CriterionConditionNBT.a;
             this.f = CriterionConditionEntityFlags.a;
             this.g = CriterionConditionEntityEquipment.a;
+            this.h = CriterionConditionPlayer.a;
         }
 
         public static CriterionConditionEntity.a a() {
@@ -150,7 +200,7 @@ public class CriterionConditionEntity {
         }
 
         public CriterionConditionEntity.a a(MinecraftKey minecraftkey) {
-            this.h = minecraftkey;
+            this.j = minecraftkey;
             return this;
         }
 
@@ -189,13 +239,23 @@ public class CriterionConditionEntity {
             return this;
         }
 
+        public CriterionConditionEntity.a a(CriterionConditionPlayer criterionconditionplayer) {
+            this.h = criterionconditionplayer;
+            return this;
+        }
+
+        public CriterionConditionEntity.a a(@Nullable String s) {
+            this.i = s;
+            return this;
+        }
+
         public CriterionConditionEntity.a b(@Nullable MinecraftKey minecraftkey) {
-            this.h = minecraftkey;
+            this.j = minecraftkey;
             return this;
         }
 
         public CriterionConditionEntity b() {
-            return new CriterionConditionEntity(this.a, this.b, this.c, this.d, this.e, this.f, this.g, this.h);
+            return new CriterionConditionEntity(this.a, this.b, this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j);
         }
     }
 }

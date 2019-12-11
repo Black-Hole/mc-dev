@@ -22,9 +22,9 @@ public class DragonControllerCharge extends AbstractDragonController {
         } else if (this.d > 0 && this.d++ >= 10) {
             this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
         } else {
-            double d0 = this.c.c(this.a.locX, this.a.locY, this.a.locZ);
+            double d0 = this.c.c(this.a.locX(), this.a.locY(), this.a.locZ());
 
-            if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.y) {
+            if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.v) {
                 ++this.d;
             }
 

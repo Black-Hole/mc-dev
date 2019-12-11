@@ -61,7 +61,7 @@ public class WorldGenFeatureDefinedStructurePoolList extends WorldGenFeatureDefi
     }
 
     @Override
-    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccess generatoraccess, BlockPosition blockposition, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random) {
+    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, BlockPosition blockposition, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random) {
         Iterator iterator = this.a.iterator();
 
         WorldGenFeatureDefinedStructurePoolStructure worldgenfeaturedefinedstructurepoolstructure;
@@ -72,7 +72,7 @@ public class WorldGenFeatureDefinedStructurePoolList extends WorldGenFeatureDefi
             }
 
             worldgenfeaturedefinedstructurepoolstructure = (WorldGenFeatureDefinedStructurePoolStructure) iterator.next();
-        } while (worldgenfeaturedefinedstructurepoolstructure.a(definedstructuremanager, generatoraccess, blockposition, enumblockrotation, structureboundingbox, random));
+        } while (worldgenfeaturedefinedstructurepoolstructure.a(definedstructuremanager, generatoraccess, chunkgenerator, blockposition, enumblockrotation, structureboundingbox, random));
 
         return false;
     }

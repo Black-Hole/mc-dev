@@ -52,7 +52,7 @@ public abstract class StructurePiece {
 
     public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {}
 
-    public abstract boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair);
+    public abstract boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair);
 
     public StructureBoundingBox g() {
         return this.n;
@@ -200,7 +200,7 @@ public abstract class StructurePiece {
             }
 
             if (StructurePiece.e.contains(iblockdata.getBlock())) {
-                generatoraccess.w(blockposition).f(blockposition);
+                generatoraccess.x(blockposition).e(blockposition);
             }
 
         }
@@ -374,7 +374,7 @@ public abstract class StructurePiece {
             }
 
             if (iblockaccess.getType(blockposition2).g(iblockaccess, blockposition2)) {
-                enumdirection2 = enumdirection2.e();
+                enumdirection2 = enumdirection2.f();
                 blockposition2 = blockposition.shift(enumdirection2);
             }
 
@@ -459,7 +459,7 @@ public abstract class StructurePiece {
 
     }
 
-    public EnumBlockRotation X_() {
+    public EnumBlockRotation ad_() {
         return this.c;
     }
 

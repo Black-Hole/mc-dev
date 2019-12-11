@@ -10,13 +10,13 @@ public class BlockBarrel extends BlockTileEntity {
 
     public BlockBarrel(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBarrel.a, EnumDirection.NORTH)).set(BlockBarrel.b, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBarrel.a, EnumDirection.NORTH)).set(BlockBarrel.b, false));
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (world.isClientSide) {
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -25,7 +25,7 @@ public class BlockBarrel extends BlockTileEntity {
                 entityhuman.a(StatisticList.OPEN_BARREL);
             }
 
-            return true;
+            return EnumInteractionResult.SUCCESS;
         }
     }
 
@@ -44,8 +44,8 @@ public class BlockBarrel extends BlockTileEntity {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        TileEntity tileentity = world.getTileEntity(blockposition);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        TileEntity tileentity = worldserver.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityBarrel) {
             ((TileEntityBarrel) tileentity).h();

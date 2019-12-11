@@ -25,15 +25,15 @@ public class BlockFlowers extends BlockPlant {
     }
 
     @Override
-    public Block.EnumRandomOffset R_() {
+    public Block.EnumRandomOffset X_() {
         return Block.EnumRandomOffset.XZ;
     }
 
-    public MobEffectList d() {
+    public MobEffectList c() {
         return this.b;
     }
 
-    public int e() {
+    public int d() {
         return this.c;
     }
 }

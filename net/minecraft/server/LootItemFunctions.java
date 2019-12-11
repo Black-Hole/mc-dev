@@ -105,6 +105,7 @@ public class LootItemFunctions {
         a((LootItemFunction.b) (new LootItemFunctionSetLore.b()));
         a((LootItemFunction.b) (new LootItemFunctionFillPlayerHead.a()));
         a((LootItemFunction.b) (new LootItemFunctionCopyNBT.e()));
+        a((LootItemFunction.b) (new LootItemFunctionCopyState.b()));
     }
 
     public static class a implements JsonDeserializer<LootItemFunction>, JsonSerializer<LootItemFunction> {

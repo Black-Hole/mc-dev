@@ -5,7 +5,7 @@ public class BiomeLayoutCheckerboardConfiguration implements BiomeLayoutConfigur
     private BiomeBase[] a;
     private int b;
 
-    public BiomeLayoutCheckerboardConfiguration() {
+    public BiomeLayoutCheckerboardConfiguration(WorldData worlddata) {
         this.a = new BiomeBase[]{Biomes.PLAINS};
         this.b = 1;
     }

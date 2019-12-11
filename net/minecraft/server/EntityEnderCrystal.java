@@ -33,9 +33,6 @@ public class EntityEnderCrystal extends Entity {
 
     @Override
     public void tick() {
-        this.lastX = this.locX;
-        this.lastY = this.locY;
-        this.lastZ = this.locZ;
         ++this.b;
         if (!this.world.isClientSide) {
             BlockPosition blockposition = new BlockPosition(this);
@@ -83,7 +80,7 @@ public class EntityEnderCrystal extends Entity {
             if (!this.dead && !this.world.isClientSide) {
                 this.die();
                 if (!damagesource.isExplosion()) {
-                    this.world.explode((Entity) null, this.locX, this.locY, this.locZ, 6.0F, Explosion.Effect.DESTROY);
+                    this.world.explode((Entity) null, this.locX(), this.locY(), this.locZ(), 6.0F, Explosion.Effect.DESTROY);
                 }
 
                 this.a(damagesource);
@@ -102,7 +99,7 @@ public class EntityEnderCrystal extends Entity {
     private void a(DamageSource damagesource) {
         if (this.world.worldProvider instanceof WorldProviderTheEnd) {
             WorldProviderTheEnd worldprovidertheend = (WorldProviderTheEnd) this.world.worldProvider;
-            EnderDragonBattle enderdragonbattle = worldprovidertheend.q();
+            EnderDragonBattle enderdragonbattle = worldprovidertheend.o();
 
             if (enderdragonbattle != null) {
                 enderdragonbattle.a(this, damagesource);
@@ -129,7 +126,7 @@ public class EntityEnderCrystal extends Entity {
     }
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

@@ -10,7 +10,7 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
     protected BlockPressurePlateBinary(BlockPressurePlateBinary.EnumMobType blockpressureplatebinary_enummobtype, Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateBinary.POWERED, false));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateBinary.POWERED, false));
         this.e = blockpressureplatebinary_enummobtype;
     }
 

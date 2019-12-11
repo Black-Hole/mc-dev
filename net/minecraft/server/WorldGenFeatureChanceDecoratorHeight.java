@@ -17,17 +17,11 @@ public class WorldGenFeatureChanceDecoratorHeight extends WorldGenDecorator<Worl
         return IntStream.range(0, worldgendecoratorfrequencychanceconfiguration.a).filter((i) -> {
             return random.nextFloat() < worldgendecoratorfrequencychanceconfiguration.b;
         }).mapToObj((i) -> {
-            int j = random.nextInt(16);
-            int k = random.nextInt(16);
-            int l = generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition.b(j, 0, k)).getY() * 2;
+            int j = random.nextInt(16) + blockposition.getX();
+            int k = random.nextInt(16) + blockposition.getZ();
+            int l = generatoraccess.a(HeightMap.Type.MOTION_BLOCKING, j, k) * 2;
 
-            if (l <= 0) {
-                return null;
-            } else {
-                int i1 = random.nextInt(l);
-
-                return blockposition.b(j, i1, k);
-            }
+            return l <= 0 ? null : new BlockPosition(j, random.nextInt(l), k);
         }).filter(Objects::nonNull);
     }
 }

@@ -27,7 +27,7 @@ public class Chunk implements IChunkAccess {
     private static final Logger LOGGER = LogManager.getLogger();
     public static final ChunkSection a = null;
     private final ChunkSection[] sections;
-    private final BiomeBase[] d;
+    private BiomeStorage d;
     private final Map<BlockPosition, NBTTagCompound> e;
     public boolean loaded;
     public final World world;
@@ -43,7 +43,7 @@ public class Chunk implements IChunkAccess {
     private boolean q;
     private long lastSaved;
     private volatile boolean s;
-    private long t;
+    private long inhabitedTime;
     @Nullable
     private Supplier<PlayerChunk.State> u;
     @Nullable
@@ -51,11 +51,11 @@ public class Chunk implements IChunkAccess {
     private final ChunkCoordIntPair loc;
     private volatile boolean x;
 
-    public Chunk(World world, ChunkCoordIntPair chunkcoordintpair, BiomeBase[] abiomebase) {
-        this(world, chunkcoordintpair, abiomebase, ChunkConverter.a, TickListEmpty.b(), TickListEmpty.b(), 0L, (ChunkSection[]) null, (Consumer) null);
+    public Chunk(World world, ChunkCoordIntPair chunkcoordintpair, BiomeStorage biomestorage) {
+        this(world, chunkcoordintpair, biomestorage, ChunkConverter.a, TickListEmpty.b(), TickListEmpty.b(), 0L, (ChunkSection[]) null, (Consumer) null);
     }
 
-    public Chunk(World world, ChunkCoordIntPair chunkcoordintpair, BiomeBase[] abiomebase, ChunkConverter chunkconverter, TickList<Block> ticklist, TickList<FluidType> ticklist1, long i, @Nullable ChunkSection[] achunksection, @Nullable Consumer<Chunk> consumer) {
+    public Chunk(World world, ChunkCoordIntPair chunkcoordintpair, BiomeStorage biomestorage, ChunkConverter chunkconverter, TickList<Block> ticklist, TickList<FluidType> ticklist1, long i, @Nullable ChunkSection[] achunksection, @Nullable Consumer<Chunk> consumer) {
         this.sections = new ChunkSection[16];
         this.e = Maps.newHashMap();
         this.heightMap = Maps.newEnumMap(HeightMap.Type.class);
@@ -82,10 +82,10 @@ public class Chunk implements IChunkAccess {
             this.entitySlices[l] = new EntitySlice<>(Entity.class);
         }
 
-        this.d = abiomebase;
+        this.d = biomestorage;
         this.o = ticklist;
         this.p = ticklist1;
-        this.t = i;
+        this.inhabitedTime = i;
         this.v = consumer;
         if (achunksection != null) {
             if (this.sections.length == achunksection.length) {
@@ -98,7 +98,7 @@ public class Chunk implements IChunkAccess {
     }
 
     public Chunk(World world, ProtoChunk protochunk) {
-        this(world, protochunk.getPos(), protochunk.getBiomeIndex(), protochunk.p(), protochunk.n(), protochunk.o(), protochunk.q(), protochunk.getSections(), (Consumer) null);
+        this(world, protochunk.getPos(), protochunk.getBiomeIndex(), protochunk.p(), protochunk.n(), protochunk.o(), protochunk.getInhabitedTime(), protochunk.getSections(), (Consumer) null);
         Iterator iterator = protochunk.y().iterator();
 
         while (iterator.hasNext()) {
@@ -132,7 +132,7 @@ public class Chunk implements IChunkAccess {
             Entry<HeightMap.Type, HeightMap> entry = (Entry) iterator.next();
 
             if (ChunkStatus.FULL.h().contains(entry.getKey())) {
-                this.b((HeightMap.Type) entry.getKey()).a(((HeightMap) entry.getValue()).a());
+                this.a((HeightMap.Type) entry.getKey()).a(((HeightMap) entry.getValue()).a());
             }
         }
 
@@ -141,7 +141,7 @@ public class Chunk implements IChunkAccess {
     }
 
     @Override
-    public HeightMap b(HeightMap.Type heightmap_type) {
+    public HeightMap a(HeightMap.Type heightmap_type) {
         return (HeightMap) this.heightMap.computeIfAbsent(heightmap_type, (heightmap_type1) -> {
             return new HeightMap(this, heightmap_type1);
         });
@@ -216,7 +216,7 @@ public class Chunk implements IChunkAccess {
                 }
             }
 
-            return FluidTypes.EMPTY.i();
+            return FluidTypes.EMPTY.h();
         } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.a(throwable, "Getting fluid state");
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Block being got");
@@ -303,27 +303,22 @@ public class Chunk implements IChunkAccess {
     }
 
     @Nullable
-    @Override
     public LightEngine e() {
         return this.world.getChunkProvider().getLightEngine();
-    }
-
-    public int a(BlockPosition blockposition, int i) {
-        return this.a(blockposition, i, this.world.getWorldProvider().g());
     }
 
     @Override
     public void a(Entity entity) {
         this.q = true;
-        int i = MathHelper.floor(entity.locX / 16.0D);
-        int j = MathHelper.floor(entity.locZ / 16.0D);
+        int i = MathHelper.floor(entity.locX() / 16.0D);
+        int j = MathHelper.floor(entity.locZ() / 16.0D);
 
         if (i != this.loc.x || j != this.loc.z) {
             Chunk.LOGGER.warn("Wrong location! ({}, {}) should be ({}, {}), {}", i, j, this.loc.x, this.loc.z, entity);
             entity.dead = true;
         }
 
-        int k = MathHelper.floor(entity.locY / 16.0D);
+        int k = MathHelper.floor(entity.locY() / 16.0D);
 
         if (k < 0) {
             k = 0;
@@ -367,7 +362,7 @@ public class Chunk implements IChunkAccess {
     }
 
     @Nullable
-    private TileEntity k(BlockPosition blockposition) {
+    private TileEntity j(BlockPosition blockposition) {
         IBlockData iblockdata = this.getType(blockposition);
         Block block = iblockdata.getBlock();
 
@@ -398,7 +393,7 @@ public class Chunk implements IChunkAccess {
 
         if (tileentity == null) {
             if (chunk_enumtileentitystate == Chunk.EnumTileEntityState.IMMEDIATE) {
-                tileentity = this.k(blockposition);
+                tileentity = this.j(blockposition);
                 this.world.setTileEntity(blockposition, tileentity);
             }
         } else if (tileentity.isRemoved()) {
@@ -411,7 +406,7 @@ public class Chunk implements IChunkAccess {
 
     public void a(TileEntity tileentity) {
         this.setTileEntity(tileentity.getPosition(), tileentity);
-        if (this.loaded || this.world.e()) {
+        if (this.loaded || this.world.p_()) {
             this.world.setTileEntity(tileentity.getPosition(), tileentity);
         }
 
@@ -420,13 +415,12 @@ public class Chunk implements IChunkAccess {
     @Override
     public void setTileEntity(BlockPosition blockposition, TileEntity tileentity) {
         if (this.getType(blockposition).getBlock() instanceof ITileEntity) {
-            tileentity.setWorld(this.world);
-            tileentity.setPosition(blockposition);
-            tileentity.n();
+            tileentity.setLocation(this.world, blockposition);
+            tileentity.r();
             TileEntity tileentity1 = (TileEntity) this.tileEntities.put(blockposition.immutableCopy(), tileentity);
 
             if (tileentity1 != null && tileentity1 != tileentity) {
-                tileentity1.V_();
+                tileentity1.ab_();
             }
 
         }
@@ -439,7 +433,7 @@ public class Chunk implements IChunkAccess {
 
     @Nullable
     @Override
-    public NBTTagCompound j(BlockPosition blockposition) {
+    public NBTTagCompound i(BlockPosition blockposition) {
         TileEntity tileentity = this.getTileEntity(blockposition);
         NBTTagCompound nbttagcompound;
 
@@ -460,11 +454,11 @@ public class Chunk implements IChunkAccess {
 
     @Override
     public void removeTileEntity(BlockPosition blockposition) {
-        if (this.loaded || this.world.e()) {
+        if (this.loaded || this.world.p_()) {
             TileEntity tileentity = (TileEntity) this.tileEntities.remove(blockposition);
 
             if (tileentity != null) {
-                tileentity.V_();
+                tileentity.ab_();
             }
         }
 
@@ -502,7 +496,7 @@ public class Chunk implements IChunkAccess {
                         }
 
                         if (entity1 instanceof EntityEnderDragon) {
-                            EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity1).dT();
+                            EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity1).eo();
                             int l = aentitycomplexpart.length;
 
                             for (int i1 = 0; i1 < l; ++i1) {
@@ -520,7 +514,7 @@ public class Chunk implements IChunkAccess {
 
     }
 
-    public void a(@Nullable EntityTypes<?> entitytypes, AxisAlignedBB axisalignedbb, List<Entity> list, Predicate<? super Entity> predicate) {
+    public <T extends Entity> void a(@Nullable EntityTypes<?> entitytypes, AxisAlignedBB axisalignedbb, List<? super T> list, Predicate<? super T> predicate) {
         int i = MathHelper.floor((axisalignedbb.minY - 2.0D) / 16.0D);
         int j = MathHelper.floor((axisalignedbb.maxY + 2.0D) / 16.0D);
 
@@ -572,7 +566,7 @@ public class Chunk implements IChunkAccess {
     }
 
     @Override
-    public BiomeBase[] getBiomeIndex() {
+    public BiomeStorage getBiomeIndex() {
         return this.d;
     }
 
@@ -598,7 +592,7 @@ public class Chunk implements IChunkAccess {
     }
 
     @Override
-    public NBTTagCompound i(BlockPosition blockposition) {
+    public NBTTagCompound f(BlockPosition blockposition) {
         return (NBTTagCompound) this.e.get(blockposition);
     }
 
@@ -686,13 +680,13 @@ public class Chunk implements IChunkAccess {
     }
 
     @Override
-    public long q() {
-        return this.t;
+    public long getInhabitedTime() {
+        return this.inhabitedTime;
     }
 
     @Override
-    public void b(long i) {
-        this.t = i;
+    public void setInhabitedTime(long i) {
+        this.inhabitedTime = i;
     }
 
     public void A() {
@@ -746,7 +740,7 @@ public class Chunk implements IChunkAccess {
         }
 
         if (tileentity != null) {
-            tileentity.setPosition(blockposition);
+            tileentity.setLocation(this.world, blockposition);
             this.a(tileentity);
         } else {
             Chunk.LOGGER.warn("Tried to load a block entity for block {} but failed at location {}", this.getType(blockposition), blockposition);
@@ -813,9 +807,6 @@ public class Chunk implements IChunkAccess {
     public void a(Supplier<PlayerChunk.State> supplier) {
         this.u = supplier;
     }
-
-    @Override
-    public void a(LightEngine lightengine) {}
 
     @Override
     public boolean r() {

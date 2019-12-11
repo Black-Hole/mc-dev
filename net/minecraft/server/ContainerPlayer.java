@@ -2,16 +2,22 @@ package net.minecraft.server;
 
 public class ContainerPlayer extends ContainerRecipeBook<InventoryCrafting> {
 
-    private static final String[] d = new String[]{"item/empty_armor_slot_boots", "item/empty_armor_slot_leggings", "item/empty_armor_slot_chestplate", "item/empty_armor_slot_helmet"};
-    private static final EnumItemSlot[] e = new EnumItemSlot[]{EnumItemSlot.HEAD, EnumItemSlot.CHEST, EnumItemSlot.LEGS, EnumItemSlot.FEET};
+    public static final MinecraftKey c = new MinecraftKey("textures/atlas/blocks.png");
+    public static final MinecraftKey d = new MinecraftKey("item/empty_armor_slot_helmet");
+    public static final MinecraftKey e = new MinecraftKey("item/empty_armor_slot_chestplate");
+    public static final MinecraftKey f = new MinecraftKey("item/empty_armor_slot_leggings");
+    public static final MinecraftKey g = new MinecraftKey("item/empty_armor_slot_boots");
+    public static final MinecraftKey h = new MinecraftKey("item/empty_armor_slot_shield");
+    private static final MinecraftKey[] j = new MinecraftKey[]{ContainerPlayer.g, ContainerPlayer.f, ContainerPlayer.e, ContainerPlayer.d};
+    private static final EnumItemSlot[] k = new EnumItemSlot[]{EnumItemSlot.HEAD, EnumItemSlot.CHEST, EnumItemSlot.LEGS, EnumItemSlot.FEET};
     private final InventoryCrafting craftInventory = new InventoryCrafting(this, 2, 2);
     private final InventoryCraftResult resultInventory = new InventoryCraftResult();
-    public final boolean c;
+    public final boolean i;
     private final EntityHuman owner;
 
     public ContainerPlayer(PlayerInventory playerinventory, boolean flag, EntityHuman entityhuman) {
         super((Containers) null, 0);
-        this.c = flag;
+        this.i = flag;
         this.owner = entityhuman;
         this.a((Slot) (new SlotResult(playerinventory.player, this.craftInventory, this.resultInventory, 0, 154, 28)));
 
@@ -25,7 +31,7 @@ public class ContainerPlayer extends ContainerRecipeBook<InventoryCrafting> {
         }
 
         for (i = 0; i < 4; ++i) {
-            final EnumItemSlot enumitemslot = ContainerPlayer.e[i];
+            final EnumItemSlot enumitemslot = ContainerPlayer.k[i];
 
             this.a(new Slot(playerinventory, 39 - i, 8, 8 + i * 18) {
                 @Override

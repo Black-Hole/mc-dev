@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlayOut> {
@@ -18,8 +17,6 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
     private byte j;
     private byte k;
     private byte l;
-    private DataWatcher m;
-    private List<DataWatcher.Item<?>> n;
 
     public PacketPlayOutSpawnEntityLiving() {}
 
@@ -27,12 +24,12 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
         this.a = entityliving.getId();
         this.b = entityliving.getUniqueID();
         this.c = IRegistry.ENTITY_TYPE.a((Object) entityliving.getEntityType());
-        this.d = entityliving.locX;
-        this.e = entityliving.locY;
-        this.f = entityliving.locZ;
+        this.d = entityliving.locX();
+        this.e = entityliving.locY();
+        this.f = entityliving.locZ();
         this.j = (byte) ((int) (entityliving.yaw * 256.0F / 360.0F));
         this.k = (byte) ((int) (entityliving.pitch * 256.0F / 360.0F));
-        this.l = (byte) ((int) (entityliving.aM * 256.0F / 360.0F));
+        this.l = (byte) ((int) (entityliving.aK * 256.0F / 360.0F));
         double d0 = 3.9D;
         Vec3D vec3d = entityliving.getMot();
         double d1 = MathHelper.a(vec3d.x, -3.9D, 3.9D);
@@ -42,7 +39,6 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
         this.g = (int) (d1 * 8000.0D);
         this.h = (int) (d2 * 8000.0D);
         this.i = (int) (d3 * 8000.0D);
-        this.m = entityliving.getDataWatcher();
     }
 
     @Override
@@ -59,7 +55,6 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
         this.g = packetdataserializer.readShort();
         this.h = packetdataserializer.readShort();
         this.i = packetdataserializer.readShort();
-        this.n = DataWatcher.b(packetdataserializer);
     }
 
     @Override
@@ -76,7 +71,6 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
         packetdataserializer.writeShort(this.g);
         packetdataserializer.writeShort(this.h);
         packetdataserializer.writeShort(this.i);
-        this.m.a(packetdataserializer);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

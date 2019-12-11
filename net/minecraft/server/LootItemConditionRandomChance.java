@@ -13,7 +13,7 @@ public class LootItemConditionRandomChance implements LootItemCondition {
     }
 
     public boolean test(LootTableInfo loottableinfo) {
-        return loottableinfo.b().nextFloat() < this.a;
+        return loottableinfo.a().nextFloat() < this.a;
     }
 
     public static LootItemCondition.a a(float f) {

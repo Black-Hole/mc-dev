@@ -10,7 +10,7 @@ public class EntityItemFrame extends EntityHanging {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final DataWatcherObject<ItemStack> ITEM = DataWatcher.a(EntityItemFrame.class, DataWatcherRegistry.g);
     private static final DataWatcherObject<Integer> g = DataWatcher.a(EntityItemFrame.class, DataWatcherRegistry.b);
-    private float ar = 1.0F;
+    private float ao = 1.0F;
 
     public EntityItemFrame(EntityTypes<? extends EntityItemFrame> entitytypes, World world) {
         super(entitytypes, world);
@@ -36,11 +36,11 @@ public class EntityItemFrame extends EntityHanging {
     public void setDirection(EnumDirection enumdirection) {
         Validate.notNull(enumdirection);
         this.direction = enumdirection;
-        if (enumdirection.k().c()) {
+        if (enumdirection.m().c()) {
             this.pitch = 0.0F;
             this.yaw = (float) (this.direction.get2DRotationValue() * 90);
         } else {
-            this.pitch = (float) (-90 * enumdirection.c().a());
+            this.pitch = (float) (-90 * enumdirection.d().a());
             this.yaw = 0.0F;
         }
 
@@ -53,30 +53,31 @@ public class EntityItemFrame extends EntityHanging {
     protected void updateBoundingBox() {
         if (this.direction != null) {
             double d0 = 0.46875D;
+            double d1 = (double) this.blockPosition.getX() + 0.5D - (double) this.direction.getAdjacentX() * 0.46875D;
+            double d2 = (double) this.blockPosition.getY() + 0.5D - (double) this.direction.getAdjacentY() * 0.46875D;
+            double d3 = (double) this.blockPosition.getZ() + 0.5D - (double) this.direction.getAdjacentZ() * 0.46875D;
 
-            this.locX = (double) this.blockPosition.getX() + 0.5D - (double) this.direction.getAdjacentX() * 0.46875D;
-            this.locY = (double) this.blockPosition.getY() + 0.5D - (double) this.direction.getAdjacentY() * 0.46875D;
-            this.locZ = (double) this.blockPosition.getZ() + 0.5D - (double) this.direction.getAdjacentZ() * 0.46875D;
-            double d1 = (double) this.getHangingWidth();
-            double d2 = (double) this.getHangingHeight();
-            double d3 = (double) this.getHangingWidth();
-            EnumDirection.EnumAxis enumdirection_enumaxis = this.direction.k();
+            this.setPositionRaw(d1, d2, d3);
+            double d4 = (double) this.getHangingWidth();
+            double d5 = (double) this.getHangingHeight();
+            double d6 = (double) this.getHangingWidth();
+            EnumDirection.EnumAxis enumdirection_enumaxis = this.direction.m();
 
             switch (enumdirection_enumaxis) {
                 case X:
-                    d1 = 1.0D;
+                    d4 = 1.0D;
                     break;
                 case Y:
-                    d2 = 1.0D;
+                    d5 = 1.0D;
                     break;
                 case Z:
-                    d3 = 1.0D;
+                    d6 = 1.0D;
             }
 
-            d1 /= 32.0D;
-            d2 /= 32.0D;
-            d3 /= 32.0D;
-            this.a(new AxisAlignedBB(this.locX - d1, this.locY - d2, this.locZ - d3, this.locX + d1, this.locY + d2, this.locZ + d3));
+            d4 /= 32.0D;
+            d5 /= 32.0D;
+            d6 /= 32.0D;
+            this.a(new AxisAlignedBB(d1 - d4, d2 - d5, d3 - d6, d1 + d4, d2 + d5, d3 + d6));
         }
     }
 
@@ -87,12 +88,12 @@ public class EntityItemFrame extends EntityHanging {
         } else {
             IBlockData iblockdata = this.world.getType(this.blockPosition.shift(this.direction.opposite()));
 
-            return !iblockdata.getMaterial().isBuildable() && (!this.direction.k().c() || !BlockDiodeAbstract.isDiode(iblockdata)) ? false : this.world.getEntities(this, this.getBoundingBox(), EntityItemFrame.b).isEmpty();
+            return !iblockdata.getMaterial().isBuildable() && (!this.direction.m().c() || !BlockDiodeAbstract.isDiode(iblockdata)) ? false : this.world.getEntities(this, this.getBoundingBox(), EntityItemFrame.b).isEmpty();
         }
     }
 
     @Override
-    public float aS() {
+    public float aV() {
         return 0.0F;
     }
 
@@ -165,7 +166,7 @@ public class EntityItemFrame extends EntityHanging {
             if (!itemstack.isEmpty()) {
                 itemstack = itemstack.cloneItemStack();
                 this.c(itemstack);
-                if (this.random.nextFloat() < this.ar) {
+                if (this.random.nextFloat() < this.ao) {
                     this.a(itemstack);
                 }
             }
@@ -254,10 +255,10 @@ public class EntityItemFrame extends EntityHanging {
         if (!this.getItem().isEmpty()) {
             nbttagcompound.set("Item", this.getItem().save(new NBTTagCompound()));
             nbttagcompound.setByte("ItemRotation", (byte) this.getRotation());
-            nbttagcompound.setFloat("ItemDropChance", this.ar);
+            nbttagcompound.setFloat("ItemDropChance", this.ao);
         }
 
-        nbttagcompound.setByte("Facing", (byte) this.direction.a());
+        nbttagcompound.setByte("Facing", (byte) this.direction.b());
     }
 
     @Override
@@ -281,7 +282,7 @@ public class EntityItemFrame extends EntityHanging {
             this.setItem(itemstack, false);
             this.setRotation(nbttagcompound.getByte("ItemRotation"), false);
             if (nbttagcompound.hasKeyOfType("ItemDropChance", 99)) {
-                this.ar = nbttagcompound.getFloat("ItemDropChance");
+                this.ao = nbttagcompound.getFloat("ItemDropChance");
             }
         }
 
@@ -291,10 +292,12 @@ public class EntityItemFrame extends EntityHanging {
     @Override
     public boolean b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
+        boolean flag = !this.getItem().isEmpty();
+        boolean flag1 = !itemstack.isEmpty();
 
         if (!this.world.isClientSide) {
-            if (this.getItem().isEmpty()) {
-                if (!itemstack.isEmpty()) {
+            if (!flag) {
+                if (flag1) {
                     this.setItem(itemstack);
                     if (!entityhuman.abilities.canInstantlyBuild) {
                         itemstack.subtract(1);
@@ -304,9 +307,11 @@ public class EntityItemFrame extends EntityHanging {
                 this.a(SoundEffects.ENTITY_ITEM_FRAME_ROTATE_ITEM, 1.0F, 1.0F);
                 this.setRotation(this.getRotation() + 1);
             }
-        }
 
-        return true;
+            return true;
+        } else {
+            return flag || flag1;
+        }
     }
 
     public int q() {
@@ -314,7 +319,7 @@ public class EntityItemFrame extends EntityHanging {
     }
 
     @Override
-    public Packet<?> N() {
-        return new PacketPlayOutSpawnEntity(this, this.getEntityType(), this.direction.a(), this.getBlockPosition());
+    public Packet<?> L() {
+        return new PacketPlayOutSpawnEntity(this, this.getEntityType(), this.direction.b(), this.getBlockPosition());
     }
 }

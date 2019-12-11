@@ -30,7 +30,7 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     @Override
-    public float aF() {
+    public float aI() {
         return 1.0F;
     }
 
@@ -41,7 +41,7 @@ public class EntityMagmaCube extends EntitySlime {
 
     @Override
     protected MinecraftKey getDefaultLootTable() {
-        return this.ea() ? LootTables.a : this.getEntityType().h();
+        return this.ev() ? LootTables.a : this.getEntityType().h();
     }
 
     @Override
@@ -50,12 +50,12 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     @Override
-    protected int dT() {
-        return super.dT() * 4;
+    protected int eo() {
+        return super.eo() * 4;
     }
 
     @Override
-    protected void dU() {
+    protected void ep() {
         this.b *= 0.9F;
     }
 
@@ -63,7 +63,7 @@ public class EntityMagmaCube extends EntitySlime {
     protected void jump() {
         Vec3D vec3d = this.getMot();
 
-        this.setMot(vec3d.x, (double) (0.42F + (float) this.getSize() * 0.1F), vec3d.z);
+        this.setMot(vec3d.x, (double) (this.dp() + (float) this.getSize() * 0.1F), vec3d.z);
         this.impulse = true;
     }
 
@@ -81,31 +81,33 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     @Override
-    public void b(float f, float f1) {}
-
-    @Override
-    protected boolean dV() {
-        return this.df();
+    public boolean b(float f, float f1) {
+        return false;
     }
 
     @Override
-    protected int dW() {
-        return super.dW() + 2;
+    protected boolean eq() {
+        return this.doAITick();
+    }
+
+    @Override
+    protected float er() {
+        return super.er() + 2.0F;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return this.ea() ? SoundEffects.ENTITY_MAGMA_CUBE_HURT_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_HURT;
+        return this.ev() ? SoundEffects.ENTITY_MAGMA_CUBE_HURT_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return this.ea() ? SoundEffects.ENTITY_MAGMA_CUBE_DEATH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_DEATH;
+        return this.ev() ? SoundEffects.ENTITY_MAGMA_CUBE_DEATH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundSquish() {
-        return this.ea() ? SoundEffects.ENTITY_MAGMA_CUBE_SQUISH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_SQUISH;
+        return this.ev() ? SoundEffects.ENTITY_MAGMA_CUBE_SQUISH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_SQUISH;
     }
 
     @Override

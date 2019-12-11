@@ -42,7 +42,7 @@ public class ShapedRecipes implements RecipeCrafting {
     }
 
     @Override
-    public ItemStack c() {
+    public ItemStack getResult() {
         return this.result;
     }
 
@@ -92,7 +92,7 @@ public class ShapedRecipes implements RecipeCrafting {
     }
 
     public ItemStack a(InventoryCrafting inventorycrafting) {
-        return this.c().cloneItemStack();
+        return this.getResult().cloneItemStack();
     }
 
     public int i() {

@@ -44,7 +44,7 @@ public class PathfinderGoalBeg extends PathfinderGoal {
 
     @Override
     public void e() {
-        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, 10.0F, (float) this.a.M());
+        this.a.getControllerLook().a(this.b.locX(), this.b.getHeadY(), this.b.locZ(), 10.0F, (float) this.a.dU());
         --this.e;
     }
 

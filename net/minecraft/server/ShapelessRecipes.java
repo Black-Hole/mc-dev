@@ -31,7 +31,7 @@ public class ShapelessRecipes implements RecipeCrafting {
     }
 
     @Override
-    public ItemStack c() {
+    public ItemStack getResult() {
         return this.result;
     }
 

@@ -13,10 +13,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 public class LootTable {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final LootTable a = new LootTable(LootContextParameterSets.EMPTY, new LootSelector[0], new LootItemFunction[0]);
+    public static final LootTable EMPTY = new LootTable(LootContextParameterSets.EMPTY, new LootSelector[0], new LootItemFunction[0]);
     public static final LootContextParameterSet b = LootContextParameterSets.GENERIC;
     private final LootContextParameterSet d;
     private final LootSelector[] e;
@@ -91,22 +89,22 @@ public class LootTable {
         return this.d;
     }
 
-    public void a(LootCollector lootcollector, Function<MinecraftKey, LootTable> function, Set<MinecraftKey> set, LootContextParameterSet lootcontextparameterset) {
+    public void a(LootCollector lootcollector) {
         int i;
 
         for (i = 0; i < this.e.length; ++i) {
-            this.e[i].a(lootcollector.b(".pools[" + i + "]"), function, set, lootcontextparameterset);
+            this.e[i].a(lootcollector.b(".pools[" + i + "]"));
         }
 
         for (i = 0; i < this.f.length; ++i) {
-            this.f[i].a(lootcollector.b(".functions[" + i + "]"), function, set, lootcontextparameterset);
+            this.f[i].a(lootcollector.b(".functions[" + i + "]"));
         }
 
     }
 
     public void fillInventory(IInventory iinventory, LootTableInfo loottableinfo) {
         List<ItemStack> list = this.populateLoot(loottableinfo);
-        Random random = loottableinfo.b();
+        Random random = loottableinfo.a();
         List<Integer> list1 = this.a(iinventory, random);
 
         this.a(list, list1.size(), random);

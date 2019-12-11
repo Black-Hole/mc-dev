@@ -41,7 +41,11 @@ public class RecipeBook {
         return irecipe == null ? false : this.a.contains(irecipe.getKey());
     }
 
-    protected void b(MinecraftKey minecraftkey) {
+    public boolean b(MinecraftKey minecraftkey) {
+        return this.a.contains(minecraftkey);
+    }
+
+    protected void c(MinecraftKey minecraftkey) {
         this.a.remove(minecraftkey);
         this.b.remove(minecraftkey);
     }
@@ -51,10 +55,10 @@ public class RecipeBook {
     }
 
     public void f(IRecipe<?> irecipe) {
-        this.c(irecipe.getKey());
+        this.d(irecipe.getKey());
     }
 
-    protected void c(MinecraftKey minecraftkey) {
+    protected void d(MinecraftKey minecraftkey) {
         this.b.add(minecraftkey);
     }
 

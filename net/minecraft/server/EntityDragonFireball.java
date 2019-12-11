@@ -15,10 +15,11 @@ public class EntityDragonFireball extends EntityFireball {
 
     @Override
     protected void a(MovingObjectPosition movingobjectposition) {
+        super.a(movingobjectposition);
         if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.ENTITY || !((MovingObjectPositionEntity) movingobjectposition).getEntity().s(this.shooter)) {
             if (!this.world.isClientSide) {
                 List<EntityLiving> list = this.world.a(EntityLiving.class, this.getBoundingBox().grow(4.0D, 2.0D, 4.0D));
-                EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX, this.locY, this.locZ);
+                EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX(), this.locY(), this.locZ());
 
                 entityareaeffectcloud.setSource(this.shooter);
                 entityareaeffectcloud.setParticle(Particles.DRAGON_BREATH);
@@ -34,13 +35,13 @@ public class EntityDragonFireball extends EntityFireball {
                         double d0 = this.h(entityliving);
 
                         if (d0 < 16.0D) {
-                            entityareaeffectcloud.setPosition(entityliving.locX, entityliving.locY, entityliving.locZ);
+                            entityareaeffectcloud.setPosition(entityliving.locX(), entityliving.locY(), entityliving.locZ());
                             break;
                         }
                     }
                 }
 
-                this.world.triggerEffect(2006, new BlockPosition(this.locX, this.locY, this.locZ), 0);
+                this.world.triggerEffect(2006, new BlockPosition(this), 0);
                 this.world.addEntity(entityareaeffectcloud);
                 this.die();
             }
@@ -64,7 +65,7 @@ public class EntityDragonFireball extends EntityFireball {
     }
 
     @Override
-    protected boolean K_() {
+    protected boolean M_() {
         return false;
     }
 }

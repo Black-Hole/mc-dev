@@ -46,13 +46,14 @@ public class ItemHanging extends Item {
                 }
 
                 itemstack.subtract(1);
+                return EnumInteractionResult.SUCCESS;
+            } else {
+                return EnumInteractionResult.CONSUME;
             }
-
-            return EnumInteractionResult.SUCCESS;
         }
     }
 
     protected boolean a(EntityHuman entityhuman, EnumDirection enumdirection, ItemStack itemstack, BlockPosition blockposition) {
-        return !enumdirection.k().b() && entityhuman.a(blockposition, enumdirection, itemstack);
+        return !enumdirection.m().b() && entityhuman.a(blockposition, enumdirection, itemstack);
     }
 }

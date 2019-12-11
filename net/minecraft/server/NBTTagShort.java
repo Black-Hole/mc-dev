@@ -6,12 +6,36 @@ import java.io.IOException;
 
 public class NBTTagShort extends NBTNumber {
 
-    private short data;
+    public static final NBTTagType<NBTTagShort> a = new NBTTagType<NBTTagShort>() {
+        @Override
+        public NBTTagShort b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+            nbtreadlimiter.a(80L);
+            return NBTTagShort.a(datainput.readShort());
+        }
 
-    public NBTTagShort() {}
+        @Override
+        public String a() {
+            return "SHORT";
+        }
 
-    public NBTTagShort(short short0) {
+        @Override
+        public String b() {
+            return "TAG_Short";
+        }
+
+        @Override
+        public boolean c() {
+            return true;
+        }
+    };
+    private final short data;
+
+    private NBTTagShort(short short0) {
         this.data = short0;
+    }
+
+    public static NBTTagShort a(short short0) {
+        return short0 >= -128 && short0 <= 1024 ? NBTTagShort.a.a[short0 + 128] : new NBTTagShort(short0);
     }
 
     @Override
@@ -20,14 +44,13 @@ public class NBTTagShort extends NBTNumber {
     }
 
     @Override
-    public void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
-        nbtreadlimiter.a(80L);
-        this.data = datainput.readShort();
+    public byte getTypeId() {
+        return 2;
     }
 
     @Override
-    public byte getTypeId() {
-        return 2;
+    public NBTTagType<NBTTagShort> b() {
+        return NBTTagShort.a;
     }
 
     @Override
@@ -37,7 +60,7 @@ public class NBTTagShort extends NBTNumber {
 
     @Override
     public NBTTagShort clone() {
-        return new NBTTagShort(this.data);
+        return this;
     }
 
     public boolean equals(Object object) {
@@ -50,9 +73,9 @@ public class NBTTagShort extends NBTNumber {
 
     @Override
     public IChatBaseComponent a(String s, int i) {
-        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("s")).a(NBTTagShort.e);
+        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("s")).a(NBTTagShort.g);
 
-        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatbasecomponent).a(NBTTagShort.d);
+        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatbasecomponent).a(NBTTagShort.f);
     }
 
     @Override
@@ -86,7 +109,19 @@ public class NBTTagShort extends NBTNumber {
     }
 
     @Override
-    public Number j() {
+    public Number k() {
         return this.data;
+    }
+
+    static class a {
+
+        static final NBTTagShort[] a = new NBTTagShort[1153];
+
+        static {
+            for (int i = 0; i < NBTTagShort.a.a.length; ++i) {
+                NBTTagShort.a.a[i] = new NBTTagShort((short) (-128 + i));
+            }
+
+        }
     }
 }

@@ -45,18 +45,18 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
     }
 
     @Override
-    public double aO() {
+    public double aR() {
         return -0.45D;
     }
 
-    public boolean dX() {
+    public boolean es() {
         return true;
     }
 
     @Nullable
     @Override
     public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        if (enummobspawn != EnumMobSpawn.PATROL && enummobspawn != EnumMobSpawn.EVENT && enummobspawn != EnumMobSpawn.STRUCTURE && this.random.nextFloat() < 0.06F && this.dX()) {
+        if (enummobspawn != EnumMobSpawn.PATROL && enummobspawn != EnumMobSpawn.EVENT && enummobspawn != EnumMobSpawn.STRUCTURE && this.random.nextFloat() < 0.06F && this.es()) {
             this.patrolLeader = true;
         }
 
@@ -90,7 +90,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         return this.patrolTarget;
     }
 
-    public boolean dZ() {
+    public boolean eu() {
         return this.patrolTarget != null;
     }
 
@@ -103,11 +103,11 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         return this.patrolLeader;
     }
 
-    public boolean ec() {
+    public boolean ex() {
         return true;
     }
 
-    public void ed() {
+    public void ey() {
         this.patrolTarget = (new BlockPosition(this)).b(-500 + this.random.nextInt(1000), 0, -500 + this.random.nextInt(1000));
         this.patrolling = true;
     }
@@ -116,22 +116,30 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         return this.patrolling;
     }
 
+    protected void s(boolean flag) {
+        this.patrolling = flag;
+    }
+
     public static class a<T extends EntityMonsterPatrolling> extends PathfinderGoal {
 
         private final T a;
         private final double b;
         private final double c;
+        private long d;
 
         public a(T t0, double d0, double d1) {
             this.a = t0;
             this.b = d0;
             this.c = d1;
+            this.d = -1L;
             this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
         }
 
         @Override
         public boolean a() {
-            return this.a.isPatrolling() && this.a.getGoalTarget() == null && !this.a.isVehicle() && this.a.dZ();
+            boolean flag = this.a.world.getTime() < this.d;
+
+            return this.a.isPatrolling() && this.a.getGoalTarget() == null && !this.a.isVehicle() && this.a.eu() && !flag;
         }
 
         @Override
@@ -145,12 +153,16 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
             boolean flag = this.a.isPatrolLeader();
             NavigationAbstract navigationabstract = this.a.getNavigation();
 
-            if (navigationabstract.n()) {
-                if (flag && this.a.getPatrolTarget().a((IPosition) this.a.getPositionVector(), 10.0D)) {
-                    this.a.ed();
+            if (navigationabstract.m()) {
+                List<EntityMonsterPatrolling> list = this.g();
+
+                if (this.a.isPatrolling() && list.isEmpty()) {
+                    this.a.s(false);
+                } else if (flag && this.a.getPatrolTarget().a((IPosition) this.a.getPositionVector(), 10.0D)) {
+                    this.a.ey();
                 } else {
                     Vec3D vec3d = new Vec3D(this.a.getPatrolTarget());
-                    Vec3D vec3d1 = new Vec3D(this.a.locX, this.a.locY, this.a.locZ);
+                    Vec3D vec3d1 = this.a.getPositionVector();
                     Vec3D vec3d2 = vec3d1.d(vec3d);
 
                     vec3d = vec3d2.b(90.0F).a(0.4D).e(vec3d);
@@ -159,11 +171,9 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
 
                     blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, blockposition);
                     if (!navigationabstract.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), flag ? this.c : this.b)) {
-                        this.g();
+                        this.h();
+                        this.d = this.a.world.getTime() + 200L;
                     } else if (flag) {
-                        List<EntityMonsterPatrolling> list = this.a.world.a(EntityMonsterPatrolling.class, this.a.getBoundingBox().g(16.0D), (entitymonsterpatrolling) -> {
-                            return !entitymonsterpatrolling.isPatrolLeader() && entitymonsterpatrolling.ec();
-                        });
                         Iterator iterator = list.iterator();
 
                         while (iterator.hasNext()) {
@@ -177,11 +187,17 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
 
         }
 
-        private void g() {
+        private List<EntityMonsterPatrolling> g() {
+            return this.a.world.a(EntityMonsterPatrolling.class, this.a.getBoundingBox().g(16.0D), (entitymonsterpatrolling) -> {
+                return entitymonsterpatrolling.ex() && !entitymonsterpatrolling.s(this.a);
+            });
+        }
+
+        private boolean h() {
             Random random = this.a.getRandom();
             BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, (new BlockPosition(this.a)).b(-8 + random.nextInt(16), 0, -8 + random.nextInt(16)));
 
-            this.a.getNavigation().a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), this.b);
+            return this.a.getNavigation().a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), this.b);
         }
     }
 }

@@ -97,4 +97,11 @@ public class LightEngine implements ILightEngine {
         }
 
     }
+
+    public int b(BlockPosition blockposition, int i) {
+        int j = this.b == null ? 0 : this.b.b(blockposition) - i;
+        int k = this.a == null ? 0 : this.a.b(blockposition);
+
+        return Math.max(k, j);
+    }
 }

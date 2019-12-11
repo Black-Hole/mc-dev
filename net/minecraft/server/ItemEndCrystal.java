@@ -36,7 +36,7 @@ public class ItemEndCrystal extends Item {
                         entityendercrystal.setShowingBottom(false);
                         world.addEntity(entityendercrystal);
                         if (world.worldProvider instanceof WorldProviderTheEnd) {
-                            EnderDragonBattle enderdragonbattle = ((WorldProviderTheEnd) world.worldProvider).q();
+                            EnderDragonBattle enderdragonbattle = ((WorldProviderTheEnd) world.worldProvider).o();
 
                             enderdragonbattle.e();
                         }
@@ -47,5 +47,10 @@ public class ItemEndCrystal extends Item {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean d_(ItemStack itemstack) {
+        return true;
     }
 }

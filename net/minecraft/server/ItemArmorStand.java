@@ -42,7 +42,7 @@ public class ItemArmorStand extends Item {
                         this.a(entityarmorstand, world.random);
                         EntityTypes.a(world, itemactioncontext.getEntity(), (Entity) entityarmorstand, itemstack.getTag());
                         world.addEntity(entityarmorstand);
-                        world.playSound((EntityHuman) null, entityarmorstand.locX, entityarmorstand.locY, entityarmorstand.locZ, SoundEffects.ENTITY_ARMOR_STAND_PLACE, SoundCategory.BLOCKS, 0.75F, 0.8F);
+                        world.playSound((EntityHuman) null, entityarmorstand.locX(), entityarmorstand.locY(), entityarmorstand.locZ(), SoundEffects.ENTITY_ARMOR_STAND_PLACE, SoundCategory.BLOCKS, 0.75F, 0.8F);
                     }
 
                     itemstack.subtract(1);

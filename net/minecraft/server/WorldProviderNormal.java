@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 public class WorldProviderNormal extends WorldProvider {
 
     public WorldProviderNormal(World world, DimensionManager dimensionmanager) {
-        super(world, dimensionmanager);
+        super(world, dimensionmanager, 0.0F);
     }
 
     @Override
@@ -32,18 +32,18 @@ public class WorldProviderNormal extends WorldProvider {
 
         if (worldtype == WorldType.FLAT) {
             GeneratorSettingsFlat generatorsettingsflat = GeneratorSettingsFlat.a(new Dynamic(DynamicOpsNBT.a, this.b.getWorldData().getGeneratorOptions()));
-            BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration = ((BiomeLayoutFixedConfiguration) biomelayout.a()).a(generatorsettingsflat.v());
+            BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration = ((BiomeLayoutFixedConfiguration) biomelayout.a(this.b.getWorldData())).a(generatorsettingsflat.v());
 
-            return chunkgeneratortype.create(this.b, biomelayout.a(biomelayoutfixedconfiguration), generatorsettingsflat);
+            return chunkgeneratortype.create(this.b, biomelayout.a((BiomeLayoutConfiguration) biomelayoutfixedconfiguration), generatorsettingsflat);
         } else if (worldtype == WorldType.DEBUG_ALL_BLOCK_STATES) {
-            BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration1 = ((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.PLAINS);
+            BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration1 = ((BiomeLayoutFixedConfiguration) biomelayout.a(this.b.getWorldData())).a(Biomes.PLAINS);
 
-            return chunkgeneratortype1.create(this.b, biomelayout.a(biomelayoutfixedconfiguration1), chunkgeneratortype1.a());
+            return chunkgeneratortype1.create(this.b, biomelayout.a((BiomeLayoutConfiguration) biomelayoutfixedconfiguration1), chunkgeneratortype1.a());
         } else if (worldtype != WorldType.g) {
             GeneratorSettingsOverworld generatorsettingsoverworld = (GeneratorSettingsOverworld) chunkgeneratortype4.a();
-            BiomeLayoutOverworldConfiguration biomelayoutoverworldconfiguration = ((BiomeLayoutOverworldConfiguration) biomelayout1.a()).a(this.b.getWorldData()).a(generatorsettingsoverworld);
+            BiomeLayoutOverworldConfiguration biomelayoutoverworldconfiguration = ((BiomeLayoutOverworldConfiguration) biomelayout1.a(this.b.getWorldData())).a(generatorsettingsoverworld);
 
-            return chunkgeneratortype4.create(this.b, biomelayout1.a(biomelayoutoverworldconfiguration), generatorsettingsoverworld);
+            return chunkgeneratortype4.create(this.b, biomelayout1.a((BiomeLayoutConfiguration) biomelayoutoverworldconfiguration), generatorsettingsoverworld);
         } else {
             WorldChunkManager worldchunkmanager = null;
             JsonElement jsonelement = (JsonElement) Dynamic.convert(DynamicOpsNBT.a, JsonOps.INSTANCE, this.b.getWorldData().getGeneratorOptions());
@@ -66,27 +66,27 @@ public class WorldProviderNormal extends WorldProvider {
                 }
 
                 if (BiomeLayout.b == biomelayout3) {
-                    BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration2 = ((BiomeLayoutFixedConfiguration) biomelayout.a()).a(abiomebase[0]);
+                    BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration2 = ((BiomeLayoutFixedConfiguration) biomelayout.a(this.b.getWorldData())).a(abiomebase[0]);
 
-                    worldchunkmanager = biomelayout.a(biomelayoutfixedconfiguration2);
+                    worldchunkmanager = biomelayout.a((BiomeLayoutConfiguration) biomelayoutfixedconfiguration2);
                 }
 
                 if (BiomeLayout.a == biomelayout3) {
                     int j = jsonobject2.has("size") ? jsonobject2.getAsJsonPrimitive("size").getAsInt() : 2;
-                    BiomeLayoutCheckerboardConfiguration biomelayoutcheckerboardconfiguration = ((BiomeLayoutCheckerboardConfiguration) biomelayout2.a()).a(abiomebase).a(j);
+                    BiomeLayoutCheckerboardConfiguration biomelayoutcheckerboardconfiguration = ((BiomeLayoutCheckerboardConfiguration) biomelayout2.a(this.b.getWorldData())).a(abiomebase).a(j);
 
-                    worldchunkmanager = biomelayout2.a(biomelayoutcheckerboardconfiguration);
+                    worldchunkmanager = biomelayout2.a((BiomeLayoutConfiguration) biomelayoutcheckerboardconfiguration);
                 }
 
                 if (BiomeLayout.c == biomelayout3) {
-                    BiomeLayoutOverworldConfiguration biomelayoutoverworldconfiguration1 = ((BiomeLayoutOverworldConfiguration) biomelayout1.a()).a(new GeneratorSettingsOverworld()).a(this.b.getWorldData());
+                    BiomeLayoutOverworldConfiguration biomelayoutoverworldconfiguration1 = (BiomeLayoutOverworldConfiguration) biomelayout1.a(this.b.getWorldData());
 
-                    worldchunkmanager = biomelayout1.a(biomelayoutoverworldconfiguration1);
+                    worldchunkmanager = biomelayout1.a((BiomeLayoutConfiguration) biomelayoutoverworldconfiguration1);
                 }
             }
 
             if (worldchunkmanager == null) {
-                worldchunkmanager = biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.OCEAN));
+                worldchunkmanager = biomelayout.a((BiomeLayoutConfiguration) ((BiomeLayoutFixedConfiguration) biomelayout.a(this.b.getWorldData())).a(Biomes.OCEAN));
             }
 
             IBlockData iblockdata = Blocks.STONE.getBlockData();
@@ -158,7 +158,7 @@ public class WorldProviderNormal extends WorldProvider {
     public BlockPosition a(int i, int j, boolean flag) {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(i, 0, j);
         BiomeBase biomebase = this.b.getBiome(blockposition_mutableblockposition);
-        IBlockData iblockdata = biomebase.q().a();
+        IBlockData iblockdata = biomebase.s().a();
 
         if (flag && !iblockdata.getBlock().a(TagsBlock.VALID_SPAWN)) {
             return null;
@@ -175,7 +175,7 @@ public class WorldProviderNormal extends WorldProvider {
                     blockposition_mutableblockposition.d(i, l, j);
                     IBlockData iblockdata1 = this.b.getType(blockposition_mutableblockposition);
 
-                    if (!iblockdata1.p().isEmpty()) {
+                    if (!iblockdata1.getFluid().isEmpty()) {
                         break;
                     }
 

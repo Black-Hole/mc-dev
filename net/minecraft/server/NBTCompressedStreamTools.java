@@ -99,14 +99,12 @@ public class NBTCompressedStreamTools {
         byte b0 = datainput.readByte();
 
         if (b0 == 0) {
-            return new NBTTagEnd();
+            return NBTTagEnd.b;
         } else {
             datainput.readUTF();
-            NBTBase nbtbase = NBTBase.createTag(b0);
 
             try {
-                nbtbase.load(datainput, i, nbtreadlimiter);
-                return nbtbase;
+                return NBTTagTypes.a(b0).b(datainput, i, nbtreadlimiter);
             } catch (IOException ioexception) {
                 CrashReport crashreport = CrashReport.a(ioexception, "Loading NBT data");
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("NBT Tag");

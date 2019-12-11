@@ -35,11 +35,11 @@ public class NavigationSpider extends Navigation {
 
     @Override
     public void c() {
-        if (!this.n()) {
+        if (!this.m()) {
             super.c();
         } else {
             if (this.p != null) {
-                if (!this.p.a((IPosition) this.a.getPositionVector(), (double) this.a.getWidth()) && (this.a.locY <= (double) this.p.getY() || !(new BlockPosition((double) this.p.getX(), this.a.locY, (double) this.p.getZ())).a((IPosition) this.a.getPositionVector(), (double) this.a.getWidth()))) {
+                if (!this.p.a((IPosition) this.a.getPositionVector(), (double) this.a.getWidth()) && (this.a.locY() <= (double) this.p.getY() || !(new BlockPosition((double) this.p.getX(), this.a.locY(), (double) this.p.getZ())).a((IPosition) this.a.getPositionVector(), (double) this.a.getWidth()))) {
                     this.a.getControllerMove().a((double) this.p.getX(), (double) this.p.getY(), (double) this.p.getZ(), this.d);
                 } else {
                     this.p = null;

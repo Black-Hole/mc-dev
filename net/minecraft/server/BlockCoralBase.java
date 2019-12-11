@@ -9,7 +9,7 @@ public class BlockCoralBase extends Block implements IBlockWaterlogged {
 
     protected BlockCoralBase(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCoralBase.b, true));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCoralBase.b, true));
     }
 
     protected void a(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition) {
@@ -52,11 +52,6 @@ public class BlockCoralBase extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
-    }
-
-    @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if ((Boolean) iblockdata.get(BlockCoralBase.b)) {
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
@@ -78,7 +73,7 @@ public class BlockCoralBase extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public Fluid g(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockCoralBase.b) ? FluidTypes.WATER.a(false) : super.g(iblockdata);
+    public Fluid a_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockCoralBase.b) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
     }
 }

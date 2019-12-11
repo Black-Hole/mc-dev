@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.Random;
 import javax.annotation.Nullable;
@@ -54,7 +55,7 @@ public class MobSpawnerTrader {
     }
 
     private boolean b() {
-        EntityPlayer entityplayer = this.b.l_();
+        EntityPlayer entityplayer = this.b.k();
 
         if (entityplayer == null) {
             return true;
@@ -70,7 +71,7 @@ public class MobSpawnerTrader {
             BlockPosition blockposition1 = (BlockPosition) optional.orElse(blockposition);
             BlockPosition blockposition2 = this.a(blockposition1, 48);
 
-            if (blockposition2 != null) {
+            if (blockposition2 != null && this.a(blockposition2)) {
                 if (this.b.getBiome(blockposition2) == Biomes.THE_VOID) {
                     return false;
                 }
@@ -83,7 +84,7 @@ public class MobSpawnerTrader {
                     }
 
                     this.b.getWorldData().a(entityvillagertrader.getUniqueID());
-                    entityvillagertrader.t(48000);
+                    entityvillagertrader.u(48000);
                     entityvillagertrader.g(blockposition1);
                     entityvillagertrader.a(blockposition1, 16);
                     return true;
@@ -123,5 +124,21 @@ public class MobSpawnerTrader {
         }
 
         return blockposition1;
+    }
+
+    private boolean a(BlockPosition blockposition) {
+        Iterator iterator = BlockPosition.a(blockposition, blockposition.b(1, 2, 1)).iterator();
+
+        BlockPosition blockposition1;
+
+        do {
+            if (!iterator.hasNext()) {
+                return true;
+            }
+
+            blockposition1 = (BlockPosition) iterator.next();
+        } while (this.b.getType(blockposition1).getCollisionShape(this.b, blockposition1).isEmpty());
+
+        return false;
     }
 }

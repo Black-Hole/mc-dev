@@ -266,9 +266,9 @@ public class WorldGenWoodlandMansionPieces {
                     }
                 }
 
-                EnumDirection enumdirection2 = enumdirection.e();
+                EnumDirection enumdirection2 = enumdirection.f();
 
-                enumdirection1 = enumdirection.f();
+                enumdirection1 = enumdirection.g();
                 worldgenwoodlandmansionpieces_g.a(i + enumdirection2.getAdjacentX(), j + enumdirection2.getAdjacentZ(), 0, 2);
                 worldgenwoodlandmansionpieces_g.a(i + enumdirection1.getAdjacentX(), j + enumdirection1.getAdjacentZ(), 0, 2);
                 worldgenwoodlandmansionpieces_g.a(i + enumdirection.getAdjacentX() + enumdirection2.getAdjacentX(), j + enumdirection.getAdjacentZ() + enumdirection2.getAdjacentZ(), 0, 2);
@@ -648,7 +648,7 @@ public class WorldGenWoodlandMansionPieces {
 
                                     this.a(list, blockposition3, enumblockrotation, enumdirection2, enumdirection1, aworldgenwoodlandmansionpieces_b[k], flag2);
                                 } else if (j2 == 262144 && enumdirection1 != null && enumdirection1 != EnumDirection.UP) {
-                                    enumdirection2 = enumdirection1.e();
+                                    enumdirection2 = enumdirection1.f();
                                     if (!worldgenwoodlandmansionpieces_c.a(worldgenwoodlandmansionpieces_g3, l1 + enumdirection2.getAdjacentX(), k1 + enumdirection2.getAdjacentZ(), k, k2)) {
                                         enumdirection2 = enumdirection2.opposite();
                                     }
@@ -673,15 +673,15 @@ public class WorldGenWoodlandMansionPieces {
             do {
                 if (!WorldGenWoodlandMansionPieces.c.a(worldgenwoodlandmansionpieces_g, i1 + enumdirection.getAdjacentX(), j1 + enumdirection.getAdjacentZ())) {
                     this.c(list, worldgenwoodlandmansionpieces_e);
-                    enumdirection = enumdirection.e();
+                    enumdirection = enumdirection.f();
                     if (i1 != k || j1 != l || enumdirection1 != enumdirection) {
                         this.b(list, worldgenwoodlandmansionpieces_e);
                     }
-                } else if (WorldGenWoodlandMansionPieces.c.a(worldgenwoodlandmansionpieces_g, i1 + enumdirection.getAdjacentX(), j1 + enumdirection.getAdjacentZ()) && WorldGenWoodlandMansionPieces.c.a(worldgenwoodlandmansionpieces_g, i1 + enumdirection.getAdjacentX() + enumdirection.f().getAdjacentX(), j1 + enumdirection.getAdjacentZ() + enumdirection.f().getAdjacentZ())) {
+                } else if (WorldGenWoodlandMansionPieces.c.a(worldgenwoodlandmansionpieces_g, i1 + enumdirection.getAdjacentX(), j1 + enumdirection.getAdjacentZ()) && WorldGenWoodlandMansionPieces.c.a(worldgenwoodlandmansionpieces_g, i1 + enumdirection.getAdjacentX() + enumdirection.g().getAdjacentX(), j1 + enumdirection.getAdjacentZ() + enumdirection.g().getAdjacentZ())) {
                     this.d(list, worldgenwoodlandmansionpieces_e);
                     i1 += enumdirection.getAdjacentX();
                     j1 += enumdirection.getAdjacentZ();
-                    enumdirection = enumdirection.f();
+                    enumdirection = enumdirection.g();
                 } else {
                     i1 += enumdirection.getAdjacentX();
                     j1 += enumdirection.getAdjacentZ();

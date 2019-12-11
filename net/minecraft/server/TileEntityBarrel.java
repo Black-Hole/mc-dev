@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import java.util.Iterator;
-
 public class TileEntityBarrel extends TileEntityLootable {
 
     private NonNullList<ItemStack> items;
@@ -42,52 +40,6 @@ public class TileEntityBarrel extends TileEntityLootable {
     }
 
     @Override
-    public boolean isNotEmpty() {
-        Iterator iterator = this.items.iterator();
-
-        ItemStack itemstack;
-
-        do {
-            if (!iterator.hasNext()) {
-                return true;
-            }
-
-            itemstack = (ItemStack) iterator.next();
-        } while (itemstack.isEmpty());
-
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int i) {
-        return (ItemStack) this.items.get(i);
-    }
-
-    @Override
-    public ItemStack splitStack(int i, int j) {
-        return ContainerUtil.a(this.items, i, j);
-    }
-
-    @Override
-    public ItemStack splitWithoutUpdate(int i) {
-        return ContainerUtil.a(this.items, i);
-    }
-
-    @Override
-    public void setItem(int i, ItemStack itemstack) {
-        this.items.set(i, itemstack);
-        if (itemstack.getCount() > this.getMaxStackSize()) {
-            itemstack.setCount(this.getMaxStackSize());
-        }
-
-    }
-
-    @Override
-    public void clear() {
-        this.items.clear();
-    }
-
-    @Override
     protected NonNullList<ItemStack> f() {
         return this.items;
     }
@@ -123,12 +75,12 @@ public class TileEntityBarrel extends TileEntityLootable {
                 this.a(iblockdata, true);
             }
 
-            this.s();
+            this.j();
         }
 
     }
 
-    private void s() {
+    private void j() {
         this.world.getBlockTickList().a(this.getPosition(), this.getBlock().getBlock(), 5);
     }
 
@@ -139,12 +91,12 @@ public class TileEntityBarrel extends TileEntityLootable {
 
         this.b = TileEntityChest.a(this.world, this, i, j, k);
         if (this.b > 0) {
-            this.s();
+            this.j();
         } else {
             IBlockData iblockdata = this.getBlock();
 
             if (iblockdata.getBlock() != Blocks.BARREL) {
-                this.V_();
+                this.ab_();
                 return;
             }
 
@@ -171,7 +123,7 @@ public class TileEntityBarrel extends TileEntityLootable {
     }
 
     private void a(IBlockData iblockdata, SoundEffect soundeffect) {
-        BaseBlockPosition baseblockposition = ((EnumDirection) iblockdata.get(BlockBarrel.a)).n();
+        BaseBlockPosition baseblockposition = ((EnumDirection) iblockdata.get(BlockBarrel.a)).p();
         double d0 = (double) this.position.getX() + 0.5D + (double) baseblockposition.getX() / 2.0D;
         double d1 = (double) this.position.getY() + 0.5D + (double) baseblockposition.getY() / 2.0D;
         double d2 = (double) this.position.getZ() + 0.5D + (double) baseblockposition.getZ() / 2.0D;

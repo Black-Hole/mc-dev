@@ -16,7 +16,12 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
     private static final Logger LOGGER = LogManager.getLogger();
 
     public StructureGenerator(Function<Dynamic<?>, ? extends C> function) {
-        super(function, false);
+        super(function);
+    }
+
+    @Override
+    public WorldGenFeatureConfigured<C, ? extends StructureGenerator<C>> b(C c0) {
+        return new WorldGenFeatureConfigured<>(this, c0);
     }
 
     @Override
@@ -37,7 +42,7 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
                 StructureStart structurestart = generatoraccess.getChunkAt(chunkcoordintpair.x, chunkcoordintpair.z).a(this.b());
 
                 if (structurestart != null && structurestart != StructureStart.a) {
-                    structurestart.a(generatoraccess, random, new StructureBoundingBox(k, l, k + 15, l + 15), new ChunkCoordIntPair(i, j));
+                    structurestart.a(generatoraccess, chunkgenerator, random, new StructureBoundingBox(k, l, k + 15, l + 15), new ChunkCoordIntPair(i, j));
                     flag = true;
                 }
             }
@@ -159,7 +164,7 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
         return new ChunkCoordIntPair(i + k, j + l);
     }
 
-    public abstract boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j);
+    public abstract boolean a(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, Random random, int i, int j, BiomeBase biomebase);
 
     public abstract StructureGenerator.a a();
 
@@ -169,6 +174,6 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
 
     public interface a {
 
-        StructureStart create(StructureGenerator<?> structuregenerator, int i, int j, BiomeBase biomebase, StructureBoundingBox structureboundingbox, int k, long l);
+        StructureStart create(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l);
     }
 }

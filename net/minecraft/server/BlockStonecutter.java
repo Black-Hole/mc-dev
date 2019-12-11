@@ -10,7 +10,7 @@ public class BlockStonecutter extends Block {
 
     public BlockStonecutter(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStonecutter.a, EnumDirection.NORTH));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStonecutter.a, EnumDirection.NORTH));
     }
 
     @Override
@@ -19,10 +19,14 @@ public class BlockStonecutter extends Block {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        entityhuman.openContainer(iblockdata.b(world, blockposition));
-        entityhuman.a(StatisticList.INTERACT_WITH_STONECUTTER);
-        return true;
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+        if (world.isClientSide) {
+            return EnumInteractionResult.SUCCESS;
+        } else {
+            entityhuman.openContainer(iblockdata.b(world, blockposition));
+            entityhuman.a(StatisticList.INTERACT_WITH_STONECUTTER);
+            return EnumInteractionResult.SUCCESS;
+        }
     }
 
     @Nullable
@@ -39,23 +43,13 @@ public class BlockStonecutter extends Block {
     }
 
     @Override
-    public boolean n(IBlockData iblockdata) {
-        return true;
-    }
-
-    @Override
-    public boolean f(IBlockData iblockdata) {
+    public boolean o(IBlockData iblockdata) {
         return true;
     }
 
     @Override
     public EnumRenderType c(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 
     @Override

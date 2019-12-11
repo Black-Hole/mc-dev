@@ -14,9 +14,9 @@ public class PacketPlayOutSpawnEntityExperienceOrb implements Packet<PacketListe
 
     public PacketPlayOutSpawnEntityExperienceOrb(EntityExperienceOrb entityexperienceorb) {
         this.a = entityexperienceorb.getId();
-        this.b = entityexperienceorb.locX;
-        this.c = entityexperienceorb.locY;
-        this.d = entityexperienceorb.locZ;
+        this.b = entityexperienceorb.locX();
+        this.c = entityexperienceorb.locY();
+        this.d = entityexperienceorb.locZ();
         this.e = entityexperienceorb.f();
     }
 

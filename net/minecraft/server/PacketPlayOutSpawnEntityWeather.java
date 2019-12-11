@@ -14,9 +14,9 @@ public class PacketPlayOutSpawnEntityWeather implements Packet<PacketListenerPla
 
     public PacketPlayOutSpawnEntityWeather(Entity entity) {
         this.a = entity.getId();
-        this.b = entity.locX;
-        this.c = entity.locY;
-        this.d = entity.locZ;
+        this.b = entity.locX();
+        this.c = entity.locY();
+        this.d = entity.locZ();
         if (entity instanceof EntityLightning) {
             this.e = 1;
         }

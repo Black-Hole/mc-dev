@@ -5,10 +5,8 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import java.util.List;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import org.apache.commons.lang3.ArrayUtils;
 
 public abstract class LootSelectorEntry extends LootEntryAbstract {
@@ -33,11 +31,11 @@ public abstract class LootSelectorEntry extends LootEntryAbstract {
     }
 
     @Override
-    public void a(LootCollector lootcollector, Function<MinecraftKey, LootTable> function, Set<MinecraftKey> set, LootContextParameterSet lootcontextparameterset) {
-        super.a(lootcollector, function, set, lootcontextparameterset);
+    public void a(LootCollector lootcollector) {
+        super.a(lootcollector);
 
         for (int i = 0; i < this.g.length; ++i) {
-            this.g[i].a(lootcollector.b(".functions[" + i + "]"), function, set, lootcontextparameterset);
+            this.g[i].a(lootcollector.b(".functions[" + i + "]"));
         }
 
     }

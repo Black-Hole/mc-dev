@@ -18,7 +18,7 @@ public class BehaviorPositionEntity implements BehaviorPosition {
 
     @Override
     public Vec3D b() {
-        return new Vec3D(this.a.locX, this.a.locY + (double) this.a.getHeadHeight(), this.a.locZ);
+        return new Vec3D(this.a.locX(), this.a.getHeadY(), this.a.locZ());
     }
 
     @Override

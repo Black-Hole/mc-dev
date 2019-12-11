@@ -20,7 +20,7 @@ public class FluidTypes {
 
         while (iterator.hasNext()) {
             FluidType fluidtype = (FluidType) iterator.next();
-            UnmodifiableIterator unmodifiableiterator = fluidtype.h().a().iterator();
+            UnmodifiableIterator unmodifiableiterator = fluidtype.g().a().iterator();
 
             while (unmodifiableiterator.hasNext()) {
                 Fluid fluid = (Fluid) unmodifiableiterator.next();

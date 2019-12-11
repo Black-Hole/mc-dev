@@ -63,7 +63,7 @@ public class CommandDataAccessorTile implements CommandDataAccessor {
 
     @Override
     public IChatBaseComponent a(NBTBase nbtbase) {
-        return new ChatMessage("commands.data.block.query", new Object[]{this.d.getX(), this.d.getY(), this.d.getZ(), nbtbase.k()});
+        return new ChatMessage("commands.data.block.query", new Object[]{this.d.getX(), this.d.getY(), this.d.getZ(), nbtbase.l()});
     }
 
     @Override

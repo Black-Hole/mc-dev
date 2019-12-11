@@ -13,7 +13,7 @@ public class ItemSword extends ItemToolMaterial {
         this.a = (float) i + toolmaterial.c();
     }
 
-    public float d() {
+    public float f() {
         return this.a;
     }
 

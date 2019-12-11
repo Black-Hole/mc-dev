@@ -37,7 +37,7 @@ public class EntityFallingBlock extends Entity {
     }
 
     @Override
-    public boolean bs() {
+    public boolean bA() {
         return false;
     }
 
@@ -65,9 +65,6 @@ public class EntityFallingBlock extends Entity {
         if (this.block.isAir()) {
             this.die();
         } else {
-            this.lastX = this.locX;
-            this.lastY = this.locY;
-            this.lastZ = this.locZ;
             Block block = this.block.getBlock();
             BlockPosition blockposition;
 
@@ -93,7 +90,7 @@ public class EntityFallingBlock extends Entity {
                 double d0 = this.getMot().g();
 
                 if (flag && d0 > 1.0D) {
-                    MovingObjectPositionBlock movingobjectpositionblock = this.world.rayTrace(new RayTrace(new Vec3D(this.lastX, this.lastY, this.lastZ), new Vec3D(this.locX, this.locY, this.locZ), RayTrace.BlockCollisionOption.COLLIDER, RayTrace.FluidCollisionOption.SOURCE_ONLY, this));
+                    MovingObjectPositionBlock movingobjectpositionblock = this.world.rayTrace(new RayTrace(new Vec3D(this.lastX, this.lastY, this.lastZ), this.getPositionVector(), RayTrace.BlockCollisionOption.COLLIDER, RayTrace.FluidCollisionOption.SOURCE_ONLY, this));
 
                     if (movingobjectpositionblock.getType() != MovingObjectPosition.EnumMovingObjectType.MISS && this.world.getFluid(movingobjectpositionblock.getBlockPosition()).a(TagsFluid.WATER)) {
                         blockposition = movingobjectpositionblock.getBlockPosition();
@@ -117,7 +114,7 @@ public class EntityFallingBlock extends Entity {
                         this.die();
                         if (!this.g) {
                             boolean flag2 = iblockdata.a((BlockActionContext) (new BlockActionContextDirectional(this.world, blockposition, EnumDirection.DOWN, ItemStack.a, EnumDirection.UP)));
-                            boolean flag3 = this.block.canPlace(this.world, blockposition);
+                            boolean flag3 = this.block.canPlace(this.world, blockposition) && !BlockFalling.canFallThrough(this.world.getType(blockposition.down()));
 
                             if (flag2 && flag3) {
                                 if (this.block.b((IBlockState) BlockProperties.C) && this.world.getFluid(blockposition).getType() == FluidTypes.WATER) {
@@ -167,7 +164,7 @@ public class EntityFallingBlock extends Entity {
     }
 
     @Override
-    public void b(float f, float f1) {
+    public boolean b(float f, float f1) {
         if (this.hurtEntities) {
             int i = MathHelper.f(f - 1.0F);
 
@@ -184,7 +181,7 @@ public class EntityFallingBlock extends Entity {
                 }
 
                 if (flag && (double) this.random.nextFloat() < 0.05000000074505806D + (double) i * 0.05D) {
-                    IBlockData iblockdata = BlockAnvil.a_(this.block);
+                    IBlockData iblockdata = BlockAnvil.e(this.block);
 
                     if (iblockdata == null) {
                         this.g = true;
@@ -195,6 +192,7 @@ public class EntityFallingBlock extends Entity {
             }
         }
 
+        return false;
     }
 
     @Override
@@ -252,12 +250,12 @@ public class EntityFallingBlock extends Entity {
     }
 
     @Override
-    public boolean bT() {
+    public boolean cb() {
         return true;
     }
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         return new PacketPlayOutSpawnEntity(this, Block.getCombinedId(this.getBlock()));
     }
 }

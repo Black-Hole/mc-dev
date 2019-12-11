@@ -77,7 +77,7 @@ public class WorldGenFeatureDefinedStructurePoolSingle extends WorldGenFeatureDe
     }
 
     @Override
-    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccess generatoraccess, BlockPosition blockposition, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random) {
+    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, BlockPosition blockposition, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random) {
         DefinedStructure definedstructure = definedstructuremanager.a(this.a);
         DefinedStructureInfo definedstructureinfo = this.a(enumblockrotation, structureboundingbox);
 

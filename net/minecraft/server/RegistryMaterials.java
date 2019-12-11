@@ -19,7 +19,7 @@ public class RegistryMaterials<T> extends IRegistryWritable<T> {
     protected final RegistryID<T> b = new RegistryID<>(256);
     protected final BiMap<MinecraftKey, T> c = HashBiMap.create();
     protected Object[] d;
-    private int R;
+    private int V;
 
     public RegistryMaterials() {}
 
@@ -34,8 +34,8 @@ public class RegistryMaterials<T> extends IRegistryWritable<T> {
         }
 
         this.c.put(minecraftkey, v0);
-        if (this.R <= i) {
-            this.R = i + 1;
+        if (this.V <= i) {
+            this.V = i + 1;
         }
 
         return v0;
@@ -43,7 +43,7 @@ public class RegistryMaterials<T> extends IRegistryWritable<T> {
 
     @Override
     public <V extends T> V a(MinecraftKey minecraftkey, V v0) {
-        return this.a(this.R, minecraftkey, v0);
+        return this.a(this.V, minecraftkey, v0);
     }
 
     @Nullable

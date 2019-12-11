@@ -21,6 +21,6 @@ public class EntityGiantZombie extends EntityMonster {
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return iworldreader.v(blockposition) - 0.5F;
+        return iworldreader.w(blockposition) - 0.5F;
     }
 }

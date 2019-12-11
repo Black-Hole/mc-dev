@@ -177,23 +177,30 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
     public void a(NBTTagCompound nbttagcompound, String s, String s1) {
         this.a();
         DataPaletteHash<T> datapalettehash = new DataPaletteHash<>(this.d, this.i, this.c, this.e, this.f);
-
-        datapalettehash.a(this.g);
+        T t0 = this.g;
+        int i = datapalettehash.a(this.g);
         int[] aint = new int[4096];
 
-        for (int i = 0; i < 4096; ++i) {
-            aint[i] = datapalettehash.a(this.a(i));
+        for (int j = 0; j < 4096; ++j) {
+            T t1 = this.a(j);
+
+            if (t1 != t0) {
+                t0 = t1;
+                i = datapalettehash.a(t1);
+            }
+
+            aint[j] = i;
         }
 
         NBTTagList nbttaglist = new NBTTagList();
 
         datapalettehash.b(nbttaglist);
         nbttagcompound.set(s, nbttaglist);
-        int j = Math.max(4, MathHelper.d(nbttaglist.size()));
-        DataBits databits = new DataBits(j, 4096);
+        int k = Math.max(4, MathHelper.d(nbttaglist.size()));
+        DataBits databits = new DataBits(k, 4096);
 
-        for (int k = 0; k < aint.length; ++k) {
-            databits.b(k, aint[k]);
+        for (int l = 0; l < aint.length; ++l) {
+            databits.b(l, aint[l]);
         }
 
         nbttagcompound.a(s1, databits.a());
@@ -204,7 +211,7 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
         return 1 + this.h.a() + PacketDataSerializer.a(this.a.b()) + this.a.a().length * 8;
     }
 
-    public boolean a(T t0) {
+    public boolean contains(T t0) {
         return this.h.b(t0);
     }
 

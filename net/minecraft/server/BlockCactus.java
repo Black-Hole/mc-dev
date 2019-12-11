@@ -11,20 +11,20 @@ public class BlockCactus extends Block {
 
     protected BlockCactus(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCactus.AGE, 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCactus.AGE, 0));
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!iblockdata.canPlace(world, blockposition)) {
-            world.b(blockposition, true);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!iblockdata.canPlace(worldserver, blockposition)) {
+            worldserver.b(blockposition, true);
         } else {
             BlockPosition blockposition1 = blockposition.up();
 
-            if (world.isEmpty(blockposition1)) {
+            if (worldserver.isEmpty(blockposition1)) {
                 int i;
 
-                for (i = 1; world.getType(blockposition.down(i)).getBlock() == this; ++i) {
+                for (i = 1; worldserver.getType(blockposition.down(i)).getBlock() == this; ++i) {
                     ;
                 }
 
@@ -32,13 +32,13 @@ public class BlockCactus extends Block {
                     int j = (Integer) iblockdata.get(BlockCactus.AGE);
 
                     if (j == 15) {
-                        world.setTypeUpdate(blockposition1, this.getBlockData());
+                        worldserver.setTypeUpdate(blockposition1, this.getBlockData());
                         IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockCactus.AGE, 0);
 
-                        world.setTypeAndData(blockposition, iblockdata1, 4);
-                        iblockdata1.doPhysics(world, blockposition1, this, blockposition, false);
+                        worldserver.setTypeAndData(blockposition, iblockdata1, 4);
+                        iblockdata1.doPhysics(worldserver, blockposition1, this, blockposition, false);
                     } else {
-                        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCactus.AGE, j + 1), 4);
+                        worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCactus.AGE, j + 1), 4);
                     }
 
                 }
@@ -54,11 +54,6 @@ public class BlockCactus extends Block {
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockCactus.c;
-    }
-
-    @Override
-    public boolean f(IBlockData iblockdata) {
-        return true;
     }
 
     @Override
@@ -96,11 +91,6 @@ public class BlockCactus extends Block {
     @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
         entity.damageEntity(DamageSource.CACTUS, 1.0F);
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 
     @Override

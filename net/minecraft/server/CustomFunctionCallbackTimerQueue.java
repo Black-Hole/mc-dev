@@ -1,12 +1,15 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import com.google.common.primitives.UnsignedLong;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,19 +19,19 @@ public class CustomFunctionCallbackTimerQueue<T> {
     private final CustomFunctionCallbackTimers<T> b;
     private final Queue<CustomFunctionCallbackTimerQueue.a<T>> c = new PriorityQueue(c());
     private UnsignedLong d;
-    private final Map<String, CustomFunctionCallbackTimerQueue.a<T>> e;
+    private final Table<String, Long, CustomFunctionCallbackTimerQueue.a<T>> e;
 
     private static <T> Comparator<CustomFunctionCallbackTimerQueue.a<T>> c() {
-        return (customfunctioncallbacktimerqueue_a, customfunctioncallbacktimerqueue_a1) -> {
-            int i = Long.compare(customfunctioncallbacktimerqueue_a.a, customfunctioncallbacktimerqueue_a1.a);
-
-            return i != 0 ? i : customfunctioncallbacktimerqueue_a.b.compareTo(customfunctioncallbacktimerqueue_a1.b);
-        };
+        return Comparator.comparingLong((customfunctioncallbacktimerqueue_a) -> {
+            return customfunctioncallbacktimerqueue_a.a;
+        }).thenComparing((customfunctioncallbacktimerqueue_a) -> {
+            return customfunctioncallbacktimerqueue_a.b;
+        });
     }
 
     public CustomFunctionCallbackTimerQueue(CustomFunctionCallbackTimers<T> customfunctioncallbacktimers) {
         this.d = UnsignedLong.ZERO;
-        this.e = Maps.newHashMap();
+        this.e = HashBasedTable.create();
         this.b = customfunctioncallbacktimers;
     }
 
@@ -41,36 +44,35 @@ public class CustomFunctionCallbackTimerQueue<T> {
             }
 
             this.c.remove();
-            this.e.remove(customfunctioncallbacktimerqueue_a.c);
+            this.e.remove(customfunctioncallbacktimerqueue_a.c, i);
             customfunctioncallbacktimerqueue_a.d.a(t0, this, i);
         }
     }
 
-    private void c(String s, long i, CustomFunctionCallbackTimer<T> customfunctioncallbacktimer) {
-        this.d = this.d.plus(UnsignedLong.ONE);
-        CustomFunctionCallbackTimerQueue.a<T> customfunctioncallbacktimerqueue_a = new CustomFunctionCallbackTimerQueue.a<>(i, this.d, s, customfunctioncallbacktimer);
+    public void a(String s, long i, CustomFunctionCallbackTimer<T> customfunctioncallbacktimer) {
+        if (!this.e.contains(s, i)) {
+            this.d = this.d.plus(UnsignedLong.ONE);
+            CustomFunctionCallbackTimerQueue.a<T> customfunctioncallbacktimerqueue_a = new CustomFunctionCallbackTimerQueue.a<>(i, this.d, s, customfunctioncallbacktimer);
 
-        this.e.put(s, customfunctioncallbacktimerqueue_a);
-        this.c.add(customfunctioncallbacktimerqueue_a);
-    }
-
-    public boolean a(String s, long i, CustomFunctionCallbackTimer<T> customfunctioncallbacktimer) {
-        if (this.e.containsKey(s)) {
-            return false;
-        } else {
-            this.c(s, i, customfunctioncallbacktimer);
-            return true;
+            this.e.put(s, i, customfunctioncallbacktimerqueue_a);
+            this.c.add(customfunctioncallbacktimerqueue_a);
         }
     }
 
-    public void b(String s, long i, CustomFunctionCallbackTimer<T> customfunctioncallbacktimer) {
-        CustomFunctionCallbackTimerQueue.a<T> customfunctioncallbacktimerqueue_a = (CustomFunctionCallbackTimerQueue.a) this.e.remove(s);
+    public int a(String s) {
+        Collection<CustomFunctionCallbackTimerQueue.a<T>> collection = this.e.row(s).values();
+        Queue queue = this.c;
 
-        if (customfunctioncallbacktimerqueue_a != null) {
-            this.c.remove(customfunctioncallbacktimerqueue_a);
-        }
+        this.c.getClass();
+        collection.forEach(queue::remove);
+        int i = collection.size();
 
-        this.c(s, i, customfunctioncallbacktimer);
+        collection.clear();
+        return i;
+    }
+
+    public Set<String> a() {
+        return Collections.unmodifiableSet(this.e.rowKeySet());
     }
 
     private void a(NBTTagCompound nbttagcompound) {

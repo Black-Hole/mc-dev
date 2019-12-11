@@ -73,7 +73,7 @@ public class ContainerAnvil extends Container {
                     IBlockData iblockdata = world.getType(blockposition);
 
                     if (!entityhuman.abilities.canInstantlyBuild && iblockdata.a(TagsBlock.ANVIL) && entityhuman.getRandom().nextFloat() < 0.12F) {
-                        IBlockData iblockdata1 = BlockAnvil.a_(iblockdata);
+                        IBlockData iblockdata1 = BlockAnvil.e(iblockdata);
 
                         if (iblockdata1 == null) {
                             world.a(blockposition, false);
@@ -313,7 +313,7 @@ public class ContainerAnvil extends Container {
     @Override
     public boolean canUse(EntityHuman entityhuman) {
         return (Boolean) this.containerAccess.a((world, blockposition) -> {
-            return !world.getType(blockposition).a(TagsBlock.ANVIL) ? false : entityhuman.e((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) <= 64.0D;
+            return !world.getType(blockposition).a(TagsBlock.ANVIL) ? false : entityhuman.g((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) <= 64.0D;
         }, true);
     }
 

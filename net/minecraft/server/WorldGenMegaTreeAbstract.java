@@ -5,26 +5,17 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
-public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfiguration> extends WorldGenTreeAbstract<T> {
+public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureTreeConfiguration> extends WorldGenTreeAbstract<T> {
 
-    protected final int a;
-    protected final IBlockData aS;
-    protected final IBlockData aT;
-    protected final int aU;
-
-    public WorldGenMegaTreeAbstract(Function<Dynamic<?>, ? extends T> function, boolean flag, int i, int j, IBlockData iblockdata, IBlockData iblockdata1) {
-        super(function, flag);
-        this.a = i;
-        this.aU = j;
-        this.aS = iblockdata;
-        this.aT = iblockdata1;
+    public WorldGenMegaTreeAbstract(Function<Dynamic<?>, ? extends T> function) {
+        super(function);
     }
 
-    protected int a(Random random) {
-        int i = random.nextInt(3) + this.a;
+    protected int a(Random random, WorldGenMegaTreeConfiguration worldgenmegatreeconfiguration) {
+        int i = random.nextInt(3) + worldgenmegatreeconfiguration.p;
 
-        if (this.aU > 1) {
-            i += random.nextInt(this.aU);
+        if (worldgenmegatreeconfiguration.a > 1) {
+            i += random.nextInt(worldgenmegatreeconfiguration.a);
         }
 
         return i;
@@ -61,7 +52,7 @@ public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfigur
     private boolean b(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.down();
 
-        if (h(virtuallevelwritable, blockposition1) && blockposition.getY() >= 2) {
+        if (g(virtuallevelwritable, blockposition1) && blockposition.getY() >= 2) {
             this.a(virtuallevelwritable, blockposition1);
             this.a(virtuallevelwritable, blockposition1.east());
             this.a(virtuallevelwritable, blockposition1.south());
@@ -76,7 +67,7 @@ public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfigur
         return this.a((VirtualLevelReadable) virtuallevelwritable, blockposition, i) && this.b(virtuallevelwritable, blockposition);
     }
 
-    protected void a(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i, StructureBoundingBox structureboundingbox, Set<BlockPosition> set) {
+    protected void a(VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, int i, Set<BlockPosition> set, StructureBoundingBox structureboundingbox, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
         int j = i * i;
 
         for (int k = -i; k <= i + 1; ++k) {
@@ -85,28 +76,49 @@ public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfigur
                 int j1 = Math.min(Math.abs(l), Math.abs(l - 1));
 
                 if (i1 + j1 < 7 && i1 * i1 + j1 * j1 <= j) {
-                    BlockPosition blockposition1 = blockposition.b(k, 0, l);
-
-                    if (g(virtuallevelwritable, blockposition1)) {
-                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition1, this.aT, structureboundingbox);
-                    }
+                    this.b(virtuallevelwritable, random, blockposition.b(k, 0, l), set, structureboundingbox, worldgenfeaturetreeconfiguration);
                 }
             }
         }
 
     }
 
-    protected void b(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i, StructureBoundingBox structureboundingbox, Set<BlockPosition> set) {
+    protected void b(VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, int i, Set<BlockPosition> set, StructureBoundingBox structureboundingbox, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
         int j = i * i;
 
         for (int k = -i; k <= i; ++k) {
             for (int l = -i; l <= i; ++l) {
                 if (k * k + l * l <= j) {
-                    BlockPosition blockposition1 = blockposition.b(k, 0, l);
+                    this.b(virtuallevelwritable, random, blockposition.b(k, 0, l), set, structureboundingbox, worldgenfeaturetreeconfiguration);
+                }
+            }
+        }
 
-                    if (g(virtuallevelwritable, blockposition1)) {
-                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition1, this.aT, structureboundingbox);
-                    }
+    }
+
+    protected void a(VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, int i, Set<BlockPosition> set, StructureBoundingBox structureboundingbox, WorldGenMegaTreeConfiguration worldgenmegatreeconfiguration) {
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+
+        for (int j = 0; j < i; ++j) {
+            blockposition_mutableblockposition.g(blockposition).e(0, j, 0);
+            if (a((VirtualLevelReadable) virtuallevelwritable, (BlockPosition) blockposition_mutableblockposition)) {
+                this.a(virtuallevelwritable, random, blockposition_mutableblockposition, set, structureboundingbox, worldgenmegatreeconfiguration);
+            }
+
+            if (j < i - 1) {
+                blockposition_mutableblockposition.g(blockposition).e(1, j, 0);
+                if (a((VirtualLevelReadable) virtuallevelwritable, (BlockPosition) blockposition_mutableblockposition)) {
+                    this.a(virtuallevelwritable, random, blockposition_mutableblockposition, set, structureboundingbox, worldgenmegatreeconfiguration);
+                }
+
+                blockposition_mutableblockposition.g(blockposition).e(1, j, 1);
+                if (a((VirtualLevelReadable) virtuallevelwritable, (BlockPosition) blockposition_mutableblockposition)) {
+                    this.a(virtuallevelwritable, random, blockposition_mutableblockposition, set, structureboundingbox, worldgenmegatreeconfiguration);
+                }
+
+                blockposition_mutableblockposition.g(blockposition).e(0, j, 1);
+                if (a((VirtualLevelReadable) virtuallevelwritable, (BlockPosition) blockposition_mutableblockposition)) {
+                    this.a(virtuallevelwritable, random, blockposition_mutableblockposition, set, structureboundingbox, worldgenmegatreeconfiguration);
                 }
             }
         }

@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 public abstract class PathfinderAbstract {
 
-    protected IWorldReader a;
+    protected ChunkCache a;
     protected EntityInsentient b;
     protected final Int2ObjectMap<PathPoint> c = new Int2ObjectOpenHashMap();
     protected int d;
@@ -17,8 +17,8 @@ public abstract class PathfinderAbstract {
 
     public PathfinderAbstract() {}
 
-    public void a(IWorldReader iworldreader, EntityInsentient entityinsentient) {
-        this.a = iworldreader;
+    public void a(ChunkCache chunkcache, EntityInsentient entityinsentient) {
+        this.a = chunkcache;
         this.b = entityinsentient;
         this.c.clear();
         this.d = MathHelper.d(entityinsentient.getWidth() + 1.0F);

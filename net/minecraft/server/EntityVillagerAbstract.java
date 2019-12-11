@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 
 public abstract class EntityVillagerAbstract extends EntityAgeable implements NPC, IMerchant {
 
-    private static final DataWatcherObject<Integer> bA = DataWatcher.a(EntityVillagerAbstract.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Integer> bx = DataWatcher.a(EntityVillagerAbstract.class, DataWatcherRegistry.b);
     @Nullable
     private EntityHuman tradingPlayer;
     @Nullable
@@ -18,12 +18,22 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         super(entitytypes, world);
     }
 
-    public int dV() {
-        return (Integer) this.datawatcher.get(EntityVillagerAbstract.bA);
+    @Override
+    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        if (groupdataentity == null) {
+            groupdataentity = new EntityAgeable.a();
+            ((EntityAgeable.a) groupdataentity).a(false);
+        }
+
+        return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
     }
 
-    public void r(int i) {
-        this.datawatcher.set(EntityVillagerAbstract.bA, i);
+    public int eq() {
+        return (Integer) this.datawatcher.get(EntityVillagerAbstract.bx);
+    }
+
+    public void s(int i) {
+        this.datawatcher.set(EntityVillagerAbstract.bx, i);
     }
 
     @Override
@@ -39,7 +49,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityVillagerAbstract.bA, 0);
+        this.datawatcher.register(EntityVillagerAbstract.bx, 0);
     }
 
     @Override
@@ -53,7 +63,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return this.tradingPlayer;
     }
 
-    public boolean dY() {
+    public boolean et() {
         return this.tradingPlayer != null;
     }
 
@@ -61,14 +71,14 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     public MerchantRecipeList getOffers() {
         if (this.trades == null) {
             this.trades = new MerchantRecipeList();
-            this.eh();
+            this.eC();
         }
 
         return this.trades;
     }
 
     @Override
-    public void s(int i) {}
+    public void setExperience(int i) {}
 
     @Override
     public void a(MerchantRecipe merchantrecipe) {
@@ -84,7 +94,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     protected abstract void b(MerchantRecipe merchantrecipe);
 
     @Override
-    public boolean ea() {
+    public boolean isRegularVillager() {
         return true;
     }
 
@@ -92,13 +102,13 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     public void i(ItemStack itemstack) {
         if (!this.world.isClientSide && this.e > -this.A() + 20) {
             this.e = -this.A();
-            this.a(this.r(!itemstack.isEmpty()), this.getSoundVolume(), this.cV());
+            this.a(this.r(!itemstack.isEmpty()), this.getSoundVolume(), this.dn());
         }
 
     }
 
     @Override
-    public SoundEffect eb() {
+    public SoundEffect getTradeSound() {
         return SoundEffects.ENTITY_VILLAGER_YES;
     }
 
@@ -106,8 +116,8 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return flag ? SoundEffects.ENTITY_VILLAGER_YES : SoundEffects.ENTITY_VILLAGER_NO;
     }
 
-    public void ec() {
-        this.a(SoundEffects.ENTITY_VILLAGER_CELEBRATE, this.getSoundVolume(), this.cV());
+    public void ex() {
+        this.a(SoundEffects.ENTITY_VILLAGER_CELEBRATE, this.getSoundVolume(), this.dn());
     }
 
     @Override
@@ -154,18 +164,18 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     @Nullable
     @Override
     public Entity a(DimensionManager dimensionmanager) {
-        this.ed();
+        this.ey();
         return super.a(dimensionmanager);
     }
 
-    protected void ed() {
+    protected void ey() {
         this.setTradingPlayer((EntityHuman) null);
     }
 
     @Override
     public void die(DamageSource damagesource) {
         super.die(damagesource);
-        this.ed();
+        this.ey();
     }
 
     @Override
@@ -198,7 +208,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return this.world;
     }
 
-    protected abstract void eh();
+    protected abstract void eC();
 
     protected void a(MerchantRecipeList merchantrecipelist, VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption, int i) {
         Set<Integer> set = Sets.newHashSet();

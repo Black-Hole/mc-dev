@@ -70,7 +70,7 @@ public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorage
                     this.p(i1);
                 }
 
-                this.e();
+                this.f();
             }
         }
 
@@ -86,7 +86,7 @@ public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorage
         this.n.remove(i);
     }
 
-    private void e() {
+    private void f() {
         this.p = !this.m.isEmpty() || !this.n.isEmpty();
     }
 
@@ -119,13 +119,14 @@ public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorage
         }
 
         if (flag) {
-            this.e();
+            this.f();
         }
 
     }
 
     @Override
     protected void b(long i, boolean flag) {
+        this.d();
         if (flag && this.o.add(i)) {
             int j = ((LightEngineStorageSky.a) this.f).c.get(i);
 
@@ -133,7 +134,7 @@ public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorage
                 long k = SectionPosition.b(SectionPosition.b(i), j - 1, SectionPosition.d(i));
 
                 this.q(k);
-                this.e();
+                this.f();
             }
         } else if (!flag) {
             this.o.remove(i);

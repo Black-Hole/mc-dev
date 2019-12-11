@@ -7,9 +7,9 @@ import java.util.function.Function;
 public class WorldGenFeatureBamboo extends WorldGenerator<WorldGenFeatureConfigurationChance> {
 
     private static final IBlockData a = (IBlockData) ((IBlockData) ((IBlockData) Blocks.BAMBOO.getBlockData().set(BlockBamboo.d, 1)).set(BlockBamboo.e, BlockPropertyBambooSize.NONE)).set(BlockBamboo.f, 0);
-    private static final IBlockData aS = (IBlockData) ((IBlockData) WorldGenFeatureBamboo.a.set(BlockBamboo.e, BlockPropertyBambooSize.LARGE)).set(BlockBamboo.f, 1);
-    private static final IBlockData aT = (IBlockData) WorldGenFeatureBamboo.a.set(BlockBamboo.e, BlockPropertyBambooSize.LARGE);
-    private static final IBlockData aU = (IBlockData) WorldGenFeatureBamboo.a.set(BlockBamboo.e, BlockPropertyBambooSize.SMALL);
+    private static final IBlockData aq = (IBlockData) ((IBlockData) WorldGenFeatureBamboo.a.set(BlockBamboo.e, BlockPropertyBambooSize.LARGE)).set(BlockBamboo.f, 1);
+    private static final IBlockData ar = (IBlockData) WorldGenFeatureBamboo.a.set(BlockBamboo.e, BlockPropertyBambooSize.LARGE);
+    private static final IBlockData as = (IBlockData) WorldGenFeatureBamboo.a.set(BlockBamboo.e, BlockPropertyBambooSize.SMALL);
 
     public WorldGenFeatureBamboo(Function<Dynamic<?>, ? extends WorldGenFeatureConfigurationChance> function) {
         super(function);
@@ -35,7 +35,7 @@ public class WorldGenFeatureBamboo extends WorldGenerator<WorldGenFeatureConfigu
 
                             if (j1 * j1 + k1 * k1 <= k * k) {
                                 blockposition_mutableblockposition1.d(l, generatoraccess.a(HeightMap.Type.WORLD_SURFACE, l, i1) - 1, i1);
-                                if (generatoraccess.getType(blockposition_mutableblockposition1).getBlock().a(TagsBlock.DIRT_LIKE)) {
+                                if (b(generatoraccess.getType(blockposition_mutableblockposition1).getBlock())) {
                                     generatoraccess.setTypeAndData(blockposition_mutableblockposition1, Blocks.PODZOL.getBlockData(), 2);
                                 }
                             }
@@ -49,9 +49,9 @@ public class WorldGenFeatureBamboo extends WorldGenerator<WorldGenFeatureConfigu
                 }
 
                 if (blockposition_mutableblockposition.getY() - blockposition.getY() >= 3) {
-                    generatoraccess.setTypeAndData(blockposition_mutableblockposition, WorldGenFeatureBamboo.aS, 2);
-                    generatoraccess.setTypeAndData(blockposition_mutableblockposition.c(EnumDirection.DOWN, 1), WorldGenFeatureBamboo.aT, 2);
-                    generatoraccess.setTypeAndData(blockposition_mutableblockposition.c(EnumDirection.DOWN, 1), WorldGenFeatureBamboo.aU, 2);
+                    generatoraccess.setTypeAndData(blockposition_mutableblockposition, WorldGenFeatureBamboo.aq, 2);
+                    generatoraccess.setTypeAndData(blockposition_mutableblockposition.c(EnumDirection.DOWN, 1), WorldGenFeatureBamboo.ar, 2);
+                    generatoraccess.setTypeAndData(blockposition_mutableblockposition.c(EnumDirection.DOWN, 1), WorldGenFeatureBamboo.as, 2);
                 }
             }
 

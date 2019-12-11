@@ -12,7 +12,7 @@ public class BlockCommand extends BlockTileEntity {
 
     public BlockCommand(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCommand.a, EnumDirection.NORTH)).set(BlockCommand.b, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCommand.a, EnumDirection.NORTH)).set(BlockCommand.b, false));
     }
 
     @Override
@@ -34,9 +34,9 @@ public class BlockCommand extends BlockTileEntity {
                 boolean flag2 = tileentitycommand.f();
 
                 tileentitycommand.a(flag1);
-                if (!flag2 && !tileentitycommand.g() && tileentitycommand.u() != TileEntityCommand.Type.SEQUENCE) {
+                if (!flag2 && !tileentitycommand.g() && tileentitycommand.m() != TileEntityCommand.Type.SEQUENCE) {
                     if (flag1) {
-                        tileentitycommand.s();
+                        tileentitycommand.k();
                         world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
                     }
 
@@ -46,40 +46,38 @@ public class BlockCommand extends BlockTileEntity {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!world.isClientSide) {
-            TileEntity tileentity = world.getTileEntity(blockposition);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        TileEntity tileentity = worldserver.getTileEntity(blockposition);
 
-            if (tileentity instanceof TileEntityCommand) {
-                TileEntityCommand tileentitycommand = (TileEntityCommand) tileentity;
-                CommandBlockListenerAbstract commandblocklistenerabstract = tileentitycommand.getCommandBlock();
-                boolean flag = !UtilColor.b(commandblocklistenerabstract.getCommand());
-                TileEntityCommand.Type tileentitycommand_type = tileentitycommand.u();
-                boolean flag1 = tileentitycommand.h();
+        if (tileentity instanceof TileEntityCommand) {
+            TileEntityCommand tileentitycommand = (TileEntityCommand) tileentity;
+            CommandBlockListenerAbstract commandblocklistenerabstract = tileentitycommand.getCommandBlock();
+            boolean flag = !UtilColor.b(commandblocklistenerabstract.getCommand());
+            TileEntityCommand.Type tileentitycommand_type = tileentitycommand.m();
+            boolean flag1 = tileentitycommand.j();
 
-                if (tileentitycommand_type == TileEntityCommand.Type.AUTO) {
-                    tileentitycommand.s();
-                    if (flag1) {
-                        this.a(iblockdata, world, blockposition, commandblocklistenerabstract, flag);
-                    } else if (tileentitycommand.v()) {
-                        commandblocklistenerabstract.a(0);
-                    }
-
-                    if (tileentitycommand.f() || tileentitycommand.g()) {
-                        world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
-                    }
-                } else if (tileentitycommand_type == TileEntityCommand.Type.REDSTONE) {
-                    if (flag1) {
-                        this.a(iblockdata, world, blockposition, commandblocklistenerabstract, flag);
-                    } else if (tileentitycommand.v()) {
-                        commandblocklistenerabstract.a(0);
-                    }
+            if (tileentitycommand_type == TileEntityCommand.Type.AUTO) {
+                tileentitycommand.k();
+                if (flag1) {
+                    this.a(iblockdata, worldserver, blockposition, commandblocklistenerabstract, flag);
+                } else if (tileentitycommand.x()) {
+                    commandblocklistenerabstract.a(0);
                 }
 
-                world.updateAdjacentComparators(blockposition, this);
+                if (tileentitycommand.f() || tileentitycommand.g()) {
+                    worldserver.getBlockTickList().a(blockposition, this, this.a((IWorldReader) worldserver));
+                }
+            } else if (tileentitycommand_type == TileEntityCommand.Type.REDSTONE) {
+                if (flag1) {
+                    this.a(iblockdata, worldserver, blockposition, commandblocklistenerabstract, flag);
+                } else if (tileentitycommand.x()) {
+                    commandblocklistenerabstract.a(0);
+                }
             }
 
+            worldserver.updateAdjacentComparators(blockposition, this);
         }
+
     }
 
     private void a(IBlockData iblockdata, World world, BlockPosition blockposition, CommandBlockListenerAbstract commandblocklistenerabstract, boolean flag) {
@@ -98,14 +96,14 @@ public class BlockCommand extends BlockTileEntity {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityCommand && entityhuman.isCreativeAndOp()) {
             entityhuman.a((TileEntityCommand) tileentity);
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
-            return false;
+            return EnumInteractionResult.PASS;
         }
     }
 
@@ -139,7 +137,7 @@ public class BlockCommand extends BlockTileEntity {
                     tileentitycommand.b(this == Blocks.CHAIN_COMMAND_BLOCK);
                 }
 
-                if (tileentitycommand.u() == TileEntityCommand.Type.SEQUENCE) {
+                if (tileentitycommand.m() == TileEntityCommand.Type.SEQUENCE) {
                     boolean flag = world.isBlockIndirectlyPowered(blockposition);
 
                     tileentitycommand.a(flag);
@@ -198,20 +196,20 @@ public class BlockCommand extends BlockTileEntity {
 
             TileEntityCommand tileentitycommand = (TileEntityCommand) tileentity;
 
-            if (tileentitycommand.u() != TileEntityCommand.Type.SEQUENCE) {
+            if (tileentitycommand.m() != TileEntityCommand.Type.SEQUENCE) {
                 break;
             }
 
             if (tileentitycommand.f() || tileentitycommand.g()) {
                 CommandBlockListenerAbstract commandblocklistenerabstract = tileentitycommand.getCommandBlock();
 
-                if (tileentitycommand.s()) {
+                if (tileentitycommand.k()) {
                     if (!commandblocklistenerabstract.a(world)) {
                         break;
                     }
 
                     world.updateAdjacentComparators(blockposition_mutableblockposition, block);
-                } else if (tileentitycommand.v()) {
+                } else if (tileentitycommand.x()) {
                     commandblocklistenerabstract.a(0);
                 }
             }

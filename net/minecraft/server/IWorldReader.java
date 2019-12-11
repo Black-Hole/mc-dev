@@ -1,21 +1,49 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Streams;
-import java.util.Collections;
-import java.util.Set;
-import java.util.Spliterators.AbstractSpliterator;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 import javax.annotation.Nullable;
 
-public interface IWorldReader extends IIBlockAccess {
+public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, BiomeManager.Provider {
+
+    @Nullable
+    IChunkAccess getChunkAt(int i, int j, ChunkStatus chunkstatus, boolean flag);
+
+    @Deprecated
+    boolean isChunkLoaded(int i, int j);
+
+    int a(HeightMap.Type heightmap_type, int i, int j);
+
+    int c();
+
+    BiomeManager d();
+
+    default BiomeBase getBiome(BlockPosition blockposition) {
+        return this.d().a(blockposition);
+    }
+
+    @Override
+    default BiomeBase getBiome(int i, int j, int k) {
+        IChunkAccess ichunkaccess = this.getChunkAt(i >> 2, k >> 2, ChunkStatus.BIOMES, false);
+
+        return ichunkaccess != null && ichunkaccess.getBiomeIndex() != null ? ichunkaccess.getBiomeIndex().getBiome(i, j, k) : this.a(i, j, k);
+    }
+
+    BiomeBase a(int i, int j, int k);
+
+    boolean p_();
+
+    int getSeaLevel();
+
+    WorldProvider getWorldProvider();
+
+    default BlockPosition getHighestBlockYAt(HeightMap.Type heightmap_type, BlockPosition blockposition) {
+        return new BlockPosition(blockposition.getX(), this.a(heightmap_type, blockposition.getX(), blockposition.getZ()), blockposition.getZ());
+    }
 
     default boolean isEmpty(BlockPosition blockposition) {
         return this.getType(blockposition).isAir();
     }
 
-    default boolean u(BlockPosition blockposition) {
+    default boolean v(BlockPosition blockposition) {
         if (blockposition.getY() >= this.getSeaLevel()) {
             return this.f(blockposition);
         } else {
@@ -37,37 +65,16 @@ public interface IWorldReader extends IIBlockAccess {
         }
     }
 
-    int getLightLevel(BlockPosition blockposition, int i);
-
-    @Nullable
-    IChunkAccess getChunkAt(int i, int j, ChunkStatus chunkstatus, boolean flag);
-
     @Deprecated
-    boolean isChunkLoaded(int i, int j);
-
-    BlockPosition getHighestBlockYAt(HeightMap.Type heightmap_type, BlockPosition blockposition);
-
-    int a(HeightMap.Type heightmap_type, int i, int j);
-
-    default float v(BlockPosition blockposition) {
-        return this.getWorldProvider().i()[this.getLightLevel(blockposition)];
+    default float w(BlockPosition blockposition) {
+        return this.getWorldProvider().a(this.getLightLevel(blockposition));
     }
-
-    int c();
-
-    WorldBorder getWorldBorder();
-
-    boolean a(@Nullable Entity entity, VoxelShape voxelshape);
 
     default int c(BlockPosition blockposition, EnumDirection enumdirection) {
         return this.getType(blockposition).c(this, blockposition, enumdirection);
     }
 
-    boolean e();
-
-    int getSeaLevel();
-
-    default IChunkAccess w(BlockPosition blockposition) {
+    default IChunkAccess x(BlockPosition blockposition) {
         return this.getChunkAt(blockposition.getX() >> 4, blockposition.getZ() >> 4);
     }
 
@@ -79,106 +86,13 @@ public interface IWorldReader extends IIBlockAccess {
         return this.getChunkAt(i, j, chunkstatus, true);
     }
 
-    default ChunkStatus O() {
-        return ChunkStatus.EMPTY;
+    @Nullable
+    @Override
+    default IBlockAccess c(int i, int j) {
+        return this.getChunkAt(i, j, ChunkStatus.EMPTY, false);
     }
 
-    default boolean a(IBlockData iblockdata, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        VoxelShape voxelshape = iblockdata.b((IBlockAccess) this, blockposition, voxelshapecollision);
-
-        return voxelshape.isEmpty() || this.a((Entity) null, voxelshape.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()));
-    }
-
-    default boolean i(Entity entity) {
-        return this.a(entity, VoxelShapes.a(entity.getBoundingBox()));
-    }
-
-    default boolean c(AxisAlignedBB axisalignedbb) {
-        return this.b((Entity) null, axisalignedbb, Collections.emptySet());
-    }
-
-    default boolean getCubes(Entity entity) {
-        return this.b(entity, entity.getBoundingBox(), Collections.emptySet());
-    }
-
-    default boolean getCubes(Entity entity, AxisAlignedBB axisalignedbb) {
-        return this.b(entity, axisalignedbb, Collections.emptySet());
-    }
-
-    default boolean b(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
-        return this.c(entity, axisalignedbb, set).allMatch(VoxelShape::isEmpty);
-    }
-
-    default Stream<VoxelShape> a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
-        return Stream.empty();
-    }
-
-    default Stream<VoxelShape> c(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
-        return Streams.concat(new Stream[]{this.b(entity, axisalignedbb), this.a(entity, axisalignedbb, set)});
-    }
-
-    default Stream<VoxelShape> b(@Nullable final Entity entity, AxisAlignedBB axisalignedbb) {
-        int i = MathHelper.floor(axisalignedbb.minX - 1.0E-7D) - 1;
-        int j = MathHelper.floor(axisalignedbb.maxX + 1.0E-7D) + 1;
-        int k = MathHelper.floor(axisalignedbb.minY - 1.0E-7D) - 1;
-        int l = MathHelper.floor(axisalignedbb.maxY + 1.0E-7D) + 1;
-        int i1 = MathHelper.floor(axisalignedbb.minZ - 1.0E-7D) - 1;
-        int j1 = MathHelper.floor(axisalignedbb.maxZ + 1.0E-7D) + 1;
-        final VoxelShapeCollision voxelshapecollision = entity == null ? VoxelShapeCollision.a() : VoxelShapeCollision.a(entity);
-        final CursorPosition cursorposition = new CursorPosition(i, k, i1, j, l, j1);
-        final BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-        final VoxelShape voxelshape = VoxelShapes.a(axisalignedbb);
-
-        return StreamSupport.stream(new AbstractSpliterator<VoxelShape>(Long.MAX_VALUE, 1280) {
-            boolean a = entity == null;
-
-            public boolean tryAdvance(Consumer<? super VoxelShape> consumer) {
-                if (!this.a) {
-                    this.a = true;
-                    VoxelShape voxelshape1 = IWorldReader.this.getWorldBorder().a();
-                    boolean flag = VoxelShapes.c(voxelshape1, VoxelShapes.a(entity.getBoundingBox().shrink(1.0E-7D)), OperatorBoolean.AND);
-                    boolean flag1 = VoxelShapes.c(voxelshape1, VoxelShapes.a(entity.getBoundingBox().g(1.0E-7D)), OperatorBoolean.AND);
-
-                    if (!flag && flag1) {
-                        consumer.accept(voxelshape1);
-                        return true;
-                    }
-                }
-
-                while (cursorposition.a()) {
-                    int k1 = cursorposition.b();
-                    int l1 = cursorposition.c();
-                    int i2 = cursorposition.d();
-                    int j2 = cursorposition.e();
-
-                    if (j2 != 3) {
-                        int k2 = k1 >> 4;
-                        int l2 = i2 >> 4;
-                        IChunkAccess ichunkaccess = IWorldReader.this.getChunkAt(k2, l2, IWorldReader.this.O(), false);
-
-                        if (ichunkaccess != null) {
-                            blockposition_mutableblockposition.d(k1, l1, i2);
-                            IBlockData iblockdata = ichunkaccess.getType(blockposition_mutableblockposition);
-
-                            if ((j2 != 1 || iblockdata.f()) && (j2 != 2 || iblockdata.getBlock() == Blocks.MOVING_PISTON)) {
-                                VoxelShape voxelshape2 = iblockdata.b((IBlockAccess) IWorldReader.this, blockposition_mutableblockposition, voxelshapecollision);
-                                VoxelShape voxelshape3 = voxelshape2.a((double) k1, (double) l1, (double) i2);
-
-                                if (VoxelShapes.c(voxelshape, voxelshape3, OperatorBoolean.AND)) {
-                                    consumer.accept(voxelshape3);
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return false;
-            }
-        }, false);
-    }
-
-    default boolean x(BlockPosition blockposition) {
+    default boolean y(BlockPosition blockposition) {
         return this.getFluid(blockposition).a(TagsFluid.WATER);
     }
 
@@ -198,7 +112,7 @@ public interface IWorldReader extends IIBlockAccess {
                     for (int i2 = i1; i2 < j1; ++i2) {
                         IBlockData iblockdata = this.getType(blockposition_pooledblockposition.d(k1, l1, i2));
 
-                        if (!iblockdata.p().isEmpty()) {
+                        if (!iblockdata.getFluid().isEmpty()) {
                             boolean flag = true;
 
                             return flag;
@@ -228,10 +142,10 @@ public interface IWorldReader extends IIBlockAccess {
     }
 
     default int getLightLevel(BlockPosition blockposition) {
-        return this.d(blockposition, this.c());
+        return this.c(blockposition, this.c());
     }
 
-    default int d(BlockPosition blockposition, int i) {
+    default int c(BlockPosition blockposition, int i) {
         return blockposition.getX() >= -30000000 && blockposition.getZ() >= -30000000 && blockposition.getX() < 30000000 && blockposition.getZ() < 30000000 ? this.getLightLevel(blockposition, i) : 15;
     }
 
@@ -266,6 +180,4 @@ public interface IWorldReader extends IIBlockAccess {
             return false;
         }
     }
-
-    WorldProvider getWorldProvider();
 }

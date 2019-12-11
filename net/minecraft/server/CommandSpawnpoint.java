@@ -28,7 +28,7 @@ public class CommandSpawnpoint {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            entityplayer.setRespawnPosition(blockposition, true);
+            entityplayer.setRespawnPosition(blockposition, true, false);
         }
 
         if (collection.size() == 1) {

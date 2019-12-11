@@ -12,7 +12,7 @@ public interface IResourcePack extends Closeable {
 
     InputStream a(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) throws IOException;
 
-    Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, int i, Predicate<String> predicate);
+    Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, String s1, int i, Predicate<String> predicate);
 
     boolean b(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey);
 

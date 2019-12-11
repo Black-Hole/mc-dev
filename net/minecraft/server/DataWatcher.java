@@ -173,20 +173,6 @@ public class DataWatcher {
         return list;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.lock.readLock().lock();
-        Iterator iterator = this.entries.values().iterator();
-
-        while (iterator.hasNext()) {
-            DataWatcher.Item<?> datawatcher_item = (DataWatcher.Item) iterator.next();
-
-            a(packetdataserializer, datawatcher_item);
-        }
-
-        this.lock.readLock().unlock();
-        packetdataserializer.writeByte(255);
-    }
-
     @Nullable
     public List<DataWatcher.Item<?>> c() {
         List<DataWatcher.Item<?>> list = null;
@@ -220,7 +206,7 @@ public class DataWatcher {
     }
 
     @Nullable
-    public static List<DataWatcher.Item<?>> b(PacketDataSerializer packetdataserializer) throws IOException {
+    public static List<DataWatcher.Item<?>> a(PacketDataSerializer packetdataserializer) throws IOException {
         ArrayList arraylist = null;
 
         short short0;

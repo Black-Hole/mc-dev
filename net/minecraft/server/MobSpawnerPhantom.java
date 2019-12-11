@@ -12,6 +12,8 @@ public class MobSpawnerPhantom {
     public int a(WorldServer worldserver, boolean flag, boolean flag1) {
         if (!flag) {
             return 0;
+        } else if (!worldserver.getGameRules().getBoolean(GameRules.DO_INSOMNIA)) {
+            return 0;
         } else {
             Random random = worldserver.random;
 
@@ -20,7 +22,7 @@ public class MobSpawnerPhantom {
                 return 0;
             } else {
                 this.a += (60 + random.nextInt(60)) * 20;
-                if (worldserver.c() < 5 && worldserver.worldProvider.g()) {
+                if (worldserver.c() < 5 && worldserver.worldProvider.f()) {
                     return 0;
                 } else {
                     int i = 0;
@@ -32,7 +34,7 @@ public class MobSpawnerPhantom {
                         if (!entityhuman.isSpectator()) {
                             BlockPosition blockposition = new BlockPosition(entityhuman);
 
-                            if (!worldserver.worldProvider.g() || blockposition.getY() >= worldserver.getSeaLevel() && worldserver.f(blockposition)) {
+                            if (!worldserver.worldProvider.f() || blockposition.getY() >= worldserver.getSeaLevel() && worldserver.f(blockposition)) {
                                 DifficultyDamageScaler difficultydamagescaler = worldserver.getDamageScaler(blockposition);
 
                                 if (difficultydamagescaler.a(random.nextFloat() * 3.0F)) {

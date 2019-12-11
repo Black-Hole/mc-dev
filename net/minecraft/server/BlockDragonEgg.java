@@ -14,9 +14,9 @@ public class BlockDragonEgg extends BlockFalling {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         this.d(iblockdata, world, blockposition);
-        return true;
+        return EnumInteractionResult.SUCCESS;
     }
 
     @Override

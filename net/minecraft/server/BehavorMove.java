@@ -35,7 +35,7 @@ public class BehavorMove extends Behavior<EntityInsentient> {
             Optional<MemoryTarget> optional = entityinsentient.getBehaviorController().getMemory(MemoryModuleType.WALK_TARGET);
             NavigationAbstract navigationabstract = entityinsentient.getNavigation();
 
-            return !navigationabstract.n() && optional.isPresent() && !this.a(entityinsentient, (MemoryTarget) optional.get());
+            return !navigationabstract.m() && optional.isPresent() && !this.a(entityinsentient, (MemoryTarget) optional.get());
         } else {
             return false;
         }
@@ -57,7 +57,7 @@ public class BehavorMove extends Behavior<EntityInsentient> {
     protected void d(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
         --this.d;
         if (this.d <= 0) {
-            PathEntity pathentity = entityinsentient.getNavigation().l();
+            PathEntity pathentity = entityinsentient.getNavigation().k();
             BehaviorController<?> behaviorcontroller = entityinsentient.getBehaviorController();
 
             if (this.a != pathentity) {

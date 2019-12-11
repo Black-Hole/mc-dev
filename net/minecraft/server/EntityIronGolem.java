@@ -1,5 +1,11 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Stream;
+
 public class EntityIronGolem extends EntityGolem {
 
     protected static final DataWatcherObject<Byte> b = DataWatcher.a(EntityIronGolem.class, DataWatcherRegistry.a);
@@ -8,7 +14,7 @@ public class EntityIronGolem extends EntityGolem {
 
     public EntityIronGolem(EntityTypes<? extends EntityIronGolem> entitytypes, World world) {
         super(entitytypes, world);
-        this.K = 1.0F;
+        this.H = 1.0F;
     }
 
     @Override
@@ -42,6 +48,7 @@ public class EntityIronGolem extends EntityGolem {
         this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(100.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.25D);
         this.getAttributeInstance(GenericAttributes.KNOCKBACK_RESISTANCE).setValue(1.0D);
+        this.getAttributeMap().b(GenericAttributes.ATTACK_DAMAGE).setValue(15.0D);
     }
 
     @Override
@@ -50,12 +57,12 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     @Override
-    protected void D(Entity entity) {
+    protected void C(Entity entity) {
         if (entity instanceof IMonster && !(entity instanceof EntityCreeper) && this.getRandom().nextInt(20) == 0) {
             this.setGoalTarget((EntityLiving) entity);
         }
 
-        super.D(entity);
+        super.C(entity);
     }
 
     @Override
@@ -70,13 +77,13 @@ public class EntityIronGolem extends EntityGolem {
         }
 
         if (b(this.getMot()) > 2.500000277905201E-7D && this.random.nextInt(5) == 0) {
-            int i = MathHelper.floor(this.locX);
-            int j = MathHelper.floor(this.locY - 0.20000000298023224D);
-            int k = MathHelper.floor(this.locZ);
+            int i = MathHelper.floor(this.locX());
+            int j = MathHelper.floor(this.locY() - 0.20000000298023224D);
+            int k = MathHelper.floor(this.locZ());
             IBlockData iblockdata = this.world.getType(new BlockPosition(i, j, k));
 
             if (!iblockdata.isAir()) {
-                this.world.addParticle(new ParticleParamBlock(Particles.BLOCK, iblockdata), this.locX + ((double) this.random.nextFloat() - 0.5D) * (double) this.getWidth(), this.getBoundingBox().minY + 0.1D, this.locZ + ((double) this.random.nextFloat() - 0.5D) * (double) this.getWidth(), 4.0D * ((double) this.random.nextFloat() - 0.5D), 0.5D, ((double) this.random.nextFloat() - 0.5D) * 4.0D);
+                this.world.addParticle(new ParticleParamBlock(Particles.BLOCK, iblockdata), this.locX() + ((double) this.random.nextFloat() - 0.5D) * (double) this.getWidth(), this.locY() + 0.1D, this.locZ() + ((double) this.random.nextFloat() - 0.5D) * (double) this.getWidth(), 4.0D * ((double) this.random.nextFloat() - 0.5D), 0.5D, ((double) this.random.nextFloat() - 0.5D) * 4.0D);
             }
         }
 
@@ -99,11 +106,17 @@ public class EntityIronGolem extends EntityGolem {
         this.setPlayerCreated(nbttagcompound.getBoolean("PlayerCreated"));
     }
 
+    private float et() {
+        return (float) this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
+    }
+
     @Override
-    public boolean C(Entity entity) {
+    public boolean B(Entity entity) {
         this.c = 10;
         this.world.broadcastEntityEffect(this, (byte) 4);
-        boolean flag = entity.damageEntity(DamageSource.mobAttack(this), (float) (7 + this.random.nextInt(15)));
+        float f = this.et();
+        float f1 = f > 0.0F ? f / 2.0F + (float) this.random.nextInt((int) f) : 0.0F;
+        boolean flag = entity.damageEntity(DamageSource.mobAttack(this), f1);
 
         if (flag) {
             entity.setMot(entity.getMot().add(0.0D, 0.4000000059604645D, 0.0D));
@@ -112,6 +125,22 @@ public class EntityIronGolem extends EntityGolem {
 
         this.a(SoundEffects.ENTITY_IRON_GOLEM_ATTACK, 1.0F, 1.0F);
         return flag;
+    }
+
+    @Override
+    public boolean damageEntity(DamageSource damagesource, float f) {
+        EntityIronGolem.CrackLevel entityirongolem_cracklevel = this.l();
+        boolean flag = super.damageEntity(damagesource, f);
+
+        if (flag && this.l() != entityirongolem_cracklevel) {
+            this.a(SoundEffects.ENTITY_IRON_GOLEM_DAMAGE, 1.0F, 1.0F);
+        }
+
+        return flag;
+    }
+
+    public EntityIronGolem.CrackLevel l() {
+        return EntityIronGolem.CrackLevel.a(this.getHealth() / this.getMaxHealth());
     }
 
     public void r(boolean flag) {
@@ -133,6 +162,32 @@ public class EntityIronGolem extends EntityGolem {
     @Override
     protected SoundEffect getSoundDeath() {
         return SoundEffects.ENTITY_IRON_GOLEM_DEATH;
+    }
+
+    @Override
+    protected boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+        Item item = itemstack.getItem();
+
+        if (item != Items.IRON_INGOT) {
+            return false;
+        } else {
+            float f = this.getHealth();
+
+            this.heal(25.0F);
+            if (this.getHealth() == f) {
+                return false;
+            } else {
+                float f1 = 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F;
+
+                this.a(SoundEffects.ENTITY_IRON_GOLEM_REPAIR, 1.0F, f1);
+                if (!entityhuman.abilities.canInstantlyBuild) {
+                    itemstack.subtract(1);
+                }
+
+                return true;
+            }
+        }
     }
 
     @Override
@@ -173,12 +228,42 @@ public class EntityIronGolem extends EntityGolem {
                 BlockPosition blockposition2 = blockposition.up(i);
                 IBlockData iblockdata1 = iworldreader.getType(blockposition2);
 
-                if (!SpawnerCreature.a((IBlockAccess) iworldreader, blockposition2, iblockdata1, iblockdata1.p())) {
+                if (!SpawnerCreature.a((IBlockAccess) iworldreader, blockposition2, iblockdata1, iblockdata1.getFluid())) {
                     return false;
                 }
             }
 
-            return SpawnerCreature.a((IBlockAccess) iworldreader, blockposition, iworldreader.getType(blockposition), FluidTypes.EMPTY.i()) && iworldreader.i(this);
+            return SpawnerCreature.a((IBlockAccess) iworldreader, blockposition, iworldreader.getType(blockposition), FluidTypes.EMPTY.h()) && iworldreader.i(this);
+        }
+    }
+
+    public static enum CrackLevel {
+
+        NONE(1.0F), LOW(0.75F), MEDIUM(0.5F), HIGH(0.25F);
+
+        private static final List<EntityIronGolem.CrackLevel> e = (List) Stream.of(values()).sorted(Comparator.comparingDouble((entityirongolem_cracklevel) -> {
+            return (double) entityirongolem_cracklevel.f;
+        })).collect(ImmutableList.toImmutableList());
+        private final float f;
+
+        private CrackLevel(float f) {
+            this.f = f;
+        }
+
+        public static EntityIronGolem.CrackLevel a(float f) {
+            Iterator iterator = EntityIronGolem.CrackLevel.e.iterator();
+
+            EntityIronGolem.CrackLevel entityirongolem_cracklevel;
+
+            do {
+                if (!iterator.hasNext()) {
+                    return EntityIronGolem.CrackLevel.NONE;
+                }
+
+                entityirongolem_cracklevel = (EntityIronGolem.CrackLevel) iterator.next();
+            } while (f >= entityirongolem_cracklevel.f);
+
+            return entityirongolem_cracklevel;
         }
     }
 }

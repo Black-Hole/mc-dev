@@ -2,13 +2,13 @@ package net.minecraft.server;
 
 public class BlockNote extends Block {
 
-    public static final BlockStateEnum<BlockPropertyInstrument> INSTRUMENT = BlockProperties.aA;
+    public static final BlockStateEnum<BlockPropertyInstrument> INSTRUMENT = BlockProperties.aB;
     public static final BlockStateBoolean POWERED = BlockProperties.w;
-    public static final BlockStateInteger NOTE = BlockProperties.aq;
+    public static final BlockStateInteger NOTE = BlockProperties.ar;
 
     public BlockNote(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockNote.INSTRUMENT, BlockPropertyInstrument.HARP)).set(BlockNote.NOTE, 0)).set(BlockNote.POWERED, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockNote.INSTRUMENT, BlockPropertyInstrument.HARP)).set(BlockNote.NOTE, 0)).set(BlockNote.POWERED, false));
     }
 
     @Override
@@ -43,15 +43,15 @@ public class BlockNote extends Block {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (world.isClientSide) {
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
             iblockdata = (IBlockData) iblockdata.a((IBlockState) BlockNote.NOTE);
             world.setTypeAndData(blockposition, iblockdata, 3);
             this.play(world, blockposition);
             entityhuman.a(StatisticList.TUNE_NOTEBLOCK);
-            return true;
+            return EnumInteractionResult.SUCCESS;
         }
     }
 

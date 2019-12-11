@@ -32,8 +32,6 @@ public abstract class IChunkProvider implements ILightAccess, AutoCloseable {
 
     public abstract String getName();
 
-    public abstract ChunkGenerator<?> getChunkGenerator();
-
     public void close() throws IOException {}
 
     public abstract LightEngine getLightEngine();

@@ -17,7 +17,7 @@ public class EntityLeash extends EntityHanging {
         float f1 = 0.1875F;
         float f2 = 0.25F;
 
-        this.a(new AxisAlignedBB(this.locX - 0.1875D, this.locY - 0.25D + 0.125D, this.locZ - 0.1875D, this.locX + 0.1875D, this.locY + 0.25D + 0.125D, this.locZ + 0.1875D));
+        this.a(new AxisAlignedBB(this.locX() - 0.1875D, this.locY() - 0.25D + 0.125D, this.locZ() - 0.1875D, this.locX() + 0.1875D, this.locY() + 0.25D + 0.125D, this.locZ() + 0.1875D));
         this.attachedToPlayer = true;
     }
 
@@ -28,9 +28,7 @@ public class EntityLeash extends EntityHanging {
 
     @Override
     protected void updateBoundingBox() {
-        this.locX = (double) this.blockPosition.getX() + 0.5D;
-        this.locY = (double) this.blockPosition.getY() + 0.5D;
-        this.locZ = (double) this.blockPosition.getZ() + 0.5D;
+        this.setPositionRaw((double) this.blockPosition.getX() + 0.5D, (double) this.blockPosition.getY() + 0.5D, (double) this.blockPosition.getZ() + 0.5D);
     }
 
     @Override
@@ -69,7 +67,7 @@ public class EntityLeash extends EntityHanging {
         } else {
             boolean flag = false;
             double d0 = 7.0D;
-            List<EntityInsentient> list = this.world.a(EntityInsentient.class, new AxisAlignedBB(this.locX - 7.0D, this.locY - 7.0D, this.locZ - 7.0D, this.locX + 7.0D, this.locY + 7.0D, this.locZ + 7.0D));
+            List<EntityInsentient> list = this.world.a(EntityInsentient.class, new AxisAlignedBB(this.locX() - 7.0D, this.locY() - 7.0D, this.locZ() - 7.0D, this.locX() + 7.0D, this.locY() + 7.0D, this.locZ() + 7.0D));
             Iterator iterator = list.iterator();
 
             EntityInsentient entityinsentient;
@@ -135,7 +133,7 @@ public class EntityLeash extends EntityHanging {
     }
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         return new PacketPlayOutSpawnEntity(this, this.getEntityType(), 0, this.getBlockPosition());
     }
 }

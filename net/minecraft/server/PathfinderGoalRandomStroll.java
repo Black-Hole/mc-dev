@@ -30,7 +30,7 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
             return false;
         } else {
             if (!this.g) {
-                if (this.a.cw() >= 100) {
+                if (this.a.cL() >= 100) {
                     return false;
                 }
 
@@ -60,12 +60,18 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
 
     @Override
     public boolean b() {
-        return !this.a.getNavigation().n();
+        return !this.a.getNavigation().m() && !this.a.isVehicle();
     }
 
     @Override
     public void c() {
         this.a.getNavigation().a(this.b, this.c, this.d, this.e);
+    }
+
+    @Override
+    public void d() {
+        this.a.getNavigation().o();
+        super.d();
     }
 
     public void h() {

@@ -28,7 +28,7 @@ public class ChunkStatus {
     public static final ChunkStatus STRUCTURE_STARTS = a("structure_starts", ChunkStatus.EMPTY, 0, ChunkStatus.n, ChunkStatus.Type.PROTOCHUNK, (chunkstatus, worldserver, chunkgenerator, definedstructuremanager, lightenginethreaded, function, list, ichunkaccess) -> {
         if (!ichunkaccess.getChunkStatus().b(chunkstatus)) {
             if (worldserver.getWorldData().shouldGenerateMapFeatures()) {
-                chunkgenerator.createStructures(ichunkaccess, chunkgenerator, definedstructuremanager);
+                chunkgenerator.createStructures(worldserver.d().a(chunkgenerator.getWorldChunkManager()), ichunkaccess, chunkgenerator, definedstructuremanager);
             }
 
             if (ichunkaccess instanceof ProtoChunk) {
@@ -48,22 +48,22 @@ public class ChunkStatus {
         chunkgenerator.buildNoise(new RegionLimitedWorldAccess(worldserver, list), ichunkaccess);
     });
     public static final ChunkStatus SURFACE = a("surface", ChunkStatus.NOISE, 0, ChunkStatus.n, ChunkStatus.Type.PROTOCHUNK, (worldserver, chunkgenerator, list, ichunkaccess) -> {
-        chunkgenerator.buildBase(ichunkaccess);
+        chunkgenerator.buildBase(new RegionLimitedWorldAccess(worldserver, list), ichunkaccess);
     });
     public static final ChunkStatus CARVERS = a("carvers", ChunkStatus.SURFACE, 0, ChunkStatus.n, ChunkStatus.Type.PROTOCHUNK, (worldserver, chunkgenerator, list, ichunkaccess) -> {
-        chunkgenerator.doCarving(ichunkaccess, WorldGenStage.Features.AIR);
+        chunkgenerator.doCarving(worldserver.d().a(chunkgenerator.getWorldChunkManager()), ichunkaccess, WorldGenStage.Features.AIR);
     });
     public static final ChunkStatus LIQUID_CARVERS = a("liquid_carvers", ChunkStatus.CARVERS, 0, ChunkStatus.o, ChunkStatus.Type.PROTOCHUNK, (worldserver, chunkgenerator, list, ichunkaccess) -> {
-        chunkgenerator.doCarving(ichunkaccess, WorldGenStage.Features.LIQUID);
+        chunkgenerator.doCarving(worldserver.d().a(chunkgenerator.getWorldChunkManager()), ichunkaccess, WorldGenStage.Features.LIQUID);
     });
     public static final ChunkStatus FEATURES = a("features", ChunkStatus.LIQUID_CARVERS, 8, ChunkStatus.o, ChunkStatus.Type.PROTOCHUNK, (chunkstatus, worldserver, chunkgenerator, definedstructuremanager, lightenginethreaded, function, list, ichunkaccess) -> {
-        ichunkaccess.a((LightEngine) lightenginethreaded);
+        ProtoChunk protochunk = (ProtoChunk) ichunkaccess;
+
+        protochunk.a((LightEngine) lightenginethreaded);
         if (!ichunkaccess.getChunkStatus().b(chunkstatus)) {
             HeightMap.a(ichunkaccess, EnumSet.of(HeightMap.Type.MOTION_BLOCKING, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, HeightMap.Type.OCEAN_FLOOR, HeightMap.Type.WORLD_SURFACE));
             chunkgenerator.addDecorations(new RegionLimitedWorldAccess(worldserver, list));
-            if (ichunkaccess instanceof ProtoChunk) {
-                ((ProtoChunk) ichunkaccess).a(chunkstatus);
-            }
+            protochunk.a(chunkstatus);
         }
 
         return CompletableFuture.completedFuture(Either.left(ichunkaccess));

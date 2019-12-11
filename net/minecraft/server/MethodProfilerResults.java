@@ -22,8 +22,6 @@ public interface MethodProfilerResults {
         return this.d() - this.b();
     }
 
-    String e();
-
     static String b(String s) {
         return s.replace('\u001e', '.');
     }

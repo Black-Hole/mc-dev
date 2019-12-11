@@ -54,7 +54,7 @@ public class PathfinderGoalWaterJump extends PathfinderGoalWaterJumpAbstract {
     }
 
     @Override
-    public boolean C_() {
+    public boolean E_() {
         return false;
     }
 
@@ -88,7 +88,7 @@ public class PathfinderGoalWaterJump extends PathfinderGoalWaterJumpAbstract {
         Vec3D vec3d = this.b.getMot();
 
         if (vec3d.y * vec3d.y < 0.029999999329447746D && this.b.pitch != 0.0F) {
-            this.b.pitch = this.a(this.b.pitch, 0.0F, 0.2F);
+            this.b.pitch = MathHelper.j(this.b.pitch, 0.0F, 0.2F);
         } else {
             double d0 = Math.sqrt(Entity.b(vec3d));
             double d1 = Math.signum(-vec3d.y) * Math.acos(d0 / vec3d.f()) * 57.2957763671875D;

@@ -29,7 +29,7 @@ public class LootItemConditionRandomChanceWithLooting implements LootItemConditi
             i = EnchantmentManager.g((EntityLiving) entity);
         }
 
-        return loottableinfo.b().nextFloat() < this.a + (float) i * this.b;
+        return loottableinfo.a().nextFloat() < this.a + (float) i * this.b;
     }
 
     public static LootItemCondition.a a(float f, float f1) {

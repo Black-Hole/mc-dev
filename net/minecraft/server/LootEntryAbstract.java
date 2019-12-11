@@ -5,8 +5,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 public abstract class LootEntryAbstract implements LootEntryChildren {
@@ -19,9 +17,9 @@ public abstract class LootEntryAbstract implements LootEntryChildren {
         this.c = LootItemConditions.a((Predicate[]) alootitemcondition);
     }
 
-    public void a(LootCollector lootcollector, Function<MinecraftKey, LootTable> function, Set<MinecraftKey> set, LootContextParameterSet lootcontextparameterset) {
+    public void a(LootCollector lootcollector) {
         for (int i = 0; i < this.d.length; ++i) {
-            this.d[i].a(lootcollector.b(".condition[" + i + "]"), function, set, lootcontextparameterset);
+            this.d[i].a(lootcollector.b(".condition[" + i + "]"));
         }
 
     }

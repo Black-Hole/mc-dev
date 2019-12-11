@@ -49,7 +49,7 @@ public class MobEffects {
                 }
 
                 if (worldserver.b_(new BlockPosition(entityliving))) {
-                    worldserver.C().a(entityplayer);
+                    worldserver.getPersistentRaid().a(entityplayer);
                 }
             }
 

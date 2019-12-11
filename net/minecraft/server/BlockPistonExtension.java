@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockPistonExtension extends BlockDirectional {
 
-    public static final BlockStateEnum<BlockPropertyPistonType> TYPE = BlockProperties.aB;
+    public static final BlockStateEnum<BlockPropertyPistonType> TYPE = BlockProperties.aC;
     public static final BlockStateBoolean SHORT = BlockProperties.x;
     protected static final VoxelShape d = Block.a(12.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     protected static final VoxelShape e = Block.a(0.0D, 0.0D, 0.0D, 4.0D, 16.0D, 16.0D);
@@ -25,10 +25,10 @@ public class BlockPistonExtension extends BlockDirectional {
 
     public BlockPistonExtension(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPistonExtension.FACING, EnumDirection.NORTH)).set(BlockPistonExtension.TYPE, BlockPropertyPistonType.DEFAULT)).set(BlockPistonExtension.SHORT, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPistonExtension.FACING, EnumDirection.NORTH)).set(BlockPistonExtension.TYPE, BlockPropertyPistonType.DEFAULT)).set(BlockPistonExtension.SHORT, false));
     }
 
-    private VoxelShape j(IBlockData iblockdata) {
+    private VoxelShape h(IBlockData iblockdata) {
         switch ((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)) {
             case DOWN:
             default:
@@ -47,16 +47,16 @@ public class BlockPistonExtension extends BlockDirectional {
     }
 
     @Override
-    public boolean n(IBlockData iblockdata) {
+    public boolean o(IBlockData iblockdata) {
         return true;
     }
 
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return VoxelShapes.a(this.j(iblockdata), this.q(iblockdata));
+        return VoxelShapes.a(this.h(iblockdata), this.i(iblockdata));
     }
 
-    private VoxelShape q(IBlockData iblockdata) {
+    private VoxelShape i(IBlockData iblockdata) {
         boolean flag = (Boolean) iblockdata.get(BlockPistonExtension.SHORT);
 
         switch ((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)) {

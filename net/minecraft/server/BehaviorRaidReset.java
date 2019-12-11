@@ -18,7 +18,7 @@ public class BehaviorRaidReset extends Behavior<EntityLiving> {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
         Raid raid = worldserver.c_(new BlockPosition(entityliving));
 
-        if (raid == null || raid.d() || raid.f()) {
+        if (raid == null || raid.isStopped() || raid.isLoss()) {
             behaviorcontroller.b(Activity.IDLE);
             behaviorcontroller.a(worldserver.getDayTime(), worldserver.getTime());
         }

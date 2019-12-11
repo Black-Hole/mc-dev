@@ -59,7 +59,7 @@ public class ItemWrittenBook extends Item {
 
         entityhuman.openBook(itemstack, enumhand);
         entityhuman.b(StatisticList.ITEM_USED.b(this));
-        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
+        return InteractionResultWrapper.a(itemstack);
     }
 
     public static boolean a(ItemStack itemstack, @Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable EntityHuman entityhuman) {
@@ -85,7 +85,7 @@ public class ItemWrittenBook extends Item {
                         object = new ChatComponentText(s);
                     }
 
-                    nbttaglist.set(i, (NBTBase) (new NBTTagString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object))));
+                    nbttaglist.set(i, (NBTBase) NBTTagString.a(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object)));
                 }
 
                 nbttagcompound.set("pages", nbttaglist);
@@ -94,5 +94,10 @@ public class ItemWrittenBook extends Item {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public boolean d_(ItemStack itemstack) {
+        return true;
     }
 }

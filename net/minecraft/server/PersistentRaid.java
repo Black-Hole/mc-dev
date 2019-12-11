@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 
 public class PersistentRaid extends PersistentBase {
 
-    private final Map<Integer, Raid> a = Maps.newHashMap();
+    public final Map<Integer, Raid> raids = Maps.newHashMap();
     private final WorldServer b;
     private int c;
     private int d;
@@ -22,21 +22,21 @@ public class PersistentRaid extends PersistentBase {
     }
 
     public Raid a(int i) {
-        return (Raid) this.a.get(i);
+        return (Raid) this.raids.get(i);
     }
 
     public void a() {
         ++this.d;
-        Iterator iterator = this.a.values().iterator();
+        Iterator iterator = this.raids.values().iterator();
 
         while (iterator.hasNext()) {
             Raid raid = (Raid) iterator.next();
 
-            if (this.b.getGameRules().getBoolean(GameRules.x)) {
-                raid.n();
+            if (this.b.getGameRules().getBoolean(GameRules.DISABLE_RAIDS)) {
+                raid.stop();
             }
 
-            if (raid.d()) {
+            if (raid.isStopped()) {
                 iterator.remove();
                 this.b();
             } else {
@@ -48,18 +48,18 @@ public class PersistentRaid extends PersistentBase {
             this.b();
         }
 
-        PacketDebug.a(this.b, this.a.values());
+        PacketDebug.a(this.b, this.raids.values());
     }
 
     public static boolean a(EntityRaider entityraider, Raid raid) {
-        return entityraider != null && raid != null && raid.i() != null ? entityraider.isAlive() && entityraider.ei() && entityraider.cw() <= 2400 && entityraider.world.getWorldProvider().getDimensionManager() == raid.i().getWorldProvider().getDimensionManager() : false;
+        return entityraider != null && raid != null && raid.getWorld() != null ? entityraider.isAlive() && entityraider.eD() && entityraider.cL() <= 2400 && entityraider.world.getWorldProvider().getDimensionManager() == raid.getWorld().getWorldProvider().getDimensionManager() : false;
     }
 
     @Nullable
     public Raid a(EntityPlayer entityplayer) {
         if (entityplayer.isSpectator()) {
             return null;
-        } else if (this.b.getGameRules().getBoolean(GameRules.x)) {
+        } else if (this.b.getGameRules().getBoolean(GameRules.DISABLE_RAIDS)) {
             return null;
         } else {
             DimensionManager dimensionmanager = entityplayer.world.getWorldProvider().getDimensionManager();
@@ -68,9 +68,9 @@ public class PersistentRaid extends PersistentBase {
                 return null;
             } else {
                 BlockPosition blockposition = new BlockPosition(entityplayer);
-                List<VillagePlaceRecord> list = (List) this.b.B().b(VillagePlaceType.a, blockposition, 64, VillagePlace.Occupancy.IS_OCCUPIED).collect(Collectors.toList());
+                List<VillagePlaceRecord> list = (List) this.b.B().c(VillagePlaceType.a, blockposition, 64, VillagePlace.Occupancy.IS_OCCUPIED).collect(Collectors.toList());
                 int i = 0;
-                Vec3D vec3d = new Vec3D(0.0D, 0.0D, 0.0D);
+                Vec3D vec3d = Vec3D.a;
 
                 for (Iterator iterator = list.iterator(); iterator.hasNext(); ++i) {
                     VillagePlaceRecord villageplacerecord = (VillagePlaceRecord) iterator.next();
@@ -91,13 +91,13 @@ public class PersistentRaid extends PersistentBase {
                 Raid raid = this.a(entityplayer.getWorldServer(), blockposition2);
                 boolean flag = false;
 
-                if (!raid.j()) {
-                    if (!this.a.containsKey(raid.u())) {
-                        this.a.put(raid.u(), raid);
+                if (!raid.isStarted()) {
+                    if (!this.raids.containsKey(raid.getId())) {
+                        this.raids.put(raid.getId(), raid);
                     }
 
                     flag = true;
-                } else if (raid.m() < raid.l()) {
+                } else if (raid.getBadOmenLevel() < raid.getMaxBadOmenLevel()) {
                     flag = true;
                 } else {
                     entityplayer.removeEffect(MobEffects.BAD_OMEN);
@@ -135,7 +135,7 @@ public class PersistentRaid extends PersistentBase {
             NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(i);
             Raid raid = new Raid(this.b, nbttagcompound1);
 
-            this.a.put(raid.u(), raid);
+            this.raids.put(raid.getId(), raid);
         }
 
     }
@@ -145,7 +145,7 @@ public class PersistentRaid extends PersistentBase {
         nbttagcompound.setInt("NextAvailableID", this.c);
         nbttagcompound.setInt("Tick", this.d);
         NBTTagList nbttaglist = new NBTTagList();
-        Iterator iterator = this.a.values().iterator();
+        Iterator iterator = this.raids.values().iterator();
 
         while (iterator.hasNext()) {
             Raid raid = (Raid) iterator.next();
@@ -168,14 +168,14 @@ public class PersistentRaid extends PersistentBase {
     }
 
     @Nullable
-    public Raid a(BlockPosition blockposition, int i) {
+    public Raid getNearbyRaid(BlockPosition blockposition, int i) {
         Raid raid = null;
         double d0 = (double) i;
-        Iterator iterator = this.a.values().iterator();
+        Iterator iterator = this.raids.values().iterator();
 
         while (iterator.hasNext()) {
             Raid raid1 = (Raid) iterator.next();
-            double d1 = raid1.t().m(blockposition);
+            double d1 = raid1.getCenter().m(blockposition);
 
             if (raid1.v() && d1 < d0) {
                 raid = raid1;

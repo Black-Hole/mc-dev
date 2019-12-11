@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableList;
 import java.util.function.LongFunction;
 
 public class GenLayers {
@@ -26,7 +25,7 @@ public class GenLayers {
         return areafactory1;
     }
 
-    public static <T extends Area, C extends AreaContextTransformed<T>> ImmutableList<AreaFactory<T>> a(WorldType worldtype, GeneratorSettingsOverworld generatorsettingsoverworld, LongFunction<C> longfunction) {
+    public static <T extends Area, C extends AreaContextTransformed<T>> AreaFactory<T> a(WorldType worldtype, GeneratorSettingsOverworld generatorsettingsoverworld, LongFunction<C> longfunction) {
         AreaFactory<T> areafactory = LayerIsland.INSTANCE.a((AreaContextTransformed) longfunction.apply(1L));
 
         areafactory = GenLayerZoom.FUZZY.a((AreaContextTransformed) longfunction.apply(2000L), areafactory);
@@ -50,22 +49,12 @@ public class GenLayers {
         areafactory = GenLayerMushroomIsland.INSTANCE.a((AreaContextTransformed) longfunction.apply(5L), areafactory);
         areafactory = GenLayerDeepOcean.INSTANCE.a((AreaContextTransformed) longfunction.apply(4L), areafactory);
         areafactory = a(1000L, GenLayerZoom.NORMAL, areafactory, 0, longfunction);
-        int i = 4;
-        int j = i;
-
-        if (generatorsettingsoverworld != null) {
-            i = generatorsettingsoverworld.v();
-            j = generatorsettingsoverworld.w();
-        }
-
-        if (worldtype == WorldType.LARGE_BIOMES) {
-            i = 6;
-        }
-
+        int i = worldtype == WorldType.LARGE_BIOMES ? 6 : generatorsettingsoverworld.v();
+        int j = generatorsettingsoverworld.w();
         AreaFactory<T> areafactory2 = a(1000L, GenLayerZoom.NORMAL, areafactory, 0, longfunction);
 
         areafactory2 = GenLayerCleaner.INSTANCE.a((AreaContextTransformed) longfunction.apply(100L), areafactory2);
-        AreaFactory<T> areafactory3 = (new GenLayerBiome(worldtype, generatorsettingsoverworld)).a((AreaContextTransformed) longfunction.apply(200L), areafactory);
+        AreaFactory<T> areafactory3 = (new GenLayerBiome(worldtype, generatorsettingsoverworld.x())).a((AreaContextTransformed) longfunction.apply(200L), areafactory);
 
         areafactory3 = GenLayerJungle.INSTANCE.a((AreaContextTransformed) longfunction.apply(1001L), areafactory3);
         areafactory3 = a(1000L, GenLayerZoom.NORMAL, areafactory3, 2, longfunction);
@@ -93,21 +82,16 @@ public class GenLayers {
         areafactory3 = GenLayerSmooth.INSTANCE.a((AreaContextTransformed) longfunction.apply(1000L), areafactory3);
         areafactory3 = GenLayerRiverMix.INSTANCE.a((AreaContextTransformed) longfunction.apply(100L), areafactory3, areafactory2);
         areafactory3 = GenLayerOcean.INSTANCE.a((AreaContextTransformed) longfunction.apply(100L), areafactory3, areafactory1);
-        AreaFactory<T> areafactory5 = GenLayerZoomVoronoi.INSTANCE.a((AreaContextTransformed) longfunction.apply(10L), areafactory3);
-
-        return ImmutableList.of(areafactory3, areafactory5, areafactory3);
+        return areafactory3;
     }
 
-    public static GenLayer[] a(long i, WorldType worldtype, GeneratorSettingsOverworld generatorsettingsoverworld) {
+    public static GenLayer a(long i, WorldType worldtype, GeneratorSettingsOverworld generatorsettingsoverworld) {
         boolean flag = true;
-        ImmutableList<AreaFactory<AreaLazy>> immutablelist = a(worldtype, generatorsettingsoverworld, (j) -> {
+        AreaFactory<AreaLazy> areafactory = a(worldtype, generatorsettingsoverworld, (j) -> {
             return new WorldGenContextArea(25, i, j);
         });
-        GenLayer genlayer = new GenLayer((AreaFactory) immutablelist.get(0));
-        GenLayer genlayer1 = new GenLayer((AreaFactory) immutablelist.get(1));
-        GenLayer genlayer2 = new GenLayer((AreaFactory) immutablelist.get(2));
 
-        return new GenLayer[]{genlayer, genlayer1, genlayer2};
+        return new GenLayer(areafactory);
     }
 
     public static boolean a(int i, int j) {
@@ -117,7 +101,7 @@ public class GenLayers {
             BiomeBase biomebase = (BiomeBase) IRegistry.BIOME.fromId(i);
             BiomeBase biomebase1 = (BiomeBase) IRegistry.BIOME.fromId(j);
 
-            return biomebase != null && biomebase1 != null ? (biomebase != Biomes.WOODED_BADLANDS_PLATEAU && biomebase != Biomes.BADLANDS_PLATEAU ? (biomebase.o() != BiomeBase.Geography.NONE && biomebase1.o() != BiomeBase.Geography.NONE && biomebase.o() == biomebase1.o() ? true : biomebase == biomebase1) : biomebase1 == Biomes.WOODED_BADLANDS_PLATEAU || biomebase1 == Biomes.BADLANDS_PLATEAU) : false;
+            return biomebase != null && biomebase1 != null ? (biomebase != Biomes.WOODED_BADLANDS_PLATEAU && biomebase != Biomes.BADLANDS_PLATEAU ? (biomebase.q() != BiomeBase.Geography.NONE && biomebase1.q() != BiomeBase.Geography.NONE && biomebase.q() == biomebase1.q() ? true : biomebase == biomebase1) : biomebase1 == Biomes.WOODED_BADLANDS_PLATEAU || biomebase1 == Biomes.BADLANDS_PLATEAU) : false;
         }
     }
 

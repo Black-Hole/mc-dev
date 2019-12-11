@@ -17,7 +17,7 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if (random.nextInt(25) == 0) {
             int i = 5;
             boolean flag = true;
@@ -26,7 +26,7 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
             while (iterator.hasNext()) {
                 BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
-                if (world.getType(blockposition1).getBlock() == this) {
+                if (worldserver.getType(blockposition1).getBlock() == this) {
                     --i;
                     if (i <= 0) {
                         return;
@@ -37,15 +37,15 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
             BlockPosition blockposition2 = blockposition.b(random.nextInt(3) - 1, random.nextInt(2) - random.nextInt(2), random.nextInt(3) - 1);
 
             for (int j = 0; j < 4; ++j) {
-                if (world.isEmpty(blockposition2) && iblockdata.canPlace(world, blockposition2)) {
+                if (worldserver.isEmpty(blockposition2) && iblockdata.canPlace(worldserver, blockposition2)) {
                     blockposition = blockposition2;
                 }
 
                 blockposition2 = blockposition.b(random.nextInt(3) - 1, random.nextInt(2) - random.nextInt(2), random.nextInt(3) - 1);
             }
 
-            if (world.isEmpty(blockposition2) && iblockdata.canPlace(world, blockposition2)) {
-                world.setTypeAndData(blockposition2, iblockdata, 2);
+            if (worldserver.isEmpty(blockposition2) && iblockdata.canPlace(worldserver, blockposition2)) {
+                worldserver.setTypeAndData(blockposition2, iblockdata, 2);
             }
         }
 
@@ -65,20 +65,25 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
         return block != Blocks.MYCELIUM && block != Blocks.PODZOL ? iworldreader.getLightLevel(blockposition, 0) < 13 && this.a_(iblockdata1, iworldreader, blockposition1) : true;
     }
 
-    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        generatoraccess.a(blockposition, false);
-        WorldGenerator<WorldGenHugeMushroomConfiguration> worldgenerator = null;
+    public boolean a(WorldServer worldserver, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+        worldserver.a(blockposition, false);
+        WorldGenFeatureConfigured worldgenfeatureconfigured;
 
         if (this == Blocks.BROWN_MUSHROOM) {
-            worldgenerator = WorldGenerator.HUGE_BROWN_MUSHROOM;
-        } else if (this == Blocks.RED_MUSHROOM) {
-            worldgenerator = WorldGenerator.HUGE_RED_MUSHROOM;
+            worldgenfeatureconfigured = WorldGenerator.HUGE_BROWN_MUSHROOM.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.HUGE_BROWN_MUSHROOM);
+        } else {
+            if (this != Blocks.RED_MUSHROOM) {
+                worldserver.setTypeAndData(blockposition, iblockdata, 3);
+                return false;
+            }
+
+            worldgenfeatureconfigured = WorldGenerator.HUGE_RED_MUSHROOM.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.HUGE_RED_MUSHROOM);
         }
 
-        if (worldgenerator != null && worldgenerator.generate(generatoraccess, generatoraccess.getChunkProvider().getChunkGenerator(), random, blockposition, new WorldGenHugeMushroomConfiguration(true))) {
+        if (worldgenfeatureconfigured.a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), random, blockposition)) {
             return true;
         } else {
-            generatoraccess.setTypeAndData(blockposition, iblockdata, 3);
+            worldserver.setTypeAndData(blockposition, iblockdata, 3);
             return false;
         }
     }
@@ -94,12 +99,12 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
     }
 
     @Override
-    public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        this.a((GeneratorAccess) world, blockposition, iblockdata, random);
+    public void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata) {
+        this.a(worldserver, blockposition, iblockdata, random);
     }
 
     @Override
-    public boolean g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public boolean h(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return true;
     }
 }

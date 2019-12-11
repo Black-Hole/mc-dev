@@ -14,7 +14,7 @@ public class BlockHugeMushroom extends Block {
 
     public BlockHugeMushroom(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockHugeMushroom.a, true)).set(BlockHugeMushroom.b, true)).set(BlockHugeMushroom.c, true)).set(BlockHugeMushroom.d, true)).set(BlockHugeMushroom.e, true)).set(BlockHugeMushroom.f, true));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockHugeMushroom.a, true)).set(BlockHugeMushroom.b, true)).set(BlockHugeMushroom.c, true)).set(BlockHugeMushroom.d, true)).set(BlockHugeMushroom.e, true)).set(BlockHugeMushroom.f, true));
     }
 
     @Override

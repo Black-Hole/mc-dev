@@ -16,13 +16,8 @@ public class BlockSlowSand extends Block {
     }
 
     @Override
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
-        entity.setMot(entity.getMot().d(0.4D, 1.0D, 0.4D));
-    }
-
-    @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        BlockBubbleColumn.a(world, blockposition.up(), false);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        BlockBubbleColumn.a(worldserver, blockposition.up(), false);
     }
 
     @Override

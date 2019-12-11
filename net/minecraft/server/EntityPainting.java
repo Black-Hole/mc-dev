@@ -100,7 +100,7 @@ public class EntityPainting extends EntityHanging {
     }
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         return new PacketPlayOutSpawnEntityPainting(this);
     }
 }

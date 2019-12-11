@@ -12,22 +12,17 @@ public class BlockKelpPlant extends Block implements IFluidContainer {
     }
 
     @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
-    }
-
-    @Override
-    public Fluid g(IBlockData iblockdata) {
+    public Fluid a_(IBlockData iblockdata) {
         return FluidTypes.WATER.a(false);
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!iblockdata.canPlace(world, blockposition)) {
-            world.b(blockposition, true);
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!iblockdata.canPlace(worldserver, blockposition)) {
+            worldserver.b(blockposition, true);
         }
 
-        super.tick(iblockdata, world, blockposition, random);
+        super.tick(iblockdata, worldserver, blockposition, random);
     }
 
     @Override

@@ -16,7 +16,7 @@ public class TicketType<T> {
     public static final TicketType<ChunkCoordIntPair> PLAYER = a("player", Comparator.comparingLong(ChunkCoordIntPair::pair));
     public static final TicketType<ChunkCoordIntPair> FORCED = a("forced", Comparator.comparingLong(ChunkCoordIntPair::pair));
     public static final TicketType<ChunkCoordIntPair> LIGHT = a("light", Comparator.comparingLong(ChunkCoordIntPair::pair));
-    public static final TicketType<BlockPosition2D> PORTAL = a("portal", Comparator.comparingLong(BlockPosition2D::b));
+    public static final TicketType<BlockPosition> PORTAL = a("portal", BaseBlockPosition::compareTo, 300);
     public static final TicketType<Integer> POST_TELEPORT = a("post_teleport", Integer::compareTo, 5);
     public static final TicketType<ChunkCoordIntPair> UNKNOWN = a("unknown", Comparator.comparingLong(ChunkCoordIntPair::pair), 1);
 

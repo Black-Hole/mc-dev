@@ -8,6 +8,6 @@ public class ItemNamedBlock extends ItemBlock {
 
     @Override
     public String getName() {
-        return this.l();
+        return this.n();
     }
 }

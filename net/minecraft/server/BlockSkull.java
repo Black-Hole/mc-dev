@@ -2,12 +2,12 @@ package net.minecraft.server;
 
 public class BlockSkull extends BlockSkullAbstract {
 
-    public static final BlockStateInteger a = BlockProperties.av;
+    public static final BlockStateInteger a = BlockProperties.aw;
     protected static final VoxelShape b = Block.a(4.0D, 0.0D, 4.0D, 12.0D, 8.0D, 12.0D);
 
     protected BlockSkull(BlockSkull.a blockskull_a, Block.Info block_info) {
         super(blockskull_a, block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSkull.a, 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSkull.a, 0));
     }
 
     @Override
@@ -16,7 +16,7 @@ public class BlockSkull extends BlockSkullAbstract {
     }
 
     @Override
-    public VoxelShape h(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape i(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return VoxelShapes.a();
     }
 

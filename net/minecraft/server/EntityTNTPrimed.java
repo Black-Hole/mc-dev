@@ -45,9 +45,6 @@ public class EntityTNTPrimed extends Entity {
 
     @Override
     public void tick() {
-        this.lastX = this.locX;
-        this.lastY = this.locY;
-        this.lastZ = this.locZ;
         if (!this.isNoGravity()) {
             this.setMot(this.getMot().add(0.0D, -0.04D, 0.0D));
         }
@@ -65,8 +62,10 @@ public class EntityTNTPrimed extends Entity {
                 this.explode();
             }
         } else {
-            this.ay();
-            this.world.addParticle(Particles.SMOKE, this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D);
+            this.aC();
+            if (this.world.isClientSide) {
+                this.world.addParticle(Particles.SMOKE, this.locX(), this.locY() + 0.5D, this.locZ(), 0.0D, 0.0D, 0.0D);
+            }
         }
 
     }
@@ -74,7 +73,7 @@ public class EntityTNTPrimed extends Entity {
     private void explode() {
         float f = 4.0F;
 
-        this.world.explode(this, this.locX, this.locY + (double) (this.getHeight() / 16.0F), this.locZ, 4.0F, Explosion.Effect.BREAK);
+        this.world.explode(this, this.locX(), this.e(0.0625D), this.locZ(), 4.0F, Explosion.Effect.BREAK);
     }
 
     @Override
@@ -119,7 +118,7 @@ public class EntityTNTPrimed extends Entity {
     }
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

@@ -5,7 +5,7 @@ import com.mojang.datafixers.types.DynamicOps;
 
 public interface WorldGenFeatureDecoratorConfiguration {
 
-    WorldGenFeatureDecoratorEmptyConfiguration e = new WorldGenFeatureDecoratorEmptyConfiguration();
+    WorldGenFeatureEmptyConfiguration2 e = new WorldGenFeatureEmptyConfiguration2();
 
     <T> Dynamic<T> a(DynamicOps<T> dynamicops);
 }

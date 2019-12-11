@@ -23,17 +23,18 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     private final WorldProvider k;
     private final GeneratorSettingsDefault l;
     private final TickList<Block> m = new TickListWorldGen<>((blockposition) -> {
-        return this.w(blockposition).n();
+        return this.x(blockposition).n();
     });
     private final TickList<FluidType> n = new TickListWorldGen<>((blockposition) -> {
-        return this.w(blockposition).o();
+        return this.x(blockposition).o();
     });
+    private final BiomeManager o;
 
     public RegionLimitedWorldAccess(WorldServer worldserver, List<IChunkAccess> list) {
         int i = MathHelper.floor(Math.sqrt((double) list.size()));
 
         if (i * i != list.size()) {
-            throw new IllegalStateException("Cache size is not a square.");
+            throw (IllegalStateException) SystemUtils.c(new IllegalStateException("Cache size is not a square."));
         } else {
             ChunkCoordIntPair chunkcoordintpair = ((IChunkAccess) list.get(list.size() / 2)).getPos();
 
@@ -48,6 +49,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
             this.i = worldserver.getWorldData();
             this.j = worldserver.getRandom();
             this.k = worldserver.getWorldProvider();
+            this.o = new BiomeManager(this, WorldData.c(this.g), this.k.getDimensionManager().getGenLayerZoomer());
         }
     }
 
@@ -91,9 +93,9 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
             RegionLimitedWorldAccess.LOGGER.error("Requested chunk : {} {}", i, j);
             RegionLimitedWorldAccess.LOGGER.error("Region bounds : {} {} | {} {}", ichunkaccess1.getPos().x, ichunkaccess1.getPos().z, ichunkaccess2.getPos().x, ichunkaccess2.getPos().z);
             if (ichunkaccess != null) {
-                throw new RuntimeException(String.format("Chunk is not of correct status. Expecting %s, got %s | %s %s", chunkstatus, ichunkaccess.getChunkStatus(), i, j));
+                throw (RuntimeException) SystemUtils.c(new RuntimeException(String.format("Chunk is not of correct status. Expecting %s, got %s | %s %s", chunkstatus, ichunkaccess.getChunkStatus(), i, j)));
             } else {
-                throw new RuntimeException(String.format("We are asking a region for a chunk out of bound | %s %s", i, j));
+                throw (RuntimeException) SystemUtils.c(new RuntimeException(String.format("We are asking a region for a chunk out of bound | %s %s", i, j)));
             }
         }
     }
@@ -113,7 +115,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
 
     @Override
     public Fluid getFluid(BlockPosition blockposition) {
-        return this.w(blockposition).getFluid(blockposition);
+        return this.x(blockposition).getFluid(blockposition);
     }
 
     @Nullable
@@ -128,28 +130,22 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     }
 
     @Override
-    public BiomeBase getBiome(BlockPosition blockposition) {
-        BiomeBase biomebase = this.w(blockposition).getBiomeIndex()[blockposition.getX() & 15 | (blockposition.getZ() & 15) << 4];
-
-        if (biomebase == null) {
-            throw new RuntimeException(String.format("Biome is null @ %s", blockposition));
-        } else {
-            return biomebase;
-        }
+    public BiomeManager d() {
+        return this.o;
     }
 
     @Override
-    public int getBrightness(EnumSkyBlock enumskyblock, BlockPosition blockposition) {
-        return this.getChunkProvider().getLightEngine().a(enumskyblock).b(blockposition);
+    public BiomeBase a(int i, int j, int k) {
+        return this.f.a(i, j, k);
     }
 
     @Override
-    public int getLightLevel(BlockPosition blockposition, int i) {
-        return this.w(blockposition).a(blockposition, i, this.getWorldProvider().g());
+    public LightEngine e() {
+        return this.f.e();
     }
 
     @Override
-    public boolean b(BlockPosition blockposition, boolean flag) {
+    public boolean a(BlockPosition blockposition, boolean flag, @Nullable Entity entity) {
         IBlockData iblockdata = this.getType(blockposition);
 
         if (iblockdata.isAir()) {
@@ -158,7 +154,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
             if (flag) {
                 TileEntity tileentity = iblockdata.getBlock().isTileEntity() ? this.getTileEntity(blockposition) : null;
 
-                Block.a(iblockdata, (World) this.f, blockposition, tileentity);
+                Block.dropItems(iblockdata, this.f, blockposition, tileentity, entity, ItemStack.a);
             }
 
             return this.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 3);
@@ -168,13 +164,13 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     @Nullable
     @Override
     public TileEntity getTileEntity(BlockPosition blockposition) {
-        IChunkAccess ichunkaccess = this.w(blockposition);
+        IChunkAccess ichunkaccess = this.x(blockposition);
         TileEntity tileentity = ichunkaccess.getTileEntity(blockposition);
 
         if (tileentity != null) {
             return tileentity;
         } else {
-            NBTTagCompound nbttagcompound = ichunkaccess.i(blockposition);
+            NBTTagCompound nbttagcompound = ichunkaccess.f(blockposition);
 
             if (nbttagcompound != null) {
                 if ("DUMMY".equals(nbttagcompound.getString("id"))) {
@@ -205,7 +201,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
 
     @Override
     public boolean setTypeAndData(BlockPosition blockposition, IBlockData iblockdata, int i) {
-        IChunkAccess ichunkaccess = this.w(blockposition);
+        IChunkAccess ichunkaccess = this.x(blockposition);
         IBlockData iblockdata1 = ichunkaccess.setType(blockposition, iblockdata, false);
 
         if (iblockdata1 != null) {
@@ -230,21 +226,21 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
             ichunkaccess.removeTileEntity(blockposition);
         }
 
-        if (iblockdata.n(this, blockposition)) {
-            this.i(blockposition);
+        if (iblockdata.o(this, blockposition)) {
+            this.e(blockposition);
         }
 
         return true;
     }
 
-    private void i(BlockPosition blockposition) {
-        this.w(blockposition).f(blockposition);
+    private void e(BlockPosition blockposition) {
+        this.x(blockposition).e(blockposition);
     }
 
     @Override
     public boolean addEntity(Entity entity) {
-        int i = MathHelper.floor(entity.locX / 16.0D);
-        int j = MathHelper.floor(entity.locZ / 16.0D);
+        int i = MathHelper.floor(entity.locX() / 16.0D);
+        int j = MathHelper.floor(entity.locZ() / 16.0D);
 
         this.getChunkAt(i, j).a(entity);
         return true;
@@ -261,12 +257,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     }
 
     @Override
-    public boolean a(@Nullable Entity entity, VoxelShape voxelshape) {
-        return true;
-    }
-
-    @Override
-    public boolean e() {
+    public boolean p_() {
         return false;
     }
 
@@ -286,7 +277,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
         if (!this.isChunkLoaded(blockposition.getX() >> 4, blockposition.getZ() >> 4)) {
             throw new RuntimeException("We are asking a region for a chunk out of bound");
         } else {
-            return new DifficultyDamageScaler(this.f.getDifficulty(), this.f.getDayTime(), 0L, this.f.aa());
+            return new DifficultyDamageScaler(this.f.getDifficulty(), this.f.getDayTime(), 0L, this.f.Y());
         }
     }
 
@@ -360,10 +351,5 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     @Override
     public List<EntityHuman> getPlayers() {
         return Collections.emptyList();
-    }
-
-    @Override
-    public BlockPosition getHighestBlockYAt(HeightMap.Type heightmap_type, BlockPosition blockposition) {
-        return new BlockPosition(blockposition.getX(), this.a(heightmap_type, blockposition.getX(), blockposition.getZ()), blockposition.getZ());
     }
 }

@@ -123,7 +123,7 @@ public class EntityPotion extends EntityProjectile {
             while (iterator.hasNext()) {
                 EntityLiving entityliving = (EntityLiving) iterator.next();
 
-                if (entityliving.dt()) {
+                if (entityliving.dM()) {
                     double d0 = this.h(entityliving);
 
                     if (d0 < 16.0D) {
@@ -157,7 +157,7 @@ public class EntityPotion extends EntityProjectile {
     }
 
     private void a(ItemStack itemstack, PotionRegistry potionregistry) {
-        EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX, this.locY, this.locZ);
+        EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX(), this.locY(), this.locZ());
 
         entityareaeffectcloud.setSource(this.getShooter());
         entityareaeffectcloud.setRadius(3.0F);

@@ -11,7 +11,7 @@ public class BlockPistonMoving extends BlockTileEntity {
 
     public BlockPistonMoving(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPistonMoving.a, EnumDirection.NORTH)).set(BlockPistonMoving.b, BlockPropertyPistonType.DEFAULT));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPistonMoving.a, EnumDirection.NORTH)).set(BlockPistonMoving.b, BlockPropertyPistonType.DEFAULT));
     }
 
     @Nullable
@@ -30,7 +30,7 @@ public class BlockPistonMoving extends BlockTileEntity {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityPiston) {
-                ((TileEntityPiston) tileentity).u();
+                ((TileEntityPiston) tileentity).l();
             }
 
         }
@@ -48,11 +48,6 @@ public class BlockPistonMoving extends BlockTileEntity {
     }
 
     @Override
-    public boolean f(IBlockData iblockdata) {
-        return false;
-    }
-
-    @Override
     public boolean isOccluding(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return false;
     }
@@ -63,12 +58,12 @@ public class BlockPistonMoving extends BlockTileEntity {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (!world.isClientSide && world.getTileEntity(blockposition) == null) {
             world.a(blockposition, false);
-            return true;
+            return EnumInteractionResult.CONSUME;
         } else {
-            return false;
+            return EnumInteractionResult.PASS;
         }
     }
 
@@ -76,7 +71,7 @@ public class BlockPistonMoving extends BlockTileEntity {
     public List<ItemStack> a(IBlockData iblockdata, LootTableInfo.Builder loottableinfo_builder) {
         TileEntityPiston tileentitypiston = this.a((IBlockAccess) loottableinfo_builder.a(), (BlockPosition) loottableinfo_builder.a(LootContextParameters.POSITION));
 
-        return tileentitypiston == null ? Collections.emptyList() : tileentitypiston.t().a(loottableinfo_builder);
+        return tileentitypiston == null ? Collections.emptyList() : tileentitypiston.k().a(loottableinfo_builder);
     }
 
     @Override

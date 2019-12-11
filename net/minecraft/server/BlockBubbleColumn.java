@@ -8,7 +8,7 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
 
     public BlockBubbleColumn(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBubbleColumn.a, true));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBubbleColumn.a, true));
     }
 
     @Override
@@ -37,12 +37,12 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        a(world, blockposition.up(), a((IBlockAccess) world, blockposition));
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        a(worldserver, blockposition.up(), a((IBlockAccess) worldserver, blockposition));
     }
 
     @Override
-    public Fluid g(IBlockData iblockdata) {
+    public Fluid a_(IBlockData iblockdata) {
         return FluidTypes.WATER.a(false);
     }
 
@@ -97,11 +97,6 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
     @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return VoxelShapes.a();
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.TRANSLUCENT;
     }
 
     @Override

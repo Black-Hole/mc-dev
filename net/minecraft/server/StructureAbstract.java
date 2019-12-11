@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public abstract class StructureAbstract extends StructureStart {
 
-    public StructureAbstract(StructureGenerator<?> structuregenerator, int i, int j, BiomeBase biomebase, StructureBoundingBox structureboundingbox, int k, long l) {
-        super(structuregenerator, i, j, biomebase, structureboundingbox, k, l);
+    public StructureAbstract(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+        super(structuregenerator, i, j, structureboundingbox, k, l);
     }
 
     @Override

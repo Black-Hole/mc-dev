@@ -8,7 +8,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -97,17 +96,11 @@ public class ResourcePackFolder extends ResourcePackAbstract {
     public void close() throws IOException {}
 
     @Override
-    public Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, int i, Predicate<String> predicate) {
+    public Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, String s1, int i, Predicate<String> predicate) {
         File file = new File(this.a, enumresourcepacktype.a());
         List<MinecraftKey> list = Lists.newArrayList();
-        Iterator iterator = this.a(enumresourcepacktype).iterator();
 
-        while (iterator.hasNext()) {
-            String s1 = (String) iterator.next();
-
-            this.a(new File(new File(file, s1), s), i, s1, list, s + "/", predicate);
-        }
-
+        this.a(new File(new File(file, s), s1), i, s, list, s1 + "/", predicate);
         return list;
     }
 

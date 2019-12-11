@@ -11,7 +11,7 @@ public class ItemHorseArmor extends Item {
         this.b = "textures/entity/horse/armor/horse_armor_" + s + ".png";
     }
 
-    public int e() {
+    public int g() {
         return this.a;
     }
 }

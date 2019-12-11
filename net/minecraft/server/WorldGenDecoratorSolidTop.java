@@ -5,17 +5,17 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class WorldGenDecoratorSolidTop extends WorldGenDecorator<WorldGenFeatureDecoratorEmptyConfiguration> {
+public class WorldGenDecoratorSolidTop extends WorldGenDecorator<WorldGenFeatureEmptyConfiguration2> {
 
-    public WorldGenDecoratorSolidTop(Function<Dynamic<?>, ? extends WorldGenFeatureDecoratorEmptyConfiguration> function) {
+    public WorldGenDecoratorSolidTop(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration2> function) {
         super(function);
     }
 
-    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenFeatureDecoratorEmptyConfiguration worldgenfeaturedecoratoremptyconfiguration, BlockPosition blockposition) {
-        int i = random.nextInt(16);
-        int j = random.nextInt(16);
-        int k = generatoraccess.a(HeightMap.Type.OCEAN_FLOOR_WG, blockposition.getX() + i, blockposition.getZ() + j);
+    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenFeatureEmptyConfiguration2 worldgenfeatureemptyconfiguration2, BlockPosition blockposition) {
+        int i = random.nextInt(16) + blockposition.getX();
+        int j = random.nextInt(16) + blockposition.getZ();
+        int k = generatoraccess.a(HeightMap.Type.OCEAN_FLOOR_WG, i, j);
 
-        return Stream.of(new BlockPosition(blockposition.getX() + i, k, blockposition.getZ() + j));
+        return Stream.of(new BlockPosition(i, k, j));
     }
 }

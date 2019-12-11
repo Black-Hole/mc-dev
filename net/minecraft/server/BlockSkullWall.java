@@ -11,11 +11,11 @@ public class BlockSkullWall extends BlockSkullAbstract {
 
     protected BlockSkullWall(BlockSkull.a blockskull_a, Block.Info block_info) {
         super(blockskull_a, block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSkullWall.a, EnumDirection.NORTH));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSkullWall.a, EnumDirection.NORTH));
     }
 
     @Override
-    public String l() {
+    public String k() {
         return this.getItem().getName();
     }
 
@@ -36,7 +36,7 @@ public class BlockSkullWall extends BlockSkullAbstract {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection1[j];
 
-            if (enumdirection.k().c()) {
+            if (enumdirection.m().c()) {
                 EnumDirection enumdirection1 = enumdirection.opposite();
 
                 iblockdata = (IBlockData) iblockdata.set(BlockSkullWall.a, enumdirection1);

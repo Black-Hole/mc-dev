@@ -16,11 +16,11 @@ public class WorldGenDecoratorNetherMagma extends WorldGenDecorator<WorldGenDeco
         int i = generatoraccess.getSeaLevel() / 2 + 1;
 
         return IntStream.range(0, worldgendecoratorfrequencyconfiguration.a).mapToObj((j) -> {
-            int k = random.nextInt(16);
-            int l = i - 5 + random.nextInt(10);
-            int i1 = random.nextInt(16);
+            int k = random.nextInt(16) + blockposition.getX();
+            int l = random.nextInt(16) + blockposition.getZ();
+            int i1 = i - 5 + random.nextInt(10);
 
-            return blockposition.b(k, l, i1);
+            return new BlockPosition(k, i1, l);
         });
     }
 }

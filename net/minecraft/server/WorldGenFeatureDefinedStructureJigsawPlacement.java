@@ -75,7 +75,7 @@ public class WorldGenFeatureDefinedStructureJigsawPlacement {
         private void a(WorldGenFeaturePillagerOutpostPoolPiece worldgenfeaturepillageroutpostpoolpiece, AtomicReference<VoxelShape> atomicreference, int i, int j) {
             WorldGenFeatureDefinedStructurePoolStructure worldgenfeaturedefinedstructurepoolstructure = worldgenfeaturepillageroutpostpoolpiece.b();
             BlockPosition blockposition = worldgenfeaturepillageroutpostpoolpiece.c();
-            EnumBlockRotation enumblockrotation = worldgenfeaturepillageroutpostpoolpiece.X_();
+            EnumBlockRotation enumblockrotation = worldgenfeaturepillageroutpostpoolpiece.ad_();
             WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching = worldgenfeaturedefinedstructurepoolstructure.c();
             boolean flag = worldgenfeaturedefinedstructurepooltemplate_matching == WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID;
             AtomicReference<VoxelShape> atomicreference1 = new AtomicReference();

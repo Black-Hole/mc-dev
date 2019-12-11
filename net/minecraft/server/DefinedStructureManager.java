@@ -142,6 +142,10 @@ public class DefinedStructureManager implements IResourcePackListener {
     private DefinedStructure a(InputStream inputstream) throws IOException {
         NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a(inputstream);
 
+        return this.a(nbttagcompound);
+    }
+
+    public DefinedStructure a(NBTTagCompound nbttagcompound) {
         if (!nbttagcompound.hasKeyOfType("DataVersion", 99)) {
             nbttagcompound.setInt("DataVersion", 500);
         }
@@ -205,7 +209,7 @@ public class DefinedStructureManager implements IResourcePackListener {
         }
     }
 
-    private java.nio.file.Path a(MinecraftKey minecraftkey, String s) {
+    public java.nio.file.Path a(MinecraftKey minecraftkey, String s) {
         try {
             java.nio.file.Path java_nio_file_path = this.e.resolve(minecraftkey.getNamespace());
             java.nio.file.Path java_nio_file_path1 = java_nio_file_path.resolve("structures");

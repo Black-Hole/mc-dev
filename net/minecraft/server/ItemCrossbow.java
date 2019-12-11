@@ -13,10 +13,10 @@ public class ItemCrossbow extends ItemProjectileWeapon {
     public ItemCrossbow(Item.Info item_info) {
         super(item_info);
         this.a(new MinecraftKey("pull"), (itemstack, world, entityliving) -> {
-            return entityliving != null && itemstack.getItem() == this ? (d(itemstack) ? 0.0F : (float) (itemstack.k() - entityliving.dm()) / (float) e(itemstack)) : 0.0F;
+            return entityliving != null && itemstack.getItem() == this ? (d(itemstack) ? 0.0F : (float) (itemstack.k() - entityliving.dE()) / (float) e(itemstack)) : 0.0F;
         });
         this.a(new MinecraftKey("pulling"), (itemstack, world, entityliving) -> {
-            return entityliving != null && entityliving.isHandRaised() && entityliving.dl() == itemstack && !d(itemstack) ? 1.0F : 0.0F;
+            return entityliving != null && entityliving.isHandRaised() && entityliving.dD() == itemstack && !d(itemstack) ? 1.0F : 0.0F;
         });
         this.a(new MinecraftKey("charged"), (itemstack, world, entityliving) -> {
             return entityliving != null && d(itemstack) ? 1.0F : 0.0F;
@@ -43,7 +43,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
         if (d(itemstack)) {
             a(world, entityhuman, enumhand, itemstack, l(itemstack), 1.0F);
             a(itemstack, false);
-            return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
+            return InteractionResultWrapper.b(itemstack);
         } else if (!entityhuman.f(itemstack).isEmpty()) {
             if (!d(itemstack)) {
                 this.c = false;
@@ -51,9 +51,9 @@ public class ItemCrossbow extends ItemProjectileWeapon {
                 entityhuman.c(enumhand);
             }
 
-            return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
+            return InteractionResultWrapper.b(itemstack);
         } else {
-            return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
+            return InteractionResultWrapper.d(itemstack);
         }
     }
 
@@ -66,7 +66,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
             a(itemstack, true);
             SoundCategory soundcategory = entityliving instanceof EntityHuman ? SoundCategory.PLAYERS : SoundCategory.HOSTILE;
 
-            world.playSound((EntityHuman) null, entityliving.locX, entityliving.locY, entityliving.locZ, SoundEffects.ITEM_CROSSBOW_LOADING_END, soundcategory, 1.0F, 1.0F / (ItemCrossbow.i.nextFloat() * 0.5F + 1.0F) + 0.2F);
+            world.playSound((EntityHuman) null, entityliving.locX(), entityliving.locY(), entityliving.locZ(), SoundEffects.ITEM_CROSSBOW_LOADING_END, soundcategory, 1.0F, 1.0F / (ItemCrossbow.i.nextFloat() * 0.5F + 1.0F) + 0.2F);
         }
 
     }
@@ -189,7 +189,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
             Object object;
 
             if (flag1) {
-                object = new EntityFireworks(world, itemstack1, entityliving.locX, entityliving.locY + (double) entityliving.getHeadHeight() - 0.15000000596046448D, entityliving.locZ, true);
+                object = new EntityFireworks(world, itemstack1, entityliving.locX(), entityliving.getHeadY() - 0.15000000596046448D, entityliving.locZ(), true);
             } else {
                 object = a(world, entityliving, itemstack, itemstack1);
                 if (flag || f3 != 0.0F) {
@@ -215,7 +215,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
                 entityliving1.d(enumhand);
             });
             world.addEntity((Entity) object);
-            world.playSound((EntityHuman) null, entityliving.locX, entityliving.locY, entityliving.locZ, SoundEffects.ITEM_CROSSBOW_SHOOT, SoundCategory.PLAYERS, 1.0F, f);
+            world.playSound((EntityHuman) null, entityliving.locX(), entityliving.locY(), entityliving.locZ(), SoundEffects.ITEM_CROSSBOW_SHOOT, SoundCategory.PLAYERS, 1.0F, f);
         }
     }
 
@@ -301,12 +301,12 @@ public class ItemCrossbow extends ItemProjectileWeapon {
 
             if (f >= 0.2F && !this.c) {
                 this.c = true;
-                world.playSound((EntityHuman) null, entityliving.locX, entityliving.locY, entityliving.locZ, soundeffect, SoundCategory.PLAYERS, 0.5F, 1.0F);
+                world.playSound((EntityHuman) null, entityliving.locX(), entityliving.locY(), entityliving.locZ(), soundeffect, SoundCategory.PLAYERS, 0.5F, 1.0F);
             }
 
             if (f >= 0.5F && soundeffect1 != null && !this.d) {
                 this.d = true;
-                world.playSound((EntityHuman) null, entityliving.locX, entityliving.locY, entityliving.locZ, soundeffect1, SoundCategory.PLAYERS, 0.5F, 1.0F);
+                world.playSound((EntityHuman) null, entityliving.locX(), entityliving.locY(), entityliving.locZ(), soundeffect1, SoundCategory.PLAYERS, 0.5F, 1.0F);
             }
         }
 

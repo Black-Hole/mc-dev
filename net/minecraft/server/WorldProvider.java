@@ -12,19 +12,15 @@ public abstract class WorldProvider {
     protected final float[] e = new float[16];
     private final float[] g = new float[4];
 
-    public WorldProvider(World world, DimensionManager dimensionmanager) {
+    public WorldProvider(World world, DimensionManager dimensionmanager, float f) {
         this.b = world;
         this.f = dimensionmanager;
-        this.a();
-    }
-
-    protected void a() {
-        float f = 0.0F;
 
         for (int i = 0; i <= 15; ++i) {
-            float f1 = 1.0F - (float) i / 15.0F;
+            float f1 = (float) i / 15.0F;
+            float f2 = f1 / (4.0F - 3.0F * f1);
 
-            this.e[i] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * 1.0F + 0.0F;
+            this.e[i] = MathHelper.g(f, f2, 1.0F);
         }
 
     }
@@ -34,7 +30,7 @@ public abstract class WorldProvider {
     }
 
     @Nullable
-    public BlockPosition d() {
+    public BlockPosition c() {
         return null;
     }
 
@@ -42,25 +38,25 @@ public abstract class WorldProvider {
         return this.c;
     }
 
-    public boolean g() {
+    public boolean f() {
         return this.f.hasSkyLight();
     }
 
-    public boolean h() {
+    public boolean g() {
         return this.d;
     }
 
-    public float[] i() {
-        return this.e;
+    public float a(int i) {
+        return this.e[i];
     }
 
     public WorldBorder getWorldBorder() {
         return new WorldBorder();
     }
 
-    public void k() {}
+    public void i() {}
 
-    public void l() {}
+    public void j() {}
 
     public abstract ChunkGenerator<?> getChunkGenerator();
 

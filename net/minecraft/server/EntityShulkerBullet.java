@@ -15,13 +15,13 @@ public class EntityShulkerBullet extends Entity {
     private int e;
     private double f;
     private double g;
-    private double ar;
+    private double ao;
     @Nullable
-    private UUID as;
-    private BlockPosition at;
+    private UUID ap;
+    private BlockPosition aq;
     @Nullable
-    private UUID au;
-    private BlockPosition av;
+    private UUID ar;
+    private BlockPosition as;
 
     public EntityShulkerBullet(EntityTypes<? extends EntityShulkerBullet> entitytypes, World world) {
         super(entitytypes, world);
@@ -71,13 +71,13 @@ public class EntityShulkerBullet extends Entity {
         }
 
         if (this.dir != null) {
-            nbttagcompound.setInt("Dir", this.dir.a());
+            nbttagcompound.setInt("Dir", this.dir.b());
         }
 
         nbttagcompound.setInt("Steps", this.e);
         nbttagcompound.setDouble("TXD", this.f);
         nbttagcompound.setDouble("TYD", this.g);
-        nbttagcompound.setDouble("TZD", this.ar);
+        nbttagcompound.setDouble("TZD", this.ao);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class EntityShulkerBullet extends Entity {
         this.e = nbttagcompound.getInt("Steps");
         this.f = nbttagcompound.getDouble("TXD");
         this.g = nbttagcompound.getDouble("TYD");
-        this.ar = nbttagcompound.getDouble("TZD");
+        this.ao = nbttagcompound.getDouble("TZD");
         if (nbttagcompound.hasKeyOfType("Dir", 99)) {
             this.dir = EnumDirection.fromType1(nbttagcompound.getInt("Dir"));
         }
@@ -94,14 +94,14 @@ public class EntityShulkerBullet extends Entity {
 
         if (nbttagcompound.hasKeyOfType("Owner", 10)) {
             nbttagcompound1 = nbttagcompound.getCompound("Owner");
-            this.as = GameProfileSerializer.b(nbttagcompound1);
-            this.at = new BlockPosition(nbttagcompound1.getInt("X"), nbttagcompound1.getInt("Y"), nbttagcompound1.getInt("Z"));
+            this.ap = GameProfileSerializer.b(nbttagcompound1);
+            this.aq = new BlockPosition(nbttagcompound1.getInt("X"), nbttagcompound1.getInt("Y"), nbttagcompound1.getInt("Z"));
         }
 
         if (nbttagcompound.hasKeyOfType("Target", 10)) {
             nbttagcompound1 = nbttagcompound.getCompound("Target");
-            this.au = GameProfileSerializer.b(nbttagcompound1);
-            this.av = new BlockPosition(nbttagcompound1.getInt("X"), nbttagcompound1.getInt("Y"), nbttagcompound1.getInt("Z"));
+            this.ar = GameProfileSerializer.b(nbttagcompound1);
+            this.as = new BlockPosition(nbttagcompound1.getInt("X"), nbttagcompound1.getInt("Y"), nbttagcompound1.getInt("Z"));
         }
 
     }
@@ -121,7 +121,7 @@ public class EntityShulkerBullet extends Entity {
             blockposition = (new BlockPosition(this)).down();
         } else {
             d0 = (double) this.target.getHeight() * 0.5D;
-            blockposition = new BlockPosition(this.target.locX, this.target.locY + d0, this.target.locZ);
+            blockposition = new BlockPosition(this.target.locX(), this.target.locY() + d0, this.target.locZ());
         }
 
         double d1 = (double) blockposition.getX() + 0.5D;
@@ -166,25 +166,25 @@ public class EntityShulkerBullet extends Entity {
                 enumdirection = (EnumDirection) list.get(this.random.nextInt(list.size()));
             }
 
-            d1 = this.locX + (double) enumdirection.getAdjacentX();
-            d2 = this.locY + (double) enumdirection.getAdjacentY();
-            d3 = this.locZ + (double) enumdirection.getAdjacentZ();
+            d1 = this.locX() + (double) enumdirection.getAdjacentX();
+            d2 = this.locY() + (double) enumdirection.getAdjacentY();
+            d3 = this.locZ() + (double) enumdirection.getAdjacentZ();
         }
 
         this.a(enumdirection);
-        double d4 = d1 - this.locX;
-        double d5 = d2 - this.locY;
-        double d6 = d3 - this.locZ;
+        double d4 = d1 - this.locX();
+        double d5 = d2 - this.locY();
+        double d6 = d3 - this.locZ();
         double d7 = (double) MathHelper.sqrt(d4 * d4 + d5 * d5 + d6 * d6);
 
         if (d7 == 0.0D) {
             this.f = 0.0D;
             this.g = 0.0D;
-            this.ar = 0.0D;
+            this.ao = 0.0D;
         } else {
             this.f = d4 / d7 * 0.15D;
             this.g = d5 / d7 * 0.15D;
-            this.ar = d6 / d7 * 0.15D;
+            this.ao = d6 / d7 * 0.15D;
         }
 
         this.impulse = true;
@@ -192,95 +192,99 @@ public class EntityShulkerBullet extends Entity {
     }
 
     @Override
-    public void tick() {
-        if (!this.world.isClientSide && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+    public void checkDespawn() {
+        if (this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
             this.die();
-        } else {
-            super.tick();
-            Vec3D vec3d;
-
-            if (!this.world.isClientSide) {
-                List list;
-                Iterator iterator;
-                EntityLiving entityliving;
-
-                if (this.target == null && this.au != null) {
-                    list = this.world.a(EntityLiving.class, new AxisAlignedBB(this.av.b(-2, -2, -2), this.av.b(2, 2, 2)));
-                    iterator = list.iterator();
-
-                    while (iterator.hasNext()) {
-                        entityliving = (EntityLiving) iterator.next();
-                        if (entityliving.getUniqueID().equals(this.au)) {
-                            this.target = entityliving;
-                            break;
-                        }
-                    }
-
-                    this.au = null;
-                }
-
-                if (this.shooter == null && this.as != null) {
-                    list = this.world.a(EntityLiving.class, new AxisAlignedBB(this.at.b(-2, -2, -2), this.at.b(2, 2, 2)));
-                    iterator = list.iterator();
-
-                    while (iterator.hasNext()) {
-                        entityliving = (EntityLiving) iterator.next();
-                        if (entityliving.getUniqueID().equals(this.as)) {
-                            this.shooter = entityliving;
-                            break;
-                        }
-                    }
-
-                    this.as = null;
-                }
-
-                if (this.target != null && this.target.isAlive() && (!(this.target instanceof EntityHuman) || !((EntityHuman) this.target).isSpectator())) {
-                    this.f = MathHelper.a(this.f * 1.025D, -1.0D, 1.0D);
-                    this.g = MathHelper.a(this.g * 1.025D, -1.0D, 1.0D);
-                    this.ar = MathHelper.a(this.ar * 1.025D, -1.0D, 1.0D);
-                    vec3d = this.getMot();
-                    this.setMot(vec3d.add((this.f - vec3d.x) * 0.2D, (this.g - vec3d.y) * 0.2D, (this.ar - vec3d.z) * 0.2D));
-                } else if (!this.isNoGravity()) {
-                    this.setMot(this.getMot().add(0.0D, -0.04D, 0.0D));
-                }
-
-                MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, true, false, this.shooter, RayTrace.BlockCollisionOption.COLLIDER);
-
-                if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.MISS) {
-                    this.a(movingobjectposition);
-                }
-            }
-
-            vec3d = this.getMot();
-            this.setPosition(this.locX + vec3d.x, this.locY + vec3d.y, this.locZ + vec3d.z);
-            ProjectileHelper.a(this, 0.5F);
-            if (this.world.isClientSide) {
-                this.world.addParticle(Particles.END_ROD, this.locX - vec3d.x, this.locY - vec3d.y + 0.15D, this.locZ - vec3d.z, 0.0D, 0.0D, 0.0D);
-            } else if (this.target != null && !this.target.dead) {
-                if (this.e > 0) {
-                    --this.e;
-                    if (this.e == 0) {
-                        this.a(this.dir == null ? null : this.dir.k());
-                    }
-                }
-
-                if (this.dir != null) {
-                    BlockPosition blockposition = new BlockPosition(this);
-                    EnumDirection.EnumAxis enumdirection_enumaxis = this.dir.k();
-
-                    if (this.world.a(blockposition.shift(this.dir), (Entity) this)) {
-                        this.a(enumdirection_enumaxis);
-                    } else {
-                        BlockPosition blockposition1 = new BlockPosition(this.target);
-
-                        if (enumdirection_enumaxis == EnumDirection.EnumAxis.X && blockposition.getX() == blockposition1.getX() || enumdirection_enumaxis == EnumDirection.EnumAxis.Z && blockposition.getZ() == blockposition1.getZ() || enumdirection_enumaxis == EnumDirection.EnumAxis.Y && blockposition.getY() == blockposition1.getY()) {
-                            this.a(enumdirection_enumaxis);
-                        }
-                    }
-                }
-            }
-
         }
+
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        Vec3D vec3d;
+
+        if (!this.world.isClientSide) {
+            List list;
+            Iterator iterator;
+            EntityLiving entityliving;
+
+            if (this.target == null && this.ar != null) {
+                list = this.world.a(EntityLiving.class, new AxisAlignedBB(this.as.b(-2, -2, -2), this.as.b(2, 2, 2)));
+                iterator = list.iterator();
+
+                while (iterator.hasNext()) {
+                    entityliving = (EntityLiving) iterator.next();
+                    if (entityliving.getUniqueID().equals(this.ar)) {
+                        this.target = entityliving;
+                        break;
+                    }
+                }
+
+                this.ar = null;
+            }
+
+            if (this.shooter == null && this.ap != null) {
+                list = this.world.a(EntityLiving.class, new AxisAlignedBB(this.aq.b(-2, -2, -2), this.aq.b(2, 2, 2)));
+                iterator = list.iterator();
+
+                while (iterator.hasNext()) {
+                    entityliving = (EntityLiving) iterator.next();
+                    if (entityliving.getUniqueID().equals(this.ap)) {
+                        this.shooter = entityliving;
+                        break;
+                    }
+                }
+
+                this.ap = null;
+            }
+
+            if (this.target != null && this.target.isAlive() && (!(this.target instanceof EntityHuman) || !((EntityHuman) this.target).isSpectator())) {
+                this.f = MathHelper.a(this.f * 1.025D, -1.0D, 1.0D);
+                this.g = MathHelper.a(this.g * 1.025D, -1.0D, 1.0D);
+                this.ao = MathHelper.a(this.ao * 1.025D, -1.0D, 1.0D);
+                vec3d = this.getMot();
+                this.setMot(vec3d.add((this.f - vec3d.x) * 0.2D, (this.g - vec3d.y) * 0.2D, (this.ao - vec3d.z) * 0.2D));
+            } else if (!this.isNoGravity()) {
+                this.setMot(this.getMot().add(0.0D, -0.04D, 0.0D));
+            }
+
+            MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, true, false, this.shooter, RayTrace.BlockCollisionOption.COLLIDER);
+
+            if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.MISS) {
+                this.a(movingobjectposition);
+            }
+        }
+
+        vec3d = this.getMot();
+        this.setPosition(this.locX() + vec3d.x, this.locY() + vec3d.y, this.locZ() + vec3d.z);
+        ProjectileHelper.a(this, 0.5F);
+        if (this.world.isClientSide) {
+            this.world.addParticle(Particles.END_ROD, this.locX() - vec3d.x, this.locY() - vec3d.y + 0.15D, this.locZ() - vec3d.z, 0.0D, 0.0D, 0.0D);
+        } else if (this.target != null && !this.target.dead) {
+            if (this.e > 0) {
+                --this.e;
+                if (this.e == 0) {
+                    this.a(this.dir == null ? null : this.dir.m());
+                }
+            }
+
+            if (this.dir != null) {
+                BlockPosition blockposition = new BlockPosition(this);
+                EnumDirection.EnumAxis enumdirection_enumaxis = this.dir.m();
+
+                if (this.world.a(blockposition.shift(this.dir), (Entity) this)) {
+                    this.a(enumdirection_enumaxis);
+                } else {
+                    BlockPosition blockposition1 = new BlockPosition(this.target);
+
+                    if (enumdirection_enumaxis == EnumDirection.EnumAxis.X && blockposition.getX() == blockposition1.getX() || enumdirection_enumaxis == EnumDirection.EnumAxis.Z && blockposition.getZ() == blockposition1.getZ() || enumdirection_enumaxis == EnumDirection.EnumAxis.Y && blockposition.getY() == blockposition1.getY()) {
+                        this.a(enumdirection_enumaxis);
+                    }
+                }
+            }
+        }
+
     }
 
     @Override
@@ -289,7 +293,7 @@ public class EntityShulkerBullet extends Entity {
     }
 
     @Override
-    public float aF() {
+    public float aI() {
         return 1.0F;
     }
 
@@ -305,7 +309,7 @@ public class EntityShulkerBullet extends Entity {
                 }
             }
         } else {
-            ((WorldServer) this.world).a(Particles.EXPLOSION, this.locX, this.locY, this.locZ, 2, 0.2D, 0.2D, 0.2D, 0.0D);
+            ((WorldServer) this.world).a(Particles.EXPLOSION, this.locX(), this.locY(), this.locZ(), 2, 0.2D, 0.2D, 0.2D, 0.0D);
             this.a(SoundEffects.ENTITY_SHULKER_BULLET_HIT, 1.0F, 1.0F);
         }
 
@@ -321,7 +325,7 @@ public class EntityShulkerBullet extends Entity {
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (!this.world.isClientSide) {
             this.a(SoundEffects.ENTITY_SHULKER_BULLET_HURT, 1.0F, 1.0F);
-            ((WorldServer) this.world).a(Particles.CRIT, this.locX, this.locY, this.locZ, 15, 0.2D, 0.2D, 0.2D, 0.0D);
+            ((WorldServer) this.world).a(Particles.CRIT, this.locX(), this.locY(), this.locZ(), 15, 0.2D, 0.2D, 0.2D, 0.0D);
             this.die();
         }
 
@@ -329,7 +333,7 @@ public class EntityShulkerBullet extends Entity {
     }
 
     @Override
-    public Packet<?> N() {
+    public Packet<?> L() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

@@ -4,9 +4,9 @@ import java.io.IOException;
 
 public class PacketPlayOutWorldParticles implements Packet<PacketListenerPlayOut> {
 
-    private float a;
-    private float b;
-    private float c;
+    private double a;
+    private double b;
+    private double c;
     private float d;
     private float e;
     private float f;
@@ -17,16 +17,16 @@ public class PacketPlayOutWorldParticles implements Packet<PacketListenerPlayOut
 
     public PacketPlayOutWorldParticles() {}
 
-    public <T extends ParticleParam> PacketPlayOutWorldParticles(T t0, boolean flag, float f, float f1, float f2, float f3, float f4, float f5, float f6, int i) {
+    public <T extends ParticleParam> PacketPlayOutWorldParticles(T t0, boolean flag, double d0, double d1, double d2, float f, float f1, float f2, float f3, int i) {
         this.j = t0;
         this.i = flag;
-        this.a = f;
-        this.b = f1;
-        this.c = f2;
-        this.d = f3;
-        this.e = f4;
-        this.f = f5;
-        this.g = f6;
+        this.a = d0;
+        this.b = d1;
+        this.c = d2;
+        this.d = f;
+        this.e = f1;
+        this.f = f2;
+        this.g = f3;
         this.h = i;
     }
 
@@ -39,9 +39,9 @@ public class PacketPlayOutWorldParticles implements Packet<PacketListenerPlayOut
         }
 
         this.i = packetdataserializer.readBoolean();
-        this.a = packetdataserializer.readFloat();
-        this.b = packetdataserializer.readFloat();
-        this.c = packetdataserializer.readFloat();
+        this.a = packetdataserializer.readDouble();
+        this.b = packetdataserializer.readDouble();
+        this.c = packetdataserializer.readDouble();
         this.d = packetdataserializer.readFloat();
         this.e = packetdataserializer.readFloat();
         this.f = packetdataserializer.readFloat();
@@ -58,9 +58,9 @@ public class PacketPlayOutWorldParticles implements Packet<PacketListenerPlayOut
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeInt(IRegistry.PARTICLE_TYPE.a((Object) this.j.getParticle()));
         packetdataserializer.writeBoolean(this.i);
-        packetdataserializer.writeFloat(this.a);
-        packetdataserializer.writeFloat(this.b);
-        packetdataserializer.writeFloat(this.c);
+        packetdataserializer.writeDouble(this.a);
+        packetdataserializer.writeDouble(this.b);
+        packetdataserializer.writeDouble(this.c);
         packetdataserializer.writeFloat(this.d);
         packetdataserializer.writeFloat(this.e);
         packetdataserializer.writeFloat(this.f);

@@ -17,11 +17,6 @@ public class BlockBarrier extends Block {
     }
 
     @Override
-    public boolean f(IBlockData iblockdata) {
-        return false;
-    }
-
-    @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EntityTypes<?> entitytypes) {
         return false;
     }

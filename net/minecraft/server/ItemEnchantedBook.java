@@ -9,6 +9,11 @@ public class ItemEnchantedBook extends Item {
     }
 
     @Override
+    public boolean d_(ItemStack itemstack) {
+        return true;
+    }
+
+    @Override
     public boolean g_(ItemStack itemstack) {
         return false;
     }

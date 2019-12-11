@@ -4,17 +4,17 @@ import javax.annotation.Nullable;
 
 public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRangedEntity {
 
-    private int bz;
-    private final Vec3D[][] bA;
+    private int bw;
+    private final Vec3D[][] bx;
 
     public EntityIllagerIllusioner(EntityTypes<? extends EntityIllagerIllusioner> entitytypes, World world) {
         super(entitytypes, world);
         this.f = 5;
-        this.bA = new Vec3D[2][4];
+        this.bx = new Vec3D[2][4];
 
         for (int i = 0; i < 4; ++i) {
-            this.bA[0][i] = new Vec3D(0.0D, 0.0D, 0.0D);
-            this.bA[1][i] = new Vec3D(0.0D, 0.0D, 0.0D);
+            this.bx[0][i] = Vec3D.a;
+            this.bx[1][i] = Vec3D.a;
         }
 
     }
@@ -59,44 +59,44 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
     public void movementTick() {
         super.movementTick();
         if (this.world.isClientSide && this.isInvisible()) {
-            --this.bz;
-            if (this.bz < 0) {
-                this.bz = 0;
+            --this.bw;
+            if (this.bw < 0) {
+                this.bw = 0;
             }
 
             if (this.hurtTicks != 1 && this.ticksLived % 1200 != 0) {
                 if (this.hurtTicks == this.hurtDuration - 1) {
-                    this.bz = 3;
+                    this.bw = 3;
 
                     for (int i = 0; i < 4; ++i) {
-                        this.bA[0][i] = this.bA[1][i];
-                        this.bA[1][i] = new Vec3D(0.0D, 0.0D, 0.0D);
+                        this.bx[0][i] = this.bx[1][i];
+                        this.bx[1][i] = new Vec3D(0.0D, 0.0D, 0.0D);
                     }
                 }
             } else {
-                this.bz = 3;
+                this.bw = 3;
                 float f = -6.0F;
                 boolean flag = true;
 
                 int j;
 
                 for (j = 0; j < 4; ++j) {
-                    this.bA[0][j] = this.bA[1][j];
-                    this.bA[1][j] = new Vec3D((double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D, (double) Math.max(0, this.random.nextInt(6) - 4), (double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D);
+                    this.bx[0][j] = this.bx[1][j];
+                    this.bx[1][j] = new Vec3D((double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D, (double) Math.max(0, this.random.nextInt(6) - 4), (double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D);
                 }
 
                 for (j = 0; j < 16; ++j) {
-                    this.world.addParticle(Particles.CLOUD, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.getWidth(), this.locY + this.random.nextDouble() * (double) this.getHeight(), this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.getWidth(), 0.0D, 0.0D, 0.0D);
+                    this.world.addParticle(Particles.CLOUD, this.d(0.5D), this.cv(), this.f(0.5D), 0.0D, 0.0D, 0.0D);
                 }
 
-                this.world.a(this.locX, this.locY, this.locZ, SoundEffects.ENTITY_ILLUSIONER_MIRROR_MOVE, this.getSoundCategory(), 1.0F, 1.0F, false);
+                this.world.a(this.locX(), this.locY(), this.locZ(), SoundEffects.ENTITY_ILLUSIONER_MIRROR_MOVE, this.getSoundCategory(), 1.0F, 1.0F, false);
             }
         }
 
     }
 
     @Override
-    public SoundEffect dV() {
+    public SoundEffect eq() {
         return SoundEffects.ENTITY_ILLUSIONER_AMBIENT;
     }
 
@@ -132,9 +132,9 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
     public void a(EntityLiving entityliving, float f) {
         ItemStack itemstack = this.f(this.b(ProjectileHelper.a(this, Items.BOW)));
         EntityArrow entityarrow = ProjectileHelper.a(this, itemstack, f);
-        double d0 = entityliving.locX - this.locX;
-        double d1 = entityliving.getBoundingBox().minY + (double) (entityliving.getHeight() / 3.0F) - entityarrow.locY;
-        double d2 = entityliving.locZ - this.locZ;
+        double d0 = entityliving.locX() - this.locX();
+        double d1 = entityliving.e(0.3333333333333333D) - entityarrow.locY();
+        double d2 = entityliving.locZ() - this.locZ();
         double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
 
         entityarrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, (float) (14 - this.world.getDifficulty().a() * 4));

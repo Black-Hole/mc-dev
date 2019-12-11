@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 
-public interface IChunkAccess extends IStructureAccess {
+public interface IChunkAccess extends IBlockAccess, IStructureAccess {
 
     @Nullable
     IBlockData setType(BlockPosition blockposition, IBlockData iblockdata, boolean flag);
@@ -45,27 +45,11 @@ public interface IChunkAccess extends IStructureAccess {
 
     ChunkSection[] getSections();
 
-    @Nullable
-    LightEngine e();
-
-    default int a(BlockPosition blockposition, int i, boolean flag) {
-        LightEngine lightengine = this.e();
-
-        if (lightengine != null && this.getChunkStatus().b(ChunkStatus.LIGHT)) {
-            int j = flag ? lightengine.a(EnumSkyBlock.SKY).b(blockposition) - i : 0;
-            int k = lightengine.a(EnumSkyBlock.BLOCK).b(blockposition);
-
-            return Math.max(k, j);
-        } else {
-            return 0;
-        }
-    }
-
     Collection<Entry<HeightMap.Type, HeightMap>> f();
 
     void a(HeightMap.Type heightmap_type, long[] along);
 
-    HeightMap b(HeightMap.Type heightmap_type);
+    HeightMap a(HeightMap.Type heightmap_type);
 
     int a(HeightMap.Type heightmap_type, int i, int j);
 
@@ -76,13 +60,6 @@ public interface IChunkAccess extends IStructureAccess {
     Map<String, StructureStart> h();
 
     void a(Map<String, StructureStart> map);
-
-    default BiomeBase getBiome(BlockPosition blockposition) {
-        int i = blockposition.getX() & 15;
-        int j = blockposition.getZ() & 15;
-
-        return this.getBiomeIndex()[j << 4 | i];
-    }
 
     default boolean a(int i, int j) {
         if (i < 0) {
@@ -102,7 +79,8 @@ public interface IChunkAccess extends IStructureAccess {
         return true;
     }
 
-    BiomeBase[] getBiomeIndex();
+    @Nullable
+    BiomeStorage getBiomeIndex();
 
     void setNeedsSaving(boolean flag);
 
@@ -112,9 +90,7 @@ public interface IChunkAccess extends IStructureAccess {
 
     void removeTileEntity(BlockPosition blockposition);
 
-    void a(LightEngine lightengine);
-
-    default void f(BlockPosition blockposition) {
+    default void e(BlockPosition blockposition) {
         LogManager.getLogger().warn("Trying to mark a block for PostProcessing @ {}, but this operation is not supported.", blockposition);
     }
 
@@ -129,14 +105,10 @@ public interface IChunkAccess extends IStructureAccess {
     }
 
     @Nullable
-    NBTTagCompound i(BlockPosition blockposition);
+    NBTTagCompound f(BlockPosition blockposition);
 
     @Nullable
-    NBTTagCompound j(BlockPosition blockposition);
-
-    default void a(BiomeBase[] abiomebase) {
-        throw new UnsupportedOperationException();
-    }
+    NBTTagCompound i(BlockPosition blockposition);
 
     Stream<BlockPosition> m();
 
@@ -145,14 +117,14 @@ public interface IChunkAccess extends IStructureAccess {
     TickList<FluidType> o();
 
     default BitSet a(WorldGenStage.Features worldgenstage_features) {
-        throw new RuntimeException("Meaningless in this context");
+        throw (RuntimeException) SystemUtils.c(new RuntimeException("Meaningless in this context"));
     }
 
     ChunkConverter p();
 
-    void b(long i);
+    void setInhabitedTime(long i);
 
-    long q();
+    long getInhabitedTime();
 
     static ShortList a(ShortList[] ashortlist, int i) {
         if (ashortlist[i] == null) {

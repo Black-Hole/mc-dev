@@ -28,7 +28,7 @@ public class LootItemFunctionEnchant extends LootItemFunctionConditional {
 
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
-        Random random = loottableinfo.b();
+        Random random = loottableinfo.a();
         Enchantment enchantment;
 
         if (this.c.isEmpty()) {

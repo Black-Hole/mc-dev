@@ -17,7 +17,7 @@ public class WorldGenCanyon extends WorldGenCarverAbstract<WorldGenFeatureConfig
         return random.nextFloat() <= worldgenfeatureconfigurationchance.b;
     }
 
-    public boolean a(IChunkAccess ichunkaccess, Random random, int i, int j, int k, int l, int i1, BitSet bitset, WorldGenFeatureConfigurationChance worldgenfeatureconfigurationchance) {
+    public boolean a(IChunkAccess ichunkaccess, Function<BlockPosition, BiomeBase> function, Random random, int i, int j, int k, int l, int i1, BitSet bitset, WorldGenFeatureConfigurationChance worldgenfeatureconfigurationchance) {
         int j1 = (this.c() * 2 - 1) * 16;
         double d0 = (double) (j * 16 + random.nextInt(16));
         double d1 = (double) (random.nextInt(random.nextInt(40) + 8) + 20);
@@ -29,11 +29,11 @@ public class WorldGenCanyon extends WorldGenCarverAbstract<WorldGenFeatureConfig
         int k1 = j1 - random.nextInt(j1 / 4);
         boolean flag = false;
 
-        this.a(ichunkaccess, random.nextLong(), i, l, i1, d0, d1, d2, f2, f, f1, 0, k1, 3.0D, bitset);
+        this.a(ichunkaccess, function, random.nextLong(), i, l, i1, d0, d1, d2, f2, f, f1, 0, k1, 3.0D, bitset);
         return true;
     }
 
-    private void a(IChunkAccess ichunkaccess, long i, int j, int k, int l, double d0, double d1, double d2, float f, float f1, float f2, int i1, int j1, double d3, BitSet bitset) {
+    private void a(IChunkAccess ichunkaccess, Function<BlockPosition, BiomeBase> function, long i, int j, int k, int l, double d0, double d1, double d2, float f, float f1, float f2, int i1, int j1, double d3, BitSet bitset) {
         Random random = new Random(i);
         float f3 = 1.0F;
 
@@ -72,7 +72,7 @@ public class WorldGenCanyon extends WorldGenCarverAbstract<WorldGenFeatureConfig
                     return;
                 }
 
-                this.a(ichunkaccess, i, j, k, l, d0, d1, d2, d4, d5, bitset);
+                this.a(ichunkaccess, function, i, j, k, l, d0, d1, d2, d4, d5, bitset);
             }
         }
 

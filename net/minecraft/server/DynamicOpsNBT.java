@@ -29,7 +29,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
     protected DynamicOpsNBT() {}
 
     public NBTBase empty() {
-        return new NBTTagEnd();
+        return NBTTagEnd.b;
     }
 
     public Type<?> getType(NBTBase nbtbase) {
@@ -66,35 +66,39 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
     }
 
     public Optional<Number> getNumberValue(NBTBase nbtbase) {
-        return nbtbase instanceof NBTNumber ? Optional.of(((NBTNumber) nbtbase).j()) : Optional.empty();
+        return nbtbase instanceof NBTNumber ? Optional.of(((NBTNumber) nbtbase).k()) : Optional.empty();
     }
 
     public NBTBase createNumeric(Number number) {
-        return new NBTTagDouble(number.doubleValue());
+        return NBTTagDouble.a(number.doubleValue());
     }
 
     public NBTBase createByte(byte b0) {
-        return new NBTTagByte(b0);
+        return NBTTagByte.a(b0);
     }
 
     public NBTBase createShort(short short0) {
-        return new NBTTagShort(short0);
+        return NBTTagShort.a(short0);
     }
 
     public NBTBase createInt(int i) {
-        return new NBTTagInt(i);
+        return NBTTagInt.a(i);
     }
 
     public NBTBase createLong(long i) {
-        return new NBTTagLong(i);
+        return NBTTagLong.a(i);
     }
 
     public NBTBase createFloat(float f) {
-        return new NBTTagFloat(f);
+        return NBTTagFloat.a(f);
     }
 
     public NBTBase createDouble(double d0) {
-        return new NBTTagDouble(d0);
+        return NBTTagDouble.a(d0);
+    }
+
+    public NBTBase createBoolean(boolean flag) {
+        return NBTTagByte.a(flag);
     }
 
     public Optional<String> getStringValue(NBTBase nbtbase) {
@@ -102,7 +106,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
     }
 
     public NBTBase createString(String s) {
-        return new NBTTagString(s);
+        return NBTTagString.a(s);
     }
 
     public NBTBase mergeInto(NBTBase nbtbase, NBTBase nbtbase1) {

@@ -1,20 +1,68 @@
 package net.minecraft.server;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import it.unimi.dsi.fastutil.bytes.ByteOpenHashSet;
+import it.unimi.dsi.fastutil.bytes.ByteSet;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
 public class NBTTagList extends NBTList<NBTBase> {
 
-    private List<NBTBase> list = Lists.newArrayList();
-    private byte type = 0;
+    public static final NBTTagType<NBTTagList> a = new NBTTagType<NBTTagList>() {
+        @Override
+        public NBTTagList b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+            nbtreadlimiter.a(296L);
+            if (i > 512) {
+                throw new RuntimeException("Tried to read NBT tag with too high complexity, depth > 512");
+            } else {
+                byte b0 = datainput.readByte();
+                int j = datainput.readInt();
 
-    public NBTTagList() {}
+                if (b0 == 0 && j > 0) {
+                    throw new RuntimeException("Missing type on ListTag");
+                } else {
+                    nbtreadlimiter.a(32L * (long) j);
+                    NBTTagType<?> nbttagtype = NBTTagTypes.a(b0);
+                    List<NBTBase> list = Lists.newArrayListWithCapacity(j);
+
+                    for (int k = 0; k < j; ++k) {
+                        list.add(nbttagtype.b(datainput, i + 1, nbtreadlimiter));
+                    }
+
+                    return new NBTTagList(list, b0);
+                }
+            }
+        }
+
+        @Override
+        public String a() {
+            return "LIST";
+        }
+
+        @Override
+        public String b() {
+            return "TAG_List";
+        }
+    };
+    private static final ByteSet b = new ByteOpenHashSet(Arrays.asList(1, 2, 3, 4, 5, 6));
+    private final List<NBTBase> list;
+    private byte type;
+
+    private NBTTagList(List<NBTBase> list, byte b0) {
+        this.list = list;
+        this.type = b0;
+    }
+
+    public NBTTagList() {
+        this(Lists.newArrayList(), (byte) 0);
+    }
 
     @Override
     public void write(DataOutput dataoutput) throws IOException {
@@ -37,34 +85,13 @@ public class NBTTagList extends NBTList<NBTBase> {
     }
 
     @Override
-    public void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
-        nbtreadlimiter.a(296L);
-        if (i > 512) {
-            throw new RuntimeException("Tried to read NBT tag with too high complexity, depth > 512");
-        } else {
-            this.type = datainput.readByte();
-            int j = datainput.readInt();
-
-            if (this.type == 0 && j > 0) {
-                throw new RuntimeException("Missing type on ListTag");
-            } else {
-                nbtreadlimiter.a(32L * (long) j);
-                this.list = Lists.newArrayListWithCapacity(j);
-
-                for (int k = 0; k < j; ++k) {
-                    NBTBase nbtbase = NBTBase.createTag(this.type);
-
-                    nbtbase.load(datainput, i + 1, nbtreadlimiter);
-                    this.list.add(nbtbase);
-                }
-
-            }
-        }
+    public byte getTypeId() {
+        return 9;
     }
 
     @Override
-    public byte getTypeId() {
-        return 9;
+    public NBTTagType<NBTTagList> b() {
+        return NBTTagList.a;
     }
 
     @Override
@@ -82,7 +109,7 @@ public class NBTTagList extends NBTList<NBTBase> {
         return stringbuilder.append(']').toString();
     }
 
-    private void f() {
+    private void g() {
         if (this.list.isEmpty()) {
             this.type = 0;
         }
@@ -93,7 +120,7 @@ public class NBTTagList extends NBTList<NBTBase> {
     public NBTBase remove(int i) {
         NBTBase nbtbase = (NBTBase) this.list.remove(i);
 
-        this.f();
+        this.g();
         return nbtbase;
     }
 
@@ -254,19 +281,10 @@ public class NBTTagList extends NBTList<NBTBase> {
 
     @Override
     public NBTTagList clone() {
-        NBTTagList nbttaglist = new NBTTagList();
+        Iterable<NBTBase> iterable = NBTTagTypes.a(this.type).c() ? this.list : Iterables.transform(this.list, NBTBase::clone);
+        List<NBTBase> list = Lists.newArrayList((Iterable) iterable);
 
-        nbttaglist.type = this.type;
-        Iterator iterator = this.list.iterator();
-
-        while (iterator.hasNext()) {
-            NBTBase nbtbase = (NBTBase) iterator.next();
-            NBTBase nbtbase1 = nbtbase.clone();
-
-            nbttaglist.list.add(nbtbase1);
-        }
-
-        return nbttaglist;
+        return new NBTTagList(list, this.type);
     }
 
     public boolean equals(Object object) {
@@ -282,29 +300,49 @@ public class NBTTagList extends NBTList<NBTBase> {
         if (this.isEmpty()) {
             return new ChatComponentText("[]");
         } else {
-            ChatComponentText chatcomponenttext = new ChatComponentText("[");
+            int j;
 
-            if (!s.isEmpty()) {
-                chatcomponenttext.a("\n");
-            }
+            if (NBTTagList.b.contains(this.type) && this.size() <= 8) {
+                String s1 = ", ";
+                ChatComponentText chatcomponenttext = new ChatComponentText("[");
 
-            for (int j = 0; j < this.list.size(); ++j) {
-                ChatComponentText chatcomponenttext1 = new ChatComponentText(Strings.repeat(s, i + 1));
+                for (j = 0; j < this.list.size(); ++j) {
+                    if (j != 0) {
+                        chatcomponenttext.a(", ");
+                    }
 
-                chatcomponenttext1.addSibling(((NBTBase) this.list.get(j)).a(s, i + 1));
-                if (j != this.list.size() - 1) {
-                    chatcomponenttext1.a(String.valueOf(',')).a(s.isEmpty() ? " " : "\n");
+                    chatcomponenttext.addSibling(((NBTBase) this.list.get(j)).l());
                 }
 
-                chatcomponenttext.addSibling(chatcomponenttext1);
-            }
+                chatcomponenttext.a("]");
+                return chatcomponenttext;
+            } else {
+                ChatComponentText chatcomponenttext1 = new ChatComponentText("[");
 
-            if (!s.isEmpty()) {
-                chatcomponenttext.a("\n").a(Strings.repeat(s, i));
-            }
+                if (!s.isEmpty()) {
+                    chatcomponenttext1.a("\n");
+                }
 
-            chatcomponenttext.a("]");
-            return chatcomponenttext;
+                String s2 = String.valueOf(',');
+
+                for (j = 0; j < this.list.size(); ++j) {
+                    ChatComponentText chatcomponenttext2 = new ChatComponentText(Strings.repeat(s, i + 1));
+
+                    chatcomponenttext2.addSibling(((NBTBase) this.list.get(j)).a(s, i + 1));
+                    if (j != this.list.size() - 1) {
+                        chatcomponenttext2.a(s2).a(s.isEmpty() ? " " : "\n");
+                    }
+
+                    chatcomponenttext1.addSibling(chatcomponenttext2);
+                }
+
+                if (!s.isEmpty()) {
+                    chatcomponenttext1.a("\n").a(Strings.repeat(s, i));
+                }
+
+                chatcomponenttext1.a("]");
+                return chatcomponenttext1;
+            }
         }
     }
 

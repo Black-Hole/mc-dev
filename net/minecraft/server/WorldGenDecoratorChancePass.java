@@ -5,13 +5,13 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class WorldGenDecoratorChancePass extends WorldGenDecoratorFeatureSimple<WorldGenDecoratorChanceConfiguration> {
+public class WorldGenDecoratorChancePass extends WorldGenDecoratorFeatureSimple<WorldGenDecoratorDungeonConfiguration> {
 
-    public WorldGenDecoratorChancePass(Function<Dynamic<?>, ? extends WorldGenDecoratorChanceConfiguration> function) {
+    public WorldGenDecoratorChancePass(Function<Dynamic<?>, ? extends WorldGenDecoratorDungeonConfiguration> function) {
         super(function);
     }
 
-    public Stream<BlockPosition> a(Random random, WorldGenDecoratorChanceConfiguration worldgendecoratorchanceconfiguration, BlockPosition blockposition) {
-        return random.nextFloat() < 1.0F / (float) worldgendecoratorchanceconfiguration.a ? Stream.of(blockposition) : Stream.empty();
+    public Stream<BlockPosition> a(Random random, WorldGenDecoratorDungeonConfiguration worldgendecoratordungeonconfiguration, BlockPosition blockposition) {
+        return random.nextFloat() < 1.0F / (float) worldgendecoratordungeonconfiguration.a ? Stream.of(blockposition) : Stream.empty();
     }
 }

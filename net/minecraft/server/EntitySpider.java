@@ -25,7 +25,7 @@ public class EntitySpider extends EntityMonster {
     }
 
     @Override
-    public double aP() {
+    public double aS() {
         return (double) (this.getHeight() * 0.5F);
     }
 
@@ -123,7 +123,7 @@ public class EntitySpider extends EntityMonster {
         if (generatoraccess.getRandom().nextInt(100) == 0) {
             EntitySkeleton entityskeleton = (EntitySkeleton) EntityTypes.SKELETON.a(this.world);
 
-            entityskeleton.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, 0.0F);
+            entityskeleton.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.yaw, 0.0F);
             entityskeleton.prepare(generatoraccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) null, (NBTTagCompound) null);
             generatoraccess.addEntity(entityskeleton);
             entityskeleton.startRiding(this);
@@ -160,7 +160,7 @@ public class EntitySpider extends EntityMonster {
 
         @Override
         public boolean a() {
-            float f = this.e.aF();
+            float f = this.e.aI();
 
             return f >= 0.5F ? false : super.a();
         }
@@ -179,7 +179,7 @@ public class EntitySpider extends EntityMonster {
 
         @Override
         public boolean b() {
-            float f = this.a.aF();
+            float f = this.a.aI();
 
             if (f >= 0.5F && this.a.getRandom().nextInt(100) == 0) {
                 this.a.setGoalTarget((EntityLiving) null);

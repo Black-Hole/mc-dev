@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,7 +64,7 @@ public class PlayerInteractManager {
             if (iblockdata.isAir()) {
                 this.i = false;
             } else {
-                float f = this.a(iblockdata, this.j);
+                float f = this.a(iblockdata, this.j, this.k);
 
                 if (f >= 1.0F) {
                     this.i = false;
@@ -77,56 +78,56 @@ public class PlayerInteractManager {
                 this.l = -1;
                 this.e = false;
             } else {
-                this.a(iblockdata, this.g);
+                this.a(iblockdata, this.g, this.lastDigTick);
             }
         }
 
     }
 
-    private float a(IBlockData iblockdata, BlockPosition blockposition) {
-        int i = this.currentTick - this.k;
-        float f = iblockdata.getDamage(this.player, this.player.world, blockposition) * (float) (i + 1);
-        int j = (int) (f * 10.0F);
+    private float a(IBlockData iblockdata, BlockPosition blockposition, int i) {
+        int j = this.currentTick - i;
+        float f = iblockdata.getDamage(this.player, this.player.world, blockposition) * (float) (j + 1);
+        int k = (int) (f * 10.0F);
 
-        if (j != this.l) {
-            this.world.a(this.player.getId(), blockposition, j);
-            this.l = j;
+        if (k != this.l) {
+            this.world.a(this.player.getId(), blockposition, k);
+            this.l = k;
         }
 
         return f;
     }
 
     public void a(BlockPosition blockposition, PacketPlayInBlockDig.EnumPlayerDigType packetplayinblockdig_enumplayerdigtype, EnumDirection enumdirection, int i) {
-        double d0 = this.player.locX - ((double) blockposition.getX() + 0.5D);
-        double d1 = this.player.locY - ((double) blockposition.getY() + 0.5D) + 1.5D;
-        double d2 = this.player.locZ - ((double) blockposition.getZ() + 0.5D);
+        double d0 = this.player.locX() - ((double) blockposition.getX() + 0.5D);
+        double d1 = this.player.locY() - ((double) blockposition.getY() + 0.5D) + 1.5D;
+        double d2 = this.player.locZ() - ((double) blockposition.getZ() + 0.5D);
         double d3 = d0 * d0 + d1 * d1 + d2 * d2;
 
         if (d3 > 36.0D) {
-            this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, false));
+            this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, false, "too far"));
         } else if (blockposition.getY() >= i) {
-            this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, false));
+            this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, false, "too high"));
         } else {
             IBlockData iblockdata;
 
             if (packetplayinblockdig_enumplayerdigtype == PacketPlayInBlockDig.EnumPlayerDigType.START_DESTROY_BLOCK) {
                 if (!this.world.a((EntityHuman) this.player, blockposition)) {
-                    this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, false));
+                    this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, false, "may not interact"));
                     return;
                 }
 
                 if (this.isCreative()) {
                     if (!this.world.douseFire((EntityHuman) null, blockposition, enumdirection)) {
-                        this.a(blockposition, packetplayinblockdig_enumplayerdigtype);
+                        this.a(blockposition, packetplayinblockdig_enumplayerdigtype, "creative destroy");
                     } else {
-                        this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, true));
+                        this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, true, "fire put out"));
                     }
 
                     return;
                 }
 
                 if (this.player.a((World) this.world, blockposition, this.gamemode)) {
-                    this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, false));
+                    this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, false, "block action restricted"));
                     return;
                 }
 
@@ -141,14 +142,18 @@ public class PlayerInteractManager {
                 }
 
                 if (!iblockdata.isAir() && f >= 1.0F) {
-                    this.a(blockposition, packetplayinblockdig_enumplayerdigtype);
+                    this.a(blockposition, packetplayinblockdig_enumplayerdigtype, "insta mine");
                 } else {
+                    if (this.e) {
+                        this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(this.g, this.world.getType(this.g), PacketPlayInBlockDig.EnumPlayerDigType.START_DESTROY_BLOCK, false, "abort destroying since another started (client insta mine, server disagreed)"));
+                    }
+
                     this.e = true;
-                    this.g = blockposition;
+                    this.g = blockposition.immutableCopy();
                     int j = (int) (f * 10.0F);
 
                     this.world.a(this.player.getId(), blockposition, j);
-                    this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, true));
+                    this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, true, "actual start of destroying"));
                     this.l = j;
                 }
             } else if (packetplayinblockdig_enumplayerdigtype == PacketPlayInBlockDig.EnumPlayerDigType.STOP_DESTROY_BLOCK) {
@@ -162,7 +167,7 @@ public class PlayerInteractManager {
                         if (f1 >= 0.7F) {
                             this.e = false;
                             this.world.a(this.player.getId(), blockposition, -1);
-                            this.a(blockposition, packetplayinblockdig_enumplayerdigtype);
+                            this.a(blockposition, packetplayinblockdig_enumplayerdigtype, "destroyed");
                             return;
                         }
 
@@ -175,21 +180,27 @@ public class PlayerInteractManager {
                     }
                 }
 
-                this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, true));
+                this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, true, "stopped destroying"));
             } else if (packetplayinblockdig_enumplayerdigtype == PacketPlayInBlockDig.EnumPlayerDigType.ABORT_DESTROY_BLOCK) {
                 this.e = false;
-                this.world.a(this.player.getId(), this.g, -1);
-                this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, true));
+                if (!Objects.equals(this.g, blockposition)) {
+                    PlayerInteractManager.LOGGER.warn("Mismatch in destroy block pos: " + this.g + " " + blockposition);
+                    this.world.a(this.player.getId(), this.g, -1);
+                    this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(this.g, this.world.getType(this.g), packetplayinblockdig_enumplayerdigtype, true, "aborted mismatched destroying"));
+                }
+
+                this.world.a(this.player.getId(), blockposition, -1);
+                this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, true, "aborted destroying"));
             }
 
         }
     }
 
-    public void a(BlockPosition blockposition, PacketPlayInBlockDig.EnumPlayerDigType packetplayinblockdig_enumplayerdigtype) {
+    public void a(BlockPosition blockposition, PacketPlayInBlockDig.EnumPlayerDigType packetplayinblockdig_enumplayerdigtype, String s) {
         if (this.breakBlock(blockposition)) {
-            this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, true));
+            this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, true, s));
         } else {
-            this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, false));
+            this.player.playerConnection.sendPacket(new PacketPlayOutBlockBreak(blockposition, this.world.getType(blockposition), packetplayinblockdig_enumplayerdigtype, false, s));
         }
 
     }
@@ -220,12 +231,11 @@ public class PlayerInteractManager {
                     return true;
                 } else {
                     ItemStack itemstack = this.player.getItemInMainHand();
+                    ItemStack itemstack1 = itemstack.cloneItemStack();
                     boolean flag1 = this.player.hasBlock(iblockdata);
 
                     itemstack.a(this.world, iblockdata, blockposition, this.player);
                     if (flag && flag1) {
-                        ItemStack itemstack1 = itemstack.isEmpty() ? ItemStack.a : itemstack.cloneItemStack();
-
                         block.a(this.world, this.player, blockposition, iblockdata, tileentity, itemstack1);
                     }
 
@@ -254,7 +264,7 @@ public class PlayerInteractManager {
                 entityhuman.a(enumhand, itemstack1);
                 if (this.isCreative()) {
                     itemstack1.setCount(i);
-                    if (itemstack1.e()) {
+                    if (itemstack1.e() && itemstack1.getDamage() != j) {
                         itemstack1.setDamage(j);
                     }
                 }
@@ -287,19 +297,25 @@ public class PlayerInteractManager {
             }
         } else {
             boolean flag = !entityhuman.getItemInMainHand().isEmpty() || !entityhuman.getItemInOffHand().isEmpty();
-            boolean flag1 = entityhuman.isSneaking() && flag;
+            boolean flag1 = entityhuman.dT() && flag;
 
-            if (!flag1 && iblockdata.interact(world, entityhuman, enumhand, movingobjectpositionblock)) {
-                return EnumInteractionResult.SUCCESS;
-            } else if (!itemstack.isEmpty() && !entityhuman.getCooldownTracker().hasCooldown(itemstack.getItem())) {
+            if (!flag1) {
+                EnumInteractionResult enuminteractionresult = iblockdata.interact(world, entityhuman, enumhand, movingobjectpositionblock);
+
+                if (enuminteractionresult.a()) {
+                    return enuminteractionresult;
+                }
+            }
+
+            if (!itemstack.isEmpty() && !entityhuman.getCooldownTracker().hasCooldown(itemstack.getItem())) {
                 ItemActionContext itemactioncontext = new ItemActionContext(entityhuman, enumhand, movingobjectpositionblock);
 
                 if (this.isCreative()) {
                     int i = itemstack.getCount();
-                    EnumInteractionResult enuminteractionresult = itemstack.placeItem(itemactioncontext);
+                    EnumInteractionResult enuminteractionresult1 = itemstack.placeItem(itemactioncontext);
 
                     itemstack.setCount(i);
-                    return enuminteractionresult;
+                    return enuminteractionresult1;
                 } else {
                     return itemstack.placeItem(itemactioncontext);
                 }

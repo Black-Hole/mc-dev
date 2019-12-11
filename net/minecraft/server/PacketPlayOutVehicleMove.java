@@ -13,9 +13,9 @@ public class PacketPlayOutVehicleMove implements Packet<PacketListenerPlayOut> {
     public PacketPlayOutVehicleMove() {}
 
     public PacketPlayOutVehicleMove(Entity entity) {
-        this.a = entity.locX;
-        this.b = entity.locY;
-        this.c = entity.locZ;
+        this.a = entity.locX();
+        this.b = entity.locY();
+        this.c = entity.locZ();
         this.d = entity.yaw;
         this.e = entity.pitch;
     }

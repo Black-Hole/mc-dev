@@ -15,7 +15,7 @@ public class LootItemFunctionSetCount extends LootItemFunctionConditional {
 
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
-        itemstack.setCount(this.a.a(loottableinfo.b()));
+        itemstack.setCount(this.a.a(loottableinfo.a()));
         return itemstack;
     }
 

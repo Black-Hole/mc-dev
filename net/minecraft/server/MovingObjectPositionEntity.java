@@ -5,7 +5,7 @@ public class MovingObjectPositionEntity extends MovingObjectPosition {
     private final Entity b;
 
     public MovingObjectPositionEntity(Entity entity) {
-        this(entity, new Vec3D(entity.locX, entity.locY, entity.locZ));
+        this(entity, entity.getPositionVector());
     }
 
     public MovingObjectPositionEntity(Entity entity, Vec3D vec3d) {

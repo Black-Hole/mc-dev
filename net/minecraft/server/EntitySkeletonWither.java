@@ -59,7 +59,7 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
         GroupDataEntity groupdataentity1 = super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
 
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(4.0D);
-        this.dV();
+        this.eq();
         return groupdataentity1;
     }
 
@@ -69,8 +69,8 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
     }
 
     @Override
-    public boolean C(Entity entity) {
-        if (!super.C(entity)) {
+    public boolean B(Entity entity) {
+        if (!super.B(entity)) {
             return false;
         } else {
             if (entity instanceof EntityLiving) {

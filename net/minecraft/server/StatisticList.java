@@ -80,6 +80,8 @@ public class StatisticList {
     public static final MinecraftKey BELL_RING = a("bell_ring", Counter.DEFAULT);
     public static final MinecraftKey RAID_TRIGGER = a("raid_trigger", Counter.DEFAULT);
     public static final MinecraftKey RAID_WIN = a("raid_win", Counter.DEFAULT);
+    public static final MinecraftKey INTERACT_WITH_ANVIL = a("interact_with_anvil", Counter.DEFAULT);
+    public static final MinecraftKey INTERACT_WITH_GRINDSTONE = a("interact_with_grindstone", Counter.DEFAULT);
 
     private static MinecraftKey a(String s, Counter counter) {
         MinecraftKey minecraftkey = new MinecraftKey(s);

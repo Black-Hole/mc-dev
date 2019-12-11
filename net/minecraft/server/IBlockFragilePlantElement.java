@@ -8,5 +8,5 @@ public interface IBlockFragilePlantElement {
 
     boolean a(World world, Random random, BlockPosition blockposition, IBlockData iblockdata);
 
-    void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata);
+    void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata);
 }

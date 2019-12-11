@@ -8,16 +8,17 @@ public abstract class WorldGenTreeProvider {
     public WorldGenTreeProvider() {}
 
     @Nullable
-    protected abstract WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> b(Random random);
+    protected abstract WorldGenFeatureConfigured<WorldGenFeatureSmallTreeConfigurationConfiguration, ?> b(Random random);
 
-    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> worldgentreeabstract = this.b(random);
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+        WorldGenFeatureConfigured<WorldGenFeatureSmallTreeConfigurationConfiguration, ?> worldgenfeatureconfigured = this.b(random);
 
-        if (worldgentreeabstract == null) {
+        if (worldgenfeatureconfigured == null) {
             return false;
         } else {
             generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 4);
-            if (worldgentreeabstract.generate(generatoraccess, generatoraccess.getChunkProvider().getChunkGenerator(), random, blockposition, WorldGenFeatureConfiguration.e)) {
+            ((WorldGenFeatureSmallTreeConfigurationConfiguration) worldgenfeatureconfigured.c).a();
+            if (worldgenfeatureconfigured.a(generatoraccess, chunkgenerator, random, blockposition)) {
                 return true;
             } else {
                 generatoraccess.setTypeAndData(blockposition, iblockdata, 4);

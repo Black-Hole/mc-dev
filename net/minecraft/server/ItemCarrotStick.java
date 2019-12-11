@@ -11,12 +11,12 @@ public class ItemCarrotStick extends Item {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (world.isClientSide) {
-            return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
+            return InteractionResultWrapper.c(itemstack);
         } else {
             if (entityhuman.isPassenger() && entityhuman.getVehicle() instanceof EntityPig) {
                 EntityPig entitypig = (EntityPig) entityhuman.getVehicle();
 
-                if (itemstack.h() - itemstack.getDamage() >= 7 && entitypig.dW()) {
+                if (itemstack.h() - itemstack.getDamage() >= 7 && entitypig.er()) {
                     itemstack.damage(7, entityhuman, (entityhuman1) -> {
                         entityhuman1.d(enumhand);
                     });
@@ -24,15 +24,15 @@ public class ItemCarrotStick extends Item {
                         ItemStack itemstack1 = new ItemStack(Items.FISHING_ROD);
 
                         itemstack1.setTag(itemstack.getTag());
-                        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack1);
+                        return InteractionResultWrapper.a(itemstack1);
                     }
 
-                    return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
+                    return InteractionResultWrapper.a(itemstack);
                 }
             }
 
             entityhuman.b(StatisticList.ITEM_USED.b(this));
-            return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
+            return InteractionResultWrapper.c(itemstack);
         }
     }
 }

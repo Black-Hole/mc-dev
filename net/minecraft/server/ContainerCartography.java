@@ -4,6 +4,7 @@ public class ContainerCartography extends Container {
 
     private final ContainerAccess containerAccess;
     private boolean e;
+    private long f;
     public final IInventory inventory;
     private final InventoryCraftResult resultInventory;
 
@@ -12,7 +13,7 @@ public class ContainerCartography extends Container {
     }
 
     public ContainerCartography(int i, PlayerInventory playerinventory, final ContainerAccess containeraccess) {
-        super(Containers.CARTOGRAPHY, i);
+        super(Containers.CARTOGRAPHY_TABLE, i);
         this.inventory = new InventorySubcontainer(2) {
             @Override
             public void update() {
@@ -53,7 +54,7 @@ public class ContainerCartography extends Container {
                 ItemStack itemstack = super.a(j);
                 ItemStack itemstack1 = (ItemStack) containeraccess.a((world, blockposition) -> {
                     if (!ContainerCartography.this.e && ContainerCartography.this.inventory.getItem(1).getItem() == Items.df) {
-                        ItemStack itemstack2 = ItemWorldMap.b(world, ContainerCartography.this.inventory.getItem(0));
+                        ItemStack itemstack2 = ItemWorldMap.a(world, ContainerCartography.this.inventory.getItem(0));
 
                         if (itemstack2 != null) {
                             itemstack2.setCount(1);
@@ -79,7 +80,13 @@ public class ContainerCartography extends Container {
             public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
                 itemstack.getItem().b(itemstack, entityhuman.world, entityhuman);
                 containeraccess.a((world, blockposition) -> {
-                    world.playSound((EntityHuman) null, blockposition, SoundEffects.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    long j = world.getTime();
+
+                    if (ContainerCartography.this.f != j) {
+                        world.playSound((EntityHuman) null, blockposition, SoundEffects.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        ContainerCartography.this.f = j;
+                    }
+
                 });
                 return super.a(entityhuman, itemstack);
             }
@@ -158,7 +165,7 @@ public class ContainerCartography extends Container {
 
     @Override
     public boolean a(ItemStack itemstack, Slot slot) {
-        return false;
+        return slot.inventory != this.resultInventory && super.a(itemstack, slot);
     }
 
     @Override
@@ -175,7 +182,7 @@ public class ContainerCartography extends Container {
             if (i == 2) {
                 if (this.inventory.getItem(1).getItem() == Items.df) {
                     itemstack2 = (ItemStack) this.containerAccess.a((world, blockposition) -> {
-                        ItemStack itemstack3 = ItemWorldMap.b(world, this.inventory.getItem(0));
+                        ItemStack itemstack3 = ItemWorldMap.a(world, this.inventory.getItem(0));
 
                         if (itemstack3 != null) {
                             itemstack3.setCount(1);

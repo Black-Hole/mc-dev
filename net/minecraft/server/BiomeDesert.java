@@ -4,11 +4,11 @@ public final class BiomeDesert extends BiomeBase {
 
     public BiomeDesert() {
         super((new BiomeBase.a()).a(WorldGenSurface.G, WorldGenSurface.z).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.DESERT).a(0.125F).b(0.05F).c(2.0F).d(0.0F).a(4159204).b(329011).a((String) null));
-        this.a(WorldGenerator.VILLAGE, (WorldGenFeatureConfiguration) (new WorldGenFeatureVillageConfiguration("village/desert/town_centers", 6)));
-        this.a(WorldGenerator.PILLAGER_OUTPOST, (WorldGenFeatureConfiguration) (new WorldGenFeaturePillagerOutpostConfiguration(0.004D)));
-        this.a(WorldGenerator.DESERT_PYRAMID, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
-        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
-        this.a(WorldGenerator.STRONGHOLD, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
+        this.a(WorldGenerator.VILLAGE.b((WorldGenFeatureConfiguration) (new WorldGenFeatureVillageConfiguration("village/desert/town_centers", 6))));
+        this.a(WorldGenerator.PILLAGER_OUTPOST.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
+        this.a(WorldGenerator.DESERT_PYRAMID.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
+        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
+        this.a(WorldGenerator.STRONGHOLD.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.e(this);

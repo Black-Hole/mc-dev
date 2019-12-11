@@ -25,7 +25,7 @@ public class Containers<T extends Container> {
     public static final Containers<ContainerMerchant> MERCHANT = a("merchant", ContainerMerchant::new);
     public static final Containers<ContainerShulkerBox> SHULKER_BOX = a("shulker_box", ContainerShulkerBox::new);
     public static final Containers<ContainerSmoker> SMOKER = a("smoker", ContainerSmoker::new);
-    public static final Containers<ContainerCartography> CARTOGRAPHY = a("cartography", ContainerCartography::new);
+    public static final Containers<ContainerCartography> CARTOGRAPHY_TABLE = a("cartography_table", ContainerCartography::new);
     public static final Containers<ContainerStonecutter> STONECUTTER = a("stonecutter", ContainerStonecutter::new);
     private final Containers.Supplier<T> x;
 

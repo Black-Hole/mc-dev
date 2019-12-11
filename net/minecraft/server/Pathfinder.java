@@ -19,7 +19,7 @@ public class Pathfinder {
     private final Set<PathPoint> b = Sets.newHashSet();
     private final PathPoint[] c = new PathPoint[32];
     private final int d;
-    private PathfinderAbstract e;
+    private final PathfinderAbstract e;
 
     public Pathfinder(PathfinderAbstract pathfinderabstract, int i) {
         this.e = pathfinderabstract;
@@ -27,21 +27,21 @@ public class Pathfinder {
     }
 
     @Nullable
-    public PathEntity a(IWorldReader iworldreader, EntityInsentient entityinsentient, Set<BlockPosition> set, float f, int i) {
+    public PathEntity a(ChunkCache chunkcache, EntityInsentient entityinsentient, Set<BlockPosition> set, float f, int i, float f1) {
         this.a.a();
-        this.e.a(iworldreader, entityinsentient);
+        this.e.a(chunkcache, entityinsentient);
         PathPoint pathpoint = this.e.b();
         Map<PathDestination, BlockPosition> map = (Map) set.stream().collect(Collectors.toMap((blockposition) -> {
             return this.e.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
         }, Function.identity()));
-        PathEntity pathentity = this.a(pathpoint, map, f, i);
+        PathEntity pathentity = this.a(pathpoint, map, f, i, f1);
 
         this.e.a();
         return pathentity;
     }
 
     @Nullable
-    private PathEntity a(PathPoint pathpoint, Map<PathDestination, BlockPosition> map, float f, int i) {
+    private PathEntity a(PathPoint pathpoint, Map<PathDestination, BlockPosition> map, float f, int i, float f1) {
         Set<PathDestination> set = map.keySet();
 
         pathpoint.e = 0.0F;
@@ -51,10 +51,11 @@ public class Pathfinder {
         this.b.clear();
         this.a.a(pathpoint);
         int j = 0;
+        int k = (int) ((float) this.d * f1);
 
         while (!this.a.e()) {
             ++j;
-            if (j >= this.d) {
+            if (j >= k) {
                 break;
             }
 
@@ -69,18 +70,18 @@ public class Pathfinder {
             }
 
             if (pathpoint1.a(pathpoint) < f) {
-                int k = this.e.a(this.c, pathpoint1);
+                int l = this.e.a(this.c, pathpoint1);
 
-                for (int l = 0; l < k; ++l) {
-                    PathPoint pathpoint2 = this.c[l];
-                    float f1 = pathpoint1.a(pathpoint2);
+                for (int i1 = 0; i1 < l; ++i1) {
+                    PathPoint pathpoint2 = this.c[i1];
+                    float f2 = pathpoint1.a(pathpoint2);
 
-                    pathpoint2.j = pathpoint1.j + f1;
-                    float f2 = pathpoint1.e + f1 + pathpoint2.k;
+                    pathpoint2.j = pathpoint1.j + f2;
+                    float f3 = pathpoint1.e + f2 + pathpoint2.k;
 
-                    if (pathpoint2.j < f && (!pathpoint2.c() || f2 < pathpoint2.e)) {
+                    if (pathpoint2.j < f && (!pathpoint2.c() || f3 < pathpoint2.e)) {
                         pathpoint2.h = pathpoint1;
-                        pathpoint2.e = f2;
+                        pathpoint2.e = f3;
                         pathpoint2.f = this.a(pathpoint2, set) * 1.5F;
                         if (pathpoint2.c()) {
                             this.a.a(pathpoint2, pathpoint2.e + pathpoint2.f);

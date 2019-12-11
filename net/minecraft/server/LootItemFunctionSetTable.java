@@ -1,11 +1,8 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import java.util.Set;
-import java.util.function.Function;
 
 public class LootItemFunctionSetTable extends LootItemFunctionConditional {
 
@@ -36,19 +33,17 @@ public class LootItemFunctionSetTable extends LootItemFunctionConditional {
     }
 
     @Override
-    public void a(LootCollector lootcollector, Function<MinecraftKey, LootTable> function, Set<MinecraftKey> set, LootContextParameterSet lootcontextparameterset) {
-        if (set.contains(this.a)) {
+    public void a(LootCollector lootcollector) {
+        if (lootcollector.a(this.a)) {
             lootcollector.a("Table " + this.a + " is recursively called");
         } else {
-            super.a(lootcollector, function, set, lootcontextparameterset);
-            LootTable loottable = (LootTable) function.apply(this.a);
+            super.a(lootcollector);
+            LootTable loottable = lootcollector.c(this.a);
 
             if (loottable == null) {
                 lootcollector.a("Unknown loot table called " + this.a);
             } else {
-                Set<MinecraftKey> set1 = ImmutableSet.builder().addAll(set).add(this.a).build();
-
-                loottable.a(lootcollector.b("->{" + this.a + "}"), function, set1, lootcontextparameterset);
+                loottable.a(lootcollector.a("->{" + this.a + "}", this.a));
             }
 
         }

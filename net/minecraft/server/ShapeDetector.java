@@ -171,7 +171,7 @@ public class ShapeDetector {
 
         public ShapeDetector.Shape a(EnumDirection enumdirection, BlockPosition blockposition, double d0, Vec3D vec3d, double d1) {
             EnumDirection enumdirection1 = this.getFacing();
-            EnumDirection enumdirection2 = enumdirection1.e();
+            EnumDirection enumdirection2 = enumdirection1.f();
             double d2 = (double) (this.a().getY() + 1) - d0 * (double) this.e();
             double d3;
             double d4;
@@ -199,7 +199,7 @@ public class ShapeDetector {
             } else if (enumdirection1.opposite() == enumdirection.opposite()) {
                 d5 = -vec3d.x;
                 d6 = -vec3d.z;
-            } else if (enumdirection1.opposite() == enumdirection.e()) {
+            } else if (enumdirection1.opposite() == enumdirection.f()) {
                 d5 = -vec3d.z;
                 d6 = vec3d.x;
             } else {

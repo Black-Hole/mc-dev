@@ -77,7 +77,7 @@ public class EntityEndermite extends EntityMonster {
 
     @Override
     public void tick() {
-        this.aK = this.yaw;
+        this.aI = this.yaw;
         super.tick();
     }
 
@@ -88,7 +88,7 @@ public class EntityEndermite extends EntityMonster {
     }
 
     @Override
-    public double aO() {
+    public double aR() {
         return 0.1D;
     }
 
@@ -105,7 +105,7 @@ public class EntityEndermite extends EntityMonster {
         super.movementTick();
         if (this.world.isClientSide) {
             for (int i = 0; i < 2; ++i) {
-                this.world.addParticle(Particles.PORTAL, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.getWidth(), this.locY + this.random.nextDouble() * (double) this.getHeight(), this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.getWidth(), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
+                this.world.addParticle(Particles.PORTAL, this.d(0.5D), this.cv(), this.g(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
             }
         } else {
             if (!this.isPersistent()) {

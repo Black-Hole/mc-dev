@@ -23,9 +23,4 @@ public class BlockMobSpawner extends BlockTileEntity {
     public EnumRenderType c(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
-    }
 }

@@ -16,8 +16,9 @@ public class WorldGenDecoratorSkyVisible extends WorldGenDecorator<WorldGenDecor
         return IntStream.range(0, worldgendecoratorfrequencyconfiguration.a).mapToObj((i) -> {
             int j = random.nextInt(16) + blockposition.getX();
             int k = random.nextInt(16) + blockposition.getZ();
+            int l = generatoraccess.a(HeightMap.Type.OCEAN_FLOOR_WG, j, k);
 
-            return new BlockPosition(j, generatoraccess.a(HeightMap.Type.OCEAN_FLOOR_WG, j, k), k);
+            return new BlockPosition(j, l, k);
         });
     }
 }

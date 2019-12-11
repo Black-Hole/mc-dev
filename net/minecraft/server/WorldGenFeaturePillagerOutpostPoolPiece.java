@@ -63,8 +63,8 @@ public abstract class WorldGenFeaturePillagerOutpostPoolPiece extends StructureP
     }
 
     @Override
-    public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
-        return this.a.a(this.f, generatoraccess, this.b, this.c, structureboundingbox, random);
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        return this.a.a(this.f, generatoraccess, chunkgenerator, this.b, this.c, structureboundingbox, random);
     }
 
     @Override
@@ -74,7 +74,7 @@ public abstract class WorldGenFeaturePillagerOutpostPoolPiece extends StructureP
     }
 
     @Override
-    public EnumBlockRotation X_() {
+    public EnumBlockRotation ad_() {
         return this.c;
     }
 

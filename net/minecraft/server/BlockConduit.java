@@ -9,7 +9,7 @@ public class BlockConduit extends BlockTileEntity implements IBlockWaterlogged {
 
     public BlockConduit(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockConduit.a, true));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockConduit.a, true));
     }
 
     @Override
@@ -28,8 +28,8 @@ public class BlockConduit extends BlockTileEntity implements IBlockWaterlogged {
     }
 
     @Override
-    public Fluid g(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockConduit.a) ? FluidTypes.WATER.a(false) : super.g(iblockdata);
+    public Fluid a_(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockConduit.a) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
     }
 
     @Override
@@ -64,11 +64,6 @@ public class BlockConduit extends BlockTileEntity implements IBlockWaterlogged {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
         return (IBlockData) this.getBlockData().set(BlockConduit.a, fluid.a(TagsFluid.WATER) && fluid.g() == 8);
-    }
-
-    @Override
-    public TextureType c() {
-        return TextureType.CUTOUT;
     }
 
     @Override

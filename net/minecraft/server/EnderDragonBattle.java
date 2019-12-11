@@ -94,7 +94,7 @@ public class EnderDragonBattle {
         while (iterator.hasNext()) {
             int i = (Integer) iterator.next();
 
-            nbttaglist.add(new NBTTagInt(i));
+            nbttaglist.add(NBTTagInt.a(i));
         }
 
         nbttagcompound.set("Gateways", nbttaglist);
@@ -153,7 +153,9 @@ public class EnderDragonBattle {
         } else {
             EnderDragonBattle.LOGGER.info("Found that the dragon has not yet been killed in this world.");
             this.l = false;
-            this.a(false);
+            if (this.j() == null) {
+                this.a(false);
+            }
         }
 
         List<EntityEnderDragon> list = this.d.j();
@@ -374,7 +376,7 @@ public class EnderDragonBattle {
 
     private void a(BlockPosition blockposition) {
         this.d.triggerEffect(3000, blockposition, 0);
-        WorldGenerator.END_GATEWAY.generate(this.d, this.d.getChunkProvider().getChunkGenerator(), new Random(), blockposition, WorldGenEndGatewayConfiguration.a());
+        WorldGenerator.END_GATEWAY.b((WorldGenFeatureConfiguration) WorldGenEndGatewayConfiguration.a()).a(this.d, this.d.getChunkProvider().getChunkGenerator(), new Random(), blockposition);
     }
 
     private void a(boolean flag) {
@@ -386,7 +388,7 @@ public class EnderDragonBattle {
             }
         }
 
-        worldgenendtrophy.a(this.d, this.d.getChunkProvider().getChunkGenerator(), new Random(), this.o, WorldGenFeatureConfiguration.e);
+        worldgenendtrophy.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e).a(this.d, this.d.getChunkProvider().getChunkGenerator(), new Random(), this.o);
     }
 
     private EntityEnderDragon o() {

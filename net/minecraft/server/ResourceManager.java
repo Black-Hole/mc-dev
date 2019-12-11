@@ -5,7 +5,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -43,7 +42,7 @@ public class ResourceManager implements IReloadableResourceManager {
             this.e.add(s);
             resourcemanagerfallback = (ResourceManagerFallback) this.b.get(s);
             if (resourcemanagerfallback == null) {
-                resourcemanagerfallback = new ResourceManagerFallback(this.f);
+                resourcemanagerfallback = new ResourceManagerFallback(this.f, s);
                 this.b.put(s, resourcemanagerfallback);
             }
         }
@@ -111,9 +110,9 @@ public class ResourceManager implements IReloadableResourceManager {
         Object object;
 
         if (ResourceManager.LOGGER.isDebugEnabled()) {
-            object = new ReloadableProfiled(this, new ArrayList(list), executor, executor1, completablefuture);
+            object = new ReloadableProfiled(this, Lists.newArrayList(list), executor, executor1, completablefuture);
         } else {
-            object = Reloadable.a(this, new ArrayList(list), executor, executor1, completablefuture);
+            object = Reloadable.a(this, Lists.newArrayList(list), executor, executor1, completablefuture);
         }
 
         this.d.clear();
@@ -128,9 +127,41 @@ public class ResourceManager implements IReloadableResourceManager {
         while (iterator.hasNext()) {
             IResourcePack iresourcepack = (IResourcePack) iterator.next();
 
-            this.a(iresourcepack);
+            try {
+                this.a(iresourcepack);
+            } catch (Exception exception) {
+                ResourceManager.LOGGER.error("Failed to add resource pack {}", iresourcepack.a(), exception);
+                return new ResourceManager.a(new ResourceManager.b(iresourcepack, exception));
+            }
         }
 
         return this.b(executor, executor1, this.c, completablefuture);
+    }
+
+    static class a implements IReloadable {
+
+        private final ResourceManager.b a;
+        private final CompletableFuture<Unit> b;
+
+        public a(ResourceManager.b resourcemanager_b) {
+            this.a = resourcemanager_b;
+            this.b = new CompletableFuture();
+            this.b.completeExceptionally(resourcemanager_b);
+        }
+
+        @Override
+        public CompletableFuture<Unit> a() {
+            return this.b;
+        }
+    }
+
+    public static class b extends RuntimeException {
+
+        private final IResourcePack a;
+
+        public b(IResourcePack iresourcepack, Throwable throwable) {
+            super(iresourcepack.a(), throwable);
+            this.a = iresourcepack;
+        }
     }
 }

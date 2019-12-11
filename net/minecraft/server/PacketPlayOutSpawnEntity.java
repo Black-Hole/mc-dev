@@ -40,7 +40,7 @@ public class PacketPlayOutSpawnEntity implements Packet<PacketListenerPlayOut> {
     }
 
     public PacketPlayOutSpawnEntity(Entity entity, int i) {
-        this(entity.getId(), entity.getUniqueID(), entity.locX, entity.locY, entity.locZ, entity.pitch, entity.yaw, entity.getEntityType(), i, entity.getMot());
+        this(entity.getId(), entity.getUniqueID(), entity.locX(), entity.locY(), entity.locZ(), entity.pitch, entity.yaw, entity.getEntityType(), i, entity.getMot());
     }
 
     public PacketPlayOutSpawnEntity(Entity entity, EntityTypes<?> entitytypes, int i, BlockPosition blockposition) {

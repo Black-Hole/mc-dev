@@ -40,7 +40,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
         super(iminecraftserver, "Query Listener");
         this.i = iminecraftserver.getDedicatedServerProperties().queryPort;
         this.s = iminecraftserver.e_();
-        this.j = iminecraftserver.e();
+        this.j = iminecraftserver.q();
         this.l = iminecraftserver.f_();
         this.k = iminecraftserver.getMaxPlayers();
         this.m = iminecraftserver.getWorld();

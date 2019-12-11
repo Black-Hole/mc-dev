@@ -2,33 +2,33 @@ package net.minecraft.server;
 
 public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
 
-    private static final DataWatcherObject<Boolean> bI = DataWatcher.a(EntityHorseChestedAbstract.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> bF = DataWatcher.a(EntityHorseChestedAbstract.class, DataWatcherRegistry.i);
 
     protected EntityHorseChestedAbstract(EntityTypes<? extends EntityHorseChestedAbstract> entitytypes, World world) {
         super(entitytypes, world);
-        this.bG = false;
+        this.bD = false;
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityHorseChestedAbstract.bI, false);
+        this.datawatcher.register(EntityHorseChestedAbstract.bF, false);
     }
 
     @Override
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.ex());
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.eS());
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.17499999701976776D);
         this.getAttributeInstance(EntityHorseChestedAbstract.attributeJumpStrength).setValue(0.5D);
     }
 
     public boolean isCarryingChest() {
-        return (Boolean) this.datawatcher.get(EntityHorseChestedAbstract.bI);
+        return (Boolean) this.datawatcher.get(EntityHorseChestedAbstract.bF);
     }
 
     public void setCarryingChest(boolean flag) {
-        this.datawatcher.set(EntityHorseChestedAbstract.bI, flag);
+        this.datawatcher.set(EntityHorseChestedAbstract.bF, flag);
     }
 
     @Override
@@ -37,8 +37,8 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
     }
 
     @Override
-    public double aP() {
-        return super.aP() - 0.25D;
+    public double aS() {
+        return super.aS() - 0.25D;
     }
 
     @Override
@@ -48,8 +48,8 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
     }
 
     @Override
-    protected void cF() {
-        super.cF();
+    protected void dropInventory() {
+        super.dropInventory();
         if (this.isCarryingChest()) {
             if (!this.world.isClientSide) {
                 this.a((IMaterial) Blocks.CHEST);
@@ -103,7 +103,7 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
             }
         }
 
-        this.en();
+        this.eI();
     }
 
     @Override
@@ -133,7 +133,7 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
             return super.a(entityhuman, enumhand);
         } else {
             if (!this.isBaby()) {
-                if (this.isTamed() && entityhuman.isSneaking()) {
+                if (this.isTamed() && entityhuman.dT()) {
                     this.e(entityhuman);
                     return true;
                 }
@@ -152,18 +152,18 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
                             return true;
                         }
 
-                        this.eu();
+                        this.eP();
                         return true;
                     }
 
                     if (!this.isCarryingChest() && itemstack.getItem() == Blocks.CHEST.getItem()) {
                         this.setCarryingChest(true);
-                        this.dY();
+                        this.et();
                         flag = true;
                         this.loadChest();
                     }
 
-                    if (!this.isBaby() && !this.eq() && itemstack.getItem() == Items.SADDLE) {
+                    if (!this.isBaby() && !this.eL() && itemstack.getItem() == Items.SADDLE) {
                         this.e(entityhuman);
                         return true;
                     }
@@ -187,11 +187,11 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
         }
     }
 
-    protected void dY() {
+    protected void et() {
         this.a(SoundEffects.ENTITY_DONKEY_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 
-    public int dZ() {
+    public int eu() {
         return 5;
     }
 }

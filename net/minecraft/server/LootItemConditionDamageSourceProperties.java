@@ -23,7 +23,7 @@ public class LootItemConditionDamageSourceProperties implements LootItemConditio
         DamageSource damagesource = (DamageSource) loottableinfo.getContextParameter(LootContextParameters.DAMAGE_SOURCE);
         BlockPosition blockposition = (BlockPosition) loottableinfo.getContextParameter(LootContextParameters.POSITION);
 
-        return blockposition != null && damagesource != null && this.a.a(loottableinfo.d(), new Vec3D(blockposition), damagesource);
+        return blockposition != null && damagesource != null && this.a.a(loottableinfo.c(), new Vec3D(blockposition), damagesource);
     }
 
     public static LootItemCondition.a a(CriterionConditionDamageSource.a criterionconditiondamagesource_a) {

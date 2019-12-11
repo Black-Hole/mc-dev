@@ -6,7 +6,7 @@ public interface IRecipe<C extends IInventory> {
 
     ItemStack a(C c0);
 
-    ItemStack c();
+    ItemStack getResult();
 
     default NonNullList<ItemStack> b(C c0) {
         NonNullList<ItemStack> nonnulllist = NonNullList.a(c0.getSize(), ItemStack.a);
@@ -14,8 +14,8 @@ public interface IRecipe<C extends IInventory> {
         for (int i = 0; i < nonnulllist.size(); ++i) {
             Item item = c0.getItem(i).getItem();
 
-            if (item.o()) {
-                nonnulllist.set(i, new ItemStack(item.n()));
+            if (item.q()) {
+                nonnulllist.set(i, new ItemStack(item.p()));
             }
         }
 

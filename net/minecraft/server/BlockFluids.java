@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class BlockFluids extends Block implements IFluidSource {
 
-    public static final BlockStateInteger LEVEL = BlockProperties.ao;
+    public static final BlockStateInteger LEVEL = BlockProperties.ap;
     protected final FluidTypeFlowing b;
     private final List<Fluid> c;
 
@@ -22,12 +22,12 @@ public class BlockFluids extends Block implements IFluidSource {
         }
 
         this.c.add(fluidtypeflowing.a(8, true));
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFluids.LEVEL, 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFluids.LEVEL, 0));
     }
 
     @Override
-    public void c(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        world.getFluid(blockposition).b(world, blockposition, random);
+    public void b(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        worldserver.getFluid(blockposition).b(worldserver, blockposition, random);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class BlockFluids extends Block implements IFluidSource {
     }
 
     @Override
-    public Fluid g(IBlockData iblockdata) {
+    public Fluid a_(IBlockData iblockdata) {
         int i = (Integer) iblockdata.get(BlockFluids.LEVEL);
 
         return (Fluid) this.c.get(Math.min(i, 8));
@@ -70,15 +70,15 @@ public class BlockFluids extends Block implements IFluidSource {
     @Override
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (this.a(world, blockposition, iblockdata)) {
-            world.getFluidTickList().a(blockposition, iblockdata.p().getType(), this.a((IWorldReader) world));
+            world.getFluidTickList().a(blockposition, iblockdata.getFluid().getType(), this.a((IWorldReader) world));
         }
 
     }
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if (iblockdata.p().isSource() || iblockdata1.p().isSource()) {
-            generatoraccess.getFluidTickList().a(blockposition, iblockdata.p().getType(), this.a((IWorldReader) generatoraccess));
+        if (iblockdata.getFluid().isSource() || iblockdata1.getFluid().isSource()) {
+            generatoraccess.getFluidTickList().a(blockposition, iblockdata.getFluid().getType(), this.a((IWorldReader) generatoraccess));
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
@@ -87,7 +87,7 @@ public class BlockFluids extends Block implements IFluidSource {
     @Override
     public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1, boolean flag) {
         if (this.a(world, blockposition, iblockdata)) {
-            world.getFluidTickList().a(blockposition, iblockdata.p().getType(), this.a((IWorldReader) world));
+            world.getFluidTickList().a(blockposition, iblockdata.getFluid().getType(), this.a((IWorldReader) world));
         }
 
     }
@@ -149,7 +149,7 @@ public class BlockFluids extends Block implements IFluidSource {
     @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
         if (this.b.a(TagsFluid.LAVA)) {
-            entity.aC();
+            entity.aG();
         }
 
     }

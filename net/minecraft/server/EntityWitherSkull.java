@@ -29,6 +29,7 @@ public class EntityWitherSkull extends EntityFireball {
 
     @Override
     protected void a(MovingObjectPosition movingobjectposition) {
+        super.a(movingobjectposition);
         if (!this.world.isClientSide) {
             if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.ENTITY) {
                 Entity entity = ((MovingObjectPositionEntity) movingobjectposition).getEntity();
@@ -62,7 +63,7 @@ public class EntityWitherSkull extends EntityFireball {
 
             Explosion.Effect explosion_effect = this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) ? Explosion.Effect.DESTROY : Explosion.Effect.NONE;
 
-            this.world.createExplosion(this, this.locX, this.locY, this.locZ, 1.0F, false, explosion_effect);
+            this.world.createExplosion(this, this.locX(), this.locY(), this.locZ(), 1.0F, false, explosion_effect);
             this.die();
         }
 
@@ -92,7 +93,7 @@ public class EntityWitherSkull extends EntityFireball {
     }
 
     @Override
-    protected boolean K_() {
+    protected boolean M_() {
         return false;
     }
 }

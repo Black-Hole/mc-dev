@@ -7,7 +7,7 @@ public abstract class BlockFurnace extends BlockTileEntity {
 
     protected BlockFurnace(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFurnace.FACING, EnumDirection.NORTH)).set(BlockFurnace.LIT, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFurnace.FACING, EnumDirection.NORTH)).set(BlockFurnace.LIT, false));
     }
 
     @Override
@@ -16,12 +16,13 @@ public abstract class BlockFurnace extends BlockTileEntity {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        if (!world.isClientSide) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+        if (world.isClientSide) {
+            return EnumInteractionResult.SUCCESS;
+        } else {
             this.a(world, blockposition, entityhuman);
+            return EnumInteractionResult.SUCCESS;
         }
-
-        return true;
     }
 
     protected abstract void a(World world, BlockPosition blockposition, EntityHuman entityhuman);

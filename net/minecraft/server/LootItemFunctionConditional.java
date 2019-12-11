@@ -5,7 +5,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.ArrayUtils;
@@ -27,11 +26,11 @@ public abstract class LootItemFunctionConditional implements LootItemFunction {
     protected abstract ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo);
 
     @Override
-    public void a(LootCollector lootcollector, Function<MinecraftKey, LootTable> function, Set<MinecraftKey> set, LootContextParameterSet lootcontextparameterset) {
-        LootItemFunction.super.a(lootcollector, function, set, lootcontextparameterset);
+    public void a(LootCollector lootcollector) {
+        LootItemFunction.super.a(lootcollector);
 
         for (int i = 0; i < this.b.length; ++i) {
-            this.b[i].a(lootcollector.b(".conditions[" + i + "]"), function, set, lootcontextparameterset);
+            this.b[i].a(lootcollector.b(".conditions[" + i + "]"));
         }
 
     }

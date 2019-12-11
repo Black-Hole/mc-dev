@@ -11,8 +11,8 @@ public class SensorHurtBy extends Sensor<EntityLiving> {
     protected void a(WorldServer worldserver, EntityLiving entityliving) {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
 
-        if (entityliving.cE() != null) {
-            behaviorcontroller.setMemory(MemoryModuleType.HURT_BY, (Object) entityliving.cE());
+        if (entityliving.cT() != null) {
+            behaviorcontroller.setMemory(MemoryModuleType.HURT_BY, (Object) entityliving.cT());
             Entity entity = ((DamageSource) behaviorcontroller.getMemory(MemoryModuleType.HURT_BY).get()).getEntity();
 
             if (entity instanceof EntityLiving) {

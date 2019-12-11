@@ -167,7 +167,6 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         this.a.handleTeamChanged(this);
     }
 
-    @Override
     public EnumChatFormat getColor() {
         return this.k;
     }

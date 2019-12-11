@@ -44,6 +44,6 @@ public class EntityDamageSource extends DamageSource {
     @Nullable
     @Override
     public Vec3D w() {
-        return new Vec3D(this.x.locX, this.x.locY, this.x.locZ);
+        return this.x != null ? this.x.getPositionVector() : null;
     }
 }

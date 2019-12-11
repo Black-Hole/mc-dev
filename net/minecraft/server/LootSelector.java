@@ -12,10 +12,8 @@ import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -41,7 +39,7 @@ public class LootSelector {
     }
 
     private void b(Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {
-        Random random = loottableinfo.b();
+        Random random = loottableinfo.a();
         List<LootEntry> list = Lists.newArrayList();
         MutableInt mutableint = new MutableInt();
         LootEntryAbstract[] alootentryabstract = this.a;
@@ -51,7 +49,7 @@ public class LootSelector {
             LootEntryAbstract lootentryabstract = alootentryabstract[j];
 
             lootentryabstract.expand(loottableinfo, (lootentry) -> {
-                int k = lootentry.a(loottableinfo.c());
+                int k = lootentry.a(loottableinfo.b());
 
                 if (k > 0) {
                     list.add(lootentry);
@@ -78,7 +76,7 @@ public class LootSelector {
                     }
 
                     lootentry = (LootEntry) iterator.next();
-                    i -= lootentry.a(loottableinfo.c());
+                    i -= lootentry.a(loottableinfo.b());
                 } while (i >= 0);
 
                 lootentry.a(consumer, loottableinfo);
@@ -89,8 +87,8 @@ public class LootSelector {
     public void a(Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {
         if (this.c.test(loottableinfo)) {
             Consumer<ItemStack> consumer1 = LootItemFunction.a(this.e, consumer, loottableinfo);
-            Random random = loottableinfo.b();
-            int i = this.f.a(random) + MathHelper.d(this.g.b(random) * loottableinfo.c());
+            Random random = loottableinfo.a();
+            int i = this.f.a(random) + MathHelper.d(this.g.b(random) * loottableinfo.b());
 
             for (int j = 0; j < i; ++j) {
                 this.b(consumer1, loottableinfo);
@@ -99,19 +97,19 @@ public class LootSelector {
         }
     }
 
-    public void a(LootCollector lootcollector, Function<MinecraftKey, LootTable> function, Set<MinecraftKey> set, LootContextParameterSet lootcontextparameterset) {
+    public void a(LootCollector lootcollector) {
         int i;
 
         for (i = 0; i < this.b.length; ++i) {
-            this.b[i].a(lootcollector.b(".condition[" + i + "]"), function, set, lootcontextparameterset);
+            this.b[i].a(lootcollector.b(".condition[" + i + "]"));
         }
 
         for (i = 0; i < this.d.length; ++i) {
-            this.d[i].a(lootcollector.b(".functions[" + i + "]"), function, set, lootcontextparameterset);
+            this.d[i].a(lootcollector.b(".functions[" + i + "]"));
         }
 
         for (i = 0; i < this.a.length; ++i) {
-            this.a[i].a(lootcollector.b(".entries[" + i + "]"), function, set, lootcontextparameterset);
+            this.a[i].a(lootcollector.b(".entries[" + i + "]"));
         }
 
     }

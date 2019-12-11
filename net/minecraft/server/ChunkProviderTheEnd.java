@@ -23,7 +23,7 @@ public class ChunkProviderTheEnd extends ChunkGeneratorAbstract<GeneratorSetting
 
     @Override
     protected double[] a(int i, int j) {
-        return new double[]{(double) this.c.c(i, j), 0.0D};
+        return new double[]{(double) this.c.a(i, j), 0.0D};
     }
 
     @Override

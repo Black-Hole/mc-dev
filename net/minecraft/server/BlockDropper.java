@@ -31,7 +31,7 @@ public class BlockDropper extends BlockDispenser {
 
             if (!itemstack.isEmpty()) {
                 EnumDirection enumdirection = (EnumDirection) world.getType(blockposition).get(BlockDropper.FACING);
-                IInventory iinventory = TileEntityHopper.a(world, blockposition.shift(enumdirection));
+                IInventory iinventory = TileEntityHopper.b(world, blockposition.shift(enumdirection));
                 ItemStack itemstack1;
 
                 if (iinventory == null) {

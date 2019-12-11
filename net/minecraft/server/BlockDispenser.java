@@ -18,7 +18,7 @@ public class BlockDispenser extends BlockTileEntity {
 
     protected BlockDispenser(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDispenser.FACING, EnumDirection.NORTH)).set(BlockDispenser.TRIGGERED, false));
+        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDispenser.FACING, EnumDirection.NORTH)).set(BlockDispenser.TRIGGERED, false));
     }
 
     @Override
@@ -27,9 +27,9 @@ public class BlockDispenser extends BlockTileEntity {
     }
 
     @Override
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+    public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (world.isClientSide) {
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -42,7 +42,7 @@ public class BlockDispenser extends BlockTileEntity {
                 }
             }
 
-            return true;
+            return EnumInteractionResult.SUCCESS;
         }
     }
 
@@ -83,11 +83,8 @@ public class BlockDispenser extends BlockTileEntity {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!world.isClientSide) {
-            this.dispense(world, blockposition);
-        }
-
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        this.dispense(worldserver, blockposition);
     }
 
     @Override

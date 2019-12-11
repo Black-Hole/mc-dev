@@ -5,7 +5,7 @@ public class DamageSourceNetherBed extends DamageSource {
     protected DamageSourceNetherBed() {
         super("netherBed");
         this.r();
-        this.e();
+        this.setExplosion();
     }
 
     @Override

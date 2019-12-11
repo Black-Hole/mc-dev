@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class BiomeLayout<C extends BiomeLayoutConfiguration, T extends WorldChunkManager> {
 
@@ -10,22 +9,22 @@ public class BiomeLayout<C extends BiomeLayoutConfiguration, T extends WorldChun
     public static final BiomeLayout<BiomeLayoutOverworldConfiguration, WorldChunkManagerOverworld> c = a("vanilla_layered", WorldChunkManagerOverworld::new, BiomeLayoutOverworldConfiguration::new);
     public static final BiomeLayout<BiomeLayoutTheEndConfiguration, WorldChunkManagerTheEnd> d = a("the_end", WorldChunkManagerTheEnd::new, BiomeLayoutTheEndConfiguration::new);
     private final Function<C, T> e;
-    private final Supplier<C> f;
+    private final Function<WorldData, C> f;
 
-    private static <C extends BiomeLayoutConfiguration, T extends WorldChunkManager> BiomeLayout<C, T> a(String s, Function<C, T> function, Supplier<C> supplier) {
-        return (BiomeLayout) IRegistry.a(IRegistry.BIOME_SOURCE_TYPE, s, (Object) (new BiomeLayout<>(function, supplier)));
+    private static <C extends BiomeLayoutConfiguration, T extends WorldChunkManager> BiomeLayout<C, T> a(String s, Function<C, T> function, Function<WorldData, C> function1) {
+        return (BiomeLayout) IRegistry.a(IRegistry.BIOME_SOURCE_TYPE, s, (Object) (new BiomeLayout<>(function, function1)));
     }
 
-    public BiomeLayout(Function<C, T> function, Supplier<C> supplier) {
+    private BiomeLayout(Function<C, T> function, Function<WorldData, C> function1) {
         this.e = function;
-        this.f = supplier;
+        this.f = function1;
     }
 
     public T a(C c0) {
         return (WorldChunkManager) this.e.apply(c0);
     }
 
-    public C a() {
-        return (BiomeLayoutConfiguration) this.f.get();
+    public C a(WorldData worlddata) {
+        return (BiomeLayoutConfiguration) this.f.apply(worlddata);
     }
 }

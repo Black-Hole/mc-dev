@@ -132,7 +132,7 @@ public interface IDispenseBehavior {
                 return itemstack;
             }
         };
-        Iterator iterator = ItemMonsterEgg.d().iterator();
+        Iterator iterator = ItemMonsterEgg.f().iterator();
 
         while (iterator.hasNext()) {
             ItemMonsterEgg itemmonsteregg = (ItemMonsterEgg) iterator.next();
@@ -140,15 +140,35 @@ public interface IDispenseBehavior {
             BlockDispenser.a((IMaterial) itemmonsteregg, (IDispenseBehavior) dispensebehavioritem);
         }
 
+        BlockDispenser.a((IMaterial) Items.ARMOR_STAND, (IDispenseBehavior) (new DispenseBehaviorItem() {
+            @Override
+            public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
+                EnumDirection enumdirection = (EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING);
+                BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
+                World world = isourceblock.getWorld();
+                EntityArmorStand entityarmorstand = new EntityArmorStand(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D);
+
+                EntityTypes.a(world, (EntityHuman) null, (Entity) entityarmorstand, itemstack.getTag());
+                entityarmorstand.yaw = enumdirection.n();
+                world.addEntity(entityarmorstand);
+                itemstack.subtract(1);
+                return itemstack;
+            }
+        }));
         BlockDispenser.a((IMaterial) Items.FIREWORK_ROCKET, (IDispenseBehavior) (new DispenseBehaviorItem() {
             @Override
             public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 EnumDirection enumdirection = (EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING);
-                double d0 = isourceblock.getX() + (double) enumdirection.getAdjacentX();
-                double d1 = (double) ((float) isourceblock.getBlockPosition().getY() + 0.2F);
-                double d2 = isourceblock.getZ() + (double) enumdirection.getAdjacentZ();
+                double d0 = (double) enumdirection.getAdjacentX();
+                double d1 = (double) enumdirection.getAdjacentY();
+                double d2 = (double) enumdirection.getAdjacentZ();
+                double d3 = isourceblock.getX() + d0;
+                double d4 = (double) ((float) isourceblock.getBlockPosition().getY() + 0.2F);
+                double d5 = isourceblock.getZ() + d2;
+                EntityFireworks entityfireworks = new EntityFireworks(isourceblock.getWorld(), itemstack, d3, d4, d5, true);
 
-                isourceblock.getWorld().addEntity(new EntityFireworks(isourceblock.getWorld(), d0, d1, d2, itemstack));
+                entityfireworks.shoot(d0, d1, d2, 0.5F, 1.0F);
+                isourceblock.getWorld().addEntity(entityfireworks);
                 itemstack.subtract(1);
                 return itemstack;
             }
@@ -230,7 +250,7 @@ public interface IDispenseBehavior {
                     if (!(fluidtype instanceof FluidTypeFlowing)) {
                         return super.a(isourceblock, itemstack);
                     } else {
-                        Item item = fluidtype.b();
+                        Item item = fluidtype.a();
 
                         itemstack.subtract(1);
                         if (itemstack.isEmpty()) {
@@ -299,7 +319,7 @@ public interface IDispenseBehavior {
                 EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, (EntityLiving) null);
 
                 world.addEntity(entitytntprimed);
-                world.playSound((EntityHuman) null, entitytntprimed.locX, entitytntprimed.locY, entitytntprimed.locZ, SoundEffects.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.playSound((EntityHuman) null, entitytntprimed.locX(), entitytntprimed.locY(), entitytntprimed.locZ(), SoundEffects.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 itemstack.subtract(1);
                 return itemstack;
             }
@@ -307,7 +327,7 @@ public interface IDispenseBehavior {
         DispenseBehaviorMaybe dispensebehaviormaybe = new DispenseBehaviorMaybe() {
             @Override
             protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-                this.dispensed = !ItemArmor.a(isourceblock, itemstack).isEmpty();
+                this.dispensed = ItemArmor.a(isourceblock, itemstack);
                 return itemstack;
             }
         };
@@ -324,9 +344,8 @@ public interface IDispenseBehavior {
                 EnumDirection enumdirection = (EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING);
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
 
-                this.dispensed = true;
                 if (world.isEmpty(blockposition) && BlockWitherSkull.b(world, blockposition, itemstack)) {
-                    world.setTypeAndData(blockposition, (IBlockData) Blocks.WITHER_SKELETON_SKULL.getBlockData().set(BlockSkull.a, enumdirection.k() == EnumDirection.EnumAxis.Y ? 0 : enumdirection.opposite().get2DRotationValue() * 4), 3);
+                    world.setTypeAndData(blockposition, (IBlockData) Blocks.WITHER_SKELETON_SKULL.getBlockData().set(BlockSkull.a, enumdirection.m() == EnumDirection.EnumAxis.Y ? 0 : enumdirection.opposite().get2DRotationValue() * 4), 3);
                     TileEntity tileentity = world.getTileEntity(blockposition);
 
                     if (tileentity instanceof TileEntitySkull) {
@@ -334,8 +353,9 @@ public interface IDispenseBehavior {
                     }
 
                     itemstack.subtract(1);
-                } else if (ItemArmor.a(isourceblock, itemstack).isEmpty()) {
-                    this.dispensed = false;
+                    this.dispensed = true;
+                } else {
+                    this.dispensed = ItemArmor.a(isourceblock, itemstack);
                 }
 
                 return itemstack;
@@ -348,19 +368,15 @@ public interface IDispenseBehavior {
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
                 BlockPumpkinCarved blockpumpkincarved = (BlockPumpkinCarved) Blocks.CARVED_PUMPKIN;
 
-                this.dispensed = true;
                 if (world.isEmpty(blockposition) && blockpumpkincarved.a((IWorldReader) world, blockposition)) {
                     if (!world.isClientSide) {
                         world.setTypeAndData(blockposition, blockpumpkincarved.getBlockData(), 3);
                     }
 
                     itemstack.subtract(1);
+                    this.dispensed = true;
                 } else {
-                    ItemStack itemstack1 = ItemArmor.a(isourceblock, itemstack);
-
-                    if (itemstack1.isEmpty()) {
-                        this.dispensed = false;
-                    }
+                    this.dispensed = ItemArmor.a(isourceblock, itemstack);
                 }
 
                 return itemstack;
@@ -376,12 +392,48 @@ public interface IDispenseBehavior {
             BlockDispenser.a((IMaterial) BlockShulkerBox.a(enumcolor).getItem(), (IDispenseBehavior) (new DispenseBehaviorShulkerBox()));
         }
 
+        BlockDispenser.a((IMaterial) Items.GLASS_BOTTLE.getItem(), (IDispenseBehavior) (new DispenseBehaviorMaybe() {
+            private final DispenseBehaviorItem c = new DispenseBehaviorItem();
+
+            private ItemStack a(ISourceBlock isourceblock, ItemStack itemstack, ItemStack itemstack1) {
+                itemstack.subtract(1);
+                if (itemstack.isEmpty()) {
+                    return itemstack1.cloneItemStack();
+                } else {
+                    if (((TileEntityDispenser) isourceblock.getTileEntity()).addItem(itemstack1.cloneItemStack()) < 0) {
+                        this.c.dispense(isourceblock, itemstack1.cloneItemStack());
+                    }
+
+                    return itemstack;
+                }
+            }
+
+            @Override
+            public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
+                this.dispensed = false;
+                World world = isourceblock.getWorld();
+                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
+                IBlockData iblockdata = world.getType(blockposition);
+                Block block = iblockdata.getBlock();
+
+                if (block.a(TagsBlock.BEEHIVES) && (Integer) iblockdata.get(BlockBeehive.c) >= 5) {
+                    ((BlockBeehive) iblockdata.getBlock()).a(world.getMinecraftWorld(), iblockdata, blockposition, (EntityHuman) null, TileEntityBeehive.ReleaseStatus.BEE_RELEASED);
+                    this.dispensed = true;
+                    return this.a(isourceblock, itemstack, new ItemStack(Items.pX));
+                } else if (world.getFluid(blockposition).a(TagsFluid.WATER)) {
+                    this.dispensed = true;
+                    return this.a(isourceblock, itemstack, PotionUtil.a(new ItemStack(Items.POTION), Potions.WATER));
+                } else {
+                    return super.a(isourceblock, itemstack);
+                }
+            }
+        }));
         BlockDispenser.a((IMaterial) Items.SHEARS.getItem(), (IDispenseBehavior) (new DispenseBehaviorMaybe() {
             @Override
             protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 World world = isourceblock.getWorld();
 
-                if (!world.e()) {
+                if (!world.p_()) {
                     this.dispensed = false;
                     BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
                     List<EntitySheep> list = world.a(EntitySheep.class, new AxisAlignedBB(blockposition));
@@ -398,6 +450,24 @@ public interface IDispenseBehavior {
 
                             this.dispensed = true;
                             break;
+                        }
+                    }
+
+                    if (!this.dispensed) {
+                        IBlockData iblockdata = world.getType(blockposition);
+
+                        if (iblockdata.a(TagsBlock.BEEHIVES)) {
+                            int k = (Integer) iblockdata.get(BlockBeehive.c);
+
+                            if (k >= 5) {
+                                if (itemstack.isDamaged(1, world.random, (EntityPlayer) null)) {
+                                    itemstack.setCount(0);
+                                }
+
+                                BlockBeehive.a(world, blockposition);
+                                ((BlockBeehive) iblockdata.getBlock()).a(world, iblockdata, blockposition, (EntityHuman) null, TileEntityBeehive.ReleaseStatus.BEE_RELEASED);
+                                this.dispensed = true;
+                            }
                         }
                     }
                 }

@@ -33,7 +33,7 @@ public class SharedConstants {
         return stringbuilder.toString();
     }
 
-    public static GameVersion a() {
+    public static GameVersion getGameVersion() {
         if (SharedConstants.d == null) {
             SharedConstants.d = MinecraftVersion.a();
         }

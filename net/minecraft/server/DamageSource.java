@@ -4,26 +4,26 @@ import javax.annotation.Nullable;
 
 public class DamageSource {
 
-    public static final DamageSource FIRE = (new DamageSource("inFire")).setExplosion();
+    public static final DamageSource FIRE = (new DamageSource("inFire")).setFire();
     public static final DamageSource LIGHTNING = new DamageSource("lightningBolt");
-    public static final DamageSource BURN = (new DamageSource("onFire")).setIgnoreArmor().setExplosion();
-    public static final DamageSource LAVA = (new DamageSource("lava")).setExplosion();
-    public static final DamageSource HOT_FLOOR = (new DamageSource("hotFloor")).setExplosion();
+    public static final DamageSource BURN = (new DamageSource("onFire")).setIgnoreArmor().setFire();
+    public static final DamageSource LAVA = (new DamageSource("lava")).setFire();
+    public static final DamageSource HOT_FLOOR = (new DamageSource("hotFloor")).setFire();
     public static final DamageSource STUCK = (new DamageSource("inWall")).setIgnoreArmor();
     public static final DamageSource CRAMMING = (new DamageSource("cramming")).setIgnoreArmor();
     public static final DamageSource DROWN = (new DamageSource("drown")).setIgnoreArmor();
-    public static final DamageSource STARVE = (new DamageSource("starve")).setIgnoreArmor().n();
+    public static final DamageSource STARVE = (new DamageSource("starve")).setIgnoreArmor().setStarvation();
     public static final DamageSource CACTUS = new DamageSource("cactus");
     public static final DamageSource FALL = (new DamageSource("fall")).setIgnoreArmor();
     public static final DamageSource FLY_INTO_WALL = (new DamageSource("flyIntoWall")).setIgnoreArmor();
-    public static final DamageSource OUT_OF_WORLD = (new DamageSource("outOfWorld")).setIgnoreArmor().m();
+    public static final DamageSource OUT_OF_WORLD = (new DamageSource("outOfWorld")).setIgnoreArmor().setIgnoresInvulnerability();
     public static final DamageSource GENERIC = (new DamageSource("generic")).setIgnoreArmor();
     public static final DamageSource MAGIC = (new DamageSource("magic")).setIgnoreArmor().setMagic();
     public static final DamageSource WITHER = (new DamageSource("wither")).setIgnoreArmor();
     public static final DamageSource ANVIL = new DamageSource("anvil");
     public static final DamageSource FALLING_BLOCK = new DamageSource("fallingBlock");
     public static final DamageSource DRAGON_BREATH = (new DamageSource("dragonBreath")).setIgnoreArmor();
-    public static final DamageSource FIREWORKS = (new DamageSource("fireworks")).e();
+    public static final DamageSource FIREWORKS = (new DamageSource("fireworks")).setExplosion();
     public static final DamageSource DRYOUT = new DamageSource("dryout");
     public static final DamageSource SWEET_BERRY_BUSH = new DamageSource("sweetBerryBush");
     private boolean x;
@@ -36,6 +36,10 @@ public class DamageSource {
     private boolean E;
     private boolean F;
     public final String translationIndex;
+
+    public static DamageSource a(EntityLiving entityliving) {
+        return new EntityDamageSource("sting", entityliving);
+    }
 
     public static DamageSource mobAttack(EntityLiving entityliving) {
         return new EntityDamageSource("mob", entityliving);
@@ -58,7 +62,7 @@ public class DamageSource {
     }
 
     public static DamageSource fireball(EntityFireball entityfireball, @Nullable Entity entity) {
-        return entity == null ? (new EntityDamageSourceIndirect("onFire", entityfireball, entityfireball)).setExplosion().c() : (new EntityDamageSourceIndirect("fireball", entityfireball, entity)).setExplosion().c();
+        return entity == null ? (new EntityDamageSourceIndirect("onFire", entityfireball, entityfireball)).setFire().c() : (new EntityDamageSourceIndirect("fireball", entityfireball, entity)).setFire().c();
     }
 
     public static DamageSource projectile(Entity entity, @Nullable Entity entity1) {
@@ -74,11 +78,11 @@ public class DamageSource {
     }
 
     public static DamageSource explosion(@Nullable Explosion explosion) {
-        return explosion != null && explosion.getSource() != null ? (new EntityDamageSource("explosion.player", explosion.getSource())).r().e() : (new DamageSource("explosion")).r().e();
+        return explosion != null && explosion.getSource() != null ? (new EntityDamageSource("explosion.player", explosion.getSource())).r().setExplosion() : (new DamageSource("explosion")).r().setExplosion();
     }
 
-    public static DamageSource b(@Nullable EntityLiving entityliving) {
-        return entityliving != null ? (new EntityDamageSource("explosion.player", entityliving)).r().e() : (new DamageSource("explosion")).r().e();
+    public static DamageSource c(@Nullable EntityLiving entityliving) {
+        return entityliving != null ? (new EntityDamageSource("explosion.player", entityliving)).r().setExplosion() : (new DamageSource("explosion")).r().setExplosion();
     }
 
     public static DamageSource a() {
@@ -98,7 +102,7 @@ public class DamageSource {
         return this.F;
     }
 
-    public DamageSource e() {
+    public DamageSource setExplosion() {
         this.F = true;
         return this;
     }
@@ -139,18 +143,18 @@ public class DamageSource {
         return this;
     }
 
-    protected DamageSource m() {
+    protected DamageSource setIgnoresInvulnerability() {
         this.y = true;
         return this;
     }
 
-    protected DamageSource n() {
+    protected DamageSource setStarvation() {
         this.z = true;
         this.A = 0.0F;
         return this;
     }
 
-    protected DamageSource setExplosion() {
+    protected DamageSource setFire() {
         this.B = true;
         return this;
     }
@@ -163,7 +167,7 @@ public class DamageSource {
         return entityliving1 != null ? new ChatMessage(s1, new Object[]{entityliving.getScoreboardDisplayName(), entityliving1.getScoreboardDisplayName()}) : new ChatMessage(s, new Object[]{entityliving.getScoreboardDisplayName()});
     }
 
-    public boolean p() {
+    public boolean isFire() {
         return this.B;
     }
 

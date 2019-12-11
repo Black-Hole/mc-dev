@@ -8,12 +8,12 @@ public class BlockIceFrost extends BlockIce {
 
     public BlockIceFrost(Block.Info block_info) {
         super(block_info);
-        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockIceFrost.a, 0));
+        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockIceFrost.a, 0));
     }
 
     @Override
-    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if ((random.nextInt(3) == 0 || this.a(world, blockposition, 4)) && world.getLightLevel(blockposition) > 11 - (Integer) iblockdata.get(BlockIceFrost.a) - iblockdata.b((IBlockAccess) world, blockposition) && this.e(iblockdata, world, blockposition)) {
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if ((random.nextInt(3) == 0 || this.a(worldserver, blockposition, 4)) && worldserver.getLightLevel(blockposition) > 11 - (Integer) iblockdata.get(BlockIceFrost.a) - iblockdata.b((IBlockAccess) worldserver, blockposition) && this.e(iblockdata, (World) worldserver, blockposition)) {
             BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
             Throwable throwable = null;
 
@@ -25,10 +25,10 @@ public class BlockIceFrost extends BlockIce {
                     EnumDirection enumdirection = aenumdirection[j];
 
                     blockposition_pooledblockposition.g(blockposition).c(enumdirection);
-                    IBlockData iblockdata1 = world.getType(blockposition_pooledblockposition);
+                    IBlockData iblockdata1 = worldserver.getType(blockposition_pooledblockposition);
 
-                    if (iblockdata1.getBlock() == this && !this.e(iblockdata1, world, blockposition_pooledblockposition)) {
-                        world.getBlockTickList().a(blockposition_pooledblockposition, this, MathHelper.nextInt(random, 20, 40));
+                    if (iblockdata1.getBlock() == this && !this.e(iblockdata1, (World) worldserver, blockposition_pooledblockposition)) {
+                        worldserver.getBlockTickList().a(blockposition_pooledblockposition, this, MathHelper.nextInt(random, 20, 40));
                     }
                 }
             } catch (Throwable throwable1) {
@@ -50,7 +50,7 @@ public class BlockIceFrost extends BlockIce {
             }
 
         } else {
-            world.getBlockTickList().a(blockposition, this, MathHelper.nextInt(random, 20, 40));
+            worldserver.getBlockTickList().a(blockposition, this, MathHelper.nextInt(random, 20, 40));
         }
     }
 
