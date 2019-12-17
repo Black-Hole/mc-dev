@@ -163,7 +163,7 @@ public class EntityEnderman extends EntityMonster {
             this.damageEntity(DamageSource.DROWN, 1.0F);
         }
 
-        if (this.world.J() && this.ticksLived >= this.bA + 600) {
+        if (this.world.isDay() && this.ticksLived >= this.bA + 600) {
             float f = this.aI();
 
             if (f > 0.5F && this.world.f(new BlockPosition(this)) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {

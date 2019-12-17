@@ -305,12 +305,12 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
         }
     }
 
-    public boolean J() {
+    public boolean isDay() {
         return this.worldProvider.getDimensionManager() == DimensionManager.OVERWORLD && this.c < 4;
     }
 
-    public boolean K() {
-        return this.worldProvider.getDimensionManager() == DimensionManager.OVERWORLD && !this.J();
+    public boolean isNight() {
+        return this.worldProvider.getDimensionManager() == DimensionManager.OVERWORLD && !this.isDay();
     }
 
     @Override

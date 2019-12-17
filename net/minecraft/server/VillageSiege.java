@@ -18,7 +18,7 @@ public class VillageSiege {
     }
 
     public int a(WorldServer worldserver, boolean flag, boolean flag1) {
-        if (!worldserver.J() && flag) {
+        if (!worldserver.isDay() && flag) {
             float f = worldserver.f(0.0F);
 
             if ((double) f == 0.5D) {

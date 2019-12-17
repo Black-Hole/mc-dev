@@ -542,7 +542,7 @@ public class EntityFox extends EntityAnimal {
         if (this.isSleeping()) {
             return SoundEffects.ENTITY_FOX_SLEEP;
         } else {
-            if (!this.world.J() && this.random.nextFloat() < 0.1F) {
+            if (!this.world.isDay() && this.random.nextFloat() < 0.1F) {
                 List<EntityHuman> list = this.world.a(EntityHuman.class, this.getBoundingBox().grow(16.0D, 16.0D, 16.0D), IEntitySelector.f);
 
                 if (list.isEmpty()) {
@@ -1029,7 +1029,7 @@ public class EntityFox extends EntityAnimal {
                 --this.c;
                 return false;
             } else {
-                return EntityFox.this.world.J() && this.g() && !this.h();
+                return EntityFox.this.world.isDay() && this.g() && !this.h();
             }
         }
 
@@ -1099,7 +1099,7 @@ public class EntityFox extends EntityAnimal {
                     this.c = 100;
                     BlockPosition blockposition = new BlockPosition(this.a);
 
-                    return EntityFox.this.world.J() && EntityFox.this.world.f(blockposition) && !((WorldServer) EntityFox.this.world).b_(blockposition) && this.g();
+                    return EntityFox.this.world.isDay() && EntityFox.this.world.f(blockposition) && !((WorldServer) EntityFox.this.world).b_(blockposition) && this.g();
                 }
             } else {
                 return false;

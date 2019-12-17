@@ -258,9 +258,13 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
 
     @Override
     public void close() throws IOException {
-        this.p.close();
-        this.m.close();
-        super.close();
+        try {
+            this.p.close();
+            this.m.close();
+        } finally {
+            super.close();
+        }
+
     }
 
     protected void save(boolean flag) {

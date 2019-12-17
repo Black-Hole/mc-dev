@@ -386,6 +386,10 @@ public final class ItemStack {
 
     public void setTag(@Nullable NBTTagCompound nbttagcompound) {
         this.tag = nbttagcompound;
+        if (this.getItem().usesDurability()) {
+            this.setDamage(this.getDamage());
+        }
+
     }
 
     public IChatBaseComponent getName() {

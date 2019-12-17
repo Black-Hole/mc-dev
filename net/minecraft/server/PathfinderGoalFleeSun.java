@@ -22,7 +22,7 @@ public class PathfinderGoalFleeSun extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        return this.a.getGoalTarget() != null ? false : (!this.f.J() ? false : (!this.a.isBurning() ? false : (!this.f.f(new BlockPosition(this.a)) ? false : (!this.a.getEquipment(EnumItemSlot.HEAD).isEmpty() ? false : this.g()))));
+        return this.a.getGoalTarget() != null ? false : (!this.f.isDay() ? false : (!this.a.isBurning() ? false : (!this.f.f(new BlockPosition(this.a)) ? false : (!this.a.getEquipment(EnumItemSlot.HEAD).isEmpty() ? false : this.g()))));
     }
 
     protected boolean g() {

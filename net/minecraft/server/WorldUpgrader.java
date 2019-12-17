@@ -51,6 +51,7 @@ public class WorldUpgrader {
         this.f.setUncaughtExceptionHandler((thread, throwable) -> {
             WorldUpgrader.LOGGER.error("Error upgrading world", throwable);
             this.o = new ChatMessage("optimizeWorld.stage.failed", new Object[0]);
+            this.i = true;
         });
         this.f.start();
     }

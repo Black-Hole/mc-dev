@@ -416,7 +416,10 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
         this.bK = nbttagcompound.getLong("LastRestock");
         this.bI = nbttagcompound.getLong("LastGossipDecay");
         this.setCanPickupLoot(true);
-        this.a((WorldServer) this.world);
+        if (this.world instanceof WorldServer) {
+            this.a((WorldServer) this.world);
+        }
+
         this.bL = nbttagcompound.getInt("RestocksToday");
     }
 

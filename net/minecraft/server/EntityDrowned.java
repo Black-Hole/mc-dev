@@ -121,7 +121,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
     }
 
     public boolean i(@Nullable EntityLiving entityliving) {
-        return entityliving != null ? !this.world.J() || entityliving.isInWater() : false;
+        return entityliving != null ? !this.world.isDay() || entityliving.isInWater() : false;
     }
 
     @Override
@@ -287,7 +287,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
 
         @Override
         public boolean a() {
-            if (!this.f.J()) {
+            if (!this.f.isDay()) {
                 return false;
             } else if (this.a.isInWater()) {
                 return false;
@@ -343,7 +343,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
 
         @Override
         public boolean a() {
-            return super.a() && !this.g.world.J() && this.g.isInWater() && this.g.locY() >= (double) (this.g.world.getSeaLevel() - 3);
+            return super.a() && !this.g.world.isDay() && this.g.isInWater() && this.g.locY() >= (double) (this.g.world.getSeaLevel() - 3);
         }
 
         @Override
@@ -386,7 +386,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
 
         @Override
         public boolean a() {
-            return !this.a.world.J() && this.a.isInWater() && this.a.locY() < (double) (this.c - 2);
+            return !this.a.world.isDay() && this.a.isInWater() && this.a.locY() < (double) (this.c - 2);
         }
 
         @Override

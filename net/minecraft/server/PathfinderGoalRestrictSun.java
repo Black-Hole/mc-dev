@@ -10,7 +10,7 @@ public class PathfinderGoalRestrictSun extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        return this.a.world.J() && this.a.getEquipment(EnumItemSlot.HEAD).isEmpty() && this.a.getNavigation() instanceof Navigation;
+        return this.a.world.isDay() && this.a.getEquipment(EnumItemSlot.HEAD).isEmpty() && this.a.getNavigation() instanceof Navigation;
     }
 
     @Override

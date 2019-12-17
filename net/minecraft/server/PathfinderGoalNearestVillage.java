@@ -21,7 +21,7 @@ public class PathfinderGoalNearestVillage extends PathfinderGoal {
     public boolean a() {
         if (this.a.isVehicle()) {
             return false;
-        } else if (this.a.world.J()) {
+        } else if (this.a.world.isDay()) {
             return false;
         } else if (this.a.getRandom().nextInt(this.b) != 0) {
             return false;

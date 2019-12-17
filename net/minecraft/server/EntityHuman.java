@@ -123,7 +123,7 @@ public abstract class EntityHuman extends EntityLiving {
                 this.sleepTicks = 100;
             }
 
-            if (!this.world.isClientSide && this.world.J()) {
+            if (!this.world.isClientSide && this.world.isDay()) {
                 this.wakeup(false, true);
             }
         } else if (this.sleepTicks > 0) {
@@ -1151,7 +1151,7 @@ public abstract class EntityHuman extends EntityLiving {
                 return Either.left(EntityHuman.EnumBedResult.NOT_POSSIBLE_HERE);
             }
 
-            if (this.world.J()) {
+            if (this.world.isDay()) {
                 this.setRespawnPosition(blockposition, false, true);
                 return Either.left(EntityHuman.EnumBedResult.NOT_POSSIBLE_NOW);
             }

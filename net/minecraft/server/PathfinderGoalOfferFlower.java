@@ -16,7 +16,7 @@ public class PathfinderGoalOfferFlower extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        if (!this.b.world.J()) {
+        if (!this.b.world.isDay()) {
             return false;
         } else if (this.b.getRandom().nextInt(8000) != 0) {
             return false;

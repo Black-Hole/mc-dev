@@ -47,7 +47,7 @@ public class Block implements IMaterial {
     @Nullable
     private Item x;
     private static final ThreadLocal<Object2ByteLinkedOpenHashMap<Block.a>> y = ThreadLocal.withInitial(() -> {
-        Object2ByteLinkedOpenHashMap<Block.a> object2bytelinkedopenhashmap = new Object2ByteLinkedOpenHashMap<Block.a>(200) {
+        Object2ByteLinkedOpenHashMap<Block.a> object2bytelinkedopenhashmap = new Object2ByteLinkedOpenHashMap<Block.a>(2048, 0.25F) {
             protected void rehash(int i) {}
         };
 

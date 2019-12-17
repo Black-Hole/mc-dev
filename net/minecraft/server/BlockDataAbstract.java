@@ -34,13 +34,11 @@ public abstract class BlockDataAbstract<O, S> implements IBlockDataHolder<S> {
     };
     protected final O a;
     private final ImmutableMap<IBlockState<?>, Comparable<?>> d;
-    private final int e;
-    private Table<IBlockState<?>, Comparable<?>, S> f;
+    private Table<IBlockState<?>, Comparable<?>, S> e;
 
     protected BlockDataAbstract(O o0, ImmutableMap<IBlockState<?>, Comparable<?>> immutablemap) {
         this.a = o0;
         this.d = immutablemap;
-        this.e = immutablemap.hashCode();
     }
 
     public <T extends Comparable<T>> S a(IBlockState<T> iblockstate) {
@@ -104,7 +102,7 @@ public abstract class BlockDataAbstract<O, S> implements IBlockDataHolder<S> {
         } else if (comparable == v0) {
             return this;
         } else {
-            S s0 = this.f.get(iblockstate, v0);
+            S s0 = this.e.get(iblockstate, v0);
 
             if (s0 == null) {
                 throw new IllegalArgumentException("Cannot set property " + iblockstate + " to " + v0 + " on " + this.a + ", it is not an allowed value");
@@ -115,7 +113,7 @@ public abstract class BlockDataAbstract<O, S> implements IBlockDataHolder<S> {
     }
 
     public void a(Map<Map<IBlockState<?>, Comparable<?>>, S> map) {
-        if (this.f != null) {
+        if (this.e != null) {
             throw new IllegalStateException();
         } else {
             Table<IBlockState<?>, Comparable<?>, S> table = HashBasedTable.create();
@@ -135,7 +133,7 @@ public abstract class BlockDataAbstract<O, S> implements IBlockDataHolder<S> {
                 }
             }
 
-            this.f = (Table) (table.isEmpty() ? table : ArrayTable.create(table));
+            this.e = (Table) (table.isEmpty() ? table : ArrayTable.create(table));
         }
     }
 
@@ -149,13 +147,5 @@ public abstract class BlockDataAbstract<O, S> implements IBlockDataHolder<S> {
     @Override
     public ImmutableMap<IBlockState<?>, Comparable<?>> getStateMap() {
         return this.d;
-    }
-
-    public boolean equals(Object object) {
-        return this == object;
-    }
-
-    public int hashCode() {
-        return this.e;
     }
 }

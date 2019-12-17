@@ -21,7 +21,7 @@ public class MobSpawnerPatrol {
                 this.a += 12000 + random.nextInt(1200);
                 long i = worldserver.getDayTime() / 24000L;
 
-                if (i >= 5L && worldserver.J()) {
+                if (i >= 5L && worldserver.isDay()) {
                     if (random.nextInt(5) != 0) {
                         return 0;
                     } else {

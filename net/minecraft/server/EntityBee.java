@@ -228,7 +228,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
 
     private boolean eI() {
         if (this.cannotEnterHiveTicks <= 0 && !this.bJ.k() && !this.hasStung()) {
-            boolean flag = this.canPollinate() || this.world.isRaining() || this.world.K() || this.hasNectar();
+            boolean flag = this.canPollinate() || this.world.isRaining() || this.world.isNight() || this.hasNectar();
 
             return flag && !this.eK();
         } else {

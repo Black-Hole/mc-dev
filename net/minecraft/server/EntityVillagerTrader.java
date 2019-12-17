@@ -18,10 +18,10 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     protected void initPathfinder() {
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(0, new PathfinderGoalUseItem<>(this, PotionUtil.a(new ItemStack(Items.POTION), Potions.INVISIBILITY), SoundEffects.ENTITY_WANDERING_TRADER_DISAPPEARED, (entityvillagertrader) -> {
-            return !this.world.J() && !entityvillagertrader.isInvisible();
+            return !this.world.isDay() && !entityvillagertrader.isInvisible();
         }));
         this.goalSelector.a(0, new PathfinderGoalUseItem<>(this, new ItemStack(Items.MILK_BUCKET), SoundEffects.ENTITY_WANDERING_TRADER_REAPPEARED, (entityvillagertrader) -> {
-            return this.world.J() && entityvillagertrader.isInvisible();
+            return this.world.isDay() && entityvillagertrader.isInvisible();
         }));
         this.goalSelector.a(1, new PathfinderGoalTradeWithPlayer(this));
         this.goalSelector.a(1, new PathfinderGoalAvoidTarget<>(this, EntityZombie.class, 8.0F, 0.5D, 0.5D));

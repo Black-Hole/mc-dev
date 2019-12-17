@@ -338,7 +338,11 @@ public class RegionFile implements AutoCloseable {
             try {
                 this.b();
             } finally {
-                this.dataFile.close();
+                try {
+                    this.dataFile.force(true);
+                } finally {
+                    this.dataFile.close();
+                }
             }
         }
 

@@ -1227,7 +1227,7 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     protected boolean en() {
-        if (this.world.J() && !this.world.isClientSide) {
+        if (this.world.isDay() && !this.world.isClientSide) {
             float f = this.aI();
             BlockPosition blockposition = this.getVehicle() instanceof EntityBoat ? (new BlockPosition(this.locX(), (double) Math.round(this.locY()), this.locZ())).up() : new BlockPosition(this.locX(), (double) Math.round(this.locY()), this.locZ());
 

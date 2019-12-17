@@ -134,7 +134,7 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
     private boolean a(IBlockData iblockdata, NBTTagCompound nbttagcompound, @Nullable List<Entity> list, TileEntityBeehive.ReleaseStatus tileentitybeehive_releasestatus) {
         BlockPosition blockposition = this.getPosition();
 
-        if ((this.world.K() || this.world.isRaining()) && tileentitybeehive_releasestatus != TileEntityBeehive.ReleaseStatus.EMERGENCY) {
+        if ((this.world.isNight() || this.world.isRaining()) && tileentitybeehive_releasestatus != TileEntityBeehive.ReleaseStatus.EMERGENCY) {
             return false;
         } else {
             nbttagcompound.remove("Passengers");

@@ -34,7 +34,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
     @Override
     public boolean a() {
         this.g();
-        if (this.e && this.a.world.J()) {
+        if (this.e && this.a.world.isDay()) {
             return false;
         } else {
             WorldServer worldserver = (WorldServer) this.a.world;
