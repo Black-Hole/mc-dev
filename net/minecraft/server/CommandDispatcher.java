@@ -120,7 +120,6 @@ public class CommandDispatcher {
 
         try {
             byte b1;
-            ChatComponentText chatcomponenttext;
 
             try {
                 int i = this.b.execute(stringreader, commandlistenerwrapper);
@@ -156,30 +155,27 @@ public class CommandDispatcher {
                 b1 = 0;
                 return b1;
             } catch (Exception exception) {
-                chatcomponenttext = new ChatComponentText;
-            }
+                ChatComponentText chatcomponenttext = new ChatComponentText(exception.getMessage() == null ? exception.getClass().getName() : exception.getMessage());
 
-            chatcomponenttext.<init>(exception.getMessage() == null ? exception.getClass().getName() : exception.getMessage());
-            ChatComponentText chatcomponenttext1 = chatcomponenttext;
+                if (CommandDispatcher.LOGGER.isDebugEnabled()) {
+                    CommandDispatcher.LOGGER.error("Command exception: {}", s, exception);
+                    StackTraceElement[] astacktraceelement = exception.getStackTrace();
 
-            if (CommandDispatcher.LOGGER.isDebugEnabled()) {
-                CommandDispatcher.LOGGER.error("Command exception: {}", s, exception);
-                StackTraceElement[] astacktraceelement = exception.getStackTrace();
-
-                for(int k = 0; k < Math.min(astacktraceelement.length, 3); ++k) {
-                    chatcomponenttext1.a("\n\n").a(astacktraceelement[k].getMethodName()).a("\n ").a(astacktraceelement[k].getFileName()).a(":").a(String.valueOf(astacktraceelement[k].getLineNumber()));
+                    for (int k = 0; k < Math.min(astacktraceelement.length, 3); ++k) {
+                        chatcomponenttext.a("\n\n").a(astacktraceelement[k].getMethodName()).a("\n ").a(astacktraceelement[k].getFileName()).a(":").a(String.valueOf(astacktraceelement[k].getLineNumber()));
+                    }
                 }
-            }
 
-            commandlistenerwrapper.sendFailureMessage((new ChatMessage("command.failed", new Object[0])).a((chatmodifier) -> {
-                chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, chatcomponenttext1));
-            }));
-            if (SharedConstants.b) {
-                commandlistenerwrapper.sendFailureMessage(new ChatComponentText(SystemUtils.d(exception)));
-                CommandDispatcher.LOGGER.error("'" + s + "' threw an exception", exception);
-            }
+                commandlistenerwrapper.sendFailureMessage((new ChatMessage("command.failed", new Object[0])).a((chatmodifier) -> {
+                    chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, chatcomponenttext));
+                }));
+                if (SharedConstants.b) {
+                    commandlistenerwrapper.sendFailureMessage(new ChatComponentText(SystemUtils.d(exception)));
+                    CommandDispatcher.LOGGER.error("'" + s + "' threw an exception", exception);
+                }
 
-            b0 = 0;
+                b0 = 0;
+            }
         } finally {
             commandlistenerwrapper.getServer().getMethodProfiler().exit();
         }

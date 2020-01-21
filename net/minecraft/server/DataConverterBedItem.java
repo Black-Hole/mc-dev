@@ -18,7 +18,7 @@ public class DataConverterBedItem extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.r.typeName(), DSL.namespacedString()));
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString()));
 
         return this.fixTypeEverywhereTyped("BedItemColorFix", this.getInputSchema().getType(DataConverterTypes.ITEM_STACK), (typed) -> {
             Optional<Pair<String, String>> optional = typed.getOptional(opticfinder);

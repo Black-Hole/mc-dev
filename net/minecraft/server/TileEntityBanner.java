@@ -1,24 +1,25 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.util.Pair;
 import java.util.List;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 public class TileEntityBanner extends TileEntity implements INamableTileEntity {
 
+    @Nullable
     private IChatBaseComponent a;
+    @Nullable
     public EnumColor color;
+    @Nullable
     public NBTTagList patterns;
     private boolean g;
-    private List<EnumBannerPatternType> h;
-    private List<EnumColor> i;
-    private String j;
-    private boolean k;
+    @Nullable
+    private List<Pair<EnumBannerPatternType, EnumColor>> h;
 
     public TileEntityBanner() {
         super(TileEntityTypes.BANNER);
         this.color = EnumColor.WHITE;
-        this.k = false;
     }
 
     public TileEntityBanner(EnumColor enumcolor) {
@@ -70,8 +71,6 @@ public class TileEntityBanner extends TileEntity implements INamableTileEntity {
 
         this.patterns = nbttagcompound.getList("Patterns", 10);
         this.h = null;
-        this.i = null;
-        this.j = null;
         this.g = true;
     }
 
@@ -86,13 +85,13 @@ public class TileEntityBanner extends TileEntity implements INamableTileEntity {
         return this.save(new NBTTagCompound());
     }
 
-    public static int a(ItemStack itemstack) {
+    public static int b(ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.b("BlockEntityTag");
 
         return nbttagcompound != null && nbttagcompound.hasKey("Patterns") ? nbttagcompound.getList("Patterns", 10).size() : 0;
     }
 
-    public static void b(ItemStack itemstack) {
+    public static void c(ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.b("BlockEntityTag");
 
         if (nbttagcompound != null && nbttagcompound.hasKeyOfType("Patterns", 9)) {

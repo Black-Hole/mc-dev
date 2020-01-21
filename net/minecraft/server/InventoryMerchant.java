@@ -23,7 +23,7 @@ public class InventoryMerchant implements IInventory {
     }
 
     @Override
-    public boolean isNotEmpty() {
+    public boolean isEmpty() {
         Iterator iterator = this.itemsInSlots.iterator();
 
         ItemStack itemstack;

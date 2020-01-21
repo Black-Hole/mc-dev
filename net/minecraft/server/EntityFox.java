@@ -17,8 +17,8 @@ public class EntityFox extends EntityAnimal {
 
     private static final DataWatcherObject<Integer> bw = DataWatcher.a(EntityFox.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Byte> bx = DataWatcher.a(EntityFox.class, DataWatcherRegistry.a);
-    private static final DataWatcherObject<Optional<UUID>> by = DataWatcher.a(EntityFox.class, DataWatcherRegistry.o);
-    private static final DataWatcherObject<Optional<UUID>> bz = DataWatcher.a(EntityFox.class, DataWatcherRegistry.o);
+    public static final DataWatcherObject<Optional<UUID>> FIRST_TRUSTED_PLAYER = DataWatcher.a(EntityFox.class, DataWatcherRegistry.o);
+    public static final DataWatcherObject<Optional<UUID>> SECOND_TRUSTED_PLAYER = DataWatcher.a(EntityFox.class, DataWatcherRegistry.o);
     private static final Predicate<EntityItem> bA = (entityitem) -> {
         return !entityitem.p() && entityitem.isAlive();
     };
@@ -58,8 +58,8 @@ public class EntityFox extends EntityAnimal {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityFox.by, Optional.empty());
-        this.datawatcher.register(EntityFox.bz, Optional.empty());
+        this.datawatcher.register(EntityFox.FIRST_TRUSTED_PLAYER, Optional.empty());
+        this.datawatcher.register(EntityFox.SECOND_TRUSTED_PLAYER, Optional.empty());
         this.datawatcher.register(EntityFox.bw, 0);
         this.datawatcher.register(EntityFox.bx, (byte) 0);
     }
@@ -263,16 +263,16 @@ public class EntityFox extends EntityAnimal {
     private List<UUID> eE() {
         List<UUID> list = Lists.newArrayList();
 
-        list.add(((Optional) this.datawatcher.get(EntityFox.by)).orElse((Object) null));
-        list.add(((Optional) this.datawatcher.get(EntityFox.bz)).orElse((Object) null));
+        list.add(((Optional) this.datawatcher.get(EntityFox.FIRST_TRUSTED_PLAYER)).orElse((Object) null));
+        list.add(((Optional) this.datawatcher.get(EntityFox.SECOND_TRUSTED_PLAYER)).orElse((Object) null));
         return list;
     }
 
     private void b(@Nullable UUID uuid) {
-        if (((Optional) this.datawatcher.get(EntityFox.by)).isPresent()) {
-            this.datawatcher.set(EntityFox.bz, Optional.ofNullable(uuid));
+        if (((Optional) this.datawatcher.get(EntityFox.FIRST_TRUSTED_PLAYER)).isPresent()) {
+            this.datawatcher.set(EntityFox.SECOND_TRUSTED_PLAYER, Optional.ofNullable(uuid));
         } else {
-            this.datawatcher.set(EntityFox.by, Optional.ofNullable(uuid));
+            this.datawatcher.set(EntityFox.FIRST_TRUSTED_PLAYER, Optional.ofNullable(uuid));
         }
 
     }

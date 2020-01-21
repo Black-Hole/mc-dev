@@ -119,7 +119,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         this.setAnger(nbttagcompound.getInt("Anger"));
         this.ticksSincePollination = nbttagcompound.getInt("TicksSincePollination");
         this.cannotEnterHiveTicks = nbttagcompound.getInt("CannotEnterHiveTicks");
-        this.numCropsGrownSincePollination = nbttagcompound.getInt("NumCropsGrownSincePollination");
+        this.numCropsGrownSincePollination = nbttagcompound.getInt("CropsGrownSincePollination");
         String s = nbttagcompound.getString("HurtBy");
 
         if (!s.isEmpty()) {

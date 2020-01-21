@@ -343,7 +343,7 @@ public abstract class TileEntityFurnace extends TileEntityContainer implements I
     }
 
     @Override
-    public boolean isNotEmpty() {
+    public boolean isEmpty() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;

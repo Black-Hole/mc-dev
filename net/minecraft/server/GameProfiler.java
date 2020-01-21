@@ -58,6 +58,18 @@ public class GameProfiler implements GameProfilerFiller {
         this.e.a.exitEnter(s);
     }
 
+    @Override
+    public void c(String s) {
+        this.d.a.c(s);
+        this.e.a.c(s);
+    }
+
+    @Override
+    public void c(Supplier<String> supplier) {
+        this.d.a.c(supplier);
+        this.e.a.c(supplier);
+    }
+
     class b implements GameProfiler.a {
 
         protected GameProfilerFillerActive a;

@@ -67,7 +67,7 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureEmptyC
 
     @Nullable
     @Override
-    public BlockPosition getNearestGeneratedFeature(World world, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, BlockPosition blockposition, int i, boolean flag) {
+    public synchronized BlockPosition getNearestGeneratedFeature(World world, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, BlockPosition blockposition, int i, boolean flag) {
         if (!chunkgenerator.getWorldChunkManager().a(this)) {
             return null;
         } else {

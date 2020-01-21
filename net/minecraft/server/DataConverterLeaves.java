@@ -52,7 +52,7 @@ public class DataConverterLeaves extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<?> type = this.getInputSchema().getType(DataConverterTypes.c);
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.CHUNK);
         OpticFinder<?> opticfinder = type.findField("Level");
         OpticFinder<?> opticfinder1 = opticfinder.type().findField("Sections");
         Type<?> type1 = opticfinder1.type();
@@ -313,9 +313,9 @@ public class DataConverterLeaves extends DataFix {
         protected DataBits d;
 
         public b(Typed<?> typed, Schema schema) {
-            this.e = DSL.named(DataConverterTypes.m.typeName(), DSL.remainderType());
+            this.e = DSL.named(DataConverterTypes.BLOCK_STATE.typeName(), DSL.remainderType());
             this.a = DSL.fieldFinder("Palette", DSL.list(this.e));
-            if (!Objects.equals(schema.getType(DataConverterTypes.m), this.e)) {
+            if (!Objects.equals(schema.getType(DataConverterTypes.BLOCK_STATE), this.e)) {
                 throw new IllegalStateException("Block state type is not what was expected.");
             } else {
                 Optional<List<Pair<String, Dynamic<?>>>> optional = typed.getOptional(this.a);
@@ -346,7 +346,7 @@ public class DataConverterLeaves extends DataFix {
             return this.b() ? typed : typed.update(DSL.remainderFinder(), (dynamic) -> {
                 return dynamic.set("BlockStates", dynamic.createLongList(Arrays.stream(this.d.a())));
             }).set(this.a, this.b.stream().map((dynamic) -> {
-                return Pair.of(DataConverterTypes.m.typeName(), dynamic);
+                return Pair.of(DataConverterTypes.BLOCK_STATE.typeName(), dynamic);
             }).collect(Collectors.toList()));
         }
 

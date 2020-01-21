@@ -15,4 +15,8 @@ public interface GameProfilerFiller {
     void exit();
 
     void exitEnter(String s);
+
+    void c(String s);
+
+    void c(Supplier<String> supplier);
 }

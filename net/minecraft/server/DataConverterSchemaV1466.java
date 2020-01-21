@@ -14,11 +14,11 @@ public class DataConverterSchemaV1466 extends DataConverterSchemaNamed {
 
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
         super.registerTypes(schema, map, map1);
-        schema.registerType(false, DataConverterTypes.c, () -> {
-            return DSL.fields("Level", DSL.optionalFields("Entities", DSL.list(DataConverterTypes.o.in(schema)), "TileEntities", DSL.list(DataConverterTypes.k.in(schema)), "TileTicks", DSL.list(DSL.fields("i", DataConverterTypes.q.in(schema))), "Sections", DSL.list(DSL.optionalFields("Palette", DSL.list(DataConverterTypes.m.in(schema)))), "Structures", DSL.optionalFields("Starts", DSL.compoundList(DataConverterTypes.t.in(schema)))));
+        schema.registerType(false, DataConverterTypes.CHUNK, () -> {
+            return DSL.fields("Level", DSL.optionalFields("Entities", DSL.list(DataConverterTypes.ENTITY_TREE.in(schema)), "TileEntities", DSL.list(DataConverterTypes.BLOCK_ENTITY.in(schema)), "TileTicks", DSL.list(DSL.fields("i", DataConverterTypes.BLOCK_NAME.in(schema))), "Sections", DSL.list(DSL.optionalFields("Palette", DSL.list(DataConverterTypes.BLOCK_STATE.in(schema)))), "Structures", DSL.optionalFields("Starts", DSL.compoundList(DataConverterTypes.STRUCTURE_FEATURE.in(schema)))));
         });
-        schema.registerType(false, DataConverterTypes.t, () -> {
-            return DSL.optionalFields("Children", DSL.list(DSL.optionalFields("CA", DataConverterTypes.m.in(schema), "CB", DataConverterTypes.m.in(schema), "CC", DataConverterTypes.m.in(schema), "CD", DataConverterTypes.m.in(schema))), "biome", DataConverterTypes.x.in(schema));
+        schema.registerType(false, DataConverterTypes.STRUCTURE_FEATURE, () -> {
+            return DSL.optionalFields("Children", DSL.list(DSL.optionalFields("CA", DataConverterTypes.BLOCK_STATE.in(schema), "CB", DataConverterTypes.BLOCK_STATE.in(schema), "CC", DataConverterTypes.BLOCK_STATE.in(schema), "CD", DataConverterTypes.BLOCK_STATE.in(schema))), "biome", DataConverterTypes.BIOME.in(schema));
         });
     }
 

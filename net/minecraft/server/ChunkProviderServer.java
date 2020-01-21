@@ -85,6 +85,9 @@ public class ChunkProviderServer extends IChunkProvider {
                 return this.getChunkAt(i, j, chunkstatus, flag);
             }, this.serverThreadQueue).join();
         } else {
+            GameProfilerFiller gameprofilerfiller = this.world.getMethodProfiler();
+
+            gameprofilerfiller.c("getChunk");
             long k = ChunkCoordIntPair.pair(i, j);
 
             IChunkAccess ichunkaccess;
@@ -98,6 +101,7 @@ public class ChunkProviderServer extends IChunkProvider {
                 }
             }
 
+            gameprofilerfiller.c("getChunkCacheMiss");
             CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> completablefuture = this.getChunkFutureMainThread(i, j, chunkstatus, flag);
 
             this.serverThreadQueue.awaitTasks(completablefuture::isDone);
@@ -121,6 +125,7 @@ public class ChunkProviderServer extends IChunkProvider {
         if (Thread.currentThread() != this.serverThread) {
             return null;
         } else {
+            this.world.getMethodProfiler().c("getChunkNow");
             long k = ChunkCoordIntPair.pair(i, j);
 
             for (int l = 0; l < 4; ++l) {
@@ -383,7 +388,7 @@ public class ChunkProviderServer extends IChunkProvider {
 
     @VisibleForTesting
     public int f() {
-        return this.serverThreadQueue.bg();
+        return this.serverThreadQueue.bh();
     }
 
     public ChunkGenerator<?> getChunkGenerator() {
@@ -492,6 +497,12 @@ public class ChunkProviderServer extends IChunkProvider {
         @Override
         protected Thread getThread() {
             return ChunkProviderServer.this.serverThread;
+        }
+
+        @Override
+        protected void executeTask(Runnable runnable) {
+            ChunkProviderServer.this.world.getMethodProfiler().c("runTask");
+            super.executeTask(runnable);
         }
 
         @Override

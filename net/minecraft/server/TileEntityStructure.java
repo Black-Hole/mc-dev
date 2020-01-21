@@ -18,7 +18,7 @@ public class TileEntityStructure extends TileEntity {
     public BlockPosition size;
     public EnumBlockMirror mirror;
     public EnumBlockRotation rotation;
-    private BlockPropertyStructureMode usageMode;
+    public BlockPropertyStructureMode usageMode;
     public boolean ignoreEntities;
     private boolean powered;
     public boolean showAir;

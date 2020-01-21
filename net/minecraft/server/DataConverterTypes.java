@@ -4,76 +4,76 @@ import com.mojang.datafixers.DSL.TypeReference;
 
 public class DataConverterTypes {
 
-    public static final TypeReference a = () -> {
+    public static final TypeReference LEVEL = () -> {
         return "level";
     };
     public static final TypeReference PLAYER = () -> {
         return "player";
     };
-    public static final TypeReference c = () -> {
+    public static final TypeReference CHUNK = () -> {
         return "chunk";
     };
-    public static final TypeReference d = () -> {
+    public static final TypeReference HOTBAR = () -> {
         return "hotbar";
     };
-    public static final TypeReference e = () -> {
+    public static final TypeReference OPTIONS = () -> {
         return "options";
     };
-    public static final TypeReference f = () -> {
+    public static final TypeReference STRUCTURE = () -> {
         return "structure";
     };
-    public static final TypeReference g = () -> {
+    public static final TypeReference STATS = () -> {
         return "stats";
     };
-    public static final TypeReference h = () -> {
+    public static final TypeReference SAVED_DATA = () -> {
         return "saved_data";
     };
-    public static final TypeReference i = () -> {
+    public static final TypeReference ADVANCEMENTS = () -> {
         return "advancements";
     };
-    public static final TypeReference j = () -> {
+    public static final TypeReference POI_CHUNK = () -> {
         return "poi_chunk";
     };
-    public static final TypeReference k = () -> {
+    public static final TypeReference BLOCK_ENTITY = () -> {
         return "block_entity";
     };
     public static final TypeReference ITEM_STACK = () -> {
         return "item_stack";
     };
-    public static final TypeReference m = () -> {
+    public static final TypeReference BLOCK_STATE = () -> {
         return "block_state";
     };
-    public static final TypeReference n = () -> {
+    public static final TypeReference ENTITY_NAME = () -> {
         return "entity_name";
     };
-    public static final TypeReference o = () -> {
+    public static final TypeReference ENTITY_TREE = () -> {
         return "entity_tree";
     };
     public static final TypeReference ENTITY = () -> {
         return "entity";
     };
-    public static final TypeReference q = () -> {
+    public static final TypeReference BLOCK_NAME = () -> {
         return "block_name";
     };
-    public static final TypeReference r = () -> {
+    public static final TypeReference ITEM_NAME = () -> {
         return "item_name";
     };
-    public static final TypeReference s = () -> {
+    public static final TypeReference UNTAGGED_SPAWNER = () -> {
         return "untagged_spawner";
     };
-    public static final TypeReference t = () -> {
+    public static final TypeReference STRUCTURE_FEATURE = () -> {
         return "structure_feature";
     };
-    public static final TypeReference u = () -> {
+    public static final TypeReference OBJECTIVE = () -> {
         return "objective";
     };
-    public static final TypeReference v = () -> {
+    public static final TypeReference TEAM = () -> {
         return "team";
     };
-    public static final TypeReference w = () -> {
+    public static final TypeReference RECIPE = () -> {
         return "recipe";
     };
-    public static final TypeReference x = () -> {
+    public static final TypeReference BIOME = () -> {
         return "biome";
     };
 }

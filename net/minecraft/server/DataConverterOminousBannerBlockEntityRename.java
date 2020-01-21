@@ -9,7 +9,7 @@ import java.util.Optional;
 public class DataConverterOminousBannerBlockEntityRename extends DataConverterNamedEntity {
 
     public DataConverterOminousBannerBlockEntityRename(Schema schema, boolean flag) {
-        super(schema, flag, "OminousBannerBlockEntityRenameFix", DataConverterTypes.k, "minecraft:banner");
+        super(schema, flag, "OminousBannerBlockEntityRenameFix", DataConverterTypes.BLOCK_ENTITY, "minecraft:banner");
     }
 
     @Override

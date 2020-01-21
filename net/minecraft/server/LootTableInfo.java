@@ -240,7 +240,7 @@ public class LootTableInfo {
 
                     MinecraftServer minecraftserver = this.a.getMinecraftServer();
 
-                    return new LootTableInfo(random, this.e, this.a, minecraftserver.getLootTableRegistry()::getLootTable, minecraftserver.aP()::a, this.b, this.c);
+                    return new LootTableInfo(random, this.e, this.a, minecraftserver.getLootTableRegistry()::getLootTable, minecraftserver.aQ()::a, this.b, this.c);
                 }
             }
         }

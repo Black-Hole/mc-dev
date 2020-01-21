@@ -77,52 +77,56 @@ public class BiomeDecoratorGroups {
     public static final WorldGenFeatureSmallTreeConfigurationConfiguration SPRUCE_TREE = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.SPRUCE_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.SPRUCE_LEAVES), new WorldGenFoilagePlacerSpruce(2, 1))).d(6).b(3).e(1).f(1).h(2).a().b();
     public static final WorldGenFeatureSmallTreeConfigurationConfiguration ACACIA_TREE = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.ACACIA_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.ACACIA_LEAVES), new WorldGenFoilagePlacerAcacia(2, 0))).d(5).b(2).c(2).e(0).a().b();
     public static final WorldGenFeatureSmallTreeConfigurationConfiguration BIRCH_TREE = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BIRCH_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BIRCH_LEAVES), new WorldGenFoilagePlacerBlob(2, 0))).d(5).b(2).i(3).a().b();
-    public static final WorldGenFeatureSmallTreeConfigurationConfiguration TALL_BIRCH_TREE = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BIRCH_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BIRCH_LEAVES), new WorldGenFoilagePlacerBlob(2, 0))).d(5).b(2).c(6).i(3).a().b();
+    public static final WorldGenFeatureSmallTreeConfigurationConfiguration BIRCH_TREE_BEES_0002 = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BIRCH_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BIRCH_LEAVES), new WorldGenFoilagePlacerBlob(2, 0))).d(5).b(2).i(3).a().a(ImmutableList.of(new WorldGenFeatureTreeBeehive(0.002F))).b();
+    public static final WorldGenFeatureSmallTreeConfigurationConfiguration TALL_BIRCH_TREE_BEES_0002 = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BIRCH_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BIRCH_LEAVES), new WorldGenFoilagePlacerBlob(2, 0))).d(5).b(2).c(6).i(3).a().a(ImmutableList.of(new WorldGenFeatureTreeBeehive(0.002F))).b();
     public static final WorldGenFeatureSmallTreeConfigurationConfiguration SWAMP_TREE = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LEAVES), new WorldGenFoilagePlacerBlob(3, 0))).d(5).b(3).i(3).k(1).a(ImmutableList.of(new WorldGenFeatureTreeVineLeaves())).b();
     public static final WorldGenFeatureSmallTreeConfigurationConfiguration FANCY_TREE = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LEAVES), new WorldGenFoilagePlacerBlob(0, 0))).b();
-    public static final WorldGenFeatureSmallTreeConfigurationConfiguration k = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LEAVES), new WorldGenFoilagePlacerBlob(2, 0))).d(4).b(2).i(3).a().a(ImmutableList.of(new WorldGenFeatureTreeBeehive(0.05F))).b();
-    public static final WorldGenFeatureSmallTreeConfigurationConfiguration l = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LEAVES), new WorldGenFoilagePlacerBlob(0, 0))).a(ImmutableList.of(new WorldGenFeatureTreeBeehive(0.05F))).b();
-    public static final WorldGenFeatureSmallTreeConfigurationConfiguration m = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LEAVES), new WorldGenFoilagePlacerBlob(2, 0))).d(4).b(2).i(3).a().a(ImmutableList.of(new WorldGenFeatureTreeBeehive(0.01F))).b();
-    public static final WorldGenFeatureSmallTreeConfigurationConfiguration n = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LEAVES), new WorldGenFoilagePlacerBlob(0, 0))).a(ImmutableList.of(new WorldGenFeatureTreeBeehive(0.01F))).b();
-    public static final WorldGenFeatureSmallTreeConfigurationConfiguration o = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BIRCH_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BIRCH_LEAVES), new WorldGenFoilagePlacerBlob(2, 0))).d(5).b(2).i(3).a().a(ImmutableList.of(new WorldGenFeatureTreeBeehive(0.01F))).b();
+    public static final WorldGenFeatureSmallTreeConfigurationConfiguration NORMAL_TREE_BEES_005 = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LEAVES), new WorldGenFoilagePlacerBlob(2, 0))).d(4).b(2).i(3).a().a(ImmutableList.of(new WorldGenFeatureTreeBeehive(0.05F))).b();
+    public static final WorldGenFeatureSmallTreeConfigurationConfiguration FANCY_TREE_BEES_0002 = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LEAVES), new WorldGenFoilagePlacerBlob(0, 0))).a(ImmutableList.of(new WorldGenFeatureTreeBeehive(0.002F))).b();
+    public static final WorldGenFeatureSmallTreeConfigurationConfiguration FANCY_TREE_BEES_005 = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LEAVES), new WorldGenFoilagePlacerBlob(0, 0))).a(ImmutableList.of(new WorldGenFeatureTreeBeehive(0.05F))).b();
+    public static final WorldGenFeatureSmallTreeConfigurationConfiguration NORMAL_TREE_BEES_0002 = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LEAVES), new WorldGenFoilagePlacerBlob(2, 0))).d(4).b(2).i(3).a().a(ImmutableList.of(new WorldGenFeatureTreeBeehive(0.002F))).b();
+    public static final WorldGenFeatureSmallTreeConfigurationConfiguration NORMAL_TREE_BEES_002 = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LEAVES), new WorldGenFoilagePlacerBlob(2, 0))).d(4).b(2).i(3).a().a(ImmutableList.of(new WorldGenFeatureTreeBeehive(0.02F))).b();
+    public static final WorldGenFeatureSmallTreeConfigurationConfiguration FANCY_TREE_BEES_002 = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LEAVES), new WorldGenFoilagePlacerBlob(0, 0))).a(ImmutableList.of(new WorldGenFeatureTreeBeehive(0.02F))).b();
+    public static final WorldGenFeatureSmallTreeConfigurationConfiguration BIRCH_TREE_BEES_002 = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BIRCH_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BIRCH_LEAVES), new WorldGenFoilagePlacerBlob(2, 0))).d(5).b(2).i(3).a().a(ImmutableList.of(new WorldGenFeatureTreeBeehive(0.02F))).b();
+    public static final WorldGenFeatureSmallTreeConfigurationConfiguration BIRCH_TREE_BEES_005 = (new WorldGenFeatureSmallTreeConfigurationConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BIRCH_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BIRCH_LEAVES), new WorldGenFoilagePlacerBlob(2, 0))).d(5).b(2).i(3).a().a(ImmutableList.of(new WorldGenFeatureTreeBeehive(0.05F))).b();
     public static final WorldGenFeatureTreeConfiguration JUNGLE_BUSH = (new WorldGenFeatureTreeConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.JUNGLE_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.OAK_LEAVES))).d(4).b();
     public static final WorldGenMegaTreeConfiguration DARK_OAK_TREE = (new WorldGenMegaTreeConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.DARK_OAK_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.DARK_OAK_LEAVES))).d(6).b();
     public static final WorldGenMegaTreeConfiguration MEGA_SPRUCE_TREE = (new WorldGenMegaTreeConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.SPRUCE_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.SPRUCE_LEAVES))).d(13).b(15).c(13).a(ImmutableList.of(new WorldGenFeatureTreeAlterGround(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.PODZOL)))).b();
     public static final WorldGenMegaTreeConfiguration MEGA_PINE_TREE = (new WorldGenMegaTreeConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.SPRUCE_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.SPRUCE_LEAVES))).d(13).b(15).c(3).a(ImmutableList.of(new WorldGenFeatureTreeAlterGround(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.PODZOL)))).b();
     public static final WorldGenMegaTreeConfiguration MEGA_JUNGLE_TREE = (new WorldGenMegaTreeConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.JUNGLE_LOG), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.JUNGLE_LEAVES))).d(10).b(20).a(ImmutableList.of(new WorldGenFeatureTreeVineTrunk(), new WorldGenFeatureTreeVineLeaves())).b();
-    public static final WorldGenFeatureRandomPatchConfiguration u = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.GRASS), new WorldGenBlockPlacerSimple())).a(32).d();
-    public static final WorldGenFeatureRandomPatchConfiguration v = (new WorldGenFeatureRandomPatchConfiguration.a((new WorldGenFeatureStateProviderWeighted()).a(BiomeDecoratorGroups.GRASS, 1).a(BiomeDecoratorGroups.FERN, 4), new WorldGenBlockPlacerSimple())).a(32).d();
-    public static final WorldGenFeatureRandomPatchConfiguration w = (new WorldGenFeatureRandomPatchConfiguration.a((new WorldGenFeatureStateProviderWeighted()).a(BiomeDecoratorGroups.GRASS, 3).a(BiomeDecoratorGroups.FERN, 1), new WorldGenBlockPlacerSimple())).b(ImmutableSet.of(BiomeDecoratorGroups.PODZOL)).a(32).d();
-    public static final WorldGenFeatureRandomPatchConfiguration x = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.LILY_OF_THE_VALLEY), new WorldGenBlockPlacerSimple())).a(64).d();
-    public static final WorldGenFeatureRandomPatchConfiguration y = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BLUE_ORCHID), new WorldGenBlockPlacerSimple())).a(64).d();
-    public static final WorldGenFeatureRandomPatchConfiguration z = (new WorldGenFeatureRandomPatchConfiguration.a((new WorldGenFeatureStateProviderWeighted()).a(BiomeDecoratorGroups.POPPY, 2).a(BiomeDecoratorGroups.DANDELION, 1), new WorldGenBlockPlacerSimple())).a(64).d();
-    public static final WorldGenFeatureRandomPatchConfiguration A = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderPlainFlower(), new WorldGenBlockPlacerSimple())).a(64).d();
-    public static final WorldGenFeatureRandomPatchConfiguration B = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderForestFlower(), new WorldGenBlockPlacerSimple())).a(64).d();
-    public static final WorldGenFeatureRandomPatchConfiguration C = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.DEAD_BUSH), new WorldGenBlockPlacerSimple())).a(4).d();
-    public static final WorldGenFeatureRandomPatchConfiguration D = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.MELON), new WorldGenBlockPlacerSimple())).a(64).a(ImmutableSet.of(BiomeDecoratorGroups.GRASS_BLOCK.getBlock())).a().b().d();
-    public static final WorldGenFeatureRandomPatchConfiguration E = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.PUMPKIN), new WorldGenBlockPlacerSimple())).a(64).a(ImmutableSet.of(BiomeDecoratorGroups.GRASS_BLOCK.getBlock())).b().d();
-    public static final WorldGenFeatureRandomPatchConfiguration F = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.SWEET_BERRY_BUSH), new WorldGenBlockPlacerSimple())).a(64).a(ImmutableSet.of(BiomeDecoratorGroups.GRASS_BLOCK.getBlock())).b().d();
-    public static final WorldGenFeatureRandomPatchConfiguration G = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.FIRE), new WorldGenBlockPlacerSimple())).a(64).a(ImmutableSet.of(BiomeDecoratorGroups.NETHERRACK.getBlock())).b().d();
-    public static final WorldGenFeatureRandomPatchConfiguration H = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.LILY_PAD), new WorldGenBlockPlacerSimple())).a(10).d();
-    public static final WorldGenFeatureRandomPatchConfiguration I = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.RED_MUSHROOM), new WorldGenBlockPlacerSimple())).a(64).b().d();
-    public static final WorldGenFeatureRandomPatchConfiguration J = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BROWN_MUSHROOM), new WorldGenBlockPlacerSimple())).a(64).b().d();
-    public static final WorldGenFeatureRandomPatchConfiguration K = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.LILAC), new WorldGenBlockPlacerDoublePlant())).a(64).b().d();
-    public static final WorldGenFeatureRandomPatchConfiguration L = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.ROSE_BUSH), new WorldGenBlockPlacerDoublePlant())).a(64).b().d();
-    public static final WorldGenFeatureRandomPatchConfiguration M = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.PEONY), new WorldGenBlockPlacerDoublePlant())).a(64).b().d();
-    public static final WorldGenFeatureRandomPatchConfiguration N = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.SUNFLOWER), new WorldGenBlockPlacerDoublePlant())).a(64).b().d();
-    public static final WorldGenFeatureRandomPatchConfiguration O = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.TALL_GRASS), new WorldGenBlockPlacerDoublePlant())).a(64).b().d();
-    public static final WorldGenFeatureRandomPatchConfiguration P = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.LARGE_FERN), new WorldGenBlockPlacerDoublePlant())).a(64).b().d();
-    public static final WorldGenFeatureRandomPatchConfiguration Q = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.CACTUS), new WorldGenBlockPlacerColumn(1, 2))).a(10).b().d();
-    public static final WorldGenFeatureRandomPatchConfiguration R = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.SUGAR_CANE), new WorldGenBlockPlacerColumn(2, 2))).a(20).b(4).c(0).d(4).b().c().d();
-    public static final WorldGenFeatureBlockPileConfiguration S = new WorldGenFeatureBlockPileConfiguration(new WorldGenFeatureStateProviderRotatedBlock(Blocks.HAY_BLOCK));
-    public static final WorldGenFeatureBlockPileConfiguration T = new WorldGenFeatureBlockPileConfiguration(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.SNOW));
-    public static final WorldGenFeatureBlockPileConfiguration U = new WorldGenFeatureBlockPileConfiguration(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.MELON));
-    public static final WorldGenFeatureBlockPileConfiguration V = new WorldGenFeatureBlockPileConfiguration((new WorldGenFeatureStateProviderWeighted()).a(BiomeDecoratorGroups.PUMPKIN, 19).a(BiomeDecoratorGroups.JACK_O_LANTERN, 1));
-    public static final WorldGenFeatureBlockPileConfiguration W = new WorldGenFeatureBlockPileConfiguration((new WorldGenFeatureStateProviderWeighted()).a(BiomeDecoratorGroups.BLUE_ICE, 1).a(BiomeDecoratorGroups.PACKED_ICE, 5));
-    public static final WorldGenFeatureHellFlowingLavaConfiguration X = new WorldGenFeatureHellFlowingLavaConfiguration(FluidTypes.WATER.h(), true, 4, 1, ImmutableSet.of(Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE));
-    public static final WorldGenFeatureHellFlowingLavaConfiguration Y = new WorldGenFeatureHellFlowingLavaConfiguration(FluidTypes.LAVA.h(), true, 4, 1, ImmutableSet.of(Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE));
-    public static final WorldGenFeatureHellFlowingLavaConfiguration Z = new WorldGenFeatureHellFlowingLavaConfiguration(FluidTypes.LAVA.h(), false, 4, 1, ImmutableSet.of(Blocks.NETHERRACK));
-    public static final WorldGenFeatureHellFlowingLavaConfiguration aa = new WorldGenFeatureHellFlowingLavaConfiguration(FluidTypes.LAVA.h(), false, 5, 0, ImmutableSet.of(Blocks.NETHERRACK));
+    public static final WorldGenFeatureRandomPatchConfiguration y = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.GRASS), new WorldGenBlockPlacerSimple())).a(32).d();
+    public static final WorldGenFeatureRandomPatchConfiguration z = (new WorldGenFeatureRandomPatchConfiguration.a((new WorldGenFeatureStateProviderWeighted()).a(BiomeDecoratorGroups.GRASS, 1).a(BiomeDecoratorGroups.FERN, 4), new WorldGenBlockPlacerSimple())).a(32).d();
+    public static final WorldGenFeatureRandomPatchConfiguration A = (new WorldGenFeatureRandomPatchConfiguration.a((new WorldGenFeatureStateProviderWeighted()).a(BiomeDecoratorGroups.GRASS, 3).a(BiomeDecoratorGroups.FERN, 1), new WorldGenBlockPlacerSimple())).b(ImmutableSet.of(BiomeDecoratorGroups.PODZOL)).a(32).d();
+    public static final WorldGenFeatureRandomPatchConfiguration B = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.LILY_OF_THE_VALLEY), new WorldGenBlockPlacerSimple())).a(64).d();
+    public static final WorldGenFeatureRandomPatchConfiguration C = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BLUE_ORCHID), new WorldGenBlockPlacerSimple())).a(64).d();
+    public static final WorldGenFeatureRandomPatchConfiguration D = (new WorldGenFeatureRandomPatchConfiguration.a((new WorldGenFeatureStateProviderWeighted()).a(BiomeDecoratorGroups.POPPY, 2).a(BiomeDecoratorGroups.DANDELION, 1), new WorldGenBlockPlacerSimple())).a(64).d();
+    public static final WorldGenFeatureRandomPatchConfiguration E = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderPlainFlower(), new WorldGenBlockPlacerSimple())).a(64).d();
+    public static final WorldGenFeatureRandomPatchConfiguration F = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderForestFlower(), new WorldGenBlockPlacerSimple())).a(64).d();
+    public static final WorldGenFeatureRandomPatchConfiguration G = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.DEAD_BUSH), new WorldGenBlockPlacerSimple())).a(4).d();
+    public static final WorldGenFeatureRandomPatchConfiguration H = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.MELON), new WorldGenBlockPlacerSimple())).a(64).a(ImmutableSet.of(BiomeDecoratorGroups.GRASS_BLOCK.getBlock())).a().b().d();
+    public static final WorldGenFeatureRandomPatchConfiguration I = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.PUMPKIN), new WorldGenBlockPlacerSimple())).a(64).a(ImmutableSet.of(BiomeDecoratorGroups.GRASS_BLOCK.getBlock())).b().d();
+    public static final WorldGenFeatureRandomPatchConfiguration J = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.SWEET_BERRY_BUSH), new WorldGenBlockPlacerSimple())).a(64).a(ImmutableSet.of(BiomeDecoratorGroups.GRASS_BLOCK.getBlock())).b().d();
+    public static final WorldGenFeatureRandomPatchConfiguration K = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.FIRE), new WorldGenBlockPlacerSimple())).a(64).a(ImmutableSet.of(BiomeDecoratorGroups.NETHERRACK.getBlock())).b().d();
+    public static final WorldGenFeatureRandomPatchConfiguration L = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.LILY_PAD), new WorldGenBlockPlacerSimple())).a(10).d();
+    public static final WorldGenFeatureRandomPatchConfiguration M = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.RED_MUSHROOM), new WorldGenBlockPlacerSimple())).a(64).b().d();
+    public static final WorldGenFeatureRandomPatchConfiguration N = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BROWN_MUSHROOM), new WorldGenBlockPlacerSimple())).a(64).b().d();
+    public static final WorldGenFeatureRandomPatchConfiguration O = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.LILAC), new WorldGenBlockPlacerDoublePlant())).a(64).b().d();
+    public static final WorldGenFeatureRandomPatchConfiguration P = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.ROSE_BUSH), new WorldGenBlockPlacerDoublePlant())).a(64).b().d();
+    public static final WorldGenFeatureRandomPatchConfiguration Q = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.PEONY), new WorldGenBlockPlacerDoublePlant())).a(64).b().d();
+    public static final WorldGenFeatureRandomPatchConfiguration R = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.SUNFLOWER), new WorldGenBlockPlacerDoublePlant())).a(64).b().d();
+    public static final WorldGenFeatureRandomPatchConfiguration S = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.TALL_GRASS), new WorldGenBlockPlacerDoublePlant())).a(64).b().d();
+    public static final WorldGenFeatureRandomPatchConfiguration T = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.LARGE_FERN), new WorldGenBlockPlacerDoublePlant())).a(64).b().d();
+    public static final WorldGenFeatureRandomPatchConfiguration U = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.CACTUS), new WorldGenBlockPlacerColumn(1, 2))).a(10).b().d();
+    public static final WorldGenFeatureRandomPatchConfiguration V = (new WorldGenFeatureRandomPatchConfiguration.a(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.SUGAR_CANE), new WorldGenBlockPlacerColumn(2, 2))).a(20).b(4).c(0).d(4).b().c().d();
+    public static final WorldGenFeatureBlockPileConfiguration W = new WorldGenFeatureBlockPileConfiguration(new WorldGenFeatureStateProviderRotatedBlock(Blocks.HAY_BLOCK));
+    public static final WorldGenFeatureBlockPileConfiguration X = new WorldGenFeatureBlockPileConfiguration(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.SNOW));
+    public static final WorldGenFeatureBlockPileConfiguration Y = new WorldGenFeatureBlockPileConfiguration(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.MELON));
+    public static final WorldGenFeatureBlockPileConfiguration Z = new WorldGenFeatureBlockPileConfiguration((new WorldGenFeatureStateProviderWeighted()).a(BiomeDecoratorGroups.PUMPKIN, 19).a(BiomeDecoratorGroups.JACK_O_LANTERN, 1));
+    public static final WorldGenFeatureBlockPileConfiguration aa = new WorldGenFeatureBlockPileConfiguration((new WorldGenFeatureStateProviderWeighted()).a(BiomeDecoratorGroups.BLUE_ICE, 1).a(BiomeDecoratorGroups.PACKED_ICE, 5));
+    public static final WorldGenFeatureHellFlowingLavaConfiguration ab = new WorldGenFeatureHellFlowingLavaConfiguration(FluidTypes.WATER.h(), true, 4, 1, ImmutableSet.of(Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE));
+    public static final WorldGenFeatureHellFlowingLavaConfiguration ac = new WorldGenFeatureHellFlowingLavaConfiguration(FluidTypes.LAVA.h(), true, 4, 1, ImmutableSet.of(Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE));
+    public static final WorldGenFeatureHellFlowingLavaConfiguration ad = new WorldGenFeatureHellFlowingLavaConfiguration(FluidTypes.LAVA.h(), false, 4, 1, ImmutableSet.of(Blocks.NETHERRACK));
+    public static final WorldGenFeatureHellFlowingLavaConfiguration ae = new WorldGenFeatureHellFlowingLavaConfiguration(FluidTypes.LAVA.h(), false, 5, 0, ImmutableSet.of(Blocks.NETHERRACK));
     public static final WorldGenFeatureMushroomConfiguration HUGE_RED_MUSHROOM = new WorldGenFeatureMushroomConfiguration(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.RED_MUSHROOM_BLOCK), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.MUSHROOM_STEM), 2);
     public static final WorldGenFeatureMushroomConfiguration HUGE_BROWN_MUSHROOM = new WorldGenFeatureMushroomConfiguration(new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.BROWN_MUSHROOM_BLOCK), new WorldGenFeatureStateProviderSimpl(BiomeDecoratorGroups.MUSHROOM_STEM), 3);
 
@@ -211,15 +215,15 @@ public class BiomeDecoratorGroups {
     }
 
     public static void o(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.P).a(WorldGenDecorator.d.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(7)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.T).a(WorldGenDecorator.d.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(7)))));
     }
 
     public static void p(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.F).a(WorldGenDecorator.j.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(12)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.J).a(WorldGenDecorator.j.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(12)))));
     }
 
     public static void q(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.F).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.J).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
     }
 
     public static void r(BiomeBase biomebase) {
@@ -228,7 +232,7 @@ public class BiomeDecoratorGroups {
 
     public static void s(BiomeBase biomebase) {
         biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.BAMBOO.b((WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.2F))).a(WorldGenDecorator.x.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorNoiseConfiguration(160, 80.0D, 0.3D, HeightMap.Type.WORLD_SURFACE_WG)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_SELECTOR.b((WorldGenFeatureConfiguration) (new WorldGenFeatureRandomChoiceConfiguration(ImmutableList.of(WorldGenerator.FANCY_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.FANCY_TREE).a(0.05F), WorldGenerator.JUNGLE_GROUND_BUSH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.JUNGLE_BUSH).a(0.15F), WorldGenerator.MEGA_JUNGLE_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.MEGA_JUNGLE_TREE).a(0.7F)), WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.w)))).a(WorldGenDecorator.m.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyExtraChanceConfiguration(30, 0.1F, 1)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_SELECTOR.b((WorldGenFeatureConfiguration) (new WorldGenFeatureRandomChoiceConfiguration(ImmutableList.of(WorldGenerator.FANCY_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.FANCY_TREE).a(0.05F), WorldGenerator.JUNGLE_GROUND_BUSH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.JUNGLE_BUSH).a(0.15F), WorldGenerator.MEGA_JUNGLE_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.MEGA_JUNGLE_TREE).a(0.7F)), WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.A)))).a(WorldGenDecorator.m.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyExtraChanceConfiguration(30, 0.1F, 1)))));
     }
 
     public static void t(BiomeBase biomebase) {
@@ -240,15 +244,15 @@ public class BiomeDecoratorGroups {
     }
 
     public static void v(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.BIRCH_TREE).a(WorldGenDecorator.m.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.BIRCH_TREE_BEES_0002).a(WorldGenDecorator.m.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)))));
     }
 
     public static void w(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_SELECTOR.b((WorldGenFeatureConfiguration) (new WorldGenFeatureRandomChoiceConfiguration(ImmutableList.of(WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.BIRCH_TREE).a(0.2F), WorldGenerator.FANCY_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.FANCY_TREE).a(0.1F)), WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.NORMAL_TREE)))).a(WorldGenDecorator.m.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_SELECTOR.b((WorldGenFeatureConfiguration) (new WorldGenFeatureRandomChoiceConfiguration(ImmutableList.of(WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.BIRCH_TREE_BEES_0002).a(0.2F), WorldGenerator.FANCY_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.FANCY_TREE_BEES_0002).a(0.1F)), WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.NORMAL_TREE_BEES_0002)))).a(WorldGenDecorator.m.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)))));
     }
 
     public static void x(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_SELECTOR.b((WorldGenFeatureConfiguration) (new WorldGenFeatureRandomChoiceConfiguration(ImmutableList.of(WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.TALL_BIRCH_TREE).a(0.5F)), WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.BIRCH_TREE)))).a(WorldGenDecorator.m.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_SELECTOR.b((WorldGenFeatureConfiguration) (new WorldGenFeatureRandomChoiceConfiguration(ImmutableList.of(WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.TALL_BIRCH_TREE_BEES_0002).a(0.5F)), WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.BIRCH_TREE_BEES_0002)))).a(WorldGenDecorator.m.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyExtraChanceConfiguration(10, 0.1F, 1)))));
     }
 
     public static void y(BiomeBase biomebase) {
@@ -292,119 +296,119 @@ public class BiomeDecoratorGroups {
     }
 
     public static void I(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.w).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(25)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.A).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(25)))));
     }
 
     public static void J(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.O).a(WorldGenDecorator.d.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(7)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.S).a(WorldGenDecorator.d.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(7)))));
     }
 
     public static void K(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.u).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(5)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.y).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(5)))));
     }
 
     public static void L(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.u).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(20)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.y).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(20)))));
     }
 
     public static void M(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.u).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.C).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(20)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.y).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.G).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(20)))));
     }
 
     public static void N(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_RANDOM_SELECTOR.b((WorldGenFeatureConfiguration) (new WorldGenFeatureRandomConfiguration(ImmutableList.of(WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.K), WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.L), WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.M), WorldGenerator.FLOWER.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.x)), 0))).a(WorldGenDecorator.d.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(5)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_RANDOM_SELECTOR.b((WorldGenFeatureConfiguration) (new WorldGenFeatureRandomConfiguration(ImmutableList.of(WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.O), WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.P), WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.Q), WorldGenerator.FLOWER.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.B)), 0))).a(WorldGenDecorator.d.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(5)))));
     }
 
     public static void O(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.u).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(2)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.y).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(2)))));
     }
 
     public static void P(BiomeBase biomebase) {
         biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.SWAMP_TREE).a(WorldGenDecorator.m.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyExtraChanceConfiguration(2, 0.1F, 1)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.FLOWER.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.y).a(WorldGenDecorator.d.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.u).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(5)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.C).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.H).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(4)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.J).a(WorldGenDecorator.s.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(8, 0.25F)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.I).a(WorldGenDecorator.t.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(8, 0.125F)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.FLOWER.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.C).a(WorldGenDecorator.d.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.y).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(5)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.G).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.L).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(4)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.N).a(WorldGenDecorator.s.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(8, 0.25F)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.M).a(WorldGenDecorator.t.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(8, 0.125F)))));
     }
 
     public static void Q(BiomeBase biomebase) {
         biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_BOOLEAN_SELECTOR.b((WorldGenFeatureConfiguration) (new WorldGenFeatureChoiceConfiguration(WorldGenerator.HUGE_RED_MUSHROOM.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.HUGE_RED_MUSHROOM), WorldGenerator.HUGE_BROWN_MUSHROOM.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.HUGE_BROWN_MUSHROOM)))).a(WorldGenDecorator.b.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.J).a(WorldGenDecorator.s.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(1, 0.25F)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.I).a(WorldGenDecorator.t.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(1, 0.125F)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.N).a(WorldGenDecorator.s.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(1, 0.25F)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.M).a(WorldGenDecorator.t.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(1, 0.125F)))));
     }
 
     public static void R(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_SELECTOR.b((WorldGenFeatureConfiguration) (new WorldGenFeatureRandomChoiceConfiguration(ImmutableList.of(WorldGenerator.FANCY_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.l).a(0.33333334F)), WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.k)))).a(WorldGenDecorator.m.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyExtraChanceConfiguration(0, 0.05F, 1)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.FLOWER.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.A).a(WorldGenDecorator.g.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenFeatureDecoratorNoiseConfiguration(-0.8D, 15, 4)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.u).a(WorldGenDecorator.h.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenFeatureDecoratorNoiseConfiguration(-0.8D, 5, 10)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_SELECTOR.b((WorldGenFeatureConfiguration) (new WorldGenFeatureRandomChoiceConfiguration(ImmutableList.of(WorldGenerator.FANCY_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.FANCY_TREE_BEES_005).a(0.33333334F)), WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.NORMAL_TREE_BEES_005)))).a(WorldGenDecorator.m.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyExtraChanceConfiguration(0, 0.05F, 1)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.FLOWER.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.E).a(WorldGenDecorator.g.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenFeatureDecoratorNoiseConfiguration(-0.8D, 15, 4)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.y).a(WorldGenDecorator.h.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenFeatureDecoratorNoiseConfiguration(-0.8D, 5, 10)))));
     }
 
     public static void S(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.C).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(2)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.G).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(2)))));
     }
 
     public static void T(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.v).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(7)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.C).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.J).a(WorldGenDecorator.s.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(3, 0.25F)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.I).a(WorldGenDecorator.t.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(3, 0.125F)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.z).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(7)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.G).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.N).a(WorldGenDecorator.s.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(3, 0.25F)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.M).a(WorldGenDecorator.t.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(3, 0.125F)))));
     }
 
     public static void U(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.FLOWER.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.z).a(WorldGenDecorator.d.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(2)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.FLOWER.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.D).a(WorldGenDecorator.d.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(2)))));
     }
 
     public static void V(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.FLOWER.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.z).a(WorldGenDecorator.d.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(4)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.FLOWER.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.D).a(WorldGenDecorator.d.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(4)))));
     }
 
     public static void W(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.u).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.y).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
     }
 
     public static void X(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.v).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.J).a(WorldGenDecorator.s.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(1, 0.25F)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.I).a(WorldGenDecorator.t.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(1, 0.125F)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.z).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.N).a(WorldGenDecorator.s.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(1, 0.25F)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.M).a(WorldGenDecorator.t.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyChanceConfiguration(1, 0.125F)))));
     }
 
     public static void Y(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.O).a(WorldGenDecorator.g.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenFeatureDecoratorNoiseConfiguration(-0.8D, 0, 7)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.S).a(WorldGenDecorator.g.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenFeatureDecoratorNoiseConfiguration(-0.8D, 0, 7)))));
     }
 
     public static void Z(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.J).a(WorldGenDecorator.j.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(4)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.I).a(WorldGenDecorator.j.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(8)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.N).a(WorldGenDecorator.j.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(4)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.M).a(WorldGenDecorator.j.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(8)))));
     }
 
     public static void aa(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.R).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(10)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.E).a(WorldGenDecorator.j.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(32)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.V).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(10)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.I).a(WorldGenDecorator.j.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(32)))));
     }
 
     public static void ab(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.R).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(13)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.E).a(WorldGenDecorator.j.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(32)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.Q).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(5)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.V).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(13)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.I).a(WorldGenDecorator.j.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(32)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.U).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(5)))));
     }
 
     public static void ac(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.D).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.H).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(1)))));
         biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.VINES.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e).a(WorldGenDecorator.f.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(50)))));
     }
 
     public static void ad(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.R).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(60)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.E).a(WorldGenDecorator.j.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(32)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.Q).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(10)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.V).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(60)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.I).a(WorldGenDecorator.j.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(32)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.U).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(10)))));
     }
 
     public static void ae(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.R).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(20)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.E).a(WorldGenDecorator.j.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(32)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.V).a(WorldGenDecorator.e.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorFrequencyConfiguration(20)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.RANDOM_PATCH.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.I).a(WorldGenDecorator.j.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(32)))));
     }
 
     public static void af(BiomeBase biomebase) {
@@ -437,8 +441,8 @@ public class BiomeDecoratorGroups {
     }
 
     public static void am(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.SPRING_FEATURE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.X).a(WorldGenDecorator.o.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)))));
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.SPRING_FEATURE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.Y).a(WorldGenDecorator.p.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.SPRING_FEATURE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.ab).a(WorldGenDecorator.o.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)))));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, WorldGenerator.SPRING_FEATURE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.ac).a(WorldGenDecorator.p.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)))));
     }
 
     public static void an(BiomeBase biomebase) {

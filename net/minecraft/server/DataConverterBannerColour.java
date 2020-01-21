@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 public class DataConverterBannerColour extends DataConverterNamedEntity {
 
     public DataConverterBannerColour(Schema schema, boolean flag) {
-        super(schema, flag, "BlockEntityBannerColorFix", DataConverterTypes.k, "minecraft:banner");
+        super(schema, flag, "BlockEntityBannerColorFix", DataConverterTypes.BLOCK_ENTITY, "minecraft:banner");
     }
 
     public Dynamic<?> a(Dynamic<?> dynamic) {

@@ -20,7 +20,7 @@ public class ItemFlintAndSteel extends Item {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.r, true), 11);
             if (entityhuman != null) {
                 itemactioncontext.getItemStack().damage(1, entityhuman, (entityhuman1) -> {
-                    entityhuman1.d(itemactioncontext.n());
+                    entityhuman1.broadcastItemBreak(itemactioncontext.getHand());
                 });
             }
 
@@ -38,7 +38,7 @@ public class ItemFlintAndSteel extends Item {
                 if (entityhuman instanceof EntityPlayer) {
                     CriterionTriggers.y.a((EntityPlayer) entityhuman, blockposition1, itemstack);
                     itemstack.damage(1, entityhuman, (entityhuman1) -> {
-                        entityhuman1.d(itemactioncontext.n());
+                        entityhuman1.broadcastItemBreak(itemactioncontext.getHand());
                     });
                 }
 

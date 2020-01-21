@@ -17,10 +17,10 @@ public class DataConverterBlockName extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type<?> type = this.getInputSchema().getType(DataConverterTypes.q);
-        Type<?> type1 = this.getOutputSchema().getType(DataConverterTypes.q);
-        Type<Pair<String, Either<Integer, String>>> type2 = DSL.named(DataConverterTypes.q.typeName(), DSL.or(DSL.intType(), DSL.namespacedString()));
-        Type<Pair<String, String>> type3 = DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString());
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.BLOCK_NAME);
+        Type<?> type1 = this.getOutputSchema().getType(DataConverterTypes.BLOCK_NAME);
+        Type<Pair<String, Either<Integer, String>>> type2 = DSL.named(DataConverterTypes.BLOCK_NAME.typeName(), DSL.or(DSL.intType(), DSL.namespacedString()));
+        Type<Pair<String, String>> type3 = DSL.named(DataConverterTypes.BLOCK_NAME.typeName(), DSL.namespacedString());
 
         if (Objects.equals(type, type2) && Objects.equals(type1, type3)) {
             return this.fixTypeEverywhere("BlockNameFlatteningFix", type2, type3, (dynamicops) -> {

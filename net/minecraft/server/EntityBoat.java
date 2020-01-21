@@ -374,7 +374,7 @@ public class EntityBoat extends Entity {
         Throwable throwable = null;
 
         try {
-            label161:
+            label159:
             for (int k1 = k; k1 < l; ++k1) {
                 float f = 0.0F;
 
@@ -388,7 +388,7 @@ public class EntityBoat extends Entity {
                         }
 
                         if (f >= 1.0F) {
-                            continue label161;
+                            continue label159;
                         }
                     }
                 }

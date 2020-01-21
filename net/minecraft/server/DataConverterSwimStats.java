@@ -15,8 +15,8 @@ public class DataConverterSwimStats extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<?> type = this.getOutputSchema().getType(DataConverterTypes.g);
-        Type<?> type1 = this.getInputSchema().getType(DataConverterTypes.g);
+        Type<?> type = this.getOutputSchema().getType(DataConverterTypes.STATS);
+        Type<?> type1 = this.getInputSchema().getType(DataConverterTypes.STATS);
         OpticFinder<?> opticfinder = type1.findField("stats");
         OpticFinder<?> opticfinder1 = opticfinder.type().findField("minecraft:custom");
         OpticFinder<String> opticfinder2 = DSL.namespacedString().finder();

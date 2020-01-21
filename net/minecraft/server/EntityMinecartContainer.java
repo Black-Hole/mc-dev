@@ -33,7 +33,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
     }
 
     @Override
-    public boolean isNotEmpty() {
+    public boolean isEmpty() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;

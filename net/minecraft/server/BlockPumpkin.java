@@ -22,7 +22,7 @@ public class BlockPumpkin extends BlockStemmed {
                 entityitem.setMot(0.05D * (double) enumdirection1.getAdjacentX() + world.random.nextDouble() * 0.02D, 0.05D, 0.05D * (double) enumdirection1.getAdjacentZ() + world.random.nextDouble() * 0.02D);
                 world.addEntity(entityitem);
                 itemstack.damage(1, entityhuman, (entityhuman1) -> {
-                    entityhuman1.d(enumhand);
+                    entityhuman1.broadcastItemBreak(enumhand);
                 });
             }
 

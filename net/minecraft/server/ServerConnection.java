@@ -37,8 +37,8 @@ public class ServerConnection {
     });
     private final MinecraftServer e;
     public volatile boolean c;
-    private final List<ChannelFuture> f = Collections.synchronizedList(Lists.newArrayList());
-    private final List<NetworkManager> listeningChannels = Collections.synchronizedList(Lists.newArrayList());
+    private final List<ChannelFuture> listeningChannels = Collections.synchronizedList(Lists.newArrayList());
+    private final List<NetworkManager> connectedChannels = Collections.synchronizedList(Lists.newArrayList());
 
     public ServerConnection(MinecraftServer minecraftserver) {
         this.e = minecraftserver;
@@ -46,9 +46,9 @@ public class ServerConnection {
     }
 
     public void a(@Nullable InetAddress inetaddress, int i) throws IOException {
-        List list = this.f;
+        List list = this.listeningChannels;
 
-        synchronized (this.f) {
+        synchronized (this.listeningChannels) {
             Class oclass;
             LazyInitVar lazyinitvar;
 
@@ -62,7 +62,7 @@ public class ServerConnection {
                 ServerConnection.LOGGER.info("Using default channel type");
             }
 
-            this.f.add(((ServerBootstrap) ((ServerBootstrap) (new ServerBootstrap()).channel(oclass)).childHandler(new ChannelInitializer<Channel>() {
+            this.listeningChannels.add(((ServerBootstrap) ((ServerBootstrap) (new ServerBootstrap()).channel(oclass)).childHandler(new ChannelInitializer<Channel>() {
                 protected void initChannel(Channel channel) throws Exception {
                     try {
                         channel.config().setOption(ChannelOption.TCP_NODELAY, true);
@@ -73,7 +73,7 @@ public class ServerConnection {
                     channel.pipeline().addLast("timeout", new ReadTimeoutHandler(30)).addLast("legacy_query", new LegacyPingHandler(ServerConnection.this)).addLast("splitter", new PacketSplitter()).addLast("decoder", new PacketDecoder(EnumProtocolDirection.SERVERBOUND)).addLast("prepender", new PacketPrepender()).addLast("encoder", new PacketEncoder(EnumProtocolDirection.CLIENTBOUND));
                     NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
 
-                    ServerConnection.this.listeningChannels.add(networkmanager);
+                    ServerConnection.this.connectedChannels.add(networkmanager);
                     channel.pipeline().addLast("packet_handler", networkmanager);
                     networkmanager.setPacketListener(new HandshakeListener(ServerConnection.this.e, networkmanager));
                 }
@@ -83,7 +83,7 @@ public class ServerConnection {
 
     public void b() {
         this.c = false;
-        Iterator iterator = this.f.iterator();
+        Iterator iterator = this.listeningChannels.iterator();
 
         while (iterator.hasNext()) {
             ChannelFuture channelfuture = (ChannelFuture) iterator.next();
@@ -98,10 +98,10 @@ public class ServerConnection {
     }
 
     public void c() {
-        List list = this.listeningChannels;
+        List list = this.connectedChannels;
 
-        synchronized (this.listeningChannels) {
-            Iterator iterator = this.listeningChannels.iterator();
+        synchronized (this.connectedChannels) {
+            Iterator iterator = this.connectedChannels.iterator();
 
             while (iterator.hasNext()) {
                 NetworkManager networkmanager = (NetworkManager) iterator.next();

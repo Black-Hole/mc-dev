@@ -4,7 +4,7 @@ import com.mojang.datafixers.DSL.TypeReference;
 
 public enum DataFixTypes {
 
-    LEVEL(DataConverterTypes.a), PLAYER(DataConverterTypes.PLAYER), CHUNK(DataConverterTypes.c), HOTBAR(DataConverterTypes.d), OPTIONS(DataConverterTypes.e), STRUCTURE(DataConverterTypes.f), STATS(DataConverterTypes.g), SAVED_DATA(DataConverterTypes.h), ADVANCEMENTS(DataConverterTypes.i), POI_CHUNK(DataConverterTypes.j);
+    LEVEL(DataConverterTypes.LEVEL), PLAYER(DataConverterTypes.PLAYER), CHUNK(DataConverterTypes.CHUNK), HOTBAR(DataConverterTypes.HOTBAR), OPTIONS(DataConverterTypes.OPTIONS), STRUCTURE(DataConverterTypes.STRUCTURE), STATS(DataConverterTypes.STATS), SAVED_DATA(DataConverterTypes.SAVED_DATA), ADVANCEMENTS(DataConverterTypes.ADVANCEMENTS), POI_CHUNK(DataConverterTypes.POI_CHUNK);
 
     private final TypeReference k;
 

@@ -41,7 +41,7 @@ public class CustomFunctionData implements IResourcePackListener {
         return Optional.ofNullable(this.g.get(minecraftkey));
     }
 
-    public MinecraftServer a() {
+    public MinecraftServer getServer() {
         return this.server;
     }
 
@@ -53,7 +53,7 @@ public class CustomFunctionData implements IResourcePackListener {
         return this.g;
     }
 
-    public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> d() {
+    public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> getCommandDispatcher() {
         return this.server.getCommandDispatcher().a();
     }
 
@@ -101,18 +101,23 @@ public class CustomFunctionData implements IResourcePackListener {
 
             return 0;
         } else {
+            int j;
+
             try {
                 this.h = true;
-                int j = 0;
+                int k = 0;
                 CustomFunction.c[] acustomfunction_c = customfunction.b();
 
-                int k;
-
-                for (k = acustomfunction_c.length - 1; k >= 0; --k) {
-                    this.i.push(new CustomFunctionData.a(this, commandlistenerwrapper, acustomfunction_c[k]));
+                for (j = acustomfunction_c.length - 1; j >= 0; --j) {
+                    this.i.push(new CustomFunctionData.a(this, commandlistenerwrapper, acustomfunction_c[j]));
                 }
 
-                while (!this.i.isEmpty()) {
+                do {
+                    if (this.i.isEmpty()) {
+                        j = k;
+                        return j;
+                    }
+
                     try {
                         CustomFunctionData.a customfunctiondata_a = (CustomFunctionData.a) this.i.removeFirst();
 
@@ -130,20 +135,17 @@ public class CustomFunctionData implements IResourcePackListener {
                         this.server.getMethodProfiler().exit();
                     }
 
-                    ++j;
-                    if (j >= i) {
-                        k = j;
-                        return k;
-                    }
-                }
+                    ++k;
+                } while (k < i);
 
-                k = j;
-                return k;
+                j = k;
             } finally {
                 this.i.clear();
                 this.j.clear();
                 this.h = false;
             }
+
+            return j;
         }
     }
 
@@ -166,7 +168,7 @@ public class CustomFunctionData implements IResourcePackListener {
                 return a(iresourcemanager, minecraftkey);
             }, Resource.a).thenApplyAsync((list1) -> {
                 return CustomFunction.a(minecraftkey1, this, list1);
-            }, this.server.aW()).handle((customfunction, throwable) -> {
+            }, this.server.aX()).handle((customfunction, throwable) -> {
                 return this.a(customfunction, throwable, minecraftkey);
             }));
         }
@@ -176,7 +178,7 @@ public class CustomFunctionData implements IResourcePackListener {
             CustomFunctionData.LOGGER.info("Loaded {} custom command functions", this.g.size());
         }
 
-        this.k.a((Map) this.k.a(iresourcemanager, this.server.aW()).join());
+        this.k.a((Map) this.k.a(iresourcemanager, this.server.aX()).join());
         this.l.addAll(this.k.b(CustomFunctionData.d).a());
         this.m = true;
     }

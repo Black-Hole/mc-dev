@@ -36,7 +36,7 @@ public class ItemAxe extends ItemTool {
                 world.setTypeAndData(blockposition, (IBlockData) block.getBlockData().set(BlockRotatable.AXIS, iblockdata.get(BlockRotatable.AXIS)), 11);
                 if (entityhuman != null) {
                     itemactioncontext.getItemStack().damage(1, entityhuman, (entityhuman1) -> {
-                        entityhuman1.d(itemactioncontext.n());
+                        entityhuman1.broadcastItemBreak(itemactioncontext.getHand());
                     });
                 }
             }

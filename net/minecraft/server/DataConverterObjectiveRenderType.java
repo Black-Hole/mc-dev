@@ -22,9 +22,9 @@ public class DataConverterObjectiveRenderType extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<Pair<String, Dynamic<?>>> type = DSL.named(DataConverterTypes.u.typeName(), DSL.remainderType());
+        Type<Pair<String, Dynamic<?>>> type = DSL.named(DataConverterTypes.OBJECTIVE.typeName(), DSL.remainderType());
 
-        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.u))) {
+        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.OBJECTIVE))) {
             throw new IllegalStateException("Objective type is not what was expected.");
         } else {
             return this.fixTypeEverywhere("ObjectiveRenderTypeFix", type, (dynamicops) -> {

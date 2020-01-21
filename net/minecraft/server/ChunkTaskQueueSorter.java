@@ -27,7 +27,7 @@ public class ChunkTaskQueueSorter implements AutoCloseable, PlayerChunk.c {
 
     public ChunkTaskQueueSorter(List<Mailbox<?>> list, Executor executor, int i) {
         this.b = (Map) list.stream().collect(Collectors.toMap(Function.identity(), (mailbox) -> {
-            return new ChunkTaskQueue<>(mailbox.bh() + "_queue", i);
+            return new ChunkTaskQueue<>(mailbox.bi() + "_queue", i);
         }));
         this.c = Sets.newHashSet(list);
         this.d = new ThreadedMailbox<>(new PairedQueue.a(4), executor, "sorter");
@@ -57,7 +57,7 @@ public class ChunkTaskQueueSorter implements AutoCloseable, PlayerChunk.c {
         return (Mailbox) this.d.a((mailbox1) -> {
             return new PairedQueue.b(0, () -> {
                 this.b(mailbox);
-                mailbox1.a((Object) Mailbox.a("chunk priority sorter around " + mailbox.bh(), (chunktaskqueuesorter_a) -> {
+                mailbox1.a((Object) Mailbox.a("chunk priority sorter around " + mailbox.bi(), (chunktaskqueuesorter_a) -> {
                     this.a(mailbox, chunktaskqueuesorter_a.a, chunktaskqueuesorter_a.b, chunktaskqueuesorter_a.c, flag);
                 }));
             });
@@ -67,7 +67,7 @@ public class ChunkTaskQueueSorter implements AutoCloseable, PlayerChunk.c {
     public Mailbox<ChunkTaskQueueSorter.b> a(Mailbox<Runnable> mailbox) {
         return (Mailbox) this.d.a((mailbox1) -> {
             return new PairedQueue.b(0, () -> {
-                mailbox1.a((Object) Mailbox.a("chunk priority sorter around " + mailbox.bh(), (chunktaskqueuesorter_b) -> {
+                mailbox1.a((Object) Mailbox.a("chunk priority sorter around " + mailbox.bi(), (chunktaskqueuesorter_b) -> {
                     this.a(mailbox, chunktaskqueuesorter_b.b, chunktaskqueuesorter_b.a, chunktaskqueuesorter_b.c);
                 }));
             });
@@ -149,7 +149,7 @@ public class ChunkTaskQueueSorter implements AutoCloseable, PlayerChunk.c {
     @VisibleForTesting
     public String a() {
         return (String) this.b.entrySet().stream().map((entry) -> {
-            return ((Mailbox) entry.getKey()).bh() + "=[" + (String) ((ChunkTaskQueue) entry.getValue()).b().stream().map((olong) -> {
+            return ((Mailbox) entry.getKey()).bi() + "=[" + (String) ((ChunkTaskQueue) entry.getValue()).b().stream().map((olong) -> {
                 return olong + ":" + new ChunkCoordIntPair(olong);
             }).collect(Collectors.joining(",")) + "]";
         }).collect(Collectors.joining(",")) + ", s=" + this.c.size();

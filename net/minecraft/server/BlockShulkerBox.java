@@ -83,7 +83,7 @@ public class BlockShulkerBox extends BlockTileEntity {
         if (tileentity instanceof TileEntityShulkerBox) {
             TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) tileentity;
 
-            if (!world.isClientSide && entityhuman.isCreative() && !tileentityshulkerbox.isNotEmpty()) {
+            if (!world.isClientSide && entityhuman.isCreative() && !tileentityshulkerbox.isEmpty()) {
                 ItemStack itemstack = b(this.c());
                 NBTTagCompound nbttagcompound = tileentityshulkerbox.g(new NBTTagCompound());
 

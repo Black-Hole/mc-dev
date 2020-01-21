@@ -124,10 +124,10 @@ public class BlockCauldron extends Block {
                     }
 
                     if (i > 0 && item instanceof ItemBanner) {
-                        if (TileEntityBanner.a(itemstack) > 0 && !world.isClientSide) {
+                        if (TileEntityBanner.b(itemstack) > 0 && !world.isClientSide) {
                             itemstack1 = itemstack.cloneItemStack();
                             itemstack1.setCount(1);
-                            TileEntityBanner.b(itemstack1);
+                            TileEntityBanner.c(itemstack1);
                             entityhuman.a(StatisticList.CLEAN_BANNER);
                             if (!entityhuman.abilities.canInstantlyBuild) {
                                 itemstack.subtract(1);

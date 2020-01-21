@@ -38,7 +38,7 @@ public class ItemTrident extends Item {
                 if (k <= 0 || entityhuman.isInWaterOrRain()) {
                     if (!world.isClientSide) {
                         itemstack.damage(1, entityhuman, (entityhuman1) -> {
-                            entityhuman1.d(entityliving.getRaisedHand());
+                            entityhuman1.broadcastItemBreak(entityliving.getRaisedHand());
                         });
                         if (k == 0) {
                             EntityThrownTrident entitythrowntrident = new EntityThrownTrident(world, entityhuman, itemstack);
@@ -100,19 +100,19 @@ public class ItemTrident extends Item {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (itemstack.getDamage() >= itemstack.h() - 1) {
-            return InteractionResultWrapper.d(itemstack);
+            return InteractionResultWrapper.fail(itemstack);
         } else if (EnchantmentManager.g(itemstack) > 0 && !entityhuman.isInWaterOrRain()) {
-            return InteractionResultWrapper.d(itemstack);
+            return InteractionResultWrapper.fail(itemstack);
         } else {
             entityhuman.c(enumhand);
-            return InteractionResultWrapper.b(itemstack);
+            return InteractionResultWrapper.consume(itemstack);
         }
     }
 
     @Override
     public boolean a(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1) {
         itemstack.damage(1, entityliving1, (entityliving2) -> {
-            entityliving2.c(EnumItemSlot.MAINHAND);
+            entityliving2.broadcastItemBreak(EnumItemSlot.MAINHAND);
         });
         return true;
     }
@@ -121,7 +121,7 @@ public class ItemTrident extends Item {
     public boolean a(ItemStack itemstack, World world, IBlockData iblockdata, BlockPosition blockposition, EntityLiving entityliving) {
         if ((double) iblockdata.f(world, blockposition) != 0.0D) {
             itemstack.damage(2, entityliving, (entityliving1) -> {
-                entityliving1.c(EnumItemSlot.MAINHAND);
+                entityliving1.broadcastItemBreak(EnumItemSlot.MAINHAND);
             });
         }
 

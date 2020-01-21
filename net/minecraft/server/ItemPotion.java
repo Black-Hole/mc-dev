@@ -65,7 +65,7 @@ public class ItemPotion extends Item {
     @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         entityhuman.c(enumhand);
-        return InteractionResultWrapper.a(entityhuman.b(enumhand));
+        return InteractionResultWrapper.success(entityhuman.b(enumhand));
     }
 
     @Override

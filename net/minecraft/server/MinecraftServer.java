@@ -67,7 +67,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     private final MojangStatisticsGenerator snooper = new MojangStatisticsGenerator("server", this, SystemUtils.getMonotonicMillis());
     public File universe;
     private final List<Runnable> tickables = Lists.newArrayList();
-    private final GameProfiler methodProfiler = new GameProfiler(this::aj);
+    private final GameProfiler methodProfiler = new GameProfiler(this::ak);
     private ServerConnection serverConnection;
     public final WorldLoadListenerFactory worldLoadListenerFactory;
     private final ServerPing serverPing = new ServerPing();
@@ -281,6 +281,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
             worldsettings = new WorldSettings(worlddata);
         }
 
+        worlddata.a(this.getServerModName(), this.q().isPresent());
         this.a(worldnbtstorage.getDirectory(), worlddata);
         WorldLoadListener worldloadlistener = this.worldLoadListenerFactory.create(11);
 
@@ -352,7 +353,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         worlddata.g(1000000000);
         worlddata.setDayTime(6000L);
         worlddata.setGameType(EnumGamemode.SPECTATOR);
-        worlddata.g(false);
+        worlddata.setHardcore(false);
         worlddata.setDifficulty(EnumDifficulty.PEACEFUL);
         worlddata.e(true);
         ((GameRules.GameRuleBoolean) worlddata.v().get(GameRules.DO_DAYLIGHT_CYCLE)).a(false, this);
@@ -379,7 +380,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
         this.resourcePackRepository.a((Collection) list);
         this.b(worlddata);
-        this.ba();
+        this.bb();
     }
 
     public void loadSpawn(WorldLoadListener worldloadlistener) {
@@ -603,7 +604,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
                 crashreport = this.b(new CrashReport("Exception in server tick loop", throwable));
             }
 
-            File file = new File(new File(this.y(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
+            File file = new File(new File(this.z(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
 
             if (crashreport.a(file)) {
                 MinecraftServer.LOGGER.error("This crash report has been saved to: {}", file.getAbsolutePath());
@@ -648,13 +649,13 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     @Override
     public boolean executeNext() {
-        boolean flag = this.aZ();
+        boolean flag = this.ba();
 
         this.ac = flag;
         return flag;
     }
 
-    private boolean aZ() {
+    private boolean ba() {
         if (super.executeNext()) {
             return true;
         } else {
@@ -672,6 +673,11 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
             return false;
         }
+    }
+
+    protected void c(TickTask ticktask) {
+        this.getMethodProfiler().c("runTask");
+        super.executeTask(ticktask);
     }
 
     public void a(ServerPing serverping) {
@@ -702,7 +708,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     }
 
-    public File y() {
+    public File z() {
         return new File(".");
     }
 
@@ -859,6 +865,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
                 return;
             }
 
+            CrashReport.h();
             DispenserRegistry.init();
             DispenserRegistry.c();
             String s = (String) optionset.valueOf(optionspec8);
@@ -879,7 +886,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
             boolean flag = !optionset.has(optionspec) && !optionset.valuesOf(nonoptionargumentspec).contains("nogui");
 
             if (flag && !GraphicsEnvironment.isHeadless()) {
-                dedicatedserver.bb();
+                dedicatedserver.bc();
             }
 
             dedicatedserver.startServerThread();
@@ -914,7 +921,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public File d(String s) {
-        return new File(this.y(), s);
+        return new File(this.z(), s);
     }
 
     public void info(String s) {
@@ -1003,7 +1010,9 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return crashreport;
     }
 
-    public boolean J() {
+    public abstract Optional<String> q();
+
+    public boolean K() {
         return this.universe != null;
     }
 
@@ -1131,7 +1140,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         }
 
         mojangstatisticsgenerator.a("uses_auth", this.onlineMode);
-        mojangstatisticsgenerator.a("gui_state", this.ai() ? "enabled" : "disabled");
+        mojangstatisticsgenerator.a("gui_state", this.aj() ? "enabled" : "disabled");
         mojangstatisticsgenerator.a("run_time", (SystemUtils.getMonotonicMillis() - mojangstatisticsgenerator.g()) / 60L * 1000L);
         mojangstatisticsgenerator.a("avg_tick_ms", (int) (MathHelper.a(this.f) * 1.0E-6D));
         int i = 0;
@@ -1168,7 +1177,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.onlineMode = flag;
     }
 
-    public boolean X() {
+    public boolean Y() {
         return this.A;
     }
 
@@ -1258,17 +1267,17 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.serverConnection;
     }
 
-    public boolean ai() {
+    public boolean aj() {
         return false;
     }
 
     public abstract boolean a(EnumGamemode enumgamemode, boolean flag, int i);
 
-    public int aj() {
+    public int ak() {
         return this.ticks;
     }
 
-    public void ak() {
+    public void al() {
         this.T = true;
     }
 
@@ -1316,7 +1325,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.Z = 0L;
     }
 
-    public int aw() {
+    public int ax() {
         return 29999984;
     }
 
@@ -1330,15 +1339,15 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.serverThread;
     }
 
-    public int az() {
+    public int aA() {
         return 256;
     }
 
-    public long aA() {
+    public long aB() {
         return this.nextTick;
     }
 
-    public DataFixer aB() {
+    public DataFixer aC() {
         return this.dataConverterManager;
     }
 
@@ -1362,7 +1371,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
             this.resourcePackRepository.a();
             this.b(this.getWorldServer(DimensionManager.OVERWORLD).getWorldData());
             this.getPlayerList().reload();
-            this.ba();
+            this.bb();
         }
     }
 
@@ -1411,7 +1420,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public void a(CommandListenerWrapper commandlistenerwrapper) {
-        if (this.aS()) {
+        if (this.aT()) {
             PlayerList playerlist = commandlistenerwrapper.getServer().getPlayerList();
             WhiteList whitelist = playerlist.getWhitelist();
 
@@ -1469,7 +1478,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.scoreboardServer;
     }
 
-    public PersistentCommandStorage aN() {
+    public PersistentCommandStorage aO() {
         if (this.persistentCommandStorage == null) {
             throw new NullPointerException("Called before server init");
         } else {
@@ -1481,7 +1490,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.lootTableRegistry;
     }
 
-    public LootPredicateManager aP() {
+    public LootPredicateManager aQ() {
         return this.lootPredicateManager;
     }
 
@@ -1493,7 +1502,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.bossBattleCustomData;
     }
 
-    public boolean aS() {
+    public boolean aT() {
         return this.as;
     }
 
@@ -1501,7 +1510,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.as = flag;
     }
 
-    public float aT() {
+    public float aU() {
         return this.av;
     }
 
@@ -1519,7 +1528,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.methodProfiler;
     }
 
-    public Executor aW() {
+    public Executor aX() {
         return this.executorService;
     }
 
@@ -1550,8 +1559,8 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         Throwable throwable = null;
 
         try {
-            bufferedwriter.write(String.format("pending_tasks: %d\n", this.bg()));
-            bufferedwriter.write(String.format("average_tick_time: %f\n", this.aT()));
+            bufferedwriter.write(String.format("pending_tasks: %d\n", this.bh()));
+            bufferedwriter.write(String.format("average_tick_time: %f\n", this.aU()));
             bufferedwriter.write(String.format("tick_times: %s\n", Arrays.toString(this.f)));
             bufferedwriter.write(String.format("queue: %s\n", SystemUtils.e()));
         } catch (Throwable throwable1) {
@@ -1717,7 +1726,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     }
 
-    private void ba() {
+    private void bb() {
         Block.REGISTRY_ID.forEach(IBlockData::c);
     }
 }

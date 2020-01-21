@@ -30,7 +30,7 @@ public class DataConverterSchemaV1470 extends DataConverterSchemaNamed {
         a(schema, map, "minecraft:dolphin");
         a(schema, map, "minecraft:drowned");
         schema.register(map, "minecraft:trident", (s) -> {
-            return DSL.optionalFields("inBlockState", DataConverterTypes.m.in(schema));
+            return DSL.optionalFields("inBlockState", DataConverterTypes.BLOCK_STATE.in(schema));
         });
         return map;
     }

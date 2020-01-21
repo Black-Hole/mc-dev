@@ -58,7 +58,7 @@ public class TileEntityTypes<T extends TileEntity> {
         Type type = null;
 
         try {
-            type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.getGameVersion().getWorldVersion())).getChoiceType(DataConverterTypes.k, s);
+            type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.getGameVersion().getWorldVersion())).getChoiceType(DataConverterTypes.BLOCK_ENTITY, s);
         } catch (IllegalArgumentException illegalargumentexception) {
             TileEntityTypes.LOGGER.error("No data fixer registered for block entity {}", s);
             if (SharedConstants.b) {

@@ -440,7 +440,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
     }
 
     @Override
-    public boolean isNotEmpty() {
+    public boolean isEmpty() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -514,7 +514,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
 
                 if (itemstack.getItem() instanceof ItemArmor) {
                     itemstack.damage((int) f, this.player, (entityhuman) -> {
-                        entityhuman.c(EnumItemSlot.a(EnumItemSlot.Function.ARMOR, i));
+                        entityhuman.broadcastItemBreak(EnumItemSlot.a(EnumItemSlot.Function.ARMOR, i));
                     });
                 }
             }

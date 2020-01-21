@@ -47,8 +47,8 @@ public class DataConverterTileEntity extends DataFix {
     public TypeRewriteRule makeRule() {
         Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
         Type<?> type1 = this.getOutputSchema().getType(DataConverterTypes.ITEM_STACK);
-        TaggedChoiceType<String> taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.k);
-        TaggedChoiceType<String> taggedchoicetype1 = this.getOutputSchema().findChoiceType(DataConverterTypes.k);
+        TaggedChoiceType<String> taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.BLOCK_ENTITY);
+        TaggedChoiceType<String> taggedchoicetype1 = this.getOutputSchema().findChoiceType(DataConverterTypes.BLOCK_ENTITY);
 
         return TypeRewriteRule.seq(this.convertUnchecked("item stack block entity name hook converter", type, type1), this.fixTypeEverywhere("BlockEntityIdFix", taggedchoicetype, taggedchoicetype1, (dynamicops) -> {
             return (pair) -> {

@@ -87,7 +87,7 @@ public abstract class LightEngineGraph {
     }
 
     public void a(LongPredicate longpredicate) {
-        LongArrayList longarraylist = new LongArrayList(0);
+        LongArrayList longarraylist = new LongArrayList();
 
         this.c.keySet().forEach((i) -> {
             if (longpredicate.test(i)) {

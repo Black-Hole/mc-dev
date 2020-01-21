@@ -136,7 +136,7 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
         EnumDirection enumdirection = blockactioncontext.getClickedFace();
         BlockPosition blockposition = blockactioncontext.getClickPosition();
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockposition);
-        IBlockData iblockdata = (IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockStairs.FACING, blockactioncontext.f())).set(BlockStairs.HALF, enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || blockactioncontext.j().y - (double) blockposition.getY() <= 0.5D) ? BlockPropertyHalf.BOTTOM : BlockPropertyHalf.TOP)).set(BlockStairs.d, fluid.getType() == FluidTypes.WATER);
+        IBlockData iblockdata = (IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockStairs.FACING, blockactioncontext.f())).set(BlockStairs.HALF, enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || blockactioncontext.getPos().y - (double) blockposition.getY() <= 0.5D) ? BlockPropertyHalf.BOTTOM : BlockPropertyHalf.TOP)).set(BlockStairs.d, fluid.getType() == FluidTypes.WATER);
 
         return (IBlockData) iblockdata.set(BlockStairs.SHAPE, n(iblockdata, blockactioncontext.getWorld(), blockposition));
     }

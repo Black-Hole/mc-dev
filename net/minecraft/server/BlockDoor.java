@@ -135,7 +135,7 @@ public class BlockDoor extends Block {
             if ((!flag1 || flag) && i >= 0) {
                 int j = enumdirection.getAdjacentX();
                 int k = enumdirection.getAdjacentZ();
-                Vec3D vec3d = blockactioncontext.j();
+                Vec3D vec3d = blockactioncontext.getPos();
                 double d0 = vec3d.x - (double) blockposition.getX();
                 double d1 = vec3d.z - (double) blockposition.getZ();
 

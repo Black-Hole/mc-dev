@@ -46,7 +46,7 @@ public class CommandDebug {
         if (gameprofiler.d().a()) {
             throw CommandDebug.c.create();
         } else {
-            minecraftserver.ak();
+            minecraftserver.al();
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.started", new Object[]{"Started the debug profiler. Type '/debug stop' to stop it."}), true);
             return 0;
         }

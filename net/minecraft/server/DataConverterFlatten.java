@@ -354,7 +354,7 @@ public class DataConverterFlatten extends DataFix {
 
     public TypeRewriteRule makeRule() {
         Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.r.typeName(), DSL.namespacedString()));
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString()));
         OpticFinder<?> opticfinder1 = type.findField("tag");
 
         return this.fixTypeEverywhereTyped("ItemInstanceTheFlatteningFix", type, (typed) -> {
@@ -369,7 +369,7 @@ public class DataConverterFlatten extends DataFix {
                 String s = a((String) ((Pair) optional.get()).getSecond(), i);
 
                 if (s != null) {
-                    typed1 = typed.set(opticfinder, Pair.of(DataConverterTypes.r.typeName(), s));
+                    typed1 = typed.set(opticfinder, Pair.of(DataConverterTypes.ITEM_NAME.typeName(), s));
                 }
 
                 if (DataConverterFlatten.c.contains(((Pair) optional.get()).getSecond())) {

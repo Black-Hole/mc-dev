@@ -22,7 +22,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
     public final List<TileEntity> tileEntityListTick = Lists.newArrayList();
     protected final List<TileEntity> tileEntityListPending = Lists.newArrayList();
     protected final List<TileEntity> tileEntityListUnload = Lists.newArrayList();
-    private final Thread serverThread;
+    public final Thread serverThread;
     private int c;
     protected int i = (new Random()).nextInt();
     protected final int j = 1013904223;
@@ -735,6 +735,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
 
     @Override
     public List<Entity> getEntities(@Nullable Entity entity, AxisAlignedBB axisalignedbb, @Nullable Predicate<? super Entity> predicate) {
+        this.getMethodProfiler().c("getEntities");
         List<Entity> list = Lists.newArrayList();
         int i = MathHelper.floor((axisalignedbb.minX - 2.0D) / 16.0D);
         int j = MathHelper.floor((axisalignedbb.maxX + 2.0D) / 16.0D);
@@ -755,6 +756,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
     }
 
     public <T extends Entity> List<T> a(@Nullable EntityTypes<T> entitytypes, AxisAlignedBB axisalignedbb, Predicate<? super T> predicate) {
+        this.getMethodProfiler().c("getEntities");
         int i = MathHelper.floor((axisalignedbb.minX - 2.0D) / 16.0D);
         int j = MathHelper.f((axisalignedbb.maxX + 2.0D) / 16.0D);
         int k = MathHelper.floor((axisalignedbb.minZ - 2.0D) / 16.0D);
@@ -776,6 +778,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
 
     @Override
     public <T extends Entity> List<T> a(Class<? extends T> oclass, AxisAlignedBB axisalignedbb, @Nullable Predicate<? super T> predicate) {
+        this.getMethodProfiler().c("getEntities");
         int i = MathHelper.floor((axisalignedbb.minX - 2.0D) / 16.0D);
         int j = MathHelper.f((axisalignedbb.maxX + 2.0D) / 16.0D);
         int k = MathHelper.floor((axisalignedbb.minZ - 2.0D) / 16.0D);
@@ -798,6 +801,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
 
     @Override
     public <T extends Entity> List<T> b(Class<? extends T> oclass, AxisAlignedBB axisalignedbb, @Nullable Predicate<? super T> predicate) {
+        this.getMethodProfiler().c("getLoadedEntities");
         int i = MathHelper.floor((axisalignedbb.minX - 2.0D) / 16.0D);
         int j = MathHelper.f((axisalignedbb.maxX + 2.0D) / 16.0D);
         int k = MathHelper.floor((axisalignedbb.minZ - 2.0D) / 16.0D);

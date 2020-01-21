@@ -58,7 +58,7 @@ public class ItemBow extends ItemProjectileWeapon {
                         }
 
                         itemstack.damage(1, entityhuman, (entityhuman1) -> {
-                            entityhuman1.d(entityhuman.getRaisedHand());
+                            entityhuman1.broadcastItemBreak(entityhuman.getRaisedHand());
                         });
                         if (flag1 || entityhuman.abilities.canInstantlyBuild && (itemstack1.getItem() == Items.SPECTRAL_ARROW || itemstack1.getItem() == Items.TIPPED_ARROW)) {
                             entityarrow.fromPlayer = EntityArrow.PickupStatus.CREATIVE_ONLY;
@@ -108,10 +108,10 @@ public class ItemBow extends ItemProjectileWeapon {
         boolean flag = !entityhuman.f(itemstack).isEmpty();
 
         if (!entityhuman.abilities.canInstantlyBuild && !flag) {
-            return InteractionResultWrapper.d(itemstack);
+            return InteractionResultWrapper.fail(itemstack);
         } else {
             entityhuman.c(enumhand);
-            return InteractionResultWrapper.b(itemstack);
+            return InteractionResultWrapper.consume(itemstack);
         }
     }
 

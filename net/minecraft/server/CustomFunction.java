@@ -48,7 +48,7 @@ public class CustomFunction {
                 }
 
                 try {
-                    ParseResults<CommandListenerWrapper> parseresults = customfunctiondata.a().getCommandDispatcher().a().parse(stringreader, customfunctiondata.g());
+                    ParseResults<CommandListenerWrapper> parseresults = customfunctiondata.getServer().getCommandDispatcher().a().parse(stringreader, customfunctiondata.g());
 
                     if (parseresults.getReader().canRead()) {
                         throw CommandDispatcher.a(parseresults);
@@ -139,7 +139,7 @@ public class CustomFunction {
 
         @Override
         public void a(CustomFunctionData customfunctiondata, CommandListenerWrapper commandlistenerwrapper, ArrayDeque<CustomFunctionData.a> arraydeque, int i) throws CommandSyntaxException {
-            customfunctiondata.d().execute(new ParseResults(this.a.getContext().withSource(commandlistenerwrapper), this.a.getReader(), this.a.getExceptions()));
+            customfunctiondata.getCommandDispatcher().execute(new ParseResults(this.a.getContext().withSource(commandlistenerwrapper), this.a.getReader(), this.a.getExceptions()));
         }
 
         public String toString() {

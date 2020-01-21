@@ -11,7 +11,7 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
         }
 
         @Override
-        public boolean isNotEmpty() {
+        public boolean isEmpty() {
             return TileEntityLectern.this.book.isEmpty();
         }
 

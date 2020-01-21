@@ -54,11 +54,6 @@ public class EntityArmorStand extends EntityLiving {
     }
 
     @Override
-    public boolean bt() {
-        return !this.isMarker() && super.bt();
-    }
-
-    @Override
     public void updateSize() {
         double d0 = this.locX();
         double d1 = this.locY();
@@ -714,6 +709,11 @@ public class EntityArmorStand extends EntityLiving {
     @Override
     public boolean isInteractable() {
         return super.isInteractable() && !this.isMarker();
+    }
+
+    @Override
+    public boolean t(Entity entity) {
+        return entity instanceof EntityHuman && !this.world.a((EntityHuman) entity, new BlockPosition(this));
     }
 
     @Override

@@ -27,7 +27,7 @@ public class DataConverterBedBlock extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type<?> type = this.getOutputSchema().getType(DataConverterTypes.c);
+        Type<?> type = this.getOutputSchema().getType(DataConverterTypes.CHUNK);
         Type<?> type1 = type.findFieldType("Level");
         Type<?> type2 = type1.findFieldType("TileEntities");
 
@@ -46,11 +46,11 @@ public class DataConverterBedBlock extends DataFix {
         OpticFinder<List<TE>> opticfinder1 = DSL.fieldFinder("TileEntities", listtype);
         boolean flag = true;
 
-        return TypeRewriteRule.seq(this.fixTypeEverywhere("InjectBedBlockEntityType", this.getInputSchema().findChoiceType(DataConverterTypes.k), this.getOutputSchema().findChoiceType(DataConverterTypes.k), (dynamicops) -> {
+        return TypeRewriteRule.seq(this.fixTypeEverywhere("InjectBedBlockEntityType", this.getInputSchema().findChoiceType(DataConverterTypes.BLOCK_ENTITY), this.getOutputSchema().findChoiceType(DataConverterTypes.BLOCK_ENTITY), (dynamicops) -> {
             return (pair) -> {
                 return pair;
             };
-        }), this.fixTypeEverywhereTyped("BedBlockEntityInjecter", this.getOutputSchema().getType(DataConverterTypes.c), (typed) -> {
+        }), this.fixTypeEverywhereTyped("BedBlockEntityInjecter", this.getOutputSchema().getType(DataConverterTypes.CHUNK), (typed) -> {
             Typed<?> typed1 = typed.getTyped(opticfinder);
             Dynamic<?> dynamic = (Dynamic) typed1.get(DSL.remainderFinder());
             int i = dynamic.get("xPos").asInt(0);

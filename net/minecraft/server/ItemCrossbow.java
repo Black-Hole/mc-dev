@@ -43,7 +43,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
         if (d(itemstack)) {
             a(world, entityhuman, enumhand, itemstack, l(itemstack), 1.0F);
             a(itemstack, false);
-            return InteractionResultWrapper.b(itemstack);
+            return InteractionResultWrapper.consume(itemstack);
         } else if (!entityhuman.f(itemstack).isEmpty()) {
             if (!d(itemstack)) {
                 this.c = false;
@@ -51,9 +51,9 @@ public class ItemCrossbow extends ItemProjectileWeapon {
                 entityhuman.c(enumhand);
             }
 
-            return InteractionResultWrapper.b(itemstack);
+            return InteractionResultWrapper.consume(itemstack);
         } else {
-            return InteractionResultWrapper.d(itemstack);
+            return InteractionResultWrapper.fail(itemstack);
         }
     }
 
@@ -212,7 +212,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
             }
 
             itemstack.damage(flag1 ? 3 : 1, entityliving, (entityliving1) -> {
-                entityliving1.d(enumhand);
+                entityliving1.broadcastItemBreak(enumhand);
             });
             world.addEntity((Entity) object);
             world.playSound((EntityHuman) null, entityliving.locX(), entityliving.locY(), entityliving.locZ(), SoundEffects.ITEM_CROSSBOW_SHOOT, SoundCategory.PLAYERS, 1.0F, f);

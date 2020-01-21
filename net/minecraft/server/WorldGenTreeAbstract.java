@@ -198,59 +198,44 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureTreeConfigur
                 }
             }
 
-            int l = 1;
-
-            while (l < 6) {
+            for (int l = 1; l < 6; ++l) {
                 Set<BlockPosition> set2 = (Set) list.get(l - 1);
                 Set<BlockPosition> set3 = (Set) list.get(l);
                 Iterator iterator1 = set2.iterator();
 
-                label217:
-                while (true) {
-                    if (iterator1.hasNext()) {
-                        BlockPosition blockposition1 = (BlockPosition) iterator1.next();
+                while (iterator1.hasNext()) {
+                    BlockPosition blockposition1 = (BlockPosition) iterator1.next();
 
-                        if (structureboundingbox.b((BaseBlockPosition) blockposition1)) {
-                            voxelshapebitset.a(blockposition1.getX() - structureboundingbox.a, blockposition1.getY() - structureboundingbox.b, blockposition1.getZ() - structureboundingbox.c, true, true);
-                        }
-
-                        EnumDirection[] aenumdirection1 = EnumDirection.values();
-                        int i1 = aenumdirection1.length;
-                        int j1 = 0;
-
-                        while (true) {
-                            if (j1 >= i1) {
-                                continue label217;
-                            }
-
-                            EnumDirection enumdirection1 = aenumdirection1[j1];
-
-                            blockposition_pooledblockposition.g(blockposition1).c(enumdirection1);
-                            if (!set2.contains(blockposition_pooledblockposition) && !set3.contains(blockposition_pooledblockposition)) {
-                                IBlockData iblockdata1 = generatoraccess.getType(blockposition_pooledblockposition);
-
-                                if (iblockdata1.b((IBlockState) BlockProperties.ah)) {
-                                    int k1 = (Integer) iblockdata1.get(BlockProperties.ah);
-
-                                    if (k1 > l + 1) {
-                                        IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockProperties.ah, l + 1);
-
-                                        this.b(generatoraccess, blockposition_pooledblockposition, iblockdata2);
-                                        if (structureboundingbox.b((BaseBlockPosition) blockposition_pooledblockposition)) {
-                                            voxelshapebitset.a(blockposition_pooledblockposition.getX() - structureboundingbox.a, blockposition_pooledblockposition.getY() - structureboundingbox.b, blockposition_pooledblockposition.getZ() - structureboundingbox.c, true, true);
-                                        }
-
-                                        set3.add(blockposition_pooledblockposition.immutableCopy());
-                                    }
-                                }
-                            }
-
-                            ++j1;
-                        }
+                    if (structureboundingbox.b((BaseBlockPosition) blockposition1)) {
+                        voxelshapebitset.a(blockposition1.getX() - structureboundingbox.a, blockposition1.getY() - structureboundingbox.b, blockposition1.getZ() - structureboundingbox.c, true, true);
                     }
 
-                    ++l;
-                    break;
+                    EnumDirection[] aenumdirection1 = EnumDirection.values();
+                    int i1 = aenumdirection1.length;
+
+                    for (int j1 = 0; j1 < i1; ++j1) {
+                        EnumDirection enumdirection1 = aenumdirection1[j1];
+
+                        blockposition_pooledblockposition.g(blockposition1).c(enumdirection1);
+                        if (!set2.contains(blockposition_pooledblockposition) && !set3.contains(blockposition_pooledblockposition)) {
+                            IBlockData iblockdata1 = generatoraccess.getType(blockposition_pooledblockposition);
+
+                            if (iblockdata1.b((IBlockState) BlockProperties.ah)) {
+                                int k1 = (Integer) iblockdata1.get(BlockProperties.ah);
+
+                                if (k1 > l + 1) {
+                                    IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockProperties.ah, l + 1);
+
+                                    this.b(generatoraccess, blockposition_pooledblockposition, iblockdata2);
+                                    if (structureboundingbox.b((BaseBlockPosition) blockposition_pooledblockposition)) {
+                                        voxelshapebitset.a(blockposition_pooledblockposition.getX() - structureboundingbox.a, blockposition_pooledblockposition.getY() - structureboundingbox.b, blockposition_pooledblockposition.getZ() - structureboundingbox.c, true, true);
+                                    }
+
+                                    set3.add(blockposition_pooledblockposition.immutableCopy());
+                                }
+                            }
+                        }
+                    }
                 }
             }
         } catch (Throwable throwable1) {

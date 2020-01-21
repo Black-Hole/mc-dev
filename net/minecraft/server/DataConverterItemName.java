@@ -20,9 +20,9 @@ public abstract class DataConverterItemName extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type<Pair<String, String>> type = DSL.named(DataConverterTypes.r.typeName(), DSL.namespacedString());
+        Type<Pair<String, String>> type = DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString());
 
-        if (!Objects.equals(this.getInputSchema().getType(DataConverterTypes.r), type)) {
+        if (!Objects.equals(this.getInputSchema().getType(DataConverterTypes.ITEM_NAME), type)) {
             throw new IllegalStateException("item name type is not what was expected.");
         } else {
             return this.fixTypeEverywhere(this.a, type, (dynamicops) -> {

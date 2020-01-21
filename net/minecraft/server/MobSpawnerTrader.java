@@ -30,24 +30,26 @@ public class MobSpawnerTrader {
     }
 
     public void a() {
-        if (--this.c <= 0) {
-            this.c = 1200;
-            WorldData worlddata = this.b.getWorldData();
+        if (this.b.getGameRules().getBoolean(GameRules.DO_TRADER_SPAWNING)) {
+            if (--this.c <= 0) {
+                this.c = 1200;
+                WorldData worlddata = this.b.getWorldData();
 
-            this.d -= 1200;
-            worlddata.j(this.d);
-            if (this.d <= 0) {
-                this.d = 24000;
-                if (this.b.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
-                    int i = this.e;
+                this.d -= 1200;
+                worlddata.j(this.d);
+                if (this.d <= 0) {
+                    this.d = 24000;
+                    if (this.b.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
+                        int i = this.e;
 
-                    this.e = MathHelper.clamp(this.e + 25, 25, 75);
-                    worlddata.k(this.e);
-                    if (this.a.nextInt(100) <= i) {
-                        if (this.b()) {
-                            this.e = 25;
+                        this.e = MathHelper.clamp(this.e + 25, 25, 75);
+                        worlddata.k(this.e);
+                        if (this.a.nextInt(100) <= i) {
+                            if (this.b()) {
+                                this.e = 25;
+                            }
+
                         }
-
                     }
                 }
             }

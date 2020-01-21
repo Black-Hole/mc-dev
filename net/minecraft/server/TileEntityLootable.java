@@ -67,7 +67,7 @@ public abstract class TileEntityLootable extends TileEntityContainer {
     }
 
     @Override
-    public boolean isNotEmpty() {
+    public boolean isEmpty() {
         this.d((EntityHuman) null);
         return this.f().stream().allMatch(ItemStack::isEmpty);
     }

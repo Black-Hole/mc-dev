@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Random;
 import java.util.function.BooleanSupplier;
 import java.util.regex.Pattern;
@@ -103,7 +104,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         this.setSpawnNPCs(dedicatedserverproperties.spawnNpcs);
         this.setPVP(dedicatedserverproperties.pvp);
         this.setAllowFlight(dedicatedserverproperties.allowFlight);
-        this.setResourcePack(dedicatedserverproperties.resourcePack, this.aY());
+        this.setResourcePack(dedicatedserverproperties.resourcePack, this.aZ());
         this.setMotd(dedicatedserverproperties.motd);
         this.setForceGamemode(dedicatedserverproperties.forceGamemode);
         super.setIdleTimeout((Integer) dedicatedserverproperties.playerIdleTimeout.get());
@@ -215,7 +216,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         }
     }
 
-    public String aY() {
+    public String aZ() {
         DedicatedServerProperties dedicatedserverproperties = this.propertyManager.getProperties();
         String s;
 
@@ -277,14 +278,19 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     public CrashReport b(CrashReport crashreport) {
         crashreport = super.b(crashreport);
         crashreport.g().a("Is Modded", () -> {
-            String s = this.getServerModName();
-
-            return !"vanilla".equals(s) ? "Definitely; Server brand changed to '" + s + "'" : "Unknown (can't tell)";
+            return (String) this.q().orElse("Unknown (can't tell)");
         });
         crashreport.g().a("Type", () -> {
             return "Dedicated Server (map_server.txt)";
         });
         return crashreport;
+    }
+
+    @Override
+    public Optional<String> q() {
+        String s = this.getServerModName();
+
+        return !"vanilla".equals(s) ? Optional.of("Definitely; Server brand changed to '" + s + "'") : Optional.empty();
     }
 
     @Override
@@ -365,7 +371,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     }
 
     @Override
-    public int q() {
+    public int r() {
         return this.getPort();
     }
 
@@ -374,7 +380,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         return this.getMotd();
     }
 
-    public void bb() {
+    public void bc() {
         if (this.p == null) {
             this.p = ServerGUI.a(this);
         }
@@ -382,7 +388,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     }
 
     @Override
-    public boolean ai() {
+    public boolean aj() {
         return this.p != null;
     }
 
@@ -450,12 +456,12 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     }
 
     @Override
-    public int aw() {
+    public int ax() {
         return this.getDedicatedServerProperties().maxWorldSize;
     }
 
     @Override
-    public int az() {
+    public int aA() {
         return this.getDedicatedServerProperties().networkCompressionThreshold;
     }
 
@@ -467,7 +473,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         for (i = 0; !flag && i <= 2; ++i) {
             if (i > 0) {
                 DedicatedServer.LOGGER.warn("Encountered a problem while converting the user banlist, retrying in a few seconds");
-                this.bm();
+                this.bn();
             }
 
             flag = NameReferencingFileConverter.a((MinecraftServer) this);
@@ -478,7 +484,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         for (i = 0; !flag1 && i <= 2; ++i) {
             if (i > 0) {
                 DedicatedServer.LOGGER.warn("Encountered a problem while converting the ip banlist, retrying in a few seconds");
-                this.bm();
+                this.bn();
             }
 
             flag1 = NameReferencingFileConverter.b((MinecraftServer) this);
@@ -489,7 +495,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         for (i = 0; !flag2 && i <= 2; ++i) {
             if (i > 0) {
                 DedicatedServer.LOGGER.warn("Encountered a problem while converting the op list, retrying in a few seconds");
-                this.bm();
+                this.bn();
             }
 
             flag2 = NameReferencingFileConverter.c((MinecraftServer) this);
@@ -500,7 +506,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         for (i = 0; !flag3 && i <= 2; ++i) {
             if (i > 0) {
                 DedicatedServer.LOGGER.warn("Encountered a problem while converting the whitelist, retrying in a few seconds");
-                this.bm();
+                this.bn();
             }
 
             flag3 = NameReferencingFileConverter.d(this);
@@ -511,7 +517,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         for (i = 0; !flag4 && i <= 2; ++i) {
             if (i > 0) {
                 DedicatedServer.LOGGER.warn("Encountered a problem while converting the player save files, retrying in a few seconds");
-                this.bm();
+                this.bn();
             }
 
             flag4 = NameReferencingFileConverter.a(this);
@@ -520,7 +526,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         return flag || flag1 || flag2 || flag3 || flag4;
     }
 
-    private void bm() {
+    private void bn() {
         try {
             Thread.sleep(5000L);
         } catch (InterruptedException interruptedexception) {

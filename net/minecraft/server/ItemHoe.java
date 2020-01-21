@@ -31,7 +31,7 @@ public class ItemHoe extends ItemToolMaterial {
                     world.setTypeAndData(blockposition, iblockdata, 11);
                     if (entityhuman != null) {
                         itemactioncontext.getItemStack().damage(1, entityhuman, (entityhuman1) -> {
-                            entityhuman1.d(itemactioncontext.n());
+                            entityhuman1.broadcastItemBreak(itemactioncontext.getHand());
                         });
                     }
                 }
@@ -46,7 +46,7 @@ public class ItemHoe extends ItemToolMaterial {
     @Override
     public boolean a(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1) {
         itemstack.damage(1, entityliving1, (entityliving2) -> {
-            entityliving2.c(EnumItemSlot.MAINHAND);
+            entityliving2.broadcastItemBreak(EnumItemSlot.MAINHAND);
         });
         return true;
     }

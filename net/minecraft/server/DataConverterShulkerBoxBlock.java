@@ -8,7 +8,7 @@ import com.mojang.datafixers.schemas.Schema;
 public class DataConverterShulkerBoxBlock extends DataConverterNamedEntity {
 
     public DataConverterShulkerBoxBlock(Schema schema, boolean flag) {
-        super(schema, flag, "BlockEntityShulkerBoxColorFix", DataConverterTypes.k, "minecraft:shulker_box");
+        super(schema, flag, "BlockEntityShulkerBoxColorFix", DataConverterTypes.BLOCK_ENTITY, "minecraft:shulker_box");
     }
 
     @Override

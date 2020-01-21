@@ -17,7 +17,7 @@ public class ItemWaterLily extends ItemBlock {
         MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.SOURCE_ONLY);
 
         if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
-            return InteractionResultWrapper.c(itemstack);
+            return InteractionResultWrapper.pass(itemstack);
         } else {
             if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
                 MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;
@@ -25,7 +25,7 @@ public class ItemWaterLily extends ItemBlock {
                 EnumDirection enumdirection = movingobjectpositionblock.getDirection();
 
                 if (!world.a(entityhuman, blockposition) || !entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
-                    return InteractionResultWrapper.d(itemstack);
+                    return InteractionResultWrapper.fail(itemstack);
                 }
 
                 BlockPosition blockposition1 = blockposition.up();
@@ -45,11 +45,11 @@ public class ItemWaterLily extends ItemBlock {
 
                     entityhuman.b(StatisticList.ITEM_USED.b(this));
                     world.playSound(entityhuman, blockposition, SoundEffects.BLOCK_LILY_PAD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                    return InteractionResultWrapper.a(itemstack);
+                    return InteractionResultWrapper.success(itemstack);
                 }
             }
 
-            return InteractionResultWrapper.d(itemstack);
+            return InteractionResultWrapper.fail(itemstack);
         }
     }
 }

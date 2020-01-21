@@ -42,7 +42,7 @@ public class CommandExecute {
         };
     };
     private static final SuggestionProvider<CommandListenerWrapper> e = (commandcontext, suggestionsbuilder) -> {
-        LootPredicateManager lootpredicatemanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aP();
+        LootPredicateManager lootpredicatemanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aQ();
 
         return ICompletionProvider.a((Iterable) lootpredicatemanager.a(), suggestionsbuilder);
     };

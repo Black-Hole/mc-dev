@@ -19,9 +19,9 @@ public class DataConverterTeamDisplayName extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<Pair<String, Dynamic<?>>> type = DSL.named(DataConverterTypes.v.typeName(), DSL.remainderType());
+        Type<Pair<String, Dynamic<?>>> type = DSL.named(DataConverterTypes.TEAM.typeName(), DSL.remainderType());
 
-        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.v))) {
+        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.TEAM))) {
             throw new IllegalStateException("Team type is not what was expected.");
         } else {
             return this.fixTypeEverywhere("TeamDisplayNameFix", type, (dynamicops) -> {

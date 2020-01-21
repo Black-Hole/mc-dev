@@ -48,7 +48,7 @@ public class ItemSpade extends ItemTool {
                     world.setTypeAndData(blockposition, iblockdata2, 11);
                     if (entityhuman != null) {
                         itemactioncontext.getItemStack().damage(1, entityhuman, (entityhuman1) -> {
-                            entityhuman1.d(itemactioncontext.n());
+                            entityhuman1.broadcastItemBreak(itemactioncontext.getHand());
                         });
                     }
                 }

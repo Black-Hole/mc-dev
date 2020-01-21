@@ -9,7 +9,7 @@ public class WorldGenMegaTreeProviderDarkOak extends WorldGenMegaTreeProvider {
 
     @Nullable
     @Override
-    protected WorldGenFeatureConfigured<WorldGenFeatureSmallTreeConfigurationConfiguration, ?> b(Random random) {
+    protected WorldGenFeatureConfigured<WorldGenFeatureSmallTreeConfigurationConfiguration, ?> a(Random random, boolean flag) {
         return null;
     }
 

@@ -17,9 +17,9 @@ public class ItemBucket extends Item {
         MovingObjectPosition movingobjectposition = a(world, entityhuman, this.fluidType == FluidTypes.EMPTY ? RayTrace.FluidCollisionOption.SOURCE_ONLY : RayTrace.FluidCollisionOption.NONE);
 
         if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
-            return InteractionResultWrapper.c(itemstack);
+            return InteractionResultWrapper.pass(itemstack);
         } else if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-            return InteractionResultWrapper.c(itemstack);
+            return InteractionResultWrapper.pass(itemstack);
         } else {
             MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;
             BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
@@ -43,11 +43,11 @@ public class ItemBucket extends Item {
                                 CriterionTriggers.j.a((EntityPlayer) entityhuman, new ItemStack(fluidtype.a()));
                             }
 
-                            return InteractionResultWrapper.a(itemstack1);
+                            return InteractionResultWrapper.success(itemstack1);
                         }
                     }
 
-                    return InteractionResultWrapper.d(itemstack);
+                    return InteractionResultWrapper.fail(itemstack);
                 } else {
                     iblockdata = world.getType(blockposition);
                     BlockPosition blockposition2 = iblockdata.getBlock() instanceof IFluidContainer && this.fluidType == FluidTypes.WATER ? blockposition : blockposition1;
@@ -59,13 +59,13 @@ public class ItemBucket extends Item {
                         }
 
                         entityhuman.b(StatisticList.ITEM_USED.b(this));
-                        return InteractionResultWrapper.a(this.a(itemstack, entityhuman));
+                        return InteractionResultWrapper.success(this.a(itemstack, entityhuman));
                     } else {
-                        return InteractionResultWrapper.d(itemstack);
+                        return InteractionResultWrapper.fail(itemstack);
                     }
                 }
             } else {
-                return InteractionResultWrapper.d(itemstack);
+                return InteractionResultWrapper.fail(itemstack);
             }
         }
     }

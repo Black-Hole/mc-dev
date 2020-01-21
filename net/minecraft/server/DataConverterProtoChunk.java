@@ -23,15 +23,15 @@ public class DataConverterProtoChunk extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type<?> type = this.getInputSchema().getType(DataConverterTypes.c);
-        Type<?> type1 = this.getOutputSchema().getType(DataConverterTypes.c);
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.CHUNK);
+        Type<?> type1 = this.getOutputSchema().getType(DataConverterTypes.CHUNK);
         Type<?> type2 = type.findFieldType("Level");
         Type<?> type3 = type1.findFieldType("Level");
         Type<?> type4 = type2.findFieldType("TileTicks");
         OpticFinder<?> opticfinder = DSL.fieldFinder("Level", type2);
         OpticFinder<?> opticfinder1 = DSL.fieldFinder("TileTicks", type4);
 
-        return TypeRewriteRule.seq(this.fixTypeEverywhereTyped("ChunkToProtoChunkFix", type, this.getOutputSchema().getType(DataConverterTypes.c), (typed) -> {
+        return TypeRewriteRule.seq(this.fixTypeEverywhereTyped("ChunkToProtoChunkFix", type, this.getOutputSchema().getType(DataConverterTypes.CHUNK), (typed) -> {
             return typed.updateTyped(opticfinder, type3, (typed1) -> {
                 Optional<? extends Stream<? extends Dynamic<?>>> optional = typed1.getOptionalTyped(opticfinder1).map(Typed::write).flatMap(Dynamic::asStreamOpt);
                 Dynamic<?> dynamic = (Dynamic) typed1.get(DSL.remainderFinder());
@@ -82,7 +82,7 @@ public class DataConverterProtoChunk extends DataFix {
                     return new IllegalStateException("Could not read the new chunk");
                 });
             });
-        }), this.writeAndRead("Structure biome inject", this.getInputSchema().getType(DataConverterTypes.t), this.getOutputSchema().getType(DataConverterTypes.t)));
+        }), this.writeAndRead("Structure biome inject", this.getInputSchema().getType(DataConverterTypes.STRUCTURE_FEATURE), this.getOutputSchema().getType(DataConverterTypes.STRUCTURE_FEATURE)));
     }
 
     private static short a(int i, int j, int k) {

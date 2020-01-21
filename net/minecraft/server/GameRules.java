@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 public class GameRules {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Map<GameRules.GameRuleKey<?>, GameRules.GameRuleDefinition<?>> E = Maps.newTreeMap(Comparator.comparing((gamerules_gamerulekey) -> {
+    private static final Map<GameRules.GameRuleKey<?>, GameRules.GameRuleDefinition<?>> G = Maps.newTreeMap(Comparator.comparing((gamerules_gamerulekey) -> {
         return gamerules_gamerulekey.a;
     }));
     public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> DO_FIRE_TICK = a("doFireTick", GameRules.GameRuleBoolean.b(true));
@@ -72,11 +72,13 @@ public class GameRules {
     public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> DROWNING_DAMAGE = a("drowningDamage", GameRules.GameRuleBoolean.b(true));
     public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> FALL_DAMAGE = a("fallDamage", GameRules.GameRuleBoolean.b(true));
     public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> FIRE_DAMAGE = a("fireDamage", GameRules.GameRuleBoolean.b(true));
-    private final Map<GameRules.GameRuleKey<?>, GameRules.GameRuleValue<?>> F;
+    public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> DO_PATROL_SPAWNING = a("doPatrolSpawning", GameRules.GameRuleBoolean.b(true));
+    public static final GameRules.GameRuleKey<GameRules.GameRuleBoolean> DO_TRADER_SPAWNING = a("doTraderSpawning", GameRules.GameRuleBoolean.b(true));
+    private final Map<GameRules.GameRuleKey<?>, GameRules.GameRuleValue<?>> H;
 
     private static <T extends GameRules.GameRuleValue<T>> GameRules.GameRuleKey<T> a(String s, GameRules.GameRuleDefinition<T> gamerules_gameruledefinition) {
         GameRules.GameRuleKey<T> gamerules_gamerulekey = new GameRules.GameRuleKey<>(s);
-        GameRules.GameRuleDefinition<?> gamerules_gameruledefinition1 = (GameRules.GameRuleDefinition) GameRules.E.put(gamerules_gamerulekey, gamerules_gameruledefinition);
+        GameRules.GameRuleDefinition<?> gamerules_gameruledefinition1 = (GameRules.GameRuleDefinition) GameRules.G.put(gamerules_gamerulekey, gamerules_gameruledefinition);
 
         if (gamerules_gameruledefinition1 != null) {
             throw new IllegalStateException("Duplicate game rule registration for " + s);
@@ -86,26 +88,26 @@ public class GameRules {
     }
 
     public GameRules() {
-        this.F = (Map) GameRules.E.entrySet().stream().collect(ImmutableMap.toImmutableMap(Entry::getKey, (entry) -> {
+        this.H = (Map) GameRules.G.entrySet().stream().collect(ImmutableMap.toImmutableMap(Entry::getKey, (entry) -> {
             return ((GameRules.GameRuleDefinition) entry.getValue()).getValue();
         }));
     }
 
     public <T extends GameRules.GameRuleValue<T>> T get(GameRules.GameRuleKey<T> gamerules_gamerulekey) {
-        return (GameRules.GameRuleValue) this.F.get(gamerules_gamerulekey);
+        return (GameRules.GameRuleValue) this.H.get(gamerules_gamerulekey);
     }
 
     public NBTTagCompound a() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        this.F.forEach((gamerules_gamerulekey, gamerules_gamerulevalue) -> {
+        this.H.forEach((gamerules_gamerulekey, gamerules_gamerulevalue) -> {
             nbttagcompound.setString(gamerules_gamerulekey.a, gamerules_gamerulevalue.getValue());
         });
         return nbttagcompound;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
-        this.F.forEach((gamerules_gamerulekey, gamerules_gamerulevalue) -> {
+        this.H.forEach((gamerules_gamerulekey, gamerules_gamerulevalue) -> {
             if (nbttagcompound.hasKey(gamerules_gamerulekey.a)) {
                 gamerules_gamerulevalue.setValue(nbttagcompound.getString(gamerules_gamerulekey.a));
             }
@@ -114,7 +116,7 @@ public class GameRules {
     }
 
     public static void a(GameRules.GameRuleVisitor gamerules_gamerulevisitor) {
-        GameRules.E.forEach((gamerules_gamerulekey, gamerules_gameruledefinition) -> {
+        GameRules.G.forEach((gamerules_gamerulekey, gamerules_gameruledefinition) -> {
             a(gamerules_gamerulevisitor, gamerules_gamerulekey, gamerules_gameruledefinition);
         });
     }

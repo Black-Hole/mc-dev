@@ -20,7 +20,7 @@ public class DataConverterChunkStructuresTemplateRename extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type<?> type = this.getInputSchema().getType(DataConverterTypes.t);
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.STRUCTURE_FEATURE);
         OpticFinder<?> opticfinder = type.findField("Children");
 
         return this.fixTypeEverywhereTyped("ChunkStructuresTemplateRenameFix", type, (typed) -> {

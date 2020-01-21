@@ -24,8 +24,8 @@ public class InventoryLargeChest implements IInventory {
     }
 
     @Override
-    public boolean isNotEmpty() {
-        return this.left.isNotEmpty() && this.right.isNotEmpty();
+    public boolean isEmpty() {
+        return this.left.isEmpty() && this.right.isEmpty();
     }
 
     public boolean a(IInventory iinventory) {

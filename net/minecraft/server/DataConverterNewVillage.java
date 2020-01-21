@@ -23,15 +23,15 @@ public class DataConverterNewVillage extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        CompoundListType<String, ?> compoundlisttype = DSL.compoundList(DSL.string(), this.getInputSchema().getType(DataConverterTypes.t));
+        CompoundListType<String, ?> compoundlisttype = DSL.compoundList(DSL.string(), this.getInputSchema().getType(DataConverterTypes.STRUCTURE_FEATURE));
         OpticFinder<? extends List<? extends Pair<String, ?>>> opticfinder = compoundlisttype.finder();
 
         return this.a(compoundlisttype);
     }
 
     private <SF> TypeRewriteRule a(CompoundListType<String, SF> compoundlisttype) {
-        Type<?> type = this.getInputSchema().getType(DataConverterTypes.c);
-        Type<?> type1 = this.getInputSchema().getType(DataConverterTypes.t);
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.CHUNK);
+        Type<?> type1 = this.getInputSchema().getType(DataConverterTypes.STRUCTURE_FEATURE);
         OpticFinder<?> opticfinder = type.findField("Level");
         OpticFinder<?> opticfinder1 = opticfinder.type().findField("Structures");
         OpticFinder<?> opticfinder2 = opticfinder1.type().findField("Starts");

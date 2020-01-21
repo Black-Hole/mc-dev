@@ -76,13 +76,13 @@ public class DataConverterSchemaV99 extends Schema {
 
     protected static void b(Schema schema, Map<String, Supplier<TypeTemplate>> map, String s) {
         schema.register(map, s, () -> {
-            return DSL.optionalFields("inTile", DataConverterTypes.q.in(schema));
+            return DSL.optionalFields("inTile", DataConverterTypes.BLOCK_NAME.in(schema));
         });
     }
 
     protected static void c(Schema schema, Map<String, Supplier<TypeTemplate>> map, String s) {
         schema.register(map, s, () -> {
-            return DSL.optionalFields("DisplayTile", DataConverterTypes.q.in(schema));
+            return DSL.optionalFields("DisplayTile", DataConverterTypes.BLOCK_NAME.in(schema));
         });
     }
 
@@ -103,13 +103,13 @@ public class DataConverterSchemaV99 extends Schema {
         schema.registerSimple(map, "LeashKnot");
         schema.registerSimple(map, "Painting");
         schema.register(map, "Arrow", (s) -> {
-            return DSL.optionalFields("inTile", DataConverterTypes.q.in(schema));
+            return DSL.optionalFields("inTile", DataConverterTypes.BLOCK_NAME.in(schema));
         });
         schema.register(map, "TippedArrow", (s) -> {
-            return DSL.optionalFields("inTile", DataConverterTypes.q.in(schema));
+            return DSL.optionalFields("inTile", DataConverterTypes.BLOCK_NAME.in(schema));
         });
         schema.register(map, "SpectralArrow", (s) -> {
-            return DSL.optionalFields("inTile", DataConverterTypes.q.in(schema));
+            return DSL.optionalFields("inTile", DataConverterTypes.BLOCK_NAME.in(schema));
         });
         b(schema, map, "Snowball");
         b(schema, map, "Fireball");
@@ -117,7 +117,7 @@ public class DataConverterSchemaV99 extends Schema {
         b(schema, map, "ThrownEnderpearl");
         schema.registerSimple(map, "EyeOfEnderSignal");
         schema.register(map, "ThrownPotion", (s) -> {
-            return DSL.optionalFields("inTile", DataConverterTypes.q.in(schema), "Potion", DataConverterTypes.ITEM_STACK.in(schema));
+            return DSL.optionalFields("inTile", DataConverterTypes.BLOCK_NAME.in(schema), "Potion", DataConverterTypes.ITEM_STACK.in(schema));
         });
         b(schema, map, "ThrownExpBottle");
         schema.register(map, "ItemFrame", (s) -> {
@@ -126,26 +126,26 @@ public class DataConverterSchemaV99 extends Schema {
         b(schema, map, "WitherSkull");
         schema.registerSimple(map, "PrimedTnt");
         schema.register(map, "FallingSand", (s) -> {
-            return DSL.optionalFields("Block", DataConverterTypes.q.in(schema), "TileEntityData", DataConverterTypes.k.in(schema));
+            return DSL.optionalFields("Block", DataConverterTypes.BLOCK_NAME.in(schema), "TileEntityData", DataConverterTypes.BLOCK_ENTITY.in(schema));
         });
         schema.register(map, "FireworksRocketEntity", (s) -> {
             return DSL.optionalFields("FireworksItem", DataConverterTypes.ITEM_STACK.in(schema));
         });
         schema.registerSimple(map, "Boat");
         schema.register(map, "Minecart", () -> {
-            return DSL.optionalFields("DisplayTile", DataConverterTypes.q.in(schema), "Items", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));
+            return DSL.optionalFields("DisplayTile", DataConverterTypes.BLOCK_NAME.in(schema), "Items", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));
         });
         c(schema, map, "MinecartRideable");
         schema.register(map, "MinecartChest", (s) -> {
-            return DSL.optionalFields("DisplayTile", DataConverterTypes.q.in(schema), "Items", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));
+            return DSL.optionalFields("DisplayTile", DataConverterTypes.BLOCK_NAME.in(schema), "Items", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));
         });
         c(schema, map, "MinecartFurnace");
         c(schema, map, "MinecartTNT");
         schema.register(map, "MinecartSpawner", () -> {
-            return DSL.optionalFields("DisplayTile", DataConverterTypes.q.in(schema), DataConverterTypes.s.in(schema));
+            return DSL.optionalFields("DisplayTile", DataConverterTypes.BLOCK_NAME.in(schema), DataConverterTypes.UNTAGGED_SPAWNER.in(schema));
         });
         schema.register(map, "MinecartHopper", (s) -> {
-            return DSL.optionalFields("DisplayTile", DataConverterTypes.q.in(schema), "Items", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));
+            return DSL.optionalFields("DisplayTile", DataConverterTypes.BLOCK_NAME.in(schema), "Items", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));
         });
         c(schema, map, "MinecartCommandBlock");
         a(schema, (Map) map, "ArmorStand");
@@ -158,7 +158,7 @@ public class DataConverterSchemaV99 extends Schema {
         a(schema, (Map) map, "Ghast");
         a(schema, (Map) map, "PigZombie");
         schema.register(map, "Enderman", (s) -> {
-            return DSL.optionalFields("carried", DataConverterTypes.q.in(schema), a(schema));
+            return DSL.optionalFields("carried", DataConverterTypes.BLOCK_NAME.in(schema), a(schema));
         });
         a(schema, (Map) map, "CaveSpider");
         a(schema, (Map) map, "Silverfish");
@@ -207,7 +207,7 @@ public class DataConverterSchemaV99 extends Schema {
         d(schema, map, "Dropper");
         schema.registerSimple(map, "Sign");
         schema.register(map, "MobSpawner", (s) -> {
-            return DataConverterTypes.s.in(schema);
+            return DataConverterTypes.UNTAGGED_SPAWNER.in(schema);
         });
         schema.registerSimple(map, "Music");
         schema.registerSimple(map, "Piston");
@@ -221,7 +221,7 @@ public class DataConverterSchemaV99 extends Schema {
         d(schema, map, "Hopper");
         schema.registerSimple(map, "Comparator");
         schema.register(map, "FlowerPot", (s) -> {
-            return DSL.optionalFields("Item", DSL.or(DSL.constType(DSL.intType()), DataConverterTypes.r.in(schema)));
+            return DSL.optionalFields("Item", DSL.or(DSL.constType(DSL.intType()), DataConverterTypes.ITEM_NAME.in(schema)));
         });
         schema.registerSimple(map, "Banner");
         schema.registerSimple(map, "Structure");
@@ -230,44 +230,44 @@ public class DataConverterSchemaV99 extends Schema {
     }
 
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
-        schema.registerType(false, DataConverterTypes.a, DSL::remainder);
+        schema.registerType(false, DataConverterTypes.LEVEL, DSL::remainder);
         schema.registerType(false, DataConverterTypes.PLAYER, () -> {
             return DSL.optionalFields("Inventory", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)), "EnderItems", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));
         });
-        schema.registerType(false, DataConverterTypes.c, () -> {
-            return DSL.fields("Level", DSL.optionalFields("Entities", DSL.list(DataConverterTypes.o.in(schema)), "TileEntities", DSL.list(DataConverterTypes.k.in(schema)), "TileTicks", DSL.list(DSL.fields("i", DataConverterTypes.q.in(schema)))));
+        schema.registerType(false, DataConverterTypes.CHUNK, () -> {
+            return DSL.fields("Level", DSL.optionalFields("Entities", DSL.list(DataConverterTypes.ENTITY_TREE.in(schema)), "TileEntities", DSL.list(DataConverterTypes.BLOCK_ENTITY.in(schema)), "TileTicks", DSL.list(DSL.fields("i", DataConverterTypes.BLOCK_NAME.in(schema)))));
         });
-        schema.registerType(true, DataConverterTypes.k, () -> {
+        schema.registerType(true, DataConverterTypes.BLOCK_ENTITY, () -> {
             return DSL.taggedChoiceLazy("id", DSL.string(), map1);
         });
-        schema.registerType(true, DataConverterTypes.o, () -> {
-            return DSL.optionalFields("Riding", DataConverterTypes.o.in(schema), DataConverterTypes.ENTITY.in(schema));
+        schema.registerType(true, DataConverterTypes.ENTITY_TREE, () -> {
+            return DSL.optionalFields("Riding", DataConverterTypes.ENTITY_TREE.in(schema), DataConverterTypes.ENTITY.in(schema));
         });
-        schema.registerType(false, DataConverterTypes.n, () -> {
+        schema.registerType(false, DataConverterTypes.ENTITY_NAME, () -> {
             return DSL.constType(DSL.namespacedString());
         });
         schema.registerType(true, DataConverterTypes.ENTITY, () -> {
             return DSL.taggedChoiceLazy("id", DSL.string(), map);
         });
         schema.registerType(true, DataConverterTypes.ITEM_STACK, () -> {
-            return DSL.hook(DSL.optionalFields("id", DSL.or(DSL.constType(DSL.intType()), DataConverterTypes.r.in(schema)), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.o.in(schema), "BlockEntityTag", DataConverterTypes.k.in(schema), "CanDestroy", DSL.list(DataConverterTypes.q.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.q.in(schema)))), DataConverterSchemaV99.a, HookFunction.IDENTITY);
+            return DSL.hook(DSL.optionalFields("id", DSL.or(DSL.constType(DSL.intType()), DataConverterTypes.ITEM_NAME.in(schema)), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.ENTITY_TREE.in(schema), "BlockEntityTag", DataConverterTypes.BLOCK_ENTITY.in(schema), "CanDestroy", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)))), DataConverterSchemaV99.a, HookFunction.IDENTITY);
         });
-        schema.registerType(false, DataConverterTypes.e, DSL::remainder);
-        schema.registerType(false, DataConverterTypes.q, () -> {
+        schema.registerType(false, DataConverterTypes.OPTIONS, DSL::remainder);
+        schema.registerType(false, DataConverterTypes.BLOCK_NAME, () -> {
             return DSL.or(DSL.constType(DSL.intType()), DSL.constType(DSL.namespacedString()));
         });
-        schema.registerType(false, DataConverterTypes.r, () -> {
+        schema.registerType(false, DataConverterTypes.ITEM_NAME, () -> {
             return DSL.constType(DSL.namespacedString());
         });
-        schema.registerType(false, DataConverterTypes.g, DSL::remainder);
-        schema.registerType(false, DataConverterTypes.h, () -> {
-            return DSL.optionalFields("data", DSL.optionalFields("Features", DSL.compoundList(DataConverterTypes.t.in(schema)), "Objectives", DSL.list(DataConverterTypes.u.in(schema)), "Teams", DSL.list(DataConverterTypes.v.in(schema))));
+        schema.registerType(false, DataConverterTypes.STATS, DSL::remainder);
+        schema.registerType(false, DataConverterTypes.SAVED_DATA, () -> {
+            return DSL.optionalFields("data", DSL.optionalFields("Features", DSL.compoundList(DataConverterTypes.STRUCTURE_FEATURE.in(schema)), "Objectives", DSL.list(DataConverterTypes.OBJECTIVE.in(schema)), "Teams", DSL.list(DataConverterTypes.TEAM.in(schema))));
         });
-        schema.registerType(false, DataConverterTypes.t, DSL::remainder);
-        schema.registerType(false, DataConverterTypes.u, DSL::remainder);
-        schema.registerType(false, DataConverterTypes.v, DSL::remainder);
-        schema.registerType(true, DataConverterTypes.s, DSL::remainder);
-        schema.registerType(false, DataConverterTypes.j, DSL::remainder);
+        schema.registerType(false, DataConverterTypes.STRUCTURE_FEATURE, DSL::remainder);
+        schema.registerType(false, DataConverterTypes.OBJECTIVE, DSL::remainder);
+        schema.registerType(false, DataConverterTypes.TEAM, DSL::remainder);
+        schema.registerType(true, DataConverterTypes.UNTAGGED_SPAWNER, DSL::remainder);
+        schema.registerType(false, DataConverterTypes.POI_CHUNK, DSL::remainder);
     }
 
     protected static <T> T a(Dynamic<T> dynamic, Map<String, String> map, String s) {

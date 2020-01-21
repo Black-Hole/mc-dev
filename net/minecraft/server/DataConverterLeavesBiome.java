@@ -19,7 +19,7 @@ public class DataConverterLeavesBiome extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<?> type = this.getInputSchema().getType(DataConverterTypes.c);
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.CHUNK);
         OpticFinder<?> opticfinder = type.findField("Level");
 
         return this.fixTypeEverywhereTyped("Leaves fix", type, (typed) -> {

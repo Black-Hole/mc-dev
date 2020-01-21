@@ -50,7 +50,7 @@ public class ItemEnderEye extends Item {
         MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.NONE);
 
         if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK && world.getType(((MovingObjectPositionBlock) movingobjectposition).getBlockPosition()).getBlock() == Blocks.END_PORTAL_FRAME) {
-            return InteractionResultWrapper.c(itemstack);
+            return InteractionResultWrapper.pass(itemstack);
         } else {
             entityhuman.c(enumhand);
             if (world instanceof WorldServer) {
@@ -74,11 +74,11 @@ public class ItemEnderEye extends Item {
 
                     entityhuman.b(StatisticList.ITEM_USED.b(this));
                     entityhuman.a(enumhand, true);
-                    return InteractionResultWrapper.a(itemstack);
+                    return InteractionResultWrapper.success(itemstack);
                 }
             }
 
-            return InteractionResultWrapper.b(itemstack);
+            return InteractionResultWrapper.consume(itemstack);
         }
     }
 }

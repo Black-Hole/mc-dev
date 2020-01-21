@@ -573,9 +573,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
                 this.setPositionRotation((double) i, (double) j, (double) k, f1, 0.0F);
                 this.setMot(Vec3D.a);
-            } else if (!worldserver1.getTravelAgent().a(this, f2)) {
-                worldserver1.getTravelAgent().a((Entity) this);
-                worldserver1.getTravelAgent().a(this, f2);
+            } else if (!worldserver1.getTravelAgent().findAndTeleport(this, f2)) {
+                worldserver1.getTravelAgent().createPortal(this);
+                worldserver1.getTravelAgent().findAndTeleport(this, f2);
             }
 
             worldserver.getMethodProfiler().exit();
@@ -1011,7 +1011,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     @Override
-    public void b(double d0, double d1, double d2) {
+    public void teleportAndSync(double d0, double d1, double d2) {
         this.playerConnection.a(d0, d1, d2, this.yaw, this.pitch);
         this.playerConnection.syncPosition();
     }

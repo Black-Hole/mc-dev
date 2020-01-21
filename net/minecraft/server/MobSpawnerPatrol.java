@@ -11,6 +11,8 @@ public class MobSpawnerPatrol {
     public int a(WorldServer worldserver, boolean flag, boolean flag1) {
         if (!flag) {
             return 0;
+        } else if (!worldserver.getGameRules().getBoolean(GameRules.DO_PATROL_SPAWNING)) {
+            return 0;
         } else {
             Random random = worldserver.random;
 

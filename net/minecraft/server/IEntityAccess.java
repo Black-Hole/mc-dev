@@ -28,7 +28,7 @@ public interface IEntityAccess {
 
     default boolean a(@Nullable Entity entity, VoxelShape voxelshape) {
         return voxelshape.isEmpty() ? true : this.getEntities(entity, voxelshape.getBoundingBox()).stream().filter((entity1) -> {
-            return !entity1.dead && entity1.i && (entity == null || !entity1.x(entity));
+            return !entity1.dead && entity1.i && (entity == null || !entity1.isSameVehicle(entity));
         }).noneMatch((entity1) -> {
             return VoxelShapes.c(voxelshape, VoxelShapes.a(entity1.getBoundingBox()), OperatorBoolean.AND);
         });
@@ -50,7 +50,7 @@ public interface IEntityAccess {
             Stream stream = this.getEntities(entity, axisalignedbb1).stream().filter((entity1) -> {
                 return !set.contains(entity1);
             }).filter((entity1) -> {
-                return entity == null || !entity.x(entity1);
+                return entity == null || !entity.isSameVehicle(entity1);
             }).flatMap((entity1) -> {
                 return Stream.of(entity1.au(), entity == null ? null : entity.j(entity1));
             }).filter(Objects::nonNull);

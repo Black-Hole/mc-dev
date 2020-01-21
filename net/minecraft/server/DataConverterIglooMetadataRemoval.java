@@ -15,8 +15,8 @@ public class DataConverterIglooMetadataRemoval extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<?> type = this.getInputSchema().getType(DataConverterTypes.t);
-        Type<?> type1 = this.getOutputSchema().getType(DataConverterTypes.t);
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.STRUCTURE_FEATURE);
+        Type<?> type1 = this.getOutputSchema().getType(DataConverterTypes.STRUCTURE_FEATURE);
 
         return this.writeFixAndRead("IglooMetadataRemovalFix", type, type1, DataConverterIglooMetadataRemoval::a);
     }

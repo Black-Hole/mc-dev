@@ -105,7 +105,7 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
 
         @Override
         protected Stream<NBTTagCompound> a(CommandListenerWrapper commandlistenerwrapper) {
-            NBTTagCompound nbttagcompound = commandlistenerwrapper.getServer().aN().a(this.e);
+            NBTTagCompound nbttagcompound = commandlistenerwrapper.getServer().aO().a(this.e);
 
             return Stream.of(nbttagcompound);
         }

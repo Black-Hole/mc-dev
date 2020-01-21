@@ -92,7 +92,7 @@ public class DataConverterSpawnEgg extends DataFix {
     public TypeRewriteRule makeRule() {
         Schema schema = this.getInputSchema();
         Type<?> type = schema.getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.r.typeName(), DSL.namespacedString()));
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString()));
         OpticFinder<String> opticfinder1 = DSL.fieldFinder("id", DSL.string());
         OpticFinder<?> opticfinder2 = type.findField("tag");
         OpticFinder<?> opticfinder3 = opticfinder2.type().findField("EntityTag");

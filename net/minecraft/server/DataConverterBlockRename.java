@@ -23,8 +23,8 @@ public abstract class DataConverterBlockRename extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type<?> type = this.getInputSchema().getType(DataConverterTypes.q);
-        Type<Pair<String, String>> type1 = DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString());
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.BLOCK_NAME);
+        Type<Pair<String, String>> type1 = DSL.named(DataConverterTypes.BLOCK_NAME.typeName(), DSL.namespacedString());
 
         if (!Objects.equals(type, type1)) {
             throw new IllegalStateException("block type is not what was expected.");
@@ -34,7 +34,7 @@ public abstract class DataConverterBlockRename extends DataFix {
                     return pair.mapSecond(this::a);
                 };
             });
-            TypeRewriteRule typerewriterule1 = this.fixTypeEverywhereTyped(this.a + " for block_state", this.getInputSchema().getType(DataConverterTypes.m), (typed) -> {
+            TypeRewriteRule typerewriterule1 = this.fixTypeEverywhereTyped(this.a + " for block_state", this.getInputSchema().getType(DataConverterTypes.BLOCK_STATE), (typed) -> {
                 return typed.update(DSL.remainderFinder(), (dynamic) -> {
                     Optional<String> optional = dynamic.get("Name").asString();
 

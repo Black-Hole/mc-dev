@@ -59,7 +59,7 @@ public class ItemWrittenBook extends Item {
 
         entityhuman.openBook(itemstack, enumhand);
         entityhuman.b(StatisticList.ITEM_USED.b(this));
-        return InteractionResultWrapper.a(itemstack);
+        return InteractionResultWrapper.success(itemstack);
     }
 
     public static boolean a(ItemStack itemstack, @Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable EntityHuman entityhuman) {

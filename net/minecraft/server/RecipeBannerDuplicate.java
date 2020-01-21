@@ -24,7 +24,7 @@ public class RecipeBannerDuplicate extends IRecipeComplex {
                     return false;
                 }
 
-                int j = TileEntityBanner.a(itemstack2);
+                int j = TileEntityBanner.b(itemstack2);
 
                 if (j > 6) {
                     return false;
@@ -54,7 +54,7 @@ public class RecipeBannerDuplicate extends IRecipeComplex {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
             if (!itemstack.isEmpty()) {
-                int j = TileEntityBanner.a(itemstack);
+                int j = TileEntityBanner.b(itemstack);
 
                 if (j > 0 && j <= 6) {
                     ItemStack itemstack1 = itemstack.cloneItemStack();
@@ -77,7 +77,7 @@ public class RecipeBannerDuplicate extends IRecipeComplex {
             if (!itemstack.isEmpty()) {
                 if (itemstack.getItem().q()) {
                     nonnulllist.set(i, new ItemStack(itemstack.getItem().p()));
-                } else if (itemstack.hasTag() && TileEntityBanner.a(itemstack) > 0) {
+                } else if (itemstack.hasTag() && TileEntityBanner.b(itemstack) > 0) {
                     ItemStack itemstack1 = itemstack.cloneItemStack();
 
                     itemstack1.setCount(1);

@@ -6,7 +6,7 @@ public interface IInventory extends Clearable {
 
     int getSize();
 
-    boolean isNotEmpty();
+    boolean isEmpty();
 
     ItemStack getItem(int i);
 

@@ -152,7 +152,7 @@ public class DataConverterPotionId extends DataFix {
 
     public TypeRewriteRule makeRule() {
         Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.r.typeName(), DSL.namespacedString()));
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString()));
         OpticFinder<?> opticfinder1 = type.findField("tag");
 
         return this.fixTypeEverywhereTyped("ItemPotionFix", type, (typed) -> {
@@ -174,7 +174,7 @@ public class DataConverterPotionId extends DataFix {
 
                         typed1 = typed.set(opticfinder1, typed2);
                         if ((short0 & 16384) == 16384) {
-                            typed1 = typed1.set(opticfinder, Pair.of(DataConverterTypes.r.typeName(), "minecraft:splash_potion"));
+                            typed1 = typed1.set(opticfinder, Pair.of(DataConverterTypes.ITEM_NAME.typeName(), "minecraft:splash_potion"));
                         }
                     }
 

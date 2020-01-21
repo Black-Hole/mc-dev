@@ -51,7 +51,7 @@ public class BlockStepAbstract extends Block implements IBlockWaterlogged {
             IBlockData iblockdata1 = (IBlockData) ((IBlockData) this.getBlockData().set(BlockStepAbstract.a, BlockPropertySlabType.BOTTOM)).set(BlockStepAbstract.b, fluid.getType() == FluidTypes.WATER);
             EnumDirection enumdirection = blockactioncontext.getClickedFace();
 
-            return enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || blockactioncontext.j().y - (double) blockposition.getY() <= 0.5D) ? iblockdata1 : (IBlockData) iblockdata1.set(BlockStepAbstract.a, BlockPropertySlabType.TOP);
+            return enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || blockactioncontext.getPos().y - (double) blockposition.getY() <= 0.5D) ? iblockdata1 : (IBlockData) iblockdata1.set(BlockStepAbstract.a, BlockPropertySlabType.TOP);
         }
     }
 
@@ -62,7 +62,7 @@ public class BlockStepAbstract extends Block implements IBlockWaterlogged {
 
         if (blockpropertyslabtype != BlockPropertySlabType.DOUBLE && itemstack.getItem() == this.getItem()) {
             if (blockactioncontext.c()) {
-                boolean flag = blockactioncontext.j().y - (double) blockactioncontext.getClickPosition().getY() > 0.5D;
+                boolean flag = blockactioncontext.getPos().y - (double) blockactioncontext.getClickPosition().getY() > 0.5D;
                 EnumDirection enumdirection = blockactioncontext.getClickedFace();
 
                 return blockpropertyslabtype == BlockPropertySlabType.BOTTOM ? enumdirection == EnumDirection.UP || flag && enumdirection.m().c() : enumdirection == EnumDirection.DOWN || !flag && enumdirection.m().c();

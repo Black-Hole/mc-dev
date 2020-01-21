@@ -22,7 +22,7 @@ public class DataConverterShulkerBoxItem extends DataFix {
 
     public TypeRewriteRule makeRule() {
         Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.r.typeName(), DSL.namespacedString()));
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString()));
         OpticFinder<?> opticfinder1 = type.findField("tag");
         OpticFinder<?> opticfinder2 = opticfinder1.type().findField("BlockEntityTag");
 
@@ -42,7 +42,7 @@ public class DataConverterShulkerBoxItem extends DataFix {
                         int i = dynamic.get("Color").asInt(0);
 
                         dynamic.remove("Color");
-                        return typed.set(opticfinder1, typed1.set(opticfinder2, typed2.set(DSL.remainderFinder(), dynamic))).set(opticfinder, Pair.of(DataConverterTypes.r.typeName(), DataConverterShulkerBoxItem.a[i % 16]));
+                        return typed.set(opticfinder1, typed1.set(opticfinder2, typed2.set(DSL.remainderFinder(), dynamic))).set(opticfinder, Pair.of(DataConverterTypes.ITEM_NAME.typeName(), DataConverterShulkerBoxItem.a[i % 16]));
                     }
                 }
             }

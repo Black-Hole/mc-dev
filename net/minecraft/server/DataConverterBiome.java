@@ -20,9 +20,9 @@ public class DataConverterBiome extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<Pair<String, String>> type = DSL.named(DataConverterTypes.x.typeName(), DSL.namespacedString());
+        Type<Pair<String, String>> type = DSL.named(DataConverterTypes.BIOME.typeName(), DSL.namespacedString());
 
-        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.x))) {
+        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.BIOME))) {
             throw new IllegalStateException("Biome type is not what was expected.");
         } else {
             return this.fixTypeEverywhere("Biomes fix", type, (dynamicops) -> {

@@ -30,7 +30,7 @@ public class ItemShield extends Item {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         entityhuman.c(enumhand);
-        return InteractionResultWrapper.b(itemstack);
+        return InteractionResultWrapper.consume(itemstack);
     }
 
     @Override

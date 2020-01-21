@@ -65,23 +65,20 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
 
     @Override
     protected void b(BlockPosition blockposition, IBlockData iblockdata) {
+        double d0 = 1.0E-4D;
+        double d1 = 0.001D;
+
         super.b(blockposition, iblockdata);
-        double d0 = this.b * this.b + this.c * this.c;
         Vec3D vec3d = this.getMot();
+        double d2 = b(vec3d);
+        double d3 = this.b * this.b + this.c * this.c;
 
-        if (d0 > 1.0E-4D && b(vec3d) > 0.001D) {
-            d0 = (double) MathHelper.sqrt(d0);
-            this.b /= d0;
-            this.c /= d0;
-            if (this.b * vec3d.x + this.c * vec3d.z < 0.0D) {
-                this.b = 0.0D;
-                this.c = 0.0D;
-            } else {
-                double d1 = d0 / this.getMaxSpeed();
+        if (d3 > 1.0E-4D && d2 > 0.001D) {
+            double d4 = (double) MathHelper.sqrt(d2);
+            double d5 = (double) MathHelper.sqrt(d3);
 
-                this.b *= d1;
-                this.c *= d1;
-            }
+            this.b = vec3d.x / d4 * d5;
+            this.c = vec3d.z / d4 * d5;
         }
 
     }

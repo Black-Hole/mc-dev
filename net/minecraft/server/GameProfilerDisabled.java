@@ -27,6 +27,12 @@ public class GameProfilerDisabled implements GameProfilerFillerActive {
     public void exitEnter(String s) {}
 
     @Override
+    public void c(String s) {}
+
+    @Override
+    public void c(Supplier<String> supplier) {}
+
+    @Override
     public MethodProfilerResults d() {
         return MethodProfilerResultsEmpty.a;
     }

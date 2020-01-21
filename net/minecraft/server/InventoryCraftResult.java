@@ -18,7 +18,7 @@ public class InventoryCraftResult implements IInventory, RecipeHolder {
     }
 
     @Override
-    public boolean isNotEmpty() {
+    public boolean isEmpty() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;

@@ -41,12 +41,12 @@ public class EnchantmentThorns extends Enchantment {
 
             if (entry != null) {
                 ((ItemStack) entry.getValue()).damage(3, entityliving, (entityliving1) -> {
-                    entityliving1.c((EnumItemSlot) entry.getKey());
+                    entityliving1.broadcastItemBreak((EnumItemSlot) entry.getKey());
                 });
             }
         } else if (entry != null) {
             ((ItemStack) entry.getValue()).damage(1, entityliving, (entityliving1) -> {
-                entityliving1.c((EnumItemSlot) entry.getKey());
+                entityliving1.broadcastItemBreak((EnumItemSlot) entry.getKey());
             });
         }
 

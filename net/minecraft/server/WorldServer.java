@@ -48,7 +48,7 @@ public class WorldServer extends World {
     private final MinecraftServer server;
     private final WorldNBTStorage dataManager;
     public boolean savingDisabled;
-    private boolean C;
+    private boolean everyoneSleeping;
     private int emptyTime;
     private final PortalTravelAgent portalTravelAgent;
     private final TickListServer<Block> nextTickListBlock;
@@ -79,7 +79,7 @@ public class WorldServer extends World {
         this.portalTravelAgent = new PortalTravelAgent(this);
         this.N();
         this.O();
-        this.getWorldBorder().a(minecraftserver.aw());
+        this.getWorldBorder().a(minecraftserver.ax());
         this.persistentRaid = (PersistentRaid) this.getWorldPersistentData().a(() -> {
             return new PersistentRaid(this);
         }, PersistentRaid.a(this.worldProvider));
@@ -192,17 +192,17 @@ public class WorldServer extends World {
             this.getWorldData().setDifficulty(EnumDifficulty.HARD);
         }
 
-        if (this.C && this.players.stream().noneMatch((entityplayer) -> {
+        if (this.everyoneSleeping && this.players.stream().noneMatch((entityplayer) -> {
             return !entityplayer.isSpectator() && !entityplayer.isDeeplySleeping();
         })) {
-            this.C = false;
+            this.everyoneSleeping = false;
             if (this.getGameRules().getBoolean(GameRules.DO_DAYLIGHT_CYCLE)) {
                 long l = this.worldData.getDayTime() + 24000L;
 
                 this.setDayTime(l - l % 24000L);
             }
 
-            this.ab();
+            this.wakeupPlayers();
             if (this.getGameRules().getBoolean(GameRules.DO_WEATHER_CYCLE)) {
                 this.clearWeather();
             }
@@ -311,7 +311,7 @@ public class WorldServer extends World {
         gameprofilerfiller.exit();
     }
 
-    private void ab() {
+    private void wakeupPlayers() {
         ((List) this.players.stream().filter(EntityLiving::isSleeping).collect(Collectors.toList())).forEach((entityplayer) -> {
             entityplayer.wakeup(false, false);
         });
@@ -424,7 +424,7 @@ public class WorldServer extends World {
     }
 
     public void everyoneSleeping() {
-        this.C = false;
+        this.everyoneSleeping = false;
         if (!this.players.isEmpty()) {
             int i = 0;
             int j = 0;
@@ -440,7 +440,7 @@ public class WorldServer extends World {
                 }
             }
 
-            this.C = j > 0 && j >= this.players.size() - i;
+            this.everyoneSleeping = j > 0 && j >= this.players.size() - i;
         }
 
     }
@@ -486,11 +486,14 @@ public class WorldServer extends World {
             entity.lastPitch = entity.pitch;
             if (entity.inChunk) {
                 ++entity.ticksLived;
-                this.getMethodProfiler().a(() -> {
+                GameProfilerFiller gameprofilerfiller = this.getMethodProfiler();
+
+                gameprofilerfiller.a(() -> {
                     return IRegistry.ENTITY_TYPE.getKey(entity.getEntityType()).toString();
                 });
+                gameprofilerfiller.c("tickNonPassenger");
                 entity.tick();
-                this.getMethodProfiler().exit();
+                gameprofilerfiller.exit();
             }
 
             this.chunkCheck(entity);
@@ -515,7 +518,14 @@ public class WorldServer extends World {
                 entity1.lastPitch = entity1.pitch;
                 if (entity1.inChunk) {
                     ++entity1.ticksLived;
+                    GameProfilerFiller gameprofilerfiller = this.getMethodProfiler();
+
+                    gameprofilerfiller.a(() -> {
+                        return IRegistry.ENTITY_TYPE.getKey(entity1.getEntityType()).toString();
+                    });
+                    gameprofilerfiller.c("tickPassenger");
                     entity1.passengerTick();
+                    gameprofilerfiller.exit();
                 }
 
                 this.chunkCheck(entity1);

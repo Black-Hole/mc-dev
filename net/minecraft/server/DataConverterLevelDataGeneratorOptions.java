@@ -108,9 +108,9 @@ public class DataConverterLevelDataGeneratorOptions extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<?> type = this.getOutputSchema().getType(DataConverterTypes.a);
+        Type<?> type = this.getOutputSchema().getType(DataConverterTypes.LEVEL);
 
-        return this.fixTypeEverywhereTyped("LevelDataGeneratorOptionsFix", this.getInputSchema().getType(DataConverterTypes.a), type, (typed) -> {
+        return this.fixTypeEverywhereTyped("LevelDataGeneratorOptionsFix", this.getInputSchema().getType(DataConverterTypes.LEVEL), type, (typed) -> {
             Dynamic<?> dynamic = typed.write();
             Optional<String> optional = dynamic.get("generatorOptions").asString();
             Dynamic dynamic1;

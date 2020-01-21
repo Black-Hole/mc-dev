@@ -272,16 +272,16 @@ public class BlockComposter extends Block implements IInventoryHolder {
 
     static class ContainerOutput extends InventorySubcontainer implements IWorldInventory {
 
-        private final IBlockData a;
-        private final GeneratorAccess b;
-        private final BlockPosition c;
-        private boolean d;
+        private final IBlockData blockData;
+        private final GeneratorAccess generatorAccess;
+        private final BlockPosition blockPosition;
+        private boolean emptied;
 
         public ContainerOutput(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition, ItemStack itemstack) {
             super(itemstack);
-            this.a = iblockdata;
-            this.b = generatoraccess;
-            this.c = blockposition;
+            this.blockData = iblockdata;
+            this.generatorAccess = generatoraccess;
+            this.blockPosition = blockposition;
         }
 
         @Override
@@ -301,13 +301,13 @@ public class BlockComposter extends Block implements IInventoryHolder {
 
         @Override
         public boolean canTakeItemThroughFace(int i, ItemStack itemstack, EnumDirection enumdirection) {
-            return !this.d && enumdirection == EnumDirection.DOWN && itemstack.getItem() == Items.BONE_MEAL;
+            return !this.emptied && enumdirection == EnumDirection.DOWN && itemstack.getItem() == Items.BONE_MEAL;
         }
 
         @Override
         public void update() {
-            BlockComposter.d(this.a, this.b, this.c);
-            this.d = true;
+            BlockComposter.d(this.blockData, this.generatorAccess, this.blockPosition);
+            this.emptied = true;
         }
     }
 

@@ -14,13 +14,13 @@ public class DataConverterSchemaV1022 extends Schema {
 
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
         super.registerTypes(schema, map, map1);
-        schema.registerType(false, DataConverterTypes.w, () -> {
+        schema.registerType(false, DataConverterTypes.RECIPE, () -> {
             return DSL.constType(DSL.namespacedString());
         });
         schema.registerType(false, DataConverterTypes.PLAYER, () -> {
-            return DSL.optionalFields("RootVehicle", DSL.optionalFields("Entity", DataConverterTypes.o.in(schema)), "Inventory", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)), "EnderItems", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)), DSL.optionalFields("ShoulderEntityLeft", DataConverterTypes.o.in(schema), "ShoulderEntityRight", DataConverterTypes.o.in(schema), "recipeBook", DSL.optionalFields("recipes", DSL.list(DataConverterTypes.w.in(schema)), "toBeDisplayed", DSL.list(DataConverterTypes.w.in(schema)))));
+            return DSL.optionalFields("RootVehicle", DSL.optionalFields("Entity", DataConverterTypes.ENTITY_TREE.in(schema)), "Inventory", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)), "EnderItems", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)), DSL.optionalFields("ShoulderEntityLeft", DataConverterTypes.ENTITY_TREE.in(schema), "ShoulderEntityRight", DataConverterTypes.ENTITY_TREE.in(schema), "recipeBook", DSL.optionalFields("recipes", DSL.list(DataConverterTypes.RECIPE.in(schema)), "toBeDisplayed", DSL.list(DataConverterTypes.RECIPE.in(schema)))));
         });
-        schema.registerType(false, DataConverterTypes.d, () -> {
+        schema.registerType(false, DataConverterTypes.HOTBAR, () -> {
             return DSL.compoundList(DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));
         });
     }

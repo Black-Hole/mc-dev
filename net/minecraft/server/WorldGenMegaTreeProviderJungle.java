@@ -9,7 +9,7 @@ public class WorldGenMegaTreeProviderJungle extends WorldGenMegaTreeProvider {
 
     @Nullable
     @Override
-    protected WorldGenFeatureConfigured<WorldGenFeatureSmallTreeConfigurationConfiguration, ?> b(Random random) {
+    protected WorldGenFeatureConfigured<WorldGenFeatureSmallTreeConfigurationConfiguration, ?> a(Random random, boolean flag) {
         return (new WorldGenTrees(WorldGenFeatureSmallTreeConfigurationConfiguration::a)).b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.JUNGLE_TREE_NOVINE);
     }
 

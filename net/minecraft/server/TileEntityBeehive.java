@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 
 public class TileEntityBeehive extends TileEntity implements ITickable {
 
-    private final List<TileEntityBeehive.a> bees = Lists.newArrayList();
+    private final List<TileEntityBeehive.HiveBee> bees = Lists.newArrayList();
     @Nullable
     public BlockPosition flowerPos = null;
 
@@ -80,8 +80,8 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
     private List<Entity> a(IBlockData iblockdata, TileEntityBeehive.ReleaseStatus tileentitybeehive_releasestatus) {
         List<Entity> list = Lists.newArrayList();
 
-        this.bees.removeIf((tileentitybeehive_a) -> {
-            return this.a(iblockdata, tileentitybeehive_a.a, list, tileentitybeehive_releasestatus);
+        this.bees.removeIf((tileentitybeehive_hivebee) -> {
+            return this.a(iblockdata, tileentitybeehive_hivebee.entityData, list, tileentitybeehive_releasestatus);
         });
         return list;
     }
@@ -108,11 +108,12 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
 
     public void a(Entity entity, boolean flag, int i) {
         if (this.bees.size() < 3) {
+            entity.stopRiding();
             entity.ejectPassengers();
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
             entity.d(nbttagcompound);
-            this.bees.add(new TileEntityBeehive.a(nbttagcompound, i, flag ? 2400 : 600));
+            this.bees.add(new TileEntityBeehive.HiveBee(nbttagcompound, i, flag ? 2400 : 600));
             if (this.world != null) {
                 if (entity instanceof EntityBee) {
                     EntityBee entitybee = (EntityBee) entity;
@@ -142,8 +143,9 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
             nbttagcompound.c("UUID");
             EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockBeehive.b);
             BlockPosition blockposition1 = blockposition.shift(enumdirection);
+            boolean flag = !this.world.getType(blockposition1).getCollisionShape(this.world, blockposition1).isEmpty();
 
-            if (!this.world.getType(blockposition1).getCollisionShape(this.world, blockposition1).isEmpty()) {
+            if (flag && tileentitybeehive_releasestatus != TileEntityBeehive.ReleaseStatus.EMERGENCY) {
                 return false;
             } else {
                 Entity entity = EntityTypes.a(nbttagcompound, this.world, (entity1) -> {
@@ -152,7 +154,7 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
 
                 if (entity != null) {
                     float f = entity.getWidth();
-                    double d0 = 0.55D + (double) (f / 2.0F);
+                    double d0 = flag ? 0.0D : 0.55D + (double) (f / 2.0F);
                     double d1 = (double) blockposition.getX() + 0.5D + d0 * (double) enumdirection.getAdjacentX();
                     double d2 = (double) blockposition.getY() + 0.5D - (double) (entity.getHeight() / 2.0F);
                     double d3 = (double) blockposition.getZ() + 0.5D + d0 * (double) enumdirection.getAdjacentZ();
@@ -208,21 +210,21 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
     }
 
     private void y() {
-        Iterator<TileEntityBeehive.a> iterator = this.bees.iterator();
+        Iterator<TileEntityBeehive.HiveBee> iterator = this.bees.iterator();
         IBlockData iblockdata = this.getBlock();
 
         while (iterator.hasNext()) {
-            TileEntityBeehive.a tileentitybeehive_a = (TileEntityBeehive.a) iterator.next();
+            TileEntityBeehive.HiveBee tileentitybeehive_hivebee = (TileEntityBeehive.HiveBee) iterator.next();
 
-            if (tileentitybeehive_a.b > tileentitybeehive_a.c) {
-                NBTTagCompound nbttagcompound = tileentitybeehive_a.a;
+            if (tileentitybeehive_hivebee.ticksInHive > tileentitybeehive_hivebee.minOccupationTicks) {
+                NBTTagCompound nbttagcompound = tileentitybeehive_hivebee.entityData;
                 TileEntityBeehive.ReleaseStatus tileentitybeehive_releasestatus = nbttagcompound.getBoolean("HasNectar") ? TileEntityBeehive.ReleaseStatus.HONEY_DELIVERED : TileEntityBeehive.ReleaseStatus.BEE_RELEASED;
 
                 if (this.a(iblockdata, nbttagcompound, (List) null, tileentitybeehive_releasestatus)) {
                     iterator.remove();
                 }
             } else {
-                tileentitybeehive_a.b++;
+                tileentitybeehive_hivebee.ticksInHive++;
             }
         }
 
@@ -254,9 +256,9 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(i);
-            TileEntityBeehive.a tileentitybeehive_a = new TileEntityBeehive.a(nbttagcompound1.getCompound("EntityData"), nbttagcompound1.getInt("TicksInHive"), nbttagcompound1.getInt("MinOccupationTicks"));
+            TileEntityBeehive.HiveBee tileentitybeehive_hivebee = new TileEntityBeehive.HiveBee(nbttagcompound1.getCompound("EntityData"), nbttagcompound1.getInt("TicksInHive"), nbttagcompound1.getInt("MinOccupationTicks"));
 
-            this.bees.add(tileentitybeehive_a);
+            this.bees.add(tileentitybeehive_hivebee);
         }
 
         this.flowerPos = null;
@@ -282,31 +284,31 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
         Iterator iterator = this.bees.iterator();
 
         while (iterator.hasNext()) {
-            TileEntityBeehive.a tileentitybeehive_a = (TileEntityBeehive.a) iterator.next();
+            TileEntityBeehive.HiveBee tileentitybeehive_hivebee = (TileEntityBeehive.HiveBee) iterator.next();
 
-            tileentitybeehive_a.a.c("UUID");
+            tileentitybeehive_hivebee.entityData.c("UUID");
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-            nbttagcompound.set("EntityData", tileentitybeehive_a.a);
-            nbttagcompound.setInt("TicksInHive", tileentitybeehive_a.b);
-            nbttagcompound.setInt("MinOccupationTicks", tileentitybeehive_a.c);
+            nbttagcompound.set("EntityData", tileentitybeehive_hivebee.entityData);
+            nbttagcompound.setInt("TicksInHive", tileentitybeehive_hivebee.ticksInHive);
+            nbttagcompound.setInt("MinOccupationTicks", tileentitybeehive_hivebee.minOccupationTicks);
             nbttaglist.add(nbttagcompound);
         }
 
         return nbttaglist;
     }
 
-    static class a {
+    static class HiveBee {
 
-        private final NBTTagCompound a;
-        private int b;
-        private final int c;
+        private final NBTTagCompound entityData;
+        private int ticksInHive;
+        private final int minOccupationTicks;
 
-        private a(NBTTagCompound nbttagcompound, int i, int j) {
+        private HiveBee(NBTTagCompound nbttagcompound, int i, int j) {
             nbttagcompound.c("UUID");
-            this.a = nbttagcompound;
-            this.b = i;
-            this.c = j;
+            this.entityData = nbttagcompound;
+            this.ticksInHive = i;
+            this.minOccupationTicks = j;
         }
     }
 

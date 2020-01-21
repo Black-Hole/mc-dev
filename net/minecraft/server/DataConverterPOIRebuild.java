@@ -17,9 +17,9 @@ public class DataConverterPOIRebuild extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<Pair<String, Dynamic<?>>> type = DSL.named(DataConverterTypes.j.typeName(), DSL.remainderType());
+        Type<Pair<String, Dynamic<?>>> type = DSL.named(DataConverterTypes.POI_CHUNK.typeName(), DSL.remainderType());
 
-        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.j))) {
+        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.POI_CHUNK))) {
             throw new IllegalStateException("Poi type is not what was expected.");
         } else {
             return this.fixTypeEverywhere("POI rebuild", type, (dynamicops) -> {

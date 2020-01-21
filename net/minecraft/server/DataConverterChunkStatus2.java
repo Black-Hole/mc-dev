@@ -21,11 +21,11 @@ public class DataConverterChunkStatus2 extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<?> type = this.getInputSchema().getType(DataConverterTypes.c);
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.CHUNK);
         Type<?> type1 = type.findFieldType("Level");
         OpticFinder<?> opticfinder = DSL.fieldFinder("Level", type1);
 
-        return this.fixTypeEverywhereTyped("ChunkStatusFix2", type, this.getOutputSchema().getType(DataConverterTypes.c), (typed) -> {
+        return this.fixTypeEverywhereTyped("ChunkStatusFix2", type, this.getOutputSchema().getType(DataConverterTypes.CHUNK), (typed) -> {
             return typed.updateTyped(opticfinder, (typed1) -> {
                 Dynamic<?> dynamic = (Dynamic) typed1.get(DSL.remainderFinder());
                 String s = dynamic.get("Status").asString("empty");

@@ -62,7 +62,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
     }
 
     @Override
-    public boolean isNotEmpty() {
+    public boolean isEmpty() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;

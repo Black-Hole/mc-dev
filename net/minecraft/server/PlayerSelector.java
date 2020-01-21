@@ -569,7 +569,7 @@ public class PlayerSelector {
                         return false;
                     } else {
                         WorldServer worldserver = (WorldServer) entity.world;
-                        LootItemCondition lootitemcondition = worldserver.getMinecraftServer().aP().a(minecraftkey);
+                        LootItemCondition lootitemcondition = worldserver.getMinecraftServer().aQ().a(minecraftkey);
 
                         if (lootitemcondition == null) {
                             return false;

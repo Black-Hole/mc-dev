@@ -30,7 +30,7 @@ public class DataConverterSchemaV705 extends DataConverterSchemaNamed {
 
     protected static void b(Schema schema, Map<String, Supplier<TypeTemplate>> map, String s) {
         schema.register(map, s, () -> {
-            return DSL.optionalFields("inTile", DataConverterTypes.q.in(schema));
+            return DSL.optionalFields("inTile", DataConverterTypes.BLOCK_NAME.in(schema));
         });
     }
 
@@ -40,18 +40,18 @@ public class DataConverterSchemaV705 extends DataConverterSchemaNamed {
         schema.registerSimple(map, "minecraft:area_effect_cloud");
         a(schema, map, "minecraft:armor_stand");
         schema.register(map, "minecraft:arrow", (s) -> {
-            return DSL.optionalFields("inTile", DataConverterTypes.q.in(schema));
+            return DSL.optionalFields("inTile", DataConverterTypes.BLOCK_NAME.in(schema));
         });
         a(schema, map, "minecraft:bat");
         a(schema, map, "minecraft:blaze");
         schema.registerSimple(map, "minecraft:boat");
         a(schema, map, "minecraft:cave_spider");
         schema.register(map, "minecraft:chest_minecart", (s) -> {
-            return DSL.optionalFields("DisplayTile", DataConverterTypes.q.in(schema), "Items", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));
+            return DSL.optionalFields("DisplayTile", DataConverterTypes.BLOCK_NAME.in(schema), "Items", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));
         });
         a(schema, map, "minecraft:chicken");
         schema.register(map, "minecraft:commandblock_minecart", (s) -> {
-            return DSL.optionalFields("DisplayTile", DataConverterTypes.q.in(schema));
+            return DSL.optionalFields("DisplayTile", DataConverterTypes.BLOCK_NAME.in(schema));
         });
         a(schema, map, "minecraft:cow");
         a(schema, map, "minecraft:creeper");
@@ -64,26 +64,26 @@ public class DataConverterSchemaV705 extends DataConverterSchemaNamed {
         schema.registerSimple(map, "minecraft:ender_crystal");
         a(schema, map, "minecraft:ender_dragon");
         schema.register(map, "minecraft:enderman", (s) -> {
-            return DSL.optionalFields("carried", DataConverterTypes.q.in(schema), DataConverterSchemaV100.a(schema));
+            return DSL.optionalFields("carried", DataConverterTypes.BLOCK_NAME.in(schema), DataConverterSchemaV100.a(schema));
         });
         a(schema, map, "minecraft:endermite");
         b(schema, map, "minecraft:ender_pearl");
         schema.registerSimple(map, "minecraft:eye_of_ender_signal");
         schema.register(map, "minecraft:falling_block", (s) -> {
-            return DSL.optionalFields("Block", DataConverterTypes.q.in(schema), "TileEntityData", DataConverterTypes.k.in(schema));
+            return DSL.optionalFields("Block", DataConverterTypes.BLOCK_NAME.in(schema), "TileEntityData", DataConverterTypes.BLOCK_ENTITY.in(schema));
         });
         b(schema, map, "minecraft:fireball");
         schema.register(map, "minecraft:fireworks_rocket", (s) -> {
             return DSL.optionalFields("FireworksItem", DataConverterTypes.ITEM_STACK.in(schema));
         });
         schema.register(map, "minecraft:furnace_minecart", (s) -> {
-            return DSL.optionalFields("DisplayTile", DataConverterTypes.q.in(schema));
+            return DSL.optionalFields("DisplayTile", DataConverterTypes.BLOCK_NAME.in(schema));
         });
         a(schema, map, "minecraft:ghast");
         a(schema, map, "minecraft:giant");
         a(schema, map, "minecraft:guardian");
         schema.register(map, "minecraft:hopper_minecart", (s) -> {
-            return DSL.optionalFields("DisplayTile", DataConverterTypes.q.in(schema), "Items", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));
+            return DSL.optionalFields("DisplayTile", DataConverterTypes.BLOCK_NAME.in(schema), "Items", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));
         });
         schema.register(map, "minecraft:horse", (s) -> {
             return DSL.optionalFields("ArmorItem", DataConverterTypes.ITEM_STACK.in(schema), "SaddleItem", DataConverterTypes.ITEM_STACK.in(schema), DataConverterSchemaV100.a(schema));
@@ -98,7 +98,7 @@ public class DataConverterSchemaV705 extends DataConverterSchemaNamed {
         schema.registerSimple(map, "minecraft:leash_knot");
         a(schema, map, "minecraft:magma_cube");
         schema.register(map, "minecraft:minecart", (s) -> {
-            return DSL.optionalFields("DisplayTile", DataConverterTypes.q.in(schema));
+            return DSL.optionalFields("DisplayTile", DataConverterTypes.BLOCK_NAME.in(schema));
         });
         a(schema, map, "minecraft:mooshroom");
         schema.register(map, "minecraft:mule", (s) -> {
@@ -110,7 +110,7 @@ public class DataConverterSchemaV705 extends DataConverterSchemaNamed {
         a(schema, map, "minecraft:pig");
         a(schema, map, "minecraft:polar_bear");
         schema.register(map, "minecraft:potion", (s) -> {
-            return DSL.optionalFields("Potion", DataConverterTypes.ITEM_STACK.in(schema), "inTile", DataConverterTypes.q.in(schema));
+            return DSL.optionalFields("Potion", DataConverterTypes.ITEM_STACK.in(schema), "inTile", DataConverterTypes.BLOCK_NAME.in(schema));
         });
         a(schema, map, "minecraft:rabbit");
         a(schema, map, "minecraft:sheep");
@@ -126,17 +126,17 @@ public class DataConverterSchemaV705 extends DataConverterSchemaNamed {
         b(schema, map, "minecraft:snowball");
         a(schema, map, "minecraft:snowman");
         schema.register(map, "minecraft:spawner_minecart", (s) -> {
-            return DSL.optionalFields("DisplayTile", DataConverterTypes.q.in(schema), DataConverterTypes.s.in(schema));
+            return DSL.optionalFields("DisplayTile", DataConverterTypes.BLOCK_NAME.in(schema), DataConverterTypes.UNTAGGED_SPAWNER.in(schema));
         });
         schema.register(map, "minecraft:spectral_arrow", (s) -> {
-            return DSL.optionalFields("inTile", DataConverterTypes.q.in(schema));
+            return DSL.optionalFields("inTile", DataConverterTypes.BLOCK_NAME.in(schema));
         });
         a(schema, map, "minecraft:spider");
         a(schema, map, "minecraft:squid");
         a(schema, map, "minecraft:stray");
         schema.registerSimple(map, "minecraft:tnt");
         schema.register(map, "minecraft:tnt_minecart", (s) -> {
-            return DSL.optionalFields("DisplayTile", DataConverterTypes.q.in(schema));
+            return DSL.optionalFields("DisplayTile", DataConverterTypes.BLOCK_NAME.in(schema));
         });
         schema.register(map, "minecraft:villager", (s) -> {
             return DSL.optionalFields("Inventory", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)), "Offers", DSL.optionalFields("Recipes", DSL.list(DSL.optionalFields("buy", DataConverterTypes.ITEM_STACK.in(schema), "buyB", DataConverterTypes.ITEM_STACK.in(schema), "sell", DataConverterTypes.ITEM_STACK.in(schema)))), DataConverterSchemaV100.a(schema));
@@ -173,7 +173,7 @@ public class DataConverterSchemaV705 extends DataConverterSchemaNamed {
             return DSL.taggedChoiceLazy("id", DSL.namespacedString(), map);
         });
         schema.registerType(true, DataConverterTypes.ITEM_STACK, () -> {
-            return DSL.hook(DSL.optionalFields("id", DataConverterTypes.r.in(schema), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.o.in(schema), "BlockEntityTag", DataConverterTypes.k.in(schema), "CanDestroy", DSL.list(DataConverterTypes.q.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.q.in(schema)))), DataConverterSchemaV705.a, HookFunction.IDENTITY);
+            return DSL.hook(DSL.optionalFields("id", DataConverterTypes.ITEM_NAME.in(schema), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.ENTITY_TREE.in(schema), "BlockEntityTag", DataConverterTypes.BLOCK_ENTITY.in(schema), "CanDestroy", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)))), DataConverterSchemaV705.a, HookFunction.IDENTITY);
         });
     }
 }

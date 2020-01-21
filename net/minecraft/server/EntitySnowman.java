@@ -112,7 +112,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
             if (!this.world.isClientSide) {
                 this.setHasPumpkin(false);
                 itemstack.damage(1, entityhuman, (entityhuman1) -> {
-                    entityhuman1.d(enumhand);
+                    entityhuman1.broadcastItemBreak(enumhand);
                 });
             }
 

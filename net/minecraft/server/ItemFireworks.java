@@ -15,7 +15,7 @@ public class ItemFireworks extends Item {
 
         if (!world.isClientSide) {
             ItemStack itemstack = itemactioncontext.getItemStack();
-            Vec3D vec3d = itemactioncontext.j();
+            Vec3D vec3d = itemactioncontext.getPos();
             EnumDirection enumdirection = itemactioncontext.getClickedFace();
             EntityFireworks entityfireworks = new EntityFireworks(world, vec3d.x + (double) enumdirection.getAdjacentX() * 0.15D, vec3d.y + (double) enumdirection.getAdjacentY() * 0.15D, vec3d.z + (double) enumdirection.getAdjacentZ() * 0.15D, itemstack);
 
@@ -38,9 +38,9 @@ public class ItemFireworks extends Item {
                 }
             }
 
-            return InteractionResultWrapper.a(entityhuman.b(enumhand));
+            return InteractionResultWrapper.success(entityhuman.b(enumhand));
         } else {
-            return InteractionResultWrapper.c(entityhuman.b(enumhand));
+            return InteractionResultWrapper.pass(entityhuman.b(enumhand));
         }
     }
 

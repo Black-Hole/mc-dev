@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.ComparisonChain;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,8 +13,10 @@ public class MobEffect implements Comparable<MobEffect> {
     private int amplification;
     private boolean splash;
     private boolean ambient;
-    private boolean h;
-    private boolean i;
+    private boolean showParticles;
+    private boolean showIcon;
+    @Nullable
+    private MobEffect hiddenEffect;
 
     public MobEffect(MobEffectList mobeffectlist) {
         this(mobeffectlist, 0, 0);
@@ -32,24 +35,33 @@ public class MobEffect implements Comparable<MobEffect> {
     }
 
     public MobEffect(MobEffectList mobeffectlist, int i, int j, boolean flag, boolean flag1, boolean flag2) {
+        this(mobeffectlist, i, j, flag, flag1, flag2, (MobEffect) null);
+    }
+
+    public MobEffect(MobEffectList mobeffectlist, int i, int j, boolean flag, boolean flag1, boolean flag2, @Nullable MobEffect mobeffect) {
         this.b = mobeffectlist;
         this.duration = i;
         this.amplification = j;
         this.ambient = flag;
-        this.h = flag1;
-        this.i = flag2;
+        this.showParticles = flag1;
+        this.showIcon = flag2;
+        this.hiddenEffect = mobeffect;
     }
 
     public MobEffect(MobEffect mobeffect) {
         this.b = mobeffect.b;
+        this.a(mobeffect);
+    }
+
+    void a(MobEffect mobeffect) {
         this.duration = mobeffect.duration;
         this.amplification = mobeffect.amplification;
         this.ambient = mobeffect.ambient;
-        this.h = mobeffect.h;
-        this.i = mobeffect.i;
+        this.showParticles = mobeffect.showParticles;
+        this.showIcon = mobeffect.showIcon;
     }
 
-    public boolean a(MobEffect mobeffect) {
+    public boolean b(MobEffect mobeffect) {
         if (this.b != mobeffect.b) {
             MobEffect.LOGGER.warn("This method should only be called for matching effects!");
         }
@@ -57,12 +69,25 @@ public class MobEffect implements Comparable<MobEffect> {
         boolean flag = false;
 
         if (mobeffect.amplification > this.amplification) {
+            if (mobeffect.duration < this.duration) {
+                MobEffect mobeffect1 = this.hiddenEffect;
+
+                this.hiddenEffect = new MobEffect(this);
+                this.hiddenEffect.hiddenEffect = mobeffect1;
+            }
+
             this.amplification = mobeffect.amplification;
             this.duration = mobeffect.duration;
             flag = true;
-        } else if (mobeffect.amplification == this.amplification && this.duration < mobeffect.duration) {
-            this.duration = mobeffect.duration;
-            flag = true;
+        } else if (mobeffect.duration > this.duration) {
+            if (mobeffect.amplification == this.amplification) {
+                this.duration = mobeffect.duration;
+                flag = true;
+            } else if (this.hiddenEffect == null) {
+                this.hiddenEffect = new MobEffect(mobeffect);
+            } else {
+                this.hiddenEffect.b(mobeffect);
+            }
         }
 
         if (!mobeffect.ambient && this.ambient || flag) {
@@ -70,13 +95,13 @@ public class MobEffect implements Comparable<MobEffect> {
             flag = true;
         }
 
-        if (mobeffect.h != this.h) {
-            this.h = mobeffect.h;
+        if (mobeffect.showParticles != this.showParticles) {
+            this.showParticles = mobeffect.showParticles;
             flag = true;
         }
 
-        if (mobeffect.i != this.i) {
-            this.i = mobeffect.i;
+        if (mobeffect.showIcon != this.showIcon) {
+            this.showIcon = mobeffect.showIcon;
             flag = true;
         }
 
@@ -100,30 +125,39 @@ public class MobEffect implements Comparable<MobEffect> {
     }
 
     public boolean isShowParticles() {
-        return this.h;
+        return this.showParticles;
     }
 
-    public boolean f() {
-        return this.i;
+    public boolean isShowIcon() {
+        return this.showIcon;
     }
 
-    public boolean tick(EntityLiving entityliving) {
+    public boolean tick(EntityLiving entityliving, Runnable runnable) {
         if (this.duration > 0) {
             if (this.b.a(this.duration, this.amplification)) {
-                this.b(entityliving);
+                this.a(entityliving);
             }
 
             this.i();
+            if (this.duration == 0 && this.hiddenEffect != null) {
+                this.a(this.hiddenEffect);
+                this.hiddenEffect = this.hiddenEffect.hiddenEffect;
+                runnable.run();
+            }
         }
 
         return this.duration > 0;
     }
 
     private int i() {
+        if (this.hiddenEffect != null) {
+            this.hiddenEffect.i();
+        }
+
         return --this.duration;
     }
 
-    public void b(EntityLiving entityliving) {
+    public void a(EntityLiving entityliving) {
         if (this.duration > 0) {
             this.b.tick(entityliving, this.amplification);
         }
@@ -147,11 +181,11 @@ public class MobEffect implements Comparable<MobEffect> {
             s = s + ", Splash: true";
         }
 
-        if (!this.h) {
+        if (!this.showParticles) {
             s = s + ", Particles: false";
         }
 
-        if (!this.i) {
+        if (!this.showIcon) {
             s = s + ", Show Icon: false";
         }
 
@@ -182,38 +216,55 @@ public class MobEffect implements Comparable<MobEffect> {
 
     public NBTTagCompound a(NBTTagCompound nbttagcompound) {
         nbttagcompound.setByte("Id", (byte) MobEffectList.getId(this.getMobEffect()));
+        this.c(nbttagcompound);
+        return nbttagcompound;
+    }
+
+    private void c(NBTTagCompound nbttagcompound) {
         nbttagcompound.setByte("Amplifier", (byte) this.getAmplifier());
         nbttagcompound.setInt("Duration", this.getDuration());
         nbttagcompound.setBoolean("Ambient", this.isAmbient());
         nbttagcompound.setBoolean("ShowParticles", this.isShowParticles());
-        nbttagcompound.setBoolean("ShowIcon", this.f());
-        return nbttagcompound;
+        nbttagcompound.setBoolean("ShowIcon", this.isShowIcon());
+        if (this.hiddenEffect != null) {
+            NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+
+            this.hiddenEffect.a(nbttagcompound1);
+            nbttagcompound.set("HiddenEffect", nbttagcompound1);
+        }
+
     }
 
     public static MobEffect b(NBTTagCompound nbttagcompound) {
         byte b0 = nbttagcompound.getByte("Id");
         MobEffectList mobeffectlist = MobEffectList.fromId(b0);
 
-        if (mobeffectlist == null) {
-            return null;
-        } else {
-            byte b1 = nbttagcompound.getByte("Amplifier");
-            int i = nbttagcompound.getInt("Duration");
-            boolean flag = nbttagcompound.getBoolean("Ambient");
-            boolean flag1 = true;
+        return mobeffectlist == null ? null : a(mobeffectlist, nbttagcompound);
+    }
 
-            if (nbttagcompound.hasKeyOfType("ShowParticles", 1)) {
-                flag1 = nbttagcompound.getBoolean("ShowParticles");
-            }
+    private static MobEffect a(MobEffectList mobeffectlist, NBTTagCompound nbttagcompound) {
+        byte b0 = nbttagcompound.getByte("Amplifier");
+        int i = nbttagcompound.getInt("Duration");
+        boolean flag = nbttagcompound.getBoolean("Ambient");
+        boolean flag1 = true;
 
-            boolean flag2 = flag1;
-
-            if (nbttagcompound.hasKeyOfType("ShowIcon", 1)) {
-                flag2 = nbttagcompound.getBoolean("ShowIcon");
-            }
-
-            return new MobEffect(mobeffectlist, i, b1 < 0 ? 0 : b1, flag, flag1, flag2);
+        if (nbttagcompound.hasKeyOfType("ShowParticles", 1)) {
+            flag1 = nbttagcompound.getBoolean("ShowParticles");
         }
+
+        boolean flag2 = flag1;
+
+        if (nbttagcompound.hasKeyOfType("ShowIcon", 1)) {
+            flag2 = nbttagcompound.getBoolean("ShowIcon");
+        }
+
+        MobEffect mobeffect = null;
+
+        if (nbttagcompound.hasKeyOfType("HiddenEffect", 10)) {
+            mobeffect = a(mobeffectlist, nbttagcompound.getCompound("HiddenEffect"));
+        }
+
+        return new MobEffect(mobeffectlist, i, b0 < 0 ? 0 : b0, flag, flag1, flag2, mobeffect);
     }
 
     public int compareTo(MobEffect mobeffect) {

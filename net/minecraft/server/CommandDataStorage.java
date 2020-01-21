@@ -30,7 +30,7 @@ public class CommandDataStorage implements CommandDataAccessor {
     private final MinecraftKey d;
 
     private static PersistentCommandStorage b(CommandContext<CommandListenerWrapper> commandcontext) {
-        return ((CommandListenerWrapper) commandcontext.getSource()).getServer().aN();
+        return ((CommandListenerWrapper) commandcontext.getSource()).getServer().aO();
     }
 
     private CommandDataStorage(PersistentCommandStorage persistentcommandstorage, MinecraftKey minecraftkey) {

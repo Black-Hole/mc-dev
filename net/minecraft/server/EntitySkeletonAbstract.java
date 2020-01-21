@@ -69,7 +69,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
                 if (itemstack.e()) {
                     itemstack.setDamage(itemstack.getDamage() + this.random.nextInt(2));
                     if (itemstack.getDamage() >= itemstack.h()) {
-                        this.c(EnumItemSlot.HEAD);
+                        this.broadcastItemBreak(EnumItemSlot.HEAD);
                         this.setSlot(EnumItemSlot.HEAD, ItemStack.a);
                     }
                 }

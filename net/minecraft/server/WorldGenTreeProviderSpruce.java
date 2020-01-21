@@ -9,7 +9,7 @@ public class WorldGenTreeProviderSpruce extends WorldGenMegaTreeProvider {
 
     @Nullable
     @Override
-    protected WorldGenFeatureConfigured<WorldGenFeatureSmallTreeConfigurationConfiguration, ?> b(Random random) {
+    protected WorldGenFeatureConfigured<WorldGenFeatureSmallTreeConfigurationConfiguration, ?> a(Random random, boolean flag) {
         return WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.SPRUCE_TREE);
     }
 

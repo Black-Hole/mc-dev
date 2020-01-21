@@ -28,9 +28,9 @@ public class ItemElytra extends Item {
         if (itemstack1.isEmpty()) {
             entityhuman.setSlot(enumitemslot, itemstack.cloneItemStack());
             itemstack.setCount(0);
-            return InteractionResultWrapper.a(itemstack);
+            return InteractionResultWrapper.success(itemstack);
         } else {
-            return InteractionResultWrapper.d(itemstack);
+            return InteractionResultWrapper.fail(itemstack);
         }
     }
 }

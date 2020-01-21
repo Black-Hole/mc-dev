@@ -1157,7 +1157,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     public void pickup(EntityHuman entityhuman) {}
 
     public void collide(Entity entity) {
-        if (!this.x(entity)) {
+        if (!this.isSameVehicle(entity)) {
             if (!entity.noclip && !this.noclip) {
                 double d0 = entity.locX() - this.locX();
                 double d1 = entity.locZ() - this.locZ();
@@ -2233,7 +2233,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             this.cg().forEach((entity) -> {
                 worldserver.chunkCheck(entity);
                 entity.aF = true;
-                entity.a(Entity::b);
+                entity.a(Entity::teleportAndSync);
             });
         }
     }
@@ -2490,7 +2490,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return entity;
     }
 
-    public boolean x(Entity entity) {
+    public boolean isSameVehicle(Entity entity) {
         return this.getRootVehicle() == entity.getRootVehicle();
     }
 
@@ -2753,7 +2753,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     public void checkDespawn() {}
 
-    public void b(double d0, double d1, double d2) {
+    public void teleportAndSync(double d0, double d1, double d2) {
         this.setPositionRotation(d0, d1, d2, this.yaw, this.pitch);
     }
 

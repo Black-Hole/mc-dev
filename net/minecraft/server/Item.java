@@ -103,12 +103,12 @@ public class Item implements IMaterial {
 
             if (entityhuman.p(this.getFoodInfo().d())) {
                 entityhuman.c(enumhand);
-                return InteractionResultWrapper.b(itemstack);
+                return InteractionResultWrapper.consume(itemstack);
             } else {
-                return InteractionResultWrapper.d(itemstack);
+                return InteractionResultWrapper.fail(itemstack);
             }
         } else {
-            return InteractionResultWrapper.c(entityhuman.b(enumhand));
+            return InteractionResultWrapper.pass(entityhuman.b(enumhand));
         }
     }
 

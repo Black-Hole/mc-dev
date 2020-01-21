@@ -159,14 +159,14 @@ public class EntityTypes<T extends Entity> {
 
     @Nullable
     public T spawnCreature(World world, @Nullable NBTTagCompound nbttagcompound, @Nullable IChatBaseComponent ichatbasecomponent, @Nullable EntityHuman entityhuman, BlockPosition blockposition, EnumMobSpawn enummobspawn, boolean flag, boolean flag1) {
-        T t0 = this.b(world, nbttagcompound, ichatbasecomponent, entityhuman, blockposition, enummobspawn, flag, flag1);
+        T t0 = this.createCreature(world, nbttagcompound, ichatbasecomponent, entityhuman, blockposition, enummobspawn, flag, flag1);
 
         world.addEntity(t0);
         return t0;
     }
 
     @Nullable
-    public T b(World world, @Nullable NBTTagCompound nbttagcompound, @Nullable IChatBaseComponent ichatbasecomponent, @Nullable EntityHuman entityhuman, BlockPosition blockposition, EnumMobSpawn enummobspawn, boolean flag, boolean flag1) {
+    public T createCreature(World world, @Nullable NBTTagCompound nbttagcompound, @Nullable IChatBaseComponent ichatbasecomponent, @Nullable EntityHuman entityhuman, BlockPosition blockposition, EnumMobSpawn enummobspawn, boolean flag, boolean flag1) {
         T t0 = this.a(world);
 
         if (t0 == null) {
@@ -415,7 +415,7 @@ public class EntityTypes<T extends Entity> {
         public EntityTypes<T> a(String s) {
             if (this.c) {
                 try {
-                    DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.getGameVersion().getWorldVersion())).getChoiceType(DataConverterTypes.o, s);
+                    DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.getGameVersion().getWorldVersion())).getChoiceType(DataConverterTypes.ENTITY_TREE, s);
                 } catch (IllegalStateException illegalstateexception) {
                     if (SharedConstants.b) {
                         throw illegalstateexception;

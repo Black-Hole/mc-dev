@@ -144,7 +144,7 @@ public class EntitySheep extends EntityAnimal {
             this.shear();
             if (!this.world.isClientSide) {
                 itemstack.damage(1, entityhuman, (entityhuman1) -> {
-                    entityhuman1.d(enumhand);
+                    entityhuman1.broadcastItemBreak(enumhand);
                 });
             }
 

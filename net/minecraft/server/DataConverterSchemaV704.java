@@ -107,7 +107,7 @@ public class DataConverterSchemaV704 extends Schema {
     }
 
     public Type<?> getChoiceType(TypeReference typereference, String s) {
-        return Objects.equals(typereference.typeName(), DataConverterTypes.k.typeName()) ? super.getChoiceType(typereference, DataConverterSchemaNamed.a(s)) : super.getChoiceType(typereference, s);
+        return Objects.equals(typereference.typeName(), DataConverterTypes.BLOCK_ENTITY.typeName()) ? super.getChoiceType(typereference, DataConverterSchemaNamed.a(s)) : super.getChoiceType(typereference, s);
     }
 
     public Map<String, Supplier<TypeTemplate>> registerBlockEntities(Schema schema) {
@@ -123,7 +123,7 @@ public class DataConverterSchemaV704 extends Schema {
         a(schema, map, "minecraft:dropper");
         schema.registerSimple(map, "minecraft:sign");
         schema.register(map, "minecraft:mob_spawner", (s) -> {
-            return DataConverterTypes.s.in(schema);
+            return DataConverterTypes.UNTAGGED_SPAWNER.in(schema);
         });
         schema.registerSimple(map, "minecraft:noteblock");
         schema.registerSimple(map, "minecraft:piston");
@@ -136,7 +136,7 @@ public class DataConverterSchemaV704 extends Schema {
         a(schema, map, "minecraft:hopper");
         schema.registerSimple(map, "minecraft:comparator");
         schema.register(map, "minecraft:flower_pot", (s) -> {
-            return DSL.optionalFields("Item", DSL.or(DSL.constType(DSL.intType()), DataConverterTypes.r.in(schema)));
+            return DSL.optionalFields("Item", DSL.or(DSL.constType(DSL.intType()), DataConverterTypes.ITEM_NAME.in(schema)));
         });
         schema.registerSimple(map, "minecraft:banner");
         schema.registerSimple(map, "minecraft:structure_block");
@@ -147,11 +147,11 @@ public class DataConverterSchemaV704 extends Schema {
 
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
         super.registerTypes(schema, map, map1);
-        schema.registerType(false, DataConverterTypes.k, () -> {
+        schema.registerType(false, DataConverterTypes.BLOCK_ENTITY, () -> {
             return DSL.taggedChoiceLazy("id", DSL.namespacedString(), map1);
         });
         schema.registerType(true, DataConverterTypes.ITEM_STACK, () -> {
-            return DSL.hook(DSL.optionalFields("id", DataConverterTypes.r.in(schema), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.o.in(schema), "BlockEntityTag", DataConverterTypes.k.in(schema), "CanDestroy", DSL.list(DataConverterTypes.q.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.q.in(schema)))), DataConverterSchemaV704.b, HookFunction.IDENTITY);
+            return DSL.hook(DSL.optionalFields("id", DataConverterTypes.ITEM_NAME.in(schema), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.ENTITY_TREE.in(schema), "BlockEntityTag", DataConverterTypes.BLOCK_ENTITY.in(schema), "CanDestroy", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)))), DataConverterSchemaV704.b, HookFunction.IDENTITY);
         });
     }
 }

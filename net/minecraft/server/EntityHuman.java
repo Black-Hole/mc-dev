@@ -754,7 +754,7 @@ public abstract class EntityHuman extends EntityLiving {
             EnumHand enumhand = this.getRaisedHand();
 
             this.activeItem.damage(i, this, (entityhuman) -> {
-                entityhuman.d(enumhand);
+                entityhuman.broadcastItemBreak(enumhand);
             });
             if (this.activeItem.isEmpty()) {
                 if (enumhand == EnumHand.MAIN_HAND) {
@@ -1167,7 +1167,8 @@ public abstract class EntityHuman extends EntityLiving {
             if (!this.isCreative()) {
                 double d0 = 8.0D;
                 double d1 = 5.0D;
-                List<EntityMonster> list = this.world.a(EntityMonster.class, new AxisAlignedBB((double) blockposition.getX() - 8.0D, (double) blockposition.getY() - 5.0D, (double) blockposition.getZ() - 8.0D, (double) blockposition.getX() + 8.0D, (double) blockposition.getY() + 5.0D, (double) blockposition.getZ() + 8.0D), (entitymonster) -> {
+                Vec3D vec3d = new Vec3D((double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D);
+                List<EntityMonster> list = this.world.a(EntityMonster.class, new AxisAlignedBB(vec3d.getX() - 8.0D, vec3d.getY() - 5.0D, vec3d.getZ() - 8.0D, vec3d.getX() + 8.0D, vec3d.getY() + 5.0D, vec3d.getZ() + 8.0D), (entitymonster) -> {
                     return entitymonster.e(this);
                 });
 
@@ -1194,13 +1195,13 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     private boolean a(BlockPosition blockposition, EnumDirection enumdirection) {
-        if (Math.abs(this.locX() - (double) blockposition.getX()) <= 3.0D && Math.abs(this.locY() - (double) blockposition.getY()) <= 2.0D && Math.abs(this.locZ() - (double) blockposition.getZ()) <= 3.0D) {
-            return true;
-        } else {
-            BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
+        return this.g(blockposition) || this.g(blockposition.shift(enumdirection.opposite()));
+    }
 
-            return Math.abs(this.locX() - (double) blockposition1.getX()) <= 3.0D && Math.abs(this.locY() - (double) blockposition1.getY()) <= 2.0D && Math.abs(this.locZ() - (double) blockposition1.getZ()) <= 3.0D;
-        }
+    private boolean g(BlockPosition blockposition) {
+        Vec3D vec3d = new Vec3D((double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D);
+
+        return Math.abs(this.locX() - vec3d.getX()) <= 3.0D && Math.abs(this.locY() - vec3d.getY()) <= 2.0D && Math.abs(this.locZ() - vec3d.getZ()) <= 3.0D;
     }
 
     private boolean b(BlockPosition blockposition, EnumDirection enumdirection) {

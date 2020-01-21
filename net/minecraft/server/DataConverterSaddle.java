@@ -17,7 +17,7 @@ public class DataConverterSaddle extends DataConverterNamedEntity {
 
     @Override
     protected Typed<?> a(Typed<?> typed) {
-        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.r.typeName(), DSL.namespacedString()));
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString()));
         Type<?> type = this.getInputSchema().getTypeRaw(DataConverterTypes.ITEM_STACK);
         OpticFinder<?> opticfinder1 = DSL.fieldFinder("SaddleItem", type);
         Optional<? extends Typed<?>> optional = typed.getOptionalTyped(opticfinder1);
@@ -26,7 +26,7 @@ public class DataConverterSaddle extends DataConverterNamedEntity {
         if (!optional.isPresent() && dynamic.get("Saddle").asBoolean(false)) {
             Typed<?> typed1 = (Typed) type.pointTyped(typed.getOps()).orElseThrow(IllegalStateException::new);
 
-            typed1 = typed1.set(opticfinder, Pair.of(DataConverterTypes.r.typeName(), "minecraft:saddle"));
+            typed1 = typed1.set(opticfinder, Pair.of(DataConverterTypes.ITEM_NAME.typeName(), "minecraft:saddle"));
             Dynamic<?> dynamic1 = dynamic.emptyMap();
 
             dynamic1 = dynamic1.set("Count", dynamic1.createByte((byte) 1));

@@ -18,7 +18,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     @Nullable
     protected Raid d;
     private int bw;
-    private boolean bx;
+    private boolean canJoinRaid;
     private int by;
 
     protected EntityRaider(EntityTypes<? extends EntityRaider> entitytypes, World world) {
@@ -42,12 +42,12 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
 
     public abstract void a(int i, boolean flag);
 
-    public boolean eD() {
-        return this.bx;
+    public boolean isCanJoinRaid() {
+        return this.canJoinRaid;
     }
 
-    public void u(boolean flag) {
-        this.bx = flag;
+    public void setCanJoinRaid(boolean flag) {
+        this.canJoinRaid = flag;
     }
 
     @Override
@@ -55,7 +55,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
         if (this.world instanceof WorldServer && this.isAlive()) {
             Raid raid = this.eE();
 
-            if (this.eD()) {
+            if (this.isCanJoinRaid()) {
                 if (raid == null) {
                     if (this.world.getTime() % 20L == 0L) {
                         Raid raid1 = ((WorldServer) this.world).c_(new BlockPosition(this));
@@ -174,7 +174,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.setInt("Wave", this.bw);
-        nbttagcompound.setBoolean("CanJoinRaid", this.bx);
+        nbttagcompound.setBoolean("CanJoinRaid", this.canJoinRaid);
         if (this.d != null) {
             nbttagcompound.setInt("RaidId", this.d.getId());
         }
@@ -185,7 +185,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.bw = nbttagcompound.getInt("Wave");
-        this.bx = nbttagcompound.getBoolean("CanJoinRaid");
+        this.canJoinRaid = nbttagcompound.getBoolean("CanJoinRaid");
         if (nbttagcompound.hasKeyOfType("RaidId", 3)) {
             if (this.world instanceof WorldServer) {
                 this.d = ((WorldServer) this.world).getPersistentRaid().a(nbttagcompound.getInt("RaidId"));
@@ -256,7 +256,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     @Nullable
     @Override
     public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        this.u(this.getEntityType() != EntityTypes.WITCH || enummobspawn != EnumMobSpawn.NATURAL);
+        this.setCanJoinRaid(this.getEntityType() != EntityTypes.WITCH || enummobspawn != EnumMobSpawn.NATURAL);
         return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 

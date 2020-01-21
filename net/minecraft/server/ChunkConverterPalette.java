@@ -270,8 +270,8 @@ public class ChunkConverterPalette extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type<?> type = this.getInputSchema().getType(DataConverterTypes.c);
-        Type<?> type1 = this.getOutputSchema().getType(DataConverterTypes.c);
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.CHUNK);
+        Type<?> type1 = this.getOutputSchema().getType(DataConverterTypes.CHUNK);
 
         return this.writeFixAndRead("ChunkPalettedStorageFix", type, type1, this::b);
     }

@@ -507,7 +507,7 @@ public class Raid {
         if (flag1) {
             entityraider.a(this);
             entityraider.a(i);
-            entityraider.u(true);
+            entityraider.setCanJoinRaid(true);
             entityraider.b(0);
             if (!flag && blockposition != null) {
                 entityraider.setPosition((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 1.0D, (double) blockposition.getZ() + 0.5D);

@@ -10,7 +10,7 @@ public class ItemShears extends Item {
     public boolean a(ItemStack itemstack, World world, IBlockData iblockdata, BlockPosition blockposition, EntityLiving entityliving) {
         if (!world.isClientSide) {
             itemstack.damage(1, entityliving, (entityliving1) -> {
-                entityliving1.c(EnumItemSlot.MAINHAND);
+                entityliving1.broadcastItemBreak(EnumItemSlot.MAINHAND);
             });
         }
 

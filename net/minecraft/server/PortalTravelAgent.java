@@ -17,7 +17,7 @@ public class PortalTravelAgent {
         this.b = new Random(worldserver.getSeed());
     }
 
-    public boolean a(Entity entity, float f) {
+    public boolean findAndTeleport(Entity entity, float f) {
         Vec3D vec3d = entity.getPortalOffset();
         EnumDirection enumdirection = entity.getPortalDirection();
         ShapeDetector.Shape shapedetector_shape = this.a(new BlockPosition(entity), entity.getMot(), enumdirection, vec3d.x, vec3d.y, entity instanceof EntityHuman);
@@ -30,7 +30,7 @@ public class PortalTravelAgent {
 
             entity.setMot(vec3d2);
             entity.yaw = f + (float) shapedetector_shape.yaw;
-            entity.b(vec3d1.x, vec3d1.y, vec3d1.z);
+            entity.teleportAndSync(vec3d1.x, vec3d1.y, vec3d1.z);
             return true;
         }
     }
@@ -59,7 +59,7 @@ public class PortalTravelAgent {
         }).orElse((Object) null);
     }
 
-    public boolean a(Entity entity) {
+    public boolean createPortal(Entity entity) {
         boolean flag = true;
         double d0 = -1.0D;
         int i = MathHelper.floor(entity.locX());

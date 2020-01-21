@@ -18,19 +18,19 @@ public class InteractionResultWrapper<T> {
         return this.b;
     }
 
-    public static <T> InteractionResultWrapper<T> a(T t0) {
+    public static <T> InteractionResultWrapper<T> success(T t0) {
         return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, t0);
     }
 
-    public static <T> InteractionResultWrapper<T> b(T t0) {
+    public static <T> InteractionResultWrapper<T> consume(T t0) {
         return new InteractionResultWrapper<>(EnumInteractionResult.CONSUME, t0);
     }
 
-    public static <T> InteractionResultWrapper<T> c(T t0) {
+    public static <T> InteractionResultWrapper<T> pass(T t0) {
         return new InteractionResultWrapper<>(EnumInteractionResult.PASS, t0);
     }
 
-    public static <T> InteractionResultWrapper<T> d(T t0) {
+    public static <T> InteractionResultWrapper<T> fail(T t0) {
         return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, t0);
     }
 }

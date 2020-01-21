@@ -22,9 +22,9 @@ public abstract class DataConverterEntityRenameAbstract extends DataFix {
     public TypeRewriteRule makeRule() {
         TaggedChoiceType<String> taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.ENTITY);
         TaggedChoiceType<String> taggedchoicetype1 = this.getOutputSchema().findChoiceType(DataConverterTypes.ENTITY);
-        Type<Pair<String, String>> type = DSL.named(DataConverterTypes.n.typeName(), DSL.namespacedString());
+        Type<Pair<String, String>> type = DSL.named(DataConverterTypes.ENTITY_NAME.typeName(), DSL.namespacedString());
 
-        if (!Objects.equals(this.getOutputSchema().getType(DataConverterTypes.n), type)) {
+        if (!Objects.equals(this.getOutputSchema().getType(DataConverterTypes.ENTITY_NAME), type)) {
             throw new IllegalStateException("Entity name type is not what was expected.");
         } else {
             return TypeRewriteRule.seq(this.fixTypeEverywhere(this.a, taggedchoicetype, taggedchoicetype1, (dynamicops) -> {

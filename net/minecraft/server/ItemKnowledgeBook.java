@@ -35,7 +35,7 @@ public class ItemKnowledgeBook extends Item {
 
                     if (!optional.isPresent()) {
                         ItemKnowledgeBook.LOGGER.error("Invalid recipe: {}", s);
-                        return InteractionResultWrapper.d(itemstack);
+                        return InteractionResultWrapper.fail(itemstack);
                     }
 
                     list.add(optional.get());
@@ -45,10 +45,10 @@ public class ItemKnowledgeBook extends Item {
                 entityhuman.b(StatisticList.ITEM_USED.b(this));
             }
 
-            return InteractionResultWrapper.a(itemstack);
+            return InteractionResultWrapper.success(itemstack);
         } else {
             ItemKnowledgeBook.LOGGER.error("Tag not valid: {}", nbttagcompound);
-            return InteractionResultWrapper.d(itemstack);
+            return InteractionResultWrapper.fail(itemstack);
         }
     }
 }

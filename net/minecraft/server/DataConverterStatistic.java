@@ -31,9 +31,9 @@ public class DataConverterStatistic extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type<?> type = this.getOutputSchema().getType(DataConverterTypes.g);
+        Type<?> type = this.getOutputSchema().getType(DataConverterTypes.STATS);
 
-        return this.fixTypeEverywhereTyped("StatsCounterFix", this.getInputSchema().getType(DataConverterTypes.g), type, (typed) -> {
+        return this.fixTypeEverywhereTyped("StatsCounterFix", this.getInputSchema().getType(DataConverterTypes.STATS), type, (typed) -> {
             Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
             Map<Dynamic<?>, Dynamic<?>> map = Maps.newHashMap();
             Optional<? extends Map<? extends Dynamic<?>, ? extends Dynamic<?>>> optional = dynamic.getMapValues();

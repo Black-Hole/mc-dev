@@ -17,7 +17,7 @@ public class DataConverterMapId extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<?> type = this.getInputSchema().getType(DataConverterTypes.h);
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.SAVED_DATA);
         OpticFinder<?> opticfinder = type.findField("data");
 
         return this.fixTypeEverywhereTyped("Map id fix", type, (typed) -> {

@@ -34,9 +34,9 @@ public class BlockBeehive extends BlockTileEntity {
             if (EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) == 0) {
                 tileentitybeehive.a(entityhuman, iblockdata, TileEntityBeehive.ReleaseStatus.EMERGENCY);
                 world.updateAdjacentComparators(blockposition, this);
+                this.b(world, blockposition);
             }
 
-            this.b(world, blockposition);
             CriterionTriggers.L.a((EntityPlayer) entityhuman, iblockdata.getBlock(), itemstack, tileentitybeehive.j());
         }
 
@@ -62,10 +62,7 @@ public class BlockBeehive extends BlockTileEntity {
     }
 
     public static void a(World world, BlockPosition blockposition) {
-        for (int i = 0; i < 3; ++i) {
-            a(world, blockposition, new ItemStack(Items.pU, 1));
-        }
-
+        a(world, blockposition, new ItemStack(Items.pU, 3));
     }
 
     @Override
@@ -80,7 +77,7 @@ public class BlockBeehive extends BlockTileEntity {
                 world.playSound(entityhuman, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.BLOCK_BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 a(world, blockposition);
                 itemstack.damage(1, entityhuman, (entityhuman1) -> {
-                    entityhuman1.d(enumhand);
+                    entityhuman1.broadcastItemBreak(enumhand);
                 });
                 flag = true;
             } else if (itemstack.getItem() == Items.GLASS_BOTTLE) {

@@ -114,9 +114,10 @@ public class EntityFallingBlock extends Entity {
                         this.die();
                         if (!this.g) {
                             boolean flag2 = iblockdata.a((BlockActionContext) (new BlockActionContextDirectional(this.world, blockposition, EnumDirection.DOWN, ItemStack.a, EnumDirection.UP)));
-                            boolean flag3 = this.block.canPlace(this.world, blockposition) && !BlockFalling.canFallThrough(this.world.getType(blockposition.down()));
+                            boolean flag3 = BlockFalling.canFallThrough(this.world.getType(blockposition.down())) && (!flag || !flag1);
+                            boolean flag4 = this.block.canPlace(this.world, blockposition) && !flag3;
 
-                            if (flag2 && flag3) {
+                            if (flag2 && flag4) {
                                 if (this.block.b((IBlockState) BlockProperties.C) && this.world.getFluid(blockposition).getType() == FluidTypes.WATER) {
                                     this.block = (IBlockData) this.block.set(BlockProperties.C, true);
                                 }

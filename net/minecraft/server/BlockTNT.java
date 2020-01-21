@@ -76,7 +76,7 @@ public class BlockTNT extends Block {
             if (!entityhuman.isCreative()) {
                 if (item == Items.FLINT_AND_STEEL) {
                     itemstack.damage(1, entityhuman, (entityhuman1) -> {
-                        entityhuman1.d(enumhand);
+                        entityhuman1.broadcastItemBreak(enumhand);
                     });
                 } else {
                     itemstack.subtract(1);

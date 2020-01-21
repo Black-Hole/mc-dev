@@ -11,28 +11,28 @@ public class ItemCarrotStick extends Item {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (world.isClientSide) {
-            return InteractionResultWrapper.c(itemstack);
+            return InteractionResultWrapper.pass(itemstack);
         } else {
             if (entityhuman.isPassenger() && entityhuman.getVehicle() instanceof EntityPig) {
                 EntityPig entitypig = (EntityPig) entityhuman.getVehicle();
 
                 if (itemstack.h() - itemstack.getDamage() >= 7 && entitypig.er()) {
                     itemstack.damage(7, entityhuman, (entityhuman1) -> {
-                        entityhuman1.d(enumhand);
+                        entityhuman1.broadcastItemBreak(enumhand);
                     });
                     if (itemstack.isEmpty()) {
                         ItemStack itemstack1 = new ItemStack(Items.FISHING_ROD);
 
                         itemstack1.setTag(itemstack.getTag());
-                        return InteractionResultWrapper.a(itemstack1);
+                        return InteractionResultWrapper.success(itemstack1);
                     }
 
-                    return InteractionResultWrapper.a(itemstack);
+                    return InteractionResultWrapper.success(itemstack);
                 }
             }
 
             entityhuman.b(StatisticList.ITEM_USED.b(this));
-            return InteractionResultWrapper.c(itemstack);
+            return InteractionResultWrapper.pass(itemstack);
         }
     }
 }

@@ -112,7 +112,7 @@ public class DataConverterRegistry {
         datafixerbuilder.addFixer(new DataConverterPotionWater(schema26, false));
         Schema schema27 = datafixerbuilder.addSchema(808, DataConverterSchemaV808::new);
 
-        datafixerbuilder.addFixer(new DataConverterAddChoices(schema27, "added shulker box", DataConverterTypes.k));
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema27, "added shulker box", DataConverterTypes.BLOCK_ENTITY));
         Schema schema28 = datafixerbuilder.addSchema(808, 1, DataConverterRegistry.b);
 
         datafixerbuilder.addFixer(new DataConverterShulker(schema28, false));
@@ -146,7 +146,7 @@ public class DataConverterRegistry {
         datafixerbuilder.addFixer(new DataConverterFlattenState(schema36, false));
         Schema schema37 = datafixerbuilder.addSchema(1451, DataConverterSchemaV1451::new);
 
-        datafixerbuilder.addFixer(new DataConverterAddChoices(schema37, "AddTrappedChestFix", DataConverterTypes.k));
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema37, "AddTrappedChestFix", DataConverterTypes.BLOCK_ENTITY));
         Schema schema38 = datafixerbuilder.addSchema(1451, 1, DataConverterSchemaV1451_1::new);
 
         datafixerbuilder.addFixer(new ChunkConverterPalette(schema38, true));
@@ -163,7 +163,7 @@ public class DataConverterRegistry {
         datafixerbuilder.addFixer(new DataConverterFlatten(schema41, false));
         Schema schema42 = datafixerbuilder.addSchema(1451, 5, DataConverterSchemaV1451_5::new);
 
-        datafixerbuilder.addFixer(new DataConverterAddChoices(schema42, "RemoveNoteBlockFlowerPotFix", DataConverterTypes.k));
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema42, "RemoveNoteBlockFlowerPotFix", DataConverterTypes.BLOCK_ENTITY));
         datafixerbuilder.addFixer(new DataConverterFlattenSpawnEgg(schema42, false));
         datafixerbuilder.addFixer(new DataConverterWolf(schema42, false));
         datafixerbuilder.addFixer(new DataConverterBannerColour(schema42, false));
@@ -219,7 +219,7 @@ public class DataConverterRegistry {
         }));
         Schema schema54 = datafixerbuilder.addSchema(1481, DataConverterSchemaV1481::new);
 
-        datafixerbuilder.addFixer(new DataConverterAddChoices(schema54, "Add conduit", DataConverterTypes.k));
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema54, "Add conduit", DataConverterTypes.BLOCK_ENTITY));
         Schema schema55 = datafixerbuilder.addSchema(1483, DataConverterSchemaV1483::new);
 
         datafixerbuilder.addFixer(new DataConverterEntityPufferfish(schema55, true));
@@ -257,7 +257,7 @@ public class DataConverterRegistry {
         datafixerbuilder.addFixer(DataConverterItemName.a(schema59, "Rename kelptop", (s) -> {
             return Objects.equals(s, "minecraft:kelp_top") ? "minecraft:kelp" : s;
         }));
-        datafixerbuilder.addFixer(new DataConverterNamedEntity(schema59, false, "Command block block entity custom name fix", DataConverterTypes.k, "minecraft:command_block") {
+        datafixerbuilder.addFixer(new DataConverterNamedEntity(schema59, false, "Command block block entity custom name fix", DataConverterTypes.BLOCK_ENTITY, "minecraft:command_block") {
             @Override
             protected Typed<?> a(Typed<?> typed) {
                 return typed.update(DSL.remainderFinder(), DataConverterCustomNameEntity::a);
@@ -355,10 +355,10 @@ public class DataConverterRegistry {
         datafixerbuilder.addFixer(new DataConverterChunkStatus(schema78, false));
         Schema schema79 = datafixerbuilder.addSchema(1906, DataConverterSchemaV1906::new);
 
-        datafixerbuilder.addFixer(new DataConverterAddChoices(schema79, "Add POI Blocks", DataConverterTypes.k));
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema79, "Add POI Blocks", DataConverterTypes.BLOCK_ENTITY));
         Schema schema80 = datafixerbuilder.addSchema(1909, DataConverterSchemaV1909::new);
 
-        datafixerbuilder.addFixer(new DataConverterAddChoices(schema80, "Add jigsaw", DataConverterTypes.k));
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema80, "Add jigsaw", DataConverterTypes.BLOCK_ENTITY));
         Schema schema81 = datafixerbuilder.addSchema(1911, DataConverterRegistry.b);
 
         datafixerbuilder.addFixer(new DataConverterChunkStatus2(schema81, false));
@@ -372,7 +372,7 @@ public class DataConverterRegistry {
         Schema schema84 = datafixerbuilder.addSchema(1920, DataConverterSchemaV1920::new);
 
         datafixerbuilder.addFixer(new DataConverterNewVillage(schema84, false));
-        datafixerbuilder.addFixer(new DataConverterAddChoices(schema84, "Add campfire", DataConverterTypes.k));
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema84, "Add campfire", DataConverterTypes.BLOCK_ENTITY));
         Schema schema85 = datafixerbuilder.addSchema(1925, DataConverterRegistry.b);
 
         datafixerbuilder.addFixer(new DataConverterMapId(schema85, false));
@@ -410,7 +410,13 @@ public class DataConverterRegistry {
         Schema schema95 = datafixerbuilder.addSchema(2100, DataConverterSchemaV2100::new);
 
         datafixerbuilder.addFixer(new DataConverterAddChoices(schema95, "Added Bee and Bee Stinger", DataConverterTypes.ENTITY));
-        datafixerbuilder.addFixer(new DataConverterAddChoices(schema95, "Add beehive", DataConverterTypes.k));
+        datafixerbuilder.addFixer(new DataConverterAddChoices(schema95, "Add beehive", DataConverterTypes.BLOCK_ENTITY));
+        datafixerbuilder.addFixer(new DataConverterRecipeBase(schema95, false, "Rename sugar recipe", (s) -> {
+            return "minecraft:sugar".equals(s) ? "sugar_from_sugar_cane" : s;
+        }));
+        datafixerbuilder.addFixer(new DataConverterAdvancementBase(schema95, false, "Rename sugar recipe advancement", (s) -> {
+            return "minecraft:recipes/misc/sugar".equals(s) ? "minecraft:recipes/misc/sugar_from_sugar_cane" : s;
+        }));
         Schema schema96 = datafixerbuilder.addSchema(2202, DataConverterRegistry.b);
 
         datafixerbuilder.addFixer(new DataConverterLeavesBiome(schema96, false));

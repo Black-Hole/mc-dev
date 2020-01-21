@@ -31,7 +31,7 @@ public class PacketPlayOutEntityEffect implements Packet<PacketListenerPlayOut> 
             this.e = (byte) (this.e | 2);
         }
 
-        if (mobeffect.f()) {
+        if (mobeffect.isShowIcon()) {
             this.e = (byte) (this.e | 4);
         }
 

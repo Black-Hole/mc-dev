@@ -73,30 +73,30 @@ public class ItemMonsterEgg extends Item {
         MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.SOURCE_ONLY);
 
         if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-            return InteractionResultWrapper.c(itemstack);
+            return InteractionResultWrapper.pass(itemstack);
         } else if (world.isClientSide) {
-            return InteractionResultWrapper.a(itemstack);
+            return InteractionResultWrapper.success(itemstack);
         } else {
             MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;
             BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
 
             if (!(world.getType(blockposition).getBlock() instanceof BlockFluids)) {
-                return InteractionResultWrapper.c(itemstack);
+                return InteractionResultWrapper.pass(itemstack);
             } else if (world.a(entityhuman, blockposition) && entityhuman.a(blockposition, movingobjectpositionblock.getDirection(), itemstack)) {
                 EntityTypes<?> entitytypes = this.b(itemstack.getTag());
 
                 if (entitytypes.spawnCreature(world, itemstack, entityhuman, blockposition, EnumMobSpawn.SPAWN_EGG, false, false) == null) {
-                    return InteractionResultWrapper.c(itemstack);
+                    return InteractionResultWrapper.pass(itemstack);
                 } else {
                     if (!entityhuman.abilities.canInstantlyBuild) {
                         itemstack.subtract(1);
                     }
 
                     entityhuman.b(StatisticList.ITEM_USED.b(this));
-                    return InteractionResultWrapper.a(itemstack);
+                    return InteractionResultWrapper.success(itemstack);
                 }
             } else {
-                return InteractionResultWrapper.d(itemstack);
+                return InteractionResultWrapper.fail(itemstack);
             }
         }
     }

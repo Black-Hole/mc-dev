@@ -30,7 +30,7 @@ public class DataConverterTrappedChest extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type<?> type = this.getOutputSchema().getType(DataConverterTypes.c);
+        Type<?> type = this.getOutputSchema().getType(DataConverterTypes.CHUNK);
         Type<?> type1 = type.findFieldType("Level");
         Type<?> type2 = type1.findFieldType("TileEntities");
 
@@ -39,7 +39,7 @@ public class DataConverterTrappedChest extends DataFix {
         } else {
             ListType<?> listtype = (ListType) type2;
             OpticFinder<? extends List<?>> opticfinder = DSL.fieldFinder("TileEntities", listtype);
-            Type<?> type3 = this.getInputSchema().getType(DataConverterTypes.c);
+            Type<?> type3 = this.getInputSchema().getType(DataConverterTypes.CHUNK);
             OpticFinder<?> opticfinder1 = type3.findField("Level");
             OpticFinder<?> opticfinder2 = opticfinder1.type().findField("Sections");
             Type<?> type4 = opticfinder2.type();
@@ -50,7 +50,7 @@ public class DataConverterTrappedChest extends DataFix {
                 Type<?> type5 = ((ListType) type4).getElement();
                 OpticFinder<?> opticfinder3 = DSL.typeFinder(type5);
 
-                return TypeRewriteRule.seq((new DataConverterAddChoices(this.getOutputSchema(), "AddTrappedChestFix", DataConverterTypes.k)).makeRule(), this.fixTypeEverywhereTyped("Trapped Chest fix", type3, (typed) -> {
+                return TypeRewriteRule.seq((new DataConverterAddChoices(this.getOutputSchema(), "AddTrappedChestFix", DataConverterTypes.BLOCK_ENTITY)).makeRule(), this.fixTypeEverywhereTyped("Trapped Chest fix", type3, (typed) -> {
                     return typed.updateTyped(opticfinder1, (typed1) -> {
                         Optional<? extends Typed<?>> optional = typed1.getOptionalTyped(opticfinder2);
 
@@ -79,7 +79,7 @@ public class DataConverterTrappedChest extends DataFix {
                             Dynamic<?> dynamic = (Dynamic) typed1.get(DSL.remainderFinder());
                             int k = dynamic.get("xPos").asInt(0);
                             int l = dynamic.get("zPos").asInt(0);
-                            TaggedChoiceType<String> taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.k);
+                            TaggedChoiceType<String> taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.BLOCK_ENTITY);
 
                             return typed1.updateTyped(opticfinder, (typed3) -> {
                                 return typed3.updateTyped(taggedchoicetype.finder(), (typed4) -> {

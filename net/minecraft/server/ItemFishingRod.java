@@ -29,7 +29,7 @@ public class ItemFishingRod extends Item {
             if (!world.isClientSide) {
                 i = entityhuman.hookedFish.b(itemstack);
                 itemstack.damage(i, entityhuman, (entityhuman1) -> {
-                    entityhuman1.d(enumhand);
+                    entityhuman1.broadcastItemBreak(enumhand);
                 });
             }
 
@@ -46,7 +46,7 @@ public class ItemFishingRod extends Item {
             entityhuman.b(StatisticList.ITEM_USED.b(this));
         }
 
-        return InteractionResultWrapper.a(itemstack);
+        return InteractionResultWrapper.success(itemstack);
     }
 
     @Override

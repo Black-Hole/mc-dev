@@ -25,18 +25,18 @@ public class DataConverterRiding extends DataFix {
     public TypeRewriteRule makeRule() {
         Schema schema = this.getInputSchema();
         Schema schema1 = this.getOutputSchema();
-        Type<?> type = schema.getTypeRaw(DataConverterTypes.o);
-        Type<?> type1 = schema1.getTypeRaw(DataConverterTypes.o);
+        Type<?> type = schema.getTypeRaw(DataConverterTypes.ENTITY_TREE);
+        Type<?> type1 = schema1.getTypeRaw(DataConverterTypes.ENTITY_TREE);
         Type<?> type2 = schema.getTypeRaw(DataConverterTypes.ENTITY);
 
         return this.a(schema, schema1, type, type1, type2);
     }
 
     private <OldEntityTree, NewEntityTree, Entity> TypeRewriteRule a(Schema schema, Schema schema1, Type<OldEntityTree> type, Type<NewEntityTree> type1, Type<Entity> type2) {
-        Type<Pair<String, Pair<Either<OldEntityTree, com.mojang.datafixers.util.Unit>, Entity>>> type3 = DSL.named(DataConverterTypes.o.typeName(), DSL.and(DSL.optional(DSL.field("Riding", type)), type2));
-        Type<Pair<String, Pair<Either<List<NewEntityTree>, com.mojang.datafixers.util.Unit>, Entity>>> type4 = DSL.named(DataConverterTypes.o.typeName(), DSL.and(DSL.optional(DSL.field("Passengers", DSL.list(type1))), type2));
-        Type<?> type5 = schema.getType(DataConverterTypes.o);
-        Type<?> type6 = schema1.getType(DataConverterTypes.o);
+        Type<Pair<String, Pair<Either<OldEntityTree, com.mojang.datafixers.util.Unit>, Entity>>> type3 = DSL.named(DataConverterTypes.ENTITY_TREE.typeName(), DSL.and(DSL.optional(DSL.field("Riding", type)), type2));
+        Type<Pair<String, Pair<Either<List<NewEntityTree>, com.mojang.datafixers.util.Unit>, Entity>>> type4 = DSL.named(DataConverterTypes.ENTITY_TREE.typeName(), DSL.and(DSL.optional(DSL.field("Passengers", DSL.list(type1))), type2));
+        Type<?> type5 = schema.getType(DataConverterTypes.ENTITY_TREE);
+        Type<?> type6 = schema1.getType(DataConverterTypes.ENTITY_TREE);
 
         if (!Objects.equals(type5, type3)) {
             throw new IllegalStateException("Old entity type is not what was expected.");
@@ -66,7 +66,7 @@ public class DataConverterRiding extends DataFix {
                             return Either.left(ImmutableList.of(newentitytree));
                         }), Either.right(DSL.unit()));
 
-                        optional = Optional.of(Pair.of(DataConverterTypes.o.typeName(), Pair.of(either, ((Pair) pair1.getSecond()).getSecond())));
+                        optional = Optional.of(Pair.of(DataConverterTypes.ENTITY_TREE.typeName(), Pair.of(either, ((Pair) pair1.getSecond()).getSecond())));
                         Optional<OldEntityTree> optional1 = ((Either) ((Pair) pair1.getSecond()).getFirst()).left();
 
                         if (!optional1.isPresent()) {

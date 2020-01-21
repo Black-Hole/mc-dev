@@ -36,7 +36,7 @@ public class ServerStatisticManager extends StatisticManager {
         this.d = file;
         if (file.isFile()) {
             try {
-                this.a(minecraftserver.aB(), org.apache.commons.io.FileUtils.readFileToString(file));
+                this.a(minecraftserver.aC(), org.apache.commons.io.FileUtils.readFileToString(file));
             } catch (IOException ioexception) {
                 ServerStatisticManager.LOGGER.error("Couldn't read statistics file {}", file, ioexception);
             } catch (JsonParseException jsonparseexception) {
@@ -215,7 +215,7 @@ public class ServerStatisticManager extends StatisticManager {
     }
 
     public void a(EntityPlayer entityplayer) {
-        int i = this.c.aj();
+        int i = this.c.ak();
         Object2IntMap<Statistic<?>> object2intmap = new Object2IntOpenHashMap();
 
         if (i - this.f > 300) {

@@ -16,7 +16,7 @@ public class DataConverterLang extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        return this.fixTypeEverywhereTyped("OptionsLowerCaseLanguageFix", this.getInputSchema().getType(DataConverterTypes.e), (typed) -> {
+        return this.fixTypeEverywhereTyped("OptionsLowerCaseLanguageFix", this.getInputSchema().getType(DataConverterTypes.OPTIONS), (typed) -> {
             return typed.update(DSL.remainderFinder(), (dynamic) -> {
                 Optional<String> optional = dynamic.get("lang").asString();
 

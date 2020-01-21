@@ -24,6 +24,6 @@ public class ItemSnowball extends Item {
             itemstack.subtract(1);
         }
 
-        return InteractionResultWrapper.a(itemstack);
+        return InteractionResultWrapper.success(itemstack);
     }
 }

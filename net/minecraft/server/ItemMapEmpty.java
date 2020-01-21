@@ -16,14 +16,14 @@ public class ItemMapEmpty extends ItemWorldMapBase {
         }
 
         if (itemstack1.isEmpty()) {
-            return InteractionResultWrapper.a(itemstack);
+            return InteractionResultWrapper.success(itemstack);
         } else {
             if (!entityhuman.inventory.pickup(itemstack.cloneItemStack())) {
                 entityhuman.drop(itemstack, false);
             }
 
             entityhuman.b(StatisticList.ITEM_USED.b(this));
-            return InteractionResultWrapper.a(itemstack1);
+            return InteractionResultWrapper.success(itemstack1);
         }
     }
 }

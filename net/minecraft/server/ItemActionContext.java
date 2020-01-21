@@ -30,7 +30,7 @@ public class ItemActionContext {
         return this.d.getDirection();
     }
 
-    public Vec3D j() {
+    public Vec3D getPos() {
         return this.d.getPos();
     }
 
@@ -47,7 +47,7 @@ public class ItemActionContext {
         return this.b;
     }
 
-    public EnumHand n() {
+    public EnumHand getHand() {
         return this.c;
     }
 

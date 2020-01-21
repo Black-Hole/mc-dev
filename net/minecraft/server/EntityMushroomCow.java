@@ -106,7 +106,7 @@ public class EntityMushroomCow extends EntityCow {
                     }
 
                     itemstack.damage(1, entityhuman, (entityhuman1) -> {
-                        entityhuman1.d(enumhand);
+                        entityhuman1.broadcastItemBreak(enumhand);
                     });
                     this.a(SoundEffects.ENTITY_MOOSHROOM_SHEAR, 1.0F, 1.0F);
                 }

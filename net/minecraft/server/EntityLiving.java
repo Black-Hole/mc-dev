@@ -509,7 +509,9 @@ public abstract class EntityLiving extends Entity {
                 MobEffectList mobeffectlist = (MobEffectList) iterator.next();
                 MobEffect mobeffect = (MobEffect) this.effects.get(mobeffectlist);
 
-                if (!mobeffect.tick(this)) {
+                if (!mobeffect.tick(this, () -> {
+                    this.a(mobeffect, true);
+                })) {
                     if (!this.world.isClientSide) {
                         iterator.remove();
                         this.b(mobeffect);
@@ -674,7 +676,7 @@ public abstract class EntityLiving extends Entity {
                 this.effects.put(mobeffect.getMobEffect(), mobeffect);
                 this.a(mobeffect);
                 return true;
-            } else if (mobeffect1.a(mobeffect)) {
+            } else if (mobeffect1.b(mobeffect)) {
                 this.a(mobeffect1, true);
                 return true;
             } else {
@@ -779,7 +781,7 @@ public abstract class EntityLiving extends Entity {
 
             if ((damagesource == DamageSource.ANVIL || damagesource == DamageSource.FALLING_BLOCK) && !this.getEquipment(EnumItemSlot.HEAD).isEmpty()) {
                 this.getEquipment(EnumItemSlot.HEAD).damage((int) (f * 4.0F + this.random.nextFloat() * f * 2.0F), this, (entityliving) -> {
-                    entityliving.c(EnumItemSlot.HEAD);
+                    entityliving.broadcastItemBreak(EnumItemSlot.HEAD);
                 });
                 f *= 0.75F;
             }
@@ -1019,7 +1021,7 @@ public abstract class EntityLiving extends Entity {
     }
 
     public void die(DamageSource damagesource) {
-        if (!this.killed) {
+        if (!this.dead && !this.killed) {
             Entity entity = damagesource.getEntity();
             EntityLiving entityliving = this.getKillingEntity();
 
@@ -2155,7 +2157,7 @@ public abstract class EntityLiving extends Entity {
                 flag = true;
                 if (!this.world.isClientSide && (this.bm + 1) % 20 == 0) {
                     itemstack.damage(1, this, (entityliving) -> {
-                        entityliving.c(EnumItemSlot.CHEST);
+                        entityliving.broadcastItemBreak(EnumItemSlot.CHEST);
                     });
                 }
             } else {
@@ -2749,11 +2751,11 @@ public abstract class EntityLiving extends Entity {
         }
     }
 
-    public void c(EnumItemSlot enumitemslot) {
+    public void broadcastItemBreak(EnumItemSlot enumitemslot) {
         this.world.broadcastEntityEffect(this, d(enumitemslot));
     }
 
-    public void d(EnumHand enumhand) {
-        this.c(enumhand == EnumHand.MAIN_HAND ? EnumItemSlot.MAINHAND : EnumItemSlot.OFFHAND);
+    public void broadcastItemBreak(EnumHand enumhand) {
+        this.broadcastItemBreak(enumhand == EnumHand.MAIN_HAND ? EnumItemSlot.MAINHAND : EnumItemSlot.OFFHAND);
     }
 }

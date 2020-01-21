@@ -120,7 +120,13 @@ public abstract class EntityHanging extends Entity {
 
     @Override
     public boolean t(Entity entity) {
-        return entity instanceof EntityHuman ? this.damageEntity(DamageSource.playerAttack((EntityHuman) entity), 0.0F) : false;
+        if (entity instanceof EntityHuman) {
+            EntityHuman entityhuman = (EntityHuman) entity;
+
+            return !this.world.a(entityhuman, this.blockPosition) ? true : this.damageEntity(DamageSource.playerAttack(entityhuman), 0.0F);
+        } else {
+            return false;
+        }
     }
 
     @Override

@@ -38,7 +38,7 @@ public class ItemSword extends ItemToolMaterial {
     @Override
     public boolean a(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1) {
         itemstack.damage(1, entityliving1, (entityliving2) -> {
-            entityliving2.c(EnumItemSlot.MAINHAND);
+            entityliving2.broadcastItemBreak(EnumItemSlot.MAINHAND);
         });
         return true;
     }
@@ -47,7 +47,7 @@ public class ItemSword extends ItemToolMaterial {
     public boolean a(ItemStack itemstack, World world, IBlockData iblockdata, BlockPosition blockposition, EntityLiving entityliving) {
         if (iblockdata.f(world, blockposition) != 0.0F) {
             itemstack.damage(2, entityliving, (entityliving1) -> {
-                entityliving1.c(EnumItemSlot.MAINHAND);
+                entityliving1.broadcastItemBreak(EnumItemSlot.MAINHAND);
             });
         }
 

@@ -87,7 +87,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
             if (!this.l() && (Boolean) this.getBlock().get(BlockHopper.ENABLED)) {
                 boolean flag = false;
 
-                if (!this.isNotEmpty()) {
+                if (!this.isEmpty()) {
                     flag = this.j();
                 }
 
@@ -263,7 +263,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
 
         if (a(iinventory1, itemstack, i, enumdirection)) {
             boolean flag = false;
-            boolean flag1 = iinventory1.isNotEmpty();
+            boolean flag1 = iinventory1.isEmpty();
 
             if (itemstack1.isEmpty()) {
                 iinventory1.setItem(i, itemstack);

@@ -437,6 +437,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
     private CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> f(ChunkCoordIntPair chunkcoordintpair) {
         return CompletableFuture.supplyAsync(() -> {
             try {
+                this.world.getMethodProfiler().c("chunkLoad");
                 NBTTagCompound nbttagcompound = this.readChunkData(chunkcoordintpair);
 
                 if (nbttagcompound != null) {
@@ -473,6 +474,9 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
             return this.a(chunkstatus, i);
         });
 
+        this.world.getMethodProfiler().c(() -> {
+            return "chunkGenerate " + chunkstatus.d();
+        });
         return completablefuture.thenComposeAsync((either) -> {
             return (CompletableFuture) either.map((list) -> {
                 try {
@@ -661,6 +665,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
                     }
                 }
 
+                this.world.getMethodProfiler().c("chunkSave");
                 nbttagcompound = ChunkRegionLoader.saveChunk(this.world, ichunkaccess);
                 this.a(chunkcoordintpair, nbttagcompound);
                 return true;
@@ -1095,7 +1100,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
     }
 
     public CompletableFuture<Void> a(Chunk chunk) {
-        return this.executor.e(() -> {
+        return this.executor.f(() -> {
             chunk.a(this.world);
         });
     }

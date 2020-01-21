@@ -18,7 +18,7 @@ public class DataConverterKeybind2 extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        return this.fixTypeEverywhereTyped("OptionsKeyTranslationFix", this.getInputSchema().getType(DataConverterTypes.e), (typed) -> {
+        return this.fixTypeEverywhereTyped("OptionsKeyTranslationFix", this.getInputSchema().getType(DataConverterTypes.OPTIONS), (typed) -> {
             return typed.update(DSL.remainderFinder(), (dynamic) -> {
                 return (Dynamic) dynamic.getMapValues().map((map) -> {
                     return dynamic.createMap((Map) map.entrySet().stream().map((entry) -> {

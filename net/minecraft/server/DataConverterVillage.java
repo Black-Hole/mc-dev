@@ -14,7 +14,7 @@ public class DataConverterVillage extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        return this.writeFixAndRead("SavedDataVillageCropFix", this.getInputSchema().getType(DataConverterTypes.t), this.getOutputSchema().getType(DataConverterTypes.t), this::a);
+        return this.writeFixAndRead("SavedDataVillageCropFix", this.getInputSchema().getType(DataConverterTypes.STRUCTURE_FEATURE), this.getOutputSchema().getType(DataConverterTypes.STRUCTURE_FEATURE), this::a);
     }
 
     private <T> Dynamic<T> a(Dynamic<T> dynamic) {

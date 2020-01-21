@@ -20,7 +20,7 @@ public class ItemBoat extends Item {
         MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.ANY);
 
         if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
-            return InteractionResultWrapper.c(itemstack);
+            return InteractionResultWrapper.pass(itemstack);
         } else {
             Vec3D vec3d = entityhuman.f(1.0F);
             double d0 = 5.0D;
@@ -35,7 +35,7 @@ public class ItemBoat extends Item {
                     AxisAlignedBB axisalignedbb = entity.getBoundingBox().g((double) entity.aV());
 
                     if (axisalignedbb.c(vec3d1)) {
-                        return InteractionResultWrapper.c(itemstack);
+                        return InteractionResultWrapper.pass(itemstack);
                     }
                 }
             }
@@ -46,7 +46,7 @@ public class ItemBoat extends Item {
                 entityboat.setType(this.b);
                 entityboat.yaw = entityhuman.yaw;
                 if (!world.getCubes(entityboat, entityboat.getBoundingBox().g(-0.1D))) {
-                    return InteractionResultWrapper.d(itemstack);
+                    return InteractionResultWrapper.fail(itemstack);
                 } else {
                     if (!world.isClientSide) {
                         world.addEntity(entityboat);
@@ -56,10 +56,10 @@ public class ItemBoat extends Item {
                     }
 
                     entityhuman.b(StatisticList.ITEM_USED.b(this));
-                    return InteractionResultWrapper.a(itemstack);
+                    return InteractionResultWrapper.success(itemstack);
                 }
             } else {
-                return InteractionResultWrapper.c(itemstack);
+                return InteractionResultWrapper.pass(itemstack);
             }
         }
     }

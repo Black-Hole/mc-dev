@@ -29,26 +29,29 @@ public class WorldGenFeatureTreeBeehive extends WorldGenFeatureTree {
             List<BlockPosition> list2 = (List) list.stream().filter((blockposition) -> {
                 return blockposition.getY() == i;
             }).collect(Collectors.toList());
-            BlockPosition blockposition = (BlockPosition) list2.get(random.nextInt(list2.size()));
-            BlockPosition blockposition1 = blockposition.shift(enumdirection);
 
-            if (WorldGenTreeAbstract.b(generatoraccess, blockposition1) && WorldGenTreeAbstract.b(generatoraccess, blockposition1.shift(EnumDirection.SOUTH))) {
-                IBlockData iblockdata = (IBlockData) Blocks.BEE_NEST.getBlockData().set(BlockBeehive.b, EnumDirection.SOUTH);
+            if (!list2.isEmpty()) {
+                BlockPosition blockposition = (BlockPosition) list2.get(random.nextInt(list2.size()));
+                BlockPosition blockposition1 = blockposition.shift(enumdirection);
 
-                this.a(generatoraccess, blockposition1, iblockdata, set, structureboundingbox);
-                TileEntity tileentity = generatoraccess.getTileEntity(blockposition1);
+                if (WorldGenTreeAbstract.b(generatoraccess, blockposition1) && WorldGenTreeAbstract.b(generatoraccess, blockposition1.shift(EnumDirection.SOUTH))) {
+                    IBlockData iblockdata = (IBlockData) Blocks.BEE_NEST.getBlockData().set(BlockBeehive.b, EnumDirection.SOUTH);
 
-                if (tileentity instanceof TileEntityBeehive) {
-                    TileEntityBeehive tileentitybeehive = (TileEntityBeehive) tileentity;
-                    int j = 2 + random.nextInt(2);
+                    this.a(generatoraccess, blockposition1, iblockdata, set, structureboundingbox);
+                    TileEntity tileentity = generatoraccess.getTileEntity(blockposition1);
 
-                    for (int k = 0; k < j; ++k) {
-                        EntityBee entitybee = new EntityBee(EntityTypes.BEE, generatoraccess.getMinecraftWorld());
+                    if (tileentity instanceof TileEntityBeehive) {
+                        TileEntityBeehive tileentitybeehive = (TileEntityBeehive) tileentity;
+                        int j = 2 + random.nextInt(2);
 
-                        tileentitybeehive.a(entitybee, false, random.nextInt(599));
+                        for (int k = 0; k < j; ++k) {
+                            EntityBee entitybee = new EntityBee(EntityTypes.BEE, generatoraccess.getMinecraftWorld());
+
+                            tileentitybeehive.a(entitybee, false, random.nextInt(599));
+                        }
                     }
-                }
 
+                }
             }
         }
     }

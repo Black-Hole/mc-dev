@@ -19,28 +19,28 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public class Advancement {
 
-    private final Advancement a;
-    private final AdvancementDisplay b;
-    private final AdvancementRewards c;
-    private final MinecraftKey d;
-    private final Map<String, Criterion> e;
-    private final String[][] f;
-    private final Set<Advancement> g = Sets.newLinkedHashSet();
-    private final IChatBaseComponent h;
+    private final Advancement parent;
+    private final AdvancementDisplay display;
+    private final AdvancementRewards rewards;
+    private final MinecraftKey key;
+    private final Map<String, Criterion> criteria;
+    private final String[][] requirements;
+    private final Set<Advancement> children = Sets.newLinkedHashSet();
+    private final IChatBaseComponent chatComponent;
 
     public Advancement(MinecraftKey minecraftkey, @Nullable Advancement advancement, @Nullable AdvancementDisplay advancementdisplay, AdvancementRewards advancementrewards, Map<String, Criterion> map, String[][] astring) {
-        this.d = minecraftkey;
-        this.b = advancementdisplay;
-        this.e = ImmutableMap.copyOf(map);
-        this.a = advancement;
-        this.c = advancementrewards;
-        this.f = astring;
+        this.key = minecraftkey;
+        this.display = advancementdisplay;
+        this.criteria = ImmutableMap.copyOf(map);
+        this.parent = advancement;
+        this.rewards = advancementrewards;
+        this.requirements = astring;
         if (advancement != null) {
             advancement.a(this);
         }
 
         if (advancementdisplay == null) {
-            this.h = new ChatComponentText(minecraftkey.toString());
+            this.chatComponent = new ChatComponentText(minecraftkey.toString());
         } else {
             IChatBaseComponent ichatbasecomponent = advancementdisplay.a();
             EnumChatFormat enumchatformat = advancementdisplay.e().c();
@@ -49,47 +49,47 @@ public class Advancement {
                 chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, ichatbasecomponent1));
             });
 
-            this.h = (new ChatComponentText("[")).addSibling(ichatbasecomponent2).a("]").a(enumchatformat);
+            this.chatComponent = (new ChatComponentText("[")).addSibling(ichatbasecomponent2).a("]").a(enumchatformat);
         }
 
     }
 
     public Advancement.SerializedAdvancement a() {
-        return new Advancement.SerializedAdvancement(this.a == null ? null : this.a.getName(), this.b, this.c, this.e, this.f);
+        return new Advancement.SerializedAdvancement(this.parent == null ? null : this.parent.getName(), this.display, this.rewards, this.criteria, this.requirements);
     }
 
     @Nullable
     public Advancement b() {
-        return this.a;
+        return this.parent;
     }
 
     @Nullable
     public AdvancementDisplay c() {
-        return this.b;
+        return this.display;
     }
 
     public AdvancementRewards d() {
-        return this.c;
+        return this.rewards;
     }
 
     public String toString() {
-        return "SimpleAdvancement{id=" + this.getName() + ", parent=" + (this.a == null ? "null" : this.a.getName()) + ", display=" + this.b + ", rewards=" + this.c + ", criteria=" + this.e + ", requirements=" + Arrays.deepToString(this.f) + '}';
+        return "SimpleAdvancement{id=" + this.getName() + ", parent=" + (this.parent == null ? "null" : this.parent.getName()) + ", display=" + this.display + ", rewards=" + this.rewards + ", criteria=" + this.criteria + ", requirements=" + Arrays.deepToString(this.requirements) + '}';
     }
 
     public Iterable<Advancement> e() {
-        return this.g;
+        return this.children;
     }
 
     public Map<String, Criterion> getCriteria() {
-        return this.e;
+        return this.criteria;
     }
 
     public void a(Advancement advancement) {
-        this.g.add(advancement);
+        this.children.add(advancement);
     }
 
     public MinecraftKey getName() {
-        return this.d;
+        return this.key;
     }
 
     public boolean equals(Object object) {
@@ -100,20 +100,20 @@ public class Advancement {
         } else {
             Advancement advancement = (Advancement) object;
 
-            return this.d.equals(advancement.d);
+            return this.key.equals(advancement.key);
         }
     }
 
     public int hashCode() {
-        return this.d.hashCode();
+        return this.key.hashCode();
     }
 
     public String[][] i() {
-        return this.f;
+        return this.requirements;
     }
 
     public IChatBaseComponent j() {
-        return this.h;
+        return this.chatComponent;
     }
 
     public static class SerializedAdvancement {

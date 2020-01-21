@@ -45,7 +45,7 @@ public class DataConverterSignText extends DataConverterNamedEntity {
     }).create();
 
     public DataConverterSignText(Schema schema, boolean flag) {
-        super(schema, flag, "BlockEntitySignTextStrictJsonFix", DataConverterTypes.k, "Sign");
+        super(schema, flag, "BlockEntitySignTextStrictJsonFix", DataConverterTypes.BLOCK_ENTITY, "Sign");
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic, String s) {

@@ -29,7 +29,7 @@ public class DataConverterWorldGenSettings extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        return this.fixTypeEverywhereTyped("LevelFlatGeneratorInfoFix", this.getInputSchema().getType(DataConverterTypes.a), (typed) -> {
+        return this.fixTypeEverywhereTyped("LevelFlatGeneratorInfoFix", this.getInputSchema().getType(DataConverterTypes.LEVEL), (typed) -> {
             return typed.update(DSL.remainderFinder(), this::a);
         });
     }

@@ -343,14 +343,14 @@ public class DataConverterMaterialId extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type<Either<Integer, Pair<String, String>>> type = DSL.or(DSL.intType(), DSL.named(DataConverterTypes.r.typeName(), DSL.namespacedString()));
-        Type<Pair<String, String>> type1 = DSL.named(DataConverterTypes.r.typeName(), DSL.namespacedString());
+        Type<Either<Integer, Pair<String, String>>> type = DSL.or(DSL.intType(), DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString()));
+        Type<Pair<String, String>> type1 = DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString());
         OpticFinder<Either<Integer, Pair<String, String>>> opticfinder = DSL.fieldFinder("id", type);
 
         return this.fixTypeEverywhereTyped("ItemIdFix", this.getInputSchema().getType(DataConverterTypes.ITEM_STACK), this.getOutputSchema().getType(DataConverterTypes.ITEM_STACK), (typed) -> {
             return typed.update(opticfinder, type1, (either) -> {
                 return (Pair) either.map((integer) -> {
-                    return Pair.of(DataConverterTypes.r.typeName(), a(integer));
+                    return Pair.of(DataConverterTypes.ITEM_NAME.typeName(), a(integer));
                 }, (pair) -> {
                     return pair;
                 });

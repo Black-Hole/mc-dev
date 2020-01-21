@@ -66,8 +66,10 @@ public class WorldData {
     private int U;
     private int V;
     private UUID W;
-    private final GameRules X;
-    private final CustomFunctionCallbackTimerQueue<MinecraftServer> Y;
+    private Set<String> X;
+    private boolean Y;
+    private final GameRules Z;
+    private final CustomFunctionCallbackTimerQueue<MinecraftServer> aa;
 
     protected WorldData() {
         this.f = WorldType.NORMAL;
@@ -80,8 +82,9 @@ public class WorldData {
         this.Q = Sets.newHashSet();
         this.R = Sets.newLinkedHashSet();
         this.S = Maps.newIdentityHashMap();
-        this.X = new GameRules();
-        this.Y = new CustomFunctionCallbackTimerQueue<>(CustomFunctionCallbackTimers.a);
+        this.X = Sets.newLinkedHashSet();
+        this.Z = new GameRules();
+        this.aa = new CustomFunctionCallbackTimerQueue<>(CustomFunctionCallbackTimers.a);
         this.p = null;
         this.q = SharedConstants.getGameVersion().getWorldVersion();
         this.b(new NBTTagCompound());
@@ -98,9 +101,17 @@ public class WorldData {
         this.Q = Sets.newHashSet();
         this.R = Sets.newLinkedHashSet();
         this.S = Maps.newIdentityHashMap();
-        this.X = new GameRules();
-        this.Y = new CustomFunctionCallbackTimerQueue<>(CustomFunctionCallbackTimers.a);
+        this.X = Sets.newLinkedHashSet();
+        this.Z = new GameRules();
+        this.aa = new CustomFunctionCallbackTimerQueue<>(CustomFunctionCallbackTimers.a);
         this.p = datafixer;
+        NBTTagList nbttaglist = nbttagcompound.getList("ServerBrands", 8);
+
+        for (int j = 0; j < nbttaglist.size(); ++j) {
+            this.X.add(nbttaglist.getString(j));
+        }
+
+        this.Y = nbttagcompound.getBoolean("WasModded");
         NBTTagCompound nbttagcompound2;
 
         if (nbttagcompound.hasKeyOfType("Version", 10)) {
@@ -120,13 +131,13 @@ public class WorldData {
             } else if (this.f == WorldType.CUSTOMIZED) {
                 this.h = nbttagcompound.getString("generatorOptions");
             } else if (this.f.h()) {
-                int j = 0;
+                int k = 0;
 
                 if (nbttagcompound.hasKeyOfType("generatorVersion", 99)) {
-                    j = nbttagcompound.getInt("generatorVersion");
+                    k = nbttagcompound.getInt("generatorVersion");
                 }
 
-                this.f = this.f.a(j);
+                this.f = this.f.a(k);
             }
 
             this.b(nbttagcompound.getCompound("generatorOptions"));
@@ -181,7 +192,7 @@ public class WorldData {
         }
 
         if (nbttagcompound.hasKeyOfType("GameRules", 10)) {
-            this.X.a(nbttagcompound.getCompound("GameRules"));
+            this.Z.a(nbttagcompound.getCompound("GameRules"));
         }
 
         if (nbttagcompound.hasKeyOfType("Difficulty", 99)) {
@@ -241,16 +252,16 @@ public class WorldData {
 
         if (nbttagcompound.hasKeyOfType("DataPacks", 10)) {
             nbttagcompound2 = nbttagcompound.getCompound("DataPacks");
-            NBTTagList nbttaglist = nbttagcompound2.getList("Disabled", 8);
-
-            for (int k = 0; k < nbttaglist.size(); ++k) {
-                this.Q.add(nbttaglist.getString(k));
-            }
-
-            NBTTagList nbttaglist1 = nbttagcompound2.getList("Enabled", 8);
+            NBTTagList nbttaglist1 = nbttagcompound2.getList("Disabled", 8);
 
             for (int l = 0; l < nbttaglist1.size(); ++l) {
-                this.R.add(nbttaglist1.getString(l));
+                this.Q.add(nbttaglist1.getString(l));
+            }
+
+            NBTTagList nbttaglist2 = nbttagcompound2.getList("Enabled", 8);
+
+            for (int i1 = 0; i1 < nbttaglist2.size(); ++i1) {
+                this.R.add(nbttaglist2.getString(i1));
             }
         }
 
@@ -259,7 +270,7 @@ public class WorldData {
         }
 
         if (nbttagcompound.hasKeyOfType("ScheduledEvents", 9)) {
-            this.Y.a(nbttagcompound.getList("ScheduledEvents", 10));
+            this.aa.a(nbttagcompound.getList("ScheduledEvents", 10));
         }
 
         if (nbttagcompound.hasKeyOfType("WanderingTraderSpawnDelay", 99)) {
@@ -287,8 +298,9 @@ public class WorldData {
         this.Q = Sets.newHashSet();
         this.R = Sets.newLinkedHashSet();
         this.S = Maps.newIdentityHashMap();
-        this.X = new GameRules();
-        this.Y = new CustomFunctionCallbackTimerQueue<>(CustomFunctionCallbackTimers.a);
+        this.X = Sets.newLinkedHashSet();
+        this.Z = new GameRules();
+        this.aa = new CustomFunctionCallbackTimerQueue<>(CustomFunctionCallbackTimers.a);
         this.p = null;
         this.q = SharedConstants.getGameVersion().getWorldVersion();
         this.a(worldsettings);
@@ -320,6 +332,11 @@ public class WorldData {
     }
 
     private void a(NBTTagCompound nbttagcompound, NBTTagCompound nbttagcompound1) {
+        NBTTagList nbttaglist = new NBTTagList();
+
+        this.X.stream().map(NBTTagString::a).forEach(nbttaglist::add);
+        nbttagcompound.set("ServerBrands", nbttaglist);
+        nbttagcompound.setBoolean("WasModded", this.Y);
         NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 
         nbttagcompound2.setString("Name", SharedConstants.getGameVersion().getName());
@@ -371,7 +388,7 @@ public class WorldData {
         }
 
         nbttagcompound.setBoolean("DifficultyLocked", this.G);
-        nbttagcompound.set("GameRules", this.X.a());
+        nbttagcompound.set("GameRules", this.Z.a());
         NBTTagCompound nbttagcompound3 = new NBTTagCompound();
         Iterator iterator = this.S.entrySet().iterator();
 
@@ -387,32 +404,32 @@ public class WorldData {
         }
 
         NBTTagCompound nbttagcompound4 = new NBTTagCompound();
-        NBTTagList nbttaglist = new NBTTagList();
+        NBTTagList nbttaglist1 = new NBTTagList();
         Iterator iterator1 = this.R.iterator();
 
         while (iterator1.hasNext()) {
             String s = (String) iterator1.next();
 
-            nbttaglist.add(NBTTagString.a(s));
+            nbttaglist1.add(NBTTagString.a(s));
         }
 
-        nbttagcompound4.set("Enabled", nbttaglist);
-        NBTTagList nbttaglist1 = new NBTTagList();
+        nbttagcompound4.set("Enabled", nbttaglist1);
+        NBTTagList nbttaglist2 = new NBTTagList();
         Iterator iterator2 = this.Q.iterator();
 
         while (iterator2.hasNext()) {
             String s1 = (String) iterator2.next();
 
-            nbttaglist1.add(NBTTagString.a(s1));
+            nbttaglist2.add(NBTTagString.a(s1));
         }
 
-        nbttagcompound4.set("Disabled", nbttaglist1);
+        nbttagcompound4.set("Disabled", nbttaglist2);
         nbttagcompound.set("DataPacks", nbttagcompound4);
         if (this.customBossEvents != null) {
             nbttagcompound.set("CustomBossEvents", this.customBossEvents);
         }
 
-        nbttagcompound.set("ScheduledEvents", this.Y.b());
+        nbttagcompound.set("ScheduledEvents", this.aa.b());
         nbttagcompound.setInt("WanderingTraderSpawnDelay", this.U);
         nbttagcompound.setInt("WanderingTraderSpawnChance", this.V);
         if (this.W != null) {
@@ -558,7 +575,7 @@ public class WorldData {
         return this.C;
     }
 
-    public void g(boolean flag) {
+    public void setHardcore(boolean flag) {
         this.C = flag;
     }
 
@@ -595,7 +612,7 @@ public class WorldData {
     }
 
     public GameRules v() {
-        return this.X;
+        return this.Z;
     }
 
     public double B() {
@@ -687,7 +704,7 @@ public class WorldData {
     }
 
     public CustomFunctionCallbackTimerQueue<MinecraftServer> y() {
-        return this.Y;
+        return this.aa;
     }
 
     public void a(CrashReportSystemDetails crashreportsystemdetails) {
@@ -708,6 +725,12 @@ public class WorldData {
         });
         crashreportsystemdetails.a("Level time", () -> {
             return String.format("%d game time, %d day time", this.l, this.m);
+        });
+        crashreportsystemdetails.a("Known server brands", () -> {
+            return String.join(", ", this.X);
+        });
+        crashreportsystemdetails.a("Level was modded", () -> {
+            return Boolean.toString(this.Y);
         });
         crashreportsystemdetails.a("Level storage version", () -> {
             String s = "Unknown?";
@@ -779,5 +802,10 @@ public class WorldData {
 
     public void a(UUID uuid) {
         this.W = uuid;
+    }
+
+    public void a(String s, boolean flag) {
+        this.X.add(s);
+        this.Y |= flag;
     }
 }

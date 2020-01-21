@@ -53,9 +53,9 @@ public class DataConverterMobSpawner extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type<?> type = this.getOutputSchema().getType(DataConverterTypes.s);
+        Type<?> type = this.getOutputSchema().getType(DataConverterTypes.UNTAGGED_SPAWNER);
 
-        return this.fixTypeEverywhereTyped("MobSpawnerEntityIdentifiersFix", this.getInputSchema().getType(DataConverterTypes.s), type, (typed) -> {
+        return this.fixTypeEverywhereTyped("MobSpawnerEntityIdentifiersFix", this.getInputSchema().getType(DataConverterTypes.UNTAGGED_SPAWNER), type, (typed) -> {
             Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
 
             dynamic = dynamic.set("id", dynamic.createString("MobSpawner"));
