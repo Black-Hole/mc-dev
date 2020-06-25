@@ -15,15 +15,16 @@ public class ItemMapEmpty extends ItemWorldMapBase {
             itemstack1.subtract(1);
         }
 
+        entityhuman.b(StatisticList.ITEM_USED.b(this));
+        entityhuman.playSound(SoundEffects.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, 1.0F, 1.0F);
         if (itemstack1.isEmpty()) {
-            return InteractionResultWrapper.success(itemstack);
+            return InteractionResultWrapper.a(itemstack, world.s_());
         } else {
             if (!entityhuman.inventory.pickup(itemstack.cloneItemStack())) {
                 entityhuman.drop(itemstack, false);
             }
 
-            entityhuman.b(StatisticList.ITEM_USED.b(this));
-            return InteractionResultWrapper.success(itemstack1);
+            return InteractionResultWrapper.a(itemstack1, world.s_());
         }
     }
 }

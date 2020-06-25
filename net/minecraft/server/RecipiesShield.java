@@ -7,8 +7,8 @@ public class RecipiesShield extends IRecipeComplex {
     }
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
-        ItemStack itemstack = ItemStack.a;
-        ItemStack itemstack1 = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack1 = ItemStack.b;
 
         for (int i = 0; i < inventorycrafting.getSize(); ++i) {
             ItemStack itemstack2 = inventorycrafting.getItem(i);
@@ -46,8 +46,8 @@ public class RecipiesShield extends IRecipeComplex {
     }
 
     public ItemStack a(InventoryCrafting inventorycrafting) {
-        ItemStack itemstack = ItemStack.a;
-        ItemStack itemstack1 = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
+        ItemStack itemstack1 = ItemStack.b;
 
         for (int i = 0; i < inventorycrafting.getSize(); ++i) {
             ItemStack itemstack2 = inventorycrafting.getItem(i);

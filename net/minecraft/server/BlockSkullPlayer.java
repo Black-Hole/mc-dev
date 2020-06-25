@@ -7,8 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public class BlockSkullPlayer extends BlockSkull {
 
-    protected BlockSkullPlayer(Block.Info block_info) {
-        super(BlockSkull.Type.PLAYER, block_info);
+    protected BlockSkullPlayer(BlockBase.Info blockbase_info) {
+        super(BlockSkull.Type.PLAYER, blockbase_info);
     }
 
     @Override

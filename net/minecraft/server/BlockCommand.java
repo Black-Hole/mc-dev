@@ -10,9 +10,9 @@ public class BlockCommand extends BlockTileEntity {
     public static final BlockStateDirection a = BlockDirectional.FACING;
     public static final BlockStateBoolean b = BlockProperties.c;
 
-    public BlockCommand(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCommand.a, EnumDirection.NORTH)).set(BlockCommand.b, false));
+    public BlockCommand(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCommand.a, EnumDirection.NORTH)).set(BlockCommand.b, false));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class BlockCommand extends BlockTileEntity {
                 if (!flag2 && !tileentitycommand.g() && tileentitycommand.m() != TileEntityCommand.Type.SEQUENCE) {
                     if (flag1) {
                         tileentitycommand.k();
-                        world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
+                        world.getBlockTickList().a(blockposition, this, 1);
                     }
 
                 }
@@ -46,7 +46,7 @@ public class BlockCommand extends BlockTileEntity {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         TileEntity tileentity = worldserver.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityCommand) {
@@ -65,7 +65,7 @@ public class BlockCommand extends BlockTileEntity {
                 }
 
                 if (tileentitycommand.f() || tileentitycommand.g()) {
-                    worldserver.getBlockTickList().a(blockposition, this, this.a((IWorldReader) worldserver));
+                    worldserver.getBlockTickList().a(blockposition, this, 1);
                 }
             } else if (tileentitycommand_type == TileEntityCommand.Type.REDSTONE) {
                 if (flag1) {
@@ -91,17 +91,12 @@ public class BlockCommand extends BlockTileEntity {
     }
 
     @Override
-    public int a(IWorldReader iworldreader) {
-        return 1;
-    }
-
-    @Override
     public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityCommand && entityhuman.isCreativeAndOp()) {
             entityhuman.a((TileEntityCommand) tileentity);
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.a(world.isClientSide);
         } else {
             return EnumInteractionResult.PASS;
         }
@@ -148,7 +143,7 @@ public class BlockCommand extends BlockTileEntity {
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
@@ -173,7 +168,7 @@ public class BlockCommand extends BlockTileEntity {
     }
 
     private static void a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
-        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(blockposition);
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i();
         GameRules gamerules = world.getGameRules();
 
         IBlockData iblockdata;
@@ -184,7 +179,7 @@ public class BlockCommand extends BlockTileEntity {
             iblockdata = world.getType(blockposition_mutableblockposition);
             Block block = iblockdata.getBlock();
 
-            if (block != Blocks.CHAIN_COMMAND_BLOCK) {
+            if (!iblockdata.a(Blocks.CHAIN_COMMAND_BLOCK)) {
                 break;
             }
 

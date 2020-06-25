@@ -5,14 +5,17 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 import java.util.function.Supplier;
+import javax.annotation.Nullable;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AttributeModifier {
 
-    private final double a;
-    private final AttributeModifier.Operation b;
-    private final Supplier<String> c;
-    private final UUID d;
-    private boolean e;
+    private static final Logger LOGGER = LogManager.getLogger();
+    private final double b;
+    private final AttributeModifier.Operation c;
+    private final Supplier<String> d;
+    private final UUID e;
 
     public AttributeModifier(String s, double d0, AttributeModifier.Operation attributemodifier_operation) {
         this(MathHelper.a((Random) ThreadLocalRandom.current()), () -> {
@@ -27,36 +30,26 @@ public class AttributeModifier {
     }
 
     public AttributeModifier(UUID uuid, Supplier<String> supplier, double d0, AttributeModifier.Operation attributemodifier_operation) {
-        this.e = true;
-        this.d = uuid;
-        this.c = supplier;
-        this.a = d0;
-        this.b = attributemodifier_operation;
+        this.e = uuid;
+        this.d = supplier;
+        this.b = d0;
+        this.c = attributemodifier_operation;
     }
 
     public UUID getUniqueId() {
-        return this.d;
-    }
-
-    public String getName() {
-        return (String) this.c.get();
-    }
-
-    public AttributeModifier.Operation getOperation() {
-        return this.b;
-    }
-
-    public double getAmount() {
-        return this.a;
-    }
-
-    public boolean e() {
         return this.e;
     }
 
-    public AttributeModifier a(boolean flag) {
-        this.e = flag;
-        return this;
+    public String getName() {
+        return (String) this.d.get();
+    }
+
+    public AttributeModifier.Operation getOperation() {
+        return this.c;
+    }
+
+    public double getAmount() {
+        return this.b;
     }
 
     public boolean equals(Object object) {
@@ -65,18 +58,41 @@ public class AttributeModifier {
         } else if (object != null && this.getClass() == object.getClass()) {
             AttributeModifier attributemodifier = (AttributeModifier) object;
 
-            return Objects.equals(this.d, attributemodifier.d);
+            return Objects.equals(this.e, attributemodifier.e);
         } else {
             return false;
         }
     }
 
     public int hashCode() {
-        return this.d != null ? this.d.hashCode() : 0;
+        return this.e.hashCode();
     }
 
     public String toString() {
-        return "AttributeModifier{amount=" + this.a + ", operation=" + this.b + ", name='" + (String) this.c.get() + '\'' + ", id=" + this.d + ", serialize=" + this.e + '}';
+        return "AttributeModifier{amount=" + this.b + ", operation=" + this.c + ", name='" + (String) this.d.get() + '\'' + ", id=" + this.e + '}';
+    }
+
+    public NBTTagCompound save() {
+        NBTTagCompound nbttagcompound = new NBTTagCompound();
+
+        nbttagcompound.setString("Name", this.getName());
+        nbttagcompound.setDouble("Amount", this.b);
+        nbttagcompound.setInt("Operation", this.c.a());
+        nbttagcompound.a("UUID", this.e);
+        return nbttagcompound;
+    }
+
+    @Nullable
+    public static AttributeModifier a(NBTTagCompound nbttagcompound) {
+        try {
+            UUID uuid = nbttagcompound.a("UUID");
+            AttributeModifier.Operation attributemodifier_operation = AttributeModifier.Operation.a(nbttagcompound.getInt("Operation"));
+
+            return new AttributeModifier(uuid, nbttagcompound.getString("Name"), nbttagcompound.getDouble("Amount"), attributemodifier_operation);
+        } catch (Exception exception) {
+            AttributeModifier.LOGGER.warn("Unable to create attribute: {}", exception.getMessage());
+            return null;
+        }
     }
 
     public static enum Operation {

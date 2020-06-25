@@ -6,9 +6,9 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
 
     public static final BlockStateBoolean a = BlockProperties.e;
 
-    public BlockBubbleColumn(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBubbleColumn.a, true));
+    public BlockBubbleColumn(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBubbleColumn.a, true));
     }
 
     @Override
@@ -16,17 +16,17 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
         IBlockData iblockdata1 = world.getType(blockposition.up());
 
         if (iblockdata1.isAir()) {
-            entity.j((Boolean) iblockdata.get(BlockBubbleColumn.a));
+            entity.k((Boolean) iblockdata.get(BlockBubbleColumn.a));
             if (!world.isClientSide) {
                 WorldServer worldserver = (WorldServer) world;
 
                 for (int i = 0; i < 2; ++i) {
-                    worldserver.a(Particles.SPLASH, (double) ((float) blockposition.getX() + world.random.nextFloat()), (double) (blockposition.getY() + 1), (double) ((float) blockposition.getZ() + world.random.nextFloat()), 1, 0.0D, 0.0D, 0.0D, 1.0D);
-                    worldserver.a(Particles.BUBBLE, (double) ((float) blockposition.getX() + world.random.nextFloat()), (double) (blockposition.getY() + 1), (double) ((float) blockposition.getZ() + world.random.nextFloat()), 1, 0.0D, 0.01D, 0.0D, 0.2D);
+                    worldserver.a(Particles.SPLASH, (double) blockposition.getX() + world.random.nextDouble(), (double) (blockposition.getY() + 1), (double) blockposition.getZ() + world.random.nextDouble(), 1, 0.0D, 0.0D, 0.0D, 1.0D);
+                    worldserver.a(Particles.BUBBLE, (double) blockposition.getX() + world.random.nextDouble(), (double) (blockposition.getY() + 1), (double) blockposition.getZ() + world.random.nextDouble(), 1, 0.0D, 0.01D, 0.0D, 0.2D);
                 }
             }
         } else {
-            entity.k((Boolean) iblockdata.get(BlockBubbleColumn.a));
+            entity.l((Boolean) iblockdata.get(BlockBubbleColumn.a));
         }
 
     }
@@ -37,12 +37,12 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         a(worldserver, blockposition.up(), a((IBlockAccess) worldserver, blockposition));
     }
 
     @Override
-    public Fluid a_(IBlockData iblockdata) {
+    public Fluid d(IBlockData iblockdata) {
         return FluidTypes.WATER.a(false);
     }
 
@@ -56,19 +56,13 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
     public static boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
         Fluid fluid = generatoraccess.getFluid(blockposition);
 
-        return generatoraccess.getType(blockposition).getBlock() == Blocks.WATER && fluid.g() >= 8 && fluid.isSource();
+        return generatoraccess.getType(blockposition).a(Blocks.WATER) && fluid.e() >= 8 && fluid.isSource();
     }
 
     private static boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
         IBlockData iblockdata = iblockaccess.getType(blockposition);
-        Block block = iblockdata.getBlock();
 
-        return block == Blocks.BUBBLE_COLUMN ? (Boolean) iblockdata.get(BlockBubbleColumn.a) : block != Blocks.SOUL_SAND;
-    }
-
-    @Override
-    public int a(IWorldReader iworldreader) {
-        return 5;
+        return iblockdata.a(Blocks.BUBBLE_COLUMN) ? (Boolean) iblockdata.get(BlockBubbleColumn.a) : !iblockdata.a(Blocks.SOUL_SAND);
     }
 
     @Override
@@ -78,8 +72,8 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
         } else {
             if (enumdirection == EnumDirection.DOWN) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) Blocks.BUBBLE_COLUMN.getBlockData().set(BlockBubbleColumn.a, a((IBlockAccess) generatoraccess, blockposition1)), 2);
-            } else if (enumdirection == EnumDirection.UP && iblockdata1.getBlock() != Blocks.BUBBLE_COLUMN && a(generatoraccess, blockposition1)) {
-                generatoraccess.getBlockTickList().a(blockposition, this, this.a((IWorldReader) generatoraccess));
+            } else if (enumdirection == EnumDirection.UP && !iblockdata1.a(Blocks.BUBBLE_COLUMN) && a(generatoraccess, blockposition1)) {
+                generatoraccess.getBlockTickList().a(blockposition, this, 5);
             }
 
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
@@ -89,18 +83,18 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        Block block = iworldreader.getType(blockposition.down()).getBlock();
+        IBlockData iblockdata1 = iworldreader.getType(blockposition.down());
 
-        return block == Blocks.BUBBLE_COLUMN || block == Blocks.MAGMA_BLOCK || block == Blocks.SOUL_SAND;
+        return iblockdata1.a(Blocks.BUBBLE_COLUMN) || iblockdata1.a(Blocks.MAGMA_BLOCK) || iblockdata1.a(Blocks.SOUL_SAND);
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return VoxelShapes.a();
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.INVISIBLE;
     }
 

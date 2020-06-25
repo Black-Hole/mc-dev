@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerShotCrossbow extends CriterionTriggerAbstract<CriterionTriggerShotCrossbow.a> {
@@ -16,14 +14,14 @@ public class CriterionTriggerShotCrossbow extends CriterionTriggerAbstract<Crite
     }
 
     @Override
-    public CriterionTriggerShotCrossbow.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerShotCrossbow.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
 
-        return new CriterionTriggerShotCrossbow.a(criterionconditionitem);
+        return new CriterionTriggerShotCrossbow.a(criterionconditionentity_b, criterionconditionitem);
     }
 
     public void a(EntityPlayer entityplayer, ItemStack itemstack) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggershotcrossbow_a) -> {
+        this.a(entityplayer, (criteriontriggershotcrossbow_a) -> {
             return criteriontriggershotcrossbow_a.a(itemstack);
         });
     }
@@ -32,13 +30,13 @@ public class CriterionTriggerShotCrossbow extends CriterionTriggerAbstract<Crite
 
         private final CriterionConditionItem a;
 
-        public a(CriterionConditionItem criterionconditionitem) {
-            super(CriterionTriggerShotCrossbow.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionItem criterionconditionitem) {
+            super(CriterionTriggerShotCrossbow.a, criterionconditionentity_b);
             this.a = criterionconditionitem;
         }
 
         public static CriterionTriggerShotCrossbow.a a(IMaterial imaterial) {
-            return new CriterionTriggerShotCrossbow.a(CriterionConditionItem.a.a().a(imaterial).b());
+            return new CriterionTriggerShotCrossbow.a(CriterionConditionEntity.b.a, CriterionConditionItem.a.a().a(imaterial).b());
         }
 
         public boolean a(ItemStack itemstack) {
@@ -46,8 +44,8 @@ public class CriterionTriggerShotCrossbow extends CriterionTriggerAbstract<Crite
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             jsonobject.add("item", this.a.a());
             return jsonobject;

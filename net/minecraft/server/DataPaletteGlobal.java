@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.function.Predicate;
+
 public class DataPaletteGlobal<T> implements DataPalette<T> {
 
     private final RegistryBlockID<T> a;
@@ -18,7 +20,7 @@ public class DataPaletteGlobal<T> implements DataPalette<T> {
     }
 
     @Override
-    public boolean b(T t0) {
+    public boolean a(Predicate<T> predicate) {
         return true;
     }
 

@@ -4,7 +4,6 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Locale;
 import java.util.function.Function;
 
@@ -17,7 +16,7 @@ public class CommandDataStorage implements CommandDataAccessor {
         return new CommandData.c() {
             @Override
             public CommandDataAccessor a(CommandContext<CommandListenerWrapper> commandcontext) {
-                return new CommandDataStorage(CommandDataStorage.b(commandcontext), ArgumentMinecraftKeyRegistered.d(commandcontext, s));
+                return new CommandDataStorage(CommandDataStorage.b(commandcontext), ArgumentMinecraftKeyRegistered.e(commandcontext, s));
             }
 
             @Override
@@ -30,7 +29,7 @@ public class CommandDataStorage implements CommandDataAccessor {
     private final MinecraftKey d;
 
     private static PersistentCommandStorage b(CommandContext<CommandListenerWrapper> commandcontext) {
-        return ((CommandListenerWrapper) commandcontext.getSource()).getServer().aO();
+        return ((CommandListenerWrapper) commandcontext.getSource()).getServer().aG();
     }
 
     private CommandDataStorage(PersistentCommandStorage persistentcommandstorage, MinecraftKey minecraftkey) {

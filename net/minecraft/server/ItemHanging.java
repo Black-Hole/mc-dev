@@ -27,7 +27,7 @@ public class ItemHanging extends Item {
                 object = new EntityPainting(world, blockposition1, enumdirection);
             } else {
                 if (this.a != EntityTypes.ITEM_FRAME) {
-                    return EnumInteractionResult.SUCCESS;
+                    return EnumInteractionResult.a(world.isClientSide);
                 }
 
                 object = new EntityItemFrame(world, blockposition1, enumdirection);
@@ -46,7 +46,7 @@ public class ItemHanging extends Item {
                 }
 
                 itemstack.subtract(1);
-                return EnumInteractionResult.SUCCESS;
+                return EnumInteractionResult.a(world.isClientSide);
             } else {
                 return EnumInteractionResult.CONSUME;
             }
@@ -54,6 +54,6 @@ public class ItemHanging extends Item {
     }
 
     protected boolean a(EntityHuman entityhuman, EnumDirection enumdirection, ItemStack itemstack, BlockPosition blockposition) {
-        return !enumdirection.m().b() && entityhuman.a(blockposition, enumdirection, itemstack);
+        return !enumdirection.n().c() && entityhuman.a(blockposition, enumdirection, itemstack);
     }
 }

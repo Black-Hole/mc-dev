@@ -17,13 +17,13 @@ public class ItemFireworks extends Item {
             ItemStack itemstack = itemactioncontext.getItemStack();
             Vec3D vec3d = itemactioncontext.getPos();
             EnumDirection enumdirection = itemactioncontext.getClickedFace();
-            EntityFireworks entityfireworks = new EntityFireworks(world, vec3d.x + (double) enumdirection.getAdjacentX() * 0.15D, vec3d.y + (double) enumdirection.getAdjacentY() * 0.15D, vec3d.z + (double) enumdirection.getAdjacentZ() * 0.15D, itemstack);
+            EntityFireworks entityfireworks = new EntityFireworks(world, itemactioncontext.getEntity(), vec3d.x + (double) enumdirection.getAdjacentX() * 0.15D, vec3d.y + (double) enumdirection.getAdjacentY() * 0.15D, vec3d.z + (double) enumdirection.getAdjacentZ() * 0.15D, itemstack);
 
             world.addEntity(entityfireworks);
             itemstack.subtract(1);
         }
 
-        return EnumInteractionResult.SUCCESS;
+        return EnumInteractionResult.a(world.isClientSide);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ItemFireworks extends Item {
                 }
             }
 
-            return InteractionResultWrapper.success(entityhuman.b(enumhand));
+            return InteractionResultWrapper.a(entityhuman.b(enumhand), world.s_());
         } else {
             return InteractionResultWrapper.pass(entityhuman.b(enumhand));
         }

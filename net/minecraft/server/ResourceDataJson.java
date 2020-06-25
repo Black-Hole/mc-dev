@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class ResourceDataJson extends ResourceDataAbstract<Map<MinecraftKey, JsonObject>> {
+public abstract class ResourceDataJson extends ResourceDataAbstract<Map<MinecraftKey, JsonElement>> {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int b = ".json".length();
@@ -28,8 +28,8 @@ public abstract class ResourceDataJson extends ResourceDataAbstract<Map<Minecraf
     }
 
     @Override
-    protected Map<MinecraftKey, JsonObject> b(IResourceManager iresourcemanager, GameProfilerFiller gameprofilerfiller) {
-        Map<MinecraftKey, JsonObject> map = Maps.newHashMap();
+    protected Map<MinecraftKey, JsonElement> b(IResourceManager iresourcemanager, GameProfilerFiller gameprofilerfiller) {
+        Map<MinecraftKey, JsonElement> map = Maps.newHashMap();
         int i = this.d.length() + 1;
         Iterator iterator = iresourcemanager.a(this.d, (s) -> {
             return s.endsWith(".json");
@@ -53,12 +53,12 @@ public abstract class ResourceDataJson extends ResourceDataAbstract<Map<Minecraf
                         Throwable throwable2 = null;
 
                         try {
-                            JsonObject jsonobject = (JsonObject) ChatDeserializer.a(this.c, (Reader) bufferedreader, JsonObject.class);
+                            JsonElement jsonelement = (JsonElement) ChatDeserializer.a(this.c, (Reader) bufferedreader, JsonElement.class);
 
-                            if (jsonobject != null) {
-                                JsonObject jsonobject1 = (JsonObject) map.put(minecraftkey1, jsonobject);
+                            if (jsonelement != null) {
+                                JsonElement jsonelement1 = (JsonElement) map.put(minecraftkey1, jsonelement);
 
-                                if (jsonobject1 != null) {
+                                if (jsonelement1 != null) {
                                     throw new IllegalStateException("Duplicate data file ignored with ID " + minecraftkey1);
                                 }
                             } else {

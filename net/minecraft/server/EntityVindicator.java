@@ -11,7 +11,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
     private static final Predicate<EnumDifficulty> b = (enumdifficulty) -> {
         return enumdifficulty == EnumDifficulty.NORMAL || enumdifficulty == EnumDifficulty.HARD;
     };
-    private boolean bw;
+    private boolean bv;
 
     public EntityVindicator(EntityTypes<? extends EntityVindicator> entitytypes, World world) {
         super(entitytypes, world);
@@ -41,7 +41,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
             NavigationAbstract navigationabstract = this.getNavigation();
 
             if (navigationabstract instanceof Navigation) {
-                boolean flag = ((WorldServer) this.world).e(new BlockPosition(this));
+                boolean flag = ((WorldServer) this.world).e(this.getChunkCoordinates());
 
                 ((Navigation) navigationabstract).a(flag);
             }
@@ -50,35 +50,30 @@ public class EntityVindicator extends EntityIllagerAbstract {
         super.mobTick();
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.3499999940395355D);
-        this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(12.0D);
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(24.0D);
-        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(5.0D);
+    public static AttributeProvider.Builder eL() {
+        return EntityMonster.eS().a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.FOLLOW_RANGE, 12.0D).a(GenericAttributes.MAX_HEALTH, 24.0D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D);
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
-        if (this.bw) {
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
+        if (this.bv) {
             nbttagcompound.setBoolean("Johnny", true);
         }
 
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("Johnny", 99)) {
-            this.bw = nbttagcompound.getBoolean("Johnny");
+            this.bv = nbttagcompound.getBoolean("Johnny");
         }
 
     }
 
     @Override
-    public SoundEffect eq() {
+    public SoundEffect eM() {
         return SoundEffects.ENTITY_VINDICATOR_CELEBRATE;
     }
 
@@ -95,7 +90,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
 
     @Override
     protected void a(DifficultyDamageScaler difficultydamagescaler) {
-        if (this.eE() == null) {
+        if (this.fb() == null) {
             this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
         }
 
@@ -109,8 +104,8 @@ public class EntityVindicator extends EntityIllagerAbstract {
     @Override
     public void setCustomName(@Nullable IChatBaseComponent ichatbasecomponent) {
         super.setCustomName(ichatbasecomponent);
-        if (!this.bw && ichatbasecomponent != null && ichatbasecomponent.getString().equals("Johnny")) {
-            this.bw = true;
+        if (!this.bv && ichatbasecomponent != null && ichatbasecomponent.getString().equals("Johnny")) {
+            this.bv = true;
         }
 
     }
@@ -133,7 +128,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
     @Override
     public void a(int i, boolean flag) {
         ItemStack itemstack = new ItemStack(Items.IRON_AXE);
-        Raid raid = this.eE();
+        Raid raid = this.fb();
         byte b0 = 1;
 
         if (i > raid.a(EnumDifficulty.NORMAL)) {
@@ -155,12 +150,12 @@ public class EntityVindicator extends EntityIllagerAbstract {
     static class b extends PathfinderGoalNearestAttackableTarget<EntityLiving> {
 
         public b(EntityVindicator entityvindicator) {
-            super(entityvindicator, EntityLiving.class, 0, true, true, EntityLiving::dN);
+            super(entityvindicator, EntityLiving.class, 0, true, true, EntityLiving::eh);
         }
 
         @Override
         public boolean a() {
-            return ((EntityVindicator) this.e).bw && super.a();
+            return ((EntityVindicator) this.e).bv && super.a();
         }
 
         @Override
@@ -181,14 +176,14 @@ public class EntityVindicator extends EntityIllagerAbstract {
         public boolean b() {
             EntityVindicator entityvindicator = (EntityVindicator) this.entity;
 
-            return entityvindicator.eF() && super.b();
+            return entityvindicator.fc() && super.b();
         }
 
         @Override
         public boolean a() {
             EntityVindicator entityvindicator = (EntityVindicator) this.entity;
 
-            return entityvindicator.eF() && entityvindicator.random.nextInt(10) == 0 && super.a();
+            return entityvindicator.fc() && entityvindicator.random.nextInt(10) == 0 && super.a();
         }
 
         @Override

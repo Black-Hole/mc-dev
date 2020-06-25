@@ -1,10 +1,10 @@
 package net.minecraft.server;
 
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.schemas.Schema;
-import java.util.Optional;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
 import java.util.stream.Stream;
 
 public class DataConverterVillage extends DataFix {
@@ -22,10 +22,10 @@ public class DataConverterVillage extends DataFix {
     }
 
     private static <T> Dynamic<T> b(Dynamic<T> dynamic) {
-        Optional optional = dynamic.asStreamOpt().map(DataConverterVillage::a);
+        DataResult dataresult = dynamic.asStreamOpt().map(DataConverterVillage::a);
 
         dynamic.getClass();
-        return (Dynamic) optional.map(dynamic::createList).orElse(dynamic);
+        return (Dynamic) dataresult.map(dynamic::createList).result().orElse(dynamic);
     }
 
     private static Stream<? extends Dynamic<?>> a(Stream<? extends Dynamic<?>> stream) {
@@ -49,6 +49,6 @@ public class DataConverterVillage extends DataFix {
     }
 
     private static <T> Dynamic<T> a(Dynamic<T> dynamic, String s) {
-        return dynamic.get(s).asNumber().isPresent() ? dynamic.set(s, DataConverterFlattenData.b(dynamic.get(s).asInt(0) << 4)) : dynamic;
+        return dynamic.get(s).asNumber().result().isPresent() ? dynamic.set(s, DataConverterFlattenData.b(dynamic.get(s).asInt(0) << 4)) : dynamic;
     }
 }

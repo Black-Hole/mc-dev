@@ -134,7 +134,7 @@ public class EntitySelector {
 
     private void a(List<Entity> list, WorldServer worldserver, Vec3D vec3d, Predicate<Entity> predicate) {
         if (this.g != null) {
-            list.addAll(worldserver.a(this.l, this.g.b(vec3d), predicate));
+            list.addAll(worldserver.a(this.l, this.g.c(vec3d), predicate));
         } else {
             list.addAll(worldserver.a(this.l, predicate));
         }
@@ -160,7 +160,7 @@ public class EntitySelector {
             entityplayer = commandlistenerwrapper.getServer().getPlayerList().getPlayer(this.j);
             return (List) (entityplayer == null ? Collections.emptyList() : Lists.newArrayList(new EntityPlayer[]{entityplayer}));
         } else if (this.k != null) {
-            entityplayer = commandlistenerwrapper.getServer().getPlayerList().a(this.k);
+            entityplayer = commandlistenerwrapper.getServer().getPlayerList().getPlayer(this.k);
             return (List) (entityplayer == null ? Collections.emptyList() : Lists.newArrayList(new EntityPlayer[]{entityplayer}));
         } else {
             Vec3D vec3d = (Vec3D) this.f.apply(commandlistenerwrapper.getPosition());
@@ -206,7 +206,7 @@ public class EntitySelector {
         Predicate<Entity> predicate = this.d;
 
         if (this.g != null) {
-            AxisAlignedBB axisalignedbb = this.g.b(vec3d);
+            AxisAlignedBB axisalignedbb = this.g.c(vec3d);
 
             predicate = predicate.and((entity) -> {
                 return axisalignedbb.c(entity.getBoundingBox());
@@ -215,7 +215,7 @@ public class EntitySelector {
 
         if (!this.e.c()) {
             predicate = predicate.and((entity) -> {
-                return this.e.a(entity.c(vec3d));
+                return this.e.a(entity.d(vec3d));
             });
         }
 
@@ -230,7 +230,7 @@ public class EntitySelector {
         return list.subList(0, Math.min(this.a, list.size()));
     }
 
-    public static IChatBaseComponent a(List<? extends Entity> list) {
+    public static IChatMutableComponent a(List<? extends Entity> list) {
         return ChatComponentUtils.b(list, Entity::getScoreboardDisplayName);
     }
 }

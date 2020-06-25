@@ -5,13 +5,13 @@ import java.util.Queue;
 
 public class BlockSponge extends Block {
 
-    protected BlockSponge(Block.Info block_info) {
-        super(block_info);
+    protected BlockSponge(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (iblockdata1.getBlock() != iblockdata.getBlock()) {
+        if (!iblockdata1.a(iblockdata.getBlock())) {
             this.a(world, blockposition);
         }
     }
@@ -50,7 +50,7 @@ public class BlockSponge extends Block {
                 Fluid fluid = world.getFluid(blockposition2);
                 Material material = iblockdata.getMaterial();
 
-                if (fluid.a(TagsFluid.WATER)) {
+                if (fluid.a((Tag) TagsFluid.WATER)) {
                     if (iblockdata.getBlock() instanceof IFluidSource && ((IFluidSource) iblockdata.getBlock()).removeFluid(world, blockposition2, iblockdata) != FluidTypes.EMPTY) {
                         ++i;
                         if (j < 6) {

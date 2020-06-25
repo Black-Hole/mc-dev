@@ -11,6 +11,7 @@ public interface ParticleParam {
 
     String a();
 
+    @Deprecated
     public interface a<T extends ParticleParam> {
 
         T b(Particle<T> particle, StringReader stringreader) throws CommandSyntaxException;

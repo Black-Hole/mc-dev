@@ -2,16 +2,16 @@ package net.minecraft.server;
 
 public class BlockCake extends Block {
 
-    public static final BlockStateInteger BITES = BlockProperties.af;
+    public static final BlockStateInteger BITES = BlockProperties.al;
     protected static final VoxelShape[] b = new VoxelShape[]{Block.a(1.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(3.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(5.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(7.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(9.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(11.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(13.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D)};
 
-    protected BlockCake(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCake.BITES, 0));
+    protected BlockCake(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCake.BITES, 0));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockCake.b[(Integer) iblockdata.get(BlockCake.BITES)];
     }
 
@@ -20,7 +20,7 @@ public class BlockCake extends Block {
         if (world.isClientSide) {
             ItemStack itemstack = entityhuman.b(enumhand);
 
-            if (this.a((GeneratorAccess) world, blockposition, iblockdata, entityhuman) == EnumInteractionResult.SUCCESS) {
+            if (this.a((GeneratorAccess) world, blockposition, iblockdata, entityhuman).a()) {
                 return EnumInteractionResult.SUCCESS;
             }
 
@@ -33,7 +33,7 @@ public class BlockCake extends Block {
     }
 
     private EnumInteractionResult a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
-        if (!entityhuman.p(false)) {
+        if (!entityhuman.q(false)) {
             return EnumInteractionResult.PASS;
         } else {
             entityhuman.a(StatisticList.EAT_CAKE_SLICE);

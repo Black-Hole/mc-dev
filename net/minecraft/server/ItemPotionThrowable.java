@@ -23,6 +23,6 @@ public class ItemPotionThrowable extends ItemPotion {
             itemstack.subtract(1);
         }
 
-        return InteractionResultWrapper.success(itemstack);
+        return InteractionResultWrapper.a(itemstack, world.s_());
     }
 }

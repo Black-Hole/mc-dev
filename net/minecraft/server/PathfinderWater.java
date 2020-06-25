@@ -49,7 +49,7 @@ public class PathfinderWater extends PathfinderAbstract {
         Fluid fluid = iblockaccess.getFluid(blockposition);
         IBlockData iblockdata = iblockaccess.getType(blockposition);
 
-        return fluid.isEmpty() && iblockdata.a(iblockaccess, blockposition.down(), PathMode.WATER) && iblockdata.isAir() ? PathType.BREACH : (fluid.a(TagsFluid.WATER) && iblockdata.a(iblockaccess, blockposition, PathMode.WATER) ? PathType.WATER : PathType.BLOCKED);
+        return fluid.isEmpty() && iblockdata.a(iblockaccess, blockposition.down(), PathMode.WATER) && iblockdata.isAir() ? PathType.BREACH : (fluid.a((Tag) TagsFluid.WATER) && iblockdata.a(iblockaccess, blockposition, PathMode.WATER) ? PathType.WATER : PathType.BLOCKED);
     }
 
     @Nullable
@@ -91,7 +91,7 @@ public class PathfinderWater extends PathfinderAbstract {
                         return PathType.BREACH;
                     }
 
-                    if (!fluid.a(TagsFluid.WATER)) {
+                    if (!fluid.a((Tag) TagsFluid.WATER)) {
                         return PathType.BLOCKED;
                     }
                 }

@@ -8,6 +8,7 @@ public class LootContextParameters {
     public static final LootContextParameter<Entity> KILLER_ENTITY = a("killer_entity");
     public static final LootContextParameter<Entity> DIRECT_KILLER_ENTITY = a("direct_killer_entity");
     public static final LootContextParameter<BlockPosition> POSITION = a("position");
+    public static final LootContextParameter<Vec3D> g = a("origin");
     public static final LootContextParameter<IBlockData> BLOCK_STATE = a("block_state");
     public static final LootContextParameter<TileEntity> BLOCK_ENTITY = a("block_entity");
     public static final LootContextParameter<ItemStack> TOOL = a("tool");

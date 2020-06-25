@@ -5,7 +5,6 @@ import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Either;
@@ -343,8 +342,8 @@ public class DataConverterMaterialId extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type<Either<Integer, Pair<String, String>>> type = DSL.or(DSL.intType(), DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString()));
-        Type<Pair<String, String>> type1 = DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString());
+        Type<Either<Integer, Pair<String, String>>> type = DSL.or(DSL.intType(), DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DataConverterSchemaNamed.a()));
+        Type<Pair<String, String>> type1 = DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DataConverterSchemaNamed.a());
         OpticFinder<Either<Integer, Pair<String, String>>> opticfinder = DSL.fieldFinder("id", type);
 
         return this.fixTypeEverywhereTyped("ItemIdFix", this.getInputSchema().getType(DataConverterTypes.ITEM_STACK), this.getOutputSchema().getType(DataConverterTypes.ITEM_STACK), (typed) -> {

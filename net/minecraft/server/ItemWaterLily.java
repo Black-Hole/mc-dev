@@ -13,43 +13,10 @@ public class ItemWaterLily extends ItemBlock {
 
     @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
-        ItemStack itemstack = entityhuman.b(enumhand);
-        MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.SOURCE_ONLY);
+        MovingObjectPositionBlock movingobjectpositionblock = a(world, entityhuman, RayTrace.FluidCollisionOption.SOURCE_ONLY);
+        MovingObjectPositionBlock movingobjectpositionblock1 = movingobjectpositionblock.a(movingobjectpositionblock.getBlockPosition().up());
+        EnumInteractionResult enuminteractionresult = super.a(new ItemActionContext(entityhuman, enumhand, movingobjectpositionblock1));
 
-        if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
-            return InteractionResultWrapper.pass(itemstack);
-        } else {
-            if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-                MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;
-                BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
-                EnumDirection enumdirection = movingobjectpositionblock.getDirection();
-
-                if (!world.a(entityhuman, blockposition) || !entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
-                    return InteractionResultWrapper.fail(itemstack);
-                }
-
-                BlockPosition blockposition1 = blockposition.up();
-                IBlockData iblockdata = world.getType(blockposition);
-                Material material = iblockdata.getMaterial();
-                Fluid fluid = world.getFluid(blockposition);
-
-                if ((fluid.getType() == FluidTypes.WATER || material == Material.ICE) && world.isEmpty(blockposition1)) {
-                    world.setTypeAndData(blockposition1, Blocks.LILY_PAD.getBlockData(), 11);
-                    if (entityhuman instanceof EntityPlayer) {
-                        CriterionTriggers.y.a((EntityPlayer) entityhuman, blockposition1, itemstack);
-                    }
-
-                    if (!entityhuman.abilities.canInstantlyBuild) {
-                        itemstack.subtract(1);
-                    }
-
-                    entityhuman.b(StatisticList.ITEM_USED.b(this));
-                    world.playSound(entityhuman, blockposition, SoundEffects.BLOCK_LILY_PAD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                    return InteractionResultWrapper.success(itemstack);
-                }
-            }
-
-            return InteractionResultWrapper.fail(itemstack);
-        }
+        return new InteractionResultWrapper<>(enuminteractionresult, entityhuman.b(enumhand));
     }
 }

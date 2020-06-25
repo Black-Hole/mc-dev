@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 public abstract class BlockDirectional extends Block {
 
-    public static final BlockStateDirection FACING = BlockProperties.L;
+    public static final BlockStateDirection FACING = BlockProperties.M;
 
-    protected BlockDirectional(Block.Info block_info) {
-        super(block_info);
+    protected BlockDirectional(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 }

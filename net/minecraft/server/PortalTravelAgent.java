@@ -20,7 +20,7 @@ public class PortalTravelAgent {
     public boolean findAndTeleport(Entity entity, float f) {
         Vec3D vec3d = entity.getPortalOffset();
         EnumDirection enumdirection = entity.getPortalDirection();
-        ShapeDetector.Shape shapedetector_shape = this.a(new BlockPosition(entity), entity.getMot(), enumdirection, vec3d.x, vec3d.y, entity instanceof EntityHuman);
+        ShapeDetector.Shape shapedetector_shape = this.a(entity.getChunkCoordinates(), entity.getMot(), enumdirection, vec3d.x, vec3d.y, entity instanceof EntityHuman);
 
         if (shapedetector_shape == null) {
             return false;
@@ -37,14 +37,14 @@ public class PortalTravelAgent {
 
     @Nullable
     public ShapeDetector.Shape a(BlockPosition blockposition, Vec3D vec3d, EnumDirection enumdirection, double d0, double d1, boolean flag) {
-        VillagePlace villageplace = this.world.B();
+        VillagePlace villageplace = this.world.x();
 
         villageplace.a(this.world, blockposition, 128);
         List<VillagePlaceRecord> list = (List) villageplace.b((villageplacetype) -> {
-            return villageplacetype == VillagePlaceType.u;
+            return villageplacetype == VillagePlaceType.v;
         }, blockposition, 128, VillagePlace.Occupancy.ANY).collect(Collectors.toList());
         Optional<VillagePlaceRecord> optional = list.stream().min(Comparator.comparingDouble((villageplacerecord) -> {
-            return villageplacerecord.f().m(blockposition);
+            return villageplacerecord.f().j(blockposition);
         }).thenComparingInt((villageplacerecord) -> {
             return villageplacerecord.f().getY();
         }));

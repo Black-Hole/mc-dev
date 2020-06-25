@@ -7,100 +7,85 @@ import javax.annotation.Nullable;
 
 public class ChatComponentScore extends ChatBaseComponent implements ChatComponentContextual {
 
-    private final String b;
-    @Nullable
-    private final EntitySelector c;
     private final String d;
-    private String e = "";
+    @Nullable
+    private final EntitySelector e;
+    private final String f;
+
+    @Nullable
+    private static EntitySelector d(String s) {
+        try {
+            return (new ArgumentParserSelector(new StringReader(s))).parse();
+        } catch (CommandSyntaxException commandsyntaxexception) {
+            return null;
+        }
+    }
 
     public ChatComponentScore(String s, String s1) {
-        this.b = s;
-        this.d = s1;
-        EntitySelector entityselector = null;
-
-        try {
-            ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(new StringReader(s));
-
-            entityselector = argumentparserselector.parse();
-        } catch (CommandSyntaxException commandsyntaxexception) {
-            ;
-        }
-
-        this.c = entityselector;
+        this(s, d(s), s1);
     }
 
-    public String i() {
-        return this.b;
+    private ChatComponentScore(String s, @Nullable EntitySelector entityselector, String s1) {
+        this.d = s;
+        this.e = entityselector;
+        this.f = s1;
     }
 
-    public String k() {
+    public String g() {
         return this.d;
     }
 
-    public void b(String s) {
-        this.e = s;
+    public String i() {
+        return this.f;
     }
 
-    @Override
-    public String getText() {
-        return this.e;
-    }
+    private String a(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
+        if (this.e != null) {
+            List<? extends Entity> list = this.e.getEntities(commandlistenerwrapper);
 
-    private void b(CommandListenerWrapper commandlistenerwrapper) {
-        MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
+            if (!list.isEmpty()) {
+                if (list.size() != 1) {
+                    throw ArgumentEntity.a.create();
+                }
 
-        if (minecraftserver != null && minecraftserver.K() && UtilColor.b(this.e)) {
-            ScoreboardServer scoreboardserver = minecraftserver.getScoreboard();
-            ScoreboardObjective scoreboardobjective = scoreboardserver.getObjective(this.d);
-
-            if (scoreboardserver.b(this.b, scoreboardobjective)) {
-                ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(this.b, scoreboardobjective);
-
-                this.b(String.format("%d", scoreboardscore.getScore()));
-            } else {
-                this.e = "";
+                return ((Entity) list.get(0)).getName();
             }
         }
 
+        return this.d;
     }
 
-    @Override
-    public ChatComponentScore g() {
-        ChatComponentScore chatcomponentscore = new ChatComponentScore(this.b, this.d);
+    private String a(String s, CommandListenerWrapper commandlistenerwrapper) {
+        MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
-        chatcomponentscore.b(this.e);
-        return chatcomponentscore;
-    }
+        if (minecraftserver != null) {
+            ScoreboardServer scoreboardserver = minecraftserver.getScoreboard();
+            ScoreboardObjective scoreboardobjective = scoreboardserver.getObjective(this.f);
 
-    @Override
-    public IChatBaseComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity, int i) throws CommandSyntaxException {
-        if (commandlistenerwrapper == null) {
-            return this.g();
-        } else {
-            String s;
+            if (scoreboardserver.b(s, scoreboardobjective)) {
+                ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(s, scoreboardobjective);
 
-            if (this.c != null) {
-                List<? extends Entity> list = this.c.getEntities(commandlistenerwrapper);
-
-                if (list.isEmpty()) {
-                    s = this.b;
-                } else {
-                    if (list.size() != 1) {
-                        throw ArgumentEntity.a.create();
-                    }
-
-                    s = ((Entity) list.get(0)).getName();
-                }
-            } else {
-                s = this.b;
+                return Integer.toString(scoreboardscore.getScore());
             }
+        }
 
+        return "";
+    }
+
+    @Override
+    public ChatComponentScore f() {
+        return new ChatComponentScore(this.d, this.e, this.f);
+    }
+
+    @Override
+    public IChatMutableComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity, int i) throws CommandSyntaxException {
+        if (commandlistenerwrapper == null) {
+            return new ChatComponentText("");
+        } else {
+            String s = this.a(commandlistenerwrapper);
             String s1 = entity != null && s.equals("*") ? entity.getName() : s;
-            ChatComponentScore chatcomponentscore = new ChatComponentScore(s1, this.d);
 
-            chatcomponentscore.b(this.e);
-            chatcomponentscore.b(commandlistenerwrapper);
-            return chatcomponentscore;
+            return new ChatComponentText(this.a(s1, commandlistenerwrapper));
         }
     }
 
@@ -113,12 +98,12 @@ public class ChatComponentScore extends ChatBaseComponent implements ChatCompone
         } else {
             ChatComponentScore chatcomponentscore = (ChatComponentScore) object;
 
-            return this.b.equals(chatcomponentscore.b) && this.d.equals(chatcomponentscore.d) && super.equals(object);
+            return this.d.equals(chatcomponentscore.d) && this.f.equals(chatcomponentscore.f) && super.equals(object);
         }
     }
 
     @Override
     public String toString() {
-        return "ScoreComponent{name='" + this.b + '\'' + "objective='" + this.d + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
+        return "ScoreComponent{name='" + this.d + '\'' + "objective='" + this.f + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
     }
 }

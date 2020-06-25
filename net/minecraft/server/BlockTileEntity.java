@@ -4,12 +4,12 @@ import javax.annotation.Nullable;
 
 public abstract class BlockTileEntity extends Block implements ITileEntity {
 
-    protected BlockTileEntity(Block.Info block_info) {
-        super(block_info);
+    protected BlockTileEntity(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.INVISIBLE;
     }
 

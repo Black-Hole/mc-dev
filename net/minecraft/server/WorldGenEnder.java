@@ -3,17 +3,14 @@ package net.minecraft.server;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.ImmutableMap.Builder;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -21,22 +18,22 @@ public class WorldGenEnder extends WorldGenerator<WorldGenFeatureEndSpikeConfigu
 
     private static final LoadingCache<Long, List<WorldGenEnder.Spike>> a = CacheBuilder.newBuilder().expireAfterWrite(5L, TimeUnit.MINUTES).build(new WorldGenEnder.b());
 
-    public WorldGenEnder(Function<Dynamic<?>, ? extends WorldGenFeatureEndSpikeConfiguration> function) {
-        super(function);
+    public WorldGenEnder(Codec<WorldGenFeatureEndSpikeConfiguration> codec) {
+        super(codec);
     }
 
-    public static List<WorldGenEnder.Spike> a(GeneratorAccess generatoraccess) {
-        Random random = new Random(generatoraccess.getSeed());
+    public static List<WorldGenEnder.Spike> a(GeneratorAccessSeed generatoraccessseed) {
+        Random random = new Random(generatoraccessseed.getSeed());
         long i = random.nextLong() & 65535L;
 
         return (List) WorldGenEnder.a.getUnchecked(i);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEndSpikeConfiguration worldgenfeatureendspikeconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEndSpikeConfiguration worldgenfeatureendspikeconfiguration) {
         List<WorldGenEnder.Spike> list = worldgenfeatureendspikeconfiguration.b();
 
         if (list.isEmpty()) {
-            list = a(generatoraccess);
+            list = a(generatoraccessseed);
         }
 
         Iterator iterator = list.iterator();
@@ -45,7 +42,7 @@ public class WorldGenEnder extends WorldGenerator<WorldGenFeatureEndSpikeConfigu
             WorldGenEnder.Spike worldgenender_spike = (WorldGenEnder.Spike) iterator.next();
 
             if (worldgenender_spike.a(blockposition)) {
-                this.a(generatoraccess, random, worldgenfeatureendspikeconfiguration, worldgenender_spike);
+                this.a(generatoraccessseed, random, worldgenfeatureendspikeconfiguration, worldgenender_spike);
             }
         }
 
@@ -95,7 +92,7 @@ public class WorldGenEnder extends WorldGenerator<WorldGenFeatureEndSpikeConfigu
 
         entityendercrystal.setBeamTarget(worldgenfeatureendspikeconfiguration.c());
         entityendercrystal.setInvulnerable(worldgenfeatureendspikeconfiguration.a());
-        entityendercrystal.setPositionRotation((double) ((float) worldgenender_spike.a() + 0.5F), (double) (worldgenender_spike.d() + 1), (double) ((float) worldgenender_spike.b() + 0.5F), random.nextFloat() * 360.0F, 0.0F);
+        entityendercrystal.setPositionRotation((double) worldgenender_spike.a() + 0.5D, (double) (worldgenender_spike.d() + 1), (double) worldgenender_spike.b() + 0.5D, random.nextFloat() * 360.0F, 0.0F);
         generatoraccess.addEntity(entityendercrystal);
         this.a(generatoraccess, new BlockPosition(worldgenender_spike.a(), worldgenender_spike.d(), worldgenender_spike.b()), Blocks.BEDROCK.getBlockData());
     }
@@ -127,63 +124,61 @@ public class WorldGenEnder extends WorldGenerator<WorldGenFeatureEndSpikeConfigu
 
     public static class Spike {
 
-        private final int a;
+        public static final Codec<WorldGenEnder.Spike> a = RecordCodecBuilder.create((instance) -> {
+            return instance.group(Codec.INT.fieldOf("centerX").withDefault(0).forGetter((worldgenender_spike) -> {
+                return worldgenender_spike.b;
+            }), Codec.INT.fieldOf("centerZ").withDefault(0).forGetter((worldgenender_spike) -> {
+                return worldgenender_spike.c;
+            }), Codec.INT.fieldOf("radius").withDefault(0).forGetter((worldgenender_spike) -> {
+                return worldgenender_spike.d;
+            }), Codec.INT.fieldOf("height").withDefault(0).forGetter((worldgenender_spike) -> {
+                return worldgenender_spike.e;
+            }), Codec.BOOL.fieldOf("guarded").withDefault(false).forGetter((worldgenender_spike) -> {
+                return worldgenender_spike.f;
+            })).apply(instance, WorldGenEnder.Spike::new);
+        });
         private final int b;
         private final int c;
         private final int d;
-        private final boolean e;
-        private final AxisAlignedBB f;
+        private final int e;
+        private final boolean f;
+        private final AxisAlignedBB g;
 
         public Spike(int i, int j, int k, int l, boolean flag) {
-            this.a = i;
-            this.b = j;
-            this.c = k;
-            this.d = l;
-            this.e = flag;
-            this.f = new AxisAlignedBB((double) (i - k), 0.0D, (double) (j - k), (double) (i + k), 256.0D, (double) (j + k));
+            this.b = i;
+            this.c = j;
+            this.d = k;
+            this.e = l;
+            this.f = flag;
+            this.g = new AxisAlignedBB((double) (i - k), 0.0D, (double) (j - k), (double) (i + k), 256.0D, (double) (j + k));
         }
 
         public boolean a(BlockPosition blockposition) {
-            return blockposition.getX() >> 4 == this.a >> 4 && blockposition.getZ() >> 4 == this.b >> 4;
+            return blockposition.getX() >> 4 == this.b >> 4 && blockposition.getZ() >> 4 == this.c >> 4;
         }
 
         public int a() {
-            return this.a;
-        }
-
-        public int b() {
             return this.b;
         }
 
-        public int c() {
+        public int b() {
             return this.c;
         }
 
-        public int d() {
+        public int c() {
             return this.d;
         }
 
-        public boolean e() {
+        public int d() {
             return this.e;
         }
 
-        public AxisAlignedBB f() {
+        public boolean e() {
             return this.f;
         }
 
-        public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-            Builder<T, T> builder = ImmutableMap.builder();
-
-            builder.put(dynamicops.createString("centerX"), dynamicops.createInt(this.a));
-            builder.put(dynamicops.createString("centerZ"), dynamicops.createInt(this.b));
-            builder.put(dynamicops.createString("radius"), dynamicops.createInt(this.c));
-            builder.put(dynamicops.createString("height"), dynamicops.createInt(this.d));
-            builder.put(dynamicops.createString("guarded"), dynamicops.createBoolean(this.e));
-            return new Dynamic(dynamicops, dynamicops.createMap(builder.build()));
-        }
-
-        public static <T> WorldGenEnder.Spike a(Dynamic<T> dynamic) {
-            return new WorldGenEnder.Spike(dynamic.get("centerX").asInt(0), dynamic.get("centerZ").asInt(0), dynamic.get("radius").asInt(0), dynamic.get("height").asInt(0), dynamic.get("guarded").asBoolean(false));
+        public AxisAlignedBB f() {
+            return this.g;
         }
     }
 }

@@ -86,9 +86,9 @@ public class NBTTagString implements NBTBase {
     public IChatBaseComponent a(String s, int i) {
         String s1 = b(this.data);
         String s2 = s1.substring(0, 1);
-        IChatBaseComponent ichatbasecomponent = (new ChatComponentText(s1.substring(1, s1.length() - 1))).a(NBTTagString.e);
+        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText(s1.substring(1, s1.length() - 1))).a(NBTTagString.e);
 
-        return (new ChatComponentText(s2)).addSibling(ichatbasecomponent).a(s2);
+        return (new ChatComponentText(s2)).addSibling(ichatmutablecomponent).c(s2);
     }
 
     public static String b(String s) {

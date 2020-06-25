@@ -2,11 +2,10 @@ package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
-import java.util.Optional;
-import java.util.stream.Stream;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
 
 public class DataConverterBannerColour extends DataConverterNamedEntity {
 
@@ -19,7 +18,7 @@ public class DataConverterBannerColour extends DataConverterNamedEntity {
             return dynamic1.createInt(15 - dynamic1.asInt(0));
         });
         dynamic = dynamic.update("Patterns", (dynamic1) -> {
-            Optional optional = dynamic1.asStreamOpt().map((stream) -> {
+            DataResult dataresult = dynamic1.asStreamOpt().map((stream) -> {
                 return stream.map((dynamic2) -> {
                     return dynamic2.update("Color", (dynamic3) -> {
                         return dynamic3.createInt(15 - dynamic3.asInt(0));
@@ -28,7 +27,7 @@ public class DataConverterBannerColour extends DataConverterNamedEntity {
             });
 
             dynamic1.getClass();
-            return (Dynamic) DataFixUtils.orElse(optional.map(dynamic1::createList), dynamic1);
+            return (Dynamic) DataFixUtils.orElse(dataresult.map(dynamic1::createList).result(), dynamic1);
         });
         return dynamic;
     }

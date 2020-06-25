@@ -57,14 +57,17 @@ public class DragonControllerStrafe extends AbstractDragonController {
                     if (this.c >= 5 && f1 >= 0.0F && f1 < 10.0F) {
                         d2 = 1.0D;
                         Vec3D vec3d2 = this.a.f(1.0F);
-                        double d6 = this.a.bw.locX() - vec3d2.x * 1.0D;
-                        double d7 = this.a.bw.e(0.5D) + 0.5D;
-                        double d8 = this.a.bw.locZ() - vec3d2.z * 1.0D;
+                        double d6 = this.a.bv.locX() - vec3d2.x * 1.0D;
+                        double d7 = this.a.bv.e(0.5D) + 0.5D;
+                        double d8 = this.a.bv.locZ() - vec3d2.z * 1.0D;
                         double d9 = this.f.locX() - d6;
                         double d10 = this.f.e(0.5D) - d7;
                         double d11 = this.f.locZ() - d8;
 
-                        this.a.world.a((EntityHuman) null, 1017, new BlockPosition(this.a), 0);
+                        if (!this.a.isSilent()) {
+                            this.a.world.a((EntityHuman) null, 1017, this.a.getChunkCoordinates(), 0);
+                        }
+
                         EntityDragonFireball entitydragonfireball = new EntityDragonFireball(this.a.world, this.a, d9, d10, d11);
 
                         entitydragonfireball.setPositionRotation(d6, d7, d8, 0.0F, 0.0F);
@@ -90,7 +93,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
 
     private void j() {
         if (this.d == null || this.d.b()) {
-            int i = this.a.l();
+            int i = this.a.eJ();
             int j = i;
 
             if (this.a.getRandom().nextInt(8) == 0) {
@@ -126,17 +129,17 @@ public class DragonControllerStrafe extends AbstractDragonController {
 
     private void k() {
         if (this.d != null && !this.d.b()) {
-            Vec3D vec3d = this.d.g();
+            BaseBlockPosition baseblockposition = this.d.g();
 
             this.d.a();
-            double d0 = vec3d.x;
-            double d1 = vec3d.z;
+            double d0 = (double) baseblockposition.getX();
+            double d1 = (double) baseblockposition.getZ();
 
             double d2;
 
             do {
-                d2 = vec3d.y + (double) (this.a.getRandom().nextFloat() * 20.0F);
-            } while (d2 < vec3d.y);
+                d2 = (double) ((float) baseblockposition.getY() + this.a.getRandom().nextFloat() * 20.0F);
+            } while (d2 < (double) baseblockposition.getY());
 
             this.e = new Vec3D(d0, d2, d1);
         }
@@ -153,7 +156,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
 
     public void a(EntityLiving entityliving) {
         this.f = entityliving;
-        int i = this.a.l();
+        int i = this.a.eJ();
         int j = this.a.o(this.f.locX(), this.f.locY(), this.f.locZ());
         int k = MathHelper.floor(this.f.locX());
         int l = MathHelper.floor(this.f.locZ());

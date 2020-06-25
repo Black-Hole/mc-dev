@@ -1,34 +1,30 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class WorldGenFeatureChanceDecoratorCountConfiguration implements WorldGenFeatureDecoratorConfiguration {
 
-    public final int a;
+    public static final Codec<WorldGenFeatureChanceDecoratorCountConfiguration> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(Codec.INT.fieldOf("count").forGetter((worldgenfeaturechancedecoratorcountconfiguration) -> {
+            return worldgenfeaturechancedecoratorcountconfiguration.b;
+        }), Codec.INT.fieldOf("bottom_offset").withDefault(0).forGetter((worldgenfeaturechancedecoratorcountconfiguration) -> {
+            return worldgenfeaturechancedecoratorcountconfiguration.c;
+        }), Codec.INT.fieldOf("top_offset").withDefault(0).forGetter((worldgenfeaturechancedecoratorcountconfiguration) -> {
+            return worldgenfeaturechancedecoratorcountconfiguration.d;
+        }), Codec.INT.fieldOf("maximum").withDefault(0).forGetter((worldgenfeaturechancedecoratorcountconfiguration) -> {
+            return worldgenfeaturechancedecoratorcountconfiguration.e;
+        })).apply(instance, WorldGenFeatureChanceDecoratorCountConfiguration::new);
+    });
     public final int b;
     public final int c;
     public final int d;
+    public final int e;
 
     public WorldGenFeatureChanceDecoratorCountConfiguration(int i, int j, int k, int l) {
-        this.a = i;
-        this.b = j;
-        this.c = k;
-        this.d = l;
-    }
-
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("count"), dynamicops.createInt(this.a), dynamicops.createString("bottom_offset"), dynamicops.createInt(this.b), dynamicops.createString("top_offset"), dynamicops.createInt(this.c), dynamicops.createString("maximum"), dynamicops.createInt(this.d))));
-    }
-
-    public static WorldGenFeatureChanceDecoratorCountConfiguration a(Dynamic<?> dynamic) {
-        int i = dynamic.get("count").asInt(0);
-        int j = dynamic.get("bottom_offset").asInt(0);
-        int k = dynamic.get("top_offset").asInt(0);
-        int l = dynamic.get("maximum").asInt(0);
-
-        return new WorldGenFeatureChanceDecoratorCountConfiguration(i, j, k, l);
+        this.b = i;
+        this.c = j;
+        this.d = k;
+        this.e = l;
     }
 }

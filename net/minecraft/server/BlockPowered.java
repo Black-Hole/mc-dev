@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class BlockPowered extends Block {
 
-    public BlockPowered(Block.Info block_info) {
-        super(block_info);
+    public BlockPowered(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override

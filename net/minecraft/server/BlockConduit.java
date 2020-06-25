@@ -7,9 +7,9 @@ public class BlockConduit extends BlockTileEntity implements IBlockWaterlogged {
     public static final BlockStateBoolean a = BlockProperties.C;
     protected static final VoxelShape b = Block.a(5.0D, 5.0D, 5.0D, 11.0D, 11.0D, 11.0D);
 
-    public BlockConduit(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockConduit.a, true));
+    public BlockConduit(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockConduit.a, true));
     }
 
     @Override
@@ -23,13 +23,13 @@ public class BlockConduit extends BlockTileEntity implements IBlockWaterlogged {
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @Override
-    public Fluid a_(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockConduit.a) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
+    public Fluid d(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockConduit.a) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class BlockConduit extends BlockTileEntity implements IBlockWaterlogged {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockConduit.b;
     }
 
@@ -63,7 +63,7 @@ public class BlockConduit extends BlockTileEntity implements IBlockWaterlogged {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
-        return (IBlockData) this.getBlockData().set(BlockConduit.a, fluid.a(TagsFluid.WATER) && fluid.g() == 8);
+        return (IBlockData) this.getBlockData().set(BlockConduit.a, fluid.a((Tag) TagsFluid.WATER) && fluid.e() == 8);
     }
 
     @Override

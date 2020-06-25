@@ -8,15 +8,13 @@ public class EntityCaveSpider extends EntitySpider {
         super(entitytypes, world);
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(12.0D);
+    public static AttributeProvider.Builder m() {
+        return EntitySpider.eL().a(GenericAttributes.MAX_HEALTH, 12.0D);
     }
 
     @Override
-    public boolean B(Entity entity) {
-        if (super.B(entity)) {
+    public boolean attackEntity(Entity entity) {
+        if (super.attackEntity(entity)) {
             if (entity instanceof EntityLiving) {
                 byte b0 = 0;
 

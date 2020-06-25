@@ -17,6 +17,11 @@ public class LootItemConditionRandomChanceWithLooting implements LootItemConditi
     }
 
     @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.d;
+    }
+
+    @Override
     public Set<LootContextParameter<?>> a() {
         return ImmutableSet.of(LootContextParameters.KILLER_ENTITY);
     }
@@ -38,11 +43,9 @@ public class LootItemConditionRandomChanceWithLooting implements LootItemConditi
         };
     }
 
-    public static class a extends LootItemCondition.b<LootItemConditionRandomChanceWithLooting> {
+    public static class a implements LootSerializer<LootItemConditionRandomChanceWithLooting> {
 
-        protected a() {
-            super(new MinecraftKey("random_chance_with_looting"), LootItemConditionRandomChanceWithLooting.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionRandomChanceWithLooting lootitemconditionrandomchancewithlooting, JsonSerializationContext jsonserializationcontext) {
             jsonobject.addProperty("chance", lootitemconditionrandomchancewithlooting.a);
@@ -50,7 +53,7 @@ public class LootItemConditionRandomChanceWithLooting implements LootItemConditi
         }
 
         @Override
-        public LootItemConditionRandomChanceWithLooting b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionRandomChanceWithLooting a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             return new LootItemConditionRandomChanceWithLooting(ChatDeserializer.l(jsonobject, "chance"), ChatDeserializer.l(jsonobject, "looting_multiplier"));
         }
     }

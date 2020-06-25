@@ -3,7 +3,6 @@ package net.minecraft.server;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
-import java.util.Map.Entry;
 import javax.annotation.Nullable;
 
 public class BlockVine extends Block {
@@ -22,13 +21,13 @@ public class BlockVine extends Block {
     protected static final VoxelShape j = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 1.0D);
     protected static final VoxelShape k = Block.a(0.0D, 0.0D, 15.0D, 16.0D, 16.0D, 16.0D);
 
-    public BlockVine(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockVine.UP, false)).set(BlockVine.NORTH, false)).set(BlockVine.EAST, false)).set(BlockVine.SOUTH, false)).set(BlockVine.WEST, false));
+    public BlockVine(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockVine.UP, false)).set(BlockVine.NORTH, false)).set(BlockVine.EAST, false)).set(BlockVine.SOUTH, false)).set(BlockVine.WEST, false));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         VoxelShape voxelshape = VoxelShapes.a();
 
         if ((Boolean) iblockdata.get(BlockVine.UP)) {
@@ -56,14 +55,14 @@ public class BlockVine extends Block {
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        return this.h(this.n(iblockdata, iworldreader, blockposition));
+        return this.h(this.g(iblockdata, iworldreader, blockposition));
     }
 
     private boolean h(IBlockData iblockdata) {
-        return this.i(iblockdata) > 0;
+        return this.l(iblockdata) > 0;
     }
 
-    private int i(IBlockData iblockdata) {
+    private int l(IBlockData iblockdata) {
         int i = 0;
         Iterator iterator = BlockVine.f.values().iterator();
 
@@ -86,13 +85,13 @@ public class BlockVine extends Block {
 
             if (a(iblockaccess, blockposition1, enumdirection)) {
                 return true;
-            } else if (enumdirection.m() == EnumDirection.EnumAxis.Y) {
+            } else if (enumdirection.n() == EnumDirection.EnumAxis.Y) {
                 return false;
             } else {
                 BlockStateBoolean blockstateboolean = (BlockStateBoolean) BlockVine.f.get(enumdirection);
                 IBlockData iblockdata = iblockaccess.getType(blockposition.up());
 
-                return iblockdata.getBlock() == this && (Boolean) iblockdata.get(blockstateboolean);
+                return iblockdata.a((Block) this) && (Boolean) iblockdata.get(blockstateboolean);
             }
         }
     }
@@ -103,7 +102,7 @@ public class BlockVine extends Block {
         return Block.a(iblockdata.getCollisionShape(iblockaccess, blockposition), enumdirection.opposite());
     }
 
-    private IBlockData n(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    private IBlockData g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.up();
 
         if ((Boolean) iblockdata.get(BlockVine.UP)) {
@@ -125,7 +124,7 @@ public class BlockVine extends Block {
                         iblockdata1 = iblockaccess.getType(blockposition1);
                     }
 
-                    flag = iblockdata1.getBlock() == this && (Boolean) iblockdata1.get(blockstateboolean);
+                    flag = iblockdata1.a((Block) this) && (Boolean) iblockdata1.get(blockstateboolean);
                 }
 
                 iblockdata = (IBlockData) iblockdata.set(blockstateboolean, flag);
@@ -140,7 +139,7 @@ public class BlockVine extends Block {
         if (enumdirection == EnumDirection.DOWN) {
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
         } else {
-            IBlockData iblockdata2 = this.n(iblockdata, generatoraccess, blockposition);
+            IBlockData iblockdata2 = this.g(iblockdata, generatoraccess, blockposition);
 
             return !this.h(iblockdata2) ? Blocks.AIR.getBlockData() : iblockdata2;
         }
@@ -148,30 +147,20 @@ public class BlockVine extends Block {
 
     @Override
     public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        IBlockData iblockdata1 = this.n(iblockdata, worldserver, blockposition);
-
-        if (iblockdata1 != iblockdata) {
-            if (this.h(iblockdata1)) {
-                worldserver.setTypeAndData(blockposition, iblockdata1, 2);
-            } else {
-                c(iblockdata, (World) worldserver, blockposition);
-                worldserver.a(blockposition, false);
-            }
-
-        } else if (worldserver.random.nextInt(4) == 0) {
+        if (worldserver.random.nextInt(4) == 0) {
             EnumDirection enumdirection = EnumDirection.a(random);
             BlockPosition blockposition1 = blockposition.up();
             BlockPosition blockposition2;
-            IBlockData iblockdata2;
+            IBlockData iblockdata1;
             EnumDirection enumdirection1;
 
-            if (enumdirection.m().c() && !(Boolean) iblockdata.get(getDirection(enumdirection))) {
+            if (enumdirection.n().d() && !(Boolean) iblockdata.get(getDirection(enumdirection))) {
                 if (this.a((IBlockAccess) worldserver, blockposition)) {
                     blockposition2 = blockposition.shift(enumdirection);
-                    iblockdata2 = worldserver.getType(blockposition2);
-                    if (iblockdata2.isAir()) {
-                        enumdirection1 = enumdirection.f();
-                        EnumDirection enumdirection2 = enumdirection.g();
+                    iblockdata1 = worldserver.getType(blockposition2);
+                    if (iblockdata1.isAir()) {
+                        enumdirection1 = enumdirection.g();
+                        EnumDirection enumdirection2 = enumdirection.h();
                         boolean flag = (Boolean) iblockdata.get(getDirection(enumdirection1));
                         boolean flag1 = (Boolean) iblockdata.get(getDirection(enumdirection2));
                         BlockPosition blockposition3 = blockposition2.shift(enumdirection1);
@@ -209,18 +198,18 @@ public class BlockVine extends Block {
                             return;
                         }
 
-                        IBlockData iblockdata3 = iblockdata;
+                        IBlockData iblockdata2 = iblockdata;
                         Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
                         while (iterator.hasNext()) {
                             enumdirection1 = (EnumDirection) iterator.next();
                             if (random.nextBoolean() || !a((IBlockAccess) worldserver, blockposition1.shift(enumdirection1), EnumDirection.UP)) {
-                                iblockdata3 = (IBlockData) iblockdata3.set(getDirection(enumdirection1), false);
+                                iblockdata2 = (IBlockData) iblockdata2.set(getDirection(enumdirection1), false);
                             }
                         }
 
-                        if (this.canSpread(iblockdata3)) {
-                            worldserver.setTypeAndData(blockposition1, iblockdata3, 2);
+                        if (this.canSpread(iblockdata2)) {
+                            worldserver.setTypeAndData(blockposition1, iblockdata2, 2);
                         }
 
                         return;
@@ -229,13 +218,13 @@ public class BlockVine extends Block {
 
                 if (blockposition.getY() > 0) {
                     blockposition2 = blockposition.down();
-                    iblockdata2 = worldserver.getType(blockposition2);
-                    if (iblockdata2.isAir() || iblockdata2.getBlock() == this) {
-                        IBlockData iblockdata4 = iblockdata2.isAir() ? this.getBlockData() : iblockdata2;
-                        IBlockData iblockdata5 = this.a(iblockdata, iblockdata4, random);
+                    iblockdata1 = worldserver.getType(blockposition2);
+                    if (iblockdata1.isAir() || iblockdata1.a((Block) this)) {
+                        IBlockData iblockdata3 = iblockdata1.isAir() ? this.getBlockData() : iblockdata1;
+                        IBlockData iblockdata4 = this.a(iblockdata, iblockdata3, random);
 
-                        if (iblockdata4 != iblockdata5 && this.canSpread(iblockdata5)) {
-                            worldserver.setTypeAndData(blockposition2, iblockdata5, 2);
+                        if (iblockdata3 != iblockdata4 && this.canSpread(iblockdata4)) {
+                            worldserver.setTypeAndData(blockposition2, iblockdata4, 2);
                         }
                     }
                 }
@@ -275,7 +264,7 @@ public class BlockVine extends Block {
         while (iterator.hasNext()) {
             BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
-            if (iblockaccess.getType(blockposition1).getBlock() == this) {
+            if (iblockaccess.getType(blockposition1).a((Block) this)) {
                 --i;
                 if (i <= 0) {
                     return false;
@@ -290,14 +279,14 @@ public class BlockVine extends Block {
     public boolean a(IBlockData iblockdata, BlockActionContext blockactioncontext) {
         IBlockData iblockdata1 = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition());
 
-        return iblockdata1.getBlock() == this ? this.i(iblockdata1) < BlockVine.f.size() : super.a(iblockdata, blockactioncontext);
+        return iblockdata1.a((Block) this) ? this.l(iblockdata1) < BlockVine.f.size() : super.a(iblockdata, blockactioncontext);
     }
 
     @Nullable
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition());
-        boolean flag = iblockdata.getBlock() == this;
+        boolean flag = iblockdata.a((Block) this);
         IBlockData iblockdata1 = flag ? iblockdata : this.getBlockData();
         EnumDirection[] aenumdirection = blockactioncontext.e();
         int i = aenumdirection.length;

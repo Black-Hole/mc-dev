@@ -2,16 +2,18 @@ package net.minecraft.server;
 
 import com.mojang.bridge.game.GameVersion;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.datafixers.types.constant.NamespacedStringType;
 import io.netty.util.ResourceLeakDetector;
 import io.netty.util.ResourceLeakDetector.Level;
+import java.time.Duration;
 
 public class SharedConstants {
 
     public static final Level a = Level.DISABLED;
-    public static boolean b;
+    public static final long b = Duration.ofMillis(300L).toNanos();
+    public static boolean c = true;
+    public static boolean d;
     public static final char[] allowedCharacters = new char[]{'/', '\n', '\r', '\t', '\u0000', '\f', '`', '?', '*', '\\', '<', '>', '|', '"', ':'};
-    private static GameVersion d;
+    private static GameVersion f;
 
     public static boolean isAllowedChatCharacter(char c0) {
         return c0 != 167 && c0 >= ' ' && c0 != 127;
@@ -34,17 +36,16 @@ public class SharedConstants {
     }
 
     public static GameVersion getGameVersion() {
-        if (SharedConstants.d == null) {
-            SharedConstants.d = MinecraftVersion.a();
+        if (SharedConstants.f == null) {
+            SharedConstants.f = MinecraftVersion.a();
         }
 
-        return SharedConstants.d;
+        return SharedConstants.f;
     }
 
     static {
         ResourceLeakDetector.setLevel(SharedConstants.a);
         CommandSyntaxException.ENABLE_COMMAND_STACK_TRACES = false;
         CommandSyntaxException.BUILT_IN_EXCEPTIONS = new CommandExceptionProvider();
-        NamespacedStringType.ENSURE_NAMESPACE = DataConverterSchemaNamed::a;
     }
 }

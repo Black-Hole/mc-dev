@@ -16,7 +16,7 @@ public class ContainerBeacon extends Container {
         this.beacon = new InventorySubcontainer(1) {
             @Override
             public boolean b(int j, ItemStack itemstack) {
-                return itemstack.getItem() == Items.EMERALD || itemstack.getItem() == Items.DIAMOND || itemstack.getItem() == Items.GOLD_INGOT || itemstack.getItem() == Items.IRON_INGOT;
+                return itemstack.getItem().a((Tag) TagsItem.BEACON_PAYMENT_ITEMS);
             }
 
             @Override
@@ -73,7 +73,7 @@ public class ContainerBeacon extends Container {
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -82,34 +82,34 @@ public class ContainerBeacon extends Container {
             itemstack = itemstack1.cloneItemStack();
             if (i == 0) {
                 if (!this.a(itemstack1, 1, 37, true)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
 
                 slot.a(itemstack1, itemstack);
             } else if (!this.d.hasItem() && this.d.isAllowed(itemstack1) && itemstack1.getCount() == 1) {
                 if (!this.a(itemstack1, 0, 1, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (i >= 1 && i < 28) {
                 if (!this.a(itemstack1, 28, 37, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (i >= 28 && i < 37) {
                 if (!this.a(itemstack1, 1, 28, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (!this.a(itemstack1, 1, 37, false)) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.a);
+                slot.set(ItemStack.b);
             } else {
                 slot.d();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             slot.a(entityhuman, itemstack1);
@@ -135,9 +135,7 @@ public class ContainerBeacon extends Container {
 
         @Override
         public boolean isAllowed(ItemStack itemstack) {
-            Item item = itemstack.getItem();
-
-            return item == Items.EMERALD || item == Items.DIAMOND || item == Items.GOLD_INGOT || item == Items.IRON_INGOT;
+            return itemstack.getItem().a((Tag) TagsItem.BEACON_PAYMENT_ITEMS);
         }
 
         @Override

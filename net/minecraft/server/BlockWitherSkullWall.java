@@ -4,8 +4,8 @@ import javax.annotation.Nullable;
 
 public class BlockWitherSkullWall extends BlockSkullWall {
 
-    protected BlockWitherSkullWall(Block.Info block_info) {
-        super(BlockSkull.Type.WITHER_SKELETON, block_info);
+    protected BlockWitherSkullWall(BlockBase.Info blockbase_info) {
+        super(BlockSkull.Type.WITHER_SKELETON, blockbase_info);
     }
 
     @Override

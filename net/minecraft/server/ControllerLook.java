@@ -23,7 +23,7 @@ public class ControllerLook {
     }
 
     public void a(double d0, double d1, double d2) {
-        this.a(d0, d1, d2, (float) this.a.dW(), (float) this.a.dU());
+        this.a(d0, d1, d2, (float) this.a.eq(), (float) this.a.eo());
     }
 
     public void a(double d0, double d1, double d2, float f, float f1) {
@@ -42,14 +42,14 @@ public class ControllerLook {
 
         if (this.d) {
             this.d = false;
-            this.a.aK = this.a(this.a.aK, this.h(), this.b);
+            this.a.aJ = this.a(this.a.aJ, this.h(), this.b);
             this.a.pitch = this.a(this.a.pitch, this.g(), this.c);
         } else {
-            this.a.aK = this.a(this.a.aK, this.a.aI, 10.0F);
+            this.a.aJ = this.a(this.a.aJ, this.a.aH, 10.0F);
         }
 
         if (!this.a.getNavigation().m()) {
-            this.a.aK = MathHelper.b(this.a.aK, this.a.aI, (float) this.a.dV());
+            this.a.aJ = MathHelper.b(this.a.aJ, this.a.aH, (float) this.a.ep());
         }
 
     }

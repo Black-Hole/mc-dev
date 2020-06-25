@@ -39,7 +39,7 @@ public abstract class StructurePiece {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.setString("id", IRegistry.STRUCTURE_PIECE.getKey(this.k()).toString());
-        nbttagcompound.set("BB", this.n.g());
+        nbttagcompound.set("BB", this.n.h());
         EnumDirection enumdirection = this.i();
 
         nbttagcompound.setInt("O", enumdirection == null ? -1 : enumdirection.get2DRotationValue());
@@ -52,7 +52,7 @@ public abstract class StructurePiece {
 
     public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {}
 
-    public abstract boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair);
+    public abstract boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair, BlockPosition blockposition);
 
     public StructureBoundingBox g() {
         return this.n;
@@ -200,7 +200,7 @@ public abstract class StructurePiece {
             }
 
             if (StructurePiece.e.contains(iblockdata.getBlock())) {
-                generatoraccess.x(blockposition).e(blockposition);
+                generatoraccess.z(blockposition).e(blockposition);
             }
 
         }
@@ -348,11 +348,11 @@ public abstract class StructurePiece {
             BlockPosition blockposition1 = blockposition.shift(enumdirection1);
             IBlockData iblockdata1 = iblockaccess.getType(blockposition1);
 
-            if (iblockdata1.getBlock() == Blocks.CHEST) {
+            if (iblockdata1.a(Blocks.CHEST)) {
                 return iblockdata;
             }
 
-            if (iblockdata1.g(iblockaccess, blockposition1)) {
+            if (iblockdata1.i(iblockaccess, blockposition1)) {
                 if (enumdirection != null) {
                     enumdirection = null;
                     break;
@@ -368,17 +368,17 @@ public abstract class StructurePiece {
             EnumDirection enumdirection2 = (EnumDirection) iblockdata.get(BlockFacingHorizontal.FACING);
             BlockPosition blockposition2 = blockposition.shift(enumdirection2);
 
-            if (iblockaccess.getType(blockposition2).g(iblockaccess, blockposition2)) {
+            if (iblockaccess.getType(blockposition2).i(iblockaccess, blockposition2)) {
                 enumdirection2 = enumdirection2.opposite();
                 blockposition2 = blockposition.shift(enumdirection2);
             }
 
-            if (iblockaccess.getType(blockposition2).g(iblockaccess, blockposition2)) {
-                enumdirection2 = enumdirection2.f();
+            if (iblockaccess.getType(blockposition2).i(iblockaccess, blockposition2)) {
+                enumdirection2 = enumdirection2.g();
                 blockposition2 = blockposition.shift(enumdirection2);
             }
 
-            if (iblockaccess.getType(blockposition2).g(iblockaccess, blockposition2)) {
+            if (iblockaccess.getType(blockposition2).i(iblockaccess, blockposition2)) {
                 enumdirection2 = enumdirection2.opposite();
                 blockposition.shift(enumdirection2);
             }
@@ -388,7 +388,7 @@ public abstract class StructurePiece {
     }
 
     protected boolean a(GeneratorAccess generatoraccess, StructureBoundingBox structureboundingbox, Random random, BlockPosition blockposition, MinecraftKey minecraftkey, @Nullable IBlockData iblockdata) {
-        if (structureboundingbox.b((BaseBlockPosition) blockposition) && generatoraccess.getType(blockposition).getBlock() != Blocks.CHEST) {
+        if (structureboundingbox.b((BaseBlockPosition) blockposition) && !generatoraccess.getType(blockposition).a(Blocks.CHEST)) {
             if (iblockdata == null) {
                 iblockdata = a((IBlockAccess) generatoraccess, blockposition, Blocks.CHEST.getBlockData());
             }
@@ -409,7 +409,7 @@ public abstract class StructurePiece {
     protected boolean a(GeneratorAccess generatoraccess, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, EnumDirection enumdirection, MinecraftKey minecraftkey) {
         BlockPosition blockposition = new BlockPosition(this.a(i, k), this.d(j), this.b(i, k));
 
-        if (structureboundingbox.b((BaseBlockPosition) blockposition) && generatoraccess.getType(blockposition).getBlock() != Blocks.DISPENSER) {
+        if (structureboundingbox.b((BaseBlockPosition) blockposition) && !generatoraccess.getType(blockposition).a(Blocks.DISPENSER)) {
             this.a(generatoraccess, (IBlockData) Blocks.DISPENSER.getBlockData().set(BlockDispenser.FACING, enumdirection), i, j, k, structureboundingbox);
             TileEntity tileentity = generatoraccess.getTileEntity(blockposition);
 
@@ -459,7 +459,7 @@ public abstract class StructurePiece {
 
     }
 
-    public EnumBlockRotation ad_() {
+    public EnumBlockRotation ap_() {
         return this.c;
     }
 

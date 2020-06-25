@@ -1,15 +1,16 @@
 package net.minecraft.server;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public class ContainerUtil {
 
     public static ItemStack a(List<ItemStack> list, int i, int j) {
-        return i >= 0 && i < list.size() && !((ItemStack) list.get(i)).isEmpty() && j > 0 ? ((ItemStack) list.get(i)).cloneAndSubtract(j) : ItemStack.a;
+        return i >= 0 && i < list.size() && !((ItemStack) list.get(i)).isEmpty() && j > 0 ? ((ItemStack) list.get(i)).cloneAndSubtract(j) : ItemStack.b;
     }
 
     public static ItemStack a(List<ItemStack> list, int i) {
-        return i >= 0 && i < list.size() ? (ItemStack) list.set(i, ItemStack.a) : ItemStack.a;
+        return i >= 0 && i < list.size() ? (ItemStack) list.set(i, ItemStack.b) : ItemStack.b;
     }
 
     public static NBTTagCompound a(NBTTagCompound nbttagcompound, NonNullList<ItemStack> nonnulllist) {
@@ -50,5 +51,37 @@ public class ContainerUtil {
             }
         }
 
+    }
+
+    public static int a(IInventory iinventory, Predicate<ItemStack> predicate, int i, boolean flag) {
+        int j = 0;
+
+        for (int k = 0; k < iinventory.getSize(); ++k) {
+            ItemStack itemstack = iinventory.getItem(k);
+            int l = a(itemstack, predicate, i - j, flag);
+
+            if (l > 0 && !flag && itemstack.isEmpty()) {
+                iinventory.setItem(k, ItemStack.b);
+            }
+
+            j += l;
+        }
+
+        return j;
+    }
+
+    public static int a(ItemStack itemstack, Predicate<ItemStack> predicate, int i, boolean flag) {
+        if (!itemstack.isEmpty() && predicate.test(itemstack)) {
+            if (flag) {
+                return itemstack.getCount();
+            } else {
+                int j = i < 0 ? itemstack.getCount() : Math.min(i, itemstack.getCount());
+
+                itemstack.subtract(j);
+                return j;
+            }
+        } else {
+            return 0;
+        }
     }
 }

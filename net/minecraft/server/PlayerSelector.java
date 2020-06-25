@@ -11,10 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class PlayerSelector {
@@ -26,9 +25,9 @@ public class PlayerSelector {
     public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.entity.options.inapplicable", new Object[]{object});
     });
-    public static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.distance.negative", new Object[0]));
-    public static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.level.negative", new Object[0]));
-    public static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.limit.toosmall", new Object[0]));
+    public static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.distance.negative"));
+    public static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.level.negative"));
+    public static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.limit.toosmall"));
     public static final DynamicCommandExceptionType f = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.entity.options.sort.irreversible", new Object[]{object});
     });
@@ -55,18 +54,18 @@ public class PlayerSelector {
                     throw PlayerSelector.b.createWithContext(argumentparserselector.g(), "name");
                 } else {
                     if (flag) {
-                        argumentparserselector.d(true);
-                    } else {
                         argumentparserselector.c(true);
+                    } else {
+                        argumentparserselector.b(true);
                     }
 
                     argumentparserselector.a((entity) -> {
-                        return entity.getDisplayName().getText().equals(s) != flag;
+                        return entity.getDisplayName().getString().equals(s) != flag;
                     });
                 }
             }, (argumentparserselector) -> {
                 return !argumentparserselector.v();
-            }, new ChatMessage("argument.entity.options.name.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.name.description"));
             a("distance", (argumentparserselector) -> {
                 int i = argumentparserselector.g().getCursor();
                 CriterionConditionValue.FloatRange criterionconditionvalue_floatrange = CriterionConditionValue.FloatRange.a(argumentparserselector.g());
@@ -80,7 +79,7 @@ public class PlayerSelector {
                 }
             }, (argumentparserselector) -> {
                 return argumentparserselector.i().c();
-            }, new ChatMessage("argument.entity.options.distance.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.distance.description"));
             a("level", (argumentparserselector) -> {
                 int i = argumentparserselector.g().getCursor();
                 CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(argumentparserselector.g());
@@ -94,53 +93,53 @@ public class PlayerSelector {
                 }
             }, (argumentparserselector) -> {
                 return argumentparserselector.j().c();
-            }, new ChatMessage("argument.entity.options.level.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.level.description"));
             a("x", (argumentparserselector) -> {
                 argumentparserselector.h();
                 argumentparserselector.a(argumentparserselector.g().readDouble());
             }, (argumentparserselector) -> {
                 return argumentparserselector.m() == null;
-            }, new ChatMessage("argument.entity.options.x.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.x.description"));
             a("y", (argumentparserselector) -> {
                 argumentparserselector.h();
                 argumentparserselector.b(argumentparserselector.g().readDouble());
             }, (argumentparserselector) -> {
                 return argumentparserselector.n() == null;
-            }, new ChatMessage("argument.entity.options.y.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.y.description"));
             a("z", (argumentparserselector) -> {
                 argumentparserselector.h();
                 argumentparserselector.c(argumentparserselector.g().readDouble());
             }, (argumentparserselector) -> {
                 return argumentparserselector.o() == null;
-            }, new ChatMessage("argument.entity.options.z.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.z.description"));
             a("dx", (argumentparserselector) -> {
                 argumentparserselector.h();
                 argumentparserselector.d(argumentparserselector.g().readDouble());
             }, (argumentparserselector) -> {
                 return argumentparserselector.p() == null;
-            }, new ChatMessage("argument.entity.options.dx.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.dx.description"));
             a("dy", (argumentparserselector) -> {
                 argumentparserselector.h();
                 argumentparserselector.e(argumentparserselector.g().readDouble());
             }, (argumentparserselector) -> {
                 return argumentparserselector.q() == null;
-            }, new ChatMessage("argument.entity.options.dy.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.dy.description"));
             a("dz", (argumentparserselector) -> {
                 argumentparserselector.h();
                 argumentparserselector.f(argumentparserselector.g().readDouble());
             }, (argumentparserselector) -> {
                 return argumentparserselector.r() == null;
-            }, new ChatMessage("argument.entity.options.dz.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.dz.description"));
             a("x_rotation", (argumentparserselector) -> {
                 argumentparserselector.a(CriterionConditionRange.a(argumentparserselector.g(), true, MathHelper::g));
             }, (argumentparserselector) -> {
                 return argumentparserselector.k() == CriterionConditionRange.a;
-            }, new ChatMessage("argument.entity.options.x_rotation.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.x_rotation.description"));
             a("y_rotation", (argumentparserselector) -> {
                 argumentparserselector.b(CriterionConditionRange.a(argumentparserselector.g(), true, MathHelper::g));
             }, (argumentparserselector) -> {
                 return argumentparserselector.l() == CriterionConditionRange.a;
-            }, new ChatMessage("argument.entity.options.y_rotation.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.y_rotation.description"));
             a("limit", (argumentparserselector) -> {
                 int i = argumentparserselector.g().getCursor();
                 int j = argumentparserselector.g().readInt();
@@ -150,11 +149,11 @@ public class PlayerSelector {
                     throw PlayerSelector.e.createWithContext(argumentparserselector.g());
                 } else {
                     argumentparserselector.a(j);
-                    argumentparserselector.e(true);
+                    argumentparserselector.d(true);
                 }
             }, (argumentparserselector) -> {
                 return !argumentparserselector.u() && !argumentparserselector.x();
-            }, new ChatMessage("argument.entity.options.limit.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.limit.description"));
             a("sort", (argumentparserselector) -> {
                 int i = argumentparserselector.g().getCursor();
                 String s = argumentparserselector.g().readUnquotedString();
@@ -207,10 +206,10 @@ public class PlayerSelector {
                 }
 
                 argumentparserselector.a(biconsumer);
-                argumentparserselector.f(true);
+                argumentparserselector.e(true);
             }, (argumentparserselector) -> {
                 return !argumentparserselector.u() && !argumentparserselector.y();
-            }, new ChatMessage("argument.entity.options.sort.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.sort.description"));
             a("gamemode", (argumentparserselector) -> {
                 argumentparserselector.a((suggestionsbuilder, consumer) -> {
                     String s = suggestionsbuilder.getRemaining().toLowerCase(Locale.ROOT);
@@ -270,16 +269,16 @@ public class PlayerSelector {
                             }
                         });
                         if (flag) {
-                            argumentparserselector.h(true);
-                        } else {
                             argumentparserselector.g(true);
+                        } else {
+                            argumentparserselector.f(true);
                         }
 
                     }
                 }
             }, (argumentparserselector) -> {
                 return !argumentparserselector.z();
-            }, new ChatMessage("argument.entity.options.gamemode.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.gamemode.description"));
             a("team", (argumentparserselector) -> {
                 boolean flag = argumentparserselector.e();
                 String s = argumentparserselector.g().readUnquotedString();
@@ -295,21 +294,21 @@ public class PlayerSelector {
                     }
                 });
                 if (flag) {
-                    argumentparserselector.j(true);
-                } else {
                     argumentparserselector.i(true);
+                } else {
+                    argumentparserselector.h(true);
                 }
 
             }, (argumentparserselector) -> {
                 return !argumentparserselector.B();
-            }, new ChatMessage("argument.entity.options.team.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.team.description"));
             a("type", (argumentparserselector) -> {
                 argumentparserselector.a((suggestionsbuilder, consumer) -> {
                     ICompletionProvider.a((Iterable) IRegistry.ENTITY_TYPE.keySet(), suggestionsbuilder, String.valueOf('!'));
-                    ICompletionProvider.a((Iterable) TagsEntity.a().a(), suggestionsbuilder, "!#");
+                    ICompletionProvider.a((Iterable) TagsEntity.b().a(), suggestionsbuilder, "!#");
                     if (!argumentparserselector.F()) {
                         ICompletionProvider.a((Iterable) IRegistry.ENTITY_TYPE.keySet(), suggestionsbuilder);
-                        ICompletionProvider.a((Iterable) TagsEntity.a().a(), suggestionsbuilder, String.valueOf('#'));
+                        ICompletionProvider.a((Iterable) TagsEntity.b().a(), suggestionsbuilder, String.valueOf('#'));
                     }
 
                     return suggestionsbuilder.buildFuture();
@@ -329,15 +328,8 @@ public class PlayerSelector {
 
                     if (argumentparserselector.f()) {
                         minecraftkey = MinecraftKey.a(argumentparserselector.g());
-                        Tag<EntityTypes<?>> tag = TagsEntity.a().a(minecraftkey);
-
-                        if (tag == null) {
-                            argumentparserselector.g().setCursor(i);
-                            throw PlayerSelector.h.createWithContext(argumentparserselector.g(), minecraftkey.toString());
-                        }
-
                         argumentparserselector.a((entity) -> {
-                            return tag.isTagged(entity.getEntityType()) != flag;
+                            return entity.getMinecraftServer().getTagRegistry().getEntityTags().b(minecraftkey).isTagged(entity.getEntityType()) != flag;
                         });
                     } else {
                         minecraftkey = MinecraftKey.a(argumentparserselector.g());
@@ -361,7 +353,7 @@ public class PlayerSelector {
                 }
             }, (argumentparserselector) -> {
                 return !argumentparserselector.E();
-            }, new ChatMessage("argument.entity.options.type.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.type.description"));
             a("tag", (argumentparserselector) -> {
                 boolean flag = argumentparserselector.e();
                 String s = argumentparserselector.g().readUnquotedString();
@@ -371,7 +363,7 @@ public class PlayerSelector {
                 });
             }, (argumentparserselector) -> {
                 return true;
-            }, new ChatMessage("argument.entity.options.tag.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.tag.description"));
             a("nbt", (argumentparserselector) -> {
                 boolean flag = argumentparserselector.e();
                 NBTTagCompound nbttagcompound = (new MojangsonParser(argumentparserselector.g())).f();
@@ -391,7 +383,7 @@ public class PlayerSelector {
                 });
             }, (argumentparserselector) -> {
                 return true;
-            }, new ChatMessage("argument.entity.options.nbt.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.nbt.description"));
             a("scores", (argumentparserselector) -> {
                 StringReader stringreader = argumentparserselector.g();
                 Map<String, CriterionConditionValue.IntegerRange> map = Maps.newHashMap();
@@ -450,10 +442,10 @@ public class PlayerSelector {
                     });
                 }
 
-                argumentparserselector.k(true);
+                argumentparserselector.j(true);
             }, (argumentparserselector) -> {
                 return !argumentparserselector.G();
-            }, new ChatMessage("argument.entity.options.scores.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.scores.description"));
             a("advancements", (argumentparserselector) -> {
                 StringReader stringreader = argumentparserselector.g();
                 Map<MinecraftKey, Predicate<AdvancementProgress>> map = Maps.newHashMap();
@@ -556,10 +548,10 @@ public class PlayerSelector {
                     argumentparserselector.a(false);
                 }
 
-                argumentparserselector.l(true);
+                argumentparserselector.k(true);
             }, (argumentparserselector) -> {
                 return !argumentparserselector.H();
-            }, new ChatMessage("argument.entity.options.advancements.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.advancements.description"));
             a("predicate", (argumentparserselector) -> {
                 boolean flag = argumentparserselector.e();
                 MinecraftKey minecraftkey = MinecraftKey.a(argumentparserselector.g());
@@ -569,12 +561,12 @@ public class PlayerSelector {
                         return false;
                     } else {
                         WorldServer worldserver = (WorldServer) entity.world;
-                        LootItemCondition lootitemcondition = worldserver.getMinecraftServer().aQ().a(minecraftkey);
+                        LootItemCondition lootitemcondition = worldserver.getMinecraftServer().aI().a(minecraftkey);
 
                         if (lootitemcondition == null) {
                             return false;
                         } else {
-                            LootTableInfo loottableinfo = (new LootTableInfo.Builder(worldserver)).set(LootContextParameters.THIS_ENTITY, entity).set(LootContextParameters.POSITION, new BlockPosition(entity)).build(LootContextParameterSets.SELECTOR);
+                            LootTableInfo loottableinfo = (new LootTableInfo.Builder(worldserver)).set(LootContextParameters.THIS_ENTITY, entity).set(LootContextParameters.POSITION, entity.getChunkCoordinates()).build(LootContextParameterSets.SELECTOR);
 
                             return flag ^ lootitemcondition.test(loottableinfo);
                         }
@@ -582,7 +574,7 @@ public class PlayerSelector {
                 });
             }, (argumentparserselector) -> {
                 return true;
-            }, new ChatMessage("argument.entity.options.predicate.description", new Object[0]));
+            }, new ChatMessage("argument.entity.options.predicate.description"));
         }
     }
 

@@ -1,16 +1,17 @@
 package net.minecraft.server;
 
+import com.mojang.serialization.Codec;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-public abstract class WorldGenFeatureTree implements MinecraftSerializable {
+public abstract class WorldGenFeatureTree {
 
-    protected final WorldGenFeatureTrees<?> a;
+    public static final Codec<WorldGenFeatureTree> c = IRegistry.TREE_DECORATOR_TYPE.dispatch(WorldGenFeatureTree::a, WorldGenFeatureTrees::a);
 
-    protected WorldGenFeatureTree(WorldGenFeatureTrees<?> worldgenfeaturetrees) {
-        this.a = worldgenfeaturetrees;
-    }
+    public WorldGenFeatureTree() {}
+
+    protected abstract WorldGenFeatureTrees<?> a();
 
     public abstract void a(GeneratorAccess generatoraccess, Random random, List<BlockPosition> list, List<BlockPosition> list1, Set<BlockPosition> set, StructureBoundingBox structureboundingbox);
 

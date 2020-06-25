@@ -3,11 +3,11 @@ package net.minecraft.server;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 public class LootPredicateManager extends ResourceDataJson {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Gson b = (new GsonBuilder()).registerTypeAdapter(LootValueBounds.class, new LootValueBounds.a()).registerTypeAdapter(LootValueBinomial.class, new LootValueBinomial.a()).registerTypeAdapter(LootValueConstant.class, new LootValueConstant.a()).registerTypeHierarchyAdapter(LootItemCondition.class, new LootItemConditions.a()).registerTypeHierarchyAdapter(LootTableInfo.EntityTarget.class, new LootTableInfo.EntityTarget.a()).create();
+    private static final Gson b = LootSerialization.a().create();
     private Map<MinecraftKey, LootItemCondition> c = ImmutableMap.of();
 
     public LootPredicateManager() {
@@ -27,14 +27,20 @@ public class LootPredicateManager extends ResourceDataJson {
         return (LootItemCondition) this.c.get(minecraftkey);
     }
 
-    protected void a(Map<MinecraftKey, JsonObject> map, IResourceManager iresourcemanager, GameProfilerFiller gameprofilerfiller) {
+    protected void a(Map<MinecraftKey, JsonElement> map, IResourceManager iresourcemanager, GameProfilerFiller gameprofilerfiller) {
         Builder<MinecraftKey, LootItemCondition> builder = ImmutableMap.builder();
 
-        map.forEach((minecraftkey, jsonobject) -> {
+        map.forEach((minecraftkey, jsonelement) -> {
             try {
-                LootItemCondition lootitemcondition = (LootItemCondition) LootPredicateManager.b.fromJson(jsonobject, LootItemCondition.class);
+                if (jsonelement.isJsonArray()) {
+                    LootItemCondition[] alootitemcondition = (LootItemCondition[]) LootPredicateManager.b.fromJson(jsonelement, LootItemCondition[].class);
 
-                builder.put(minecraftkey, lootitemcondition);
+                    builder.put(minecraftkey, new LootPredicateManager.a(alootitemcondition));
+                } else {
+                    LootItemCondition lootitemcondition = (LootItemCondition) LootPredicateManager.b.fromJson(jsonelement, LootItemCondition.class);
+
+                    builder.put(minecraftkey, lootitemcondition);
+                }
             } catch (Exception exception) {
                 LootPredicateManager.LOGGER.error("Couldn't parse loot table {}", minecraftkey, exception);
             }
@@ -56,5 +62,35 @@ public class LootPredicateManager extends ResourceDataJson {
 
     public Set<MinecraftKey> a() {
         return Collections.unmodifiableSet(this.c.keySet());
+    }
+
+    static class a implements LootItemCondition {
+
+        private final LootItemCondition[] a;
+        private final Predicate<LootTableInfo> b;
+
+        private a(LootItemCondition[] alootitemcondition) {
+            this.a = alootitemcondition;
+            this.b = LootItemConditions.a((Predicate[]) alootitemcondition);
+        }
+
+        public final boolean test(LootTableInfo loottableinfo) {
+            return this.b.test(loottableinfo);
+        }
+
+        @Override
+        public void a(LootCollector lootcollector) {
+            LootItemCondition.super.a(lootcollector);
+
+            for (int i = 0; i < this.a.length; ++i) {
+                this.a[i].a(lootcollector.b(".term[" + i + "]"));
+            }
+
+        }
+
+        @Override
+        public LootItemConditionType b() {
+            throw new UnsupportedOperationException();
+        }
     }
 }

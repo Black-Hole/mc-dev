@@ -32,9 +32,8 @@ public class PlayerChunk {
     private int r;
     private int s;
     private int t;
-    private int u;
     private final LightEngine lightEngine;
-    private final PlayerChunk.c w;
+    private final PlayerChunk.c v;
     public final PlayerChunk.d players;
     private boolean hasBeenLoaded;
 
@@ -47,7 +46,7 @@ public class PlayerChunk {
         this.dirtyBlocks = new short[64];
         this.location = chunkcoordintpair;
         this.lightEngine = lightengine;
-        this.w = playerchunk_c;
+        this.v = playerchunk_c;
         this.players = playerchunk_d;
         this.oldTicketLevel = PlayerChunkMap.GOLDEN_TICKET + 1;
         this.ticketLevel = this.oldTicketLevel;
@@ -133,38 +132,26 @@ public class PlayerChunk {
         if (chunk != null) {
             chunk.setNeedsSaving(true);
             if (enumskyblock == EnumSkyBlock.SKY) {
-                this.u |= 1 << i - -1;
-            } else {
                 this.t |= 1 << i - -1;
+            } else {
+                this.s |= 1 << i - -1;
             }
 
         }
     }
 
     public void a(Chunk chunk) {
-        if (this.dirtyCount != 0 || this.u != 0 || this.t != 0) {
+        if (this.dirtyCount != 0 || this.t != 0 || this.s != 0) {
             World world = chunk.getWorld();
 
-            if (this.dirtyCount == 64) {
-                this.s = -1;
+            if (this.dirtyCount < 64 && (this.t != 0 || this.s != 0)) {
+                this.a(new PacketPlayOutLightUpdate(chunk.getPos(), this.lightEngine, this.t, this.s, false), true);
+                this.t = 0;
+                this.s = 0;
             }
 
             int i;
             int j;
-
-            if (this.u != 0 || this.t != 0) {
-                this.a(new PacketPlayOutLightUpdate(chunk.getPos(), this.lightEngine, this.u & ~this.s, this.t & ~this.s), true);
-                i = this.u & this.s;
-                j = this.t & this.s;
-                if (i != 0 || j != 0) {
-                    this.a(new PacketPlayOutLightUpdate(chunk.getPos(), this.lightEngine, i, j), false);
-                }
-
-                this.u = 0;
-                this.t = 0;
-                this.s &= ~(this.u & this.t);
-            }
-
             int k;
 
             if (this.dirtyCount == 1) {
@@ -178,7 +165,7 @@ public class PlayerChunk {
                     this.a(world, blockposition);
                 }
             } else if (this.dirtyCount == 64) {
-                this.a(new PacketPlayOutMapChunk(chunk, this.r), false);
+                this.a(new PacketPlayOutMapChunk(chunk, this.r, false), false);
             } else if (this.dirtyCount != 0) {
                 this.a(new PacketPlayOutMultiBlockChange(this.dirtyCount, this.dirtyBlocks, chunk), false);
 
@@ -345,7 +332,7 @@ public class PlayerChunk {
             this.entityTickingFuture = PlayerChunk.UNLOADED_CHUNK_FUTURE;
         }
 
-        this.w.a(this.location, this::k, this.ticketLevel, this::d);
+        this.v.a(this.location, this::k, this.ticketLevel, this::d);
         this.oldTicketLevel = this.ticketLevel;
     }
 

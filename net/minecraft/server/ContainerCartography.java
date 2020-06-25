@@ -40,7 +40,7 @@ public class ContainerCartography extends Container {
             public boolean isAllowed(ItemStack itemstack) {
                 Item item = itemstack.getItem();
 
-                return item == Items.PAPER || item == Items.MAP || item == Items.df;
+                return item == Items.PAPER || item == Items.MAP || item == Items.dP;
             }
         });
         this.a(new Slot(this.resultInventory, 2, 145, 39) {
@@ -53,7 +53,7 @@ public class ContainerCartography extends Container {
             public ItemStack a(int j) {
                 ItemStack itemstack = super.a(j);
                 ItemStack itemstack1 = (ItemStack) containeraccess.a((world, blockposition) -> {
-                    if (!ContainerCartography.this.e && ContainerCartography.this.inventory.getItem(1).getItem() == Items.df) {
+                    if (!ContainerCartography.this.e && ContainerCartography.this.inventory.getItem(1).getItem() == Items.dP) {
                         ItemStack itemstack2 = ItemWorldMap.a(world, ContainerCartography.this.inventory.getItem(0));
 
                         if (itemstack2 != null) {
@@ -138,7 +138,7 @@ public class ContainerCartography extends Container {
                     itemstack3.setCount(1);
                     itemstack3.getOrCreateTag().setInt("map_scale_direction", 1);
                     this.c();
-                } else if (item == Items.df && !worldmap.locked) {
+                } else if (item == Items.dP && !worldmap.locked) {
                     itemstack3 = itemstack.cloneItemStack();
                     itemstack3.setCount(1);
                     this.c();
@@ -170,7 +170,7 @@ public class ContainerCartography extends Container {
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -180,7 +180,7 @@ public class ContainerCartography extends Container {
 
             itemstack = itemstack1.cloneItemStack();
             if (i == 2) {
-                if (this.inventory.getItem(1).getItem() == Items.df) {
+                if (this.inventory.getItem(1).getItem() == Items.dP) {
                     itemstack2 = (ItemStack) this.containerAccess.a((world, blockposition) -> {
                         ItemStack itemstack3 = ItemWorldMap.a(world, this.inventory.getItem(0));
 
@@ -195,37 +195,37 @@ public class ContainerCartography extends Container {
 
                 item.b(itemstack2, entityhuman.world, entityhuman);
                 if (!this.a(itemstack2, 3, 39, true)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
 
                 slot.a(itemstack2, itemstack);
             } else if (i != 1 && i != 0) {
                 if (item == Items.FILLED_MAP) {
                     if (!this.a(itemstack1, 0, 1, false)) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
-                } else if (item != Items.PAPER && item != Items.MAP && item != Items.df) {
+                } else if (item != Items.PAPER && item != Items.MAP && item != Items.dP) {
                     if (i >= 3 && i < 30) {
                         if (!this.a(itemstack1, 30, 39, false)) {
-                            return ItemStack.a;
+                            return ItemStack.b;
                         }
                     } else if (i >= 30 && i < 39 && !this.a(itemstack1, 3, 30, false)) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
                 } else if (!this.a(itemstack1, 1, 2, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (!this.a(itemstack1, 3, 39, false)) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             if (itemstack2.isEmpty()) {
-                slot.set(ItemStack.a);
+                slot.set(ItemStack.b);
             }
 
             slot.d();
             if (itemstack2.getCount() == itemstack.getCount()) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             this.e = true;

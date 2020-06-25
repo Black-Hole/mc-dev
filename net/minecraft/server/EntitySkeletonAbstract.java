@@ -11,19 +11,19 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         @Override
         public void d() {
             super.d();
-            EntitySkeletonAbstract.this.q(false);
+            EntitySkeletonAbstract.this.setAggressive(false);
         }
 
         @Override
         public void c() {
             super.c();
-            EntitySkeletonAbstract.this.q(true);
+            EntitySkeletonAbstract.this.setAggressive(true);
         }
     };
 
     protected EntitySkeletonAbstract(EntityTypes<? extends EntitySkeletonAbstract> entitytypes, World world) {
         super(entitytypes, world);
-        this.eq();
+        this.eM();
     }
 
     @Override
@@ -37,21 +37,19 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, new Class[0]));
         this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, true));
-        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityTurtle.class, 10, true, false, EntityTurtle.bw));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityTurtle.class, 10, true, false, EntityTurtle.bv));
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.25D);
+    public static AttributeProvider.Builder m() {
+        return EntityMonster.eS().a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
     }
 
     @Override
     protected void a(BlockPosition blockposition, IBlockData iblockdata) {
-        this.a(this.l(), 0.15F, 1.0F);
+        this.playSound(this.eL(), 0.15F, 1.0F);
     }
 
-    abstract SoundEffect l();
+    abstract SoundEffect eL();
 
     @Override
     public EnumMonsterType getMonsterType() {
@@ -60,7 +58,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
 
     @Override
     public void movementTick() {
-        boolean flag = this.en();
+        boolean flag = this.eH();
 
         if (flag) {
             ItemStack itemstack = this.getEquipment(EnumItemSlot.HEAD);
@@ -70,7 +68,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
                     itemstack.setDamage(itemstack.getDamage() + this.random.nextInt(2));
                     if (itemstack.getDamage() >= itemstack.h()) {
                         this.broadcastItemBreak(EnumItemSlot.HEAD);
-                        this.setSlot(EnumItemSlot.HEAD, ItemStack.a);
+                        this.setSlot(EnumItemSlot.HEAD, ItemStack.b);
                     }
                 }
 
@@ -91,7 +89,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         if (this.getVehicle() instanceof EntityCreature) {
             EntityCreature entitycreature = (EntityCreature) this.getVehicle();
 
-            this.aI = entitycreature.aI;
+            this.aH = entitycreature.aH;
         }
 
     }
@@ -108,7 +106,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         groupdataentity = super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
         this.a(difficultydamagescaler);
         this.b(difficultydamagescaler);
-        this.eq();
+        this.eM();
         this.setCanPickupLoot(this.random.nextFloat() < 0.55F * difficultydamagescaler.d());
         if (this.getEquipment(EnumItemSlot.HEAD).isEmpty()) {
             LocalDate localdate = LocalDate.now();
@@ -124,7 +122,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         return groupdataentity;
     }
 
-    public void eq() {
+    public void eM() {
         if (this.world != null && !this.world.isClientSide) {
             this.goalSelector.a((PathfinderGoal) this.c);
             this.goalSelector.a((PathfinderGoal) this.b);
@@ -156,7 +154,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
 
         entityarrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, (float) (14 - this.world.getDifficulty().a() * 4));
-        this.a(SoundEffects.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.playSound(SoundEffects.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.world.addEntity(entityarrow);
     }
 
@@ -165,16 +163,21 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
-        this.eq();
+    public boolean a(ItemProjectileWeapon itemprojectileweapon) {
+        return itemprojectileweapon == Items.BOW;
+    }
+
+    @Override
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
+        this.eM();
     }
 
     @Override
     public void setSlot(EnumItemSlot enumitemslot, ItemStack itemstack) {
         super.setSlot(enumitemslot, itemstack);
         if (!this.world.isClientSide) {
-            this.eq();
+            this.eM();
         }
 
     }
@@ -185,7 +188,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
     }
 
     @Override
-    public double aR() {
+    public double aX() {
         return -0.6D;
     }
 }

@@ -84,6 +84,8 @@ public interface PacketListenerPlayIn extends PacketListener {
 
     void a(PacketPlayInSetJigsaw packetplayinsetjigsaw);
 
+    void a(PacketPlayInJigsawGenerate packetplayinjigsawgenerate);
+
     void a(PacketPlayInDifficultyChange packetplayindifficultychange);
 
     void a(PacketPlayInDifficultyLock packetplayindifficultylock);

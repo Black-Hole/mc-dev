@@ -11,13 +11,13 @@ public class BlockLadder extends Block implements IBlockWaterlogged {
     protected static final VoxelShape e = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 3.0D);
     protected static final VoxelShape f = Block.a(0.0D, 0.0D, 13.0D, 16.0D, 16.0D, 16.0D);
 
-    protected BlockLadder(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLadder.FACING, EnumDirection.NORTH)).set(BlockLadder.b, false));
+    protected BlockLadder(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLadder.FACING, EnumDirection.NORTH)).set(BlockLadder.b, false));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch ((EnumDirection) iblockdata.get(BlockLadder.FACING)) {
             case NORTH:
                 return BlockLadder.f;
@@ -34,7 +34,7 @@ public class BlockLadder extends Block implements IBlockWaterlogged {
     private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         IBlockData iblockdata = iblockaccess.getType(blockposition);
 
-        return !iblockdata.isPowerSource() && iblockdata.d(iblockaccess, blockposition, enumdirection);
+        return iblockdata.d(iblockaccess, blockposition, enumdirection);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class BlockLadder extends Block implements IBlockWaterlogged {
 
         if (!blockactioncontext.c()) {
             iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition().shift(blockactioncontext.getClickedFace().opposite()));
-            if (iblockdata.getBlock() == this && iblockdata.get(BlockLadder.FACING) == blockactioncontext.getClickedFace()) {
+            if (iblockdata.a((Block) this) && iblockdata.get(BlockLadder.FACING) == blockactioncontext.getClickedFace()) {
                 return null;
             }
         }
@@ -79,7 +79,7 @@ public class BlockLadder extends Block implements IBlockWaterlogged {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection[j];
 
-            if (enumdirection.m().c()) {
+            if (enumdirection.n().d()) {
                 iblockdata = (IBlockData) iblockdata.set(BlockLadder.FACING, enumdirection.opposite());
                 if (iblockdata.canPlace(world, blockposition)) {
                     return (IBlockData) iblockdata.set(BlockLadder.b, fluid.getType() == FluidTypes.WATER);
@@ -106,7 +106,7 @@ public class BlockLadder extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public Fluid a_(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockLadder.b) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
+    public Fluid d(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockLadder.b) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
     }
 }

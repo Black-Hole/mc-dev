@@ -20,7 +20,7 @@ public class PathfinderGoalWaterJump extends PathfinderGoalWaterJumpAbstract {
             EnumDirection enumdirection = this.b.getAdjustedDirection();
             int i = enumdirection.getAdjacentX();
             int j = enumdirection.getAdjacentZ();
-            BlockPosition blockposition = new BlockPosition(this.b);
+            BlockPosition blockposition = this.b.getChunkCoordinates();
             int[] aint = PathfinderGoalWaterJump.a;
             int k = aint.length;
 
@@ -39,7 +39,7 @@ public class PathfinderGoalWaterJump extends PathfinderGoalWaterJumpAbstract {
     private boolean a(BlockPosition blockposition, int i, int j, int k) {
         BlockPosition blockposition1 = blockposition.b(i * k, 0, j * k);
 
-        return this.b.world.getFluid(blockposition1).a(TagsFluid.WATER) && !this.b.world.getType(blockposition1).getMaterial().isSolid();
+        return this.b.world.getFluid(blockposition1).a((Tag) TagsFluid.WATER) && !this.b.world.getType(blockposition1).getMaterial().isSolid();
     }
 
     private boolean b(BlockPosition blockposition, int i, int j, int k) {
@@ -50,11 +50,11 @@ public class PathfinderGoalWaterJump extends PathfinderGoalWaterJumpAbstract {
     public boolean b() {
         double d0 = this.b.getMot().y;
 
-        return (d0 * d0 >= 0.029999999329447746D || this.b.pitch == 0.0F || Math.abs(this.b.pitch) >= 10.0F || !this.b.isInWater()) && !this.b.onGround;
+        return (d0 * d0 >= 0.029999999329447746D || this.b.pitch == 0.0F || Math.abs(this.b.pitch) >= 10.0F || !this.b.isInWater()) && !this.b.isOnGround();
     }
 
     @Override
-    public boolean E_() {
+    public boolean D_() {
         return false;
     }
 
@@ -76,13 +76,13 @@ public class PathfinderGoalWaterJump extends PathfinderGoalWaterJumpAbstract {
         boolean flag = this.d;
 
         if (!flag) {
-            Fluid fluid = this.b.world.getFluid(new BlockPosition(this.b));
+            Fluid fluid = this.b.world.getFluid(this.b.getChunkCoordinates());
 
-            this.d = fluid.a(TagsFluid.WATER);
+            this.d = fluid.a((Tag) TagsFluid.WATER);
         }
 
         if (this.d && !flag) {
-            this.b.a(SoundEffects.ENTITY_DOLPHIN_JUMP, 1.0F, 1.0F);
+            this.b.playSound(SoundEffects.ENTITY_DOLPHIN_JUMP, 1.0F, 1.0F);
         }
 
         Vec3D vec3d = this.b.getMot();

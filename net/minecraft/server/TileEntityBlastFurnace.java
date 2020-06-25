@@ -8,7 +8,7 @@ public class TileEntityBlastFurnace extends TileEntityFurnace {
 
     @Override
     protected IChatBaseComponent getContainerName() {
-        return new ChatMessage("container.blast_furnace", new Object[0]);
+        return new ChatMessage("container.blast_furnace");
     }
 
     @Override

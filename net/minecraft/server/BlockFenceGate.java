@@ -13,24 +13,24 @@ public class BlockFenceGate extends BlockFacingHorizontal {
     protected static final VoxelShape i = Block.a(6.0D, 0.0D, 0.0D, 10.0D, 24.0D, 16.0D);
     protected static final VoxelShape j = VoxelShapes.a(Block.a(0.0D, 5.0D, 7.0D, 2.0D, 16.0D, 9.0D), Block.a(14.0D, 5.0D, 7.0D, 16.0D, 16.0D, 9.0D));
     protected static final VoxelShape k = VoxelShapes.a(Block.a(7.0D, 5.0D, 0.0D, 9.0D, 16.0D, 2.0D), Block.a(7.0D, 5.0D, 14.0D, 9.0D, 16.0D, 16.0D));
-    protected static final VoxelShape w = VoxelShapes.a(Block.a(0.0D, 2.0D, 7.0D, 2.0D, 13.0D, 9.0D), Block.a(14.0D, 2.0D, 7.0D, 16.0D, 13.0D, 9.0D));
-    protected static final VoxelShape x = VoxelShapes.a(Block.a(7.0D, 2.0D, 0.0D, 9.0D, 13.0D, 2.0D), Block.a(7.0D, 2.0D, 14.0D, 9.0D, 13.0D, 16.0D));
+    protected static final VoxelShape o = VoxelShapes.a(Block.a(0.0D, 2.0D, 7.0D, 2.0D, 13.0D, 9.0D), Block.a(14.0D, 2.0D, 7.0D, 16.0D, 13.0D, 9.0D));
+    protected static final VoxelShape p = VoxelShapes.a(Block.a(7.0D, 2.0D, 0.0D, 9.0D, 13.0D, 2.0D), Block.a(7.0D, 2.0D, 14.0D, 9.0D, 13.0D, 16.0D));
 
-    public BlockFenceGate(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFenceGate.OPEN, false)).set(BlockFenceGate.POWERED, false)).set(BlockFenceGate.IN_WALL, false));
+    public BlockFenceGate(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFenceGate.OPEN, false)).set(BlockFenceGate.POWERED, false)).set(BlockFenceGate.IN_WALL, false));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return (Boolean) iblockdata.get(BlockFenceGate.IN_WALL) ? (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).m() == EnumDirection.EnumAxis.X ? BlockFenceGate.g : BlockFenceGate.f) : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).m() == EnumDirection.EnumAxis.X ? BlockFenceGate.e : BlockFenceGate.d);
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return (Boolean) iblockdata.get(BlockFenceGate.IN_WALL) ? (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).n() == EnumDirection.EnumAxis.X ? BlockFenceGate.g : BlockFenceGate.f) : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).n() == EnumDirection.EnumAxis.X ? BlockFenceGate.e : BlockFenceGate.d);
     }
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.m();
+        EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.n();
 
-        if (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).f().m() != enumdirection_enumaxis) {
+        if (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).g().n() != enumdirection_enumaxis) {
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
         } else {
             boolean flag = this.h(iblockdata1) || this.h(generatoraccess.getType(blockposition.shift(enumdirection.opposite())));
@@ -40,13 +40,13 @@ public class BlockFenceGate extends BlockFacingHorizontal {
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return (Boolean) iblockdata.get(BlockFenceGate.OPEN) ? VoxelShapes.a() : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).m() == EnumDirection.EnumAxis.Z ? BlockFenceGate.h : BlockFenceGate.i);
+    public VoxelShape c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return (Boolean) iblockdata.get(BlockFenceGate.OPEN) ? VoxelShapes.a() : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).n() == EnumDirection.EnumAxis.Z ? BlockFenceGate.h : BlockFenceGate.i);
     }
 
     @Override
-    public VoxelShape i(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return (Boolean) iblockdata.get(BlockFenceGate.IN_WALL) ? (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).m() == EnumDirection.EnumAxis.X ? BlockFenceGate.x : BlockFenceGate.w) : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).m() == EnumDirection.EnumAxis.X ? BlockFenceGate.k : BlockFenceGate.j);
+    public VoxelShape d(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return (Boolean) iblockdata.get(BlockFenceGate.IN_WALL) ? (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).n() == EnumDirection.EnumAxis.X ? BlockFenceGate.p : BlockFenceGate.o) : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).n() == EnumDirection.EnumAxis.X ? BlockFenceGate.k : BlockFenceGate.j);
     }
 
     @Override
@@ -69,14 +69,14 @@ public class BlockFenceGate extends BlockFacingHorizontal {
         BlockPosition blockposition = blockactioncontext.getClickPosition();
         boolean flag = world.isBlockIndirectlyPowered(blockposition);
         EnumDirection enumdirection = blockactioncontext.f();
-        EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.m();
+        EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.n();
         boolean flag1 = enumdirection_enumaxis == EnumDirection.EnumAxis.Z && (this.h(world.getType(blockposition.west())) || this.h(world.getType(blockposition.east()))) || enumdirection_enumaxis == EnumDirection.EnumAxis.X && (this.h(world.getType(blockposition.north())) || this.h(world.getType(blockposition.south())));
 
         return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockFenceGate.FACING, enumdirection)).set(BlockFenceGate.OPEN, flag)).set(BlockFenceGate.POWERED, flag)).set(BlockFenceGate.IN_WALL, flag1);
     }
 
     private boolean h(IBlockData iblockdata) {
-        return iblockdata.getBlock().a(TagsBlock.WALLS);
+        return iblockdata.getBlock().a((Tag) TagsBlock.WALLS);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class BlockFenceGate extends BlockFacingHorizontal {
         }
 
         world.a(entityhuman, (Boolean) iblockdata.get(BlockFenceGate.OPEN) ? 1008 : 1014, blockposition, 0);
-        return EnumInteractionResult.SUCCESS;
+        return EnumInteractionResult.a(world.isClientSide);
     }
 
     @Override
@@ -120,6 +120,6 @@ public class BlockFenceGate extends BlockFacingHorizontal {
     }
 
     public static boolean a(IBlockData iblockdata, EnumDirection enumdirection) {
-        return ((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).m() == enumdirection.f().m();
+        return ((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).n() == enumdirection.g().n();
     }
 }

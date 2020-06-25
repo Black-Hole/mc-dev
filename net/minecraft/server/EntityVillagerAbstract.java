@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 
 public abstract class EntityVillagerAbstract extends EntityAgeable implements NPC, IMerchant {
 
-    private static final DataWatcherObject<Integer> bx = DataWatcher.a(EntityVillagerAbstract.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Integer> bw = DataWatcher.a(EntityVillagerAbstract.class, DataWatcherRegistry.b);
     @Nullable
     private EntityHuman tradingPlayer;
     @Nullable
@@ -16,6 +16,8 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
 
     public EntityVillagerAbstract(EntityTypes<? extends EntityVillagerAbstract> entitytypes, World world) {
         super(entitytypes, world);
+        this.a(PathType.DANGER_FIRE, 16.0F);
+        this.a(PathType.DAMAGE_FIRE, -1.0F);
     }
 
     @Override
@@ -28,12 +30,12 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
     }
 
-    public int eq() {
-        return (Integer) this.datawatcher.get(EntityVillagerAbstract.bx);
+    public int eL() {
+        return (Integer) this.datawatcher.get(EntityVillagerAbstract.bw);
     }
 
     public void s(int i) {
-        this.datawatcher.set(EntityVillagerAbstract.bx, i);
+        this.datawatcher.set(EntityVillagerAbstract.bw, i);
     }
 
     @Override
@@ -49,7 +51,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityVillagerAbstract.bx, 0);
+        this.datawatcher.register(EntityVillagerAbstract.bw, 0);
     }
 
     @Override
@@ -63,7 +65,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return this.tradingPlayer;
     }
 
-    public boolean et() {
+    public boolean eO() {
         return this.tradingPlayer != null;
     }
 
@@ -71,19 +73,19 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     public MerchantRecipeList getOffers() {
         if (this.trades == null) {
             this.trades = new MerchantRecipeList();
-            this.eC();
+            this.eW();
         }
 
         return this.trades;
     }
 
     @Override
-    public void setExperience(int i) {}
+    public void setForcedExperience(int i) {}
 
     @Override
     public void a(MerchantRecipe merchantrecipe) {
         merchantrecipe.increaseUses();
-        this.e = -this.A();
+        this.e = -this.D();
         this.b(merchantrecipe);
         if (this.tradingPlayer instanceof EntityPlayer) {
             CriterionTriggers.s.a((EntityPlayer) this.tradingPlayer, this, merchantrecipe.getSellingItem());
@@ -99,10 +101,10 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     }
 
     @Override
-    public void i(ItemStack itemstack) {
-        if (!this.world.isClientSide && this.e > -this.A() + 20) {
-            this.e = -this.A();
-            this.a(this.r(!itemstack.isEmpty()), this.getSoundVolume(), this.dn());
+    public void k(ItemStack itemstack) {
+        if (!this.world.isClientSide && this.e > -this.D() + 20) {
+            this.e = -this.D();
+            this.playSound(this.t(!itemstack.isEmpty()), this.getSoundVolume(), this.dG());
         }
 
     }
@@ -112,70 +114,51 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return SoundEffects.ENTITY_VILLAGER_YES;
     }
 
-    protected SoundEffect r(boolean flag) {
+    protected SoundEffect t(boolean flag) {
         return flag ? SoundEffects.ENTITY_VILLAGER_YES : SoundEffects.ENTITY_VILLAGER_NO;
     }
 
-    public void ex() {
-        this.a(SoundEffects.ENTITY_VILLAGER_CELEBRATE, this.getSoundVolume(), this.dn());
+    public void eS() {
+        this.playSound(SoundEffects.ENTITY_VILLAGER_CELEBRATE, this.getSoundVolume(), this.dG());
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         MerchantRecipeList merchantrecipelist = this.getOffers();
 
         if (!merchantrecipelist.isEmpty()) {
             nbttagcompound.set("Offers", merchantrecipelist.a());
         }
 
-        NBTTagList nbttaglist = new NBTTagList();
-
-        for (int i = 0; i < this.inventory.getSize(); ++i) {
-            ItemStack itemstack = this.inventory.getItem(i);
-
-            if (!itemstack.isEmpty()) {
-                nbttaglist.add(itemstack.save(new NBTTagCompound()));
-            }
-        }
-
-        nbttagcompound.set("Inventory", nbttaglist);
+        nbttagcompound.set("Inventory", this.inventory.g());
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("Offers", 10)) {
             this.trades = new MerchantRecipeList(nbttagcompound.getCompound("Offers"));
         }
 
-        NBTTagList nbttaglist = nbttagcompound.getList("Inventory", 10);
-
-        for (int i = 0; i < nbttaglist.size(); ++i) {
-            ItemStack itemstack = ItemStack.a(nbttaglist.getCompound(i));
-
-            if (!itemstack.isEmpty()) {
-                this.inventory.a(itemstack);
-            }
-        }
-
+        this.inventory.a(nbttagcompound.getList("Inventory", 10));
     }
 
     @Nullable
     @Override
-    public Entity a(DimensionManager dimensionmanager) {
-        this.ey();
-        return super.a(dimensionmanager);
+    public Entity a(WorldServer worldserver) {
+        this.eT();
+        return super.a(worldserver);
     }
 
-    protected void ey() {
+    protected void eT() {
         this.setTradingPlayer((EntityHuman) null);
     }
 
     @Override
     public void die(DamageSource damagesource) {
         super.die(damagesource);
-        this.ey();
+        this.eT();
     }
 
     @Override
@@ -208,7 +191,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return this.world;
     }
 
-    protected abstract void eC();
+    protected abstract void eW();
 
     protected void a(MerchantRecipeList merchantrecipelist, VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption, int i) {
         Set<Integer> set = Sets.newHashSet();

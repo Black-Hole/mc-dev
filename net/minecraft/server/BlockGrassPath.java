@@ -6,12 +6,12 @@ public class BlockGrassPath extends Block {
 
     protected static final VoxelShape a = BlockSoil.b;
 
-    protected BlockGrassPath(Block.Info block_info) {
-        super(block_info);
+    protected BlockGrassPath(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
-    public boolean o(IBlockData iblockdata) {
+    public boolean c_(IBlockData iblockdata) {
         return true;
     }
 
@@ -30,7 +30,7 @@ public class BlockGrassPath extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         BlockSoil.fade(iblockdata, worldserver, blockposition);
     }
 
@@ -42,7 +42,7 @@ public class BlockGrassPath extends Block {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockGrassPath.a;
     }
 

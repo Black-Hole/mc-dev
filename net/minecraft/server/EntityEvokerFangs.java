@@ -49,19 +49,19 @@ public class EntityEvokerFangs extends Entity {
     }
 
     @Override
-    protected void a(NBTTagCompound nbttagcompound) {
+    protected void loadData(NBTTagCompound nbttagcompound) {
         this.b = nbttagcompound.getInt("Warmup");
-        if (nbttagcompound.b("OwnerUUID")) {
-            this.g = nbttagcompound.a("OwnerUUID");
+        if (nbttagcompound.b("Owner")) {
+            this.g = nbttagcompound.a("Owner");
         }
 
     }
 
     @Override
-    protected void b(NBTTagCompound nbttagcompound) {
+    protected void saveData(NBTTagCompound nbttagcompound) {
         nbttagcompound.setInt("Warmup", this.b);
         if (this.g != null) {
-            nbttagcompound.a("OwnerUUID", this.g);
+            nbttagcompound.a("Owner", this.g);
         }
 
     }
@@ -93,7 +93,7 @@ public class EntityEvokerFangs extends Entity {
                 while (iterator.hasNext()) {
                     EntityLiving entityliving = (EntityLiving) iterator.next();
 
-                    this.c(entityliving);
+                    this.d(entityliving);
                 }
             }
 
@@ -109,7 +109,7 @@ public class EntityEvokerFangs extends Entity {
 
     }
 
-    private void c(EntityLiving entityliving) {
+    private void d(EntityLiving entityliving) {
         EntityLiving entityliving1 = this.getOwner();
 
         if (entityliving.isAlive() && !entityliving.isInvulnerable() && entityliving != entityliving1) {
@@ -127,7 +127,7 @@ public class EntityEvokerFangs extends Entity {
     }
 
     @Override
-    public Packet<?> L() {
+    public Packet<?> O() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

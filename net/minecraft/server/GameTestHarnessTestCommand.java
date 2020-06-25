@@ -1,11 +1,11 @@
 package net.minecraft.server;
 
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,26 +16,47 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.apache.commons.io.IOUtils;
 
 public class GameTestHarnessTestCommand {
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
-        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("test").then(CommandDispatcher.a("runthis").executes((commandcontext) -> {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("test").then(CommandDispatcher.a("runthis").executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource());
         }))).then(CommandDispatcher.a("runthese").executes((commandcontext) -> {
             return b((CommandListenerWrapper) commandcontext.getSource());
-        }))).then(CommandDispatcher.a("run").then(CommandDispatcher.a("testName", (ArgumentType) GameTestHarnessTestFunctionArgument.a()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), GameTestHarnessTestFunctionArgument.a(commandcontext, "testName"));
-        })))).then(((LiteralArgumentBuilder) CommandDispatcher.a("runall").executes((commandcontext) -> {
+        }))).then(((LiteralArgumentBuilder) CommandDispatcher.a("runfailed").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), false, 0, 8);
+        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("onlyRequiredTests", (ArgumentType) BoolArgumentType.bool()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), BoolArgumentType.getBool(commandcontext, "onlyRequiredTests"), 0, 8);
+        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("rotationSteps", (ArgumentType) IntegerArgumentType.integer()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), BoolArgumentType.getBool(commandcontext, "onlyRequiredTests"), IntegerArgumentType.getInteger(commandcontext, "rotationSteps"), 8);
+        })).then(CommandDispatcher.a("testsPerRow", (ArgumentType) IntegerArgumentType.integer()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), BoolArgumentType.getBool(commandcontext, "onlyRequiredTests"), IntegerArgumentType.getInteger(commandcontext, "rotationSteps"), IntegerArgumentType.getInteger(commandcontext, "testsPerRow"));
+        })))))).then(CommandDispatcher.a("run").then(((RequiredArgumentBuilder) CommandDispatcher.a("testName", (ArgumentType) GameTestHarnessTestFunctionArgument.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), GameTestHarnessTestFunctionArgument.a(commandcontext, "testName"), 0);
+        })).then(CommandDispatcher.a("rotationSteps", (ArgumentType) IntegerArgumentType.integer()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), GameTestHarnessTestFunctionArgument.a(commandcontext, "testName"), IntegerArgumentType.getInteger(commandcontext, "rotationSteps"));
+        }))))).then(((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("runall").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), 0, 8);
+        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("testClassName", (ArgumentType) GameTestHarnessTestClassArgument.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), GameTestHarnessTestClassArgument.a(commandcontext, "testClassName"), 0, 8);
+        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("rotationSteps", (ArgumentType) IntegerArgumentType.integer()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), GameTestHarnessTestClassArgument.a(commandcontext, "testClassName"), IntegerArgumentType.getInteger(commandcontext, "rotationSteps"), 8);
+        })).then(CommandDispatcher.a("testsPerRow", (ArgumentType) IntegerArgumentType.integer()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), GameTestHarnessTestClassArgument.a(commandcontext, "testClassName"), IntegerArgumentType.getInteger(commandcontext, "rotationSteps"), IntegerArgumentType.getInteger(commandcontext, "testsPerRow"));
+        }))))).then(((RequiredArgumentBuilder) CommandDispatcher.a("rotationSteps", (ArgumentType) IntegerArgumentType.integer()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), IntegerArgumentType.getInteger(commandcontext, "rotationSteps"), 8);
+        })).then(CommandDispatcher.a("testsPerRow", (ArgumentType) IntegerArgumentType.integer()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), IntegerArgumentType.getInteger(commandcontext, "rotationSteps"), IntegerArgumentType.getInteger(commandcontext, "testsPerRow"));
+        }))))).then(CommandDispatcher.a("export").then(CommandDispatcher.a("testName", (ArgumentType) StringArgumentType.word()).executes((commandcontext) -> {
+            return c((CommandListenerWrapper) commandcontext.getSource(), StringArgumentType.getString(commandcontext, "testName"));
+        })))).then(CommandDispatcher.a("exportthis").executes((commandcontext) -> {
             return c((CommandListenerWrapper) commandcontext.getSource());
-        })).then(CommandDispatcher.a("testClassName", (ArgumentType) GameTestHarnessTestClassArgument.a()).executes((commandcontext) -> {
-            return b((CommandListenerWrapper) commandcontext.getSource(), GameTestHarnessTestClassArgument.a(commandcontext, "testClassName"));
-        })))).then(CommandDispatcher.a("export").then(CommandDispatcher.a("testName", (ArgumentType) StringArgumentType.word()).executes((commandcontext) -> {
+        }))).then(CommandDispatcher.a("import").then(CommandDispatcher.a("testName", (ArgumentType) StringArgumentType.word()).executes((commandcontext) -> {
             return d((CommandListenerWrapper) commandcontext.getSource(), StringArgumentType.getString(commandcontext, "testName"));
-        })))).then(CommandDispatcher.a("import").then(CommandDispatcher.a("testName", (ArgumentType) StringArgumentType.word()).executes((commandcontext) -> {
-            return e((CommandListenerWrapper) commandcontext.getSource(), StringArgumentType.getString(commandcontext, "testName"));
         })))).then(((LiteralArgumentBuilder) CommandDispatcher.a("pos").executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), "pos");
         })).then(CommandDispatcher.a("var", (ArgumentType) StringArgumentType.word()).executes((commandcontext) -> {
@@ -54,12 +75,12 @@ public class GameTestHarnessTestCommand {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, String s, int i, int j, int k) {
-        if (i <= 32 && j <= 32 && k <= 32) {
+        if (i <= 48 && j <= 48 && k <= 48) {
             WorldServer worldserver = commandlistenerwrapper.getWorld();
             BlockPosition blockposition = new BlockPosition(commandlistenerwrapper.getPosition());
             BlockPosition blockposition1 = new BlockPosition(blockposition.getX(), commandlistenerwrapper.getWorld().getHighestBlockYAt(HeightMap.Type.WORLD_SURFACE, blockposition).getY(), blockposition.getZ() + 3);
 
-            GameTestHarnessStructures.a(s.toLowerCase(), blockposition1, new BlockPosition(i, j, k), 2, worldserver);
+            GameTestHarnessStructures.a(s.toLowerCase(), blockposition1, new BlockPosition(i, j, k), EnumBlockRotation.NONE, worldserver);
 
             for (int l = 0; l < i; ++l) {
                 for (int i1 = 0; i1 < k; ++i1) {
@@ -71,10 +92,10 @@ public class GameTestHarnessTestCommand {
                 }
             }
 
-            GameTestHarnessStructures.a(blockposition1.b(1, 0, -1), worldserver);
+            GameTestHarnessStructures.a(blockposition1, new BlockPosition(1, 0, -1), EnumBlockRotation.NONE, worldserver);
             return 0;
         } else {
-            throw new IllegalArgumentException("The structure must be less than 32 blocks big in each axis");
+            throw new IllegalArgumentException("The structure must be less than 48 blocks big in each axis");
         }
     }
 
@@ -96,9 +117,9 @@ public class GameTestHarnessTestCommand {
             BlockPosition blockposition1 = blockposition.b((BaseBlockPosition) optional.get());
             String s1 = blockposition1.getX() + ", " + blockposition1.getY() + ", " + blockposition1.getZ();
             String s2 = tileentitystructure.f();
-            IChatBaseComponent ichatbasecomponent = (new ChatComponentText(s1)).setChatModifier((new ChatModifier()).setBold(true).setColor(EnumChatFormat.GREEN).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText("Click to copy to clipboard"))).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.COPY_TO_CLIPBOARD, "final BlockPos " + s + " = new BlockPos(" + s1 + ");")));
+            IChatMutableComponent ichatmutablecomponent = (new ChatComponentText(s1)).setChatModifier(ChatModifier.b.setBold(true).setColor(EnumChatFormat.GREEN).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText("Click to copy to clipboard"))).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.COPY_TO_CLIPBOARD, "final BlockPos " + s + " = new BlockPos(" + s1 + ");")));
 
-            commandlistenerwrapper.sendMessage((new ChatComponentText("Position relative to " + s2 + ": ")).addSibling(ichatbasecomponent), false);
+            commandlistenerwrapper.sendMessage((new ChatComponentText("Position relative to " + s2 + ": ")).addSibling(ichatmutablecomponent), false);
             PacketDebug.a(worldserver, new BlockPosition(blockposition), s1, -2147418368, 10000);
             return 1;
         }
@@ -129,7 +150,7 @@ public class GameTestHarnessTestCommand {
             return 1;
         } else {
             GameTestHarnessRunner.a(worldserver);
-            c(commandlistenerwrapper, "Running " + collection.size() + " tests...");
+            b(commandlistenerwrapper, "Running " + collection.size() + " tests...");
             GameTestHarnessCollector gametestharnesscollector = new GameTestHarnessCollector();
 
             collection.forEach((blockposition1) -> {
@@ -143,7 +164,7 @@ public class GameTestHarnessTestCommand {
         TileEntityStructure tileentitystructure = (TileEntityStructure) worldserver.getTileEntity(blockposition);
         String s = tileentitystructure.f();
         GameTestHarnessTestFunction gametestharnesstestfunction = GameTestHarnessRegistry.e(s);
-        GameTestHarnessInfo gametestharnessinfo = new GameTestHarnessInfo(gametestharnesstestfunction, blockposition, worldserver);
+        GameTestHarnessInfo gametestharnessinfo = new GameTestHarnessInfo(gametestharnesstestfunction, tileentitystructure.l(), worldserver);
 
         if (gametestharnesscollector != null) {
             gametestharnesscollector.a(gametestharnessinfo);
@@ -151,7 +172,10 @@ public class GameTestHarnessTestCommand {
         }
 
         a(gametestharnesstestfunction, worldserver);
-        GameTestHarnessRunner.a(gametestharnessinfo, GameTestHarnessTicker.a);
+        AxisAlignedBB axisalignedbb = GameTestHarnessStructures.a(tileentitystructure);
+        BlockPosition blockposition1 = new BlockPosition(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ);
+
+        GameTestHarnessRunner.a(gametestharnessinfo, blockposition1, GameTestHarnessTicker.a);
     }
 
     private static void b(WorldServer worldserver, GameTestHarnessCollector gametestharnesscollector) {
@@ -180,16 +204,18 @@ public class GameTestHarnessTestCommand {
         return 1;
     }
 
-    private static int a(CommandListenerWrapper commandlistenerwrapper, GameTestHarnessTestFunction gametestharnesstestfunction) {
+    private static int a(CommandListenerWrapper commandlistenerwrapper, GameTestHarnessTestFunction gametestharnesstestfunction, int i) {
         WorldServer worldserver = commandlistenerwrapper.getWorld();
         BlockPosition blockposition = new BlockPosition(commandlistenerwrapper.getPosition());
-        BlockPosition blockposition1 = new BlockPosition(blockposition.getX(), commandlistenerwrapper.getWorld().getHighestBlockYAt(HeightMap.Type.WORLD_SURFACE, blockposition).getY(), blockposition.getZ() + 3);
+        int j = commandlistenerwrapper.getWorld().getHighestBlockYAt(HeightMap.Type.WORLD_SURFACE, blockposition).getY();
+        BlockPosition blockposition1 = new BlockPosition(blockposition.getX(), j, blockposition.getZ() + 3);
 
         GameTestHarnessRunner.a(worldserver);
         a(gametestharnesstestfunction, worldserver);
-        GameTestHarnessInfo gametestharnessinfo = new GameTestHarnessInfo(gametestharnesstestfunction, blockposition1, worldserver);
+        EnumBlockRotation enumblockrotation = GameTestHarnessStructures.a(i);
+        GameTestHarnessInfo gametestharnessinfo = new GameTestHarnessInfo(gametestharnesstestfunction, enumblockrotation, worldserver);
 
-        GameTestHarnessRunner.a(gametestharnessinfo, GameTestHarnessTicker.a);
+        GameTestHarnessRunner.a(gametestharnessinfo, blockposition1, GameTestHarnessTicker.a);
         return 1;
     }
 
@@ -202,63 +228,107 @@ public class GameTestHarnessTestCommand {
 
     }
 
-    private static int c(CommandListenerWrapper commandlistenerwrapper) {
+    private static int a(CommandListenerWrapper commandlistenerwrapper, int i, int j) {
         GameTestHarnessRunner.a(commandlistenerwrapper.getWorld());
-        a(commandlistenerwrapper, GameTestHarnessRegistry.a());
+        Collection<GameTestHarnessTestFunction> collection = GameTestHarnessRegistry.a();
+
+        b(commandlistenerwrapper, "Running all " + collection.size() + " tests...");
+        GameTestHarnessRegistry.d();
+        a(commandlistenerwrapper, collection, i, j);
         return 1;
     }
 
-    private static int b(CommandListenerWrapper commandlistenerwrapper, String s) {
+    private static int a(CommandListenerWrapper commandlistenerwrapper, String s, int i, int j) {
         Collection<GameTestHarnessTestFunction> collection = GameTestHarnessRegistry.a(s);
 
         GameTestHarnessRunner.a(commandlistenerwrapper.getWorld());
-        a(commandlistenerwrapper, collection);
+        b(commandlistenerwrapper, "Running " + collection.size() + " tests from " + s + "...");
+        GameTestHarnessRegistry.d();
+        a(commandlistenerwrapper, collection, i, j);
         return 1;
     }
 
-    private static void a(CommandListenerWrapper commandlistenerwrapper, Collection<GameTestHarnessTestFunction> collection) {
+    private static int a(CommandListenerWrapper commandlistenerwrapper, boolean flag, int i, int j) {
+        Collection collection;
+
+        if (flag) {
+            collection = (Collection) GameTestHarnessRegistry.c().stream().filter(GameTestHarnessTestFunction::d).collect(Collectors.toList());
+        } else {
+            collection = GameTestHarnessRegistry.c();
+        }
+
+        if (collection.isEmpty()) {
+            b(commandlistenerwrapper, "No failed tests to rerun");
+            return 0;
+        } else {
+            GameTestHarnessRunner.a(commandlistenerwrapper.getWorld());
+            b(commandlistenerwrapper, "Rerunning " + collection.size() + " failed tests (" + (flag ? "only required tests" : "including optional tests") + ")");
+            a(commandlistenerwrapper, collection, i, j);
+            return 1;
+        }
+    }
+
+    private static void a(CommandListenerWrapper commandlistenerwrapper, Collection<GameTestHarnessTestFunction> collection, int i, int j) {
         BlockPosition blockposition = new BlockPosition(commandlistenerwrapper.getPosition());
         BlockPosition blockposition1 = new BlockPosition(blockposition.getX(), commandlistenerwrapper.getWorld().getHighestBlockYAt(HeightMap.Type.WORLD_SURFACE, blockposition).getY(), blockposition.getZ() + 3);
         WorldServer worldserver = commandlistenerwrapper.getWorld();
-
-        c(commandlistenerwrapper, "Running " + collection.size() + " tests...");
-        Collection<GameTestHarnessInfo> collection1 = GameTestHarnessRunner.b(collection, blockposition1, worldserver, GameTestHarnessTicker.a);
+        EnumBlockRotation enumblockrotation = GameTestHarnessStructures.a(i);
+        Collection<GameTestHarnessInfo> collection1 = GameTestHarnessRunner.b(collection, blockposition1, enumblockrotation, worldserver, GameTestHarnessTicker.a, j);
         GameTestHarnessCollector gametestharnesscollector = new GameTestHarnessCollector(collection1);
 
         gametestharnesscollector.a((GameTestHarnessListener) (new GameTestHarnessTestCommand.a(worldserver, gametestharnesscollector)));
+        gametestharnesscollector.a((gametestharnessinfo) -> {
+            GameTestHarnessRegistry.a(gametestharnessinfo.u());
+        });
     }
 
-    private static void c(CommandListenerWrapper commandlistenerwrapper, String s) {
+    private static void b(CommandListenerWrapper commandlistenerwrapper, String s) {
         commandlistenerwrapper.sendMessage(new ChatComponentText(s), false);
     }
 
-    private static int d(CommandListenerWrapper commandlistenerwrapper, String s) {
+    private static int c(CommandListenerWrapper commandlistenerwrapper) {
+        BlockPosition blockposition = new BlockPosition(commandlistenerwrapper.getPosition());
+        WorldServer worldserver = commandlistenerwrapper.getWorld();
+        BlockPosition blockposition1 = GameTestHarnessStructures.b(blockposition, 15, worldserver);
+
+        if (blockposition1 == null) {
+            a(worldserver, "Couldn't find any structure block within 15 radius", EnumChatFormat.RED);
+            return 0;
+        } else {
+            TileEntityStructure tileentitystructure = (TileEntityStructure) worldserver.getTileEntity(blockposition1);
+            String s = tileentitystructure.f();
+
+            return c(commandlistenerwrapper, s);
+        }
+    }
+
+    private static int c(CommandListenerWrapper commandlistenerwrapper, String s) {
         java.nio.file.Path java_nio_file_path = Paths.get(GameTestHarnessStructures.a);
         MinecraftKey minecraftkey = new MinecraftKey("minecraft", s);
-        java.nio.file.Path java_nio_file_path1 = commandlistenerwrapper.getWorld().r().a(minecraftkey, ".nbt");
+        java.nio.file.Path java_nio_file_path1 = commandlistenerwrapper.getWorld().r_().a(minecraftkey, ".nbt");
         java.nio.file.Path java_nio_file_path2 = DebugReportNBT.a(java_nio_file_path1, s, java_nio_file_path);
 
         if (java_nio_file_path2 == null) {
-            c(commandlistenerwrapper, "Failed to export " + java_nio_file_path1);
+            b(commandlistenerwrapper, "Failed to export " + java_nio_file_path1);
             return 1;
         } else {
             try {
                 Files.createDirectories(java_nio_file_path2.getParent());
             } catch (IOException ioexception) {
-                c(commandlistenerwrapper, "Could not create folder " + java_nio_file_path2.getParent());
+                b(commandlistenerwrapper, "Could not create folder " + java_nio_file_path2.getParent());
                 ioexception.printStackTrace();
                 return 1;
             }
 
-            c(commandlistenerwrapper, "Exported to " + java_nio_file_path2.toAbsolutePath());
+            b(commandlistenerwrapper, "Exported " + s + " to " + java_nio_file_path2.toAbsolutePath());
             return 0;
         }
     }
 
-    private static int e(CommandListenerWrapper commandlistenerwrapper, String s) {
+    private static int d(CommandListenerWrapper commandlistenerwrapper, String s) {
         java.nio.file.Path java_nio_file_path = Paths.get(GameTestHarnessStructures.a, s + ".snbt");
         MinecraftKey minecraftkey = new MinecraftKey("minecraft", s);
-        java.nio.file.Path java_nio_file_path1 = commandlistenerwrapper.getWorld().r().a(minecraftkey, ".nbt");
+        java.nio.file.Path java_nio_file_path1 = commandlistenerwrapper.getWorld().r_().a(minecraftkey, ".nbt");
 
         try {
             BufferedReader bufferedreader = Files.newBufferedReader(java_nio_file_path);
@@ -268,7 +338,7 @@ public class GameTestHarnessTestCommand {
             OutputStream outputstream = Files.newOutputStream(java_nio_file_path1);
 
             NBTCompressedStreamTools.a(MojangsonParser.parse(s1), outputstream);
-            c(commandlistenerwrapper, "Imported to " + java_nio_file_path1.toAbsolutePath());
+            b(commandlistenerwrapper, "Imported to " + java_nio_file_path1.toAbsolutePath());
             return 0;
         } catch (CommandSyntaxException | IOException ioexception) {
             System.err.println("Failed to load structure " + s);
@@ -281,7 +351,7 @@ public class GameTestHarnessTestCommand {
         worldserver.a((entityplayer) -> {
             return true;
         }).forEach((entityplayer) -> {
-            entityplayer.sendMessage(new ChatComponentText(enumchatformat + s));
+            entityplayer.sendMessage(new ChatComponentText(enumchatformat + s), SystemUtils.b);
         });
     }
 

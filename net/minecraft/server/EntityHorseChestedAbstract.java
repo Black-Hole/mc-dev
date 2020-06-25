@@ -2,33 +2,34 @@ package net.minecraft.server;
 
 public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
 
-    private static final DataWatcherObject<Boolean> bF = DataWatcher.a(EntityHorseChestedAbstract.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> bD = DataWatcher.a(EntityHorseChestedAbstract.class, DataWatcherRegistry.i);
 
     protected EntityHorseChestedAbstract(EntityTypes<? extends EntityHorseChestedAbstract> entitytypes, World world) {
         super(entitytypes, world);
-        this.bD = false;
+        this.bB = false;
+    }
+
+    @Override
+    protected void eL() {
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.fq());
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityHorseChestedAbstract.bF, false);
+        this.datawatcher.register(EntityHorseChestedAbstract.bD, false);
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.eS());
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.17499999701976776D);
-        this.getAttributeInstance(EntityHorseChestedAbstract.attributeJumpStrength).setValue(0.5D);
+    public static AttributeProvider.Builder eM() {
+        return fj().a(GenericAttributes.MOVEMENT_SPEED, 0.17499999701976776D).a(GenericAttributes.JUMP_STRENGTH, 0.5D);
     }
 
     public boolean isCarryingChest() {
-        return (Boolean) this.datawatcher.get(EntityHorseChestedAbstract.bF);
+        return (Boolean) this.datawatcher.get(EntityHorseChestedAbstract.bD);
     }
 
     public void setCarryingChest(boolean flag) {
-        this.datawatcher.set(EntityHorseChestedAbstract.bF, flag);
+        this.datawatcher.set(EntityHorseChestedAbstract.bD, flag);
     }
 
     @Override
@@ -37,14 +38,8 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
     }
 
     @Override
-    public double aS() {
-        return super.aS() - 0.25D;
-    }
-
-    @Override
-    protected SoundEffect getSoundAngry() {
-        super.getSoundAngry();
-        return SoundEffects.ENTITY_DONKEY_ANGRY;
+    public double aY() {
+        return super.aY() - 0.25D;
     }
 
     @Override
@@ -61,8 +56,8 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setBoolean("ChestedHorse", this.isCarryingChest());
         if (this.isCarryingChest()) {
             NBTTagList nbttaglist = new NBTTagList();
@@ -85,8 +80,8 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.setCarryingChest(nbttagcompound.getBoolean("ChestedHorse"));
         if (this.isCarryingChest()) {
             NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
@@ -103,7 +98,7 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
             }
         }
 
-        this.eI();
+        this.ff();
     }
 
     @Override
@@ -126,72 +121,60 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
     }
 
     @Override
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+    public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getItem() instanceof ItemMonsterEgg) {
-            return super.a(entityhuman, enumhand);
+        if (!this.isBaby()) {
+            if (this.isTamed() && entityhuman.ep()) {
+                this.f(entityhuman);
+                return EnumInteractionResult.a(this.world.isClientSide);
+            }
+
+            if (this.isVehicle()) {
+                return super.b(entityhuman, enumhand);
+            }
+        }
+
+        if (!itemstack.isEmpty()) {
+            if (this.k(itemstack)) {
+                return this.b(entityhuman, itemstack);
+            }
+
+            if (!this.isTamed()) {
+                this.fn();
+                return EnumInteractionResult.a(this.world.isClientSide);
+            }
+
+            if (!this.isCarryingChest() && itemstack.getItem() == Blocks.CHEST.getItem()) {
+                this.setCarryingChest(true);
+                this.eP();
+                if (!entityhuman.abilities.canInstantlyBuild) {
+                    itemstack.subtract(1);
+                }
+
+                this.loadChest();
+                return EnumInteractionResult.a(this.world.isClientSide);
+            }
+
+            if (!this.isBaby() && !this.hasSaddle() && itemstack.getItem() == Items.SADDLE) {
+                this.f(entityhuman);
+                return EnumInteractionResult.a(this.world.isClientSide);
+            }
+        }
+
+        if (this.isBaby()) {
+            return super.b(entityhuman, enumhand);
         } else {
-            if (!this.isBaby()) {
-                if (this.isTamed() && entityhuman.dT()) {
-                    this.e(entityhuman);
-                    return true;
-                }
-
-                if (this.isVehicle()) {
-                    return super.a(entityhuman, enumhand);
-                }
-            }
-
-            if (!itemstack.isEmpty()) {
-                boolean flag = this.b(entityhuman, itemstack);
-
-                if (!flag) {
-                    if (!this.isTamed() || itemstack.getItem() == Items.NAME_TAG) {
-                        if (itemstack.a(entityhuman, (EntityLiving) this, enumhand)) {
-                            return true;
-                        }
-
-                        this.eP();
-                        return true;
-                    }
-
-                    if (!this.isCarryingChest() && itemstack.getItem() == Blocks.CHEST.getItem()) {
-                        this.setCarryingChest(true);
-                        this.et();
-                        flag = true;
-                        this.loadChest();
-                    }
-
-                    if (!this.isBaby() && !this.eL() && itemstack.getItem() == Items.SADDLE) {
-                        this.e(entityhuman);
-                        return true;
-                    }
-                }
-
-                if (flag) {
-                    if (!entityhuman.abilities.canInstantlyBuild) {
-                        itemstack.subtract(1);
-                    }
-
-                    return true;
-                }
-            }
-
-            if (this.isBaby()) {
-                return super.a(entityhuman, enumhand);
-            } else {
-                this.g(entityhuman);
-                return true;
-            }
+            this.h(entityhuman);
+            return EnumInteractionResult.a(this.world.isClientSide);
         }
     }
 
-    protected void et() {
-        this.a(SoundEffects.ENTITY_DONKEY_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+    protected void eP() {
+        this.playSound(SoundEffects.ENTITY_DONKEY_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 
-    public int eu() {
+    public int eV() {
         return 5;
     }
 }

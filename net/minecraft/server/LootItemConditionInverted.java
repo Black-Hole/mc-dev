@@ -13,6 +13,11 @@ public class LootItemConditionInverted implements LootItemCondition {
         this.a = lootitemcondition;
     }
 
+    @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.a;
+    }
+
     public final boolean test(LootTableInfo loottableinfo) {
         return !this.a.test(loottableinfo);
     }
@@ -36,18 +41,16 @@ public class LootItemConditionInverted implements LootItemCondition {
         };
     }
 
-    public static class a extends LootItemCondition.b<LootItemConditionInverted> {
+    public static class a implements LootSerializer<LootItemConditionInverted> {
 
-        public a() {
-            super(new MinecraftKey("inverted"), LootItemConditionInverted.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionInverted lootitemconditioninverted, JsonSerializationContext jsonserializationcontext) {
             jsonobject.add("term", jsonserializationcontext.serialize(lootitemconditioninverted.a));
         }
 
         @Override
-        public LootItemConditionInverted b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionInverted a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             LootItemCondition lootitemcondition = (LootItemCondition) ChatDeserializer.a(jsonobject, "term", jsondeserializationcontext, LootItemCondition.class);
 
             return new LootItemConditionInverted(lootitemcondition);

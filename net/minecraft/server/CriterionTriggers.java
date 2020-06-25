@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public class CriterionTriggers {
 
-    private static final Map<MinecraftKey, CriterionTrigger<?>> M = Maps.newHashMap();
+    private static final Map<MinecraftKey, CriterionTrigger<?>> Q = Maps.newHashMap();
     public static final CriterionTriggerImpossible a = (CriterionTriggerImpossible) a((CriterionTrigger) (new CriterionTriggerImpossible()));
     public static final CriterionTriggerKilled b = (CriterionTriggerKilled) a((CriterionTrigger) (new CriterionTriggerKilled(new MinecraftKey("player_killed_entity"))));
     public static final CriterionTriggerKilled c = (CriterionTriggerKilled) a((CriterionTrigger) (new CriterionTriggerKilled(new MinecraftKey("entity_killed_player"))));
@@ -42,25 +42,29 @@ public class CriterionTriggers {
     public static final CriterionTriggerKilledByCrossbow G = (CriterionTriggerKilledByCrossbow) a((CriterionTrigger) (new CriterionTriggerKilledByCrossbow()));
     public static final CriterionTriggerLocation H = (CriterionTriggerLocation) a((CriterionTrigger) (new CriterionTriggerLocation(new MinecraftKey("hero_of_the_village"))));
     public static final CriterionTriggerLocation I = (CriterionTriggerLocation) a((CriterionTrigger) (new CriterionTriggerLocation(new MinecraftKey("voluntary_exile"))));
-    public static final CriterionTriggerInteractBlock J = (CriterionTriggerInteractBlock) a((CriterionTrigger) (new CriterionTriggerInteractBlock(new MinecraftKey("safely_harvest_honey"))));
-    public static final CriterionSlideDownBlock K = (CriterionSlideDownBlock) a((CriterionTrigger) (new CriterionSlideDownBlock()));
-    public static final CriterionTriggerBeeNestDestroyed L = (CriterionTriggerBeeNestDestroyed) a((CriterionTrigger) (new CriterionTriggerBeeNestDestroyed()));
+    public static final CriterionSlideDownBlock J = (CriterionSlideDownBlock) a((CriterionTrigger) (new CriterionSlideDownBlock()));
+    public static final CriterionTriggerBeeNestDestroyed K = (CriterionTriggerBeeNestDestroyed) a((CriterionTrigger) (new CriterionTriggerBeeNestDestroyed()));
+    public static final CriterionTriggerTargetHit L = (CriterionTriggerTargetHit) a((CriterionTrigger) (new CriterionTriggerTargetHit()));
+    public static final CriterionTriggerInteractBlock M = (CriterionTriggerInteractBlock) a((CriterionTrigger) (new CriterionTriggerInteractBlock()));
+    public static final CriterionTriggerPlayerGeneratesContainerLoot N = (CriterionTriggerPlayerGeneratesContainerLoot) a((CriterionTrigger) (new CriterionTriggerPlayerGeneratesContainerLoot()));
+    public static final CriterionTriggerThrownItemPickedUpByEntity O = (CriterionTriggerThrownItemPickedUpByEntity) a((CriterionTrigger) (new CriterionTriggerThrownItemPickedUpByEntity()));
+    public static final CriterionTriggerPlayerInteractedWithEntity P = (CriterionTriggerPlayerInteractedWithEntity) a((CriterionTrigger) (new CriterionTriggerPlayerInteractedWithEntity()));
 
     private static <T extends CriterionTrigger<?>> T a(T t0) {
-        if (CriterionTriggers.M.containsKey(t0.a())) {
+        if (CriterionTriggers.Q.containsKey(t0.a())) {
             throw new IllegalArgumentException("Duplicate criterion id " + t0.a());
         } else {
-            CriterionTriggers.M.put(t0.a(), t0);
+            CriterionTriggers.Q.put(t0.a(), t0);
             return t0;
         }
     }
 
     @Nullable
     public static <T extends CriterionInstance> CriterionTrigger<T> a(MinecraftKey minecraftkey) {
-        return (CriterionTrigger) CriterionTriggers.M.get(minecraftkey);
+        return (CriterionTrigger) CriterionTriggers.Q.get(minecraftkey);
     }
 
     public static Iterable<? extends CriterionTrigger<?>> a() {
-        return CriterionTriggers.M.values();
+        return CriterionTriggers.Q.values();
     }
 }

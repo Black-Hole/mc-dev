@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,12 +26,12 @@ public class PathfinderGoalSelector {
     };
     private final Map<PathfinderGoal.Type, PathfinderGoalWrapped> c = new EnumMap(PathfinderGoal.Type.class);
     private final Set<PathfinderGoalWrapped> d = Sets.newLinkedHashSet();
-    private final GameProfilerFiller e;
+    private final Supplier<GameProfilerFiller> e;
     private final EnumSet<PathfinderGoal.Type> f = EnumSet.noneOf(PathfinderGoal.Type.class);
     private int g = 3;
 
-    public PathfinderGoalSelector(GameProfilerFiller gameprofilerfiller) {
-        this.e = gameprofilerfiller;
+    public PathfinderGoalSelector(Supplier<GameProfilerFiller> supplier) {
+        this.e = supplier;
     }
 
     public void a(int i, PathfinderGoal pathfindergoal) {
@@ -47,8 +48,10 @@ public class PathfinderGoalSelector {
     }
 
     public void doTick() {
-        this.e.enter("goalCleanup");
-        this.c().filter((pathfindergoalwrapped) -> {
+        GameProfilerFiller gameprofilerfiller = (GameProfilerFiller) this.e.get();
+
+        gameprofilerfiller.enter("goalCleanup");
+        this.d().filter((pathfindergoalwrapped) -> {
             boolean flag;
 
             if (pathfindergoalwrapped.g()) {
@@ -71,8 +74,8 @@ public class PathfinderGoalSelector {
             }
 
         });
-        this.e.exit();
-        this.e.enter("goalUpdate");
+        gameprofilerfiller.exit();
+        gameprofilerfiller.enter("goalUpdate");
         this.d.stream().filter((pathfindergoalwrapped) -> {
             return !pathfindergoalwrapped.g();
         }).filter((pathfindergoalwrapped) -> {
@@ -94,13 +97,13 @@ public class PathfinderGoalSelector {
             });
             pathfindergoalwrapped.c();
         });
-        this.e.exit();
-        this.e.enter("goalTick");
-        this.c().forEach(PathfinderGoalWrapped::e);
-        this.e.exit();
+        gameprofilerfiller.exit();
+        gameprofilerfiller.enter("goalTick");
+        this.d().forEach(PathfinderGoalWrapped::e);
+        gameprofilerfiller.exit();
     }
 
-    public Stream<PathfinderGoalWrapped> c() {
+    public Stream<PathfinderGoalWrapped> d() {
         return this.d.stream().filter(PathfinderGoalWrapped::g);
     }
 

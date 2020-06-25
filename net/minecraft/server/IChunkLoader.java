@@ -13,12 +13,12 @@ public class IChunkLoader implements AutoCloseable {
     @Nullable
     private PersistentStructureLegacy c;
 
-    public IChunkLoader(File file, DataFixer datafixer) {
+    public IChunkLoader(File file, DataFixer datafixer, boolean flag) {
         this.b = datafixer;
-        this.a = new IOWorker(new RegionFileCache(file), "chunk");
+        this.a = new IOWorker(file, flag, "chunk");
     }
 
-    public NBTTagCompound getChunkData(DimensionManager dimensionmanager, Supplier<WorldPersistentData> supplier, NBTTagCompound nbttagcompound) {
+    public NBTTagCompound getChunkData(ResourceKey<World> resourcekey, Supplier<WorldPersistentData> supplier, NBTTagCompound nbttagcompound) {
         int i = a(nbttagcompound);
         boolean flag = true;
 
@@ -26,7 +26,7 @@ public class IChunkLoader implements AutoCloseable {
             nbttagcompound = GameProfileSerializer.a(this.b, DataFixTypes.CHUNK, nbttagcompound, i, 1493);
             if (nbttagcompound.getCompound("Level").getBoolean("hasLegacyStructureData")) {
                 if (this.c == null) {
-                    this.c = PersistentStructureLegacy.a(dimensionmanager, (WorldPersistentData) supplier.get());
+                    this.c = PersistentStructureLegacy.a(resourcekey, (WorldPersistentData) supplier.get());
                 }
 
                 nbttagcompound = this.c.a(nbttagcompound);

@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -12,36 +13,30 @@ import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class LocaleLanguage {
+public abstract class LocaleLanguage {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Pattern b = Pattern.compile("%(\\d+\\$)?[\\d\\.]*[df]");
-    private static final LocaleLanguage c = new LocaleLanguage();
-    private final Map<String, String> d = Maps.newHashMap();
-    private long e;
+    private static final Gson b = new Gson();
+    private static final Pattern c = Pattern.compile("%(\\d+\\$)?[\\d.]*[df]");
+    private static volatile LocaleLanguage d = c();
 
-    public LocaleLanguage() {
+    public LocaleLanguage() {}
+
+    private static LocaleLanguage c() {
+        Builder<String, String> builder = ImmutableMap.builder();
+        BiConsumer biconsumer = builder::put;
+
         try {
             InputStream inputstream = LocaleLanguage.class.getResourceAsStream("/assets/minecraft/lang/en_us.json");
             Throwable throwable = null;
 
             try {
-                JsonElement jsonelement = (JsonElement) (new Gson()).fromJson(new InputStreamReader(inputstream, StandardCharsets.UTF_8), JsonElement.class);
-                JsonObject jsonobject = ChatDeserializer.m(jsonelement, "strings");
-                Iterator iterator = jsonobject.entrySet().iterator();
-
-                while (iterator.hasNext()) {
-                    Entry<String, JsonElement> entry = (Entry) iterator.next();
-                    String s = LocaleLanguage.b.matcher(ChatDeserializer.a((JsonElement) entry.getValue(), (String) entry.getKey())).replaceAll("%$1s");
-
-                    this.d.put(entry.getKey(), s);
-                }
-
-                this.e = SystemUtils.getMonotonicMillis();
+                a(inputstream, biconsumer);
             } catch (Throwable throwable1) {
                 throwable = throwable1;
                 throw throwable1;
@@ -63,27 +58,46 @@ public class LocaleLanguage {
             LocaleLanguage.LOGGER.error("Couldn't read strings from /assets/minecraft/lang/en_us.json", ioexception);
         }
 
+        final Map<String, String> map = builder.build();
+
+        return new LocaleLanguage() {
+            @Override
+            public String a(String s) {
+                return (String) map.getOrDefault(s, s);
+            }
+
+            @Override
+            public boolean b(String s) {
+                return map.containsKey(s);
+            }
+
+            @Override
+            public String a(String s, boolean flag) {
+                return s;
+            }
+        };
+    }
+
+    public static void a(InputStream inputstream, BiConsumer<String, String> biconsumer) {
+        JsonObject jsonobject = (JsonObject) LocaleLanguage.b.fromJson(new InputStreamReader(inputstream, StandardCharsets.UTF_8), JsonObject.class);
+        Iterator iterator = jsonobject.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Entry<String, JsonElement> entry = (Entry) iterator.next();
+            String s = LocaleLanguage.c.matcher(ChatDeserializer.a((JsonElement) entry.getValue(), (String) entry.getKey())).replaceAll("%$1s");
+
+            biconsumer.accept(entry.getKey(), s);
+        }
+
     }
 
     public static LocaleLanguage a() {
-        return LocaleLanguage.c;
+        return LocaleLanguage.d;
     }
 
-    public synchronized String a(String s) {
-        return this.c(s);
-    }
+    public abstract String a(String s);
 
-    private String c(String s) {
-        String s1 = (String) this.d.get(s);
+    public abstract boolean b(String s);
 
-        return s1 == null ? s : s1;
-    }
-
-    public synchronized boolean b(String s) {
-        return this.d.containsKey(s);
-    }
-
-    public long b() {
-        return this.e;
-    }
+    public abstract String a(String s, boolean flag);
 }

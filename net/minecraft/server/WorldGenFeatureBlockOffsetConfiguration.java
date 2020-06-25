@@ -1,28 +1,22 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class WorldGenFeatureBlockOffsetConfiguration implements WorldGenFeatureConfiguration {
 
-    public final IBlockData a;
-    public final int b;
+    public static final Codec<WorldGenFeatureBlockOffsetConfiguration> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(IBlockData.b.fieldOf("state").forGetter((worldgenfeatureblockoffsetconfiguration) -> {
+            return worldgenfeatureblockoffsetconfiguration.b;
+        }), Codec.INT.fieldOf("start_radius").withDefault(0).forGetter((worldgenfeatureblockoffsetconfiguration) -> {
+            return worldgenfeatureblockoffsetconfiguration.c;
+        })).apply(instance, WorldGenFeatureBlockOffsetConfiguration::new);
+    });
+    public final IBlockData b;
+    public final int c;
 
     public WorldGenFeatureBlockOffsetConfiguration(IBlockData iblockdata, int i) {
-        this.a = iblockdata;
-        this.b = i;
-    }
-
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("state"), IBlockData.a(dynamicops, this.a).getValue(), dynamicops.createString("start_radius"), dynamicops.createInt(this.b))));
-    }
-
-    public static <T> WorldGenFeatureBlockOffsetConfiguration a(Dynamic<T> dynamic) {
-        IBlockData iblockdata = (IBlockData) dynamic.get("state").map(IBlockData::a).orElse(Blocks.AIR.getBlockData());
-        int i = dynamic.get("start_radius").asInt(0);
-
-        return new WorldGenFeatureBlockOffsetConfiguration(iblockdata, i);
+        this.b = iblockdata;
+        this.c = i;
     }
 }

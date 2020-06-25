@@ -11,8 +11,8 @@ public class SensorInteractableDoors extends Sensor<EntityLiving> {
 
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving) {
-        DimensionManager dimensionmanager = worldserver.getWorldProvider().getDimensionManager();
-        BlockPosition blockposition = new BlockPosition(entityliving);
+        ResourceKey<World> resourcekey = worldserver.getDimensionKey();
+        BlockPosition blockposition = entityliving.getChunkCoordinates();
         List<GlobalPos> list = Lists.newArrayList();
 
         for (int i = -1; i <= 1; ++i) {
@@ -20,8 +20,8 @@ public class SensorInteractableDoors extends Sensor<EntityLiving> {
                 for (int k = -1; k <= 1; ++k) {
                     BlockPosition blockposition1 = blockposition.b(i, j, k);
 
-                    if (worldserver.getType(blockposition1).a(TagsBlock.WOODEN_DOORS)) {
-                        list.add(GlobalPos.create(dimensionmanager, blockposition1));
+                    if (worldserver.getType(blockposition1).a((Tag) TagsBlock.WOODEN_DOORS)) {
+                        list.add(GlobalPos.create(resourcekey, blockposition1));
                     }
                 }
             }

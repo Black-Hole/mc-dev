@@ -15,19 +15,22 @@ public class EntitySnowball extends EntityProjectileThrowable {
     }
 
     @Override
-    protected Item i() {
+    protected Item getDefaultItem() {
         return Items.SNOWBALL;
     }
 
     @Override
+    protected void a(MovingObjectPositionEntity movingobjectpositionentity) {
+        super.a(movingobjectpositionentity);
+        Entity entity = movingobjectpositionentity.getEntity();
+        int i = entity instanceof EntityBlaze ? 3 : 0;
+
+        entity.damageEntity(DamageSource.projectile(this, this.getShooter()), (float) i);
+    }
+
+    @Override
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.ENTITY) {
-            Entity entity = ((MovingObjectPositionEntity) movingobjectposition).getEntity();
-            int i = entity instanceof EntityBlaze ? 3 : 0;
-
-            entity.damageEntity(DamageSource.projectile(this, this.getShooter()), (float) i);
-        }
-
+        super.a(movingobjectposition);
         if (!this.world.isClientSide) {
             this.world.broadcastEntityEffect(this, (byte) 3);
             this.die();

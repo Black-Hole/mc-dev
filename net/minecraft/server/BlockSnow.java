@@ -5,12 +5,12 @@ import javax.annotation.Nullable;
 
 public class BlockSnow extends Block {
 
-    public static final BlockStateInteger LAYERS = BlockProperties.ak;
+    public static final BlockStateInteger LAYERS = BlockProperties.aq;
     protected static final VoxelShape[] b = new VoxelShape[]{VoxelShapes.a(), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
-    protected BlockSnow(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSnow.LAYERS, 1));
+    protected BlockSnow(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSnow.LAYERS, 1));
     }
 
     @Override
@@ -28,26 +28,35 @@ public class BlockSnow extends Block {
     }
 
     @Override
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockSnow.b[(Integer) iblockdata.get(BlockSnow.LAYERS)];
+    }
+
+    @Override
+    public VoxelShape c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockSnow.b[(Integer) iblockdata.get(BlockSnow.LAYERS) - 1];
+    }
+
+    @Override
+    public VoxelShape e(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockSnow.b[(Integer) iblockdata.get(BlockSnow.LAYERS)];
+    }
+
+    @Override
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockSnow.b[(Integer) iblockdata.get(BlockSnow.LAYERS)];
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockSnow.b[(Integer) iblockdata.get(BlockSnow.LAYERS) - 1];
-    }
-
-    @Override
-    public boolean o(IBlockData iblockdata) {
+    public boolean c_(IBlockData iblockdata) {
         return true;
     }
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         IBlockData iblockdata1 = iworldreader.getType(blockposition.down());
-        Block block = iblockdata1.getBlock();
 
-        return block != Blocks.ICE && block != Blocks.PACKED_ICE && block != Blocks.BARRIER ? (block != Blocks.HONEY_BLOCK && block != Blocks.SOUL_SAND ? Block.a(iblockdata1.getCollisionShape(iworldreader, blockposition.down()), EnumDirection.UP) || block == this && (Integer) iblockdata1.get(BlockSnow.LAYERS) == 8 : true) : false;
+        return !iblockdata1.a(Blocks.ICE) && !iblockdata1.a(Blocks.PACKED_ICE) && !iblockdata1.a(Blocks.BARRIER) ? (!iblockdata1.a(Blocks.HONEY_BLOCK) && !iblockdata1.a(Blocks.SOUL_SAND) ? Block.a(iblockdata1.getCollisionShape(iworldreader, blockposition.down()), EnumDirection.UP) || iblockdata1.getBlock() == this && (Integer) iblockdata1.get(BlockSnow.LAYERS) == 8 : true) : false;
     }
 
     @Override
@@ -76,7 +85,7 @@ public class BlockSnow extends Block {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition());
 
-        if (iblockdata.getBlock() == this) {
+        if (iblockdata.a((Block) this)) {
             int i = (Integer) iblockdata.get(BlockSnow.LAYERS);
 
             return (IBlockData) iblockdata.set(BlockSnow.LAYERS, Math.min(8, i + 1));

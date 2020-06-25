@@ -3,13 +3,12 @@ package net.minecraft.server;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
-import java.util.Optional;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
 import java.util.stream.Stream;
 
 public class DataConverterItemLoreComponentize extends DataFix {
@@ -27,10 +26,10 @@ public class DataConverterItemLoreComponentize extends DataFix {
                 return typed1.update(DSL.remainderFinder(), (dynamic) -> {
                     return dynamic.update("display", (dynamic1) -> {
                         return dynamic1.update("Lore", (dynamic2) -> {
-                            Optional optional = dynamic2.asStreamOpt().map(DataConverterItemLoreComponentize::a);
+                            DataResult dataresult = dynamic2.asStreamOpt().map(DataConverterItemLoreComponentize::a);
 
                             dynamic2.getClass();
-                            return (Dynamic) DataFixUtils.orElse(optional.map(dynamic2::createList), dynamic2);
+                            return (Dynamic) DataFixUtils.orElse(dataresult.map(dynamic2::createList).result(), dynamic2);
                         });
                     });
                 });
@@ -40,10 +39,10 @@ public class DataConverterItemLoreComponentize extends DataFix {
 
     private static <T> Stream<Dynamic<T>> a(Stream<Dynamic<T>> stream) {
         return stream.map((dynamic) -> {
-            Optional optional = dynamic.asString().map(DataConverterItemLoreComponentize::a);
+            DataResult dataresult = dynamic.asString().map(DataConverterItemLoreComponentize::a);
 
             dynamic.getClass();
-            return (Dynamic) DataFixUtils.orElse(optional.map(dynamic::createString), dynamic);
+            return (Dynamic) DataFixUtils.orElse(dataresult.map(dynamic::createString).result(), dynamic);
         });
     }
 

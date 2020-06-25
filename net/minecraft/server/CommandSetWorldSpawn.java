@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 
 public class CommandSetWorldSpawn {
 
@@ -18,7 +17,6 @@ public class CommandSetWorldSpawn {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, BlockPosition blockposition) {
         commandlistenerwrapper.getWorld().a_(blockposition);
-        commandlistenerwrapper.getServer().getPlayerList().sendAll(new PacketPlayOutSpawnPosition(blockposition));
         commandlistenerwrapper.sendMessage(new ChatMessage("commands.setworldspawn.success", new Object[]{blockposition.getX(), blockposition.getY(), blockposition.getZ()}), true);
         return 1;
     }

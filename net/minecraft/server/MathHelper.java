@@ -204,17 +204,17 @@ public class MathHelper {
         return j + 1;
     }
 
-    private static boolean g(int i) {
+    public static boolean d(int i) {
         return i != 0 && (i & i - 1) == 0;
     }
 
-    public static int d(int i) {
-        i = g(i) ? i : c(i);
+    public static int e(int i) {
+        i = d(i) ? i : c(i);
         return MathHelper.d[(int) ((long) i * 125613361L >> 27) & 31];
     }
 
-    public static int e(int i) {
-        return d(i) - (g(i) ? 0 : 1);
+    public static int f(int i) {
+        return e(i) - (d(i) ? 0 : 1);
     }
 
     public static int c(int i, int j) {
@@ -231,6 +231,10 @@ public class MathHelper {
 
             return k == 0 ? i : i + j - k;
         }
+    }
+
+    public static float h(float f) {
+        return f - (float) d(f);
     }
 
     public static double h(double d0) {
@@ -380,7 +384,7 @@ public class MathHelper {
         return j << 16 | k << 8 | l;
     }
 
-    public static int f(int i) {
+    public static int g(int i) {
         i ^= i >>> 16;
         i *= -2048144789;
         i ^= i >>> 13;
@@ -444,6 +448,10 @@ public class MathHelper {
         }
 
         return f + f2 * f3;
+    }
+
+    public static float k(float f) {
+        return f * f;
     }
 
     static {

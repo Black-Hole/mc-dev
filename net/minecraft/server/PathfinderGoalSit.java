@@ -5,7 +5,6 @@ import java.util.EnumSet;
 public class PathfinderGoalSit extends PathfinderGoal {
 
     private final EntityTameableAnimal entity;
-    private boolean willSit;
 
     public PathfinderGoalSit(EntityTameableAnimal entitytameableanimal) {
         this.entity = entitytameableanimal;
@@ -14,21 +13,21 @@ public class PathfinderGoalSit extends PathfinderGoal {
 
     @Override
     public boolean b() {
-        return this.willSit;
+        return this.entity.isWillSit();
     }
 
     @Override
     public boolean a() {
         if (!this.entity.isTamed()) {
             return false;
-        } else if (this.entity.az()) {
+        } else if (this.entity.aD()) {
             return false;
-        } else if (!this.entity.onGround) {
+        } else if (!this.entity.isOnGround()) {
             return false;
         } else {
             EntityLiving entityliving = this.entity.getOwner();
 
-            return entityliving == null ? true : (this.entity.h((Entity) entityliving) < 144.0D && entityliving.getLastDamager() != null ? false : this.willSit);
+            return entityliving == null ? true : (this.entity.h((Entity) entityliving) < 144.0D && entityliving.getLastDamager() != null ? false : this.entity.isWillSit());
         }
     }
 
@@ -41,9 +40,5 @@ public class PathfinderGoalSit extends PathfinderGoal {
     @Override
     public void d() {
         this.entity.setSitting(false);
-    }
-
-    public void setSitting(boolean flag) {
-        this.willSit = flag;
     }
 }

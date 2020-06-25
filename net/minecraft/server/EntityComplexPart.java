@@ -18,10 +18,10 @@ public class EntityComplexPart extends Entity {
     protected void initDatawatcher() {}
 
     @Override
-    protected void a(NBTTagCompound nbttagcompound) {}
+    protected void loadData(NBTTagCompound nbttagcompound) {}
 
     @Override
-    protected void b(NBTTagCompound nbttagcompound) {}
+    protected void saveData(NBTTagCompound nbttagcompound) {}
 
     @Override
     public boolean isInteractable() {
@@ -39,7 +39,7 @@ public class EntityComplexPart extends Entity {
     }
 
     @Override
-    public Packet<?> L() {
+    public Packet<?> O() {
         throw new UnsupportedOperationException();
     }
 

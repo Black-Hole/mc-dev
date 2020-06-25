@@ -13,7 +13,9 @@ public class StatisticManager {
     }
 
     public void b(EntityHuman entityhuman, Statistic<?> statistic, int i) {
-        this.setStatistic(entityhuman, statistic, this.getStatisticValue(statistic) + i);
+        int j = (int) Math.min((long) this.getStatisticValue(statistic) + (long) i, 2147483647L);
+
+        this.setStatistic(entityhuman, statistic, j);
     }
 
     public void setStatistic(EntityHuman entityhuman, Statistic<?> statistic, int i) {

@@ -14,7 +14,7 @@ public enum BlockPropertyTrackPosition implements INamable {
         return this.k;
     }
 
-    public boolean b() {
+    public boolean c() {
         return this == BlockPropertyTrackPosition.ASCENDING_NORTH || this == BlockPropertyTrackPosition.ASCENDING_EAST || this == BlockPropertyTrackPosition.ASCENDING_SOUTH || this == BlockPropertyTrackPosition.ASCENDING_WEST;
     }
 

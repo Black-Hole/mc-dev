@@ -27,8 +27,8 @@ public class ChunkStatus {
     });
     public static final ChunkStatus STRUCTURE_STARTS = a("structure_starts", ChunkStatus.EMPTY, 0, ChunkStatus.n, ChunkStatus.Type.PROTOCHUNK, (chunkstatus, worldserver, chunkgenerator, definedstructuremanager, lightenginethreaded, function, list, ichunkaccess) -> {
         if (!ichunkaccess.getChunkStatus().b(chunkstatus)) {
-            if (worldserver.getWorldData().shouldGenerateMapFeatures()) {
-                chunkgenerator.createStructures(worldserver.d().a(chunkgenerator.getWorldChunkManager()), ichunkaccess, chunkgenerator, definedstructuremanager);
+            if (worldserver.getMinecraftServer().getSaveData().getGeneratorSettings().shouldGenerateMapFeatures()) {
+                chunkgenerator.createStructures(worldserver.getStructureManager(), ichunkaccess, definedstructuremanager, worldserver.getSeed());
             }
 
             if (ichunkaccess instanceof ProtoChunk) {
@@ -39,22 +39,26 @@ public class ChunkStatus {
         return CompletableFuture.completedFuture(Either.left(ichunkaccess));
     });
     public static final ChunkStatus STRUCTURE_REFERENCES = a("structure_references", ChunkStatus.STRUCTURE_STARTS, 8, ChunkStatus.n, ChunkStatus.Type.PROTOCHUNK, (worldserver, chunkgenerator, list, ichunkaccess) -> {
-        chunkgenerator.storeStructures(new RegionLimitedWorldAccess(worldserver, list), ichunkaccess);
+        RegionLimitedWorldAccess regionlimitedworldaccess = new RegionLimitedWorldAccess(worldserver, list);
+
+        chunkgenerator.storeStructures(regionlimitedworldaccess, worldserver.getStructureManager().a(regionlimitedworldaccess), ichunkaccess);
     });
     public static final ChunkStatus BIOMES = a("biomes", ChunkStatus.STRUCTURE_REFERENCES, 0, ChunkStatus.n, ChunkStatus.Type.PROTOCHUNK, (worldserver, chunkgenerator, list, ichunkaccess) -> {
         chunkgenerator.createBiomes(ichunkaccess);
     });
     public static final ChunkStatus NOISE = a("noise", ChunkStatus.BIOMES, 8, ChunkStatus.n, ChunkStatus.Type.PROTOCHUNK, (worldserver, chunkgenerator, list, ichunkaccess) -> {
-        chunkgenerator.buildNoise(new RegionLimitedWorldAccess(worldserver, list), ichunkaccess);
+        RegionLimitedWorldAccess regionlimitedworldaccess = new RegionLimitedWorldAccess(worldserver, list);
+
+        chunkgenerator.buildNoise(regionlimitedworldaccess, worldserver.getStructureManager().a(regionlimitedworldaccess), ichunkaccess);
     });
     public static final ChunkStatus SURFACE = a("surface", ChunkStatus.NOISE, 0, ChunkStatus.n, ChunkStatus.Type.PROTOCHUNK, (worldserver, chunkgenerator, list, ichunkaccess) -> {
         chunkgenerator.buildBase(new RegionLimitedWorldAccess(worldserver, list), ichunkaccess);
     });
     public static final ChunkStatus CARVERS = a("carvers", ChunkStatus.SURFACE, 0, ChunkStatus.n, ChunkStatus.Type.PROTOCHUNK, (worldserver, chunkgenerator, list, ichunkaccess) -> {
-        chunkgenerator.doCarving(worldserver.d().a(chunkgenerator.getWorldChunkManager()), ichunkaccess, WorldGenStage.Features.AIR);
+        chunkgenerator.doCarving(worldserver.getSeed(), worldserver.d(), ichunkaccess, WorldGenStage.Features.AIR);
     });
     public static final ChunkStatus LIQUID_CARVERS = a("liquid_carvers", ChunkStatus.CARVERS, 0, ChunkStatus.o, ChunkStatus.Type.PROTOCHUNK, (worldserver, chunkgenerator, list, ichunkaccess) -> {
-        chunkgenerator.doCarving(worldserver.d().a(chunkgenerator.getWorldChunkManager()), ichunkaccess, WorldGenStage.Features.LIQUID);
+        chunkgenerator.doCarving(worldserver.getSeed(), worldserver.d(), ichunkaccess, WorldGenStage.Features.LIQUID);
     });
     public static final ChunkStatus FEATURES = a("features", ChunkStatus.LIQUID_CARVERS, 8, ChunkStatus.o, ChunkStatus.Type.PROTOCHUNK, (chunkstatus, worldserver, chunkgenerator, definedstructuremanager, lightenginethreaded, function, list, ichunkaccess) -> {
         ProtoChunk protochunk = (ProtoChunk) ichunkaccess;
@@ -62,7 +66,9 @@ public class ChunkStatus {
         protochunk.a((LightEngine) lightenginethreaded);
         if (!ichunkaccess.getChunkStatus().b(chunkstatus)) {
             HeightMap.a(ichunkaccess, EnumSet.of(HeightMap.Type.MOTION_BLOCKING, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, HeightMap.Type.OCEAN_FLOOR, HeightMap.Type.WORLD_SURFACE));
-            chunkgenerator.addDecorations(new RegionLimitedWorldAccess(worldserver, list));
+            RegionLimitedWorldAccess regionlimitedworldaccess = new RegionLimitedWorldAccess(worldserver, list);
+
+            chunkgenerator.addDecorations(regionlimitedworldaccess, worldserver.getStructureManager().a(regionlimitedworldaccess));
             protochunk.a(chunkstatus);
         }
 
@@ -180,7 +186,7 @@ public class ChunkStatus {
         return this.u;
     }
 
-    public CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> a(WorldServer worldserver, ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, LightEngineThreaded lightenginethreaded, Function<IChunkAccess, CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>>> function, List<IChunkAccess> list) {
+    public CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> a(WorldServer worldserver, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, LightEngineThreaded lightenginethreaded, Function<IChunkAccess, CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>>> function, List<IChunkAccess> list) {
         return this.v.doWork(this, worldserver, chunkgenerator, definedstructuremanager, lightenginethreaded, function, list, (IChunkAccess) list.get(list.size() / 2));
     }
 
@@ -222,7 +228,7 @@ public class ChunkStatus {
     interface d extends ChunkStatus.b {
 
         @Override
-        default CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> doWork(ChunkStatus chunkstatus, WorldServer worldserver, ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, LightEngineThreaded lightenginethreaded, Function<IChunkAccess, CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>>> function, List<IChunkAccess> list, IChunkAccess ichunkaccess) {
+        default CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> doWork(ChunkStatus chunkstatus, WorldServer worldserver, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, LightEngineThreaded lightenginethreaded, Function<IChunkAccess, CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>>> function, List<IChunkAccess> list, IChunkAccess ichunkaccess) {
             if (!ichunkaccess.getChunkStatus().b(chunkstatus)) {
                 this.doWork(worldserver, chunkgenerator, list, ichunkaccess);
                 if (ichunkaccess instanceof ProtoChunk) {
@@ -233,7 +239,7 @@ public class ChunkStatus {
             return CompletableFuture.completedFuture(Either.left(ichunkaccess));
         }
 
-        void doWork(WorldServer worldserver, ChunkGenerator<?> chunkgenerator, List<IChunkAccess> list, IChunkAccess ichunkaccess);
+        void doWork(WorldServer worldserver, ChunkGenerator chunkgenerator, List<IChunkAccess> list, IChunkAccess ichunkaccess);
     }
 
     interface c {
@@ -243,6 +249,6 @@ public class ChunkStatus {
 
     interface b {
 
-        CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> doWork(ChunkStatus chunkstatus, WorldServer worldserver, ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, LightEngineThreaded lightenginethreaded, Function<IChunkAccess, CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>>> function, List<IChunkAccess> list, IChunkAccess ichunkaccess);
+        CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> doWork(ChunkStatus chunkstatus, WorldServer worldserver, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, LightEngineThreaded lightenginethreaded, Function<IChunkAccess, CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>>> function, List<IChunkAccess> list, IChunkAccess ichunkaccess);
     }
 }

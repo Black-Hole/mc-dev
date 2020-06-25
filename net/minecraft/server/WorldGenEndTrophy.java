@@ -6,14 +6,14 @@ import java.util.Random;
 public class WorldGenEndTrophy extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     public static final BlockPosition a = BlockPosition.ZERO;
-    private final boolean aq;
+    private final boolean ac;
 
     public WorldGenEndTrophy(boolean flag) {
-        super(WorldGenFeatureEmptyConfiguration::a);
-        this.aq = flag;
+        super(WorldGenFeatureEmptyConfiguration.a);
+        this.ac = flag;
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         Iterator iterator = BlockPosition.a(new BlockPosition(blockposition.getX() - 4, blockposition.getY() - 1, blockposition.getZ() - 4), new BlockPosition(blockposition.getX() + 4, blockposition.getY() + 32, blockposition.getZ() + 4)).iterator();
 
         while (iterator.hasNext()) {
@@ -23,24 +23,24 @@ public class WorldGenEndTrophy extends WorldGenerator<WorldGenFeatureEmptyConfig
             if (flag || blockposition1.a((BaseBlockPosition) blockposition, 3.5D)) {
                 if (blockposition1.getY() < blockposition.getY()) {
                     if (flag) {
-                        this.a(generatoraccess, blockposition1, Blocks.BEDROCK.getBlockData());
+                        this.a(generatoraccessseed, blockposition1, Blocks.BEDROCK.getBlockData());
                     } else if (blockposition1.getY() < blockposition.getY()) {
-                        this.a(generatoraccess, blockposition1, Blocks.END_STONE.getBlockData());
+                        this.a(generatoraccessseed, blockposition1, Blocks.END_STONE.getBlockData());
                     }
                 } else if (blockposition1.getY() > blockposition.getY()) {
-                    this.a(generatoraccess, blockposition1, Blocks.AIR.getBlockData());
+                    this.a(generatoraccessseed, blockposition1, Blocks.AIR.getBlockData());
                 } else if (!flag) {
-                    this.a(generatoraccess, blockposition1, Blocks.BEDROCK.getBlockData());
-                } else if (this.aq) {
-                    this.a(generatoraccess, new BlockPosition(blockposition1), Blocks.END_PORTAL.getBlockData());
+                    this.a(generatoraccessseed, blockposition1, Blocks.BEDROCK.getBlockData());
+                } else if (this.ac) {
+                    this.a(generatoraccessseed, new BlockPosition(blockposition1), Blocks.END_PORTAL.getBlockData());
                 } else {
-                    this.a(generatoraccess, new BlockPosition(blockposition1), Blocks.AIR.getBlockData());
+                    this.a(generatoraccessseed, new BlockPosition(blockposition1), Blocks.AIR.getBlockData());
                 }
             }
         }
 
         for (int i = 0; i < 4; ++i) {
-            this.a(generatoraccess, blockposition.up(i), Blocks.BEDROCK.getBlockData());
+            this.a(generatoraccessseed, blockposition.up(i), Blocks.BEDROCK.getBlockData());
         }
 
         BlockPosition blockposition2 = blockposition.up(2);
@@ -49,7 +49,7 @@ public class WorldGenEndTrophy extends WorldGenerator<WorldGenFeatureEmptyConfig
         while (iterator1.hasNext()) {
             EnumDirection enumdirection = (EnumDirection) iterator1.next();
 
-            this.a(generatoraccess, blockposition2.shift(enumdirection), (IBlockData) Blocks.WALL_TORCH.getBlockData().set(BlockTorchWall.a, enumdirection));
+            this.a(generatoraccessseed, blockposition2.shift(enumdirection), (IBlockData) Blocks.WALL_TORCH.getBlockData().set(BlockTorchWall.a, enumdirection));
         }
 
         return true;

@@ -31,7 +31,7 @@ public class DataConverterVillagerTrade extends DataConverterNamedEntity {
             OpticFinder<?> opticfinder3 = type1.findField("buy");
             OpticFinder<?> opticfinder4 = type1.findField("buyB");
             OpticFinder<?> opticfinder5 = type1.findField("sell");
-            OpticFinder<Pair<String, String>> opticfinder6 = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString()));
+            OpticFinder<Pair<String, String>> opticfinder6 = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DataConverterSchemaNamed.a()));
             Function<Typed<?>, Typed<?>> function = (typed1) -> {
                 return this.a(opticfinder6, typed1);
             };

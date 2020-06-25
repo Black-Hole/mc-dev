@@ -2,11 +2,10 @@ package net.minecraft.server;
 
 import it.unimi.dsi.fastutil.shorts.ShortArrayList;
 import it.unimi.dsi.fastutil.shorts.ShortList;
-import java.util.BitSet;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
@@ -51,15 +50,15 @@ public interface IChunkAccess extends IBlockAccess, IStructureAccess {
 
     HeightMap a(HeightMap.Type heightmap_type);
 
-    int a(HeightMap.Type heightmap_type, int i, int j);
+    int getHighestBlock(HeightMap.Type heightmap_type, int i, int j);
 
     ChunkCoordIntPair getPos();
 
     void setLastSaved(long i);
 
-    Map<String, StructureStart> h();
+    Map<StructureGenerator<?>, StructureStart<?>> h();
 
-    void a(Map<String, StructureStart> map);
+    void a(Map<StructureGenerator<?>, StructureStart<?>> map);
 
     default boolean a(int i, int j) {
         if (i < 0) {
@@ -115,10 +114,6 @@ public interface IChunkAccess extends IBlockAccess, IStructureAccess {
     TickList<Block> n();
 
     TickList<FluidType> o();
-
-    default BitSet a(WorldGenStage.Features worldgenstage_features) {
-        throw (RuntimeException) SystemUtils.c(new RuntimeException("Meaningless in this context"));
-    }
 
     ChunkConverter p();
 

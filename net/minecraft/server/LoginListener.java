@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
-import io.netty.channel.ChannelFuture;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -45,7 +44,7 @@ public class LoginListener implements PacketLoginInListener {
         if (this.g == LoginListener.EnumProtocolState.READY_TO_ACCEPT) {
             this.c();
         } else if (this.g == LoginListener.EnumProtocolState.DELAY_ACCEPT) {
-            EntityPlayer entityplayer = this.server.getPlayerList().a(this.i.getId());
+            EntityPlayer entityplayer = this.server.getPlayerList().getPlayer(this.i.getId());
 
             if (entityplayer == null) {
                 this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
@@ -55,7 +54,7 @@ public class LoginListener implements PacketLoginInListener {
         }
 
         if (this.h++ == 600) {
-            this.disconnect(new ChatMessage("multiplayer.disconnect.slow_login", new Object[0]));
+            this.disconnect(new ChatMessage("multiplayer.disconnect.slow_login"));
         }
 
     }
@@ -87,14 +86,14 @@ public class LoginListener implements PacketLoginInListener {
             this.disconnect(ichatbasecomponent);
         } else {
             this.g = LoginListener.EnumProtocolState.ACCEPTED;
-            if (this.server.aA() >= 0 && !this.networkManager.isLocal()) {
-                this.networkManager.sendPacket(new PacketLoginOutSetCompression(this.server.aA()), (channelfuture) -> {
-                    this.networkManager.setCompressionLevel(this.server.aA());
+            if (this.server.av() >= 0 && !this.networkManager.isLocal()) {
+                this.networkManager.sendPacket(new PacketLoginOutSetCompression(this.server.av()), (channelfuture) -> {
+                    this.networkManager.setCompressionLevel(this.server.av());
                 });
             }
 
             this.networkManager.sendPacket(new PacketLoginOutSuccess(this.i));
-            EntityPlayer entityplayer = this.server.getPlayerList().a(this.i.getId());
+            EntityPlayer entityplayer = this.server.getPlayerList().getPlayer(this.i.getId());
 
             if (entityplayer != null) {
                 this.g = LoginListener.EnumProtocolState.DELAY_ACCEPT;
@@ -155,7 +154,7 @@ public class LoginListener implements PacketLoginInListener {
                             LoginListener.this.i = LoginListener.this.a(gameprofile);
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
                         } else {
-                            LoginListener.this.disconnect(new ChatMessage("multiplayer.disconnect.unverified_username", new Object[0]));
+                            LoginListener.this.disconnect(new ChatMessage("multiplayer.disconnect.unverified_username"));
                             LoginListener.LOGGER.error("Username '{}' tried to join with an invalid session", gameprofile.getName());
                         }
                     } catch (AuthenticationUnavailableException authenticationunavailableexception) {
@@ -164,7 +163,7 @@ public class LoginListener implements PacketLoginInListener {
                             LoginListener.this.i = LoginListener.this.a(gameprofile);
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
                         } else {
-                            LoginListener.this.disconnect(new ChatMessage("multiplayer.disconnect.authservers_down", new Object[0]));
+                            LoginListener.this.disconnect(new ChatMessage("multiplayer.disconnect.authservers_down"));
                             LoginListener.LOGGER.error("Couldn't verify username because servers are unavailable");
                         }
                     }
@@ -175,7 +174,7 @@ public class LoginListener implements PacketLoginInListener {
                 private InetAddress a() {
                     SocketAddress socketaddress = LoginListener.this.networkManager.getSocketAddress();
 
-                    return LoginListener.this.server.Y() && socketaddress instanceof InetSocketAddress ? ((InetSocketAddress) socketaddress).getAddress() : null;
+                    return LoginListener.this.server.U() && socketaddress instanceof InetSocketAddress ? ((InetSocketAddress) socketaddress).getAddress() : null;
                 }
             };
 
@@ -186,7 +185,7 @@ public class LoginListener implements PacketLoginInListener {
 
     @Override
     public void a(PacketLoginInCustomPayload packetloginincustompayload) {
-        this.disconnect(new ChatMessage("multiplayer.disconnect.unexpected_query_response", new Object[0]));
+        this.disconnect(new ChatMessage("multiplayer.disconnect.unexpected_query_response"));
     }
 
     protected GameProfile a(GameProfile gameprofile) {

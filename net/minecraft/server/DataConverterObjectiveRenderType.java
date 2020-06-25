@@ -2,12 +2,11 @@ package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.schemas.Schema;
-import com.mojang.datafixers.types.DynamicOps;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -30,7 +29,7 @@ public class DataConverterObjectiveRenderType extends DataFix {
             return this.fixTypeEverywhere("ObjectiveRenderTypeFix", type, (dynamicops) -> {
                 return (pair) -> {
                     return pair.mapSecond((dynamic) -> {
-                        Optional<String> optional = dynamic.get("RenderType").asString();
+                        Optional<String> optional = dynamic.get("RenderType").asString().result();
 
                         if (!optional.isPresent()) {
                             String s = dynamic.get("CriteriaName").asString("");

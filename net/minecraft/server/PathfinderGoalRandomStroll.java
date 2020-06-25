@@ -12,15 +12,21 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
     protected final double e;
     protected int f;
     protected boolean g;
+    private boolean h;
 
     public PathfinderGoalRandomStroll(EntityCreature entitycreature, double d0) {
         this(entitycreature, d0, 120);
     }
 
     public PathfinderGoalRandomStroll(EntityCreature entitycreature, double d0, int i) {
+        this(entitycreature, d0, i, true);
+    }
+
+    public PathfinderGoalRandomStroll(EntityCreature entitycreature, double d0, int i, boolean flag) {
         this.a = entitycreature;
         this.e = d0;
         this.f = i;
+        this.h = flag;
         this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
     }
 
@@ -30,7 +36,7 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
             return false;
         } else {
             if (!this.g) {
-                if (this.a.cL() >= 100) {
+                if (this.h && this.a.dc() >= 100) {
                     return false;
                 }
 

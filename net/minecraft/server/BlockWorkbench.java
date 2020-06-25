@@ -2,10 +2,10 @@ package net.minecraft.server;
 
 public class BlockWorkbench extends Block {
 
-    private static final IChatBaseComponent a = new ChatMessage("container.crafting", new Object[0]);
+    private static final IChatBaseComponent a = new ChatMessage("container.crafting");
 
-    protected BlockWorkbench(Block.Info block_info) {
-        super(block_info);
+    protected BlockWorkbench(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
@@ -15,7 +15,7 @@ public class BlockWorkbench extends Block {
         } else {
             entityhuman.openContainer(iblockdata.b(world, blockposition));
             entityhuman.a(StatisticList.INTERACT_WITH_CRAFTING_TABLE);
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.CONSUME;
         }
     }
 

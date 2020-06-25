@@ -1,34 +1,26 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
 import java.util.Random;
 
 public class DefinedStructureTestBlockState extends DefinedStructureRuleTest {
 
-    private final IBlockData a;
+    public static final Codec<DefinedStructureTestBlockState> a = IBlockData.b.fieldOf("block_state").xmap(DefinedStructureTestBlockState::new, (definedstructuretestblockstate) -> {
+        return definedstructuretestblockstate.b;
+    }).codec();
+    private final IBlockData b;
 
     public DefinedStructureTestBlockState(IBlockData iblockdata) {
-        this.a = iblockdata;
-    }
-
-    public <T> DefinedStructureTestBlockState(Dynamic<T> dynamic) {
-        this(IBlockData.a(dynamic.get("blockstate").orElseEmptyMap()));
+        this.b = iblockdata;
     }
 
     @Override
     public boolean a(IBlockData iblockdata, Random random) {
-        return iblockdata == this.a;
+        return iblockdata == this.b;
     }
 
     @Override
-    protected DefinedStructureRuleTestType a() {
-        return DefinedStructureRuleTestType.d;
-    }
-
-    @Override
-    protected <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("blockstate"), IBlockData.a(dynamicops, this.a).getValue())));
+    protected DefinedStructureRuleTestType<?> a() {
+        return DefinedStructureRuleTestType.c;
     }
 }

@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerImpossible implements CriterionTrigger<CriterionTriggerImpossible.a> {
@@ -24,14 +23,22 @@ public class CriterionTriggerImpossible implements CriterionTrigger<CriterionTri
     public void a(AdvancementDataPlayer advancementdataplayer) {}
 
     @Override
-    public CriterionTriggerImpossible.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerImpossible.a a(JsonObject jsonobject, LootDeserializationContext lootdeserializationcontext) {
         return new CriterionTriggerImpossible.a();
     }
 
-    public static class a extends CriterionInstanceAbstract {
+    public static class a implements CriterionInstance {
 
-        public a() {
-            super(CriterionTriggerImpossible.a);
+        public a() {}
+
+        @Override
+        public MinecraftKey a() {
+            return CriterionTriggerImpossible.a;
+        }
+
+        @Override
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            return new JsonObject();
         }
     }
 }

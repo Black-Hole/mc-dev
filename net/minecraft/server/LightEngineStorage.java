@@ -1,12 +1,12 @@
 package net.minecraft.server;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap.Entry;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap.Entry;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import javax.annotation.Nullable;
 
@@ -26,6 +26,7 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
     protected final Long2ObjectMap<NibbleArray> i = Long2ObjectMaps.synchronize(new Long2ObjectOpenHashMap());
     private final LongSet n = new LongOpenHashSet();
     private final LongSet o = new LongOpenHashSet();
+    private final LongSet p = new LongOpenHashSet();
     protected volatile boolean j;
 
     protected LightEngineStorage(EnumSkyBlock enumskyblock, ILightAccess ilightaccess, M m0) {
@@ -90,7 +91,7 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
 
     @Override
     protected int c(long i) {
-        return i == Long.MAX_VALUE ? 2 : (this.b.contains(i) ? 0 : (!this.o.contains(i) && this.f.b(i) ? 1 : 2));
+        return i == Long.MAX_VALUE ? 2 : (this.b.contains(i) ? 0 : (!this.p.contains(i) && this.f.b(i) ? 1 : 2));
     }
 
     @Override
@@ -113,8 +114,8 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
         }
 
         if (k >= 2 && j != 2) {
-            if (this.o.contains(i)) {
-                this.o.remove(i);
+            if (this.p.contains(i)) {
+                this.p.remove(i);
             } else {
                 this.f.a(i, this.j(i));
                 this.g.add(i);
@@ -131,10 +132,10 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
         }
 
         if (k != 2 && j >= 2) {
-            this.o.add(i);
+            this.p.add(i);
         }
 
-        this.j = !this.o.isEmpty();
+        this.j = !this.p.isEmpty();
     }
 
     protected NibbleArray j(long i) {
@@ -172,7 +173,7 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
 
     protected void a(LightEngineLayer<M, ?> lightenginelayer, boolean flag, boolean flag1) {
         if (this.a() || !this.i.isEmpty()) {
-            LongIterator longiterator = this.o.iterator();
+            LongIterator longiterator = this.p.iterator();
 
             long i;
             NibbleArray nibblearray;
@@ -183,7 +184,7 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
                 NibbleArray nibblearray1 = (NibbleArray) this.i.remove(i);
 
                 nibblearray = this.f.d(i);
-                if (this.n.contains(SectionPosition.f(i))) {
+                if (this.o.contains(SectionPosition.f(i))) {
                     if (nibblearray1 != null) {
                         this.i.put(i, nibblearray1);
                     } else if (nibblearray != null) {
@@ -193,14 +194,14 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
             }
 
             this.f.c();
-            longiterator = this.o.iterator();
+            longiterator = this.p.iterator();
 
             while (longiterator.hasNext()) {
                 i = (Long) longiterator.next();
                 this.l(i);
             }
 
-            this.o.clear();
+            this.p.clear();
             this.j = false;
             ObjectIterator objectiterator = this.i.long2ObjectEntrySet().iterator();
 
@@ -226,59 +227,18 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
 
                 while (longiterator.hasNext()) {
                     i = (Long) longiterator.next();
-                    if (this.g(i)) {
-                        int k = SectionPosition.c(SectionPosition.b(i));
-                        int l = SectionPosition.c(SectionPosition.c(i));
-                        int i1 = SectionPosition.c(SectionPosition.d(i));
-                        EnumDirection[] aenumdirection = LightEngineStorage.k;
-                        int j1 = aenumdirection.length;
+                    this.b(lightenginelayer, i);
+                }
+            } else {
+                longiterator = this.n.iterator();
 
-                        for (int k1 = 0; k1 < j1; ++k1) {
-                            EnumDirection enumdirection = aenumdirection[k1];
-                            long l1 = SectionPosition.a(i, enumdirection);
-
-                            if (!this.i.containsKey(l1) && this.g(l1)) {
-                                for (int i2 = 0; i2 < 16; ++i2) {
-                                    for (int j2 = 0; j2 < 16; ++j2) {
-                                        long k2;
-                                        long l2;
-
-                                        switch (enumdirection) {
-                                            case DOWN:
-                                                k2 = BlockPosition.a(k + j2, l, i1 + i2);
-                                                l2 = BlockPosition.a(k + j2, l - 1, i1 + i2);
-                                                break;
-                                            case UP:
-                                                k2 = BlockPosition.a(k + j2, l + 16 - 1, i1 + i2);
-                                                l2 = BlockPosition.a(k + j2, l + 16, i1 + i2);
-                                                break;
-                                            case NORTH:
-                                                k2 = BlockPosition.a(k + i2, l + j2, i1);
-                                                l2 = BlockPosition.a(k + i2, l + j2, i1 - 1);
-                                                break;
-                                            case SOUTH:
-                                                k2 = BlockPosition.a(k + i2, l + j2, i1 + 16 - 1);
-                                                l2 = BlockPosition.a(k + i2, l + j2, i1 + 16);
-                                                break;
-                                            case WEST:
-                                                k2 = BlockPosition.a(k, l + i2, i1 + j2);
-                                                l2 = BlockPosition.a(k - 1, l + i2, i1 + j2);
-                                                break;
-                                            default:
-                                                k2 = BlockPosition.a(k + 16 - 1, l + i2, i1 + j2);
-                                                l2 = BlockPosition.a(k + 16, l + i2, i1 + j2);
-                                        }
-
-                                        lightenginelayer.a(k2, l2, lightenginelayer.b(k2, l2, lightenginelayer.c(k2)), false);
-                                        lightenginelayer.a(l2, k2, lightenginelayer.b(l2, k2, lightenginelayer.c(l2)), false);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                while (longiterator.hasNext()) {
+                    i = (Long) longiterator.next();
+                    this.b(lightenginelayer, i);
                 }
             }
 
+            this.n.clear();
             objectiterator = this.i.long2ObjectEntrySet().iterator();
 
             while (objectiterator.hasNext()) {
@@ -286,6 +246,60 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
                 j = entry.getLongKey();
                 if (this.g(j)) {
                     objectiterator.remove();
+                }
+            }
+
+        }
+    }
+
+    private void b(LightEngineLayer<M, ?> lightenginelayer, long i) {
+        if (this.g(i)) {
+            int j = SectionPosition.c(SectionPosition.b(i));
+            int k = SectionPosition.c(SectionPosition.c(i));
+            int l = SectionPosition.c(SectionPosition.d(i));
+            EnumDirection[] aenumdirection = LightEngineStorage.k;
+            int i1 = aenumdirection.length;
+
+            for (int j1 = 0; j1 < i1; ++j1) {
+                EnumDirection enumdirection = aenumdirection[j1];
+                long k1 = SectionPosition.a(i, enumdirection);
+
+                if (!this.i.containsKey(k1) && this.g(k1)) {
+                    for (int l1 = 0; l1 < 16; ++l1) {
+                        for (int i2 = 0; i2 < 16; ++i2) {
+                            long j2;
+                            long k2;
+
+                            switch (enumdirection) {
+                                case DOWN:
+                                    j2 = BlockPosition.a(j + i2, k, l + l1);
+                                    k2 = BlockPosition.a(j + i2, k - 1, l + l1);
+                                    break;
+                                case UP:
+                                    j2 = BlockPosition.a(j + i2, k + 16 - 1, l + l1);
+                                    k2 = BlockPosition.a(j + i2, k + 16, l + l1);
+                                    break;
+                                case NORTH:
+                                    j2 = BlockPosition.a(j + l1, k + i2, l);
+                                    k2 = BlockPosition.a(j + l1, k + i2, l - 1);
+                                    break;
+                                case SOUTH:
+                                    j2 = BlockPosition.a(j + l1, k + i2, l + 16 - 1);
+                                    k2 = BlockPosition.a(j + l1, k + i2, l + 16);
+                                    break;
+                                case WEST:
+                                    j2 = BlockPosition.a(j, k + l1, l + i2);
+                                    k2 = BlockPosition.a(j - 1, k + l1, l + i2);
+                                    break;
+                                default:
+                                    j2 = BlockPosition.a(j + 16 - 1, k + l1, l + i2);
+                                    k2 = BlockPosition.a(j + 16, k + l1, l + i2);
+                            }
+
+                            lightenginelayer.a(j2, k2, lightenginelayer.b(j2, k2, lightenginelayer.c(j2)), false);
+                            lightenginelayer.a(k2, j2, lightenginelayer.b(k2, j2, lightenginelayer.c(k2)), false);
+                        }
+                    }
                 }
             }
 
@@ -300,16 +314,19 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
 
     public void c(long i, boolean flag) {
         if (flag) {
-            this.n.add(i);
+            this.o.add(i);
         } else {
-            this.n.remove(i);
+            this.o.remove(i);
         }
 
     }
 
-    protected void a(long i, @Nullable NibbleArray nibblearray) {
+    protected void a(long i, @Nullable NibbleArray nibblearray, boolean flag) {
         if (nibblearray != null) {
             this.i.put(i, nibblearray);
+            if (!flag) {
+                this.n.add(i);
+            }
         } else {
             this.i.remove(i);
         }

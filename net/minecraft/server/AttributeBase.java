@@ -1,54 +1,34 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
+public class AttributeBase {
 
-public abstract class AttributeBase implements IAttribute {
+    private final double a;
+    private boolean b;
+    private final String c;
 
-    private final IAttribute a;
-    private final String b;
-    private final double c;
-    private boolean d;
-
-    protected AttributeBase(@Nullable IAttribute iattribute, String s, double d0) {
-        this.a = iattribute;
-        this.b = s;
-        this.c = d0;
-        if (s == null) {
-            throw new IllegalArgumentException("Name cannot be null!");
-        }
+    protected AttributeBase(String s, double d0) {
+        this.a = d0;
+        this.c = s;
     }
 
-    @Override
-    public String getName() {
-        return this.b;
-    }
-
-    @Override
     public double getDefault() {
-        return this.c;
-    }
-
-    @Override
-    public boolean c() {
-        return this.d;
-    }
-
-    public AttributeBase a(boolean flag) {
-        this.d = flag;
-        return this;
-    }
-
-    @Nullable
-    @Override
-    public IAttribute d() {
         return this.a;
     }
 
-    public int hashCode() {
-        return this.b.hashCode();
+    public boolean b() {
+        return this.b;
     }
 
-    public boolean equals(Object object) {
-        return object instanceof IAttribute && this.b.equals(((IAttribute) object).getName());
+    public AttributeBase a(boolean flag) {
+        this.b = flag;
+        return this;
+    }
+
+    public double a(double d0) {
+        return d0;
+    }
+
+    public String getName() {
+        return this.c;
     }
 }

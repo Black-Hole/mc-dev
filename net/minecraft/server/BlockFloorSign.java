@@ -2,11 +2,11 @@ package net.minecraft.server;
 
 public class BlockFloorSign extends BlockSign {
 
-    public static final BlockStateInteger ROTATION = BlockProperties.aw;
+    public static final BlockStateInteger ROTATION = BlockProperties.aD;
 
-    public BlockFloorSign(Block.Info block_info, BlockPropertyWood blockpropertywood) {
-        super(block_info, blockpropertywood);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFloorSign.ROTATION, 0)).set(BlockFloorSign.a, false));
+    public BlockFloorSign(BlockBase.Info blockbase_info, BlockPropertyWood blockpropertywood) {
+        super(blockbase_info, blockpropertywood);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFloorSign.ROTATION, 0)).set(BlockFloorSign.a, false));
     }
 
     @Override

@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import java.io.File;
@@ -20,8 +19,8 @@ import org.apache.logging.log4j.Logger;
 public class CommandDebug {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.debug.notRunning", new Object[0]));
-    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.debug.alreadyRunning", new Object[0]));
+    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.debug.notRunning"));
+    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.debug.alreadyRunning"));
     @Nullable
     private static final FileSystemProvider d = (FileSystemProvider) FileSystemProvider.installedProviders().stream().filter((filesystemprovider) -> {
         return filesystemprovider.getScheme().equalsIgnoreCase("jar");
@@ -41,12 +40,11 @@ public class CommandDebug {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
-        GameProfiler gameprofiler = minecraftserver.getMethodProfiler();
 
-        if (gameprofiler.d().a()) {
+        if (minecraftserver.aQ()) {
             throw CommandDebug.c.create();
         } else {
-            minecraftserver.al();
+            minecraftserver.aR();
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.started", new Object[]{"Started the debug profiler. Type '/debug stop' to stop it."}), true);
             return 0;
         }
@@ -54,13 +52,12 @@ public class CommandDebug {
 
     private static int b(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
-        GameProfiler gameprofiler = minecraftserver.getMethodProfiler();
 
-        if (!gameprofiler.d().a()) {
+        if (!minecraftserver.aQ()) {
             throw CommandDebug.b.create();
         } else {
-            MethodProfilerResults methodprofilerresults = gameprofiler.d().b();
-            File file = new File(minecraftserver.d("debug"), "profile-results-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + ".txt");
+            MethodProfilerResults methodprofilerresults = minecraftserver.aS();
+            File file = new File(minecraftserver.c("debug"), "profile-results-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + ".txt");
 
             methodprofilerresults.a(file);
             float f = (float) methodprofilerresults.g() / 1.0E9F;
@@ -76,12 +73,12 @@ public class CommandDebug {
         String s = "debug-report-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date());
 
         try {
-            java.nio.file.Path java_nio_file_path = minecraftserver.d("debug").toPath();
+            java.nio.file.Path java_nio_file_path = minecraftserver.c("debug").toPath();
 
             Files.createDirectories(java_nio_file_path);
             java.nio.file.Path java_nio_file_path1;
 
-            if (!SharedConstants.b && CommandDebug.d != null) {
+            if (!SharedConstants.d && CommandDebug.d != null) {
                 java_nio_file_path1 = java_nio_file_path.resolve(s + ".zip");
                 FileSystem filesystem = CommandDebug.d.newFileSystem(java_nio_file_path1, ImmutableMap.of("create", "true"));
                 Throwable throwable = null;
@@ -114,7 +111,7 @@ public class CommandDebug {
             return 1;
         } catch (IOException ioexception) {
             CommandDebug.LOGGER.error("Failed to save debug dump", ioexception);
-            commandlistenerwrapper.sendFailureMessage(new ChatMessage("commands.debug.reportFailed", new Object[0]));
+            commandlistenerwrapper.sendFailureMessage(new ChatMessage("commands.debug.reportFailed"));
             return 0;
         }
     }

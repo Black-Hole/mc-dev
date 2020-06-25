@@ -1,116 +1,118 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class RemoteControlListener extends RemoteConnectionThread {
 
-    private final int h;
-    private String i;
-    private ServerSocket j;
-    private final String k;
-    private Map<SocketAddress, RemoteControlSession> l;
+    private static final Logger LOGGER = LogManager.getLogger();
+    private final int e;
+    private String f;
+    private ServerSocket g;
+    private final String h;
+    private final List<RemoteControlSession> i = Lists.newArrayList();
+    private final IMinecraftServer j;
 
     public RemoteControlListener(IMinecraftServer iminecraftserver) {
-        super(iminecraftserver, "RCON Listener");
+        super("RCON Listener");
+        this.j = iminecraftserver;
         DedicatedServerProperties dedicatedserverproperties = iminecraftserver.getDedicatedServerProperties();
 
-        this.h = dedicatedserverproperties.rconPort;
-        this.k = dedicatedserverproperties.rconPassword;
-        this.i = iminecraftserver.e_();
-        if (this.i.isEmpty()) {
-            this.i = "0.0.0.0";
+        this.e = dedicatedserverproperties.rconPort;
+        this.h = dedicatedserverproperties.rconPassword;
+        this.f = iminecraftserver.h_();
+        if (this.f.isEmpty()) {
+            this.f = "0.0.0.0";
         }
 
-        this.f();
-        this.j = null;
     }
 
-    private void f() {
-        this.l = Maps.newHashMap();
-    }
-
-    private void g() {
-        Iterator iterator = this.l.entrySet().iterator();
-
-        while (iterator.hasNext()) {
-            Entry<SocketAddress, RemoteControlSession> entry = (Entry) iterator.next();
-
-            if (!((RemoteControlSession) entry.getValue()).c()) {
-                iterator.remove();
-            }
-        }
-
+    private void d() {
+        this.i.removeIf((remotecontrolsession) -> {
+            return !remotecontrolsession.c();
+        });
     }
 
     public void run() {
-        this.b("RCON running on " + this.i + ":" + this.h);
+        RemoteControlListener.LOGGER.info("RCON running on {}:{}", this.f, this.e);
 
         try {
             while (this.a) {
                 try {
-                    Socket socket = this.j.accept();
-
-                    socket.setSoTimeout(500);
-                    RemoteControlSession remotecontrolsession = new RemoteControlSession(this.b, this.k, socket);
+                    Socket socket = this.g.accept();
+                    RemoteControlSession remotecontrolsession = new RemoteControlSession(this.j, this.h, socket);
 
                     remotecontrolsession.a();
-                    this.l.put(socket.getRemoteSocketAddress(), remotecontrolsession);
-                    this.g();
+                    this.i.add(remotecontrolsession);
+                    this.d();
                 } catch (SocketTimeoutException sockettimeoutexception) {
-                    this.g();
+                    this.d();
                 } catch (IOException ioexception) {
                     if (this.a) {
-                        this.b("IO: " + ioexception.getMessage());
+                        RemoteControlListener.LOGGER.info("IO exception: ", ioexception);
                     }
                 }
             }
         } finally {
-            this.b(this.j);
+            this.a(this.g);
         }
 
     }
 
     @Override
     public void a() {
-        if (this.k.isEmpty()) {
-            this.c("No rcon password set in server.properties, rcon disabled!");
-        } else if (0 < this.h && 65535 >= this.h) {
+        if (this.h.isEmpty()) {
+            RemoteControlListener.LOGGER.warn("No rcon password set in server.properties, rcon disabled!");
+        } else if (0 < this.e && 65535 >= this.e) {
             if (!this.a) {
                 try {
-                    this.j = new ServerSocket(this.h, 0, InetAddress.getByName(this.i));
-                    this.j.setSoTimeout(500);
+                    this.g = new ServerSocket(this.e, 0, InetAddress.getByName(this.f));
+                    this.g.setSoTimeout(500);
                     super.a();
                 } catch (IOException ioexception) {
-                    this.c("Unable to initialise rcon on " + this.i + ":" + this.h + " : " + ioexception.getMessage());
+                    RemoteControlListener.LOGGER.warn("Unable to initialise rcon on {}:{}", this.f, this.e, ioexception);
                 }
 
             }
         } else {
-            this.c("Invalid rcon port " + this.h + " found in server.properties, rcon disabled!");
+            RemoteControlListener.LOGGER.warn("Invalid rcon port {} found in server.properties, rcon disabled!", this.e);
         }
     }
 
     @Override
     public void b() {
+        this.a = false;
+        this.a(this.g);
         super.b();
-        Iterator iterator = this.l.entrySet().iterator();
+        Iterator iterator = this.i.iterator();
 
         while (iterator.hasNext()) {
-            Entry<SocketAddress, RemoteControlSession> entry = (Entry) iterator.next();
+            RemoteControlSession remotecontrolsession = (RemoteControlSession) iterator.next();
 
-            ((RemoteControlSession) entry.getValue()).b();
+            if (remotecontrolsession.c()) {
+                remotecontrolsession.b();
+            }
         }
 
-        this.b(this.j);
-        this.f();
+        this.i.clear();
+    }
+
+    private void a(ServerSocket serversocket) {
+        RemoteControlListener.LOGGER.debug("closeSocket: {}", serversocket);
+
+        try {
+            serversocket.close();
+        } catch (IOException ioexception) {
+            RemoteControlListener.LOGGER.warn("Failed to close socket", ioexception);
+        }
+
     }
 }

@@ -76,4 +76,7 @@ public class DataConverterTypes {
     public static final TypeReference BIOME = () -> {
         return "biome";
     };
+    public static final TypeReference WORLD_GEN_SETTINGS = () -> {
+        return "world_gen_settings";
+    };
 }

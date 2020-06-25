@@ -1,16 +1,16 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -19,33 +19,40 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Supplier;
 
-public class VillagePlaceSection implements MinecraftSerializable {
+public class VillagePlaceSection {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final Short2ObjectMap<VillagePlaceRecord> b = new Short2ObjectOpenHashMap();
-    private final Map<VillagePlaceType, Set<VillagePlaceRecord>> c = Maps.newHashMap();
+    private final Short2ObjectMap<VillagePlaceRecord> b;
+    private final Map<VillagePlaceType, Set<VillagePlaceRecord>> c;
     private final Runnable d;
     private boolean e;
 
-    public VillagePlaceSection(Runnable runnable) {
-        this.d = runnable;
-        this.e = true;
+    public static Codec<VillagePlaceSection> a(Runnable runnable) {
+        Codec codec = RecordCodecBuilder.create((instance) -> {
+            return instance.group(RecordCodecBuilder.point(runnable), Codec.BOOL.optionalFieldOf("Valid", false).forGetter((villageplacesection) -> {
+                return villageplacesection.e;
+            }), VillagePlaceRecord.a(runnable).listOf().fieldOf("Records").forGetter((villageplacesection) -> {
+                return ImmutableList.copyOf(villageplacesection.b.values());
+            })).apply(instance, VillagePlaceSection::new);
+        });
+        Logger logger = VillagePlaceSection.LOGGER;
+
+        logger.getClass();
+        return codec.withDefault(SystemUtils.a("Failed to read POI section: ", logger::error), () -> {
+            return new VillagePlaceSection(runnable, false, ImmutableList.of());
+        });
     }
 
-    public <T> VillagePlaceSection(Runnable runnable, Dynamic<T> dynamic) {
+    public VillagePlaceSection(Runnable runnable) {
+        this(runnable, true, ImmutableList.of());
+    }
+
+    private VillagePlaceSection(Runnable runnable, boolean flag, List<VillagePlaceRecord> list) {
+        this.b = new Short2ObjectOpenHashMap();
+        this.c = Maps.newHashMap();
         this.d = runnable;
-
-        try {
-            this.e = dynamic.get("Valid").asBoolean(false);
-            dynamic.get("Records").asStream().forEach((dynamic1) -> {
-                this.a(new VillagePlaceRecord(dynamic1, runnable));
-            });
-        } catch (Exception exception) {
-            VillagePlaceSection.LOGGER.error("Failed to load POI chunk", exception);
-            this.b();
-            this.e = false;
-        }
-
+        this.e = flag;
+        list.forEach(this::a);
     }
 
     public Stream<VillagePlaceRecord> a(Predicate<VillagePlaceType> predicate, VillagePlace.Occupancy villageplace_occupancy) {
@@ -126,15 +133,6 @@ public class VillagePlaceSection implements MinecraftSerializable {
         VillagePlaceRecord villageplacerecord = (VillagePlaceRecord) this.b.get(short0);
 
         return villageplacerecord != null ? Optional.of(villageplacerecord.g()) : Optional.empty();
-    }
-
-    @Override
-    public <T> T a(DynamicOps<T> dynamicops) {
-        T t0 = dynamicops.createList(this.b.values().stream().map((villageplacerecord) -> {
-            return villageplacerecord.a(dynamicops);
-        }));
-
-        return dynamicops.createMap(ImmutableMap.of(dynamicops.createString("Records"), t0, dynamicops.createString("Valid"), dynamicops.createBoolean(this.e)));
     }
 
     public void a(Consumer<BiConsumer<BlockPosition, VillagePlaceType>> consumer) {

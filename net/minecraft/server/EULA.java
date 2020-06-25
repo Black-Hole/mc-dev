@@ -15,7 +15,7 @@ public class EULA {
 
     public EULA(java.nio.file.Path java_nio_file_path) {
         this.b = java_nio_file_path;
-        this.c = SharedConstants.b || this.b();
+        this.c = SharedConstants.d || this.b();
     }
 
     private boolean b() {
@@ -61,7 +61,7 @@ public class EULA {
     }
 
     private void c() {
-        if (!SharedConstants.b) {
+        if (!SharedConstants.d) {
             try {
                 OutputStream outputstream = Files.newOutputStream(this.b);
                 Throwable throwable = null;

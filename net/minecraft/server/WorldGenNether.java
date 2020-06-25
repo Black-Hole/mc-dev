@@ -1,57 +1,39 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenNether extends StructureGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    private static final List<BiomeBase.BiomeMeta> a = Lists.newArrayList(new BiomeBase.BiomeMeta[]{new BiomeBase.BiomeMeta(EntityTypes.BLAZE, 10, 2, 3), new BiomeBase.BiomeMeta(EntityTypes.ZOMBIE_PIGMAN, 5, 4, 4), new BiomeBase.BiomeMeta(EntityTypes.WITHER_SKELETON, 8, 5, 5), new BiomeBase.BiomeMeta(EntityTypes.SKELETON, 2, 5, 5), new BiomeBase.BiomeMeta(EntityTypes.MAGMA_CUBE, 3, 4, 4)});
+    private static final List<BiomeBase.BiomeMeta> u = Lists.newArrayList(new BiomeBase.BiomeMeta[]{new BiomeBase.BiomeMeta(EntityTypes.BLAZE, 10, 2, 3), new BiomeBase.BiomeMeta(EntityTypes.ZOMBIFIED_PIGLIN, 5, 4, 4), new BiomeBase.BiomeMeta(EntityTypes.WITHER_SKELETON, 8, 5, 5), new BiomeBase.BiomeMeta(EntityTypes.SKELETON, 2, 5, 5), new BiomeBase.BiomeMeta(EntityTypes.MAGMA_CUBE, 3, 4, 4)});
 
-    public WorldGenNether(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
-        super(function);
+    public WorldGenNether(Codec<WorldGenFeatureEmptyConfiguration> codec) {
+        super(codec);
+    }
+
+    protected boolean a(ChunkGenerator chunkgenerator, WorldChunkManager worldchunkmanager, long i, SeededRandom seededrandom, int j, int k, BiomeBase biomebase, ChunkCoordIntPair chunkcoordintpair, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+        return seededrandom.nextInt(5) < 2;
     }
 
     @Override
-    public boolean a(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, Random random, int i, int j, BiomeBase biomebase) {
-        int k = i >> 4;
-        int l = j >> 4;
-
-        random.setSeed((long) (k ^ l << 4) ^ chunkgenerator.getSeed());
-        random.nextInt();
-        return random.nextInt(3) != 0 ? false : (i != (k << 4) + 4 + random.nextInt(8) ? false : (j != (l << 4) + 4 + random.nextInt(8) ? false : chunkgenerator.canSpawnStructure(biomebase, this)));
-    }
-
-    @Override
-    public StructureGenerator.a a() {
+    public StructureGenerator.a<WorldGenFeatureEmptyConfiguration> a() {
         return WorldGenNether.a::new;
     }
 
     @Override
-    public String b() {
-        return "Fortress";
+    public List<BiomeBase.BiomeMeta> c() {
+        return WorldGenNether.u;
     }
 
-    @Override
-    public int c() {
-        return 8;
-    }
+    public static class a extends StructureStart<WorldGenFeatureEmptyConfiguration> {
 
-    @Override
-    public List<BiomeBase.BiomeMeta> e() {
-        return WorldGenNether.a;
-    }
-
-    public static class a extends StructureStart {
-
-        public a(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+        public a(StructureGenerator<WorldGenFeatureEmptyConfiguration> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
             super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
-        @Override
-        public void a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase) {
+        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
             WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15 = new WorldGenNetherPieces.WorldGenNetherPiece15(this.d, (i << 4) + 2, (j << 4) + 2);
 
             this.b.add(worldgennetherpieces_worldgennetherpiece15);

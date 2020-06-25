@@ -127,8 +127,8 @@ public abstract class VoxelShape {
     }
 
     private VoxelShape b(EnumDirection enumdirection) {
-        EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.m();
-        EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection = enumdirection.d();
+        EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.n();
+        EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection = enumdirection.e();
         DoubleList doublelist = this.a(enumdirection_enumaxis);
 
         if (doublelist.size() == 2 && DoubleMath.fuzzyEquals(doublelist.getDouble(0), 0.0D, 1.0E-7D) && DoubleMath.fuzzyEquals(doublelist.getDouble(1), 1.0D, 1.0E-7D)) {

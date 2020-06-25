@@ -11,20 +11,23 @@ public class LootSelectorEmpty extends LootSelectorEntry {
     }
 
     @Override
+    public LootEntryType a() {
+        return LootEntries.a;
+    }
+
+    @Override
     public void a(Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {}
 
-    public static LootSelectorEntry.a<?> a() {
+    public static LootSelectorEntry.a<?> b() {
         return a(LootSelectorEmpty::new);
     }
 
     public static class a extends LootSelectorEntry.e<LootSelectorEmpty> {
 
-        public a() {
-            super(new MinecraftKey("empty"), LootSelectorEmpty.class);
-        }
+        public a() {}
 
         @Override
-        protected LootSelectorEmpty b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
+        public LootSelectorEmpty b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
             return new LootSelectorEmpty(i, j, alootitemcondition, alootitemfunction);
         }
     }

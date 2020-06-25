@@ -18,7 +18,7 @@ public class PathfinderGoalLlamaFollow extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        if (!this.a.isLeashed() && !this.a.fd()) {
+        if (!this.a.isLeashed() && !this.a.fD()) {
             List<Entity> list = this.a.world.getEntities(this.a, this.a.getBoundingBox().grow(9.0D, 4.0D, 9.0D), (entity) -> {
                 EntityTypes<?> entitytypes = entity.getEntityType();
 
@@ -35,7 +35,7 @@ public class PathfinderGoalLlamaFollow extends PathfinderGoal {
             while (iterator.hasNext()) {
                 entity = (Entity) iterator.next();
                 entityllama1 = (EntityLlama) entity;
-                if (entityllama1.fd() && !entityllama1.fc()) {
+                if (entityllama1.fD() && !entityllama1.fC()) {
                     d1 = this.a.h((Entity) entityllama1);
                     if (d1 <= d0) {
                         d0 = d1;
@@ -50,7 +50,7 @@ public class PathfinderGoalLlamaFollow extends PathfinderGoal {
                 while (iterator.hasNext()) {
                     entity = (Entity) iterator.next();
                     entityllama1 = (EntityLlama) entity;
-                    if (entityllama1.isLeashed() && !entityllama1.fc()) {
+                    if (entityllama1.isLeashed() && !entityllama1.fC()) {
                         d1 = this.a.h((Entity) entityllama1);
                         if (d1 <= d0) {
                             d0 = d1;
@@ -77,8 +77,8 @@ public class PathfinderGoalLlamaFollow extends PathfinderGoal {
 
     @Override
     public boolean b() {
-        if (this.a.fd() && this.a.fe().isAlive() && this.a(this.a, 0)) {
-            double d0 = this.a.h((Entity) this.a.fe());
+        if (this.a.fD() && this.a.fE().isAlive() && this.a(this.a, 0)) {
+            double d0 = this.a.h((Entity) this.a.fE());
 
             if (d0 > 676.0D) {
                 if (this.b <= 3.0D) {
@@ -104,14 +104,14 @@ public class PathfinderGoalLlamaFollow extends PathfinderGoal {
 
     @Override
     public void d() {
-        this.a.fb();
+        this.a.fB();
         this.b = 2.1D;
     }
 
     @Override
     public void e() {
-        if (this.a.fd()) {
-            EntityLlama entityllama = this.a.fe();
+        if (this.a.fD()) {
+            EntityLlama entityllama = this.a.fE();
             double d0 = (double) this.a.g((Entity) entityllama);
             float f = 2.0F;
             Vec3D vec3d = (new Vec3D(entityllama.locX() - this.a.locX(), entityllama.locY() - this.a.locY(), entityllama.locZ() - this.a.locZ())).d().a(Math.max(d0 - 2.0D, 0.0D));
@@ -123,11 +123,11 @@ public class PathfinderGoalLlamaFollow extends PathfinderGoal {
     private boolean a(EntityLlama entityllama, int i) {
         if (i > 8) {
             return false;
-        } else if (entityllama.fd()) {
-            if (entityllama.fe().isLeashed()) {
+        } else if (entityllama.fD()) {
+            if (entityllama.fE().isLeashed()) {
                 return true;
             } else {
-                EntityLlama entityllama1 = entityllama.fe();
+                EntityLlama entityllama1 = entityllama.fE();
 
                 ++i;
                 return this.a(entityllama1, i);

@@ -1,17 +1,16 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenFeatureComposite extends WorldGenerator<WorldGenFeatureCompositeConfiguration> {
 
-    public WorldGenFeatureComposite(Function<Dynamic<?>, ? extends WorldGenFeatureCompositeConfiguration> function) {
-        super(function);
+    public WorldGenFeatureComposite(Codec<WorldGenFeatureCompositeConfiguration> codec) {
+        super(codec);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureCompositeConfiguration worldgenfeaturecompositeconfiguration) {
-        return worldgenfeaturecompositeconfiguration.b.a(generatoraccess, chunkgenerator, random, blockposition, worldgenfeaturecompositeconfiguration.a);
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureCompositeConfiguration worldgenfeaturecompositeconfiguration) {
+        return worldgenfeaturecompositeconfiguration.c.a(generatoraccessseed, structuremanager, chunkgenerator, random, blockposition, worldgenfeaturecompositeconfiguration.b);
     }
 
     public String toString() {

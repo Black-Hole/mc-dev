@@ -8,6 +8,14 @@ public abstract class MovingObjectPosition {
         this.pos = vec3d;
     }
 
+    public double a(Entity entity) {
+        double d0 = this.pos.x - entity.locX();
+        double d1 = this.pos.y - entity.locY();
+        double d2 = this.pos.z - entity.locZ();
+
+        return d0 * d0 + d1 * d1 + d2 * d2;
+    }
+
     public abstract MovingObjectPosition.EnumMovingObjectType getType();
 
     public Vec3D getPos() {

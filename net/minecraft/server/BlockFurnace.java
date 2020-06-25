@@ -3,16 +3,11 @@ package net.minecraft.server;
 public abstract class BlockFurnace extends BlockTileEntity {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
-    public static final BlockStateBoolean LIT = BlockRedstoneTorch.LIT;
+    public static final BlockStateBoolean LIT = BlockProperties.r;
 
-    protected BlockFurnace(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFurnace.FACING, EnumDirection.NORTH)).set(BlockFurnace.LIT, false));
-    }
-
-    @Override
-    public int a(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockFurnace.LIT) ? super.a(iblockdata) : 0;
+    protected BlockFurnace(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFurnace.FACING, EnumDirection.NORTH)).set(BlockFurnace.LIT, false));
     }
 
     @Override
@@ -21,7 +16,7 @@ public abstract class BlockFurnace extends BlockTileEntity {
             return EnumInteractionResult.SUCCESS;
         } else {
             this.a(world, blockposition, entityhuman);
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.CONSUME;
         }
     }
 
@@ -46,11 +41,12 @@ public abstract class BlockFurnace extends BlockTileEntity {
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!iblockdata.a(iblockdata1.getBlock())) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityFurnace) {
                 InventoryUtils.dropInventory(world, blockposition, (TileEntityFurnace) tileentity);
+                ((TileEntityFurnace) tileentity).a(world, Vec3D.a((BaseBlockPosition) blockposition));
                 world.updateAdjacentComparators(blockposition, this);
             }
 
@@ -69,7 +65,7 @@ public abstract class BlockFurnace extends BlockTileEntity {
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 

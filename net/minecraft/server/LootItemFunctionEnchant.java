@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -13,17 +14,24 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class LootItemFunctionEnchant extends LootItemFunctionConditional {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final List<Enchantment> c;
+    private final List<Enchantment> b;
 
     private LootItemFunctionEnchant(LootItemCondition[] alootitemcondition, Collection<Enchantment> collection) {
         super(alootitemcondition);
-        this.c = ImmutableList.copyOf(collection);
+        this.b = ImmutableList.copyOf(collection);
+    }
+
+    @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.d;
     }
 
     @Override
@@ -31,17 +39,11 @@ public class LootItemFunctionEnchant extends LootItemFunctionConditional {
         Random random = loottableinfo.a();
         Enchantment enchantment;
 
-        if (this.c.isEmpty()) {
-            List<Enchantment> list = Lists.newArrayList();
-            Iterator iterator = IRegistry.ENCHANTMENT.iterator();
-
-            while (iterator.hasNext()) {
-                Enchantment enchantment1 = (Enchantment) iterator.next();
-
-                if (itemstack.getItem() == Items.BOOK || enchantment1.canEnchant(itemstack)) {
-                    list.add(enchantment1);
-                }
-            }
+        if (this.b.isEmpty()) {
+            boolean flag = itemstack.getItem() == Items.BOOK;
+            List<Enchantment> list = (List) IRegistry.ENCHANTMENT.e().filter(Enchantment::i).filter((enchantment1) -> {
+                return flag || enchantment1.canEnchant(itemstack);
+            }).collect(Collectors.toList());
 
             if (list.isEmpty()) {
                 LootItemFunctionEnchant.LOGGER.warn("Couldn't find a compatible enchantment for {}", itemstack);
@@ -50,9 +52,13 @@ public class LootItemFunctionEnchant extends LootItemFunctionConditional {
 
             enchantment = (Enchantment) list.get(random.nextInt(list.size()));
         } else {
-            enchantment = (Enchantment) this.c.get(random.nextInt(this.c.size()));
+            enchantment = (Enchantment) this.b.get(random.nextInt(this.b.size()));
         }
 
+        return a(itemstack, enchantment, random);
+    }
+
+    private static ItemStack a(ItemStack itemstack, Enchantment enchantment, Random random) {
         int i = MathHelper.nextInt(random, enchantment.getStartLevel(), enchantment.getMaxLevel());
 
         if (itemstack.getItem() == Items.BOOK) {
@@ -65,7 +71,7 @@ public class LootItemFunctionEnchant extends LootItemFunctionConditional {
         return itemstack;
     }
 
-    public static LootItemFunctionConditional.a<?> c() {
+    public static LootItemFunctionConditional.a<?> d() {
         return a((alootitemcondition) -> {
             return new LootItemFunctionEnchant(alootitemcondition, ImmutableList.of());
         });
@@ -73,15 +79,13 @@ public class LootItemFunctionEnchant extends LootItemFunctionConditional {
 
     public static class b extends LootItemFunctionConditional.c<LootItemFunctionEnchant> {
 
-        public b() {
-            super(new MinecraftKey("enchant_randomly"), LootItemFunctionEnchant.class);
-        }
+        public b() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionEnchant lootitemfunctionenchant, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionenchant, jsonserializationcontext);
-            if (!lootitemfunctionenchant.c.isEmpty()) {
+            if (!lootitemfunctionenchant.b.isEmpty()) {
                 JsonArray jsonarray = new JsonArray();
-                Iterator iterator = lootitemfunctionenchant.c.iterator();
+                Iterator iterator = lootitemfunctionenchant.b.iterator();
 
                 while (iterator.hasNext()) {
                     Enchantment enchantment = (Enchantment) iterator.next();
@@ -119,6 +123,28 @@ public class LootItemFunctionEnchant extends LootItemFunctionConditional {
             }
 
             return new LootItemFunctionEnchant(alootitemcondition, list);
+        }
+    }
+
+    public static class a extends LootItemFunctionConditional.a<LootItemFunctionEnchant.a> {
+
+        private final Set<Enchantment> a = Sets.newHashSet();
+
+        public a() {}
+
+        @Override
+        protected LootItemFunctionEnchant.a d() {
+            return this;
+        }
+
+        public LootItemFunctionEnchant.a a(Enchantment enchantment) {
+            this.a.add(enchantment);
+            return this;
+        }
+
+        @Override
+        public LootItemFunction b() {
+            return new LootItemFunctionEnchant(this.g(), this.a);
         }
     }
 }

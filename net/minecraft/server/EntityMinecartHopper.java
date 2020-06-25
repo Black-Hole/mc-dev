@@ -62,17 +62,17 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
     }
 
     @Override
-    public double z() {
+    public double x() {
         return this.locX();
     }
 
     @Override
-    public double A() {
+    public double z() {
         return this.locY() + 0.5D;
     }
 
     @Override
-    public double B() {
+    public double A() {
         return this.locZ();
     }
 
@@ -80,7 +80,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
     public void tick() {
         super.tick();
         if (!this.world.isClientSide && this.isAlive() && this.isEnabled()) {
-            BlockPosition blockposition = new BlockPosition(this);
+            BlockPosition blockposition = this.getChunkCoordinates();
 
             if (blockposition.equals(this.f)) {
                 --this.e;
@@ -88,9 +88,9 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
                 this.setCooldown(0);
             }
 
-            if (!this.D()) {
+            if (!this.C()) {
                 this.setCooldown(0);
-                if (this.C()) {
+                if (this.B()) {
                     this.setCooldown(4);
                     this.update();
                 }
@@ -99,7 +99,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
 
     }
 
-    public boolean C() {
+    public boolean B() {
         if (TileEntityHopper.a((IHopper) this)) {
             return true;
         } else {
@@ -123,15 +123,15 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
     }
 
     @Override
-    protected void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    protected void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setInt("TransferCooldown", this.e);
         nbttagcompound.setBoolean("Enabled", this.d);
     }
 
     @Override
-    protected void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    protected void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.e = nbttagcompound.getInt("TransferCooldown");
         this.d = nbttagcompound.hasKey("Enabled") ? nbttagcompound.getBoolean("Enabled") : true;
     }
@@ -140,7 +140,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
         this.e = i;
     }
 
-    public boolean D() {
+    public boolean C() {
         return this.e > 0;
     }
 

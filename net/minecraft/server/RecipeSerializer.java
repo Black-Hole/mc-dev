@@ -24,6 +24,7 @@ public interface RecipeSerializer<T extends IRecipe<?>> {
     RecipeSerializerCooking<RecipeSmoking> r = (RecipeSerializerCooking) a("smoking", (RecipeSerializer) (new RecipeSerializerCooking<>(RecipeSmoking::new, 100)));
     RecipeSerializerCooking<RecipeCampfire> s = (RecipeSerializerCooking) a("campfire_cooking", (RecipeSerializer) (new RecipeSerializerCooking<>(RecipeCampfire::new, 100)));
     RecipeSerializer<RecipeStonecutting> t = a("stonecutting", (RecipeSerializer) (new RecipeSingleItem.a<>(RecipeStonecutting::new)));
+    RecipeSerializer<RecipeSmithing> u = a("smithing", (RecipeSerializer) (new RecipeSmithing.a()));
 
     T a(MinecraftKey minecraftkey, JsonObject jsonobject);
 

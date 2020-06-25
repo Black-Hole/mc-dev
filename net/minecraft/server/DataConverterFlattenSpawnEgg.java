@@ -10,7 +10,6 @@ import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -71,8 +70,8 @@ public class DataConverterFlattenSpawnEgg extends DataFix {
 
     public TypeRewriteRule makeRule() {
         Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString()));
-        OpticFinder<String> opticfinder1 = DSL.fieldFinder("id", DSL.namespacedString());
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DataConverterSchemaNamed.a()));
+        OpticFinder<String> opticfinder1 = DSL.fieldFinder("id", DataConverterSchemaNamed.a());
         OpticFinder<?> opticfinder2 = type.findField("tag");
         OpticFinder<?> opticfinder3 = opticfinder2.type().findField("EntityTag");
 

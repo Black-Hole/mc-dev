@@ -9,11 +9,11 @@ public class PacketPlayOutSetSlot implements Packet<PacketListenerPlayOut> {
     private ItemStack c;
 
     public PacketPlayOutSetSlot() {
-        this.c = ItemStack.a;
+        this.c = ItemStack.b;
     }
 
     public PacketPlayOutSetSlot(int i, int j, ItemStack itemstack) {
-        this.c = ItemStack.a;
+        this.c = ItemStack.b;
         this.a = i;
         this.b = j;
         this.c = itemstack.cloneItemStack();

@@ -55,4 +55,8 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
         this.e.setGoalTarget(this.c);
         super.c();
     }
+
+    public void a(@Nullable EntityLiving entityliving) {
+        this.c = entityliving;
+    }
 }

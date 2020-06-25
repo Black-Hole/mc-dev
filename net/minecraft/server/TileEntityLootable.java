@@ -22,7 +22,7 @@ public abstract class TileEntityLootable extends TileEntityContainer {
 
     }
 
-    protected boolean d(NBTTagCompound nbttagcompound) {
+    protected boolean b(NBTTagCompound nbttagcompound) {
         if (nbttagcompound.hasKeyOfType("LootTable", 8)) {
             this.lootTable = new MinecraftKey(nbttagcompound.getString("LootTable"));
             this.lootTableSeed = nbttagcompound.getLong("LootTableSeed");
@@ -32,7 +32,7 @@ public abstract class TileEntityLootable extends TileEntityContainer {
         }
     }
 
-    protected boolean e(NBTTagCompound nbttagcompound) {
+    protected boolean c(NBTTagCompound nbttagcompound) {
         if (this.lootTable == null) {
             return false;
         } else {
@@ -49,11 +49,15 @@ public abstract class TileEntityLootable extends TileEntityContainer {
         if (this.lootTable != null && this.world.getMinecraftServer() != null) {
             LootTable loottable = this.world.getMinecraftServer().getLootTableRegistry().getLootTable(this.lootTable);
 
+            if (entityhuman instanceof EntityPlayer) {
+                CriterionTriggers.N.a((EntityPlayer) entityhuman, this.lootTable);
+            }
+
             this.lootTable = null;
             LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).set(LootContextParameters.POSITION, new BlockPosition(this.position)).a(this.lootTableSeed);
 
             if (entityhuman != null) {
-                loottableinfo_builder.a(entityhuman.eA()).set(LootContextParameters.THIS_ENTITY, entityhuman);
+                loottableinfo_builder.a(entityhuman.eU()).set(LootContextParameters.THIS_ENTITY, entityhuman);
             }
 
             loottable.fillInventory(this, loottableinfo_builder.build(LootContextParameterSets.CHEST));

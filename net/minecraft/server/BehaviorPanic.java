@@ -8,7 +8,7 @@ public class BehaviorPanic extends Behavior<EntityVillager> {
         super(ImmutableMap.of());
     }
 
-    protected boolean g(WorldServer worldserver, EntityVillager entityvillager, long i) {
+    protected boolean b(WorldServer worldserver, EntityVillager entityvillager, long i) {
         return b(entityvillager) || a(entityvillager);
     }
 

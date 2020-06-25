@@ -58,7 +58,7 @@ public abstract class FluidTypeWater extends FluidTypeFlowing {
 
     @Override
     public boolean a(Fluid fluid, IBlockAccess iblockaccess, BlockPosition blockposition, FluidType fluidtype, EnumDirection enumdirection) {
-        return enumdirection == EnumDirection.DOWN && !fluidtype.a(TagsFluid.WATER);
+        return enumdirection == EnumDirection.DOWN && !fluidtype.a((Tag) TagsFluid.WATER);
     }
 
     @Override

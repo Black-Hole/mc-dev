@@ -17,12 +17,12 @@ import java.util.concurrent.CompletableFuture;
 public class ArgumentEntity implements ArgumentType<EntitySelector> {
 
     private static final Collection<String> g = Arrays.asList("Player", "0123", "@e", "@e[type=foo]", "dd12be42-52a9-4a91-a8a1-11c01849e498");
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.entity.toomany", new Object[0]));
-    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.player.toomany", new Object[0]));
-    public static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.player.entities", new Object[0]));
-    public static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("argument.entity.notfound.entity", new Object[0]));
-    public static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("argument.entity.notfound.player", new Object[0]));
-    public static final SimpleCommandExceptionType f = new SimpleCommandExceptionType(new ChatMessage("argument.entity.selector.not_allowed", new Object[0]));
+    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.entity.toomany"));
+    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.player.toomany"));
+    public static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.player.entities"));
+    public static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("argument.entity.notfound.entity"));
+    public static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("argument.entity.notfound.player"));
+    public static final SimpleCommandExceptionType f = new SimpleCommandExceptionType(new ChatMessage("argument.entity.selector.not_allowed"));
     private final boolean h;
     private final boolean i;
 
@@ -120,7 +120,7 @@ public class ArgumentEntity implements ArgumentType<EntitySelector> {
 
             return argumentparserselector.a(suggestionsbuilder, (suggestionsbuilder1) -> {
                 Collection<String> collection = icompletionprovider.l();
-                Iterable<String> iterable = this.i ? collection : Iterables.concat(collection, icompletionprovider.p());
+                Iterable<String> iterable = this.i ? collection : Iterables.concat(collection, icompletionprovider.r());
 
                 ICompletionProvider.b((Iterable) iterable, suggestionsbuilder1);
             });

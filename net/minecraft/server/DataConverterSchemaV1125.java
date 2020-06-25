@@ -25,10 +25,10 @@ public class DataConverterSchemaV1125 extends DataConverterSchemaNamed {
             return DSL.optionalFields("minecraft:adventure/adventuring_time", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.BIOME.in(schema), DSL.constType(DSL.string()))), "minecraft:adventure/kill_a_mob", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.ENTITY_NAME.in(schema), DSL.constType(DSL.string()))), "minecraft:adventure/kill_all_mobs", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.ENTITY_NAME.in(schema), DSL.constType(DSL.string()))), "minecraft:husbandry/bred_all_animals", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.ENTITY_NAME.in(schema), DSL.constType(DSL.string()))));
         });
         schema.registerType(false, DataConverterTypes.BIOME, () -> {
-            return DSL.constType(DSL.namespacedString());
+            return DSL.constType(a());
         });
         schema.registerType(false, DataConverterTypes.ENTITY_NAME, () -> {
-            return DSL.constType(DSL.namespacedString());
+            return DSL.constType(a());
         });
     }
 }

@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerItemDurabilityChanged extends CriterionTriggerAbstract<CriterionTriggerItemDurabilityChanged.a> {
@@ -16,16 +14,16 @@ public class CriterionTriggerItemDurabilityChanged extends CriterionTriggerAbstr
     }
 
     @Override
-    public CriterionTriggerItemDurabilityChanged.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerItemDurabilityChanged.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
         CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("durability"));
         CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1 = CriterionConditionValue.IntegerRange.a(jsonobject.get("delta"));
 
-        return new CriterionTriggerItemDurabilityChanged.a(criterionconditionitem, criterionconditionvalue_integerrange, criterionconditionvalue_integerrange1);
+        return new CriterionTriggerItemDurabilityChanged.a(criterionconditionentity_b, criterionconditionitem, criterionconditionvalue_integerrange, criterionconditionvalue_integerrange1);
     }
 
     public void a(EntityPlayer entityplayer, ItemStack itemstack, int i) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggeritemdurabilitychanged_a) -> {
+        this.a(entityplayer, (criteriontriggeritemdurabilitychanged_a) -> {
             return criteriontriggeritemdurabilitychanged_a.a(itemstack, i);
         });
     }
@@ -36,15 +34,15 @@ public class CriterionTriggerItemDurabilityChanged extends CriterionTriggerAbstr
         private final CriterionConditionValue.IntegerRange b;
         private final CriterionConditionValue.IntegerRange c;
 
-        public a(CriterionConditionItem criterionconditionitem, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1) {
-            super(CriterionTriggerItemDurabilityChanged.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionItem criterionconditionitem, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1) {
+            super(CriterionTriggerItemDurabilityChanged.a, criterionconditionentity_b);
             this.a = criterionconditionitem;
             this.b = criterionconditionvalue_integerrange;
             this.c = criterionconditionvalue_integerrange1;
         }
 
-        public static CriterionTriggerItemDurabilityChanged.a a(CriterionConditionItem criterionconditionitem, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
-            return new CriterionTriggerItemDurabilityChanged.a(criterionconditionitem, criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange.e);
+        public static CriterionTriggerItemDurabilityChanged.a a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionItem criterionconditionitem, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
+            return new CriterionTriggerItemDurabilityChanged.a(criterionconditionentity_b, criterionconditionitem, criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange.e);
         }
 
         public boolean a(ItemStack itemstack, int i) {
@@ -52,8 +50,8 @@ public class CriterionTriggerItemDurabilityChanged extends CriterionTriggerAbstr
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             jsonobject.add("item", this.a.a());
             jsonobject.add("durability", this.b.d());

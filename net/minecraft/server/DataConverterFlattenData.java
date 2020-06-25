@@ -1,7 +1,7 @@
 package net.minecraft.server;
 
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Dynamic;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.apache.logging.log4j.LogManager;

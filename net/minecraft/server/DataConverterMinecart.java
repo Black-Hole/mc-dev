@@ -3,17 +3,15 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
-import com.mojang.datafixers.types.DynamicOps;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.types.templates.TaggedChoice.TaggedChoiceType;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class DataConverterMinecart extends DataFix {
 
@@ -43,7 +41,9 @@ public class DataConverterMinecart extends DataFix {
                         s = "MinecartRideable";
                     }
 
-                    return Pair.of(s, ((Optional) ((Type) taggedchoicetype1.types().get(s)).read(typed.write()).getSecond()).orElseThrow(() -> {
+                    return Pair.of(s, typed.write().map((dynamic1) -> {
+                        return ((Type) taggedchoicetype1.types().get(s)).read(dynamic1);
+                    }).result().orElseThrow(() -> {
                         return new IllegalStateException("Could not read the new minecart.");
                     }));
                 }

@@ -2,13 +2,10 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -31,7 +28,7 @@ public class AdvancementRewards {
 
     public void a(EntityPlayer entityplayer) {
         entityplayer.giveExp(this.b);
-        LootTableInfo loottableinfo = (new LootTableInfo.Builder(entityplayer.getWorldServer())).set(LootContextParameters.THIS_ENTITY, entityplayer).set(LootContextParameters.POSITION, new BlockPosition(entityplayer)).a(entityplayer.getRandom()).build(LootContextParameterSets.ADVANCEMENT_REWARD);
+        LootTableInfo loottableinfo = (new LootTableInfo.Builder(entityplayer.getWorldServer())).set(LootContextParameters.THIS_ENTITY, entityplayer).set(LootContextParameters.POSITION, entityplayer.getChunkCoordinates()).a(entityplayer.getRandom()).build(LootContextParameterSets.ADVANCEMENT_REWARD);
         boolean flag = false;
         MinecraftKey[] aminecraftkey = this.c;
         int i = aminecraftkey.length;
@@ -126,6 +123,33 @@ public class AdvancementRewards {
         }
     }
 
+    public static AdvancementRewards a(JsonObject jsonobject) throws JsonParseException {
+        int i = ChatDeserializer.a(jsonobject, "experience", (int) 0);
+        JsonArray jsonarray = ChatDeserializer.a(jsonobject, "loot", new JsonArray());
+        MinecraftKey[] aminecraftkey = new MinecraftKey[jsonarray.size()];
+
+        for (int j = 0; j < aminecraftkey.length; ++j) {
+            aminecraftkey[j] = new MinecraftKey(ChatDeserializer.a(jsonarray.get(j), "loot[" + j + "]"));
+        }
+
+        JsonArray jsonarray1 = ChatDeserializer.a(jsonobject, "recipes", new JsonArray());
+        MinecraftKey[] aminecraftkey1 = new MinecraftKey[jsonarray1.size()];
+
+        for (int k = 0; k < aminecraftkey1.length; ++k) {
+            aminecraftkey1[k] = new MinecraftKey(ChatDeserializer.a(jsonarray1.get(k), "recipes[" + k + "]"));
+        }
+
+        CustomFunction.a customfunction_a;
+
+        if (jsonobject.has("function")) {
+            customfunction_a = new CustomFunction.a(new MinecraftKey(ChatDeserializer.h(jsonobject, "function")));
+        } else {
+            customfunction_a = CustomFunction.a.a;
+        }
+
+        return new AdvancementRewards(i, aminecraftkey, aminecraftkey1, customfunction_a);
+    }
+
     public static class a {
 
         private int a;
@@ -156,39 +180,6 @@ public class AdvancementRewards {
 
         public AdvancementRewards a() {
             return new AdvancementRewards(this.a, (MinecraftKey[]) this.b.toArray(new MinecraftKey[0]), (MinecraftKey[]) this.c.toArray(new MinecraftKey[0]), this.d == null ? CustomFunction.a.a : new CustomFunction.a(this.d));
-        }
-    }
-
-    public static class b implements JsonDeserializer<AdvancementRewards> {
-
-        public b() {}
-
-        public AdvancementRewards deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            JsonObject jsonobject = ChatDeserializer.m(jsonelement, "rewards");
-            int i = ChatDeserializer.a(jsonobject, "experience", (int) 0);
-            JsonArray jsonarray = ChatDeserializer.a(jsonobject, "loot", new JsonArray());
-            MinecraftKey[] aminecraftkey = new MinecraftKey[jsonarray.size()];
-
-            for (int j = 0; j < aminecraftkey.length; ++j) {
-                aminecraftkey[j] = new MinecraftKey(ChatDeserializer.a(jsonarray.get(j), "loot[" + j + "]"));
-            }
-
-            JsonArray jsonarray1 = ChatDeserializer.a(jsonobject, "recipes", new JsonArray());
-            MinecraftKey[] aminecraftkey1 = new MinecraftKey[jsonarray1.size()];
-
-            for (int k = 0; k < aminecraftkey1.length; ++k) {
-                aminecraftkey1[k] = new MinecraftKey(ChatDeserializer.a(jsonarray1.get(k), "recipes[" + k + "]"));
-            }
-
-            CustomFunction.a customfunction_a;
-
-            if (jsonobject.has("function")) {
-                customfunction_a = new CustomFunction.a(new MinecraftKey(ChatDeserializer.h(jsonobject, "function")));
-            } else {
-                customfunction_a = CustomFunction.a.a;
-            }
-
-            return new AdvancementRewards(i, aminecraftkey, aminecraftkey1, customfunction_a);
         }
     }
 }

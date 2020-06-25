@@ -2,11 +2,10 @@ package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
+import com.mojang.serialization.Dynamic;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -17,7 +16,7 @@ public class DataConverterCustomNameEntity extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        OpticFinder<String> opticfinder = DSL.fieldFinder("id", DSL.namespacedString());
+        OpticFinder<String> opticfinder = DSL.fieldFinder("id", DataConverterSchemaNamed.a());
 
         return this.fixTypeEverywhereTyped("EntityCustomNameToComponentFix", this.getInputSchema().getType(DataConverterTypes.ENTITY), (typed) -> {
             return typed.update(DSL.remainderFinder(), (dynamic) -> {

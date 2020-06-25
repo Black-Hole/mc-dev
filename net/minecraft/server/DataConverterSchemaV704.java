@@ -2,15 +2,14 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.DSL;
-import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.DSL.TypeReference;
+import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.schemas.Schema;
-import com.mojang.datafixers.types.DynamicOps;
 import com.mojang.datafixers.types.Type;
-import com.mojang.datafixers.types.templates.TypeTemplate;
 import com.mojang.datafixers.types.templates.Hook.HookFunction;
-import java.util.HashMap;
+import com.mojang.datafixers.types.templates.TypeTemplate;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.DynamicOps;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -148,7 +147,7 @@ public class DataConverterSchemaV704 extends Schema {
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
         super.registerTypes(schema, map, map1);
         schema.registerType(false, DataConverterTypes.BLOCK_ENTITY, () -> {
-            return DSL.taggedChoiceLazy("id", DSL.namespacedString(), map1);
+            return DSL.taggedChoiceLazy("id", DataConverterSchemaNamed.a(), map1);
         });
         schema.registerType(true, DataConverterTypes.ITEM_STACK, () -> {
             return DSL.hook(DSL.optionalFields("id", DataConverterTypes.ITEM_NAME.in(schema), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.ENTITY_TREE.in(schema), "BlockEntityTag", DataConverterTypes.BLOCK_ENTITY.in(schema), "CanDestroy", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)))), DataConverterSchemaV704.b, HookFunction.IDENTITY);

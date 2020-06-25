@@ -7,7 +7,7 @@ public class ItemExpBottle extends Item {
     }
 
     @Override
-    public boolean d_(ItemStack itemstack) {
+    public boolean e(ItemStack itemstack) {
         return true;
     }
 
@@ -15,7 +15,7 @@ public class ItemExpBottle extends Item {
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ENTITY_EXPERIENCE_BOTTLE_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemExpBottle.i.nextFloat() * 0.4F + 0.8F));
+        world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ENTITY_EXPERIENCE_BOTTLE_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemExpBottle.RANDOM.nextFloat() * 0.4F + 0.8F));
         if (!world.isClientSide) {
             EntityThrownExpBottle entitythrownexpbottle = new EntityThrownExpBottle(world, entityhuman);
 
@@ -29,6 +29,6 @@ public class ItemExpBottle extends Item {
             itemstack.subtract(1);
         }
 
-        return InteractionResultWrapper.success(itemstack);
+        return InteractionResultWrapper.a(itemstack, world.s_());
     }
 }

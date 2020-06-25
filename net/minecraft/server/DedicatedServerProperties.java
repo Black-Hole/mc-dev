@@ -16,13 +16,9 @@ public class DedicatedServerProperties extends PropertyManager<DedicatedServerPr
     public final String motd = this.getString("motd", "A Minecraft Server");
     public final boolean forceGamemode = this.getBoolean("force-gamemode", false);
     public final boolean enforceWhitelist = this.getBoolean("enforce-whitelist", false);
-    public final boolean generateStructures = this.getBoolean("generate-structures", true);
     public final EnumDifficulty difficulty;
     public final EnumGamemode gamemode;
     public final String levelName;
-    public final String levelSeed;
-    public final WorldType levelType;
-    public final String generatorSettings;
     public final int serverPort;
     public final int maxBuildHeight;
     public final Boolean announcePlayerAchievements;
@@ -49,17 +45,19 @@ public class DedicatedServerProperties extends PropertyManager<DedicatedServerPr
     public final boolean broadcastRconToOps;
     public final boolean broadcastConsoleToOps;
     public final int maxWorldSize;
+    public final boolean syncChunkWrites;
+    public final boolean enableJmxMonitoring;
+    public final boolean enableStatus;
+    public final int entityBroadcastRangePercentage;
     public final PropertyManager<DedicatedServerProperties>.EditableProperty<Integer> playerIdleTimeout;
     public final PropertyManager<DedicatedServerProperties>.EditableProperty<Boolean> whiteList;
+    public final GeneratorSettings generatorSettings;
 
     public DedicatedServerProperties(Properties properties) {
         super(properties);
         this.difficulty = (EnumDifficulty) this.a("difficulty", a(EnumDifficulty::getById, EnumDifficulty::a), EnumDifficulty::c, EnumDifficulty.EASY);
         this.gamemode = (EnumGamemode) this.a("gamemode", a(EnumGamemode::getById, EnumGamemode::a), EnumGamemode::b, EnumGamemode.SURVIVAL);
         this.levelName = this.getString("level-name", "world");
-        this.levelSeed = this.getString("level-seed", "");
-        this.levelType = (WorldType) this.a("level-type", WorldType::getType, WorldType::name, WorldType.NORMAL);
-        this.generatorSettings = this.getString("generator-settings", "");
         this.serverPort = this.getInt("server-port", 25565);
         this.maxBuildHeight = this.a("max-build-height", (integer) -> {
             return MathHelper.clamp((integer + 8) / 16 * 16, 64, 256);
@@ -94,8 +92,15 @@ public class DedicatedServerProperties extends PropertyManager<DedicatedServerPr
         this.maxWorldSize = this.a("max-world-size", (integer) -> {
             return MathHelper.clamp(integer, 1, 29999984);
         }, 29999984);
+        this.syncChunkWrites = this.getBoolean("sync-chunk-writes", true);
+        this.enableJmxMonitoring = this.getBoolean("enable-jmx-monitoring", false);
+        this.enableStatus = this.getBoolean("enable-status", true);
+        this.entityBroadcastRangePercentage = this.a("entity-broadcast-range-percentage", (integer) -> {
+            return MathHelper.clamp(integer, 10, 1000);
+        }, 100);
         this.playerIdleTimeout = this.b("player-idle-timeout", 0);
         this.whiteList = this.b("white-list", false);
+        this.generatorSettings = GeneratorSettings.a(properties);
     }
 
     public static DedicatedServerProperties load(java.nio.file.Path java_nio_file_path) {

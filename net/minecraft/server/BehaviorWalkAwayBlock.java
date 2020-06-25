@@ -5,41 +5,41 @@ import java.util.Optional;
 
 public class BehaviorWalkAwayBlock extends Behavior<EntityVillager> {
 
-    private final MemoryModuleType<GlobalPos> a;
-    private final float b;
-    private final int c;
+    private final MemoryModuleType<GlobalPos> b;
+    private final float c;
     private final int d;
     private final int e;
+    private final int f;
 
     public BehaviorWalkAwayBlock(MemoryModuleType<GlobalPos> memorymoduletype, float f, int i, int j, int k) {
         super(ImmutableMap.of(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryStatus.REGISTERED, MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, memorymoduletype, MemoryStatus.VALUE_PRESENT));
-        this.a = memorymoduletype;
-        this.b = f;
-        this.c = i;
-        this.d = j;
-        this.e = k;
+        this.b = memorymoduletype;
+        this.c = f;
+        this.d = i;
+        this.e = j;
+        this.f = k;
     }
 
     private void a(EntityVillager entityvillager, long i) {
         BehaviorController<?> behaviorcontroller = entityvillager.getBehaviorController();
 
-        entityvillager.a(this.a);
-        behaviorcontroller.removeMemory(this.a);
+        entityvillager.a(this.b);
+        behaviorcontroller.removeMemory(this.b);
         behaviorcontroller.setMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, (Object) i);
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
         BehaviorController<?> behaviorcontroller = entityvillager.getBehaviorController();
 
-        behaviorcontroller.getMemory(this.a).ifPresent((globalpos) -> {
+        behaviorcontroller.getMemory(this.b).ifPresent((globalpos) -> {
             if (this.a(worldserver, entityvillager)) {
                 this.a(entityvillager, i);
             } else if (this.a(worldserver, entityvillager, globalpos)) {
                 Vec3D vec3d = null;
                 int j = 0;
 
-                for (boolean flag = true; j < 1000 && (vec3d == null || this.a(worldserver, entityvillager, GlobalPos.create(entityvillager.dimension, new BlockPosition(vec3d)))); ++j) {
-                    vec3d = RandomPositionGenerator.a((EntityCreature) entityvillager, 15, 7, new Vec3D(globalpos.getBlockPosition()));
+                for (boolean flag = true; j < 1000 && (vec3d == null || this.a(worldserver, entityvillager, GlobalPos.create(worldserver.getDimensionKey(), new BlockPosition(vec3d)))); ++j) {
+                    vec3d = RandomPositionGenerator.b(entityvillager, 15, 7, Vec3D.c((BaseBlockPosition) globalpos.getBlockPosition()));
                 }
 
                 if (j == 1000) {
@@ -47,9 +47,9 @@ public class BehaviorWalkAwayBlock extends Behavior<EntityVillager> {
                     return;
                 }
 
-                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(vec3d, this.b, this.c)));
+                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(vec3d, this.c, this.d)));
             } else if (!this.b(worldserver, entityvillager, globalpos)) {
-                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(globalpos.getBlockPosition(), this.b, this.c)));
+                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(globalpos.getBlockPosition(), this.c, this.d)));
             }
 
         });
@@ -58,14 +58,14 @@ public class BehaviorWalkAwayBlock extends Behavior<EntityVillager> {
     private boolean a(WorldServer worldserver, EntityVillager entityvillager) {
         Optional<Long> optional = entityvillager.getBehaviorController().getMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
 
-        return optional.isPresent() ? worldserver.getTime() - (Long) optional.get() > (long) this.e : false;
+        return optional.isPresent() ? worldserver.getTime() - (Long) optional.get() > (long) this.f : false;
     }
 
     private boolean a(WorldServer worldserver, EntityVillager entityvillager, GlobalPos globalpos) {
-        return globalpos.getDimensionManager() != worldserver.getWorldProvider().getDimensionManager() || globalpos.getBlockPosition().n(new BlockPosition(entityvillager)) > this.d;
+        return globalpos.getDimensionManager() != worldserver.getDimensionKey() || globalpos.getBlockPosition().k(entityvillager.getChunkCoordinates()) > this.e;
     }
 
     private boolean b(WorldServer worldserver, EntityVillager entityvillager, GlobalPos globalpos) {
-        return globalpos.getDimensionManager() == worldserver.getWorldProvider().getDimensionManager() && globalpos.getBlockPosition().n(new BlockPosition(entityvillager)) <= this.c;
+        return globalpos.getDimensionManager() == worldserver.getDimensionKey() && globalpos.getBlockPosition().k(entityvillager.getChunkCoordinates()) <= this.d;
     }
 }

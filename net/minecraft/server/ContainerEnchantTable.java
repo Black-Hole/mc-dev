@@ -65,7 +65,7 @@ public class ContainerEnchantTable extends Container {
         this.a(ContainerProperty.a(this.costs, 0));
         this.a(ContainerProperty.a(this.costs, 1));
         this.a(ContainerProperty.a(this.costs, 2));
-        this.a(this.i).set(playerinventory.player.el());
+        this.a(this.i).set(playerinventory.player.eF());
         this.a(ContainerProperty.a(this.enchantments, 0));
         this.a(ContainerProperty.a(this.enchantments, 1));
         this.a(ContainerProperty.a(this.enchantments, 2));
@@ -88,28 +88,28 @@ public class ContainerEnchantTable extends Container {
                     for (j = -1; j <= 1; ++j) {
                         for (int k = -1; k <= 1; ++k) {
                             if ((j != 0 || k != 0) && world.isEmpty(blockposition.b(k, 0, j)) && world.isEmpty(blockposition.b(k, 1, j))) {
-                                if (world.getType(blockposition.b(k * 2, 0, j * 2)).getBlock() == Blocks.BOOKSHELF) {
+                                if (world.getType(blockposition.b(k * 2, 0, j * 2)).a(Blocks.BOOKSHELF)) {
                                     ++i;
                                 }
 
-                                if (world.getType(blockposition.b(k * 2, 1, j * 2)).getBlock() == Blocks.BOOKSHELF) {
+                                if (world.getType(blockposition.b(k * 2, 1, j * 2)).a(Blocks.BOOKSHELF)) {
                                     ++i;
                                 }
 
                                 if (k != 0 && j != 0) {
-                                    if (world.getType(blockposition.b(k * 2, 0, j)).getBlock() == Blocks.BOOKSHELF) {
+                                    if (world.getType(blockposition.b(k * 2, 0, j)).a(Blocks.BOOKSHELF)) {
                                         ++i;
                                     }
 
-                                    if (world.getType(blockposition.b(k * 2, 1, j)).getBlock() == Blocks.BOOKSHELF) {
+                                    if (world.getType(blockposition.b(k * 2, 1, j)).a(Blocks.BOOKSHELF)) {
                                         ++i;
                                     }
 
-                                    if (world.getType(blockposition.b(k, 0, j * 2)).getBlock() == Blocks.BOOKSHELF) {
+                                    if (world.getType(blockposition.b(k, 0, j * 2)).a(Blocks.BOOKSHELF)) {
                                         ++i;
                                     }
 
-                                    if (world.getType(blockposition.b(k, 1, j * 2)).getBlock() == Blocks.BOOKSHELF) {
+                                    if (world.getType(blockposition.b(k, 1, j * 2)).a(Blocks.BOOKSHELF)) {
                                         ++i;
                                     }
                                 }
@@ -173,6 +173,12 @@ public class ContainerEnchantTable extends Container {
 
                     if (flag) {
                         itemstack2 = new ItemStack(Items.ENCHANTED_BOOK);
+                        NBTTagCompound nbttagcompound = itemstack.getTag();
+
+                        if (nbttagcompound != null) {
+                            itemstack2.setTag(nbttagcompound.clone());
+                        }
+
                         this.enchantSlots.setItem(0, itemstack2);
                     }
 
@@ -189,7 +195,7 @@ public class ContainerEnchantTable extends Container {
                     if (!entityhuman.abilities.canInstantlyBuild) {
                         itemstack1.subtract(j);
                         if (itemstack1.isEmpty()) {
-                            this.enchantSlots.setItem(1, ItemStack.a);
+                            this.enchantSlots.setItem(1, ItemStack.b);
                         }
                     }
 
@@ -199,7 +205,7 @@ public class ContainerEnchantTable extends Container {
                     }
 
                     this.enchantSlots.update();
-                    this.i.set(entityhuman.el());
+                    this.i.set(entityhuman.eF());
                     this.a(this.enchantSlots);
                     world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
                 }
@@ -237,7 +243,7 @@ public class ContainerEnchantTable extends Container {
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -246,38 +252,36 @@ public class ContainerEnchantTable extends Container {
             itemstack = itemstack1.cloneItemStack();
             if (i == 0) {
                 if (!this.a(itemstack1, 2, 38, true)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (i == 1) {
                 if (!this.a(itemstack1, 2, 38, true)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (itemstack1.getItem() == Items.LAPIS_LAZULI) {
                 if (!this.a(itemstack1, 1, 2, true)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else {
                 if (((Slot) this.slots.get(0)).hasItem() || !((Slot) this.slots.get(0)).isAllowed(itemstack1)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
 
-                if (itemstack1.hasTag() && itemstack1.getCount() == 1) {
-                    ((Slot) this.slots.get(0)).set(itemstack1.cloneItemStack());
-                    itemstack1.setCount(0);
-                } else if (!itemstack1.isEmpty()) {
-                    ((Slot) this.slots.get(0)).set(new ItemStack(itemstack1.getItem()));
-                    itemstack1.subtract(1);
-                }
+                ItemStack itemstack2 = itemstack1.cloneItemStack();
+
+                itemstack2.setCount(1);
+                itemstack1.subtract(1);
+                ((Slot) this.slots.get(0)).set(itemstack2);
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.a);
+                slot.set(ItemStack.b);
             } else {
                 slot.d();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             slot.a(entityhuman, itemstack1);

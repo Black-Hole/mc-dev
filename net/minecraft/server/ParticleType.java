@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
 
 public class ParticleType extends Particle<ParticleType> implements ParticleParam {
 
@@ -16,14 +17,20 @@ public class ParticleType extends Particle<ParticleType> implements ParticlePara
             return (ParticleType) particle;
         }
     };
+    private final Codec<ParticleType> b = Codec.unit(this::getParticle);
 
     protected ParticleType(boolean flag) {
         super(flag, ParticleType.a);
     }
 
     @Override
-    public Particle<ParticleType> getParticle() {
+    public ParticleType getParticle() {
         return this;
+    }
+
+    @Override
+    public Codec<ParticleType> e() {
+        return this.b;
     }
 
     @Override

@@ -65,18 +65,18 @@ public class RecipeBannerDuplicate extends IRecipeComplex {
             }
         }
 
-        return ItemStack.a;
+        return ItemStack.b;
     }
 
     public NonNullList<ItemStack> b(InventoryCrafting inventorycrafting) {
-        NonNullList<ItemStack> nonnulllist = NonNullList.a(inventorycrafting.getSize(), ItemStack.a);
+        NonNullList<ItemStack> nonnulllist = NonNullList.a(inventorycrafting.getSize(), ItemStack.b);
 
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
             if (!itemstack.isEmpty()) {
-                if (itemstack.getItem().q()) {
-                    nonnulllist.set(i, new ItemStack(itemstack.getItem().p()));
+                if (itemstack.getItem().p()) {
+                    nonnulllist.set(i, new ItemStack(itemstack.getItem().getCraftingRemainingItem()));
                 } else if (itemstack.hasTag() && TileEntityBanner.b(itemstack) > 0) {
                     ItemStack itemstack1 = itemstack.cloneItemStack();
 

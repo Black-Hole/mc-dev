@@ -2,16 +2,17 @@ package net.minecraft.server;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.UnmodifiableIterator;
-import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.mojang.datafixers.DataFixer;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenCustomHashMap;
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.ThreadFactory;
@@ -24,33 +25,32 @@ public class WorldUpgrader {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final ThreadFactory b = (new ThreadFactoryBuilder()).setDaemon(true).build();
-    private final String c;
+    private final ImmutableSet<ResourceKey<World>> c;
     private final boolean d;
-    private final WorldNBTStorage e;
+    private final Convertable.ConversionSession e;
     private final Thread f;
-    private final File g;
+    private final DataFixer g;
     private volatile boolean h = true;
     private volatile boolean i;
     private volatile float j;
     private volatile int k;
     private volatile int l;
     private volatile int m;
-    private final Object2FloatMap<DimensionManager> n = Object2FloatMaps.synchronize(new Object2FloatOpenCustomHashMap(SystemUtils.i()));
-    private volatile IChatBaseComponent o = new ChatMessage("optimizeWorld.stage.counting", new Object[0]);
+    private final Object2FloatMap<ResourceKey<World>> n = Object2FloatMaps.synchronize(new Object2FloatOpenCustomHashMap(SystemUtils.k()));
+    private volatile IChatBaseComponent o = new ChatMessage("optimizeWorld.stage.counting");
     private static final Pattern p = Pattern.compile("^r\\.(-?[0-9]+)\\.(-?[0-9]+)\\.mca$");
     private final WorldPersistentData q;
 
-    public WorldUpgrader(String s, Convertable convertable, WorldData worlddata, boolean flag) {
-        this.c = worlddata.getName();
+    public WorldUpgrader(Convertable.ConversionSession convertable_conversionsession, DataFixer datafixer, ImmutableSet<ResourceKey<World>> immutableset, boolean flag) {
+        this.c = immutableset;
         this.d = flag;
-        this.e = convertable.a(s, (MinecraftServer) null);
-        this.e.saveWorldData(worlddata);
-        this.q = new WorldPersistentData(new File(DimensionManager.OVERWORLD.a(this.e.getDirectory()), "data"), this.e.getDataFixer());
-        this.g = this.e.getDirectory();
+        this.g = datafixer;
+        this.e = convertable_conversionsession;
+        this.q = new WorldPersistentData(new File(this.e.a(World.OVERWORLD), "data"), datafixer);
         this.f = WorldUpgrader.b.newThread(this::i);
         this.f.setUncaughtExceptionHandler((thread, throwable) -> {
             WorldUpgrader.LOGGER.error("Error upgrading world", throwable);
-            this.o = new ChatMessage("optimizeWorld.stage.failed", new Object[0]);
+            this.o = new ChatMessage("optimizeWorld.stage.failed");
             this.i = true;
         });
         this.f.start();
@@ -68,39 +68,37 @@ public class WorldUpgrader {
     }
 
     private void i() {
-        File file = this.e.getDirectory();
-
         this.k = 0;
-        Builder<DimensionManager, ListIterator<ChunkCoordIntPair>> builder = ImmutableMap.builder();
+        Builder<ResourceKey<World>, ListIterator<ChunkCoordIntPair>> builder = ImmutableMap.builder();
 
         List list;
 
-        for (Iterator iterator = DimensionManager.a().iterator(); iterator.hasNext(); this.k += list.size()) {
-            DimensionManager dimensionmanager = (DimensionManager) iterator.next();
+        for (UnmodifiableIterator unmodifiableiterator = this.c.iterator(); unmodifiableiterator.hasNext(); this.k += list.size()) {
+            ResourceKey<World> resourcekey = (ResourceKey) unmodifiableiterator.next();
 
-            list = this.b(dimensionmanager);
-            builder.put(dimensionmanager, list.listIterator());
+            list = this.b(resourcekey);
+            builder.put(resourcekey, list.listIterator());
         }
 
         if (this.k == 0) {
             this.i = true;
         } else {
             float f = (float) this.k;
-            ImmutableMap<DimensionManager, ListIterator<ChunkCoordIntPair>> immutablemap = builder.build();
-            Builder<DimensionManager, IChunkLoader> builder1 = ImmutableMap.builder();
-            Iterator iterator1 = DimensionManager.a().iterator();
+            ImmutableMap<ResourceKey<World>, ListIterator<ChunkCoordIntPair>> immutablemap = builder.build();
+            Builder<ResourceKey<World>, IChunkLoader> builder1 = ImmutableMap.builder();
+            UnmodifiableIterator unmodifiableiterator1 = this.c.iterator();
 
-            while (iterator1.hasNext()) {
-                DimensionManager dimensionmanager1 = (DimensionManager) iterator1.next();
-                File file1 = dimensionmanager1.a(file);
+            while (unmodifiableiterator1.hasNext()) {
+                ResourceKey<World> resourcekey1 = (ResourceKey) unmodifiableiterator1.next();
+                File file = this.e.a(resourcekey1);
 
-                builder1.put(dimensionmanager1, new IChunkLoader(new File(file1, "region"), this.e.getDataFixer()));
+                builder1.put(resourcekey1, new IChunkLoader(new File(file, "region"), this.g, true));
             }
 
-            ImmutableMap<DimensionManager, IChunkLoader> immutablemap1 = builder1.build();
+            ImmutableMap<ResourceKey<World>, IChunkLoader> immutablemap1 = builder1.build();
             long i = SystemUtils.getMonotonicMillis();
 
-            this.o = new ChatMessage("optimizeWorld.stage.upgrading", new Object[0]);
+            this.o = new ChatMessage("optimizeWorld.stage.upgrading");
 
             while (this.h) {
                 boolean flag = false;
@@ -108,10 +106,10 @@ public class WorldUpgrader {
 
                 float f2;
 
-                for (Iterator iterator2 = DimensionManager.a().iterator(); iterator2.hasNext(); f1 += f2) {
-                    DimensionManager dimensionmanager2 = (DimensionManager) iterator2.next();
-                    ListIterator<ChunkCoordIntPair> listiterator = (ListIterator) immutablemap.get(dimensionmanager2);
-                    IChunkLoader ichunkloader = (IChunkLoader) immutablemap1.get(dimensionmanager2);
+                for (UnmodifiableIterator unmodifiableiterator2 = this.c.iterator(); unmodifiableiterator2.hasNext(); f1 += f2) {
+                    ResourceKey<World> resourcekey2 = (ResourceKey) unmodifiableiterator2.next();
+                    ListIterator<ChunkCoordIntPair> listiterator = (ListIterator) immutablemap.get(resourcekey2);
+                    IChunkLoader ichunkloader = (IChunkLoader) immutablemap1.get(resourcekey2);
 
                     if (listiterator.hasNext()) {
                         ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair) listiterator.next();
@@ -122,7 +120,7 @@ public class WorldUpgrader {
 
                             if (nbttagcompound != null) {
                                 int j = IChunkLoader.a(nbttagcompound);
-                                NBTTagCompound nbttagcompound1 = ichunkloader.getChunkData(dimensionmanager2, () -> {
+                                NBTTagCompound nbttagcompound1 = ichunkloader.getChunkData(resourcekey2, () -> {
                                     return this.q;
                                 }, nbttagcompound);
                                 NBTTagCompound nbttagcompound2 = nbttagcompound1.getCompound("Level");
@@ -168,7 +166,7 @@ public class WorldUpgrader {
                     }
 
                     f2 = (float) listiterator.nextIndex() / f;
-                    this.n.put(dimensionmanager2, f2);
+                    this.n.put(resourcekey2, f2);
                 }
 
                 this.j = f1;
@@ -177,11 +175,11 @@ public class WorldUpgrader {
                 }
             }
 
-            this.o = new ChatMessage("optimizeWorld.stage.finished", new Object[0]);
-            UnmodifiableIterator unmodifiableiterator = immutablemap1.values().iterator();
+            this.o = new ChatMessage("optimizeWorld.stage.finished");
+            UnmodifiableIterator unmodifiableiterator3 = immutablemap1.values().iterator();
 
-            while (unmodifiableiterator.hasNext()) {
-                IChunkLoader ichunkloader1 = (IChunkLoader) unmodifiableiterator.next();
+            while (unmodifiableiterator3.hasNext()) {
+                IChunkLoader ichunkloader1 = (IChunkLoader) unmodifiableiterator3.next();
 
                 try {
                     ichunkloader1.close();
@@ -197,8 +195,8 @@ public class WorldUpgrader {
         }
     }
 
-    private List<ChunkCoordIntPair> b(DimensionManager dimensionmanager) {
-        File file = dimensionmanager.a(this.g);
+    private List<ChunkCoordIntPair> b(ResourceKey<World> resourcekey) {
+        File file = this.e.a(resourcekey);
         File file1 = new File(file, "region");
         File[] afile = file1.listFiles((file2, s) -> {
             return s.endsWith(".mca");
@@ -220,7 +218,7 @@ public class WorldUpgrader {
                     int l = Integer.parseInt(matcher.group(2)) << 5;
 
                     try {
-                        RegionFile regionfile = new RegionFile(file2, file1);
+                        RegionFile regionfile = new RegionFile(file2, file1, true);
                         Throwable throwable = null;
 
                         try {
@@ -264,19 +262,19 @@ public class WorldUpgrader {
         return this.i;
     }
 
-    public int d() {
+    public int e() {
         return this.k;
     }
 
-    public int e() {
+    public int f() {
         return this.l;
     }
 
-    public int f() {
+    public int g() {
         return this.m;
     }
 
-    public IChatBaseComponent g() {
+    public IChatBaseComponent h() {
         return this.o;
     }
 }

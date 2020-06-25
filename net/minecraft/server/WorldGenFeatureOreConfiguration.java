@@ -1,8 +1,7 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -10,62 +9,60 @@ import java.util.stream.Collectors;
 
 public class WorldGenFeatureOreConfiguration implements WorldGenFeatureConfiguration {
 
-    public final WorldGenFeatureOreConfiguration.Target a;
-    public final int b;
-    public final IBlockData c;
+    public static final Codec<WorldGenFeatureOreConfiguration> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(WorldGenFeatureOreConfiguration.Target.d.fieldOf("target").forGetter((worldgenfeatureoreconfiguration) -> {
+            return worldgenfeatureoreconfiguration.b;
+        }), IBlockData.b.fieldOf("state").forGetter((worldgenfeatureoreconfiguration) -> {
+            return worldgenfeatureoreconfiguration.d;
+        }), Codec.INT.fieldOf("size").withDefault(0).forGetter((worldgenfeatureoreconfiguration) -> {
+            return worldgenfeatureoreconfiguration.c;
+        })).apply(instance, WorldGenFeatureOreConfiguration::new);
+    });
+    public final WorldGenFeatureOreConfiguration.Target b;
+    public final int c;
+    public final IBlockData d;
 
     public WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target worldgenfeatureoreconfiguration_target, IBlockData iblockdata, int i) {
-        this.b = i;
-        this.c = iblockdata;
-        this.a = worldgenfeatureoreconfiguration_target;
+        this.c = i;
+        this.d = iblockdata;
+        this.b = worldgenfeatureoreconfiguration_target;
     }
 
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("size"), dynamicops.createInt(this.b), dynamicops.createString("target"), dynamicops.createString(this.a.a()), dynamicops.createString("state"), IBlockData.a(dynamicops, this.c).getValue())));
-    }
-
-    public static WorldGenFeatureOreConfiguration a(Dynamic<?> dynamic) {
-        int i = dynamic.get("size").asInt(0);
-        WorldGenFeatureOreConfiguration.Target worldgenfeatureoreconfiguration_target = WorldGenFeatureOreConfiguration.Target.a(dynamic.get("target").asString(""));
-        IBlockData iblockdata = (IBlockData) dynamic.get("state").map(IBlockData::a).orElse(Blocks.AIR.getBlockData());
-
-        return new WorldGenFeatureOreConfiguration(worldgenfeatureoreconfiguration_target, iblockdata, i);
-    }
-
-    public static enum Target {
+    public static enum Target implements INamable {
 
         NATURAL_STONE("natural_stone", (iblockdata) -> {
-            if (iblockdata == null) {
-                return false;
-            } else {
-                Block block = iblockdata.getBlock();
+            return iblockdata == null ? false : iblockdata.a(Blocks.STONE) || iblockdata.a(Blocks.GRANITE) || iblockdata.a(Blocks.DIORITE) || iblockdata.a(Blocks.ANDESITE);
+        }), NETHERRACK("netherrack", new BlockPredicate(Blocks.NETHERRACK)), NETHER_ORE_REPLACEABLES("nether_ore_replaceables", (iblockdata) -> {
+            return iblockdata == null ? false : iblockdata.a(Blocks.NETHERRACK) || iblockdata.a(Blocks.BASALT) || iblockdata.a(Blocks.BLACKSTONE);
+        });
 
-                return block == Blocks.STONE || block == Blocks.GRANITE || block == Blocks.DIORITE || block == Blocks.ANDESITE;
-            }
-        }), NETHERRACK("netherrack", new BlockPredicate(Blocks.NETHERRACK));
-
-        private static final Map<String, WorldGenFeatureOreConfiguration.Target> c = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenFeatureOreConfiguration.Target::a, (worldgenfeatureoreconfiguration_target) -> {
+        public static final Codec<WorldGenFeatureOreConfiguration.Target> d = INamable.a(WorldGenFeatureOreConfiguration.Target::values, WorldGenFeatureOreConfiguration.Target::a);
+        private static final Map<String, WorldGenFeatureOreConfiguration.Target> e = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenFeatureOreConfiguration.Target::b, (worldgenfeatureoreconfiguration_target) -> {
             return worldgenfeatureoreconfiguration_target;
         }));
-        private final String d;
-        private final Predicate<IBlockData> e;
+        private final String f;
+        private final Predicate<IBlockData> g;
 
         private Target(String s, Predicate predicate) {
-            this.d = s;
-            this.e = predicate;
+            this.f = s;
+            this.g = predicate;
         }
 
-        public String a() {
-            return this.d;
+        public String b() {
+            return this.f;
         }
 
         public static WorldGenFeatureOreConfiguration.Target a(String s) {
-            return (WorldGenFeatureOreConfiguration.Target) WorldGenFeatureOreConfiguration.Target.c.get(s);
+            return (WorldGenFeatureOreConfiguration.Target) WorldGenFeatureOreConfiguration.Target.e.get(s);
         }
 
-        public Predicate<IBlockData> b() {
-            return this.e;
+        public Predicate<IBlockData> c() {
+            return this.g;
+        }
+
+        @Override
+        public String getName() {
+            return this.f;
         }
     }
 }

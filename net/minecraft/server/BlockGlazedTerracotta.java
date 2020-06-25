@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class BlockGlazedTerracotta extends BlockFacingHorizontal {
 
-    public BlockGlazedTerracotta(Block.Info block_info) {
-        super(block_info);
+    public BlockGlazedTerracotta(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override

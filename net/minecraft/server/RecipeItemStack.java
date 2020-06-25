@@ -21,23 +21,20 @@ import javax.annotation.Nullable;
 
 public final class RecipeItemStack implements Predicate<ItemStack> {
 
-    private static final Predicate<? super RecipeItemStack.Provider> b = (recipeitemstack_provider) -> {
-        return !recipeitemstack_provider.a().stream().allMatch(ItemStack::isEmpty);
-    };
     public static final RecipeItemStack a = new RecipeItemStack(Stream.empty());
-    private final RecipeItemStack.Provider[] c;
+    private final RecipeItemStack.Provider[] b;
     public ItemStack[] choices;
-    private IntList e;
+    private IntList d;
 
     public RecipeItemStack(Stream<? extends RecipeItemStack.Provider> stream) {
-        this.c = (RecipeItemStack.Provider[]) stream.filter(RecipeItemStack.b).toArray((i) -> {
+        this.b = (RecipeItemStack.Provider[]) stream.toArray((i) -> {
             return new RecipeItemStack.Provider[i];
         });
     }
 
     public void buildChoices() {
         if (this.choices == null) {
-            this.choices = (ItemStack[]) Arrays.stream(this.c).flatMap((recipeitemstack_provider) -> {
+            this.choices = (ItemStack[]) Arrays.stream(this.b).flatMap((recipeitemstack_provider) -> {
                 return recipeitemstack_provider.a().stream();
             }).distinct().toArray((i) -> {
                 return new ItemStack[i];
@@ -49,42 +46,44 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
     public boolean test(@Nullable ItemStack itemstack) {
         if (itemstack == null) {
             return false;
-        } else if (this.c.length == 0) {
-            return itemstack.isEmpty();
         } else {
             this.buildChoices();
-            ItemStack[] aitemstack = this.choices;
-            int i = aitemstack.length;
+            if (this.choices.length == 0) {
+                return itemstack.isEmpty();
+            } else {
+                ItemStack[] aitemstack = this.choices;
+                int i = aitemstack.length;
 
-            for (int j = 0; j < i; ++j) {
-                ItemStack itemstack1 = aitemstack[j];
+                for (int j = 0; j < i; ++j) {
+                    ItemStack itemstack1 = aitemstack[j];
 
-                if (itemstack1.getItem() == itemstack.getItem()) {
-                    return true;
+                    if (itemstack1.getItem() == itemstack.getItem()) {
+                        return true;
+                    }
                 }
-            }
 
-            return false;
+                return false;
+            }
         }
     }
 
     public IntList b() {
-        if (this.e == null) {
+        if (this.d == null) {
             this.buildChoices();
-            this.e = new IntArrayList(this.choices.length);
+            this.d = new IntArrayList(this.choices.length);
             ItemStack[] aitemstack = this.choices;
             int i = aitemstack.length;
 
             for (int j = 0; j < i; ++j) {
                 ItemStack itemstack = aitemstack[j];
 
-                this.e.add(AutoRecipeStackManager.c(itemstack));
+                this.d.add(AutoRecipeStackManager.c(itemstack));
             }
 
-            this.e.sort(IntComparators.NATURAL_COMPARATOR);
+            this.d.sort(IntComparators.NATURAL_COMPARATOR);
         }
 
-        return this.e;
+        return this.d;
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
@@ -98,11 +97,11 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
     }
 
     public JsonElement c() {
-        if (this.c.length == 1) {
-            return this.c[0].b();
+        if (this.b.length == 1) {
+            return this.b[0].b();
         } else {
             JsonArray jsonarray = new JsonArray();
-            RecipeItemStack.Provider[] arecipeitemstack_provider = this.c;
+            RecipeItemStack.Provider[] arecipeitemstack_provider = this.b;
             int i = arecipeitemstack_provider.length;
 
             for (int j = 0; j < i; ++j) {
@@ -116,29 +115,35 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
     }
 
     public boolean d() {
-        return this.c.length == 0 && (this.choices == null || this.choices.length == 0) && (this.e == null || this.e.isEmpty());
+        return this.b.length == 0 && (this.choices == null || this.choices.length == 0) && (this.d == null || this.d.isEmpty());
     }
 
-    private static RecipeItemStack a(Stream<? extends RecipeItemStack.Provider> stream) {
+    private static RecipeItemStack b(Stream<? extends RecipeItemStack.Provider> stream) {
         RecipeItemStack recipeitemstack = new RecipeItemStack(stream);
 
-        return recipeitemstack.c.length == 0 ? RecipeItemStack.a : recipeitemstack;
+        return recipeitemstack.b.length == 0 ? RecipeItemStack.a : recipeitemstack;
     }
 
     public static RecipeItemStack a(IMaterial... aimaterial) {
-        return a(Arrays.stream(aimaterial).map((imaterial) -> {
-            return new RecipeItemStack.StackProvider(new ItemStack(imaterial));
+        return a(Arrays.stream(aimaterial).map(ItemStack::new));
+    }
+
+    public static RecipeItemStack a(Stream<ItemStack> stream) {
+        return b(stream.filter((itemstack) -> {
+            return !itemstack.isEmpty();
+        }).map((itemstack) -> {
+            return new RecipeItemStack.StackProvider(itemstack);
         }));
     }
 
     public static RecipeItemStack a(Tag<Item> tag) {
-        return a(Stream.of(new RecipeItemStack.b(tag)));
+        return b(Stream.of(new RecipeItemStack.b(tag)));
     }
 
     public static RecipeItemStack b(PacketDataSerializer packetdataserializer) {
         int i = packetdataserializer.i();
 
-        return a(Stream.generate(() -> {
+        return b(Stream.generate(() -> {
             return new RecipeItemStack.StackProvider(packetdataserializer.m());
         }).limit((long) i));
     }
@@ -146,14 +151,14 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
     public static RecipeItemStack a(@Nullable JsonElement jsonelement) {
         if (jsonelement != null && !jsonelement.isJsonNull()) {
             if (jsonelement.isJsonObject()) {
-                return a(Stream.of(a(jsonelement.getAsJsonObject())));
+                return b(Stream.of(a(jsonelement.getAsJsonObject())));
             } else if (jsonelement.isJsonArray()) {
                 JsonArray jsonarray = jsonelement.getAsJsonArray();
 
                 if (jsonarray.size() == 0) {
                     throw new JsonSyntaxException("Item array cannot be empty, at least one item must be defined");
                 } else {
-                    return a(StreamSupport.stream(jsonarray.spliterator(), false).map((jsonelement1) -> {
+                    return b(StreamSupport.stream(jsonarray.spliterator(), false).map((jsonelement1) -> {
                         return a(ChatDeserializer.m(jsonelement1, "item"));
                     }));
                 }
@@ -165,7 +170,7 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
         }
     }
 
-    public static RecipeItemStack.Provider a(JsonObject jsonobject) {
+    private static RecipeItemStack.Provider a(JsonObject jsonobject) {
         if (jsonobject.has("item") && jsonobject.has("tag")) {
             throw new JsonParseException("An ingredient entry is either a tag or an item, not both");
         } else {
@@ -180,7 +185,7 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
                 return new RecipeItemStack.StackProvider(new ItemStack(item));
             } else if (jsonobject.has("tag")) {
                 minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "tag"));
-                Tag<Item> tag = TagsItem.a().a(minecraftkey);
+                Tag<Item> tag = TagsInstance.e().b().a(minecraftkey);
 
                 if (tag == null) {
                     throw new JsonSyntaxException("Unknown item tag '" + minecraftkey + "'");
@@ -204,7 +209,7 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
         @Override
         public Collection<ItemStack> a() {
             List<ItemStack> list = Lists.newArrayList();
-            Iterator iterator = this.a.a().iterator();
+            Iterator iterator = this.a.getTagged().iterator();
 
             while (iterator.hasNext()) {
                 Item item = (Item) iterator.next();
@@ -219,7 +224,7 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
         public JsonObject b() {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.addProperty("tag", this.a.c().toString());
+            jsonobject.addProperty("tag", TagsInstance.e().b().b(this.a).toString());
             return jsonobject;
         }
     }

@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 public class LootItemFunctionCopyNBT extends LootItemFunctionConditional {
 
     private final LootItemFunctionCopyNBT.Source a;
-    private final List<LootItemFunctionCopyNBT.b> c;
+    private final List<LootItemFunctionCopyNBT.b> b;
     private static final Function<Entity, NBTBase> d = CriterionConditionNBT::b;
     private static final Function<TileEntity, NBTBase> e = (tileentity) -> {
         return tileentity.save(new NBTTagCompound());
@@ -29,7 +29,12 @@ public class LootItemFunctionCopyNBT extends LootItemFunctionConditional {
     private LootItemFunctionCopyNBT(LootItemCondition[] alootitemcondition, LootItemFunctionCopyNBT.Source lootitemfunctioncopynbt_source, List<LootItemFunctionCopyNBT.b> list) {
         super(alootitemcondition);
         this.a = lootitemfunctioncopynbt_source;
-        this.c = ImmutableList.copyOf(list);
+        this.b = ImmutableList.copyOf(list);
+    }
+
+    @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.u;
     }
 
     private static ArgumentNBTKey.h b(String s) {
@@ -50,7 +55,7 @@ public class LootItemFunctionCopyNBT extends LootItemFunctionConditional {
         NBTBase nbtbase = (NBTBase) this.a.g.apply(loottableinfo);
 
         if (nbtbase != null) {
-            this.c.forEach((lootitemfunctioncopynbt_b) -> {
+            this.b.forEach((lootitemfunctioncopynbt_b) -> {
                 lootitemfunctioncopynbt_b.a(itemstack::getOrCreateTag, nbtbase);
             });
         }
@@ -64,16 +69,14 @@ public class LootItemFunctionCopyNBT extends LootItemFunctionConditional {
 
     public static class e extends LootItemFunctionConditional.c<LootItemFunctionCopyNBT> {
 
-        public e() {
-            super(new MinecraftKey("copy_nbt"), LootItemFunctionCopyNBT.class);
-        }
+        public e() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionCopyNBT lootitemfunctioncopynbt, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctioncopynbt, jsonserializationcontext);
             jsonobject.addProperty("source", lootitemfunctioncopynbt.a.e);
             JsonArray jsonarray = new JsonArray();
 
-            lootitemfunctioncopynbt.c.stream().map(LootItemFunctionCopyNBT.b::a).forEach(jsonarray::add);
+            lootitemfunctioncopynbt.b.stream().map(LootItemFunctionCopyNBT.b::a).forEach(jsonarray::add);
             jsonobject.add("ops", jsonarray);
         }
 

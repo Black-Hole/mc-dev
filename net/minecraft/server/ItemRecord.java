@@ -22,7 +22,7 @@ public class ItemRecord extends Item {
         BlockPosition blockposition = itemactioncontext.getClickPosition();
         IBlockData iblockdata = world.getType(blockposition);
 
-        if (iblockdata.getBlock() == Blocks.JUKEBOX && !(Boolean) iblockdata.get(BlockJukeBox.HAS_RECORD)) {
+        if (iblockdata.a(Blocks.JUKEBOX) && !(Boolean) iblockdata.get(BlockJukeBox.HAS_RECORD)) {
             ItemStack itemstack = itemactioncontext.getItemStack();
 
             if (!world.isClientSide) {
@@ -36,7 +36,7 @@ public class ItemRecord extends Item {
                 }
             }
 
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.a(world.isClientSide);
         } else {
             return EnumInteractionResult.PASS;
         }

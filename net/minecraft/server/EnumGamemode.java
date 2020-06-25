@@ -21,7 +21,7 @@ public enum EnumGamemode {
     }
 
     public IChatBaseComponent c() {
-        return new ChatMessage("gameMode." + this.g, new Object[0]);
+        return new ChatMessage("gameMode." + this.g);
     }
 
     public void a(PlayerAbilities playerabilities) {

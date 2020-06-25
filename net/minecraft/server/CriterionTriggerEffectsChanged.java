@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerEffectsChanged extends CriterionTriggerAbstract<CriterionTriggerEffectsChanged.a> {
@@ -16,14 +14,14 @@ public class CriterionTriggerEffectsChanged extends CriterionTriggerAbstract<Cri
     }
 
     @Override
-    public CriterionTriggerEffectsChanged.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerEffectsChanged.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         CriterionConditionMobEffect criterionconditionmobeffect = CriterionConditionMobEffect.a(jsonobject.get("effects"));
 
-        return new CriterionTriggerEffectsChanged.a(criterionconditionmobeffect);
+        return new CriterionTriggerEffectsChanged.a(criterionconditionentity_b, criterionconditionmobeffect);
     }
 
     public void a(EntityPlayer entityplayer) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggereffectschanged_a) -> {
+        this.a(entityplayer, (criteriontriggereffectschanged_a) -> {
             return criteriontriggereffectschanged_a.a(entityplayer);
         });
     }
@@ -32,13 +30,13 @@ public class CriterionTriggerEffectsChanged extends CriterionTriggerAbstract<Cri
 
         private final CriterionConditionMobEffect a;
 
-        public a(CriterionConditionMobEffect criterionconditionmobeffect) {
-            super(CriterionTriggerEffectsChanged.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionMobEffect criterionconditionmobeffect) {
+            super(CriterionTriggerEffectsChanged.a, criterionconditionentity_b);
             this.a = criterionconditionmobeffect;
         }
 
         public static CriterionTriggerEffectsChanged.a a(CriterionConditionMobEffect criterionconditionmobeffect) {
-            return new CriterionTriggerEffectsChanged.a(criterionconditionmobeffect);
+            return new CriterionTriggerEffectsChanged.a(CriterionConditionEntity.b.a, criterionconditionmobeffect);
         }
 
         public boolean a(EntityPlayer entityplayer) {
@@ -46,8 +44,8 @@ public class CriterionTriggerEffectsChanged extends CriterionTriggerAbstract<Cri
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             jsonobject.add("effects", this.a.b());
             return jsonobject;

@@ -11,6 +11,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.function.IntSupplier;
+import java.util.function.LongSupplier;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,28 +25,30 @@ public class MethodProfiler implements GameProfilerFillerActive {
     private final LongList d = new LongArrayList();
     private final Map<String, MethodProfiler.a> e = Maps.newHashMap();
     private final IntSupplier f;
-    private final long g;
-    private final int h;
-    private String i = "";
-    private boolean j;
+    private final LongSupplier g;
+    private final long h;
+    private final int i;
+    private String j = "";
+    private boolean k;
     @Nullable
-    private MethodProfiler.a k;
-    private final boolean l;
+    private MethodProfiler.a l;
+    private final boolean m;
 
-    public MethodProfiler(long i, IntSupplier intsupplier, boolean flag) {
-        this.g = i;
-        this.h = intsupplier.getAsInt();
+    public MethodProfiler(LongSupplier longsupplier, IntSupplier intsupplier, boolean flag) {
+        this.h = longsupplier.getAsLong();
+        this.g = longsupplier;
+        this.i = intsupplier.getAsInt();
         this.f = intsupplier;
-        this.l = flag;
+        this.m = flag;
     }
 
     @Override
     public void a() {
-        if (this.j) {
+        if (this.k) {
             MethodProfiler.LOGGER.error("Profiler tick already started - missing endTick()?");
         } else {
-            this.j = true;
-            this.i = "";
+            this.k = true;
+            this.j = "";
             this.c.clear();
             this.enter("root");
         }
@@ -53,14 +56,14 @@ public class MethodProfiler implements GameProfilerFillerActive {
 
     @Override
     public void b() {
-        if (!this.j) {
+        if (!this.k) {
             MethodProfiler.LOGGER.error("Profiler tick already ended - missing startTick()?");
         } else {
             this.exit();
-            this.j = false;
-            if (!this.i.isEmpty()) {
+            this.k = false;
+            if (!this.j.isEmpty()) {
                 MethodProfiler.LOGGER.error("Profiler tick ended before path was fully popped (remainder: '{}'). Mismatched push/pop?", new Supplier[]{() -> {
-                            return MethodProfilerResults.b(this.i);
+                            return MethodProfilerResults.b(this.j);
                         }});
             }
 
@@ -69,17 +72,17 @@ public class MethodProfiler implements GameProfilerFillerActive {
 
     @Override
     public void enter(String s) {
-        if (!this.j) {
+        if (!this.k) {
             MethodProfiler.LOGGER.error("Cannot push '{}' to profiler if profiler tick hasn't started - missing startTick()?", s);
         } else {
-            if (!this.i.isEmpty()) {
-                this.i = this.i + '\u001e';
+            if (!this.j.isEmpty()) {
+                this.j = this.j + '\u001e';
             }
 
-            this.i = this.i + s;
-            this.c.add(this.i);
+            this.j = this.j + s;
+            this.c.add(this.j);
             this.d.add(SystemUtils.getMonotonicNanos());
-            this.k = null;
+            this.l = null;
         }
     }
 
@@ -90,7 +93,7 @@ public class MethodProfiler implements GameProfilerFillerActive {
 
     @Override
     public void exit() {
-        if (!this.j) {
+        if (!this.k) {
             MethodProfiler.LOGGER.error("Cannot pop from profiler if profiler tick hasn't started - missing startTick()?");
         } else if (this.d.isEmpty()) {
             MethodProfiler.LOGGER.error("Tried to pop one too many times! Mismatched push() and pop()?");
@@ -104,16 +107,16 @@ public class MethodProfiler implements GameProfilerFillerActive {
 
             methodprofiler_a.a = methodprofiler_a.a + k;
             methodprofiler_a.b = methodprofiler_a.b + 1L;
-            if (this.l && k > MethodProfiler.a) {
+            if (this.m && k > MethodProfiler.a) {
                 MethodProfiler.LOGGER.warn("Something's taking too long! '{}' took aprox {} ms", new Supplier[]{() -> {
-                            return MethodProfilerResults.b(this.i);
+                            return MethodProfilerResults.b(this.j);
                         }, () -> {
                             return (double) k / 1000000.0D;
                         }});
             }
 
-            this.i = this.c.isEmpty() ? "" : (String) this.c.get(this.c.size() - 1);
-            this.k = null;
+            this.j = this.c.isEmpty() ? "" : (String) this.c.get(this.c.size() - 1);
+            this.l = null;
         }
     }
 
@@ -124,13 +127,13 @@ public class MethodProfiler implements GameProfilerFillerActive {
     }
 
     private MethodProfiler.a e() {
-        if (this.k == null) {
-            this.k = (MethodProfiler.a) this.e.computeIfAbsent(this.i, (s) -> {
+        if (this.l == null) {
+            this.l = (MethodProfiler.a) this.e.computeIfAbsent(this.j, (s) -> {
                 return new MethodProfiler.a();
             });
         }
 
-        return this.k;
+        return this.l;
     }
 
     @Override
@@ -145,7 +148,7 @@ public class MethodProfiler implements GameProfilerFillerActive {
 
     @Override
     public MethodProfilerResults d() {
-        return new MethodProfilerResultsFilled(this.e, this.g, this.h, SystemUtils.getMonotonicNanos(), this.f.getAsInt());
+        return new MethodProfilerResultsFilled(this.e, this.h, this.i, this.g.getAsLong(), this.f.getAsInt());
     }
 
     static class a implements MethodProfilerResult {

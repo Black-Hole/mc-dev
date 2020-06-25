@@ -1,12 +1,12 @@
 package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
-import java.util.Optional;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 
 public class DataConverterJukeBox extends DataConverterNamedEntity {
 
@@ -31,9 +31,9 @@ public class DataConverterJukeBox extends DataConverterNamedEntity {
 
                 dynamic1 = dynamic1.set("id", dynamic1.createString(s));
                 dynamic1 = dynamic1.set("Count", dynamic1.createByte((byte) 1));
-                return typed.set(opticfinder, (Typed) ((Optional) type1.readTyped(dynamic1).getSecond()).orElseThrow(() -> {
+                return typed.set(opticfinder, (Typed) ((Pair) type1.readTyped(dynamic1).result().orElseThrow(() -> {
                     return new IllegalStateException("Could not create record item stack.");
-                })).set(DSL.remainderFinder(), dynamic);
+                })).getFirst()).set(DSL.remainderFinder(), dynamic);
             }
         }
 

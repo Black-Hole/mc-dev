@@ -3,22 +3,21 @@ package net.minecraft.server;
 public final class BiomeMesaPlateauClearMutated extends BiomeBase {
 
     public BiomeMesaPlateauClearMutated() {
-        super((new BiomeBase.a()).a(WorldGenSurface.M, WorldGenSurface.C).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.MESA).a(0.45F).b(0.3F).c(2.0F).d(0.0F).a(4159204).b(329011).a("badlands_plateau"));
-        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.MESA))));
-        this.a(WorldGenerator.STRONGHOLD.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
+        super((new BiomeBase.a()).a(WorldGenSurface.Y, WorldGenSurface.K).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.MESA).a(0.45F).b(0.3F).c(2.0F).d(0.0F).a((new BiomeFog.a()).b(4159204).c(329011).a(12638463).a(CaveSoundSettings.b).a()).a("badlands_plateau"));
         BiomeDecoratorGroups.a(this);
-        BiomeDecoratorGroups.c(this);
+        this.a(BiomeDecoratorGroups.C);
         BiomeDecoratorGroups.d(this);
         BiomeDecoratorGroups.f(this);
-        BiomeDecoratorGroups.g(this);
         BiomeDecoratorGroups.h(this);
         BiomeDecoratorGroups.i(this);
-        BiomeDecoratorGroups.l(this);
-        BiomeDecoratorGroups.M(this);
-        BiomeDecoratorGroups.Z(this);
+        BiomeDecoratorGroups.j(this);
+        BiomeDecoratorGroups.k(this);
+        BiomeDecoratorGroups.n(this);
+        BiomeDecoratorGroups.O(this);
         BiomeDecoratorGroups.ab(this);
-        BiomeDecoratorGroups.am(this);
-        BiomeDecoratorGroups.ap(this);
+        BiomeDecoratorGroups.ad(this);
+        BiomeDecoratorGroups.ao(this);
+        BiomeDecoratorGroups.ar(this);
         this.a(EnumCreatureType.AMBIENT, new BiomeBase.BiomeMeta(EntityTypes.BAT, 10, 8, 8));
         this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.SPIDER, 100, 4, 4));
         this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.ZOMBIE, 95, 4, 4));

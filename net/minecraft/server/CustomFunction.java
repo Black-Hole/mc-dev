@@ -27,7 +27,7 @@ public class CustomFunction {
         return this.a;
     }
 
-    public static CustomFunction a(MinecraftKey minecraftkey, CustomFunctionData customfunctiondata, List<String> list) {
+    public static CustomFunction a(MinecraftKey minecraftkey, com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher, CommandListenerWrapper commandlistenerwrapper, List<String> list) {
         List<CustomFunction.c> list1 = Lists.newArrayListWithCapacity(list.size());
 
         for (int i = 0; i < list.size(); ++i) {
@@ -48,7 +48,7 @@ public class CustomFunction {
                 }
 
                 try {
-                    ParseResults<CommandListenerWrapper> parseresults = customfunctiondata.getServer().getCommandDispatcher().a().parse(stringreader, customfunctiondata.g());
+                    ParseResults<CommandListenerWrapper> parseresults = com_mojang_brigadier_commanddispatcher.parse(stringreader, commandlistenerwrapper);
 
                     if (parseresults.getReader().canRead()) {
                         throw CommandDispatcher.a(parseresults);

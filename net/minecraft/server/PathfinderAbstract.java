@@ -31,6 +31,10 @@ public abstract class PathfinderAbstract {
         this.b = null;
     }
 
+    protected PathPoint a(BlockPosition blockposition) {
+        return this.a(blockposition.getX(), blockposition.getY(), blockposition.getZ());
+    }
+
     protected PathPoint a(int i, int j, int k) {
         return (PathPoint) this.c.computeIfAbsent(PathPoint.b(i, j, k), (l) -> {
             return new PathPoint(i, j, k);

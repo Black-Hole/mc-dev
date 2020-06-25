@@ -4,22 +4,22 @@ import java.util.Random;
 
 public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement {
 
-    public static final BlockStateInteger AGE = BlockProperties.ac;
+    public static final BlockStateInteger AGE = BlockProperties.ai;
     private static final VoxelShape[] a = new VoxelShape[]{Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
-    protected BlockCrops(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(this.c(), 0));
+    protected BlockCrops(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(this.c(), 0));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockCrops.a[(Integer) iblockdata.get(this.c())];
     }
 
     @Override
-    protected boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.getBlock() == Blocks.FARMLAND;
+    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockdata.a(Blocks.FARMLAND);
     }
 
     public BlockStateInteger c() {
@@ -30,7 +30,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
         return 7;
     }
 
-    protected int h(IBlockData iblockdata) {
+    protected int g(IBlockData iblockdata) {
         return (Integer) iblockdata.get(this.c());
     }
 
@@ -43,10 +43,14 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     @Override
+    public boolean isTicking(IBlockData iblockdata) {
+        return !this.isRipe(iblockdata);
+    }
+
+    @Override
     public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        super.tick(iblockdata, worldserver, blockposition, random);
         if (worldserver.getLightLevel(blockposition, 0) >= 9) {
-            int i = this.h(iblockdata);
+            int i = this.g(iblockdata);
 
             if (i < this.d()) {
                 float f = a((Block) this, (IBlockAccess) worldserver, blockposition);
@@ -60,7 +64,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        int i = this.h(iblockdata) + this.a(world);
+        int i = this.g(iblockdata) + this.a(world);
         int j = this.d();
 
         if (i > j) {
@@ -83,7 +87,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
                 float f1 = 0.0F;
                 IBlockData iblockdata = iblockaccess.getType(blockposition1.b(i, 0, j));
 
-                if (iblockdata.getBlock() == Blocks.FARMLAND) {
+                if (iblockdata.a(Blocks.FARMLAND)) {
                     f1 = 1.0F;
                     if ((Integer) iblockdata.get(BlockSoil.MOISTURE) > 0) {
                         f1 = 3.0F;

@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import javax.annotation.Nullable;
@@ -23,6 +22,7 @@ public class DefinedStructureInfo {
     private int i;
     private final List<DefinedStructureProcessor> j;
     private boolean k;
+    private boolean l;
 
     public DefinedStructureInfo() {
         this.a = EnumBlockMirror.NONE;
@@ -46,6 +46,7 @@ public class DefinedStructureInfo {
         definedstructureinfo.i = this.i;
         definedstructureinfo.j.addAll(this.j);
         definedstructureinfo.k = this.k;
+        definedstructureinfo.l = this.l;
         return definedstructureinfo;
     }
 
@@ -152,10 +153,14 @@ public class DefinedStructureInfo {
         return this.g;
     }
 
-    public List<DefinedStructure.BlockInfo> a(List<List<DefinedStructure.BlockInfo>> list, @Nullable BlockPosition blockposition) {
+    public DefinedStructure.a a(List<DefinedStructure.a> list, @Nullable BlockPosition blockposition) {
         int i = list.size();
 
-        return i > 0 ? (List) list.get(this.b(blockposition).nextInt(i)) : Collections.emptyList();
+        if (i == 0) {
+            throw new IllegalStateException("No palettes");
+        } else {
+            return (DefinedStructure.a) list.get(this.b(blockposition).nextInt(i));
+        }
     }
 
     @Nullable
@@ -168,5 +173,14 @@ public class DefinedStructureInfo {
 
             return new StructureBoundingBox(i, 0, j, i + 16 - 1, 255, j + 16 - 1);
         }
+    }
+
+    public DefinedStructureInfo d(boolean flag) {
+        this.l = flag;
+        return this;
+    }
+
+    public boolean m() {
+        return this.l;
     }
 }

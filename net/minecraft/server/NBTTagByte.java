@@ -79,9 +79,9 @@ public class NBTTagByte extends NBTNumber {
 
     @Override
     public IChatBaseComponent a(String s, int i) {
-        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("b")).a(NBTTagByte.g);
+        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("b")).a(NBTTagByte.g);
 
-        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatbasecomponent).a(NBTTagByte.f);
+        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatmutablecomponent).a(NBTTagByte.f);
     }
 
     @Override

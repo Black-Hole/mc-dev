@@ -4,14 +4,14 @@ import javax.annotation.Nullable;
 
 public class PathfinderGoalStrollVillage extends PathfinderGoalRandomStroll {
 
-    public PathfinderGoalStrollVillage(EntityCreature entitycreature, double d0) {
-        super(entitycreature, d0, 10);
+    public PathfinderGoalStrollVillage(EntityCreature entitycreature, double d0, boolean flag) {
+        super(entitycreature, d0, 10, flag);
     }
 
     @Override
     public boolean a() {
         WorldServer worldserver = (WorldServer) this.a.world;
-        BlockPosition blockposition = new BlockPosition(this.a);
+        BlockPosition blockposition = this.a.getChunkCoordinates();
 
         return worldserver.b_(blockposition) ? false : super.a();
     }
@@ -20,10 +20,10 @@ public class PathfinderGoalStrollVillage extends PathfinderGoalRandomStroll {
     @Override
     protected Vec3D g() {
         WorldServer worldserver = (WorldServer) this.a.world;
-        BlockPosition blockposition = new BlockPosition(this.a);
+        BlockPosition blockposition = this.a.getChunkCoordinates();
         SectionPosition sectionposition = SectionPosition.a(blockposition);
         SectionPosition sectionposition1 = BehaviorUtil.a(worldserver, sectionposition, 2);
 
-        return sectionposition1 != sectionposition ? RandomPositionGenerator.a(this.a, 10, 7, new Vec3D(sectionposition1.t())) : null;
+        return sectionposition1 != sectionposition ? RandomPositionGenerator.b(this.a, 10, 7, Vec3D.c((BaseBlockPosition) sectionposition1.q())) : null;
     }
 }

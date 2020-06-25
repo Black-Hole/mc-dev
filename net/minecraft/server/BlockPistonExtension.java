@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockPistonExtension extends BlockDirectional {
 
-    public static final BlockStateEnum<BlockPropertyPistonType> TYPE = BlockProperties.aC;
+    public static final BlockStateEnum<BlockPropertyPistonType> TYPE = BlockProperties.aJ;
     public static final BlockStateBoolean SHORT = BlockProperties.x;
     protected static final VoxelShape d = Block.a(12.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     protected static final VoxelShape e = Block.a(0.0D, 0.0D, 0.0D, 4.0D, 16.0D, 16.0D);
@@ -12,20 +12,20 @@ public class BlockPistonExtension extends BlockDirectional {
     protected static final VoxelShape i = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
     protected static final VoxelShape j = Block.a(6.0D, -4.0D, 6.0D, 10.0D, 12.0D, 10.0D);
     protected static final VoxelShape k = Block.a(6.0D, 4.0D, 6.0D, 10.0D, 20.0D, 10.0D);
-    protected static final VoxelShape w = Block.a(6.0D, 6.0D, -4.0D, 10.0D, 10.0D, 12.0D);
-    protected static final VoxelShape x = Block.a(6.0D, 6.0D, 4.0D, 10.0D, 10.0D, 20.0D);
-    protected static final VoxelShape y = Block.a(-4.0D, 6.0D, 6.0D, 12.0D, 10.0D, 10.0D);
-    protected static final VoxelShape z = Block.a(4.0D, 6.0D, 6.0D, 20.0D, 10.0D, 10.0D);
-    protected static final VoxelShape A = Block.a(6.0D, 0.0D, 6.0D, 10.0D, 12.0D, 10.0D);
-    protected static final VoxelShape B = Block.a(6.0D, 4.0D, 6.0D, 10.0D, 16.0D, 10.0D);
-    protected static final VoxelShape C = Block.a(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 12.0D);
-    protected static final VoxelShape D = Block.a(6.0D, 6.0D, 4.0D, 10.0D, 10.0D, 16.0D);
-    protected static final VoxelShape E = Block.a(0.0D, 6.0D, 6.0D, 12.0D, 10.0D, 10.0D);
-    protected static final VoxelShape F = Block.a(4.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D);
+    protected static final VoxelShape o = Block.a(6.0D, 6.0D, -4.0D, 10.0D, 10.0D, 12.0D);
+    protected static final VoxelShape p = Block.a(6.0D, 6.0D, 4.0D, 10.0D, 10.0D, 20.0D);
+    protected static final VoxelShape q = Block.a(-4.0D, 6.0D, 6.0D, 12.0D, 10.0D, 10.0D);
+    protected static final VoxelShape r = Block.a(4.0D, 6.0D, 6.0D, 20.0D, 10.0D, 10.0D);
+    protected static final VoxelShape s = Block.a(6.0D, 0.0D, 6.0D, 10.0D, 12.0D, 10.0D);
+    protected static final VoxelShape t = Block.a(6.0D, 4.0D, 6.0D, 10.0D, 16.0D, 10.0D);
+    protected static final VoxelShape u = Block.a(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 12.0D);
+    protected static final VoxelShape v = Block.a(6.0D, 6.0D, 4.0D, 10.0D, 10.0D, 16.0D);
+    protected static final VoxelShape w = Block.a(0.0D, 6.0D, 6.0D, 12.0D, 10.0D, 10.0D);
+    protected static final VoxelShape x = Block.a(4.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D);
 
-    public BlockPistonExtension(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPistonExtension.FACING, EnumDirection.NORTH)).set(BlockPistonExtension.TYPE, BlockPropertyPistonType.DEFAULT)).set(BlockPistonExtension.SHORT, false));
+    public BlockPistonExtension(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPistonExtension.FACING, EnumDirection.NORTH)).set(BlockPistonExtension.TYPE, BlockPropertyPistonType.DEFAULT)).set(BlockPistonExtension.SHORT, false));
     }
 
     private VoxelShape h(IBlockData iblockdata) {
@@ -47,43 +47,48 @@ public class BlockPistonExtension extends BlockDirectional {
     }
 
     @Override
-    public boolean o(IBlockData iblockdata) {
+    public boolean c_(IBlockData iblockdata) {
         return true;
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return VoxelShapes.a(this.h(iblockdata), this.i(iblockdata));
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return VoxelShapes.a(this.h(iblockdata), this.l(iblockdata));
     }
 
-    private VoxelShape i(IBlockData iblockdata) {
+    private VoxelShape l(IBlockData iblockdata) {
         boolean flag = (Boolean) iblockdata.get(BlockPistonExtension.SHORT);
 
         switch ((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)) {
             case DOWN:
             default:
-                return flag ? BlockPistonExtension.B : BlockPistonExtension.k;
+                return flag ? BlockPistonExtension.t : BlockPistonExtension.k;
             case UP:
-                return flag ? BlockPistonExtension.A : BlockPistonExtension.j;
+                return flag ? BlockPistonExtension.s : BlockPistonExtension.j;
             case NORTH:
-                return flag ? BlockPistonExtension.D : BlockPistonExtension.x;
+                return flag ? BlockPistonExtension.v : BlockPistonExtension.p;
             case SOUTH:
-                return flag ? BlockPistonExtension.C : BlockPistonExtension.w;
+                return flag ? BlockPistonExtension.u : BlockPistonExtension.o;
             case WEST:
-                return flag ? BlockPistonExtension.F : BlockPistonExtension.z;
+                return flag ? BlockPistonExtension.x : BlockPistonExtension.r;
             case EAST:
-                return flag ? BlockPistonExtension.E : BlockPistonExtension.y;
+                return flag ? BlockPistonExtension.w : BlockPistonExtension.q;
         }
+    }
+
+    private boolean a(IBlockData iblockdata, IBlockData iblockdata1) {
+        Block block = iblockdata.get(BlockPistonExtension.TYPE) == BlockPropertyPistonType.DEFAULT ? Blocks.PISTON : Blocks.STICKY_PISTON;
+
+        return iblockdata1.a(block) && (Boolean) iblockdata1.get(BlockPiston.EXTENDED) && iblockdata1.get(BlockPistonExtension.FACING) == iblockdata.get(BlockPistonExtension.FACING);
     }
 
     @Override
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
         if (!world.isClientSide && entityhuman.abilities.canInstantlyBuild) {
             BlockPosition blockposition1 = blockposition.shift(((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)).opposite());
-            Block block = world.getType(blockposition1).getBlock();
 
-            if (block == Blocks.PISTON || block == Blocks.STICKY_PISTON) {
-                world.a(blockposition1, false);
+            if (this.a(iblockdata, world.getType(blockposition1))) {
+                world.b(blockposition1, false);
             }
         }
 
@@ -92,16 +97,12 @@ public class BlockPistonExtension extends BlockDirectional {
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!iblockdata.a(iblockdata1.getBlock())) {
             super.remove(iblockdata, world, blockposition, iblockdata1, flag);
-            EnumDirection enumdirection = ((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)).opposite();
+            BlockPosition blockposition1 = blockposition.shift(((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)).opposite());
 
-            blockposition = blockposition.shift(enumdirection);
-            IBlockData iblockdata2 = world.getType(blockposition);
-
-            if ((iblockdata2.getBlock() == Blocks.PISTON || iblockdata2.getBlock() == Blocks.STICKY_PISTON) && (Boolean) iblockdata2.get(BlockPiston.EXTENDED)) {
-                c(iblockdata2, world, blockposition);
-                world.a(blockposition, false);
+            if (this.a(iblockdata, world.getType(blockposition1))) {
+                world.b(blockposition1, true);
             }
 
         }
@@ -114,9 +115,9 @@ public class BlockPistonExtension extends BlockDirectional {
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        Block block = iworldreader.getType(blockposition.shift(((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)).opposite())).getBlock();
+        IBlockData iblockdata1 = iworldreader.getType(blockposition.shift(((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)).opposite()));
 
-        return block == Blocks.PISTON || block == Blocks.STICKY_PISTON || block == Blocks.MOVING_PISTON;
+        return this.a(iblockdata, iblockdata1) || iblockdata1.a(Blocks.MOVING_PISTON) && iblockdata1.get(BlockPistonExtension.FACING) == iblockdata.get(BlockPistonExtension.FACING);
     }
 
     @Override

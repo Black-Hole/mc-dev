@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, BiomeManager.Provider {
@@ -20,6 +21,17 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
         return this.d().a(blockposition);
     }
 
+    default Stream<IBlockData> c(AxisAlignedBB axisalignedbb) {
+        int i = MathHelper.floor(axisalignedbb.minX);
+        int j = MathHelper.floor(axisalignedbb.maxX);
+        int k = MathHelper.floor(axisalignedbb.minY);
+        int l = MathHelper.floor(axisalignedbb.maxY);
+        int i1 = MathHelper.floor(axisalignedbb.minZ);
+        int j1 = MathHelper.floor(axisalignedbb.maxZ);
+
+        return this.isAreaLoaded(i, k, i1, j, l, j1) ? this.a(axisalignedbb) : Stream.empty();
+    }
+
     @Override
     default BiomeBase getBiome(int i, int j, int k) {
         IChunkAccess ichunkaccess = this.getChunkAt(i >> 2, k >> 2, ChunkStatus.BIOMES, false);
@@ -29,11 +41,12 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
 
     BiomeBase a(int i, int j, int k);
 
-    boolean p_();
+    boolean s_();
 
+    @Deprecated
     int getSeaLevel();
 
-    WorldProvider getWorldProvider();
+    DimensionManager getDimensionManager();
 
     default BlockPosition getHighestBlockYAt(HeightMap.Type heightmap_type, BlockPosition blockposition) {
         return new BlockPosition(blockposition.getX(), this.a(heightmap_type, blockposition.getX(), blockposition.getZ()), blockposition.getZ());
@@ -43,7 +56,7 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
         return this.getType(blockposition).isAir();
     }
 
-    default boolean v(BlockPosition blockposition) {
+    default boolean x(BlockPosition blockposition) {
         if (blockposition.getY() >= this.getSeaLevel()) {
             return this.f(blockposition);
         } else {
@@ -66,15 +79,15 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
     }
 
     @Deprecated
-    default float w(BlockPosition blockposition) {
-        return this.getWorldProvider().a(this.getLightLevel(blockposition));
+    default float y(BlockPosition blockposition) {
+        return this.getDimensionManager().a(this.getLightLevel(blockposition));
     }
 
     default int c(BlockPosition blockposition, EnumDirection enumdirection) {
         return this.getType(blockposition).c(this, blockposition, enumdirection);
     }
 
-    default IChunkAccess x(BlockPosition blockposition) {
+    default IChunkAccess z(BlockPosition blockposition) {
         return this.getChunkAt(blockposition.getX() >> 4, blockposition.getZ() >> 4);
     }
 
@@ -92,8 +105,8 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
         return this.getChunkAt(i, j, ChunkStatus.EMPTY, false);
     }
 
-    default boolean y(BlockPosition blockposition) {
-        return this.getFluid(blockposition).a(TagsFluid.WATER);
+    default boolean A(BlockPosition blockposition) {
+        return this.getFluid(blockposition).a((Tag) TagsFluid.WATER);
     }
 
     default boolean containsLiquid(AxisAlignedBB axisalignedbb) {
@@ -103,42 +116,21 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
         int l = MathHelper.f(axisalignedbb.maxY);
         int i1 = MathHelper.floor(axisalignedbb.minZ);
         int j1 = MathHelper.f(axisalignedbb.maxZ);
-        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
-        Throwable throwable = null;
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-        try {
-            for (int k1 = i; k1 < j; ++k1) {
-                for (int l1 = k; l1 < l; ++l1) {
-                    for (int i2 = i1; i2 < j1; ++i2) {
-                        IBlockData iblockdata = this.getType(blockposition_pooledblockposition.d(k1, l1, i2));
+        for (int k1 = i; k1 < j; ++k1) {
+            for (int l1 = k; l1 < l; ++l1) {
+                for (int i2 = i1; i2 < j1; ++i2) {
+                    IBlockData iblockdata = this.getType(blockposition_mutableblockposition.d(k1, l1, i2));
 
-                        if (!iblockdata.getFluid().isEmpty()) {
-                            boolean flag = true;
-
-                            return flag;
-                        }
+                    if (!iblockdata.getFluid().isEmpty()) {
+                        return true;
                     }
                 }
             }
-
-            return false;
-        } catch (Throwable throwable1) {
-            throwable = throwable1;
-            throw throwable1;
-        } finally {
-            if (blockposition_pooledblockposition != null) {
-                if (throwable != null) {
-                    try {
-                        blockposition_pooledblockposition.close();
-                    } catch (Throwable throwable2) {
-                        throwable.addSuppressed(throwable2);
-                    }
-                } else {
-                    blockposition_pooledblockposition.close();
-                }
-            }
-
         }
+
+        return false;
     }
 
     default int getLightLevel(BlockPosition blockposition) {

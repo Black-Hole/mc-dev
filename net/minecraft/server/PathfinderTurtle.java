@@ -41,7 +41,7 @@ public class PathfinderTurtle extends PathfinderNormal {
         int i = 0;
         boolean flag = true;
         BlockPosition blockposition = new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c);
-        double d0 = this.a(blockposition);
+        double d0 = this.b(blockposition);
         PathPoint pathpoint1 = this.a(pathpoint.a, pathpoint.b, pathpoint.c + 1, 1, d0);
         PathPoint pathpoint2 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c, 1, d0);
         PathPoint pathpoint3 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c, 1, d0);
@@ -110,7 +110,7 @@ public class PathfinderTurtle extends PathfinderNormal {
         return i;
     }
 
-    private double a(BlockPosition blockposition) {
+    private double b(BlockPosition blockposition) {
         if (!this.b.isInWater()) {
             BlockPosition blockposition1 = blockposition.down();
             VoxelShape voxelshape = this.a.getType(blockposition1).getCollisionShape(this.a, blockposition1);
@@ -125,7 +125,7 @@ public class PathfinderTurtle extends PathfinderNormal {
     private PathPoint a(int i, int j, int k, int l, double d0) {
         PathPoint pathpoint = null;
         BlockPosition blockposition = new BlockPosition(i, j, k);
-        double d1 = this.a(blockposition);
+        double d1 = this.b(blockposition);
 
         if (d1 - d0 > 1.125D) {
             return null;
@@ -141,7 +141,7 @@ public class PathfinderTurtle extends PathfinderNormal {
             }
 
             if (pathtype != PathType.WATER && pathtype != PathType.WALKABLE) {
-                if (pathpoint == null && l > 0 && pathtype != PathType.FENCE && pathtype != PathType.TRAPDOOR) {
+                if (pathpoint == null && l > 0 && pathtype != PathType.FENCE && pathtype != PathType.UNPASSABLE_RAIL && pathtype != PathType.TRAPDOOR) {
                     pathpoint = this.a(i, j + 1, k, l - 1, d0);
                 }
 
@@ -172,7 +172,7 @@ public class PathfinderTurtle extends PathfinderNormal {
 
                     while (j > 0 && pathtype == PathType.OPEN) {
                         --j;
-                        if (i1++ >= this.b.bD()) {
+                        if (i1++ >= this.b.bL()) {
                             return null;
                         }
 
@@ -205,7 +205,7 @@ public class PathfinderTurtle extends PathfinderNormal {
     @Override
     protected PathType a(IBlockAccess iblockaccess, boolean flag, boolean flag1, BlockPosition blockposition, PathType pathtype) {
         if (pathtype == PathType.RAIL && !(iblockaccess.getType(blockposition).getBlock() instanceof BlockMinecartTrackAbstract) && !(iblockaccess.getType(blockposition.down()).getBlock() instanceof BlockMinecartTrackAbstract)) {
-            pathtype = PathType.FENCE;
+            pathtype = PathType.UNPASSABLE_RAIL;
         }
 
         if (pathtype == PathType.DOOR_OPEN || pathtype == PathType.DOOR_WOOD_CLOSED || pathtype == PathType.DOOR_IRON_CLOSED) {
@@ -221,7 +221,8 @@ public class PathfinderTurtle extends PathfinderNormal {
 
     @Override
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k) {
-        PathType pathtype = c(iblockaccess, i, j, k);
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+        PathType pathtype = b(iblockaccess, blockposition_mutableblockposition.d(i, j, k));
 
         if (pathtype == PathType.WATER) {
             EnumDirection[] aenumdirection = EnumDirection.values();
@@ -229,7 +230,7 @@ public class PathfinderTurtle extends PathfinderNormal {
 
             for (int i1 = 0; i1 < l; ++i1) {
                 EnumDirection enumdirection = aenumdirection[i1];
-                PathType pathtype1 = c(iblockaccess, i + enumdirection.getAdjacentX(), j + enumdirection.getAdjacentY(), k + enumdirection.getAdjacentZ());
+                PathType pathtype1 = b(iblockaccess, blockposition_mutableblockposition.d(i, j, k).c(enumdirection));
 
                 if (pathtype1 == PathType.BLOCKED) {
                     return PathType.WATER_BORDER;
@@ -239,8 +240,8 @@ public class PathfinderTurtle extends PathfinderNormal {
             return PathType.WATER;
         } else {
             if (pathtype == PathType.OPEN && j >= 1) {
-                Block block = iblockaccess.getType(new BlockPosition(i, j - 1, k)).getBlock();
-                PathType pathtype2 = c(iblockaccess, i, j - 1, k);
+                IBlockData iblockdata = iblockaccess.getType(new BlockPosition(i, j - 1, k));
+                PathType pathtype2 = b(iblockaccess, blockposition_mutableblockposition.d(i, j - 1, k));
 
                 if (pathtype2 != PathType.WALKABLE && pathtype2 != PathType.OPEN && pathtype2 != PathType.LAVA) {
                     pathtype = PathType.WALKABLE;
@@ -248,7 +249,7 @@ public class PathfinderTurtle extends PathfinderNormal {
                     pathtype = PathType.OPEN;
                 }
 
-                if (pathtype2 == PathType.DAMAGE_FIRE || block == Blocks.MAGMA_BLOCK || block == Blocks.CAMPFIRE) {
+                if (pathtype2 == PathType.DAMAGE_FIRE || iblockdata.a(Blocks.MAGMA_BLOCK) || iblockdata.a((Tag) TagsBlock.CAMPFIRES)) {
                     pathtype = PathType.DAMAGE_FIRE;
                 }
 
@@ -262,7 +263,7 @@ public class PathfinderTurtle extends PathfinderNormal {
             }
 
             if (pathtype == PathType.WALKABLE) {
-                pathtype = a(iblockaccess, i, j, k, pathtype);
+                pathtype = a(iblockaccess, blockposition_mutableblockposition.d(i, j, k), pathtype);
             }
 
             return pathtype;

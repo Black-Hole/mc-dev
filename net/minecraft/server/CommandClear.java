@@ -4,7 +4,6 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import java.util.Collection;
@@ -46,14 +45,15 @@ public class CommandClear {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            j += entityplayer.inventory.a(predicate, i);
+            j += entityplayer.inventory.a(predicate, i, entityplayer.defaultContainer.j());
             entityplayer.activeContainer.c();
+            entityplayer.defaultContainer.a((IInventory) entityplayer.inventory);
             entityplayer.broadcastCarriedItem();
         }
 
         if (j == 0) {
             if (collection.size() == 1) {
-                throw CommandClear.a.create(((EntityPlayer) collection.iterator().next()).getDisplayName().getLegacyString());
+                throw CommandClear.a.create(((EntityPlayer) collection.iterator().next()).getDisplayName());
             } else {
                 throw CommandClear.b.create(collection.size());
             }

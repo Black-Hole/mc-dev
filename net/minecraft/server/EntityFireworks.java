@@ -3,8 +3,9 @@ package net.minecraft.server;
 import java.util.Iterator;
 import java.util.List;
 import java.util.OptionalInt;
+import javax.annotation.Nullable;
 
-public class EntityFireworks extends Entity implements IProjectile {
+public class EntityFireworks extends IProjectile {
 
     public static final DataWatcherObject<ItemStack> FIREWORK_ITEM = DataWatcher.a(EntityFireworks.class, DataWatcherRegistry.g);
     private static final DataWatcherObject<OptionalInt> c = DataWatcher.a(EntityFireworks.class, DataWatcherRegistry.r);
@@ -15,13 +16,6 @@ public class EntityFireworks extends Entity implements IProjectile {
 
     public EntityFireworks(EntityTypes<? extends EntityFireworks> entitytypes, World world) {
         super(entitytypes, world);
-    }
-
-    @Override
-    protected void initDatawatcher() {
-        this.datawatcher.register(EntityFireworks.FIREWORK_ITEM, ItemStack.a);
-        this.datawatcher.register(EntityFireworks.c, OptionalInt.empty());
-        this.datawatcher.register(EntityFireworks.SHOT_AT_ANGLE, false);
     }
 
     public EntityFireworks(World world, double d0, double d1, double d2, ItemStack itemstack) {
@@ -39,8 +33,13 @@ public class EntityFireworks extends Entity implements IProjectile {
         this.expectedLifespan = 10 * i + this.random.nextInt(6) + this.random.nextInt(7);
     }
 
+    public EntityFireworks(World world, @Nullable Entity entity, double d0, double d1, double d2, ItemStack itemstack) {
+        this(world, d0, d1, d2, itemstack);
+        this.setShooter(entity);
+    }
+
     public EntityFireworks(World world, ItemStack itemstack, EntityLiving entityliving) {
-        this(world, entityliving.locX(), entityliving.locY(), entityliving.locZ(), itemstack);
+        this(world, entityliving, entityliving.locX(), entityliving.locY(), entityliving.locZ(), itemstack);
         this.datawatcher.set(EntityFireworks.c, OptionalInt.of(entityliving.getId()));
         this.ridingEntity = entityliving;
     }
@@ -48,6 +47,18 @@ public class EntityFireworks extends Entity implements IProjectile {
     public EntityFireworks(World world, ItemStack itemstack, double d0, double d1, double d2, boolean flag) {
         this(world, d0, d1, d2, itemstack);
         this.datawatcher.set(EntityFireworks.SHOT_AT_ANGLE, flag);
+    }
+
+    public EntityFireworks(World world, ItemStack itemstack, Entity entity, double d0, double d1, double d2, boolean flag) {
+        this(world, itemstack, d0, d1, d2, flag);
+        this.setShooter(entity);
+    }
+
+    @Override
+    protected void initDatawatcher() {
+        this.datawatcher.register(EntityFireworks.FIREWORK_ITEM, ItemStack.b);
+        this.datawatcher.register(EntityFireworks.c, OptionalInt.empty());
+        this.datawatcher.register(EntityFireworks.SHOT_AT_ANGLE, false);
     }
 
     @Override
@@ -85,41 +96,19 @@ public class EntityFireworks extends Entity implements IProjectile {
                 this.setMot(this.getMot().d(1.15D, 1.0D, 1.15D).add(0.0D, 0.04D, 0.0D));
             }
 
-            this.move(EnumMoveType.SELF, this.getMot());
+            vec3d = this.getMot();
+            this.move(EnumMoveType.SELF, vec3d);
+            this.setMot(vec3d);
         }
 
-        vec3d = this.getMot();
-        MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, this.getBoundingBox().a(vec3d).g(1.0D), (entity) -> {
-            return !entity.isSpectator() && entity.isAlive() && entity.isInteractable();
-        }, RayTrace.BlockCollisionOption.COLLIDER, true);
+        MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, this::a, RayTrace.BlockCollisionOption.COLLIDER);
 
         if (!this.noclip) {
             this.a(movingobjectposition);
             this.impulse = true;
         }
 
-        float f = MathHelper.sqrt(b(vec3d));
-
-        this.yaw = (float) (MathHelper.d(vec3d.x, vec3d.z) * 57.2957763671875D);
-
-        for (this.pitch = (float) (MathHelper.d(vec3d.y, (double) f) * 57.2957763671875D); this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {
-            ;
-        }
-
-        while (this.pitch - this.lastPitch >= 180.0F) {
-            this.lastPitch += 360.0F;
-        }
-
-        while (this.yaw - this.lastYaw < -180.0F) {
-            this.lastYaw -= 360.0F;
-        }
-
-        while (this.yaw - this.lastYaw >= 180.0F) {
-            this.lastYaw += 360.0F;
-        }
-
-        this.pitch = MathHelper.g(0.2F, this.lastPitch, this.pitch);
-        this.yaw = MathHelper.g(0.2F, this.lastYaw, this.yaw);
+        this.x();
         if (this.ticksFlown == 0 && !this.isSilent()) {
             this.world.playSound((EntityHuman) null, this.locX(), this.locY(), this.locZ(), SoundEffects.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.AMBIENT, 3.0F, 1.0F);
         }
@@ -141,24 +130,24 @@ public class EntityFireworks extends Entity implements IProjectile {
         this.die();
     }
 
-    protected void a(MovingObjectPosition movingobjectposition) {
-        if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.ENTITY && !this.world.isClientSide) {
+    @Override
+    protected void a(MovingObjectPositionEntity movingobjectpositionentity) {
+        super.a(movingobjectpositionentity);
+        if (!this.world.isClientSide) {
             this.explode();
-        } else if (this.w) {
-            BlockPosition blockposition;
+        }
+    }
 
-            if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-                blockposition = new BlockPosition(((MovingObjectPositionBlock) movingobjectposition).getBlockPosition());
-            } else {
-                blockposition = new BlockPosition(this);
-            }
+    @Override
+    protected void a(MovingObjectPositionBlock movingobjectpositionblock) {
+        BlockPosition blockposition = new BlockPosition(movingobjectpositionblock.getBlockPosition());
 
-            this.world.getType(blockposition).a(this.world, blockposition, (Entity) this);
-            if (this.hasExplosions()) {
-                this.explode();
-            }
+        this.world.getType(blockposition).a(this.world, blockposition, (Entity) this);
+        if (!this.world.s_() && this.hasExplosions()) {
+            this.explode();
         }
 
+        super.a(movingobjectpositionblock);
     }
 
     private boolean hasExplosions() {
@@ -181,7 +170,7 @@ public class EntityFireworks extends Entity implements IProjectile {
 
         if (f > 0.0F) {
             if (this.ridingEntity != null) {
-                this.ridingEntity.damageEntity(DamageSource.FIREWORKS, 5.0F + (float) (nbttaglist.size() * 2));
+                this.ridingEntity.damageEntity(DamageSource.a(this, this.getShooter()), 5.0F + (float) (nbttaglist.size() * 2));
             }
 
             double d0 = 5.0D;
@@ -208,7 +197,7 @@ public class EntityFireworks extends Entity implements IProjectile {
                     if (flag) {
                         float f1 = f * (float) Math.sqrt((5.0D - (double) this.g(entityliving)) / 5.0D);
 
-                        entityliving.damageEntity(DamageSource.FIREWORKS, f1);
+                        entityliving.damageEntity(DamageSource.a(this, this.getShooter()), f1);
                     }
                 }
             }
@@ -225,7 +214,8 @@ public class EntityFireworks extends Entity implements IProjectile {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setInt("Life", this.ticksFlown);
         nbttagcompound.setInt("LifeTime", this.expectedLifespan);
         ItemStack itemstack = (ItemStack) this.datawatcher.get(EntityFireworks.FIREWORK_ITEM);
@@ -238,7 +228,8 @@ public class EntityFireworks extends Entity implements IProjectile {
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.ticksFlown = nbttagcompound.getInt("Life");
         this.expectedLifespan = nbttagcompound.getInt("LifeTime");
         ItemStack itemstack = ItemStack.a(nbttagcompound.getCompound("FireworksItem"));
@@ -254,28 +245,12 @@ public class EntityFireworks extends Entity implements IProjectile {
     }
 
     @Override
-    public boolean bA() {
+    public boolean bH() {
         return false;
     }
 
     @Override
-    public Packet<?> L() {
+    public Packet<?> O() {
         return new PacketPlayOutSpawnEntity(this);
-    }
-
-    @Override
-    public void shoot(double d0, double d1, double d2, float f, float f1) {
-        float f2 = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-
-        d0 /= (double) f2;
-        d1 /= (double) f2;
-        d2 /= (double) f2;
-        d0 += this.random.nextGaussian() * 0.007499999832361937D * (double) f1;
-        d1 += this.random.nextGaussian() * 0.007499999832361937D * (double) f1;
-        d2 += this.random.nextGaussian() * 0.007499999832361937D * (double) f1;
-        d0 *= (double) f;
-        d1 *= (double) f;
-        d2 *= (double) f;
-        this.setMot(d0, d1, d2);
     }
 }

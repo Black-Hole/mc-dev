@@ -2,36 +2,41 @@ package net.minecraft.server;
 
 public class HandshakeListener implements PacketHandshakingInListener {
 
-    private final MinecraftServer a;
-    private final NetworkManager b;
+    private static final IChatBaseComponent a = new ChatComponentText("Ignoring status request");
+    private final MinecraftServer b;
+    private final NetworkManager c;
 
     public HandshakeListener(MinecraftServer minecraftserver, NetworkManager networkmanager) {
-        this.a = minecraftserver;
-        this.b = networkmanager;
+        this.b = minecraftserver;
+        this.c = networkmanager;
     }
 
     @Override
     public void a(PacketHandshakingInSetProtocol packethandshakinginsetprotocol) {
         switch (packethandshakinginsetprotocol.b()) {
             case LOGIN:
-                this.b.setProtocol(EnumProtocol.LOGIN);
+                this.c.setProtocol(EnumProtocol.LOGIN);
                 ChatMessage chatmessage;
 
                 if (packethandshakinginsetprotocol.c() > SharedConstants.getGameVersion().getProtocolVersion()) {
                     chatmessage = new ChatMessage("multiplayer.disconnect.outdated_server", new Object[]{SharedConstants.getGameVersion().getName()});
-                    this.b.sendPacket(new PacketLoginOutDisconnect(chatmessage));
-                    this.b.close(chatmessage);
+                    this.c.sendPacket(new PacketLoginOutDisconnect(chatmessage));
+                    this.c.close(chatmessage);
                 } else if (packethandshakinginsetprotocol.c() < SharedConstants.getGameVersion().getProtocolVersion()) {
                     chatmessage = new ChatMessage("multiplayer.disconnect.outdated_client", new Object[]{SharedConstants.getGameVersion().getName()});
-                    this.b.sendPacket(new PacketLoginOutDisconnect(chatmessage));
-                    this.b.close(chatmessage);
+                    this.c.sendPacket(new PacketLoginOutDisconnect(chatmessage));
+                    this.c.close(chatmessage);
                 } else {
-                    this.b.setPacketListener(new LoginListener(this.a, this.b));
+                    this.c.setPacketListener(new LoginListener(this.b, this.c));
                 }
                 break;
             case STATUS:
-                this.b.setProtocol(EnumProtocol.STATUS);
-                this.b.setPacketListener(new PacketStatusListener(this.a, this.b));
+                if (this.b.ak()) {
+                    this.c.setProtocol(EnumProtocol.STATUS);
+                    this.c.setPacketListener(new PacketStatusListener(this.b, this.c));
+                } else {
+                    this.c.close(HandshakeListener.a);
+                }
                 break;
             default:
                 throw new UnsupportedOperationException("Invalid intention " + packethandshakinginsetprotocol.b());
@@ -44,6 +49,6 @@ public class HandshakeListener implements PacketHandshakingInListener {
 
     @Override
     public NetworkManager a() {
-        return this.b;
+        return this.c;
     }
 }

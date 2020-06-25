@@ -2,15 +2,15 @@ package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Stream;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.OptionalDynamic;
+import java.util.List;
 
 public class DataConverterDropChances extends DataFix {
+
+    private static final Codec<List<Float>> a = Codec.FLOAT.listOf();
 
     public DataConverterDropChances(Schema schema, boolean flag) {
         super(schema, flag);
@@ -19,22 +19,27 @@ public class DataConverterDropChances extends DataFix {
     public TypeRewriteRule makeRule() {
         return this.fixTypeEverywhereTyped("EntityRedundantChanceTagsFix", this.getInputSchema().getType(DataConverterTypes.ENTITY), (typed) -> {
             return typed.update(DSL.remainderFinder(), (dynamic) -> {
-                Dynamic<?> dynamic1 = dynamic;
-
-                if (Objects.equals(dynamic.get("HandDropChances"), Optional.of(dynamic.createList(Stream.generate(() -> {
-                    return dynamic.createFloat(0.0F);
-                }).limit(2L))))) {
+                if (a(dynamic.get("HandDropChances"), 2)) {
                     dynamic = dynamic.remove("HandDropChances");
                 }
 
-                if (Objects.equals(dynamic.get("ArmorDropChances"), Optional.of(dynamic.createList(Stream.generate(() -> {
-                    return dynamic1.createFloat(0.0F);
-                }).limit(4L))))) {
+                if (a(dynamic.get("ArmorDropChances"), 4)) {
                     dynamic = dynamic.remove("ArmorDropChances");
                 }
 
                 return dynamic;
             });
         });
+    }
+
+    private static boolean a(OptionalDynamic<?> optionaldynamic, int i) {
+        Codec codec = DataConverterDropChances.a;
+
+        codec.getClass();
+        return (Boolean) optionaldynamic.flatMap(codec::parse).map((list) -> {
+            return list.size() == i && list.stream().allMatch((ofloat) -> {
+                return ofloat == 0.0F;
+            });
+        }).result().orElse(false);
     }
 }

@@ -7,19 +7,19 @@ public class BlockCoralBase extends Block implements IBlockWaterlogged {
     public static final BlockStateBoolean b = BlockProperties.C;
     private static final VoxelShape a = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 4.0D, 14.0D);
 
-    protected BlockCoralBase(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCoralBase.b, true));
+    protected BlockCoralBase(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCoralBase.b, true));
     }
 
     protected void a(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        if (!b_(iblockdata, generatoraccess, blockposition)) {
+        if (!c(iblockdata, (IBlockAccess) generatoraccess, blockposition)) {
             generatoraccess.getBlockTickList().a(blockposition, this, 60 + generatoraccess.getRandom().nextInt(40));
         }
 
     }
 
-    protected static boolean b_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    protected static boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         if ((Boolean) iblockdata.get(BlockCoralBase.b)) {
             return true;
         } else {
@@ -29,7 +29,7 @@ public class BlockCoralBase extends Block implements IBlockWaterlogged {
             for (int j = 0; j < i; ++j) {
                 EnumDirection enumdirection = aenumdirection[j];
 
-                if (iblockaccess.getFluid(blockposition.shift(enumdirection)).a(TagsFluid.WATER)) {
+                if (iblockaccess.getFluid(blockposition.shift(enumdirection)).a((Tag) TagsFluid.WATER)) {
                     return true;
                 }
             }
@@ -43,11 +43,11 @@ public class BlockCoralBase extends Block implements IBlockWaterlogged {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
-        return (IBlockData) this.getBlockData().set(BlockCoralBase.b, fluid.a(TagsFluid.WATER) && fluid.g() == 8);
+        return (IBlockData) this.getBlockData().set(BlockCoralBase.b, fluid.a((Tag) TagsFluid.WATER) && fluid.e() == 8);
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockCoralBase.a;
     }
 
@@ -73,7 +73,7 @@ public class BlockCoralBase extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public Fluid a_(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockCoralBase.b) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
+    public Fluid d(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockCoralBase.b) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
     }
 }

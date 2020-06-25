@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
-public class BlockStateInteger extends BlockState<Integer> {
+public class BlockStateInteger extends IBlockState<Integer> {
 
     private final ImmutableSet<Integer> a;
 
@@ -46,8 +46,8 @@ public class BlockStateInteger extends BlockState<Integer> {
     }
 
     @Override
-    public int c() {
-        return 31 * super.c() + this.a.hashCode();
+    public int b() {
+        return 31 * super.b() + this.a.hashCode();
     }
 
     public static BlockStateInteger of(String s, int i, int j) {

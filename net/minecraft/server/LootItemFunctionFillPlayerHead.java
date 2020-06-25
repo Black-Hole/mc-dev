@@ -17,6 +17,11 @@ public class LootItemFunctionFillPlayerHead extends LootItemFunctionConditional 
     }
 
     @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.t;
+    }
+
+    @Override
     public Set<LootContextParameter<?>> a() {
         return ImmutableSet.of(this.a.a());
     }
@@ -38,9 +43,7 @@ public class LootItemFunctionFillPlayerHead extends LootItemFunctionConditional 
 
     public static class a extends LootItemFunctionConditional.c<LootItemFunctionFillPlayerHead> {
 
-        public a() {
-            super(new MinecraftKey("fill_player_head"), LootItemFunctionFillPlayerHead.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionFillPlayerHead lootitemfunctionfillplayerhead, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionfillplayerhead, jsonserializationcontext);

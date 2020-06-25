@@ -3,10 +3,9 @@ package net.minecraft.server;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
-import java.util.HashMap;
+import com.mojang.serialization.Dynamic;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -24,7 +23,7 @@ public class DataConverterPainting extends DataConverterNamedEntity {
     }
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
-        Optional<String> optional = dynamic.get("Motive").asString();
+        Optional<String> optional = dynamic.get("Motive").asString().result();
 
         if (optional.isPresent()) {
             String s = ((String) optional.get()).toLowerCase(Locale.ROOT);

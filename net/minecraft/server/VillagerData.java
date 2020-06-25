@@ -1,56 +1,60 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class VillagerData {
 
-    private static final int[] a = new int[]{0, 10, 70, 150, 250};
-    private final VillagerType b;
-    private final VillagerProfession c;
-    private final int d;
+    private static final int[] b = new int[]{0, 10, 70, 150, 250};
+    public static final Codec<VillagerData> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(IRegistry.VILLAGER_TYPE.fieldOf("type").withDefault(() -> {
+            return VillagerType.PLAINS;
+        }).forGetter((villagerdata) -> {
+            return villagerdata.c;
+        }), IRegistry.VILLAGER_PROFESSION.fieldOf("profession").withDefault(() -> {
+            return VillagerProfession.NONE;
+        }).forGetter((villagerdata) -> {
+            return villagerdata.d;
+        }), Codec.INT.fieldOf("level").withDefault(1).forGetter((villagerdata) -> {
+            return villagerdata.e;
+        })).apply(instance, VillagerData::new);
+    });
+    private final VillagerType c;
+    private final VillagerProfession d;
+    private final int e;
 
     public VillagerData(VillagerType villagertype, VillagerProfession villagerprofession, int i) {
-        this.b = villagertype;
-        this.c = villagerprofession;
-        this.d = Math.max(1, i);
-    }
-
-    public VillagerData(Dynamic<?> dynamic) {
-        this((VillagerType) IRegistry.VILLAGER_TYPE.get(MinecraftKey.a(dynamic.get("type").asString(""))), (VillagerProfession) IRegistry.VILLAGER_PROFESSION.get(MinecraftKey.a(dynamic.get("profession").asString(""))), dynamic.get("level").asInt(1));
+        this.c = villagertype;
+        this.d = villagerprofession;
+        this.e = Math.max(1, i);
     }
 
     public VillagerType getType() {
-        return this.b;
-    }
-
-    public VillagerProfession getProfession() {
         return this.c;
     }
 
-    public int getLevel() {
+    public VillagerProfession getProfession() {
         return this.d;
     }
 
+    public int getLevel() {
+        return this.e;
+    }
+
     public VillagerData withType(VillagerType villagertype) {
-        return new VillagerData(villagertype, this.c, this.d);
+        return new VillagerData(villagertype, this.d, this.e);
     }
 
     public VillagerData withProfession(VillagerProfession villagerprofession) {
-        return new VillagerData(this.b, villagerprofession, this.d);
+        return new VillagerData(this.c, villagerprofession, this.e);
     }
 
     public VillagerData withLevel(int i) {
-        return new VillagerData(this.b, this.c, i);
-    }
-
-    public <T> T a(DynamicOps<T> dynamicops) {
-        return dynamicops.createMap(ImmutableMap.of(dynamicops.createString("type"), dynamicops.createString(IRegistry.VILLAGER_TYPE.getKey(this.b).toString()), dynamicops.createString("profession"), dynamicops.createString(IRegistry.VILLAGER_PROFESSION.getKey(this.c).toString()), dynamicops.createString("level"), dynamicops.createInt(this.d)));
+        return new VillagerData(this.c, this.d, i);
     }
 
     public static int c(int i) {
-        return d(i) ? VillagerData.a[i] : 0;
+        return d(i) ? VillagerData.b[i] : 0;
     }
 
     public static boolean d(int i) {

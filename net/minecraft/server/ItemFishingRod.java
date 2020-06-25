@@ -1,23 +1,9 @@
 package net.minecraft.server;
 
-public class ItemFishingRod extends Item {
+public class ItemFishingRod extends Item implements ItemVanishable {
 
     public ItemFishingRod(Item.Info item_info) {
         super(item_info);
-        this.a(new MinecraftKey("cast"), (itemstack, world, entityliving) -> {
-            if (entityliving == null) {
-                return 0.0F;
-            } else {
-                boolean flag = entityliving.getItemInMainHand() == itemstack;
-                boolean flag1 = entityliving.getItemInOffHand() == itemstack;
-
-                if (entityliving.getItemInMainHand().getItem() instanceof ItemFishingRod) {
-                    flag1 = false;
-                }
-
-                return (flag || flag1) && entityliving instanceof EntityHuman && ((EntityHuman) entityliving).hookedFish != null ? 1.0F : 0.0F;
-            }
-        });
     }
 
     @Override
@@ -33,9 +19,9 @@ public class ItemFishingRod extends Item {
                 });
             }
 
-            world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ENTITY_FISHING_BOBBER_RETRIEVE, SoundCategory.NEUTRAL, 1.0F, 0.4F / (ItemFishingRod.i.nextFloat() * 0.4F + 0.8F));
+            world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ENTITY_FISHING_BOBBER_RETRIEVE, SoundCategory.NEUTRAL, 1.0F, 0.4F / (ItemFishingRod.RANDOM.nextFloat() * 0.4F + 0.8F));
         } else {
-            world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ENTITY_FISHING_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemFishingRod.i.nextFloat() * 0.4F + 0.8F));
+            world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ENTITY_FISHING_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemFishingRod.RANDOM.nextFloat() * 0.4F + 0.8F));
             if (!world.isClientSide) {
                 i = EnchantmentManager.c(itemstack);
                 int j = EnchantmentManager.b(itemstack);
@@ -46,7 +32,7 @@ public class ItemFishingRod extends Item {
             entityhuman.b(StatisticList.ITEM_USED.b(this));
         }
 
-        return InteractionResultWrapper.success(itemstack);
+        return InteractionResultWrapper.a(itemstack, world.s_());
     }
 
     @Override

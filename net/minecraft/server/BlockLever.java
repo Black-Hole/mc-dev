@@ -12,16 +12,16 @@ public class BlockLever extends BlockAttachable {
     protected static final VoxelShape h = Block.a(5.0D, 10.0D, 4.0D, 11.0D, 16.0D, 12.0D);
     protected static final VoxelShape i = Block.a(4.0D, 10.0D, 5.0D, 12.0D, 16.0D, 11.0D);
 
-    protected BlockLever(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLever.FACING, EnumDirection.NORTH)).set(BlockLever.POWERED, false)).set(BlockLever.FACE, BlockPropertyAttachPosition.WALL));
+    protected BlockLever(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLever.FACING, EnumDirection.NORTH)).set(BlockLever.POWERED, false)).set(BlockLever.FACE, BlockPropertyAttachPosition.WALL));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch ((BlockPropertyAttachPosition) iblockdata.get(BlockLever.FACE)) {
             case FLOOR:
-                switch (((EnumDirection) iblockdata.get(BlockLever.FACING)).m()) {
+                switch (((EnumDirection) iblockdata.get(BlockLever.FACING)).n()) {
                     case X:
                         return BlockLever.g;
                     case Z:
@@ -42,7 +42,7 @@ public class BlockLever extends BlockAttachable {
                 }
             case CEILING:
             default:
-                switch (((EnumDirection) iblockdata.get(BlockLever.FACING)).m()) {
+                switch (((EnumDirection) iblockdata.get(BlockLever.FACING)).n()) {
                     case X:
                         return BlockLever.i;
                     case Z:
@@ -68,7 +68,7 @@ public class BlockLever extends BlockAttachable {
             float f = (Boolean) iblockdata1.get(BlockLever.POWERED) ? 0.6F : 0.5F;
 
             world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, f);
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.CONSUME;
         }
     }
 
@@ -91,7 +91,7 @@ public class BlockLever extends BlockAttachable {
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (!flag && iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!flag && !iblockdata.a(iblockdata1.getBlock())) {
             if ((Boolean) iblockdata.get(BlockLever.POWERED)) {
                 this.e(iblockdata, world, blockposition);
             }

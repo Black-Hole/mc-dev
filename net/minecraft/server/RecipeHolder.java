@@ -8,10 +8,10 @@ public interface RecipeHolder {
     void a(@Nullable IRecipe<?> irecipe);
 
     @Nullable
-    IRecipe<?> aa_();
+    IRecipe<?> am_();
 
     default void b(EntityHuman entityhuman) {
-        IRecipe<?> irecipe = this.aa_();
+        IRecipe<?> irecipe = this.am_();
 
         if (irecipe != null && !irecipe.isComplex()) {
             entityhuman.discoverRecipes(Collections.singleton(irecipe));

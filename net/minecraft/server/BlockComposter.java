@@ -7,9 +7,9 @@ import javax.annotation.Nullable;
 
 public class BlockComposter extends Block implements IInventoryHolder {
 
-    public static final BlockStateInteger a = BlockProperties.am;
+    public static final BlockStateInteger a = BlockProperties.as;
     public static final Object2FloatMap<IMaterial> b = new Object2FloatOpenHashMap();
-    public static final VoxelShape c = VoxelShapes.b();
+    private static final VoxelShape c = VoxelShapes.b();
     private static final VoxelShape[] d = (VoxelShape[]) SystemUtils.a((Object) (new VoxelShape[9]), (avoxelshape) -> {
         for (int i = 0; i < 8; ++i) {
             avoxelshape[i] = VoxelShapes.a(BlockComposter.c, Block.a(2.0D, (double) Math.max(2, 1 + i * 2), 2.0D, 14.0D, 16.0D, 14.0D), OperatorBoolean.ONLY_FIRST);
@@ -26,73 +26,84 @@ public class BlockComposter extends Block implements IInventoryHolder {
         float f3 = 0.85F;
         float f4 = 1.0F;
 
-        a(0.3F, Items.ah);
-        a(0.3F, Items.ae);
-        a(0.3F, Items.af);
-        a(0.3F, Items.aj);
-        a(0.3F, Items.ai);
-        a(0.3F, Items.ag);
-        a(0.3F, Items.t);
-        a(0.3F, Items.u);
-        a(0.3F, Items.v);
-        a(0.3F, Items.w);
+        a(0.3F, Items.au);
+        a(0.3F, Items.ar);
+        a(0.3F, Items.as);
+        a(0.3F, Items.aw);
+        a(0.3F, Items.av);
+        a(0.3F, Items.at);
         a(0.3F, Items.x);
         a(0.3F, Items.y);
+        a(0.3F, Items.z);
+        a(0.3F, Items.A);
+        a(0.3F, Items.B);
+        a(0.3F, Items.C);
         a(0.3F, Items.BEETROOT_SEEDS);
         a(0.3F, Items.DRIED_KELP);
-        a(0.3F, Items.ay);
-        a(0.3F, Items.kO);
+        a(0.3F, Items.aL);
+        a(0.3F, Items.bE);
         a(0.3F, Items.MELON_SEEDS);
         a(0.3F, Items.PUMPKIN_SEEDS);
-        a(0.3F, Items.aB);
+        a(0.3F, Items.aO);
         a(0.3F, Items.SWEET_BERRIES);
         a(0.3F, Items.WHEAT_SEEDS);
-        a(0.5F, Items.kP);
-        a(0.5F, Items.fp);
-        a(0.5F, Items.cw);
-        a(0.5F, Items.kN);
-        a(0.5F, Items.dh);
+        a(0.5F, Items.ma);
+        a(0.5F, Items.gn);
+        a(0.5F, Items.cX);
+        a(0.5F, Items.bD);
+        a(0.5F, Items.dR);
+        a(0.5F, Items.bA);
+        a(0.5F, Items.bB);
+        a(0.5F, Items.bC);
         a(0.5F, Items.MELON_SLICE);
-        a(0.65F, Items.aC);
-        a(0.65F, Items.dr);
-        a(0.65F, Items.cF);
-        a(0.65F, Items.cG);
-        a(0.65F, Items.dg);
+        a(0.65F, Items.aP);
+        a(0.65F, Items.ed);
+        a(0.65F, Items.di);
+        a(0.65F, Items.dj);
+        a(0.65F, Items.dQ);
         a(0.65F, Items.APPLE);
         a(0.65F, Items.BEETROOT);
         a(0.65F, Items.CARROT);
         a(0.65F, Items.COCOA_BEANS);
         a(0.65F, Items.POTATO);
         a(0.65F, Items.WHEAT);
+        a(0.65F, Items.bu);
+        a(0.65F, Items.bv);
+        a(0.65F, Items.dM);
+        a(0.65F, Items.bw);
+        a(0.65F, Items.bx);
+        a(0.65F, Items.NETHER_WART);
+        a(0.65F, Items.by);
+        a(0.65F, Items.bz);
+        a(0.65F, Items.ro);
         a(0.65F, Items.bh);
         a(0.65F, Items.bi);
-        a(0.65F, Items.dd);
-        a(0.65F, Items.aU);
-        a(0.65F, Items.aV);
-        a(0.65F, Items.aW);
-        a(0.65F, Items.aX);
-        a(0.65F, Items.aY);
-        a(0.65F, Items.aZ);
-        a(0.65F, Items.ba);
-        a(0.65F, Items.bb);
-        a(0.65F, Items.bc);
-        a(0.65F, Items.bd);
-        a(0.65F, Items.be);
-        a(0.65F, Items.bf);
-        a(0.65F, Items.bg);
-        a(0.65F, Items.az);
-        a(0.65F, Items.fl);
-        a(0.65F, Items.fm);
-        a(0.65F, Items.fn);
-        a(0.65F, Items.fo);
-        a(0.65F, Items.fq);
-        a(0.85F, Items.eN);
-        a(0.85F, Items.db);
-        a(0.85F, Items.dc);
+        a(0.65F, Items.bj);
+        a(0.65F, Items.bk);
+        a(0.65F, Items.bl);
+        a(0.65F, Items.bm);
+        a(0.65F, Items.bn);
+        a(0.65F, Items.bo);
+        a(0.65F, Items.bp);
+        a(0.65F, Items.bq);
+        a(0.65F, Items.br);
+        a(0.65F, Items.bs);
+        a(0.65F, Items.bt);
+        a(0.65F, Items.aM);
+        a(0.65F, Items.gj);
+        a(0.65F, Items.gk);
+        a(0.65F, Items.gl);
+        a(0.65F, Items.gm);
+        a(0.65F, Items.go);
+        a(0.85F, Items.fL);
+        a(0.85F, Items.dK);
+        a(0.85F, Items.dL);
+        a(0.85F, Items.hj);
+        a(0.85F, Items.hk);
         a(0.85F, Items.BREAD);
         a(0.85F, Items.BAKED_POTATO);
         a(0.85F, Items.COOKIE);
-        a(1.0F, Items.lD);
+        a(1.0F, Items.mN);
         a(1.0F, Items.PUMPKIN_PIE);
     }
 
@@ -100,23 +111,23 @@ public class BlockComposter extends Block implements IInventoryHolder {
         BlockComposter.b.put(imaterial.getItem(), f);
     }
 
-    public BlockComposter(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockComposter.a, 0));
-    }
-
-    @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockComposter.d[(Integer) iblockdata.get(BlockComposter.a)];
-    }
-
-    @Override
-    public VoxelShape j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockComposter.c;
+    public BlockComposter(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockComposter.a, 0));
     }
 
     @Override
     public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockComposter.d[(Integer) iblockdata.get(BlockComposter.a)];
+    }
+
+    @Override
+    public VoxelShape a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockComposter.c;
+    }
+
+    @Override
+    public VoxelShape c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockComposter.d[0];
     }
 
@@ -135,65 +146,88 @@ public class BlockComposter extends Block implements IInventoryHolder {
 
         if (i < 8 && BlockComposter.b.containsKey(itemstack.getItem())) {
             if (i < 7 && !world.isClientSide) {
-                boolean flag = b(iblockdata, (GeneratorAccess) world, blockposition, itemstack);
+                IBlockData iblockdata1 = b(iblockdata, (GeneratorAccess) world, blockposition, itemstack);
 
-                world.triggerEffect(1500, blockposition, flag ? 1 : 0);
+                world.triggerEffect(1500, blockposition, iblockdata != iblockdata1 ? 1 : 0);
                 if (!entityhuman.abilities.canInstantlyBuild) {
                     itemstack.subtract(1);
                 }
             }
 
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.a(world.isClientSide);
         } else if (i == 8) {
-            if (!world.isClientSide) {
-                float f = 0.7F;
-                double d0 = (double) (world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
-                double d1 = (double) (world.random.nextFloat() * 0.7F) + 0.06000000238418579D + 0.6D;
-                double d2 = (double) (world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
-                EntityItem entityitem = new EntityItem(world, (double) blockposition.getX() + d0, (double) blockposition.getY() + d1, (double) blockposition.getZ() + d2, new ItemStack(Items.BONE_MEAL));
-
-                entityitem.defaultPickupDelay();
-                world.addEntity(entityitem);
-            }
-
-            d(iblockdata, (GeneratorAccess) world, blockposition);
-            world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_COMPOSTER_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            return EnumInteractionResult.SUCCESS;
+            d(iblockdata, world, blockposition);
+            return EnumInteractionResult.a(world.isClientSide);
         } else {
             return EnumInteractionResult.PASS;
         }
     }
 
-    private static void d(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockComposter.a, 0), 3);
+    public static IBlockData a(IBlockData iblockdata, WorldServer worldserver, ItemStack itemstack, BlockPosition blockposition) {
+        int i = (Integer) iblockdata.get(BlockComposter.a);
+
+        if (i < 7 && BlockComposter.b.containsKey(itemstack.getItem())) {
+            IBlockData iblockdata1 = b(iblockdata, (GeneratorAccess) worldserver, blockposition, itemstack);
+
+            itemstack.subtract(1);
+            worldserver.triggerEffect(1500, blockposition, iblockdata != iblockdata1 ? 1 : 0);
+            return iblockdata1;
+        } else {
+            return iblockdata;
+        }
     }
 
-    private static boolean b(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition, ItemStack itemstack) {
+    public static IBlockData d(IBlockData iblockdata, World world, BlockPosition blockposition) {
+        if (!world.isClientSide) {
+            float f = 0.7F;
+            double d0 = (double) (world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
+            double d1 = (double) (world.random.nextFloat() * 0.7F) + 0.06000000238418579D + 0.6D;
+            double d2 = (double) (world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
+            EntityItem entityitem = new EntityItem(world, (double) blockposition.getX() + d0, (double) blockposition.getY() + d1, (double) blockposition.getZ() + d2, new ItemStack(Items.BONE_MEAL));
+
+            entityitem.defaultPickupDelay();
+            world.addEntity(entityitem);
+        }
+
+        IBlockData iblockdata1 = d(iblockdata, (GeneratorAccess) world, blockposition);
+
+        world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_COMPOSTER_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        return iblockdata1;
+    }
+
+    private static IBlockData d(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition) {
+        IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockComposter.a, 0);
+
+        generatoraccess.setTypeAndData(blockposition, iblockdata1, 3);
+        return iblockdata1;
+    }
+
+    private static IBlockData b(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition, ItemStack itemstack) {
         int i = (Integer) iblockdata.get(BlockComposter.a);
         float f = BlockComposter.b.getFloat(itemstack.getItem());
 
         if ((i != 0 || f <= 0.0F) && generatoraccess.getRandom().nextDouble() >= (double) f) {
-            return false;
+            return iblockdata;
         } else {
             int j = i + 1;
+            IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockComposter.a, j);
 
-            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockComposter.a, j), 3);
+            generatoraccess.setTypeAndData(blockposition, iblockdata1, 3);
             if (j == 7) {
                 generatoraccess.getBlockTickList().a(blockposition, iblockdata.getBlock(), 20);
             }
 
-            return true;
+            return iblockdata1;
         }
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if ((Integer) iblockdata.get(BlockComposter.a) == 7) {
             worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.a((IBlockState) BlockComposter.a), 3);
             worldserver.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_COMPOSTER_READY, SoundCategory.BLOCKS, 1.0F, 1.0F);
         }
 
-        super.tick(iblockdata, worldserver, blockposition, random);
     }
 
     @Override
@@ -263,7 +297,9 @@ public class BlockComposter extends Block implements IInventoryHolder {
 
             if (!itemstack.isEmpty()) {
                 this.d = true;
-                BlockComposter.b(this.a, this.b, this.c, itemstack);
+                IBlockData iblockdata = BlockComposter.b(this.a, this.b, this.c, itemstack);
+
+                this.b.triggerEffect(1500, this.c, iblockdata != this.a ? 1 : 0);
                 this.splitWithoutUpdate(0);
             }
 

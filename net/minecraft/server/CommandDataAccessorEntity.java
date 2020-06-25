@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 public class CommandDataAccessorEntity implements CommandDataAccessor {
 
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.data.entity.invalid", new Object[0]));
+    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.data.entity.invalid"));
     public static final Function<String, CommandData.c> a = (s) -> {
         return new CommandData.c() {
             @Override
@@ -38,8 +38,8 @@ public class CommandDataAccessorEntity implements CommandDataAccessor {
         } else {
             UUID uuid = this.c.getUniqueID();
 
-            this.c.f(nbttagcompound);
-            this.c.a(uuid);
+            this.c.load(nbttagcompound);
+            this.c.a_(uuid);
         }
     }
 

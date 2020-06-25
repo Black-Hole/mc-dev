@@ -19,10 +19,10 @@ public class DispenseBehaviorBoat extends DispenseBehaviorItem {
         BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
         double d3;
 
-        if (world.getFluid(blockposition).a(TagsFluid.WATER)) {
+        if (world.getFluid(blockposition).a((Tag) TagsFluid.WATER)) {
             d3 = 1.0D;
         } else {
-            if (!world.getType(blockposition).isAir() || !world.getFluid(blockposition.down()).a(TagsFluid.WATER)) {
+            if (!world.getType(blockposition).isAir() || !world.getFluid(blockposition.down()).a((Tag) TagsFluid.WATER)) {
                 return this.b.dispense(isourceblock, itemstack);
             }
 
@@ -32,7 +32,7 @@ public class DispenseBehaviorBoat extends DispenseBehaviorItem {
         EntityBoat entityboat = new EntityBoat(world, d0, d1 + d3, d2);
 
         entityboat.setType(this.c);
-        entityboat.yaw = enumdirection.n();
+        entityboat.yaw = enumdirection.o();
         world.addEntity(entityboat);
         itemstack.subtract(1);
         return itemstack;

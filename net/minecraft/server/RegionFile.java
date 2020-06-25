@@ -33,11 +33,11 @@ public class RegionFile implements AutoCloseable {
     private final IntBuffer h;
     private final RegionFileBitSet freeSectors;
 
-    public RegionFile(File file, File file1) throws IOException {
-        this(file.toPath(), file1.toPath(), RegionFileCompression.b);
+    public RegionFile(File file, File file1, boolean flag) throws IOException {
+        this(file.toPath(), file1.toPath(), RegionFileCompression.b, flag);
     }
 
-    public RegionFile(java.nio.file.Path java_nio_file_path, java.nio.file.Path java_nio_file_path1, RegionFileCompression regionfilecompression) throws IOException {
+    public RegionFile(java.nio.file.Path java_nio_file_path, java.nio.file.Path java_nio_file_path1, RegionFileCompression regionfilecompression, boolean flag) throws IOException {
         this.f = ByteBuffer.allocateDirect(8192);
         this.freeSectors = new RegionFileBitSet();
         this.e = regionfilecompression;
@@ -49,7 +49,12 @@ public class RegionFile implements AutoCloseable {
             this.g.limit(1024);
             this.f.position(4096);
             this.h = this.f.asIntBuffer();
-            this.dataFile = FileChannel.open(java_nio_file_path, StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE);
+            if (flag) {
+                this.dataFile = FileChannel.open(java_nio_file_path, StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE, StandardOpenOption.DSYNC);
+            } else {
+                this.dataFile = FileChannel.open(java_nio_file_path, StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE);
+            }
+
             this.freeSectors.a(0, 2);
             this.f.position(0);
             int i = this.dataFile.read(this.f, 0L);
@@ -234,6 +239,10 @@ public class RegionFile implements AutoCloseable {
         return new DataOutputStream(new BufferedOutputStream(this.e.a((OutputStream) (new RegionFile.ChunkBuffer(chunkcoordintpair)))));
     }
 
+    public void a() throws IOException {
+        this.dataFile.force(true);
+    }
+
     protected synchronized void a(ChunkCoordIntPair chunkcoordintpair, ByteBuffer bytebuffer) throws IOException {
         int i = g(chunkcoordintpair);
         int j = this.g.get(i);
@@ -251,7 +260,7 @@ public class RegionFile implements AutoCloseable {
             j1 = 1;
             k1 = this.freeSectors.a(j1);
             regionfile_b = this.a(java_nio_file_path, bytebuffer);
-            ByteBuffer bytebuffer1 = this.a();
+            ByteBuffer bytebuffer1 = this.b();
 
             this.dataFile.write(bytebuffer1, (long) (k1 * 4096));
         } else {
@@ -266,7 +275,7 @@ public class RegionFile implements AutoCloseable {
 
         this.g.put(i, this.a(k1, j1));
         this.h.put(i, l1);
-        this.b();
+        this.c();
         regionfile_b.run();
         if (k != 0) {
             this.freeSectors.b(k, l);
@@ -274,7 +283,7 @@ public class RegionFile implements AutoCloseable {
 
     }
 
-    private ByteBuffer a() {
+    private ByteBuffer b() {
         ByteBuffer bytebuffer = ByteBuffer.allocate(5);
 
         bytebuffer.putInt(1);
@@ -314,7 +323,7 @@ public class RegionFile implements AutoCloseable {
         };
     }
 
-    private void b() throws IOException {
+    private void c() throws IOException {
         this.f.position(0);
         this.dataFile.write(this.f, 0L);
     }
@@ -333,22 +342,18 @@ public class RegionFile implements AutoCloseable {
 
     public void close() throws IOException {
         try {
-            this.c();
+            this.d();
         } finally {
             try {
-                this.b();
+                this.dataFile.force(true);
             } finally {
-                try {
-                    this.dataFile.force(true);
-                } finally {
-                    this.dataFile.close();
-                }
+                this.dataFile.close();
             }
         }
 
     }
 
-    private void c() throws IOException {
+    private void d() throws IOException {
         int i = (int) this.dataFile.size();
         int j = c(i) * 4096;
 

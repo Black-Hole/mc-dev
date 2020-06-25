@@ -28,7 +28,7 @@ public abstract class EntityHanging extends Entity {
 
     public void setDirection(EnumDirection enumdirection) {
         Validate.notNull(enumdirection);
-        Validate.isTrue(enumdirection.m().c());
+        Validate.isTrue(enumdirection.n().d());
         this.direction = enumdirection;
         this.yaw = (float) (this.direction.get2DRotationValue() * 90);
         this.lastYaw = this.yaw;
@@ -47,7 +47,7 @@ public abstract class EntityHanging extends Entity {
             d0 -= (double) this.direction.getAdjacentX() * 0.46875D;
             d2 -= (double) this.direction.getAdjacentZ() * 0.46875D;
             d1 += d5;
-            EnumDirection enumdirection = this.direction.g();
+            EnumDirection enumdirection = this.direction.h();
 
             d0 += d4 * (double) enumdirection.getAdjacentX();
             d2 += d4 * (double) enumdirection.getAdjacentZ();
@@ -56,7 +56,7 @@ public abstract class EntityHanging extends Entity {
             double d7 = (double) this.getHangingHeight();
             double d8 = (double) this.getHangingWidth();
 
-            if (this.direction.m() == EnumDirection.EnumAxis.Z) {
+            if (this.direction.n() == EnumDirection.EnumAxis.Z) {
                 d8 = 1.0D;
             } else {
                 d6 = 1.0D;
@@ -75,11 +75,17 @@ public abstract class EntityHanging extends Entity {
 
     @Override
     public void tick() {
-        if (this.e++ == 100 && !this.world.isClientSide) {
-            this.e = 0;
-            if (!this.dead && !this.survives()) {
-                this.die();
-                this.a((Entity) null);
+        if (!this.world.isClientSide) {
+            if (this.locY() < -64.0D) {
+                this.ai();
+            }
+
+            if (this.e++ == 100) {
+                this.e = 0;
+                if (!this.dead && !this.survives()) {
+                    this.die();
+                    this.a((Entity) null);
+                }
             }
         }
 
@@ -92,7 +98,7 @@ public abstract class EntityHanging extends Entity {
             int i = Math.max(1, this.getHangingWidth() / 16);
             int j = Math.max(1, this.getHangingHeight() / 16);
             BlockPosition blockposition = this.blockPosition.shift(this.direction.opposite());
-            EnumDirection enumdirection = this.direction.g();
+            EnumDirection enumdirection = this.direction.h();
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
             for (int k = 0; k < i; ++k) {
@@ -168,7 +174,7 @@ public abstract class EntityHanging extends Entity {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
+    public void saveData(NBTTagCompound nbttagcompound) {
         nbttagcompound.setByte("Facing", (byte) this.direction.get2DRotationValue());
         BlockPosition blockposition = this.getBlockPosition();
 
@@ -178,7 +184,7 @@ public abstract class EntityHanging extends Entity {
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
+    public void loadData(NBTTagCompound nbttagcompound) {
         this.blockPosition = new BlockPosition(nbttagcompound.getInt("TileX"), nbttagcompound.getInt("TileY"), nbttagcompound.getInt("TileZ"));
         this.direction = EnumDirection.fromType2(nbttagcompound.getByte("Facing"));
     }
@@ -201,7 +207,7 @@ public abstract class EntityHanging extends Entity {
     }
 
     @Override
-    protected boolean aM() {
+    protected boolean aS() {
         return false;
     }
 
@@ -218,16 +224,16 @@ public abstract class EntityHanging extends Entity {
 
     @Override
     public float a(EnumBlockRotation enumblockrotation) {
-        if (this.direction.m() != EnumDirection.EnumAxis.Y) {
+        if (this.direction.n() != EnumDirection.EnumAxis.Y) {
             switch (enumblockrotation) {
                 case CLOCKWISE_180:
                     this.direction = this.direction.opposite();
                     break;
                 case COUNTERCLOCKWISE_90:
-                    this.direction = this.direction.g();
+                    this.direction = this.direction.h();
                     break;
                 case CLOCKWISE_90:
-                    this.direction = this.direction.f();
+                    this.direction = this.direction.g();
             }
         }
 

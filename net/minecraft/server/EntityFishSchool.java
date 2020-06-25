@@ -21,49 +21,49 @@ public abstract class EntityFishSchool extends EntityFish {
 
     @Override
     public int getMaxSpawnGroup() {
-        return this.es();
+        return this.eO();
     }
 
-    public int es() {
+    public int eO() {
         return super.getMaxSpawnGroup();
     }
 
     @Override
-    protected boolean eq() {
-        return !this.et();
+    protected boolean eM() {
+        return !this.eP();
     }
 
-    public boolean et() {
+    public boolean eP() {
         return this.b != null && this.b.isAlive();
     }
 
     public EntityFishSchool a(EntityFishSchool entityfishschool) {
         this.b = entityfishschool;
-        entityfishschool.ez();
+        entityfishschool.eV();
         return entityfishschool;
     }
 
-    public void eu() {
-        this.b.eA();
+    public void eQ() {
+        this.b.eW();
         this.b = null;
     }
 
-    private void ez() {
+    private void eV() {
         ++this.c;
     }
 
-    private void eA() {
+    private void eW() {
         --this.c;
     }
 
-    public boolean ev() {
-        return this.ew() && this.c < this.es();
+    public boolean eR() {
+        return this.eS() && this.c < this.eO();
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.ew() && this.world.random.nextInt(200) == 1) {
+        if (this.eS() && this.world.random.nextInt(200) == 1) {
             List<EntityFish> list = this.world.a(this.getClass(), this.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
 
             if (list.size() <= 1) {
@@ -73,23 +73,23 @@ public abstract class EntityFishSchool extends EntityFish {
 
     }
 
-    public boolean ew() {
+    public boolean eS() {
         return this.c > 1;
     }
 
-    public boolean ex() {
+    public boolean eT() {
         return this.h((Entity) this.b) <= 121.0D;
     }
 
-    public void ey() {
-        if (this.et()) {
+    public void eU() {
+        if (this.eP()) {
             this.getNavigation().a((Entity) this.b, 1.0D);
         }
 
     }
 
     public void a(Stream<EntityFishSchool> stream) {
-        stream.limit((long) (this.es() - this.c)).filter((entityfishschool) -> {
+        stream.limit((long) (this.eO() - this.c)).filter((entityfishschool) -> {
             return entityfishschool != this;
         }).forEach((entityfishschool) -> {
             entityfishschool.a(this);

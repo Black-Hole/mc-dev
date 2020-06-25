@@ -14,6 +14,11 @@ public class LootItemConditionSurvivesExplosion implements LootItemCondition {
     private LootItemConditionSurvivesExplosion() {}
 
     @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.k;
+    }
+
+    @Override
     public Set<LootContextParameter<?>> a() {
         return ImmutableSet.of(LootContextParameters.EXPLOSION_RADIUS);
     }
@@ -31,22 +36,20 @@ public class LootItemConditionSurvivesExplosion implements LootItemCondition {
         }
     }
 
-    public static LootItemCondition.a b() {
+    public static LootItemCondition.a c() {
         return () -> {
             return LootItemConditionSurvivesExplosion.a;
         };
     }
 
-    public static class a extends LootItemCondition.b<LootItemConditionSurvivesExplosion> {
+    public static class a implements LootSerializer<LootItemConditionSurvivesExplosion> {
 
-        protected a() {
-            super(new MinecraftKey("survives_explosion"), LootItemConditionSurvivesExplosion.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionSurvivesExplosion lootitemconditionsurvivesexplosion, JsonSerializationContext jsonserializationcontext) {}
 
         @Override
-        public LootItemConditionSurvivesExplosion b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionSurvivesExplosion a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             return LootItemConditionSurvivesExplosion.a;
         }
     }

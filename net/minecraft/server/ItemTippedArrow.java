@@ -9,6 +9,11 @@ public class ItemTippedArrow extends ItemArrow {
     }
 
     @Override
+    public ItemStack r() {
+        return PotionUtil.a(super.r(), Potions.POISON);
+    }
+
+    @Override
     public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
         if (this.a(creativemodetab)) {
             Iterator iterator = IRegistry.POTION.iterator();

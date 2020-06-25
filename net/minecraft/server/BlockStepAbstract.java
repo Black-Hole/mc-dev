@@ -4,18 +4,18 @@ import javax.annotation.Nullable;
 
 public class BlockStepAbstract extends Block implements IBlockWaterlogged {
 
-    public static final BlockStateEnum<BlockPropertySlabType> a = BlockProperties.aD;
+    public static final BlockStateEnum<BlockPropertySlabType> a = BlockProperties.aK;
     public static final BlockStateBoolean b = BlockProperties.C;
     protected static final VoxelShape c = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
     protected static final VoxelShape d = Block.a(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 
-    public BlockStepAbstract(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.getBlockData().set(BlockStepAbstract.a, BlockPropertySlabType.BOTTOM)).set(BlockStepAbstract.b, false));
+    public BlockStepAbstract(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.getBlockData().set(BlockStepAbstract.a, BlockPropertySlabType.BOTTOM)).set(BlockStepAbstract.b, false));
     }
 
     @Override
-    public boolean o(IBlockData iblockdata) {
+    public boolean c_(IBlockData iblockdata) {
         return iblockdata.get(BlockStepAbstract.a) != BlockPropertySlabType.DOUBLE;
     }
 
@@ -25,7 +25,7 @@ public class BlockStepAbstract extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         BlockPropertySlabType blockpropertyslabtype = (BlockPropertySlabType) iblockdata.get(BlockStepAbstract.a);
 
         switch (blockpropertyslabtype) {
@@ -44,7 +44,7 @@ public class BlockStepAbstract extends Block implements IBlockWaterlogged {
         BlockPosition blockposition = blockactioncontext.getClickPosition();
         IBlockData iblockdata = blockactioncontext.getWorld().getType(blockposition);
 
-        if (iblockdata.getBlock() == this) {
+        if (iblockdata.a((Block) this)) {
             return (IBlockData) ((IBlockData) iblockdata.set(BlockStepAbstract.a, BlockPropertySlabType.DOUBLE)).set(BlockStepAbstract.b, false);
         } else {
             Fluid fluid = blockactioncontext.getWorld().getFluid(blockposition);
@@ -65,7 +65,7 @@ public class BlockStepAbstract extends Block implements IBlockWaterlogged {
                 boolean flag = blockactioncontext.getPos().y - (double) blockactioncontext.getClickPosition().getY() > 0.5D;
                 EnumDirection enumdirection = blockactioncontext.getClickedFace();
 
-                return blockpropertyslabtype == BlockPropertySlabType.BOTTOM ? enumdirection == EnumDirection.UP || flag && enumdirection.m().c() : enumdirection == EnumDirection.DOWN || !flag && enumdirection.m().c();
+                return blockpropertyslabtype == BlockPropertySlabType.BOTTOM ? enumdirection == EnumDirection.UP || flag && enumdirection.n().d() : enumdirection == EnumDirection.DOWN || !flag && enumdirection.n().d();
             } else {
                 return true;
             }
@@ -75,8 +75,8 @@ public class BlockStepAbstract extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public Fluid a_(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockStepAbstract.b) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
+    public Fluid d(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockStepAbstract.b) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class BlockStepAbstract extends Block implements IBlockWaterlogged {
             case LAND:
                 return false;
             case WATER:
-                return iblockaccess.getFluid(blockposition).a(TagsFluid.WATER);
+                return iblockaccess.getFluid(blockposition).a((Tag) TagsFluid.WATER);
             case AIR:
                 return false;
             default:

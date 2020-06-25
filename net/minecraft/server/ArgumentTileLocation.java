@@ -25,7 +25,7 @@ public class ArgumentTileLocation implements Predicate<ShapeDetectorBlock> {
     public boolean test(ShapeDetectorBlock shapedetectorblock) {
         IBlockData iblockdata = shapedetectorblock.a();
 
-        if (iblockdata.getBlock() != this.a.getBlock()) {
+        if (!iblockdata.a(this.a.getBlock())) {
             return false;
         } else {
             Iterator iterator = this.b.iterator();
@@ -49,7 +49,13 @@ public class ArgumentTileLocation implements Predicate<ShapeDetectorBlock> {
     }
 
     public boolean a(WorldServer worldserver, BlockPosition blockposition, int i) {
-        if (!worldserver.setTypeAndData(blockposition, this.a, i)) {
+        IBlockData iblockdata = Block.b(this.a, (GeneratorAccess) worldserver, blockposition);
+
+        if (iblockdata.isAir()) {
+            iblockdata = this.a;
+        }
+
+        if (!worldserver.setTypeAndData(blockposition, iblockdata, i)) {
             return false;
         } else {
             if (this.c != null) {
@@ -61,7 +67,7 @@ public class ArgumentTileLocation implements Predicate<ShapeDetectorBlock> {
                     nbttagcompound.setInt("x", blockposition.getX());
                     nbttagcompound.setInt("y", blockposition.getY());
                     nbttagcompound.setInt("z", blockposition.getZ());
-                    tileentity.load(nbttagcompound);
+                    tileentity.load(iblockdata, nbttagcompound);
                 }
             }
 

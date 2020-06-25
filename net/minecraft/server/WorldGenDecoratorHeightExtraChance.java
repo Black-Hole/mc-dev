@@ -1,22 +1,21 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class WorldGenDecoratorHeightExtraChance extends WorldGenDecorator<WorldGenDecoratorFrequencyExtraChanceConfiguration> {
 
-    public WorldGenDecoratorHeightExtraChance(Function<Dynamic<?>, ? extends WorldGenDecoratorFrequencyExtraChanceConfiguration> function) {
-        super(function);
+    public WorldGenDecoratorHeightExtraChance(Codec<WorldGenDecoratorFrequencyExtraChanceConfiguration> codec) {
+        super(codec);
     }
 
-    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenDecoratorFrequencyExtraChanceConfiguration worldgendecoratorfrequencyextrachanceconfiguration, BlockPosition blockposition) {
-        int i = worldgendecoratorfrequencyextrachanceconfiguration.a;
+    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator chunkgenerator, Random random, WorldGenDecoratorFrequencyExtraChanceConfiguration worldgendecoratorfrequencyextrachanceconfiguration, BlockPosition blockposition) {
+        int i = worldgendecoratorfrequencyextrachanceconfiguration.b;
 
-        if (random.nextFloat() < worldgendecoratorfrequencyextrachanceconfiguration.b) {
-            i += worldgendecoratorfrequencyextrachanceconfiguration.c;
+        if (random.nextFloat() < worldgendecoratorfrequencyextrachanceconfiguration.c) {
+            i += worldgendecoratorfrequencyextrachanceconfiguration.d;
         }
 
         return IntStream.range(0, i).mapToObj((j) -> {

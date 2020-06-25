@@ -3,44 +3,36 @@ package net.minecraft.server;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import it.unimi.dsi.fastutil.objects.Object2LongMap.Entry;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
-import it.unimi.dsi.fastutil.objects.Object2LongMap.Entry;
 import java.util.Collection;
 import javax.annotation.Nullable;
 
 public class GameTestHarnessInfo {
 
     private final GameTestHarnessTestFunction a;
+    @Nullable
     private BlockPosition b;
     private final WorldServer c;
-    private final Collection<GameTestHarnessListener> d;
+    private final Collection<GameTestHarnessListener> d = Lists.newArrayList();
     private final int e;
-    private final Collection<GameTestHarnessSequence> f;
-    private Object2LongMap<Runnable> g;
+    private final Collection<GameTestHarnessSequence> f = Lists.newCopyOnWriteArrayList();
+    private Object2LongMap<Runnable> g = new Object2LongOpenHashMap();
     private long h;
     private long i;
-    private boolean j;
-    private final Stopwatch k;
-    private boolean l;
+    private boolean j = false;
+    private final Stopwatch k = Stopwatch.createUnstarted();
+    private boolean l = false;
+    private final EnumBlockRotation m;
     @Nullable
-    private Throwable m;
+    private Throwable n;
 
-    public GameTestHarnessInfo(GameTestHarnessTestFunction gametestharnesstestfunction, WorldServer worldserver) {
-        this.d = Lists.newArrayList();
-        this.f = Lists.newCopyOnWriteArrayList();
-        this.g = new Object2LongOpenHashMap();
-        this.j = false;
-        this.k = Stopwatch.createUnstarted();
-        this.l = false;
+    public GameTestHarnessInfo(GameTestHarnessTestFunction gametestharnesstestfunction, EnumBlockRotation enumblockrotation, WorldServer worldserver) {
         this.a = gametestharnesstestfunction;
         this.c = worldserver;
         this.e = gametestharnesstestfunction.c();
-    }
-
-    public GameTestHarnessInfo(GameTestHarnessTestFunction gametestharnesstestfunction, BlockPosition blockposition, WorldServer worldserver) {
-        this(gametestharnesstestfunction, worldserver);
-        this.a(blockposition);
+        this.m = gametestharnesstestfunction.g().a(enumblockrotation);
     }
 
     void a(BlockPosition blockposition) {
@@ -57,7 +49,7 @@ public class GameTestHarnessInfo {
             this.i = this.c.getTime() - this.h;
             if (this.i >= 0L) {
                 if (this.i == 0L) {
-                    this.t();
+                    this.v();
                 }
 
                 ObjectIterator objectiterator = this.g.object2LongEntrySet().iterator();
@@ -83,7 +75,7 @@ public class GameTestHarnessInfo {
                         this.f.forEach((gametestharnesssequence) -> {
                             gametestharnesssequence.b(this.i);
                         });
-                        if (this.m == null) {
+                        if (this.n == null) {
                             this.a((Throwable) (new GameTestHarnessTimeout("No sequences finished")));
                         }
                     }
@@ -97,7 +89,7 @@ public class GameTestHarnessInfo {
         }
     }
 
-    private void t() {
+    private void v() {
         if (this.j) {
             throw new IllegalStateException("Test already started");
         } else {
@@ -120,28 +112,16 @@ public class GameTestHarnessInfo {
         return this.b;
     }
 
-    @Nullable
-    public BlockPosition e() {
-        TileEntityStructure tileentitystructure = this.u();
-
-        return tileentitystructure == null ? null : tileentitystructure.j();
-    }
-
-    @Nullable
-    private TileEntityStructure u() {
-        return (TileEntityStructure) this.c.getTileEntity(this.b);
-    }
-
     public WorldServer g() {
         return this.c;
     }
 
     public boolean h() {
-        return this.l && this.m == null;
+        return this.l && this.n == null;
     }
 
     public boolean i() {
-        return this.m != null;
+        return this.n != null;
     }
 
     public boolean j() {
@@ -152,7 +132,7 @@ public class GameTestHarnessInfo {
         return this.l;
     }
 
-    private void v() {
+    private void x() {
         if (!this.l) {
             this.l = true;
             this.k.stop();
@@ -161,8 +141,8 @@ public class GameTestHarnessInfo {
     }
 
     public void a(Throwable throwable) {
-        this.v();
-        this.m = throwable;
+        this.x();
+        this.n = throwable;
         this.d.forEach((gametestharnesslistener) -> {
             gametestharnesslistener.c(this);
         });
@@ -170,7 +150,7 @@ public class GameTestHarnessInfo {
 
     @Nullable
     public Throwable n() {
-        return this.m;
+        return this.n;
     }
 
     public String toString() {
@@ -181,11 +161,12 @@ public class GameTestHarnessInfo {
         this.d.add(gametestharnesslistener);
     }
 
-    public void a(int i) {
-        TileEntityStructure tileentitystructure = GameTestHarnessStructures.a(this.a.b(), this.b, i, this.c, false);
+    public void a(BlockPosition blockposition, int i) {
+        TileEntityStructure tileentitystructure = GameTestHarnessStructures.a(this.s(), blockposition, this.t(), i, this.c, false);
 
+        this.a(tileentitystructure.getPosition());
         tileentitystructure.setStructureName(this.c());
-        GameTestHarnessStructures.a(this.b.b(1, 0, -1), this.c);
+        GameTestHarnessStructures.a(this.b, new BlockPosition(1, 0, -1), this.t(), this.c);
         this.d.forEach((gametestharnesslistener) -> {
             gametestharnesslistener.a(this);
         });
@@ -201,5 +182,13 @@ public class GameTestHarnessInfo {
 
     public String s() {
         return this.a.b();
+    }
+
+    public EnumBlockRotation t() {
+        return this.m;
+    }
+
+    public GameTestHarnessTestFunction u() {
+        return this.a;
     }
 }

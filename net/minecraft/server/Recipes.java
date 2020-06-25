@@ -10,6 +10,7 @@ public interface Recipes<T extends IRecipe<?>> {
     Recipes<RecipeSmoking> SMOKING = a("smoking");
     Recipes<RecipeCampfire> CAMPFIRE_COOKING = a("campfire_cooking");
     Recipes<RecipeStonecutting> STONECUTTING = a("stonecutting");
+    Recipes<RecipeSmithing> SMITHING = a("smithing");
 
     static <T extends IRecipe<?>> Recipes<T> a(final String s) {
         return (Recipes) IRegistry.a(IRegistry.RECIPE_TYPE, new MinecraftKey(s), (Object) (new Recipes<T>() {

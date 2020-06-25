@@ -5,15 +5,15 @@ import javax.annotation.Nullable;
 
 public class BlockIce extends BlockHalfTransparent {
 
-    public BlockIce(Block.Info block_info) {
-        super(block_info);
+    public BlockIce(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
     public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
         super.a(world, entityhuman, blockposition, iblockdata, tileentity, itemstack);
         if (EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) == 0) {
-            if (world.worldProvider.isNether()) {
+            if (world.getDimensionManager().isNether()) {
                 world.a(blockposition, false);
                 return;
             }
@@ -36,7 +36,7 @@ public class BlockIce extends BlockHalfTransparent {
     }
 
     protected void melt(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        if (world.worldProvider.isNether()) {
+        if (world.getDimensionManager().isNether()) {
             world.a(blockposition, false);
         } else {
             world.setTypeUpdate(blockposition, Blocks.WATER.getBlockData());
@@ -47,10 +47,5 @@ public class BlockIce extends BlockHalfTransparent {
     @Override
     public EnumPistonReaction getPushReaction(IBlockData iblockdata) {
         return EnumPistonReaction.NORMAL;
-    }
-
-    @Override
-    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EntityTypes<?> entitytypes) {
-        return entitytypes == EntityTypes.POLAR_BEAR;
     }
 }

@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
 import java.util.Optional;
 
-public class BlockStateBoolean extends BlockState<Boolean> {
+public class BlockStateBoolean extends IBlockState<Boolean> {
 
     private final ImmutableSet<Boolean> a = ImmutableSet.of(true, false);
 
@@ -44,7 +44,7 @@ public class BlockStateBoolean extends BlockState<Boolean> {
     }
 
     @Override
-    public int c() {
-        return 31 * super.c() + this.a.hashCode();
+    public int b() {
+        return 31 * super.b() + this.a.hashCode();
     }
 }

@@ -1,59 +1,68 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
-import com.google.common.collect.ImmutableMap.Builder;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class WorldGenFeatureRandomPatchConfiguration implements WorldGenFeatureConfiguration {
 
-    public final WorldGenFeatureStateProvider a;
-    public final WorldGenBlockPlacer b;
-    public final Set<Block> c;
-    public final Set<IBlockData> d;
+    public static final Codec<WorldGenFeatureRandomPatchConfiguration> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(WorldGenFeatureStateProvider.a.fieldOf("state_provider").forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return worldgenfeaturerandompatchconfiguration.b;
+        }), WorldGenBlockPlacer.a.fieldOf("block_placer").forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return worldgenfeaturerandompatchconfiguration.c;
+        }), IBlockData.b.listOf().fieldOf("whitelist").forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return (List) worldgenfeaturerandompatchconfiguration.d.stream().map(Block::getBlockData).collect(Collectors.toList());
+        }), IBlockData.b.listOf().fieldOf("blacklist").forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return ImmutableList.copyOf(worldgenfeaturerandompatchconfiguration.e);
+        }), Codec.INT.fieldOf("tries").withDefault(128).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return worldgenfeaturerandompatchconfiguration.f;
+        }), Codec.INT.fieldOf("xspread").withDefault(7).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return worldgenfeaturerandompatchconfiguration.g;
+        }), Codec.INT.fieldOf("yspread").withDefault(3).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return worldgenfeaturerandompatchconfiguration.h;
+        }), Codec.INT.fieldOf("zspread").withDefault(7).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return worldgenfeaturerandompatchconfiguration.i;
+        }), Codec.BOOL.fieldOf("can_replace").withDefault(false).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return worldgenfeaturerandompatchconfiguration.j;
+        }), Codec.BOOL.fieldOf("project").withDefault(true).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return worldgenfeaturerandompatchconfiguration.l;
+        }), Codec.BOOL.fieldOf("need_water").withDefault(false).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+            return worldgenfeaturerandompatchconfiguration.m;
+        })).apply(instance, WorldGenFeatureRandomPatchConfiguration::new);
+    });
+    public final WorldGenFeatureStateProvider b;
+    public final WorldGenBlockPlacer c;
+    public final Set<Block> d;
+    public final Set<IBlockData> e;
     public final int f;
     public final int g;
     public final int h;
     public final int i;
     public final boolean j;
-    public final boolean k;
     public final boolean l;
+    public final boolean m;
+
+    private WorldGenFeatureRandomPatchConfiguration(WorldGenFeatureStateProvider worldgenfeaturestateprovider, WorldGenBlockPlacer worldgenblockplacer, List<IBlockData> list, List<IBlockData> list1, int i, int j, int k, int l, boolean flag, boolean flag1, boolean flag2) {
+        this(worldgenfeaturestateprovider, worldgenblockplacer, (Set) list.stream().map(BlockBase.BlockData::getBlock).collect(Collectors.toSet()), (Set) ImmutableSet.copyOf(list1), i, j, k, l, flag, flag1, flag2);
+    }
 
     private WorldGenFeatureRandomPatchConfiguration(WorldGenFeatureStateProvider worldgenfeaturestateprovider, WorldGenBlockPlacer worldgenblockplacer, Set<Block> set, Set<IBlockData> set1, int i, int j, int k, int l, boolean flag, boolean flag1, boolean flag2) {
-        this.a = worldgenfeaturestateprovider;
-        this.b = worldgenblockplacer;
-        this.c = set;
-        this.d = set1;
+        this.b = worldgenfeaturestateprovider;
+        this.c = worldgenblockplacer;
+        this.d = set;
+        this.e = set1;
         this.f = i;
         this.g = j;
         this.h = k;
         this.i = l;
         this.j = flag;
-        this.k = flag1;
-        this.l = flag2;
-    }
-
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        Builder<T, T> builder = ImmutableMap.builder();
-
-        builder.put(dynamicops.createString("state_provider"), this.a.a(dynamicops)).put(dynamicops.createString("block_placer"), this.b.a(dynamicops)).put(dynamicops.createString("whitelist"), dynamicops.createList(this.c.stream().map((block) -> {
-            return IBlockData.a(dynamicops, block.getBlockData()).getValue();
-        }))).put(dynamicops.createString("blacklist"), dynamicops.createList(this.d.stream().map((iblockdata) -> {
-            return IBlockData.a(dynamicops, iblockdata).getValue();
-        }))).put(dynamicops.createString("tries"), dynamicops.createInt(this.f)).put(dynamicops.createString("xspread"), dynamicops.createInt(this.g)).put(dynamicops.createString("yspread"), dynamicops.createInt(this.h)).put(dynamicops.createString("zspread"), dynamicops.createInt(this.i)).put(dynamicops.createString("can_replace"), dynamicops.createBoolean(this.j)).put(dynamicops.createString("project"), dynamicops.createBoolean(this.k)).put(dynamicops.createString("need_water"), dynamicops.createBoolean(this.l));
-        return new Dynamic(dynamicops, dynamicops.createMap(builder.build()));
-    }
-
-    public static <T> WorldGenFeatureRandomPatchConfiguration a(Dynamic<T> dynamic) {
-        WorldGenFeatureStateProviders<?> worldgenfeaturestateproviders = (WorldGenFeatureStateProviders) IRegistry.t.get(new MinecraftKey((String) dynamic.get("state_provider").get("type").asString().orElseThrow(RuntimeException::new)));
-        WorldGenBlockPlacers<?> worldgenblockplacers = (WorldGenBlockPlacers) IRegistry.u.get(new MinecraftKey((String) dynamic.get("block_placer").get("type").asString().orElseThrow(RuntimeException::new)));
-
-        return new WorldGenFeatureRandomPatchConfiguration(worldgenfeaturestateproviders.a(dynamic.get("state_provider").orElseEmptyMap()), worldgenblockplacers.a(dynamic.get("block_placer").orElseEmptyMap()), (Set) dynamic.get("whitelist").asList(IBlockData::a).stream().map(IBlockData::getBlock).collect(Collectors.toSet()), Sets.newHashSet(dynamic.get("blacklist").asList(IBlockData::a)), dynamic.get("tries").asInt(128), dynamic.get("xspread").asInt(7), dynamic.get("yspread").asInt(3), dynamic.get("zspread").asInt(7), dynamic.get("can_replace").asBoolean(false), dynamic.get("project").asBoolean(true), dynamic.get("need_water").asBoolean(false));
+        this.l = flag1;
+        this.m = flag2;
     }
 
     public static class a {

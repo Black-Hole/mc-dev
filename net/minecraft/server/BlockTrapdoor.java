@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 public class BlockTrapdoor extends BlockFacingHorizontal implements IBlockWaterlogged {
 
     public static final BlockStateBoolean OPEN = BlockProperties.u;
-    public static final BlockStateEnum<BlockPropertyHalf> HALF = BlockProperties.V;
+    public static final BlockStateEnum<BlockPropertyHalf> HALF = BlockProperties.ab;
     public static final BlockStateBoolean c = BlockProperties.w;
     public static final BlockStateBoolean d = BlockProperties.C;
     protected static final VoxelShape e = Block.a(0.0D, 0.0D, 0.0D, 3.0D, 16.0D, 16.0D);
@@ -15,13 +15,13 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IBlockWaterl
     protected static final VoxelShape i = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 3.0D, 16.0D);
     protected static final VoxelShape j = Block.a(0.0D, 13.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 
-    protected BlockTrapdoor(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTrapdoor.FACING, EnumDirection.NORTH)).set(BlockTrapdoor.OPEN, false)).set(BlockTrapdoor.HALF, BlockPropertyHalf.BOTTOM)).set(BlockTrapdoor.c, false)).set(BlockTrapdoor.d, false));
+    protected BlockTrapdoor(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTrapdoor.FACING, EnumDirection.NORTH)).set(BlockTrapdoor.OPEN, false)).set(BlockTrapdoor.HALF, BlockPropertyHalf.BOTTOM)).set(BlockTrapdoor.c, false)).set(BlockTrapdoor.d, false));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         if (!(Boolean) iblockdata.get(BlockTrapdoor.OPEN)) {
             return iblockdata.get(BlockTrapdoor.HALF) == BlockPropertyHalf.TOP ? BlockTrapdoor.j : BlockTrapdoor.i;
         } else {
@@ -65,7 +65,7 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IBlockWaterl
             }
 
             this.a(entityhuman, world, blockposition, (Boolean) iblockdata.get(BlockTrapdoor.OPEN));
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.a(world.isClientSide);
         }
     }
 
@@ -108,7 +108,7 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IBlockWaterl
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
         EnumDirection enumdirection = blockactioncontext.getClickedFace();
 
-        if (!blockactioncontext.c() && enumdirection.m().c()) {
+        if (!blockactioncontext.c() && enumdirection.n().d()) {
             iblockdata = (IBlockData) ((IBlockData) iblockdata.set(BlockTrapdoor.FACING, enumdirection)).set(BlockTrapdoor.HALF, blockactioncontext.getPos().y - (double) blockactioncontext.getClickPosition().getY() > 0.5D ? BlockPropertyHalf.TOP : BlockPropertyHalf.BOTTOM);
         } else {
             iblockdata = (IBlockData) ((IBlockData) iblockdata.set(BlockTrapdoor.FACING, blockactioncontext.f().opposite())).set(BlockTrapdoor.HALF, enumdirection == EnumDirection.UP ? BlockPropertyHalf.BOTTOM : BlockPropertyHalf.TOP);
@@ -127,8 +127,8 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IBlockWaterl
     }
 
     @Override
-    public Fluid a_(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockTrapdoor.d) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
+    public Fluid d(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockTrapdoor.d) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
     }
 
     @Override
@@ -138,10 +138,5 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IBlockWaterl
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
-    }
-
-    @Override
-    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EntityTypes<?> entitytypes) {
-        return false;
     }
 }

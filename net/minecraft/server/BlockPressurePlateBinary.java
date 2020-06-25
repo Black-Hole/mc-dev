@@ -8,9 +8,9 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
     public static final BlockStateBoolean POWERED = BlockProperties.w;
     private final BlockPressurePlateBinary.EnumMobType e;
 
-    protected BlockPressurePlateBinary(BlockPressurePlateBinary.EnumMobType blockpressureplatebinary_enummobtype, Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateBinary.POWERED, false));
+    protected BlockPressurePlateBinary(BlockPressurePlateBinary.EnumMobType blockpressureplatebinary_enummobtype, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateBinary.POWERED, false));
         this.e = blockpressureplatebinary_enummobtype;
     }
 
@@ -26,20 +26,20 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
     @Override
     protected void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        if (this.material == Material.WOOD) {
-            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.8F);
-        } else {
+        if (this.material != Material.WOOD && this.material != Material.NETHER_WOOD) {
             generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_STONE_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.6F);
+        } else {
+            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.8F);
         }
 
     }
 
     @Override
     protected void b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        if (this.material == Material.WOOD) {
-            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.7F);
-        } else {
+        if (this.material != Material.WOOD && this.material != Material.NETHER_WOOD) {
             generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.5F);
+        } else {
+            generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.7F);
         }
 
     }

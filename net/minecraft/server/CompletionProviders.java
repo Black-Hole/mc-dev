@@ -11,9 +11,9 @@ import java.util.concurrent.CompletableFuture;
 
 public class CompletionProviders {
 
-    private static final Map<MinecraftKey, SuggestionProvider<ICompletionProvider>> e = Maps.newHashMap();
-    private static final MinecraftKey f = new MinecraftKey("ask_server");
-    public static final SuggestionProvider<ICompletionProvider> a = a(CompletionProviders.f, (commandcontext, suggestionsbuilder) -> {
+    private static final Map<MinecraftKey, SuggestionProvider<ICompletionProvider>> f = Maps.newHashMap();
+    private static final MinecraftKey g = new MinecraftKey("ask_server");
+    public static final SuggestionProvider<ICompletionProvider> a = a(CompletionProviders.g, (commandcontext, suggestionsbuilder) -> {
         return ((ICompletionProvider) commandcontext.getSource()).a(commandcontext, suggestionsbuilder);
     });
     public static final SuggestionProvider<CommandListenerWrapper> b = a(new MinecraftKey("all_recipes"), (commandcontext, suggestionsbuilder) -> {
@@ -22,27 +22,30 @@ public class CompletionProviders {
     public static final SuggestionProvider<CommandListenerWrapper> c = a(new MinecraftKey("available_sounds"), (commandcontext, suggestionsbuilder) -> {
         return ICompletionProvider.a((Iterable) ((ICompletionProvider) commandcontext.getSource()).n(), suggestionsbuilder);
     });
-    public static final SuggestionProvider<CommandListenerWrapper> d = a(new MinecraftKey("summonable_entities"), (commandcontext, suggestionsbuilder) -> {
-        return ICompletionProvider.a(IRegistry.ENTITY_TYPE.d().filter(EntityTypes::b), suggestionsbuilder, EntityTypes::getName, (entitytypes) -> {
-            return new ChatMessage(SystemUtils.a("entity", EntityTypes.getName(entitytypes)), new Object[0]);
+    public static final SuggestionProvider<CommandListenerWrapper> d = a(new MinecraftKey("available_biomes"), (commandcontext, suggestionsbuilder) -> {
+        return ICompletionProvider.a((Iterable) IRegistry.BIOME.keySet(), suggestionsbuilder);
+    });
+    public static final SuggestionProvider<CommandListenerWrapper> e = a(new MinecraftKey("summonable_entities"), (commandcontext, suggestionsbuilder) -> {
+        return ICompletionProvider.a(IRegistry.ENTITY_TYPE.e().filter(EntityTypes::b), suggestionsbuilder, EntityTypes::getName, (entitytypes) -> {
+            return new ChatMessage(SystemUtils.a("entity", EntityTypes.getName(entitytypes)));
         });
     });
 
     public static <S extends ICompletionProvider> SuggestionProvider<S> a(MinecraftKey minecraftkey, SuggestionProvider<ICompletionProvider> suggestionprovider) {
-        if (CompletionProviders.e.containsKey(minecraftkey)) {
+        if (CompletionProviders.f.containsKey(minecraftkey)) {
             throw new IllegalArgumentException("A command suggestion provider is already registered with the name " + minecraftkey);
         } else {
-            CompletionProviders.e.put(minecraftkey, suggestionprovider);
+            CompletionProviders.f.put(minecraftkey, suggestionprovider);
             return new CompletionProviders.a(minecraftkey, suggestionprovider);
         }
     }
 
     public static SuggestionProvider<ICompletionProvider> a(MinecraftKey minecraftkey) {
-        return (SuggestionProvider) CompletionProviders.e.getOrDefault(minecraftkey, CompletionProviders.a);
+        return (SuggestionProvider) CompletionProviders.f.getOrDefault(minecraftkey, CompletionProviders.a);
     }
 
     public static MinecraftKey a(SuggestionProvider<ICompletionProvider> suggestionprovider) {
-        return suggestionprovider instanceof CompletionProviders.a ? ((CompletionProviders.a) suggestionprovider).b : CompletionProviders.f;
+        return suggestionprovider instanceof CompletionProviders.a ? ((CompletionProviders.a) suggestionprovider).b : CompletionProviders.g;
     }
 
     public static SuggestionProvider<ICompletionProvider> b(SuggestionProvider<ICompletionProvider> suggestionprovider) {

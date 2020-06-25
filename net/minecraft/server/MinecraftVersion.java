@@ -16,35 +16,36 @@ import org.apache.logging.log4j.Logger;
 public class MinecraftVersion implements GameVersion {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final String b;
+    public static final GameVersion a = new MinecraftVersion();
     private final String c;
-    private final boolean d;
-    private final int e;
+    private final String d;
+    private final boolean e;
     private final int f;
     private final int g;
-    private final Date h;
-    private final String i;
+    private final int h;
+    private final Date i;
+    private final String j;
 
-    public MinecraftVersion() {
-        this.b = UUID.randomUUID().toString().replaceAll("-", "");
-        this.c = "1.15.2";
-        this.d = true;
-        this.e = 2230;
-        this.f = 578;
-        this.g = 5;
-        this.h = new Date();
-        this.i = "1.15.2";
+    private MinecraftVersion() {
+        this.c = UUID.randomUUID().toString().replaceAll("-", "");
+        this.d = "1.16.1";
+        this.e = true;
+        this.f = 2567;
+        this.g = 736;
+        this.h = 5;
+        this.i = new Date();
+        this.j = "1.16.1";
     }
 
-    protected MinecraftVersion(JsonObject jsonobject) {
-        this.b = ChatDeserializer.h(jsonobject, "id");
-        this.c = ChatDeserializer.h(jsonobject, "name");
-        this.i = ChatDeserializer.h(jsonobject, "release_target");
-        this.d = ChatDeserializer.j(jsonobject, "stable");
-        this.e = ChatDeserializer.n(jsonobject, "world_version");
-        this.f = ChatDeserializer.n(jsonobject, "protocol_version");
-        this.g = ChatDeserializer.n(jsonobject, "pack_version");
-        this.h = Date.from(ZonedDateTime.parse(ChatDeserializer.h(jsonobject, "build_time")).toInstant());
+    private MinecraftVersion(JsonObject jsonobject) {
+        this.c = ChatDeserializer.h(jsonobject, "id");
+        this.d = ChatDeserializer.h(jsonobject, "name");
+        this.j = ChatDeserializer.h(jsonobject, "release_target");
+        this.e = ChatDeserializer.j(jsonobject, "stable");
+        this.f = ChatDeserializer.n(jsonobject, "world_version");
+        this.g = ChatDeserializer.n(jsonobject, "protocol_version");
+        this.h = ChatDeserializer.n(jsonobject, "pack_version");
+        this.i = Date.from(ZonedDateTime.parse(ChatDeserializer.h(jsonobject, "build_time")).toInstant());
     }
 
     public static GameVersion a() {
@@ -52,7 +53,7 @@ public class MinecraftVersion implements GameVersion {
             InputStream inputstream = MinecraftVersion.class.getResourceAsStream("/version.json");
             Throwable throwable = null;
 
-            MinecraftVersion minecraftversion;
+            GameVersion gameversion;
 
             try {
                 if (inputstream != null) {
@@ -87,7 +88,7 @@ public class MinecraftVersion implements GameVersion {
                 }
 
                 MinecraftVersion.LOGGER.warn("Missing version information!");
-                minecraftversion = new MinecraftVersion();
+                gameversion = MinecraftVersion.a;
             } catch (Throwable throwable4) {
                 throwable = throwable4;
                 throw throwable4;
@@ -106,41 +107,41 @@ public class MinecraftVersion implements GameVersion {
 
             }
 
-            return minecraftversion;
+            return gameversion;
         } catch (JsonParseException | IOException ioexception) {
             throw new IllegalStateException("Game version information is corrupt", ioexception);
         }
     }
 
     public String getId() {
-        return this.b;
-    }
-
-    public String getName() {
         return this.c;
     }
 
+    public String getName() {
+        return this.d;
+    }
+
     public String getReleaseTarget() {
-        return this.i;
+        return this.j;
     }
 
     public int getWorldVersion() {
-        return this.e;
-    }
-
-    public int getProtocolVersion() {
         return this.f;
     }
 
-    public int getPackVersion() {
+    public int getProtocolVersion() {
         return this.g;
     }
 
-    public Date getBuildTime() {
+    public int getPackVersion() {
         return this.h;
     }
 
+    public Date getBuildTime() {
+        return this.i;
+    }
+
     public boolean isStable() {
-        return this.d;
+        return this.e;
     }
 }

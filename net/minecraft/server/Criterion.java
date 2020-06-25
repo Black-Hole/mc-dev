@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Maps;
-import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -24,14 +23,14 @@ public class Criterion {
 
     public void a(PacketDataSerializer packetdataserializer) {}
 
-    public static Criterion a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public static Criterion a(JsonObject jsonobject, LootDeserializationContext lootdeserializationcontext) {
         MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "trigger"));
         CriterionTrigger<?> criteriontrigger = CriterionTriggers.a(minecraftkey);
 
         if (criteriontrigger == null) {
             throw new JsonSyntaxException("Invalid criterion trigger: " + minecraftkey);
         } else {
-            CriterionInstance criterioninstance = criteriontrigger.a(ChatDeserializer.a(jsonobject, "conditions", new JsonObject()), jsondeserializationcontext);
+            CriterionInstance criterioninstance = criteriontrigger.a(ChatDeserializer.a(jsonobject, "conditions", new JsonObject()), lootdeserializationcontext);
 
             return new Criterion(criterioninstance);
         }
@@ -41,14 +40,14 @@ public class Criterion {
         return new Criterion();
     }
 
-    public static Map<String, Criterion> b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public static Map<String, Criterion> b(JsonObject jsonobject, LootDeserializationContext lootdeserializationcontext) {
         Map<String, Criterion> map = Maps.newHashMap();
         Iterator iterator = jsonobject.entrySet().iterator();
 
         while (iterator.hasNext()) {
             Entry<String, JsonElement> entry = (Entry) iterator.next();
 
-            map.put(entry.getKey(), a(ChatDeserializer.m((JsonElement) entry.getValue(), "criterion"), jsondeserializationcontext));
+            map.put(entry.getKey(), a(ChatDeserializer.m((JsonElement) entry.getValue(), "criterion"), lootdeserializationcontext));
         }
 
         return map;
@@ -87,7 +86,12 @@ public class Criterion {
         JsonObject jsonobject = new JsonObject();
 
         jsonobject.addProperty("trigger", this.a.a().toString());
-        jsonobject.add("conditions", this.a.b());
+        JsonObject jsonobject1 = this.a.a(LootSerializationContext.a);
+
+        if (jsonobject1.size() != 0) {
+            jsonobject.add("conditions", jsonobject1);
+        }
+
         return jsonobject;
     }
 }

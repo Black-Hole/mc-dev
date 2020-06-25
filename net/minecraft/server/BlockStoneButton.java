@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class BlockStoneButton extends BlockButtonAbstract {
 
-    protected BlockStoneButton(Block.Info block_info) {
-        super(false, block_info);
+    protected BlockStoneButton(BlockBase.Info blockbase_info) {
+        super(false, blockbase_info);
     }
 
     @Override

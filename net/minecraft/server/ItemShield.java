@@ -4,24 +4,21 @@ public class ItemShield extends Item {
 
     public ItemShield(Item.Info item_info) {
         super(item_info);
-        this.a(new MinecraftKey("blocking"), (itemstack, world, entityliving) -> {
-            return entityliving != null && entityliving.isHandRaised() && entityliving.dD() == itemstack ? 1.0F : 0.0F;
-        });
         BlockDispenser.a((IMaterial) this, ItemArmor.a);
     }
 
     @Override
     public String f(ItemStack itemstack) {
-        return itemstack.b("BlockEntityTag") != null ? this.getName() + '.' + e(itemstack).b() : super.f(itemstack);
+        return itemstack.b("BlockEntityTag") != null ? this.getName() + '.' + d(itemstack).c() : super.f(itemstack);
     }
 
     @Override
-    public EnumAnimation e_(ItemStack itemstack) {
+    public EnumAnimation d_(ItemStack itemstack) {
         return EnumAnimation.BLOCK;
     }
 
     @Override
-    public int f_(ItemStack itemstack) {
+    public int e_(ItemStack itemstack) {
         return 72000;
     }
 
@@ -38,7 +35,7 @@ public class ItemShield extends Item {
         return TagsItem.PLANKS.isTagged(itemstack1.getItem()) || super.a(itemstack, itemstack1);
     }
 
-    public static EnumColor e(ItemStack itemstack) {
+    public static EnumColor d(ItemStack itemstack) {
         return EnumColor.fromColorIndex(itemstack.a("BlockEntityTag").getInt("Base"));
     }
 }

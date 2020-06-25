@@ -11,6 +11,11 @@ public class LootItemFunctionExplosionDecay extends LootItemFunctionConditional 
     }
 
     @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.r;
+    }
+
+    @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
         Float ofloat = (Float) loottableinfo.getContextParameter(LootContextParameters.EXPLOSION_RADIUS);
 
@@ -32,15 +37,13 @@ public class LootItemFunctionExplosionDecay extends LootItemFunctionConditional 
         return itemstack;
     }
 
-    public static LootItemFunctionConditional.a<?> b() {
+    public static LootItemFunctionConditional.a<?> c() {
         return a(LootItemFunctionExplosionDecay::new);
     }
 
     public static class a extends LootItemFunctionConditional.c<LootItemFunctionExplosionDecay> {
 
-        protected a() {
-            super(new MinecraftKey("explosion_decay"), LootItemFunctionExplosionDecay.class);
-        }
+        public a() {}
 
         @Override
         public LootItemFunctionExplosionDecay b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {

@@ -6,13 +6,13 @@ public abstract class BlockBannerAbstract extends BlockTileEntity {
 
     private final EnumColor a;
 
-    protected BlockBannerAbstract(EnumColor enumcolor, Block.Info block_info) {
-        super(block_info);
+    protected BlockBannerAbstract(EnumColor enumcolor, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.a = enumcolor;
     }
 
     @Override
-    public boolean Y_() {
+    public boolean ak_() {
         return true;
     }
 

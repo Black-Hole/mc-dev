@@ -80,7 +80,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     }
 
     public void channelInactive(ChannelHandlerContext channelhandlercontext) throws Exception {
-        this.close(new ChatMessage("disconnect.endOfStream", new Object[0]));
+        this.close(new ChatMessage("disconnect.endOfStream"));
     }
 
     public void exceptionCaught(ChannelHandlerContext channelhandlercontext, Throwable throwable) {
@@ -93,7 +93,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
             if (this.channel.isOpen()) {
                 if (throwable instanceof TimeoutException) {
                     NetworkManager.LOGGER.debug("Timeout", throwable);
-                    this.close(new ChatMessage("disconnect.timeout", new Object[0]));
+                    this.close(new ChatMessage("disconnect.timeout"));
                 } else {
                     ChatMessage chatmessage = new ChatMessage("disconnect.genericReason", new Object[]{"Internal Exception: " + throwable});
 
@@ -132,7 +132,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
     public void setPacketListener(PacketListener packetlistener) {
         Validate.notNull(packetlistener, "packetListener", new Object[0]);
-        NetworkManager.LOGGER.debug("Set listener of {} to {}", this, packetlistener);
         this.packetListener = packetlistener;
     }
 
@@ -305,7 +304,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
                 if (this.j() != null) {
                     this.i().a(this.j());
                 } else if (this.i() != null) {
-                    this.i().a(new ChatMessage("multiplayer.disconnect.generic", new Object[0]));
+                    this.i().a(new ChatMessage("multiplayer.disconnect.generic"));
                 }
             }
 

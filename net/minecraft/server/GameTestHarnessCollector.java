@@ -2,13 +2,14 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.Collection;
+import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 public class GameTestHarnessCollector {
 
     private final Collection<GameTestHarnessInfo> a = Lists.newArrayList();
     @Nullable
-    private GameTestHarnessListener b;
+    private Collection<GameTestHarnessListener> b = Lists.newArrayList();
 
     public GameTestHarnessCollector() {}
 
@@ -18,16 +19,25 @@ public class GameTestHarnessCollector {
 
     public void a(GameTestHarnessInfo gametestharnessinfo) {
         this.a.add(gametestharnessinfo);
-        if (this.b != null) {
-            gametestharnessinfo.a(this.b);
-        }
-
+        this.b.forEach(gametestharnessinfo::a);
     }
 
     public void a(GameTestHarnessListener gametestharnesslistener) {
-        this.b = gametestharnesslistener;
+        this.b.add(gametestharnesslistener);
         this.a.forEach((gametestharnessinfo) -> {
             gametestharnessinfo.a(gametestharnesslistener);
+        });
+    }
+
+    public void a(final Consumer<GameTestHarnessInfo> consumer) {
+        this.a(new GameTestHarnessListener() {
+            @Override
+            public void a(GameTestHarnessInfo gametestharnessinfo) {}
+
+            @Override
+            public void c(GameTestHarnessInfo gametestharnessinfo) {
+                consumer.accept(gametestharnessinfo);
+            }
         });
     }
 

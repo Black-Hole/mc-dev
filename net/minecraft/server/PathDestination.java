@@ -25,8 +25,4 @@ public class PathDestination extends PathPoint {
     public void e() {
         this.o = true;
     }
-
-    public boolean f() {
-        return this.o;
-    }
 }

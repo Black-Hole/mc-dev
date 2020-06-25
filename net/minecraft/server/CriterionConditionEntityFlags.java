@@ -28,7 +28,7 @@ public class CriterionConditionEntityFlags {
     }
 
     public boolean a(Entity entity) {
-        return this.b != null && entity.isBurning() != this.b ? false : (this.c != null && entity.bo() != this.c ? false : (this.d != null && entity.isSprinting() != this.d ? false : (this.e != null && entity.isSwimming() != this.e ? false : this.f == null || !(entity instanceof EntityLiving) || ((EntityLiving) entity).isBaby() == this.f)));
+        return this.b != null && entity.isBurning() != this.b ? false : (this.c != null && entity.bv() != this.c ? false : (this.d != null && entity.isSprinting() != this.d ? false : (this.e != null && entity.isSwimming() != this.e ? false : this.f == null || !(entity instanceof EntityLiving) || ((EntityLiving) entity).isBaby() == this.f)));
     }
 
     @Nullable
@@ -94,6 +94,11 @@ public class CriterionConditionEntityFlags {
 
         public CriterionConditionEntityFlags.a a(@Nullable Boolean obool) {
             this.a = obool;
+            return this;
+        }
+
+        public CriterionConditionEntityFlags.a e(@Nullable Boolean obool) {
+            this.e = obool;
             return this;
         }
 

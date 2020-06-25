@@ -9,25 +9,25 @@ import javax.annotation.Nullable;
 public class BehaviorCelebrate extends Behavior<EntityVillager> {
 
     @Nullable
-    private Raid a;
+    private Raid b;
 
     public BehaviorCelebrate(int i, int j) {
         super(ImmutableMap.of(), i, j);
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
-        BlockPosition blockposition = new BlockPosition(entityvillager);
+        BlockPosition blockposition = entityvillager.getChunkCoordinates();
 
-        this.a = worldserver.c_(blockposition);
-        return this.a != null && this.a.isVictory() && BehaviorOutside.a(worldserver, entityvillager, blockposition);
+        this.b = worldserver.c_(blockposition);
+        return this.b != null && this.b.isVictory() && BehaviorOutside.a(worldserver, entityvillager, blockposition);
     }
 
-    protected boolean g(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        return this.a != null && !this.a.isStopped();
+    protected boolean b(WorldServer worldserver, EntityVillager entityvillager, long i) {
+        return this.b != null && !this.b.isStopped();
     }
 
-    protected void f(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        this.a = null;
+    protected void c(WorldServer worldserver, EntityVillager entityvillager, long i) {
+        this.b = null;
         entityvillager.getBehaviorController().a(worldserver.getDayTime(), worldserver.getTime());
     }
 
@@ -35,14 +35,14 @@ public class BehaviorCelebrate extends Behavior<EntityVillager> {
         Random random = entityvillager.getRandom();
 
         if (random.nextInt(100) == 0) {
-            entityvillager.ex();
+            entityvillager.eS();
         }
 
-        if (random.nextInt(200) == 0 && BehaviorOutside.a(worldserver, entityvillager, new BlockPosition(entityvillager))) {
-            EnumColor enumcolor = EnumColor.values()[random.nextInt(EnumColor.values().length)];
+        if (random.nextInt(200) == 0 && BehaviorOutside.a(worldserver, entityvillager, entityvillager.getChunkCoordinates())) {
+            EnumColor enumcolor = (EnumColor) SystemUtils.a((Object[]) EnumColor.values(), random);
             int j = random.nextInt(3);
             ItemStack itemstack = this.a(enumcolor, j);
-            EntityFireworks entityfireworks = new EntityFireworks(entityvillager.world, entityvillager.locX(), entityvillager.getHeadY(), entityvillager.locZ(), itemstack);
+            EntityFireworks entityfireworks = new EntityFireworks(entityvillager.world, entityvillager, entityvillager.locX(), entityvillager.getHeadY(), entityvillager.locZ(), itemstack);
 
             entityvillager.world.addEntity(entityfireworks);
         }
@@ -55,7 +55,7 @@ public class BehaviorCelebrate extends Behavior<EntityVillager> {
         NBTTagCompound nbttagcompound = itemstack1.a("Explosion");
         List<Integer> list = Lists.newArrayList();
 
-        list.add(enumcolor.f());
+        list.add(enumcolor.getFireworksColor());
         nbttagcompound.b("Colors", (List) list);
         nbttagcompound.setByte("Type", (byte) ItemFireworks.EffectType.BURST.a());
         NBTTagCompound nbttagcompound1 = itemstack.a("Fireworks");

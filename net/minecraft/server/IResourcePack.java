@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -8,7 +7,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
-public interface IResourcePack extends Closeable {
+public interface IResourcePack extends AutoCloseable {
 
     InputStream a(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) throws IOException;
 
@@ -22,4 +21,6 @@ public interface IResourcePack extends Closeable {
     <T> T a(ResourcePackMetaParser<T> resourcepackmetaparser) throws IOException;
 
     String a();
+
+    void close();
 }

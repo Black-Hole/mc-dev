@@ -4,20 +4,18 @@ import com.google.common.collect.ImmutableMap;
 
 public class BehaviorSwim extends Behavior<EntityInsentient> {
 
-    private final float a;
     private final float b;
 
-    public BehaviorSwim(float f, float f1) {
+    public BehaviorSwim(float f) {
         super(ImmutableMap.of());
-        this.a = f;
-        this.b = f1;
+        this.b = f;
     }
 
     protected boolean a(WorldServer worldserver, EntityInsentient entityinsentient) {
-        return entityinsentient.isInWater() && entityinsentient.co() > (double) this.a || entityinsentient.aH();
+        return entityinsentient.isInWater() && entityinsentient.b((Tag) TagsFluid.WATER) > entityinsentient.cw() || entityinsentient.aN();
     }
 
-    protected boolean g(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
+    protected boolean b(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
         return this.a(worldserver, entityinsentient);
     }
 

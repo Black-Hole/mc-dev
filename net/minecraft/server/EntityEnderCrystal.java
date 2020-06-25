@@ -34,18 +34,18 @@ public class EntityEnderCrystal extends Entity {
     @Override
     public void tick() {
         ++this.b;
-        if (!this.world.isClientSide) {
-            BlockPosition blockposition = new BlockPosition(this);
+        if (this.world instanceof WorldServer) {
+            BlockPosition blockposition = this.getChunkCoordinates();
 
-            if (this.world.worldProvider instanceof WorldProviderTheEnd && this.world.getType(blockposition).isAir()) {
-                this.world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
+            if (((WorldServer) this.world).getDragonBattle() != null && this.world.getType(blockposition).isAir()) {
+                this.world.setTypeUpdate(blockposition, BlockFireAbstract.a((IBlockAccess) this.world, blockposition));
             }
         }
 
     }
 
     @Override
-    protected void b(NBTTagCompound nbttagcompound) {
+    protected void saveData(NBTTagCompound nbttagcompound) {
         if (this.getBeamTarget() != null) {
             nbttagcompound.set("BeamTarget", GameProfileSerializer.a(this.getBeamTarget()));
         }
@@ -54,9 +54,9 @@ public class EntityEnderCrystal extends Entity {
     }
 
     @Override
-    protected void a(NBTTagCompound nbttagcompound) {
+    protected void loadData(NBTTagCompound nbttagcompound) {
         if (nbttagcompound.hasKeyOfType("BeamTarget", 10)) {
-            this.setBeamTarget(GameProfileSerializer.c(nbttagcompound.getCompound("BeamTarget")));
+            this.setBeamTarget(GameProfileSerializer.b(nbttagcompound.getCompound("BeamTarget")));
         }
 
         if (nbttagcompound.hasKeyOfType("ShowBottom", 1)) {
@@ -97,9 +97,8 @@ public class EntityEnderCrystal extends Entity {
     }
 
     private void a(DamageSource damagesource) {
-        if (this.world.worldProvider instanceof WorldProviderTheEnd) {
-            WorldProviderTheEnd worldprovidertheend = (WorldProviderTheEnd) this.world.worldProvider;
-            EnderDragonBattle enderdragonbattle = worldprovidertheend.o();
+        if (this.world instanceof WorldServer) {
+            EnderDragonBattle enderdragonbattle = ((WorldServer) this.world).getDragonBattle();
 
             if (enderdragonbattle != null) {
                 enderdragonbattle.a(this, damagesource);
@@ -126,7 +125,7 @@ public class EntityEnderCrystal extends Entity {
     }
 
     @Override
-    public Packet<?> L() {
+    public Packet<?> O() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

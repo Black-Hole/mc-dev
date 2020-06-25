@@ -7,6 +7,10 @@ public class BlockActionContext extends ItemActionContext {
     private final BlockPosition g;
     protected boolean a;
 
+    public BlockActionContext(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, MovingObjectPositionBlock movingobjectpositionblock) {
+        this(entityhuman.world, entityhuman, enumhand, itemstack, movingobjectpositionblock);
+    }
+
     public BlockActionContext(ItemActionContext itemactioncontext) {
         this(itemactioncontext.getWorld(), itemactioncontext.getEntity(), itemactioncontext.getHand(), itemactioncontext.getItemStack(), itemactioncontext.d);
     }

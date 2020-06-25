@@ -7,12 +7,12 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
     protected static final VoxelShape b = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
     public static final BlockStateBoolean c = BlockProperties.w;
 
-    protected BlockDiodeAbstract(Block.Info block_info) {
-        super(block_info);
+    protected BlockDiodeAbstract(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockDiodeAbstract.b;
     }
 
@@ -22,7 +22,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if (!this.a((IWorldReader) worldserver, blockposition, iblockdata)) {
             boolean flag = (Boolean) iblockdata.get(BlockDiodeAbstract.c);
             boolean flag1 = this.a((World) worldserver, blockposition, iblockdata);
@@ -32,7 +32,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
             } else if (!flag) {
                 worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDiodeAbstract.c, true), 2);
                 if (!flag1) {
-                    worldserver.getBlockTickList().a(blockposition, this, this.h(iblockdata), TickListPriority.VERY_HIGH);
+                    worldserver.getBlockTickList().a(blockposition, this, this.g(iblockdata), TickListPriority.VERY_HIGH);
                 }
             }
 
@@ -84,7 +84,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
                     ticklistpriority = TickListPriority.VERY_HIGH;
                 }
 
-                world.getBlockTickList().a(blockposition, this, this.h(iblockdata), ticklistpriority);
+                world.getBlockTickList().a(blockposition, this, this.g(iblockdata), ticklistpriority);
             }
 
         }
@@ -108,23 +108,22 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
         } else {
             IBlockData iblockdata1 = world.getType(blockposition1);
 
-            return Math.max(i, iblockdata1.getBlock() == Blocks.REDSTONE_WIRE ? (Integer) iblockdata1.get(BlockRedstoneWire.POWER) : 0);
+            return Math.max(i, iblockdata1.a(Blocks.REDSTONE_WIRE) ? (Integer) iblockdata1.get(BlockRedstoneWire.POWER) : 0);
         }
     }
 
     protected int b(IWorldReader iworldreader, BlockPosition blockposition, IBlockData iblockdata) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockDiodeAbstract.FACING);
-        EnumDirection enumdirection1 = enumdirection.f();
-        EnumDirection enumdirection2 = enumdirection.g();
+        EnumDirection enumdirection1 = enumdirection.g();
+        EnumDirection enumdirection2 = enumdirection.h();
 
         return Math.max(this.b(iworldreader, blockposition.shift(enumdirection1), enumdirection1), this.b(iworldreader, blockposition.shift(enumdirection2), enumdirection2));
     }
 
     protected int b(IWorldReader iworldreader, BlockPosition blockposition, EnumDirection enumdirection) {
         IBlockData iblockdata = iworldreader.getType(blockposition);
-        Block block = iblockdata.getBlock();
 
-        return this.i(iblockdata) ? (block == Blocks.REDSTONE_BLOCK ? 15 : (block == Blocks.REDSTONE_WIRE ? (Integer) iblockdata.get(BlockRedstoneWire.POWER) : iworldreader.c(blockposition, enumdirection))) : 0;
+        return this.h(iblockdata) ? (iblockdata.a(Blocks.REDSTONE_BLOCK) ? 15 : (iblockdata.a(Blocks.REDSTONE_WIRE) ? (Integer) iblockdata.get(BlockRedstoneWire.POWER) : iworldreader.c(blockposition, enumdirection))) : 0;
     }
 
     @Override
@@ -152,7 +151,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (!flag && iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!flag && !iblockdata.a(iblockdata1.getBlock())) {
             super.remove(iblockdata, world, blockposition, iblockdata1, flag);
             this.d(world, blockposition, iblockdata);
         }
@@ -166,7 +165,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
         world.a(blockposition1, (Block) this, enumdirection);
     }
 
-    protected boolean i(IBlockData iblockdata) {
+    protected boolean h(IBlockData iblockdata) {
         return iblockdata.isPowerSource();
     }
 
@@ -185,5 +184,5 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
         return isDiode(iblockdata1) && iblockdata1.get(BlockDiodeAbstract.FACING) != enumdirection;
     }
 
-    protected abstract int h(IBlockData iblockdata);
+    protected abstract int g(IBlockData iblockdata);
 }

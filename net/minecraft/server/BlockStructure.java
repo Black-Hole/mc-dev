@@ -4,10 +4,10 @@ import javax.annotation.Nullable;
 
 public class BlockStructure extends BlockTileEntity {
 
-    public static final BlockStateEnum<BlockPropertyStructureMode> a = BlockProperties.aF;
+    public static final BlockStateEnum<BlockPropertyStructureMode> a = BlockProperties.aM;
 
-    protected BlockStructure(Block.Info block_info) {
-        super(block_info);
+    protected BlockStructure(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
@@ -19,7 +19,7 @@ public class BlockStructure extends BlockTileEntity {
     public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
-        return tileentity instanceof TileEntityStructure ? (((TileEntityStructure) tileentity).a(entityhuman) ? EnumInteractionResult.SUCCESS : EnumInteractionResult.PASS) : EnumInteractionResult.PASS;
+        return tileentity instanceof TileEntityStructure ? (((TileEntityStructure) tileentity).a(entityhuman) ? EnumInteractionResult.a(world.isClientSide) : EnumInteractionResult.PASS) : EnumInteractionResult.PASS;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class BlockStructure extends BlockTileEntity {
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 

@@ -16,14 +16,9 @@ public class BlockDispenser extends BlockTileEntity {
         BlockDispenser.REGISTRY.put(imaterial.getItem(), idispensebehavior);
     }
 
-    protected BlockDispenser(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDispenser.FACING, EnumDirection.NORTH)).set(BlockDispenser.TRIGGERED, false));
-    }
-
-    @Override
-    public int a(IWorldReader iworldreader) {
-        return 4;
+    protected BlockDispenser(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDispenser.FACING, EnumDirection.NORTH)).set(BlockDispenser.TRIGGERED, false));
     }
 
     @Override
@@ -42,7 +37,7 @@ public class BlockDispenser extends BlockTileEntity {
                 }
             }
 
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.CONSUME;
         }
     }
 
@@ -74,7 +69,7 @@ public class BlockDispenser extends BlockTileEntity {
         boolean flag2 = (Boolean) iblockdata.get(BlockDispenser.TRIGGERED);
 
         if (flag1 && !flag2) {
-            world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
+            world.getBlockTickList().a(blockposition, this, 4);
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDispenser.TRIGGERED, true), 4);
         } else if (!flag1 && flag2) {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDispenser.TRIGGERED, false), 4);
@@ -83,7 +78,7 @@ public class BlockDispenser extends BlockTileEntity {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         this.dispense(worldserver, blockposition);
     }
 
@@ -111,7 +106,7 @@ public class BlockDispenser extends BlockTileEntity {
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!iblockdata.a(iblockdata1.getBlock())) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityDispenser) {
@@ -143,7 +138,7 @@ public class BlockDispenser extends BlockTileEntity {
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 

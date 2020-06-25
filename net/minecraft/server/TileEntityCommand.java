@@ -29,7 +29,7 @@ public class TileEntityCommand extends TileEntity {
 
         @Override
         public CommandListenerWrapper getWrapper() {
-            return new CommandListenerWrapper(this, new Vec3D((double) TileEntityCommand.this.position.getX() + 0.5D, (double) TileEntityCommand.this.position.getY() + 0.5D, (double) TileEntityCommand.this.position.getZ() + 0.5D), Vec2F.a, this.d(), 2, this.getName().getString(), this.getName(), this.d().getMinecraftServer(), (Entity) null);
+            return new CommandListenerWrapper(this, Vec3D.a((BaseBlockPosition) TileEntityCommand.this.position), Vec2F.a, this.d(), 2, this.getName().getString(), this.getName(), this.d().getMinecraftServer(), (Entity) null);
         }
     };
 
@@ -48,8 +48,8 @@ public class TileEntityCommand extends TileEntity {
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
         this.h.b(nbttagcompound);
         this.a = nbttagcompound.getBoolean("powered");
         this.c = nbttagcompound.getBoolean("conditionMet");
@@ -114,7 +114,7 @@ public class TileEntityCommand extends TileEntity {
 
         if (block instanceof BlockCommand) {
             this.k();
-            this.world.getBlockTickList().a(this.position, block, block.a((IWorldReader) this.world));
+            this.world.getBlockTickList().a(this.position, block, 1);
         }
 
     }
@@ -149,9 +149,9 @@ public class TileEntityCommand extends TileEntity {
     }
 
     public TileEntityCommand.Type m() {
-        Block block = this.getBlock().getBlock();
+        IBlockData iblockdata = this.getBlock();
 
-        return block == Blocks.COMMAND_BLOCK ? TileEntityCommand.Type.REDSTONE : (block == Blocks.REPEATING_COMMAND_BLOCK ? TileEntityCommand.Type.AUTO : (block == Blocks.CHAIN_COMMAND_BLOCK ? TileEntityCommand.Type.SEQUENCE : TileEntityCommand.Type.REDSTONE));
+        return iblockdata.a(Blocks.COMMAND_BLOCK) ? TileEntityCommand.Type.REDSTONE : (iblockdata.a(Blocks.REPEATING_COMMAND_BLOCK) ? TileEntityCommand.Type.AUTO : (iblockdata.a(Blocks.CHAIN_COMMAND_BLOCK) ? TileEntityCommand.Type.SEQUENCE : TileEntityCommand.Type.REDSTONE));
     }
 
     public boolean x() {

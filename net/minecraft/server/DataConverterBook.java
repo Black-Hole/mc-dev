@@ -4,14 +4,12 @@ import com.google.gson.JsonParseException;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
-import java.util.Optional;
-import java.util.stream.Stream;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
 import org.apache.commons.lang3.StringUtils;
 
 public class DataConverterBook extends DataFix {
@@ -22,9 +20,9 @@ public class DataConverterBook extends DataFix {
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
         return dynamic.update("pages", (dynamic1) -> {
-            Optional optional = dynamic1.asStreamOpt().map((stream) -> {
+            DataResult dataresult = dynamic1.asStreamOpt().map((stream) -> {
                 return stream.map((dynamic2) -> {
-                    if (!dynamic2.asString().isPresent()) {
+                    if (!dynamic2.asString().result().isPresent()) {
                         return dynamic2;
                     } else {
                         String s = dynamic2.asString("");
@@ -37,7 +35,7 @@ public class DataConverterBook extends DataFix {
                                 try {
                                     object = (IChatBaseComponent) ChatDeserializer.a(DataConverterSignText.a, s, IChatBaseComponent.class, true);
                                     if (object == null) {
-                                        object = new ChatComponentText("");
+                                        object = ChatComponentText.d;
                                     }
                                 } catch (JsonParseException jsonparseexception) {
                                     ;
@@ -64,7 +62,7 @@ public class DataConverterBook extends DataFix {
                                 }
                             }
                         } else {
-                            object = new ChatComponentText("");
+                            object = ChatComponentText.d;
                         }
 
                         return dynamic2.createString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object));
@@ -73,7 +71,7 @@ public class DataConverterBook extends DataFix {
             });
 
             dynamic.getClass();
-            return (Dynamic) DataFixUtils.orElse(optional.map(dynamic::createList), dynamic.emptyList());
+            return (Dynamic) DataFixUtils.orElse(dataresult.map(dynamic::createList).result(), dynamic.emptyList());
         });
     }
 

@@ -12,26 +12,47 @@ import javax.annotation.Nullable;
 
 public class ChatComponentUtils {
 
-    public static IChatBaseComponent a(IChatBaseComponent ichatbasecomponent, ChatModifier chatmodifier) {
-        return chatmodifier.g() ? ichatbasecomponent : (ichatbasecomponent.getChatModifier().g() ? ichatbasecomponent.setChatModifier(chatmodifier.clone()) : (new ChatComponentText("")).addSibling(ichatbasecomponent).setChatModifier(chatmodifier.clone()));
+    public static IChatMutableComponent a(IChatMutableComponent ichatmutablecomponent, ChatModifier chatmodifier) {
+        if (chatmodifier.g()) {
+            return ichatmutablecomponent;
+        } else {
+            ChatModifier chatmodifier1 = ichatmutablecomponent.getChatModifier();
+
+            return chatmodifier1.g() ? ichatmutablecomponent.setChatModifier(chatmodifier) : (chatmodifier1.equals(chatmodifier) ? ichatmutablecomponent : ichatmutablecomponent.setChatModifier(chatmodifier1.setChatModifier(chatmodifier)));
+        }
     }
 
-    public static IChatBaseComponent filterForDisplay(@Nullable CommandListenerWrapper commandlistenerwrapper, IChatBaseComponent ichatbasecomponent, @Nullable Entity entity, int i) throws CommandSyntaxException {
+    public static IChatMutableComponent filterForDisplay(@Nullable CommandListenerWrapper commandlistenerwrapper, IChatBaseComponent ichatbasecomponent, @Nullable Entity entity, int i) throws CommandSyntaxException {
         if (i > 100) {
-            return ichatbasecomponent;
+            return ichatbasecomponent.mutableCopy();
         } else {
-            ++i;
-            IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent instanceof ChatComponentContextual ? ((ChatComponentContextual) ichatbasecomponent).a(commandlistenerwrapper, entity, i) : ichatbasecomponent.g();
+            IChatMutableComponent ichatmutablecomponent = ichatbasecomponent instanceof ChatComponentContextual ? ((ChatComponentContextual) ichatbasecomponent).a(commandlistenerwrapper, entity, i + 1) : ichatbasecomponent.f();
             Iterator iterator = ichatbasecomponent.getSiblings().iterator();
 
             while (iterator.hasNext()) {
-                IChatBaseComponent ichatbasecomponent2 = (IChatBaseComponent) iterator.next();
+                IChatBaseComponent ichatbasecomponent1 = (IChatBaseComponent) iterator.next();
 
-                ichatbasecomponent1.addSibling(filterForDisplay(commandlistenerwrapper, ichatbasecomponent2, entity, i));
+                ichatmutablecomponent.addSibling(filterForDisplay(commandlistenerwrapper, ichatbasecomponent1, entity, i + 1));
             }
 
-            return a(ichatbasecomponent1, ichatbasecomponent.getChatModifier());
+            return ichatmutablecomponent.c(a(commandlistenerwrapper, ichatbasecomponent.getChatModifier(), entity, i));
         }
+    }
+
+    private static ChatModifier a(@Nullable CommandListenerWrapper commandlistenerwrapper, ChatModifier chatmodifier, @Nullable Entity entity, int i) throws CommandSyntaxException {
+        ChatHoverable chathoverable = chatmodifier.getHoverEvent();
+
+        if (chathoverable != null) {
+            IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) chathoverable.a(ChatHoverable.EnumHoverAction.SHOW_TEXT);
+
+            if (ichatbasecomponent != null) {
+                ChatHoverable chathoverable1 = new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, filterForDisplay(commandlistenerwrapper, ichatbasecomponent, entity, i + 1));
+
+                return chatmodifier.setChatHoverable(chathoverable1);
+            }
+        }
+
+        return chatmodifier;
     }
 
     public static IChatBaseComponent a(GameProfile gameprofile) {
@@ -46,7 +67,7 @@ public class ChatComponentUtils {
 
     public static <T extends Comparable<T>> IChatBaseComponent a(Collection<T> collection, Function<T, IChatBaseComponent> function) {
         if (collection.isEmpty()) {
-            return new ChatComponentText("");
+            return ChatComponentText.d;
         } else if (collection.size() == 1) {
             return (IChatBaseComponent) function.apply(collection.iterator().next());
         } else {
@@ -57,11 +78,11 @@ public class ChatComponentUtils {
         }
     }
 
-    public static <T> IChatBaseComponent b(Collection<T> collection, Function<T, IChatBaseComponent> function) {
+    public static <T> IChatMutableComponent b(Collection<T> collection, Function<T, IChatBaseComponent> function) {
         if (collection.isEmpty()) {
             return new ChatComponentText("");
         } else if (collection.size() == 1) {
-            return (IChatBaseComponent) function.apply(collection.iterator().next());
+            return ((IChatBaseComponent) function.apply(collection.iterator().next())).mutableCopy();
         } else {
             ChatComponentText chatcomponenttext = new ChatComponentText("");
             boolean flag = true;
@@ -80,8 +101,8 @@ public class ChatComponentUtils {
         }
     }
 
-    public static IChatBaseComponent a(IChatBaseComponent ichatbasecomponent) {
-        return (new ChatComponentText("[")).addSibling(ichatbasecomponent).a("]");
+    public static IChatMutableComponent a(IChatBaseComponent ichatbasecomponent) {
+        return (new ChatComponentText("[")).addSibling(ichatbasecomponent).c("]");
     }
 
     public static IChatBaseComponent a(Message message) {

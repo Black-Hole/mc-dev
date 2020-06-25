@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 public class EntityEvoker extends EntityIllagerWizard {
 
-    private EntitySheep bw;
+    private EntitySheep bv;
 
     public EntityEvoker(EntityTypes<? extends EntityEvoker> entitytypes, World world) {
         super(entitytypes, world);
@@ -30,12 +30,8 @@ public class EntityEvoker extends EntityIllagerWizard {
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, false));
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.5D);
-        this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(12.0D);
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(24.0D);
+    public static AttributeProvider.Builder eL() {
+        return EntityMonster.eS().a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.FOLLOW_RANGE, 12.0D).a(GenericAttributes.MAX_HEALTH, 24.0D);
     }
 
     @Override
@@ -44,18 +40,18 @@ public class EntityEvoker extends EntityIllagerWizard {
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
     }
 
     @Override
-    public SoundEffect eq() {
+    public SoundEffect eM() {
         return SoundEffects.ENTITY_EVOKER_CELEBRATE;
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
     }
 
     @Override
@@ -65,7 +61,7 @@ public class EntityEvoker extends EntityIllagerWizard {
 
     @Override
     public boolean r(Entity entity) {
-        return entity == null ? false : (entity == this ? true : (super.r(entity) ? true : (entity instanceof EntityVex ? this.r(((EntityVex) entity).l()) : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.getScoreboardTeam() == null && entity.getScoreboardTeam() == null : false))));
+        return entity == null ? false : (entity == this ? true : (super.r(entity) ? true : (entity instanceof EntityVex ? this.r(((EntityVex) entity).eL()) : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.getScoreboardTeam() == null && entity.getScoreboardTeam() == null : false))));
     }
 
     @Override
@@ -84,12 +80,12 @@ public class EntityEvoker extends EntityIllagerWizard {
     }
 
     private void a(@Nullable EntitySheep entitysheep) {
-        this.bw = entitysheep;
+        this.bv = entitysheep;
     }
 
     @Nullable
-    private EntitySheep eK() {
-        return this.bw;
+    private EntitySheep fh() {
+        return this.bv;
     }
 
     @Override
@@ -114,7 +110,7 @@ public class EntityEvoker extends EntityIllagerWizard {
         public boolean a() {
             if (EntityEvoker.this.getGoalTarget() != null) {
                 return false;
-            } else if (EntityEvoker.this.eA()) {
+            } else if (EntityEvoker.this.eX()) {
                 return false;
             } else if (EntityEvoker.this.ticksLived < this.c) {
                 return false;
@@ -134,7 +130,7 @@ public class EntityEvoker extends EntityIllagerWizard {
 
         @Override
         public boolean b() {
-            return EntityEvoker.this.eK() != null && this.b > 0;
+            return EntityEvoker.this.fh() != null && this.b > 0;
         }
 
         @Override
@@ -145,7 +141,7 @@ public class EntityEvoker extends EntityIllagerWizard {
 
         @Override
         protected void j() {
-            EntitySheep entitysheep = EntityEvoker.this.eK();
+            EntitySheep entitysheep = EntityEvoker.this.fh();
 
             if (entitysheep != null && entitysheep.isAlive()) {
                 entitysheep.setColor(EnumColor.RED);
@@ -212,7 +208,7 @@ public class EntityEvoker extends EntityIllagerWizard {
         @Override
         protected void j() {
             for (int i = 0; i < 3; ++i) {
-                BlockPosition blockposition = (new BlockPosition(EntityEvoker.this)).b(-2 + EntityEvoker.this.random.nextInt(5), 1, -2 + EntityEvoker.this.random.nextInt(5));
+                BlockPosition blockposition = EntityEvoker.this.getChunkCoordinates().b(-2 + EntityEvoker.this.random.nextInt(5), 1, -2 + EntityEvoker.this.random.nextInt(5));
                 EntityVex entityvex = (EntityVex) EntityTypes.VEX.a(EntityEvoker.this.world);
 
                 entityvex.setPositionRotation(blockposition, 0.0F, 0.0F);
@@ -335,9 +331,9 @@ public class EntityEvoker extends EntityIllagerWizard {
         @Override
         public void e() {
             if (EntityEvoker.this.getGoalTarget() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.dV(), (float) EntityEvoker.this.dU());
-            } else if (EntityEvoker.this.eK() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.eK(), (float) EntityEvoker.this.dV(), (float) EntityEvoker.this.dU());
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.ep(), (float) EntityEvoker.this.eo());
+            } else if (EntityEvoker.this.fh() != null) {
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.fh(), (float) EntityEvoker.this.ep(), (float) EntityEvoker.this.eo());
             }
 
         }

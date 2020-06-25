@@ -13,11 +13,8 @@ import org.apache.logging.log4j.Logger;
 public class RecipeBookServer extends RecipeBook {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final CraftingManager l;
 
-    public RecipeBookServer(CraftingManager craftingmanager) {
-        this.l = craftingmanager;
-    }
+    public RecipeBookServer() {}
 
     public int a(Collection<IRecipe<?>> collection, EntityPlayer entityplayer) {
         List<MinecraftKey> list = Lists.newArrayList();
@@ -37,7 +34,7 @@ public class RecipeBookServer extends RecipeBook {
             }
         }
 
-        this.a(PacketPlayOutRecipes.Action.ADD, entityplayer, list);
+        this.a(PacketPlayOutRecipes.Action.ADD, entityplayer, (List) list);
         return i;
     }
 
@@ -57,7 +54,7 @@ public class RecipeBookServer extends RecipeBook {
             }
         }
 
-        this.a(PacketPlayOutRecipes.Action.REMOVE, entityplayer, list);
+        this.a(PacketPlayOutRecipes.Action.REMOVE, entityplayer, (List) list);
         return i;
     }
 
@@ -72,6 +69,10 @@ public class RecipeBookServer extends RecipeBook {
         nbttagcompound.setBoolean("isFilteringCraftable", this.d);
         nbttagcompound.setBoolean("isFurnaceGuiOpen", this.e);
         nbttagcompound.setBoolean("isFurnaceFilteringCraftable", this.f);
+        nbttagcompound.setBoolean("isBlastingFurnaceGuiOpen", this.g);
+        nbttagcompound.setBoolean("isBlastingFurnaceFilteringCraftable", this.h);
+        nbttagcompound.setBoolean("isSmokerGuiOpen", this.i);
+        nbttagcompound.setBoolean("isSmokerFilteringCraftable", this.j);
         NBTTagList nbttaglist = new NBTTagList();
         Iterator iterator = this.a.iterator();
 
@@ -95,26 +96,30 @@ public class RecipeBookServer extends RecipeBook {
         return nbttagcompound;
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
+    public void a(NBTTagCompound nbttagcompound, CraftingManager craftingmanager) {
         this.c = nbttagcompound.getBoolean("isGuiOpen");
         this.d = nbttagcompound.getBoolean("isFilteringCraftable");
         this.e = nbttagcompound.getBoolean("isFurnaceGuiOpen");
         this.f = nbttagcompound.getBoolean("isFurnaceFilteringCraftable");
+        this.g = nbttagcompound.getBoolean("isBlastingFurnaceGuiOpen");
+        this.h = nbttagcompound.getBoolean("isBlastingFurnaceFilteringCraftable");
+        this.i = nbttagcompound.getBoolean("isSmokerGuiOpen");
+        this.j = nbttagcompound.getBoolean("isSmokerFilteringCraftable");
         NBTTagList nbttaglist = nbttagcompound.getList("recipes", 8);
 
-        this.a(nbttaglist, this::a);
+        this.a(nbttaglist, this::a, craftingmanager);
         NBTTagList nbttaglist1 = nbttagcompound.getList("toBeDisplayed", 8);
 
-        this.a(nbttaglist1, this::f);
+        this.a(nbttaglist1, this::f, craftingmanager);
     }
 
-    private void a(NBTTagList nbttaglist, Consumer<IRecipe<?>> consumer) {
+    private void a(NBTTagList nbttaglist, Consumer<IRecipe<?>> consumer, CraftingManager craftingmanager) {
         for (int i = 0; i < nbttaglist.size(); ++i) {
             String s = nbttaglist.getString(i);
 
             try {
                 MinecraftKey minecraftkey = new MinecraftKey(s);
-                Optional<? extends IRecipe<?>> optional = this.l.a(minecraftkey);
+                Optional<? extends IRecipe<?>> optional = craftingmanager.a(minecraftkey);
 
                 if (!optional.isPresent()) {
                     RecipeBookServer.LOGGER.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey);

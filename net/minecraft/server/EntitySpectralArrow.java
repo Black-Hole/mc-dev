@@ -39,8 +39,8 @@ public class EntitySpectralArrow extends EntityArrow {
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         if (nbttagcompound.hasKey("Duration")) {
             this.duration = nbttagcompound.getInt("Duration");
         }
@@ -48,8 +48,8 @@ public class EntitySpectralArrow extends EntityArrow {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setInt("Duration", this.duration);
     }
 }

@@ -3,13 +3,14 @@ package net.minecraft.server;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.google.common.primitives.UnsignedLong;
+import com.mojang.serialization.Dynamic;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +18,7 @@ public class CustomFunctionCallbackTimerQueue<T> {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private final CustomFunctionCallbackTimers<T> b;
-    private final Queue<CustomFunctionCallbackTimerQueue.a<T>> c = new PriorityQueue(c());
+    private final Queue<CustomFunctionCallbackTimerQueue.a<T>> c;
     private UnsignedLong d;
     private final Table<String, Long, CustomFunctionCallbackTimerQueue.a<T>> e;
 
@@ -29,7 +30,22 @@ public class CustomFunctionCallbackTimerQueue<T> {
         });
     }
 
+    public CustomFunctionCallbackTimerQueue(CustomFunctionCallbackTimers<T> customfunctioncallbacktimers, Stream<Dynamic<NBTBase>> stream) {
+        this(customfunctioncallbacktimers);
+        this.c.clear();
+        this.e.clear();
+        this.d = UnsignedLong.ZERO;
+        stream.forEach((dynamic) -> {
+            if (!(dynamic.getValue() instanceof NBTTagCompound)) {
+                CustomFunctionCallbackTimerQueue.LOGGER.warn("Invalid format of events: {}", dynamic);
+            } else {
+                this.a((NBTTagCompound) dynamic.getValue());
+            }
+        });
+    }
+
     public CustomFunctionCallbackTimerQueue(CustomFunctionCallbackTimers<T> customfunctioncallbacktimers) {
+        this.c = new PriorityQueue(c());
         this.d = UnsignedLong.ZERO;
         this.e = HashBasedTable.create();
         this.b = customfunctioncallbacktimers;
@@ -86,26 +102,6 @@ public class CustomFunctionCallbackTimerQueue<T> {
             this.a(s, i, customfunctioncallbacktimer);
         }
 
-    }
-
-    public void a(NBTTagList nbttaglist) {
-        this.c.clear();
-        this.e.clear();
-        this.d = UnsignedLong.ZERO;
-        if (!nbttaglist.isEmpty()) {
-            if (nbttaglist.a_() != 10) {
-                CustomFunctionCallbackTimerQueue.LOGGER.warn("Invalid format of events: " + nbttaglist);
-            } else {
-                Iterator iterator = nbttaglist.iterator();
-
-                while (iterator.hasNext()) {
-                    NBTBase nbtbase = (NBTBase) iterator.next();
-
-                    this.a((NBTTagCompound) nbtbase);
-                }
-
-            }
-        }
     }
 
     private NBTTagCompound a(CustomFunctionCallbackTimerQueue.a<T> customfunctioncallbacktimerqueue_a) {

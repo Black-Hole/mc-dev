@@ -7,17 +7,17 @@ public class BehaviorTarget implements BehaviorPosition {
 
     public BehaviorTarget(BlockPosition blockposition) {
         this.a = blockposition;
-        this.b = new Vec3D((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
+        this.b = Vec3D.a((BaseBlockPosition) blockposition);
     }
 
     @Override
-    public BlockPosition a() {
-        return this.a;
-    }
-
-    @Override
-    public Vec3D b() {
+    public Vec3D a() {
         return this.b;
+    }
+
+    @Override
+    public BlockPosition b() {
+        return this.a;
     }
 
     @Override
@@ -26,6 +26,6 @@ public class BehaviorTarget implements BehaviorPosition {
     }
 
     public String toString() {
-        return "BlockPosWrapper{pos=" + this.a + ", lookAt=" + this.b + '}';
+        return "BlockPosTracker{blockPos=" + this.a + ", centerPosition=" + this.b + '}';
     }
 }

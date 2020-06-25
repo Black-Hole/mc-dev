@@ -62,19 +62,19 @@ public class TileEntityStructure extends TileEntity {
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
         this.setStructureName(nbttagcompound.getString("name"));
         this.author = nbttagcompound.getString("author");
         this.metadata = nbttagcompound.getString("metadata");
-        int i = MathHelper.clamp(nbttagcompound.getInt("posX"), -32, 32);
-        int j = MathHelper.clamp(nbttagcompound.getInt("posY"), -32, 32);
-        int k = MathHelper.clamp(nbttagcompound.getInt("posZ"), -32, 32);
+        int i = MathHelper.clamp(nbttagcompound.getInt("posX"), -48, 48);
+        int j = MathHelper.clamp(nbttagcompound.getInt("posY"), -48, 48);
+        int k = MathHelper.clamp(nbttagcompound.getInt("posZ"), -48, 48);
 
         this.relativePosition = new BlockPosition(i, j, k);
-        int l = MathHelper.clamp(nbttagcompound.getInt("sizeX"), 0, 32);
-        int i1 = MathHelper.clamp(nbttagcompound.getInt("sizeY"), 0, 32);
-        int j1 = MathHelper.clamp(nbttagcompound.getInt("sizeZ"), 0, 32);
+        int l = MathHelper.clamp(nbttagcompound.getInt("sizeX"), 0, 48);
+        int i1 = MathHelper.clamp(nbttagcompound.getInt("sizeY"), 0, 48);
+        int j1 = MathHelper.clamp(nbttagcompound.getInt("sizeZ"), 0, 48);
 
         this.size = new BlockPosition(l, i1, j1);
 
@@ -115,7 +115,7 @@ public class TileEntityStructure extends TileEntity {
             BlockPosition blockposition = this.getPosition();
             IBlockData iblockdata = this.world.getType(blockposition);
 
-            if (iblockdata.getBlock() == Blocks.STRUCTURE_BLOCK) {
+            if (iblockdata.a(Blocks.STRUCTURE_BLOCK)) {
                 this.world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStructure.a, this.usageMode), 2);
             }
 
@@ -169,10 +169,6 @@ public class TileEntityStructure extends TileEntity {
         this.author = entityliving.getDisplayName().getString();
     }
 
-    public BlockPosition h() {
-        return this.relativePosition;
-    }
-
     public void b(BlockPosition blockposition) {
         this.relativePosition = blockposition;
     }
@@ -187,6 +183,10 @@ public class TileEntityStructure extends TileEntity {
 
     public void b(EnumBlockMirror enumblockmirror) {
         this.mirror = enumblockmirror;
+    }
+
+    public EnumBlockRotation l() {
+        return this.rotation;
     }
 
     public void b(EnumBlockRotation enumblockrotation) {
@@ -205,7 +205,7 @@ public class TileEntityStructure extends TileEntity {
         this.usageMode = blockpropertystructuremode;
         IBlockData iblockdata = this.world.getType(this.getPosition());
 
-        if (iblockdata.getBlock() == Blocks.STRUCTURE_BLOCK) {
+        if (iblockdata.a(Blocks.STRUCTURE_BLOCK)) {
             this.world.setTypeAndData(this.getPosition(), (IBlockData) iblockdata.set(BlockStructure.a, blockpropertystructuremode), 2);
         }
 
@@ -270,7 +270,7 @@ public class TileEntityStructure extends TileEntity {
             BlockPosition blockposition2 = (BlockPosition) iterator.next();
             IBlockData iblockdata = this.world.getType(blockposition2);
 
-            if (iblockdata.getBlock() == Blocks.STRUCTURE_BLOCK) {
+            if (iblockdata.a(Blocks.STRUCTURE_BLOCK)) {
                 TileEntity tileentity = this.world.getTileEntity(blockposition2);
 
                 if (tileentity != null && tileentity instanceof TileEntityStructure) {
@@ -329,7 +329,7 @@ public class TileEntityStructure extends TileEntity {
         if (this.usageMode == BlockPropertyStructureMode.SAVE && !this.world.isClientSide && this.structureName != null) {
             BlockPosition blockposition = this.getPosition().a((BaseBlockPosition) this.relativePosition);
             WorldServer worldserver = (WorldServer) this.world;
-            DefinedStructureManager definedstructuremanager = worldserver.r();
+            DefinedStructureManager definedstructuremanager = worldserver.r_();
 
             DefinedStructure definedstructure;
 
@@ -366,7 +366,7 @@ public class TileEntityStructure extends TileEntity {
     public boolean c(boolean flag) {
         if (this.usageMode == BlockPropertyStructureMode.LOAD && !this.world.isClientSide && this.structureName != null) {
             WorldServer worldserver = (WorldServer) this.world;
-            DefinedStructureManager definedstructuremanager = worldserver.r();
+            DefinedStructureManager definedstructuremanager = worldserver.r_();
 
             DefinedStructure definedstructure;
 
@@ -411,7 +411,7 @@ public class TileEntityStructure extends TileEntity {
 
             BlockPosition blockposition2 = blockposition.a((BaseBlockPosition) this.relativePosition);
 
-            definedstructure.a((GeneratorAccess) this.world, blockposition2, definedstructureinfo);
+            definedstructure.a((GeneratorAccess) this.world, blockposition2, definedstructureinfo, b(this.seed));
             return true;
         }
     }
@@ -419,7 +419,7 @@ public class TileEntityStructure extends TileEntity {
     public void F() {
         if (this.structureName != null) {
             WorldServer worldserver = (WorldServer) this.world;
-            DefinedStructureManager definedstructuremanager = worldserver.r();
+            DefinedStructureManager definedstructuremanager = worldserver.r_();
 
             definedstructuremanager.d(this.structureName);
         }
@@ -428,7 +428,7 @@ public class TileEntityStructure extends TileEntity {
     public boolean G() {
         if (this.usageMode == BlockPropertyStructureMode.LOAD && !this.world.isClientSide && this.structureName != null) {
             WorldServer worldserver = (WorldServer) this.world;
-            DefinedStructureManager definedstructuremanager = worldserver.r();
+            DefinedStructureManager definedstructuremanager = worldserver.r_();
 
             try {
                 return definedstructuremanager.b(this.structureName) != null;

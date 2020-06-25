@@ -41,7 +41,7 @@ public class EntityItem extends Entity {
 
     @Override
     protected void initDatawatcher() {
-        this.getDataWatcher().register(EntityItem.ITEM, ItemStack.a);
+        this.getDataWatcher().register(EntityItem.ITEM, ItemStack.b);
     }
 
     @Override
@@ -59,8 +59,10 @@ public class EntityItem extends Entity {
             this.lastZ = this.locZ();
             Vec3D vec3d = this.getMot();
 
-            if (this.a(TagsFluid.WATER)) {
+            if (this.a((Tag) TagsFluid.WATER)) {
                 this.u();
+            } else if (this.a((Tag) TagsFluid.LAVA)) {
+                this.v();
             } else if (!this.isNoGravity()) {
                 this.setMot(this.getMot().add(0.0D, -0.04D, 0.0D));
             }
@@ -79,7 +81,7 @@ public class EntityItem extends Entity {
                 float f = 0.98F;
 
                 if (this.onGround) {
-                    f = this.world.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().l() * 0.98F;
+                    f = this.world.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().getFrictionFactor() * 0.98F;
                 }
 
                 this.setMot(this.getMot().d((double) f, 0.98D, (double) f));
@@ -92,12 +94,11 @@ public class EntityItem extends Entity {
             int i = flag ? 2 : 40;
 
             if (this.ticksLived % i == 0) {
-                if (this.world.getFluid(new BlockPosition(this)).a(TagsFluid.LAVA)) {
-                    this.setMot((double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F), 0.20000000298023224D, (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F));
-                    this.a(SoundEffects.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
+                if (this.world.getFluid(this.getChunkCoordinates()).a((Tag) TagsFluid.LAVA) && !this.isFireProof()) {
+                    this.playSound(SoundEffects.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
                 }
 
-                if (!this.world.isClientSide && this.w()) {
+                if (!this.world.isClientSide && this.z()) {
                     this.mergeNearby();
                 }
             }
@@ -106,7 +107,7 @@ public class EntityItem extends Entity {
                 ++this.age;
             }
 
-            this.impulse |= this.aC();
+            this.impulse |= this.aG();
             if (!this.world.isClientSide) {
                 double d0 = this.getMot().d(vec3d).g();
 
@@ -128,17 +129,23 @@ public class EntityItem extends Entity {
         this.setMot(vec3d.x * 0.9900000095367432D, vec3d.y + (double) (vec3d.y < 0.05999999865889549D ? 5.0E-4F : 0.0F), vec3d.z * 0.9900000095367432D);
     }
 
+    private void v() {
+        Vec3D vec3d = this.getMot();
+
+        this.setMot(vec3d.x * 0.949999988079071D, vec3d.y + (double) (vec3d.y < 0.05999999865889549D ? 5.0E-4F : 0.0F), vec3d.z * 0.949999988079071D);
+    }
+
     private void mergeNearby() {
-        if (this.w()) {
+        if (this.z()) {
             List<EntityItem> list = this.world.a(EntityItem.class, this.getBoundingBox().grow(0.5D, 0.0D, 0.5D), (entityitem) -> {
-                return entityitem != this && entityitem.w();
+                return entityitem != this && entityitem.z();
             });
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 EntityItem entityitem = (EntityItem) iterator.next();
 
-                if (entityitem.w()) {
+                if (entityitem.z()) {
                     this.a(entityitem);
                     if (this.dead) {
                         break;
@@ -149,7 +156,7 @@ public class EntityItem extends Entity {
         }
     }
 
-    private boolean w() {
+    private boolean z() {
         ItemStack itemstack = this.getItemStack();
 
         return this.isAlive() && this.pickupDelay != 32767 && this.age != -32768 && this.age < 6000 && itemstack.getCount() < itemstack.getMaxStackSize();
@@ -199,8 +206,8 @@ public class EntityItem extends Entity {
     }
 
     @Override
-    protected void burn(int i) {
-        this.damageEntity(DamageSource.FIRE, (float) i);
+    public boolean isFireProof() {
+        return this.getItemStack().getItem().u() || super.isFireProof();
     }
 
     @Override
@@ -208,6 +215,8 @@ public class EntityItem extends Entity {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else if (!this.getItemStack().isEmpty() && this.getItemStack().getItem() == Items.NETHER_STAR && damagesource.isExplosion()) {
+            return false;
+        } else if (!this.getItemStack().getItem().a(damagesource)) {
             return false;
         } else {
             this.velocityChanged();
@@ -221,16 +230,16 @@ public class EntityItem extends Entity {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
+    public void saveData(NBTTagCompound nbttagcompound) {
         nbttagcompound.setShort("Health", (short) this.f);
         nbttagcompound.setShort("Age", (short) this.age);
         nbttagcompound.setShort("PickupDelay", (short) this.pickupDelay);
         if (this.getThrower() != null) {
-            nbttagcompound.set("Thrower", GameProfileSerializer.a(this.getThrower()));
+            nbttagcompound.a("Thrower", this.getThrower());
         }
 
         if (this.getOwner() != null) {
-            nbttagcompound.set("Owner", GameProfileSerializer.a(this.getOwner()));
+            nbttagcompound.a("Owner", this.getOwner());
         }
 
         if (!this.getItemStack().isEmpty()) {
@@ -240,19 +249,19 @@ public class EntityItem extends Entity {
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
+    public void loadData(NBTTagCompound nbttagcompound) {
         this.f = nbttagcompound.getShort("Health");
         this.age = nbttagcompound.getShort("Age");
         if (nbttagcompound.hasKey("PickupDelay")) {
             this.pickupDelay = nbttagcompound.getShort("PickupDelay");
         }
 
-        if (nbttagcompound.hasKeyOfType("Owner", 10)) {
-            this.owner = GameProfileSerializer.b(nbttagcompound.getCompound("Owner"));
+        if (nbttagcompound.b("Owner")) {
+            this.owner = nbttagcompound.a("Owner");
         }
 
-        if (nbttagcompound.hasKeyOfType("Thrower", 10)) {
-            this.thrower = GameProfileSerializer.b(nbttagcompound.getCompound("Thrower"));
+        if (nbttagcompound.b("Thrower")) {
+            this.thrower = nbttagcompound.a("Thrower");
         }
 
         NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Item");
@@ -279,6 +288,7 @@ public class EntityItem extends Entity {
                 }
 
                 entityhuman.a(StatisticList.ITEM_PICKED_UP.b(item), i);
+                entityhuman.a(this);
             }
 
         }
@@ -288,18 +298,18 @@ public class EntityItem extends Entity {
     public IChatBaseComponent getDisplayName() {
         IChatBaseComponent ichatbasecomponent = this.getCustomName();
 
-        return (IChatBaseComponent) (ichatbasecomponent != null ? ichatbasecomponent : new ChatMessage(this.getItemStack().j(), new Object[0]));
+        return (IChatBaseComponent) (ichatbasecomponent != null ? ichatbasecomponent : new ChatMessage(this.getItemStack().j()));
     }
 
     @Override
-    public boolean bA() {
+    public boolean bH() {
         return false;
     }
 
     @Nullable
     @Override
-    public Entity a(DimensionManager dimensionmanager) {
-        Entity entity = super.a(dimensionmanager);
+    public Entity a(WorldServer worldserver) {
+        Entity entity = super.a(worldserver);
 
         if (!this.world.isClientSide && entity instanceof EntityItem) {
             ((EntityItem) entity).mergeNearby();
@@ -314,6 +324,15 @@ public class EntityItem extends Entity {
 
     public void setItemStack(ItemStack itemstack) {
         this.getDataWatcher().set(EntityItem.ITEM, itemstack);
+    }
+
+    @Override
+    public void a(DataWatcherObject<?> datawatcherobject) {
+        super.a(datawatcherobject);
+        if (EntityItem.ITEM.equals(datawatcherobject)) {
+            this.getItemStack().a((Entity) this);
+        }
+
     }
 
     @Nullable
@@ -364,7 +383,7 @@ public class EntityItem extends Entity {
     }
 
     @Override
-    public Packet<?> L() {
+    public Packet<?> O() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

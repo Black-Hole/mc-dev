@@ -2,23 +2,6 @@ package net.minecraft.server;
 
 public enum EnchantmentSlotType {
 
-    ALL {
-        @Override
-        public boolean canEnchant(Item item) {
-            EnchantmentSlotType[] aenchantmentslottype = EnchantmentSlotType.values();
-            int i = aenchantmentslottype.length;
-
-            for (int j = 0; j < i; ++j) {
-                EnchantmentSlotType enchantmentslottype = aenchantmentslottype[j];
-
-                if (enchantmentslottype != EnchantmentSlotType.ALL && enchantmentslottype.canEnchant(item)) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    },
     ARMOR {
         @Override
         public boolean canEnchant(Item item) {
@@ -88,15 +71,19 @@ public enum EnchantmentSlotType {
     WEARABLE {
         @Override
         public boolean canEnchant(Item item) {
-            Block block = Block.asBlock(item);
-
-            return item instanceof ItemArmor || item instanceof ItemElytra || block instanceof BlockSkullAbstract || block instanceof BlockPumpkinCarved;
+            return item instanceof ItemWearable || Block.asBlock(item) instanceof ItemWearable;
         }
     },
     CROSSBOW {
         @Override
         public boolean canEnchant(Item item) {
             return item instanceof ItemCrossbow;
+        }
+    },
+    VANISHABLE {
+        @Override
+        public boolean canEnchant(Item item) {
+            return item instanceof ItemVanishable || Block.asBlock(item) instanceof ItemVanishable || null.BREAKABLE.canEnchant(item);
         }
     };
 

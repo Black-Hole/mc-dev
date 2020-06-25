@@ -12,7 +12,7 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
 
     public TileEntityCampfire() {
         super(TileEntityTypes.CAMPFIRE);
-        this.items = NonNullList.a(4, ItemStack.a);
+        this.items = NonNullList.a(4, ItemStack.b);
         this.cookingTimes = new int[4];
         this.cookingTotalTimes = new int[4];
     }
@@ -56,7 +56,7 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
                     BlockPosition blockposition = this.getPosition();
 
                     InventoryUtils.dropItem(this.world, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), itemstack1);
-                    this.items.set(i, ItemStack.a);
+                    this.items.set(i, ItemStack.b);
                     this.k();
                 }
             }
@@ -84,9 +84,9 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
                 if (!((ItemStack) this.items.get(j)).isEmpty() && random.nextFloat() < 0.2F) {
                     EnumDirection enumdirection = EnumDirection.fromType2(Math.floorMod(j + i, 4));
                     float f = 0.3125F;
-                    double d0 = (double) blockposition.getX() + 0.5D - (double) ((float) enumdirection.getAdjacentX() * 0.3125F) + (double) ((float) enumdirection.f().getAdjacentX() * 0.3125F);
+                    double d0 = (double) blockposition.getX() + 0.5D - (double) ((float) enumdirection.getAdjacentX() * 0.3125F) + (double) ((float) enumdirection.g().getAdjacentX() * 0.3125F);
                     double d1 = (double) blockposition.getY() + 0.5D;
-                    double d2 = (double) blockposition.getZ() + 0.5D - (double) ((float) enumdirection.getAdjacentZ() * 0.3125F) + (double) ((float) enumdirection.f().getAdjacentZ() * 0.3125F);
+                    double d2 = (double) blockposition.getZ() + 0.5D - (double) ((float) enumdirection.getAdjacentZ() * 0.3125F) + (double) ((float) enumdirection.g().getAdjacentZ() * 0.3125F);
 
                     for (int k = 0; k < 4; ++k) {
                         world.addParticle(Particles.SMOKE, d0, d1, d2, 0.0D, 5.0E-4D, 0.0D);
@@ -102,8 +102,8 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
         this.items.clear();
         ContainerUtil.b(nbttagcompound, this.items);
         int[] aint;
@@ -122,13 +122,13 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
 
     @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
-        this.d(nbttagcompound);
+        this.b(nbttagcompound);
         nbttagcompound.setIntArray("CookingTimes", this.cookingTimes);
         nbttagcompound.setIntArray("CookingTotalTimes", this.cookingTotalTimes);
         return nbttagcompound;
     }
 
-    private NBTTagCompound d(NBTTagCompound nbttagcompound) {
+    private NBTTagCompound b(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         ContainerUtil.a(nbttagcompound, this.items, true);
         return nbttagcompound;
@@ -142,7 +142,7 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
 
     @Override
     public NBTTagCompound b() {
-        return this.d(new NBTTagCompound());
+        return this.b(new NBTTagCompound());
     }
 
     public Optional<RecipeCampfire> a(ItemStack itemstack) {
@@ -176,10 +176,13 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
     }
 
     public void f() {
-        if (!this.getWorld().isClientSide) {
-            InventoryUtils.a(this.getWorld(), this.getPosition(), this.getItems());
+        if (this.world != null) {
+            if (!this.world.isClientSide) {
+                InventoryUtils.a(this.world, this.getPosition(), this.getItems());
+            }
+
+            this.k();
         }
 
-        this.k();
     }
 }

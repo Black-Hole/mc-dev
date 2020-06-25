@@ -20,15 +20,17 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
     private byte[] f;
     private List<NBTTagCompound> g;
     private boolean h;
+    private boolean i;
 
     public PacketPlayOutMapChunk() {}
 
-    public PacketPlayOutMapChunk(Chunk chunk, int i) {
+    public PacketPlayOutMapChunk(Chunk chunk, int i, boolean flag) {
         ChunkCoordIntPair chunkcoordintpair = chunk.getPos();
 
         this.a = chunkcoordintpair.x;
         this.b = chunkcoordintpair.z;
         this.h = i == 65535;
+        this.i = flag;
         this.d = new NBTTagCompound();
         Iterator iterator = chunk.f().iterator();
 
@@ -36,8 +38,8 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
 
         while (iterator.hasNext()) {
             entry = (Entry) iterator.next();
-            if (((HeightMap.Type) entry.getKey()).b()) {
-                this.d.set(((HeightMap.Type) entry.getKey()).a(), new NBTTagLongArray(((HeightMap) entry.getValue()).a()));
+            if (((HeightMap.Type) entry.getKey()).c()) {
+                this.d.set(((HeightMap.Type) entry.getKey()).b(), new NBTTagLongArray(((HeightMap) entry.getValue()).a()));
             }
         }
 
@@ -46,7 +48,7 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         }
 
         this.f = new byte[this.a(chunk, i)];
-        this.c = this.a(new PacketDataSerializer(this.j()), chunk, i);
+        this.c = this.a(new PacketDataSerializer(this.k()), chunk, i);
         this.g = Lists.newArrayList();
         iterator = chunk.getTileEntities().entrySet().iterator();
 
@@ -70,6 +72,7 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         this.a = packetdataserializer.readInt();
         this.b = packetdataserializer.readInt();
         this.h = packetdataserializer.readBoolean();
+        this.i = packetdataserializer.readBoolean();
         this.c = packetdataserializer.i();
         this.d = packetdataserializer.l();
         if (this.h) {
@@ -99,6 +102,7 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         packetdataserializer.writeInt(this.a);
         packetdataserializer.writeInt(this.b);
         packetdataserializer.writeBoolean(this.h);
+        packetdataserializer.writeBoolean(this.i);
         packetdataserializer.d(this.c);
         packetdataserializer.a(this.d);
         if (this.e != null) {
@@ -122,7 +126,7 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         packetlistenerplayout.a(this);
     }
 
-    private ByteBuf j() {
+    private ByteBuf k() {
         ByteBuf bytebuf = Unpooled.wrappedBuffer(this.f);
 
         bytebuf.writerIndex(0);

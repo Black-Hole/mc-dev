@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerRecipeUnlocked extends CriterionTriggerAbstract<CriterionTriggerRecipeUnlocked.a> {
@@ -16,30 +14,34 @@ public class CriterionTriggerRecipeUnlocked extends CriterionTriggerAbstract<Cri
     }
 
     @Override
-    public CriterionTriggerRecipeUnlocked.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerRecipeUnlocked.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "recipe"));
 
-        return new CriterionTriggerRecipeUnlocked.a(minecraftkey);
+        return new CriterionTriggerRecipeUnlocked.a(criterionconditionentity_b, minecraftkey);
     }
 
     public void a(EntityPlayer entityplayer, IRecipe<?> irecipe) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggerrecipeunlocked_a) -> {
+        this.a(entityplayer, (criteriontriggerrecipeunlocked_a) -> {
             return criteriontriggerrecipeunlocked_a.a(irecipe);
         });
+    }
+
+    public static CriterionTriggerRecipeUnlocked.a a(MinecraftKey minecraftkey) {
+        return new CriterionTriggerRecipeUnlocked.a(CriterionConditionEntity.b.a, minecraftkey);
     }
 
     public static class a extends CriterionInstanceAbstract {
 
         private final MinecraftKey a;
 
-        public a(MinecraftKey minecraftkey) {
-            super(CriterionTriggerRecipeUnlocked.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, MinecraftKey minecraftkey) {
+            super(CriterionTriggerRecipeUnlocked.a, criterionconditionentity_b);
             this.a = minecraftkey;
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             jsonobject.addProperty("recipe", this.a.toString());
             return jsonobject;

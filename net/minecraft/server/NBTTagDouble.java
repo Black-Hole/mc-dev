@@ -76,9 +76,9 @@ public class NBTTagDouble extends NBTNumber {
 
     @Override
     public IChatBaseComponent a(String s, int i) {
-        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("d")).a(NBTTagDouble.g);
+        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("d")).a(NBTTagDouble.g);
 
-        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatbasecomponent).a(NBTTagDouble.f);
+        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatmutablecomponent).a(NBTTagDouble.f);
     }
 
     @Override

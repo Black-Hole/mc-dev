@@ -16,7 +16,7 @@ public class ItemScaffolding extends ItemBlock {
         IBlockData iblockdata = world.getType(blockposition);
         Block block = this.getBlock();
 
-        if (iblockdata.getBlock() != block) {
+        if (!iblockdata.a(block)) {
             return BlockScaffolding.a((IBlockAccess) world, blockposition) == 7 ? null : blockactioncontext;
         } else {
             EnumDirection enumdirection;
@@ -28,7 +28,7 @@ public class ItemScaffolding extends ItemBlock {
             }
 
             int i = 0;
-            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = (new BlockPosition.MutableBlockPosition(blockposition)).c(enumdirection);
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i().c(enumdirection);
 
             while (i < 7) {
                 if (!world.isClientSide && !World.isValidLocation(blockposition_mutableblockposition)) {
@@ -36,7 +36,7 @@ public class ItemScaffolding extends ItemBlock {
                     int j = world.getBuildHeight();
 
                     if (entityhuman instanceof EntityPlayer && blockposition_mutableblockposition.getY() >= j) {
-                        PacketPlayOutChat packetplayoutchat = new PacketPlayOutChat((new ChatMessage("build.tooHigh", new Object[]{j})).a(EnumChatFormat.RED), ChatMessageType.GAME_INFO);
+                        PacketPlayOutChat packetplayoutchat = new PacketPlayOutChat((new ChatMessage("build.tooHigh", new Object[]{j})).a(EnumChatFormat.RED), ChatMessageType.GAME_INFO, SystemUtils.b);
 
                         ((EntityPlayer) entityhuman).playerConnection.sendPacket(packetplayoutchat);
                     }
@@ -44,7 +44,7 @@ public class ItemScaffolding extends ItemBlock {
                 }
 
                 iblockdata = world.getType(blockposition_mutableblockposition);
-                if (iblockdata.getBlock() != this.getBlock()) {
+                if (!iblockdata.a(this.getBlock())) {
                     if (iblockdata.a(blockactioncontext)) {
                         return BlockActionContext.a(blockactioncontext, blockposition_mutableblockposition, enumdirection);
                     }
@@ -52,7 +52,7 @@ public class ItemScaffolding extends ItemBlock {
                 }
 
                 blockposition_mutableblockposition.c(enumdirection);
-                if (enumdirection.m().c()) {
+                if (enumdirection.n().d()) {
                     ++i;
                 }
             }
@@ -62,7 +62,7 @@ public class ItemScaffolding extends ItemBlock {
     }
 
     @Override
-    protected boolean T_() {
+    protected boolean isCheckCollisions() {
         return false;
     }
 }

@@ -13,7 +13,7 @@ public class WorldMapFrame {
     }
 
     public static WorldMapFrame a(NBTTagCompound nbttagcompound) {
-        BlockPosition blockposition = GameProfileSerializer.c(nbttagcompound.getCompound("Pos"));
+        BlockPosition blockposition = GameProfileSerializer.b(nbttagcompound.getCompound("Pos"));
         int i = nbttagcompound.getInt("Rotation");
         int j = nbttagcompound.getInt("EntityId");
 

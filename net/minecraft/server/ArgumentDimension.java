@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Streams;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -13,38 +12,42 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ArgumentDimension implements ArgumentType<DimensionManager> {
+public class ArgumentDimension implements ArgumentType<MinecraftKey> {
 
-    private static final Collection<String> b = (Collection) Stream.of(DimensionManager.OVERWORLD, DimensionManager.NETHER).map((dimensionmanager) -> {
-        return DimensionManager.a(dimensionmanager).toString();
+    private static final Collection<String> a = (Collection) Stream.of(World.OVERWORLD, World.THE_NETHER).map((resourcekey) -> {
+        return resourcekey.a().toString();
     }).collect(Collectors.toList());
-    public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.dimension.invalid", new Object[]{object});
     });
 
     public ArgumentDimension() {}
 
-    public DimensionManager parse(StringReader stringreader) throws CommandSyntaxException {
-        MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
-
-        return (DimensionManager) IRegistry.DIMENSION_TYPE.getOptional(minecraftkey).orElseThrow(() -> {
-            return ArgumentDimension.a.create(minecraftkey);
-        });
+    public MinecraftKey parse(StringReader stringreader) throws CommandSyntaxException {
+        return MinecraftKey.a(stringreader);
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
-        return ICompletionProvider.a(Streams.stream(DimensionManager.a()).map(DimensionManager::a), suggestionsbuilder);
+        return commandcontext.getSource() instanceof ICompletionProvider ? ICompletionProvider.a(((ICompletionProvider) commandcontext.getSource()).p().stream().map(ResourceKey::a), suggestionsbuilder) : Suggestions.empty();
     }
 
     public Collection<String> getExamples() {
-        return ArgumentDimension.b;
+        return ArgumentDimension.a;
     }
 
     public static ArgumentDimension a() {
         return new ArgumentDimension();
     }
 
-    public static DimensionManager a(CommandContext<CommandListenerWrapper> commandcontext, String s) {
-        return (DimensionManager) commandcontext.getArgument(s, DimensionManager.class);
+    public static WorldServer a(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
+        MinecraftKey minecraftkey = (MinecraftKey) commandcontext.getArgument(s, MinecraftKey.class);
+        ResourceKey<World> resourcekey = ResourceKey.a(IRegistry.ae, minecraftkey);
+        WorldServer worldserver = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getWorldServer(resourcekey);
+
+        if (worldserver == null) {
+            throw ArgumentDimension.b.create(minecraftkey);
+        } else {
+            return worldserver;
+        }
     }
 }

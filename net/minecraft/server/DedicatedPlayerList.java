@@ -9,26 +9,21 @@ public class DedicatedPlayerList extends PlayerList {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public DedicatedPlayerList(DedicatedServer dedicatedserver) {
-        super(dedicatedserver, dedicatedserver.getDedicatedServerProperties().maxPlayers);
+    public DedicatedPlayerList(DedicatedServer dedicatedserver, IRegistryCustom.Dimension iregistrycustom_dimension, WorldNBTStorage worldnbtstorage) {
+        super(dedicatedserver, iregistrycustom_dimension, worldnbtstorage, dedicatedserver.getDedicatedServerProperties().maxPlayers);
         DedicatedServerProperties dedicatedserverproperties = dedicatedserver.getDedicatedServerProperties();
 
         this.a(dedicatedserverproperties.viewDistance);
         super.setHasWhitelist((Boolean) dedicatedserverproperties.whiteList.get());
-        if (!dedicatedserver.isEmbeddedServer()) {
-            this.getProfileBans().a(true);
-            this.getIPBans().a(true);
-        }
-
-        this.z();
-        this.x();
         this.y();
         this.w();
-        this.A();
-        this.C();
+        this.x();
+        this.v();
+        this.z();
         this.B();
-        if (!this.getWhitelist().c().exists()) {
-            this.D();
+        this.A();
+        if (!this.getWhitelist().b().exists()) {
+            this.C();
         }
 
     }
@@ -42,21 +37,21 @@ public class DedicatedPlayerList extends PlayerList {
     @Override
     public void addOp(GameProfile gameprofile) {
         super.addOp(gameprofile);
-        this.B();
+        this.A();
     }
 
     @Override
     public void removeOp(GameProfile gameprofile) {
         super.removeOp(gameprofile);
-        this.B();
+        this.A();
     }
 
     @Override
     public void reloadWhitelist() {
-        this.C();
+        this.B();
     }
 
-    private void w() {
+    private void v() {
         try {
             this.getIPBans().save();
         } catch (IOException ioexception) {
@@ -65,7 +60,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void x() {
+    private void w() {
         try {
             this.getProfileBans().save();
         } catch (IOException ioexception) {
@@ -74,7 +69,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void y() {
+    private void x() {
         try {
             this.getIPBans().load();
         } catch (IOException ioexception) {
@@ -83,7 +78,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void z() {
+    private void y() {
         try {
             this.getProfileBans().load();
         } catch (IOException ioexception) {
@@ -92,7 +87,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void A() {
+    private void z() {
         try {
             this.getOPs().load();
         } catch (Exception exception) {
@@ -101,7 +96,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void B() {
+    private void A() {
         try {
             this.getOPs().save();
         } catch (Exception exception) {
@@ -110,7 +105,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void C() {
+    private void B() {
         try {
             this.getWhitelist().load();
         } catch (Exception exception) {
@@ -119,7 +114,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void D() {
+    private void C() {
         try {
             this.getWhitelist().save();
         } catch (Exception exception) {

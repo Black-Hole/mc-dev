@@ -13,7 +13,7 @@ public class EntityZombieHusk extends EntityZombie {
     }
 
     @Override
-    protected boolean K_() {
+    protected boolean U_() {
         return false;
     }
 
@@ -38,11 +38,11 @@ public class EntityZombieHusk extends EntityZombie {
     }
 
     @Override
-    public boolean B(Entity entity) {
-        boolean flag = super.B(entity);
+    public boolean attackEntity(Entity entity) {
+        boolean flag = super.attackEntity(entity);
 
         if (flag && this.getItemInMainHand().isEmpty() && entity instanceof EntityLiving) {
-            float f = this.world.getDamageScaler(new BlockPosition(this)).b();
+            float f = this.world.getDamageScaler(this.getChunkCoordinates()).b();
 
             ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.HUNGER, 140 * (int) f));
         }
@@ -51,18 +51,21 @@ public class EntityZombieHusk extends EntityZombie {
     }
 
     @Override
-    protected boolean et() {
+    protected boolean eO() {
         return true;
     }
 
     @Override
-    protected void ev() {
-        this.b(EntityTypes.ZOMBIE);
-        this.world.a((EntityHuman) null, 1041, new BlockPosition(this), 0);
+    protected void eQ() {
+        this.c(EntityTypes.ZOMBIE);
+        if (!this.isSilent()) {
+            this.world.a((EntityHuman) null, 1041, this.getChunkCoordinates(), 0);
+        }
+
     }
 
     @Override
-    protected ItemStack es() {
-        return ItemStack.a;
+    protected ItemStack eN() {
+        return ItemStack.b;
     }
 }

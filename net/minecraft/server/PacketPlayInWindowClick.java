@@ -12,7 +12,7 @@ public class PacketPlayInWindowClick implements Packet<PacketListenerPlayIn> {
     private InventoryClickType shift;
 
     public PacketPlayInWindowClick() {
-        this.item = ItemStack.a;
+        this.item = ItemStack.b;
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {

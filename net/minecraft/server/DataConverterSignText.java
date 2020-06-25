@@ -8,9 +8,9 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.mojang.datafixers.DSL;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
+import com.mojang.serialization.Dynamic;
 import java.lang.reflect.Type;
 import java.util.Iterator;
 import org.apache.commons.lang3.StringUtils;
@@ -18,26 +18,26 @@ import org.apache.commons.lang3.StringUtils;
 public class DataConverterSignText extends DataConverterNamedEntity {
 
     public static final Gson a = (new GsonBuilder()).registerTypeAdapter(IChatBaseComponent.class, new JsonDeserializer<IChatBaseComponent>() {
-        public IChatBaseComponent deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+        public IChatMutableComponent deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             if (jsonelement.isJsonPrimitive()) {
                 return new ChatComponentText(jsonelement.getAsString());
             } else if (jsonelement.isJsonArray()) {
                 JsonArray jsonarray = jsonelement.getAsJsonArray();
-                IChatBaseComponent ichatbasecomponent = null;
+                IChatMutableComponent ichatmutablecomponent = null;
                 Iterator iterator = jsonarray.iterator();
 
                 while (iterator.hasNext()) {
                     JsonElement jsonelement1 = (JsonElement) iterator.next();
-                    IChatBaseComponent ichatbasecomponent1 = this.deserialize(jsonelement1, jsonelement1.getClass(), jsondeserializationcontext);
+                    IChatMutableComponent ichatmutablecomponent1 = this.deserialize(jsonelement1, jsonelement1.getClass(), jsondeserializationcontext);
 
-                    if (ichatbasecomponent == null) {
-                        ichatbasecomponent = ichatbasecomponent1;
+                    if (ichatmutablecomponent == null) {
+                        ichatmutablecomponent = ichatmutablecomponent1;
                     } else {
-                        ichatbasecomponent.addSibling(ichatbasecomponent1);
+                        ichatmutablecomponent.addSibling(ichatmutablecomponent1);
                     }
                 }
 
-                return ichatbasecomponent;
+                return ichatmutablecomponent;
             } else {
                 throw new JsonParseException("Don't know how to turn " + jsonelement + " into a Component");
             }
@@ -59,7 +59,7 @@ public class DataConverterSignText extends DataConverterNamedEntity {
                 try {
                     object = (IChatBaseComponent) ChatDeserializer.a(DataConverterSignText.a, s1, IChatBaseComponent.class, true);
                     if (object == null) {
-                        object = new ChatComponentText("");
+                        object = ChatComponentText.d;
                     }
                 } catch (JsonParseException jsonparseexception) {
                     ;
@@ -86,7 +86,7 @@ public class DataConverterSignText extends DataConverterNamedEntity {
                 }
             }
         } else {
-            object = new ChatComponentText("");
+            object = ChatComponentText.d;
         }
 
         return dynamic.set(s, dynamic.createString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object)));

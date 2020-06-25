@@ -103,7 +103,7 @@ public class SectionPosition extends BaseBlockPosition {
         return (this.b() << 4) + 15;
     }
 
-    public int r() {
+    public int i() {
         return (this.c() << 4) + 15;
     }
 
@@ -115,17 +115,17 @@ public class SectionPosition extends BaseBlockPosition {
         return i & -1048576L;
     }
 
-    public BlockPosition s() {
+    public BlockPosition p() {
         return new BlockPosition(c(this.a()), c(this.b()), c(this.c()));
     }
 
-    public BlockPosition t() {
+    public BlockPosition q() {
         boolean flag = true;
 
-        return this.s().b(8, 8, 8);
+        return this.p().b(8, 8, 8);
     }
 
-    public ChunkCoordIntPair u() {
+    public ChunkCoordIntPair r() {
         return new ChunkCoordIntPair(this.a(), this.c());
     }
 
@@ -138,12 +138,12 @@ public class SectionPosition extends BaseBlockPosition {
         return l;
     }
 
-    public long v() {
+    public long s() {
         return b(this.a(), this.b(), this.c());
     }
 
-    public Stream<BlockPosition> w() {
-        return BlockPosition.a(this.d(), this.e(), this.f(), this.g(), this.h(), this.r());
+    public Stream<BlockPosition> t() {
+        return BlockPosition.a(this.d(), this.e(), this.f(), this.g(), this.h(), this.i());
     }
 
     public static Stream<SectionPosition> a(SectionPosition sectionposition, int i) {

@@ -10,7 +10,7 @@ public interface IBlockWaterlogged extends IFluidSource, IFluidContainer {
     @Override
     default boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
         if (!(Boolean) iblockdata.get(BlockProperties.C) && fluid.getType() == FluidTypes.WATER) {
-            if (!generatoraccess.p_()) {
+            if (!generatoraccess.s_()) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.C, true), 3);
                 generatoraccess.getFluidTickList().a(blockposition, fluid.getType(), fluid.getType().a((IWorldReader) generatoraccess));
             }

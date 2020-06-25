@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.Nullable;
 
 public class CombatTracker {
@@ -22,13 +23,29 @@ public class CombatTracker {
 
     public void a() {
         this.k();
-        if (this.b.isClimbing()) {
-            Block block = this.b.world.getType(new BlockPosition(this.b)).getBlock();
+        Optional<BlockPosition> optional = this.b.dq();
 
-            if (block == Blocks.LADDER) {
+        if (optional.isPresent()) {
+            IBlockData iblockdata = this.b.world.getType((BlockPosition) optional.get());
+
+            if (!iblockdata.a(Blocks.LADDER) && !iblockdata.a((Tag) TagsBlock.TRAPDOORS)) {
+                if (iblockdata.a(Blocks.VINE)) {
+                    this.h = "vines";
+                } else if (!iblockdata.a(Blocks.WEEPING_VINES) && !iblockdata.a(Blocks.WEEPING_VINES_PLANT)) {
+                    if (!iblockdata.a(Blocks.TWISTING_VINES) && !iblockdata.a(Blocks.TWISTING_VINES_PLANT)) {
+                        if (iblockdata.a(Blocks.SCAFFOLDING)) {
+                            this.h = "scaffolding";
+                        } else {
+                            this.h = "other_climbable";
+                        }
+                    } else {
+                        this.h = "twisting_vines";
+                    }
+                } else {
+                    this.h = "weeping_vines";
+                }
+            } else {
                 this.h = "ladder";
-            } else if (block == Blocks.VINE) {
-                this.h = "vines";
             }
         } else if (this.b.isInWater()) {
             this.h = "water";
@@ -69,18 +86,18 @@ public class CombatTracker {
                 if (combatentry.a() != DamageSource.FALL && combatentry.a() != DamageSource.OUT_OF_WORLD) {
                     if (ichatbasecomponent1 != null && (ichatbasecomponent == null || !ichatbasecomponent1.equals(ichatbasecomponent))) {
                         Entity entity1 = combatentry.a().getEntity();
-                        ItemStack itemstack = entity1 instanceof EntityLiving ? ((EntityLiving) entity1).getItemInMainHand() : ItemStack.a;
+                        ItemStack itemstack = entity1 instanceof EntityLiving ? ((EntityLiving) entity1).getItemInMainHand() : ItemStack.b;
 
                         if (!itemstack.isEmpty() && itemstack.hasName()) {
-                            object = new ChatMessage("death.fell.assist.item", new Object[]{this.b.getScoreboardDisplayName(), ichatbasecomponent1, itemstack.B()});
+                            object = new ChatMessage("death.fell.assist.item", new Object[]{this.b.getScoreboardDisplayName(), ichatbasecomponent1, itemstack.C()});
                         } else {
                             object = new ChatMessage("death.fell.assist", new Object[]{this.b.getScoreboardDisplayName(), ichatbasecomponent1});
                         }
                     } else if (ichatbasecomponent != null) {
-                        ItemStack itemstack1 = entity instanceof EntityLiving ? ((EntityLiving) entity).getItemInMainHand() : ItemStack.a;
+                        ItemStack itemstack1 = entity instanceof EntityLiving ? ((EntityLiving) entity).getItemInMainHand() : ItemStack.b;
 
                         if (!itemstack1.isEmpty() && itemstack1.hasName()) {
-                            object = new ChatMessage("death.fell.finish.item", new Object[]{this.b.getScoreboardDisplayName(), ichatbasecomponent, itemstack1.B()});
+                            object = new ChatMessage("death.fell.finish.item", new Object[]{this.b.getScoreboardDisplayName(), ichatbasecomponent, itemstack1.C()});
                         } else {
                             object = new ChatMessage("death.fell.finish", new Object[]{this.b.getScoreboardDisplayName(), ichatbasecomponent});
                         }

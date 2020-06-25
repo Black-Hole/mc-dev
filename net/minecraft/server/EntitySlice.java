@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -77,6 +78,10 @@ public class EntitySlice<T> extends AbstractCollection<T> {
 
     public Iterator<T> iterator() {
         return (Iterator) (this.c.isEmpty() ? Collections.emptyIterator() : Iterators.unmodifiableIterator(this.c.iterator()));
+    }
+
+    public List<T> a() {
+        return ImmutableList.copyOf(this.c);
     }
 
     public int size() {

@@ -6,12 +6,12 @@ public class BlockLongGrass extends BlockPlant implements IBlockFragilePlantElem
 
     protected static final VoxelShape a = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 13.0D, 14.0D);
 
-    protected BlockLongGrass(Block.Info block_info) {
-        super(block_info);
+    protected BlockLongGrass(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockLongGrass.a;
     }
 
@@ -36,7 +36,7 @@ public class BlockLongGrass extends BlockPlant implements IBlockFragilePlantElem
     }
 
     @Override
-    public Block.EnumRandomOffset X_() {
-        return Block.EnumRandomOffset.XYZ;
+    public BlockBase.EnumRandomOffset aj_() {
+        return BlockBase.EnumRandomOffset.XYZ;
     }
 }

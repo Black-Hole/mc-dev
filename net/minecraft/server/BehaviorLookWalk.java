@@ -4,13 +4,13 @@ import com.google.common.collect.ImmutableMap;
 
 public class BehaviorLookWalk extends Behavior<EntityLiving> {
 
-    private final float a;
-    private final int b;
+    private final float b;
+    private final int c;
 
     public BehaviorLookWalk(float f, int i) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_PRESENT));
-        this.a = f;
-        this.b = i;
+        this.b = f;
+        this.c = i;
     }
 
     @Override
@@ -18,6 +18,6 @@ public class BehaviorLookWalk extends Behavior<EntityLiving> {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
         BehaviorPosition behaviorposition = (BehaviorPosition) behaviorcontroller.getMemory(MemoryModuleType.LOOK_TARGET).get();
 
-        behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(behaviorposition, this.a, this.b)));
+        behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(behaviorposition, this.b, this.c)));
     }
 }

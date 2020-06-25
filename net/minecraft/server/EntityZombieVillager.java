@@ -1,8 +1,10 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
 import java.util.UUID;
 import javax.annotation.Nullable;
+import org.apache.logging.log4j.Logger;
 
 public class EntityZombieVillager extends EntityZombie implements VillagerDataHolder {
 
@@ -10,9 +12,9 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     private static final DataWatcherObject<VillagerData> c = DataWatcher.a(EntityZombieVillager.class, DataWatcherRegistry.q);
     public int conversionTime;
     public UUID conversionPlayer;
-    private NBTBase by;
-    private NBTTagCompound bz;
-    private int bA;
+    private NBTBase bw;
+    private NBTTagCompound bx;
+    private int by;
 
     public EntityZombieVillager(EntityTypes<? extends EntityZombieVillager> entitytypes, World world) {
         super(entitytypes, world);
@@ -27,15 +29,21 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
-        nbttagcompound.set("VillagerData", (NBTBase) this.getVillagerData().a(DynamicOpsNBT.a));
-        if (this.bz != null) {
-            nbttagcompound.set("Offers", this.bz);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
+        DataResult dataresult = VillagerData.a.encodeStart(DynamicOpsNBT.a, this.getVillagerData());
+        Logger logger = EntityZombieVillager.LOGGER;
+
+        logger.getClass();
+        dataresult.resultOrPartial(logger::error).ifPresent((nbtbase) -> {
+            nbttagcompound.set("VillagerData", nbtbase);
+        });
+        if (this.bx != null) {
+            nbttagcompound.set("Offers", this.bx);
         }
 
-        if (this.by != null) {
-            nbttagcompound.set("Gossips", this.by);
+        if (this.bw != null) {
+            nbttagcompound.set("Gossips", this.bw);
         }
 
         nbttagcompound.setInt("ConversionTime", this.isConverting() ? this.conversionTime : -1);
@@ -43,22 +51,26 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
             nbttagcompound.a("ConversionPlayer", this.conversionPlayer);
         }
 
-        nbttagcompound.setInt("Xp", this.bA);
+        nbttagcompound.setInt("Xp", this.by);
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("VillagerData", 10)) {
-            this.setVillagerData(new VillagerData(new Dynamic(DynamicOpsNBT.a, nbttagcompound.get("VillagerData"))));
+            DataResult<VillagerData> dataresult = VillagerData.a.parse(new Dynamic(DynamicOpsNBT.a, nbttagcompound.get("VillagerData")));
+            Logger logger = EntityZombieVillager.LOGGER;
+
+            logger.getClass();
+            dataresult.resultOrPartial(logger::error).ifPresent(this::setVillagerData);
         }
 
         if (nbttagcompound.hasKeyOfType("Offers", 10)) {
-            this.bz = nbttagcompound.getCompound("Offers");
+            this.bx = nbttagcompound.getCompound("Offers");
         }
 
         if (nbttagcompound.hasKeyOfType("Gossips", 10)) {
-            this.by = nbttagcompound.getList("Gossips", 10);
+            this.bw = nbttagcompound.getList("Gossips", 10);
         }
 
         if (nbttagcompound.hasKeyOfType("ConversionTime", 99) && nbttagcompound.getInt("ConversionTime") > -1) {
@@ -66,7 +78,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
         }
 
         if (nbttagcompound.hasKeyOfType("Xp", 3)) {
-            this.bA = nbttagcompound.getInt("Xp");
+            this.by = nbttagcompound.getInt("Xp");
         }
 
     }
@@ -78,7 +90,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
 
             this.conversionTime -= i;
             if (this.conversionTime <= 0) {
-                this.a((WorldServer) this.world);
+                this.b((WorldServer) this.world);
             }
         }
 
@@ -86,33 +98,36 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     }
 
     @Override
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+    public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getItem() == Items.GOLDEN_APPLE && this.hasEffect(MobEffects.WEAKNESS)) {
-            if (!entityhuman.abilities.canInstantlyBuild) {
-                itemstack.subtract(1);
-            }
+        if (itemstack.getItem() == Items.GOLDEN_APPLE) {
+            if (this.hasEffect(MobEffects.WEAKNESS)) {
+                if (!entityhuman.abilities.canInstantlyBuild) {
+                    itemstack.subtract(1);
+                }
 
-            if (!this.world.isClientSide) {
-                this.startConversion(entityhuman.getUniqueID(), this.random.nextInt(2401) + 3600);
-                entityhuman.a(enumhand, true);
-            }
+                if (!this.world.isClientSide) {
+                    this.startConversion(entityhuman.getUniqueID(), this.random.nextInt(2401) + 3600);
+                }
 
-            return true;
+                return EnumInteractionResult.SUCCESS;
+            } else {
+                return EnumInteractionResult.CONSUME;
+            }
         } else {
-            return super.a(entityhuman, enumhand);
+            return super.b(entityhuman, enumhand);
         }
     }
 
     @Override
-    protected boolean et() {
+    protected boolean eO() {
         return false;
     }
 
     @Override
     public boolean isTypeNotPersistent(double d0) {
-        return !this.isConverting();
+        return !this.isConverting() && this.by == 0;
     }
 
     public boolean isConverting() {
@@ -128,7 +143,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
         this.world.broadcastEntityEffect(this, (byte) 16);
     }
 
-    private void a(WorldServer worldserver) {
+    private void b(WorldServer worldserver) {
         EntityVillager entityvillager = (EntityVillager) EntityTypes.VILLAGER.a((World) worldserver);
         EnumItemSlot[] aenumitemslot = EnumItemSlot.values();
         int i = aenumitemslot.length;
@@ -141,7 +156,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
                 if (EnchantmentManager.d(itemstack)) {
                     entityvillager.a_(enumitemslot.b() + 300, itemstack);
                 } else {
-                    double d0 = (double) this.d(enumitemslot);
+                    double d0 = (double) this.e(enumitemslot);
 
                     if (d0 > 1.0D) {
                         this.a(itemstack);
@@ -152,16 +167,16 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
 
         entityvillager.u(this);
         entityvillager.setVillagerData(this.getVillagerData());
-        if (this.by != null) {
-            entityvillager.a(this.by);
+        if (this.bw != null) {
+            entityvillager.a(this.bw);
         }
 
-        if (this.bz != null) {
-            entityvillager.b(new MerchantRecipeList(this.bz));
+        if (this.bx != null) {
+            entityvillager.b(new MerchantRecipeList(this.bx));
         }
 
-        entityvillager.setExperience(this.bA);
-        entityvillager.prepare(worldserver, worldserver.getDamageScaler(new BlockPosition(entityvillager)), EnumMobSpawn.CONVERSION, (GroupDataEntity) null, (NBTTagCompound) null);
+        entityvillager.setExperience(this.by);
+        entityvillager.prepare(worldserver, worldserver.getDamageScaler(entityvillager.getChunkCoordinates()), EnumMobSpawn.CONVERSION, (GroupDataEntity) null, (NBTTagCompound) null);
         if (this.isBaby()) {
             entityvillager.setAgeRaw(-24000);
         }
@@ -183,13 +198,16 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
             EntityHuman entityhuman = worldserver.b(this.conversionPlayer);
 
             if (entityhuman instanceof EntityPlayer) {
-                CriterionTriggers.r.a((EntityPlayer) entityhuman, this, entityvillager);
+                CriterionTriggers.r.a((EntityPlayer) entityhuman, (EntityZombie) this, entityvillager);
                 worldserver.a(ReputationEvent.a, (Entity) entityhuman, (ReputationHandler) entityvillager);
             }
         }
 
         entityvillager.addEffect(new MobEffect(MobEffects.CONFUSION, 200, 0));
-        worldserver.a((EntityHuman) null, 1027, new BlockPosition(this), 0);
+        if (!this.isSilent()) {
+            worldserver.a((EntityHuman) null, 1027, this.getChunkCoordinates(), 0);
+        }
+
     }
 
     private int getConversionProgress() {
@@ -220,7 +238,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     }
 
     @Override
-    protected float dn() {
+    protected float dG() {
         return this.isBaby() ? (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 2.0F : (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F;
     }
 
@@ -245,22 +263,22 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     }
 
     @Override
-    protected ItemStack es() {
-        return ItemStack.a;
+    protected ItemStack eN() {
+        return ItemStack.b;
     }
 
     public void setOffers(NBTTagCompound nbttagcompound) {
-        this.bz = nbttagcompound;
+        this.bx = nbttagcompound;
     }
 
     public void a(NBTBase nbtbase) {
-        this.by = nbtbase;
+        this.bw = nbtbase;
     }
 
     @Nullable
     @Override
     public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        this.setVillagerData(this.getVillagerData().withType(VillagerType.a(generatoraccess.getBiome(new BlockPosition(this)))));
+        this.setVillagerData(this.getVillagerData().withType(VillagerType.a(generatoraccess.getBiome(this.getChunkCoordinates()))));
         return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
@@ -268,7 +286,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
         VillagerData villagerdata1 = this.getVillagerData();
 
         if (villagerdata1.getProfession() != villagerdata.getProfession()) {
-            this.bz = null;
+            this.bx = null;
         }
 
         this.datawatcher.set(EntityZombieVillager.c, villagerdata);
@@ -280,6 +298,6 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     }
 
     public void a(int i) {
-        this.bA = i;
+        this.by = i;
     }
 }

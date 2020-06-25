@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 
 public class ItemBoat extends Item {
 
-    private static final Predicate<Entity> a = IEntitySelector.f.and(Entity::isInteractable);
+    private static final Predicate<Entity> a = IEntitySelector.g.and(Entity::isInteractable);
     private final EntityBoat.EnumBoatType b;
 
     public ItemBoat(EntityBoat.EnumBoatType entityboat_enumboattype, Item.Info item_info) {
@@ -17,14 +17,14 @@ public class ItemBoat extends Item {
     @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.ANY);
+        MovingObjectPositionBlock movingobjectpositionblock = a(world, entityhuman, RayTrace.FluidCollisionOption.ANY);
 
-        if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
+        if (movingobjectpositionblock.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
             return InteractionResultWrapper.pass(itemstack);
         } else {
             Vec3D vec3d = entityhuman.f(1.0F);
             double d0 = 5.0D;
-            List<Entity> list = world.getEntities(entityhuman, entityhuman.getBoundingBox().a(vec3d.a(5.0D)).g(1.0D), ItemBoat.a);
+            List<Entity> list = world.getEntities(entityhuman, entityhuman.getBoundingBox().b(vec3d.a(5.0D)).g(1.0D), ItemBoat.a);
 
             if (!list.isEmpty()) {
                 Vec3D vec3d1 = entityhuman.j(1.0F);
@@ -32,16 +32,16 @@ public class ItemBoat extends Item {
 
                 while (iterator.hasNext()) {
                     Entity entity = (Entity) iterator.next();
-                    AxisAlignedBB axisalignedbb = entity.getBoundingBox().g((double) entity.aV());
+                    AxisAlignedBB axisalignedbb = entity.getBoundingBox().g((double) entity.bc());
 
-                    if (axisalignedbb.c(vec3d1)) {
+                    if (axisalignedbb.d(vec3d1)) {
                         return InteractionResultWrapper.pass(itemstack);
                     }
                 }
             }
 
-            if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-                EntityBoat entityboat = new EntityBoat(world, movingobjectposition.getPos().x, movingobjectposition.getPos().y, movingobjectposition.getPos().z);
+            if (movingobjectpositionblock.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
+                EntityBoat entityboat = new EntityBoat(world, movingobjectpositionblock.getPos().x, movingobjectpositionblock.getPos().y, movingobjectpositionblock.getPos().z);
 
                 entityboat.setType(this.b);
                 entityboat.yaw = entityhuman.yaw;
@@ -56,7 +56,7 @@ public class ItemBoat extends Item {
                     }
 
                     entityhuman.b(StatisticList.ITEM_USED.b(this));
-                    return InteractionResultWrapper.success(itemstack);
+                    return InteractionResultWrapper.a(itemstack, world.s_());
                 }
             } else {
                 return InteractionResultWrapper.pass(itemstack);

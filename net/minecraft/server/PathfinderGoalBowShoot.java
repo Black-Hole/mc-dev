@@ -43,16 +43,16 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
     @Override
     public void c() {
         super.c();
-        this.a.q(true);
+        this.a.setAggressive(true);
     }
 
     @Override
     public void d() {
         super.d();
-        this.a.q(false);
+        this.a.setAggressive(false);
         this.f = 0;
         this.e = -1;
-        this.a.dH();
+        this.a.clearActiveItem();
     }
 
     @Override
@@ -109,12 +109,12 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
 
             if (this.a.isHandRaised()) {
                 if (!flag && this.f < -60) {
-                    this.a.dH();
+                    this.a.clearActiveItem();
                 } else if (flag) {
-                    int i = this.a.dF();
+                    int i = this.a.dZ();
 
                     if (i >= 20) {
-                        this.a.dH();
+                        this.a.clearActiveItem();
                         ((IRangedEntity) this.a).a(entityliving, ItemBow.a(i));
                         this.e = this.c;
                     }

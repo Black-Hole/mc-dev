@@ -11,7 +11,7 @@ public class PathfinderGoalLookAtTradingPlayer extends PathfinderGoalLookAtPlaye
 
     @Override
     public boolean a() {
-        if (this.g.et()) {
+        if (this.g.eO()) {
             this.b = this.g.getTrader();
             return true;
         } else {

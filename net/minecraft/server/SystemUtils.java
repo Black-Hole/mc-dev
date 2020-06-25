@@ -3,23 +3,29 @@ package net.minecraft.server;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.mojang.datafixers.DSL.TypeReference;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.types.Type;
+import com.mojang.serialization.DataResult;
 import it.unimi.dsi.fastutil.Hash.Strategy;
+import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinWorkerThread;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +35,7 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
@@ -36,9 +43,12 @@ import org.apache.logging.log4j.Logger;
 
 public class SystemUtils {
 
-    private static final AtomicInteger b = new AtomicInteger(1);
-    private static final ExecutorService c = k();
+    private static final AtomicInteger c = new AtomicInteger(1);
+    private static final ExecutorService d = a("Bootstrap");
+    private static final ExecutorService e = a("Main");
+    private static final ExecutorService f = n();
     public static LongSupplier a = System::nanoTime;
+    public static final UUID b = new UUID(0L, 0L);
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static <K, V> Collector<Entry<? extends K, ? extends V>, ?, Map<K, V>> a() {
@@ -65,7 +75,7 @@ public class SystemUtils {
         return Instant.now().toEpochMilli();
     }
 
-    private static ExecutorService k() {
+    private static ExecutorService a(String s) {
         int i = MathHelper.clamp(Runtime.getRuntime().availableProcessors() - 1, 1, 7);
         Object object;
 
@@ -85,54 +95,100 @@ public class SystemUtils {
                     }
                 };
 
-                forkjoinworkerthread.setName("Server-Worker-" + SystemUtils.b.getAndIncrement());
+                forkjoinworkerthread.setName("Worker-" + s + "-" + SystemUtils.c.getAndIncrement());
                 return forkjoinworkerthread;
-            }, (thread, throwable) -> {
-                c(throwable);
-                if (throwable instanceof CompletionException) {
-                    throwable = throwable.getCause();
-                }
-
-                if (throwable instanceof ReportedException) {
-                    DispenserRegistry.a(((ReportedException) throwable).a().e());
-                    System.exit(-1);
-                }
-
-                SystemUtils.LOGGER.error(String.format("Caught exception in thread %s", thread), throwable);
-            }, true);
+            }, SystemUtils::a, true);
         }
 
         return (ExecutorService) object;
     }
 
     public static Executor e() {
-        return SystemUtils.c;
+        return SystemUtils.d;
     }
 
-    public static void f() {
-        SystemUtils.c.shutdown();
+    public static Executor f() {
+        return SystemUtils.e;
+    }
+
+    public static Executor g() {
+        return SystemUtils.f;
+    }
+
+    public static void h() {
+        a(SystemUtils.e);
+        a(SystemUtils.f);
+    }
+
+    private static void a(ExecutorService executorservice) {
+        executorservice.shutdown();
 
         boolean flag;
 
         try {
-            flag = SystemUtils.c.awaitTermination(3L, TimeUnit.SECONDS);
+            flag = executorservice.awaitTermination(3L, TimeUnit.SECONDS);
         } catch (InterruptedException interruptedexception) {
             flag = false;
         }
 
         if (!flag) {
-            SystemUtils.c.shutdownNow();
+            executorservice.shutdownNow();
         }
 
     }
 
-    public static SystemUtils.OS g() {
+    private static ExecutorService n() {
+        return Executors.newCachedThreadPool((runnable) -> {
+            Thread thread = new Thread(runnable);
+
+            thread.setName("IO-Worker-" + SystemUtils.c.getAndIncrement());
+            thread.setUncaughtExceptionHandler(SystemUtils::a);
+            return thread;
+        });
+    }
+
+    private static void a(Thread thread, Throwable throwable) {
+        c(throwable);
+        if (throwable instanceof CompletionException) {
+            throwable = throwable.getCause();
+        }
+
+        if (throwable instanceof ReportedException) {
+            DispenserRegistry.a(((ReportedException) throwable).a().e());
+            System.exit(-1);
+        }
+
+        SystemUtils.LOGGER.error(String.format("Caught exception in thread %s", thread), throwable);
+    }
+
+    @Nullable
+    public static Type<?> a(TypeReference typereference, String s) {
+        return !SharedConstants.c ? null : b(typereference, s);
+    }
+
+    @Nullable
+    private static Type<?> b(TypeReference typereference, String s) {
+        Type type = null;
+
+        try {
+            type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.getGameVersion().getWorldVersion())).getChoiceType(typereference, s);
+        } catch (IllegalArgumentException illegalargumentexception) {
+            SystemUtils.LOGGER.error("No data fixer registered for {}", s);
+            if (SharedConstants.d) {
+                throw illegalargumentexception;
+            }
+        }
+
+        return type;
+    }
+
+    public static SystemUtils.OS i() {
         String s = System.getProperty("os.name").toLowerCase(Locale.ROOT);
 
         return s.contains("win") ? SystemUtils.OS.WINDOWS : (s.contains("mac") ? SystemUtils.OS.OSX : (s.contains("solaris") ? SystemUtils.OS.SOLARIS : (s.contains("sunos") ? SystemUtils.OS.SOLARIS : (s.contains("linux") ? SystemUtils.OS.LINUX : (s.contains("unix") ? SystemUtils.OS.LINUX : SystemUtils.OS.UNKNOWN)))));
     }
 
-    public static Stream<String> h() {
+    public static Stream<String> j() {
         RuntimeMXBean runtimemxbean = ManagementFactory.getRuntimeMXBean();
 
         return runtimemxbean.getInputArguments().stream().filter((s) -> {
@@ -193,7 +249,7 @@ public class SystemUtils {
         return t0;
     }
 
-    public static <K> Strategy<K> i() {
+    public static <K> Strategy<K> k() {
         return SystemUtils.IdentityHashingStrategy.INSTANCE;
     }
 
@@ -238,20 +294,8 @@ public class SystemUtils {
         return runnable;
     }
 
-    public static Optional<UUID> a(String s, Dynamic<?> dynamic) {
-        return dynamic.get(s + "Most").asNumber().flatMap((number) -> {
-            return dynamic.get(s + "Least").asNumber().map((number1) -> {
-                return new UUID(number.longValue(), number1.longValue());
-            });
-        });
-    }
-
-    public static <T> Dynamic<T> a(String s, UUID uuid, Dynamic<T> dynamic) {
-        return dynamic.set(s + "Most", dynamic.createLong(uuid.getMostSignificantBits())).set(s + "Least", dynamic.createLong(uuid.getLeastSignificantBits()));
-    }
-
     public static <T extends Throwable> T c(T t0) {
-        if (SharedConstants.b) {
+        if (SharedConstants.d) {
             SystemUtils.LOGGER.error("Trying to throw a fatal exception, pausing in IDE", t0);
 
             while (true) {
@@ -269,6 +313,68 @@ public class SystemUtils {
 
     public static String d(Throwable throwable) {
         return throwable.getCause() != null ? d(throwable.getCause()) : (throwable.getMessage() != null ? throwable.getMessage() : throwable.toString());
+    }
+
+    public static <T> T a(T[] at, Random random) {
+        return at[random.nextInt(at.length)];
+    }
+
+    public static int a(int[] aint, Random random) {
+        return aint[random.nextInt(aint.length)];
+    }
+
+    public static void a(File file, File file1, File file2) {
+        if (file2.exists()) {
+            file2.delete();
+        }
+
+        file.renameTo(file2);
+        if (file.exists()) {
+            file.delete();
+        }
+
+        file1.renameTo(file);
+        if (file1.exists()) {
+            file1.delete();
+        }
+
+    }
+
+    public static Consumer<String> a(String s, Consumer<String> consumer) {
+        return (s1) -> {
+            consumer.accept(s + s1);
+        };
+    }
+
+    public static DataResult<int[]> a(IntStream intstream, int i) {
+        int[] aint = intstream.limit((long) (i + 1)).toArray();
+
+        if (aint.length != i) {
+            String s = "Input is not a list of " + i + " ints";
+
+            return aint.length >= i ? DataResult.error(s, Arrays.copyOf(aint, i)) : DataResult.error(s);
+        } else {
+            return DataResult.success(aint);
+        }
+    }
+
+    public static void l() {
+        Thread thread = new Thread("Timer hack thread") {
+            public void run() {
+                while (true) {
+                    try {
+                        Thread.sleep(2147483647L);
+                    } catch (InterruptedException interruptedexception) {
+                        SystemUtils.LOGGER.warn("Timer hack thread interrupted, that really should not happen");
+                        return;
+                    }
+                }
+            }
+        };
+
+        thread.setDaemon(true);
+        thread.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(SystemUtils.LOGGER));
+        thread.start();
     }
 
     static enum IdentityHashingStrategy implements Strategy<Object> {

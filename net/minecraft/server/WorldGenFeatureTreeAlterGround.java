@@ -1,23 +1,24 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 public class WorldGenFeatureTreeAlterGround extends WorldGenFeatureTree {
 
+    public static final Codec<WorldGenFeatureTreeAlterGround> a = WorldGenFeatureStateProvider.a.fieldOf("provider").xmap(WorldGenFeatureTreeAlterGround::new, (worldgenfeaturetreealterground) -> {
+        return worldgenfeaturetreealterground.b;
+    }).codec();
     private final WorldGenFeatureStateProvider b;
 
     public WorldGenFeatureTreeAlterGround(WorldGenFeatureStateProvider worldgenfeaturestateprovider) {
-        super(WorldGenFeatureTrees.e);
         this.b = worldgenfeaturestateprovider;
     }
 
-    public <T> WorldGenFeatureTreeAlterGround(Dynamic<T> dynamic) {
-        this(((WorldGenFeatureStateProviders) IRegistry.t.get(new MinecraftKey((String) dynamic.get("provider").get("type").asString().orElseThrow(RuntimeException::new)))).a(dynamic.get("provider").orElseEmptyMap()));
+    @Override
+    protected WorldGenFeatureTrees<?> a() {
+        return WorldGenFeatureTrees.e;
     }
 
     @Override
@@ -60,20 +61,15 @@ public class WorldGenFeatureTreeAlterGround extends WorldGenFeatureTree {
         for (int i = 2; i >= -3; --i) {
             BlockPosition blockposition1 = blockposition.up(i);
 
-            if (WorldGenTreeAbstract.g(virtuallevelwritable, blockposition1)) {
+            if (WorldGenerator.a((VirtualLevelReadable) virtuallevelwritable, blockposition1)) {
                 virtuallevelwritable.setTypeAndData(blockposition1, this.b.a(random, blockposition), 19);
                 break;
             }
 
-            if (!WorldGenTreeAbstract.b(virtuallevelwritable, blockposition1) && i < 0) {
+            if (!WorldGenerator.b(virtuallevelwritable, blockposition1) && i < 0) {
                 break;
             }
         }
 
-    }
-
-    @Override
-    public <T> T a(DynamicOps<T> dynamicops) {
-        return (new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("type"), dynamicops.createString(IRegistry.w.getKey(this.a).toString()), dynamicops.createString("provider"), this.b.a(dynamicops))))).getValue();
     }
 }

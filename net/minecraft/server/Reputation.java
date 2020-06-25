@@ -3,9 +3,11 @@ package net.minecraft.server;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.DynamicOps;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import java.util.Arrays;
@@ -14,11 +16,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
-import java.util.Map.Entry;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -123,7 +123,9 @@ public class Reputation {
     }
 
     public void a(Dynamic<?> dynamic) {
-        dynamic.asStream().map(Reputation.b::a).flatMap(SystemUtils::a).forEach((reputation_b) -> {
+        dynamic.asStream().map(Reputation.b::a).flatMap((dataresult) -> {
+            return SystemUtils.a(dataresult.result());
+        }).forEach((reputation_b) -> {
             this.a(reputation_b.a).a.put(reputation_b.b, reputation_b.c);
         });
     }
@@ -147,16 +149,16 @@ public class Reputation {
         }
 
         public int a(Predicate<ReputationType> predicate) {
-            return this.a.object2IntEntrySet().stream().filter((it_unimi_dsi_fastutil_objects_object2intmap_entry) -> {
-                return predicate.test(it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey());
-            }).mapToInt((it_unimi_dsi_fastutil_objects_object2intmap_entry) -> {
-                return it_unimi_dsi_fastutil_objects_object2intmap_entry.getIntValue() * ((ReputationType) it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey()).g;
+            return this.a.object2IntEntrySet().stream().filter((entry) -> {
+                return predicate.test(entry.getKey());
+            }).mapToInt((entry) -> {
+                return entry.getIntValue() * ((ReputationType) entry.getKey()).g;
             }).sum();
         }
 
         public Stream<Reputation.b> a(UUID uuid) {
-            return this.a.object2IntEntrySet().stream().map((it_unimi_dsi_fastutil_objects_object2intmap_entry) -> {
-                return new Reputation.b(uuid, (ReputationType) it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey(), it_unimi_dsi_fastutil_objects_object2intmap_entry.getIntValue());
+            return this.a.object2IntEntrySet().stream().map((entry) -> {
+                return new Reputation.b(uuid, (ReputationType) entry.getKey(), entry.getIntValue());
             });
         }
 
@@ -164,13 +166,13 @@ public class Reputation {
             ObjectIterator objectiterator = this.a.object2IntEntrySet().iterator();
 
             while (objectiterator.hasNext()) {
-                it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<ReputationType> it_unimi_dsi_fastutil_objects_object2intmap_entry = (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry) objectiterator.next();
-                int i = it_unimi_dsi_fastutil_objects_object2intmap_entry.getIntValue() - ((ReputationType) it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey()).i;
+                Entry<ReputationType> entry = (Entry) objectiterator.next();
+                int i = entry.getIntValue() - ((ReputationType) entry.getKey()).i;
 
                 if (i < 2) {
                     objectiterator.remove();
                 } else {
-                    it_unimi_dsi_fastutil_objects_object2intmap_entry.setValue(i);
+                    entry.setValue(i);
                 }
             }
 
@@ -219,17 +221,11 @@ public class Reputation {
         }
 
         public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-            return SystemUtils.a("Target", this.a, new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("Type"), dynamicops.createString(this.b.f), dynamicops.createString("Value"), dynamicops.createInt(this.c)))));
+            return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("Target"), MinecraftSerializableUUID.a.encodeStart(dynamicops, this.a).result().orElseThrow(RuntimeException::new), dynamicops.createString("Type"), dynamicops.createString(this.b.f), dynamicops.createString("Value"), dynamicops.createInt(this.c))));
         }
 
-        public static Optional<Reputation.b> a(Dynamic<?> dynamic) {
-            return dynamic.get("Type").asString().map(ReputationType::a).flatMap((reputationtype) -> {
-                return SystemUtils.a("Target", dynamic).flatMap((uuid) -> {
-                    return dynamic.get("Value").asNumber().map((number) -> {
-                        return new Reputation.b(uuid, reputationtype, number.intValue());
-                    });
-                });
-            });
+        public static DataResult<Reputation.b> a(Dynamic<?> dynamic) {
+            return DataResult.unbox(DataResult.instance().group(dynamic.get("Target").read(MinecraftSerializableUUID.a), dynamic.get("Type").asString().map(ReputationType::a), dynamic.get("Value").asNumber().map(Number::intValue)).apply(DataResult.instance(), Reputation.b::new));
         }
     }
 }

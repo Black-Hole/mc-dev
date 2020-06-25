@@ -92,13 +92,13 @@ public class EntityTippedArrow extends EntityArrow {
         super.tick();
         if (this.world.isClientSide) {
             if (this.inGround) {
-                if (this.d % 5 == 0) {
+                if (this.c % 5 == 0) {
                     this.b(1);
                 }
             } else {
                 this.b(2);
             }
-        } else if (this.inGround && this.d != 0 && !this.effects.isEmpty() && this.d >= 600) {
+        } else if (this.inGround && this.c != 0 && !this.effects.isEmpty() && this.c >= 600) {
             this.world.broadcastEntityEffect(this, (byte) 0);
             this.potionRegistry = Potions.EMPTY;
             this.effects.clear();
@@ -116,7 +116,7 @@ public class EntityTippedArrow extends EntityArrow {
             double d2 = (double) (j >> 0 & 255) / 255.0D;
 
             for (int k = 0; k < i; ++k) {
-                this.world.addParticle(Particles.ENTITY_EFFECT, this.d(0.5D), this.cv(), this.g(0.5D), d0, d1, d2);
+                this.world.addParticle(Particles.ENTITY_EFFECT, this.d(0.5D), this.cE(), this.g(0.5D), d0, d1, d2);
             }
 
         }
@@ -132,8 +132,8 @@ public class EntityTippedArrow extends EntityArrow {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         if (this.potionRegistry != Potions.EMPTY && this.potionRegistry != null) {
             nbttagcompound.setString("Potion", IRegistry.POTION.getKey(this.potionRegistry).toString());
         }
@@ -158,8 +158,8 @@ public class EntityTippedArrow extends EntityArrow {
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("Potion", 8)) {
             this.potionRegistry = PotionUtil.c(nbttagcompound);
         }

@@ -52,15 +52,15 @@ public class EntityPainting extends EntityHanging {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
+    public void saveData(NBTTagCompound nbttagcompound) {
         nbttagcompound.setString("Motive", IRegistry.MOTIVE.getKey(this.art).toString());
-        super.b(nbttagcompound);
+        super.saveData(nbttagcompound);
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
+    public void loadData(NBTTagCompound nbttagcompound) {
         this.art = (Paintings) IRegistry.MOTIVE.get(MinecraftKey.a(nbttagcompound.getString("Motive")));
-        super.a(nbttagcompound);
+        super.loadData(nbttagcompound);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class EntityPainting extends EntityHanging {
     @Override
     public void a(@Nullable Entity entity) {
         if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
-            this.a(SoundEffects.ENTITY_PAINTING_BREAK, 1.0F, 1.0F);
+            this.playSound(SoundEffects.ENTITY_PAINTING_BREAK, 1.0F, 1.0F);
             if (entity instanceof EntityHuman) {
                 EntityHuman entityhuman = (EntityHuman) entity;
 
@@ -91,7 +91,7 @@ public class EntityPainting extends EntityHanging {
 
     @Override
     public void playPlaceSound() {
-        this.a(SoundEffects.ENTITY_PAINTING_PLACE, 1.0F, 1.0F);
+        this.playSound(SoundEffects.ENTITY_PAINTING_PLACE, 1.0F, 1.0F);
     }
 
     @Override
@@ -100,7 +100,7 @@ public class EntityPainting extends EntityHanging {
     }
 
     @Override
-    public Packet<?> L() {
+    public Packet<?> O() {
         return new PacketPlayOutSpawnEntityPainting(this);
     }
 }

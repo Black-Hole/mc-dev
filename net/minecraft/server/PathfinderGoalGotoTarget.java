@@ -90,14 +90,14 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
     protected boolean l() {
         int i = this.i;
         int j = this.j;
-        BlockPosition blockposition = new BlockPosition(this.a);
+        BlockPosition blockposition = this.a.getChunkCoordinates();
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
         for (int k = this.f; k <= j; k = k > 0 ? -k : 1 - k) {
             for (int l = 0; l < i; ++l) {
                 for (int i1 = 0; i1 <= l; i1 = i1 > 0 ? -i1 : 1 - i1) {
                     for (int j1 = i1 < l && i1 > -l ? l : 0; j1 <= l; j1 = j1 > 0 ? -j1 : 1 - j1) {
-                        blockposition_mutableblockposition.g(blockposition).e(i1, k - 1, j1);
+                        blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, i1, k - 1, j1);
                         if (this.a.a((BlockPosition) blockposition_mutableblockposition) && this.a(this.a.world, blockposition_mutableblockposition)) {
                             this.e = blockposition_mutableblockposition;
                             return true;

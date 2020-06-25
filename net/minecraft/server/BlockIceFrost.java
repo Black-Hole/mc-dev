@@ -4,49 +4,34 @@ import java.util.Random;
 
 public class BlockIceFrost extends BlockIce {
 
-    public static final BlockStateInteger a = BlockProperties.aa;
+    public static final BlockStateInteger a = BlockProperties.ag;
 
-    public BlockIceFrost(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockIceFrost.a, 0));
+    public BlockIceFrost(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockIceFrost.a, 0));
     }
 
     @Override
     public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        this.tickAlways(iblockdata, worldserver, blockposition, random);
+    }
+
+    @Override
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if ((random.nextInt(3) == 0 || this.a(worldserver, blockposition, 4)) && worldserver.getLightLevel(blockposition) > 11 - (Integer) iblockdata.get(BlockIceFrost.a) - iblockdata.b((IBlockAccess) worldserver, blockposition) && this.e(iblockdata, (World) worldserver, blockposition)) {
-            BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
-            Throwable throwable = null;
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+            EnumDirection[] aenumdirection = EnumDirection.values();
+            int i = aenumdirection.length;
 
-            try {
-                EnumDirection[] aenumdirection = EnumDirection.values();
-                int i = aenumdirection.length;
+            for (int j = 0; j < i; ++j) {
+                EnumDirection enumdirection = aenumdirection[j];
 
-                for (int j = 0; j < i; ++j) {
-                    EnumDirection enumdirection = aenumdirection[j];
+                blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, enumdirection);
+                IBlockData iblockdata1 = worldserver.getType(blockposition_mutableblockposition);
 
-                    blockposition_pooledblockposition.g(blockposition).c(enumdirection);
-                    IBlockData iblockdata1 = worldserver.getType(blockposition_pooledblockposition);
-
-                    if (iblockdata1.getBlock() == this && !this.e(iblockdata1, (World) worldserver, blockposition_pooledblockposition)) {
-                        worldserver.getBlockTickList().a(blockposition_pooledblockposition, this, MathHelper.nextInt(random, 20, 40));
-                    }
+                if (iblockdata1.a((Block) this) && !this.e(iblockdata1, (World) worldserver, blockposition_mutableblockposition)) {
+                    worldserver.getBlockTickList().a(blockposition_mutableblockposition, this, MathHelper.nextInt(random, 20, 40));
                 }
-            } catch (Throwable throwable1) {
-                throwable = throwable1;
-                throw throwable1;
-            } finally {
-                if (blockposition_pooledblockposition != null) {
-                    if (throwable != null) {
-                        try {
-                            blockposition_pooledblockposition.close();
-                        } catch (Throwable throwable2) {
-                            throwable.addSuppressed(throwable2);
-                        }
-                    } else {
-                        blockposition_pooledblockposition.close();
-                    }
-                }
-
             }
 
         } else {
@@ -77,45 +62,23 @@ public class BlockIceFrost extends BlockIce {
 
     private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, int i) {
         int j = 0;
-        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
-        Throwable throwable = null;
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+        EnumDirection[] aenumdirection = EnumDirection.values();
+        int k = aenumdirection.length;
 
-        try {
-            EnumDirection[] aenumdirection = EnumDirection.values();
-            int k = aenumdirection.length;
+        for (int l = 0; l < k; ++l) {
+            EnumDirection enumdirection = aenumdirection[l];
 
-            for (int l = 0; l < k; ++l) {
-                EnumDirection enumdirection = aenumdirection[l];
-
-                blockposition_pooledblockposition.g(blockposition).c(enumdirection);
-                if (iblockaccess.getType(blockposition_pooledblockposition).getBlock() == this) {
-                    ++j;
-                    if (j >= i) {
-                        boolean flag = false;
-
-                        return flag;
-                    }
+            blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, enumdirection);
+            if (iblockaccess.getType(blockposition_mutableblockposition).a((Block) this)) {
+                ++j;
+                if (j >= i) {
+                    return false;
                 }
             }
-
-            return true;
-        } catch (Throwable throwable1) {
-            throwable = throwable1;
-            throw throwable1;
-        } finally {
-            if (blockposition_pooledblockposition != null) {
-                if (throwable != null) {
-                    try {
-                        blockposition_pooledblockposition.close();
-                    } catch (Throwable throwable2) {
-                        throwable.addSuppressed(throwable2);
-                    }
-                } else {
-                    blockposition_pooledblockposition.close();
-                }
-            }
-
         }
+
+        return true;
     }
 
     @Override

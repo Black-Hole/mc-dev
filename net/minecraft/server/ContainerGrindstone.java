@@ -58,8 +58,8 @@ public class ContainerGrindstone extends Container {
 
                     world.triggerEffect(1042, blockposition, 0);
                 });
-                ContainerGrindstone.this.craftInventory.setItem(0, ItemStack.a);
-                ContainerGrindstone.this.craftInventory.setItem(1, ItemStack.a);
+                ContainerGrindstone.this.craftInventory.setItem(0, ItemStack.b);
+                ContainerGrindstone.this.craftInventory.setItem(1, ItemStack.b);
                 return itemstack;
             }
 
@@ -129,7 +129,7 @@ public class ContainerGrindstone extends Container {
             boolean flag2 = !itemstack.isEmpty() && itemstack.getItem() != Items.ENCHANTED_BOOK && !itemstack.hasEnchantments() || !itemstack1.isEmpty() && itemstack1.getItem() != Items.ENCHANTED_BOOK && !itemstack1.hasEnchantments();
 
             if (itemstack.getCount() > 1 || itemstack1.getCount() > 1 || !flag1 && flag2) {
-                this.resultInventory.setItem(0, ItemStack.a);
+                this.resultInventory.setItem(0, ItemStack.b);
                 this.c();
                 return;
             }
@@ -140,7 +140,7 @@ public class ContainerGrindstone extends Container {
 
             if (flag1) {
                 if (itemstack.getItem() != itemstack1.getItem()) {
-                    this.resultInventory.setItem(0, ItemStack.a);
+                    this.resultInventory.setItem(0, ItemStack.b);
                     this.c();
                     return;
                 }
@@ -154,7 +154,7 @@ public class ContainerGrindstone extends Container {
                 itemstack2 = this.b(itemstack, itemstack1);
                 if (!itemstack2.e()) {
                     if (!ItemStack.matches(itemstack, itemstack1)) {
-                        this.resultInventory.setItem(0, ItemStack.a);
+                        this.resultInventory.setItem(0, ItemStack.b);
                         this.c();
                         return;
                     }
@@ -170,7 +170,7 @@ public class ContainerGrindstone extends Container {
 
             this.resultInventory.setItem(0, this.a(itemstack2, i, b0));
         } else {
-            this.resultInventory.setItem(0, ItemStack.a);
+            this.resultInventory.setItem(0, ItemStack.b);
         }
 
         this.c();
@@ -240,7 +240,7 @@ public class ContainerGrindstone extends Container {
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -252,7 +252,7 @@ public class ContainerGrindstone extends Container {
 
             if (i == 2) {
                 if (!this.a(itemstack1, 3, 39, true)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
 
                 slot.a(itemstack1, itemstack);
@@ -260,26 +260,26 @@ public class ContainerGrindstone extends Container {
                 if (!itemstack2.isEmpty() && !itemstack3.isEmpty()) {
                     if (i >= 3 && i < 30) {
                         if (!this.a(itemstack1, 30, 39, false)) {
-                            return ItemStack.a;
+                            return ItemStack.b;
                         }
                     } else if (i >= 30 && i < 39 && !this.a(itemstack1, 3, 30, false)) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
                 } else if (!this.a(itemstack1, 0, 2, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (!this.a(itemstack1, 3, 39, false)) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.a);
+                slot.set(ItemStack.b);
             } else {
                 slot.d();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             slot.a(entityhuman, itemstack1);

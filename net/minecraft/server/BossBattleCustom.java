@@ -64,8 +64,8 @@ public class BossBattleCustom extends BossBattleServer {
     }
 
     public final IChatBaseComponent e() {
-        return ChatComponentUtils.a(this.j()).a((chatmodifier) -> {
-            chatmodifier.setColor(this.l().a()).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(this.getKey().toString()))).setInsertion(this.getKey().toString());
+        return ChatComponentUtils.a(this.j()).format((chatmodifier) -> {
+            return chatmodifier.setColor(this.l().a()).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(this.getKey().toString()))).setInsertion(this.getKey().toString());
         });
     }
 
@@ -196,10 +196,10 @@ public class BossBattleCustom extends BossBattleServer {
         bossbattlecustom.setDarkenSky(nbttagcompound.getBoolean("DarkenScreen"));
         bossbattlecustom.setPlayMusic(nbttagcompound.getBoolean("PlayBossMusic"));
         bossbattlecustom.setCreateFog(nbttagcompound.getBoolean("CreateWorldFog"));
-        NBTTagList nbttaglist = nbttagcompound.getList("Players", 10);
+        NBTTagList nbttaglist = nbttagcompound.getList("Players", 11);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
-            bossbattlecustom.a(GameProfileSerializer.b(nbttaglist.getCompound(i)));
+            bossbattlecustom.a(GameProfileSerializer.a(nbttaglist.get(i)));
         }
 
         return bossbattlecustom;

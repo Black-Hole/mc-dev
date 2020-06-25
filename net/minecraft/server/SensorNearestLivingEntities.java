@@ -5,11 +5,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class SensorNearestLivingEntities extends Sensor<EntityLiving> {
 
-    private static final PathfinderTargetCondition a = (new PathfinderTargetCondition()).a(16.0D).b().d().c();
+    private static final PathfinderTargetCondition a = (new PathfinderTargetCondition()).a(16.0D).b().d();
 
     public SensorNearestLivingEntities() {}
 
@@ -24,13 +23,9 @@ public class SensorNearestLivingEntities extends Sensor<EntityLiving> {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
 
         behaviorcontroller.setMemory(MemoryModuleType.MOBS, (Object) list);
-        MemoryModuleType memorymoduletype = MemoryModuleType.VISIBLE_MOBS;
-        Stream stream = list.stream().filter((entityliving1) -> {
+        behaviorcontroller.setMemory(MemoryModuleType.VISIBLE_MOBS, list.stream().filter((entityliving1) -> {
             return SensorNearestLivingEntities.a.a(entityliving, entityliving1);
-        });
-
-        entityliving.getClass();
-        behaviorcontroller.setMemory(memorymoduletype, stream.filter(entityliving::hasLineOfSight).collect(Collectors.toList()));
+        }).collect(Collectors.toList()));
     }
 
     @Override

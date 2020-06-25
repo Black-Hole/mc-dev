@@ -6,18 +6,18 @@ public class BlockBambooSapling extends Block implements IBlockFragilePlantEleme
 
     protected static final VoxelShape a = Block.a(4.0D, 0.0D, 4.0D, 12.0D, 12.0D, 12.0D);
 
-    public BlockBambooSapling(Block.Info block_info) {
-        super(block_info);
+    public BlockBambooSapling(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
-    public Block.EnumRandomOffset X_() {
-        return Block.EnumRandomOffset.XZ;
+    public BlockBase.EnumRandomOffset aj_() {
+        return BlockBase.EnumRandomOffset.XZ;
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        Vec3D vec3d = iblockdata.l(iblockaccess, blockposition);
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        Vec3D vec3d = iblockdata.n(iblockaccess, blockposition);
 
         return BlockBambooSapling.a.a(vec3d.x, vec3d.y, vec3d.z);
     }
@@ -32,7 +32,7 @@ public class BlockBambooSapling extends Block implements IBlockFragilePlantEleme
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        return iworldreader.getType(blockposition.down()).a(TagsBlock.BAMBOO_PLANTABLE_ON);
+        return iworldreader.getType(blockposition.down()).a((Tag) TagsBlock.BAMBOO_PLANTABLE_ON);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class BlockBambooSapling extends Block implements IBlockFragilePlantEleme
         if (!iblockdata.canPlace(generatoraccess, blockposition)) {
             return Blocks.AIR.getBlockData();
         } else {
-            if (enumdirection == EnumDirection.UP && iblockdata1.getBlock() == Blocks.BAMBOO) {
+            if (enumdirection == EnumDirection.UP && iblockdata1.a(Blocks.BAMBOO)) {
                 generatoraccess.setTypeAndData(blockposition, Blocks.BAMBOO.getBlockData(), 2);
             }
 

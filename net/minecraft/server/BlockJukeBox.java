@@ -1,12 +1,29 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class BlockJukeBox extends BlockTileEntity {
 
     public static final BlockStateBoolean HAS_RECORD = BlockProperties.n;
 
-    protected BlockJukeBox(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockJukeBox.HAS_RECORD, false));
+    protected BlockJukeBox(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockJukeBox.HAS_RECORD, false));
+    }
+
+    @Override
+    public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, @Nullable EntityLiving entityliving, ItemStack itemstack) {
+        super.postPlace(world, blockposition, iblockdata, entityliving, itemstack);
+        NBTTagCompound nbttagcompound = itemstack.getOrCreateTag();
+
+        if (nbttagcompound.hasKey("BlockEntityTag")) {
+            NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("BlockEntityTag");
+
+            if (nbttagcompound1.hasKey("RecordItem")) {
+                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockJukeBox.HAS_RECORD, true), 2);
+            }
+        }
+
     }
 
     @Override
@@ -15,7 +32,7 @@ public class BlockJukeBox extends BlockTileEntity {
             this.dropRecord(world, blockposition);
             iblockdata = (IBlockData) iblockdata.set(BlockJukeBox.HAS_RECORD, false);
             world.setTypeAndData(blockposition, iblockdata, 2);
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.a(world.isClientSide);
         } else {
             return EnumInteractionResult.PASS;
         }
@@ -57,7 +74,7 @@ public class BlockJukeBox extends BlockTileEntity {
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!iblockdata.a(iblockdata1.getBlock())) {
             this.dropRecord(world, blockposition);
             super.remove(iblockdata, world, blockposition, iblockdata1, flag);
         }
@@ -89,7 +106,7 @@ public class BlockJukeBox extends BlockTileEntity {
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 

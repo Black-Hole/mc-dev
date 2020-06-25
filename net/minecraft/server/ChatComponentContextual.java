@@ -5,5 +5,5 @@ import javax.annotation.Nullable;
 
 public interface ChatComponentContextual {
 
-    IChatBaseComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity, int i) throws CommandSyntaxException;
+    IChatMutableComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity, int i) throws CommandSyntaxException;
 }

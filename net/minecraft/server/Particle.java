@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class Particle<T extends ParticleParam> {
+import com.mojang.serialization.Codec;
+
+public abstract class Particle<T extends ParticleParam> {
 
     private final boolean a;
     private final ParticleParam.a<T> b;
@@ -13,4 +15,6 @@ public class Particle<T extends ParticleParam> {
     public ParticleParam.a<T> d() {
         return this.b;
     }
+
+    public abstract Codec<T> e();
 }

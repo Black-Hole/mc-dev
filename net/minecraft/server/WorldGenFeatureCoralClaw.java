@@ -1,17 +1,16 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenFeatureCoralClaw extends WorldGenFeatureCoral {
 
-    public WorldGenFeatureCoralClaw(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
-        super(function);
+    public WorldGenFeatureCoralClaw(Codec<WorldGenFeatureEmptyConfiguration> codec) {
+        super(codec);
     }
 
     @Override
@@ -21,7 +20,7 @@ public class WorldGenFeatureCoralClaw extends WorldGenFeatureCoral {
         } else {
             EnumDirection enumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
             int i = random.nextInt(2) + 2;
-            List<EnumDirection> list = Lists.newArrayList(new EnumDirection[]{enumdirection, enumdirection.f(), enumdirection.g()});
+            List<EnumDirection> list = Lists.newArrayList(new EnumDirection[]{enumdirection, enumdirection.g(), enumdirection.h()});
 
             Collections.shuffle(list, random);
             List<EnumDirection> list1 = list.subList(0, i);
@@ -29,7 +28,7 @@ public class WorldGenFeatureCoralClaw extends WorldGenFeatureCoral {
 
             while (iterator.hasNext()) {
                 EnumDirection enumdirection1 = (EnumDirection) iterator.next();
-                BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(blockposition);
+                BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i();
                 int j = random.nextInt(2) + 1;
 
                 blockposition_mutableblockposition.c(enumdirection1);
@@ -43,7 +42,7 @@ public class WorldGenFeatureCoralClaw extends WorldGenFeatureCoral {
                     blockposition_mutableblockposition.c(EnumDirection.UP);
                     EnumDirection[] aenumdirection = new EnumDirection[]{enumdirection1, EnumDirection.UP};
 
-                    enumdirection2 = aenumdirection[random.nextInt(aenumdirection.length)];
+                    enumdirection2 = (EnumDirection) SystemUtils.a((Object[]) aenumdirection, random);
                     k = random.nextInt(3) + 3;
                 }
 

@@ -10,7 +10,7 @@ public class RecipeArmorDye extends IRecipeComplex {
     }
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
         List<ItemStack> list = Lists.newArrayList();
 
         for (int i = 0; i < inventorycrafting.getSize(); ++i) {
@@ -38,7 +38,7 @@ public class RecipeArmorDye extends IRecipeComplex {
 
     public ItemStack a(InventoryCrafting inventorycrafting) {
         List<ItemDye> list = Lists.newArrayList();
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
 
         for (int i = 0; i < inventorycrafting.getSize(); ++i) {
             ItemStack itemstack1 = inventorycrafting.getItem(i);
@@ -48,13 +48,13 @@ public class RecipeArmorDye extends IRecipeComplex {
 
                 if (item instanceof IDyeable) {
                     if (!itemstack.isEmpty()) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
 
                     itemstack = itemstack1.cloneItemStack();
                 } else {
                     if (!(item instanceof ItemDye)) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
 
                     list.add((ItemDye) item);
@@ -65,7 +65,7 @@ public class RecipeArmorDye extends IRecipeComplex {
         if (!itemstack.isEmpty() && !list.isEmpty()) {
             return IDyeable.a(itemstack, list);
         } else {
-            return ItemStack.a;
+            return ItemStack.b;
         }
     }
 

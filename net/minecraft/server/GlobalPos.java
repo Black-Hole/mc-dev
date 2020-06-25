@@ -1,35 +1,27 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Objects;
 
-public final class GlobalPos implements MinecraftSerializable {
+public final class GlobalPos {
 
-    private final DimensionManager dimensionManager;
+    public static final Codec<GlobalPos> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(World.f.fieldOf("dimension").forGetter(GlobalPos::getDimensionManager), BlockPosition.a.fieldOf("pos").forGetter(GlobalPos::getBlockPosition)).apply(instance, GlobalPos::create);
+    });
+    private final ResourceKey<World> dimensionManager;
     private final BlockPosition blockPosition;
 
-    private GlobalPos(DimensionManager dimensionmanager, BlockPosition blockposition) {
-        this.dimensionManager = dimensionmanager;
+    private GlobalPos(ResourceKey<World> resourcekey, BlockPosition blockposition) {
+        this.dimensionManager = resourcekey;
         this.blockPosition = blockposition;
     }
 
-    public static GlobalPos create(DimensionManager dimensionmanager, BlockPosition blockposition) {
-        return new GlobalPos(dimensionmanager, blockposition);
+    public static GlobalPos create(ResourceKey<World> resourcekey, BlockPosition blockposition) {
+        return new GlobalPos(resourcekey, blockposition);
     }
 
-    public static GlobalPos a(Dynamic<?> dynamic) {
-        return (GlobalPos) dynamic.get("dimension").map(DimensionManager::a).flatMap((dimensionmanager) -> {
-            return dynamic.get("pos").map(BlockPosition::a).map((blockposition) -> {
-                return new GlobalPos(dimensionmanager, blockposition);
-            });
-        }).orElseThrow(() -> {
-            return new IllegalArgumentException("Could not parse GlobalPos");
-        });
-    }
-
-    public DimensionManager getDimensionManager() {
+    public ResourceKey<World> getDimensionManager() {
         return this.dimensionManager;
     }
 
@@ -51,11 +43,6 @@ public final class GlobalPos implements MinecraftSerializable {
 
     public int hashCode() {
         return Objects.hash(new Object[]{this.dimensionManager, this.blockPosition});
-    }
-
-    @Override
-    public <T> T a(DynamicOps<T> dynamicops) {
-        return dynamicops.createMap(ImmutableMap.of(dynamicops.createString("dimension"), this.dimensionManager.a(dynamicops), dynamicops.createString("pos"), this.blockPosition.a(dynamicops)));
     }
 
     public String toString() {

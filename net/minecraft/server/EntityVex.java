@@ -9,8 +9,8 @@ public class EntityVex extends EntityMonster {
     private EntityInsentient c;
     @Nullable
     private BlockPosition d;
-    private boolean bw;
-    private int bx;
+    private boolean bv;
+    private int bw;
 
     public EntityVex(EntityTypes<? extends EntityVex> entitytypes, World world) {
         super(entitytypes, world);
@@ -30,8 +30,8 @@ public class EntityVex extends EntityMonster {
         super.tick();
         this.noclip = false;
         this.setNoGravity(true);
-        if (this.bw && --this.bx <= 0) {
-            this.bx = 20;
+        if (this.bv && --this.bw <= 0) {
+            this.bw = 20;
             this.damageEntity(DamageSource.STARVE, 1.0F);
         }
 
@@ -50,11 +50,8 @@ public class EntityVex extends EntityMonster {
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(14.0D);
-        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(4.0D);
+    public static AttributeProvider.Builder m() {
+        return EntityMonster.eS().a(GenericAttributes.MAX_HEALTH, 14.0D).a(GenericAttributes.ATTACK_DAMAGE, 4.0D);
     }
 
     @Override
@@ -64,8 +61,8 @@ public class EntityVex extends EntityMonster {
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         if (nbttagcompound.hasKey("BoundX")) {
             this.d = new BlockPosition(nbttagcompound.getInt("BoundX"), nbttagcompound.getInt("BoundY"), nbttagcompound.getInt("BoundZ"));
         }
@@ -77,26 +74,26 @@ public class EntityVex extends EntityMonster {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         if (this.d != null) {
             nbttagcompound.setInt("BoundX", this.d.getX());
             nbttagcompound.setInt("BoundY", this.d.getY());
             nbttagcompound.setInt("BoundZ", this.d.getZ());
         }
 
-        if (this.bw) {
-            nbttagcompound.setInt("LifeTicks", this.bx);
+        if (this.bv) {
+            nbttagcompound.setInt("LifeTicks", this.bw);
         }
 
     }
 
-    public EntityInsentient l() {
+    public EntityInsentient eL() {
         return this.c;
     }
 
     @Nullable
-    public BlockPosition eq() {
+    public BlockPosition eM() {
         return this.d;
     }
 
@@ -136,8 +133,8 @@ public class EntityVex extends EntityMonster {
     }
 
     public void a(int i) {
-        this.bw = true;
-        this.bx = i;
+        this.bv = true;
+        this.bw = i;
     }
 
     @Override
@@ -156,7 +153,7 @@ public class EntityVex extends EntityMonster {
     }
 
     @Override
-    public float aI() {
+    public float aO() {
         return 1.0F;
     }
 
@@ -212,10 +209,10 @@ public class EntityVex extends EntityMonster {
 
         @Override
         public void e() {
-            BlockPosition blockposition = EntityVex.this.eq();
+            BlockPosition blockposition = EntityVex.this.eM();
 
             if (blockposition == null) {
-                blockposition = new BlockPosition(EntityVex.this);
+                blockposition = EntityVex.this.getChunkCoordinates();
             }
 
             for (int i = 0; i < 3; ++i) {
@@ -256,7 +253,7 @@ public class EntityVex extends EntityMonster {
 
             EntityVex.this.moveController.a(vec3d.x, vec3d.y, vec3d.z, 1.0D);
             EntityVex.this.setCharging(true);
-            EntityVex.this.a(SoundEffects.ENTITY_VEX_CHARGE, 1.0F, 1.0F);
+            EntityVex.this.playSound(SoundEffects.ENTITY_VEX_CHARGE, 1.0F, 1.0F);
         }
 
         @Override
@@ -269,7 +266,7 @@ public class EntityVex extends EntityMonster {
             EntityLiving entityliving = EntityVex.this.getGoalTarget();
 
             if (EntityVex.this.getBoundingBox().c(entityliving.getBoundingBox())) {
-                EntityVex.this.B(entityliving);
+                EntityVex.this.attackEntity(entityliving);
                 EntityVex.this.setCharging(false);
             } else {
                 double d0 = EntityVex.this.h((Entity) entityliving);
@@ -305,13 +302,13 @@ public class EntityVex extends EntityMonster {
                         Vec3D vec3d1 = EntityVex.this.getMot();
 
                         EntityVex.this.yaw = -((float) MathHelper.d(vec3d1.x, vec3d1.z)) * 57.295776F;
-                        EntityVex.this.aI = EntityVex.this.yaw;
+                        EntityVex.this.aH = EntityVex.this.yaw;
                     } else {
                         double d1 = EntityVex.this.getGoalTarget().locX() - EntityVex.this.locX();
                         double d2 = EntityVex.this.getGoalTarget().locZ() - EntityVex.this.locZ();
 
                         EntityVex.this.yaw = -((float) MathHelper.d(d1, d2)) * 57.295776F;
-                        EntityVex.this.aI = EntityVex.this.yaw;
+                        EntityVex.this.aH = EntityVex.this.yaw;
                     }
                 }
 

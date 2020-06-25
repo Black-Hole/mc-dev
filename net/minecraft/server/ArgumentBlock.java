@@ -13,15 +13,15 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import javax.annotation.Nullable;
 
 public class ArgumentBlock {
 
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.block.tag.disallowed", new Object[0]));
+    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.block.tag.disallowed"));
     public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.block.id.invalid", new Object[]{object});
     });
@@ -37,8 +37,10 @@ public class ArgumentBlock {
     public static final Dynamic2CommandExceptionType f = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("argument.block.property.novalue", new Object[]{object, object1});
     });
-    public static final SimpleCommandExceptionType g = new SimpleCommandExceptionType(new ChatMessage("argument.block.property.unclosed", new Object[0]));
-    private static final Function<SuggestionsBuilder, CompletableFuture<Suggestions>> h = SuggestionsBuilder::buildFuture;
+    public static final SimpleCommandExceptionType g = new SimpleCommandExceptionType(new ChatMessage("argument.block.property.unclosed"));
+    private static final BiFunction<SuggestionsBuilder, Tags<Block>, CompletableFuture<Suggestions>> h = (suggestionsbuilder, tags) -> {
+        return suggestionsbuilder.buildFuture();
+    };
     private final StringReader i;
     private final boolean j;
     private final Map<IBlockState<?>, Comparable<?>> k = Maps.newHashMap();
@@ -50,7 +52,7 @@ public class ArgumentBlock {
     private NBTTagCompound p;
     private MinecraftKey q = new MinecraftKey("");
     private int r;
-    private Function<SuggestionsBuilder, CompletableFuture<Suggestions>> s;
+    private BiFunction<SuggestionsBuilder, Tags<Block>, CompletableFuture<Suggestions>> s;
 
     public ArgumentBlock(StringReader stringreader, boolean flag) {
         this.s = ArgumentBlock.h;
@@ -103,45 +105,45 @@ public class ArgumentBlock {
         return this;
     }
 
-    private CompletableFuture<Suggestions> b(SuggestionsBuilder suggestionsbuilder) {
+    private CompletableFuture<Suggestions> b(SuggestionsBuilder suggestionsbuilder, Tags<Block> tags) {
         if (suggestionsbuilder.getRemaining().isEmpty()) {
             suggestionsbuilder.suggest(String.valueOf(']'));
         }
 
-        return this.d(suggestionsbuilder);
+        return this.d(suggestionsbuilder, tags);
     }
 
-    private CompletableFuture<Suggestions> c(SuggestionsBuilder suggestionsbuilder) {
+    private CompletableFuture<Suggestions> c(SuggestionsBuilder suggestionsbuilder, Tags<Block> tags) {
         if (suggestionsbuilder.getRemaining().isEmpty()) {
             suggestionsbuilder.suggest(String.valueOf(']'));
         }
 
-        return this.e(suggestionsbuilder);
+        return this.e(suggestionsbuilder, tags);
     }
 
-    private CompletableFuture<Suggestions> d(SuggestionsBuilder suggestionsbuilder) {
+    private CompletableFuture<Suggestions> d(SuggestionsBuilder suggestionsbuilder, Tags<Block> tags) {
         String s = suggestionsbuilder.getRemaining().toLowerCase(Locale.ROOT);
-        Iterator iterator = this.o.a().iterator();
+        Iterator iterator = this.o.r().iterator();
 
         while (iterator.hasNext()) {
             IBlockState<?> iblockstate = (IBlockState) iterator.next();
 
-            if (!this.k.containsKey(iblockstate) && iblockstate.a().startsWith(s)) {
-                suggestionsbuilder.suggest(iblockstate.a() + '=');
+            if (!this.k.containsKey(iblockstate) && iblockstate.getName().startsWith(s)) {
+                suggestionsbuilder.suggest(iblockstate.getName() + '=');
             }
         }
 
         return suggestionsbuilder.buildFuture();
     }
 
-    private CompletableFuture<Suggestions> e(SuggestionsBuilder suggestionsbuilder) {
+    private CompletableFuture<Suggestions> e(SuggestionsBuilder suggestionsbuilder, Tags<Block> tags) {
         String s = suggestionsbuilder.getRemaining().toLowerCase(Locale.ROOT);
 
         if (this.q != null && !this.q.getKey().isEmpty()) {
-            Tag<Block> tag = TagsBlock.a().a(this.q);
+            Tag<Block> tag = tags.a(this.q);
 
             if (tag != null) {
-                Iterator iterator = tag.a().iterator();
+                Iterator iterator = tag.getTagged().iterator();
 
                 while (iterator.hasNext()) {
                     Block block = (Block) iterator.next();
@@ -150,8 +152,8 @@ public class ArgumentBlock {
                     while (iterator1.hasNext()) {
                         IBlockState<?> iblockstate = (IBlockState) iterator1.next();
 
-                        if (!this.l.containsKey(iblockstate.a()) && iblockstate.a().startsWith(s)) {
-                            suggestionsbuilder.suggest(iblockstate.a() + '=');
+                        if (!this.l.containsKey(iblockstate.getName()) && iblockstate.getName().startsWith(s)) {
+                            suggestionsbuilder.suggest(iblockstate.getName() + '=');
                         }
                     }
                 }
@@ -161,23 +163,23 @@ public class ArgumentBlock {
         return suggestionsbuilder.buildFuture();
     }
 
-    private CompletableFuture<Suggestions> f(SuggestionsBuilder suggestionsbuilder) {
-        if (suggestionsbuilder.getRemaining().isEmpty() && this.k()) {
+    private CompletableFuture<Suggestions> f(SuggestionsBuilder suggestionsbuilder, Tags<Block> tags) {
+        if (suggestionsbuilder.getRemaining().isEmpty() && this.a(tags)) {
             suggestionsbuilder.suggest(String.valueOf('{'));
         }
 
         return suggestionsbuilder.buildFuture();
     }
 
-    private boolean k() {
+    private boolean a(Tags<Block> tags) {
         if (this.o != null) {
             return this.o.getBlock().isTileEntity();
         } else {
             if (this.q != null) {
-                Tag<Block> tag = TagsBlock.a().a(this.q);
+                Tag<Block> tag = tags.a(this.q);
 
                 if (tag != null) {
-                    Iterator iterator = tag.a().iterator();
+                    Iterator iterator = tag.getTagged().iterator();
 
                     while (iterator.hasNext()) {
                         Block block = (Block) iterator.next();
@@ -193,7 +195,7 @@ public class ArgumentBlock {
         }
     }
 
-    private CompletableFuture<Suggestions> g(SuggestionsBuilder suggestionsbuilder) {
+    private CompletableFuture<Suggestions> g(SuggestionsBuilder suggestionsbuilder, Tags<Block> tags) {
         if (suggestionsbuilder.getRemaining().isEmpty()) {
             suggestionsbuilder.suggest(String.valueOf('='));
         }
@@ -201,12 +203,12 @@ public class ArgumentBlock {
         return suggestionsbuilder.buildFuture();
     }
 
-    private CompletableFuture<Suggestions> h(SuggestionsBuilder suggestionsbuilder) {
+    private CompletableFuture<Suggestions> h(SuggestionsBuilder suggestionsbuilder, Tags<Block> tags) {
         if (suggestionsbuilder.getRemaining().isEmpty()) {
             suggestionsbuilder.suggest(String.valueOf(']'));
         }
 
-        if (suggestionsbuilder.getRemaining().isEmpty() && this.k.size() < this.o.a().size()) {
+        if (suggestionsbuilder.getRemaining().isEmpty() && this.k.size() < this.o.r().size()) {
             suggestionsbuilder.suggest(String.valueOf(','));
         }
 
@@ -229,14 +231,14 @@ public class ArgumentBlock {
         return suggestionsbuilder;
     }
 
-    private CompletableFuture<Suggestions> a(SuggestionsBuilder suggestionsbuilder, String s) {
+    private CompletableFuture<Suggestions> a(SuggestionsBuilder suggestionsbuilder, Tags<Block> tags, String s) {
         boolean flag = false;
 
         if (this.q != null && !this.q.getKey().isEmpty()) {
-            Tag<Block> tag = TagsBlock.a().a(this.q);
+            Tag<Block> tag = tags.a(this.q);
 
             if (tag != null) {
-                Iterator iterator = tag.a().iterator();
+                Iterator iterator = tag.getTagged().iterator();
 
                 while (iterator.hasNext()) {
                     Block block = (Block) iterator.next();
@@ -252,7 +254,7 @@ public class ArgumentBlock {
                         while (iterator1.hasNext()) {
                             IBlockState<?> iblockstate1 = (IBlockState) iterator1.next();
 
-                            if (!this.l.containsKey(iblockstate1.a())) {
+                            if (!this.l.containsKey(iblockstate1.getName())) {
                                 flag = true;
                                 break;
                             }
@@ -270,14 +272,14 @@ public class ArgumentBlock {
         return suggestionsbuilder.buildFuture();
     }
 
-    private CompletableFuture<Suggestions> i(SuggestionsBuilder suggestionsbuilder) {
+    private CompletableFuture<Suggestions> i(SuggestionsBuilder suggestionsbuilder, Tags<Block> tags) {
         if (suggestionsbuilder.getRemaining().isEmpty()) {
-            Tag<Block> tag = TagsBlock.a().a(this.q);
+            Tag<Block> tag = tags.a(this.q);
 
             if (tag != null) {
                 boolean flag = false;
                 boolean flag1 = false;
-                Iterator iterator = tag.a().iterator();
+                Iterator iterator = tag.getTagged().iterator();
 
                 while (iterator.hasNext()) {
                     Block block = (Block) iterator.next();
@@ -299,10 +301,10 @@ public class ArgumentBlock {
             }
         }
 
-        return this.k(suggestionsbuilder);
+        return this.k(suggestionsbuilder, tags);
     }
 
-    private CompletableFuture<Suggestions> j(SuggestionsBuilder suggestionsbuilder) {
+    private CompletableFuture<Suggestions> j(SuggestionsBuilder suggestionsbuilder, Tags<Block> tags) {
         if (suggestionsbuilder.getRemaining().isEmpty()) {
             if (!this.o.getBlock().getStates().d().isEmpty()) {
                 suggestionsbuilder.suggest(String.valueOf('['));
@@ -316,13 +318,13 @@ public class ArgumentBlock {
         return suggestionsbuilder.buildFuture();
     }
 
-    private CompletableFuture<Suggestions> k(SuggestionsBuilder suggestionsbuilder) {
-        return ICompletionProvider.a((Iterable) TagsBlock.a().a(), suggestionsbuilder.createOffset(this.r).add(suggestionsbuilder));
+    private CompletableFuture<Suggestions> k(SuggestionsBuilder suggestionsbuilder, Tags<Block> tags) {
+        return ICompletionProvider.a((Iterable) tags.a(), suggestionsbuilder.createOffset(this.r).add(suggestionsbuilder));
     }
 
-    private CompletableFuture<Suggestions> l(SuggestionsBuilder suggestionsbuilder) {
+    private CompletableFuture<Suggestions> l(SuggestionsBuilder suggestionsbuilder, Tags<Block> tags) {
         if (this.j) {
-            ICompletionProvider.a((Iterable) TagsBlock.a().a(), suggestionsbuilder, String.valueOf('#'));
+            ICompletionProvider.a((Iterable) tags.a(), suggestionsbuilder, String.valueOf('#'));
         }
 
         ICompletionProvider.a((Iterable) IRegistry.BLOCK.keySet(), suggestionsbuilder);
@@ -383,7 +385,7 @@ public class ArgumentBlock {
 
                 this.i.skip();
                 this.i.skipWhitespace();
-                this.s = (suggestionsbuilder) -> {
+                this.s = (suggestionsbuilder, tags) -> {
                     return a(suggestionsbuilder, iblockstate).buildFuture();
                 };
                 int j = this.i.getCursor();
@@ -441,8 +443,8 @@ public class ArgumentBlock {
 
                 this.i.skip();
                 this.i.skipWhitespace();
-                this.s = (suggestionsbuilder) -> {
-                    return this.a(suggestionsbuilder, s);
+                this.s = (suggestionsbuilder, tags) -> {
+                    return this.a(suggestionsbuilder, tags, s);
                 };
                 i = this.i.getCursor();
                 String s1 = this.i.readString();
@@ -490,14 +492,14 @@ public class ArgumentBlock {
             this.k.put(iblockstate, optional.get());
         } else {
             this.i.setCursor(i);
-            throw ArgumentBlock.e.createWithContext(this.i, this.m.toString(), iblockstate.a(), s);
+            throw ArgumentBlock.e.createWithContext(this.i, this.m.toString(), iblockstate.getName(), s);
         }
     }
 
     public static String a(IBlockData iblockdata) {
         StringBuilder stringbuilder = new StringBuilder(IRegistry.BLOCK.getKey(iblockdata.getBlock()).toString());
 
-        if (!iblockdata.a().isEmpty()) {
+        if (!iblockdata.r().isEmpty()) {
             stringbuilder.append('[');
             boolean flag = false;
 
@@ -518,13 +520,13 @@ public class ArgumentBlock {
     }
 
     private static <T extends Comparable<T>> void a(StringBuilder stringbuilder, IBlockState<T> iblockstate, Comparable<?> comparable) {
-        stringbuilder.append(iblockstate.a());
+        stringbuilder.append(iblockstate.getName());
         stringbuilder.append('=');
         stringbuilder.append(iblockstate.a(comparable));
     }
 
-    public CompletableFuture<Suggestions> a(SuggestionsBuilder suggestionsbuilder) {
-        return (CompletableFuture) this.s.apply(suggestionsbuilder.createOffset(this.i.getCursor()));
+    public CompletableFuture<Suggestions> a(SuggestionsBuilder suggestionsbuilder, Tags<Block> tags) {
+        return (CompletableFuture) this.s.apply(suggestionsbuilder.createOffset(this.i.getCursor()), tags);
     }
 
     public Map<String, String> j() {

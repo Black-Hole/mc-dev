@@ -20,23 +20,23 @@ public class ItemGlassBottle extends Item {
 
             entityareaeffectcloud.setRadius(entityareaeffectcloud.getRadius() - 0.5F);
             world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-            return InteractionResultWrapper.success(this.a(itemstack, entityhuman, new ItemStack(Items.DRAGON_BREATH)));
+            return InteractionResultWrapper.a(this.a(itemstack, entityhuman, new ItemStack(Items.DRAGON_BREATH)), world.s_());
         } else {
-            MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.SOURCE_ONLY);
+            MovingObjectPositionBlock movingobjectpositionblock = a(world, entityhuman, RayTrace.FluidCollisionOption.SOURCE_ONLY);
 
-            if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
+            if (movingobjectpositionblock.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
                 return InteractionResultWrapper.pass(itemstack);
             } else {
-                if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-                    BlockPosition blockposition = ((MovingObjectPositionBlock) movingobjectposition).getBlockPosition();
+                if (movingobjectpositionblock.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
+                    BlockPosition blockposition = ((MovingObjectPositionBlock) movingobjectpositionblock).getBlockPosition();
 
                     if (!world.a(entityhuman, blockposition)) {
                         return InteractionResultWrapper.pass(itemstack);
                     }
 
-                    if (world.getFluid(blockposition).a(TagsFluid.WATER)) {
+                    if (world.getFluid(blockposition).a((Tag) TagsFluid.WATER)) {
                         world.playSound(entityhuman, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-                        return InteractionResultWrapper.success(this.a(itemstack, entityhuman, PotionUtil.a(new ItemStack(Items.POTION), Potions.WATER)));
+                        return InteractionResultWrapper.a(this.a(itemstack, entityhuman, PotionUtil.a(new ItemStack(Items.POTION), Potions.WATER)), world.s_());
                     }
                 }
 

@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 public class ResourcePackFolder extends ResourcePackAbstract {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final boolean c = SystemUtils.g() == SystemUtils.OS.WINDOWS;
+    private static final boolean c = SystemUtils.i() == SystemUtils.OS.WINDOWS;
     private static final CharMatcher d = CharMatcher.is('\\');
 
     public ResourcePackFolder(File file) {
@@ -93,7 +93,8 @@ public class ResourcePackFolder extends ResourcePackAbstract {
         return set;
     }
 
-    public void close() throws IOException {}
+    @Override
+    public void close() {}
 
     @Override
     public Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, String s1, int i, Predicate<String> predicate) {

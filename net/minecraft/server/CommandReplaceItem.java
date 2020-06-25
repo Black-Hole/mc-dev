@@ -5,7 +5,6 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
@@ -16,7 +15,7 @@ import java.util.List;
 
 public class CommandReplaceItem {
 
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.replaceitem.block.failed", new Object[0]));
+    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.replaceitem.block.failed"));
     public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.replaceitem.slot.inapplicable", new Object[]{object});
     });
@@ -48,7 +47,7 @@ public class CommandReplaceItem {
 
             if (i >= 0 && i < iinventory.getSize()) {
                 iinventory.setItem(i, itemstack);
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.block.success", new Object[]{blockposition.getX(), blockposition.getY(), blockposition.getZ(), itemstack.B()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.block.success", new Object[]{blockposition.getX(), blockposition.getY(), blockposition.getZ(), itemstack.C()}), true);
                 return 1;
             } else {
                 throw CommandReplaceItem.b.create(i);
@@ -76,12 +75,12 @@ public class CommandReplaceItem {
         }
 
         if (list.isEmpty()) {
-            throw CommandReplaceItem.c.create(itemstack.B(), i);
+            throw CommandReplaceItem.c.create(itemstack.C(), i);
         } else {
             if (list.size() == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.single", new Object[]{((Entity) list.iterator().next()).getScoreboardDisplayName(), itemstack.B()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.single", new Object[]{((Entity) list.iterator().next()).getScoreboardDisplayName(), itemstack.C()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.multiple", new Object[]{list.size(), itemstack.B()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.multiple", new Object[]{list.size(), itemstack.C()}), true);
             }
 
             return list.size();

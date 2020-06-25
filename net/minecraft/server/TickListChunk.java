@@ -1,22 +1,24 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 public class TickListChunk<T> implements TickList<T> {
 
-    private final Set<NextTickListEntry<T>> a;
+    private final List<TickListChunk.a<T>> a;
     private final Function<T, MinecraftKey> b;
 
-    public TickListChunk(Function<T, MinecraftKey> function, List<NextTickListEntry<T>> list) {
-        this(function, (Set) Sets.newHashSet(list));
+    public TickListChunk(Function<T, MinecraftKey> function, List<NextTickListEntry<T>> list, long i) {
+        this(function, (List) list.stream().map((nextticklistentry) -> {
+            return new TickListChunk.a<>(nextticklistentry.b(), nextticklistentry.a, (int) (nextticklistentry.b - i), nextticklistentry.c);
+        }).collect(Collectors.toList()));
     }
 
-    private TickListChunk(Function<T, MinecraftKey> function, Set<NextTickListEntry<T>> set) {
-        this.a = set;
+    private TickListChunk(Function<T, MinecraftKey> function, List<TickListChunk.a<T>> list) {
+        this.a = list;
         this.b = function;
     }
 
@@ -27,7 +29,7 @@ public class TickListChunk<T> implements TickList<T> {
 
     @Override
     public void a(BlockPosition blockposition, T t0, int i, TickListPriority ticklistpriority) {
-        this.a.add(new NextTickListEntry<>(blockposition, t0, (long) i, ticklistpriority));
+        this.a.add(new TickListChunk.a<>(t0, blockposition, i, ticklistpriority));
     }
 
     @Override
@@ -35,34 +37,65 @@ public class TickListChunk<T> implements TickList<T> {
         return false;
     }
 
-    @Override
-    public void a(Stream<NextTickListEntry<T>> stream) {
-        Set set = this.a;
+    public NBTTagList b() {
+        NBTTagList nbttaglist = new NBTTagList();
+        Iterator iterator = this.a.iterator();
 
-        this.a.getClass();
-        stream.forEach(set::add);
-    }
+        while (iterator.hasNext()) {
+            TickListChunk.a<T> ticklistchunk_a = (TickListChunk.a) iterator.next();
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-    public Stream<NextTickListEntry<T>> b() {
-        return this.a.stream();
-    }
+            nbttagcompound.setString("i", ((MinecraftKey) this.b.apply(ticklistchunk_a.d)).toString());
+            nbttagcompound.setInt("x", ticklistchunk_a.a.getX());
+            nbttagcompound.setInt("y", ticklistchunk_a.a.getY());
+            nbttagcompound.setInt("z", ticklistchunk_a.a.getZ());
+            nbttagcompound.setInt("t", ticklistchunk_a.b);
+            nbttagcompound.setInt("p", ticklistchunk_a.c.a());
+            nbttaglist.add(nbttagcompound);
+        }
 
-    public NBTTagList a(long i) {
-        return TickListServer.a(this.b, this.a, i);
+        return nbttaglist;
     }
 
     public static <T> TickListChunk<T> a(NBTTagList nbttaglist, Function<T, MinecraftKey> function, Function<MinecraftKey, T> function1) {
-        Set<NextTickListEntry<T>> set = Sets.newHashSet();
+        List<TickListChunk.a<T>> list = Lists.newArrayList();
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
             T t0 = function1.apply(new MinecraftKey(nbttagcompound.getString("i")));
 
             if (t0 != null) {
-                set.add(new NextTickListEntry<>(new BlockPosition(nbttagcompound.getInt("x"), nbttagcompound.getInt("y"), nbttagcompound.getInt("z")), t0, (long) nbttagcompound.getInt("t"), TickListPriority.a(nbttagcompound.getInt("p"))));
+                BlockPosition blockposition = new BlockPosition(nbttagcompound.getInt("x"), nbttagcompound.getInt("y"), nbttagcompound.getInt("z"));
+
+                list.add(new TickListChunk.a<>(t0, blockposition, nbttagcompound.getInt("t"), TickListPriority.a(nbttagcompound.getInt("p"))));
             }
         }
 
-        return new TickListChunk<>(function, set);
+        return new TickListChunk<>(function, list);
+    }
+
+    public void a(TickList<T> ticklist) {
+        this.a.forEach((ticklistchunk_a) -> {
+            ticklist.a(ticklistchunk_a.a, ticklistchunk_a.d, ticklistchunk_a.b, ticklistchunk_a.c);
+        });
+    }
+
+    static class a<T> {
+
+        private final T d;
+        public final BlockPosition a;
+        public final int b;
+        public final TickListPriority c;
+
+        private a(T t0, BlockPosition blockposition, int i, TickListPriority ticklistpriority) {
+            this.d = t0;
+            this.a = blockposition;
+            this.b = i;
+            this.c = ticklistpriority;
+        }
+
+        public String toString() {
+            return this.d + ": " + this.a + ", " + this.b + ", " + this.c;
+        }
     }
 }

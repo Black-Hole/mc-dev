@@ -18,11 +18,8 @@ public class EntityCow extends EntityAnimal {
         this.goalSelector.a(7, new PathfinderGoalRandomLookaround(this));
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(10.0D);
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
+    public static AttributeProvider.Builder eL() {
+        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
     @Override
@@ -42,7 +39,7 @@ public class EntityCow extends EntityAnimal {
 
     @Override
     protected void a(BlockPosition blockposition, IBlockData iblockdata) {
-        this.a(SoundEffects.ENTITY_COW_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEffects.ENTITY_COW_STEP, 0.15F, 1.0F);
     }
 
     @Override
@@ -51,21 +48,17 @@ public class EntityCow extends EntityAnimal {
     }
 
     @Override
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+    public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getItem() == Items.BUCKET && !entityhuman.abilities.canInstantlyBuild && !this.isBaby()) {
-            entityhuman.a(SoundEffects.ENTITY_COW_MILK, 1.0F, 1.0F);
-            itemstack.subtract(1);
-            if (itemstack.isEmpty()) {
-                entityhuman.a(enumhand, new ItemStack(Items.MILK_BUCKET));
-            } else if (!entityhuman.inventory.pickup(new ItemStack(Items.MILK_BUCKET))) {
-                entityhuman.drop(new ItemStack(Items.MILK_BUCKET), false);
-            }
+        if (itemstack.getItem() == Items.BUCKET && !this.isBaby()) {
+            entityhuman.playSound(SoundEffects.ENTITY_COW_MILK, 1.0F, 1.0F);
+            ItemStack itemstack1 = ItemLiquidUtil.a(itemstack, entityhuman, Items.MILK_BUCKET.r());
 
-            return true;
+            entityhuman.a(enumhand, itemstack1);
+            return EnumInteractionResult.a(this.world.isClientSide);
         } else {
-            return super.a(entityhuman, enumhand);
+            return super.b(entityhuman, enumhand);
         }
     }
 

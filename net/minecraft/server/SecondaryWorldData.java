@@ -1,23 +1,20 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
+import java.util.UUID;
 
-public class SecondaryWorldData extends WorldData {
+public class SecondaryWorldData implements IWorldDataServer {
 
-    private final WorldData b;
+    private final SaveData a;
+    private final IWorldDataServer b;
 
-    public SecondaryWorldData(WorldData worlddata) {
-        this.b = worlddata;
+    public SecondaryWorldData(SaveData savedata, IWorldDataServer iworlddataserver) {
+        this.a = savedata;
+        this.b = iworlddataserver;
     }
 
     @Override
-    public NBTTagCompound a(@Nullable NBTTagCompound nbttagcompound) {
-        return this.b.a(nbttagcompound);
-    }
-
-    @Override
-    public long getSeed() {
-        return this.b.getSeed();
+    public int a() {
+        return this.b.a();
     }
 
     @Override
@@ -31,11 +28,6 @@ public class SecondaryWorldData extends WorldData {
     }
 
     @Override
-    public int d() {
-        return this.b.d();
-    }
-
-    @Override
     public long getTime() {
         return this.b.getTime();
     }
@@ -46,19 +38,17 @@ public class SecondaryWorldData extends WorldData {
     }
 
     @Override
-    public NBTTagCompound h() {
-        return this.b.h();
-    }
-
-    @Override
     public String getName() {
-        return this.b.getName();
+        return this.a.getName();
     }
 
     @Override
-    public int j() {
-        return this.b.j();
+    public int g() {
+        return this.b.g();
     }
+
+    @Override
+    public void a(int i) {}
 
     @Override
     public boolean isThundering() {
@@ -82,8 +72,17 @@ public class SecondaryWorldData extends WorldData {
 
     @Override
     public EnumGamemode getGameType() {
-        return this.b.getGameType();
+        return this.a.getGameType();
     }
+
+    @Override
+    public void b(int i) {}
+
+    @Override
+    public void c(int i) {}
+
+    @Override
+    public void d(int i) {}
 
     @Override
     public void setTime(long i) {}
@@ -93,12 +92,6 @@ public class SecondaryWorldData extends WorldData {
 
     @Override
     public void setSpawn(BlockPosition blockposition) {}
-
-    @Override
-    public void setName(String s) {}
-
-    @Override
-    public void d(int i) {}
 
     @Override
     public void setThundering(boolean flag) {}
@@ -113,74 +106,72 @@ public class SecondaryWorldData extends WorldData {
     public void setWeatherDuration(int i) {}
 
     @Override
-    public boolean shouldGenerateMapFeatures() {
-        return this.b.shouldGenerateMapFeatures();
-    }
+    public void setGameType(EnumGamemode enumgamemode) {}
 
     @Override
     public boolean isHardcore() {
-        return this.b.isHardcore();
+        return this.a.isHardcore();
     }
 
     @Override
-    public WorldType getType() {
-        return this.b.getType();
+    public boolean n() {
+        return this.a.n();
     }
 
     @Override
-    public void a(WorldType worldtype) {}
-
-    @Override
-    public boolean t() {
-        return this.b.t();
+    public boolean o() {
+        return this.b.o();
     }
 
     @Override
     public void c(boolean flag) {}
 
     @Override
-    public boolean u() {
-        return this.b.u();
+    public GameRules p() {
+        return this.a.p();
     }
 
     @Override
-    public void d(boolean flag) {}
+    public WorldBorder.c q() {
+        return this.b.q();
+    }
 
     @Override
-    public GameRules v() {
-        return this.b.v();
-    }
+    public void a(WorldBorder.c worldborder_c) {}
 
     @Override
     public EnumDifficulty getDifficulty() {
-        return this.b.getDifficulty();
+        return this.a.getDifficulty();
     }
-
-    @Override
-    public void setDifficulty(EnumDifficulty enumdifficulty) {}
 
     @Override
     public boolean isDifficultyLocked() {
-        return this.b.isDifficultyLocked();
+        return this.a.isDifficultyLocked();
     }
 
     @Override
-    public void e(boolean flag) {}
-
-    @Override
-    public CustomFunctionCallbackTimerQueue<MinecraftServer> y() {
-        return this.b.y();
+    public CustomFunctionCallbackTimerQueue<MinecraftServer> t() {
+        return this.b.t();
     }
 
     @Override
-    public void a(DimensionManager dimensionmanager, NBTTagCompound nbttagcompound) {
-        this.b.a(dimensionmanager, nbttagcompound);
+    public int u() {
+        return 0;
     }
 
     @Override
-    public NBTTagCompound a(DimensionManager dimensionmanager) {
-        return this.b.a(dimensionmanager);
+    public void g(int i) {}
+
+    @Override
+    public int v() {
+        return 0;
     }
+
+    @Override
+    public void h(int i) {}
+
+    @Override
+    public void a(UUID uuid) {}
 
     @Override
     public void a(CrashReportSystemDetails crashreportsystemdetails) {

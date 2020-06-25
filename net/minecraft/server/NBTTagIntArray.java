@@ -118,18 +118,18 @@ public class NBTTagIntArray extends NBTList<NBTTagInt> {
 
     @Override
     public IChatBaseComponent a(String s, int i) {
-        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("I")).a(NBTTagIntArray.g);
-        IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText("[")).addSibling(ichatbasecomponent).a(";");
+        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("I")).a(NBTTagIntArray.g);
+        IChatMutableComponent ichatmutablecomponent1 = (new ChatComponentText("[")).addSibling(ichatmutablecomponent).c(";");
 
         for (int j = 0; j < this.data.length; ++j) {
-            ichatbasecomponent1.a(" ").addSibling((new ChatComponentText(String.valueOf(this.data[j]))).a(NBTTagIntArray.f));
+            ichatmutablecomponent1.c(" ").addSibling((new ChatComponentText(String.valueOf(this.data[j]))).a(NBTTagIntArray.f));
             if (j != this.data.length - 1) {
-                ichatbasecomponent1.a(",");
+                ichatmutablecomponent1.c(",");
             }
         }
 
-        ichatbasecomponent1.a("]");
-        return ichatbasecomponent1;
+        ichatmutablecomponent1.c("]");
+        return ichatmutablecomponent1;
     }
 
     public int size() {
@@ -177,6 +177,11 @@ public class NBTTagIntArray extends NBTList<NBTTagInt> {
 
         this.data = ArrayUtils.remove(this.data, i);
         return NBTTagInt.a(j);
+    }
+
+    @Override
+    public byte d_() {
+        return 3;
     }
 
     public void clear() {

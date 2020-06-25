@@ -5,28 +5,28 @@ import javax.annotation.Nullable;
 
 public class EntityLlamaTrader extends EntityLlama {
 
-    private int bF = 47999;
+    private int bD = 47999;
 
     public EntityLlamaTrader(EntityTypes<? extends EntityLlamaTrader> entitytypes, World world) {
         super(entitytypes, world);
     }
 
     @Override
-    protected EntityLlama fa() {
+    protected EntityLlama fA() {
         return (EntityLlama) EntityTypes.TRADER_LLAMA.a(this.world);
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
-        nbttagcompound.setInt("DespawnDelay", this.bF);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
+        nbttagcompound.setInt("DespawnDelay", this.bD);
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("DespawnDelay", 99)) {
-            this.bF = nbttagcompound.getInt("DespawnDelay");
+            this.bD = nbttagcompound.getInt("DespawnDelay");
         }
 
     }
@@ -39,11 +39,11 @@ public class EntityLlamaTrader extends EntityLlama {
     }
 
     @Override
-    protected void g(EntityHuman entityhuman) {
+    protected void h(EntityHuman entityhuman) {
         Entity entity = this.getLeashHolder();
 
         if (!(entity instanceof EntityVillagerTrader)) {
-            super.g(entityhuman);
+            super.h(entityhuman);
         }
     }
 
@@ -51,15 +51,15 @@ public class EntityLlamaTrader extends EntityLlama {
     public void movementTick() {
         super.movementTick();
         if (!this.world.isClientSide) {
-            this.ff();
+            this.fF();
         }
 
     }
 
-    private void ff() {
-        if (this.fg()) {
-            this.bF = this.fh() ? ((EntityVillagerTrader) this.getLeashHolder()).eA() - 1 : this.bF - 1;
-            if (this.bF <= 0) {
+    private void fF() {
+        if (this.fG()) {
+            this.bD = this.fH() ? ((EntityVillagerTrader) this.getLeashHolder()).eX() - 1 : this.bD - 1;
+            if (this.bD <= 0) {
                 this.unleash(true, false);
                 this.die();
             }
@@ -67,16 +67,16 @@ public class EntityLlamaTrader extends EntityLlama {
         }
     }
 
-    private boolean fg() {
-        return !this.isTamed() && !this.fi() && !this.hasSinglePlayerPassenger();
+    private boolean fG() {
+        return !this.isTamed() && !this.fI() && !this.hasSinglePlayerPassenger();
     }
 
-    private boolean fh() {
+    private boolean fH() {
         return this.getLeashHolder() instanceof EntityVillagerTrader;
     }
 
-    private boolean fi() {
-        return this.isLeashed() && !this.fh();
+    private boolean fI() {
+        return this.isLeashed() && !this.fH();
     }
 
     @Nullable
@@ -119,7 +119,7 @@ public class EntityLlamaTrader extends EntityLlama {
                     EntityVillagerTrader entityvillagertrader = (EntityVillagerTrader) entity;
 
                     this.c = entityvillagertrader.getLastDamager();
-                    int i = entityvillagertrader.cI();
+                    int i = entityvillagertrader.cZ();
 
                     return i != this.d && this.a(this.c, PathfinderTargetCondition.a);
                 }
@@ -132,7 +132,7 @@ public class EntityLlamaTrader extends EntityLlama {
             Entity entity = this.b.getLeashHolder();
 
             if (entity instanceof EntityVillagerTrader) {
-                this.d = ((EntityVillagerTrader) entity).cI();
+                this.d = ((EntityVillagerTrader) entity).cZ();
             }
 
             super.c();

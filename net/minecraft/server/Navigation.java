@@ -19,7 +19,7 @@ public class Navigation extends NavigationAbstract {
 
     @Override
     protected boolean a() {
-        return this.a.onGround || this.p() || this.a.isPassenger();
+        return this.a.isOnGround() || this.p() || this.a.isPassenger();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class Navigation extends NavigationAbstract {
 
     @Override
     public PathEntity a(Entity entity, int i) {
-        return this.a(new BlockPosition(entity), i);
+        return this.a(entity.getChunkCoordinates(), i);
     }
 
     private int t() {
@@ -86,8 +86,8 @@ public class Navigation extends NavigationAbstract {
     }
 
     @Override
-    protected void F_() {
-        super.F_();
+    protected void E_() {
+        super.E_();
         if (this.p) {
             if (this.b.f(new BlockPosition(this.a.locX(), this.a.locY() + 0.5D, this.a.locZ()))) {
                 return;
@@ -185,15 +185,7 @@ public class Navigation extends NavigationAbstract {
                     if (d2 * d0 + d3 * d1 >= 0.0D) {
                         PathType pathtype = this.o.a(this.b, i2, j - 1, j2, this.a, l, i1, j1, true, true);
 
-                        if (pathtype == PathType.WATER) {
-                            return false;
-                        }
-
-                        if (pathtype == PathType.LAVA) {
-                            return false;
-                        }
-
-                        if (pathtype == PathType.OPEN) {
+                        if (!this.a(pathtype)) {
                             return false;
                         }
 
@@ -213,6 +205,10 @@ public class Navigation extends NavigationAbstract {
 
             return true;
         }
+    }
+
+    protected boolean a(PathType pathtype) {
+        return pathtype == PathType.WATER ? false : (pathtype == PathType.LAVA ? false : pathtype != PathType.OPEN);
     }
 
     private boolean b(int i, int j, int k, int l, int i1, int j1, Vec3D vec3d, double d0, double d1) {

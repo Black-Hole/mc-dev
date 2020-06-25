@@ -2,10 +2,8 @@ package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import java.util.Arrays;
@@ -25,7 +23,7 @@ public class DataConverterLeavesBiome extends DataFix {
         return this.fixTypeEverywhereTyped("Leaves fix", type, (typed) -> {
             return typed.updateTyped(opticfinder, (typed1) -> {
                 return typed1.update(DSL.remainderFinder(), (dynamic) -> {
-                    Optional<IntStream> optional = dynamic.get("Biomes").asIntStreamOpt();
+                    Optional<IntStream> optional = dynamic.get("Biomes").asIntStreamOpt().result();
 
                     if (!optional.isPresent()) {
                         return dynamic;

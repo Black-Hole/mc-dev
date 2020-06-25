@@ -1,28 +1,22 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class WorldGenDecoratorRangeConfiguration implements WorldGenFeatureDecoratorConfiguration {
 
-    public final int a;
+    public static final Codec<WorldGenDecoratorRangeConfiguration> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(Codec.INT.fieldOf("min").forGetter((worldgendecoratorrangeconfiguration) -> {
+            return worldgendecoratorrangeconfiguration.b;
+        }), Codec.INT.fieldOf("max").forGetter((worldgendecoratorrangeconfiguration) -> {
+            return worldgendecoratorrangeconfiguration.c;
+        })).apply(instance, WorldGenDecoratorRangeConfiguration::new);
+    });
     public final int b;
+    public final int c;
 
     public WorldGenDecoratorRangeConfiguration(int i, int j) {
-        this.a = i;
-        this.b = j;
-    }
-
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("min"), dynamicops.createInt(this.a), dynamicops.createString("max"), dynamicops.createInt(this.b))));
-    }
-
-    public static WorldGenDecoratorRangeConfiguration a(Dynamic<?> dynamic) {
-        int i = dynamic.get("min").asInt(0);
-        int j = dynamic.get("max").asInt(0);
-
-        return new WorldGenDecoratorRangeConfiguration(i, j);
+        this.b = i;
+        this.c = j;
     }
 }

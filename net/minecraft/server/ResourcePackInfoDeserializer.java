@@ -9,14 +9,14 @@ public class ResourcePackInfoDeserializer implements ResourcePackMetaParser<Reso
 
     @Override
     public ResourcePackInfo a(JsonObject jsonobject) {
-        IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(jsonobject.get("description"));
+        IChatMutableComponent ichatmutablecomponent = IChatBaseComponent.ChatSerializer.a(jsonobject.get("description"));
 
-        if (ichatbasecomponent == null) {
+        if (ichatmutablecomponent == null) {
             throw new JsonParseException("Invalid/missing description!");
         } else {
             int i = ChatDeserializer.n(jsonobject, "pack_format");
 
-            return new ResourcePackInfo(ichatbasecomponent, i);
+            return new ResourcePackInfo(ichatmutablecomponent, i);
         }
     }
 

@@ -17,39 +17,37 @@ public enum BlockPropertyInstrument implements INamable {
         return this.q;
     }
 
-    public SoundEffect a() {
+    public SoundEffect b() {
         return this.r;
     }
 
     public static BlockPropertyInstrument a(IBlockData iblockdata) {
-        Block block = iblockdata.getBlock();
-
-        if (block == Blocks.CLAY) {
+        if (iblockdata.a(Blocks.CLAY)) {
             return BlockPropertyInstrument.FLUTE;
-        } else if (block == Blocks.GOLD_BLOCK) {
+        } else if (iblockdata.a(Blocks.GOLD_BLOCK)) {
             return BlockPropertyInstrument.BELL;
-        } else if (block.a(TagsBlock.WOOL)) {
+        } else if (iblockdata.a((Tag) TagsBlock.WOOL)) {
             return BlockPropertyInstrument.GUITAR;
-        } else if (block == Blocks.PACKED_ICE) {
+        } else if (iblockdata.a(Blocks.PACKED_ICE)) {
             return BlockPropertyInstrument.CHIME;
-        } else if (block == Blocks.BONE_BLOCK) {
+        } else if (iblockdata.a(Blocks.BONE_BLOCK)) {
             return BlockPropertyInstrument.XYLOPHONE;
-        } else if (block == Blocks.IRON_BLOCK) {
+        } else if (iblockdata.a(Blocks.IRON_BLOCK)) {
             return BlockPropertyInstrument.IRON_XYLOPHONE;
-        } else if (block == Blocks.SOUL_SAND) {
+        } else if (iblockdata.a(Blocks.SOUL_SAND)) {
             return BlockPropertyInstrument.COW_BELL;
-        } else if (block == Blocks.PUMPKIN) {
+        } else if (iblockdata.a(Blocks.PUMPKIN)) {
             return BlockPropertyInstrument.DIDGERIDOO;
-        } else if (block == Blocks.EMERALD_BLOCK) {
+        } else if (iblockdata.a(Blocks.EMERALD_BLOCK)) {
             return BlockPropertyInstrument.BIT;
-        } else if (block == Blocks.HAY_BLOCK) {
+        } else if (iblockdata.a(Blocks.HAY_BLOCK)) {
             return BlockPropertyInstrument.BANJO;
-        } else if (block == Blocks.GLOWSTONE) {
+        } else if (iblockdata.a(Blocks.GLOWSTONE)) {
             return BlockPropertyInstrument.PLING;
         } else {
             Material material = iblockdata.getMaterial();
 
-            return material == Material.STONE ? BlockPropertyInstrument.BASEDRUM : (material == Material.SAND ? BlockPropertyInstrument.SNARE : (material == Material.SHATTERABLE ? BlockPropertyInstrument.HAT : (material == Material.WOOD ? BlockPropertyInstrument.BASS : BlockPropertyInstrument.HARP)));
+            return material == Material.STONE ? BlockPropertyInstrument.BASEDRUM : (material == Material.SAND ? BlockPropertyInstrument.SNARE : (material == Material.SHATTERABLE ? BlockPropertyInstrument.HAT : (material != Material.WOOD && material != Material.NETHER_WOOD ? BlockPropertyInstrument.HARP : BlockPropertyInstrument.BASS)));
         }
     }
 }

@@ -11,14 +11,9 @@ public class BlockRedstoneTorch extends BlockTorch {
     public static final BlockStateBoolean LIT = BlockProperties.r;
     private static final Map<IBlockAccess, List<BlockRedstoneTorch.RedstoneUpdateInfo>> b = new WeakHashMap();
 
-    protected BlockRedstoneTorch(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneTorch.LIT, true));
-    }
-
-    @Override
-    public int a(IWorldReader iworldreader) {
-        return 2;
+    protected BlockRedstoneTorch(BlockBase.Info blockbase_info) {
+        super(blockbase_info, ParticleParamRedstone.a);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneTorch.LIT, true));
     }
 
     @Override
@@ -59,27 +54,24 @@ public class BlockRedstoneTorch extends BlockTorch {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        a(iblockdata, worldserver, blockposition, random, this.a((World) worldserver, blockposition, iblockdata));
-    }
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        boolean flag = this.a((World) worldserver, blockposition, iblockdata);
+        List list = (List) BlockRedstoneTorch.b.get(worldserver);
 
-    public static void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random, boolean flag) {
-        List list = (List) BlockRedstoneTorch.b.get(world);
-
-        while (list != null && !list.isEmpty() && world.getTime() - ((BlockRedstoneTorch.RedstoneUpdateInfo) list.get(0)).b > 60L) {
+        while (list != null && !list.isEmpty() && worldserver.getTime() - ((BlockRedstoneTorch.RedstoneUpdateInfo) list.get(0)).b > 60L) {
             list.remove(0);
         }
 
         if ((Boolean) iblockdata.get(BlockRedstoneTorch.LIT)) {
             if (flag) {
-                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneTorch.LIT, false), 3);
-                if (a(world, blockposition, true)) {
-                    world.triggerEffect(1502, blockposition, 0);
-                    world.getBlockTickList().a(blockposition, world.getType(blockposition).getBlock(), 160);
+                worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneTorch.LIT, false), 3);
+                if (a(worldserver, blockposition, true)) {
+                    worldserver.triggerEffect(1502, blockposition, 0);
+                    worldserver.getBlockTickList().a(blockposition, worldserver.getType(blockposition).getBlock(), 160);
                 }
             }
-        } else if (!flag && !a(world, blockposition, false)) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneTorch.LIT, true), 3);
+        } else if (!flag && !a(worldserver, blockposition, false)) {
+            worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneTorch.LIT, true), 3);
         }
 
     }
@@ -87,7 +79,7 @@ public class BlockRedstoneTorch extends BlockTorch {
     @Override
     public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1, boolean flag) {
         if ((Boolean) iblockdata.get(BlockRedstoneTorch.LIT) == this.a(world, blockposition, iblockdata) && !world.getBlockTickList().b(blockposition, this)) {
-            world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
+            world.getBlockTickList().a(blockposition, this, 2);
         }
 
     }
@@ -100,11 +92,6 @@ public class BlockRedstoneTorch extends BlockTorch {
     @Override
     public boolean isPowerSource(IBlockData iblockdata) {
         return true;
-    }
-
-    @Override
-    public int a(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockRedstoneTorch.LIT) ? super.a(iblockdata) : 0;
     }
 
     @Override

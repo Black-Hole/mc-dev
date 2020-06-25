@@ -3,6 +3,9 @@ package net.minecraft.server;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -22,9 +25,16 @@ import org.apache.logging.log4j.Logger;
 
 public class NBTTagCompound implements NBTBase {
 
+    public static final Codec<NBTTagCompound> a = Codec.PASSTHROUGH.comapFlatMap((dynamic) -> {
+        NBTBase nbtbase = (NBTBase) dynamic.convert(DynamicOpsNBT.a).getValue();
+
+        return nbtbase instanceof NBTTagCompound ? DataResult.success((NBTTagCompound) nbtbase) : DataResult.error("Not a compound tag: " + nbtbase);
+    }, (nbttagcompound) -> {
+        return new Dynamic(DynamicOpsNBT.a, nbttagcompound);
+    });
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Pattern c = Pattern.compile("[A-Za-z0-9._+-]+");
-    public static final NBTTagType<NBTTagCompound> a = new NBTTagType<NBTTagCompound>() {
+    private static final Pattern h = Pattern.compile("[A-Za-z0-9._+-]+");
+    public static final NBTTagType<NBTTagCompound> b = new NBTTagType<NBTTagCompound>() {
         @Override
         public NBTTagCompound b(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
             nbtreadlimiter.a(384L);
@@ -62,7 +72,7 @@ public class NBTTagCompound implements NBTBase {
     };
     private final Map<String, NBTBase> map;
 
-    private NBTTagCompound(Map<String, NBTBase> map) {
+    protected NBTTagCompound(Map<String, NBTBase> map) {
         this.map = map;
     }
 
@@ -95,7 +105,7 @@ public class NBTTagCompound implements NBTBase {
 
     @Override
     public NBTTagType<NBTTagCompound> b() {
-        return NBTTagCompound.a;
+        return NBTTagCompound.b;
     }
 
     public int e() {
@@ -124,21 +134,17 @@ public class NBTTagCompound implements NBTBase {
     }
 
     public void a(String s, UUID uuid) {
-        this.setLong(s + "Most", uuid.getMostSignificantBits());
-        this.setLong(s + "Least", uuid.getLeastSignificantBits());
+        this.map.put(s, GameProfileSerializer.a(uuid));
     }
 
     public UUID a(String s) {
-        return new UUID(this.getLong(s + "Most"), this.getLong(s + "Least"));
+        return GameProfileSerializer.a(this.get(s));
     }
 
     public boolean b(String s) {
-        return this.hasKeyOfType(s + "Most", 99) && this.hasKeyOfType(s + "Least", 99);
-    }
+        NBTBase nbtbase = this.get(s);
 
-    public void c(String s) {
-        this.remove(s + "Most");
-        this.remove(s + "Least");
+        return nbtbase != null && nbtbase.b() == NBTTagIntArray.a && ((NBTTagIntArray) nbtbase).getInts().length == 4;
     }
 
     public void setFloat(String s, float f) {
@@ -182,7 +188,7 @@ public class NBTTagCompound implements NBTBase {
         return (NBTBase) this.map.get(s);
     }
 
-    public byte e(String s) {
+    public byte d(String s) {
         NBTBase nbtbase = (NBTBase) this.map.get(s);
 
         return nbtbase == null ? 0 : nbtbase.getTypeId();
@@ -193,7 +199,7 @@ public class NBTTagCompound implements NBTBase {
     }
 
     public boolean hasKeyOfType(String s, int i) {
-        byte b0 = this.e(s);
+        byte b0 = this.d(s);
 
         return b0 == i ? true : (i != 99 ? false : b0 == 1 || b0 == 2 || b0 == 3 || b0 == 4 || b0 == 5 || b0 == 6);
     }
@@ -324,7 +330,7 @@ public class NBTTagCompound implements NBTBase {
                 return (NBTTagCompound) this.map.get(s);
             }
         } catch (ClassCastException classcastexception) {
-            throw new ReportedException(this.a(s, NBTTagCompound.a, classcastexception));
+            throw new ReportedException(this.a(s, NBTTagCompound.b, classcastexception));
         }
 
         return new NBTTagCompound();
@@ -332,10 +338,10 @@ public class NBTTagCompound implements NBTBase {
 
     public NBTTagList getList(String s, int i) {
         try {
-            if (this.e(s) == 9) {
+            if (this.d(s) == 9) {
                 NBTTagList nbttaglist = (NBTTagList) this.map.get(s);
 
-                if (!nbttaglist.isEmpty() && nbttaglist.a_() != i) {
+                if (!nbttaglist.isEmpty() && nbttaglist.d_() != i) {
                     return new NBTTagList();
                 }
 
@@ -370,7 +376,7 @@ public class NBTTagCompound implements NBTBase {
 
         String s;
 
-        for (Iterator iterator = ((Collection) collection).iterator(); iterator.hasNext(); stringbuilder.append(t(s)).append(':').append(this.map.get(s))) {
+        for (Iterator iterator = ((Collection) collection).iterator(); iterator.hasNext(); stringbuilder.append(s(s)).append(':').append(this.map.get(s))) {
             s = (String) iterator.next();
             if (stringbuilder.length() != 1) {
                 stringbuilder.append(',');
@@ -463,19 +469,19 @@ public class NBTTagCompound implements NBTBase {
         return this;
     }
 
-    protected static String t(String s) {
-        return NBTTagCompound.c.matcher(s).matches() ? s : NBTTagString.b(s);
+    protected static String s(String s) {
+        return NBTTagCompound.h.matcher(s).matches() ? s : NBTTagString.b(s);
     }
 
-    protected static IChatBaseComponent u(String s) {
-        if (NBTTagCompound.c.matcher(s).matches()) {
+    protected static IChatBaseComponent t(String s) {
+        if (NBTTagCompound.h.matcher(s).matches()) {
             return (new ChatComponentText(s)).a(NBTTagCompound.d);
         } else {
             String s1 = NBTTagString.b(s);
             String s2 = s1.substring(0, 1);
-            IChatBaseComponent ichatbasecomponent = (new ChatComponentText(s1.substring(1, s1.length() - 1))).a(NBTTagCompound.d);
+            IChatMutableComponent ichatmutablecomponent = (new ChatComponentText(s1.substring(1, s1.length() - 1))).a(NBTTagCompound.d);
 
-            return (new ChatComponentText(s2)).addSibling(ichatbasecomponent).a(s2);
+            return (new ChatComponentText(s2)).addSibling(ichatmutablecomponent).c(s2);
         }
     }
 
@@ -495,26 +501,30 @@ public class NBTTagCompound implements NBTBase {
             }
 
             if (!s.isEmpty()) {
-                chatcomponenttext.a("\n");
+                chatcomponenttext.c("\n");
             }
 
-            IChatBaseComponent ichatbasecomponent;
+            IChatMutableComponent ichatmutablecomponent;
 
-            for (Iterator iterator = ((Collection) collection).iterator(); iterator.hasNext(); chatcomponenttext.addSibling(ichatbasecomponent)) {
+            for (Iterator iterator = ((Collection) collection).iterator(); iterator.hasNext(); chatcomponenttext.addSibling(ichatmutablecomponent)) {
                 String s1 = (String) iterator.next();
 
-                ichatbasecomponent = (new ChatComponentText(Strings.repeat(s, i + 1))).addSibling(u(s1)).a(String.valueOf(':')).a(" ").addSibling(((NBTBase) this.map.get(s1)).a(s, i + 1));
+                ichatmutablecomponent = (new ChatComponentText(Strings.repeat(s, i + 1))).addSibling(t(s1)).c(String.valueOf(':')).c(" ").addSibling(((NBTBase) this.map.get(s1)).a(s, i + 1));
                 if (iterator.hasNext()) {
-                    ichatbasecomponent.a(String.valueOf(',')).a(s.isEmpty() ? " " : "\n");
+                    ichatmutablecomponent.c(String.valueOf(',')).c(s.isEmpty() ? " " : "\n");
                 }
             }
 
             if (!s.isEmpty()) {
-                chatcomponenttext.a("\n").a(Strings.repeat(s, i));
+                chatcomponenttext.c("\n").c(Strings.repeat(s, i));
             }
 
-            chatcomponenttext.a("}");
+            chatcomponenttext.c("}");
             return chatcomponenttext;
         }
+    }
+
+    protected Map<String, NBTBase> h() {
+        return Collections.unmodifiableMap(this.map);
     }
 }

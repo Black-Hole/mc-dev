@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.BitSet;
 import java.util.Random;
 import java.util.function.Function;
@@ -9,16 +9,16 @@ public class WorldGenCanyon extends WorldGenCarverAbstract<WorldGenFeatureConfig
 
     private final float[] m = new float[1024];
 
-    public WorldGenCanyon(Function<Dynamic<?>, ? extends WorldGenFeatureConfigurationChance> function) {
-        super(function, 256);
+    public WorldGenCanyon(Codec<WorldGenFeatureConfigurationChance> codec) {
+        super(codec, 256);
     }
 
     public boolean a(Random random, int i, int j, WorldGenFeatureConfigurationChance worldgenfeatureconfigurationchance) {
-        return random.nextFloat() <= worldgenfeatureconfigurationchance.b;
+        return random.nextFloat() <= worldgenfeatureconfigurationchance.c;
     }
 
     public boolean a(IChunkAccess ichunkaccess, Function<BlockPosition, BiomeBase> function, Random random, int i, int j, int k, int l, int i1, BitSet bitset, WorldGenFeatureConfigurationChance worldgenfeatureconfigurationchance) {
-        int j1 = (this.c() * 2 - 1) * 16;
+        int j1 = (this.d() * 2 - 1) * 16;
         double d0 = (double) (j * 16 + random.nextInt(16));
         double d1 = (double) (random.nextInt(random.nextInt(40) + 8) + 20);
         double d2 = (double) (k * 16 + random.nextInt(16));

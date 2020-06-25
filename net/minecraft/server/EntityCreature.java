@@ -16,20 +16,20 @@ public abstract class EntityCreature extends EntityInsentient {
 
     @Override
     public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        return this.a(new BlockPosition(this), (IWorldReader) generatoraccess) >= 0.0F;
+        return this.a(this.getChunkCoordinates(), (IWorldReader) generatoraccess) >= 0.0F;
     }
 
-    public boolean eo() {
+    public boolean eJ() {
         return !this.getNavigation().m();
     }
 
     @Override
-    protected void eh() {
-        super.eh();
+    protected void eB() {
+        super.eB();
         Entity entity = this.getLeashHolder();
 
         if (entity != null && entity.world == this.world) {
-            this.a(new BlockPosition(entity), 5);
+            this.a(entity.getChunkCoordinates(), 5);
             float f = this.g(entity);
 
             if (this instanceof EntityTameableAnimal && ((EntityTameableAnimal) this).isSitting()) {
@@ -40,7 +40,7 @@ public abstract class EntityCreature extends EntityInsentient {
                 return;
             }
 
-            this.u(f);
+            this.t(f);
             if (f > 10.0F) {
                 this.unleash(true, true);
                 this.goalSelector.a(PathfinderGoal.Type.MOVE);
@@ -55,15 +55,15 @@ public abstract class EntityCreature extends EntityInsentient {
                 float f1 = 2.0F;
                 Vec3D vec3d = (new Vec3D(entity.locX() - this.locX(), entity.locY() - this.locY(), entity.locZ() - this.locZ())).d().a((double) Math.max(f - 2.0F, 0.0F));
 
-                this.getNavigation().a(this.locX() + vec3d.x, this.locY() + vec3d.y, this.locZ() + vec3d.z, this.ep());
+                this.getNavigation().a(this.locX() + vec3d.x, this.locY() + vec3d.y, this.locZ() + vec3d.z, this.eK());
             }
         }
 
     }
 
-    protected double ep() {
+    protected double eK() {
         return 1.0D;
     }
 
-    protected void u(float f) {}
+    protected void t(float f) {}
 }

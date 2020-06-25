@@ -26,7 +26,7 @@ public class CriterionConditionBlock {
     public boolean a(WorldServer worldserver, BlockPosition blockposition) {
         if (this == CriterionConditionBlock.a) {
             return true;
-        } else if (!worldserver.n(blockposition)) {
+        } else if (!worldserver.p(blockposition)) {
             return false;
         } else {
             IBlockData iblockdata = worldserver.getType(blockposition);
@@ -69,7 +69,7 @@ public class CriterionConditionBlock {
             if (jsonobject.has("tag")) {
                 MinecraftKey minecraftkey1 = new MinecraftKey(ChatDeserializer.h(jsonobject, "tag"));
 
-                tag = TagsBlock.a().a(minecraftkey1);
+                tag = TagsInstance.e().a().a(minecraftkey1);
                 if (tag == null) {
                     throw new JsonSyntaxException("Unknown block tag '" + minecraftkey1 + "'");
                 }
@@ -94,7 +94,7 @@ public class CriterionConditionBlock {
             }
 
             if (this.b != null) {
-                jsonobject.addProperty("tag", this.b.c().toString());
+                jsonobject.addProperty("tag", TagsInstance.e().a().b(this.b).toString());
             }
 
             jsonobject.add("nbt", this.e.a());
@@ -121,8 +121,18 @@ public class CriterionConditionBlock {
             return new CriterionConditionBlock.a();
         }
 
+        public CriterionConditionBlock.a a(Block block) {
+            this.a = block;
+            return this;
+        }
+
         public CriterionConditionBlock.a a(Tag<Block> tag) {
             this.b = tag;
+            return this;
+        }
+
+        public CriterionConditionBlock.a a(CriterionTriggerProperties criteriontriggerproperties) {
+            this.c = criteriontriggerproperties;
             return this;
         }
 

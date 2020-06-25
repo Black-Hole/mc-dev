@@ -1,14 +1,20 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Multimap;
 
-public class ItemTrident extends Item {
+public class ItemTrident extends Item implements ItemVanishable {
+
+    private final Multimap<AttributeBase, AttributeModifier> a;
 
     public ItemTrident(Item.Info item_info) {
         super(item_info);
-        this.a(new MinecraftKey("throwing"), (itemstack, world, entityliving) -> {
-            return entityliving != null && entityliving.isHandRaised() && entityliving.dD() == itemstack ? 1.0F : 0.0F;
-        });
+        Builder<AttributeBase, AttributeModifier> builder = ImmutableMultimap.builder();
+
+        builder.put(GenericAttributes.ATTACK_DAMAGE, new AttributeModifier(ItemTrident.f, "Tool modifier", 8.0D, AttributeModifier.Operation.ADDITION));
+        builder.put(GenericAttributes.ATTACK_SPEED, new AttributeModifier(ItemTrident.g, "Tool modifier", -2.9000000953674316D, AttributeModifier.Operation.ADDITION));
+        this.a = builder.build();
     }
 
     @Override
@@ -17,12 +23,12 @@ public class ItemTrident extends Item {
     }
 
     @Override
-    public EnumAnimation e_(ItemStack itemstack) {
+    public EnumAnimation d_(ItemStack itemstack) {
         return EnumAnimation.SPEAR;
     }
 
     @Override
-    public int f_(ItemStack itemstack) {
+    public int e_(ItemStack itemstack) {
         return 72000;
     }
 
@@ -30,7 +36,7 @@ public class ItemTrident extends Item {
     public void a(ItemStack itemstack, World world, EntityLiving entityliving, int i) {
         if (entityliving instanceof EntityHuman) {
             EntityHuman entityhuman = (EntityHuman) entityliving;
-            int j = this.f_(itemstack) - i;
+            int j = this.e_(itemstack) - i;
 
             if (j >= 10) {
                 int k = EnchantmentManager.g(itemstack);
@@ -71,7 +77,7 @@ public class ItemTrident extends Item {
                         f4 *= f6 / f5;
                         entityhuman.h((double) f2, (double) f3, (double) f4);
                         entityhuman.r(20);
-                        if (entityhuman.onGround) {
+                        if (entityhuman.isOnGround()) {
                             float f7 = 1.1999999F;
 
                             entityhuman.move(EnumMoveType.SELF, new Vec3D(0.0D, 1.1999999284744263D, 0.0D));
@@ -119,7 +125,7 @@ public class ItemTrident extends Item {
 
     @Override
     public boolean a(ItemStack itemstack, World world, IBlockData iblockdata, BlockPosition blockposition, EntityLiving entityliving) {
-        if ((double) iblockdata.f(world, blockposition) != 0.0D) {
+        if ((double) iblockdata.h(world, blockposition) != 0.0D) {
             itemstack.damage(2, entityliving, (entityliving1) -> {
                 entityliving1.broadcastItemBreak(EnumItemSlot.MAINHAND);
             });
@@ -129,15 +135,8 @@ public class ItemTrident extends Item {
     }
 
     @Override
-    public Multimap<String, AttributeModifier> a(EnumItemSlot enumitemslot) {
-        Multimap<String, AttributeModifier> multimap = super.a(enumitemslot);
-
-        if (enumitemslot == EnumItemSlot.MAINHAND) {
-            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemTrident.g, "Tool modifier", 8.0D, AttributeModifier.Operation.ADDITION));
-            multimap.put(GenericAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ItemTrident.h, "Tool modifier", -2.9000000953674316D, AttributeModifier.Operation.ADDITION));
-        }
-
-        return multimap;
+    public Multimap<AttributeBase, AttributeModifier> a(EnumItemSlot enumitemslot) {
+        return enumitemslot == EnumItemSlot.MAINHAND ? this.a : super.a(enumitemslot);
     }
 
     @Override

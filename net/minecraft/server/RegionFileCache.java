@@ -13,9 +13,11 @@ public final class RegionFileCache implements AutoCloseable {
 
     public final Long2ObjectLinkedOpenHashMap<RegionFile> cache = new Long2ObjectLinkedOpenHashMap();
     private final File b;
+    private final boolean c;
 
-    RegionFileCache(File file) {
+    RegionFileCache(File file, boolean flag) {
         this.b = file;
+        this.c = flag;
     }
 
     private RegionFile getFile(ChunkCoordIntPair chunkcoordintpair) throws IOException {
@@ -34,7 +36,7 @@ public final class RegionFileCache implements AutoCloseable {
             }
 
             File file = new File(this.b, "r." + chunkcoordintpair.getRegionX() + "." + chunkcoordintpair.getRegionZ() + ".mca");
-            RegionFile regionfile1 = new RegionFile(file, this.b);
+            RegionFile regionfile1 = new RegionFile(file, this.b, this.c);
 
             this.cache.putAndMoveToFirst(i, regionfile1);
             return regionfile1;
@@ -105,12 +107,29 @@ public final class RegionFileCache implements AutoCloseable {
     }
 
     public void close() throws IOException {
+        ExceptionSuppressor<IOException> exceptionsuppressor = new ExceptionSuppressor<>();
         ObjectIterator objectiterator = this.cache.values().iterator();
 
         while (objectiterator.hasNext()) {
             RegionFile regionfile = (RegionFile) objectiterator.next();
 
-            regionfile.close();
+            try {
+                regionfile.close();
+            } catch (IOException ioexception) {
+                exceptionsuppressor.a(ioexception);
+            }
+        }
+
+        exceptionsuppressor.a();
+    }
+
+    public void a() throws IOException {
+        ObjectIterator objectiterator = this.cache.values().iterator();
+
+        while (objectiterator.hasNext()) {
+            RegionFile regionfile = (RegionFile) objectiterator.next();
+
+            regionfile.a();
         }
 
     }

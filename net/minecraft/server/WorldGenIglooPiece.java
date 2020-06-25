@@ -13,7 +13,7 @@ public class WorldGenIglooPiece {
     private static final Map<MinecraftKey, BlockPosition> d = ImmutableMap.of(WorldGenIglooPiece.a, new BlockPosition(3, 5, 5), WorldGenIglooPiece.b, new BlockPosition(1, 3, 1), WorldGenIglooPiece.c, new BlockPosition(3, 6, 7));
     private static final Map<MinecraftKey, BlockPosition> e = ImmutableMap.of(WorldGenIglooPiece.a, BlockPosition.ZERO, WorldGenIglooPiece.b, new BlockPosition(2, -3, 4), WorldGenIglooPiece.c, new BlockPosition(0, -3, -2));
 
-    public static void a(DefinedStructureManager definedstructuremanager, BlockPosition blockposition, EnumBlockRotation enumblockrotation, List<StructurePiece> list, Random random, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public static void a(DefinedStructureManager definedstructuremanager, BlockPosition blockposition, EnumBlockRotation enumblockrotation, List<StructurePiece> list, Random random) {
         if (random.nextDouble() < 0.5D) {
             int i = random.nextInt(8) + 4;
 
@@ -51,7 +51,7 @@ public class WorldGenIglooPiece {
 
         private void a(DefinedStructureManager definedstructuremanager) {
             DefinedStructure definedstructure = definedstructuremanager.a(this.d);
-            DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.e).a(EnumBlockMirror.NONE).a((BlockPosition) WorldGenIglooPiece.d.get(this.d)).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.a);
+            DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.e).a(EnumBlockMirror.NONE).a((BlockPosition) WorldGenIglooPiece.d.get(this.d)).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.b);
 
             this.a(definedstructure, this.c, definedstructureinfo);
         }
@@ -77,26 +77,26 @@ public class WorldGenIglooPiece {
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
-            DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.e).a(EnumBlockMirror.NONE).a((BlockPosition) WorldGenIglooPiece.d.get(this.d)).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.a);
-            BlockPosition blockposition = (BlockPosition) WorldGenIglooPiece.e.get(this.d);
-            BlockPosition blockposition1 = this.c.a((BaseBlockPosition) DefinedStructure.a(definedstructureinfo, new BlockPosition(3 - blockposition.getX(), 0, 0 - blockposition.getZ())));
-            int i = generatoraccess.a(HeightMap.Type.WORLD_SURFACE_WG, blockposition1.getX(), blockposition1.getZ());
-            BlockPosition blockposition2 = this.c;
+        public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair, BlockPosition blockposition) {
+            DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.e).a(EnumBlockMirror.NONE).a((BlockPosition) WorldGenIglooPiece.d.get(this.d)).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.b);
+            BlockPosition blockposition1 = (BlockPosition) WorldGenIglooPiece.e.get(this.d);
+            BlockPosition blockposition2 = this.c.a((BaseBlockPosition) DefinedStructure.a(definedstructureinfo, new BlockPosition(3 - blockposition1.getX(), 0, 0 - blockposition1.getZ())));
+            int i = generatoraccessseed.a(HeightMap.Type.WORLD_SURFACE_WG, blockposition2.getX(), blockposition2.getZ());
+            BlockPosition blockposition3 = this.c;
 
             this.c = this.c.b(0, i - 90 - 1, 0);
-            boolean flag = super.a(generatoraccess, chunkgenerator, random, structureboundingbox, chunkcoordintpair);
+            boolean flag = super.a(generatoraccessseed, structuremanager, chunkgenerator, random, structureboundingbox, chunkcoordintpair, blockposition);
 
             if (this.d.equals(WorldGenIglooPiece.a)) {
-                BlockPosition blockposition3 = this.c.a((BaseBlockPosition) DefinedStructure.a(definedstructureinfo, new BlockPosition(3, 0, 5)));
-                IBlockData iblockdata = generatoraccess.getType(blockposition3.down());
+                BlockPosition blockposition4 = this.c.a((BaseBlockPosition) DefinedStructure.a(definedstructureinfo, new BlockPosition(3, 0, 5)));
+                IBlockData iblockdata = generatoraccessseed.getType(blockposition4.down());
 
-                if (!iblockdata.isAir() && iblockdata.getBlock() != Blocks.LADDER) {
-                    generatoraccess.setTypeAndData(blockposition3, Blocks.SNOW_BLOCK.getBlockData(), 3);
+                if (!iblockdata.isAir() && !iblockdata.a(Blocks.LADDER)) {
+                    generatoraccessseed.setTypeAndData(blockposition4, Blocks.SNOW_BLOCK.getBlockData(), 3);
                 }
             }
 
-            this.c = blockposition2;
+            this.c = blockposition3;
             return flag;
         }
     }

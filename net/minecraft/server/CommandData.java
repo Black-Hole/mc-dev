@@ -21,14 +21,14 @@ import java.util.function.Function;
 
 public class CommandData {
 
-    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.data.merge.failed", new Object[0]));
+    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.data.merge.failed"));
     private static final DynamicCommandExceptionType e = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.data.get.invalid", new Object[]{object});
     });
     private static final DynamicCommandExceptionType f = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.data.get.unknown", new Object[]{object});
     });
-    private static final SimpleCommandExceptionType g = new SimpleCommandExceptionType(new ChatMessage("commands.data.get.multiple", new Object[0]));
+    private static final SimpleCommandExceptionType g = new SimpleCommandExceptionType(new ChatMessage("commands.data.get.multiple"));
     private static final DynamicCommandExceptionType h = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.data.modify.expected_list", new Object[]{object});
     });

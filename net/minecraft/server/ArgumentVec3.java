@@ -15,8 +15,8 @@ import java.util.concurrent.CompletableFuture;
 public class ArgumentVec3 implements ArgumentType<IVectorPosition> {
 
     private static final Collection<String> c = Arrays.asList("0 0 0", "~ ~ ~", "^ ^ ^", "^1 ^ ^-5", "0.1 -0.5 .9", "~0.5 ~1 ~-5");
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.pos3d.incomplete", new Object[0]));
-    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.pos.mixed", new Object[0]));
+    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.pos3d.incomplete"));
+    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.pos.mixed"));
     private final boolean d;
 
     public ArgumentVec3(boolean flag) {
@@ -53,7 +53,7 @@ public class ArgumentVec3 implements ArgumentType<IVectorPosition> {
             if (!s.isEmpty() && s.charAt(0) == '^') {
                 object = Collections.singleton(ICompletionProvider.a.a);
             } else {
-                object = ((ICompletionProvider) commandcontext.getSource()).r();
+                object = ((ICompletionProvider) commandcontext.getSource()).t();
             }
 
             return ICompletionProvider.a(s, (Collection) object, suggestionsbuilder, CommandDispatcher.a(this::parse));

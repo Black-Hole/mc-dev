@@ -32,19 +32,19 @@ public class PathfinderGoalBeg extends PathfinderGoal {
 
     @Override
     public void c() {
-        this.a.v(true);
+        this.a.x(true);
         this.e = 40 + this.a.getRandom().nextInt(40);
     }
 
     @Override
     public void d() {
-        this.a.v(false);
+        this.a.x(false);
         this.b = null;
     }
 
     @Override
     public void e() {
-        this.a.getControllerLook().a(this.b.locX(), this.b.getHeadY(), this.b.locZ(), 10.0F, (float) this.a.dU());
+        this.a.getControllerLook().a(this.b.locX(), this.b.getHeadY(), this.b.locZ(), 10.0F, (float) this.a.eo());
         --this.e;
     }
 
@@ -60,7 +60,7 @@ public class PathfinderGoalBeg extends PathfinderGoal {
                 return true;
             }
 
-            if (this.a.i(itemstack)) {
+            if (this.a.k(itemstack)) {
                 return true;
             }
         }

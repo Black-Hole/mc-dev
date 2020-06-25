@@ -6,8 +6,8 @@ public abstract class BlockSign extends BlockTileEntity implements IBlockWaterlo
     protected static final VoxelShape b = Block.a(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
     private final BlockPropertyWood c;
 
-    protected BlockSign(Block.Info block_info, BlockPropertyWood blockpropertywood) {
-        super(block_info);
+    protected BlockSign(BlockBase.Info blockbase_info, BlockPropertyWood blockpropertywood) {
+        super(blockbase_info);
         this.c = blockpropertywood;
     }
 
@@ -21,12 +21,12 @@ public abstract class BlockSign extends BlockTileEntity implements IBlockWaterlo
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockSign.b;
     }
 
     @Override
-    public boolean Y_() {
+    public boolean ak_() {
         return true;
     }
 
@@ -64,7 +64,7 @@ public abstract class BlockSign extends BlockTileEntity implements IBlockWaterlo
     }
 
     @Override
-    public Fluid a_(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockSign.a) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
+    public Fluid d(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockSign.a) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
     }
 }

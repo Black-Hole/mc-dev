@@ -175,7 +175,7 @@ public class PistonExtendsChecker {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection[j];
 
-            if (enumdirection.m() != this.e.m()) {
+            if (enumdirection.n() != this.e.n()) {
                 BlockPosition blockposition1 = blockposition.shift(enumdirection);
                 IBlockData iblockdata1 = this.a.getType(blockposition1);
 

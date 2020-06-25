@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 public interface BehaviorPosition {
 
-    BlockPosition a();
+    Vec3D a();
 
-    Vec3D b();
+    BlockPosition b();
 
     boolean a(EntityLiving entityliving);
 }

@@ -1,83 +1,63 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 
-public class WorldGenFeatureOceanRuin extends WorldGenFeatureRandomScattered<WorldGenFeatureOceanRuinConfiguration> {
+public class WorldGenFeatureOceanRuin extends StructureGenerator<WorldGenFeatureOceanRuinConfiguration> {
 
-    public WorldGenFeatureOceanRuin(Function<Dynamic<?>, ? extends WorldGenFeatureOceanRuinConfiguration> function) {
-        super(function);
+    public WorldGenFeatureOceanRuin(Codec<WorldGenFeatureOceanRuinConfiguration> codec) {
+        super(codec);
     }
 
     @Override
-    public String b() {
-        return "Ocean_Ruin";
-    }
-
-    @Override
-    public int c() {
-        return 3;
-    }
-
-    @Override
-    protected int a(ChunkGenerator<?> chunkgenerator) {
-        return chunkgenerator.getSettings().l();
-    }
-
-    @Override
-    protected int b(ChunkGenerator<?> chunkgenerator) {
-        return chunkgenerator.getSettings().m();
-    }
-
-    @Override
-    public StructureGenerator.a a() {
+    public StructureGenerator.a<WorldGenFeatureOceanRuinConfiguration> a() {
         return WorldGenFeatureOceanRuin.a::new;
     }
 
-    @Override
-    protected int getSeed() {
-        return 14357621;
-    }
-
-    public static enum Temperature {
+    public static enum Temperature implements INamable {
 
         WARM("warm"), COLD("cold");
 
-        private static final Map<String, WorldGenFeatureOceanRuin.Temperature> c = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenFeatureOceanRuin.Temperature::a, (worldgenfeatureoceanruin_temperature) -> {
+        public static final Codec<WorldGenFeatureOceanRuin.Temperature> c = INamable.a(WorldGenFeatureOceanRuin.Temperature::values, WorldGenFeatureOceanRuin.Temperature::a);
+        private static final Map<String, WorldGenFeatureOceanRuin.Temperature> d = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenFeatureOceanRuin.Temperature::b, (worldgenfeatureoceanruin_temperature) -> {
             return worldgenfeatureoceanruin_temperature;
         }));
-        private final String d;
+        private final String e;
 
         private Temperature(String s) {
-            this.d = s;
+            this.e = s;
         }
 
-        public String a() {
-            return this.d;
+        public String b() {
+            return this.e;
         }
 
+        @Nullable
         public static WorldGenFeatureOceanRuin.Temperature a(String s) {
-            return (WorldGenFeatureOceanRuin.Temperature) WorldGenFeatureOceanRuin.Temperature.c.get(s);
-        }
-    }
-
-    public static class a extends StructureStart {
-
-        public a(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
-            super(structuregenerator, i, j, structureboundingbox, k, l);
+            return (WorldGenFeatureOceanRuin.Temperature) WorldGenFeatureOceanRuin.Temperature.d.get(s);
         }
 
         @Override
-        public void a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase) {
-            WorldGenFeatureOceanRuinConfiguration worldgenfeatureoceanruinconfiguration = (WorldGenFeatureOceanRuinConfiguration) chunkgenerator.getFeatureConfiguration(biomebase, WorldGenerator.OCEAN_RUIN);
+        public String getName() {
+            return this.e;
+        }
+    }
+
+    public static class a extends StructureStart<WorldGenFeatureOceanRuinConfiguration> {
+
+        public a(StructureGenerator<WorldGenFeatureOceanRuinConfiguration> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+            super(structuregenerator, i, j, structureboundingbox, k, l);
+        }
+
+        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureOceanRuinConfiguration worldgenfeatureoceanruinconfiguration) {
             int k = i * 16;
             int l = j * 16;
             BlockPosition blockposition = new BlockPosition(k, 90, l);
-            EnumBlockRotation enumblockrotation = EnumBlockRotation.values()[this.d.nextInt(EnumBlockRotation.values().length)];
+            EnumBlockRotation enumblockrotation = EnumBlockRotation.a((Random) this.d);
 
             WorldGenFeatureOceanRuinPieces.a(definedstructuremanager, blockposition, enumblockrotation, this.b, (Random) this.d, worldgenfeatureoceanruinconfiguration);
             this.b();

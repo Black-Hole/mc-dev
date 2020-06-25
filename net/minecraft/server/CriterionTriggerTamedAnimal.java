@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerTamedAnimal extends CriterionTriggerAbstract<CriterionTriggerTamedAnimal.a> {
@@ -16,44 +14,46 @@ public class CriterionTriggerTamedAnimal extends CriterionTriggerAbstract<Criter
     }
 
     @Override
-    public CriterionTriggerTamedAnimal.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("entity"));
+    public CriterionTriggerTamedAnimal.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
+        CriterionConditionEntity.b criterionconditionentity_b1 = CriterionConditionEntity.b.a(jsonobject, "entity", lootdeserializationcontext);
 
-        return new CriterionTriggerTamedAnimal.a(criterionconditionentity);
+        return new CriterionTriggerTamedAnimal.a(criterionconditionentity_b, criterionconditionentity_b1);
     }
 
     public void a(EntityPlayer entityplayer, EntityAnimal entityanimal) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggertamedanimal_a) -> {
-            return criteriontriggertamedanimal_a.a(entityplayer, entityanimal);
+        LootTableInfo loottableinfo = CriterionConditionEntity.b(entityplayer, entityanimal);
+
+        this.a(entityplayer, (criteriontriggertamedanimal_a) -> {
+            return criteriontriggertamedanimal_a.a(loottableinfo);
         });
     }
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionEntity a;
+        private final CriterionConditionEntity.b a;
 
-        public a(CriterionConditionEntity criterionconditionentity) {
-            super(CriterionTriggerTamedAnimal.a);
-            this.a = criterionconditionentity;
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionEntity.b criterionconditionentity_b1) {
+            super(CriterionTriggerTamedAnimal.a, criterionconditionentity_b);
+            this.a = criterionconditionentity_b1;
         }
 
         public static CriterionTriggerTamedAnimal.a c() {
-            return new CriterionTriggerTamedAnimal.a(CriterionConditionEntity.a);
+            return new CriterionTriggerTamedAnimal.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a);
         }
 
         public static CriterionTriggerTamedAnimal.a a(CriterionConditionEntity criterionconditionentity) {
-            return new CriterionTriggerTamedAnimal.a(criterionconditionentity);
+            return new CriterionTriggerTamedAnimal.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a(criterionconditionentity));
         }
 
-        public boolean a(EntityPlayer entityplayer, EntityAnimal entityanimal) {
-            return this.a.a(entityplayer, entityanimal);
+        public boolean a(LootTableInfo loottableinfo) {
+            return this.a.a(loottableinfo);
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("entity", this.a.a());
+            jsonobject.add("entity", this.a.a(lootserializationcontext));
             return jsonobject;
         }
     }

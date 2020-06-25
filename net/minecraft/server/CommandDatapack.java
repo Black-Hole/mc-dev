@@ -9,9 +9,9 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommandDatapack {
 
@@ -25,10 +25,15 @@ public class CommandDatapack {
         return new ChatMessage("commands.datapack.disable.failed", new Object[]{object});
     });
     private static final SuggestionProvider<CommandListenerWrapper> d = (commandcontext, suggestionsbuilder) -> {
-        return ICompletionProvider.b(((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository().d().stream().map(ResourcePackLoader::e).map(StringArgumentType::escapeIfRequired), suggestionsbuilder);
+        return ICompletionProvider.b(((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository().d().stream().map(StringArgumentType::escapeIfRequired), suggestionsbuilder);
     };
     private static final SuggestionProvider<CommandListenerWrapper> e = (commandcontext, suggestionsbuilder) -> {
-        return ICompletionProvider.b(((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository().c().stream().map(ResourcePackLoader::e).map(StringArgumentType::escapeIfRequired), suggestionsbuilder);
+        ResourcePackRepository<?> resourcepackrepository = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository();
+        Collection<String> collection = resourcepackrepository.d();
+
+        return ICompletionProvider.b(resourcepackrepository.b().stream().filter((s) -> {
+            return !collection.contains(s);
+        }).map(StringArgumentType::escapeIfRequired), suggestionsbuilder);
     };
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
@@ -66,39 +71,23 @@ public class CommandDatapack {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ResourcePackLoader resourcepackloader, CommandDatapack.a commanddatapack_a) throws CommandSyntaxException {
-        ResourcePackRepository<ResourcePackLoader> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
-        List<ResourcePackLoader> list = Lists.newArrayList(resourcepackrepository.d());
+        ResourcePackRepository<?> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
+        List<ResourcePackLoader> list = Lists.newArrayList(resourcepackrepository.e());
 
         commanddatapack_a.apply(list, resourcepackloader);
-        resourcepackrepository.a((Collection) list);
-        WorldData worlddata = commandlistenerwrapper.getServer().getWorldServer(DimensionManager.OVERWORLD).getWorldData();
-
-        worlddata.O().clear();
-        resourcepackrepository.d().forEach((resourcepackloader1) -> {
-            worlddata.O().add(resourcepackloader1.e());
-        });
-        worlddata.N().remove(resourcepackloader.e());
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.enable.success", new Object[]{resourcepackloader.a(true)}), true);
-        commandlistenerwrapper.getServer().reload();
-        return resourcepackrepository.d().size();
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.modify.enable", new Object[]{resourcepackloader.a(true)}), true);
+        CommandReload.a((Collection) list.stream().map(ResourcePackLoader::e).collect(Collectors.toList()), commandlistenerwrapper);
+        return list.size();
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ResourcePackLoader resourcepackloader) {
-        ResourcePackRepository<ResourcePackLoader> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
-        List<ResourcePackLoader> list = Lists.newArrayList(resourcepackrepository.d());
+        ResourcePackRepository<?> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
+        List<ResourcePackLoader> list = Lists.newArrayList(resourcepackrepository.e());
 
         list.remove(resourcepackloader);
-        resourcepackrepository.a((Collection) list);
-        WorldData worlddata = commandlistenerwrapper.getServer().getWorldServer(DimensionManager.OVERWORLD).getWorldData();
-
-        worlddata.O().clear();
-        resourcepackrepository.d().forEach((resourcepackloader1) -> {
-            worlddata.O().add(resourcepackloader1.e());
-        });
-        worlddata.N().add(resourcepackloader.e());
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.disable.success", new Object[]{resourcepackloader.a(true)}), true);
-        commandlistenerwrapper.getServer().reload();
-        return resourcepackrepository.d().size();
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.modify.disable", new Object[]{resourcepackloader.a(true)}), true);
+        CommandReload.a((Collection) list.stream().map(ResourcePackLoader::e).collect(Collectors.toList()), commandlistenerwrapper);
+        return list.size();
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper) {
@@ -106,42 +95,52 @@ public class CommandDatapack {
     }
 
     private static int b(CommandListenerWrapper commandlistenerwrapper) {
-        ResourcePackRepository<ResourcePackLoader> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
+        ResourcePackRepository<?> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
 
-        if (resourcepackrepository.c().isEmpty()) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.available.none", new Object[0]), false);
+        resourcepackrepository.a();
+        Collection<? extends ResourcePackLoader> collection = resourcepackrepository.e();
+        Collection<? extends ResourcePackLoader> collection1 = resourcepackrepository.c();
+        List<ResourcePackLoader> list = (List) collection1.stream().filter((resourcepackloader) -> {
+            return !collection.contains(resourcepackloader);
+        }).collect(Collectors.toList());
+
+        if (list.isEmpty()) {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.available.none"), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.available.success", new Object[]{resourcepackrepository.c().size(), ChatComponentUtils.b(resourcepackrepository.c(), (resourcepackloader) -> {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.available.success", new Object[]{list.size(), ChatComponentUtils.b(list, (resourcepackloader) -> {
                         return resourcepackloader.a(false);
                     })}), false);
         }
 
-        return resourcepackrepository.c().size();
+        return list.size();
     }
 
     private static int c(CommandListenerWrapper commandlistenerwrapper) {
-        ResourcePackRepository<ResourcePackLoader> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
+        ResourcePackRepository<?> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
 
-        if (resourcepackrepository.d().isEmpty()) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.enabled.none", new Object[0]), false);
+        resourcepackrepository.a();
+        Collection<? extends ResourcePackLoader> collection = resourcepackrepository.e();
+
+        if (collection.isEmpty()) {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.enabled.none"), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.enabled.success", new Object[]{resourcepackrepository.d().size(), ChatComponentUtils.b(resourcepackrepository.d(), (resourcepackloader) -> {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.enabled.success", new Object[]{collection.size(), ChatComponentUtils.b(collection, (resourcepackloader) -> {
                         return resourcepackloader.a(true);
                     })}), false);
         }
 
-        return resourcepackrepository.d().size();
+        return collection.size();
     }
 
     private static ResourcePackLoader a(CommandContext<CommandListenerWrapper> commandcontext, String s, boolean flag) throws CommandSyntaxException {
         String s1 = StringArgumentType.getString(commandcontext, s);
-        ResourcePackRepository<ResourcePackLoader> resourcepackrepository = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository();
+        ResourcePackRepository<?> resourcepackrepository = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository();
         ResourcePackLoader resourcepackloader = resourcepackrepository.a(s1);
 
         if (resourcepackloader == null) {
             throw CommandDatapack.a.create(s1);
         } else {
-            boolean flag1 = resourcepackrepository.d().contains(resourcepackloader);
+            boolean flag1 = resourcepackrepository.e().contains(resourcepackloader);
 
             if (flag && flag1) {
                 throw CommandDatapack.b.create(s1);

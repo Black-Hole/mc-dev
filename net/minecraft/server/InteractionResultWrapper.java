@@ -33,4 +33,8 @@ public class InteractionResultWrapper<T> {
     public static <T> InteractionResultWrapper<T> fail(T t0) {
         return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, t0);
     }
+
+    public static <T> InteractionResultWrapper<T> a(T t0, boolean flag) {
+        return flag ? success(t0) : consume(t0);
+    }
 }

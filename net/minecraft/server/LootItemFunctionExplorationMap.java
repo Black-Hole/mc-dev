@@ -12,20 +12,26 @@ import org.apache.logging.log4j.Logger;
 public class LootItemFunctionExplorationMap extends LootItemFunctionConditional {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final MapIcon.Type a = MapIcon.Type.MANSION;
-    private final String d;
-    private final MapIcon.Type e;
-    private final byte f;
-    private final int g;
-    private final boolean h;
+    public static final StructureGenerator<?> a = StructureGenerator.BURIED_TREASURE;
+    public static final MapIcon.Type b = MapIcon.Type.MANSION;
+    private final StructureGenerator<?> e;
+    private final MapIcon.Type f;
+    private final byte g;
+    private final int h;
+    private final boolean i;
 
-    private LootItemFunctionExplorationMap(LootItemCondition[] alootitemcondition, String s, MapIcon.Type mapicon_type, byte b0, int i, boolean flag) {
+    private LootItemFunctionExplorationMap(LootItemCondition[] alootitemcondition, StructureGenerator<?> structuregenerator, MapIcon.Type mapicon_type, byte b0, int i, boolean flag) {
         super(alootitemcondition);
-        this.d = s;
-        this.e = mapicon_type;
-        this.f = b0;
-        this.g = i;
-        this.h = flag;
+        this.e = structuregenerator;
+        this.f = mapicon_type;
+        this.g = b0;
+        this.h = i;
+        this.i = flag;
+    }
+
+    @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.k;
     }
 
     @Override
@@ -41,15 +47,15 @@ public class LootItemFunctionExplorationMap extends LootItemFunctionConditional 
             BlockPosition blockposition = (BlockPosition) loottableinfo.getContextParameter(LootContextParameters.POSITION);
 
             if (blockposition != null) {
-                WorldServer worldserver = loottableinfo.c();
-                BlockPosition blockposition1 = worldserver.a(this.d, blockposition, this.g, this.h);
+                WorldServer worldserver = loottableinfo.getWorld();
+                BlockPosition blockposition1 = worldserver.a(this.e, blockposition, this.h, this.i);
 
                 if (blockposition1 != null) {
-                    ItemStack itemstack1 = ItemWorldMap.createFilledMapView(worldserver, blockposition1.getX(), blockposition1.getZ(), this.f, true, true);
+                    ItemStack itemstack1 = ItemWorldMap.createFilledMapView(worldserver, blockposition1.getX(), blockposition1.getZ(), this.g, true, true);
 
                     ItemWorldMap.applySepiaFilter(worldserver, itemstack1);
-                    WorldMap.decorateMap(itemstack1, blockposition1, "+", this.e);
-                    itemstack1.a((IChatBaseComponent) (new ChatMessage("filled_map." + this.d.toLowerCase(Locale.ROOT), new Object[0])));
+                    WorldMap.decorateMap(itemstack1, blockposition1, "+", this.f);
+                    itemstack1.a((IChatBaseComponent) (new ChatMessage("filled_map." + this.e.i().toLowerCase(Locale.ROOT))));
                     return itemstack1;
                 }
             }
@@ -58,72 +64,82 @@ public class LootItemFunctionExplorationMap extends LootItemFunctionConditional 
         }
     }
 
-    public static LootItemFunctionExplorationMap.a b() {
+    public static LootItemFunctionExplorationMap.a c() {
         return new LootItemFunctionExplorationMap.a();
     }
 
     public static class b extends LootItemFunctionConditional.c<LootItemFunctionExplorationMap> {
 
-        protected b() {
-            super(new MinecraftKey("exploration_map"), LootItemFunctionExplorationMap.class);
-        }
+        public b() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionExplorationMap lootitemfunctionexplorationmap, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionexplorationmap, jsonserializationcontext);
-            if (!lootitemfunctionexplorationmap.d.equals("Buried_Treasure")) {
-                jsonobject.add("destination", jsonserializationcontext.serialize(lootitemfunctionexplorationmap.d));
+            if (!lootitemfunctionexplorationmap.e.equals(LootItemFunctionExplorationMap.a)) {
+                jsonobject.add("destination", jsonserializationcontext.serialize(lootitemfunctionexplorationmap.e.i()));
             }
 
-            if (lootitemfunctionexplorationmap.e != LootItemFunctionExplorationMap.a) {
-                jsonobject.add("decoration", jsonserializationcontext.serialize(lootitemfunctionexplorationmap.e.toString().toLowerCase(Locale.ROOT)));
+            if (lootitemfunctionexplorationmap.f != LootItemFunctionExplorationMap.b) {
+                jsonobject.add("decoration", jsonserializationcontext.serialize(lootitemfunctionexplorationmap.f.toString().toLowerCase(Locale.ROOT)));
             }
 
-            if (lootitemfunctionexplorationmap.f != 2) {
-                jsonobject.addProperty("zoom", lootitemfunctionexplorationmap.f);
+            if (lootitemfunctionexplorationmap.g != 2) {
+                jsonobject.addProperty("zoom", lootitemfunctionexplorationmap.g);
             }
 
-            if (lootitemfunctionexplorationmap.g != 50) {
-                jsonobject.addProperty("search_radius", lootitemfunctionexplorationmap.g);
+            if (lootitemfunctionexplorationmap.h != 50) {
+                jsonobject.addProperty("search_radius", lootitemfunctionexplorationmap.h);
             }
 
-            if (!lootitemfunctionexplorationmap.h) {
-                jsonobject.addProperty("skip_existing_chunks", lootitemfunctionexplorationmap.h);
+            if (!lootitemfunctionexplorationmap.i) {
+                jsonobject.addProperty("skip_existing_chunks", lootitemfunctionexplorationmap.i);
             }
 
         }
 
         @Override
         public LootItemFunctionExplorationMap b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            String s = jsonobject.has("destination") ? ChatDeserializer.h(jsonobject, "destination") : "Buried_Treasure";
-
-            s = WorldGenerator.ao.containsKey(s.toLowerCase(Locale.ROOT)) ? s : "Buried_Treasure";
-            String s1 = jsonobject.has("decoration") ? ChatDeserializer.h(jsonobject, "decoration") : "mansion";
-            MapIcon.Type mapicon_type = LootItemFunctionExplorationMap.a;
+            StructureGenerator<?> structuregenerator = a(jsonobject);
+            String s = jsonobject.has("decoration") ? ChatDeserializer.h(jsonobject, "decoration") : "mansion";
+            MapIcon.Type mapicon_type = LootItemFunctionExplorationMap.b;
 
             try {
-                mapicon_type = MapIcon.Type.valueOf(s1.toUpperCase(Locale.ROOT));
+                mapicon_type = MapIcon.Type.valueOf(s.toUpperCase(Locale.ROOT));
             } catch (IllegalArgumentException illegalargumentexception) {
-                LootItemFunctionExplorationMap.LOGGER.error("Error while parsing loot table decoration entry. Found {}. Defaulting to " + LootItemFunctionExplorationMap.a, s1);
+                LootItemFunctionExplorationMap.LOGGER.error("Error while parsing loot table decoration entry. Found {}. Defaulting to " + LootItemFunctionExplorationMap.b, s);
             }
 
             byte b0 = ChatDeserializer.a(jsonobject, "zoom", (byte) 2);
             int i = ChatDeserializer.a(jsonobject, "search_radius", (int) 50);
             boolean flag = ChatDeserializer.a(jsonobject, "skip_existing_chunks", true);
 
-            return new LootItemFunctionExplorationMap(alootitemcondition, s, mapicon_type, b0, i, flag);
+            return new LootItemFunctionExplorationMap(alootitemcondition, structuregenerator, mapicon_type, b0, i, flag);
+        }
+
+        private static StructureGenerator<?> a(JsonObject jsonobject) {
+            if (jsonobject.has("destination")) {
+                String s = ChatDeserializer.h(jsonobject, "destination");
+                StructureGenerator<?> structuregenerator = (StructureGenerator) StructureGenerator.a.get(s.toLowerCase(Locale.ROOT));
+
+                if (structuregenerator != null) {
+                    return structuregenerator;
+                }
+            }
+
+            return LootItemFunctionExplorationMap.a;
         }
     }
 
     public static class a extends LootItemFunctionConditional.a<LootItemFunctionExplorationMap.a> {
 
-        private String a = "Buried_Treasure";
+        private StructureGenerator<?> a;
         private MapIcon.Type b;
         private byte c;
         private int d;
         private boolean e;
 
         public a() {
-            this.b = LootItemFunctionExplorationMap.a;
+            this.a = LootItemFunctionExplorationMap.a;
+            this.b = LootItemFunctionExplorationMap.b;
             this.c = 2;
             this.d = 50;
             this.e = true;
@@ -134,8 +150,8 @@ public class LootItemFunctionExplorationMap extends LootItemFunctionConditional 
             return this;
         }
 
-        public LootItemFunctionExplorationMap.a a(String s) {
-            this.a = s;
+        public LootItemFunctionExplorationMap.a a(StructureGenerator<?> structuregenerator) {
+            this.a = structuregenerator;
             return this;
         }
 

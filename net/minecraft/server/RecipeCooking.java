@@ -38,7 +38,7 @@ public abstract class RecipeCooking implements IRecipe<IInventory> {
         return nonnulllist;
     }
 
-    public float b() {
+    public float getExperience() {
         return this.experience;
     }
 
@@ -47,7 +47,7 @@ public abstract class RecipeCooking implements IRecipe<IInventory> {
         return this.result;
     }
 
-    public int e() {
+    public int getCookingTime() {
         return this.cookingTime;
     }
 

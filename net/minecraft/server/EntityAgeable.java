@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public abstract class EntityAgeable extends EntityCreature {
 
-    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityAgeable.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> bv = DataWatcher.a(EntityAgeable.class, DataWatcherRegistry.i);
     protected int b;
     protected int c;
     protected int d;
@@ -32,46 +32,18 @@ public abstract class EntityAgeable extends EntityCreature {
     @Nullable
     public abstract EntityAgeable createChild(EntityAgeable entityageable);
 
-    protected void a(EntityHuman entityhuman, EntityAgeable entityageable) {}
-
-    @Override
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
-        ItemStack itemstack = entityhuman.b(enumhand);
-        Item item = itemstack.getItem();
-
-        if (item instanceof ItemMonsterEgg && ((ItemMonsterEgg) item).a(itemstack.getTag(), this.getEntityType())) {
-            if (!this.world.isClientSide) {
-                EntityAgeable entityageable = this.createChild(this);
-
-                if (entityageable != null) {
-                    entityageable.setAgeRaw(-24000);
-                    entityageable.setPositionRotation(this.locX(), this.locY(), this.locZ(), 0.0F, 0.0F);
-                    this.world.addEntity(entityageable);
-                    if (itemstack.hasName()) {
-                        entityageable.setCustomName(itemstack.getName());
-                    }
-
-                    this.a(entityhuman, entityageable);
-                    if (!entityhuman.abilities.canInstantlyBuild) {
-                        itemstack.subtract(1);
-                    }
-                }
-            }
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityAgeable.bw, false);
+        this.datawatcher.register(EntityAgeable.bv, false);
+    }
+
+    public boolean canBreed() {
+        return false;
     }
 
     public int getAge() {
-        return this.world.isClientSide ? ((Boolean) this.datawatcher.get(EntityAgeable.bw) ? -1 : 1) : this.b;
+        return this.world.isClientSide ? ((Boolean) this.datawatcher.get(EntityAgeable.bv) ? -1 : 1) : this.b;
     }
 
     public void setAge(int i, boolean flag) {
@@ -108,29 +80,29 @@ public abstract class EntityAgeable extends EntityCreature {
 
         this.b = i;
         if (j < 0 && i >= 0 || j >= 0 && i < 0) {
-            this.datawatcher.set(EntityAgeable.bw, i < 0);
-            this.l();
+            this.datawatcher.set(EntityAgeable.bv, i < 0);
+            this.m();
         }
 
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setInt("Age", this.getAge());
         nbttagcompound.setInt("ForcedAge", this.c);
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.setAgeRaw(nbttagcompound.getInt("Age"));
         this.c = nbttagcompound.getInt("ForcedAge");
     }
 
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityAgeable.bw.equals(datawatcherobject)) {
+        if (EntityAgeable.bv.equals(datawatcherobject)) {
             this.updateSize();
         }
 
@@ -143,7 +115,7 @@ public abstract class EntityAgeable extends EntityCreature {
         if (this.world.isClientSide) {
             if (this.d > 0) {
                 if (this.d % 4 == 0) {
-                    this.world.addParticle(Particles.HAPPY_VILLAGER, this.d(1.0D), this.cv() + 0.5D, this.g(1.0D), 0.0D, 0.0D, 0.0D);
+                    this.world.addParticle(Particles.HAPPY_VILLAGER, this.d(1.0D), this.cE() + 0.5D, this.g(1.0D), 0.0D, 0.0D, 0.0D);
                 }
 
                 --this.d;
@@ -162,11 +134,16 @@ public abstract class EntityAgeable extends EntityCreature {
 
     }
 
-    protected void l() {}
+    protected void m() {}
 
     @Override
     public boolean isBaby() {
         return this.getAge() < 0;
+    }
+
+    @Override
+    public void a(boolean flag) {
+        this.setAgeRaw(flag ? -24000 : 0);
     }
 
     public static class a implements GroupDataEntity {

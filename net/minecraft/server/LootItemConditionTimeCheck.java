@@ -16,8 +16,13 @@ public class LootItemConditionTimeCheck implements LootItemCondition {
         this.b = lootvaluebounds;
     }
 
+    @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.p;
+    }
+
     public boolean test(LootTableInfo loottableinfo) {
-        WorldServer worldserver = loottableinfo.c();
+        WorldServer worldserver = loottableinfo.getWorld();
         long i = worldserver.getDayTime();
 
         if (this.a != null) {
@@ -27,11 +32,9 @@ public class LootItemConditionTimeCheck implements LootItemCondition {
         return this.b.a((int) i);
     }
 
-    public static class b extends LootItemCondition.b<LootItemConditionTimeCheck> {
+    public static class b implements LootSerializer<LootItemConditionTimeCheck> {
 
-        public b() {
-            super(new MinecraftKey("time_check"), LootItemConditionTimeCheck.class);
-        }
+        public b() {}
 
         public void a(JsonObject jsonobject, LootItemConditionTimeCheck lootitemconditiontimecheck, JsonSerializationContext jsonserializationcontext) {
             jsonobject.addProperty("period", lootitemconditiontimecheck.a);
@@ -39,7 +42,7 @@ public class LootItemConditionTimeCheck implements LootItemCondition {
         }
 
         @Override
-        public LootItemConditionTimeCheck b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionTimeCheck a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             Long olong = jsonobject.has("period") ? ChatDeserializer.m(jsonobject, "period") : null;
             LootValueBounds lootvaluebounds = (LootValueBounds) ChatDeserializer.a(jsonobject, "value", jsondeserializationcontext, LootValueBounds.class);
 

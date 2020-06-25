@@ -14,12 +14,12 @@ public class DragonControllerLandedFlame extends AbstractDragonControllerLanded 
     public void b() {
         ++this.b;
         if (this.b % 2 == 0 && this.b < 10) {
-            Vec3D vec3d = this.a.u(1.0F).d();
+            Vec3D vec3d = this.a.t(1.0F).d();
 
             vec3d.b(-0.7853982F);
-            double d0 = this.a.bw.locX();
-            double d1 = this.a.bw.e(0.5D);
-            double d2 = this.a.bw.locZ();
+            double d0 = this.a.bv.locX();
+            double d1 = this.a.bv.e(0.5D);
+            double d2 = this.a.bv.locZ();
 
             for (int i = 0; i < 8; ++i) {
                 double d3 = d0 + this.a.getRandom().nextGaussian() / 2.0D;
@@ -46,11 +46,11 @@ public class DragonControllerLandedFlame extends AbstractDragonControllerLanded 
                 this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.SITTING_SCANNING);
             }
         } else if (this.b == 10) {
-            Vec3D vec3d = (new Vec3D(this.a.bw.locX() - this.a.locX(), 0.0D, this.a.bw.locZ() - this.a.locZ())).d();
+            Vec3D vec3d = (new Vec3D(this.a.bv.locX() - this.a.locX(), 0.0D, this.a.bv.locZ() - this.a.locZ())).d();
             float f = 5.0F;
-            double d0 = this.a.bw.locX() + vec3d.x * 5.0D / 2.0D;
-            double d1 = this.a.bw.locZ() + vec3d.z * 5.0D / 2.0D;
-            double d2 = this.a.bw.e(0.5D);
+            double d0 = this.a.bv.locX() + vec3d.x * 5.0D / 2.0D;
+            double d1 = this.a.bv.locZ() + vec3d.z * 5.0D / 2.0D;
+            double d2 = this.a.bv.e(0.5D);
             double d3 = d2;
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(d0, d2, d1);
 

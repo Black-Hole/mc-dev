@@ -1,14 +1,16 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 public class WorldGenFeatureDefinedStructurePoolEmpty extends WorldGenFeatureDefinedStructurePoolStructure {
 
-    public static final WorldGenFeatureDefinedStructurePoolEmpty a = new WorldGenFeatureDefinedStructurePoolEmpty();
+    public static final Codec<WorldGenFeatureDefinedStructurePoolEmpty> a = Codec.unit(() -> {
+        return WorldGenFeatureDefinedStructurePoolEmpty.b;
+    });
+    public static final WorldGenFeatureDefinedStructurePoolEmpty b = new WorldGenFeatureDefinedStructurePoolEmpty();
 
     private WorldGenFeatureDefinedStructurePoolEmpty() {
         super(WorldGenFeatureDefinedStructurePoolTemplate.Matching.TERRAIN_MATCHING);
@@ -25,18 +27,13 @@ public class WorldGenFeatureDefinedStructurePoolEmpty extends WorldGenFeatureDef
     }
 
     @Override
-    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, BlockPosition blockposition, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random) {
+    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, BlockPosition blockposition, BlockPosition blockposition1, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random, boolean flag) {
         return true;
     }
 
     @Override
-    public WorldGenFeatureDefinedStructurePools a() {
-        return WorldGenFeatureDefinedStructurePools.e;
-    }
-
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.emptyMap());
+    public WorldGenFeatureDefinedStructurePools<?> a() {
+        return WorldGenFeatureDefinedStructurePools.d;
     }
 
     public String toString() {

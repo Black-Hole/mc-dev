@@ -7,13 +7,13 @@ public class BlockCoral extends Block {
 
     private final Block a;
 
-    public BlockCoral(Block block, Block.Info block_info) {
-        super(block_info);
+    public BlockCoral(Block block, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.a = block;
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if (!this.a((IBlockAccess) worldserver, blockposition)) {
             worldserver.setTypeAndData(blockposition, this.a.getBlockData(), 2);
         }
@@ -37,7 +37,7 @@ public class BlockCoral extends Block {
             EnumDirection enumdirection = aenumdirection[j];
             Fluid fluid = iblockaccess.getFluid(blockposition.shift(enumdirection));
 
-            if (fluid.a(TagsFluid.WATER)) {
+            if (fluid.a((Tag) TagsFluid.WATER)) {
                 return true;
             }
         }

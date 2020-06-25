@@ -15,19 +15,21 @@ public class ItemDye extends Item {
     }
 
     @Override
-    public boolean a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
+    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
         if (entityliving instanceof EntitySheep) {
             EntitySheep entitysheep = (EntitySheep) entityliving;
 
             if (entitysheep.isAlive() && !entitysheep.isSheared() && entitysheep.getColor() != this.b) {
-                entitysheep.setColor(this.b);
-                itemstack.subtract(1);
-            }
+                if (!entityhuman.world.isClientSide) {
+                    entitysheep.setColor(this.b);
+                    itemstack.subtract(1);
+                }
 
-            return true;
-        } else {
-            return false;
+                return EnumInteractionResult.a(entityhuman.world.isClientSide);
+            }
         }
+
+        return EnumInteractionResult.PASS;
     }
 
     public EnumColor d() {

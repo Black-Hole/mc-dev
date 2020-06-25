@@ -10,8 +10,8 @@ public class BlockWitherSkull extends BlockSkull {
     @Nullable
     private static ShapeDetector d;
 
-    protected BlockWitherSkull(Block.Info block_info) {
-        super(BlockSkull.Type.WITHER_SKELETON, block_info);
+    protected BlockWitherSkull(BlockBase.Info blockbase_info) {
+        super(BlockSkull.Type.WITHER_SKELETON, blockbase_info);
     }
 
     @Override
@@ -27,10 +27,10 @@ public class BlockWitherSkull extends BlockSkull {
 
     public static void a(World world, BlockPosition blockposition, TileEntitySkull tileentityskull) {
         if (!world.isClientSide) {
-            Block block = tileentityskull.getBlock().getBlock();
-            boolean flag = block == Blocks.WITHER_SKELETON_SKULL || block == Blocks.WITHER_SKELETON_WALL_SKULL;
+            IBlockData iblockdata = tileentityskull.getBlock();
+            boolean flag = iblockdata.a(Blocks.WITHER_SKELETON_SKULL) || iblockdata.a(Blocks.WITHER_SKELETON_WALL_SKULL);
 
-            if (flag && blockposition.getY() >= 2 && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+            if (flag && blockposition.getY() >= 0 && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
                 ShapeDetector shapedetector = c();
                 ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = shapedetector.a(world, blockposition);
 
@@ -47,9 +47,9 @@ public class BlockWitherSkull extends BlockSkull {
                     EntityWither entitywither = (EntityWither) EntityTypes.WITHER.a(world);
                     BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a(1, 2, 0).getPosition();
 
-                    entitywither.setPositionRotation((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.55D, (double) blockposition1.getZ() + 0.5D, shapedetector_shapedetectorcollection.getFacing().m() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F, 0.0F);
-                    entitywither.aI = shapedetector_shapedetectorcollection.getFacing().m() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F;
-                    entitywither.l();
+                    entitywither.setPositionRotation((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.55D, (double) blockposition1.getZ() + 0.5D, shapedetector_shapedetectorcollection.getFacing().n() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F, 0.0F);
+                    entitywither.aH = shapedetector_shapedetectorcollection.getFacing().n() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F;
+                    entitywither.beginSpawnSequence();
                     Iterator iterator = world.a(EntityPlayer.class, entitywither.getBoundingBox().g(50.0D)).iterator();
 
                     while (iterator.hasNext()) {
@@ -77,7 +77,9 @@ public class BlockWitherSkull extends BlockSkull {
 
     private static ShapeDetector c() {
         if (BlockWitherSkull.c == null) {
-            BlockWitherSkull.c = ShapeDetectorBuilder.a().a("^^^", "###", "~#~").a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SOUL_SAND))).a('^', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.WITHER_SKELETON_SKULL).or(BlockStatePredicate.a(Blocks.WITHER_SKELETON_WALL_SKULL)))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
+            BlockWitherSkull.c = ShapeDetectorBuilder.a().a("^^^", "###", "~#~").a('#', (shapedetectorblock) -> {
+                return shapedetectorblock.a().a((Tag) TagsBlock.WITHER_SUMMON_BASE_BLOCKS);
+            }).a('^', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.WITHER_SKELETON_SKULL).or(BlockStatePredicate.a(Blocks.WITHER_SKELETON_WALL_SKULL)))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
         }
 
         return BlockWitherSkull.c;
@@ -85,7 +87,9 @@ public class BlockWitherSkull extends BlockSkull {
 
     private static ShapeDetector d() {
         if (BlockWitherSkull.d == null) {
-            BlockWitherSkull.d = ShapeDetectorBuilder.a().a("   ", "###", "~#~").a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SOUL_SAND))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
+            BlockWitherSkull.d = ShapeDetectorBuilder.a().a("   ", "###", "~#~").a('#', (shapedetectorblock) -> {
+                return shapedetectorblock.a().a((Tag) TagsBlock.WITHER_SUMMON_BASE_BLOCKS);
+            }).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
         }
 
         return BlockWitherSkull.d;

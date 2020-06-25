@@ -237,7 +237,7 @@ public final class VoxelShapes {
                                 blockposition_mutableblockposition.a(enumaxiscycle1, i2, j2, l1);
                                 IBlockData iblockdata = iworldreader.getType(blockposition_mutableblockposition);
 
-                                if ((k2 != 1 || iblockdata.f()) && (k2 != 2 || iblockdata.getBlock() == Blocks.MOVING_PISTON)) {
+                                if ((k2 != 1 || iblockdata.d()) && (k2 != 2 || iblockdata.a(Blocks.MOVING_PISTON))) {
                                     d0 = iblockdata.b((IBlockAccess) iworldreader, blockposition_mutableblockposition, voxelshapecollision).a(enumdirection_enumaxis2, axisalignedbb.d((double) (-blockposition_mutableblockposition.getX()), (double) (-blockposition_mutableblockposition.getY()), (double) (-blockposition_mutableblockposition.getZ())), d0);
                                     if (Math.abs(d0) < 1.0E-7D) {
                                         return 0.0D;
@@ -272,11 +272,11 @@ public final class VoxelShapes {
         if (voxelshape == b()) {
             return b();
         } else {
-            EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.m();
+            EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.n();
             boolean flag;
             int i;
 
-            if (enumdirection.d() == EnumDirection.EnumAxisDirection.POSITIVE) {
+            if (enumdirection.e() == EnumDirection.EnumAxisDirection.POSITIVE) {
                 flag = DoubleMath.fuzzyEquals(voxelshape.c(enumdirection_enumaxis), 1.0D, 1.0E-7D);
                 i = voxelshape.a.c(enumdirection_enumaxis) - 1;
             } else {
@@ -290,8 +290,8 @@ public final class VoxelShapes {
 
     public static boolean b(VoxelShape voxelshape, VoxelShape voxelshape1, EnumDirection enumdirection) {
         if (voxelshape != b() && voxelshape1 != b()) {
-            EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.m();
-            EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection = enumdirection.d();
+            EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.n();
+            EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection = enumdirection.e();
             VoxelShape voxelshape2 = enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? voxelshape : voxelshape1;
             VoxelShape voxelshape3 = enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? voxelshape1 : voxelshape;
 

@@ -5,8 +5,8 @@ import javax.annotation.Nullable;
 
 public class BlockSkullPlayerWall extends BlockSkullWall {
 
-    protected BlockSkullPlayerWall(Block.Info block_info) {
-        super(BlockSkull.Type.PLAYER, block_info);
+    protected BlockSkullPlayerWall(BlockBase.Info blockbase_info) {
+        super(BlockSkull.Type.PLAYER, blockbase_info);
     }
 
     @Override

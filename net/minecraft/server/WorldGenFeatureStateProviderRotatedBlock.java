@@ -1,36 +1,28 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMap.Builder;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
 import java.util.Random;
 
 public class WorldGenFeatureStateProviderRotatedBlock extends WorldGenFeatureStateProvider {
 
-    private final Block b;
+    public static final Codec<WorldGenFeatureStateProviderRotatedBlock> b = IBlockData.b.fieldOf("state").xmap(BlockBase.BlockData::getBlock, Block::getBlockData).xmap(WorldGenFeatureStateProviderRotatedBlock::new, (worldgenfeaturestateproviderrotatedblock) -> {
+        return worldgenfeaturestateproviderrotatedblock.c;
+    }).codec();
+    private final Block c;
 
     public WorldGenFeatureStateProviderRotatedBlock(Block block) {
-        super(WorldGenFeatureStateProviders.a);
-        this.b = block;
+        this.c = block;
     }
 
-    public <T> WorldGenFeatureStateProviderRotatedBlock(Dynamic<T> dynamic) {
-        this(IBlockData.a(dynamic.get("state").orElseEmptyMap()).getBlock());
+    @Override
+    protected WorldGenFeatureStateProviders<?> a() {
+        return WorldGenFeatureStateProviders.e;
     }
 
     @Override
     public IBlockData a(Random random, BlockPosition blockposition) {
         EnumDirection.EnumAxis enumdirection_enumaxis = EnumDirection.EnumAxis.a(random);
 
-        return (IBlockData) this.b.getBlockData().set(BlockRotatable.AXIS, enumdirection_enumaxis);
-    }
-
-    @Override
-    public <T> T a(DynamicOps<T> dynamicops) {
-        Builder<T, T> builder = ImmutableMap.builder();
-
-        builder.put(dynamicops.createString("type"), dynamicops.createString(IRegistry.t.getKey(this.a).toString())).put(dynamicops.createString("state"), IBlockData.a(dynamicops, this.b.getBlockData()).getValue());
-        return (new Dynamic(dynamicops, dynamicops.createMap(builder.build()))).getValue();
+        return (IBlockData) this.c.getBlockData().set(BlockRotatable.AXIS, enumdirection_enumaxis);
     }
 }

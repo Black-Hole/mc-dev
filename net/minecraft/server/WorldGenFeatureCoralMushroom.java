@@ -1,13 +1,12 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenFeatureCoralMushroom extends WorldGenFeatureCoral {
 
-    public WorldGenFeatureCoralMushroom(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
-        super(function);
+    public WorldGenFeatureCoralMushroom(Codec<WorldGenFeatureEmptyConfiguration> codec) {
+        super(codec);
     }
 
     @Override
@@ -16,7 +15,7 @@ public class WorldGenFeatureCoralMushroom extends WorldGenFeatureCoral {
         int j = random.nextInt(3) + 3;
         int k = random.nextInt(3) + 3;
         int l = random.nextInt(3) + 1;
-        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(blockposition);
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i();
 
         for (int i1 = 0; i1 <= j; ++i1) {
             for (int j1 = 0; j1 <= i; ++j1) {

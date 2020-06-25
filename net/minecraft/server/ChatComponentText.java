@@ -1,25 +1,43 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ChatComponentText extends ChatBaseComponent {
 
-    private final String b;
+    public static final IChatBaseComponent d = new ChatComponentText("");
+    private final String e;
+    @Nullable
+    private LocaleLanguage f;
+    private String g;
 
     public ChatComponentText(String s) {
-        this.b = s;
+        this.e = s;
+        this.g = s;
     }
 
-    public String i() {
-        return this.b;
+    public String g() {
+        return this.e;
     }
 
     @Override
     public String getText() {
-        return this.b;
+        if (this.e.isEmpty()) {
+            return this.e;
+        } else {
+            LocaleLanguage localelanguage = LocaleLanguage.a();
+
+            if (this.f != localelanguage) {
+                this.g = localelanguage.a(this.e, false);
+                this.f = localelanguage;
+            }
+
+            return this.g;
+        }
     }
 
     @Override
-    public ChatComponentText g() {
-        return new ChatComponentText(this.b);
+    public ChatComponentText f() {
+        return new ChatComponentText(this.e);
     }
 
     @Override
@@ -31,12 +49,12 @@ public class ChatComponentText extends ChatBaseComponent {
         } else {
             ChatComponentText chatcomponenttext = (ChatComponentText) object;
 
-            return this.b.equals(chatcomponenttext.i()) && super.equals(object);
+            return this.e.equals(chatcomponenttext.g()) && super.equals(object);
         }
     }
 
     @Override
     public String toString() {
-        return "TextComponent{text='" + this.b + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
+        return "TextComponent{text='" + this.e + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
     }
 }

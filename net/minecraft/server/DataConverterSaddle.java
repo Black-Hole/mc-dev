@@ -1,12 +1,12 @@
 package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 import java.util.Optional;
 
 public class DataConverterSaddle extends DataConverterNamedEntity {
@@ -17,7 +17,7 @@ public class DataConverterSaddle extends DataConverterNamedEntity {
 
     @Override
     protected Typed<?> a(Typed<?> typed) {
-        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString()));
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DataConverterSchemaNamed.a()));
         Type<?> type = this.getInputSchema().getTypeRaw(DataConverterTypes.ITEM_STACK);
         OpticFinder<?> opticfinder1 = DSL.fieldFinder("SaddleItem", type);
         Optional<? extends Typed<?>> optional = typed.getOptionalTyped(opticfinder1);

@@ -17,17 +17,20 @@ public class LootItemConditionWeatherCheck implements LootItemCondition {
         this.b = obool1;
     }
 
-    public boolean test(LootTableInfo loottableinfo) {
-        WorldServer worldserver = loottableinfo.c();
-
-        return this.a != null && this.a != worldserver.isRaining() ? false : this.b == null || this.b == worldserver.U();
+    @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.n;
     }
 
-    public static class b extends LootItemCondition.b<LootItemConditionWeatherCheck> {
+    public boolean test(LootTableInfo loottableinfo) {
+        WorldServer worldserver = loottableinfo.getWorld();
 
-        public b() {
-            super(new MinecraftKey("weather_check"), LootItemConditionWeatherCheck.class);
-        }
+        return this.a != null && this.a != worldserver.isRaining() ? false : this.b == null || this.b == worldserver.T();
+    }
+
+    public static class b implements LootSerializer<LootItemConditionWeatherCheck> {
+
+        public b() {}
 
         public void a(JsonObject jsonobject, LootItemConditionWeatherCheck lootitemconditionweathercheck, JsonSerializationContext jsonserializationcontext) {
             jsonobject.addProperty("raining", lootitemconditionweathercheck.a);
@@ -35,7 +38,7 @@ public class LootItemConditionWeatherCheck implements LootItemCondition {
         }
 
         @Override
-        public LootItemConditionWeatherCheck b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionWeatherCheck a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             Boolean obool = jsonobject.has("raining") ? ChatDeserializer.j(jsonobject, "raining") : null;
             Boolean obool1 = jsonobject.has("thundering") ? ChatDeserializer.j(jsonobject, "thundering") : null;
 

@@ -22,6 +22,14 @@ public class RecipeBook {
     public void a(RecipeBook recipebook) {
         this.a.clear();
         this.b.clear();
+        this.c = recipebook.c;
+        this.d = recipebook.d;
+        this.e = recipebook.e;
+        this.f = recipebook.f;
+        this.g = recipebook.g;
+        this.h = recipebook.h;
+        this.i = recipebook.i;
+        this.j = recipebook.j;
         this.a.addAll(recipebook.a);
         this.b.addAll(recipebook.b);
     }

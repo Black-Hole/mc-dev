@@ -15,11 +15,16 @@ public class LootItemFunctionSmelt extends LootItemFunctionConditional {
     }
 
     @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.f;
+    }
+
+    @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
         if (itemstack.isEmpty()) {
             return itemstack;
         } else {
-            Optional<FurnaceRecipe> optional = loottableinfo.c().getCraftingManager().craft(Recipes.SMELTING, new InventorySubcontainer(new ItemStack[]{itemstack}), loottableinfo.c());
+            Optional<FurnaceRecipe> optional = loottableinfo.getWorld().getCraftingManager().craft(Recipes.SMELTING, new InventorySubcontainer(new ItemStack[]{itemstack}), loottableinfo.getWorld());
 
             if (optional.isPresent()) {
                 ItemStack itemstack1 = ((FurnaceRecipe) optional.get()).getResult();
@@ -37,15 +42,13 @@ public class LootItemFunctionSmelt extends LootItemFunctionConditional {
         }
     }
 
-    public static LootItemFunctionConditional.a<?> b() {
+    public static LootItemFunctionConditional.a<?> c() {
         return a(LootItemFunctionSmelt::new);
     }
 
     public static class a extends LootItemFunctionConditional.c<LootItemFunctionSmelt> {
 
-        protected a() {
-            super(new MinecraftKey("furnace_smelt"), LootItemFunctionSmelt.class);
-        }
+        public a() {}
 
         @Override
         public LootItemFunctionSmelt b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {

@@ -1,7 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.mojang.datafixers.DataFixer;
+import com.mojang.serialization.DynamicOps;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -18,14 +18,14 @@ public class WorldUpgraderIterator {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    static boolean a(java.nio.file.Path java_nio_file_path, DataFixer datafixer, String s, IProgressUpdate iprogressupdate) {
+    static boolean a(Convertable.ConversionSession convertable_conversionsession, IProgressUpdate iprogressupdate) {
         iprogressupdate.a(0);
         List<File> list = Lists.newArrayList();
         List<File> list1 = Lists.newArrayList();
         List<File> list2 = Lists.newArrayList();
-        File file = new File(java_nio_file_path.toFile(), s);
-        File file1 = DimensionManager.NETHER.a(file);
-        File file2 = DimensionManager.THE_END.a(file);
+        File file = convertable_conversionsession.a(World.OVERWORLD);
+        File file1 = convertable_conversionsession.a(World.THE_NETHER);
+        File file2 = convertable_conversionsession.a(World.THE_END);
 
         WorldUpgraderIterator.LOGGER.info("Scanning folders...");
         a(file, (Collection) list);
@@ -40,50 +40,38 @@ public class WorldUpgraderIterator {
         int i = list.size() + list1.size() + list2.size();
 
         WorldUpgraderIterator.LOGGER.info("Total conversion count is {}", i);
-        WorldData worlddata = Convertable.a(java_nio_file_path, datafixer, s);
-        BiomeLayout<BiomeLayoutFixedConfiguration, WorldChunkManagerHell> biomelayout = BiomeLayout.b;
-        BiomeLayout<BiomeLayoutOverworldConfiguration, WorldChunkManagerOverworld> biomelayout1 = BiomeLayout.c;
-        WorldChunkManager worldchunkmanager;
+        IRegistryCustom.Dimension iregistrycustom_dimension = IRegistryCustom.b();
+        RegistryReadOps<NBTBase> registryreadops = RegistryReadOps.a((DynamicOps) DynamicOpsNBT.a, (IResourceManager) IResourceManager.Empty.INSTANCE, (IRegistryCustom) iregistrycustom_dimension);
+        SaveData savedata = convertable_conversionsession.a((DynamicOps) registryreadops, DataPackConfiguration.a);
+        long j = savedata != null ? savedata.getGeneratorSettings().getSeed() : 0L;
+        Object object;
 
-        if (worlddata != null && worlddata.getType() == WorldType.FLAT) {
-            worldchunkmanager = biomelayout.a((BiomeLayoutConfiguration) ((BiomeLayoutFixedConfiguration) biomelayout.a(worlddata)).a(Biomes.PLAINS));
+        if (savedata != null && savedata.getGeneratorSettings().isFlatWorld()) {
+            object = new WorldChunkManagerHell(Biomes.PLAINS);
         } else {
-            worldchunkmanager = biomelayout1.a(biomelayout1.a(worlddata));
+            object = new WorldChunkManagerOverworld(j, false, false);
         }
 
-        a(new File(file, "region"), (Iterable) list, worldchunkmanager, 0, i, iprogressupdate);
-        a(new File(file1, "region"), (Iterable) list1, biomelayout.a((BiomeLayoutConfiguration) ((BiomeLayoutFixedConfiguration) biomelayout.a(worlddata)).a(Biomes.NETHER)), list.size(), i, iprogressupdate);
-        a(new File(file2, "region"), (Iterable) list2, biomelayout.a((BiomeLayoutConfiguration) ((BiomeLayoutFixedConfiguration) biomelayout.a(worlddata)).a(Biomes.THE_END)), list.size() + list1.size(), i, iprogressupdate);
-        worlddata.d(19133);
-        if (worlddata.getType() == WorldType.NORMAL_1_1) {
-            worlddata.a(WorldType.NORMAL);
-        }
-
-        a(java_nio_file_path, s);
-        WorldNBTStorage worldnbtstorage = Convertable.a(java_nio_file_path, datafixer, s, (MinecraftServer) null);
-
-        worldnbtstorage.saveWorldData(worlddata);
+        a(new File(file, "region"), (Iterable) list, (WorldChunkManager) object, 0, i, iprogressupdate);
+        a(new File(file1, "region"), (Iterable) list1, new WorldChunkManagerHell(Biomes.NETHER_WASTES), list.size(), i, iprogressupdate);
+        a(new File(file2, "region"), (Iterable) list2, new WorldChunkManagerHell(Biomes.THE_END), list.size() + list1.size(), i, iprogressupdate);
+        a(convertable_conversionsession);
+        convertable_conversionsession.a((IRegistryCustom) iregistrycustom_dimension, savedata);
         return true;
     }
 
-    private static void a(java.nio.file.Path java_nio_file_path, String s) {
-        File file = new File(java_nio_file_path.toFile(), s);
+    private static void a(Convertable.ConversionSession convertable_conversionsession) {
+        File file = convertable_conversionsession.getWorldFolder(SavedFile.LEVEL_DAT).toFile();
 
         if (!file.exists()) {
             WorldUpgraderIterator.LOGGER.warn("Unable to create level.dat_mcr backup");
         } else {
-            File file1 = new File(file, "level.dat");
+            File file1 = new File(file.getParent(), "level.dat_mcr");
 
-            if (!file1.exists()) {
+            if (!file.renameTo(file1)) {
                 WorldUpgraderIterator.LOGGER.warn("Unable to create level.dat_mcr backup");
-            } else {
-                File file2 = new File(file, "level.dat_mcr");
-
-                if (!file1.renameTo(file2)) {
-                    WorldUpgraderIterator.LOGGER.warn("Unable to create level.dat_mcr backup");
-                }
-
             }
+
         }
     }
 
@@ -106,11 +94,11 @@ public class WorldUpgraderIterator {
         String s = file1.getName();
 
         try {
-            RegionFile regionfile = new RegionFile(file1, file);
+            RegionFile regionfile = new RegionFile(file1, file, true);
             Throwable throwable = null;
 
             try {
-                RegionFile regionfile1 = new RegionFile(new File(file, s.substring(0, s.length() - ".mcr".length()) + ".mca"), file);
+                RegionFile regionfile1 = new RegionFile(new File(file, s.substring(0, s.length() - ".mcr".length()) + ".mca"), file, true);
                 Throwable throwable1 = null;
 
                 try {

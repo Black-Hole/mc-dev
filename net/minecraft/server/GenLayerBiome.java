@@ -23,56 +23,48 @@ public class GenLayerBiome implements AreaTransformer5 {
     private static final int[] s = new int[]{GenLayerBiome.d, GenLayerBiome.l, GenLayerBiome.c, GenLayerBiome.j, GenLayerBiome.a, GenLayerBiome.n};
     private static final int[] t = new int[]{GenLayerBiome.d, GenLayerBiome.c, GenLayerBiome.o, GenLayerBiome.j};
     private static final int[] u = new int[]{GenLayerBiome.e, GenLayerBiome.e, GenLayerBiome.e, GenLayerBiome.p};
-    private final int v;
-    private int[] w;
+    private int[] v;
 
-    public GenLayerBiome(WorldType worldtype, int i) {
-        this.w = GenLayerBiome.r;
-        if (worldtype == WorldType.NORMAL_1_1) {
-            this.w = GenLayerBiome.q;
-            this.v = -1;
-        } else {
-            this.v = i;
+    public GenLayerBiome(boolean flag) {
+        this.v = GenLayerBiome.r;
+        if (flag) {
+            this.v = GenLayerBiome.q;
         }
 
     }
 
     @Override
     public int a(WorldGenContext worldgencontext, int i) {
-        if (this.v >= 0) {
-            return this.v;
-        } else {
-            int j = (i & 3840) >> 8;
+        int j = (i & 3840) >> 8;
 
-            i &= -3841;
-            if (!GenLayers.a(i) && i != GenLayerBiome.i) {
-                switch (i) {
-                    case 1:
-                        if (j > 0) {
-                            return worldgencontext.a(3) == 0 ? GenLayerBiome.g : GenLayerBiome.h;
-                        }
+        i &= -3841;
+        if (!GenLayers.a(i) && i != GenLayerBiome.i) {
+            switch (i) {
+                case 1:
+                    if (j > 0) {
+                        return worldgencontext.a(3) == 0 ? GenLayerBiome.g : GenLayerBiome.h;
+                    }
 
-                        return this.w[worldgencontext.a(this.w.length)];
-                    case 2:
-                        if (j > 0) {
-                            return GenLayerBiome.f;
-                        }
+                    return this.v[worldgencontext.a(this.v.length)];
+                case 2:
+                    if (j > 0) {
+                        return GenLayerBiome.f;
+                    }
 
-                        return GenLayerBiome.s[worldgencontext.a(GenLayerBiome.s.length)];
-                    case 3:
-                        if (j > 0) {
-                            return GenLayerBiome.k;
-                        }
+                    return GenLayerBiome.s[worldgencontext.a(GenLayerBiome.s.length)];
+                case 3:
+                    if (j > 0) {
+                        return GenLayerBiome.k;
+                    }
 
-                        return GenLayerBiome.t[worldgencontext.a(GenLayerBiome.t.length)];
-                    case 4:
-                        return GenLayerBiome.u[worldgencontext.a(GenLayerBiome.u.length)];
-                    default:
-                        return GenLayerBiome.i;
-                }
-            } else {
-                return i;
+                    return GenLayerBiome.t[worldgencontext.a(GenLayerBiome.t.length)];
+                case 4:
+                    return GenLayerBiome.u[worldgencontext.a(GenLayerBiome.u.length)];
+                default:
+                    return GenLayerBiome.i;
             }
+        } else {
+            return i;
         }
     }
 }

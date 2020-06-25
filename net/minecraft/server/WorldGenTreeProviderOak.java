@@ -9,7 +9,7 @@ public class WorldGenTreeProviderOak extends WorldGenTreeProvider {
 
     @Nullable
     @Override
-    protected WorldGenFeatureConfigured<WorldGenFeatureSmallTreeConfigurationConfiguration, ?> a(Random random, boolean flag) {
-        return random.nextInt(10) == 0 ? WorldGenerator.FANCY_TREE.b((WorldGenFeatureConfiguration) (flag ? BiomeDecoratorGroups.FANCY_TREE_BEES_005 : BiomeDecoratorGroups.FANCY_TREE)) : WorldGenerator.NORMAL_TREE.b((WorldGenFeatureConfiguration) (flag ? BiomeDecoratorGroups.NORMAL_TREE_BEES_005 : BiomeDecoratorGroups.NORMAL_TREE));
+    protected WorldGenFeatureConfigured<WorldGenFeatureTreeConfiguration, ?> a(Random random, boolean flag) {
+        return random.nextInt(10) == 0 ? WorldGenerator.TREE.b((WorldGenFeatureConfiguration) (flag ? BiomeDecoratorGroups.FANCY_TREE_BEES_005 : BiomeDecoratorGroups.FANCY_TREE)) : WorldGenerator.TREE.b((WorldGenFeatureConfiguration) (flag ? BiomeDecoratorGroups.NORMAL_TREE_BEES_005 : BiomeDecoratorGroups.NORMAL_TREE));
     }
 }

@@ -23,8 +23,8 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         if (this.patrolTarget != null) {
             nbttagcompound.set("PatrolTarget", GameProfileSerializer.a(this.patrolTarget));
         }
@@ -34,10 +34,10 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         if (nbttagcompound.hasKey("PatrolTarget")) {
-            this.patrolTarget = GameProfileSerializer.c(nbttagcompound.getCompound("PatrolTarget"));
+            this.patrolTarget = GameProfileSerializer.b(nbttagcompound.getCompound("PatrolTarget"));
         }
 
         this.patrolLeader = nbttagcompound.getBoolean("PatrolLeader");
@@ -45,18 +45,18 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
     }
 
     @Override
-    public double aR() {
+    public double aX() {
         return -0.45D;
     }
 
-    public boolean es() {
+    public boolean eO() {
         return true;
     }
 
     @Nullable
     @Override
     public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        if (enummobspawn != EnumMobSpawn.PATROL && enummobspawn != EnumMobSpawn.EVENT && enummobspawn != EnumMobSpawn.STRUCTURE && this.random.nextFloat() < 0.06F && this.es()) {
+        if (enummobspawn != EnumMobSpawn.PATROL && enummobspawn != EnumMobSpawn.EVENT && enummobspawn != EnumMobSpawn.STRUCTURE && this.random.nextFloat() < 0.06F && this.eO()) {
             this.patrolLeader = true;
         }
 
@@ -90,7 +90,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         return this.patrolTarget;
     }
 
-    public boolean eu() {
+    public boolean eQ() {
         return this.patrolTarget != null;
     }
 
@@ -103,12 +103,12 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         return this.patrolLeader;
     }
 
-    public boolean ex() {
+    public boolean eU() {
         return true;
     }
 
-    public void ey() {
-        this.patrolTarget = (new BlockPosition(this)).b(-500 + this.random.nextInt(1000), 0, -500 + this.random.nextInt(1000));
+    public void eV() {
+        this.patrolTarget = this.getChunkCoordinates().b(-500 + this.random.nextInt(1000), 0, -500 + this.random.nextInt(1000));
         this.patrolling = true;
     }
 
@@ -116,7 +116,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         return this.patrolling;
     }
 
-    protected void s(boolean flag) {
+    protected void u(boolean flag) {
         this.patrolling = flag;
     }
 
@@ -139,7 +139,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         public boolean a() {
             boolean flag = this.a.world.getTime() < this.d;
 
-            return this.a.isPatrolling() && this.a.getGoalTarget() == null && !this.a.isVehicle() && this.a.eu() && !flag;
+            return this.a.isPatrolling() && this.a.getGoalTarget() == null && !this.a.isVehicle() && this.a.eQ() && !flag;
         }
 
         @Override
@@ -157,11 +157,11 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
                 List<EntityMonsterPatrolling> list = this.g();
 
                 if (this.a.isPatrolling() && list.isEmpty()) {
-                    this.a.s(false);
+                    this.a.u(false);
                 } else if (flag && this.a.getPatrolTarget().a((IPosition) this.a.getPositionVector(), 10.0D)) {
-                    this.a.ey();
+                    this.a.eV();
                 } else {
-                    Vec3D vec3d = new Vec3D(this.a.getPatrolTarget());
+                    Vec3D vec3d = Vec3D.c((BaseBlockPosition) this.a.getPatrolTarget());
                     Vec3D vec3d1 = this.a.getPositionVector();
                     Vec3D vec3d2 = vec3d1.d(vec3d);
 
@@ -189,13 +189,13 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
 
         private List<EntityMonsterPatrolling> g() {
             return this.a.world.a(EntityMonsterPatrolling.class, this.a.getBoundingBox().g(16.0D), (entitymonsterpatrolling) -> {
-                return entitymonsterpatrolling.ex() && !entitymonsterpatrolling.s(this.a);
+                return entitymonsterpatrolling.eU() && !entitymonsterpatrolling.s(this.a);
             });
         }
 
         private boolean h() {
             Random random = this.a.getRandom();
-            BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, (new BlockPosition(this.a)).b(-8 + random.nextInt(16), 0, -8 + random.nextInt(16)));
+            BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, this.a.getChunkCoordinates().b(-8 + random.nextInt(16), 0, -8 + random.nextInt(16)));
 
             return this.a.getNavigation().a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), this.b);
         }

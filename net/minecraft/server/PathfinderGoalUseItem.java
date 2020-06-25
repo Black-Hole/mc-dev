@@ -35,9 +35,9 @@ public class PathfinderGoalUseItem<T extends EntityInsentient> extends Pathfinde
 
     @Override
     public void d() {
-        this.a.setSlot(EnumItemSlot.MAINHAND, ItemStack.a);
+        this.a.setSlot(EnumItemSlot.MAINHAND, ItemStack.b);
         if (this.d != null) {
-            this.a.a(this.d, 1.0F, this.a.getRandom().nextFloat() * 0.2F + 0.9F);
+            this.a.playSound(this.d, 1.0F, this.a.getRandom().nextFloat() * 0.2F + 0.9F);
         }
 
     }

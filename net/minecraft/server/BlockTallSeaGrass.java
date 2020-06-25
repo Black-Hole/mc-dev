@@ -2,23 +2,23 @@ package net.minecraft.server;
 
 import javax.annotation.Nullable;
 
-public class BlockTallSeaGrass extends BlockTallPlantShearable implements IFluidContainer {
+public class BlockTallSeaGrass extends BlockTallPlant implements IFluidContainer {
 
-    public static final BlockStateEnum<BlockPropertyDoubleBlockHalf> c = BlockTallPlantShearable.b;
-    protected static final VoxelShape d = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
+    public static final BlockStateEnum<BlockPropertyDoubleBlockHalf> b = BlockTallPlant.HALF;
+    protected static final VoxelShape c = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
 
-    public BlockTallSeaGrass(Block.Info block_info) {
-        super(block_info);
+    public BlockTallSeaGrass(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockTallSeaGrass.d;
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return BlockTallSeaGrass.c;
     }
 
     @Override
-    protected boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.d(iblockaccess, blockposition, EnumDirection.UP) && iblockdata.getBlock() != Blocks.MAGMA_BLOCK;
+    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockdata.d(iblockaccess, blockposition, EnumDirection.UP) && !iblockdata.a(Blocks.MAGMA_BLOCK);
     }
 
     @Nullable
@@ -29,7 +29,7 @@ public class BlockTallSeaGrass extends BlockTallPlantShearable implements IFluid
         if (iblockdata != null) {
             Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition().up());
 
-            if (fluid.a(TagsFluid.WATER) && fluid.g() == 8) {
+            if (fluid.a((Tag) TagsFluid.WATER) && fluid.e() == 8) {
                 return iblockdata;
             }
         }
@@ -39,19 +39,19 @@ public class BlockTallSeaGrass extends BlockTallPlantShearable implements IFluid
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        if (iblockdata.get(BlockTallSeaGrass.c) == BlockPropertyDoubleBlockHalf.UPPER) {
+        if (iblockdata.get(BlockTallSeaGrass.b) == BlockPropertyDoubleBlockHalf.UPPER) {
             IBlockData iblockdata1 = iworldreader.getType(blockposition.down());
 
-            return iblockdata1.getBlock() == this && iblockdata1.get(BlockTallSeaGrass.c) == BlockPropertyDoubleBlockHalf.LOWER;
+            return iblockdata1.a((Block) this) && iblockdata1.get(BlockTallSeaGrass.b) == BlockPropertyDoubleBlockHalf.LOWER;
         } else {
             Fluid fluid = iworldreader.getFluid(blockposition);
 
-            return super.canPlace(iblockdata, iworldreader, blockposition) && fluid.a(TagsFluid.WATER) && fluid.g() == 8;
+            return super.canPlace(iblockdata, iworldreader, blockposition) && fluid.a((Tag) TagsFluid.WATER) && fluid.e() == 8;
         }
     }
 
     @Override
-    public Fluid a_(IBlockData iblockdata) {
+    public Fluid d(IBlockData iblockdata) {
         return FluidTypes.WATER.a(false);
     }
 

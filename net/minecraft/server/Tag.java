@@ -1,255 +1,194 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSet.Builder;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import java.util.Collection;
-import java.util.Collections;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
-import javax.annotation.Nullable;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-public class Tag<T> {
+public interface Tag<T> {
 
-    private final MinecraftKey a;
-    private final Set<T> b;
-    private final Collection<Tag.b<T>> c;
-
-    public Tag(MinecraftKey minecraftkey) {
-        this.a = minecraftkey;
-        this.b = Collections.emptySet();
-        this.c = Collections.emptyList();
+    static <T> Codec<Tag<T>> a(Supplier<Tags<T>> supplier) {
+        return MinecraftKey.a.flatXmap((minecraftkey) -> {
+            return (DataResult) Optional.ofNullable(((Tags) supplier.get()).a(minecraftkey)).map(DataResult::success).orElseGet(() -> {
+                return DataResult.error("Unknown tag: " + minecraftkey);
+            });
+        }, (tag) -> {
+            return (DataResult) Optional.ofNullable(((Tags) supplier.get()).a(tag)).map(DataResult::success).orElseGet(() -> {
+                return DataResult.error("Unknown tag: " + tag);
+            });
+        });
     }
 
-    public Tag(MinecraftKey minecraftkey, Collection<Tag.b<T>> collection, boolean flag) {
-        this.a = minecraftkey;
-        this.b = (Set) (flag ? Sets.newLinkedHashSet() : Sets.newHashSet());
-        this.c = collection;
-        Iterator iterator = collection.iterator();
+    boolean isTagged(T t0);
 
-        while (iterator.hasNext()) {
-            Tag.b<T> tag_b = (Tag.b) iterator.next();
+    List<T> getTagged();
 
-            tag_b.a((Collection) this.b);
-        }
-
-    }
-
-    public JsonObject a(Function<T, MinecraftKey> function) {
-        JsonObject jsonobject = new JsonObject();
-        JsonArray jsonarray = new JsonArray();
-        Iterator iterator = this.c.iterator();
-
-        while (iterator.hasNext()) {
-            Tag.b<T> tag_b = (Tag.b) iterator.next();
-
-            tag_b.a(jsonarray, function);
-        }
-
-        jsonobject.addProperty("replace", false);
-        jsonobject.add("values", jsonarray);
-        return jsonobject;
-    }
-
-    public boolean isTagged(T t0) {
-        return this.b.contains(t0);
-    }
-
-    public Collection<T> a() {
-        return this.b;
-    }
-
-    public Collection<Tag.b<T>> b() {
-        return this.c;
-    }
-
-    public T a(Random random) {
-        List<T> list = Lists.newArrayList(this.a());
+    default T a(Random random) {
+        List<T> list = this.getTagged();
 
         return list.get(random.nextInt(list.size()));
     }
 
-    public MinecraftKey c() {
-        return this.a;
+    static <T> Tag<T> b(Set<T> set) {
+        return TagSet.a(set);
     }
 
-    public static class c<T> implements Tag.b<T> {
+    public interface e<T> extends Tag<T> {
 
-        @Nullable
+        MinecraftKey a();
+    }
+
+    public static class f implements Tag.d {
+
         private final MinecraftKey a;
-        @Nullable
-        private Tag<T> b;
+
+        public f(MinecraftKey minecraftkey) {
+            this.a = minecraftkey;
+        }
+
+        @Override
+        public <T> boolean a(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1, Consumer<T> consumer) {
+            Tag<T> tag = (Tag) function.apply(this.a);
+
+            if (tag == null) {
+                return false;
+            } else {
+                tag.getTagged().forEach(consumer);
+                return true;
+            }
+        }
+
+        @Override
+        public void a(JsonArray jsonarray) {
+            jsonarray.add("#" + this.a);
+        }
+
+        public String toString() {
+            return "#" + this.a;
+        }
+    }
+
+    public static class c implements Tag.d {
+
+        private final MinecraftKey a;
 
         public c(MinecraftKey minecraftkey) {
             this.a = minecraftkey;
         }
 
-        public c(Tag<T> tag) {
-            this.a = tag.c();
-            this.b = tag;
-        }
-
         @Override
-        public boolean a(Function<MinecraftKey, Tag<T>> function) {
-            if (this.b == null) {
-                this.b = (Tag) function.apply(this.a);
-            }
+        public <T> boolean a(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1, Consumer<T> consumer) {
+            T t0 = function1.apply(this.a);
 
-            return this.b != null;
-        }
-
-        @Override
-        public void a(Collection<T> collection) {
-            if (this.b == null) {
-                throw (IllegalStateException) SystemUtils.c(new IllegalStateException("Cannot build unresolved tag entry"));
+            if (t0 == null) {
+                return false;
             } else {
-                collection.addAll(this.b.a());
-            }
-        }
-
-        public MinecraftKey a() {
-            if (this.b != null) {
-                return this.b.c();
-            } else if (this.a != null) {
-                return this.a;
-            } else {
-                throw new IllegalStateException("Cannot serialize an anonymous tag to json!");
+                consumer.accept(t0);
+                return true;
             }
         }
 
         @Override
-        public void a(JsonArray jsonarray, Function<T, MinecraftKey> function) {
-            jsonarray.add("#" + this.a());
+        public void a(JsonArray jsonarray) {
+            jsonarray.add(this.a.toString());
+        }
+
+        public String toString() {
+            return this.a.toString();
         }
     }
 
-    public static class d<T> implements Tag.b<T> {
+    public interface d {
 
-        private final Collection<T> a;
+        <T> boolean a(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1, Consumer<T> consumer);
 
-        public d(Collection<T> collection) {
-            this.a = collection;
-        }
-
-        @Override
-        public void a(Collection<T> collection) {
-            collection.addAll(this.a);
-        }
-
-        @Override
-        public void a(JsonArray jsonarray, Function<T, MinecraftKey> function) {
-            Iterator iterator = this.a.iterator();
-
-            while (iterator.hasNext()) {
-                T t0 = iterator.next();
-                MinecraftKey minecraftkey = (MinecraftKey) function.apply(t0);
-
-                if (minecraftkey == null) {
-                    throw new IllegalStateException("Unable to serialize an anonymous value to json!");
-                }
-
-                jsonarray.add(minecraftkey.toString());
-            }
-
-        }
-
-        public Collection<T> a() {
-            return this.a;
-        }
+        void a(JsonArray jsonarray);
     }
 
-    public interface b<T> {
+    public static class a {
 
-        default boolean a(Function<MinecraftKey, Tag<T>> function) {
-            return true;
-        }
-
-        void a(Collection<T> collection);
-
-        void a(JsonArray jsonarray, Function<T, MinecraftKey> function);
-    }
-
-    public static class a<T> {
-
-        private final Set<Tag.b<T>> a = Sets.newLinkedHashSet();
-        private boolean b;
+        private final List<Tag.b> a = Lists.newArrayList();
 
         public a() {}
 
-        public static <T> Tag.a<T> a() {
-            return new Tag.a<>();
+        public static Tag.a a() {
+            return new Tag.a();
         }
 
-        public Tag.a<T> a(Tag.b<T> tag_b) {
+        public Tag.a a(Tag.b tag_b) {
             this.a.add(tag_b);
             return this;
         }
 
-        public Tag.a<T> a(T t0) {
-            this.a.add(new Tag.d<>(Collections.singleton(t0)));
-            return this;
+        public Tag.a a(Tag.d tag_d, String s) {
+            return this.a(new Tag.b(tag_d, s));
         }
 
-        @SafeVarargs
-        public final Tag.a<T> a(T... at) {
-            this.a.add(new Tag.d<>(Lists.newArrayList(at)));
-            return this;
+        public Tag.a a(MinecraftKey minecraftkey, String s) {
+            return this.a((Tag.d) (new Tag.c(minecraftkey)), s);
         }
 
-        public Tag.a<T> a(Tag<T> tag) {
-            this.a.add(new Tag.c<>(tag));
-            return this;
+        public Tag.a b(MinecraftKey minecraftkey, String s) {
+            return this.a((Tag.d) (new Tag.f(minecraftkey)), s);
         }
 
-        public Tag.a<T> a(boolean flag) {
-            this.b = flag;
-            return this;
-        }
-
-        public boolean a(Function<MinecraftKey, Tag<T>> function) {
+        public <T> Optional<Tag<T>> a(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1) {
+            Builder<T> builder = ImmutableSet.builder();
             Iterator iterator = this.a.iterator();
 
-            Tag.b tag_b;
+            Tag.d tag_d;
 
             do {
                 if (!iterator.hasNext()) {
-                    return true;
+                    return Optional.of(Tag.b(builder.build()));
                 }
 
-                tag_b = (Tag.b) iterator.next();
-            } while (tag_b.a(function));
+                Tag.b tag_b = (Tag.b) iterator.next();
 
-            return false;
+                tag_d = tag_b.a();
+                builder.getClass();
+            } while (tag_d.a(function, function1, builder::add));
+
+            return Optional.empty();
         }
 
-        public Tag<T> b(MinecraftKey minecraftkey) {
-            return new Tag<>(minecraftkey, this.a, this.b);
+        public Stream<Tag.b> b() {
+            return this.a.stream();
         }
 
-        public Tag.a<T> a(Function<MinecraftKey, Optional<T>> function, JsonObject jsonobject) {
+        public <T> Stream<Tag.b> b(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1) {
+            return this.b().filter((tag_b) -> {
+                return !tag_b.a().a(function, function1, (object) -> {
+                });
+            });
+        }
+
+        public Tag.a a(JsonObject jsonobject, String s) {
             JsonArray jsonarray = ChatDeserializer.u(jsonobject, "values");
-            List<Tag.b<T>> list = Lists.newArrayList();
+            List<Tag.d> list = Lists.newArrayList();
             Iterator iterator = jsonarray.iterator();
 
             while (iterator.hasNext()) {
                 JsonElement jsonelement = (JsonElement) iterator.next();
-                String s = ChatDeserializer.a(jsonelement, "value");
+                String s1 = ChatDeserializer.a(jsonelement, "value");
 
-                if (s.startsWith("#")) {
-                    list.add(new Tag.c<>(new MinecraftKey(s.substring(1))));
+                if (s1.startsWith("#")) {
+                    list.add(new Tag.f(new MinecraftKey(s1.substring(1))));
                 } else {
-                    MinecraftKey minecraftkey = new MinecraftKey(s);
-
-                    list.add(new Tag.d<>(Collections.singleton(((Optional) function.apply(minecraftkey)).orElseThrow(() -> {
-                        return new JsonParseException("Unknown value '" + minecraftkey + "'");
-                    }))));
+                    list.add(new Tag.c(new MinecraftKey(s1)));
                 }
             }
 
@@ -257,8 +196,45 @@ public class Tag<T> {
                 this.a.clear();
             }
 
-            this.a.addAll(list);
+            list.forEach((tag_d) -> {
+                this.a.add(new Tag.b(tag_d, s));
+            });
             return this;
+        }
+
+        public JsonObject c() {
+            JsonObject jsonobject = new JsonObject();
+            JsonArray jsonarray = new JsonArray();
+            Iterator iterator = this.a.iterator();
+
+            while (iterator.hasNext()) {
+                Tag.b tag_b = (Tag.b) iterator.next();
+
+                tag_b.a().a(jsonarray);
+            }
+
+            jsonobject.addProperty("replace", false);
+            jsonobject.add("values", jsonarray);
+            return jsonobject;
+        }
+    }
+
+    public static class b {
+
+        private final Tag.d a;
+        private final String b;
+
+        private b(Tag.d tag_d, String s) {
+            this.a = tag_d;
+            this.b = s;
+        }
+
+        public Tag.d a() {
+            return this.a;
+        }
+
+        public String toString() {
+            return this.a.toString() + " (from " + this.b + ")";
         }
     }
 }

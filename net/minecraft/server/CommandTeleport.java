@@ -3,8 +3,8 @@ package net.minecraft.server;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,6 +14,8 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 public class CommandTeleport {
+
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.teleport.invalidPosition"));
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         LiteralCommandNode<CommandListenerWrapper> literalcommandnode = com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("teleport").requires((commandlistenerwrapper) -> {
@@ -41,7 +43,7 @@ public class CommandTeleport {
         })).redirect(literalcommandnode));
     }
 
-    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends Entity> collection, Entity entity) {
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends Entity> collection, Entity entity) throws CommandSyntaxException {
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
@@ -110,58 +112,67 @@ public class CommandTeleport {
         return collection.size();
     }
 
-    private static void a(CommandListenerWrapper commandlistenerwrapper, Entity entity, WorldServer worldserver, double d0, double d1, double d2, Set<PacketPlayOutPosition.EnumPlayerTeleportFlags> set, float f, float f1, @Nullable CommandTeleport.a commandteleport_a) {
-        if (entity instanceof EntityPlayer) {
-            ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(new BlockPosition(d0, d1, d2));
+    private static void a(CommandListenerWrapper commandlistenerwrapper, Entity entity, WorldServer worldserver, double d0, double d1, double d2, Set<PacketPlayOutPosition.EnumPlayerTeleportFlags> set, float f, float f1, @Nullable CommandTeleport.a commandteleport_a) throws CommandSyntaxException {
+        BlockPosition blockposition = new BlockPosition(d0, d1, d2);
 
-            worldserver.getChunkProvider().addTicket(TicketType.POST_TELEPORT, chunkcoordintpair, 1, entity.getId());
-            entity.stopRiding();
-            if (((EntityPlayer) entity).isSleeping()) {
-                ((EntityPlayer) entity).wakeup(true, true);
-            }
-
-            if (worldserver == entity.world) {
-                ((EntityPlayer) entity).playerConnection.a(d0, d1, d2, f, f1, set);
-            } else {
-                ((EntityPlayer) entity).a(worldserver, d0, d1, d2, f, f1);
-            }
-
-            entity.setHeadRotation(f);
+        if (!World.k(blockposition)) {
+            throw CommandTeleport.a.create();
         } else {
-            float f2 = MathHelper.g(f);
-            float f3 = MathHelper.g(f1);
+            if (entity instanceof EntityPlayer) {
+                ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(new BlockPosition(d0, d1, d2));
 
-            f3 = MathHelper.a(f3, -90.0F, 90.0F);
-            if (worldserver == entity.world) {
-                entity.setPositionRotation(d0, d1, d2, f2, f3);
-                entity.setHeadRotation(f2);
-            } else {
-                entity.decouple();
-                entity.dimension = worldserver.worldProvider.getDimensionManager();
-                Entity entity1 = entity;
-
-                entity = entity.getEntityType().a((World) worldserver);
-                if (entity == null) {
-                    return;
+                worldserver.getChunkProvider().addTicket(TicketType.POST_TELEPORT, chunkcoordintpair, 1, entity.getId());
+                entity.stopRiding();
+                if (((EntityPlayer) entity).isSleeping()) {
+                    ((EntityPlayer) entity).wakeup(true, true);
                 }
 
-                entity.v(entity1);
-                entity.setPositionRotation(d0, d1, d2, f2, f3);
-                entity.setHeadRotation(f2);
-                worldserver.addEntityTeleport(entity);
-                entity1.dead = true;
+                if (worldserver == entity.world) {
+                    ((EntityPlayer) entity).playerConnection.a(d0, d1, d2, f, f1, set);
+                } else {
+                    ((EntityPlayer) entity).a(worldserver, d0, d1, d2, f, f1);
+                }
+
+                entity.setHeadRotation(f);
+            } else {
+                float f2 = MathHelper.g(f);
+                float f3 = MathHelper.g(f1);
+
+                f3 = MathHelper.a(f3, -90.0F, 90.0F);
+                if (worldserver == entity.world) {
+                    entity.setPositionRotation(d0, d1, d2, f2, f3);
+                    entity.setHeadRotation(f2);
+                } else {
+                    entity.decouple();
+                    Entity entity1 = entity;
+
+                    entity = entity.getEntityType().a((World) worldserver);
+                    if (entity == null) {
+                        return;
+                    }
+
+                    entity.v(entity1);
+                    entity.setPositionRotation(d0, d1, d2, f2, f3);
+                    entity.setHeadRotation(f2);
+                    worldserver.addEntityTeleport(entity);
+                    entity1.dead = true;
+                }
             }
-        }
 
-        if (commandteleport_a != null) {
-            commandteleport_a.a(commandlistenerwrapper, entity);
-        }
+            if (commandteleport_a != null) {
+                commandteleport_a.a(commandlistenerwrapper, entity);
+            }
 
-        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).isGliding()) {
-            entity.setMot(entity.getMot().d(1.0D, 0.0D, 1.0D));
-            entity.onGround = true;
-        }
+            if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).isGliding()) {
+                entity.setMot(entity.getMot().d(1.0D, 0.0D, 1.0D));
+                entity.c(true);
+            }
 
+            if (entity instanceof EntityCreature) {
+                ((EntityCreature) entity).getNavigation().o();
+            }
+
+        }
     }
 
     static class a {

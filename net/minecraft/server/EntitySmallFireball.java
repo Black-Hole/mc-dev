@@ -15,33 +15,49 @@ public class EntitySmallFireball extends EntityFireballFireball {
     }
 
     @Override
-    protected void a(MovingObjectPosition movingobjectposition) {
-        super.a(movingobjectposition);
+    protected void a(MovingObjectPositionEntity movingobjectpositionentity) {
+        super.a(movingobjectpositionentity);
         if (!this.world.isClientSide) {
-            if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.ENTITY) {
-                Entity entity = ((MovingObjectPositionEntity) movingobjectposition).getEntity();
+            Entity entity = movingobjectpositionentity.getEntity();
 
-                if (!entity.isFireProof()) {
-                    int i = entity.ad();
+            if (!entity.isFireProof()) {
+                Entity entity1 = this.getShooter();
+                int i = entity.getFireTicks();
 
-                    entity.setOnFire(5);
-                    boolean flag = entity.damageEntity(DamageSource.fireball(this, this.shooter), 5.0F);
+                entity.setOnFire(5);
+                boolean flag = entity.damageEntity(DamageSource.fireball(this, entity1), 5.0F);
 
-                    if (flag) {
-                        this.a(this.shooter, entity);
-                    } else {
-                        entity.g(i);
-                    }
-                }
-            } else if (this.shooter == null || !(this.shooter instanceof EntityInsentient) || this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
-                MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;
-                BlockPosition blockposition = movingobjectpositionblock.getBlockPosition().shift(movingobjectpositionblock.getDirection());
-
-                if (this.world.isEmpty(blockposition)) {
-                    this.world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
+                if (!flag) {
+                    entity.setFireTicks(i);
+                } else if (entity1 instanceof EntityLiving) {
+                    this.a((EntityLiving) entity1, entity);
                 }
             }
 
+        }
+    }
+
+    @Override
+    protected void a(MovingObjectPositionBlock movingobjectpositionblock) {
+        super.a(movingobjectpositionblock);
+        if (!this.world.isClientSide) {
+            Entity entity = this.getShooter();
+
+            if (entity == null || !(entity instanceof EntityInsentient) || this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
+                BlockPosition blockposition = movingobjectpositionblock.getBlockPosition().shift(movingobjectpositionblock.getDirection());
+
+                if (this.world.isEmpty(blockposition)) {
+                    this.world.setTypeUpdate(blockposition, BlockFireAbstract.a((IBlockAccess) this.world, blockposition));
+                }
+            }
+
+        }
+    }
+
+    @Override
+    protected void a(MovingObjectPosition movingobjectposition) {
+        super.a(movingobjectposition);
+        if (!this.world.isClientSide) {
             this.die();
         }
 

@@ -9,20 +9,20 @@ public abstract class WorldGenTreeProvider {
     public WorldGenTreeProvider() {}
 
     @Nullable
-    protected abstract WorldGenFeatureConfigured<WorldGenFeatureSmallTreeConfigurationConfiguration, ?> a(Random random, boolean flag);
+    protected abstract WorldGenFeatureConfigured<WorldGenFeatureTreeConfiguration, ?> a(Random random, boolean flag);
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        WorldGenFeatureConfigured<WorldGenFeatureSmallTreeConfigurationConfiguration, ?> worldgenfeatureconfigured = this.a(random, this.a(generatoraccess, blockposition));
+    public boolean a(WorldServer worldserver, ChunkGenerator chunkgenerator, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+        WorldGenFeatureConfigured<WorldGenFeatureTreeConfiguration, ?> worldgenfeatureconfigured = this.a(random, this.a(worldserver, blockposition));
 
         if (worldgenfeatureconfigured == null) {
             return false;
         } else {
-            generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 4);
-            ((WorldGenFeatureSmallTreeConfigurationConfiguration) worldgenfeatureconfigured.c).a();
-            if (worldgenfeatureconfigured.a(generatoraccess, chunkgenerator, random, blockposition)) {
+            worldserver.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 4);
+            ((WorldGenFeatureTreeConfiguration) worldgenfeatureconfigured.e).a();
+            if (worldgenfeatureconfigured.a(worldserver, worldserver.getStructureManager(), chunkgenerator, random, blockposition)) {
                 return true;
             } else {
-                generatoraccess.setTypeAndData(blockposition, iblockdata, 4);
+                worldserver.setTypeAndData(blockposition, iblockdata, 4);
                 return false;
             }
         }
@@ -39,7 +39,7 @@ public abstract class WorldGenTreeProvider {
             }
 
             blockposition1 = (BlockPosition) iterator.next();
-        } while (!generatoraccess.getType(blockposition1).a(TagsBlock.FLOWERS));
+        } while (!generatoraccess.getType(blockposition1).a((Tag) TagsBlock.FLOWERS));
 
         return true;
     }

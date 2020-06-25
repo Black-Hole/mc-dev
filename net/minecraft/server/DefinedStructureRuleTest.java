@@ -1,20 +1,15 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
 import java.util.Random;
 
 public abstract class DefinedStructureRuleTest {
+
+    public static final Codec<DefinedStructureRuleTest> c = IRegistry.RULE_TEST.dispatch("predicate_type", DefinedStructureRuleTest::a, DefinedStructureRuleTestType::codec);
 
     public DefinedStructureRuleTest() {}
 
     public abstract boolean a(IBlockData iblockdata, Random random);
 
-    public <T> Dynamic<T> b(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.mergeInto(this.a(dynamicops).getValue(), dynamicops.createString("predicate_type"), dynamicops.createString(IRegistry.RULE_TEST.getKey(this.a()).toString())));
-    }
-
-    protected abstract DefinedStructureRuleTestType a();
-
-    protected abstract <T> Dynamic<T> a(DynamicOps<T> dynamicops);
+    protected abstract DefinedStructureRuleTestType<?> a();
 }

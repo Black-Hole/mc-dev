@@ -21,7 +21,7 @@ public class CriterionConditionMobEffect {
     }
 
     public static CriterionConditionMobEffect a() {
-        return new CriterionConditionMobEffect(Maps.newHashMap());
+        return new CriterionConditionMobEffect(Maps.newLinkedHashMap());
     }
 
     public CriterionConditionMobEffect a(MobEffectList mobeffectlist) {
@@ -30,11 +30,11 @@ public class CriterionConditionMobEffect {
     }
 
     public boolean a(Entity entity) {
-        return this == CriterionConditionMobEffect.a ? true : (entity instanceof EntityLiving ? this.a(((EntityLiving) entity).cQ()) : false);
+        return this == CriterionConditionMobEffect.a ? true : (entity instanceof EntityLiving ? this.a(((EntityLiving) entity).dh()) : false);
     }
 
     public boolean a(EntityLiving entityliving) {
-        return this == CriterionConditionMobEffect.a ? true : this.a(entityliving.cQ());
+        return this == CriterionConditionMobEffect.a ? true : this.a(entityliving.dh());
     }
 
     public boolean a(Map<MobEffectList, MobEffect> map) {
@@ -62,7 +62,7 @@ public class CriterionConditionMobEffect {
     public static CriterionConditionMobEffect a(@Nullable JsonElement jsonelement) {
         if (jsonelement != null && !jsonelement.isJsonNull()) {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "effects");
-            Map<MobEffectList, CriterionConditionMobEffect.a> map = Maps.newHashMap();
+            Map<MobEffectList, CriterionConditionMobEffect.a> map = Maps.newLinkedHashMap();
             Iterator iterator = jsonobject.entrySet().iterator();
 
             while (iterator.hasNext()) {

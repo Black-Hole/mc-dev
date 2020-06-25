@@ -51,19 +51,19 @@ public class EntityLeash extends EntityHanging {
 
     @Override
     public void a(@Nullable Entity entity) {
-        this.a(SoundEffects.ENTITY_LEASH_KNOT_BREAK, 1.0F, 1.0F);
+        this.playSound(SoundEffects.ENTITY_LEASH_KNOT_BREAK, 1.0F, 1.0F);
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {}
+    public void saveData(NBTTagCompound nbttagcompound) {}
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {}
+    public void loadData(NBTTagCompound nbttagcompound) {}
 
     @Override
-    public boolean b(EntityHuman entityhuman, EnumHand enumhand) {
+    public EnumInteractionResult a(EntityHuman entityhuman, EnumHand enumhand) {
         if (this.world.isClientSide) {
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
             boolean flag = false;
             double d0 = 7.0D;
@@ -94,13 +94,13 @@ public class EntityLeash extends EntityHanging {
                 }
             }
 
-            return true;
+            return EnumInteractionResult.CONSUME;
         }
     }
 
     @Override
     public boolean survives() {
-        return this.world.getType(this.blockPosition).getBlock().a(TagsBlock.FENCES);
+        return this.world.getType(this.blockPosition).getBlock().a((Tag) TagsBlock.FENCES);
     }
 
     public static EntityLeash a(World world, BlockPosition blockposition) {
@@ -129,11 +129,11 @@ public class EntityLeash extends EntityHanging {
 
     @Override
     public void playPlaceSound() {
-        this.a(SoundEffects.ENTITY_LEASH_KNOT_PLACE, 1.0F, 1.0F);
+        this.playSound(SoundEffects.ENTITY_LEASH_KNOT_PLACE, 1.0F, 1.0F);
     }
 
     @Override
-    public Packet<?> L() {
+    public Packet<?> O() {
         return new PacketPlayOutSpawnEntity(this, this.getEntityType(), 0, this.getBlockPosition());
     }
 }

@@ -27,18 +27,17 @@ public class ItemMilkBucket extends Item {
     }
 
     @Override
-    public int f_(ItemStack itemstack) {
+    public int e_(ItemStack itemstack) {
         return 32;
     }
 
     @Override
-    public EnumAnimation e_(ItemStack itemstack) {
+    public EnumAnimation d_(ItemStack itemstack) {
         return EnumAnimation.DRINK;
     }
 
     @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
-        entityhuman.c(enumhand);
-        return InteractionResultWrapper.success(entityhuman.b(enumhand));
+        return ItemLiquidUtil.a(world, entityhuman, enumhand);
     }
 }

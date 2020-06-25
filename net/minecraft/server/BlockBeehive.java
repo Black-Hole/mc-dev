@@ -2,17 +2,18 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import javax.annotation.Nullable;
 
 public class BlockBeehive extends BlockTileEntity {
 
-    public static final EnumDirection[] a = new EnumDirection[]{EnumDirection.WEST, EnumDirection.EAST, EnumDirection.SOUTH};
-    public static final BlockStateDirection b = BlockFacingHorizontal.FACING;
-    public static final BlockStateInteger c = BlockProperties.ao;
+    private static final EnumDirection[] c = new EnumDirection[]{EnumDirection.WEST, EnumDirection.EAST, EnumDirection.SOUTH};
+    public static final BlockStateDirection a = BlockFacingHorizontal.FACING;
+    public static final BlockStateInteger b = BlockProperties.au;
 
-    public BlockBeehive(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBeehive.c, 0)).set(BlockBeehive.b, EnumDirection.NORTH));
+    public BlockBeehive(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBeehive.b, 0)).set(BlockBeehive.a, EnumDirection.NORTH));
     }
 
     @Override
@@ -22,7 +23,7 @@ public class BlockBeehive extends BlockTileEntity {
 
     @Override
     public int a(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        return (Integer) iblockdata.get(BlockBeehive.c);
+        return (Integer) iblockdata.get(BlockBeehive.b);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class BlockBeehive extends BlockTileEntity {
                 this.b(world, blockposition);
             }
 
-            CriterionTriggers.L.a((EntityPlayer) entityhuman, iblockdata.getBlock(), itemstack, tileentitybeehive.j());
+            CriterionTriggers.K.a((EntityPlayer) entityhuman, iblockdata.getBlock(), itemstack, tileentitybeehive.getBeeCount());
         }
 
     }
@@ -54,7 +55,7 @@ public class BlockBeehive extends BlockTileEntity {
                 EntityBee entitybee = (EntityBee) iterator.next();
 
                 if (entitybee.getGoalTarget() == null) {
-                    entitybee.a((Entity) list1.get(world.random.nextInt(i)));
+                    entitybee.setGoalTarget((EntityLiving) list1.get(world.random.nextInt(i)));
                 }
             }
         }
@@ -62,14 +63,13 @@ public class BlockBeehive extends BlockTileEntity {
     }
 
     public static void a(World world, BlockPosition blockposition) {
-        a(world, blockposition, new ItemStack(Items.pU, 3));
+        a(world, blockposition, new ItemStack(Items.HONEYCOMB, 3));
     }
 
     @Override
     public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        ItemStack itemstack1 = itemstack.cloneItemStack();
-        int i = (Integer) iblockdata.get(BlockBeehive.c);
+        int i = (Integer) iblockdata.get(BlockBeehive.b);
         boolean flag = false;
 
         if (i >= 5) {
@@ -84,9 +84,9 @@ public class BlockBeehive extends BlockTileEntity {
                 itemstack.subtract(1);
                 world.playSound(entityhuman, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 if (itemstack.isEmpty()) {
-                    entityhuman.a(enumhand, new ItemStack(Items.pX));
-                } else if (!entityhuman.inventory.pickup(new ItemStack(Items.pX))) {
-                    entityhuman.drop(new ItemStack(Items.pX), false);
+                    entityhuman.a(enumhand, new ItemStack(Items.HONEY_BOTTLE));
+                } else if (!entityhuman.inventory.pickup(new ItemStack(Items.HONEY_BOTTLE))) {
+                    entityhuman.drop(new ItemStack(Items.HONEY_BOTTLE), false);
                 }
 
                 flag = true;
@@ -94,7 +94,7 @@ public class BlockBeehive extends BlockTileEntity {
         }
 
         if (flag) {
-            if (!BlockCampfire.b(world, blockposition, 5)) {
+            if (!BlockCampfire.a(world, blockposition)) {
                 if (this.d(world, blockposition)) {
                     this.b(world, blockposition);
                 }
@@ -102,12 +102,9 @@ public class BlockBeehive extends BlockTileEntity {
                 this.a(world, iblockdata, blockposition, entityhuman, TileEntityBeehive.ReleaseStatus.EMERGENCY);
             } else {
                 this.a(world, iblockdata, blockposition);
-                if (entityhuman instanceof EntityPlayer) {
-                    CriterionTriggers.J.a((EntityPlayer) entityhuman, blockposition, itemstack1);
-                }
             }
 
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.a(world.isClientSide);
         } else {
             return super.interact(iblockdata, world, blockposition, entityhuman, enumhand, movingobjectpositionblock);
         }
@@ -138,21 +135,21 @@ public class BlockBeehive extends BlockTileEntity {
     }
 
     public void a(World world, IBlockData iblockdata, BlockPosition blockposition) {
-        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockBeehive.c, 0), 3);
+        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockBeehive.b, 0), 3);
     }
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockBeehive.b, blockactioncontext.f().opposite());
+        return (IBlockData) this.getBlockData().set(BlockBeehive.a, blockactioncontext.f().opposite());
     }
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockBeehive.c, BlockBeehive.b);
+        blockstatelist_a.a(BlockBeehive.b, BlockBeehive.a);
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
@@ -170,7 +167,7 @@ public class BlockBeehive extends BlockTileEntity {
             if (tileentity instanceof TileEntityBeehive) {
                 TileEntityBeehive tileentitybeehive = (TileEntityBeehive) tileentity;
                 ItemStack itemstack = new ItemStack(this);
-                int i = (Integer) iblockdata.get(BlockBeehive.c);
+                int i = (Integer) iblockdata.get(BlockBeehive.b);
                 boolean flag = !tileentitybeehive.isEmpty();
 
                 if (!flag && i == 0) {
@@ -228,5 +225,9 @@ public class BlockBeehive extends BlockTileEntity {
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+    }
+
+    public static EnumDirection a(Random random) {
+        return (EnumDirection) SystemUtils.a((Object[]) BlockBeehive.c, random);
     }
 }

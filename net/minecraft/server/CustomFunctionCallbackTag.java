@@ -12,13 +12,13 @@ public class CustomFunctionCallbackTag implements CustomFunctionCallbackTimer<Mi
 
     public void a(MinecraftServer minecraftserver, CustomFunctionCallbackTimerQueue<MinecraftServer> customfunctioncallbacktimerqueue, long i) {
         CustomFunctionData customfunctiondata = minecraftserver.getFunctionData();
-        Tag<CustomFunction> tag = customfunctiondata.h().b(this.a);
-        Iterator iterator = tag.a().iterator();
+        Tag<CustomFunction> tag = customfunctiondata.b(this.a);
+        Iterator iterator = tag.getTagged().iterator();
 
         while (iterator.hasNext()) {
             CustomFunction customfunction = (CustomFunction) iterator.next();
 
-            customfunctiondata.a(customfunction, customfunctiondata.f());
+            customfunctiondata.a(customfunction, customfunctiondata.e());
         }
 
     }

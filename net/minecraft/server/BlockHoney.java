@@ -4,8 +4,8 @@ public class BlockHoney extends BlockHalfTransparent {
 
     protected static final VoxelShape a = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
 
-    public BlockHoney(Block.Info block_info) {
-        super(block_info);
+    public BlockHoney(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     private static boolean c(Entity entity) {
@@ -13,19 +13,19 @@ public class BlockHoney extends BlockHalfTransparent {
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockHoney.a;
     }
 
     @Override
     public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
-        entity.a(SoundEffects.BLOCK_HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
+        entity.playSound(SoundEffects.BLOCK_HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
         if (!world.isClientSide) {
             world.broadcastEntityEffect(entity, (byte) 54);
         }
 
         if (entity.b(f, 0.2F)) {
-            entity.a(this.stepSound.g(), this.stepSound.a() * 0.5F, this.stepSound.b() * 0.75F);
+            entity.playSound(this.stepSound.g(), this.stepSound.a() * 0.5F, this.stepSound.b() * 0.75F);
         }
 
     }
@@ -42,7 +42,7 @@ public class BlockHoney extends BlockHalfTransparent {
     }
 
     private boolean a(BlockPosition blockposition, Entity entity) {
-        if (entity.onGround) {
+        if (entity.isOnGround()) {
             return false;
         } else if (entity.locY() > (double) blockposition.getY() + 0.9375D - 1.0E-7D) {
             return false;
@@ -59,7 +59,7 @@ public class BlockHoney extends BlockHalfTransparent {
 
     private void a(Entity entity, BlockPosition blockposition) {
         if (entity instanceof EntityPlayer && entity.world.getTime() % 20L == 0L) {
-            CriterionTriggers.K.a((EntityPlayer) entity, entity.world.getType(blockposition));
+            CriterionTriggers.J.a((EntityPlayer) entity, entity.world.getType(blockposition));
         }
 
     }
@@ -81,7 +81,7 @@ public class BlockHoney extends BlockHalfTransparent {
     private void a(World world, Entity entity) {
         if (c(entity)) {
             if (world.random.nextInt(5) == 0) {
-                entity.a(SoundEffects.BLOCK_HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
+                entity.playSound(SoundEffects.BLOCK_HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
             }
 
             if (!world.isClientSide && world.random.nextInt(5) == 0) {

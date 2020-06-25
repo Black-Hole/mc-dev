@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -23,40 +22,56 @@ public interface IEntityAccess {
     List<? extends EntityHuman> getPlayers();
 
     default List<Entity> getEntities(@Nullable Entity entity, AxisAlignedBB axisalignedbb) {
-        return this.getEntities(entity, axisalignedbb, IEntitySelector.f);
+        return this.getEntities(entity, axisalignedbb, IEntitySelector.g);
     }
 
     default boolean a(@Nullable Entity entity, VoxelShape voxelshape) {
-        return voxelshape.isEmpty() ? true : this.getEntities(entity, voxelshape.getBoundingBox()).stream().filter((entity1) -> {
-            return !entity1.dead && entity1.i && (entity == null || !entity1.isSameVehicle(entity));
-        }).noneMatch((entity1) -> {
-            return VoxelShapes.c(voxelshape, VoxelShapes.a(entity1.getBoundingBox()), OperatorBoolean.AND);
-        });
+        if (voxelshape.isEmpty()) {
+            return true;
+        } else {
+            Iterator iterator = this.getEntities(entity, voxelshape.getBoundingBox()).iterator();
+
+            Entity entity1;
+
+            do {
+                if (!iterator.hasNext()) {
+                    return true;
+                }
+
+                entity1 = (Entity) iterator.next();
+            } while (entity1.dead || !entity1.i || entity != null && entity1.isSameVehicle(entity) || !VoxelShapes.c(voxelshape, VoxelShapes.a(entity1.getBoundingBox()), OperatorBoolean.AND));
+
+            return false;
+        }
     }
 
     default <T extends Entity> List<T> a(Class<? extends T> oclass, AxisAlignedBB axisalignedbb) {
-        return this.a(oclass, axisalignedbb, IEntitySelector.f);
+        return this.a(oclass, axisalignedbb, IEntitySelector.g);
     }
 
     default <T extends Entity> List<T> b(Class<? extends T> oclass, AxisAlignedBB axisalignedbb) {
-        return this.b(oclass, axisalignedbb, IEntitySelector.f);
+        return this.b(oclass, axisalignedbb, IEntitySelector.g);
     }
 
-    default Stream<VoxelShape> b(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
+    default Stream<VoxelShape> c(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Predicate<Entity> predicate) {
         if (axisalignedbb.a() < 1.0E-7D) {
             return Stream.empty();
         } else {
             AxisAlignedBB axisalignedbb1 = axisalignedbb.g(1.0E-7D);
-            Stream stream = this.getEntities(entity, axisalignedbb1).stream().filter((entity1) -> {
-                return !set.contains(entity1);
-            }).filter((entity1) -> {
-                return entity == null || !entity.isSameVehicle(entity1);
-            }).flatMap((entity1) -> {
-                return Stream.of(entity1.au(), entity == null ? null : entity.j(entity1));
-            }).filter(Objects::nonNull);
 
-            axisalignedbb1.getClass();
-            return stream.filter(axisalignedbb1::c).map(VoxelShapes::a);
+            return this.getEntities(entity, axisalignedbb1, predicate.and((entity1) -> {
+                return entity == null || !entity.isSameVehicle(entity1);
+            })).stream().flatMap((entity1) -> {
+                if (entity != null) {
+                    AxisAlignedBB axisalignedbb2 = entity.j(entity1);
+
+                    if (axisalignedbb2 != null && axisalignedbb2.c(axisalignedbb1)) {
+                        return Stream.of(entity1.ay(), axisalignedbb2);
+                    }
+                }
+
+                return Stream.of(entity1.ay());
+            }).filter(Objects::nonNull).map(VoxelShapes::a);
         }
     }
 
@@ -89,31 +104,9 @@ public interface IEntityAccess {
 
     @Nullable
     default EntityHuman a(double d0, double d1, double d2, double d3, boolean flag) {
-        Predicate<Entity> predicate = flag ? IEntitySelector.e : IEntitySelector.f;
+        Predicate<Entity> predicate = flag ? IEntitySelector.e : IEntitySelector.g;
 
         return this.a(d0, d1, d2, d3, predicate);
-    }
-
-    @Nullable
-    default EntityHuman a(double d0, double d1, double d2) {
-        double d3 = -1.0D;
-        EntityHuman entityhuman = null;
-        Iterator iterator = this.getPlayers().iterator();
-
-        while (iterator.hasNext()) {
-            EntityHuman entityhuman1 = (EntityHuman) iterator.next();
-
-            if (IEntitySelector.f.test(entityhuman1)) {
-                double d4 = entityhuman1.g(d0, entityhuman1.locY(), d1);
-
-                if ((d2 < 0.0D || d4 < d2 * d2) && (d3 == -1.0D || d4 < d3)) {
-                    d3 = d4;
-                    entityhuman = entityhuman1;
-                }
-            }
-        }
-
-        return entityhuman;
     }
 
     default boolean isPlayerNearby(double d0, double d1, double d2, double d3) {
@@ -131,7 +124,7 @@ public interface IEntityAccess {
                     }
 
                     entityhuman = (EntityHuman) iterator.next();
-                } while (!IEntitySelector.f.test(entityhuman));
+                } while (!IEntitySelector.g.test(entityhuman));
             } while (!IEntitySelector.b.test(entityhuman));
 
             d4 = entityhuman.g(d0, d1, d2);

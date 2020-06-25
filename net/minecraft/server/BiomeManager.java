@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import com.google.common.hash.Hashing;
+
 public class BiomeManager {
 
     private final BiomeManager.Provider a;
@@ -10,6 +12,10 @@ public class BiomeManager {
         this.a = biomemanager_provider;
         this.b = i;
         this.c = genlayerzoomer;
+    }
+
+    public static long a(long i) {
+        return Hashing.sha256().hashLong(i).asLong();
     }
 
     public BiomeManager a(WorldChunkManager worldchunkmanager) {

@@ -17,8 +17,8 @@ import javax.annotation.Nullable;
 public class LootTableInfo {
 
     private final Random a;
-    private final float b;
-    private final WorldServer c;
+    private final float luck;
+    private final WorldServer world;
     private final Function<MinecraftKey, LootTable> d;
     private final Set<LootTable> e;
     private final Function<MinecraftKey, LootItemCondition> f;
@@ -30,8 +30,8 @@ public class LootTableInfo {
         this.e = Sets.newLinkedHashSet();
         this.g = Sets.newLinkedHashSet();
         this.a = random;
-        this.b = f;
-        this.c = worldserver;
+        this.luck = f;
+        this.world = worldserver;
         this.d = function;
         this.f = function1;
         this.h = ImmutableMap.copyOf(map);
@@ -84,12 +84,12 @@ public class LootTableInfo {
         return this.a;
     }
 
-    public float b() {
-        return this.b;
+    public float getLuck() {
+        return this.luck;
     }
 
-    public WorldServer c() {
-        return this.c;
+    public WorldServer getWorld() {
+        return this.world;
     }
 
     public static enum EntityTarget {
@@ -222,12 +222,12 @@ public class LootTableInfo {
         }
 
         public LootTableInfo build(LootContextParameterSet lootcontextparameterset) {
-            Set<LootContextParameter<?>> set = Sets.difference(this.b.keySet(), lootcontextparameterset.b());
+            Set<LootContextParameter<?>> set = Sets.difference(this.b.keySet(), lootcontextparameterset.getOptional());
 
             if (!set.isEmpty()) {
                 throw new IllegalArgumentException("Parameters not allowed in this parameter set: " + set);
             } else {
-                Set<LootContextParameter<?>> set1 = Sets.difference(lootcontextparameterset.a(), this.b.keySet());
+                Set<LootContextParameter<?>> set1 = Sets.difference(lootcontextparameterset.getRequired(), this.b.keySet());
 
                 if (!set1.isEmpty()) {
                     throw new IllegalArgumentException("Missing required parameters: " + set1);
@@ -240,7 +240,7 @@ public class LootTableInfo {
 
                     MinecraftServer minecraftserver = this.a.getMinecraftServer();
 
-                    return new LootTableInfo(random, this.e, this.a, minecraftserver.getLootTableRegistry()::getLootTable, minecraftserver.aQ()::a, this.b, this.c);
+                    return new LootTableInfo(random, this.e, this.a, minecraftserver.getLootTableRegistry()::getLootTable, minecraftserver.aI()::a, this.b, this.c);
                 }
             }
         }

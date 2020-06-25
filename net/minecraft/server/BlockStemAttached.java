@@ -10,25 +10,25 @@ public class BlockStemAttached extends BlockPlant {
     private final BlockStemmed b;
     private static final Map<EnumDirection, VoxelShape> c = Maps.newEnumMap(ImmutableMap.of(EnumDirection.SOUTH, Block.a(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 16.0D), EnumDirection.WEST, Block.a(0.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D), EnumDirection.NORTH, Block.a(6.0D, 0.0D, 0.0D, 10.0D, 10.0D, 10.0D), EnumDirection.EAST, Block.a(6.0D, 0.0D, 6.0D, 16.0D, 10.0D, 10.0D)));
 
-    protected BlockStemAttached(BlockStemmed blockstemmed, Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStemAttached.a, EnumDirection.NORTH));
+    protected BlockStemAttached(BlockStemmed blockstemmed, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStemAttached.a, EnumDirection.NORTH));
         this.b = blockstemmed;
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return (VoxelShape) BlockStemAttached.c.get(iblockdata.get(BlockStemAttached.a));
     }
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        return iblockdata1.getBlock() != this.b && enumdirection == iblockdata.get(BlockStemAttached.a) ? (IBlockData) this.b.c().getBlockData().set(BlockStem.AGE, 7) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return !iblockdata1.a((Block) this.b) && enumdirection == iblockdata.get(BlockStemAttached.a) ? (IBlockData) this.b.c().getBlockData().set(BlockStem.AGE, 7) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     @Override
-    protected boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.getBlock() == Blocks.FARMLAND;
+    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockdata.a(Blocks.FARMLAND);
     }
 
     @Override

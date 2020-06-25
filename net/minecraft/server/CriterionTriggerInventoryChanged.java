@@ -1,11 +1,8 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import java.util.Iterator;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.List;
 
 public class CriterionTriggerInventoryChanged extends CriterionTriggerAbstract<CriterionTriggerInventoryChanged.a> {
@@ -20,19 +17,40 @@ public class CriterionTriggerInventoryChanged extends CriterionTriggerAbstract<C
     }
 
     @Override
-    public CriterionTriggerInventoryChanged.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerInventoryChanged.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         JsonObject jsonobject1 = ChatDeserializer.a(jsonobject, "slots", new JsonObject());
         CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject1.get("occupied"));
         CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1 = CriterionConditionValue.IntegerRange.a(jsonobject1.get("full"));
         CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange2 = CriterionConditionValue.IntegerRange.a(jsonobject1.get("empty"));
         CriterionConditionItem[] acriterionconditionitem = CriterionConditionItem.b(jsonobject.get("items"));
 
-        return new CriterionTriggerInventoryChanged.a(criterionconditionvalue_integerrange, criterionconditionvalue_integerrange1, criterionconditionvalue_integerrange2, acriterionconditionitem);
+        return new CriterionTriggerInventoryChanged.a(criterionconditionentity_b, criterionconditionvalue_integerrange, criterionconditionvalue_integerrange1, criterionconditionvalue_integerrange2, acriterionconditionitem);
     }
 
-    public void a(EntityPlayer entityplayer, PlayerInventory playerinventory) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggerinventorychanged_a) -> {
-            return criteriontriggerinventorychanged_a.a(playerinventory);
+    public void a(EntityPlayer entityplayer, PlayerInventory playerinventory, ItemStack itemstack) {
+        int i = 0;
+        int j = 0;
+        int k = 0;
+
+        for (int l = 0; l < playerinventory.getSize(); ++l) {
+            ItemStack itemstack1 = playerinventory.getItem(l);
+
+            if (itemstack1.isEmpty()) {
+                ++j;
+            } else {
+                ++k;
+                if (itemstack1.getCount() >= itemstack1.getMaxStackSize()) {
+                    ++i;
+                }
+            }
+        }
+
+        this.a(entityplayer, playerinventory, itemstack, i, j, k);
+    }
+
+    private void a(EntityPlayer entityplayer, PlayerInventory playerinventory, ItemStack itemstack, int i, int j, int k) {
+        this.a(entityplayer, (criteriontriggerinventorychanged_a) -> {
+            return criteriontriggerinventorychanged_a.a(playerinventory, itemstack, i, j, k);
         });
     }
 
@@ -43,8 +61,8 @@ public class CriterionTriggerInventoryChanged extends CriterionTriggerAbstract<C
         private final CriterionConditionValue.IntegerRange c;
         private final CriterionConditionItem[] d;
 
-        public a(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange2, CriterionConditionItem[] acriterionconditionitem) {
-            super(CriterionTriggerInventoryChanged.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange2, CriterionConditionItem[] acriterionconditionitem) {
+            super(CriterionTriggerInventoryChanged.a, criterionconditionentity_b);
             this.a = criterionconditionvalue_integerrange;
             this.b = criterionconditionvalue_integerrange1;
             this.c = criterionconditionvalue_integerrange2;
@@ -52,7 +70,7 @@ public class CriterionTriggerInventoryChanged extends CriterionTriggerAbstract<C
         }
 
         public static CriterionTriggerInventoryChanged.a a(CriterionConditionItem... acriterionconditionitem) {
-            return new CriterionTriggerInventoryChanged.a(CriterionConditionValue.IntegerRange.e, CriterionConditionValue.IntegerRange.e, CriterionConditionValue.IntegerRange.e, acriterionconditionitem);
+            return new CriterionTriggerInventoryChanged.a(CriterionConditionEntity.b.a, CriterionConditionValue.IntegerRange.e, CriterionConditionValue.IntegerRange.e, CriterionConditionValue.IntegerRange.e, acriterionconditionitem);
         }
 
         public static CriterionTriggerInventoryChanged.a a(IMaterial... aimaterial) {
@@ -66,8 +84,8 @@ public class CriterionTriggerInventoryChanged extends CriterionTriggerAbstract<C
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             if (!this.a.c() || !this.b.c() || !this.c.c()) {
                 JsonObject jsonobject1 = new JsonObject();
@@ -95,45 +113,40 @@ public class CriterionTriggerInventoryChanged extends CriterionTriggerAbstract<C
             return jsonobject;
         }
 
-        public boolean a(PlayerInventory playerinventory) {
-            int i = 0;
-            int j = 0;
-            int k = 0;
-            List<CriterionConditionItem> list = Lists.newArrayList(this.d);
-
-            for (int l = 0; l < playerinventory.getSize(); ++l) {
-                ItemStack itemstack = playerinventory.getItem(l);
-
-                if (itemstack.isEmpty()) {
-                    ++j;
-                } else {
-                    ++k;
-                    if (itemstack.getCount() >= itemstack.getMaxStackSize()) {
-                        ++i;
-                    }
-
-                    Iterator iterator = list.iterator();
-
-                    while (iterator.hasNext()) {
-                        CriterionConditionItem criterionconditionitem = (CriterionConditionItem) iterator.next();
-
-                        if (criterionconditionitem.a(itemstack)) {
-                            iterator.remove();
-                        }
-                    }
-                }
-            }
-
+        public boolean a(PlayerInventory playerinventory, ItemStack itemstack, int i, int j, int k) {
             if (!this.b.d(i)) {
                 return false;
             } else if (!this.c.d(j)) {
                 return false;
             } else if (!this.a.d(k)) {
                 return false;
-            } else if (!list.isEmpty()) {
-                return false;
             } else {
-                return true;
+                int l = this.d.length;
+
+                if (l == 0) {
+                    return true;
+                } else if (l != 1) {
+                    List<CriterionConditionItem> list = new ObjectArrayList(this.d);
+                    int i1 = playerinventory.getSize();
+
+                    for (int j1 = 0; j1 < i1; ++j1) {
+                        if (list.isEmpty()) {
+                            return true;
+                        }
+
+                        ItemStack itemstack1 = playerinventory.getItem(j1);
+
+                        if (!itemstack1.isEmpty()) {
+                            list.removeIf((criterionconditionitem) -> {
+                                return criterionconditionitem.a(itemstack1);
+                            });
+                        }
+                    }
+
+                    return list.isEmpty();
+                } else {
+                    return !itemstack.isEmpty() && this.d[0].a(itemstack);
+                }
             }
         }
     }

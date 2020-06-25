@@ -47,7 +47,7 @@ public class RecipeFireworksFade extends IRecipeComplex {
             Item item = itemstack1.getItem();
 
             if (item instanceof ItemDye) {
-                list.add(((ItemDye) item).d().f());
+                list.add(((ItemDye) item).d().getFireworksColor());
             } else if (RecipeFireworksFade.a.test(itemstack1)) {
                 itemstack = itemstack1.cloneItemStack();
                 itemstack.setCount(1);
@@ -58,7 +58,7 @@ public class RecipeFireworksFade extends IRecipeComplex {
             itemstack.a("Explosion").b("FadeColors", (List) list);
             return itemstack;
         } else {
-            return ItemStack.a;
+            return ItemStack.b;
         }
     }
 

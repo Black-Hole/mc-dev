@@ -1,36 +1,33 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Random;
 
 public class DefinedStructureTestRandomBlockState extends DefinedStructureRuleTest {
 
-    private final IBlockData a;
-    private final float b;
+    public static final Codec<DefinedStructureTestRandomBlockState> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(IBlockData.b.fieldOf("block_state").forGetter((definedstructuretestrandomblockstate) -> {
+            return definedstructuretestrandomblockstate.b;
+        }), Codec.FLOAT.fieldOf("probability").forGetter((definedstructuretestrandomblockstate) -> {
+            return definedstructuretestrandomblockstate.d;
+        })).apply(instance, DefinedStructureTestRandomBlockState::new);
+    });
+    private final IBlockData b;
+    private final float d;
 
     public DefinedStructureTestRandomBlockState(IBlockData iblockdata, float f) {
-        this.a = iblockdata;
-        this.b = f;
-    }
-
-    public <T> DefinedStructureTestRandomBlockState(Dynamic<T> dynamic) {
-        this(IBlockData.a(dynamic.get("blockstate").orElseEmptyMap()), dynamic.get("probability").asFloat(1.0F));
+        this.b = iblockdata;
+        this.d = f;
     }
 
     @Override
     public boolean a(IBlockData iblockdata, Random random) {
-        return iblockdata == this.a && random.nextFloat() < this.b;
+        return iblockdata == this.b && random.nextFloat() < this.d;
     }
 
     @Override
-    protected DefinedStructureRuleTestType a() {
-        return DefinedStructureRuleTestType.g;
-    }
-
-    @Override
-    protected <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("blockstate"), IBlockData.a(dynamicops, this.a).getValue(), dynamicops.createString("probability"), dynamicops.createFloat(this.b))));
+    protected DefinedStructureRuleTestType<?> a() {
+        return DefinedStructureRuleTestType.f;
     }
 }

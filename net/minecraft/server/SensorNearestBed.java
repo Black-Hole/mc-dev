@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.google.common.collect.ImmutableSet;
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2LongMap.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -28,7 +27,7 @@ public class SensorNearestBed extends Sensor<EntityInsentient> {
         if (entityinsentient.isBaby()) {
             this.b = 0;
             this.c = worldserver.getTime() + (long) worldserver.getRandom().nextInt(20);
-            VillagePlace villageplace = worldserver.B();
+            VillagePlace villageplace = worldserver.x();
             Predicate<BlockPosition> predicate = (blockposition) -> {
                 long i = blockposition.asLong();
 
@@ -41,11 +40,11 @@ public class SensorNearestBed extends Sensor<EntityInsentient> {
                     return true;
                 }
             };
-            Stream<BlockPosition> stream = villageplace.a(VillagePlaceType.q.c(), predicate, new BlockPosition(entityinsentient), 48, VillagePlace.Occupancy.ANY);
-            PathEntity pathentity = entityinsentient.getNavigation().a(stream, VillagePlaceType.q.d());
+            Stream<BlockPosition> stream = villageplace.a(VillagePlaceType.r.c(), predicate, entityinsentient.getChunkCoordinates(), 48, VillagePlace.Occupancy.ANY);
+            PathEntity pathentity = entityinsentient.getNavigation().a(stream, VillagePlaceType.r.d());
 
-            if (pathentity != null && pathentity.h()) {
-                BlockPosition blockposition = pathentity.k();
+            if (pathentity != null && pathentity.i()) {
+                BlockPosition blockposition = pathentity.m();
                 Optional<VillagePlaceType> optional = villageplace.c(blockposition);
 
                 if (optional.isPresent()) {

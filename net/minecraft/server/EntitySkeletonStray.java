@@ -28,7 +28,7 @@ public class EntitySkeletonStray extends EntitySkeletonAbstract {
     }
 
     @Override
-    SoundEffect l() {
+    SoundEffect eL() {
         return SoundEffects.ENTITY_STRAY_STEP;
     }
 

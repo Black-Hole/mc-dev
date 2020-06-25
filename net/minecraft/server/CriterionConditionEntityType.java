@@ -35,9 +35,7 @@ public abstract class CriterionConditionEntityType {
 
             if (s.startsWith("#")) {
                 minecraftkey = new MinecraftKey(s.substring(1));
-                Tag<EntityTypes<?>> tag = TagsEntity.a().b(minecraftkey);
-
-                return new CriterionConditionEntityType.a(tag);
+                return new CriterionConditionEntityType.a(TagsInstance.e().d().b(minecraftkey));
             } else {
                 minecraftkey = new MinecraftKey(s);
                 EntityTypes<?> entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.getOptional(minecraftkey).orElseThrow(() -> {
@@ -74,7 +72,7 @@ public abstract class CriterionConditionEntityType {
 
         @Override
         public JsonElement a() {
-            return new JsonPrimitive("#" + this.b.c().toString());
+            return new JsonPrimitive("#" + TagsInstance.e().d().b(this.b));
         }
     }
 

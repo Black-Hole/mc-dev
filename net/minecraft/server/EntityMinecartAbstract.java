@@ -1,8 +1,10 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.UnmodifiableIterator;
 import com.mojang.datafixers.util.Pair;
-import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ public abstract class EntityMinecartAbstract extends Entity {
     private static final DataWatcherObject<Integer> e = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Integer> f = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Boolean> g = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.i);
+    private static final ImmutableMap<EntityPose, ImmutableList<Integer>> an = ImmutableMap.of(EntityPose.STANDING, ImmutableList.of(0, 1, -1), EntityPose.CROUCHING, ImmutableList.of(0, 1, -1), EntityPose.SWIMMING, ImmutableList.of(0, 1));
     private boolean ao;
     private static final Map<BlockPropertyTrackPosition, Pair<BaseBlockPosition, BaseBlockPosition>> ap = (Map) SystemUtils.a((Object) Maps.newEnumMap(BlockPropertyTrackPosition.class), (enummap) -> {
         BaseBlockPosition baseblockposition = EnumDirection.WEST.p();
@@ -90,8 +93,73 @@ public abstract class EntityMinecartAbstract extends Entity {
     }
 
     @Override
-    public double aS() {
+    public double aY() {
         return 0.0D;
+    }
+
+    @Override
+    public Vec3D c(EntityLiving entityliving) {
+        EnumDirection enumdirection = this.getAdjustedDirection();
+
+        if (enumdirection.n() == EnumDirection.EnumAxis.Y) {
+            return super.c(entityliving);
+        } else {
+            int[][] aint = DismountUtil.a(enumdirection);
+            BlockPosition blockposition = this.getChunkCoordinates();
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+            ImmutableList<EntityPose> immutablelist = entityliving.ei();
+            UnmodifiableIterator unmodifiableiterator = immutablelist.iterator();
+
+            while (unmodifiableiterator.hasNext()) {
+                EntityPose entitypose = (EntityPose) unmodifiableiterator.next();
+                EntitySize entitysize = entityliving.a(entitypose);
+                float f = Math.min(entitysize.width, 1.0F) / 2.0F;
+                UnmodifiableIterator unmodifiableiterator1 = ((ImmutableList) EntityMinecartAbstract.an.get(entitypose)).iterator();
+
+                while (unmodifiableiterator1.hasNext()) {
+                    int i = (Integer) unmodifiableiterator1.next();
+                    int[][] aint1 = aint;
+                    int j = aint.length;
+
+                    for (int k = 0; k < j; ++k) {
+                        int[] aint2 = aint1[k];
+
+                        blockposition_mutableblockposition.d(blockposition.getX() + aint2[0], blockposition.getY() + i, blockposition.getZ() + aint2[1]);
+                        double d0 = this.world.c(blockposition_mutableblockposition, (iblockdata) -> {
+                            return iblockdata.a((Tag) TagsBlock.CLIMBABLE) ? true : iblockdata.getBlock() instanceof BlockTrapdoor && (Boolean) iblockdata.get(BlockTrapdoor.OPEN);
+                        });
+
+                        if (DismountUtil.a(d0)) {
+                            AxisAlignedBB axisalignedbb = new AxisAlignedBB((double) (-f), d0, (double) (-f), (double) f, d0 + (double) entitysize.height, (double) f);
+                            Vec3D vec3d = Vec3D.a((BaseBlockPosition) blockposition_mutableblockposition, d0);
+
+                            if (DismountUtil.a(this.world, entityliving, axisalignedbb.c(vec3d))) {
+                                entityliving.setPose(entitypose);
+                                return vec3d;
+                            }
+                        }
+                    }
+                }
+            }
+
+            double d1 = this.getBoundingBox().maxY;
+
+            blockposition_mutableblockposition.c((double) blockposition.getX(), d1, (double) blockposition.getZ());
+            UnmodifiableIterator unmodifiableiterator2 = immutablelist.iterator();
+
+            while (unmodifiableiterator2.hasNext()) {
+                EntityPose entitypose1 = (EntityPose) unmodifiableiterator2.next();
+                double d2 = (double) entityliving.a(entitypose1).height;
+                double d3 = (double) blockposition_mutableblockposition.getY() + this.world.a(blockposition_mutableblockposition, d1 - (double) blockposition_mutableblockposition.getY() + d2);
+
+                if (d1 + d2 <= d3) {
+                    entityliving.setPose(entitypose1);
+                    break;
+                }
+            }
+
+            return super.c(entityliving);
+        }
     }
 
     @Override
@@ -122,6 +190,13 @@ public abstract class EntityMinecartAbstract extends Entity {
         }
     }
 
+    @Override
+    protected float getBlockSpeedFactor() {
+        IBlockData iblockdata = this.world.getType(this.getChunkCoordinates());
+
+        return iblockdata.a((Tag) TagsBlock.RAILS) ? 1.0F : super.getBlockSpeedFactor();
+    }
+
     public void a(DamageSource damagesource) {
         this.die();
         if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
@@ -147,7 +222,7 @@ public abstract class EntityMinecartAbstract extends Entity {
 
     @Override
     public EnumDirection getAdjustedDirection() {
-        return this.ao ? this.getDirection().opposite().f() : this.getDirection().f();
+        return this.ao ? this.getDirection().opposite().g() : this.getDirection().g();
     }
 
     @Override
@@ -161,7 +236,7 @@ public abstract class EntityMinecartAbstract extends Entity {
         }
 
         if (this.locY() < -64.0D) {
-            this.af();
+            this.ai();
         }
 
         this.doPortalTick();
@@ -178,7 +253,7 @@ public abstract class EntityMinecartAbstract extends Entity {
                 this.setPosition(d0, d1, d2);
                 this.setYawPitch(this.yaw, this.pitch);
             } else {
-                this.Z();
+                this.ac();
                 this.setYawPitch(this.yaw, this.pitch);
             }
 
@@ -191,20 +266,20 @@ public abstract class EntityMinecartAbstract extends Entity {
             int j = MathHelper.floor(this.locY());
             int k = MathHelper.floor(this.locZ());
 
-            if (this.world.getType(new BlockPosition(i, j - 1, k)).a(TagsBlock.RAILS)) {
+            if (this.world.getType(new BlockPosition(i, j - 1, k)).a((Tag) TagsBlock.RAILS)) {
                 --j;
             }
 
             BlockPosition blockposition = new BlockPosition(i, j, k);
             IBlockData iblockdata = this.world.getType(blockposition);
 
-            if (iblockdata.a(TagsBlock.RAILS)) {
+            if (BlockMinecartTrackAbstract.g(iblockdata)) {
                 this.b(blockposition, iblockdata);
-                if (iblockdata.getBlock() == Blocks.ACTIVATOR_RAIL) {
+                if (iblockdata.a(Blocks.ACTIVATOR_RAIL)) {
                     this.a(i, j, k, (Boolean) iblockdata.get(BlockPoweredRail.POWERED));
                 }
             } else {
-                this.i();
+                this.h();
             }
 
             this.checkBlockCollisions();
@@ -253,7 +328,7 @@ public abstract class EntityMinecartAbstract extends Entity {
                 }
             }
 
-            this.aC();
+            this.aG();
         }
     }
 
@@ -263,7 +338,7 @@ public abstract class EntityMinecartAbstract extends Entity {
 
     public void a(int i, int j, int k, boolean flag) {}
 
-    protected void i() {
+    protected void h() {
         double d0 = this.getMaxSpeed();
         Vec3D vec3d = this.getMot();
 
@@ -472,13 +547,13 @@ public abstract class EntityMinecartAbstract extends Entity {
         int j = MathHelper.floor(d1);
         int k = MathHelper.floor(d2);
 
-        if (this.world.getType(new BlockPosition(i, j - 1, k)).a(TagsBlock.RAILS)) {
+        if (this.world.getType(new BlockPosition(i, j - 1, k)).a((Tag) TagsBlock.RAILS)) {
             --j;
         }
 
         IBlockData iblockdata = this.world.getType(new BlockPosition(i, j, k));
 
-        if (iblockdata.a(TagsBlock.RAILS)) {
+        if (BlockMinecartTrackAbstract.g(iblockdata)) {
             BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(((BlockMinecartTrackAbstract) iblockdata.getBlock()).d());
             Pair<BaseBlockPosition, BaseBlockPosition> pair = a(blockpropertytrackposition);
             BaseBlockPosition baseblockposition = (BaseBlockPosition) pair.getFirst();
@@ -521,17 +596,17 @@ public abstract class EntityMinecartAbstract extends Entity {
     }
 
     @Override
-    protected void a(NBTTagCompound nbttagcompound) {
+    protected void loadData(NBTTagCompound nbttagcompound) {
         if (nbttagcompound.getBoolean("CustomDisplayTile")) {
-            this.setDisplayBlock(GameProfileSerializer.d(nbttagcompound.getCompound("DisplayState")));
+            this.setDisplayBlock(GameProfileSerializer.c(nbttagcompound.getCompound("DisplayState")));
             this.setDisplayBlockOffset(nbttagcompound.getInt("DisplayOffset"));
         }
 
     }
 
     @Override
-    protected void b(NBTTagCompound nbttagcompound) {
-        if (this.u()) {
+    protected void saveData(NBTTagCompound nbttagcompound) {
+        if (this.t()) {
             nbttagcompound.setBoolean("CustomDisplayTile", true);
             nbttagcompound.set("DisplayState", GameProfileSerializer.a(this.getDisplayBlock()));
             nbttagcompound.setInt("DisplayOffset", this.getDisplayBlockOffset());
@@ -562,8 +637,8 @@ public abstract class EntityMinecartAbstract extends Entity {
                         d1 *= d3;
                         d0 *= 0.10000000149011612D;
                         d1 *= 0.10000000149011612D;
-                        d0 *= (double) (1.0F - this.J);
-                        d1 *= (double) (1.0F - this.J);
+                        d0 *= (double) (1.0F - this.I);
+                        d1 *= (double) (1.0F - this.I);
                         d0 *= 0.5D;
                         d1 *= 0.5D;
                         if (entity instanceof EntityMinecartAbstract) {
@@ -635,7 +710,7 @@ public abstract class EntityMinecartAbstract extends Entity {
     public abstract EntityMinecartAbstract.EnumMinecartType getMinecartType();
 
     public IBlockData getDisplayBlock() {
-        return !this.u() ? this.q() : Block.getByCombinedId((Integer) this.getDataWatcher().get(EntityMinecartAbstract.e));
+        return !this.t() ? this.q() : Block.getByCombinedId((Integer) this.getDataWatcher().get(EntityMinecartAbstract.e));
     }
 
     public IBlockData q() {
@@ -643,7 +718,7 @@ public abstract class EntityMinecartAbstract extends Entity {
     }
 
     public int getDisplayBlockOffset() {
-        return !this.u() ? this.s() : (Integer) this.getDataWatcher().get(EntityMinecartAbstract.f);
+        return !this.t() ? this.s() : (Integer) this.getDataWatcher().get(EntityMinecartAbstract.f);
     }
 
     public int s() {
@@ -660,7 +735,7 @@ public abstract class EntityMinecartAbstract extends Entity {
         this.a(true);
     }
 
-    public boolean u() {
+    public boolean t() {
         return (Boolean) this.getDataWatcher().get(EntityMinecartAbstract.g);
     }
 
@@ -669,7 +744,7 @@ public abstract class EntityMinecartAbstract extends Entity {
     }
 
     @Override
-    public Packet<?> L() {
+    public Packet<?> O() {
         return new PacketPlayOutSpawnEntity(this);
     }
 

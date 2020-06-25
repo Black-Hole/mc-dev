@@ -6,12 +6,12 @@ public class TileEntityJukeBox extends TileEntity implements Clearable {
 
     public TileEntityJukeBox() {
         super(TileEntityTypes.JUKEBOX);
-        this.a = ItemStack.a;
+        this.a = ItemStack.b;
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
         if (nbttagcompound.hasKeyOfType("RecordItem", 10)) {
             this.setRecord(ItemStack.a(nbttagcompound.getCompound("RecordItem")));
         }
@@ -39,6 +39,6 @@ public class TileEntityJukeBox extends TileEntity implements Clearable {
 
     @Override
     public void clear() {
-        this.setRecord(ItemStack.a);
+        this.setRecord(ItemStack.b);
     }
 }

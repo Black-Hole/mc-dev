@@ -9,6 +9,22 @@ public class Vec3D implements IPosition {
     public final double y;
     public final double z;
 
+    public static Vec3D a(BaseBlockPosition baseblockposition) {
+        return new Vec3D((double) baseblockposition.getX() + 0.5D, (double) baseblockposition.getY() + 0.5D, (double) baseblockposition.getZ() + 0.5D);
+    }
+
+    public static Vec3D b(BaseBlockPosition baseblockposition) {
+        return new Vec3D((double) baseblockposition.getX(), (double) baseblockposition.getY(), (double) baseblockposition.getZ());
+    }
+
+    public static Vec3D c(BaseBlockPosition baseblockposition) {
+        return new Vec3D((double) baseblockposition.getX() + 0.5D, (double) baseblockposition.getY(), (double) baseblockposition.getZ() + 0.5D);
+    }
+
+    public static Vec3D a(BaseBlockPosition baseblockposition, double d0) {
+        return new Vec3D((double) baseblockposition.getX() + 0.5D, (double) baseblockposition.getY() + d0, (double) baseblockposition.getZ() + 0.5D);
+    }
+
     public Vec3D(double d0, double d1, double d2) {
         this.x = d0;
         this.y = d1;
@@ -17,10 +33,6 @@ public class Vec3D implements IPosition {
 
     public Vec3D(Vector3fa vector3fa) {
         this((double) vector3fa.a(), (double) vector3fa.b(), (double) vector3fa.c());
-    }
-
-    public Vec3D(BaseBlockPosition baseblockposition) {
-        this((double) baseblockposition.getX(), (double) baseblockposition.getY(), (double) baseblockposition.getZ());
     }
 
     public Vec3D a(Vec3D vec3d) {
@@ -55,6 +67,10 @@ public class Vec3D implements IPosition {
 
     public Vec3D add(double d0, double d1, double d2) {
         return new Vec3D(this.x + d0, this.y + d1, this.z + d2);
+    }
+
+    public boolean a(IPosition iposition, double d0) {
+        return this.c(iposition.getX(), iposition.getY(), iposition.getZ()) < d0 * d0;
     }
 
     public double f(Vec3D vec3d) {

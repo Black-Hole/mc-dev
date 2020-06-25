@@ -13,9 +13,9 @@ import java.util.regex.Pattern;
 
 public class MojangsonParser {
 
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.nbt.trailing", new Object[0]));
-    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.nbt.expected.key", new Object[0]));
-    public static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.nbt.expected.value", new Object[0]));
+    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.nbt.trailing"));
+    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.nbt.expected.key"));
+    public static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.nbt.expected.value"));
     public static final Dynamic2CommandExceptionType d = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("argument.nbt.list.mixed", new Object[]{object, object1});
     });

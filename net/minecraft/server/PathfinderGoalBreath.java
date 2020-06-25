@@ -23,7 +23,7 @@ public class PathfinderGoalBreath extends PathfinderGoal {
     }
 
     @Override
-    public boolean E_() {
+    public boolean D_() {
         return false;
     }
 
@@ -56,13 +56,13 @@ public class PathfinderGoalBreath extends PathfinderGoal {
     @Override
     public void e() {
         this.g();
-        this.a.a(0.02F, new Vec3D((double) this.a.aZ, (double) this.a.ba, (double) this.a.bb));
+        this.a.a(0.02F, new Vec3D((double) this.a.aY, (double) this.a.aZ, (double) this.a.ba));
         this.a.move(EnumMoveType.SELF, this.a.getMot());
     }
 
     private boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
         IBlockData iblockdata = iworldreader.getType(blockposition);
 
-        return (iworldreader.getFluid(blockposition).isEmpty() || iblockdata.getBlock() == Blocks.BUBBLE_COLUMN) && iblockdata.a((IBlockAccess) iworldreader, blockposition, PathMode.LAND);
+        return (iworldreader.getFluid(blockposition).isEmpty() || iblockdata.a(Blocks.BUBBLE_COLUMN)) && iblockdata.a((IBlockAccess) iworldreader, blockposition, PathMode.LAND);
     }
 }

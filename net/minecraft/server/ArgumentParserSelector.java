@@ -21,13 +21,13 @@ import javax.annotation.Nullable;
 
 public class ArgumentParserSelector {
 
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.entity.invalid", new Object[0]));
+    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.entity.invalid"));
     public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.entity.selector.unknown", new Object[]{object});
     });
-    public static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.entity.selector.not_allowed", new Object[0]));
-    public static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("argument.entity.selector.missing", new Object[0]));
-    public static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.unterminated", new Object[0]));
+    public static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.entity.selector.not_allowed"));
+    public static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("argument.entity.selector.missing"));
+    public static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.unterminated"));
     public static final DynamicCommandExceptionType f = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.entity.options.valueless", new Object[]{object});
     });
@@ -35,12 +35,12 @@ public class ArgumentParserSelector {
     };
     public static final BiConsumer<Vec3D, List<? extends Entity>> h = (vec3d, list) -> {
         list.sort((entity, entity1) -> {
-            return Doubles.compare(entity.c(vec3d), entity1.c(vec3d));
+            return Doubles.compare(entity.d(vec3d), entity1.d(vec3d));
         });
     };
     public static final BiConsumer<Vec3D, List<? extends Entity>> i = (vec3d, list) -> {
         list.sort((entity, entity1) -> {
-            return Doubles.compare(entity1.c(vec3d), entity.c(vec3d));
+            return Doubles.compare(entity1.d(vec3d), entity.d(vec3d));
         });
     };
     public static final BiConsumer<Vec3D, List<? extends Entity>> j = (vec3d, list) -> {
@@ -461,11 +461,11 @@ public class ArgumentParserSelector {
     }
 
     private static void a(SuggestionsBuilder suggestionsbuilder) {
-        suggestionsbuilder.suggest("@p", new ChatMessage("argument.entity.selector.nearestPlayer", new Object[0]));
-        suggestionsbuilder.suggest("@a", new ChatMessage("argument.entity.selector.allPlayers", new Object[0]));
-        suggestionsbuilder.suggest("@r", new ChatMessage("argument.entity.selector.randomPlayer", new Object[0]));
-        suggestionsbuilder.suggest("@s", new ChatMessage("argument.entity.selector.self", new Object[0]));
-        suggestionsbuilder.suggest("@e", new ChatMessage("argument.entity.selector.allEntities", new Object[0]));
+        suggestionsbuilder.suggest("@p", new ChatMessage("argument.entity.selector.nearestPlayer"));
+        suggestionsbuilder.suggest("@a", new ChatMessage("argument.entity.selector.allPlayers"));
+        suggestionsbuilder.suggest("@r", new ChatMessage("argument.entity.selector.randomPlayer"));
+        suggestionsbuilder.suggest("@s", new ChatMessage("argument.entity.selector.self"));
+        suggestionsbuilder.suggest("@e", new ChatMessage("argument.entity.selector.allEntities"));
     }
 
     private CompletableFuture<Suggestions> b(SuggestionsBuilder suggestionsbuilder, Consumer<SuggestionsBuilder> consumer) {
@@ -530,7 +530,7 @@ public class ArgumentParserSelector {
         return this.H;
     }
 
-    public void c(boolean flag) {
+    public void b(boolean flag) {
         this.H = flag;
     }
 
@@ -538,7 +538,7 @@ public class ArgumentParserSelector {
         return this.I;
     }
 
-    public void d(boolean flag) {
+    public void c(boolean flag) {
         this.I = flag;
     }
 
@@ -546,7 +546,7 @@ public class ArgumentParserSelector {
         return this.J;
     }
 
-    public void e(boolean flag) {
+    public void d(boolean flag) {
         this.J = flag;
     }
 
@@ -554,7 +554,7 @@ public class ArgumentParserSelector {
         return this.K;
     }
 
-    public void f(boolean flag) {
+    public void e(boolean flag) {
         this.K = flag;
     }
 
@@ -562,7 +562,7 @@ public class ArgumentParserSelector {
         return this.L;
     }
 
-    public void g(boolean flag) {
+    public void f(boolean flag) {
         this.L = flag;
     }
 
@@ -570,7 +570,7 @@ public class ArgumentParserSelector {
         return this.M;
     }
 
-    public void h(boolean flag) {
+    public void g(boolean flag) {
         this.M = flag;
     }
 
@@ -578,11 +578,11 @@ public class ArgumentParserSelector {
         return this.N;
     }
 
-    public void i(boolean flag) {
+    public void h(boolean flag) {
         this.N = flag;
     }
 
-    public void j(boolean flag) {
+    public void i(boolean flag) {
         this.O = flag;
     }
 
@@ -606,7 +606,7 @@ public class ArgumentParserSelector {
         return this.R;
     }
 
-    public void k(boolean flag) {
+    public void j(boolean flag) {
         this.R = flag;
     }
 
@@ -614,7 +614,7 @@ public class ArgumentParserSelector {
         return this.S;
     }
 
-    public void l(boolean flag) {
+    public void k(boolean flag) {
         this.S = flag;
     }
 }

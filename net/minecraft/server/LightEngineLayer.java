@@ -80,7 +80,7 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
             } else {
                 this.d.g(i);
                 IBlockData iblockdata = iblockaccess.getType(this.d);
-                boolean flag = iblockdata.o() && iblockdata.g();
+                boolean flag = iblockdata.l() && iblockdata.e();
 
                 if (mutableint != null) {
                     mutableint.setValue(iblockdata.b(this.a.getWorld(), (BlockPosition) this.d));
@@ -92,18 +92,18 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
     }
 
     protected VoxelShape a(IBlockData iblockdata, long i, EnumDirection enumdirection) {
-        return iblockdata.o() ? iblockdata.a(this.a.getWorld(), this.d.g(i), enumdirection) : VoxelShapes.a();
+        return iblockdata.l() ? iblockdata.a(this.a.getWorld(), this.d.g(i), enumdirection) : VoxelShapes.a();
     }
 
     public static int a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, IBlockData iblockdata1, BlockPosition blockposition1, EnumDirection enumdirection, int i) {
-        boolean flag = iblockdata.o() && iblockdata.g();
-        boolean flag1 = iblockdata1.o() && iblockdata1.g();
+        boolean flag = iblockdata.l() && iblockdata.e();
+        boolean flag1 = iblockdata1.l() && iblockdata1.e();
 
         if (!flag && !flag1) {
             return i;
         } else {
-            VoxelShape voxelshape = flag ? iblockdata.j(iblockaccess, blockposition) : VoxelShapes.a();
-            VoxelShape voxelshape1 = flag1 ? iblockdata1.j(iblockaccess, blockposition1) : VoxelShapes.a();
+            VoxelShape voxelshape = flag ? iblockdata.c(iblockaccess, blockposition) : VoxelShapes.a();
+            VoxelShape voxelshape1 = flag1 ? iblockdata1.c(iblockaccess, blockposition1) : VoxelShapes.a();
 
             return VoxelShapes.b(voxelshape, voxelshape1, enumdirection) ? 16 : i;
         }
@@ -168,14 +168,14 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
         return i;
     }
 
-    protected void a(long i, @Nullable NibbleArray nibblearray) {
-        this.c.a(i, nibblearray);
+    protected void a(long i, @Nullable NibbleArray nibblearray, boolean flag) {
+        this.c.a(i, nibblearray, flag);
     }
 
     @Nullable
     @Override
     public NibbleArray a(SectionPosition sectionposition) {
-        return this.c.h(sectionposition.v());
+        return this.c.h(sectionposition.s());
     }
 
     @Override
@@ -202,7 +202,7 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
 
     @Override
     public void a(SectionPosition sectionposition, boolean flag) {
-        this.c.d(sectionposition.v(), flag);
+        this.c.d(sectionposition.s(), flag);
     }
 
     public void a(ChunkCoordIntPair chunkcoordintpair, boolean flag) {

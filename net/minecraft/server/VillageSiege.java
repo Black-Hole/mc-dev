@@ -3,7 +3,7 @@ package net.minecraft.server;
 import java.util.Iterator;
 import javax.annotation.Nullable;
 
-public class VillageSiege {
+public class VillageSiege implements MobSpawner {
 
     private boolean a;
     private VillageSiege.State b;
@@ -17,6 +17,7 @@ public class VillageSiege {
         this.b = VillageSiege.State.SIEGE_DONE;
     }
 
+    @Override
     public int a(WorldServer worldserver, boolean flag, boolean flag1) {
         if (!worldserver.isDay() && flag) {
             float f = worldserver.f(0.0F);
@@ -67,7 +68,7 @@ public class VillageSiege {
             if (!entityhuman.isSpectator()) {
                 BlockPosition blockposition = entityhuman.getChunkCoordinates();
 
-                if (worldserver.b_(blockposition) && worldserver.getBiome(blockposition).q() != BiomeBase.Geography.MUSHROOM) {
+                if (worldserver.b_(blockposition) && worldserver.getBiome(blockposition).y() != BiomeBase.Geography.MUSHROOM) {
                     for (int i = 0; i < 10; ++i) {
                         float f = worldserver.random.nextFloat() * 6.2831855F;
 
@@ -97,7 +98,7 @@ public class VillageSiege {
 
             try {
                 entityzombie = new EntityZombie(worldserver);
-                entityzombie.prepare(worldserver, worldserver.getDamageScaler(new BlockPosition(entityzombie)), EnumMobSpawn.EVENT, (GroupDataEntity) null, (NBTTagCompound) null);
+                entityzombie.prepare(worldserver, worldserver.getDamageScaler(entityzombie.getChunkCoordinates()), EnumMobSpawn.EVENT, (GroupDataEntity) null, (NBTTagCompound) null);
             } catch (Exception exception) {
                 exception.printStackTrace();
                 return;
@@ -117,7 +118,7 @@ public class VillageSiege {
             BlockPosition blockposition1 = new BlockPosition(j, l, k);
 
             if (worldserver.b_(blockposition1) && EntityMonster.c(EntityTypes.ZOMBIE, worldserver, EnumMobSpawn.EVENT, blockposition1, worldserver.random)) {
-                return new Vec3D((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY(), (double) blockposition1.getZ() + 0.5D);
+                return Vec3D.c((BaseBlockPosition) blockposition1);
             }
         }
 

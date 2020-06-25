@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockHalfTransparent extends Block {
 
-    protected BlockHalfTransparent(Block.Info block_info) {
-        super(block_info);
+    protected BlockHalfTransparent(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 }

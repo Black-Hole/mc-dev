@@ -1,29 +1,28 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Iterator;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenFeatureRandomChoice extends WorldGenerator<WorldGenFeatureRandomChoiceConfiguration> {
 
-    public WorldGenFeatureRandomChoice(Function<Dynamic<?>, ? extends WorldGenFeatureRandomChoiceConfiguration> function) {
-        super(function);
+    public WorldGenFeatureRandomChoice(Codec<WorldGenFeatureRandomChoiceConfiguration> codec) {
+        super(codec);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRandomChoiceConfiguration worldgenfeaturerandomchoiceconfiguration) {
-        Iterator iterator = worldgenfeaturerandomchoiceconfiguration.a.iterator();
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRandomChoiceConfiguration worldgenfeaturerandomchoiceconfiguration) {
+        Iterator iterator = worldgenfeaturerandomchoiceconfiguration.b.iterator();
 
         WorldGenFeatureRandomChoiceConfigurationWeight worldgenfeaturerandomchoiceconfigurationweight;
 
         do {
             if (!iterator.hasNext()) {
-                return worldgenfeaturerandomchoiceconfiguration.b.a(generatoraccess, chunkgenerator, random, blockposition);
+                return worldgenfeaturerandomchoiceconfiguration.c.a(generatoraccessseed, structuremanager, chunkgenerator, random, blockposition);
             }
 
             worldgenfeaturerandomchoiceconfigurationweight = (WorldGenFeatureRandomChoiceConfigurationWeight) iterator.next();
-        } while (random.nextFloat() >= worldgenfeaturerandomchoiceconfigurationweight.b);
+        } while (random.nextFloat() >= worldgenfeaturerandomchoiceconfigurationweight.c);
 
-        return worldgenfeaturerandomchoiceconfigurationweight.a(generatoraccess, chunkgenerator, random, blockposition);
+        return worldgenfeaturerandomchoiceconfigurationweight.a(generatoraccessseed, structuremanager, chunkgenerator, random, blockposition);
     }
 }

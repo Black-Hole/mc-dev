@@ -6,11 +6,11 @@ import com.google.common.collect.UnmodifiableIterator;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.DataFixer;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Dynamic;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.Map.Entry;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,25 +22,17 @@ public final class GameProfileSerializer {
     @Nullable
     public static GameProfile deserialize(NBTTagCompound nbttagcompound) {
         String s = null;
-        String s1 = null;
+        UUID uuid = null;
 
         if (nbttagcompound.hasKeyOfType("Name", 8)) {
             s = nbttagcompound.getString("Name");
         }
 
-        if (nbttagcompound.hasKeyOfType("Id", 8)) {
-            s1 = nbttagcompound.getString("Id");
+        if (nbttagcompound.b("Id")) {
+            uuid = nbttagcompound.a("Id");
         }
 
         try {
-            UUID uuid;
-
-            try {
-                uuid = UUID.fromString(s1);
-            } catch (Throwable throwable) {
-                uuid = null;
-            }
-
             GameProfile gameprofile = new GameProfile(uuid, s);
 
             if (nbttagcompound.hasKeyOfType("Properties", 10)) {
@@ -48,24 +40,24 @@ public final class GameProfileSerializer {
                 Iterator iterator = nbttagcompound1.getKeys().iterator();
 
                 while (iterator.hasNext()) {
-                    String s2 = (String) iterator.next();
-                    NBTTagList nbttaglist = nbttagcompound1.getList(s2, 10);
+                    String s1 = (String) iterator.next();
+                    NBTTagList nbttaglist = nbttagcompound1.getList(s1, 10);
 
                     for (int i = 0; i < nbttaglist.size(); ++i) {
                         NBTTagCompound nbttagcompound2 = nbttaglist.getCompound(i);
-                        String s3 = nbttagcompound2.getString("Value");
+                        String s2 = nbttagcompound2.getString("Value");
 
                         if (nbttagcompound2.hasKeyOfType("Signature", 8)) {
-                            gameprofile.getProperties().put(s2, new Property(s2, s3, nbttagcompound2.getString("Signature")));
+                            gameprofile.getProperties().put(s1, new Property(s1, s2, nbttagcompound2.getString("Signature")));
                         } else {
-                            gameprofile.getProperties().put(s2, new Property(s2, s3));
+                            gameprofile.getProperties().put(s1, new Property(s1, s2));
                         }
                     }
                 }
             }
 
             return gameprofile;
-        } catch (Throwable throwable1) {
+        } catch (Throwable throwable) {
             return null;
         }
     }
@@ -76,7 +68,7 @@ public final class GameProfileSerializer {
         }
 
         if (gameprofile.getId() != null) {
-            nbttagcompound.setString("Id", gameprofile.getId().toString());
+            nbttagcompound.a("Id", gameprofile.getId());
         }
 
         if (!gameprofile.getProperties().isEmpty()) {
@@ -176,19 +168,25 @@ public final class GameProfileSerializer {
         }
     }
 
-    public static NBTTagCompound a(UUID uuid) {
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
-
-        nbttagcompound.setLong("M", uuid.getMostSignificantBits());
-        nbttagcompound.setLong("L", uuid.getLeastSignificantBits());
-        return nbttagcompound;
+    public static NBTTagIntArray a(UUID uuid) {
+        return new NBTTagIntArray(MinecraftSerializableUUID.a(uuid));
     }
 
-    public static UUID b(NBTTagCompound nbttagcompound) {
-        return new UUID(nbttagcompound.getLong("M"), nbttagcompound.getLong("L"));
+    public static UUID a(NBTBase nbtbase) {
+        if (nbtbase.b() != NBTTagIntArray.a) {
+            throw new IllegalArgumentException("Expected UUID-Tag to be of type " + NBTTagIntArray.a.a() + ", but found " + nbtbase.b().a() + ".");
+        } else {
+            int[] aint = ((NBTTagIntArray) nbtbase).getInts();
+
+            if (aint.length != 4) {
+                throw new IllegalArgumentException("Expected UUID-Array to be of length 4, but found " + aint.length + ".");
+            } else {
+                return MinecraftSerializableUUID.a(aint);
+            }
+        }
     }
 
-    public static BlockPosition c(NBTTagCompound nbttagcompound) {
+    public static BlockPosition b(NBTTagCompound nbttagcompound) {
         return new BlockPosition(nbttagcompound.getInt("X"), nbttagcompound.getInt("Y"), nbttagcompound.getInt("Z"));
     }
 
@@ -201,7 +199,7 @@ public final class GameProfileSerializer {
         return nbttagcompound;
     }
 
-    public static IBlockData d(NBTTagCompound nbttagcompound) {
+    public static IBlockData c(NBTTagCompound nbttagcompound) {
         if (!nbttagcompound.hasKeyOfType("Name", 8)) {
             return Blocks.AIR.getBlockData();
         } else {
@@ -227,7 +225,7 @@ public final class GameProfileSerializer {
         }
     }
 
-    private static <S extends IBlockDataHolder<S>, T extends Comparable<T>> S a(S s0, IBlockState<T> iblockstate, String s, NBTTagCompound nbttagcompound, NBTTagCompound nbttagcompound1) {
+    private static <S extends IBlockDataHolder<?, S>, T extends Comparable<T>> S a(S s0, IBlockState<T> iblockstate, String s, NBTTagCompound nbttagcompound, NBTTagCompound nbttagcompound1) {
         Optional<T> optional = iblockstate.b(nbttagcompound.getString(s));
 
         if (optional.isPresent()) {
@@ -252,7 +250,7 @@ public final class GameProfileSerializer {
                 Entry<IBlockState<?>, Comparable<?>> entry = (Entry) unmodifiableiterator.next();
                 IBlockState<?> iblockstate = (IBlockState) entry.getKey();
 
-                nbttagcompound1.setString(iblockstate.a(), a(iblockstate, (Comparable) entry.getValue()));
+                nbttagcompound1.setString(iblockstate.getName(), a(iblockstate, (Comparable) entry.getValue()));
             }
 
             nbttagcompound.set("Properties", nbttagcompound1);

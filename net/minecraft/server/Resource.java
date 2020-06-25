@@ -1,38 +1,31 @@
 package net.minecraft.server;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import javax.annotation.Nullable;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class Resource implements IResource {
 
-    private static final Logger LOGGER = LogManager.getLogger();
-    public static final Executor a = Executors.newSingleThreadExecutor((new ThreadFactoryBuilder()).setDaemon(true).setNameFormat("Resource IO {0}").setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(Resource.LOGGER)).build());
-    private final String c;
-    private final MinecraftKey d;
-    private final InputStream e;
-    private final InputStream f;
+    private final String a;
+    private final MinecraftKey b;
+    private final InputStream c;
+    private final InputStream d;
 
     public Resource(String s, MinecraftKey minecraftkey, InputStream inputstream, @Nullable InputStream inputstream1) {
-        this.c = s;
-        this.d = minecraftkey;
-        this.e = inputstream;
-        this.f = inputstream1;
+        this.a = s;
+        this.b = minecraftkey;
+        this.c = inputstream;
+        this.d = inputstream1;
     }
 
     @Override
     public InputStream b() {
-        return this.e;
+        return this.c;
     }
 
     @Override
     public String d() {
-        return this.c;
+        return this.a;
     }
 
     public boolean equals(Object object) {
@@ -45,22 +38,22 @@ public class Resource implements IResource {
             label32:
             {
                 resource = (Resource) object;
-                if (this.d != null) {
-                    if (this.d.equals(resource.d)) {
+                if (this.b != null) {
+                    if (this.b.equals(resource.b)) {
                         break label32;
                     }
-                } else if (resource.d == null) {
+                } else if (resource.b == null) {
                     break label32;
                 }
 
                 return false;
             }
 
-            if (this.c != null) {
-                if (this.c.equals(resource.c)) {
+            if (this.a != null) {
+                if (this.a.equals(resource.a)) {
                     return true;
                 }
-            } else if (resource.c == null) {
+            } else if (resource.a == null) {
                 return true;
             }
 
@@ -69,16 +62,16 @@ public class Resource implements IResource {
     }
 
     public int hashCode() {
-        int i = this.c != null ? this.c.hashCode() : 0;
+        int i = this.a != null ? this.a.hashCode() : 0;
 
-        i = 31 * i + (this.d != null ? this.d.hashCode() : 0);
+        i = 31 * i + (this.b != null ? this.b.hashCode() : 0);
         return i;
     }
 
     public void close() throws IOException {
-        this.e.close();
-        if (this.f != null) {
-            this.f.close();
+        this.c.close();
+        if (this.d != null) {
+            this.d.close();
         }
 
     }

@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntityHorseDonkey extends EntityHorseChestedAbstract {
 
     public EntityHorseDonkey(EntityTypes<? extends EntityHorseDonkey> entitytypes, World world) {
@@ -13,9 +15,21 @@ public class EntityHorseDonkey extends EntityHorseChestedAbstract {
     }
 
     @Override
+    protected SoundEffect getSoundAngry() {
+        super.getSoundAngry();
+        return SoundEffects.ENTITY_DONKEY_ANGRY;
+    }
+
+    @Override
     protected SoundEffect getSoundDeath() {
         super.getSoundDeath();
         return SoundEffects.ENTITY_DONKEY_DEATH;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEffect fh() {
+        return SoundEffects.ENTITY_DONKEY_EAT;
     }
 
     @Override
@@ -26,7 +40,7 @@ public class EntityHorseDonkey extends EntityHorseChestedAbstract {
 
     @Override
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.eR() && ((EntityHorseAbstract) entityanimal).eR());
+        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.fp() && ((EntityHorseAbstract) entityanimal).fp());
     }
 
     @Override

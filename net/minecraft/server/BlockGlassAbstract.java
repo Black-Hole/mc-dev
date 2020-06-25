@@ -2,27 +2,17 @@ package net.minecraft.server;
 
 public abstract class BlockGlassAbstract extends BlockHalfTransparent {
 
-    protected BlockGlassAbstract(Block.Info block_info) {
-        super(block_info);
+    protected BlockGlassAbstract(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+    }
+
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return VoxelShapes.a();
     }
 
     @Override
     public boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return true;
-    }
-
-    @Override
-    public boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return false;
-    }
-
-    @Override
-    public boolean isOccluding(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return false;
-    }
-
-    @Override
-    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EntityTypes<?> entitytypes) {
-        return false;
     }
 }

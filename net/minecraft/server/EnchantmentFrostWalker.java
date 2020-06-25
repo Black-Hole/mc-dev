@@ -29,7 +29,7 @@ public class EnchantmentFrostWalker extends Enchantment {
     }
 
     public static void a(EntityLiving entityliving, World world, BlockPosition blockposition, int i) {
-        if (entityliving.onGround) {
+        if (entityliving.isOnGround()) {
             IBlockData iblockdata = Blocks.FROSTED_ICE.getBlockData();
             float f = (float) Math.min(16, 2 + i);
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();

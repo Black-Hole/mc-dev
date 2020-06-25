@@ -18,7 +18,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
 
     public TileEntityShulkerBox(@Nullable EnumColor enumcolor) {
         super(TileEntityTypes.SHULKER_BOX);
-        this.contents = NonNullList.a(27, ItemStack.a);
+        this.contents = NonNullList.a(27, ItemStack.b);
         this.i = TileEntityShulkerBox.AnimationPhase.CLOSED;
         this.l = enumcolor;
     }
@@ -32,7 +32,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
     public void tick() {
         this.h();
         if (this.i == TileEntityShulkerBox.AnimationPhase.OPENING || this.i == TileEntityShulkerBox.AnimationPhase.CLOSING) {
-            this.l();
+            this.m();
         }
 
     }
@@ -46,10 +46,10 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
             case OPENING:
                 this.j += 0.1F;
                 if (this.j >= 1.0F) {
-                    this.l();
+                    this.m();
                     this.i = TileEntityShulkerBox.AnimationPhase.OPENED;
                     this.j = 1.0F;
-                    this.m();
+                    this.x();
                 }
                 break;
             case CLOSING:
@@ -57,7 +57,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
                 if (this.j <= 0.0F) {
                     this.i = TileEntityShulkerBox.AnimationPhase.CLOSED;
                     this.j = 0.0F;
-                    this.m();
+                    this.x();
                 }
                 break;
             case OPENED:
@@ -86,7 +86,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
         return this.b(enumdirection).a((double) enumdirection1.getAdjacentX(), (double) enumdirection1.getAdjacentY(), (double) enumdirection1.getAdjacentZ());
     }
 
-    private void l() {
+    private void m() {
         IBlockData iblockdata = this.world.getType(this.getPosition());
 
         if (iblockdata.getBlock() instanceof BlockShulkerBox) {
@@ -104,9 +104,9 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
                         double d2 = 0.0D;
                         AxisAlignedBB axisalignedbb1 = entity.getBoundingBox();
 
-                        switch (enumdirection.m()) {
+                        switch (enumdirection.n()) {
                             case X:
-                                if (enumdirection.d() == EnumDirection.EnumAxisDirection.POSITIVE) {
+                                if (enumdirection.e() == EnumDirection.EnumAxisDirection.POSITIVE) {
                                     d0 = axisalignedbb.maxX - axisalignedbb1.minX;
                                 } else {
                                     d0 = axisalignedbb1.maxX - axisalignedbb.minX;
@@ -115,7 +115,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
                                 d0 += 0.01D;
                                 break;
                             case Y:
-                                if (enumdirection.d() == EnumDirection.EnumAxisDirection.POSITIVE) {
+                                if (enumdirection.e() == EnumDirection.EnumAxisDirection.POSITIVE) {
                                     d1 = axisalignedbb.maxY - axisalignedbb1.minY;
                                 } else {
                                     d1 = axisalignedbb1.maxY - axisalignedbb.minY;
@@ -124,7 +124,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
                                 d1 += 0.01D;
                                 break;
                             case Z:
-                                if (enumdirection.d() == EnumDirection.EnumAxisDirection.POSITIVE) {
+                                if (enumdirection.e() == EnumDirection.EnumAxisDirection.POSITIVE) {
                                     d2 = axisalignedbb.maxZ - axisalignedbb1.minZ;
                                 } else {
                                     d2 = axisalignedbb1.maxZ - axisalignedbb.minZ;
@@ -152,12 +152,12 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
             this.c = j;
             if (j == 0) {
                 this.i = TileEntityShulkerBox.AnimationPhase.CLOSING;
-                this.m();
+                this.x();
             }
 
             if (j == 1) {
                 this.i = TileEntityShulkerBox.AnimationPhase.OPENING;
-                this.m();
+                this.x();
             }
 
             return true;
@@ -166,7 +166,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
         }
     }
 
-    private void m() {
+    private void x() {
         this.getBlock().a(this.getWorld(), this.getPosition(), 3);
     }
 
@@ -200,31 +200,31 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
 
     @Override
     protected IChatBaseComponent getContainerName() {
-        return new ChatMessage("container.shulkerBox", new Object[0]);
+        return new ChatMessage("container.shulkerBox");
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
-        this.f(nbttagcompound);
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
+        this.d(nbttagcompound);
     }
 
     @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        return this.g(nbttagcompound);
+        return this.e(nbttagcompound);
     }
 
-    public void f(NBTTagCompound nbttagcompound) {
-        this.contents = NonNullList.a(this.getSize(), ItemStack.a);
-        if (!this.d(nbttagcompound) && nbttagcompound.hasKeyOfType("Items", 9)) {
+    public void d(NBTTagCompound nbttagcompound) {
+        this.contents = NonNullList.a(this.getSize(), ItemStack.b);
+        if (!this.b(nbttagcompound) && nbttagcompound.hasKeyOfType("Items", 9)) {
             ContainerUtil.b(nbttagcompound, this.contents);
         }
 
     }
 
-    public NBTTagCompound g(NBTTagCompound nbttagcompound) {
-        if (!this.e(nbttagcompound)) {
+    public NBTTagCompound e(NBTTagCompound nbttagcompound) {
+        if (!this.c(nbttagcompound)) {
             ContainerUtil.a(nbttagcompound, this.contents, false);
         }
 
@@ -263,6 +263,10 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
     @Override
     protected Container createContainer(int i, PlayerInventory playerinventory) {
         return new ContainerShulkerBox(i, playerinventory, this);
+    }
+
+    public boolean l() {
+        return this.i == TileEntityShulkerBox.AnimationPhase.CLOSED;
     }
 
     public static enum AnimationPhase {

@@ -10,18 +10,18 @@ public class BlockWallSign extends BlockSign {
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
     private static final Map<EnumDirection, VoxelShape> d = Maps.newEnumMap(ImmutableMap.of(EnumDirection.NORTH, Block.a(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D), EnumDirection.SOUTH, Block.a(0.0D, 4.5D, 0.0D, 16.0D, 12.5D, 2.0D), EnumDirection.EAST, Block.a(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D), EnumDirection.WEST, Block.a(14.0D, 4.5D, 0.0D, 16.0D, 12.5D, 16.0D)));
 
-    public BlockWallSign(Block.Info block_info, BlockPropertyWood blockpropertywood) {
-        super(block_info, blockpropertywood);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockWallSign.FACING, EnumDirection.NORTH)).set(BlockWallSign.a, false));
+    public BlockWallSign(BlockBase.Info blockbase_info, BlockPropertyWood blockpropertywood) {
+        super(blockbase_info, blockpropertywood);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockWallSign.FACING, EnumDirection.NORTH)).set(BlockWallSign.a, false));
     }
 
     @Override
-    public String k() {
+    public String i() {
         return this.getItem().getName();
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return (VoxelShape) BlockWallSign.d.get(iblockdata.get(BlockWallSign.FACING));
     }
 
@@ -44,7 +44,7 @@ public class BlockWallSign extends BlockSign {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection1[j];
 
-            if (enumdirection.m().c()) {
+            if (enumdirection.n().d()) {
                 EnumDirection enumdirection1 = enumdirection.opposite();
 
                 iblockdata = (IBlockData) iblockdata.set(BlockWallSign.FACING, enumdirection1);

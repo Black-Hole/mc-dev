@@ -308,19 +308,19 @@ public class NBTTagList extends NBTList<NBTBase> {
 
                 for (j = 0; j < this.list.size(); ++j) {
                     if (j != 0) {
-                        chatcomponenttext.a(", ");
+                        chatcomponenttext.c(", ");
                     }
 
                     chatcomponenttext.addSibling(((NBTBase) this.list.get(j)).l());
                 }
 
-                chatcomponenttext.a("]");
+                chatcomponenttext.c("]");
                 return chatcomponenttext;
             } else {
                 ChatComponentText chatcomponenttext1 = new ChatComponentText("[");
 
                 if (!s.isEmpty()) {
-                    chatcomponenttext1.a("\n");
+                    chatcomponenttext1.c("\n");
                 }
 
                 String s2 = String.valueOf(',');
@@ -330,23 +330,24 @@ public class NBTTagList extends NBTList<NBTBase> {
 
                     chatcomponenttext2.addSibling(((NBTBase) this.list.get(j)).a(s, i + 1));
                     if (j != this.list.size() - 1) {
-                        chatcomponenttext2.a(s2).a(s.isEmpty() ? " " : "\n");
+                        chatcomponenttext2.c(s2).c(s.isEmpty() ? " " : "\n");
                     }
 
                     chatcomponenttext1.addSibling(chatcomponenttext2);
                 }
 
                 if (!s.isEmpty()) {
-                    chatcomponenttext1.a("\n").a(Strings.repeat(s, i));
+                    chatcomponenttext1.c("\n").c(Strings.repeat(s, i));
                 }
 
-                chatcomponenttext1.a("]");
+                chatcomponenttext1.c("]");
                 return chatcomponenttext1;
             }
         }
     }
 
-    public int a_() {
+    @Override
+    public byte d_() {
         return this.type;
     }
 

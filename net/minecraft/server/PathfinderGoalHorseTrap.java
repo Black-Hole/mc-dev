@@ -15,12 +15,16 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
 
     @Override
     public void e() {
-        DifficultyDamageScaler difficultydamagescaler = this.a.world.getDamageScaler(new BlockPosition(this.a));
+        DifficultyDamageScaler difficultydamagescaler = this.a.world.getDamageScaler(this.a.getChunkCoordinates());
 
-        this.a.r(false);
+        this.a.t(false);
         this.a.setTamed(true);
         this.a.setAgeRaw(0);
-        ((WorldServer) this.a.world).strikeLightning(new EntityLightning(this.a.world, this.a.locX(), this.a.locY(), this.a.locZ(), true));
+        EntityLightning entitylightning = (EntityLightning) EntityTypes.LIGHTNING_BOLT.a(this.a.world);
+
+        entitylightning.teleportAndSync(this.a.locX(), this.a.locY(), this.a.locZ());
+        entitylightning.setEffect(true);
+        this.a.world.addEntity(entitylightning);
         EntitySkeleton entityskeleton = this.a(difficultydamagescaler, this.a);
 
         entityskeleton.startRiding(this.a);

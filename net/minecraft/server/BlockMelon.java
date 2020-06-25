@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class BlockMelon extends BlockStemmed {
 
-    protected BlockMelon(Block.Info block_info) {
-        super(block_info);
+    protected BlockMelon(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override

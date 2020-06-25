@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -93,7 +92,7 @@ public class RecipeFireworksStar extends IRecipeComplex {
                 } else if (RecipeFireworksStar.b.test(itemstack1)) {
                     nbttagcompound.setBoolean("Trail", true);
                 } else if (itemstack1.getItem() instanceof ItemDye) {
-                    list.add(((ItemDye) itemstack1.getItem()).d().f());
+                    list.add(((ItemDye) itemstack1.getItem()).d().getFireworksColor());
                 }
             }
         }

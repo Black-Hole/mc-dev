@@ -10,7 +10,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -22,14 +21,14 @@ public class CommandBossBar {
     private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.bossbar.unknown", new Object[]{object});
     });
-    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.players.unchanged", new Object[0]));
-    private static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.name.unchanged", new Object[0]));
-    private static final SimpleCommandExceptionType f = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.color.unchanged", new Object[0]));
-    private static final SimpleCommandExceptionType g = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.style.unchanged", new Object[0]));
-    private static final SimpleCommandExceptionType h = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.value.unchanged", new Object[0]));
-    private static final SimpleCommandExceptionType i = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.max.unchanged", new Object[0]));
-    private static final SimpleCommandExceptionType j = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.visibility.unchanged.hidden", new Object[0]));
-    private static final SimpleCommandExceptionType k = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.visibility.unchanged.visible", new Object[0]));
+    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.players.unchanged"));
+    private static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.name.unchanged"));
+    private static final SimpleCommandExceptionType f = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.color.unchanged"));
+    private static final SimpleCommandExceptionType g = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.style.unchanged"));
+    private static final SimpleCommandExceptionType h = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.value.unchanged"));
+    private static final SimpleCommandExceptionType i = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.max.unchanged"));
+    private static final SimpleCommandExceptionType j = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.visibility.unchanged.hidden"));
+    private static final SimpleCommandExceptionType k = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.visibility.unchanged.visible"));
     public static final SuggestionProvider<CommandListenerWrapper> a = (commandcontext, suggestionsbuilder) -> {
         return ICompletionProvider.a((Iterable) ((CommandListenerWrapper) commandcontext.getSource()).getServer().getBossBattleCustomData().a(), suggestionsbuilder);
     };
@@ -38,7 +37,7 @@ public class CommandBossBar {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("bossbar").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
         })).then(CommandDispatcher.a("add").then(CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).then(CommandDispatcher.a("name", (ArgumentType) ArgumentChatComponent.a()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentMinecraftKeyRegistered.d(commandcontext, "id"), ArgumentChatComponent.a(commandcontext, "name"));
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentMinecraftKeyRegistered.e(commandcontext, "id"), ArgumentChatComponent.a(commandcontext, "name"));
         }))))).then(CommandDispatcher.a("remove").then(CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandBossBar.a).executes((commandcontext) -> {
             return e((CommandListenerWrapper) commandcontext.getSource(), a(commandcontext));
         })))).then(CommandDispatcher.a("list").executes((commandcontext) -> {
@@ -180,12 +179,12 @@ public class CommandBossBar {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, BossBattleCustom bossbattlecustom, IChatBaseComponent ichatbasecomponent) throws CommandSyntaxException {
-        IChatBaseComponent ichatbasecomponent1 = ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, (Entity) null, 0);
+        IChatMutableComponent ichatmutablecomponent = ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, (Entity) null, 0);
 
-        if (bossbattlecustom.j().equals(ichatbasecomponent1)) {
+        if (bossbattlecustom.j().equals(ichatmutablecomponent)) {
             throw CommandBossBar.e.create();
         } else {
-            bossbattlecustom.a(ichatbasecomponent1);
+            bossbattlecustom.a((IChatBaseComponent) ichatmutablecomponent);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.name.success", new Object[]{bossbattlecustom.e()}), true);
             return 0;
         }
@@ -211,7 +210,7 @@ public class CommandBossBar {
         Collection<BossBattleCustom> collection = commandlistenerwrapper.getServer().getBossBattleCustomData().getBattles();
 
         if (collection.isEmpty()) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.list.bars.none", new Object[0]), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.list.bars.none"), false);
         } else {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.list.bars.some", new Object[]{collection.size(), ChatComponentUtils.b(collection, BossBattleCustom::e)}), false);
         }
@@ -242,7 +241,7 @@ public class CommandBossBar {
     }
 
     public static BossBattleCustom a(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException {
-        MinecraftKey minecraftkey = ArgumentMinecraftKeyRegistered.d(commandcontext, "id");
+        MinecraftKey minecraftkey = ArgumentMinecraftKeyRegistered.e(commandcontext, "id");
         BossBattleCustom bossbattlecustom = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getBossBattleCustomData().a(minecraftkey);
 
         if (bossbattlecustom == null) {

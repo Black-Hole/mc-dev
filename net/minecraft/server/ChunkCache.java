@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 public class ChunkCache implements IBlockAccess, ICollisionAccess {
@@ -88,6 +90,16 @@ public class ChunkCache implements IBlockAccess, ICollisionAccess {
 
             return ichunkaccess.getType(blockposition);
         }
+    }
+
+    @Override
+    public Stream<VoxelShape> c(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Predicate<Entity> predicate) {
+        return Stream.empty();
+    }
+
+    @Override
+    public Stream<VoxelShape> d(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Predicate<Entity> predicate) {
+        return this.b(entity, axisalignedbb);
     }
 
     @Override

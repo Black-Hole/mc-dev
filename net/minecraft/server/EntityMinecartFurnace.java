@@ -30,7 +30,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
     @Override
     public void tick() {
         super.tick();
-        if (!this.world.p_()) {
+        if (!this.world.s_()) {
             if (this.e > 0) {
                 --this.e;
             }
@@ -40,10 +40,10 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
                 this.c = 0.0D;
             }
 
-            this.n(this.e > 0);
+            this.o(this.e > 0);
         }
 
-        if (this.v() && this.random.nextInt(4) == 0) {
+        if (this.u() && this.random.nextInt(4) == 0) {
             this.world.addParticle(Particles.LARGE_SMOKE, this.locX(), this.locY() + 0.8D, this.locZ(), 0.0D, 0.0D, 0.0D);
         }
 
@@ -100,7 +100,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
     }
 
     @Override
-    public boolean b(EntityHuman entityhuman, EnumHand enumhand) {
+    public EnumInteractionResult a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (EntityMinecartFurnace.f.test(itemstack) && this.e + 3600 <= 32000) {
@@ -116,35 +116,35 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
             this.c = this.locZ() - entityhuman.locZ();
         }
 
-        return true;
+        return EnumInteractionResult.a(this.world.isClientSide);
     }
 
     @Override
-    protected void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    protected void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setDouble("PushX", this.b);
         nbttagcompound.setDouble("PushZ", this.c);
         nbttagcompound.setShort("Fuel", (short) this.e);
     }
 
     @Override
-    protected void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    protected void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.b = nbttagcompound.getDouble("PushX");
         this.c = nbttagcompound.getDouble("PushZ");
         this.e = nbttagcompound.getShort("Fuel");
     }
 
-    protected boolean v() {
+    protected boolean u() {
         return (Boolean) this.datawatcher.get(EntityMinecartFurnace.d);
     }
 
-    protected void n(boolean flag) {
+    protected void o(boolean flag) {
         this.datawatcher.set(EntityMinecartFurnace.d, flag);
     }
 
     @Override
     public IBlockData q() {
-        return (IBlockData) ((IBlockData) Blocks.FURNACE.getBlockData().set(BlockFurnaceFurace.FACING, EnumDirection.NORTH)).set(BlockFurnaceFurace.LIT, this.v());
+        return (IBlockData) ((IBlockData) Blocks.FURNACE.getBlockData().set(BlockFurnaceFurace.FACING, EnumDirection.NORTH)).set(BlockFurnaceFurace.LIT, this.u());
     }
 }

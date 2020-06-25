@@ -53,7 +53,7 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
     }
 
     public void a(@Nullable EntityHuman entityhuman, IBlockData iblockdata, TileEntityBeehive.ReleaseStatus tileentitybeehive_releasestatus) {
-        List<Entity> list = this.a(iblockdata, tileentitybeehive_releasestatus);
+        List<Entity> list = this.releaseBees(iblockdata, tileentitybeehive_releasestatus);
 
         if (entityhuman != null) {
             Iterator iterator = list.iterator();
@@ -65,8 +65,8 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
                     EntityBee entitybee = (EntityBee) entity;
 
                     if (entityhuman.getPositionVector().distanceSquared(entity.getPositionVector()) <= 16.0D) {
-                        if (!this.k()) {
-                            entitybee.a((Entity) entityhuman);
+                        if (!this.isSedated()) {
+                            entitybee.setGoalTarget(entityhuman);
                         } else {
                             entitybee.setCannotEnterHiveTicks(400);
                         }
@@ -77,29 +77,29 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
 
     }
 
-    private List<Entity> a(IBlockData iblockdata, TileEntityBeehive.ReleaseStatus tileentitybeehive_releasestatus) {
+    private List<Entity> releaseBees(IBlockData iblockdata, TileEntityBeehive.ReleaseStatus tileentitybeehive_releasestatus) {
         List<Entity> list = Lists.newArrayList();
 
         this.bees.removeIf((tileentitybeehive_hivebee) -> {
-            return this.a(iblockdata, tileentitybeehive_hivebee.entityData, list, tileentitybeehive_releasestatus);
+            return this.releaseBee(iblockdata, tileentitybeehive_hivebee, list, tileentitybeehive_releasestatus);
         });
         return list;
     }
 
-    public void a(Entity entity, boolean flag) {
+    public void addBee(Entity entity, boolean flag) {
         this.a(entity, flag, 0);
     }
 
-    public int j() {
+    public int getBeeCount() {
         return this.bees.size();
     }
 
     public static int a(IBlockData iblockdata) {
-        return (Integer) iblockdata.get(BlockBeehive.c);
+        return (Integer) iblockdata.get(BlockBeehive.b);
     }
 
-    public boolean k() {
-        return BlockCampfire.b(this.world, this.getPosition(), 5);
+    public boolean isSedated() {
+        return BlockCampfire.a(this.world, this.getPosition());
     }
 
     protected void l() {
@@ -132,16 +132,17 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
         }
     }
 
-    private boolean a(IBlockData iblockdata, NBTTagCompound nbttagcompound, @Nullable List<Entity> list, TileEntityBeehive.ReleaseStatus tileentitybeehive_releasestatus) {
-        BlockPosition blockposition = this.getPosition();
-
+    private boolean releaseBee(IBlockData iblockdata, TileEntityBeehive.HiveBee tileentitybeehive_hivebee, @Nullable List<Entity> list, TileEntityBeehive.ReleaseStatus tileentitybeehive_releasestatus) {
         if ((this.world.isNight() || this.world.isRaining()) && tileentitybeehive_releasestatus != TileEntityBeehive.ReleaseStatus.EMERGENCY) {
             return false;
         } else {
+            BlockPosition blockposition = this.getPosition();
+            NBTTagCompound nbttagcompound = tileentitybeehive_hivebee.entityData;
+
             nbttagcompound.remove("Passengers");
             nbttagcompound.remove("Leash");
-            nbttagcompound.c("UUID");
-            EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockBeehive.b);
+            nbttagcompound.remove("UUID");
+            EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockBeehive.a);
             BlockPosition blockposition1 = blockposition.shift(enumdirection);
             boolean flag = !this.world.getType(blockposition1).getCollisionShape(this.world, blockposition1).isEmpty();
 
@@ -153,14 +154,7 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
                 });
 
                 if (entity != null) {
-                    float f = entity.getWidth();
-                    double d0 = flag ? 0.0D : 0.55D + (double) (f / 2.0F);
-                    double d1 = (double) blockposition.getX() + 0.5D + d0 * (double) enumdirection.getAdjacentX();
-                    double d2 = (double) blockposition.getY() + 0.5D - (double) (entity.getHeight() / 2.0F);
-                    double d3 = (double) blockposition.getZ() + 0.5D + d0 * (double) enumdirection.getAdjacentZ();
-
-                    entity.setPositionRotation(d1, d2, d3, entity.yaw, entity.pitch);
-                    if (!entity.getEntityType().a(TagsEntity.BEEHIVE_INHABITORS)) {
+                    if (!entity.getEntityType().a((Tag) TagsEntity.BEEHIVE_INHABITORS)) {
                         return false;
                     } else {
                         if (entity instanceof EntityBee) {
@@ -171,8 +165,8 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
                             }
 
                             if (tileentitybeehive_releasestatus == TileEntityBeehive.ReleaseStatus.HONEY_DELIVERED) {
-                                entitybee.eG();
-                                if (iblockdata.getBlock().a(TagsBlock.BEEHIVES)) {
+                                entitybee.fc();
+                                if (iblockdata.getBlock().a((Tag) TagsBlock.BEEHIVES)) {
                                     int i = a(iblockdata);
 
                                     if (i < 5) {
@@ -182,20 +176,26 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
                                             --j;
                                         }
 
-                                        this.world.setTypeUpdate(this.getPosition(), (IBlockData) iblockdata.set(BlockBeehive.c, i + j));
+                                        this.world.setTypeUpdate(this.getPosition(), (IBlockData) iblockdata.set(BlockBeehive.b, i + j));
                                     }
                                 }
                             }
 
-                            entitybee.eu();
+                            this.a(tileentitybeehive_hivebee.ticksInHive, entitybee);
                             if (list != null) {
                                 list.add(entitybee);
                             }
+
+                            float f = entity.getWidth();
+                            double d0 = flag ? 0.0D : 0.55D + (double) (f / 2.0F);
+                            double d1 = (double) blockposition.getX() + 0.5D + d0 * (double) enumdirection.getAdjacentX();
+                            double d2 = (double) blockposition.getY() + 0.5D - (double) (entity.getHeight() / 2.0F);
+                            double d3 = (double) blockposition.getZ() + 0.5D + d0 * (double) enumdirection.getAdjacentZ();
+
+                            entity.setPositionRotation(d1, d2, d3, entity.yaw, entity.pitch);
                         }
 
-                        BlockPosition blockposition2 = this.getPosition();
-
-                        this.world.playSound((EntityHuman) null, (double) blockposition2.getX(), (double) blockposition2.getY(), (double) blockposition2.getZ(), SoundEffects.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        this.world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                         return this.world.addEntity(entity);
                     }
                 } else {
@@ -205,26 +205,36 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
         }
     }
 
+    private void a(int i, EntityBee entitybee) {
+        int j = entitybee.getAge();
+
+        if (j < 0) {
+            entitybee.setAgeRaw(Math.min(0, j + i));
+        } else if (j > 0) {
+            entitybee.setAgeRaw(Math.max(0, j - i));
+        }
+
+        entitybee.setLoveTicks(Math.max(0, entitybee.eR() - i));
+        entitybee.eP();
+    }
+
     private boolean x() {
         return this.flowerPos != null;
     }
 
     private void y() {
         Iterator<TileEntityBeehive.HiveBee> iterator = this.bees.iterator();
-        IBlockData iblockdata = this.getBlock();
 
-        while (iterator.hasNext()) {
-            TileEntityBeehive.HiveBee tileentitybeehive_hivebee = (TileEntityBeehive.HiveBee) iterator.next();
+        TileEntityBeehive.HiveBee tileentitybeehive_hivebee;
 
+        for (IBlockData iblockdata = this.getBlock(); iterator.hasNext(); tileentitybeehive_hivebee.ticksInHive++) {
+            tileentitybeehive_hivebee = (TileEntityBeehive.HiveBee) iterator.next();
             if (tileentitybeehive_hivebee.ticksInHive > tileentitybeehive_hivebee.minOccupationTicks) {
-                NBTTagCompound nbttagcompound = tileentitybeehive_hivebee.entityData;
-                TileEntityBeehive.ReleaseStatus tileentitybeehive_releasestatus = nbttagcompound.getBoolean("HasNectar") ? TileEntityBeehive.ReleaseStatus.HONEY_DELIVERED : TileEntityBeehive.ReleaseStatus.BEE_RELEASED;
+                TileEntityBeehive.ReleaseStatus tileentitybeehive_releasestatus = tileentitybeehive_hivebee.entityData.getBoolean("HasNectar") ? TileEntityBeehive.ReleaseStatus.HONEY_DELIVERED : TileEntityBeehive.ReleaseStatus.BEE_RELEASED;
 
-                if (this.a(iblockdata, nbttagcompound, (List) null, tileentitybeehive_releasestatus)) {
+                if (this.releaseBee(iblockdata, tileentitybeehive_hivebee, (List) null, tileentitybeehive_releasestatus)) {
                     iterator.remove();
                 }
-            } else {
-                tileentitybeehive_hivebee.ticksInHive++;
             }
         }
 
@@ -249,8 +259,8 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
         this.bees.clear();
         NBTTagList nbttaglist = nbttagcompound.getList("Bees", 10);
 
@@ -263,7 +273,7 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
 
         this.flowerPos = null;
         if (nbttagcompound.hasKey("FlowerPos")) {
-            this.flowerPos = GameProfileSerializer.c(nbttagcompound.getCompound("FlowerPos"));
+            this.flowerPos = GameProfileSerializer.b(nbttagcompound.getCompound("FlowerPos"));
         }
 
     }
@@ -286,7 +296,7 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
         while (iterator.hasNext()) {
             TileEntityBeehive.HiveBee tileentitybeehive_hivebee = (TileEntityBeehive.HiveBee) iterator.next();
 
-            tileentitybeehive_hivebee.entityData.c("UUID");
+            tileentitybeehive_hivebee.entityData.remove("UUID");
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
             nbttagcompound.set("EntityData", tileentitybeehive_hivebee.entityData);
@@ -305,7 +315,7 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
         private final int minOccupationTicks;
 
         private HiveBee(NBTTagCompound nbttagcompound, int i, int j) {
-            nbttagcompound.c("UUID");
+            nbttagcompound.remove("UUID");
             this.entityData = nbttagcompound;
             this.ticksInHive = i;
             this.minOccupationTicks = j;

@@ -14,6 +14,11 @@ public class LootItemFunctionLimitCount extends LootItemFunctionConditional {
     }
 
     @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.o;
+    }
+
+    @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
         int i = this.a.applyAsInt(itemstack.getCount());
 
@@ -29,9 +34,7 @@ public class LootItemFunctionLimitCount extends LootItemFunctionConditional {
 
     public static class a extends LootItemFunctionConditional.c<LootItemFunctionLimitCount> {
 
-        protected a() {
-            super(new MinecraftKey("limit_count"), LootItemFunctionLimitCount.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionLimitCount lootitemfunctionlimitcount, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionlimitcount, jsonserializationcontext);

@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -21,7 +22,7 @@ public interface ICompletionProvider {
 
     Collection<String> l();
 
-    default Collection<String> p() {
+    default Collection<String> r() {
         return Collections.emptyList();
     }
 
@@ -33,13 +34,15 @@ public interface ICompletionProvider {
 
     CompletableFuture<Suggestions> a(CommandContext<ICompletionProvider> commandcontext, SuggestionsBuilder suggestionsbuilder);
 
-    default Collection<ICompletionProvider.a> q() {
+    default Collection<ICompletionProvider.a> s() {
         return Collections.singleton(ICompletionProvider.a.b);
     }
 
-    default Collection<ICompletionProvider.a> r() {
+    default Collection<ICompletionProvider.a> t() {
         return Collections.singleton(ICompletionProvider.a.b);
     }
+
+    Set<ResourceKey<World>> p();
 
     boolean hasPermission(int i);
 
@@ -54,10 +57,10 @@ public interface ICompletionProvider {
             if (flag) {
                 String s1 = minecraftkey.toString();
 
-                if (s1.startsWith(s)) {
+                if (a(s, s1)) {
                     consumer.accept(t0);
                 }
-            } else if (minecraftkey.getNamespace().startsWith(s) || minecraftkey.getNamespace().equals("minecraft") && minecraftkey.getKey().startsWith(s)) {
+            } else if (a(s, minecraftkey.getNamespace()) || minecraftkey.getNamespace().equals("minecraft") && a(s, minecraftkey.getKey())) {
                 consumer.accept(t0);
             }
         }
@@ -209,7 +212,7 @@ public interface ICompletionProvider {
         while (iterator.hasNext()) {
             String s1 = (String) iterator.next();
 
-            if (s1.toLowerCase(Locale.ROOT).startsWith(s)) {
+            if (a(s, s1.toLowerCase(Locale.ROOT))) {
                 suggestionsbuilder.suggest(s1);
             }
         }
@@ -221,7 +224,7 @@ public interface ICompletionProvider {
         String s = suggestionsbuilder.getRemaining().toLowerCase(Locale.ROOT);
 
         stream.filter((s1) -> {
-            return s1.toLowerCase(Locale.ROOT).startsWith(s);
+            return a(s, s1.toLowerCase(Locale.ROOT));
         }).forEach(suggestionsbuilder::suggest);
         return suggestionsbuilder.buildFuture();
     }
@@ -234,12 +237,23 @@ public interface ICompletionProvider {
         for (int j = 0; j < i; ++j) {
             String s1 = astring1[j];
 
-            if (s1.toLowerCase(Locale.ROOT).startsWith(s)) {
+            if (a(s, s1.toLowerCase(Locale.ROOT))) {
                 suggestionsbuilder.suggest(s1);
             }
         }
 
         return suggestionsbuilder.buildFuture();
+    }
+
+    static boolean a(String s, String s1) {
+        for (int i = 0; !s1.startsWith(s, i); ++i) {
+            i = s1.indexOf(95, i);
+            if (i < 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static class a {

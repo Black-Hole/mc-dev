@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -17,6 +18,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Supplier;
 
 public class ResourceManager implements IReloadableResourceManager {
 
@@ -25,24 +27,25 @@ public class ResourceManager implements IReloadableResourceManager {
     private final List<IReloadListener> c = Lists.newArrayList();
     private final List<IReloadListener> d = Lists.newArrayList();
     private final Set<String> e = Sets.newLinkedHashSet();
-    private final EnumResourcePackType f;
-    private final Thread g;
+    private final List<IResourcePack> f = Lists.newArrayList();
+    private final EnumResourcePackType g;
 
-    public ResourceManager(EnumResourcePackType enumresourcepacktype, Thread thread) {
-        this.f = enumresourcepacktype;
-        this.g = thread;
+    public ResourceManager(EnumResourcePackType enumresourcepacktype) {
+        this.g = enumresourcepacktype;
     }
 
     public void a(IResourcePack iresourcepack) {
+        this.f.add(iresourcepack);
+
         ResourceManagerFallback resourcemanagerfallback;
 
-        for (Iterator iterator = iresourcepack.a(this.f).iterator(); iterator.hasNext(); resourcemanagerfallback.a(iresourcepack)) {
+        for (Iterator iterator = iresourcepack.a(this.g).iterator(); iterator.hasNext(); resourcemanagerfallback.a(iresourcepack)) {
             String s = (String) iterator.next();
 
             this.e.add(s);
             resourcemanagerfallback = (ResourceManagerFallback) this.b.get(s);
             if (resourcemanagerfallback == null) {
-                resourcemanagerfallback = new ResourceManagerFallback(this.f, s);
+                resourcemanagerfallback = new ResourceManagerFallback(this.g, s);
                 this.b.put(s, resourcemanagerfallback);
             }
         }
@@ -72,6 +75,13 @@ public class ResourceManager implements IReloadableResourceManager {
     }
 
     @Override
+    public Collection<MinecraftKey> a(MinecraftKey minecraftkey, Predicate<String> predicate) {
+        IResourceManager iresourcemanager = (IResourceManager) this.b.get(minecraftkey.getNamespace());
+
+        return (Collection) (iresourcemanager != null ? iresourcemanager.a(minecraftkey.getKey(), predicate) : ImmutableSet.of());
+    }
+
+    @Override
     public Collection<MinecraftKey> a(String s, Predicate<String> predicate) {
         Set<MinecraftKey> set = Sets.newHashSet();
         Iterator iterator = this.b.values().iterator();
@@ -88,16 +98,16 @@ public class ResourceManager implements IReloadableResourceManager {
         return list;
     }
 
-    private void b() {
+    private void c() {
         this.b.clear();
         this.e.clear();
+        this.f.forEach(IResourcePack::close);
+        this.f.clear();
     }
 
     @Override
-    public CompletableFuture<Unit> a(Executor executor, Executor executor1, List<IResourcePack> list, CompletableFuture<Unit> completablefuture) {
-        IReloadable ireloadable = this.a(executor, executor1, completablefuture, list);
-
-        return ireloadable.a();
+    public void close() {
+        this.c();
     }
 
     @Override
@@ -119,9 +129,12 @@ public class ResourceManager implements IReloadableResourceManager {
         return (IReloadable) object;
     }
 
+    @Override
     public IReloadable a(Executor executor, Executor executor1, CompletableFuture<Unit> completablefuture, List<IResourcePack> list) {
-        this.b();
-        ResourceManager.LOGGER.info("Reloading ResourceManager: {}", list.stream().map(IResourcePack::a).collect(Collectors.joining(", ")));
+        this.c();
+        ResourceManager.LOGGER.info("Reloading ResourceManager: {}", new Supplier[]{() -> {
+                    return (String) list.stream().map(IResourcePack::a).collect(Collectors.joining(", "));
+                }});
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {

@@ -51,7 +51,7 @@ public class PathfinderGoalAvoidTarget<T extends EntityLiving> extends Pathfinde
         if (this.b == null) {
             return false;
         } else {
-            Vec3D vec3d = RandomPositionGenerator.b(this.a, 16, 7, this.b.getPositionVector());
+            Vec3D vec3d = RandomPositionGenerator.c(this.a, 16, 7, this.b.getPositionVector());
 
             if (vec3d == null) {
                 return false;

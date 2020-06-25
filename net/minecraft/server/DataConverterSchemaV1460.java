@@ -3,8 +3,8 @@ package net.minecraft.server;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.schemas.Schema;
-import com.mojang.datafixers.types.templates.TypeTemplate;
 import com.mojang.datafixers.types.templates.Hook.HookFunction;
+import com.mojang.datafixers.types.templates.TypeTemplate;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -198,7 +198,7 @@ public class DataConverterSchemaV1460 extends DataConverterSchemaNamed {
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
         schema.registerType(false, DataConverterTypes.LEVEL, DSL::remainder);
         schema.registerType(false, DataConverterTypes.RECIPE, () -> {
-            return DSL.constType(DSL.namespacedString());
+            return DSL.constType(a());
         });
         schema.registerType(false, DataConverterTypes.PLAYER, () -> {
             return DSL.optionalFields("RootVehicle", DSL.optionalFields("Entity", DataConverterTypes.ENTITY_TREE.in(schema)), "Inventory", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)), "EnderItems", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)), DSL.optionalFields("ShoulderEntityLeft", DataConverterTypes.ENTITY_TREE.in(schema), "ShoulderEntityRight", DataConverterTypes.ENTITY_TREE.in(schema), "recipeBook", DSL.optionalFields("recipes", DSL.list(DataConverterTypes.RECIPE.in(schema)), "toBeDisplayed", DSL.list(DataConverterTypes.RECIPE.in(schema)))));
@@ -207,16 +207,16 @@ public class DataConverterSchemaV1460 extends DataConverterSchemaNamed {
             return DSL.fields("Level", DSL.optionalFields("Entities", DSL.list(DataConverterTypes.ENTITY_TREE.in(schema)), "TileEntities", DSL.list(DataConverterTypes.BLOCK_ENTITY.in(schema)), "TileTicks", DSL.list(DSL.fields("i", DataConverterTypes.BLOCK_NAME.in(schema))), "Sections", DSL.list(DSL.optionalFields("Palette", DSL.list(DataConverterTypes.BLOCK_STATE.in(schema))))));
         });
         schema.registerType(true, DataConverterTypes.BLOCK_ENTITY, () -> {
-            return DSL.taggedChoiceLazy("id", DSL.namespacedString(), map1);
+            return DSL.taggedChoiceLazy("id", a(), map1);
         });
         schema.registerType(true, DataConverterTypes.ENTITY_TREE, () -> {
             return DSL.optionalFields("Passengers", DSL.list(DataConverterTypes.ENTITY_TREE.in(schema)), DataConverterTypes.ENTITY.in(schema));
         });
         schema.registerType(true, DataConverterTypes.ENTITY, () -> {
-            return DSL.taggedChoiceLazy("id", DSL.namespacedString(), map);
+            return DSL.taggedChoiceLazy("id", a(), map);
         });
         schema.registerType(true, DataConverterTypes.ITEM_STACK, () -> {
-            return DSL.hook(DSL.optionalFields("id", DataConverterTypes.ITEM_NAME.in(schema), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.ENTITY_TREE.in(schema), "BlockEntityTag", DataConverterTypes.BLOCK_ENTITY.in(schema), "CanDestroy", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)))), DataConverterSchemaV705.a, HookFunction.IDENTITY);
+            return DSL.hook(DSL.optionalFields("id", DataConverterTypes.ITEM_NAME.in(schema), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.ENTITY_TREE.in(schema), "BlockEntityTag", DataConverterTypes.BLOCK_ENTITY.in(schema), "CanDestroy", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.BLOCK_NAME.in(schema)))), DataConverterSchemaV705.b, HookFunction.IDENTITY);
         });
         schema.registerType(false, DataConverterTypes.HOTBAR, () -> {
             return DSL.compoundList(DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));
@@ -226,10 +226,10 @@ public class DataConverterSchemaV1460 extends DataConverterSchemaNamed {
             return DSL.optionalFields("entities", DSL.list(DSL.optionalFields("nbt", DataConverterTypes.ENTITY_TREE.in(schema))), "blocks", DSL.list(DSL.optionalFields("nbt", DataConverterTypes.BLOCK_ENTITY.in(schema))), "palette", DSL.list(DataConverterTypes.BLOCK_STATE.in(schema)));
         });
         schema.registerType(false, DataConverterTypes.BLOCK_NAME, () -> {
-            return DSL.constType(DSL.namespacedString());
+            return DSL.constType(a());
         });
         schema.registerType(false, DataConverterTypes.ITEM_NAME, () -> {
-            return DSL.constType(DSL.namespacedString());
+            return DSL.constType(a());
         });
         schema.registerType(false, DataConverterTypes.BLOCK_STATE, DSL::remainder);
         Supplier<TypeTemplate> supplier = () -> {
@@ -237,7 +237,7 @@ public class DataConverterSchemaV1460 extends DataConverterSchemaNamed {
         };
 
         schema.registerType(false, DataConverterTypes.STATS, () -> {
-            return DSL.optionalFields("stats", DSL.optionalFields("minecraft:mined", DSL.compoundList(DataConverterTypes.BLOCK_NAME.in(schema), DSL.constType(DSL.intType())), "minecraft:crafted", (TypeTemplate) supplier.get(), "minecraft:used", (TypeTemplate) supplier.get(), "minecraft:broken", (TypeTemplate) supplier.get(), "minecraft:picked_up", (TypeTemplate) supplier.get(), DSL.optionalFields("minecraft:dropped", (TypeTemplate) supplier.get(), "minecraft:killed", DSL.compoundList(DataConverterTypes.ENTITY_NAME.in(schema), DSL.constType(DSL.intType())), "minecraft:killed_by", DSL.compoundList(DataConverterTypes.ENTITY_NAME.in(schema), DSL.constType(DSL.intType())), "minecraft:custom", DSL.compoundList(DSL.constType(DSL.namespacedString()), DSL.constType(DSL.intType())))));
+            return DSL.optionalFields("stats", DSL.optionalFields("minecraft:mined", DSL.compoundList(DataConverterTypes.BLOCK_NAME.in(schema), DSL.constType(DSL.intType())), "minecraft:crafted", (TypeTemplate) supplier.get(), "minecraft:used", (TypeTemplate) supplier.get(), "minecraft:broken", (TypeTemplate) supplier.get(), "minecraft:picked_up", (TypeTemplate) supplier.get(), DSL.optionalFields("minecraft:dropped", (TypeTemplate) supplier.get(), "minecraft:killed", DSL.compoundList(DataConverterTypes.ENTITY_NAME.in(schema), DSL.constType(DSL.intType())), "minecraft:killed_by", DSL.compoundList(DataConverterTypes.ENTITY_NAME.in(schema), DSL.constType(DSL.intType())), "minecraft:custom", DSL.compoundList(DSL.constType(a()), DSL.constType(DSL.intType())))));
         });
         schema.registerType(false, DataConverterTypes.SAVED_DATA, () -> {
             return DSL.optionalFields("data", DSL.optionalFields("Features", DSL.compoundList(DataConverterTypes.STRUCTURE_FEATURE.in(schema)), "Objectives", DSL.list(DataConverterTypes.OBJECTIVE.in(schema)), "Teams", DSL.list(DataConverterTypes.TEAM.in(schema))));
@@ -254,11 +254,12 @@ public class DataConverterSchemaV1460 extends DataConverterSchemaNamed {
             return DSL.optionalFields("minecraft:adventure/adventuring_time", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.BIOME.in(schema), DSL.constType(DSL.string()))), "minecraft:adventure/kill_a_mob", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.ENTITY_NAME.in(schema), DSL.constType(DSL.string()))), "minecraft:adventure/kill_all_mobs", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.ENTITY_NAME.in(schema), DSL.constType(DSL.string()))), "minecraft:husbandry/bred_all_animals", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.ENTITY_NAME.in(schema), DSL.constType(DSL.string()))));
         });
         schema.registerType(false, DataConverterTypes.BIOME, () -> {
-            return DSL.constType(DSL.namespacedString());
+            return DSL.constType(a());
         });
         schema.registerType(false, DataConverterTypes.ENTITY_NAME, () -> {
-            return DSL.constType(DSL.namespacedString());
+            return DSL.constType(a());
         });
         schema.registerType(false, DataConverterTypes.POI_CHUNK, DSL::remainder);
+        schema.registerType(true, DataConverterTypes.WORLD_GEN_SETTINGS, DSL::remainder);
     }
 }

@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -57,25 +56,25 @@ public class AdvancementDisplay {
         return this.h;
     }
 
-    public static AdvancementDisplay a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) ChatDeserializer.a(jsonobject, "title", jsondeserializationcontext, IChatBaseComponent.class);
-        IChatBaseComponent ichatbasecomponent1 = (IChatBaseComponent) ChatDeserializer.a(jsonobject, "description", jsondeserializationcontext, IChatBaseComponent.class);
+    public static AdvancementDisplay a(JsonObject jsonobject) {
+        IChatMutableComponent ichatmutablecomponent = IChatBaseComponent.ChatSerializer.a(jsonobject.get("title"));
+        IChatMutableComponent ichatmutablecomponent1 = IChatBaseComponent.ChatSerializer.a(jsonobject.get("description"));
 
-        if (ichatbasecomponent != null && ichatbasecomponent1 != null) {
-            ItemStack itemstack = a(ChatDeserializer.t(jsonobject, "icon"));
+        if (ichatmutablecomponent != null && ichatmutablecomponent1 != null) {
+            ItemStack itemstack = b(ChatDeserializer.t(jsonobject, "icon"));
             MinecraftKey minecraftkey = jsonobject.has("background") ? new MinecraftKey(ChatDeserializer.h(jsonobject, "background")) : null;
             AdvancementFrameType advancementframetype = jsonobject.has("frame") ? AdvancementFrameType.a(ChatDeserializer.h(jsonobject, "frame")) : AdvancementFrameType.TASK;
             boolean flag = ChatDeserializer.a(jsonobject, "show_toast", true);
             boolean flag1 = ChatDeserializer.a(jsonobject, "announce_to_chat", true);
             boolean flag2 = ChatDeserializer.a(jsonobject, "hidden", false);
 
-            return new AdvancementDisplay(itemstack, ichatbasecomponent, ichatbasecomponent1, minecraftkey, advancementframetype, flag, flag1, flag2);
+            return new AdvancementDisplay(itemstack, ichatmutablecomponent, ichatmutablecomponent1, minecraftkey, advancementframetype, flag, flag1, flag2);
         } else {
             throw new JsonSyntaxException("Both title and description must be set");
         }
     }
 
-    private static ItemStack a(JsonObject jsonobject) {
+    private static ItemStack b(JsonObject jsonobject) {
         if (!jsonobject.has("item")) {
             throw new JsonSyntaxException("Unsupported icon type, currently only items are supported (add 'item' key)");
         } else {

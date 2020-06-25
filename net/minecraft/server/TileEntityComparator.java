@@ -16,8 +16,8 @@ public class TileEntityComparator extends TileEntity {
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
         this.a = nbttagcompound.getInt("OutputSignal");
     }
 

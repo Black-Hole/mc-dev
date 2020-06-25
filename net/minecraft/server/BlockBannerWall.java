@@ -9,13 +9,13 @@ public class BlockBannerWall extends BlockBannerAbstract {
     public static final BlockStateDirection a = BlockFacingHorizontal.FACING;
     private static final Map<EnumDirection, VoxelShape> b = Maps.newEnumMap(ImmutableMap.of(EnumDirection.NORTH, Block.a(0.0D, 0.0D, 14.0D, 16.0D, 12.5D, 16.0D), EnumDirection.SOUTH, Block.a(0.0D, 0.0D, 0.0D, 16.0D, 12.5D, 2.0D), EnumDirection.WEST, Block.a(14.0D, 0.0D, 0.0D, 16.0D, 12.5D, 16.0D), EnumDirection.EAST, Block.a(0.0D, 0.0D, 0.0D, 2.0D, 12.5D, 16.0D)));
 
-    public BlockBannerWall(EnumColor enumcolor, Block.Info block_info) {
-        super(enumcolor, block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBannerWall.a, EnumDirection.NORTH));
+    public BlockBannerWall(EnumColor enumcolor, BlockBase.Info blockbase_info) {
+        super(enumcolor, blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBannerWall.a, EnumDirection.NORTH));
     }
 
     @Override
-    public String k() {
+    public String i() {
         return this.getItem().getName();
     }
 
@@ -30,7 +30,7 @@ public class BlockBannerWall extends BlockBannerAbstract {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return (VoxelShape) BlockBannerWall.b.get(iblockdata.get(BlockBannerWall.a));
     }
 
@@ -46,7 +46,7 @@ public class BlockBannerWall extends BlockBannerAbstract {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection1[j];
 
-            if (enumdirection.m().c()) {
+            if (enumdirection.n().d()) {
                 EnumDirection enumdirection1 = enumdirection.opposite();
 
                 iblockdata = (IBlockData) iblockdata.set(BlockBannerWall.a, enumdirection1);

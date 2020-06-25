@@ -42,7 +42,7 @@ public class ArgumentItemStack implements ArgumentType<ArgumentPredicateItemStac
             ;
         }
 
-        return argumentparseritemstack.a(suggestionsbuilder);
+        return argumentparseritemstack.a(suggestionsbuilder, TagsItem.b());
     }
 
     public Collection<String> getExamples() {

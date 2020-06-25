@@ -15,19 +15,20 @@ public class EntityThrownExpBottle extends EntityProjectileThrowable {
     }
 
     @Override
-    protected Item i() {
+    protected Item getDefaultItem() {
         return Items.EXPERIENCE_BOTTLE;
     }
 
     @Override
-    protected float l() {
+    protected float k() {
         return 0.07F;
     }
 
     @Override
     protected void a(MovingObjectPosition movingobjectposition) {
+        super.a(movingobjectposition);
         if (!this.world.isClientSide) {
-            this.world.triggerEffect(2002, new BlockPosition(this), PotionUtil.a(Potions.WATER));
+            this.world.triggerEffect(2002, this.getChunkCoordinates(), PotionUtil.a(Potions.WATER));
             int i = 3 + this.world.random.nextInt(5) + this.world.random.nextInt(5);
 
             while (i > 0) {

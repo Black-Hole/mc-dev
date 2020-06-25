@@ -1,59 +1,59 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import java.util.Optional;
 import java.util.Random;
 import javax.annotation.Nullable;
 
 public class DefinedStructureProcessorPredicates {
 
-    private final DefinedStructureRuleTest a;
+    public static final Codec<DefinedStructureProcessorPredicates> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(DefinedStructureRuleTest.c.fieldOf("input_predicate").forGetter((definedstructureprocessorpredicates) -> {
+            return definedstructureprocessorpredicates.b;
+        }), DefinedStructureRuleTest.c.fieldOf("location_predicate").forGetter((definedstructureprocessorpredicates) -> {
+            return definedstructureprocessorpredicates.c;
+        }), PosRuleTest.c.fieldOf("position_predicate").forGetter((definedstructureprocessorpredicates) -> {
+            return definedstructureprocessorpredicates.d;
+        }), IBlockData.b.fieldOf("output_state").forGetter((definedstructureprocessorpredicates) -> {
+            return definedstructureprocessorpredicates.e;
+        }), NBTTagCompound.a.optionalFieldOf("output_nbt").forGetter((definedstructureprocessorpredicates) -> {
+            return Optional.ofNullable(definedstructureprocessorpredicates.f);
+        })).apply(instance, DefinedStructureProcessorPredicates::new);
+    });
     private final DefinedStructureRuleTest b;
-    private final IBlockData c;
+    private final DefinedStructureRuleTest c;
+    private final PosRuleTest d;
+    private final IBlockData e;
     @Nullable
-    private final NBTTagCompound d;
+    private final NBTTagCompound f;
 
     public DefinedStructureProcessorPredicates(DefinedStructureRuleTest definedstructureruletest, DefinedStructureRuleTest definedstructureruletest1, IBlockData iblockdata) {
-        this(definedstructureruletest, definedstructureruletest1, iblockdata, (NBTTagCompound) null);
+        this(definedstructureruletest, definedstructureruletest1, PosRuleTestTrue.b, iblockdata, Optional.empty());
     }
 
-    public DefinedStructureProcessorPredicates(DefinedStructureRuleTest definedstructureruletest, DefinedStructureRuleTest definedstructureruletest1, IBlockData iblockdata, @Nullable NBTTagCompound nbttagcompound) {
-        this.a = definedstructureruletest;
-        this.b = definedstructureruletest1;
-        this.c = iblockdata;
-        this.d = nbttagcompound;
+    public DefinedStructureProcessorPredicates(DefinedStructureRuleTest definedstructureruletest, DefinedStructureRuleTest definedstructureruletest1, PosRuleTest posruletest, IBlockData iblockdata) {
+        this(definedstructureruletest, definedstructureruletest1, posruletest, iblockdata, Optional.empty());
     }
 
-    public boolean a(IBlockData iblockdata, IBlockData iblockdata1, Random random) {
-        return this.a.a(iblockdata, random) && this.b.a(iblockdata1, random);
+    public DefinedStructureProcessorPredicates(DefinedStructureRuleTest definedstructureruletest, DefinedStructureRuleTest definedstructureruletest1, PosRuleTest posruletest, IBlockData iblockdata, Optional<NBTTagCompound> optional) {
+        this.b = definedstructureruletest;
+        this.c = definedstructureruletest1;
+        this.d = posruletest;
+        this.e = iblockdata;
+        this.f = (NBTTagCompound) optional.orElse((Object) null);
+    }
+
+    public boolean a(IBlockData iblockdata, IBlockData iblockdata1, BlockPosition blockposition, BlockPosition blockposition1, BlockPosition blockposition2, Random random) {
+        return this.b.a(iblockdata, random) && this.c.a(iblockdata1, random) && this.d.a(blockposition, blockposition1, blockposition2, random);
     }
 
     public IBlockData a() {
-        return this.c;
+        return this.e;
     }
 
     @Nullable
     public NBTTagCompound b() {
-        return this.d;
-    }
-
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        T t0 = dynamicops.createMap(ImmutableMap.of(dynamicops.createString("input_predicate"), this.a.b(dynamicops).getValue(), dynamicops.createString("location_predicate"), this.b.b(dynamicops).getValue(), dynamicops.createString("output_state"), IBlockData.a(dynamicops, this.c).getValue()));
-
-        return this.d == null ? new Dynamic(dynamicops, t0) : new Dynamic(dynamicops, dynamicops.mergeInto(t0, dynamicops.createString("output_nbt"), (new Dynamic(DynamicOpsNBT.a, this.d)).convert(dynamicops).getValue()));
-    }
-
-    public static <T> DefinedStructureProcessorPredicates a(Dynamic<T> dynamic) {
-        Dynamic<T> dynamic1 = dynamic.get("input_predicate").orElseEmptyMap();
-        Dynamic<T> dynamic2 = dynamic.get("location_predicate").orElseEmptyMap();
-        DefinedStructureRuleTest definedstructureruletest = (DefinedStructureRuleTest) DynamicDeserializer.a(dynamic1, IRegistry.RULE_TEST, "predicate_type", DefinedStructureTestTrue.a);
-        DefinedStructureRuleTest definedstructureruletest1 = (DefinedStructureRuleTest) DynamicDeserializer.a(dynamic2, IRegistry.RULE_TEST, "predicate_type", DefinedStructureTestTrue.a);
-        IBlockData iblockdata = IBlockData.a(dynamic.get("output_state").orElseEmptyMap());
-        NBTTagCompound nbttagcompound = (NBTTagCompound) dynamic.get("output_nbt").map((dynamic3) -> {
-            return (NBTBase) dynamic3.convert(DynamicOpsNBT.a).getValue();
-        }).orElse((Object) null);
-
-        return new DefinedStructureProcessorPredicates(definedstructureruletest, definedstructureruletest1, iblockdata, nbttagcompound);
+        return this.f;
     }
 }

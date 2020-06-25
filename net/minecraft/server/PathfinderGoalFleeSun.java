@@ -22,7 +22,7 @@ public class PathfinderGoalFleeSun extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        return this.a.getGoalTarget() != null ? false : (!this.f.isDay() ? false : (!this.a.isBurning() ? false : (!this.f.f(new BlockPosition(this.a)) ? false : (!this.a.getEquipment(EnumItemSlot.HEAD).isEmpty() ? false : this.g()))));
+        return this.a.getGoalTarget() != null ? false : (!this.f.isDay() ? false : (!this.a.isBurning() ? false : (!this.f.f(this.a.getChunkCoordinates()) ? false : (!this.a.getEquipment(EnumItemSlot.HEAD).isEmpty() ? false : this.g()))));
     }
 
     protected boolean g() {
@@ -51,13 +51,13 @@ public class PathfinderGoalFleeSun extends PathfinderGoal {
     @Nullable
     protected Vec3D h() {
         Random random = this.a.getRandom();
-        BlockPosition blockposition = new BlockPosition(this.a);
+        BlockPosition blockposition = this.a.getChunkCoordinates();
 
         for (int i = 0; i < 10; ++i) {
             BlockPosition blockposition1 = blockposition.b(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);
 
             if (!this.f.f(blockposition1) && this.a.f(blockposition1) < 0.0F) {
-                return new Vec3D(blockposition1);
+                return Vec3D.c((BaseBlockPosition) blockposition1);
             }
         }
 

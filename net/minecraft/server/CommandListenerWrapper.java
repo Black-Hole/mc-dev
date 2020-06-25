@@ -9,6 +9,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BinaryOperator;
 import java.util.stream.Stream;
@@ -16,8 +17,8 @@ import javax.annotation.Nullable;
 
 public class CommandListenerWrapper implements ICompletionProvider {
 
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("permissions.requires.player", new Object[0]));
-    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("permissions.requires.entity", new Object[0]));
+    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("permissions.requires.player"));
+    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("permissions.requires.entity"));
     public final ICommandListener base;
     private final Vec3D d;
     private final WorldServer e;
@@ -166,7 +167,7 @@ public class CommandListenerWrapper implements ICompletionProvider {
 
     public void sendMessage(IChatBaseComponent ichatbasecomponent, boolean flag) {
         if (this.base.shouldSendSuccess() && !this.j) {
-            this.base.sendMessage(ichatbasecomponent);
+            this.base.sendMessage(ichatbasecomponent, SystemUtils.b);
         }
 
         if (flag && this.base.shouldBroadcastCommands() && !this.j) {
@@ -176,7 +177,7 @@ public class CommandListenerWrapper implements ICompletionProvider {
     }
 
     private void sendAdminMessage(IChatBaseComponent ichatbasecomponent) {
-        IChatBaseComponent ichatbasecomponent1 = (new ChatMessage("chat.type.admin", new Object[]{this.getScoreboardDisplayName(), ichatbasecomponent})).a(new EnumChatFormat[]{EnumChatFormat.GRAY, EnumChatFormat.ITALIC});
+        IChatMutableComponent ichatmutablecomponent = (new ChatMessage("chat.type.admin", new Object[]{this.getScoreboardDisplayName(), ichatbasecomponent})).a(new EnumChatFormat[]{EnumChatFormat.GRAY, EnumChatFormat.ITALIC});
 
         if (this.i.getGameRules().getBoolean(GameRules.SEND_COMMAND_FEEDBACK)) {
             Iterator iterator = this.i.getPlayerList().getPlayers().iterator();
@@ -185,20 +186,20 @@ public class CommandListenerWrapper implements ICompletionProvider {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
                 if (entityplayer != this.base && this.i.getPlayerList().isOp(entityplayer.getProfile())) {
-                    entityplayer.sendMessage(ichatbasecomponent1);
+                    entityplayer.sendMessage(ichatmutablecomponent, SystemUtils.b);
                 }
             }
         }
 
         if (this.base != this.i && this.i.getGameRules().getBoolean(GameRules.LOG_ADMIN_COMMANDS)) {
-            this.i.sendMessage(ichatbasecomponent1);
+            this.i.sendMessage(ichatmutablecomponent, SystemUtils.b);
         }
 
     }
 
     public void sendFailureMessage(IChatBaseComponent ichatbasecomponent) {
         if (this.base.shouldSendFailure() && !this.j) {
-            this.base.sendMessage((new ChatComponentText("")).addSibling(ichatbasecomponent).a(EnumChatFormat.RED));
+            this.base.sendMessage((new ChatComponentText("")).addSibling(ichatbasecomponent).a(EnumChatFormat.RED), SystemUtils.b);
         }
 
     }
@@ -227,11 +228,16 @@ public class CommandListenerWrapper implements ICompletionProvider {
 
     @Override
     public Stream<MinecraftKey> o() {
-        return this.i.getCraftingManager().c();
+        return this.i.getCraftingManager().d();
     }
 
     @Override
     public CompletableFuture<Suggestions> a(CommandContext<ICompletionProvider> commandcontext, SuggestionsBuilder suggestionsbuilder) {
         return null;
+    }
+
+    @Override
+    public Set<ResourceKey<World>> p() {
+        return this.i.E();
     }
 }

@@ -3,16 +3,12 @@ package net.minecraft.server;
 import com.google.gson.JsonObject;
 import javax.annotation.Nullable;
 
-public class JsonListEntry<T> {
+public abstract class JsonListEntry<T> {
 
     @Nullable
     private final T a;
 
-    public JsonListEntry(T t0) {
-        this.a = t0;
-    }
-
-    protected JsonListEntry(@Nullable T t0, JsonObject jsonobject) {
+    public JsonListEntry(@Nullable T t0) {
         this.a = t0;
     }
 
@@ -25,5 +21,5 @@ public class JsonListEntry<T> {
         return false;
     }
 
-    protected void a(JsonObject jsonobject) {}
+    protected abstract void a(JsonObject jsonobject);
 }

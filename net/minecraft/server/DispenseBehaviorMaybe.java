@@ -2,12 +2,20 @@ package net.minecraft.server;
 
 public abstract class DispenseBehaviorMaybe extends DispenseBehaviorItem {
 
-    protected boolean dispensed = true;
+    private boolean dispensed = true;
 
     public DispenseBehaviorMaybe() {}
 
+    public boolean a() {
+        return this.dispensed;
+    }
+
+    public void a(boolean flag) {
+        this.dispensed = flag;
+    }
+
     @Override
     protected void a(ISourceBlock isourceblock) {
-        isourceblock.getWorld().triggerEffect(this.dispensed ? 1000 : 1001, isourceblock.getBlockPosition(), 0);
+        isourceblock.getWorld().triggerEffect(this.a() ? 1000 : 1001, isourceblock.getBlockPosition(), 0);
     }
 }

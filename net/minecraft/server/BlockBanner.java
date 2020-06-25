@@ -5,13 +5,13 @@ import java.util.Map;
 
 public class BlockBanner extends BlockBannerAbstract {
 
-    public static final BlockStateInteger ROTATION = BlockProperties.aw;
+    public static final BlockStateInteger ROTATION = BlockProperties.aD;
     private static final Map<EnumColor, Block> b = Maps.newHashMap();
     private static final VoxelShape c = Block.a(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
 
-    public BlockBanner(EnumColor enumcolor, Block.Info block_info) {
-        super(enumcolor, block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBanner.ROTATION, 0));
+    public BlockBanner(EnumColor enumcolor, BlockBase.Info blockbase_info) {
+        super(enumcolor, blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBanner.ROTATION, 0));
         BlockBanner.b.put(enumcolor, this);
     }
 
@@ -21,7 +21,7 @@ public class BlockBanner extends BlockBannerAbstract {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockBanner.c;
     }
 

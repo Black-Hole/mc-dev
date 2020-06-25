@@ -5,9 +5,9 @@ import java.util.Optional;
 
 public class BehaviorStrollRandom extends Behavior<EntityCreature> {
 
-    private final float a;
-    private final int b;
+    private final float b;
     private final int c;
+    private final int d;
 
     public BehaviorStrollRandom(float f) {
         this(f, 10, 7);
@@ -15,13 +15,13 @@ public class BehaviorStrollRandom extends Behavior<EntityCreature> {
 
     public BehaviorStrollRandom(float f, int i, int j) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
-        this.a = f;
-        this.b = i;
-        this.c = j;
+        this.b = f;
+        this.c = i;
+        this.d = j;
     }
 
     protected void a(WorldServer worldserver, EntityCreature entitycreature, long i) {
-        BlockPosition blockposition = new BlockPosition(entitycreature);
+        BlockPosition blockposition = entitycreature.getChunkCoordinates();
 
         if (worldserver.b_(blockposition)) {
             this.a(entitycreature);
@@ -39,18 +39,18 @@ public class BehaviorStrollRandom extends Behavior<EntityCreature> {
     }
 
     private void a(EntityCreature entitycreature, SectionPosition sectionposition) {
-        Optional<Vec3D> optional = Optional.ofNullable(RandomPositionGenerator.a(entitycreature, this.b, this.c, new Vec3D(sectionposition.t())));
+        Optional<Vec3D> optional = Optional.ofNullable(RandomPositionGenerator.b(entitycreature, this.c, this.d, Vec3D.c((BaseBlockPosition) sectionposition.q())));
 
         entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, optional.map((vec3d) -> {
-            return new MemoryTarget(vec3d, this.a, 0);
+            return new MemoryTarget(vec3d, this.b, 0);
         }));
     }
 
     private void a(EntityCreature entitycreature) {
-        Optional<Vec3D> optional = Optional.ofNullable(RandomPositionGenerator.b(entitycreature, this.b, this.c));
+        Optional<Vec3D> optional = Optional.ofNullable(RandomPositionGenerator.b(entitycreature, this.c, this.d));
 
         entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, optional.map((vec3d) -> {
-            return new MemoryTarget(vec3d, this.a, 0);
+            return new MemoryTarget(vec3d, this.b, 0);
         }));
     }
 }

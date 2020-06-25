@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerEntityHurtPlayer extends CriterionTriggerAbstract<CriterionTriggerEntityHurtPlayer.a> {
@@ -16,14 +14,14 @@ public class CriterionTriggerEntityHurtPlayer extends CriterionTriggerAbstract<C
     }
 
     @Override
-    public CriterionTriggerEntityHurtPlayer.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerEntityHurtPlayer.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         CriterionConditionDamage criterionconditiondamage = CriterionConditionDamage.a(jsonobject.get("damage"));
 
-        return new CriterionTriggerEntityHurtPlayer.a(criterionconditiondamage);
+        return new CriterionTriggerEntityHurtPlayer.a(criterionconditionentity_b, criterionconditiondamage);
     }
 
     public void a(EntityPlayer entityplayer, DamageSource damagesource, float f, float f1, boolean flag) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggerentityhurtplayer_a) -> {
+        this.a(entityplayer, (criteriontriggerentityhurtplayer_a) -> {
             return criteriontriggerentityhurtplayer_a.a(entityplayer, damagesource, f, f1, flag);
         });
     }
@@ -32,13 +30,13 @@ public class CriterionTriggerEntityHurtPlayer extends CriterionTriggerAbstract<C
 
         private final CriterionConditionDamage a;
 
-        public a(CriterionConditionDamage criterionconditiondamage) {
-            super(CriterionTriggerEntityHurtPlayer.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionDamage criterionconditiondamage) {
+            super(CriterionTriggerEntityHurtPlayer.a, criterionconditionentity_b);
             this.a = criterionconditiondamage;
         }
 
         public static CriterionTriggerEntityHurtPlayer.a a(CriterionConditionDamage.a criterionconditiondamage_a) {
-            return new CriterionTriggerEntityHurtPlayer.a(criterionconditiondamage_a.b());
+            return new CriterionTriggerEntityHurtPlayer.a(CriterionConditionEntity.b.a, criterionconditiondamage_a.b());
         }
 
         public boolean a(EntityPlayer entityplayer, DamageSource damagesource, float f, float f1, boolean flag) {
@@ -46,8 +44,8 @@ public class CriterionTriggerEntityHurtPlayer extends CriterionTriggerAbstract<C
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             jsonobject.add("damage", this.a.a());
             return jsonobject;

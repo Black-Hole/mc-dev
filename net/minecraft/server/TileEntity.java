@@ -36,15 +36,15 @@ public abstract class TileEntity {
         return this.world != null;
     }
 
-    public void load(NBTTagCompound nbttagcompound) {
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
         this.position = new BlockPosition(nbttagcompound.getInt("x"), nbttagcompound.getInt("y"), nbttagcompound.getInt("z"));
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
-        return this.d(nbttagcompound);
+        return this.b(nbttagcompound);
     }
 
-    private NBTTagCompound d(NBTTagCompound nbttagcompound) {
+    private NBTTagCompound b(NBTTagCompound nbttagcompound) {
         MinecraftKey minecraftkey = TileEntityTypes.a(this.getTileType());
 
         if (minecraftkey == null) {
@@ -59,7 +59,7 @@ public abstract class TileEntity {
     }
 
     @Nullable
-    public static TileEntity create(NBTTagCompound nbttagcompound) {
+    public static TileEntity create(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
         String s = nbttagcompound.getString("id");
 
         return (TileEntity) IRegistry.BLOCK_ENTITY_TYPE.getOptional(new MinecraftKey(s)).map((tileentitytypes) -> {
@@ -71,7 +71,7 @@ public abstract class TileEntity {
             }
         }).map((tileentity) -> {
             try {
-                tileentity.load(nbttagcompound);
+                tileentity.load(iblockdata, nbttagcompound);
                 return tileentity;
             } catch (Throwable throwable) {
                 TileEntity.LOGGER.error("Failed to load data for block entity {}", s, throwable);
@@ -112,14 +112,14 @@ public abstract class TileEntity {
     }
 
     public NBTTagCompound b() {
-        return this.d(new NBTTagCompound());
+        return this.b(new NBTTagCompound());
     }
 
     public boolean isRemoved() {
         return this.f;
     }
 
-    public void ab_() {
+    public void an_() {
         this.f = true;
     }
 
@@ -161,7 +161,7 @@ public abstract class TileEntity {
         return this.tileType;
     }
 
-    public void v() {
+    public void w() {
         if (!this.g) {
             this.g = true;
             TileEntity.LOGGER.warn("Block entity invalid: {} @ {}", new Supplier[]{() -> {

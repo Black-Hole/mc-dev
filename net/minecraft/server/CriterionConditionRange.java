@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 public class CriterionConditionRange {
 
     public static final CriterionConditionRange a = new CriterionConditionRange((Float) null, (Float) null);
-    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.range.ints", new Object[0]));
+    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.range.ints"));
     private final Float c;
     private final Float d;
 

@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
-public class BlockPumpkinCarved extends BlockFacingHorizontal {
+public class BlockPumpkinCarved extends BlockFacingHorizontal implements ItemWearable {
 
     public static final BlockStateDirection a = BlockFacingHorizontal.FACING;
     @Nullable
@@ -16,17 +16,17 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
     @Nullable
     private ShapeDetector e;
     private static final Predicate<IBlockData> f = (iblockdata) -> {
-        return iblockdata != null && (iblockdata.getBlock() == Blocks.CARVED_PUMPKIN || iblockdata.getBlock() == Blocks.JACK_O_LANTERN);
+        return iblockdata != null && (iblockdata.a(Blocks.CARVED_PUMPKIN) || iblockdata.a(Blocks.JACK_O_LANTERN));
     };
 
-    protected BlockPumpkinCarved(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPumpkinCarved.a, EnumDirection.NORTH));
+    protected BlockPumpkinCarved(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPumpkinCarved.a, EnumDirection.NORTH));
     }
 
     @Override
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (iblockdata1.getBlock() != iblockdata.getBlock()) {
+        if (!iblockdata1.a(iblockdata.getBlock())) {
             this.a(world, blockposition);
         }
     }
@@ -144,10 +144,5 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
         }
 
         return this.e;
-    }
-
-    @Override
-    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EntityTypes<?> entitytypes) {
-        return true;
     }
 }

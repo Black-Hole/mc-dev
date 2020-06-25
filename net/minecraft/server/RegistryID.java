@@ -36,6 +36,10 @@ public class RegistryID<K> implements Registry<K> {
         return i == -1 ? -1 : this.c[i];
     }
 
+    public boolean b(int i) {
+        return this.fromId(i) != null;
+    }
+
     public int c(K k0) {
         int i = this.c();
 
@@ -93,7 +97,7 @@ public class RegistryID<K> implements Registry<K> {
     }
 
     private int d(@Nullable K k0) {
-        return (MathHelper.f(System.identityHashCode(k0)) & Integer.MAX_VALUE) % this.b.length;
+        return (MathHelper.g(System.identityHashCode(k0)) & Integer.MAX_VALUE) % this.b.length;
     }
 
     private int b(@Nullable K k0, int i) {

@@ -4,14 +4,13 @@ import com.google.common.collect.Maps;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
-import java.util.HashMap;
+import com.mojang.serialization.Dynamic;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -294,7 +293,7 @@ public class DataConverterEntityBlockState extends DataFix {
         Function<Typed<?>, Typed<?>> function1 = (typed) -> {
             return this.a(typed, "inTile", "inData", "inBlockState");
         };
-        Type<Pair<Either<Pair<String, Either<Integer, String>>, com.mojang.datafixers.util.Unit>, Dynamic<?>>> type = DSL.and(DSL.optional(DSL.field("inTile", DSL.named(DataConverterTypes.BLOCK_NAME.typeName(), DSL.or(DSL.intType(), DSL.namespacedString())))), DSL.remainderType());
+        Type<Pair<Either<Pair<String, Either<Integer, String>>, com.mojang.datafixers.util.Unit>, Dynamic<?>>> type = DSL.and(DSL.optional(DSL.field("inTile", DSL.named(DataConverterTypes.BLOCK_NAME.typeName(), DSL.or(DSL.intType(), DataConverterSchemaNamed.a())))), DSL.remainderType());
         Function<Typed<?>, Typed<?>> function2 = (typed) -> {
             return typed.update(type.finder(), DSL.remainderType(), Pair::getSecond);
         };
@@ -326,7 +325,7 @@ public class DataConverterEntityBlockState extends DataFix {
     }
 
     private Typed<?> a(Typed<?> typed) {
-        Type<Either<Pair<String, Either<Integer, String>>, com.mojang.datafixers.util.Unit>> type = DSL.optional(DSL.field("Block", DSL.named(DataConverterTypes.BLOCK_NAME.typeName(), DSL.or(DSL.intType(), DSL.namespacedString()))));
+        Type<Either<Pair<String, Either<Integer, String>>, com.mojang.datafixers.util.Unit>> type = DSL.optional(DSL.field("Block", DSL.named(DataConverterTypes.BLOCK_NAME.typeName(), DSL.or(DSL.intType(), DataConverterSchemaNamed.a()))));
         Type<Either<Pair<String, Dynamic<?>>, com.mojang.datafixers.util.Unit>> type1 = DSL.optional(DSL.field("BlockState", DSL.named(DataConverterTypes.BLOCK_STATE.typeName(), DSL.remainderType())));
         Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
 
@@ -336,7 +335,7 @@ public class DataConverterEntityBlockState extends DataFix {
                     return integer;
                 }, DataConverterEntityBlockState::a);
             }, (com_mojang_datafixers_util_unit) -> {
-                Optional<Number> optional = dynamic.get("TileID").asNumber();
+                Optional<Number> optional = dynamic.get("TileID").asNumber().result();
 
                 return (Integer) optional.map(Number::intValue).orElseGet(() -> {
                     return dynamic.get("Tile").asByte((byte) 0) & 255;
@@ -349,7 +348,7 @@ public class DataConverterEntityBlockState extends DataFix {
     }
 
     private Typed<?> a(Typed<?> typed, String s, String s1, String s2) {
-        Type<Pair<String, Either<Integer, String>>> type = DSL.field(s, DSL.named(DataConverterTypes.BLOCK_NAME.typeName(), DSL.or(DSL.intType(), DSL.namespacedString())));
+        Type<Pair<String, Either<Integer, String>>> type = DSL.field(s, DSL.named(DataConverterTypes.BLOCK_NAME.typeName(), DSL.or(DSL.intType(), DataConverterSchemaNamed.a())));
         Type<Pair<String, Dynamic<?>>> type1 = DSL.field(s2, DSL.named(DataConverterTypes.BLOCK_STATE.typeName(), DSL.remainderType()));
         Dynamic<?> dynamic = (Dynamic) typed.getOrCreate(DSL.remainderFinder());
 

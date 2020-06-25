@@ -3,13 +3,13 @@ package net.minecraft.server;
 import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.UUID;
 import java.util.Map.Entry;
+import java.util.UUID;
 import javax.annotation.Nullable;
 
 public class MobEffectList {
 
-    private final Map<IAttribute, AttributeModifier> a = Maps.newHashMap();
+    private final Map<AttributeBase, AttributeModifier> a = Maps.newHashMap();
     private final MobEffectInfo b;
     private final int c;
     @Nullable
@@ -46,8 +46,8 @@ public class MobEffectList {
             if (!entityliving.world.isClientSide) {
                 ((EntityHuman) entityliving).getFoodData().eat(i + 1, 1.0F);
             }
-        } else if ((this != MobEffects.HEAL || entityliving.cR()) && (this != MobEffects.HARM || !entityliving.cR())) {
-            if (this == MobEffects.HARM && !entityliving.cR() || this == MobEffects.HEAL && entityliving.cR()) {
+        } else if ((this != MobEffects.HEAL || entityliving.di()) && (this != MobEffects.HARM || !entityliving.di())) {
+            if (this == MobEffects.HARM && !entityliving.di() || this == MobEffects.HEAL && entityliving.di()) {
                 entityliving.damageEntity(DamageSource.MAGIC, (float) (6 << i));
             }
         } else {
@@ -59,8 +59,8 @@ public class MobEffectList {
     public void applyInstantEffect(@Nullable Entity entity, @Nullable Entity entity1, EntityLiving entityliving, int i, double d0) {
         int j;
 
-        if ((this != MobEffects.HEAL || entityliving.cR()) && (this != MobEffects.HARM || !entityliving.cR())) {
-            if ((this != MobEffects.HARM || entityliving.cR()) && (this != MobEffects.HEAL || !entityliving.cR())) {
+        if ((this != MobEffects.HEAL || entityliving.di()) && (this != MobEffects.HARM || !entityliving.di())) {
+            if ((this != MobEffects.HARM || entityliving.di()) && (this != MobEffects.HEAL || !entityliving.di())) {
                 this.tick(entityliving, i);
             } else {
                 j = (int) (d0 * (double) (6 << i) + 0.5D);
@@ -111,17 +111,17 @@ public class MobEffectList {
     }
 
     public IChatBaseComponent d() {
-        return new ChatMessage(this.c(), new Object[0]);
+        return new ChatMessage(this.c());
     }
 
     public int getColor() {
         return this.c;
     }
 
-    public MobEffectList a(IAttribute iattribute, String s, double d0, AttributeModifier.Operation attributemodifier_operation) {
+    public MobEffectList a(AttributeBase attributebase, String s, double d0, AttributeModifier.Operation attributemodifier_operation) {
         AttributeModifier attributemodifier = new AttributeModifier(UUID.fromString(s), this::c, d0, attributemodifier_operation);
 
-        this.a.put(iattribute, attributemodifier);
+        this.a.put(attributebase, attributemodifier);
         return this;
     }
 
@@ -129,11 +129,11 @@ public class MobEffectList {
         Iterator iterator = this.a.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry<IAttribute, AttributeModifier> entry = (Entry) iterator.next();
-            AttributeInstance attributeinstance = attributemapbase.a((IAttribute) entry.getKey());
+            Entry<AttributeBase, AttributeModifier> entry = (Entry) iterator.next();
+            AttributeModifiable attributemodifiable = attributemapbase.a((AttributeBase) entry.getKey());
 
-            if (attributeinstance != null) {
-                attributeinstance.removeModifier((AttributeModifier) entry.getValue());
+            if (attributemodifiable != null) {
+                attributemodifiable.removeModifier((AttributeModifier) entry.getValue());
             }
         }
 
@@ -143,14 +143,14 @@ public class MobEffectList {
         Iterator iterator = this.a.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry<IAttribute, AttributeModifier> entry = (Entry) iterator.next();
-            AttributeInstance attributeinstance = attributemapbase.a((IAttribute) entry.getKey());
+            Entry<AttributeBase, AttributeModifier> entry = (Entry) iterator.next();
+            AttributeModifiable attributemodifiable = attributemapbase.a((AttributeBase) entry.getKey());
 
-            if (attributeinstance != null) {
+            if (attributemodifiable != null) {
                 AttributeModifier attributemodifier = (AttributeModifier) entry.getValue();
 
-                attributeinstance.removeModifier(attributemodifier);
-                attributeinstance.addModifier(new AttributeModifier(attributemodifier.getUniqueId(), this.c() + " " + i, this.a(i, attributemodifier), attributemodifier.getOperation()));
+                attributemodifiable.removeModifier(attributemodifier);
+                attributemodifiable.addModifier(new AttributeModifier(attributemodifier.getUniqueId(), this.c() + " " + i, this.a(i, attributemodifier), attributemodifier.getOperation()));
             }
         }
 

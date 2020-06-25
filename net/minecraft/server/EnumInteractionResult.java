@@ -13,4 +13,8 @@ public enum EnumInteractionResult {
     public boolean b() {
         return this == EnumInteractionResult.SUCCESS;
     }
+
+    public static EnumInteractionResult a(boolean flag) {
+        return flag ? EnumInteractionResult.SUCCESS : EnumInteractionResult.CONSUME;
+    }
 }

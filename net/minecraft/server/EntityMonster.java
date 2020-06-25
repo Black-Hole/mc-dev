@@ -17,13 +17,13 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
 
     @Override
     public void movementTick() {
-        this.dg();
-        this.ew();
+        this.dz();
+        this.eR();
         super.movementTick();
     }
 
-    protected void ew() {
-        float f = this.aI();
+    protected void eR() {
+        float f = this.aO();
 
         if (f > 0.5F) {
             this.ticksFarFromPlayer += 2;
@@ -32,7 +32,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     }
 
     @Override
-    protected boolean J() {
+    protected boolean L() {
         return true;
     }
 
@@ -68,14 +68,14 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return 0.5F - iworldreader.w(blockposition);
+        return 0.5F - iworldreader.y(blockposition);
     }
 
     public static boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, Random random) {
         if (generatoraccess.getBrightness(EnumSkyBlock.SKY, blockposition) > random.nextInt(32)) {
             return false;
         } else {
-            int i = generatoraccess.getMinecraftWorld().U() ? generatoraccess.c(blockposition, 10) : generatoraccess.getLightLevel(blockposition);
+            int i = generatoraccess.getMinecraftWorld().T() ? generatoraccess.c(blockposition, 10) : generatoraccess.getLightLevel(blockposition);
 
             return i <= random.nextInt(8);
         }
@@ -89,10 +89,8 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         return generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL && a(entitytypes, generatoraccess, enummobspawn, blockposition, random);
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeMap().b(GenericAttributes.ATTACK_DAMAGE);
+    public static AttributeProvider.Builder eS() {
+        return EntityInsentient.p().a(GenericAttributes.ATTACK_DAMAGE);
     }
 
     @Override
@@ -100,19 +98,24 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         return true;
     }
 
-    public boolean e(EntityHuman entityhuman) {
+    @Override
+    protected boolean cV() {
+        return true;
+    }
+
+    public boolean f(EntityHuman entityhuman) {
         return true;
     }
 
     @Override
     public ItemStack f(ItemStack itemstack) {
         if (itemstack.getItem() instanceof ItemProjectileWeapon) {
-            Predicate<ItemStack> predicate = ((ItemProjectileWeapon) itemstack.getItem()).d();
+            Predicate<ItemStack> predicate = ((ItemProjectileWeapon) itemstack.getItem()).e();
             ItemStack itemstack1 = ItemProjectileWeapon.a((EntityLiving) this, predicate);
 
             return itemstack1.isEmpty() ? new ItemStack(Items.ARROW) : itemstack1;
         } else {
-            return ItemStack.a;
+            return ItemStack.b;
         }
     }
 }

@@ -10,6 +10,7 @@ public class PathfinderGoalPanic extends PathfinderGoal {
     protected double c;
     protected double d;
     protected double e;
+    protected boolean f;
 
     public PathfinderGoalPanic(EntityCreature entitycreature, double d0) {
         this.a = entitycreature;
@@ -50,9 +51,19 @@ public class PathfinderGoalPanic extends PathfinderGoal {
         }
     }
 
+    public boolean h() {
+        return this.f;
+    }
+
     @Override
     public void c() {
         this.a.getNavigation().a(this.c, this.d, this.e, this.b);
+        this.f = true;
+    }
+
+    @Override
+    public void d() {
+        this.f = false;
     }
 
     @Override
@@ -62,7 +73,7 @@ public class PathfinderGoalPanic extends PathfinderGoal {
 
     @Nullable
     protected BlockPosition a(IBlockAccess iblockaccess, Entity entity, int i, int j) {
-        BlockPosition blockposition = new BlockPosition(entity);
+        BlockPosition blockposition = entity.getChunkCoordinates();
         int k = blockposition.getX();
         int l = blockposition.getY();
         int i1 = blockposition.getZ();
@@ -74,7 +85,7 @@ public class PathfinderGoalPanic extends PathfinderGoal {
             for (int k1 = l - j; k1 <= l + j; ++k1) {
                 for (int l1 = i1 - i; l1 <= i1 + i; ++l1) {
                     blockposition_mutableblockposition.d(j1, k1, l1);
-                    if (iblockaccess.getFluid(blockposition_mutableblockposition).a(TagsFluid.WATER)) {
+                    if (iblockaccess.getFluid(blockposition_mutableblockposition).a((Tag) TagsFluid.WATER)) {
                         float f1 = (float) ((j1 - k) * (j1 - k) + (k1 - l) * (k1 - l) + (l1 - i1) * (l1 - i1));
 
                         if (f1 < f) {

@@ -11,8 +11,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
@@ -70,7 +70,7 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
             ;
         }
 
-        return argumentblock.a(suggestionsbuilder);
+        return argumentblock.a(suggestionsbuilder, TagsBlock.b());
     }
 
     public Collection<String> getExamples() {
@@ -144,7 +144,7 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
         public boolean test(ShapeDetectorBlock shapedetectorblock) {
             IBlockData iblockdata = shapedetectorblock.a();
 
-            if (iblockdata.getBlock() != this.a.getBlock()) {
+            if (!iblockdata.a(this.a.getBlock())) {
                 return false;
             } else {
                 Iterator iterator = this.b.iterator();

@@ -7,7 +7,7 @@ public class CommandException extends RuntimeException {
     private final IChatBaseComponent a;
 
     public CommandException(IChatBaseComponent ichatbasecomponent) {
-        super(ichatbasecomponent.getText(), (Throwable) null, CommandSyntaxException.ENABLE_COMMAND_STACK_TRACES, CommandSyntaxException.ENABLE_COMMAND_STACK_TRACES);
+        super(ichatbasecomponent.getString(), (Throwable) null, CommandSyntaxException.ENABLE_COMMAND_STACK_TRACES, CommandSyntaxException.ENABLE_COMMAND_STACK_TRACES);
         this.a = ichatbasecomponent;
     }
 

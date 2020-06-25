@@ -2,9 +2,7 @@ package net.minecraft.server;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -13,8 +11,8 @@ public class CommandFunction {
     public static final SuggestionProvider<CommandListenerWrapper> a = (commandcontext, suggestionsbuilder) -> {
         CustomFunctionData customfunctiondata = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getFunctionData();
 
-        ICompletionProvider.a((Iterable) customfunctiondata.h().a(), suggestionsbuilder, "#");
-        return ICompletionProvider.a((Iterable) customfunctiondata.c().keySet(), suggestionsbuilder);
+        ICompletionProvider.a(customfunctiondata.g(), suggestionsbuilder, "#");
+        return ICompletionProvider.a(customfunctiondata.f(), suggestionsbuilder);
     };
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {

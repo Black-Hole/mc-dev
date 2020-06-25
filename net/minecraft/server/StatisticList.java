@@ -30,6 +30,7 @@ public class StatisticList {
     public static final MinecraftKey HORSE_ONE_CM = a("horse_one_cm", Counter.DISTANCE);
     public static final MinecraftKey AVIATE_ONE_CM = a("aviate_one_cm", Counter.DISTANCE);
     public static final MinecraftKey SWIM_ONE_CM = a("swim_one_cm", Counter.DISTANCE);
+    public static final MinecraftKey STRIDER_ONE_CM = a("strider_one_cm", Counter.DISTANCE);
     public static final MinecraftKey JUMP = a("jump", Counter.DEFAULT);
     public static final MinecraftKey DROP = a("drop", Counter.DEFAULT);
     public static final MinecraftKey DAMAGE_DEALT = a("damage_dealt", Counter.DIVIDE_BY_TEN);
@@ -82,6 +83,8 @@ public class StatisticList {
     public static final MinecraftKey RAID_WIN = a("raid_win", Counter.DEFAULT);
     public static final MinecraftKey INTERACT_WITH_ANVIL = a("interact_with_anvil", Counter.DEFAULT);
     public static final MinecraftKey INTERACT_WITH_GRINDSTONE = a("interact_with_grindstone", Counter.DEFAULT);
+    public static final MinecraftKey TARGET_HIT = a("target_hit", Counter.DEFAULT);
+    public static final MinecraftKey INTERACT_WITH_SMITHING_TABLE = a("interact_with_smithing_table", Counter.DEFAULT);
 
     private static MinecraftKey a(String s, Counter counter) {
         MinecraftKey minecraftkey = new MinecraftKey(s);

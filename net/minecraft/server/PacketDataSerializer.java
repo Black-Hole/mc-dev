@@ -1,5 +1,8 @@
 package net.minecraft.server;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DataResult.PartialResult;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufInputStream;
@@ -39,6 +42,27 @@ public class PacketDataSerializer extends ByteBuf {
         }
 
         return 5;
+    }
+
+    public <T> T a(Codec<T> codec) throws IOException {
+        NBTTagCompound nbttagcompound = this.l();
+        DataResult<T> dataresult = codec.parse(DynamicOpsNBT.a, nbttagcompound);
+
+        if (dataresult.error().isPresent()) {
+            throw new IOException("Failed to decode: " + ((PartialResult) dataresult.error().get()).message() + " " + nbttagcompound);
+        } else {
+            return dataresult.result().get();
+        }
+    }
+
+    public <T> void a(Codec<T> codec, T t0) throws IOException {
+        DataResult<NBTBase> dataresult = codec.encodeStart(DynamicOpsNBT.a, t0);
+
+        if (dataresult.error().isPresent()) {
+            throw new IOException("Failed to encode: " + ((PartialResult) dataresult.error().get()).message() + " " + t0);
+        } else {
+            this.a((NBTTagCompound) dataresult.result().get());
+        }
     }
 
     public PacketDataSerializer a(byte[] abyte) {
@@ -244,7 +268,7 @@ public class PacketDataSerializer extends ByteBuf {
             this.writeByte(itemstack.getCount());
             NBTTagCompound nbttagcompound = null;
 
-            if (item.usesDurability() || item.o()) {
+            if (item.usesDurability() || item.n()) {
                 nbttagcompound = itemstack.getTag();
             }
 
@@ -256,7 +280,7 @@ public class PacketDataSerializer extends ByteBuf {
 
     public ItemStack m() {
         if (!this.readBoolean()) {
-            return ItemStack.a;
+            return ItemStack.b;
         } else {
             int i = this.i();
             byte b0 = this.readByte();
@@ -328,7 +352,7 @@ public class PacketDataSerializer extends ByteBuf {
         float f2 = this.readFloat();
         boolean flag = this.readBoolean();
 
-        return new MovingObjectPositionBlock(new Vec3D((double) ((float) blockposition.getX() + f), (double) ((float) blockposition.getY() + f1), (double) ((float) blockposition.getZ() + f2)), enumdirection, blockposition, flag);
+        return new MovingObjectPositionBlock(new Vec3D((double) blockposition.getX() + (double) f, (double) blockposition.getY() + (double) f1, (double) blockposition.getZ() + (double) f2), enumdirection, blockposition, flag);
     }
 
     public void a(MovingObjectPositionBlock movingobjectpositionblock) {

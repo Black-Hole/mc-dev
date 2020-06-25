@@ -16,7 +16,7 @@ public class OpListEntry extends JsonListEntry<GameProfile> {
     }
 
     public OpListEntry(JsonObject jsonobject) {
-        super(b(jsonobject), jsonobject);
+        super(b(jsonobject));
         this.a = jsonobject.has("level") ? jsonobject.get("level").getAsInt() : 0;
         this.b = jsonobject.has("bypassesPlayerLimit") && jsonobject.get("bypassesPlayerLimit").getAsBoolean();
     }
@@ -34,7 +34,6 @@ public class OpListEntry extends JsonListEntry<GameProfile> {
         if (this.getKey() != null) {
             jsonobject.addProperty("uuid", ((GameProfile) this.getKey()).getId() == null ? "" : ((GameProfile) this.getKey()).getId().toString());
             jsonobject.addProperty("name", ((GameProfile) this.getKey()).getName());
-            super.a(jsonobject);
             jsonobject.addProperty("level", this.a);
             jsonobject.addProperty("bypassesPlayerLimit", this.b);
         }

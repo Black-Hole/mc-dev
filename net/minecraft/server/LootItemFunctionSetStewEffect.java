@@ -12,8 +12,8 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
 
 public class LootItemFunctionSetStewEffect extends LootItemFunctionConditional {
 
@@ -22,6 +22,11 @@ public class LootItemFunctionSetStewEffect extends LootItemFunctionConditional {
     private LootItemFunctionSetStewEffect(LootItemCondition[] alootitemcondition, Map<MobEffectList, LootValueBounds> map) {
         super(alootitemcondition);
         this.a = ImmutableMap.copyOf(map);
+    }
+
+    @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.l;
     }
 
     @Override
@@ -44,15 +49,13 @@ public class LootItemFunctionSetStewEffect extends LootItemFunctionConditional {
         }
     }
 
-    public static LootItemFunctionSetStewEffect.a b() {
+    public static LootItemFunctionSetStewEffect.a c() {
         return new LootItemFunctionSetStewEffect.a();
     }
 
     public static class b extends LootItemFunctionConditional.c<LootItemFunctionSetStewEffect> {
 
-        public b() {
-            super(new MinecraftKey("set_stew_effect"), LootItemFunctionSetStewEffect.class);
-        }
+        public b() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionSetStewEffect lootitemfunctionsetsteweffect, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsetsteweffect, jsonserializationcontext);

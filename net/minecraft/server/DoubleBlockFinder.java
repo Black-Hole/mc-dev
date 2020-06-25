@@ -23,7 +23,7 @@ public class DoubleBlockFinder {
                 BlockPosition blockposition1 = blockposition.shift((EnumDirection) function1.apply(iblockdata));
                 IBlockData iblockdata1 = generatoraccess.getType(blockposition1);
 
-                if (iblockdata1.getBlock() == iblockdata.getBlock()) {
+                if (iblockdata1.a(iblockdata.getBlock())) {
                     DoubleBlockFinder.BlockType doubleblockfinder_blocktype1 = (DoubleBlockFinder.BlockType) function.apply(iblockdata1);
 
                     if (doubleblockfinder_blocktype1 != DoubleBlockFinder.BlockType.SINGLE && doubleblockfinder_blocktype != doubleblockfinder_blocktype1 && iblockdata1.get(blockstatedirection) == iblockdata.get(blockstatedirection)) {

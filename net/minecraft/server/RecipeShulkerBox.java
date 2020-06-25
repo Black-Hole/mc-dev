@@ -34,7 +34,7 @@ public class RecipeShulkerBox extends IRecipeComplex {
     }
 
     public ItemStack a(InventoryCrafting inventorycrafting) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
         ItemDye itemdye = (ItemDye) Items.WHITE_DYE;
 
         for (int i = 0; i < inventorycrafting.getSize(); ++i) {

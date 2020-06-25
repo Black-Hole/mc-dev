@@ -6,17 +6,17 @@ import java.util.function.Predicate;
 
 public class BehaviorLookInteract extends Behavior<EntityLiving> {
 
-    private final EntityTypes<?> a;
-    private final int b;
-    private final Predicate<EntityLiving> c;
+    private final EntityTypes<?> b;
+    private final int c;
     private final Predicate<EntityLiving> d;
+    private final Predicate<EntityLiving> e;
 
     public BehaviorLookInteract(EntityTypes<?> entitytypes, int i, Predicate<EntityLiving> predicate, Predicate<EntityLiving> predicate1) {
         super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.INTERACTION_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.VISIBLE_MOBS, MemoryStatus.VALUE_PRESENT));
-        this.a = entitytypes;
-        this.b = i * i;
-        this.c = predicate1;
-        this.d = predicate;
+        this.b = entitytypes;
+        this.c = i * i;
+        this.d = predicate1;
+        this.e = predicate;
     }
 
     public BehaviorLookInteract(EntityTypes<?> entitytypes, int i) {
@@ -29,7 +29,7 @@ public class BehaviorLookInteract extends Behavior<EntityLiving> {
 
     @Override
     public boolean a(WorldServer worldserver, EntityLiving entityliving) {
-        return this.d.test(entityliving) && this.b(entityliving).stream().anyMatch(this::a);
+        return this.e.test(entityliving) && this.b(entityliving).stream().anyMatch(this::a);
     }
 
     @Override
@@ -39,16 +39,16 @@ public class BehaviorLookInteract extends Behavior<EntityLiving> {
 
         behaviorcontroller.getMemory(MemoryModuleType.VISIBLE_MOBS).ifPresent((list) -> {
             list.stream().filter((entityliving1) -> {
-                return entityliving1.h((Entity) entityliving) <= (double) this.b;
+                return entityliving1.h((Entity) entityliving) <= (double) this.c;
             }).filter(this::a).findFirst().ifPresent((entityliving1) -> {
                 behaviorcontroller.setMemory(MemoryModuleType.INTERACTION_TARGET, (Object) entityliving1);
-                behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving1)));
+                behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving1, true)));
             });
         });
     }
 
     private boolean a(EntityLiving entityliving) {
-        return this.a.equals(entityliving.getEntityType()) && this.c.test(entityliving);
+        return this.b.equals(entityliving.getEntityType()) && this.d.test(entityliving);
     }
 
     private List<EntityLiving> b(EntityLiving entityliving) {

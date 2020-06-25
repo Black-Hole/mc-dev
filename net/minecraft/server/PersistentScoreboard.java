@@ -51,14 +51,14 @@ public class PersistentScoreboard extends PersistentBase {
             }
 
             ScoreboardTeam scoreboardteam = this.b.createTeam(s);
-            IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("DisplayName"));
+            IChatMutableComponent ichatmutablecomponent = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("DisplayName"));
 
-            if (ichatbasecomponent != null) {
-                scoreboardteam.setDisplayName(ichatbasecomponent);
+            if (ichatmutablecomponent != null) {
+                scoreboardteam.setDisplayName(ichatmutablecomponent);
             }
 
             if (nbttagcompound.hasKeyOfType("TeamColor", 8)) {
-                scoreboardteam.setColor(EnumChatFormat.c(nbttagcompound.getString("TeamColor")));
+                scoreboardteam.setColor(EnumChatFormat.b(nbttagcompound.getString("TeamColor")));
             }
 
             if (nbttagcompound.hasKeyOfType("AllowFriendlyFire", 99)) {
@@ -69,19 +69,19 @@ public class PersistentScoreboard extends PersistentBase {
                 scoreboardteam.setCanSeeFriendlyInvisibles(nbttagcompound.getBoolean("SeeFriendlyInvisibles"));
             }
 
-            IChatBaseComponent ichatbasecomponent1;
+            IChatMutableComponent ichatmutablecomponent1;
 
             if (nbttagcompound.hasKeyOfType("MemberNamePrefix", 8)) {
-                ichatbasecomponent1 = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("MemberNamePrefix"));
-                if (ichatbasecomponent1 != null) {
-                    scoreboardteam.setPrefix(ichatbasecomponent1);
+                ichatmutablecomponent1 = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("MemberNamePrefix"));
+                if (ichatmutablecomponent1 != null) {
+                    scoreboardteam.setPrefix(ichatmutablecomponent1);
                 }
             }
 
             if (nbttagcompound.hasKeyOfType("MemberNameSuffix", 8)) {
-                ichatbasecomponent1 = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("MemberNameSuffix"));
-                if (ichatbasecomponent1 != null) {
-                    scoreboardteam.setSuffix(ichatbasecomponent1);
+                ichatmutablecomponent1 = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("MemberNameSuffix"));
+                if (ichatmutablecomponent1 != null) {
+                    scoreboardteam.setSuffix(ichatmutablecomponent1);
                 }
             }
 
@@ -144,10 +144,10 @@ public class PersistentScoreboard extends PersistentBase {
                     s = s.substring(0, 16);
                 }
 
-                IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("DisplayName"));
+                IChatMutableComponent ichatmutablecomponent = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("DisplayName"));
                 IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay = IScoreboardCriteria.EnumScoreboardHealthDisplay.a(nbttagcompound.getString("RenderType"));
 
-                this.b.registerObjective(s, iscoreboardcriteria, ichatbasecomponent, iscoreboardcriteria_enumscoreboardhealthdisplay);
+                this.b.registerObjective(s, iscoreboardcriteria, ichatmutablecomponent, iscoreboardcriteria_enumscoreboardhealthdisplay);
             });
         }
 
@@ -179,7 +179,7 @@ public class PersistentScoreboard extends PersistentBase {
             nbttagcompound.setString("Name", scoreboardteam.getName());
             nbttagcompound.setString("DisplayName", IChatBaseComponent.ChatSerializer.a(scoreboardteam.getDisplayName()));
             if (scoreboardteam.getColor().b() >= 0) {
-                nbttagcompound.setString("TeamColor", scoreboardteam.getColor().g());
+                nbttagcompound.setString("TeamColor", scoreboardteam.getColor().f());
             }
 
             nbttagcompound.setBoolean("AllowFriendlyFire", scoreboardteam.allowFriendlyFire());

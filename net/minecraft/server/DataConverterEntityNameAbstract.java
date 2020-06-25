@@ -1,10 +1,10 @@
 package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 
 public abstract class DataConverterEntityNameAbstract extends DataConverterEntityName {
 

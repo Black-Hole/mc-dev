@@ -8,12 +8,10 @@ import javax.annotation.Nullable;
 public class BehaviorFarm extends Behavior<EntityVillager> {
 
     @Nullable
-    private BlockPosition a;
-    private boolean b;
-    private boolean c;
-    private long d;
-    private int e;
-    private final List<BlockPosition> f = Lists.newArrayList();
+    private BlockPosition farmBlock;
+    private long c;
+    private int d;
+    private final List<BlockPosition> e = Lists.newArrayList();
 
     public BehaviorFarm() {
         super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.SECONDARY_JOB_SITE, MemoryStatus.VALUE_PRESENT));
@@ -25,48 +23,29 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
         } else if (entityvillager.getVillagerData().getProfession() != VillagerProfession.FARMER) {
             return false;
         } else {
-            this.b = entityvillager.eM();
-            this.c = false;
-            InventorySubcontainer inventorysubcontainer = entityvillager.getInventory();
-            int i = inventorysubcontainer.getSize();
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = entityvillager.getChunkCoordinates().i();
 
-            for (int j = 0; j < i; ++j) {
-                ItemStack itemstack = inventorysubcontainer.getItem(j);
+            this.e.clear();
 
-                if (itemstack.isEmpty()) {
-                    this.c = true;
-                    break;
-                }
-
-                if (itemstack.getItem() == Items.WHEAT_SEEDS || itemstack.getItem() == Items.BEETROOT_SEEDS) {
-                    this.c = true;
-                    break;
-                }
-            }
-
-            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(entityvillager);
-
-            this.f.clear();
-
-            for (int k = -1; k <= 1; ++k) {
-                for (int l = -1; l <= 1; ++l) {
-                    for (int i1 = -1; i1 <= 1; ++i1) {
-                        blockposition_mutableblockposition.c(entityvillager.locX() + (double) k, entityvillager.locY() + (double) l, entityvillager.locZ() + (double) i1);
+            for (int i = -1; i <= 1; ++i) {
+                for (int j = -1; j <= 1; ++j) {
+                    for (int k = -1; k <= 1; ++k) {
+                        blockposition_mutableblockposition.c(entityvillager.locX() + (double) i, entityvillager.locY() + (double) j, entityvillager.locZ() + (double) k);
                         if (this.a((BlockPosition) blockposition_mutableblockposition, worldserver)) {
-                            this.f.add(new BlockPosition(blockposition_mutableblockposition));
+                            this.e.add(new BlockPosition(blockposition_mutableblockposition));
                         }
                     }
                 }
             }
 
-            this.a = this.a(worldserver);
-            return (this.b || this.c) && this.a != null;
+            this.farmBlock = this.a(worldserver);
+            return this.farmBlock != null;
         }
     }
 
     @Nullable
     private BlockPosition a(WorldServer worldserver) {
-        return this.f.isEmpty() ? null : (BlockPosition) this.f.get(worldserver.getRandom().nextInt(this.f.size()));
+        return this.e.isEmpty() ? null : (BlockPosition) this.e.get(worldserver.getRandom().nextInt(this.e.size()));
     }
 
     private boolean a(BlockPosition blockposition, WorldServer worldserver) {
@@ -74,83 +53,85 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
         Block block = iblockdata.getBlock();
         Block block1 = worldserver.getType(blockposition.down()).getBlock();
 
-        return block instanceof BlockCrops && ((BlockCrops) block).isRipe(iblockdata) && this.c || iblockdata.isAir() && block1 instanceof BlockSoil && this.b;
+        return block instanceof BlockCrops && ((BlockCrops) block).isRipe(iblockdata) || iblockdata.isAir() && block1 instanceof BlockSoil;
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        if (i > this.d && this.a != null) {
-            entityvillager.getBehaviorController().setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorTarget(this.a)));
-            entityvillager.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorTarget(this.a), 0.5F, 1)));
+        if (i > this.c && this.farmBlock != null) {
+            entityvillager.getBehaviorController().setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorTarget(this.farmBlock)));
+            entityvillager.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorTarget(this.farmBlock), 0.5F, 1)));
         }
 
     }
 
-    protected void f(WorldServer worldserver, EntityVillager entityvillager, long i) {
+    protected void c(WorldServer worldserver, EntityVillager entityvillager, long i) {
         entityvillager.getBehaviorController().removeMemory(MemoryModuleType.LOOK_TARGET);
         entityvillager.getBehaviorController().removeMemory(MemoryModuleType.WALK_TARGET);
-        this.e = 0;
-        this.d = i + 40L;
+        this.d = 0;
+        this.c = i + 40L;
     }
 
     protected void d(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        if (this.a != null && i > this.d) {
-            IBlockData iblockdata = worldserver.getType(this.a);
-            Block block = iblockdata.getBlock();
-            Block block1 = worldserver.getType(this.a.down()).getBlock();
+        if (this.farmBlock == null || this.farmBlock.a((IPosition) entityvillager.getPositionVector(), 1.0D)) {
+            if (this.farmBlock != null && i > this.c) {
+                IBlockData iblockdata = worldserver.getType(this.farmBlock);
+                Block block = iblockdata.getBlock();
+                Block block1 = worldserver.getType(this.farmBlock.down()).getBlock();
 
-            if (block instanceof BlockCrops && ((BlockCrops) block).isRipe(iblockdata) && this.c) {
-                worldserver.a(this.a, true, entityvillager);
-            }
+                if (block instanceof BlockCrops && ((BlockCrops) block).isRipe(iblockdata)) {
+                    worldserver.a(this.farmBlock, true, entityvillager);
+                }
 
-            if (iblockdata.isAir() && block1 instanceof BlockSoil && this.b) {
-                InventorySubcontainer inventorysubcontainer = entityvillager.getInventory();
+                if (iblockdata.isAir() && block1 instanceof BlockSoil && entityvillager.canPlant()) {
+                    InventorySubcontainer inventorysubcontainer = entityvillager.getInventory();
 
-                for (int j = 0; j < inventorysubcontainer.getSize(); ++j) {
-                    ItemStack itemstack = inventorysubcontainer.getItem(j);
-                    boolean flag = false;
+                    for (int j = 0; j < inventorysubcontainer.getSize(); ++j) {
+                        ItemStack itemstack = inventorysubcontainer.getItem(j);
+                        boolean flag = false;
 
-                    if (!itemstack.isEmpty()) {
-                        if (itemstack.getItem() == Items.WHEAT_SEEDS) {
-                            worldserver.setTypeAndData(this.a, Blocks.WHEAT.getBlockData(), 3);
-                            flag = true;
-                        } else if (itemstack.getItem() == Items.POTATO) {
-                            worldserver.setTypeAndData(this.a, Blocks.POTATOES.getBlockData(), 3);
-                            flag = true;
-                        } else if (itemstack.getItem() == Items.CARROT) {
-                            worldserver.setTypeAndData(this.a, Blocks.CARROTS.getBlockData(), 3);
-                            flag = true;
-                        } else if (itemstack.getItem() == Items.BEETROOT_SEEDS) {
-                            worldserver.setTypeAndData(this.a, Blocks.BEETROOTS.getBlockData(), 3);
-                            flag = true;
+                        if (!itemstack.isEmpty()) {
+                            if (itemstack.getItem() == Items.WHEAT_SEEDS) {
+                                worldserver.setTypeAndData(this.farmBlock, Blocks.WHEAT.getBlockData(), 3);
+                                flag = true;
+                            } else if (itemstack.getItem() == Items.POTATO) {
+                                worldserver.setTypeAndData(this.farmBlock, Blocks.POTATOES.getBlockData(), 3);
+                                flag = true;
+                            } else if (itemstack.getItem() == Items.CARROT) {
+                                worldserver.setTypeAndData(this.farmBlock, Blocks.CARROTS.getBlockData(), 3);
+                                flag = true;
+                            } else if (itemstack.getItem() == Items.BEETROOT_SEEDS) {
+                                worldserver.setTypeAndData(this.farmBlock, Blocks.BEETROOTS.getBlockData(), 3);
+                                flag = true;
+                            }
+                        }
+
+                        if (flag) {
+                            worldserver.playSound((EntityHuman) null, (double) this.farmBlock.getX(), (double) this.farmBlock.getY(), (double) this.farmBlock.getZ(), SoundEffects.ITEM_CROP_PLANT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                            itemstack.subtract(1);
+                            if (itemstack.isEmpty()) {
+                                inventorysubcontainer.setItem(j, ItemStack.b);
+                            }
+                            break;
                         }
                     }
+                }
 
-                    if (flag) {
-                        worldserver.playSound((EntityHuman) null, (double) this.a.getX(), (double) this.a.getY(), (double) this.a.getZ(), SoundEffects.ITEM_CROP_PLANT, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                        itemstack.subtract(1);
-                        if (itemstack.isEmpty()) {
-                            inventorysubcontainer.setItem(j, ItemStack.a);
-                        }
-                        break;
+                if (block instanceof BlockCrops && !((BlockCrops) block).isRipe(iblockdata)) {
+                    this.e.remove(this.farmBlock);
+                    this.farmBlock = this.a(worldserver);
+                    if (this.farmBlock != null) {
+                        this.c = i + 20L;
+                        entityvillager.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorTarget(this.farmBlock), 0.5F, 1)));
+                        entityvillager.getBehaviorController().setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorTarget(this.farmBlock)));
                     }
                 }
             }
 
-            if (block instanceof BlockCrops && !((BlockCrops) block).isRipe(iblockdata)) {
-                this.f.remove(this.a);
-                this.a = this.a(worldserver);
-                if (this.a != null) {
-                    this.d = i + 20L;
-                    entityvillager.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorTarget(this.a), 0.5F, 1)));
-                    entityvillager.getBehaviorController().setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorTarget(this.a)));
-                }
-            }
+            ++this.d;
         }
-
-        ++this.e;
     }
 
-    protected boolean g(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        return this.e < 200;
+    protected boolean b(WorldServer worldserver, EntityVillager entityvillager, long i) {
+        return this.d < 200;
     }
 }

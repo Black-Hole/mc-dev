@@ -1,18 +1,17 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Maps;
-import java.util.EnumMap;
 import java.util.Map;
 
 public class BlockSprawling extends Block {
 
     private static final EnumDirection[] i = EnumDirection.values();
-    public static final BlockStateBoolean a = BlockProperties.H;
-    public static final BlockStateBoolean b = BlockProperties.I;
-    public static final BlockStateBoolean c = BlockProperties.J;
-    public static final BlockStateBoolean d = BlockProperties.K;
-    public static final BlockStateBoolean e = BlockProperties.F;
-    public static final BlockStateBoolean f = BlockProperties.G;
+    public static final BlockStateBoolean a = BlockProperties.I;
+    public static final BlockStateBoolean b = BlockProperties.J;
+    public static final BlockStateBoolean c = BlockProperties.K;
+    public static final BlockStateBoolean d = BlockProperties.L;
+    public static final BlockStateBoolean e = BlockProperties.G;
+    public static final BlockStateBoolean f = BlockProperties.H;
     public static final Map<EnumDirection, BlockStateBoolean> g = (Map) SystemUtils.a((Object) Maps.newEnumMap(EnumDirection.class), (enummap) -> {
         enummap.put(EnumDirection.NORTH, BlockSprawling.a);
         enummap.put(EnumDirection.EAST, BlockSprawling.b);
@@ -23,8 +22,8 @@ public class BlockSprawling extends Block {
     });
     protected final VoxelShape[] h;
 
-    protected BlockSprawling(float f, Block.Info block_info) {
-        super(block_info);
+    protected BlockSprawling(float f, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.h = this.a(f);
     }
 
@@ -63,7 +62,7 @@ public class BlockSprawling extends Block {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return this.h[this.h(iblockdata)];
     }
 

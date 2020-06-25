@@ -4,10 +4,10 @@ import javax.annotation.Nullable;
 
 public class BlockAttachable extends BlockFacingHorizontal {
 
-    public static final BlockStateEnum<BlockPropertyAttachPosition> FACE = BlockProperties.O;
+    public static final BlockStateEnum<BlockPropertyAttachPosition> FACE = BlockProperties.Q;
 
-    protected BlockAttachable(Block.Info block_info) {
-        super(block_info);
+    protected BlockAttachable(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class BlockAttachable extends BlockFacingHorizontal {
             EnumDirection enumdirection = aenumdirection[j];
             IBlockData iblockdata;
 
-            if (enumdirection.m() == EnumDirection.EnumAxis.Y) {
+            if (enumdirection.n() == EnumDirection.EnumAxis.Y) {
                 iblockdata = (IBlockData) ((IBlockData) this.getBlockData().set(BlockAttachable.FACE, enumdirection == EnumDirection.UP ? BlockPropertyAttachPosition.CEILING : BlockPropertyAttachPosition.FLOOR)).set(BlockAttachable.FACING, blockactioncontext.f());
             } else {
                 iblockdata = (IBlockData) ((IBlockData) this.getBlockData().set(BlockAttachable.FACE, BlockPropertyAttachPosition.WALL)).set(BlockAttachable.FACING, enumdirection.opposite());

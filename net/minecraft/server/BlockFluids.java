@@ -7,27 +7,38 @@ import java.util.Random;
 
 public class BlockFluids extends Block implements IFluidSource {
 
-    public static final BlockStateInteger LEVEL = BlockProperties.ap;
+    public static final BlockStateInteger LEVEL = BlockProperties.av;
     protected final FluidTypeFlowing b;
-    private final List<Fluid> c;
+    private final List<Fluid> d;
+    public static final VoxelShape c = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
 
-    protected BlockFluids(FluidTypeFlowing fluidtypeflowing, Block.Info block_info) {
-        super(block_info);
+    protected BlockFluids(FluidTypeFlowing fluidtypeflowing, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.b = fluidtypeflowing;
-        this.c = Lists.newArrayList();
-        this.c.add(fluidtypeflowing.a(false));
+        this.d = Lists.newArrayList();
+        this.d.add(fluidtypeflowing.a(false));
 
         for (int i = 1; i < 8; ++i) {
-            this.c.add(fluidtypeflowing.a(8 - i, false));
+            this.d.add(fluidtypeflowing.a(8 - i, false));
         }
 
-        this.c.add(fluidtypeflowing.a(8, true));
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFluids.LEVEL, 0));
+        this.d.add(fluidtypeflowing.a(8, true));
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFluids.LEVEL, 0));
     }
 
     @Override
-    public void b(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        worldserver.getFluid(blockposition).b(worldserver, blockposition, random);
+    public VoxelShape c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return voxelshapecollision.a(BlockFluids.c, blockposition, true) && (Integer) iblockdata.get(BlockFluids.LEVEL) == 0 && voxelshapecollision.a(iblockaccess.getFluid(blockposition.up()), this.b) ? BlockFluids.c : VoxelShapes.a();
+    }
+
+    @Override
+    public boolean isTicking(IBlockData iblockdata) {
+        return iblockdata.getFluid().f();
+    }
+
+    @Override
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        iblockdata.getFluid().b(worldserver, blockposition, random);
     }
 
     @Override
@@ -37,18 +48,18 @@ public class BlockFluids extends Block implements IFluidSource {
 
     @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
-        return !this.b.a(TagsFluid.LAVA);
+        return !this.b.a((Tag) TagsFluid.LAVA);
     }
 
     @Override
-    public Fluid a_(IBlockData iblockdata) {
+    public Fluid d(IBlockData iblockdata) {
         int i = (Integer) iblockdata.get(BlockFluids.LEVEL);
 
-        return (Fluid) this.c.get(Math.min(i, 8));
+        return (Fluid) this.d.get(Math.min(i, 8));
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.INVISIBLE;
     }
 
@@ -58,19 +69,14 @@ public class BlockFluids extends Block implements IFluidSource {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return VoxelShapes.a();
-    }
-
-    @Override
-    public int a(IWorldReader iworldreader) {
-        return this.b.a(iworldreader);
     }
 
     @Override
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (this.a(world, blockposition, iblockdata)) {
-            world.getFluidTickList().a(blockposition, iblockdata.getFluid().getType(), this.a((IWorldReader) world));
+            world.getFluidTickList().a(blockposition, iblockdata.getFluid().getType(), this.b.a((IWorldReader) world));
         }
 
     }
@@ -78,7 +84,7 @@ public class BlockFluids extends Block implements IFluidSource {
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (iblockdata.getFluid().isSource() || iblockdata1.getFluid().isSource()) {
-            generatoraccess.getFluidTickList().a(blockposition, iblockdata.getFluid().getType(), this.a((IWorldReader) generatoraccess));
+            generatoraccess.getFluidTickList().a(blockposition, iblockdata.getFluid().getType(), this.b.a((IWorldReader) generatoraccess));
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
@@ -87,39 +93,36 @@ public class BlockFluids extends Block implements IFluidSource {
     @Override
     public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1, boolean flag) {
         if (this.a(world, blockposition, iblockdata)) {
-            world.getFluidTickList().a(blockposition, iblockdata.getFluid().getType(), this.a((IWorldReader) world));
+            world.getFluidTickList().a(blockposition, iblockdata.getFluid().getType(), this.b.a((IWorldReader) world));
         }
 
     }
 
-    public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (this.b.a(TagsFluid.LAVA)) {
-            boolean flag = false;
+    private boolean a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        if (this.b.a((Tag) TagsFluid.LAVA)) {
+            boolean flag = world.getType(blockposition.down()).a(Blocks.SOUL_SOIL);
             EnumDirection[] aenumdirection = EnumDirection.values();
             int i = aenumdirection.length;
 
             for (int j = 0; j < i; ++j) {
                 EnumDirection enumdirection = aenumdirection[j];
 
-                if (enumdirection != EnumDirection.DOWN && world.getFluid(blockposition.shift(enumdirection)).a(TagsFluid.WATER)) {
-                    flag = true;
-                    break;
-                }
-            }
+                if (enumdirection != EnumDirection.DOWN) {
+                    BlockPosition blockposition1 = blockposition.shift(enumdirection);
 
-            if (flag) {
-                Fluid fluid = world.getFluid(blockposition);
+                    if (world.getFluid(blockposition1).a((Tag) TagsFluid.WATER)) {
+                        Block block = world.getFluid(blockposition).isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE;
 
-                if (fluid.isSource()) {
-                    world.setTypeUpdate(blockposition, Blocks.OBSIDIAN.getBlockData());
-                    this.fizz(world, blockposition);
-                    return false;
-                }
+                        world.setTypeUpdate(blockposition, block.getBlockData());
+                        this.fizz(world, blockposition);
+                        return false;
+                    }
 
-                if (fluid.getHeight(world, blockposition) >= 0.44444445F) {
-                    world.setTypeUpdate(blockposition, Blocks.COBBLESTONE.getBlockData());
-                    this.fizz(world, blockposition);
-                    return false;
+                    if (flag && world.getType(blockposition1).a(Blocks.BLUE_ICE)) {
+                        world.setTypeUpdate(blockposition, Blocks.BASALT.getBlockData());
+                        this.fizz(world, blockposition);
+                        return false;
+                    }
                 }
             }
         }
@@ -148,8 +151,13 @@ public class BlockFluids extends Block implements IFluidSource {
 
     @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
-        if (this.b.a(TagsFluid.LAVA)) {
-            entity.aG();
+        if (this.b.a((Tag) TagsFluid.LAVA)) {
+            float f = (float) blockposition.getY() + iblockdata.getFluid().getHeight(world, blockposition);
+            AxisAlignedBB axisalignedbb = entity.getBoundingBox();
+
+            if (axisalignedbb.minY < (double) f || (double) f > axisalignedbb.maxY) {
+                entity.aM();
+            }
         }
 
     }

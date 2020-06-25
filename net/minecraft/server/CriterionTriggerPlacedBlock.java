@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import javax.annotation.Nullable;
@@ -18,7 +16,7 @@ public class CriterionTriggerPlacedBlock extends CriterionTriggerAbstract<Criter
     }
 
     @Override
-    public CriterionTriggerPlacedBlock.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerPlacedBlock.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         Block block = a(jsonobject);
         CriterionTriggerProperties criteriontriggerproperties = CriterionTriggerProperties.a(jsonobject.get("state"));
 
@@ -31,7 +29,7 @@ public class CriterionTriggerPlacedBlock extends CriterionTriggerAbstract<Criter
         CriterionConditionLocation criterionconditionlocation = CriterionConditionLocation.a(jsonobject.get("location"));
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
 
-        return new CriterionTriggerPlacedBlock.a(block, criteriontriggerproperties, criterionconditionlocation, criterionconditionitem);
+        return new CriterionTriggerPlacedBlock.a(criterionconditionentity_b, block, criteriontriggerproperties, criterionconditionlocation, criterionconditionitem);
     }
 
     @Nullable
@@ -50,7 +48,7 @@ public class CriterionTriggerPlacedBlock extends CriterionTriggerAbstract<Criter
     public void a(EntityPlayer entityplayer, BlockPosition blockposition, ItemStack itemstack) {
         IBlockData iblockdata = entityplayer.getWorldServer().getType(blockposition);
 
-        this.a(entityplayer.getAdvancementData(), (criteriontriggerplacedblock_a) -> {
+        this.a(entityplayer, (criteriontriggerplacedblock_a) -> {
             return criteriontriggerplacedblock_a.a(iblockdata, blockposition, entityplayer.getWorldServer(), itemstack);
         });
     }
@@ -62,8 +60,8 @@ public class CriterionTriggerPlacedBlock extends CriterionTriggerAbstract<Criter
         private final CriterionConditionLocation c;
         private final CriterionConditionItem d;
 
-        public a(@Nullable Block block, CriterionTriggerProperties criteriontriggerproperties, CriterionConditionLocation criterionconditionlocation, CriterionConditionItem criterionconditionitem) {
-            super(CriterionTriggerPlacedBlock.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, @Nullable Block block, CriterionTriggerProperties criteriontriggerproperties, CriterionConditionLocation criterionconditionlocation, CriterionConditionItem criterionconditionitem) {
+            super(CriterionTriggerPlacedBlock.a, criterionconditionentity_b);
             this.a = block;
             this.b = criteriontriggerproperties;
             this.c = criterionconditionlocation;
@@ -71,16 +69,16 @@ public class CriterionTriggerPlacedBlock extends CriterionTriggerAbstract<Criter
         }
 
         public static CriterionTriggerPlacedBlock.a a(Block block) {
-            return new CriterionTriggerPlacedBlock.a(block, CriterionTriggerProperties.a, CriterionConditionLocation.a, CriterionConditionItem.a);
+            return new CriterionTriggerPlacedBlock.a(CriterionConditionEntity.b.a, block, CriterionTriggerProperties.a, CriterionConditionLocation.a, CriterionConditionItem.a);
         }
 
         public boolean a(IBlockData iblockdata, BlockPosition blockposition, WorldServer worldserver, ItemStack itemstack) {
-            return this.a != null && iblockdata.getBlock() != this.a ? false : (!this.b.a(iblockdata) ? false : (!this.c.a(worldserver, (float) blockposition.getX(), (float) blockposition.getY(), (float) blockposition.getZ()) ? false : this.d.a(itemstack)));
+            return this.a != null && !iblockdata.a(this.a) ? false : (!this.b.a(iblockdata) ? false : (!this.c.a(worldserver, (float) blockposition.getX(), (float) blockposition.getY(), (float) blockposition.getZ()) ? false : this.d.a(itemstack)));
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             if (this.a != null) {
                 jsonobject.addProperty("block", IRegistry.BLOCK.getKey(this.a).toString());

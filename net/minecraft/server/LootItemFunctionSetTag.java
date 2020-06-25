@@ -16,6 +16,11 @@ public class LootItemFunctionSetTag extends LootItemFunctionConditional {
     }
 
     @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.e;
+    }
+
+    @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
         itemstack.getOrCreateTag().a(this.a);
         return itemstack;
@@ -29,9 +34,7 @@ public class LootItemFunctionSetTag extends LootItemFunctionConditional {
 
     public static class a extends LootItemFunctionConditional.c<LootItemFunctionSetTag> {
 
-        public a() {
-            super(new MinecraftKey("set_nbt"), LootItemFunctionSetTag.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionSetTag lootitemfunctionsettag, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsettag, jsonserializationcontext);

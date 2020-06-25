@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -11,6 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -96,6 +98,11 @@ public class ResourceManagerFallback implements IResourceManager {
         } else {
             return list;
         }
+    }
+
+    @Override
+    public Collection<MinecraftKey> a(MinecraftKey minecraftkey, Predicate<String> predicate) {
+        return (Collection) (Objects.equals(minecraftkey.getNamespace(), this.d) ? this.a(minecraftkey.getKey(), predicate) : ImmutableSet.of());
     }
 
     @Override

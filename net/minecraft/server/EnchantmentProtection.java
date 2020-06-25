@@ -5,12 +5,8 @@ public class EnchantmentProtection extends Enchantment {
     public final EnchantmentProtection.DamageType a;
 
     public EnchantmentProtection(Enchantment.Rarity enchantment_rarity, EnchantmentProtection.DamageType enchantmentprotection_damagetype, EnumItemSlot... aenumitemslot) {
-        super(enchantment_rarity, EnchantmentSlotType.ARMOR, aenumitemslot);
+        super(enchantment_rarity, enchantmentprotection_damagetype == EnchantmentProtection.DamageType.FALL ? EnchantmentSlotType.ARMOR_FEET : EnchantmentSlotType.ARMOR, aenumitemslot);
         this.a = enchantmentprotection_damagetype;
-        if (enchantmentprotection_damagetype == EnchantmentProtection.DamageType.FALL) {
-            this.itemTarget = EnchantmentSlotType.ARMOR_FEET;
-        }
-
     }
 
     @Override

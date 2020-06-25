@@ -1,22 +1,21 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenLiquids extends WorldGenerator<WorldGenFeatureHellFlowingLavaConfiguration> {
 
-    public WorldGenLiquids(Function<Dynamic<?>, ? extends WorldGenFeatureHellFlowingLavaConfiguration> function) {
-        super(function);
+    public WorldGenLiquids(Codec<WorldGenFeatureHellFlowingLavaConfiguration> codec) {
+        super(codec);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureHellFlowingLavaConfiguration worldgenfeaturehellflowinglavaconfiguration) {
-        if (!worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccess.getType(blockposition.up()).getBlock())) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureHellFlowingLavaConfiguration worldgenfeaturehellflowinglavaconfiguration) {
+        if (!worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccessseed.getType(blockposition.up()).getBlock())) {
             return false;
-        } else if (worldgenfeaturehellflowinglavaconfiguration.b && !worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccess.getType(blockposition.down()).getBlock())) {
+        } else if (worldgenfeaturehellflowinglavaconfiguration.c && !worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccessseed.getType(blockposition.down()).getBlock())) {
             return false;
         } else {
-            IBlockData iblockdata = generatoraccess.getType(blockposition);
+            IBlockData iblockdata = generatoraccessseed.getType(blockposition);
 
             if (!iblockdata.isAir() && !worldgenfeaturehellflowinglavaconfiguration.f.contains(iblockdata.getBlock())) {
                 return false;
@@ -24,51 +23,51 @@ public class WorldGenLiquids extends WorldGenerator<WorldGenFeatureHellFlowingLa
                 int i = 0;
                 int j = 0;
 
-                if (worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccess.getType(blockposition.west()).getBlock())) {
+                if (worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccessseed.getType(blockposition.west()).getBlock())) {
                     ++j;
                 }
 
-                if (worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccess.getType(blockposition.east()).getBlock())) {
+                if (worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccessseed.getType(blockposition.east()).getBlock())) {
                     ++j;
                 }
 
-                if (worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccess.getType(blockposition.north()).getBlock())) {
+                if (worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccessseed.getType(blockposition.north()).getBlock())) {
                     ++j;
                 }
 
-                if (worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccess.getType(blockposition.south()).getBlock())) {
+                if (worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccessseed.getType(blockposition.south()).getBlock())) {
                     ++j;
                 }
 
-                if (worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccess.getType(blockposition.down()).getBlock())) {
+                if (worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccessseed.getType(blockposition.down()).getBlock())) {
                     ++j;
                 }
 
                 int k = 0;
 
-                if (generatoraccess.isEmpty(blockposition.west())) {
+                if (generatoraccessseed.isEmpty(blockposition.west())) {
                     ++k;
                 }
 
-                if (generatoraccess.isEmpty(blockposition.east())) {
+                if (generatoraccessseed.isEmpty(blockposition.east())) {
                     ++k;
                 }
 
-                if (generatoraccess.isEmpty(blockposition.north())) {
+                if (generatoraccessseed.isEmpty(blockposition.north())) {
                     ++k;
                 }
 
-                if (generatoraccess.isEmpty(blockposition.south())) {
+                if (generatoraccessseed.isEmpty(blockposition.south())) {
                     ++k;
                 }
 
-                if (generatoraccess.isEmpty(blockposition.down())) {
+                if (generatoraccessseed.isEmpty(blockposition.down())) {
                     ++k;
                 }
 
-                if (j == worldgenfeaturehellflowinglavaconfiguration.c && k == worldgenfeaturehellflowinglavaconfiguration.d) {
-                    generatoraccess.setTypeAndData(blockposition, worldgenfeaturehellflowinglavaconfiguration.a.getBlockData(), 2);
-                    generatoraccess.getFluidTickList().a(blockposition, worldgenfeaturehellflowinglavaconfiguration.a.getType(), 0);
+                if (j == worldgenfeaturehellflowinglavaconfiguration.d && k == worldgenfeaturehellflowinglavaconfiguration.e) {
+                    generatoraccessseed.setTypeAndData(blockposition, worldgenfeaturehellflowinglavaconfiguration.b.getBlockData(), 2);
+                    generatoraccessseed.getFluidTickList().a(blockposition, worldgenfeaturehellflowinglavaconfiguration.b.getType(), 0);
                     ++i;
                 }
 

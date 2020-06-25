@@ -24,17 +24,18 @@ public class Containers<T extends Container> {
     public static final Containers<ContainerLoom> LOOM = a("loom", ContainerLoom::new);
     public static final Containers<ContainerMerchant> MERCHANT = a("merchant", ContainerMerchant::new);
     public static final Containers<ContainerShulkerBox> SHULKER_BOX = a("shulker_box", ContainerShulkerBox::new);
+    public static final Containers<ContainerSmithing> SMITHING = a("smithing", ContainerSmithing::new);
     public static final Containers<ContainerSmoker> SMOKER = a("smoker", ContainerSmoker::new);
     public static final Containers<ContainerCartography> CARTOGRAPHY_TABLE = a("cartography_table", ContainerCartography::new);
     public static final Containers<ContainerStonecutter> STONECUTTER = a("stonecutter", ContainerStonecutter::new);
-    private final Containers.Supplier<T> x;
+    private final Containers.Supplier<T> y;
 
     private static <T extends Container> Containers<T> a(String s, Containers.Supplier<T> containers_supplier) {
         return (Containers) IRegistry.a(IRegistry.MENU, s, (Object) (new Containers<>(containers_supplier)));
     }
 
     private Containers(Containers.Supplier<T> containers_supplier) {
-        this.x = containers_supplier;
+        this.y = containers_supplier;
     }
 
     interface Supplier<T extends Container> {}

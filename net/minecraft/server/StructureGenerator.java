@@ -1,179 +1,241 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
-import com.mojang.datafixers.Dynamic;
-import it.unimi.dsi.fastutil.longs.LongIterator;
-import java.util.Iterator;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
+import com.mojang.serialization.Codec;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-import java.util.function.Function;
+import java.util.Locale;
+import java.util.Map;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration> extends WorldGenerator<C> {
+public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration> {
 
+    public static final BiMap<String, StructureGenerator<?>> a = HashBiMap.create();
+    private static final Map<StructureGenerator<?>, WorldGenStage.Decoration> u = Maps.newHashMap();
     private static final Logger LOGGER = LogManager.getLogger();
+    public static final StructureGenerator<WorldGenFeatureEmptyConfiguration> PILLAGER_OUTPOST = a("Pillager_Outpost", new WorldGenFeaturePillagerOutpost(WorldGenFeatureEmptyConfiguration.a), WorldGenStage.Decoration.SURFACE_STRUCTURES);
+    public static final StructureGenerator<WorldGenMineshaftConfiguration> MINESHAFT = a("Mineshaft", new WorldGenMineshaft(WorldGenMineshaftConfiguration.a), WorldGenStage.Decoration.UNDERGROUND_STRUCTURES);
+    public static final StructureGenerator<WorldGenFeatureEmptyConfiguration> MANSION = a("Mansion", new WorldGenWoodlandMansion(WorldGenFeatureEmptyConfiguration.a), WorldGenStage.Decoration.SURFACE_STRUCTURES);
+    public static final StructureGenerator<WorldGenFeatureEmptyConfiguration> JUNGLE_PYRAMID = a("Jungle_Pyramid", new WorldGenFeatureJunglePyramid(WorldGenFeatureEmptyConfiguration.a), WorldGenStage.Decoration.SURFACE_STRUCTURES);
+    public static final StructureGenerator<WorldGenFeatureEmptyConfiguration> DESERT_PYRAMID = a("Desert_Pyramid", new WorldGenFeatureDesertPyramid(WorldGenFeatureEmptyConfiguration.a), WorldGenStage.Decoration.SURFACE_STRUCTURES);
+    public static final StructureGenerator<WorldGenFeatureEmptyConfiguration> IGLOO = a("Igloo", new WorldGenFeatureIgloo(WorldGenFeatureEmptyConfiguration.a), WorldGenStage.Decoration.SURFACE_STRUCTURES);
+    public static final StructureGenerator<WorldGenFeatureRuinedPortalConfiguration> RUINED_PORTAL = a("Ruined_Portal", new WorldGenFeatureRuinedPortal(WorldGenFeatureRuinedPortalConfiguration.a), WorldGenStage.Decoration.SURFACE_STRUCTURES);
+    public static final StructureGenerator<WorldGenFeatureShipwreckConfiguration> SHIPWRECK = a("Shipwreck", new WorldGenFeatureShipwreck(WorldGenFeatureShipwreckConfiguration.a), WorldGenStage.Decoration.SURFACE_STRUCTURES);
+    public static final WorldGenFeatureSwampHut SWAMP_HUT = (WorldGenFeatureSwampHut) a("Swamp_Hut", new WorldGenFeatureSwampHut(WorldGenFeatureEmptyConfiguration.a), WorldGenStage.Decoration.SURFACE_STRUCTURES);
+    public static final StructureGenerator<WorldGenFeatureEmptyConfiguration> STRONGHOLD = a("Stronghold", new WorldGenStronghold(WorldGenFeatureEmptyConfiguration.a), WorldGenStage.Decoration.STRONGHOLDS);
+    public static final StructureGenerator<WorldGenFeatureEmptyConfiguration> MONUMENT = a("Monument", new WorldGenMonument(WorldGenFeatureEmptyConfiguration.a), WorldGenStage.Decoration.SURFACE_STRUCTURES);
+    public static final StructureGenerator<WorldGenFeatureOceanRuinConfiguration> OCEAN_RUIN = a("Ocean_Ruin", new WorldGenFeatureOceanRuin(WorldGenFeatureOceanRuinConfiguration.a), WorldGenStage.Decoration.SURFACE_STRUCTURES);
+    public static final StructureGenerator<WorldGenFeatureEmptyConfiguration> FORTRESS = a("Fortress", new WorldGenNether(WorldGenFeatureEmptyConfiguration.a), WorldGenStage.Decoration.UNDERGROUND_DECORATION);
+    public static final StructureGenerator<WorldGenFeatureEmptyConfiguration> ENDCITY = a("EndCity", new WorldGenEndCity(WorldGenFeatureEmptyConfiguration.a), WorldGenStage.Decoration.SURFACE_STRUCTURES);
+    public static final StructureGenerator<WorldGenBuriedTreasureConfiguration> BURIED_TREASURE = a("Buried_Treasure", new WorldGenBuriedTreasure(WorldGenBuriedTreasureConfiguration.a), WorldGenStage.Decoration.UNDERGROUND_STRUCTURES);
+    public static final StructureGenerator<WorldGenFeatureVillageConfiguration> VILLAGE = a("Village", new WorldGenVillage(WorldGenFeatureVillageConfiguration.a), WorldGenStage.Decoration.SURFACE_STRUCTURES);
+    public static final StructureGenerator<WorldGenFeatureEmptyConfiguration> NETHER_FOSSIL = a("Nether_Fossil", new WorldGenFeatureNetherFossil(WorldGenFeatureEmptyConfiguration.a), WorldGenStage.Decoration.UNDERGROUND_DECORATION);
+    public static final StructureGenerator<WorldGenFeatureBastionRemnantConfiguration> BASTION_REMNANT = a("Bastion_Remnant", new WorldGenFeatureBastionRemnant(WorldGenFeatureBastionRemnantConfiguration.a), WorldGenStage.Decoration.SURFACE_STRUCTURES);
+    public static final List<StructureGenerator<?>> t = ImmutableList.of(StructureGenerator.PILLAGER_OUTPOST, StructureGenerator.VILLAGE, StructureGenerator.NETHER_FOSSIL);
+    private final Codec<StructureFeature<C, StructureGenerator<C>>> w;
 
-    public StructureGenerator(Function<Dynamic<?>, ? extends C> function) {
-        super(function);
+    private static <F extends StructureGenerator<?>> F a(String s, F f0, WorldGenStage.Decoration worldgenstage_decoration) {
+        StructureGenerator.a.put(s.toLowerCase(Locale.ROOT), f0);
+        StructureGenerator.u.put(f0, worldgenstage_decoration);
+        return (StructureGenerator) IRegistry.a(IRegistry.STRUCTURE_FEATURE, s.toLowerCase(Locale.ROOT), (Object) f0);
     }
 
-    @Override
-    public WorldGenFeatureConfigured<C, ? extends StructureGenerator<C>> b(C c0) {
-        return new WorldGenFeatureConfigured<>(this, c0);
+    public StructureGenerator(Codec<C> codec) {
+        this.w = codec.fieldOf("config").xmap((worldgenfeatureconfiguration) -> {
+            return new StructureFeature<>(this, worldgenfeatureconfiguration);
+        }, (structurefeature) -> {
+            return structurefeature.c;
+        }).codec();
     }
 
-    @Override
-    public boolean generate(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, C c0) {
-        if (!generatoraccess.getWorldData().shouldGenerateMapFeatures()) {
-            return false;
+    public WorldGenStage.Decoration f() {
+        return (WorldGenStage.Decoration) StructureGenerator.u.get(this);
+    }
+
+    public static void g() {}
+
+    @Nullable
+    public static StructureStart<?> a(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound, long i) {
+        String s = nbttagcompound.getString("id");
+
+        if ("INVALID".equals(s)) {
+            return StructureStart.a;
         } else {
-            int i = blockposition.getX() >> 4;
-            int j = blockposition.getZ() >> 4;
-            int k = i << 4;
-            int l = j << 4;
-            boolean flag = false;
-            LongIterator longiterator = generatoraccess.getChunkAt(i, j).b(this.b()).iterator();
+            StructureGenerator<?> structuregenerator = (StructureGenerator) IRegistry.STRUCTURE_FEATURE.get(new MinecraftKey(s.toLowerCase(Locale.ROOT)));
 
-            while (longiterator.hasNext()) {
-                Long olong = (Long) longiterator.next();
-                ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(olong);
-                StructureStart structurestart = generatoraccess.getChunkAt(chunkcoordintpair.x, chunkcoordintpair.z).a(this.b());
+            if (structuregenerator == null) {
+                StructureGenerator.LOGGER.error("Unknown feature id: {}", s);
+                return null;
+            } else {
+                int j = nbttagcompound.getInt("ChunkX");
+                int k = nbttagcompound.getInt("ChunkZ");
+                int l = nbttagcompound.getInt("references");
+                StructureBoundingBox structureboundingbox = nbttagcompound.hasKey("BB") ? new StructureBoundingBox(nbttagcompound.getIntArray("BB")) : StructureBoundingBox.a();
+                NBTTagList nbttaglist = nbttagcompound.getList("Children", 10);
 
-                if (structurestart != null && structurestart != StructureStart.a) {
-                    structurestart.a(generatoraccess, chunkgenerator, random, new StructureBoundingBox(k, l, k + 15, l + 15), new ChunkCoordIntPair(i, j));
-                    flag = true;
+                try {
+                    StructureStart<?> structurestart = structuregenerator.a(j, k, structureboundingbox, l, i);
+
+                    for (int i1 = 0; i1 < nbttaglist.size(); ++i1) {
+                        NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(i1);
+                        String s1 = nbttagcompound1.getString("id");
+                        WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype = (WorldGenFeatureStructurePieceType) IRegistry.STRUCTURE_PIECE.get(new MinecraftKey(s1.toLowerCase(Locale.ROOT)));
+
+                        if (worldgenfeaturestructurepiecetype == null) {
+                            StructureGenerator.LOGGER.error("Unknown structure piece id: {}", s1);
+                        } else {
+                            try {
+                                StructurePiece structurepiece = worldgenfeaturestructurepiecetype.load(definedstructuremanager, nbttagcompound1);
+
+                                structurestart.d().add(structurepiece);
+                            } catch (Exception exception) {
+                                StructureGenerator.LOGGER.error("Exception loading structure piece with id {}", s1, exception);
+                            }
+                        }
+                    }
+
+                    return structurestart;
+                } catch (Exception exception1) {
+                    StructureGenerator.LOGGER.error("Failed Start with id {}", s, exception1);
+                    return null;
                 }
             }
-
-            return flag;
         }
     }
 
-    protected StructureStart a(GeneratorAccess generatoraccess, BlockPosition blockposition, boolean flag) {
-        List<StructureStart> list = this.a(generatoraccess, blockposition.getX() >> 4, blockposition.getZ() >> 4);
-        Iterator iterator = list.iterator();
+    public Codec<StructureFeature<C, StructureGenerator<C>>> h() {
+        return this.w;
+    }
 
-        while (iterator.hasNext()) {
-            StructureStart structurestart = (StructureStart) iterator.next();
+    public StructureFeature<C, ? extends StructureGenerator<C>> a(C c0) {
+        return new StructureFeature<>(this, c0);
+    }
 
-            if (structurestart.e() && structurestart.c().b((BaseBlockPosition) blockposition)) {
-                if (!flag) {
-                    return structurestart;
-                }
+    @Nullable
+    public BlockPosition getNearestGeneratedFeature(IWorldReader iworldreader, StructureManager structuremanager, BlockPosition blockposition, int i, boolean flag, long j, StructureSettingsFeature structuresettingsfeature) {
+        int k = structuresettingsfeature.a();
+        int l = blockposition.getX() >> 4;
+        int i1 = blockposition.getZ() >> 4;
+        int j1 = 0;
+        SeededRandom seededrandom = new SeededRandom();
 
-                Iterator iterator1 = structurestart.d().iterator();
+        while (j1 <= i) {
+            int k1 = -j1;
 
-                while (iterator1.hasNext()) {
-                    StructurePiece structurepiece = (StructurePiece) iterator1.next();
+            while (true) {
+                if (k1 <= j1) {
+                    boolean flag1 = k1 == -j1 || k1 == j1;
 
-                    if (structurepiece.g().b((BaseBlockPosition) blockposition)) {
-                        return structurestart;
+                    for (int l1 = -j1; l1 <= j1; ++l1) {
+                        boolean flag2 = l1 == -j1 || l1 == j1;
+
+                        if (flag1 || flag2) {
+                            int i2 = l + k * k1;
+                            int j2 = i1 + k * l1;
+                            ChunkCoordIntPair chunkcoordintpair = this.a(structuresettingsfeature, j, seededrandom, i2, j2);
+                            IChunkAccess ichunkaccess = iworldreader.getChunkAt(chunkcoordintpair.x, chunkcoordintpair.z, ChunkStatus.STRUCTURE_STARTS);
+                            StructureStart<?> structurestart = structuremanager.a(SectionPosition.a(ichunkaccess.getPos(), 0), this, ichunkaccess);
+
+                            if (structurestart != null && structurestart.e()) {
+                                if (flag && structurestart.h()) {
+                                    structurestart.i();
+                                    return structurestart.a();
+                                }
+
+                                if (!flag) {
+                                    return structurestart.a();
+                                }
+                            }
+
+                            if (j1 == 0) {
+                                break;
+                            }
+                        }
+                    }
+
+                    if (j1 != 0) {
+                        ++k1;
+                        continue;
                     }
                 }
+
+                ++j1;
+                break;
+            }
+        }
+
+        return null;
+    }
+
+    protected boolean b() {
+        return true;
+    }
+
+    public final ChunkCoordIntPair a(StructureSettingsFeature structuresettingsfeature, long i, SeededRandom seededrandom, int j, int k) {
+        int l = structuresettingsfeature.a();
+        int i1 = structuresettingsfeature.b();
+        int j1 = Math.floorDiv(j, l);
+        int k1 = Math.floorDiv(k, l);
+
+        seededrandom.a(i, j1, k1, structuresettingsfeature.c());
+        int l1;
+        int i2;
+
+        if (this.b()) {
+            l1 = seededrandom.nextInt(l - i1);
+            i2 = seededrandom.nextInt(l - i1);
+        } else {
+            l1 = (seededrandom.nextInt(l - i1) + seededrandom.nextInt(l - i1)) / 2;
+            i2 = (seededrandom.nextInt(l - i1) + seededrandom.nextInt(l - i1)) / 2;
+        }
+
+        return new ChunkCoordIntPair(j1 * l + l1, k1 * l + i2);
+    }
+
+    protected boolean a(ChunkGenerator chunkgenerator, WorldChunkManager worldchunkmanager, long i, SeededRandom seededrandom, int j, int k, BiomeBase biomebase, ChunkCoordIntPair chunkcoordintpair, C c0) {
+        return true;
+    }
+
+    private StructureStart<C> a(int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+        return this.a().create(this, i, j, structureboundingbox, k, l);
+    }
+
+    public StructureStart<?> a(ChunkGenerator chunkgenerator, WorldChunkManager worldchunkmanager, DefinedStructureManager definedstructuremanager, long i, ChunkCoordIntPair chunkcoordintpair, BiomeBase biomebase, int j, SeededRandom seededrandom, StructureSettingsFeature structuresettingsfeature, C c0) {
+        ChunkCoordIntPair chunkcoordintpair1 = this.a(structuresettingsfeature, i, seededrandom, chunkcoordintpair.x, chunkcoordintpair.z);
+
+        if (chunkcoordintpair.x == chunkcoordintpair1.x && chunkcoordintpair.z == chunkcoordintpair1.z && this.a(chunkgenerator, worldchunkmanager, i, seededrandom, chunkcoordintpair.x, chunkcoordintpair.z, biomebase, chunkcoordintpair1, c0)) {
+            StructureStart<C> structurestart = this.a(chunkcoordintpair.x, chunkcoordintpair.z, StructureBoundingBox.a(), j, i);
+
+            structurestart.a(chunkgenerator, definedstructuremanager, chunkcoordintpair.x, chunkcoordintpair.z, biomebase, c0);
+            if (structurestart.e()) {
+                return structurestart;
             }
         }
 
         return StructureStart.a;
     }
 
-    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        return this.a(generatoraccess, blockposition, false).e();
+    public abstract StructureGenerator.a<C> a();
+
+    public String i() {
+        return (String) StructureGenerator.a.inverse().get(this);
     }
 
-    public boolean b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        return this.a(generatoraccess, blockposition, true).e();
+    public List<BiomeBase.BiomeMeta> c() {
+        return Collections.emptyList();
     }
 
-    @Nullable
-    public BlockPosition getNearestGeneratedFeature(World world, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, BlockPosition blockposition, int i, boolean flag) {
-        if (!chunkgenerator.getWorldChunkManager().a(this)) {
-            return null;
-        } else {
-            int j = blockposition.getX() >> 4;
-            int k = blockposition.getZ() >> 4;
-            int l = 0;
-            SeededRandom seededrandom = new SeededRandom();
-
-            while (l <= i) {
-                int i1 = -l;
-
-                while (true) {
-                    if (i1 <= l) {
-                        boolean flag1 = i1 == -l || i1 == l;
-
-                        for (int j1 = -l; j1 <= l; ++j1) {
-                            boolean flag2 = j1 == -l || j1 == l;
-
-                            if (flag1 || flag2) {
-                                ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, seededrandom, j, k, i1, j1);
-                                StructureStart structurestart = world.getChunkAt(chunkcoordintpair.x, chunkcoordintpair.z, ChunkStatus.STRUCTURE_STARTS).a(this.b());
-
-                                if (structurestart != null && structurestart.e()) {
-                                    if (flag && structurestart.h()) {
-                                        structurestart.i();
-                                        return structurestart.a();
-                                    }
-
-                                    if (!flag) {
-                                        return structurestart.a();
-                                    }
-                                }
-
-                                if (l == 0) {
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (l != 0) {
-                            ++i1;
-                            continue;
-                        }
-                    }
-
-                    ++l;
-                    break;
-                }
-            }
-
-            return null;
-        }
+    public List<BiomeBase.BiomeMeta> j() {
+        return Collections.emptyList();
     }
 
-    private List<StructureStart> a(GeneratorAccess generatoraccess, int i, int j) {
-        List<StructureStart> list = Lists.newArrayList();
-        IChunkAccess ichunkaccess = generatoraccess.getChunkAt(i, j, ChunkStatus.STRUCTURE_REFERENCES);
-        LongIterator longiterator = ichunkaccess.b(this.b()).iterator();
+    public interface a<C extends WorldGenFeatureConfiguration> {
 
-        while (longiterator.hasNext()) {
-            long k = longiterator.nextLong();
-            IChunkAccess ichunkaccess1 = generatoraccess.getChunkAt(ChunkCoordIntPair.getX(k), ChunkCoordIntPair.getZ(k), ChunkStatus.STRUCTURE_STARTS);
-            StructureStart structurestart = ichunkaccess1.a(this.b());
-
-            if (structurestart != null) {
-                list.add(structurestart);
-            }
-        }
-
-        return list;
-    }
-
-    protected ChunkCoordIntPair a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j, int k, int l) {
-        return new ChunkCoordIntPair(i + k, j + l);
-    }
-
-    public abstract boolean a(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, Random random, int i, int j, BiomeBase biomebase);
-
-    public abstract StructureGenerator.a a();
-
-    public abstract String b();
-
-    public abstract int c();
-
-    public interface a {
-
-        StructureStart create(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l);
+        StructureStart<C> create(StructureGenerator<C> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l);
     }
 }

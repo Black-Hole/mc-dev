@@ -7,18 +7,18 @@ public class BlockSeaGrass extends BlockPlant implements IBlockFragilePlantEleme
 
     protected static final VoxelShape a = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
-    protected BlockSeaGrass(Block.Info block_info) {
-        super(block_info);
+    protected BlockSeaGrass(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockSeaGrass.a;
     }
 
     @Override
-    protected boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.d(iblockaccess, blockposition, EnumDirection.UP) && iblockdata.getBlock() != Blocks.MAGMA_BLOCK;
+    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockdata.d(iblockaccess, blockposition, EnumDirection.UP) && !iblockdata.a(Blocks.MAGMA_BLOCK);
     }
 
     @Nullable
@@ -26,7 +26,7 @@ public class BlockSeaGrass extends BlockPlant implements IBlockFragilePlantEleme
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
-        return fluid.a(TagsFluid.WATER) && fluid.g() == 8 ? super.getPlacedState(blockactioncontext) : null;
+        return fluid.a((Tag) TagsFluid.WATER) && fluid.e() == 8 ? super.getPlacedState(blockactioncontext) : null;
     }
 
     @Override
@@ -51,17 +51,17 @@ public class BlockSeaGrass extends BlockPlant implements IBlockFragilePlantEleme
     }
 
     @Override
-    public Fluid a_(IBlockData iblockdata) {
+    public Fluid d(IBlockData iblockdata) {
         return FluidTypes.WATER.a(false);
     }
 
     @Override
     public void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata) {
         IBlockData iblockdata1 = Blocks.TALL_SEAGRASS.getBlockData();
-        IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockTallSeaGrass.c, BlockPropertyDoubleBlockHalf.UPPER);
+        IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockTallSeaGrass.b, BlockPropertyDoubleBlockHalf.UPPER);
         BlockPosition blockposition1 = blockposition.up();
 
-        if (worldserver.getType(blockposition1).getBlock() == Blocks.WATER) {
+        if (worldserver.getType(blockposition1).a(Blocks.WATER)) {
             worldserver.setTypeAndData(blockposition, iblockdata1, 2);
             worldserver.setTypeAndData(blockposition1, iblockdata2, 2);
         }

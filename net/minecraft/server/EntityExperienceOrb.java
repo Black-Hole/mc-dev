@@ -43,18 +43,18 @@ public class EntityExperienceOrb extends Entity {
         this.lastX = this.locX();
         this.lastY = this.locY();
         this.lastZ = this.locZ();
-        if (this.a(TagsFluid.WATER)) {
-            this.k();
+        if (this.a((Tag) TagsFluid.WATER)) {
+            this.i();
         } else if (!this.isNoGravity()) {
             this.setMot(this.getMot().add(0.0D, -0.03D, 0.0D));
         }
 
-        if (this.world.getFluid(new BlockPosition(this)).a(TagsFluid.LAVA)) {
+        if (this.world.getFluid(this.getChunkCoordinates()).a((Tag) TagsFluid.LAVA)) {
             this.setMot((double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F), 0.20000000298023224D, (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F));
-            this.a(SoundEffects.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
+            this.playSound(SoundEffects.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
         }
 
-        if (!this.world.a(this.getBoundingBox())) {
+        if (!this.world.b(this.getBoundingBox())) {
             this.k(this.locX(), (this.getBoundingBox().minY + this.getBoundingBox().maxY) / 2.0D, this.locZ());
         }
 
@@ -87,7 +87,7 @@ public class EntityExperienceOrb extends Entity {
         float f = 0.98F;
 
         if (this.onGround) {
-            f = this.world.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().l() * 0.98F;
+            f = this.world.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().getFrictionFactor() * 0.98F;
         }
 
         this.setMot(this.getMot().d((double) f, 0.98D, (double) f));
@@ -103,19 +103,14 @@ public class EntityExperienceOrb extends Entity {
 
     }
 
-    private void k() {
+    private void i() {
         Vec3D vec3d = this.getMot();
 
         this.setMot(vec3d.x * 0.9900000095367432D, Math.min(vec3d.y + 5.000000237487257E-4D, 0.05999999865889549D), vec3d.z * 0.9900000095367432D);
     }
 
     @Override
-    protected void aD() {}
-
-    @Override
-    protected void burn(int i) {
-        this.damageEntity(DamageSource.FIRE, (float) i);
-    }
+    protected void aI() {}
 
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
@@ -133,14 +128,14 @@ public class EntityExperienceOrb extends Entity {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
+    public void saveData(NBTTagCompound nbttagcompound) {
         nbttagcompound.setShort("Health", (short) this.e);
         nbttagcompound.setShort("Age", (short) this.c);
         nbttagcompound.setShort("Value", (short) this.value);
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
+    public void loadData(NBTTagCompound nbttagcompound) {
         this.e = nbttagcompound.getShort("Health");
         this.c = nbttagcompound.getShort("Age");
         this.value = nbttagcompound.getShort("Value");
@@ -149,10 +144,10 @@ public class EntityExperienceOrb extends Entity {
     @Override
     public void pickup(EntityHuman entityhuman) {
         if (!this.world.isClientSide) {
-            if (this.d == 0 && entityhuman.bC == 0) {
-                entityhuman.bC = 2;
+            if (this.d == 0 && entityhuman.bB == 0) {
+                entityhuman.bB = 2;
                 entityhuman.receive(this, 1);
-                Entry<EnumItemSlot, ItemStack> entry = EnchantmentManager.b(Enchantments.MENDING, (EntityLiving) entityhuman);
+                Entry<EnumItemSlot, ItemStack> entry = EnchantmentManager.a(Enchantments.MENDING, (EntityLiving) entityhuman, ItemStack::f);
 
                 if (entry != null) {
                     ItemStack itemstack = (ItemStack) entry.getValue();
@@ -183,7 +178,7 @@ public class EntityExperienceOrb extends Entity {
         return i * 2;
     }
 
-    public int f() {
+    public int g() {
         return this.value;
     }
 
@@ -192,12 +187,12 @@ public class EntityExperienceOrb extends Entity {
     }
 
     @Override
-    public boolean bA() {
+    public boolean bH() {
         return false;
     }
 
     @Override
-    public Packet<?> L() {
+    public Packet<?> O() {
         return new PacketPlayOutSpawnEntityExperienceOrb(this);
     }
 }

@@ -11,7 +11,7 @@ import java.util.Collection;
 public class ArgumentRotation implements ArgumentType<IVectorPosition> {
 
     private static final Collection<String> b = Arrays.asList("0 0", "~ ~", "~-5 ~5");
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.rotation.incomplete", new Object[0]));
+    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.rotation.incomplete"));
 
     public ArgumentRotation() {}
 

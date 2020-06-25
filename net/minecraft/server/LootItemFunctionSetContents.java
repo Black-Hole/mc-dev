@@ -18,6 +18,11 @@ public class LootItemFunctionSetContents extends LootItemFunctionConditional {
     }
 
     @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.n;
+    }
+
+    @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
         if (itemstack.isEmpty()) {
             return itemstack;
@@ -50,15 +55,13 @@ public class LootItemFunctionSetContents extends LootItemFunctionConditional {
 
     }
 
-    public static LootItemFunctionSetContents.a b() {
+    public static LootItemFunctionSetContents.a c() {
         return new LootItemFunctionSetContents.a();
     }
 
     public static class b extends LootItemFunctionConditional.c<LootItemFunctionSetContents> {
 
-        protected b() {
-            super(new MinecraftKey("set_contents"), LootItemFunctionSetContents.class);
-        }
+        public b() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionSetContents lootitemfunctionsetcontents, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsetcontents, jsonserializationcontext);

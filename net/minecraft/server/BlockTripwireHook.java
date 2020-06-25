@@ -14,13 +14,13 @@ public class BlockTripwireHook extends Block {
     protected static final VoxelShape f = Block.a(10.0D, 0.0D, 5.0D, 16.0D, 10.0D, 11.0D);
     protected static final VoxelShape g = Block.a(0.0D, 0.0D, 5.0D, 6.0D, 10.0D, 11.0D);
 
-    public BlockTripwireHook(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTripwireHook.FACING, EnumDirection.NORTH)).set(BlockTripwireHook.POWERED, false)).set(BlockTripwireHook.ATTACHED, false));
+    public BlockTripwireHook(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTripwireHook.FACING, EnumDirection.NORTH)).set(BlockTripwireHook.POWERED, false)).set(BlockTripwireHook.ATTACHED, false));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch ((EnumDirection) iblockdata.get(BlockTripwireHook.FACING)) {
             case EAST:
             default:
@@ -40,7 +40,7 @@ public class BlockTripwireHook extends Block {
         BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
 
-        return enumdirection.m().c() && iblockdata1.d(iworldreader, blockposition1, enumdirection) && !iblockdata1.isPowerSource();
+        return enumdirection.n().d() && iblockdata1.d(iworldreader, blockposition1, enumdirection);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class BlockTripwireHook extends Block {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection1[j];
 
-            if (enumdirection.m().c()) {
+            if (enumdirection.n().d()) {
                 EnumDirection enumdirection1 = enumdirection.opposite();
 
                 iblockdata = (IBlockData) iblockdata.set(BlockTripwireHook.FACING, enumdirection1);
@@ -94,14 +94,14 @@ public class BlockTripwireHook extends Block {
             blockposition1 = blockposition.shift(enumdirection, k);
             IBlockData iblockdata2 = world.getType(blockposition1);
 
-            if (iblockdata2.getBlock() == Blocks.TRIPWIRE_HOOK) {
+            if (iblockdata2.a(Blocks.TRIPWIRE_HOOK)) {
                 if (iblockdata2.get(BlockTripwireHook.FACING) == enumdirection.opposite()) {
                     j = k;
                 }
                 break;
             }
 
-            if (iblockdata2.getBlock() != Blocks.TRIPWIRE && k != i) {
+            if (!iblockdata2.a(Blocks.TRIPWIRE) && k != i) {
                 aiblockdata[k] = null;
                 flag4 = false;
             } else {
@@ -115,7 +115,7 @@ public class BlockTripwireHook extends Block {
                 flag5 |= flag6 && flag7;
                 aiblockdata[k] = iblockdata2;
                 if (k == i) {
-                    world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
+                    world.getBlockTickList().a(blockposition, this, 10);
                     flag4 &= flag6;
                 }
             }
@@ -159,7 +159,7 @@ public class BlockTripwireHook extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         this.a(worldserver, blockposition, iblockdata, false, true, -1, (IBlockData) null);
     }
 
@@ -183,7 +183,7 @@ public class BlockTripwireHook extends Block {
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (!flag && iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!flag && !iblockdata.a(iblockdata1.getBlock())) {
             boolean flag1 = (Boolean) iblockdata.get(BlockTripwireHook.ATTACHED);
             boolean flag2 = (Boolean) iblockdata.get(BlockTripwireHook.POWERED);
 

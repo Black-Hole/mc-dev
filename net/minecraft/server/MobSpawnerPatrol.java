@@ -2,12 +2,13 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class MobSpawnerPatrol {
+public class MobSpawnerPatrol implements MobSpawner {
 
     private int a;
 
     public MobSpawnerPatrol() {}
 
+    @Override
     public int a(WorldServer worldserver, boolean flag, boolean flag1) {
         if (!flag) {
             return 0;
@@ -36,18 +37,18 @@ public class MobSpawnerPatrol {
 
                             if (entityhuman.isSpectator()) {
                                 return 0;
-                            } else if (worldserver.b_(entityhuman.getChunkCoordinates())) {
+                            } else if (worldserver.a(entityhuman.getChunkCoordinates(), 2)) {
                                 return 0;
                             } else {
                                 int k = (24 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
                                 int l = (24 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
-                                BlockPosition.MutableBlockPosition blockposition_mutableblockposition = (new BlockPosition.MutableBlockPosition(entityhuman)).e(k, 0, l);
+                                BlockPosition.MutableBlockPosition blockposition_mutableblockposition = entityhuman.getChunkCoordinates().i().e(k, 0, l);
 
                                 if (!worldserver.isAreaLoaded(blockposition_mutableblockposition.getX() - 10, blockposition_mutableblockposition.getY() - 10, blockposition_mutableblockposition.getZ() - 10, blockposition_mutableblockposition.getX() + 10, blockposition_mutableblockposition.getY() + 10, blockposition_mutableblockposition.getZ() + 10)) {
                                     return 0;
                                 } else {
                                     BiomeBase biomebase = worldserver.getBiome(blockposition_mutableblockposition);
-                                    BiomeBase.Geography biomebase_geography = biomebase.q();
+                                    BiomeBase.Geography biomebase_geography = biomebase.y();
 
                                     if (biomebase_geography == BiomeBase.Geography.MUSHROOM) {
                                         return 0;
@@ -86,7 +87,7 @@ public class MobSpawnerPatrol {
     private boolean a(World world, BlockPosition blockposition, Random random, boolean flag) {
         IBlockData iblockdata = world.getType(blockposition);
 
-        if (!SpawnerCreature.a((IBlockAccess) world, blockposition, iblockdata, iblockdata.getFluid())) {
+        if (!SpawnerCreature.a((IBlockAccess) world, blockposition, iblockdata, iblockdata.getFluid(), EntityTypes.PILLAGER)) {
             return false;
         } else if (!EntityMonsterPatrolling.b(EntityTypes.PILLAGER, world, EnumMobSpawn.PATROL, blockposition, random)) {
             return false;
@@ -96,7 +97,7 @@ public class MobSpawnerPatrol {
             if (entitymonsterpatrolling != null) {
                 if (flag) {
                     entitymonsterpatrolling.setPatrolLeader(true);
-                    entitymonsterpatrolling.ey();
+                    entitymonsterpatrolling.eV();
                 }
 
                 entitymonsterpatrolling.setPosition((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());

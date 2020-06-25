@@ -15,7 +15,7 @@ public enum EnumChatFormat {
     BLACK("BLACK", '0', 0, 0), DARK_BLUE("DARK_BLUE", '1', 1, 170), DARK_GREEN("DARK_GREEN", '2', 2, 43520), DARK_AQUA("DARK_AQUA", '3', 3, 43690), DARK_RED("DARK_RED", '4', 4, 11141120), DARK_PURPLE("DARK_PURPLE", '5', 5, 11141290), GOLD("GOLD", '6', 6, 16755200), GRAY("GRAY", '7', 7, 11184810), DARK_GRAY("DARK_GRAY", '8', 8, 5592405), BLUE("BLUE", '9', 9, 5592575), GREEN("GREEN", 'a', 10, 5635925), AQUA("AQUA", 'b', 11, 5636095), RED("RED", 'c', 12, 16733525), LIGHT_PURPLE("LIGHT_PURPLE", 'd', 13, 16733695), YELLOW("YELLOW", 'e', 14, 16777045), WHITE("WHITE", 'f', 15, 16777215), OBFUSCATED("OBFUSCATED", 'k', true), BOLD("BOLD", 'l', true), STRIKETHROUGH("STRIKETHROUGH", 'm', true), UNDERLINE("UNDERLINE", 'n', true), ITALIC("ITALIC", 'o', true), RESET("RESET", 'r', -1, (Integer) null);
 
     private static final Map<String, EnumChatFormat> w = (Map) Arrays.stream(values()).collect(Collectors.toMap((enumchatformat) -> {
-        return d(enumchatformat.y);
+        return c(enumchatformat.y);
     }, (enumchatformat) -> {
         return enumchatformat;
     }));
@@ -28,7 +28,7 @@ public enum EnumChatFormat {
     @Nullable
     private final Integer D;
 
-    private static String d(String s) {
+    private static String c(String s) {
         return s.toLowerCase(Locale.ROOT).replaceAll("[^a-z]", "");
     }
 
@@ -61,7 +61,12 @@ public enum EnumChatFormat {
         return !this.A && this != EnumChatFormat.RESET;
     }
 
-    public String g() {
+    @Nullable
+    public Integer e() {
+        return this.D;
+    }
+
+    public String f() {
         return this.name().toLowerCase(Locale.ROOT);
     }
 
@@ -70,13 +75,13 @@ public enum EnumChatFormat {
     }
 
     @Nullable
-    public static String b(@Nullable String s) {
+    public static String a(@Nullable String s) {
         return s == null ? null : EnumChatFormat.x.matcher(s).replaceAll("");
     }
 
     @Nullable
-    public static EnumChatFormat c(@Nullable String s) {
-        return s == null ? null : (EnumChatFormat) EnumChatFormat.w.get(d(s));
+    public static EnumChatFormat b(@Nullable String s) {
+        return s == null ? null : (EnumChatFormat) EnumChatFormat.w.get(c(s));
     }
 
     @Nullable
@@ -108,7 +113,7 @@ public enum EnumChatFormat {
             EnumChatFormat enumchatformat = aenumchatformat[j];
 
             if ((!enumchatformat.d() || flag) && (!enumchatformat.isFormat() || flag1)) {
-                list.add(enumchatformat.g());
+                list.add(enumchatformat.f());
             }
         }
 

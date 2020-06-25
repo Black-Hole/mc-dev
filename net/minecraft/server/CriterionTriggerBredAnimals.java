@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import javax.annotation.Nullable;
 
@@ -17,52 +15,60 @@ public class CriterionTriggerBredAnimals extends CriterionTriggerAbstract<Criter
     }
 
     @Override
-    public CriterionTriggerBredAnimals.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("parent"));
-        CriterionConditionEntity criterionconditionentity1 = CriterionConditionEntity.a(jsonobject.get("partner"));
-        CriterionConditionEntity criterionconditionentity2 = CriterionConditionEntity.a(jsonobject.get("child"));
+    public CriterionTriggerBredAnimals.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
+        CriterionConditionEntity.b criterionconditionentity_b1 = CriterionConditionEntity.b.a(jsonobject, "parent", lootdeserializationcontext);
+        CriterionConditionEntity.b criterionconditionentity_b2 = CriterionConditionEntity.b.a(jsonobject, "partner", lootdeserializationcontext);
+        CriterionConditionEntity.b criterionconditionentity_b3 = CriterionConditionEntity.b.a(jsonobject, "child", lootdeserializationcontext);
 
-        return new CriterionTriggerBredAnimals.a(criterionconditionentity, criterionconditionentity1, criterionconditionentity2);
+        return new CriterionTriggerBredAnimals.a(criterionconditionentity_b, criterionconditionentity_b1, criterionconditionentity_b2, criterionconditionentity_b3);
     }
 
-    public void a(EntityPlayer entityplayer, EntityAnimal entityanimal, @Nullable EntityAnimal entityanimal1, @Nullable EntityAgeable entityageable) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggerbredanimals_a) -> {
-            return criteriontriggerbredanimals_a.a(entityplayer, entityanimal, entityanimal1, entityageable);
+    public void a(EntityPlayer entityplayer, EntityAnimal entityanimal, EntityAnimal entityanimal1, @Nullable EntityAgeable entityageable) {
+        LootTableInfo loottableinfo = CriterionConditionEntity.b(entityplayer, entityanimal);
+        LootTableInfo loottableinfo1 = CriterionConditionEntity.b(entityplayer, entityanimal1);
+        LootTableInfo loottableinfo2 = entityageable != null ? CriterionConditionEntity.b(entityplayer, entityageable) : null;
+
+        this.a(entityplayer, (criteriontriggerbredanimals_a) -> {
+            return criteriontriggerbredanimals_a.a(loottableinfo, loottableinfo1, loottableinfo2);
         });
     }
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionEntity a;
-        private final CriterionConditionEntity b;
-        private final CriterionConditionEntity c;
+        private final CriterionConditionEntity.b a;
+        private final CriterionConditionEntity.b b;
+        private final CriterionConditionEntity.b c;
 
-        public a(CriterionConditionEntity criterionconditionentity, CriterionConditionEntity criterionconditionentity1, CriterionConditionEntity criterionconditionentity2) {
-            super(CriterionTriggerBredAnimals.a);
-            this.a = criterionconditionentity;
-            this.b = criterionconditionentity1;
-            this.c = criterionconditionentity2;
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionEntity.b criterionconditionentity_b1, CriterionConditionEntity.b criterionconditionentity_b2, CriterionConditionEntity.b criterionconditionentity_b3) {
+            super(CriterionTriggerBredAnimals.a, criterionconditionentity_b);
+            this.a = criterionconditionentity_b1;
+            this.b = criterionconditionentity_b2;
+            this.c = criterionconditionentity_b3;
         }
 
         public static CriterionTriggerBredAnimals.a c() {
-            return new CriterionTriggerBredAnimals.a(CriterionConditionEntity.a, CriterionConditionEntity.a, CriterionConditionEntity.a);
+            return new CriterionTriggerBredAnimals.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a, CriterionConditionEntity.b.a, CriterionConditionEntity.b.a);
         }
 
         public static CriterionTriggerBredAnimals.a a(CriterionConditionEntity.a criterionconditionentity_a) {
-            return new CriterionTriggerBredAnimals.a(criterionconditionentity_a.b(), CriterionConditionEntity.a, CriterionConditionEntity.a);
+            return new CriterionTriggerBredAnimals.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a, CriterionConditionEntity.b.a, CriterionConditionEntity.b.a(criterionconditionentity_a.b()));
         }
 
-        public boolean a(EntityPlayer entityplayer, EntityAnimal entityanimal, @Nullable EntityAnimal entityanimal1, @Nullable EntityAgeable entityageable) {
-            return !this.c.a(entityplayer, entityageable) ? false : this.a.a(entityplayer, entityanimal) && this.b.a(entityplayer, entityanimal1) || this.a.a(entityplayer, entityanimal1) && this.b.a(entityplayer, entityanimal);
+        public static CriterionTriggerBredAnimals.a a(CriterionConditionEntity criterionconditionentity, CriterionConditionEntity criterionconditionentity1, CriterionConditionEntity criterionconditionentity2) {
+            return new CriterionTriggerBredAnimals.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a(criterionconditionentity), CriterionConditionEntity.b.a(criterionconditionentity1), CriterionConditionEntity.b.a(criterionconditionentity2));
+        }
+
+        public boolean a(LootTableInfo loottableinfo, LootTableInfo loottableinfo1, @Nullable LootTableInfo loottableinfo2) {
+            return this.c != CriterionConditionEntity.b.a && (loottableinfo2 == null || !this.c.a(loottableinfo2)) ? false : this.a.a(loottableinfo) && this.b.a(loottableinfo1) || this.a.a(loottableinfo1) && this.b.a(loottableinfo);
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("parent", this.a.a());
-            jsonobject.add("partner", this.b.a());
-            jsonobject.add("child", this.c.a());
+            jsonobject.add("parent", this.a.a(lootserializationcontext));
+            jsonobject.add("partner", this.b.a(lootserializationcontext));
+            jsonobject.add("child", this.c.a(lootserializationcontext));
             return jsonobject;
         }
     }

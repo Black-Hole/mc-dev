@@ -34,8 +34,8 @@ public class CommandExceptionProvider implements BuiltInExceptionProvider {
     private static final DynamicCommandExceptionType i = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.literal.incorrect", new Object[]{object});
     });
-    private static final SimpleCommandExceptionType j = new SimpleCommandExceptionType(new ChatMessage("parsing.quote.expected.start", new Object[0]));
-    private static final SimpleCommandExceptionType k = new SimpleCommandExceptionType(new ChatMessage("parsing.quote.expected.end", new Object[0]));
+    private static final SimpleCommandExceptionType j = new SimpleCommandExceptionType(new ChatMessage("parsing.quote.expected.start"));
+    private static final SimpleCommandExceptionType k = new SimpleCommandExceptionType(new ChatMessage("parsing.quote.expected.end"));
     private static final DynamicCommandExceptionType l = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("parsing.quote.escape", new Object[]{object});
     });
@@ -45,26 +45,26 @@ public class CommandExceptionProvider implements BuiltInExceptionProvider {
     private static final DynamicCommandExceptionType n = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("parsing.int.invalid", new Object[]{object});
     });
-    private static final SimpleCommandExceptionType o = new SimpleCommandExceptionType(new ChatMessage("parsing.int.expected", new Object[0]));
+    private static final SimpleCommandExceptionType o = new SimpleCommandExceptionType(new ChatMessage("parsing.int.expected"));
     private static final DynamicCommandExceptionType p = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("parsing.long.invalid", new Object[]{object});
     });
-    private static final SimpleCommandExceptionType q = new SimpleCommandExceptionType(new ChatMessage("parsing.long.expected", new Object[0]));
+    private static final SimpleCommandExceptionType q = new SimpleCommandExceptionType(new ChatMessage("parsing.long.expected"));
     private static final DynamicCommandExceptionType r = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("parsing.double.invalid", new Object[]{object});
     });
-    private static final SimpleCommandExceptionType s = new SimpleCommandExceptionType(new ChatMessage("parsing.double.expected", new Object[0]));
+    private static final SimpleCommandExceptionType s = new SimpleCommandExceptionType(new ChatMessage("parsing.double.expected"));
     private static final DynamicCommandExceptionType t = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("parsing.float.invalid", new Object[]{object});
     });
-    private static final SimpleCommandExceptionType u = new SimpleCommandExceptionType(new ChatMessage("parsing.float.expected", new Object[0]));
-    private static final SimpleCommandExceptionType v = new SimpleCommandExceptionType(new ChatMessage("parsing.bool.expected", new Object[0]));
+    private static final SimpleCommandExceptionType u = new SimpleCommandExceptionType(new ChatMessage("parsing.float.expected"));
+    private static final SimpleCommandExceptionType v = new SimpleCommandExceptionType(new ChatMessage("parsing.bool.expected"));
     private static final DynamicCommandExceptionType w = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("parsing.expected", new Object[]{object});
     });
-    private static final SimpleCommandExceptionType x = new SimpleCommandExceptionType(new ChatMessage("command.unknown.command", new Object[0]));
-    private static final SimpleCommandExceptionType y = new SimpleCommandExceptionType(new ChatMessage("command.unknown.argument", new Object[0]));
-    private static final SimpleCommandExceptionType z = new SimpleCommandExceptionType(new ChatMessage("command.expected.separator", new Object[0]));
+    private static final SimpleCommandExceptionType x = new SimpleCommandExceptionType(new ChatMessage("command.unknown.command"));
+    private static final SimpleCommandExceptionType y = new SimpleCommandExceptionType(new ChatMessage("command.unknown.argument"));
+    private static final SimpleCommandExceptionType z = new SimpleCommandExceptionType(new ChatMessage("command.expected.separator"));
     private static final DynamicCommandExceptionType A = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("command.exception", new Object[]{object});
     });

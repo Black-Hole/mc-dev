@@ -13,7 +13,7 @@ public abstract class Biomes {
     public static final BiomeBase TAIGA = a(5, "taiga", new BiomeTaiga());
     public static final BiomeBase SWAMP = a(6, "swamp", new BiomeSwamp());
     public static final BiomeBase RIVER = a(7, "river", new BiomeRiver());
-    public static final BiomeBase NETHER = a(8, "nether", new BiomeHell());
+    public static final BiomeBase NETHER_WASTES = a(8, "nether_wastes", new BiomeHell());
     public static final BiomeBase THE_END = a(9, "the_end", new BiomeTheEnd());
     public static final BiomeBase FROZEN_OCEAN = a(10, "frozen_ocean", new BiomeFrozenOcean());
     public static final BiomeBase FROZEN_RIVER = a(11, "frozen_river", new BiomeFrozenRiver());
@@ -80,17 +80,21 @@ public abstract class Biomes {
     public static final BiomeBase MODIFIED_BADLANDS_PLATEAU = a(167, "modified_badlands_plateau", new BiomeMesaPlateauClearMutated());
     public static final BiomeBase BAMBOO_JUNGLE = a(168, "bamboo_jungle", new BiomeBambooJungle());
     public static final BiomeBase BAMBOO_JUNGLE_HILLS = a(169, "bamboo_jungle_hills", new BiomeBambooJungleHills());
+    public static final BiomeBase SOUL_SAND_VALLEY = a(170, "soul_sand_valley", new BiomeSoulSandValley());
+    public static final BiomeBase CRIMSON_FOREST = a(171, "crimson_forest", new BiomeCrimsonForest());
+    public static final BiomeBase WARPED_FOREST = a(172, "warped_forest", new BiomeWarpedForest());
+    public static final BiomeBase BASALT_DELTAS = a(173, "basalt_deltas", new BiomeBasaltDeltas());
 
     private static BiomeBase a(int i, String s, BiomeBase biomebase) {
         IRegistry.a(IRegistry.BIOME, i, s, biomebase);
         if (biomebase.b()) {
-            BiomeBase.c.a(biomebase, IRegistry.BIOME.a(IRegistry.BIOME.get(new MinecraftKey(biomebase.m))));
+            BiomeBase.d.a(biomebase, IRegistry.BIOME.a(IRegistry.BIOME.get(new MinecraftKey(biomebase.l))));
         }
 
         return biomebase;
     }
 
     static {
-        Collections.addAll(BiomeBase.b, new BiomeBase[]{Biomes.OCEAN, Biomes.PLAINS, Biomes.DESERT, Biomes.MOUNTAINS, Biomes.FOREST, Biomes.TAIGA, Biomes.SWAMP, Biomes.RIVER, Biomes.FROZEN_RIVER, Biomes.SNOWY_TUNDRA, Biomes.SNOWY_MOUNTAINS, Biomes.MUSHROOM_FIELDS, Biomes.MUSHROOM_FIELD_SHORE, Biomes.BEACH, Biomes.DESERT_HILLS, Biomes.WOODED_HILLS, Biomes.TAIGA_HILLS, Biomes.JUNGLE, Biomes.JUNGLE_HILLS, Biomes.JUNGLE_EDGE, Biomes.DEEP_OCEAN, Biomes.STONE_SHORE, Biomes.SNOWY_BEACH, Biomes.BIRCH_FOREST, Biomes.BIRCH_FOREST_HILLS, Biomes.DARK_FOREST, Biomes.SNOWY_TAIGA, Biomes.SNOWY_TAIGA_HILLS, Biomes.GIANT_TREE_TAIGA, Biomes.GIANT_TREE_TAIGA_HILLS, Biomes.WOODED_MOUNTAINS, Biomes.SAVANNA, Biomes.SAVANNA_PLATEAU, Biomes.BADLANDS, Biomes.WOODED_BADLANDS_PLATEAU, Biomes.BADLANDS_PLATEAU});
+        Collections.addAll(BiomeBase.c, new BiomeBase[]{Biomes.OCEAN, Biomes.PLAINS, Biomes.DESERT, Biomes.MOUNTAINS, Biomes.FOREST, Biomes.TAIGA, Biomes.SWAMP, Biomes.RIVER, Biomes.FROZEN_RIVER, Biomes.SNOWY_TUNDRA, Biomes.SNOWY_MOUNTAINS, Biomes.MUSHROOM_FIELDS, Biomes.MUSHROOM_FIELD_SHORE, Biomes.BEACH, Biomes.DESERT_HILLS, Biomes.WOODED_HILLS, Biomes.TAIGA_HILLS, Biomes.JUNGLE, Biomes.JUNGLE_HILLS, Biomes.JUNGLE_EDGE, Biomes.DEEP_OCEAN, Biomes.STONE_SHORE, Biomes.SNOWY_BEACH, Biomes.BIRCH_FOREST, Biomes.BIRCH_FOREST_HILLS, Biomes.DARK_FOREST, Biomes.SNOWY_TAIGA, Biomes.SNOWY_TAIGA_HILLS, Biomes.GIANT_TREE_TAIGA, Biomes.GIANT_TREE_TAIGA_HILLS, Biomes.WOODED_MOUNTAINS, Biomes.SAVANNA, Biomes.SAVANNA_PLATEAU, Biomes.BADLANDS, Biomes.WOODED_BADLANDS_PLATEAU, Biomes.BADLANDS_PLATEAU});
     }
 }

@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class DamageSource {
 
-    public static final DamageSource FIRE = (new DamageSource("inFire")).setFire();
+    public static final DamageSource FIRE = (new DamageSource("inFire")).setIgnoreArmor().setFire();
     public static final DamageSource LIGHTNING = new DamageSource("lightningBolt");
     public static final DamageSource BURN = (new DamageSource("onFire")).setIgnoreArmor().setFire();
     public static final DamageSource LAVA = (new DamageSource("lava")).setFire();
@@ -23,21 +23,20 @@ public class DamageSource {
     public static final DamageSource ANVIL = new DamageSource("anvil");
     public static final DamageSource FALLING_BLOCK = new DamageSource("fallingBlock");
     public static final DamageSource DRAGON_BREATH = (new DamageSource("dragonBreath")).setIgnoreArmor();
-    public static final DamageSource FIREWORKS = (new DamageSource("fireworks")).setExplosion();
     public static final DamageSource DRYOUT = new DamageSource("dryout");
     public static final DamageSource SWEET_BERRY_BUSH = new DamageSource("sweetBerryBush");
+    private boolean w;
     private boolean x;
     private boolean y;
-    private boolean z;
-    private float A = 0.1F;
+    private float z = 0.1F;
+    private boolean A;
     private boolean B;
     private boolean C;
     private boolean D;
     private boolean E;
-    private boolean F;
     public final String translationIndex;
 
-    public static DamageSource a(EntityLiving entityliving) {
+    public static DamageSource b(EntityLiving entityliving) {
         return new EntityDamageSource("sting", entityliving);
     }
 
@@ -61,8 +60,16 @@ public class DamageSource {
         return (new EntityDamageSourceIndirect("trident", entity, entity1)).c();
     }
 
-    public static DamageSource fireball(EntityFireball entityfireball, @Nullable Entity entity) {
-        return entity == null ? (new EntityDamageSourceIndirect("onFire", entityfireball, entityfireball)).setFire().c() : (new EntityDamageSourceIndirect("fireball", entityfireball, entity)).setFire().c();
+    public static DamageSource a(EntityFireworks entityfireworks, @Nullable Entity entity) {
+        return (new EntityDamageSourceIndirect("fireworks", entityfireworks, entity)).setExplosion();
+    }
+
+    public static DamageSource fireball(EntityFireballFireball entityfireballfireball, @Nullable Entity entity) {
+        return entity == null ? (new EntityDamageSourceIndirect("onFire", entityfireballfireball, entityfireballfireball)).setFire().c() : (new EntityDamageSourceIndirect("fireball", entityfireballfireball, entity)).setFire().c();
+    }
+
+    public static DamageSource a(EntityWitherSkull entitywitherskull, Entity entity) {
+        return (new EntityDamageSourceIndirect("witherSkull", entitywitherskull, entity)).c();
     }
 
     public static DamageSource projectile(Entity entity, @Nullable Entity entity1) {
@@ -78,10 +85,10 @@ public class DamageSource {
     }
 
     public static DamageSource explosion(@Nullable Explosion explosion) {
-        return explosion != null && explosion.getSource() != null ? (new EntityDamageSource("explosion.player", explosion.getSource())).r().setExplosion() : (new DamageSource("explosion")).r().setExplosion();
+        return d(explosion != null ? explosion.getSource() : null);
     }
 
-    public static DamageSource c(@Nullable EntityLiving entityliving) {
+    public static DamageSource d(@Nullable EntityLiving entityliving) {
         return entityliving != null ? (new EntityDamageSource("explosion.player", entityliving)).r().setExplosion() : (new DamageSource("explosion")).r().setExplosion();
     }
 
@@ -89,38 +96,42 @@ public class DamageSource {
         return new DamageSourceNetherBed();
     }
 
+    public String toString() {
+        return "DamageSource (" + this.translationIndex + ")";
+    }
+
     public boolean b() {
-        return this.C;
+        return this.B;
     }
 
     public DamageSource c() {
-        this.C = true;
+        this.B = true;
         return this;
     }
 
     public boolean isExplosion() {
-        return this.F;
+        return this.E;
     }
 
     public DamageSource setExplosion() {
-        this.F = true;
+        this.E = true;
         return this;
     }
 
     public boolean ignoresArmor() {
-        return this.x;
+        return this.w;
     }
 
     public float getExhaustionCost() {
-        return this.A;
+        return this.z;
     }
 
     public boolean ignoresInvulnerability() {
-        return this.y;
+        return this.x;
     }
 
     public boolean isStarvation() {
-        return this.z;
+        return this.y;
     }
 
     protected DamageSource(String s) {
@@ -138,24 +149,24 @@ public class DamageSource {
     }
 
     protected DamageSource setIgnoreArmor() {
-        this.x = true;
-        this.A = 0.0F;
+        this.w = true;
+        this.z = 0.0F;
         return this;
     }
 
     protected DamageSource setIgnoresInvulnerability() {
-        this.y = true;
+        this.x = true;
         return this;
     }
 
     protected DamageSource setStarvation() {
-        this.z = true;
-        this.A = 0.0F;
+        this.y = true;
+        this.z = 0.0F;
         return this;
     }
 
     protected DamageSource setFire() {
-        this.B = true;
+        this.A = true;
         return this;
     }
 
@@ -168,7 +179,7 @@ public class DamageSource {
     }
 
     public boolean isFire() {
-        return this.B;
+        return this.A;
     }
 
     public String q() {
@@ -176,20 +187,20 @@ public class DamageSource {
     }
 
     public DamageSource r() {
-        this.D = true;
+        this.C = true;
         return this;
     }
 
     public boolean s() {
-        return this.D;
+        return this.C;
     }
 
     public boolean isMagic() {
-        return this.E;
+        return this.D;
     }
 
     public DamageSource setMagic() {
-        this.E = true;
+        this.D = true;
         return this;
     }
 

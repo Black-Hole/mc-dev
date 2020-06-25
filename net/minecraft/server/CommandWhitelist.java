@@ -3,19 +3,17 @@ package net.minecraft.server;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Collection;
 import java.util.Iterator;
 
 public class CommandWhitelist {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.alreadyOn", new Object[0]));
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.alreadyOff", new Object[0]));
-    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.add.failed", new Object[0]));
-    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.remove.failed", new Object[0]));
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.alreadyOn"));
+    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.alreadyOff"));
+    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.add.failed"));
+    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.whitelist.remove.failed"));
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("whitelist").requires((commandlistenerwrapper) -> {
@@ -47,7 +45,7 @@ public class CommandWhitelist {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper) {
         commandlistenerwrapper.getServer().getPlayerList().reloadWhitelist();
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.reloaded", new Object[0]), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.reloaded"), true);
         commandlistenerwrapper.getServer().a(commandlistenerwrapper);
         return 1;
     }
@@ -108,7 +106,7 @@ public class CommandWhitelist {
             throw CommandWhitelist.a.create();
         } else {
             playerlist.setHasWhitelist(true);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.enabled", new Object[0]), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.enabled"), true);
             commandlistenerwrapper.getServer().a(commandlistenerwrapper);
             return 1;
         }
@@ -121,7 +119,7 @@ public class CommandWhitelist {
             throw CommandWhitelist.b.create();
         } else {
             playerlist.setHasWhitelist(false);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.disabled", new Object[0]), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.disabled"), true);
             return 1;
         }
     }
@@ -130,7 +128,7 @@ public class CommandWhitelist {
         String[] astring = commandlistenerwrapper.getServer().getPlayerList().getWhitelisted();
 
         if (astring.length == 0) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.none", new Object[0]), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.none"), false);
         } else {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.list", new Object[]{astring.length, String.join(", ", astring)}), false);
         }

@@ -9,7 +9,7 @@ public class TileEntityDispenser extends TileEntityLootable {
 
     protected TileEntityDispenser(TileEntityTypes<?> tileentitytypes) {
         super(tileentitytypes);
-        this.items = NonNullList.a(9, ItemStack.a);
+        this.items = NonNullList.a(9, ItemStack.b);
     }
 
     public TileEntityDispenser() {
@@ -48,14 +48,14 @@ public class TileEntityDispenser extends TileEntityLootable {
 
     @Override
     protected IChatBaseComponent getContainerName() {
-        return new ChatMessage("container.dispenser", new Object[0]);
+        return new ChatMessage("container.dispenser");
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
-        this.items = NonNullList.a(this.getSize(), ItemStack.a);
-        if (!this.d(nbttagcompound)) {
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
+        this.items = NonNullList.a(this.getSize(), ItemStack.b);
+        if (!this.b(nbttagcompound)) {
             ContainerUtil.b(nbttagcompound, this.items);
         }
 
@@ -64,7 +64,7 @@ public class TileEntityDispenser extends TileEntityLootable {
     @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (!this.e(nbttagcompound)) {
+        if (!this.c(nbttagcompound)) {
             ContainerUtil.a(nbttagcompound, this.items);
         }
 

@@ -6,8 +6,8 @@ import javax.annotation.Nullable;
 public class EntityVillagerTrader extends EntityVillagerAbstract {
 
     @Nullable
-    private BlockPosition bx;
-    private int by;
+    private BlockPosition bw;
+    private int bx;
 
     public EntityVillagerTrader(EntityTypes<? extends EntityVillagerTrader> entitytypes, World world) {
         super(entitytypes, world);
@@ -30,6 +30,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
         this.goalSelector.a(1, new PathfinderGoalAvoidTarget<>(this, EntityVex.class, 8.0F, 0.5D, 0.5D));
         this.goalSelector.a(1, new PathfinderGoalAvoidTarget<>(this, EntityPillager.class, 15.0F, 0.5D, 0.5D));
         this.goalSelector.a(1, new PathfinderGoalAvoidTarget<>(this, EntityIllagerIllusioner.class, 12.0F, 0.5D, 0.5D));
+        this.goalSelector.a(1, new PathfinderGoalAvoidTarget<>(this, EntityZoglin.class, 10.0F, 0.5D, 0.5D));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 0.5D));
         this.goalSelector.a(1, new PathfinderGoalLookAtTradingPlayer(this));
         this.goalSelector.a(2, new EntityVillagerTrader.a(this, 2.0D, 0.35D));
@@ -51,35 +52,31 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     @Override
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+    public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        boolean flag = itemstack.getItem() == Items.NAME_TAG;
 
-        if (flag) {
-            itemstack.a(entityhuman, (EntityLiving) this, enumhand);
-            return true;
-        } else if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.et() && !this.isBaby()) {
+        if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.eO() && !this.isBaby()) {
             if (enumhand == EnumHand.MAIN_HAND) {
                 entityhuman.a(StatisticList.TALKED_TO_VILLAGER);
             }
 
             if (this.getOffers().isEmpty()) {
-                return super.a(entityhuman, enumhand);
+                return EnumInteractionResult.a(this.world.isClientSide);
             } else {
                 if (!this.world.isClientSide) {
                     this.setTradingPlayer(entityhuman);
                     this.openTrade(entityhuman, this.getScoreboardDisplayName(), 1);
                 }
 
-                return true;
+                return EnumInteractionResult.a(this.world.isClientSide);
             }
         } else {
-            return super.a(entityhuman, enumhand);
+            return super.b(entityhuman, enumhand);
         }
     }
 
     @Override
-    protected void eC() {
+    protected void eW() {
         VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption = (VillagerTrades.IMerchantRecipeOption[]) VillagerTrades.b.get(1);
         VillagerTrades.IMerchantRecipeOption[] avillagertrades_imerchantrecipeoption1 = (VillagerTrades.IMerchantRecipeOption[]) VillagerTrades.b.get(2);
 
@@ -99,24 +96,24 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
-        nbttagcompound.setInt("DespawnDelay", this.by);
-        if (this.bx != null) {
-            nbttagcompound.set("WanderTarget", GameProfileSerializer.a(this.bx));
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
+        nbttagcompound.setInt("DespawnDelay", this.bx);
+        if (this.bw != null) {
+            nbttagcompound.set("WanderTarget", GameProfileSerializer.a(this.bw));
         }
 
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("DespawnDelay", 99)) {
-            this.by = nbttagcompound.getInt("DespawnDelay");
+            this.bx = nbttagcompound.getInt("DespawnDelay");
         }
 
         if (nbttagcompound.hasKey("WanderTarget")) {
-            this.bx = GameProfileSerializer.c(nbttagcompound.getCompound("WanderTarget"));
+            this.bw = GameProfileSerializer.b(nbttagcompound.getCompound("WanderTarget"));
         }
 
         this.setAgeRaw(Math.max(0, this.getAge()));
@@ -139,7 +136,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return this.et() ? SoundEffects.ENTITY_WANDERING_TRADER_TRADE : SoundEffects.ENTITY_WANDERING_TRADER_AMBIENT;
+        return this.eO() ? SoundEffects.ENTITY_WANDERING_TRADER_TRADE : SoundEffects.ENTITY_WANDERING_TRADER_AMBIENT;
     }
 
     @Override
@@ -160,7 +157,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     @Override
-    protected SoundEffect r(boolean flag) {
+    protected SoundEffect t(boolean flag) {
         return flag ? SoundEffects.ENTITY_WANDERING_TRADER_YES : SoundEffects.ENTITY_WANDERING_TRADER_NO;
     }
 
@@ -170,36 +167,36 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     public void u(int i) {
-        this.by = i;
+        this.bx = i;
     }
 
-    public int eA() {
-        return this.by;
+    public int eX() {
+        return this.bx;
     }
 
     @Override
     public void movementTick() {
         super.movementTick();
         if (!this.world.isClientSide) {
-            this.eE();
+            this.eY();
         }
 
     }
 
-    private void eE() {
-        if (this.by > 0 && !this.et() && --this.by == 0) {
+    private void eY() {
+        if (this.bx > 0 && !this.eO() && --this.bx == 0) {
             this.die();
         }
 
     }
 
     public void g(@Nullable BlockPosition blockposition) {
-        this.bx = blockposition;
+        this.bw = blockposition;
     }
 
     @Nullable
-    private BlockPosition eF() {
-        return this.bx;
+    private BlockPosition eZ() {
+        return this.bw;
     }
 
     class a extends PathfinderGoal {
@@ -223,14 +220,14 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
 
         @Override
         public boolean a() {
-            BlockPosition blockposition = this.a.eF();
+            BlockPosition blockposition = this.a.eZ();
 
             return blockposition != null && this.a(blockposition, this.b);
         }
 
         @Override
         public void e() {
-            BlockPosition blockposition = this.a.eF();
+            BlockPosition blockposition = this.a.eZ();
 
             if (blockposition != null && EntityVillagerTrader.this.navigation.m()) {
                 if (this.a(blockposition, 10.0D)) {

@@ -12,23 +12,24 @@ import org.apache.logging.log4j.Logger;
 public class RemoteControlSession extends RemoteConnectionThread {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private boolean i;
-    private Socket j;
-    private final byte[] k = new byte[1460];
-    private final String l;
+    private boolean e;
+    private Socket f;
+    private final byte[] g = new byte[1460];
+    private final String h;
+    private final IMinecraftServer i;
 
     RemoteControlSession(IMinecraftServer iminecraftserver, String s, Socket socket) {
-        super(iminecraftserver, "RCON Client");
-        this.j = socket;
+        super("RCON Client " + socket.getInetAddress());
+        this.i = iminecraftserver;
+        this.f = socket;
 
         try {
-            this.j.setSoTimeout(0);
+            this.f.setSoTimeout(0);
         } catch (Exception exception) {
             this.a = false;
         }
 
-        this.l = s;
-        this.b("Rcon connection from: " + socket.getInetAddress());
+        this.h = s;
     }
 
     public void run() {
@@ -38,51 +39,51 @@ public class RemoteControlSession extends RemoteConnectionThread {
                     return;
                 }
 
-                BufferedInputStream bufferedinputstream = new BufferedInputStream(this.j.getInputStream());
-                int i = bufferedinputstream.read(this.k, 0, 1460);
+                BufferedInputStream bufferedinputstream = new BufferedInputStream(this.f.getInputStream());
+                int i = bufferedinputstream.read(this.g, 0, 1460);
 
                 if (10 > i) {
                     return;
                 }
 
                 byte b0 = 0;
-                int j = StatusChallengeUtils.b(this.k, 0, i);
+                int j = StatusChallengeUtils.b(this.g, 0, i);
 
                 if (j == i - 4) {
                     int k = b0 + 4;
-                    int l = StatusChallengeUtils.b(this.k, k, i);
+                    int l = StatusChallengeUtils.b(this.g, k, i);
 
                     k += 4;
-                    int i1 = StatusChallengeUtils.a(this.k, k);
+                    int i1 = StatusChallengeUtils.a(this.g, k);
 
                     k += 4;
                     switch (i1) {
                         case 2:
-                            if (this.i) {
-                                String s = StatusChallengeUtils.a(this.k, k, i);
+                            if (this.e) {
+                                String s = StatusChallengeUtils.a(this.g, k, i);
 
                                 try {
-                                    this.a(l, this.b.executeRemoteCommand(s));
+                                    this.a(l, this.i.executeRemoteCommand(s));
                                 } catch (Exception exception) {
                                     this.a(l, "Error executing: " + s + " (" + exception.getMessage() + ")");
                                 }
                                 continue;
                             }
 
-                            this.f();
+                            this.d();
                             continue;
                         case 3:
-                            String s1 = StatusChallengeUtils.a(this.k, k, i);
+                            String s1 = StatusChallengeUtils.a(this.g, k, i);
                             int j1 = k + s1.length();
 
-                            if (!s1.isEmpty() && s1.equals(this.l)) {
-                                this.i = true;
+                            if (!s1.isEmpty() && s1.equals(this.h)) {
+                                this.e = true;
                                 this.a(l, 2, "");
                                 continue;
                             }
 
-                            this.i = false;
-                            this.f();
+                            this.e = false;
+                            this.d();
                             continue;
                         default:
                             this.a(l, String.format("Unknown request %s", Integer.toHexString(i1)));
@@ -97,7 +98,9 @@ public class RemoteControlSession extends RemoteConnectionThread {
                 RemoteControlSession.LOGGER.error("Exception whilst parsing RCON input", exception1);
                 return;
             } finally {
-                this.g();
+                this.e();
+                RemoteControlSession.LOGGER.info("Thread {} shutting down", this.b);
+                this.a = false;
             }
 
             return;
@@ -115,10 +118,10 @@ public class RemoteControlSession extends RemoteConnectionThread {
         dataoutputstream.write(abyte);
         dataoutputstream.write(0);
         dataoutputstream.write(0);
-        this.j.getOutputStream().write(bytearrayoutputstream.toByteArray());
+        this.f.getOutputStream().write(bytearrayoutputstream.toByteArray());
     }
 
-    private void f() throws IOException {
+    private void d() throws IOException {
         this.a(-1, 2, "");
     }
 
@@ -137,19 +140,20 @@ public class RemoteControlSession extends RemoteConnectionThread {
 
     @Override
     public void b() {
+        this.a = false;
+        this.e();
         super.b();
-        this.g();
     }
 
-    private void g() {
-        if (null != this.j) {
+    private void e() {
+        if (null != this.f) {
             try {
-                this.j.close();
+                this.f.close();
             } catch (IOException ioexception) {
-                this.c("IO: " + ioexception.getMessage());
+                RemoteControlSession.LOGGER.warn("Failed to close socket", ioexception);
             }
 
-            this.j = null;
+            this.f = null;
         }
     }
 }

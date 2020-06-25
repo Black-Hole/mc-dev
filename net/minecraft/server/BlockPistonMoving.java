@@ -9,9 +9,9 @@ public class BlockPistonMoving extends BlockTileEntity {
     public static final BlockStateDirection a = BlockPistonExtension.FACING;
     public static final BlockStateEnum<BlockPropertyPistonType> b = BlockPistonExtension.TYPE;
 
-    public BlockPistonMoving(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPistonMoving.a, EnumDirection.NORTH)).set(BlockPistonMoving.b, BlockPropertyPistonType.DEFAULT));
+    public BlockPistonMoving(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPistonMoving.a, EnumDirection.NORTH)).set(BlockPistonMoving.b, BlockPropertyPistonType.DEFAULT));
     }
 
     @Nullable
@@ -26,7 +26,7 @@ public class BlockPistonMoving extends BlockTileEntity {
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!iblockdata.a(iblockdata1.getBlock())) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityPiston) {
@@ -48,16 +48,6 @@ public class BlockPistonMoving extends BlockTileEntity {
     }
 
     @Override
-    public boolean isOccluding(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return false;
-    }
-
-    @Override
-    public boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return false;
-    }
-
-    @Override
     public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (!world.isClientSide && world.getTileEntity(blockposition) == null) {
             world.a(blockposition, false);
@@ -75,12 +65,12 @@ public class BlockPistonMoving extends BlockTileEntity {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return VoxelShapes.a();
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         TileEntityPiston tileentitypiston = this.a(iblockaccess, blockposition);
 
         return tileentitypiston != null ? tileentitypiston.a(iblockaccess, blockposition) : VoxelShapes.a();

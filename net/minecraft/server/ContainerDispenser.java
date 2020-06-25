@@ -42,7 +42,7 @@ public class ContainerDispenser extends Container {
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -51,20 +51,20 @@ public class ContainerDispenser extends Container {
             itemstack = itemstack1.cloneItemStack();
             if (i < 9) {
                 if (!this.a(itemstack1, 9, 45, true)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (!this.a(itemstack1, 0, 9, false)) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.a);
+                slot.set(ItemStack.b);
             } else {
                 slot.d();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             slot.a(entityhuman, itemstack1);

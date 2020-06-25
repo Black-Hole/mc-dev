@@ -25,7 +25,7 @@ public class GenLayers {
         return areafactory1;
     }
 
-    public static <T extends Area, C extends AreaContextTransformed<T>> AreaFactory<T> a(WorldType worldtype, GeneratorSettingsOverworld generatorsettingsoverworld, LongFunction<C> longfunction) {
+    private static <T extends Area, C extends AreaContextTransformed<T>> AreaFactory<T> a(boolean flag, int i, int j, LongFunction<C> longfunction) {
         AreaFactory<T> areafactory = LayerIsland.INSTANCE.a((AreaContextTransformed) longfunction.apply(1L));
 
         areafactory = GenLayerZoom.FUZZY.a((AreaContextTransformed) longfunction.apply(2000L), areafactory);
@@ -49,12 +49,10 @@ public class GenLayers {
         areafactory = GenLayerMushroomIsland.INSTANCE.a((AreaContextTransformed) longfunction.apply(5L), areafactory);
         areafactory = GenLayerDeepOcean.INSTANCE.a((AreaContextTransformed) longfunction.apply(4L), areafactory);
         areafactory = a(1000L, GenLayerZoom.NORMAL, areafactory, 0, longfunction);
-        int i = worldtype == WorldType.LARGE_BIOMES ? 6 : generatorsettingsoverworld.v();
-        int j = generatorsettingsoverworld.w();
         AreaFactory<T> areafactory2 = a(1000L, GenLayerZoom.NORMAL, areafactory, 0, longfunction);
 
         areafactory2 = GenLayerCleaner.INSTANCE.a((AreaContextTransformed) longfunction.apply(100L), areafactory2);
-        AreaFactory<T> areafactory3 = (new GenLayerBiome(worldtype, generatorsettingsoverworld.x())).a((AreaContextTransformed) longfunction.apply(200L), areafactory);
+        AreaFactory<T> areafactory3 = (new GenLayerBiome(flag)).a((AreaContextTransformed) longfunction.apply(200L), areafactory);
 
         areafactory3 = GenLayerJungle.INSTANCE.a((AreaContextTransformed) longfunction.apply(1001L), areafactory3);
         areafactory3 = a(1000L, GenLayerZoom.NORMAL, areafactory3, 2, longfunction);
@@ -85,10 +83,10 @@ public class GenLayers {
         return areafactory3;
     }
 
-    public static GenLayer a(long i, WorldType worldtype, GeneratorSettingsOverworld generatorsettingsoverworld) {
-        boolean flag = true;
-        AreaFactory<AreaLazy> areafactory = a(worldtype, generatorsettingsoverworld, (j) -> {
-            return new WorldGenContextArea(25, i, j);
+    public static GenLayer a(long i, boolean flag, int j, int k) {
+        boolean flag1 = true;
+        AreaFactory<AreaLazy> areafactory = a(flag, j, k, (l) -> {
+            return new WorldGenContextArea(25, i, l);
         });
 
         return new GenLayer(areafactory);
@@ -101,7 +99,7 @@ public class GenLayers {
             BiomeBase biomebase = (BiomeBase) IRegistry.BIOME.fromId(i);
             BiomeBase biomebase1 = (BiomeBase) IRegistry.BIOME.fromId(j);
 
-            return biomebase != null && biomebase1 != null ? (biomebase != Biomes.WOODED_BADLANDS_PLATEAU && biomebase != Biomes.BADLANDS_PLATEAU ? (biomebase.q() != BiomeBase.Geography.NONE && biomebase1.q() != BiomeBase.Geography.NONE && biomebase.q() == biomebase1.q() ? true : biomebase == biomebase1) : biomebase1 == Biomes.WOODED_BADLANDS_PLATEAU || biomebase1 == Biomes.BADLANDS_PLATEAU) : false;
+            return biomebase != null && biomebase1 != null ? (biomebase != Biomes.WOODED_BADLANDS_PLATEAU && biomebase != Biomes.BADLANDS_PLATEAU ? (biomebase.y() != BiomeBase.Geography.NONE && biomebase1.y() != BiomeBase.Geography.NONE && biomebase.y() == biomebase1.y() ? true : biomebase == biomebase1) : biomebase1 == Biomes.WOODED_BADLANDS_PLATEAU || biomebase1 == Biomes.BADLANDS_PLATEAU) : false;
         }
     }
 

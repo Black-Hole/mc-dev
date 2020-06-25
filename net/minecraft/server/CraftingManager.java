@@ -1,10 +1,11 @@
 package net.minecraft.server;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableMap.Builder;
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
@@ -14,9 +15,9 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
@@ -33,17 +34,17 @@ public class CraftingManager extends ResourceDataJson {
         super(CraftingManager.a, "recipes");
     }
 
-    protected void a(Map<MinecraftKey, JsonObject> map, IResourceManager iresourcemanager, GameProfilerFiller gameprofilerfiller) {
+    protected void a(Map<MinecraftKey, JsonElement> map, IResourceManager iresourcemanager, GameProfilerFiller gameprofilerfiller) {
         this.d = false;
         Map<Recipes<?>, Builder<MinecraftKey, IRecipe<?>>> map1 = Maps.newHashMap();
         Iterator iterator = map.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry<MinecraftKey, JsonObject> entry = (Entry) iterator.next();
+            Entry<MinecraftKey, JsonElement> entry = (Entry) iterator.next();
             MinecraftKey minecraftkey = (MinecraftKey) entry.getKey();
 
             try {
-                IRecipe<?> irecipe = a(minecraftkey, (JsonObject) entry.getValue());
+                IRecipe<?> irecipe = a(minecraftkey, ChatDeserializer.m((JsonElement) entry.getValue(), "top element"));
 
                 ((Builder) map1.computeIfAbsent(irecipe.g(), (recipes) -> {
                     return ImmutableMap.builder();
@@ -60,20 +61,26 @@ public class CraftingManager extends ResourceDataJson {
     }
 
     public <C extends IInventory, T extends IRecipe<C>> Optional<T> craft(Recipes<T> recipes, C c0, World world) {
-        return this.a(recipes).values().stream().flatMap((irecipe) -> {
+        return this.b(recipes).values().stream().flatMap((irecipe) -> {
             return SystemUtils.a(recipes.a(irecipe, world, c0));
         }).findFirst();
     }
 
+    public <C extends IInventory, T extends IRecipe<C>> List<T> a(Recipes<T> recipes) {
+        return (List) this.b(recipes).values().stream().map((irecipe) -> {
+            return irecipe;
+        }).collect(Collectors.toList());
+    }
+
     public <C extends IInventory, T extends IRecipe<C>> List<T> b(Recipes<T> recipes, C c0, World world) {
-        return (List) this.a(recipes).values().stream().flatMap((irecipe) -> {
+        return (List) this.b(recipes).values().stream().flatMap((irecipe) -> {
             return SystemUtils.a(recipes.a(irecipe, world, c0));
         }).sorted(Comparator.comparing((irecipe) -> {
             return irecipe.getResult().j();
         })).collect(Collectors.toList());
     }
 
-    private <C extends IInventory, T extends IRecipe<C>> Map<MinecraftKey, IRecipe<C>> a(Recipes<T> recipes) {
+    private <C extends IInventory, T extends IRecipe<C>> Map<MinecraftKey, IRecipe<C>> b(Recipes<T> recipes) {
         return (Map) this.recipes.getOrDefault(recipes, Collections.emptyMap());
     }
 
@@ -83,7 +90,7 @@ public class CraftingManager extends ResourceDataJson {
         if (optional.isPresent()) {
             return ((IRecipe) optional.get()).b(c0);
         } else {
-            NonNullList<ItemStack> nonnulllist = NonNullList.a(c0.getSize(), ItemStack.a);
+            NonNullList<ItemStack> nonnulllist = NonNullList.a(c0.getSize(), ItemStack.b);
 
             for (int i = 0; i < nonnulllist.size(); ++i) {
                 nonnulllist.set(i, c0.getItem(i));
@@ -105,7 +112,7 @@ public class CraftingManager extends ResourceDataJson {
         }).collect(Collectors.toSet());
     }
 
-    public Stream<MinecraftKey> c() {
+    public Stream<MinecraftKey> d() {
         return this.recipes.values().stream().flatMap((map) -> {
             return map.keySet().stream();
         });

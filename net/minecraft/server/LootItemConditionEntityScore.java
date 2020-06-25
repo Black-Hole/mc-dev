@@ -9,8 +9,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 public class LootItemConditionEntityScore implements LootItemCondition {
 
@@ -20,6 +20,11 @@ public class LootItemConditionEntityScore implements LootItemCondition {
     private LootItemConditionEntityScore(Map<String, LootValueBounds> map, LootTableInfo.EntityTarget loottableinfo_entitytarget) {
         this.a = ImmutableMap.copyOf(map);
         this.b = loottableinfo_entitytarget;
+    }
+
+    @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.g;
     }
 
     @Override
@@ -62,11 +67,9 @@ public class LootItemConditionEntityScore implements LootItemCondition {
         }
     }
 
-    public static class b extends LootItemCondition.b<LootItemConditionEntityScore> {
+    public static class b implements LootSerializer<LootItemConditionEntityScore> {
 
-        protected b() {
-            super(new MinecraftKey("entity_scores"), LootItemConditionEntityScore.class);
-        }
+        public b() {}
 
         public void a(JsonObject jsonobject, LootItemConditionEntityScore lootitemconditionentityscore, JsonSerializationContext jsonserializationcontext) {
             JsonObject jsonobject1 = new JsonObject();
@@ -83,7 +86,7 @@ public class LootItemConditionEntityScore implements LootItemCondition {
         }
 
         @Override
-        public LootItemConditionEntityScore b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionEntityScore a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             Set<Entry<String, JsonElement>> set = ChatDeserializer.t(jsonobject, "scores").entrySet();
             Map<String, LootValueBounds> map = Maps.newLinkedHashMap();
             Iterator iterator = set.iterator();

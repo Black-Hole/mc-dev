@@ -1,16 +1,27 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Objects;
 
-public class VillagePlaceRecord implements MinecraftSerializable {
+public class VillagePlaceRecord {
 
     private final BlockPosition a;
     private final VillagePlaceType b;
     private int c;
     private final Runnable d;
+
+    public static Codec<VillagePlaceRecord> a(Runnable runnable) {
+        return RecordCodecBuilder.create((instance) -> {
+            return instance.group(BlockPosition.a.fieldOf("pos").forGetter((villageplacerecord) -> {
+                return villageplacerecord.a;
+            }), IRegistry.POINT_OF_INTEREST_TYPE.fieldOf("type").forGetter((villageplacerecord) -> {
+                return villageplacerecord.b;
+            }), Codec.INT.fieldOf("free_tickets").withDefault(0).forGetter((villageplacerecord) -> {
+                return villageplacerecord.c;
+            }), RecordCodecBuilder.point(runnable)).apply(instance, VillagePlaceRecord::new);
+        });
+    }
 
     private VillagePlaceRecord(BlockPosition blockposition, VillagePlaceType villageplacetype, int i, Runnable runnable) {
         this.a = blockposition.immutableCopy();
@@ -21,15 +32,6 @@ public class VillagePlaceRecord implements MinecraftSerializable {
 
     public VillagePlaceRecord(BlockPosition blockposition, VillagePlaceType villageplacetype, Runnable runnable) {
         this(blockposition, villageplacetype, villageplacetype.b(), runnable);
-    }
-
-    public <T> VillagePlaceRecord(Dynamic<T> dynamic, Runnable runnable) {
-        this((BlockPosition) dynamic.get("pos").map(BlockPosition::a).orElse(new BlockPosition(0, 0, 0)), (VillagePlaceType) IRegistry.POINT_OF_INTEREST_TYPE.get(new MinecraftKey(dynamic.get("type").asString(""))), dynamic.get("free_tickets").asInt(0), runnable);
-    }
-
-    @Override
-    public <T> T a(DynamicOps<T> dynamicops) {
-        return dynamicops.createMap(ImmutableMap.of(dynamicops.createString("pos"), this.a.a(dynamicops), dynamicops.createString("type"), dynamicops.createString(IRegistry.POINT_OF_INTEREST_TYPE.getKey(this.b).toString()), dynamicops.createString("free_tickets"), dynamicops.createInt(this.c)));
     }
 
     protected boolean b() {

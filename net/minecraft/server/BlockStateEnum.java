@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class BlockStateEnum<T extends Enum<T> & INamable> extends BlockState<T> {
+public class BlockStateEnum<T extends Enum<T> & INamable> extends IBlockState<T> {
 
     private final ImmutableSet<T> a;
     private final Map<String, T> b = Maps.newHashMap();
@@ -63,8 +63,8 @@ public class BlockStateEnum<T extends Enum<T> & INamable> extends BlockState<T> 
     }
 
     @Override
-    public int c() {
-        int i = super.c();
+    public int b() {
+        int i = super.b();
 
         i = 31 * i + this.a.hashCode();
         i = 31 * i + this.b.hashCode();

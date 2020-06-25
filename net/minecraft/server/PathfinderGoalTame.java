@@ -58,7 +58,7 @@ public class PathfinderGoalTame extends PathfinderGoal {
                 int j = this.entity.getMaxDomestication();
 
                 if (j > 0 && this.entity.getRandom().nextInt(j) < i) {
-                    this.entity.h((EntityHuman) entity);
+                    this.entity.i((EntityHuman) entity);
                     return;
                 }
 
@@ -66,7 +66,7 @@ public class PathfinderGoalTame extends PathfinderGoal {
             }
 
             this.entity.ejectPassengers();
-            this.entity.eP();
+            this.entity.fn();
             this.entity.world.broadcastEntityEffect(this.entity, (byte) 6);
         }
 

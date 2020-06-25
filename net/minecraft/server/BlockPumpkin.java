@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class BlockPumpkin extends BlockStemmed {
 
-    protected BlockPumpkin(Block.Info block_info) {
-        super(block_info);
+    protected BlockPumpkin(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
@@ -13,7 +13,7 @@ public class BlockPumpkin extends BlockStemmed {
         if (itemstack.getItem() == Items.SHEARS) {
             if (!world.isClientSide) {
                 EnumDirection enumdirection = movingobjectpositionblock.getDirection();
-                EnumDirection enumdirection1 = enumdirection.m() == EnumDirection.EnumAxis.Y ? entityhuman.getDirection().opposite() : enumdirection;
+                EnumDirection enumdirection1 = enumdirection.n() == EnumDirection.EnumAxis.Y ? entityhuman.getDirection().opposite() : enumdirection;
 
                 world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_PUMPKIN_CARVE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 world.setTypeAndData(blockposition, (IBlockData) Blocks.CARVED_PUMPKIN.getBlockData().set(BlockPumpkinCarved.a, enumdirection1), 11);
@@ -26,7 +26,7 @@ public class BlockPumpkin extends BlockStemmed {
                 });
             }
 
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.a(world.isClientSide);
         } else {
             return super.interact(iblockdata, world, blockposition, entityhuman, enumhand, movingobjectpositionblock);
         }

@@ -2,12 +2,16 @@ package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
+import it.unimi.dsi.fastutil.shorts.ShortArrayList;
+import it.unimi.dsi.fastutil.shorts.ShortList;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
@@ -33,16 +37,20 @@ public class DataConverterProtoChunk extends DataFix {
 
         return TypeRewriteRule.seq(this.fixTypeEverywhereTyped("ChunkToProtoChunkFix", type, this.getOutputSchema().getType(DataConverterTypes.CHUNK), (typed) -> {
             return typed.updateTyped(opticfinder, type3, (typed1) -> {
-                Optional<? extends Stream<? extends Dynamic<?>>> optional = typed1.getOptionalTyped(opticfinder1).map(Typed::write).flatMap(Dynamic::asStreamOpt);
+                Optional<? extends Stream<? extends Dynamic<?>>> optional = typed1.getOptionalTyped(opticfinder1).flatMap((typed2) -> {
+                    return typed2.write().result();
+                }).flatMap((dynamic) -> {
+                    return dynamic.asStreamOpt().result();
+                });
                 Dynamic<?> dynamic = (Dynamic) typed1.get(DSL.remainderFinder());
-                boolean flag = dynamic.get("TerrainPopulated").asBoolean(false) && (!dynamic.get("LightPopulated").asNumber().isPresent() || dynamic.get("LightPopulated").asBoolean(false));
+                boolean flag = dynamic.get("TerrainPopulated").asBoolean(false) && (!dynamic.get("LightPopulated").asNumber().result().isPresent() || dynamic.get("LightPopulated").asBoolean(false));
 
                 dynamic = dynamic.set("Status", dynamic.createString(flag ? "mobs_spawned" : "empty"));
                 dynamic = dynamic.set("hasLegacyStructureData", dynamic.createBoolean(true));
                 Dynamic dynamic1;
 
                 if (flag) {
-                    Optional<ByteBuffer> optional1 = dynamic.get("Biomes").asByteBufferOpt();
+                    Optional<ByteBuffer> optional1 = dynamic.get("Biomes").asByteBufferOpt().result();
 
                     if (optional1.isPresent()) {
                         ByteBuffer bytebuffer = (ByteBuffer) optional1.get();
@@ -57,8 +65,8 @@ public class DataConverterProtoChunk extends DataFix {
                         dynamic = dynamic.set("Biomes", dynamic.createIntList(Arrays.stream(aint)));
                     }
 
-                    List<Dynamic<?>> list = (List) IntStream.range(0, 16).mapToObj((j) -> {
-                        return dynamic.createList(Stream.empty());
+                    List<ShortList> list = (List) IntStream.range(0, 16).mapToObj((j) -> {
+                        return new ShortArrayList();
                     }).collect(Collectors.toList());
 
                     if (optional.isPresent()) {
@@ -68,19 +76,24 @@ public class DataConverterProtoChunk extends DataFix {
                             int l = dynamic2.get("z").asInt(0);
                             short short0 = a(j, k, l);
 
-                            list.set(k >> 4, ((Dynamic) list.get(k >> 4)).merge(dynamic.createShort(short0)));
+                            ((ShortList) list.get(k >> 4)).add(short0);
                         });
-                        dynamic = dynamic.set("ToBeTicked", dynamic.createList(list.stream()));
+                        dynamic = dynamic.set("ToBeTicked", dynamic.createList(list.stream().map((shortlist) -> {
+                            Stream stream = shortlist.stream();
+
+                            dynamic.getClass();
+                            return dynamic.createList(stream.map(dynamic::createShort));
+                        })));
                     }
 
-                    dynamic1 = typed1.set(DSL.remainderFinder(), dynamic).write();
+                    dynamic1 = (Dynamic) DataFixUtils.orElse(typed1.set(DSL.remainderFinder(), dynamic).write().result(), dynamic);
                 } else {
                     dynamic1 = dynamic;
                 }
 
-                return (Typed) ((Optional) type3.readTyped(dynamic1).getSecond()).orElseThrow(() -> {
+                return (Typed) ((Pair) type3.readTyped(dynamic1).result().orElseThrow(() -> {
                     return new IllegalStateException("Could not read the new chunk");
-                });
+                })).getFirst();
             });
         }), this.writeAndRead("Structure biome inject", this.getInputSchema().getType(DataConverterTypes.STRUCTURE_FEATURE), this.getOutputSchema().getType(DataConverterTypes.STRUCTURE_FEATURE)));
     }

@@ -5,12 +5,12 @@ import javax.annotation.Nullable;
 
 public class BlockBarrel extends BlockTileEntity {
 
-    public static final BlockStateDirection a = BlockProperties.L;
+    public static final BlockStateDirection a = BlockProperties.M;
     public static final BlockStateBoolean b = BlockProperties.u;
 
-    public BlockBarrel(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBarrel.a, EnumDirection.NORTH)).set(BlockBarrel.b, false));
+    public BlockBarrel(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBarrel.a, EnumDirection.NORTH)).set(BlockBarrel.b, false));
     }
 
     @Override
@@ -23,15 +23,16 @@ public class BlockBarrel extends BlockTileEntity {
             if (tileentity instanceof TileEntityBarrel) {
                 entityhuman.openContainer((TileEntityBarrel) tileentity);
                 entityhuman.a(StatisticList.OPEN_BARREL);
+                PiglinAI.a(entityhuman, true);
             }
 
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.CONSUME;
         }
     }
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!iblockdata.a(iblockdata1.getBlock())) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof IInventory) {
@@ -44,7 +45,7 @@ public class BlockBarrel extends BlockTileEntity {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         TileEntity tileentity = worldserver.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityBarrel) {
@@ -60,7 +61,7 @@ public class BlockBarrel extends BlockTileEntity {
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 

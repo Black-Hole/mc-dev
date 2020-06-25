@@ -43,7 +43,7 @@ public class MerchantRecipe {
     }
 
     public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1, int i, int j, float f) {
-        this(itemstack, ItemStack.a, itemstack1, i, j, f);
+        this(itemstack, ItemStack.b, itemstack1, i, j, f);
     }
 
     public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1, ItemStack itemstack2, int i, int j, float f) {

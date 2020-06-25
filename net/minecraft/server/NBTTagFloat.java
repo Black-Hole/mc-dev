@@ -74,9 +74,9 @@ public class NBTTagFloat extends NBTNumber {
 
     @Override
     public IChatBaseComponent a(String s, int i) {
-        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("f")).a(NBTTagFloat.g);
+        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("f")).a(NBTTagFloat.g);
 
-        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatbasecomponent).a(NBTTagFloat.f);
+        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatmutablecomponent).a(NBTTagFloat.f);
     }
 
     @Override

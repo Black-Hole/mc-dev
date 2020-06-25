@@ -19,20 +19,20 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
     protected void initDatawatcher() {
         super.initDatawatcher();
         this.getDataWatcher().register(EntityMinecartCommandBlock.COMMAND, "");
-        this.getDataWatcher().register(EntityMinecartCommandBlock.c, new ChatComponentText(""));
+        this.getDataWatcher().register(EntityMinecartCommandBlock.c, ChatComponentText.d);
     }
 
     @Override
-    protected void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    protected void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.d.b(nbttagcompound);
         this.getDataWatcher().set(EntityMinecartCommandBlock.COMMAND, this.getCommandBlock().getCommand());
         this.getDataWatcher().set(EntityMinecartCommandBlock.c, this.getCommandBlock().j());
     }
 
     @Override
-    protected void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    protected void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         this.d.a(nbttagcompound);
     }
 
@@ -60,9 +60,8 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
     }
 
     @Override
-    public boolean b(EntityHuman entityhuman, EnumHand enumhand) {
-        this.d.a(entityhuman);
-        return true;
+    public EnumInteractionResult a(EntityHuman entityhuman, EnumHand enumhand) {
+        return this.d.a(entityhuman);
     }
 
     @Override
@@ -70,7 +69,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
         super.a(datawatcherobject);
         if (EntityMinecartCommandBlock.c.equals(datawatcherobject)) {
             try {
-                this.d.c((IChatBaseComponent) this.getDataWatcher().get(EntityMinecartCommandBlock.c));
+                this.d.b((IChatBaseComponent) this.getDataWatcher().get(EntityMinecartCommandBlock.c));
             } catch (Throwable throwable) {
                 ;
             }
@@ -81,7 +80,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
     }
 
     @Override
-    public boolean cb() {
+    public boolean ci() {
         return true;
     }
 
@@ -102,7 +101,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
         @Override
         public CommandListenerWrapper getWrapper() {
-            return new CommandListenerWrapper(this, EntityMinecartCommandBlock.this.getPositionVector(), EntityMinecartCommandBlock.this.aX(), this.d(), 2, this.getName().getString(), EntityMinecartCommandBlock.this.getScoreboardDisplayName(), this.d().getMinecraftServer(), EntityMinecartCommandBlock.this);
+            return new CommandListenerWrapper(this, EntityMinecartCommandBlock.this.getPositionVector(), EntityMinecartCommandBlock.this.be(), this.d(), 2, this.getName().getString(), EntityMinecartCommandBlock.this.getScoreboardDisplayName(), this.d().getMinecraftServer(), EntityMinecartCommandBlock.this);
         }
     }
 }

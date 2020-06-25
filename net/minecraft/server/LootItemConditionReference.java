@@ -11,8 +11,13 @@ public class LootItemConditionReference implements LootItemCondition {
     private static final Logger LOGGER = LogManager.getLogger();
     private final MinecraftKey b;
 
-    public LootItemConditionReference(MinecraftKey minecraftkey) {
+    private LootItemConditionReference(MinecraftKey minecraftkey) {
         this.b = minecraftkey;
+    }
+
+    @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.o;
     }
 
     @Override
@@ -51,18 +56,16 @@ public class LootItemConditionReference implements LootItemCondition {
         }
     }
 
-    public static class a extends LootItemCondition.b<LootItemConditionReference> {
+    public static class a implements LootSerializer<LootItemConditionReference> {
 
-        protected a() {
-            super(new MinecraftKey("reference"), LootItemConditionReference.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionReference lootitemconditionreference, JsonSerializationContext jsonserializationcontext) {
             jsonobject.addProperty("name", lootitemconditionreference.b.toString());
         }
 
         @Override
-        public LootItemConditionReference b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionReference a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "name"));
 
             return new LootItemConditionReference(minecraftkey);

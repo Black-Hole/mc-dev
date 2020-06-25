@@ -5,39 +5,39 @@ import java.util.Optional;
 
 public class BehaviorMakeLove extends Behavior<EntityVillager> {
 
-    private long a;
+    private long b;
 
     public BehaviorMakeLove() {
         super(ImmutableMap.of(MemoryModuleType.BREED_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.VISIBLE_MOBS, MemoryStatus.VALUE_PRESENT), 350, 350);
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
-        return this.b(entityvillager);
+        return this.a(entityvillager);
     }
 
-    protected boolean g(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        return i <= this.a && this.b(entityvillager);
+    protected boolean b(WorldServer worldserver, EntityVillager entityvillager, long i) {
+        return i <= this.b && this.a(entityvillager);
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        EntityVillager entityvillager1 = this.a(entityvillager);
+        EntityAgeable entityageable = (EntityAgeable) entityvillager.getBehaviorController().getMemory(MemoryModuleType.BREED_TARGET).get();
 
-        BehaviorUtil.a((EntityLiving) entityvillager, (EntityLiving) entityvillager1);
-        worldserver.broadcastEntityEffect(entityvillager1, (byte) 18);
+        BehaviorUtil.a(entityvillager, entityageable, 0.5F);
+        worldserver.broadcastEntityEffect(entityageable, (byte) 18);
         worldserver.broadcastEntityEffect(entityvillager, (byte) 18);
         int j = 275 + entityvillager.getRandom().nextInt(50);
 
-        this.a = i + (long) j;
+        this.b = i + (long) j;
     }
 
     protected void d(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        EntityVillager entityvillager1 = this.a(entityvillager);
+        EntityVillager entityvillager1 = (EntityVillager) entityvillager.getBehaviorController().getMemory(MemoryModuleType.BREED_TARGET).get();
 
         if (entityvillager.h((Entity) entityvillager1) <= 5.0D) {
-            BehaviorUtil.a((EntityLiving) entityvillager, (EntityLiving) entityvillager1);
-            if (i >= this.a) {
-                entityvillager.eJ();
-                entityvillager1.eJ();
+            BehaviorUtil.a(entityvillager, entityvillager1, 0.5F);
+            if (i >= this.b) {
+                entityvillager.ff();
+                entityvillager1.ff();
                 this.a(worldserver, entityvillager, entityvillager1);
             } else if (entityvillager.getRandom().nextInt(35) == 0) {
                 worldserver.broadcastEntityEffect(entityvillager1, (byte) 12);
@@ -59,43 +59,36 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
             if (optional1.isPresent()) {
                 this.a(worldserver, (EntityVillager) optional1.get(), (BlockPosition) optional.get());
             } else {
-                worldserver.B().b((BlockPosition) optional.get());
+                worldserver.x().b((BlockPosition) optional.get());
                 PacketDebug.c(worldserver, (BlockPosition) optional.get());
             }
         }
 
     }
 
-    protected void f(WorldServer worldserver, EntityVillager entityvillager, long i) {
+    protected void c(WorldServer worldserver, EntityVillager entityvillager, long i) {
         entityvillager.getBehaviorController().removeMemory(MemoryModuleType.BREED_TARGET);
     }
 
-    private EntityVillager a(EntityVillager entityvillager) {
-        return (EntityVillager) entityvillager.getBehaviorController().getMemory(MemoryModuleType.BREED_TARGET).get();
-    }
-
-    private boolean b(EntityVillager entityvillager) {
+    private boolean a(EntityVillager entityvillager) {
         BehaviorController<EntityVillager> behaviorcontroller = entityvillager.getBehaviorController();
+        Optional<EntityAgeable> optional = behaviorcontroller.getMemory(MemoryModuleType.BREED_TARGET).filter((entityageable) -> {
+            return entityageable.getEntityType() == EntityTypes.VILLAGER;
+        });
 
-        if (!behaviorcontroller.getMemory(MemoryModuleType.BREED_TARGET).isPresent()) {
-            return false;
-        } else {
-            EntityVillager entityvillager1 = this.a(entityvillager);
-
-            return BehaviorUtil.a(behaviorcontroller, MemoryModuleType.BREED_TARGET, EntityTypes.VILLAGER) && entityvillager.canBreed() && entityvillager1.canBreed();
-        }
+        return !optional.isPresent() ? false : BehaviorUtil.a(behaviorcontroller, MemoryModuleType.BREED_TARGET, EntityTypes.VILLAGER) && entityvillager.canBreed() && ((EntityAgeable) optional.get()).canBreed();
     }
 
     private Optional<BlockPosition> b(WorldServer worldserver, EntityVillager entityvillager) {
-        return worldserver.B().a(VillagePlaceType.q.c(), (blockposition) -> {
+        return worldserver.x().a(VillagePlaceType.r.c(), (blockposition) -> {
             return this.a(entityvillager, blockposition);
-        }, new BlockPosition(entityvillager), 48);
+        }, entityvillager.getChunkCoordinates(), 48);
     }
 
     private boolean a(EntityVillager entityvillager, BlockPosition blockposition) {
-        PathEntity pathentity = entityvillager.getNavigation().a(blockposition, VillagePlaceType.q.d());
+        PathEntity pathentity = entityvillager.getNavigation().a(blockposition, VillagePlaceType.r.d());
 
-        return pathentity != null && pathentity.h();
+        return pathentity != null && pathentity.i();
     }
 
     private Optional<EntityVillager> a(EntityVillager entityvillager, EntityVillager entityvillager1) {
@@ -115,7 +108,7 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
     }
 
     private void a(WorldServer worldserver, EntityVillager entityvillager, BlockPosition blockposition) {
-        GlobalPos globalpos = GlobalPos.create(worldserver.getWorldProvider().getDimensionManager(), blockposition);
+        GlobalPos globalpos = GlobalPos.create(worldserver.getDimensionKey(), blockposition);
 
         entityvillager.getBehaviorController().setMemory(MemoryModuleType.HOME, (Object) globalpos);
     }

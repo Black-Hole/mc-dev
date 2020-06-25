@@ -5,13 +5,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public abstract class StructureStart {
+public abstract class StructureStart<C extends WorldGenFeatureConfiguration> {
 
-    public static final StructureStart a = new StructureStart(WorldGenerator.MINESHAFT, 0, 0, StructureBoundingBox.a(), 0, 0L) {
-        @Override
-        public void a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase) {}
+    public static final StructureStart<?> a = new StructureStart<WorldGenMineshaftConfiguration>(StructureGenerator.MINESHAFT, 0, 0, StructureBoundingBox.a(), 0, 0L) {
+        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenMineshaftConfiguration worldgenmineshaftconfiguration) {}
     };
-    private final StructureGenerator<?> e;
+    private final StructureGenerator<C> e;
     protected final List<StructurePiece> b = Lists.newArrayList();
     protected StructureBoundingBox c;
     private final int f;
@@ -19,7 +18,7 @@ public abstract class StructureStart {
     private int h;
     protected final SeededRandom d;
 
-    public StructureStart(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+    public StructureStart(StructureGenerator<C> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
         this.e = structuregenerator;
         this.f = i;
         this.g = j;
@@ -29,7 +28,7 @@ public abstract class StructureStart {
         this.c = structureboundingbox;
     }
 
-    public abstract void a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase);
+    public abstract void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, C c0);
 
     public StructureBoundingBox c() {
         return this.c;
@@ -39,21 +38,26 @@ public abstract class StructureStart {
         return this.b;
     }
 
-    public void a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+    public void a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
         List list = this.b;
 
         synchronized (this.b) {
-            Iterator iterator = this.b.iterator();
+            if (!this.b.isEmpty()) {
+                StructureBoundingBox structureboundingbox1 = ((StructurePiece) this.b.get(0)).n;
+                BaseBlockPosition baseblockposition = structureboundingbox1.g();
+                BlockPosition blockposition = new BlockPosition(baseblockposition.getX(), structureboundingbox1.b, baseblockposition.getZ());
+                Iterator iterator = this.b.iterator();
 
-            while (iterator.hasNext()) {
-                StructurePiece structurepiece = (StructurePiece) iterator.next();
+                while (iterator.hasNext()) {
+                    StructurePiece structurepiece = (StructurePiece) iterator.next();
 
-                if (structurepiece.g().b(structureboundingbox) && !structurepiece.a(generatoraccess, chunkgenerator, random, structureboundingbox, chunkcoordintpair)) {
-                    iterator.remove();
+                    if (structurepiece.g().b(structureboundingbox) && !structurepiece.a(generatoraccessseed, structuremanager, chunkgenerator, random, structureboundingbox, chunkcoordintpair, blockposition)) {
+                        iterator.remove();
+                    }
                 }
-            }
 
-            this.b();
+                this.b();
+            }
         }
     }
 
@@ -77,7 +81,7 @@ public abstract class StructureStart {
             nbttagcompound.setInt("ChunkX", i);
             nbttagcompound.setInt("ChunkZ", j);
             nbttagcompound.setInt("references", this.h);
-            nbttagcompound.set("BB", this.c.g());
+            nbttagcompound.set("BB", this.c.h());
             NBTTagList nbttaglist = new NBTTagList();
             List list = this.b;
 
@@ -101,7 +105,7 @@ public abstract class StructureStart {
 
     protected void a(int i, Random random, int j) {
         int k = i - j;
-        int l = this.c.d() + 1;
+        int l = this.c.e() + 1;
 
         if (l < k) {
             l += random.nextInt(k - l);
@@ -121,7 +125,7 @@ public abstract class StructureStart {
     }
 
     protected void a(Random random, int i, int j) {
-        int k = j - i + 1 - this.c.d();
+        int k = j - i + 1 - this.c.e();
         int l;
 
         if (k > 1) {

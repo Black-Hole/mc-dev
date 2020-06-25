@@ -6,21 +6,21 @@ public class BlockDoor extends Block {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
     public static final BlockStateBoolean OPEN = BlockProperties.u;
-    public static final BlockStateEnum<BlockPropertyDoorHinge> HINGE = BlockProperties.aA;
+    public static final BlockStateEnum<BlockPropertyDoorHinge> HINGE = BlockProperties.aH;
     public static final BlockStateBoolean POWERED = BlockProperties.w;
-    public static final BlockStateEnum<BlockPropertyDoubleBlockHalf> HALF = BlockProperties.U;
+    public static final BlockStateEnum<BlockPropertyDoubleBlockHalf> HALF = BlockProperties.aa;
     protected static final VoxelShape f = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 3.0D);
     protected static final VoxelShape g = Block.a(0.0D, 0.0D, 13.0D, 16.0D, 16.0D, 16.0D);
     protected static final VoxelShape h = Block.a(13.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     protected static final VoxelShape i = Block.a(0.0D, 0.0D, 0.0D, 3.0D, 16.0D, 16.0D);
 
-    protected BlockDoor(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDoor.FACING, EnumDirection.NORTH)).set(BlockDoor.OPEN, false)).set(BlockDoor.HINGE, BlockPropertyDoorHinge.LEFT)).set(BlockDoor.POWERED, false)).set(BlockDoor.HALF, BlockPropertyDoubleBlockHalf.LOWER));
+    protected BlockDoor(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDoor.FACING, EnumDirection.NORTH)).set(BlockDoor.OPEN, false)).set(BlockDoor.HINGE, BlockPropertyDoorHinge.LEFT)).set(BlockDoor.POWERED, false)).set(BlockDoor.HALF, BlockPropertyDoubleBlockHalf.LOWER));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockDoor.FACING);
         boolean flag = !(Boolean) iblockdata.get(BlockDoor.OPEN);
         boolean flag1 = iblockdata.get(BlockDoor.HINGE) == BlockPropertyDoorHinge.RIGHT;
@@ -42,29 +42,13 @@ public class BlockDoor extends Block {
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         BlockPropertyDoubleBlockHalf blockpropertydoubleblockhalf = (BlockPropertyDoubleBlockHalf) iblockdata.get(BlockDoor.HALF);
 
-        return enumdirection.m() == EnumDirection.EnumAxis.Y && blockpropertydoubleblockhalf == BlockPropertyDoubleBlockHalf.LOWER == (enumdirection == EnumDirection.UP) ? (iblockdata1.getBlock() == this && iblockdata1.get(BlockDoor.HALF) != blockpropertydoubleblockhalf ? (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockDoor.FACING, iblockdata1.get(BlockDoor.FACING))).set(BlockDoor.OPEN, iblockdata1.get(BlockDoor.OPEN))).set(BlockDoor.HINGE, iblockdata1.get(BlockDoor.HINGE))).set(BlockDoor.POWERED, iblockdata1.get(BlockDoor.POWERED)) : Blocks.AIR.getBlockData()) : (blockpropertydoubleblockhalf == BlockPropertyDoubleBlockHalf.LOWER && enumdirection == EnumDirection.DOWN && !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1));
-    }
-
-    @Override
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
-        super.a(world, entityhuman, blockposition, Blocks.AIR.getBlockData(), tileentity, itemstack);
+        return enumdirection.n() == EnumDirection.EnumAxis.Y && blockpropertydoubleblockhalf == BlockPropertyDoubleBlockHalf.LOWER == (enumdirection == EnumDirection.UP) ? (iblockdata1.a((Block) this) && iblockdata1.get(BlockDoor.HALF) != blockpropertydoubleblockhalf ? (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockDoor.FACING, iblockdata1.get(BlockDoor.FACING))).set(BlockDoor.OPEN, iblockdata1.get(BlockDoor.OPEN))).set(BlockDoor.HINGE, iblockdata1.get(BlockDoor.HINGE))).set(BlockDoor.POWERED, iblockdata1.get(BlockDoor.POWERED)) : Blocks.AIR.getBlockData()) : (blockpropertydoubleblockhalf == BlockPropertyDoubleBlockHalf.LOWER && enumdirection == EnumDirection.DOWN && !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1));
     }
 
     @Override
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
-        BlockPropertyDoubleBlockHalf blockpropertydoubleblockhalf = (BlockPropertyDoubleBlockHalf) iblockdata.get(BlockDoor.HALF);
-        BlockPosition blockposition1 = blockpropertydoubleblockhalf == BlockPropertyDoubleBlockHalf.LOWER ? blockposition.up() : blockposition.down();
-        IBlockData iblockdata1 = world.getType(blockposition1);
-
-        if (iblockdata1.getBlock() == this && iblockdata1.get(BlockDoor.HALF) != blockpropertydoubleblockhalf) {
-            world.setTypeAndData(blockposition1, Blocks.AIR.getBlockData(), 35);
-            world.a(entityhuman, 2001, blockposition1, Block.getCombinedId(iblockdata1));
-            ItemStack itemstack = entityhuman.getItemInMainHand();
-
-            if (!world.isClientSide && !entityhuman.isCreative() && entityhuman.hasBlock(iblockdata1)) {
-                Block.dropItems(iblockdata, world, blockposition, (TileEntity) null, entityhuman, itemstack);
-                Block.dropItems(iblockdata1, world, blockposition1, (TileEntity) null, entityhuman, itemstack);
-            }
+        if (!world.isClientSide && entityhuman.isCreative()) {
+            BlockTallPlant.b(world, blockposition, iblockdata, entityhuman);
         }
 
         super.a(world, blockposition, iblockdata, entityhuman);
@@ -117,19 +101,19 @@ public class BlockDoor extends Block {
         BlockPosition blockposition = blockactioncontext.getClickPosition();
         EnumDirection enumdirection = blockactioncontext.f();
         BlockPosition blockposition1 = blockposition.up();
-        EnumDirection enumdirection1 = enumdirection.g();
+        EnumDirection enumdirection1 = enumdirection.h();
         BlockPosition blockposition2 = blockposition.shift(enumdirection1);
         IBlockData iblockdata = world.getType(blockposition2);
         BlockPosition blockposition3 = blockposition1.shift(enumdirection1);
         IBlockData iblockdata1 = world.getType(blockposition3);
-        EnumDirection enumdirection2 = enumdirection.f();
+        EnumDirection enumdirection2 = enumdirection.g();
         BlockPosition blockposition4 = blockposition.shift(enumdirection2);
         IBlockData iblockdata2 = world.getType(blockposition4);
         BlockPosition blockposition5 = blockposition1.shift(enumdirection2);
         IBlockData iblockdata3 = world.getType(blockposition5);
-        int i = (iblockdata.p(world, blockposition2) ? -1 : 0) + (iblockdata1.p(world, blockposition3) ? -1 : 0) + (iblockdata2.p(world, blockposition4) ? 1 : 0) + (iblockdata3.p(world, blockposition5) ? 1 : 0);
-        boolean flag = iblockdata.getBlock() == this && iblockdata.get(BlockDoor.HALF) == BlockPropertyDoubleBlockHalf.LOWER;
-        boolean flag1 = iblockdata2.getBlock() == this && iblockdata2.get(BlockDoor.HALF) == BlockPropertyDoubleBlockHalf.LOWER;
+        int i = (iblockdata.r(world, blockposition2) ? -1 : 0) + (iblockdata1.r(world, blockposition3) ? -1 : 0) + (iblockdata2.r(world, blockposition4) ? 1 : 0) + (iblockdata3.r(world, blockposition5) ? 1 : 0);
+        boolean flag = iblockdata.a((Block) this) && iblockdata.get(BlockDoor.HALF) == BlockPropertyDoubleBlockHalf.LOWER;
+        boolean flag1 = iblockdata2.a((Block) this) && iblockdata2.get(BlockDoor.HALF) == BlockPropertyDoubleBlockHalf.LOWER;
 
         if ((!flag || flag1) && i <= 0) {
             if ((!flag1 || flag) && i >= 0) {
@@ -156,14 +140,14 @@ public class BlockDoor extends Block {
             iblockdata = (IBlockData) iblockdata.a((IBlockState) BlockDoor.OPEN);
             world.setTypeAndData(blockposition, iblockdata, 10);
             world.a(entityhuman, (Boolean) iblockdata.get(BlockDoor.OPEN) ? this.d() : this.c(), blockposition, 0);
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.a(world.isClientSide);
         }
     }
 
     public void setDoor(World world, BlockPosition blockposition, boolean flag) {
         IBlockData iblockdata = world.getType(blockposition);
 
-        if (iblockdata.getBlock() == this && (Boolean) iblockdata.get(BlockDoor.OPEN) != flag) {
+        if (iblockdata.a((Block) this) && (Boolean) iblockdata.get(BlockDoor.OPEN) != flag) {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDoor.OPEN, flag), 10);
             this.b(world, blockposition, flag);
         }
@@ -188,7 +172,7 @@ public class BlockDoor extends Block {
         BlockPosition blockposition1 = blockposition.down();
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
 
-        return iblockdata.get(BlockDoor.HALF) == BlockPropertyDoubleBlockHalf.LOWER ? iblockdata1.d(iworldreader, blockposition1, EnumDirection.UP) : iblockdata1.getBlock() == this;
+        return iblockdata.get(BlockDoor.HALF) == BlockPropertyDoubleBlockHalf.LOWER ? iblockdata1.d(iworldreader, blockposition1, EnumDirection.UP) : iblockdata1.a((Block) this);
     }
 
     private void b(World world, BlockPosition blockposition, boolean flag) {
@@ -213,5 +197,13 @@ public class BlockDoor extends Block {
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockDoor.HALF, BlockDoor.FACING, BlockDoor.OPEN, BlockDoor.HINGE, BlockDoor.POWERED);
+    }
+
+    public static boolean a(World world, BlockPosition blockposition) {
+        return h(world.getType(blockposition));
+    }
+
+    public static boolean h(IBlockData iblockdata) {
+        return iblockdata.getBlock() instanceof BlockDoor && (iblockdata.getMaterial() == Material.WOOD || iblockdata.getMaterial() == Material.NETHER_WOOD);
     }
 }

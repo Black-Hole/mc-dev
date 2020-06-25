@@ -25,8 +25,10 @@ public class ItemChorusFruit extends Item {
                 }
 
                 if (entityliving.a(d3, d4, d5, true)) {
-                    world.playSound((EntityHuman) null, d0, d1, d2, SoundEffects.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
-                    entityliving.a(SoundEffects.ITEM_CHORUS_FRUIT_TELEPORT, 1.0F, 1.0F);
+                    SoundEffect soundeffect = entityliving instanceof EntityFox ? SoundEffects.ENTITY_FOX_TELEPORT : SoundEffects.ITEM_CHORUS_FRUIT_TELEPORT;
+
+                    world.playSound((EntityHuman) null, d0, d1, d2, soundeffect, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                    entityliving.playSound(soundeffect, 1.0F, 1.0F);
                     break;
                 }
             }

@@ -17,6 +17,11 @@ public class LootItemConditionAlternative implements LootItemCondition {
         this.b = LootItemConditions.b((Predicate[]) alootitemcondition);
     }
 
+    @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.b;
+    }
+
     public final boolean test(LootTableInfo loottableinfo) {
         return this.b.test(loottableinfo);
     }
@@ -35,18 +40,16 @@ public class LootItemConditionAlternative implements LootItemCondition {
         return new LootItemConditionAlternative.a(alootitemcondition_a);
     }
 
-    public static class b extends LootItemCondition.b<LootItemConditionAlternative> {
+    public static class b implements LootSerializer<LootItemConditionAlternative> {
 
-        public b() {
-            super(new MinecraftKey("alternative"), LootItemConditionAlternative.class);
-        }
+        public b() {}
 
         public void a(JsonObject jsonobject, LootItemConditionAlternative lootitemconditionalternative, JsonSerializationContext jsonserializationcontext) {
             jsonobject.add("terms", jsonserializationcontext.serialize(lootitemconditionalternative.a));
         }
 
         @Override
-        public LootItemConditionAlternative b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionAlternative a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             LootItemCondition[] alootitemcondition = (LootItemCondition[]) ChatDeserializer.a(jsonobject, "terms", jsondeserializationcontext, LootItemCondition[].class);
 
             return new LootItemConditionAlternative(alootitemcondition);

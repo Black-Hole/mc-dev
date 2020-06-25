@@ -6,7 +6,6 @@ import com.google.common.collect.Lists;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
@@ -14,6 +13,7 @@ import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.types.templates.List.ListType;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -31,7 +31,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 import javax.annotation.Nullable;
 
 public class DataConverterLeaves extends DataFix {
@@ -155,7 +154,7 @@ public class DataConverterLeaves extends DataFix {
 
                     if (aint[0] != 0) {
                         typed2 = typed2.update(DSL.remainderFinder(), (dynamic) -> {
-                            Dynamic<?> dynamic1 = (Dynamic) DataFixUtils.orElse(dynamic.get("UpgradeData").get(), dynamic.emptyMap());
+                            Dynamic<?> dynamic1 = (Dynamic) DataFixUtils.orElse(dynamic.get("UpgradeData").result(), dynamic.emptyMap());
 
                             return dynamic.set("UpgradeData", dynamic1.set("Sides", dynamic.createByte((byte) (dynamic1.get("Sides").asByte((byte) 0) | aint[0]))));
                         });
@@ -289,17 +288,17 @@ public class DataConverterLeaves extends DataFix {
             }
 
             i1 = this.g.get(l);
-            if (1 << this.d.c() <= i1) {
-                DataBits databits = new DataBits(this.d.c() + 1, 4096);
+            if (1 << this.d.b() <= i1) {
+                DataBitsPacked databitspacked = new DataBitsPacked(this.d.b() + 1, 4096);
 
                 for (int j1 = 0; j1 < 4096; ++j1) {
-                    databits.b(j1, this.d.a(j1));
+                    databitspacked.a(j1, this.d.a(j1));
                 }
 
-                this.d = databits;
+                this.d = databitspacked;
             }
 
-            this.d.b(i, i1);
+            this.d.a(i, i1);
         }
     }
 
@@ -310,7 +309,7 @@ public class DataConverterLeaves extends DataFix {
         protected final List<Dynamic<?>> b;
         protected final int c;
         @Nullable
-        protected DataBits d;
+        protected DataBitsPacked d;
 
         public b(Typed<?> typed, Schema schema) {
             this.e = DSL.named(DataConverterTypes.BLOCK_STATE.typeName(), DSL.remainderType());
@@ -334,10 +333,10 @@ public class DataConverterLeaves extends DataFix {
             if (this.a()) {
                 this.d = null;
             } else {
-                long[] along = ((LongStream) dynamic.get("BlockStates").asLongStreamOpt().get()).toArray();
+                long[] along = dynamic.get("BlockStates").asLongStream().toArray();
                 int i = Math.max(4, DataFixUtils.ceillog2(this.b.size()));
 
-                this.d = new DataBits(i, 4096, along);
+                this.d = new DataBitsPacked(i, 4096, along);
             }
 
         }

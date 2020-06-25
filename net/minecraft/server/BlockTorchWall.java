@@ -10,18 +10,18 @@ public class BlockTorchWall extends BlockTorch {
     public static final BlockStateDirection a = BlockFacingHorizontal.FACING;
     private static final Map<EnumDirection, VoxelShape> b = Maps.newEnumMap(ImmutableMap.of(EnumDirection.NORTH, Block.a(5.5D, 3.0D, 11.0D, 10.5D, 13.0D, 16.0D), EnumDirection.SOUTH, Block.a(5.5D, 3.0D, 0.0D, 10.5D, 13.0D, 5.0D), EnumDirection.WEST, Block.a(11.0D, 3.0D, 5.5D, 16.0D, 13.0D, 10.5D), EnumDirection.EAST, Block.a(0.0D, 3.0D, 5.5D, 5.0D, 13.0D, 10.5D)));
 
-    protected BlockTorchWall(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTorchWall.a, EnumDirection.NORTH));
+    protected BlockTorchWall(BlockBase.Info blockbase_info, ParticleParam particleparam) {
+        super(blockbase_info, particleparam);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTorchWall.a, EnumDirection.NORTH));
     }
 
     @Override
-    public String k() {
+    public String i() {
         return this.getItem().getName();
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return h(iblockdata);
     }
 
@@ -51,7 +51,7 @@ public class BlockTorchWall extends BlockTorch {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection1[j];
 
-            if (enumdirection.m().c()) {
+            if (enumdirection.n().d()) {
                 EnumDirection enumdirection1 = enumdirection.opposite();
 
                 iblockdata = (IBlockData) iblockdata.set(BlockTorchWall.a, enumdirection1);

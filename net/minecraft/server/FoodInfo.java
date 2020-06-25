@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.mojang.datafixers.util.Pair;
 import java.util.List;
-import org.apache.commons.lang3.tuple.Pair;
 
 public class FoodInfo {
 

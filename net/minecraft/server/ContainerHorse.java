@@ -17,13 +17,13 @@ public class ContainerHorse extends Container {
         this.a(new Slot(iinventory, 0, 8, 18) {
             @Override
             public boolean isAllowed(ItemStack itemstack) {
-                return itemstack.getItem() == Items.SADDLE && !this.hasItem() && entityhorseabstract.eK();
+                return itemstack.getItem() == Items.SADDLE && !this.hasItem() && entityhorseabstract.canSaddle();
             }
         });
         this.a(new Slot(iinventory, 1, 8, 36) {
             @Override
             public boolean isAllowed(ItemStack itemstack) {
-                return entityhorseabstract.j(itemstack);
+                return entityhorseabstract.l(itemstack);
             }
 
             @Override
@@ -36,8 +36,8 @@ public class ContainerHorse extends Container {
 
         if (entityhorseabstract instanceof EntityHorseChestedAbstract && ((EntityHorseChestedAbstract) entityhorseabstract).isCarryingChest()) {
             for (j = 0; j < 3; ++j) {
-                for (k = 0; k < ((EntityHorseChestedAbstract) entityhorseabstract).eu(); ++k) {
-                    this.a(new Slot(iinventory, 2 + k + j * ((EntityHorseChestedAbstract) entityhorseabstract).eu(), 80 + k * 18, 18 + j * 18));
+                for (k = 0; k < ((EntityHorseChestedAbstract) entityhorseabstract).eV(); ++k) {
+                    this.a(new Slot(iinventory, 2 + k + j * ((EntityHorseChestedAbstract) entityhorseabstract).eV(), 80 + k * 18, 18 + j * 18));
                 }
             }
         }
@@ -61,7 +61,7 @@ public class ContainerHorse extends Container {
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -72,15 +72,15 @@ public class ContainerHorse extends Container {
 
             if (i < j) {
                 if (!this.a(itemstack1, j, this.slots.size(), true)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (this.getSlot(1).isAllowed(itemstack1) && !this.getSlot(1).hasItem()) {
                 if (!this.a(itemstack1, 1, 2, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (this.getSlot(0).isAllowed(itemstack1)) {
                 if (!this.a(itemstack1, 0, 1, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (j <= 2 || !this.a(itemstack1, 2, j, false)) {
                 int k = j + 27;
@@ -88,21 +88,21 @@ public class ContainerHorse extends Container {
 
                 if (i >= k && i < l) {
                     if (!this.a(itemstack1, j, k, false)) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
                 } else if (i >= j && i < k) {
                     if (!this.a(itemstack1, k, l, false)) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
                 } else if (!this.a(itemstack1, k, k, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
 
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.a);
+                slot.set(ItemStack.b);
             } else {
                 slot.d();
             }

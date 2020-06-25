@@ -1,21 +1,27 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Multimap;
 import java.util.Set;
 
-public class ItemTool extends ItemToolMaterial {
+public class ItemTool extends ItemToolMaterial implements ItemVanishable {
 
     private final Set<Block> a;
     protected final float b;
-    protected final float c;
-    protected final float d;
+    private final float c;
+    private final Multimap<AttributeBase, AttributeModifier> d;
 
     protected ItemTool(float f, float f1, ToolMaterial toolmaterial, Set<Block> set, Item.Info item_info) {
         super(toolmaterial, item_info);
         this.a = set;
         this.b = toolmaterial.b();
         this.c = f + toolmaterial.c();
-        this.d = f1;
+        Builder<AttributeBase, AttributeModifier> builder = ImmutableMultimap.builder();
+
+        builder.put(GenericAttributes.ATTACK_DAMAGE, new AttributeModifier(ItemTool.f, "Tool modifier", (double) this.c, AttributeModifier.Operation.ADDITION));
+        builder.put(GenericAttributes.ATTACK_SPEED, new AttributeModifier(ItemTool.g, "Tool modifier", (double) f1, AttributeModifier.Operation.ADDITION));
+        this.d = builder.build();
     }
 
     @Override
@@ -33,7 +39,7 @@ public class ItemTool extends ItemToolMaterial {
 
     @Override
     public boolean a(ItemStack itemstack, World world, IBlockData iblockdata, BlockPosition blockposition, EntityLiving entityliving) {
-        if (!world.isClientSide && iblockdata.f(world, blockposition) != 0.0F) {
+        if (!world.isClientSide && iblockdata.h(world, blockposition) != 0.0F) {
             itemstack.damage(1, entityliving, (entityliving1) -> {
                 entityliving1.broadcastItemBreak(EnumItemSlot.MAINHAND);
             });
@@ -43,14 +49,11 @@ public class ItemTool extends ItemToolMaterial {
     }
 
     @Override
-    public Multimap<String, AttributeModifier> a(EnumItemSlot enumitemslot) {
-        Multimap<String, AttributeModifier> multimap = super.a(enumitemslot);
+    public Multimap<AttributeBase, AttributeModifier> a(EnumItemSlot enumitemslot) {
+        return enumitemslot == EnumItemSlot.MAINHAND ? this.d : super.a(enumitemslot);
+    }
 
-        if (enumitemslot == EnumItemSlot.MAINHAND) {
-            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemTool.g, "Tool modifier", (double) this.c, AttributeModifier.Operation.ADDITION));
-            multimap.put(GenericAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ItemTool.h, "Tool modifier", (double) this.d, AttributeModifier.Operation.ADDITION));
-        }
-
-        return multimap;
+    public float d() {
+        return this.c;
     }
 }

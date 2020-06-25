@@ -1,58 +1,40 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Maps;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-import com.google.gson.JsonSyntaxException;
-import java.lang.reflect.Type;
-import java.util.Map;
 import java.util.function.BiFunction;
 
 public class LootItemFunctions {
 
-    private static final Map<MinecraftKey, LootItemFunction.b<?>> b = Maps.newHashMap();
-    private static final Map<Class<? extends LootItemFunction>, LootItemFunction.b<?>> c = Maps.newHashMap();
     public static final BiFunction<ItemStack, LootTableInfo, ItemStack> a = (itemstack, loottableinfo) -> {
         return itemstack;
     };
+    public static final LootItemFunctionType b = a("set_count", (LootSerializer) (new LootItemFunctionSetCount.a()));
+    public static final LootItemFunctionType c = a("enchant_with_levels", (LootSerializer) (new LootEnchantLevel.b()));
+    public static final LootItemFunctionType d = a("enchant_randomly", (LootSerializer) (new LootItemFunctionEnchant.b()));
+    public static final LootItemFunctionType e = a("set_nbt", (LootSerializer) (new LootItemFunctionSetTag.a()));
+    public static final LootItemFunctionType f = a("furnace_smelt", (LootSerializer) (new LootItemFunctionSmelt.a()));
+    public static final LootItemFunctionType g = a("looting_enchant", (LootSerializer) (new LootEnchantFunction.b()));
+    public static final LootItemFunctionType h = a("set_damage", (LootSerializer) (new LootItemFunctionSetDamage.a()));
+    public static final LootItemFunctionType i = a("set_attributes", (LootSerializer) (new LootItemFunctionSetAttribute.d()));
+    public static final LootItemFunctionType j = a("set_name", (LootSerializer) (new LootItemFunctionSetName.a()));
+    public static final LootItemFunctionType k = a("exploration_map", (LootSerializer) (new LootItemFunctionExplorationMap.b()));
+    public static final LootItemFunctionType l = a("set_stew_effect", (LootSerializer) (new LootItemFunctionSetStewEffect.b()));
+    public static final LootItemFunctionType m = a("copy_name", (LootSerializer) (new LootItemFunctionCopyName.b()));
+    public static final LootItemFunctionType n = a("set_contents", (LootSerializer) (new LootItemFunctionSetContents.b()));
+    public static final LootItemFunctionType o = a("limit_count", (LootSerializer) (new LootItemFunctionLimitCount.a()));
+    public static final LootItemFunctionType p = a("apply_bonus", (LootSerializer) (new LootItemFunctionApplyBonus.e()));
+    public static final LootItemFunctionType q = a("set_loot_table", (LootSerializer) (new LootItemFunctionSetTable.a()));
+    public static final LootItemFunctionType r = a("explosion_decay", (LootSerializer) (new LootItemFunctionExplosionDecay.a()));
+    public static final LootItemFunctionType s = a("set_lore", (LootSerializer) (new LootItemFunctionSetLore.b()));
+    public static final LootItemFunctionType t = a("fill_player_head", (LootSerializer) (new LootItemFunctionFillPlayerHead.a()));
+    public static final LootItemFunctionType u = a("copy_nbt", (LootSerializer) (new LootItemFunctionCopyNBT.e()));
+    public static final LootItemFunctionType v = a("copy_state", (LootSerializer) (new LootItemFunctionCopyState.b()));
 
-    public static <T extends LootItemFunction> void a(LootItemFunction.b<? extends T> lootitemfunction_b) {
-        MinecraftKey minecraftkey = lootitemfunction_b.a();
-        Class<T> oclass = lootitemfunction_b.b();
-
-        if (LootItemFunctions.b.containsKey(minecraftkey)) {
-            throw new IllegalArgumentException("Can't re-register item function name " + minecraftkey);
-        } else if (LootItemFunctions.c.containsKey(oclass)) {
-            throw new IllegalArgumentException("Can't re-register item function class " + oclass.getName());
-        } else {
-            LootItemFunctions.b.put(minecraftkey, lootitemfunction_b);
-            LootItemFunctions.c.put(oclass, lootitemfunction_b);
-        }
+    private static LootItemFunctionType a(String s, LootSerializer<? extends LootItemFunction> lootserializer) {
+        return (LootItemFunctionType) IRegistry.a(IRegistry.aZ, new MinecraftKey(s), (Object) (new LootItemFunctionType(lootserializer)));
     }
 
-    public static LootItemFunction.b<?> a(MinecraftKey minecraftkey) {
-        LootItemFunction.b<?> lootitemfunction_b = (LootItemFunction.b) LootItemFunctions.b.get(minecraftkey);
-
-        if (lootitemfunction_b == null) {
-            throw new IllegalArgumentException("Unknown loot item function '" + minecraftkey + "'");
-        } else {
-            return lootitemfunction_b;
-        }
-    }
-
-    public static <T extends LootItemFunction> LootItemFunction.b<T> a(T t0) {
-        LootItemFunction.b<T> lootitemfunction_b = (LootItemFunction.b) LootItemFunctions.c.get(t0.getClass());
-
-        if (lootitemfunction_b == null) {
-            throw new IllegalArgumentException("Unknown loot item function " + t0);
-        } else {
-            return lootitemfunction_b;
-        }
+    public static Object a() {
+        return JsonRegistry.a(IRegistry.aZ, "function", "function", LootItemFunction::b).a();
     }
 
     public static BiFunction<ItemStack, LootTableInfo, ItemStack> a(BiFunction<ItemStack, LootTableInfo, ItemStack>[] abifunction) {
@@ -81,59 +63,6 @@ public class LootItemFunctions {
 
                     return itemstack;
                 };
-        }
-    }
-
-    static {
-        a((LootItemFunction.b) (new LootItemFunctionSetCount.a()));
-        a((LootItemFunction.b) (new LootEnchantLevel.b()));
-        a((LootItemFunction.b) (new LootItemFunctionEnchant.b()));
-        a((LootItemFunction.b) (new LootItemFunctionSetTag.a()));
-        a((LootItemFunction.b) (new LootItemFunctionSmelt.a()));
-        a((LootItemFunction.b) (new LootEnchantFunction.b()));
-        a((LootItemFunction.b) (new LootItemFunctionSetDamage.a()));
-        a((LootItemFunction.b) (new LootItemFunctionSetAttribute.d()));
-        a((LootItemFunction.b) (new LootItemFunctionSetName.a()));
-        a((LootItemFunction.b) (new LootItemFunctionExplorationMap.b()));
-        a((LootItemFunction.b) (new LootItemFunctionSetStewEffect.b()));
-        a((LootItemFunction.b) (new LootItemFunctionCopyName.b()));
-        a((LootItemFunction.b) (new LootItemFunctionSetContents.b()));
-        a((LootItemFunction.b) (new LootItemFunctionLimitCount.a()));
-        a((LootItemFunction.b) (new LootItemFunctionApplyBonus.e()));
-        a((LootItemFunction.b) (new LootItemFunctionSetTable.a()));
-        a((LootItemFunction.b) (new LootItemFunctionExplosionDecay.a()));
-        a((LootItemFunction.b) (new LootItemFunctionSetLore.b()));
-        a((LootItemFunction.b) (new LootItemFunctionFillPlayerHead.a()));
-        a((LootItemFunction.b) (new LootItemFunctionCopyNBT.e()));
-        a((LootItemFunction.b) (new LootItemFunctionCopyState.b()));
-    }
-
-    public static class a implements JsonDeserializer<LootItemFunction>, JsonSerializer<LootItemFunction> {
-
-        public a() {}
-
-        public LootItemFunction deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            JsonObject jsonobject = ChatDeserializer.m(jsonelement, "function");
-            MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "function"));
-
-            LootItemFunction.b lootitemfunction_b;
-
-            try {
-                lootitemfunction_b = LootItemFunctions.a(minecraftkey);
-            } catch (IllegalArgumentException illegalargumentexception) {
-                throw new JsonSyntaxException("Unknown function '" + minecraftkey + "'");
-            }
-
-            return lootitemfunction_b.b(jsonobject, jsondeserializationcontext);
-        }
-
-        public JsonElement serialize(LootItemFunction lootitemfunction, Type type, JsonSerializationContext jsonserializationcontext) {
-            LootItemFunction.b<LootItemFunction> lootitemfunction_b = LootItemFunctions.a(lootitemfunction);
-            JsonObject jsonobject = new JsonObject();
-
-            jsonobject.addProperty("function", lootitemfunction_b.a().toString());
-            lootitemfunction_b.a(jsonobject, lootitemfunction, jsonserializationcontext);
-            return jsonobject;
         }
     }
 }

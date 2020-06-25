@@ -4,29 +4,28 @@ import java.util.Random;
 
 public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
 
-    public static final BlockStateInteger AGE = BlockProperties.ac;
+    public static final BlockStateInteger AGE = BlockProperties.ai;
     protected static final VoxelShape[] b = new VoxelShape[]{Block.a(7.0D, 0.0D, 7.0D, 9.0D, 2.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 4.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 6.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 8.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 10.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 12.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 14.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 16.0D, 9.0D)};
     private final BlockStemmed blockFruit;
 
-    protected BlockStem(BlockStemmed blockstemmed, Block.Info block_info) {
-        super(block_info);
+    protected BlockStem(BlockStemmed blockstemmed, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.blockFruit = blockstemmed;
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStem.AGE, 0));
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStem.AGE, 0));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockStem.b[(Integer) iblockdata.get(BlockStem.AGE)];
     }
 
     @Override
-    protected boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.getBlock() == Blocks.FARMLAND;
+    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockdata.a(Blocks.FARMLAND);
     }
 
     @Override
     public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        super.tick(iblockdata, worldserver, blockposition, random);
         if (worldserver.getLightLevel(blockposition, 0) >= 9) {
             float f = BlockCrops.a((Block) this, (IBlockAccess) worldserver, blockposition);
 
@@ -39,9 +38,9 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
                 } else {
                     EnumDirection enumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
                     BlockPosition blockposition1 = blockposition.shift(enumdirection);
-                    Block block = worldserver.getType(blockposition1.down()).getBlock();
+                    IBlockData iblockdata1 = worldserver.getType(blockposition1.down());
 
-                    if (worldserver.getType(blockposition1).isAir() && (block == Blocks.FARMLAND || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL || block == Blocks.GRASS_BLOCK)) {
+                    if (worldserver.getType(blockposition1).isAir() && (iblockdata1.a(Blocks.FARMLAND) || iblockdata1.a(Blocks.DIRT) || iblockdata1.a(Blocks.COARSE_DIRT) || iblockdata1.a(Blocks.PODZOL) || iblockdata1.a(Blocks.GRASS_BLOCK))) {
                         worldserver.setTypeUpdate(blockposition1, this.blockFruit.getBlockData());
                         worldserver.setTypeUpdate(blockposition, (IBlockData) this.blockFruit.d().getBlockData().set(BlockFacingHorizontal.FACING, enumdirection));
                     }
@@ -68,7 +67,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
 
         worldserver.setTypeAndData(blockposition, iblockdata1, 2);
         if (i == 7) {
-            iblockdata1.a(worldserver, blockposition, worldserver.random);
+            iblockdata1.b(worldserver, blockposition, worldserver.random);
         }
 
     }

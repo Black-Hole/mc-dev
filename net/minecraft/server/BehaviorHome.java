@@ -5,30 +5,30 @@ import java.util.Optional;
 
 public class BehaviorHome extends Behavior<EntityLiving> {
 
-    private final float a;
-    private final int b;
+    private final float b;
     private final int c;
-    private Optional<BlockPosition> d = Optional.empty();
+    private final int d;
+    private Optional<BlockPosition> e = Optional.empty();
 
     public BehaviorHome(int i, float f, int j) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.HOME, MemoryStatus.REGISTERED, MemoryModuleType.HIDING_PLACE, MemoryStatus.REGISTERED));
-        this.b = i;
-        this.a = f;
-        this.c = j;
+        this.c = i;
+        this.b = f;
+        this.d = j;
     }
 
     @Override
     protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
-        Optional<BlockPosition> optional = worldserver.B().b((villageplacetype) -> {
-            return villageplacetype == VillagePlaceType.q;
+        Optional<BlockPosition> optional = worldserver.x().b((villageplacetype) -> {
+            return villageplacetype == VillagePlaceType.r;
         }, (blockposition) -> {
             return true;
-        }, new BlockPosition(entityliving), this.c + 1, VillagePlace.Occupancy.ANY);
+        }, entityliving.getChunkCoordinates(), this.d + 1, VillagePlace.Occupancy.ANY);
 
-        if (optional.isPresent() && ((BlockPosition) optional.get()).a((IPosition) entityliving.getPositionVector(), (double) this.c)) {
-            this.d = optional;
+        if (optional.isPresent() && ((BlockPosition) optional.get()).a((IPosition) entityliving.getPositionVector(), (double) this.d)) {
+            this.e = optional;
         } else {
-            this.d = Optional.empty();
+            this.e = Optional.empty();
         }
 
         return true;
@@ -37,14 +37,14 @@ public class BehaviorHome extends Behavior<EntityLiving> {
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
-        Optional<BlockPosition> optional = this.d;
+        Optional<BlockPosition> optional = this.e;
 
         if (!optional.isPresent()) {
-            optional = worldserver.B().a((villageplacetype) -> {
-                return villageplacetype == VillagePlaceType.q;
+            optional = worldserver.x().a((villageplacetype) -> {
+                return villageplacetype == VillagePlaceType.r;
             }, (blockposition) -> {
                 return true;
-            }, VillagePlace.Occupancy.ANY, new BlockPosition(entityliving), this.b, entityliving.getRandom());
+            }, VillagePlace.Occupancy.ANY, entityliving.getChunkCoordinates(), this.c, entityliving.getRandom());
             if (!optional.isPresent()) {
                 Optional<GlobalPos> optional1 = behaviorcontroller.getMemory(MemoryModuleType.HOME);
 
@@ -59,9 +59,9 @@ public class BehaviorHome extends Behavior<EntityLiving> {
             behaviorcontroller.removeMemory(MemoryModuleType.LOOK_TARGET);
             behaviorcontroller.removeMemory(MemoryModuleType.BREED_TARGET);
             behaviorcontroller.removeMemory(MemoryModuleType.INTERACTION_TARGET);
-            behaviorcontroller.setMemory(MemoryModuleType.HIDING_PLACE, (Object) GlobalPos.create(worldserver.getWorldProvider().getDimensionManager(), (BlockPosition) optional.get()));
-            if (!((BlockPosition) optional.get()).a((IPosition) entityliving.getPositionVector(), (double) this.c)) {
-                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget((BlockPosition) optional.get(), this.a, this.c)));
+            behaviorcontroller.setMemory(MemoryModuleType.HIDING_PLACE, (Object) GlobalPos.create(worldserver.getDimensionKey(), (BlockPosition) optional.get()));
+            if (!((BlockPosition) optional.get()).a((IPosition) entityliving.getPositionVector(), (double) this.d)) {
+                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget((BlockPosition) optional.get(), this.b, this.d)));
             }
         }
 

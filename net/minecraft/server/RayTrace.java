@@ -60,17 +60,17 @@ public class RayTrace {
 
     public static enum BlockCollisionOption implements RayTrace.c {
 
-        COLLIDER(IBlockData::b), OUTLINE(IBlockData::a);
+        COLLIDER(BlockBase.BlockData::b), OUTLINE(BlockBase.BlockData::a), VISUAL(BlockBase.BlockData::c);
 
-        private final RayTrace.c c;
+        private final RayTrace.c d;
 
         private BlockCollisionOption(RayTrace.c raytrace_c) {
-            this.c = raytrace_c;
+            this.d = raytrace_c;
         }
 
         @Override
         public VoxelShape get(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-            return this.c.get(iblockdata, iblockaccess, blockposition, voxelshapecollision);
+            return this.d.get(iblockdata, iblockaccess, blockposition, voxelshapecollision);
         }
     }
 }

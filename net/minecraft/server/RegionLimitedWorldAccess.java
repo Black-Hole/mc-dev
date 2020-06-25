@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class RegionLimitedWorldAccess implements GeneratorAccess {
+public class RegionLimitedWorldAccess implements GeneratorAccessSeed {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private final List<IChunkAccess> b;
@@ -17,18 +17,18 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     private final int e;
     private final WorldServer f;
     private final long g;
-    private final int h;
-    private final WorldData i;
-    private final Random j;
-    private final WorldProvider k;
-    private final GeneratorSettingsDefault l;
-    private final TickList<Block> m = new TickListWorldGen<>((blockposition) -> {
-        return this.x(blockposition).n();
+    private final WorldData h;
+    private final Random i;
+    private final DimensionManager j;
+    private final TickList<Block> k = new TickListWorldGen<>((blockposition) -> {
+        return this.z(blockposition).n();
     });
-    private final TickList<FluidType> n = new TickListWorldGen<>((blockposition) -> {
-        return this.x(blockposition).o();
+    private final TickList<FluidType> l = new TickListWorldGen<>((blockposition) -> {
+        return this.z(blockposition).o();
     });
-    private final BiomeManager o;
+    private final BiomeManager m;
+    private final ChunkCoordIntPair n;
+    private final ChunkCoordIntPair o;
 
     public RegionLimitedWorldAccess(WorldServer worldserver, List<IChunkAccess> list) {
         int i = MathHelper.floor(Math.sqrt((double) list.size()));
@@ -44,12 +44,12 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
             this.e = i;
             this.f = worldserver;
             this.g = worldserver.getSeed();
-            this.l = worldserver.getChunkProvider().getChunkGenerator().getSettings();
-            this.h = worldserver.getSeaLevel();
-            this.i = worldserver.getWorldData();
-            this.j = worldserver.getRandom();
-            this.k = worldserver.getWorldProvider();
-            this.o = new BiomeManager(this, WorldData.c(this.g), this.k.getDimensionManager().getGenLayerZoomer());
+            this.h = worldserver.getWorldData();
+            this.i = worldserver.getRandom();
+            this.j = worldserver.getDimensionManager();
+            this.m = new BiomeManager(this, BiomeManager.a(this.g), worldserver.getDimensionManager().getGenLayerZoomer());
+            this.n = ((IChunkAccess) list.get(0)).getPos();
+            this.o = ((IChunkAccess) list.get(list.size() - 1)).getPos();
         }
     }
 
@@ -72,9 +72,8 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
         IChunkAccess ichunkaccess;
 
         if (this.isChunkLoaded(i, j)) {
-            ChunkCoordIntPair chunkcoordintpair = ((IChunkAccess) this.b.get(0)).getPos();
-            int k = i - chunkcoordintpair.x;
-            int l = j - chunkcoordintpair.z;
+            int k = i - this.n.x;
+            int l = j - this.n.z;
 
             ichunkaccess = (IChunkAccess) this.b.get(k + l * this.e);
             if (ichunkaccess.getChunkStatus().b(chunkstatus)) {
@@ -87,11 +86,8 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
         if (!flag) {
             return null;
         } else {
-            IChunkAccess ichunkaccess1 = (IChunkAccess) this.b.get(0);
-            IChunkAccess ichunkaccess2 = (IChunkAccess) this.b.get(this.b.size() - 1);
-
             RegionLimitedWorldAccess.LOGGER.error("Requested chunk : {} {}", i, j);
-            RegionLimitedWorldAccess.LOGGER.error("Region bounds : {} {} | {} {}", ichunkaccess1.getPos().x, ichunkaccess1.getPos().z, ichunkaccess2.getPos().x, ichunkaccess2.getPos().z);
+            RegionLimitedWorldAccess.LOGGER.error("Region bounds : {} {} | {} {}", this.n.x, this.n.z, this.o.x, this.o.z);
             if (ichunkaccess != null) {
                 throw (RuntimeException) SystemUtils.c(new RuntimeException(String.format("Chunk is not of correct status. Expecting %s, got %s | %s %s", chunkstatus, ichunkaccess.getChunkStatus(), i, j)));
             } else {
@@ -102,10 +98,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
 
     @Override
     public boolean isChunkLoaded(int i, int j) {
-        IChunkAccess ichunkaccess = (IChunkAccess) this.b.get(0);
-        IChunkAccess ichunkaccess1 = (IChunkAccess) this.b.get(this.b.size() - 1);
-
-        return i >= ichunkaccess.getPos().x && i <= ichunkaccess1.getPos().x && j >= ichunkaccess.getPos().z && j <= ichunkaccess1.getPos().z;
+        return i >= this.n.x && i <= this.o.x && j >= this.n.z && j <= this.o.z;
     }
 
     @Override
@@ -115,7 +108,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
 
     @Override
     public Fluid getFluid(BlockPosition blockposition) {
-        return this.x(blockposition).getFluid(blockposition);
+        return this.z(blockposition).getFluid(blockposition);
     }
 
     @Nullable
@@ -131,7 +124,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
 
     @Override
     public BiomeManager d() {
-        return this.o;
+        return this.m;
     }
 
     @Override
@@ -145,7 +138,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     }
 
     @Override
-    public boolean a(BlockPosition blockposition, boolean flag, @Nullable Entity entity) {
+    public boolean a(BlockPosition blockposition, boolean flag, @Nullable Entity entity, int i) {
         IBlockData iblockdata = this.getType(blockposition);
 
         if (iblockdata.isAir()) {
@@ -154,27 +147,28 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
             if (flag) {
                 TileEntity tileentity = iblockdata.getBlock().isTileEntity() ? this.getTileEntity(blockposition) : null;
 
-                Block.dropItems(iblockdata, this.f, blockposition, tileentity, entity, ItemStack.a);
+                Block.dropItems(iblockdata, this.f, blockposition, tileentity, entity, ItemStack.b);
             }
 
-            return this.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 3);
+            return this.a(blockposition, Blocks.AIR.getBlockData(), 3, i);
         }
     }
 
     @Nullable
     @Override
     public TileEntity getTileEntity(BlockPosition blockposition) {
-        IChunkAccess ichunkaccess = this.x(blockposition);
+        IChunkAccess ichunkaccess = this.z(blockposition);
         TileEntity tileentity = ichunkaccess.getTileEntity(blockposition);
 
         if (tileentity != null) {
             return tileentity;
         } else {
             NBTTagCompound nbttagcompound = ichunkaccess.f(blockposition);
+            IBlockData iblockdata = ichunkaccess.getType(blockposition);
 
             if (nbttagcompound != null) {
                 if ("DUMMY".equals(nbttagcompound.getString("id"))) {
-                    Block block = this.getType(blockposition).getBlock();
+                    Block block = iblockdata.getBlock();
 
                     if (!(block instanceof ITileEntity)) {
                         return null;
@@ -182,7 +176,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
 
                     tileentity = ((ITileEntity) block).createTile(this.f);
                 } else {
-                    tileentity = TileEntity.create(nbttagcompound);
+                    tileentity = TileEntity.create(iblockdata, nbttagcompound);
                 }
 
                 if (tileentity != null) {
@@ -191,7 +185,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
                 }
             }
 
-            if (ichunkaccess.getType(blockposition).getBlock() instanceof ITileEntity) {
+            if (iblockdata.getBlock() instanceof ITileEntity) {
                 RegionLimitedWorldAccess.LOGGER.warn("Tried to access a block entity before it was created. {}", blockposition);
             }
 
@@ -200,8 +194,8 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     }
 
     @Override
-    public boolean setTypeAndData(BlockPosition blockposition, IBlockData iblockdata, int i) {
-        IChunkAccess ichunkaccess = this.x(blockposition);
+    public boolean a(BlockPosition blockposition, IBlockData iblockdata, int i, int j) {
+        IChunkAccess ichunkaccess = this.z(blockposition);
         IBlockData iblockdata1 = ichunkaccess.setType(blockposition, iblockdata, false);
 
         if (iblockdata1 != null) {
@@ -226,7 +220,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
             ichunkaccess.removeTileEntity(blockposition);
         }
 
-        if (iblockdata.o(this, blockposition)) {
+        if (iblockdata.q(this, blockposition)) {
             this.e(blockposition);
         }
 
@@ -234,7 +228,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     }
 
     private void e(BlockPosition blockposition) {
-        this.x(blockposition).e(blockposition);
+        this.z(blockposition).e(blockposition);
     }
 
     @Override
@@ -257,7 +251,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     }
 
     @Override
-    public boolean p_() {
+    public boolean s_() {
         return false;
     }
 
@@ -269,7 +263,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
 
     @Override
     public WorldData getWorldData() {
-        return this.i;
+        return this.h;
     }
 
     @Override
@@ -277,7 +271,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
         if (!this.isChunkLoaded(blockposition.getX() >> 4, blockposition.getZ() >> 4)) {
             throw new RuntimeException("We are asking a region for a chunk out of bound");
         } else {
-            return new DifficultyDamageScaler(this.f.getDifficulty(), this.f.getDayTime(), 0L, this.f.Y());
+            return new DifficultyDamageScaler(this.f.getDifficulty(), this.f.getDayTime(), 0L, this.f.aa());
         }
     }
 
@@ -293,30 +287,27 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
 
     @Override
     public TickList<Block> getBlockTickList() {
-        return this.m;
+        return this.k;
     }
 
     @Override
     public TickList<FluidType> getFluidTickList() {
-        return this.n;
+        return this.l;
     }
 
     @Override
     public int getSeaLevel() {
-        return this.h;
+        return this.f.getSeaLevel();
     }
 
     @Override
     public Random getRandom() {
-        return this.j;
+        return this.i;
     }
 
     @Override
-    public void update(BlockPosition blockposition, Block block) {}
-
-    @Override
     public int a(HeightMap.Type heightmap_type, int i, int j) {
-        return this.getChunkAt(i >> 4, j >> 4).a(heightmap_type, i & 15, j & 15) + 1;
+        return this.getChunkAt(i >> 4, j >> 4).getHighestBlock(heightmap_type, i & 15, j & 15) + 1;
     }
 
     @Override
@@ -329,8 +320,8 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     public void a(@Nullable EntityHuman entityhuman, int i, BlockPosition blockposition, int j) {}
 
     @Override
-    public WorldProvider getWorldProvider() {
-        return this.k;
+    public DimensionManager getDimensionManager() {
+        return this.j;
     }
 
     @Override

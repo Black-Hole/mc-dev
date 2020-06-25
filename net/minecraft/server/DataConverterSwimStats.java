@@ -1,10 +1,8 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 
@@ -19,7 +17,7 @@ public class DataConverterSwimStats extends DataFix {
         Type<?> type1 = this.getInputSchema().getType(DataConverterTypes.STATS);
         OpticFinder<?> opticfinder = type1.findField("stats");
         OpticFinder<?> opticfinder1 = opticfinder.type().findField("minecraft:custom");
-        OpticFinder<String> opticfinder2 = DSL.namespacedString().finder();
+        OpticFinder<String> opticfinder2 = DataConverterSchemaNamed.a().finder();
 
         return this.fixTypeEverywhereTyped("SwimStatsRenameFix", type1, type, (typed) -> {
             return typed.updateTyped(opticfinder, (typed1) -> {

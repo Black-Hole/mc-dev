@@ -5,54 +5,58 @@ import java.util.Random;
 
 public class BlockCactus extends Block {
 
-    public static final BlockStateInteger AGE = BlockProperties.ad;
+    public static final BlockStateInteger AGE = BlockProperties.aj;
     protected static final VoxelShape b = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
     protected static final VoxelShape c = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
 
-    protected BlockCactus(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCactus.AGE, 0));
+    protected BlockCactus(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCactus.AGE, 0));
+    }
+
+    @Override
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!iblockdata.canPlace(worldserver, blockposition)) {
+            worldserver.b(blockposition, true);
+        }
+
     }
 
     @Override
     public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        if (!iblockdata.canPlace(worldserver, blockposition)) {
-            worldserver.b(blockposition, true);
-        } else {
-            BlockPosition blockposition1 = blockposition.up();
+        BlockPosition blockposition1 = blockposition.up();
 
-            if (worldserver.isEmpty(blockposition1)) {
-                int i;
+        if (worldserver.isEmpty(blockposition1)) {
+            int i;
 
-                for (i = 1; worldserver.getType(blockposition.down(i)).getBlock() == this; ++i) {
-                    ;
+            for (i = 1; worldserver.getType(blockposition.down(i)).a((Block) this); ++i) {
+                ;
+            }
+
+            if (i < 3) {
+                int j = (Integer) iblockdata.get(BlockCactus.AGE);
+
+                if (j == 15) {
+                    worldserver.setTypeUpdate(blockposition1, this.getBlockData());
+                    IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockCactus.AGE, 0);
+
+                    worldserver.setTypeAndData(blockposition, iblockdata1, 4);
+                    iblockdata1.doPhysics(worldserver, blockposition1, this, blockposition, false);
+                } else {
+                    worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCactus.AGE, j + 1), 4);
                 }
 
-                if (i < 3) {
-                    int j = (Integer) iblockdata.get(BlockCactus.AGE);
-
-                    if (j == 15) {
-                        worldserver.setTypeUpdate(blockposition1, this.getBlockData());
-                        IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockCactus.AGE, 0);
-
-                        worldserver.setTypeAndData(blockposition, iblockdata1, 4);
-                        iblockdata1.doPhysics(worldserver, blockposition1, this, blockposition, false);
-                    } else {
-                        worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCactus.AGE, j + 1), 4);
-                    }
-
-                }
             }
         }
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockCactus.b;
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockCactus.c;
     }
 
@@ -74,16 +78,16 @@ public class BlockCactus extends Block {
 
         do {
             if (!iterator.hasNext()) {
-                Block block = iworldreader.getType(blockposition.down()).getBlock();
+                IBlockData iblockdata1 = iworldreader.getType(blockposition.down());
 
-                return (block == Blocks.CACTUS || block == Blocks.SAND || block == Blocks.RED_SAND) && !iworldreader.getType(blockposition.up()).getMaterial().isLiquid();
+                return (iblockdata1.a(Blocks.CACTUS) || iblockdata1.a(Blocks.SAND) || iblockdata1.a(Blocks.RED_SAND)) && !iworldreader.getType(blockposition.up()).getMaterial().isLiquid();
             }
 
             enumdirection = (EnumDirection) iterator.next();
-            IBlockData iblockdata1 = iworldreader.getType(blockposition.shift(enumdirection));
+            IBlockData iblockdata2 = iworldreader.getType(blockposition.shift(enumdirection));
 
-            material = iblockdata1.getMaterial();
-        } while (!material.isBuildable() && !iworldreader.getFluid(blockposition.shift(enumdirection)).a(TagsFluid.LAVA));
+            material = iblockdata2.getMaterial();
+        } while (!material.isBuildable() && !iworldreader.getFluid(blockposition.shift(enumdirection)).a((Tag) TagsFluid.LAVA));
 
         return false;
     }

@@ -1,44 +1,52 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.DynamicOps;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public abstract class WorldGenFeaturePillagerOutpostPoolPiece extends StructurePiece {
 
+    private static final Logger LOGGER = LogManager.getLogger();
     protected final WorldGenFeatureDefinedStructurePoolStructure a;
     protected BlockPosition b;
-    private final int d;
+    private final int e;
     protected final EnumBlockRotation c;
-    private final List<WorldGenFeatureDefinedStructureJigsawJunction> e = Lists.newArrayList();
-    private final DefinedStructureManager f;
+    private final List<WorldGenFeatureDefinedStructureJigsawJunction> f = Lists.newArrayList();
+    private final DefinedStructureManager g;
 
     public WorldGenFeaturePillagerOutpostPoolPiece(WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype, DefinedStructureManager definedstructuremanager, WorldGenFeatureDefinedStructurePoolStructure worldgenfeaturedefinedstructurepoolstructure, BlockPosition blockposition, int i, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox) {
         super(worldgenfeaturestructurepiecetype, 0);
-        this.f = definedstructuremanager;
+        this.g = definedstructuremanager;
         this.a = worldgenfeaturedefinedstructurepoolstructure;
         this.b = blockposition;
-        this.d = i;
+        this.e = i;
         this.c = enumblockrotation;
         this.n = structureboundingbox;
     }
 
     public WorldGenFeaturePillagerOutpostPoolPiece(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound, WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype) {
         super(worldgenfeaturestructurepiecetype, nbttagcompound);
-        this.f = definedstructuremanager;
+        this.g = definedstructuremanager;
         this.b = new BlockPosition(nbttagcompound.getInt("PosX"), nbttagcompound.getInt("PosY"), nbttagcompound.getInt("PosZ"));
-        this.d = nbttagcompound.getInt("ground_level_delta");
-        this.a = (WorldGenFeatureDefinedStructurePoolStructure) DynamicDeserializer.a(new Dynamic(DynamicOpsNBT.a, nbttagcompound.getCompound("pool_element")), IRegistry.STRUCTURE_POOL_ELEMENT, "element_type", WorldGenFeatureDefinedStructurePoolEmpty.a);
+        this.e = nbttagcompound.getInt("ground_level_delta");
+        DataResult dataresult = WorldGenFeatureDefinedStructurePoolStructure.e.parse(DynamicOpsNBT.a, nbttagcompound.getCompound("pool_element"));
+        Logger logger = WorldGenFeaturePillagerOutpostPoolPiece.LOGGER;
+
+        logger.getClass();
+        this.a = (WorldGenFeatureDefinedStructurePoolStructure) dataresult.resultOrPartial(logger::error).orElse(WorldGenFeatureDefinedStructurePoolEmpty.b);
         this.c = EnumBlockRotation.valueOf(nbttagcompound.getString("rotation"));
         this.n = this.a.a(definedstructuremanager, this.b, this.c);
         NBTTagList nbttaglist = nbttagcompound.getList("junctions", 10);
 
-        this.e.clear();
+        this.f.clear();
         nbttaglist.forEach((nbtbase) -> {
-            this.e.add(WorldGenFeatureDefinedStructureJigsawJunction.a(new Dynamic(DynamicOpsNBT.a, nbtbase)));
+            this.f.add(WorldGenFeatureDefinedStructureJigsawJunction.a(new Dynamic(DynamicOpsNBT.a, nbtbase)));
         });
     }
 
@@ -47,11 +55,17 @@ public abstract class WorldGenFeaturePillagerOutpostPoolPiece extends StructureP
         nbttagcompound.setInt("PosX", this.b.getX());
         nbttagcompound.setInt("PosY", this.b.getY());
         nbttagcompound.setInt("PosZ", this.b.getZ());
-        nbttagcompound.setInt("ground_level_delta", this.d);
-        nbttagcompound.set("pool_element", (NBTBase) this.a.b(DynamicOpsNBT.a).getValue());
+        nbttagcompound.setInt("ground_level_delta", this.e);
+        DataResult dataresult = WorldGenFeatureDefinedStructurePoolStructure.e.encodeStart(DynamicOpsNBT.a, this.a);
+        Logger logger = WorldGenFeaturePillagerOutpostPoolPiece.LOGGER;
+
+        logger.getClass();
+        dataresult.resultOrPartial(logger::error).ifPresent((nbtbase) -> {
+            nbttagcompound.set("pool_element", nbtbase);
+        });
         nbttagcompound.setString("rotation", this.c.name());
         NBTTagList nbttaglist = new NBTTagList();
-        Iterator iterator = this.e.iterator();
+        Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {
             WorldGenFeatureDefinedStructureJigsawJunction worldgenfeaturedefinedstructurejigsawjunction = (WorldGenFeatureDefinedStructureJigsawJunction) iterator.next();
@@ -63,8 +77,12 @@ public abstract class WorldGenFeaturePillagerOutpostPoolPiece extends StructureP
     }
 
     @Override
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
-        return this.a.a(this.f, generatoraccess, chunkgenerator, this.b, this.c, structureboundingbox, random);
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair, BlockPosition blockposition) {
+        return this.a(generatoraccessseed, structuremanager, chunkgenerator, random, structureboundingbox, blockposition, false);
+    }
+
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, StructureBoundingBox structureboundingbox, BlockPosition blockposition, boolean flag) {
+        return this.a.a(this.g, generatoraccessseed, structuremanager, chunkgenerator, this.b, blockposition, this.c, structureboundingbox, random, flag);
     }
 
     @Override
@@ -74,7 +92,7 @@ public abstract class WorldGenFeaturePillagerOutpostPoolPiece extends StructureP
     }
 
     @Override
-    public EnumBlockRotation ad_() {
+    public EnumBlockRotation ap_() {
         return this.c;
     }
 
@@ -91,14 +109,14 @@ public abstract class WorldGenFeaturePillagerOutpostPoolPiece extends StructureP
     }
 
     public int d() {
-        return this.d;
+        return this.e;
     }
 
     public void a(WorldGenFeatureDefinedStructureJigsawJunction worldgenfeaturedefinedstructurejigsawjunction) {
-        this.e.add(worldgenfeaturedefinedstructurejigsawjunction);
+        this.f.add(worldgenfeaturedefinedstructurejigsawjunction);
     }
 
     public List<WorldGenFeatureDefinedStructureJigsawJunction> e() {
-        return this.e;
+        return this.f;
     }
 }

@@ -46,7 +46,7 @@ public class ControllerMove {
         float f;
 
         if (this.h == ControllerMove.Operation.STRAFE) {
-            float f1 = (float) this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue();
+            float f1 = (float) this.a.b(GenericAttributes.MOVEMENT_SPEED);
             float f2 = (float) this.e * f1;
             float f3 = this.f;
             float f4 = this.g;
@@ -64,21 +64,14 @@ public class ControllerMove {
             float f8 = f3 * f7 - f4 * f6;
 
             f = f4 * f7 + f3 * f6;
-            NavigationAbstract navigationabstract = this.a.getNavigation();
-
-            if (navigationabstract != null) {
-                PathfinderAbstract pathfinderabstract = navigationabstract.q();
-
-                if (pathfinderabstract != null && pathfinderabstract.a(this.a.world, MathHelper.floor(this.a.locX() + (double) f8), MathHelper.floor(this.a.locY()), MathHelper.floor(this.a.locZ() + (double) f)) != PathType.WALKABLE) {
-                    this.f = 1.0F;
-                    this.g = 0.0F;
-                    f2 = f1;
-                }
+            if (!this.b(f8, f)) {
+                this.f = 1.0F;
+                this.g = 0.0F;
             }
 
-            this.a.o(f2);
-            this.a.r(this.f);
-            this.a.t(this.g);
+            this.a.n(f2);
+            this.a.q(this.f);
+            this.a.s(this.g);
             this.h = ControllerMove.Operation.WAIT;
         } else if (this.h == ControllerMove.Operation.MOVE_TO) {
             this.h = ControllerMove.Operation.WAIT;
@@ -88,31 +81,45 @@ public class ControllerMove {
             double d3 = d0 * d0 + d2 * d2 + d1 * d1;
 
             if (d3 < 2.500000277905201E-7D) {
-                this.a.r(0.0F);
+                this.a.q(0.0F);
                 return;
             }
 
             f = (float) (MathHelper.d(d1, d0) * 57.2957763671875D) - 90.0F;
             this.a.yaw = this.a(this.a.yaw, f, 90.0F);
-            this.a.o((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
-            BlockPosition blockposition = new BlockPosition(this.a);
+            this.a.n((float) (this.e * this.a.b(GenericAttributes.MOVEMENT_SPEED)));
+            BlockPosition blockposition = this.a.getChunkCoordinates();
             IBlockData iblockdata = this.a.world.getType(blockposition);
             Block block = iblockdata.getBlock();
             VoxelShape voxelshape = iblockdata.getCollisionShape(this.a.world, blockposition);
 
-            if (d2 > (double) this.a.H && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.a.getWidth()) || !voxelshape.isEmpty() && this.a.locY() < voxelshape.c(EnumDirection.EnumAxis.Y) + (double) blockposition.getY() && !block.a(TagsBlock.DOORS) && !block.a(TagsBlock.FENCES)) {
+            if (d2 > (double) this.a.G && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.a.getWidth()) || !voxelshape.isEmpty() && this.a.locY() < voxelshape.c(EnumDirection.EnumAxis.Y) + (double) blockposition.getY() && !block.a((Tag) TagsBlock.DOORS) && !block.a((Tag) TagsBlock.FENCES)) {
                 this.a.getControllerJump().jump();
                 this.h = ControllerMove.Operation.JUMPING;
             }
         } else if (this.h == ControllerMove.Operation.JUMPING) {
-            this.a.o((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
-            if (this.a.onGround) {
+            this.a.n((float) (this.e * this.a.b(GenericAttributes.MOVEMENT_SPEED)));
+            if (this.a.isOnGround()) {
                 this.h = ControllerMove.Operation.WAIT;
             }
         } else {
-            this.a.r(0.0F);
+            this.a.q(0.0F);
         }
 
+    }
+
+    private boolean b(float f, float f1) {
+        NavigationAbstract navigationabstract = this.a.getNavigation();
+
+        if (navigationabstract != null) {
+            PathfinderAbstract pathfinderabstract = navigationabstract.q();
+
+            if (pathfinderabstract != null && pathfinderabstract.a(this.a.world, MathHelper.floor(this.a.locX() + (double) f), MathHelper.floor(this.a.locY()), MathHelper.floor(this.a.locZ() + (double) f1)) != PathType.WALKABLE) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     protected float a(float f, float f1, float f2) {

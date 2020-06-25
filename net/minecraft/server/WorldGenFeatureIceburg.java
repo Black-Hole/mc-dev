@@ -1,19 +1,18 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureLakeConfiguration> {
 
-    public WorldGenFeatureIceburg(Function<Dynamic<?>, ? extends WorldGenFeatureLakeConfiguration> function) {
-        super(function);
+    public WorldGenFeatureIceburg(Codec<WorldGenFeatureLakeConfiguration> codec) {
+        super(codec);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureLakeConfiguration worldgenfeaturelakeconfiguration) {
-        blockposition = new BlockPosition(blockposition.getX(), generatoraccess.getSeaLevel(), blockposition.getZ());
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureLakeConfiguration worldgenfeaturelakeconfiguration) {
+        blockposition = new BlockPosition(blockposition.getX(), chunkgenerator.getSeaLevel(), blockposition.getZ());
         boolean flag = random.nextDouble() > 0.7D;
-        IBlockData iblockdata = worldgenfeaturelakeconfiguration.a;
+        IBlockData iblockdata = worldgenfeaturelakeconfiguration.b;
         double d0 = random.nextDouble() * 2.0D * 3.141592653589793D;
         int i = 11 - random.nextInt(5);
         int j = 3 + random.nextInt(3);
@@ -39,13 +38,13 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureLakeCo
                 for (l1 = 0; l1 < k; ++l1) {
                     k1 = flag1 ? this.b(l1, k, i1) : this.a(random, l1, k, i1);
                     if (flag1 || i2 < k1) {
-                        this.a(generatoraccess, random, blockposition, k, i2, l1, j2, k1, j1, flag1, j, d0, flag, iblockdata);
+                        this.a(generatoraccessseed, random, blockposition, k, i2, l1, j2, k1, j1, flag1, j, d0, flag, iblockdata);
                     }
                 }
             }
         }
 
-        this.a(generatoraccess, blockposition, i1, k, flag1, i);
+        this.a(generatoraccessseed, blockposition, i1, k, flag1, i);
 
         for (i2 = -j1; i2 < j1; ++i2) {
             for (j2 = -j1; j2 < j1; ++j2) {
@@ -54,7 +53,7 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureLakeCo
                     int k2 = this.b(random, -l1, l, i1);
 
                     if (i2 < k2) {
-                        this.a(generatoraccess, random, blockposition, l, i2, l1, j2, k2, k1, flag1, j, d0, flag, iblockdata);
+                        this.a(generatoraccessseed, random, blockposition, l, i2, l1, j2, k2, k1, flag1, j, d0, flag, iblockdata);
                     }
                 }
             }
@@ -63,7 +62,7 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureLakeCo
         boolean flag3 = flag1 ? random.nextDouble() > 0.1D : random.nextDouble() > 0.7D;
 
         if (flag3) {
-            this.a(random, generatoraccess, i1, k, blockposition, flag1, i, d0, j);
+            this.a(random, generatoraccessseed, i1, k, blockposition, flag1, i, d0, j);
         }
 
         return true;
@@ -133,7 +132,7 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureLakeCo
     }
 
     private void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        if (generatoraccess.getType(blockposition.up()).getBlock() == Blocks.SNOW) {
+        if (generatoraccess.getType(blockposition.up()).a(Blocks.SNOW)) {
             this.a(generatoraccess, blockposition.up(), Blocks.AIR.getBlockData());
         }
 
@@ -157,13 +156,12 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureLakeCo
 
     private void a(BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, int i, int j, boolean flag, boolean flag1, IBlockData iblockdata) {
         IBlockData iblockdata1 = generatoraccess.getType(blockposition);
-        Block block = iblockdata1.getBlock();
 
-        if (iblockdata1.getMaterial() == Material.AIR || block == Blocks.SNOW_BLOCK || block == Blocks.ICE || block == Blocks.WATER) {
+        if (iblockdata1.getMaterial() == Material.AIR || iblockdata1.a(Blocks.SNOW_BLOCK) || iblockdata1.a(Blocks.ICE) || iblockdata1.a(Blocks.WATER)) {
             boolean flag2 = !flag || random.nextDouble() > 0.05D;
             int k = flag ? 3 : 2;
 
-            if (flag1 && block != Blocks.WATER && (double) i <= (double) random.nextInt(Math.max(1, j / k)) + (double) j * 0.6D && flag2) {
+            if (flag1 && !iblockdata1.a(Blocks.WATER) && (double) i <= (double) random.nextInt(Math.max(1, j / k)) + (double) j * 0.6D && flag2) {
                 this.a(generatoraccess, blockposition, Blocks.SNOW_BLOCK.getBlockData());
             } else {
                 this.a(generatoraccess, blockposition, iblockdata);

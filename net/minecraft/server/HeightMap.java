@@ -1,14 +1,15 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Maps;
+import com.mojang.serialization.Codec;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import it.unimi.dsi.fastutil.objects.ObjectListIterator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import javax.annotation.Nullable;
 
 public class HeightMap {
 
@@ -23,7 +24,7 @@ public class HeightMap {
     private final IChunkAccess e;
 
     public HeightMap(IChunkAccess ichunkaccess, HeightMap.Type heightmap_type) {
-        this.d = heightmap_type.d();
+        this.d = heightmap_type.e();
         this.e = ichunkaccess;
     }
 
@@ -32,59 +33,40 @@ public class HeightMap {
         ObjectList<HeightMap> objectlist = new ObjectArrayList(i);
         ObjectListIterator<HeightMap> objectlistiterator = objectlist.iterator();
         int j = ichunkaccess.b() + 16;
-        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
-        Throwable throwable = null;
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-        try {
-            for (int k = 0; k < 16; ++k) {
-                for (int l = 0; l < 16; ++l) {
-                    Iterator iterator = set.iterator();
+        for (int k = 0; k < 16; ++k) {
+            for (int l = 0; l < 16; ++l) {
+                Iterator iterator = set.iterator();
 
-                    while (iterator.hasNext()) {
-                        HeightMap.Type heightmap_type = (HeightMap.Type) iterator.next();
+                while (iterator.hasNext()) {
+                    HeightMap.Type heightmap_type = (HeightMap.Type) iterator.next();
 
-                        objectlist.add(ichunkaccess.a(heightmap_type));
-                    }
+                    objectlist.add(ichunkaccess.a(heightmap_type));
+                }
 
-                    for (int i1 = j - 1; i1 >= 0; --i1) {
-                        blockposition_pooledblockposition.d(k, i1, l);
-                        IBlockData iblockdata = ichunkaccess.getType(blockposition_pooledblockposition);
+                for (int i1 = j - 1; i1 >= 0; --i1) {
+                    blockposition_mutableblockposition.d(k, i1, l);
+                    IBlockData iblockdata = ichunkaccess.getType(blockposition_mutableblockposition);
 
-                        if (iblockdata.getBlock() != Blocks.AIR) {
-                            while (objectlistiterator.hasNext()) {
-                                HeightMap heightmap = (HeightMap) objectlistiterator.next();
+                    if (!iblockdata.a(Blocks.AIR)) {
+                        while (objectlistiterator.hasNext()) {
+                            HeightMap heightmap = (HeightMap) objectlistiterator.next();
 
-                                if (heightmap.d.test(iblockdata)) {
-                                    heightmap.a(k, l, i1 + 1);
-                                    objectlistiterator.remove();
-                                }
+                            if (heightmap.d.test(iblockdata)) {
+                                heightmap.a(k, l, i1 + 1);
+                                objectlistiterator.remove();
                             }
-
-                            if (objectlist.isEmpty()) {
-                                break;
-                            }
-
-                            objectlistiterator.back(i);
                         }
-                    }
-                }
-            }
-        } catch (Throwable throwable1) {
-            throwable = throwable1;
-            throw throwable1;
-        } finally {
-            if (blockposition_pooledblockposition != null) {
-                if (throwable != null) {
-                    try {
-                        blockposition_pooledblockposition.close();
-                    } catch (Throwable throwable2) {
-                        throwable.addSuppressed(throwable2);
-                    }
-                } else {
-                    blockposition_pooledblockposition.close();
-                }
-            }
 
+                        if (objectlist.isEmpty()) {
+                            break;
+                        }
+
+                        objectlistiterator.back(i);
+                    }
+                }
+            }
         }
 
     }
@@ -143,7 +125,7 @@ public class HeightMap {
         return i + j * 16;
     }
 
-    public static enum Type {
+    public static enum Type implements INamable {
 
         WORLD_SURFACE_WG("WORLD_SURFACE_WG", HeightMap.Use.WORLDGEN, HeightMap.a), WORLD_SURFACE("WORLD_SURFACE", HeightMap.Use.CLIENT, HeightMap.a), OCEAN_FLOOR_WG("OCEAN_FLOOR_WG", HeightMap.Use.WORLDGEN, HeightMap.b), OCEAN_FLOOR("OCEAN_FLOOR", HeightMap.Use.LIVE_WORLD, HeightMap.b), MOTION_BLOCKING("MOTION_BLOCKING", HeightMap.Use.CLIENT, (iblockdata) -> {
             return iblockdata.getMaterial().isSolid() || !iblockdata.getFluid().isEmpty();
@@ -151,41 +133,48 @@ public class HeightMap {
             return (iblockdata.getMaterial().isSolid() || !iblockdata.getFluid().isEmpty()) && !(iblockdata.getBlock() instanceof BlockLeaves);
         });
 
-        private final String g;
-        private final HeightMap.Use h;
-        private final Predicate<IBlockData> i;
-        private static final Map<String, HeightMap.Type> j = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+        public static final Codec<HeightMap.Type> g = INamable.a(HeightMap.Type::values, HeightMap.Type::a);
+        private final String h;
+        private final HeightMap.Use i;
+        private final Predicate<IBlockData> j;
+        private static final Map<String, HeightMap.Type> k = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
             HeightMap.Type[] aheightmap_type = values();
             int i = aheightmap_type.length;
 
             for (int j = 0; j < i; ++j) {
                 HeightMap.Type heightmap_type = aheightmap_type[j];
 
-                hashmap.put(heightmap_type.g, heightmap_type);
+                hashmap.put(heightmap_type.h, heightmap_type);
             }
 
         });
 
         private Type(String s, HeightMap.Use heightmap_use, Predicate predicate) {
-            this.g = s;
-            this.h = heightmap_use;
-            this.i = predicate;
+            this.h = s;
+            this.i = heightmap_use;
+            this.j = predicate;
         }
 
-        public String a() {
-            return this.g;
+        public String b() {
+            return this.h;
         }
 
-        public boolean b() {
-            return this.h == HeightMap.Use.CLIENT;
+        public boolean c() {
+            return this.i == HeightMap.Use.CLIENT;
         }
 
+        @Nullable
         public static HeightMap.Type a(String s) {
-            return (HeightMap.Type) HeightMap.Type.j.get(s);
+            return (HeightMap.Type) HeightMap.Type.k.get(s);
         }
 
-        public Predicate<IBlockData> d() {
-            return this.i;
+        public Predicate<IBlockData> e() {
+            return this.j;
+        }
+
+        @Override
+        public String getName() {
+            return this.h;
         }
     }
 

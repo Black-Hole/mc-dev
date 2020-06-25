@@ -7,16 +7,21 @@ import java.util.function.Consumer;
 
 public class LootItem extends LootSelectorEntry {
 
-    private final Item c;
+    private final Item g;
 
     private LootItem(Item item, int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
         super(i, j, alootitemcondition, alootitemfunction);
-        this.c = item;
+        this.g = item;
+    }
+
+    @Override
+    public LootEntryType a() {
+        return LootEntries.b;
     }
 
     @Override
     public void a(Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {
-        consumer.accept(new ItemStack(this.c));
+        consumer.accept(new ItemStack(this.g));
     }
 
     public static LootSelectorEntry.a<?> a(IMaterial imaterial) {
@@ -27,16 +32,14 @@ public class LootItem extends LootSelectorEntry {
 
     public static class a extends LootSelectorEntry.e<LootItem> {
 
-        public a() {
-            super(new MinecraftKey("item"), LootItem.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItem lootitem, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootSelectorEntry) lootitem, jsonserializationcontext);
-            MinecraftKey minecraftkey = IRegistry.ITEM.getKey(lootitem.c);
+            MinecraftKey minecraftkey = IRegistry.ITEM.getKey(lootitem.g);
 
             if (minecraftkey == null) {
-                throw new IllegalArgumentException("Can't serialize unknown item " + lootitem.c);
+                throw new IllegalArgumentException("Can't serialize unknown item " + lootitem.g);
             } else {
                 jsonobject.addProperty("name", minecraftkey.toString());
             }

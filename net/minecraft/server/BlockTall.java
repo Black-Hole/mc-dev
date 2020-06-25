@@ -1,9 +1,9 @@
 package net.minecraft.server;
 
+import com.google.common.collect.UnmodifiableIterator;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class BlockTall extends Block implements IBlockWaterlogged {
 
@@ -13,16 +13,24 @@ public class BlockTall extends Block implements IBlockWaterlogged {
     public static final BlockStateBoolean WEST = BlockSprawling.d;
     public static final BlockStateBoolean e = BlockProperties.C;
     protected static final Map<EnumDirection, BlockStateBoolean> f = (Map) BlockSprawling.g.entrySet().stream().filter((entry) -> {
-        return ((EnumDirection) entry.getKey()).m().c();
+        return ((EnumDirection) entry.getKey()).n().d();
     }).collect(SystemUtils.a());
     protected final VoxelShape[] g;
     protected final VoxelShape[] h;
     private final Object2IntMap<IBlockData> i = new Object2IntOpenHashMap();
 
-    protected BlockTall(float f, float f1, float f2, float f3, float f4, Block.Info block_info) {
-        super(block_info);
+    protected BlockTall(float f, float f1, float f2, float f3, float f4, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.g = this.a(f, f1, f4, 0.0F, f4);
         this.h = this.a(f, f1, f2, 0.0F, f3);
+        UnmodifiableIterator unmodifiableiterator = this.blockStateList.a().iterator();
+
+        while (unmodifiableiterator.hasNext()) {
+            IBlockData iblockdata = (IBlockData) unmodifiableiterator.next();
+
+            this.g(iblockdata);
+        }
+
     }
 
     protected VoxelShape[] a(float f, float f1, float f2, float f3, float f4) {
@@ -52,20 +60,20 @@ public class BlockTall extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return this.h[this.h(iblockdata)];
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return this.h[this.g(iblockdata)];
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return this.g[this.h(iblockdata)];
+    public VoxelShape c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return this.g[this.g(iblockdata)];
     }
 
     private static int a(EnumDirection enumdirection) {
         return 1 << enumdirection.get2DRotationValue();
     }
 
-    protected int h(IBlockData iblockdata) {
+    protected int g(IBlockData iblockdata) {
         return this.i.computeIntIfAbsent(iblockdata, (iblockdata1) -> {
             int i = 0;
 
@@ -90,8 +98,8 @@ public class BlockTall extends Block implements IBlockWaterlogged {
     }
 
     @Override
-    public Fluid a_(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockTall.e) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
+    public Fluid d(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockTall.e) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
     }
 
     @Override

@@ -1,28 +1,22 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class WorldGenDecoratorCarveMaskConfiguration implements WorldGenFeatureDecoratorConfiguration {
 
-    protected final WorldGenStage.Features a;
-    protected final float b;
+    public static final Codec<WorldGenDecoratorCarveMaskConfiguration> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(WorldGenStage.Features.c.fieldOf("step").forGetter((worldgendecoratorcarvemaskconfiguration) -> {
+            return worldgendecoratorcarvemaskconfiguration.b;
+        }), Codec.FLOAT.fieldOf("probability").forGetter((worldgendecoratorcarvemaskconfiguration) -> {
+            return worldgendecoratorcarvemaskconfiguration.c;
+        })).apply(instance, WorldGenDecoratorCarveMaskConfiguration::new);
+    });
+    protected final WorldGenStage.Features b;
+    protected final float c;
 
     public WorldGenDecoratorCarveMaskConfiguration(WorldGenStage.Features worldgenstage_features, float f) {
-        this.a = worldgenstage_features;
-        this.b = f;
-    }
-
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("step"), dynamicops.createString(this.a.toString()), dynamicops.createString("probability"), dynamicops.createFloat(this.b))));
-    }
-
-    public static WorldGenDecoratorCarveMaskConfiguration a(Dynamic<?> dynamic) {
-        WorldGenStage.Features worldgenstage_features = WorldGenStage.Features.valueOf(dynamic.get("step").asString(""));
-        float f = dynamic.get("probability").asFloat(0.0F);
-
-        return new WorldGenDecoratorCarveMaskConfiguration(worldgenstage_features, f);
+        this.b = worldgenstage_features;
+        this.c = f;
     }
 }

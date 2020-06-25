@@ -2,75 +2,66 @@ package net.minecraft.server;
 
 public class CursorPosition {
 
-    private final int a;
-    private final int b;
-    private final int c;
-    private final int d;
-    private final int e;
-    private final int f;
+    private int a;
+    private int b;
+    private int c;
+    private int d;
+    private int e;
+    private int f;
     private int g;
     private int h;
     private int i;
-    private boolean j;
+    private int j;
+    private int k;
 
     public CursorPosition(int i, int j, int k, int l, int i1, int j1) {
         this.a = i;
         this.b = j;
         this.c = k;
-        this.d = l;
-        this.e = i1;
-        this.f = j1;
+        this.d = l - i + 1;
+        this.e = i1 - j + 1;
+        this.f = j1 - k + 1;
+        this.g = this.d * this.e * this.f;
     }
 
     public boolean a() {
-        if (!this.j) {
-            this.g = this.a;
-            this.h = this.b;
-            this.i = this.c;
-            this.j = true;
-            return true;
-        } else if (this.g == this.d && this.h == this.e && this.i == this.f) {
+        if (this.h == this.g) {
             return false;
         } else {
-            if (this.g < this.d) {
-                ++this.g;
-            } else if (this.h < this.e) {
-                this.g = this.a;
-                ++this.h;
-            } else if (this.i < this.f) {
-                this.g = this.a;
-                this.h = this.b;
-                ++this.i;
-            }
+            this.i = this.h % this.d;
+            int i = this.h / this.d;
 
+            this.j = i % this.e;
+            this.k = i / this.e;
+            ++this.h;
             return true;
         }
     }
 
     public int b() {
-        return this.g;
+        return this.a + this.i;
     }
 
     public int c() {
-        return this.h;
+        return this.b + this.j;
     }
 
     public int d() {
-        return this.i;
+        return this.c + this.k;
     }
 
     public int e() {
         int i = 0;
 
-        if (this.g == this.a || this.g == this.d) {
+        if (this.i == 0 || this.i == this.d - 1) {
             ++i;
         }
 
-        if (this.h == this.b || this.h == this.e) {
+        if (this.j == 0 || this.j == this.e - 1) {
             ++i;
         }
 
-        if (this.i == this.c || this.i == this.f) {
+        if (this.k == 0 || this.k == this.f - 1) {
             ++i;
         }
 

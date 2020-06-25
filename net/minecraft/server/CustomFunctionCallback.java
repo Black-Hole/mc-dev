@@ -12,7 +12,7 @@ public class CustomFunctionCallback implements CustomFunctionCallbackTimer<Minec
         CustomFunctionData customfunctiondata = minecraftserver.getFunctionData();
 
         customfunctiondata.a(this.a).ifPresent((customfunction) -> {
-            customfunctiondata.a(customfunction, customfunctiondata.f());
+            customfunctiondata.a(customfunction, customfunctiondata.e());
         });
     }
 

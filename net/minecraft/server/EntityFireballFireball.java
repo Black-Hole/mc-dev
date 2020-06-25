@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public abstract class EntityFireballFireball extends EntityFireball {
 
-    private static final DataWatcherObject<ItemStack> f = DataWatcher.a(EntityFireballFireball.class, DataWatcherRegistry.g);
+    private static final DataWatcherObject<ItemStack> e = DataWatcher.a(EntityFireballFireball.class, DataWatcherRegistry.g);
 
     public EntityFireballFireball(EntityTypes<? extends EntityFireballFireball> entitytypes, World world) {
         super(entitytypes, world);
@@ -16,28 +16,28 @@ public abstract class EntityFireballFireball extends EntityFireball {
         super(entitytypes, entityliving, d0, d1, d2, world);
     }
 
-    public void b(ItemStack itemstack) {
+    public void setItem(ItemStack itemstack) {
         if (itemstack.getItem() != Items.FIRE_CHARGE || itemstack.hasTag()) {
-            this.getDataWatcher().set(EntityFireballFireball.f, SystemUtils.a((Object) itemstack.cloneItemStack(), (itemstack1) -> {
+            this.getDataWatcher().set(EntityFireballFireball.e, SystemUtils.a((Object) itemstack.cloneItemStack(), (itemstack1) -> {
                 itemstack1.setCount(1);
             }));
         }
 
     }
 
-    protected ItemStack l() {
-        return (ItemStack) this.getDataWatcher().get(EntityFireballFireball.f);
+    public ItemStack getItem() {
+        return (ItemStack) this.getDataWatcher().get(EntityFireballFireball.e);
     }
 
     @Override
     protected void initDatawatcher() {
-        this.getDataWatcher().register(EntityFireballFireball.f, ItemStack.a);
+        this.getDataWatcher().register(EntityFireballFireball.e, ItemStack.b);
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
-        ItemStack itemstack = this.l();
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
+        ItemStack itemstack = this.getItem();
 
         if (!itemstack.isEmpty()) {
             nbttagcompound.set("Item", itemstack.save(new NBTTagCompound()));
@@ -46,10 +46,10 @@ public abstract class EntityFireballFireball extends EntityFireball {
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         ItemStack itemstack = ItemStack.a(nbttagcompound.getCompound("Item"));
 
-        this.b(itemstack);
+        this.setItem(itemstack);
     }
 }

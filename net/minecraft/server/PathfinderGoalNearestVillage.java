@@ -27,7 +27,7 @@ public class PathfinderGoalNearestVillage extends PathfinderGoal {
             return false;
         } else {
             WorldServer worldserver = (WorldServer) this.a.world;
-            BlockPosition blockposition = new BlockPosition(this.a);
+            BlockPosition blockposition = this.a.getChunkCoordinates();
 
             if (!worldserver.a(blockposition, 6)) {
                 return false;
@@ -53,7 +53,7 @@ public class PathfinderGoalNearestVillage extends PathfinderGoal {
             NavigationAbstract navigationabstract = this.a.getNavigation();
 
             if (navigationabstract.m() && !this.c.a((IPosition) this.a.getPositionVector(), 10.0D)) {
-                Vec3D vec3d = new Vec3D(this.c);
+                Vec3D vec3d = Vec3D.c((BaseBlockPosition) this.c);
                 Vec3D vec3d1 = this.a.getPositionVector();
                 Vec3D vec3d2 = vec3d1.d(vec3d);
 
@@ -72,7 +72,7 @@ public class PathfinderGoalNearestVillage extends PathfinderGoal {
 
     private void g() {
         Random random = this.a.getRandom();
-        BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, (new BlockPosition(this.a)).b(-8 + random.nextInt(16), 0, -8 + random.nextInt(16)));
+        BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, this.a.getChunkCoordinates().b(-8 + random.nextInt(16), 0, -8 + random.nextInt(16)));
 
         this.a.getNavigation().a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), 1.0D);
     }

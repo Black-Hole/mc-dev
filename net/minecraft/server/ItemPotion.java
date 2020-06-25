@@ -10,6 +10,11 @@ public class ItemPotion extends Item {
     }
 
     @Override
+    public ItemStack r() {
+        return PotionUtil.a(super.r(), Potions.WATER);
+    }
+
+    @Override
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
         EntityHuman entityhuman = entityliving instanceof EntityHuman ? (EntityHuman) entityliving : null;
 
@@ -53,19 +58,18 @@ public class ItemPotion extends Item {
     }
 
     @Override
-    public int f_(ItemStack itemstack) {
+    public int e_(ItemStack itemstack) {
         return 32;
     }
 
     @Override
-    public EnumAnimation e_(ItemStack itemstack) {
+    public EnumAnimation d_(ItemStack itemstack) {
         return EnumAnimation.DRINK;
     }
 
     @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
-        entityhuman.c(enumhand);
-        return InteractionResultWrapper.success(entityhuman.b(enumhand));
+        return ItemLiquidUtil.a(world, entityhuman, enumhand);
     }
 
     @Override
@@ -74,8 +78,8 @@ public class ItemPotion extends Item {
     }
 
     @Override
-    public boolean d_(ItemStack itemstack) {
-        return super.d_(itemstack) || !PotionUtil.getEffects(itemstack).isEmpty();
+    public boolean e(ItemStack itemstack) {
+        return super.e(itemstack) || !PotionUtil.getEffects(itemstack).isEmpty();
     }
 
     @Override

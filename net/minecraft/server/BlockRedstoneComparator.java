@@ -6,15 +6,15 @@ import javax.annotation.Nullable;
 
 public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITileEntity {
 
-    public static final BlockStateEnum<BlockPropertyComparatorMode> MODE = BlockProperties.az;
+    public static final BlockStateEnum<BlockPropertyComparatorMode> MODE = BlockProperties.aG;
 
-    public BlockRedstoneComparator(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneComparator.FACING, EnumDirection.NORTH)).set(BlockRedstoneComparator.c, false)).set(BlockRedstoneComparator.MODE, BlockPropertyComparatorMode.COMPARE));
+    public BlockRedstoneComparator(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneComparator.FACING, EnumDirection.NORTH)).set(BlockRedstoneComparator.c, false)).set(BlockRedstoneComparator.MODE, BlockPropertyComparatorMode.COMPARE));
     }
 
     @Override
-    protected int h(IBlockData iblockdata) {
+    protected int g(IBlockData iblockdata) {
         return 2;
     }
 
@@ -54,14 +54,11 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
         } else if (i < 15 && iblockdata1.isOccluding(world, blockposition1)) {
             blockposition1 = blockposition1.shift(enumdirection);
             iblockdata1 = world.getType(blockposition1);
-            if (iblockdata1.isComplexRedstone()) {
-                i = iblockdata1.a(world, blockposition1);
-            } else if (iblockdata1.isAir()) {
-                EntityItemFrame entityitemframe = this.a(world, enumdirection, blockposition1);
+            EntityItemFrame entityitemframe = this.a(world, enumdirection, blockposition1);
+            int j = Math.max(entityitemframe == null ? Integer.MIN_VALUE : entityitemframe.q(), iblockdata1.isComplexRedstone() ? iblockdata1.a(world, blockposition1) : Integer.MIN_VALUE);
 
-                if (entityitemframe != null) {
-                    i = entityitemframe.q();
-                }
+            if (j != Integer.MIN_VALUE) {
+                i = j;
             }
         }
 
@@ -88,7 +85,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
             world.playSound(entityhuman, blockposition, SoundEffects.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3F, f);
             world.setTypeAndData(blockposition, iblockdata, 2);
             this.f(world, blockposition, iblockdata);
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.a(world.isClientSide);
         }
     }
 
@@ -136,8 +133,8 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        this.f(worldserver, blockposition, iblockdata);
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        this.f((World) worldserver, blockposition, iblockdata);
     }
 
     @Override

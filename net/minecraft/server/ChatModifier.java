@@ -7,274 +7,203 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.JsonSyntaxException;
 import java.lang.reflect.Type;
 import java.util.Objects;
 import javax.annotation.Nullable;
 
 public class ChatModifier {
 
-    private ChatModifier a;
-    private EnumChatFormat color;
-    private Boolean bold;
-    private Boolean italic;
-    private Boolean underlined;
-    private Boolean strikethrough;
-    private Boolean obfuscated;
-    private ChatClickable clickEvent;
-    private ChatHoverable hoverEvent;
-    private String insertion;
-    private static final ChatModifier k = new ChatModifier() {
-        @Nullable
-        @Override
-        public EnumChatFormat getColor() {
-            return null;
-        }
+    public static final MinecraftKey a = new MinecraftKey("minecraft", "default");
+    public static final ChatModifier b = new ChatModifier((ChatHexColor) null, (Boolean) null, (Boolean) null, (Boolean) null, (Boolean) null, (Boolean) null, (ChatClickable) null, (ChatHoverable) null, (String) null, (MinecraftKey) null);
+    @Nullable
+    private final ChatHexColor color;
+    @Nullable
+    private final Boolean bold;
+    @Nullable
+    private final Boolean italic;
+    @Nullable
+    private final Boolean underlined;
+    @Nullable
+    private final Boolean strikethrough;
+    @Nullable
+    private final Boolean obfuscated;
+    @Nullable
+    private final ChatClickable clickEvent;
+    @Nullable
+    private final ChatHoverable hoverEvent;
+    @Nullable
+    private final String insertion;
+    @Nullable
+    private final MinecraftKey font;
 
-        @Override
-        public boolean isBold() {
-            return false;
-        }
-
-        @Override
-        public boolean isItalic() {
-            return false;
-        }
-
-        @Override
-        public boolean isStrikethrough() {
-            return false;
-        }
-
-        @Override
-        public boolean isUnderlined() {
-            return false;
-        }
-
-        @Override
-        public boolean isRandom() {
-            return false;
-        }
-
-        @Nullable
-        @Override
-        public ChatClickable getClickEvent() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public ChatHoverable getHoverEvent() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public String getInsertion() {
-            return null;
-        }
-
-        @Override
-        public ChatModifier setColor(EnumChatFormat enumchatformat) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public ChatModifier setBold(Boolean obool) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public ChatModifier setItalic(Boolean obool) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public ChatModifier setStrikethrough(Boolean obool) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public ChatModifier setUnderline(Boolean obool) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public ChatModifier setRandom(Boolean obool) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public ChatModifier setChatClickable(ChatClickable chatclickable) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public ChatModifier setChatHoverable(ChatHoverable chathoverable) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public ChatModifier setChatModifier(ChatModifier chatmodifier) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public String toString() {
-            return "Style.ROOT";
-        }
-
-        @Override
-        public ChatModifier clone() {
-            return this;
-        }
-
-        @Override
-        public ChatModifier n() {
-            return this;
-        }
-
-        @Override
-        public String k() {
-            return "";
-        }
-    };
-
-    public ChatModifier() {}
+    private ChatModifier(@Nullable ChatHexColor chathexcolor, @Nullable Boolean obool, @Nullable Boolean obool1, @Nullable Boolean obool2, @Nullable Boolean obool3, @Nullable Boolean obool4, @Nullable ChatClickable chatclickable, @Nullable ChatHoverable chathoverable, @Nullable String s, @Nullable MinecraftKey minecraftkey) {
+        this.color = chathexcolor;
+        this.bold = obool;
+        this.italic = obool1;
+        this.underlined = obool2;
+        this.strikethrough = obool3;
+        this.obfuscated = obool4;
+        this.clickEvent = chatclickable;
+        this.hoverEvent = chathoverable;
+        this.insertion = s;
+        this.font = minecraftkey;
+    }
 
     @Nullable
-    public EnumChatFormat getColor() {
-        return this.color == null ? this.o().getColor() : this.color;
+    public ChatHexColor getColor() {
+        return this.color;
     }
 
     public boolean isBold() {
-        return this.bold == null ? this.o().isBold() : this.bold;
+        return this.bold == Boolean.TRUE;
     }
 
     public boolean isItalic() {
-        return this.italic == null ? this.o().isItalic() : this.italic;
+        return this.italic == Boolean.TRUE;
     }
 
     public boolean isStrikethrough() {
-        return this.strikethrough == null ? this.o().isStrikethrough() : this.strikethrough;
+        return this.strikethrough == Boolean.TRUE;
     }
 
     public boolean isUnderlined() {
-        return this.underlined == null ? this.o().isUnderlined() : this.underlined;
+        return this.underlined == Boolean.TRUE;
     }
 
     public boolean isRandom() {
-        return this.obfuscated == null ? this.o().isRandom() : this.obfuscated;
+        return this.obfuscated == Boolean.TRUE;
     }
 
     public boolean g() {
-        return this.bold == null && this.italic == null && this.strikethrough == null && this.underlined == null && this.obfuscated == null && this.color == null && this.clickEvent == null && this.hoverEvent == null && this.insertion == null;
+        return this == ChatModifier.b;
     }
 
     @Nullable
     public ChatClickable getClickEvent() {
-        return this.clickEvent == null ? this.o().getClickEvent() : this.clickEvent;
+        return this.clickEvent;
     }
 
     @Nullable
     public ChatHoverable getHoverEvent() {
-        return this.hoverEvent == null ? this.o().getHoverEvent() : this.hoverEvent;
+        return this.hoverEvent;
     }
 
     @Nullable
     public String getInsertion() {
-        return this.insertion == null ? this.o().getInsertion() : this.insertion;
+        return this.insertion;
     }
 
-    public ChatModifier setColor(EnumChatFormat enumchatformat) {
-        this.color = enumchatformat;
-        return this;
+    public MinecraftKey getFont() {
+        return this.font != null ? this.font : ChatModifier.a;
     }
 
-    public ChatModifier setBold(Boolean obool) {
-        this.bold = obool;
-        return this;
+    public ChatModifier setColor(@Nullable ChatHexColor chathexcolor) {
+        return new ChatModifier(chathexcolor, this.bold, this.italic, this.underlined, this.strikethrough, this.obfuscated, this.clickEvent, this.hoverEvent, this.insertion, this.font);
     }
 
-    public ChatModifier setItalic(Boolean obool) {
-        this.italic = obool;
-        return this;
+    public ChatModifier setColor(@Nullable EnumChatFormat enumchatformat) {
+        return this.setColor(enumchatformat != null ? ChatHexColor.a(enumchatformat) : null);
     }
 
-    public ChatModifier setStrikethrough(Boolean obool) {
-        this.strikethrough = obool;
-        return this;
+    public ChatModifier setBold(@Nullable Boolean obool) {
+        return new ChatModifier(this.color, obool, this.italic, this.underlined, this.strikethrough, this.obfuscated, this.clickEvent, this.hoverEvent, this.insertion, this.font);
     }
 
-    public ChatModifier setUnderline(Boolean obool) {
-        this.underlined = obool;
-        return this;
+    public ChatModifier setItalic(@Nullable Boolean obool) {
+        return new ChatModifier(this.color, this.bold, obool, this.underlined, this.strikethrough, this.obfuscated, this.clickEvent, this.hoverEvent, this.insertion, this.font);
     }
 
-    public ChatModifier setRandom(Boolean obool) {
-        this.obfuscated = obool;
-        return this;
+    public ChatModifier setChatClickable(@Nullable ChatClickable chatclickable) {
+        return new ChatModifier(this.color, this.bold, this.italic, this.underlined, this.strikethrough, this.obfuscated, chatclickable, this.hoverEvent, this.insertion, this.font);
     }
 
-    public ChatModifier setChatClickable(ChatClickable chatclickable) {
-        this.clickEvent = chatclickable;
-        return this;
+    public ChatModifier setChatHoverable(@Nullable ChatHoverable chathoverable) {
+        return new ChatModifier(this.color, this.bold, this.italic, this.underlined, this.strikethrough, this.obfuscated, this.clickEvent, chathoverable, this.insertion, this.font);
     }
 
-    public ChatModifier setChatHoverable(ChatHoverable chathoverable) {
-        this.hoverEvent = chathoverable;
-        return this;
+    public ChatModifier setInsertion(@Nullable String s) {
+        return new ChatModifier(this.color, this.bold, this.italic, this.underlined, this.strikethrough, this.obfuscated, this.clickEvent, this.hoverEvent, s, this.font);
     }
 
-    public ChatModifier setInsertion(String s) {
-        this.insertion = s;
-        return this;
+    public ChatModifier b(EnumChatFormat enumchatformat) {
+        ChatHexColor chathexcolor = this.color;
+        Boolean obool = this.bold;
+        Boolean obool1 = this.italic;
+        Boolean obool2 = this.strikethrough;
+        Boolean obool3 = this.underlined;
+        Boolean obool4 = this.obfuscated;
+
+        switch (enumchatformat) {
+            case OBFUSCATED:
+                obool4 = true;
+                break;
+            case BOLD:
+                obool = true;
+                break;
+            case STRIKETHROUGH:
+                obool2 = true;
+                break;
+            case UNDERLINE:
+                obool3 = true;
+                break;
+            case ITALIC:
+                obool1 = true;
+                break;
+            case RESET:
+                return ChatModifier.b;
+            default:
+                chathexcolor = ChatHexColor.a(enumchatformat);
+        }
+
+        return new ChatModifier(chathexcolor, obool, obool1, obool3, obool2, obool4, this.clickEvent, this.hoverEvent, this.insertion, this.font);
+    }
+
+    public ChatModifier a(EnumChatFormat... aenumchatformat) {
+        ChatHexColor chathexcolor = this.color;
+        Boolean obool = this.bold;
+        Boolean obool1 = this.italic;
+        Boolean obool2 = this.strikethrough;
+        Boolean obool3 = this.underlined;
+        Boolean obool4 = this.obfuscated;
+        EnumChatFormat[] aenumchatformat1 = aenumchatformat;
+        int i = aenumchatformat.length;
+
+        for (int j = 0; j < i; ++j) {
+            EnumChatFormat enumchatformat = aenumchatformat1[j];
+
+            switch (enumchatformat) {
+                case OBFUSCATED:
+                    obool4 = true;
+                    break;
+                case BOLD:
+                    obool = true;
+                    break;
+                case STRIKETHROUGH:
+                    obool2 = true;
+                    break;
+                case UNDERLINE:
+                    obool3 = true;
+                    break;
+                case ITALIC:
+                    obool1 = true;
+                    break;
+                case RESET:
+                    return ChatModifier.b;
+                default:
+                    chathexcolor = ChatHexColor.a(enumchatformat);
+            }
+        }
+
+        return new ChatModifier(chathexcolor, obool, obool1, obool3, obool2, obool4, this.clickEvent, this.hoverEvent, this.insertion, this.font);
     }
 
     public ChatModifier setChatModifier(ChatModifier chatmodifier) {
-        this.a = chatmodifier;
-        return this;
-    }
-
-    public String k() {
-        if (this.g()) {
-            return this.a != null ? this.a.k() : "";
-        } else {
-            StringBuilder stringbuilder = new StringBuilder();
-
-            if (this.getColor() != null) {
-                stringbuilder.append(this.getColor());
-            }
-
-            if (this.isBold()) {
-                stringbuilder.append(EnumChatFormat.BOLD);
-            }
-
-            if (this.isItalic()) {
-                stringbuilder.append(EnumChatFormat.ITALIC);
-            }
-
-            if (this.isUnderlined()) {
-                stringbuilder.append(EnumChatFormat.UNDERLINE);
-            }
-
-            if (this.isRandom()) {
-                stringbuilder.append(EnumChatFormat.OBFUSCATED);
-            }
-
-            if (this.isStrikethrough()) {
-                stringbuilder.append(EnumChatFormat.STRIKETHROUGH);
-            }
-
-            return stringbuilder.toString();
-        }
-    }
-
-    private ChatModifier o() {
-        return this.a == null ? ChatModifier.k : this.a;
+        return this == ChatModifier.b ? chatmodifier : (chatmodifier == ChatModifier.b ? this : new ChatModifier(this.color != null ? this.color : chatmodifier.color, this.bold != null ? this.bold : chatmodifier.bold, this.italic != null ? this.italic : chatmodifier.italic, this.underlined != null ? this.underlined : chatmodifier.underlined, this.strikethrough != null ? this.strikethrough : chatmodifier.strikethrough, this.obfuscated != null ? this.obfuscated : chatmodifier.obfuscated, this.clickEvent != null ? this.clickEvent : chatmodifier.clickEvent, this.hoverEvent != null ? this.hoverEvent : chatmodifier.hoverEvent, this.insertion != null ? this.insertion : chatmodifier.insertion, this.font != null ? this.font : chatmodifier.font));
     }
 
     public String toString() {
-        return "Style{hasParent=" + (this.a != null) + ", color=" + this.color + ", bold=" + this.bold + ", italic=" + this.italic + ", underlined=" + this.underlined + ", obfuscated=" + this.obfuscated + ", clickEvent=" + this.getClickEvent() + ", hoverEvent=" + this.getHoverEvent() + ", insertion=" + this.getInsertion() + '}';
+        return "Style{ color=" + this.color + ", bold=" + this.bold + ", italic=" + this.italic + ", underlined=" + this.underlined + ", strikethrough=" + this.strikethrough + ", obfuscated=" + this.obfuscated + ", clickEvent=" + this.getClickEvent() + ", hoverEvent=" + this.getHoverEvent() + ", insertion=" + this.getInsertion() + ", font=" + this.getFont() + '}';
     }
 
     public boolean equals(Object object) {
@@ -284,78 +213,13 @@ public class ChatModifier {
             return false;
         } else {
             ChatModifier chatmodifier = (ChatModifier) object;
-            boolean flag;
 
-            if (this.isBold() == chatmodifier.isBold() && this.getColor() == chatmodifier.getColor() && this.isItalic() == chatmodifier.isItalic() && this.isRandom() == chatmodifier.isRandom() && this.isStrikethrough() == chatmodifier.isStrikethrough() && this.isUnderlined() == chatmodifier.isUnderlined()) {
-                label65:
-                {
-                    if (this.getClickEvent() != null) {
-                        if (!this.getClickEvent().equals(chatmodifier.getClickEvent())) {
-                            break label65;
-                        }
-                    } else if (chatmodifier.getClickEvent() != null) {
-                        break label65;
-                    }
-
-                    if (this.getHoverEvent() != null) {
-                        if (!this.getHoverEvent().equals(chatmodifier.getHoverEvent())) {
-                            break label65;
-                        }
-                    } else if (chatmodifier.getHoverEvent() != null) {
-                        break label65;
-                    }
-
-                    if (this.getInsertion() != null) {
-                        if (!this.getInsertion().equals(chatmodifier.getInsertion())) {
-                            break label65;
-                        }
-                    } else if (chatmodifier.getInsertion() != null) {
-                        break label65;
-                    }
-
-                    flag = true;
-                    return flag;
-                }
-            }
-
-            flag = false;
-            return flag;
+            return this.isBold() == chatmodifier.isBold() && Objects.equals(this.getColor(), chatmodifier.getColor()) && this.isItalic() == chatmodifier.isItalic() && this.isRandom() == chatmodifier.isRandom() && this.isStrikethrough() == chatmodifier.isStrikethrough() && this.isUnderlined() == chatmodifier.isUnderlined() && Objects.equals(this.getClickEvent(), chatmodifier.getClickEvent()) && Objects.equals(this.getHoverEvent(), chatmodifier.getHoverEvent()) && Objects.equals(this.getInsertion(), chatmodifier.getInsertion()) && Objects.equals(this.getFont(), chatmodifier.getFont());
         }
     }
 
     public int hashCode() {
         return Objects.hash(new Object[]{this.color, this.bold, this.italic, this.underlined, this.strikethrough, this.obfuscated, this.clickEvent, this.hoverEvent, this.insertion});
-    }
-
-    public ChatModifier clone() {
-        ChatModifier chatmodifier = new ChatModifier();
-
-        chatmodifier.bold = this.bold;
-        chatmodifier.italic = this.italic;
-        chatmodifier.strikethrough = this.strikethrough;
-        chatmodifier.underlined = this.underlined;
-        chatmodifier.obfuscated = this.obfuscated;
-        chatmodifier.color = this.color;
-        chatmodifier.clickEvent = this.clickEvent;
-        chatmodifier.hoverEvent = this.hoverEvent;
-        chatmodifier.a = this.a;
-        chatmodifier.insertion = this.insertion;
-        return chatmodifier;
-    }
-
-    public ChatModifier n() {
-        ChatModifier chatmodifier = new ChatModifier();
-
-        chatmodifier.setBold(this.isBold());
-        chatmodifier.setItalic(this.isItalic());
-        chatmodifier.setStrikethrough(this.isStrikethrough());
-        chatmodifier.setUnderline(this.isUnderlined());
-        chatmodifier.setRandom(this.isRandom());
-        chatmodifier.setColor(this.getColor());
-        chatmodifier.setChatClickable(this.getClickEvent());
-        chatmodifier.setChatHoverable(this.getHoverEvent());
-        chatmodifier.setInsertion(this.getInsertion());
-        return chatmodifier;
     }
 
     public static class ChatModifierSerializer implements JsonDeserializer<ChatModifier>, JsonSerializer<ChatModifier> {
@@ -365,70 +229,93 @@ public class ChatModifier {
         @Nullable
         public ChatModifier deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             if (jsonelement.isJsonObject()) {
-                ChatModifier chatmodifier = new ChatModifier();
                 JsonObject jsonobject = jsonelement.getAsJsonObject();
 
                 if (jsonobject == null) {
                     return null;
                 } else {
-                    if (jsonobject.has("bold")) {
-                        chatmodifier.bold = jsonobject.get("bold").getAsBoolean();
-                    }
+                    Boolean obool = a(jsonobject, "bold");
+                    Boolean obool1 = a(jsonobject, "italic");
+                    Boolean obool2 = a(jsonobject, "underlined");
+                    Boolean obool3 = a(jsonobject, "strikethrough");
+                    Boolean obool4 = a(jsonobject, "obfuscated");
+                    ChatHexColor chathexcolor = e(jsonobject);
+                    String s = d(jsonobject);
+                    ChatClickable chatclickable = c(jsonobject);
+                    ChatHoverable chathoverable = b(jsonobject);
+                    MinecraftKey minecraftkey = a(jsonobject);
 
-                    if (jsonobject.has("italic")) {
-                        chatmodifier.italic = jsonobject.get("italic").getAsBoolean();
-                    }
-
-                    if (jsonobject.has("underlined")) {
-                        chatmodifier.underlined = jsonobject.get("underlined").getAsBoolean();
-                    }
-
-                    if (jsonobject.has("strikethrough")) {
-                        chatmodifier.strikethrough = jsonobject.get("strikethrough").getAsBoolean();
-                    }
-
-                    if (jsonobject.has("obfuscated")) {
-                        chatmodifier.obfuscated = jsonobject.get("obfuscated").getAsBoolean();
-                    }
-
-                    if (jsonobject.has("color")) {
-                        chatmodifier.color = (EnumChatFormat) jsondeserializationcontext.deserialize(jsonobject.get("color"), EnumChatFormat.class);
-                    }
-
-                    if (jsonobject.has("insertion")) {
-                        chatmodifier.insertion = jsonobject.get("insertion").getAsString();
-                    }
-
-                    JsonObject jsonobject1;
-                    String s;
-
-                    if (jsonobject.has("clickEvent")) {
-                        jsonobject1 = ChatDeserializer.t(jsonobject, "clickEvent");
-                        s = ChatDeserializer.a(jsonobject1, "action", (String) null);
-                        ChatClickable.EnumClickAction chatclickable_enumclickaction = s == null ? null : ChatClickable.EnumClickAction.a(s);
-                        String s1 = ChatDeserializer.a(jsonobject1, "value", (String) null);
-
-                        if (chatclickable_enumclickaction != null && s1 != null && chatclickable_enumclickaction.a()) {
-                            chatmodifier.clickEvent = new ChatClickable(chatclickable_enumclickaction, s1);
-                        }
-                    }
-
-                    if (jsonobject.has("hoverEvent")) {
-                        jsonobject1 = ChatDeserializer.t(jsonobject, "hoverEvent");
-                        s = ChatDeserializer.a(jsonobject1, "action", (String) null);
-                        ChatHoverable.EnumHoverAction chathoverable_enumhoveraction = s == null ? null : ChatHoverable.EnumHoverAction.a(s);
-                        IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) jsondeserializationcontext.deserialize(jsonobject1.get("value"), IChatBaseComponent.class);
-
-                        if (chathoverable_enumhoveraction != null && ichatbasecomponent != null && chathoverable_enumhoveraction.a()) {
-                            chatmodifier.hoverEvent = new ChatHoverable(chathoverable_enumhoveraction, ichatbasecomponent);
-                        }
-                    }
-
-                    return chatmodifier;
+                    return new ChatModifier(chathexcolor, obool, obool1, obool2, obool3, obool4, chatclickable, chathoverable, s, minecraftkey);
                 }
             } else {
                 return null;
             }
+        }
+
+        @Nullable
+        private static MinecraftKey a(JsonObject jsonobject) {
+            if (jsonobject.has("font")) {
+                String s = ChatDeserializer.h(jsonobject, "font");
+
+                try {
+                    return new MinecraftKey(s);
+                } catch (ResourceKeyInvalidException resourcekeyinvalidexception) {
+                    throw new JsonSyntaxException("Invalid font name: " + s);
+                }
+            } else {
+                return null;
+            }
+        }
+
+        @Nullable
+        private static ChatHoverable b(JsonObject jsonobject) {
+            if (jsonobject.has("hoverEvent")) {
+                JsonObject jsonobject1 = ChatDeserializer.t(jsonobject, "hoverEvent");
+                ChatHoverable chathoverable = ChatHoverable.a(jsonobject1);
+
+                if (chathoverable != null && chathoverable.a().a()) {
+                    return chathoverable;
+                }
+            }
+
+            return null;
+        }
+
+        @Nullable
+        private static ChatClickable c(JsonObject jsonobject) {
+            if (jsonobject.has("clickEvent")) {
+                JsonObject jsonobject1 = ChatDeserializer.t(jsonobject, "clickEvent");
+                String s = ChatDeserializer.a(jsonobject1, "action", (String) null);
+                ChatClickable.EnumClickAction chatclickable_enumclickaction = s == null ? null : ChatClickable.EnumClickAction.a(s);
+                String s1 = ChatDeserializer.a(jsonobject1, "value", (String) null);
+
+                if (chatclickable_enumclickaction != null && s1 != null && chatclickable_enumclickaction.a()) {
+                    return new ChatClickable(chatclickable_enumclickaction, s1);
+                }
+            }
+
+            return null;
+        }
+
+        @Nullable
+        private static String d(JsonObject jsonobject) {
+            return ChatDeserializer.a(jsonobject, "insertion", (String) null);
+        }
+
+        @Nullable
+        private static ChatHexColor e(JsonObject jsonobject) {
+            if (jsonobject.has("color")) {
+                String s = ChatDeserializer.h(jsonobject, "color");
+
+                return ChatHexColor.a(s);
+            } else {
+                return null;
+            }
+        }
+
+        @Nullable
+        private static Boolean a(JsonObject jsonobject, String s) {
+            return jsonobject.has(s) ? jsonobject.get(s).getAsBoolean() : null;
         }
 
         @Nullable
@@ -459,27 +346,27 @@ public class ChatModifier {
                 }
 
                 if (chatmodifier.color != null) {
-                    jsonobject.add("color", jsonserializationcontext.serialize(chatmodifier.color));
+                    jsonobject.addProperty("color", chatmodifier.color.b());
                 }
 
                 if (chatmodifier.insertion != null) {
                     jsonobject.add("insertion", jsonserializationcontext.serialize(chatmodifier.insertion));
                 }
 
-                JsonObject jsonobject1;
-
                 if (chatmodifier.clickEvent != null) {
-                    jsonobject1 = new JsonObject();
+                    JsonObject jsonobject1 = new JsonObject();
+
                     jsonobject1.addProperty("action", chatmodifier.clickEvent.a().b());
                     jsonobject1.addProperty("value", chatmodifier.clickEvent.b());
                     jsonobject.add("clickEvent", jsonobject1);
                 }
 
                 if (chatmodifier.hoverEvent != null) {
-                    jsonobject1 = new JsonObject();
-                    jsonobject1.addProperty("action", chatmodifier.hoverEvent.a().b());
-                    jsonobject1.add("value", jsonserializationcontext.serialize(chatmodifier.hoverEvent.b()));
-                    jsonobject.add("hoverEvent", jsonobject1);
+                    jsonobject.add("hoverEvent", chatmodifier.hoverEvent.b());
+                }
+
+                if (chatmodifier.font != null) {
+                    jsonobject.addProperty("font", chatmodifier.font.toString());
                 }
 
                 return jsonobject;

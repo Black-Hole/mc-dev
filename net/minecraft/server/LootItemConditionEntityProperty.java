@@ -17,15 +17,20 @@ public class LootItemConditionEntityProperty implements LootItemCondition {
     }
 
     @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.e;
+    }
+
+    @Override
     public Set<LootContextParameter<?>> a() {
         return ImmutableSet.of(LootContextParameters.POSITION, this.b.a());
     }
 
     public boolean test(LootTableInfo loottableinfo) {
         Entity entity = (Entity) loottableinfo.getContextParameter(this.b.a());
-        BlockPosition blockposition = (BlockPosition) loottableinfo.getContextParameter(LootContextParameters.POSITION);
+        Vec3D vec3d = (Vec3D) loottableinfo.getContextParameter(LootContextParameters.g);
 
-        return this.a.a(loottableinfo.c(), blockposition != null ? new Vec3D(blockposition) : null, entity);
+        return this.a.a(loottableinfo.getWorld(), vec3d, entity);
     }
 
     public static LootItemCondition.a a(LootTableInfo.EntityTarget loottableinfo_entitytarget) {
@@ -38,11 +43,15 @@ public class LootItemConditionEntityProperty implements LootItemCondition {
         };
     }
 
-    public static class a extends LootItemCondition.b<LootItemConditionEntityProperty> {
+    public static LootItemCondition.a a(LootTableInfo.EntityTarget loottableinfo_entitytarget, CriterionConditionEntity criterionconditionentity) {
+        return () -> {
+            return new LootItemConditionEntityProperty(criterionconditionentity, loottableinfo_entitytarget);
+        };
+    }
 
-        protected a() {
-            super(new MinecraftKey("entity_properties"), LootItemConditionEntityProperty.class);
-        }
+    public static class a implements LootSerializer<LootItemConditionEntityProperty> {
+
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionEntityProperty lootitemconditionentityproperty, JsonSerializationContext jsonserializationcontext) {
             jsonobject.add("predicate", lootitemconditionentityproperty.a.a());
@@ -50,7 +59,7 @@ public class LootItemConditionEntityProperty implements LootItemCondition {
         }
 
         @Override
-        public LootItemConditionEntityProperty b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionEntityProperty a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("predicate"));
 
             return new LootItemConditionEntityProperty(criterionconditionentity, (LootTableInfo.EntityTarget) ChatDeserializer.a(jsonobject, "entity", jsondeserializationcontext, LootTableInfo.EntityTarget.class));

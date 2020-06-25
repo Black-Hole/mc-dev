@@ -29,7 +29,7 @@ public class TileEntityBanner extends TileEntity implements INamableTileEntity {
 
     @Override
     public IChatBaseComponent getDisplayName() {
-        return (IChatBaseComponent) (this.a != null ? this.a : new ChatMessage("block.minecraft.banner", new Object[0]));
+        return (IChatBaseComponent) (this.a != null ? this.a : new ChatMessage("block.minecraft.banner"));
     }
 
     @Nullable
@@ -57,8 +57,8 @@ public class TileEntityBanner extends TileEntity implements INamableTileEntity {
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
             this.a = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("CustomName"));
         }

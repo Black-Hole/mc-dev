@@ -20,7 +20,7 @@ public class RecipeSuspiciousStew extends IRecipeComplex {
                     flag2 = true;
                 } else if (itemstack.getItem() == Blocks.RED_MUSHROOM.getItem() && !flag1) {
                     flag1 = true;
-                } else if (itemstack.getItem().a(TagsItem.SMALL_FLOWERS) && !flag) {
+                } else if (itemstack.getItem().a((Tag) TagsItem.SMALL_FLOWERS) && !flag) {
                     flag = true;
                 } else {
                     if (itemstack.getItem() != Items.BOWL || flag3) {
@@ -36,12 +36,12 @@ public class RecipeSuspiciousStew extends IRecipeComplex {
     }
 
     public ItemStack a(InventoryCrafting inventorycrafting) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
 
         for (int i = 0; i < inventorycrafting.getSize(); ++i) {
             ItemStack itemstack1 = inventorycrafting.getItem(i);
 
-            if (!itemstack1.isEmpty() && itemstack1.getItem().a(TagsItem.SMALL_FLOWERS)) {
+            if (!itemstack1.isEmpty() && itemstack1.getItem().a((Tag) TagsItem.SMALL_FLOWERS)) {
                 itemstack = itemstack1;
                 break;
             }

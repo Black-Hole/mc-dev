@@ -4,24 +4,23 @@ import java.util.Random;
 
 public class BlockSapling extends BlockPlant implements IBlockFragilePlantElement {
 
-    public static final BlockStateInteger STAGE = BlockProperties.au;
+    public static final BlockStateInteger STAGE = BlockProperties.aA;
     protected static final VoxelShape b = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
     private final WorldGenTreeProvider c;
 
-    protected BlockSapling(WorldGenTreeProvider worldgentreeprovider, Block.Info block_info) {
-        super(block_info);
+    protected BlockSapling(WorldGenTreeProvider worldgentreeprovider, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.c = worldgentreeprovider;
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSapling.STAGE, 0));
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSapling.STAGE, 0));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockSapling.b;
     }
 
     @Override
     public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        super.tick(iblockdata, worldserver, blockposition, random);
         if (worldserver.getLightLevel(blockposition.up()) >= 9 && random.nextInt(7) == 0) {
             this.grow(worldserver, blockposition, iblockdata, random);
         }

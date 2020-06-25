@@ -1,25 +1,24 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenSurfaceMesaForest extends WorldGenSurfaceMesa {
 
-    private static final IBlockData S = Blocks.WHITE_TERRACOTTA.getBlockData();
-    private static final IBlockData T = Blocks.ORANGE_TERRACOTTA.getBlockData();
-    private static final IBlockData U = Blocks.TERRACOTTA.getBlockData();
+    private static final IBlockData ah = Blocks.WHITE_TERRACOTTA.getBlockData();
+    private static final IBlockData ai = Blocks.ORANGE_TERRACOTTA.getBlockData();
+    private static final IBlockData aj = Blocks.TERRACOTTA.getBlockData();
 
-    public WorldGenSurfaceMesaForest(Function<Dynamic<?>, ? extends WorldGenSurfaceConfigurationBase> function) {
-        super(function);
+    public WorldGenSurfaceMesaForest(Codec<WorldGenSurfaceConfigurationBase> codec) {
+        super(codec);
     }
 
     @Override
     public void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, long i1, WorldGenSurfaceConfigurationBase worldgensurfaceconfigurationbase) {
         int j1 = i & 15;
         int k1 = j & 15;
-        IBlockData iblockdata2 = WorldGenSurfaceMesaForest.S;
-        IBlockData iblockdata3 = biomebase.s().b();
+        IBlockData iblockdata2 = WorldGenSurfaceMesaForest.ah;
+        IBlockData iblockdata3 = biomebase.A().b();
         int l1 = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
         boolean flag = Math.cos(d0 / 3.0D * 3.141592653589793D) > 0.0D;
         int i2 = -1;
@@ -34,15 +33,15 @@ public class WorldGenSurfaceMesaForest extends WorldGenSurfaceMesa {
 
                 if (iblockdata4.isAir()) {
                     i2 = -1;
-                } else if (iblockdata4.getBlock() == iblockdata.getBlock()) {
+                } else if (iblockdata4.a(iblockdata.getBlock())) {
                     if (i2 == -1) {
                         flag1 = false;
                         if (l1 <= 0) {
                             iblockdata2 = Blocks.AIR.getBlockData();
                             iblockdata3 = iblockdata;
                         } else if (k2 >= l - 4 && k2 <= l + 1) {
-                            iblockdata2 = WorldGenSurfaceMesaForest.S;
-                            iblockdata3 = biomebase.s().b();
+                            iblockdata2 = WorldGenSurfaceMesaForest.ah;
+                            iblockdata3 = biomebase.A().b();
                         }
 
                         if (k2 < l && (iblockdata2 == null || iblockdata2.isAir())) {
@@ -62,29 +61,29 @@ public class WorldGenSurfaceMesaForest extends WorldGenSurfaceMesa {
 
                                 if (k2 >= 64 && k2 <= 127) {
                                     if (flag) {
-                                        iblockdata5 = WorldGenSurfaceMesaForest.U;
+                                        iblockdata5 = WorldGenSurfaceMesaForest.aj;
                                     } else {
                                         iblockdata5 = this.a(i, k2, j);
                                     }
                                 } else {
-                                    iblockdata5 = WorldGenSurfaceMesaForest.T;
+                                    iblockdata5 = WorldGenSurfaceMesaForest.ai;
                                 }
 
                                 ichunkaccess.setType(blockposition_mutableblockposition, iblockdata5, false);
                             } else {
-                                ichunkaccess.setType(blockposition_mutableblockposition, biomebase.s().a(), false);
+                                ichunkaccess.setType(blockposition_mutableblockposition, biomebase.A().a(), false);
                                 flag1 = true;
                             }
                         } else {
                             ichunkaccess.setType(blockposition_mutableblockposition, iblockdata3, false);
-                            if (iblockdata3 == WorldGenSurfaceMesaForest.S) {
-                                ichunkaccess.setType(blockposition_mutableblockposition, WorldGenSurfaceMesaForest.T, false);
+                            if (iblockdata3 == WorldGenSurfaceMesaForest.ah) {
+                                ichunkaccess.setType(blockposition_mutableblockposition, WorldGenSurfaceMesaForest.ai, false);
                             }
                         }
                     } else if (i2 > 0) {
                         --i2;
                         if (flag1) {
-                            ichunkaccess.setType(blockposition_mutableblockposition, WorldGenSurfaceMesaForest.T, false);
+                            ichunkaccess.setType(blockposition_mutableblockposition, WorldGenSurfaceMesaForest.ai, false);
                         } else {
                             ichunkaccess.setType(blockposition_mutableblockposition, this.a(i, k2, j), false);
                         }

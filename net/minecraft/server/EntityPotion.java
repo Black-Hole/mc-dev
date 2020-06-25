@@ -4,14 +4,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-public class EntityPotion extends EntityProjectile {
+public class EntityPotion extends EntityProjectileThrowable {
 
-    private static final DataWatcherObject<ItemStack> f = DataWatcher.a(EntityPotion.class, DataWatcherRegistry.g);
-    private static final Logger LOGGER = LogManager.getLogger();
-    public static final Predicate<EntityLiving> e = EntityPotion::a;
+    public static final Predicate<EntityLiving> b = EntityLiving::dN;
 
     public EntityPotion(EntityTypes<? extends EntityPotion> entitytypes, World world) {
         super(entitytypes, world);
@@ -26,56 +22,50 @@ public class EntityPotion extends EntityProjectile {
     }
 
     @Override
-    protected void initDatawatcher() {
-        this.getDataWatcher().register(EntityPotion.f, ItemStack.a);
-    }
-
-    public ItemStack getItem() {
-        ItemStack itemstack = (ItemStack) this.getDataWatcher().get(EntityPotion.f);
-
-        if (itemstack.getItem() != Items.SPLASH_POTION && itemstack.getItem() != Items.LINGERING_POTION) {
-            if (this.world != null) {
-                EntityPotion.LOGGER.error("ThrownPotion entity {} has no item?!", this.getId());
-            }
-
-            return new ItemStack(Items.SPLASH_POTION);
-        } else {
-            return itemstack;
-        }
-    }
-
-    public void setItem(ItemStack itemstack) {
-        this.getDataWatcher().set(EntityPotion.f, itemstack.cloneItemStack());
+    protected Item getDefaultItem() {
+        return Items.SPLASH_POTION;
     }
 
     @Override
-    protected float l() {
+    protected float k() {
         return 0.05F;
     }
 
     @Override
-    protected void a(MovingObjectPosition movingobjectposition) {
+    protected void a(MovingObjectPositionBlock movingobjectpositionblock) {
+        super.a(movingobjectpositionblock);
         if (!this.world.isClientSide) {
-            ItemStack itemstack = this.getItem();
+            ItemStack itemstack = this.g();
             PotionRegistry potionregistry = PotionUtil.d(itemstack);
             List<MobEffect> list = PotionUtil.getEffects(itemstack);
             boolean flag = potionregistry == Potions.WATER && list.isEmpty();
+            EnumDirection enumdirection = movingobjectpositionblock.getDirection();
+            BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
+            BlockPosition blockposition1 = blockposition.shift(enumdirection);
 
-            if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK && flag) {
-                MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;
-                EnumDirection enumdirection = movingobjectpositionblock.getDirection();
-                BlockPosition blockposition = movingobjectpositionblock.getBlockPosition().shift(enumdirection);
-
-                this.a(blockposition, enumdirection);
-                this.a(blockposition.shift(enumdirection.opposite()), enumdirection);
+            if (flag) {
+                this.a(blockposition1, enumdirection);
+                this.a(blockposition1.shift(enumdirection.opposite()), enumdirection);
                 Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
                 while (iterator.hasNext()) {
                     EnumDirection enumdirection1 = (EnumDirection) iterator.next();
 
-                    this.a(blockposition.shift(enumdirection1), enumdirection1);
+                    this.a(blockposition1.shift(enumdirection1), enumdirection1);
                 }
             }
+
+        }
+    }
+
+    @Override
+    protected void a(MovingObjectPosition movingobjectposition) {
+        super.a(movingobjectposition);
+        if (!this.world.isClientSide) {
+            ItemStack itemstack = this.g();
+            PotionRegistry potionregistry = PotionUtil.d(itemstack);
+            List<MobEffect> list = PotionUtil.getEffects(itemstack);
+            boolean flag = potionregistry == Potions.WATER && list.isEmpty();
 
             if (flag) {
                 this.splash();
@@ -89,14 +79,14 @@ public class EntityPotion extends EntityProjectile {
 
             int i = potionregistry.b() ? 2007 : 2002;
 
-            this.world.triggerEffect(i, new BlockPosition(this), PotionUtil.c(itemstack));
+            this.world.triggerEffect(i, this.getChunkCoordinates(), PotionUtil.c(itemstack));
             this.die();
         }
     }
 
     private void splash() {
         AxisAlignedBB axisalignedbb = this.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
-        List<EntityLiving> list = this.world.a(EntityLiving.class, axisalignedbb, EntityPotion.e);
+        List<EntityLiving> list = this.world.a(EntityLiving.class, axisalignedbb, EntityPotion.b);
 
         if (!list.isEmpty()) {
             Iterator iterator = list.iterator();
@@ -105,7 +95,7 @@ public class EntityPotion extends EntityProjectile {
                 EntityLiving entityliving = (EntityLiving) iterator.next();
                 double d0 = this.h(entityliving);
 
-                if (d0 < 16.0D && a(entityliving)) {
+                if (d0 < 16.0D && entityliving.dN()) {
                     entityliving.damageEntity(DamageSource.c(entityliving, this.getShooter()), 1.0F);
                 }
             }
@@ -123,7 +113,7 @@ public class EntityPotion extends EntityProjectile {
             while (iterator.hasNext()) {
                 EntityLiving entityliving = (EntityLiving) iterator.next();
 
-                if (entityliving.dM()) {
+                if (entityliving.eg()) {
                     double d0 = this.h(entityliving);
 
                     if (d0 < 16.0D) {
@@ -158,8 +148,12 @@ public class EntityPotion extends EntityProjectile {
 
     private void a(ItemStack itemstack, PotionRegistry potionregistry) {
         EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX(), this.locY(), this.locZ());
+        Entity entity = this.getShooter();
 
-        entityareaeffectcloud.setSource(this.getShooter());
+        if (entity instanceof EntityLiving) {
+            entityareaeffectcloud.setSource((EntityLiving) entity);
+        }
+
         entityareaeffectcloud.setRadius(3.0F);
         entityareaeffectcloud.setRadiusOnUse(-0.5F);
         entityareaeffectcloud.setWaitTime(10);
@@ -183,47 +177,19 @@ public class EntityPotion extends EntityProjectile {
     }
 
     public boolean isLingering() {
-        return this.getItem().getItem() == Items.LINGERING_POTION;
+        return this.g().getItem() == Items.LINGERING_POTION;
     }
 
     private void a(BlockPosition blockposition, EnumDirection enumdirection) {
         IBlockData iblockdata = this.world.getType(blockposition);
-        Block block = iblockdata.getBlock();
 
-        if (block == Blocks.FIRE) {
-            this.world.douseFire((EntityHuman) null, blockposition.shift(enumdirection), enumdirection.opposite());
-        } else if (block == Blocks.CAMPFIRE && (Boolean) iblockdata.get(BlockCampfire.b)) {
+        if (iblockdata.a((Tag) TagsBlock.FIRE)) {
+            this.world.a(blockposition, false);
+        } else if (BlockCampfire.g(iblockdata)) {
             this.world.a((EntityHuman) null, 1009, blockposition, 0);
+            BlockCampfire.c((GeneratorAccess) this.world, blockposition, iblockdata);
             this.world.setTypeUpdate(blockposition, (IBlockData) iblockdata.set(BlockCampfire.b, false));
         }
 
-    }
-
-    @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
-        ItemStack itemstack = ItemStack.a(nbttagcompound.getCompound("Potion"));
-
-        if (itemstack.isEmpty()) {
-            this.die();
-        } else {
-            this.setItem(itemstack);
-        }
-
-    }
-
-    @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
-        ItemStack itemstack = this.getItem();
-
-        if (!itemstack.isEmpty()) {
-            nbttagcompound.set("Potion", itemstack.save(new NBTTagCompound()));
-        }
-
-    }
-
-    private static boolean a(EntityLiving entityliving) {
-        return entityliving instanceof EntityEnderman || entityliving instanceof EntityBlaze;
     }
 }

@@ -1,7 +1,9 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import java.util.List;
+import java.util.Map;
 
 public class RecipeRepair extends IRecipeComplex {
 
@@ -43,7 +45,7 @@ public class RecipeRepair extends IRecipeComplex {
                     ItemStack itemstack1 = (ItemStack) list.get(0);
 
                     if (itemstack.getItem() != itemstack1.getItem() || itemstack1.getCount() != 1 || itemstack.getCount() != 1 || !itemstack1.getItem().usesDurability()) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
                 }
             }
@@ -67,11 +69,27 @@ public class RecipeRepair extends IRecipeComplex {
                 ItemStack itemstack3 = new ItemStack(itemstack2.getItem());
 
                 itemstack3.setDamage(i1);
+                Map<Enchantment, Integer> map = Maps.newHashMap();
+                Map<Enchantment, Integer> map1 = EnchantmentManager.a(itemstack2);
+                Map<Enchantment, Integer> map2 = EnchantmentManager.a(itemstack);
+
+                IRegistry.ENCHANTMENT.e().filter(Enchantment::c).forEach((enchantment) -> {
+                    int j1 = Math.max((Integer) map1.getOrDefault(enchantment, 0), (Integer) map2.getOrDefault(enchantment, 0));
+
+                    if (j1 > 0) {
+                        map.put(enchantment, j1);
+                    }
+
+                });
+                if (!map.isEmpty()) {
+                    EnchantmentManager.a((Map) map, itemstack3);
+                }
+
                 return itemstack3;
             }
         }
 
-        return ItemStack.a;
+        return ItemStack.b;
     }
 
     @Override

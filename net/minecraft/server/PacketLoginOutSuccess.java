@@ -16,18 +16,29 @@ public class PacketLoginOutSuccess implements Packet<PacketLoginOutListener> {
 
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        String s = packetdataserializer.e(36);
-        String s1 = packetdataserializer.e(16);
-        UUID uuid = UUID.fromString(s);
+        int[] aint = new int[4];
 
-        this.a = new GameProfile(uuid, s1);
+        for (int i = 0; i < aint.length; ++i) {
+            aint[i] = packetdataserializer.readInt();
+        }
+
+        UUID uuid = MinecraftSerializableUUID.a(aint);
+        String s = packetdataserializer.e(16);
+
+        this.a = new GameProfile(uuid, s);
     }
 
     @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        UUID uuid = this.a.getId();
+        int[] aint = MinecraftSerializableUUID.a(this.a.getId());
+        int i = aint.length;
 
-        packetdataserializer.a(uuid == null ? "" : uuid.toString());
+        for (int j = 0; j < i; ++j) {
+            int k = aint[j];
+
+            packetdataserializer.writeInt(k);
+        }
+
         packetdataserializer.a(this.a.getName());
     }
 

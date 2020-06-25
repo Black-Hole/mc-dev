@@ -7,67 +7,64 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.PortUnreachableException;
 import java.net.SocketAddress;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
-import java.util.Map.Entry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class RemoteStatusListener extends RemoteConnectionThread {
 
-    private long h;
-    private final int i;
-    private final int j;
-    private final int k;
-    private final String l;
-    private final String m;
-    private DatagramSocket n;
-    private final byte[] o = new byte[1460];
-    private DatagramPacket p;
-    private final Map<SocketAddress, String> q;
-    private String r;
-    private String s;
-    private final Map<SocketAddress, RemoteStatusListener.RemoteStatusChallenge> t;
-    private final long u;
-    private final RemoteStatusReply v;
-    private long w;
+    private static final Logger LOGGER = LogManager.getLogger();
+    private long e;
+    private final int f;
+    private final int g;
+    private final int h;
+    private final String i;
+    private final String j;
+    private DatagramSocket k;
+    private final byte[] l = new byte[1460];
+    private String m;
+    private String n;
+    private final Map<SocketAddress, RemoteStatusListener.RemoteStatusChallenge> o;
+    private final RemoteStatusReply p;
+    private long q;
+    private final IMinecraftServer r;
 
     public RemoteStatusListener(IMinecraftServer iminecraftserver) {
-        super(iminecraftserver, "Query Listener");
-        this.i = iminecraftserver.getDedicatedServerProperties().queryPort;
-        this.s = iminecraftserver.e_();
-        this.j = iminecraftserver.r();
-        this.l = iminecraftserver.f_();
-        this.k = iminecraftserver.getMaxPlayers();
-        this.m = iminecraftserver.getWorld();
-        this.w = 0L;
-        this.r = "0.0.0.0";
-        if (!this.s.isEmpty() && !this.r.equals(this.s)) {
-            this.r = this.s;
+        super("Query Listener");
+        this.r = iminecraftserver;
+        this.f = iminecraftserver.getDedicatedServerProperties().queryPort;
+        this.n = iminecraftserver.h_();
+        this.g = iminecraftserver.o();
+        this.i = iminecraftserver.i_();
+        this.h = iminecraftserver.getMaxPlayers();
+        this.j = iminecraftserver.getWorld();
+        this.q = 0L;
+        this.m = "0.0.0.0";
+        if (!this.n.isEmpty() && !this.m.equals(this.n)) {
+            this.m = this.n;
         } else {
-            this.s = "0.0.0.0";
+            this.n = "0.0.0.0";
 
             try {
                 InetAddress inetaddress = InetAddress.getLocalHost();
 
-                this.r = inetaddress.getHostAddress();
+                this.m = inetaddress.getHostAddress();
             } catch (UnknownHostException unknownhostexception) {
-                this.c("Unable to determine local host IP, please set server-ip in server.properties: " + unknownhostexception.getMessage());
+                RemoteStatusListener.LOGGER.warn("Unable to determine local host IP, please set server-ip in server.properties", unknownhostexception);
             }
         }
 
-        this.q = Maps.newHashMap();
-        this.v = new RemoteStatusReply(1460);
-        this.t = Maps.newHashMap();
-        this.u = (new Date()).getTime();
+        this.p = new RemoteStatusReply(1460);
+        this.o = Maps.newHashMap();
     }
 
     private void a(byte[] abyte, DatagramPacket datagrampacket) throws IOException {
-        this.n.send(new DatagramPacket(abyte, abyte.length, datagrampacket.getSocketAddress()));
+        this.k.send(new DatagramPacket(abyte, abyte.length, datagrampacket.getSocketAddress()));
     }
 
     private boolean a(DatagramPacket datagrampacket) throws IOException {
@@ -75,41 +72,41 @@ public class RemoteStatusListener extends RemoteConnectionThread {
         int i = datagrampacket.getLength();
         SocketAddress socketaddress = datagrampacket.getSocketAddress();
 
-        this.a("Packet len " + i + " [" + socketaddress + "]");
+        RemoteStatusListener.LOGGER.debug("Packet len {} [{}]", i, socketaddress);
         if (3 <= i && -2 == abyte[0] && -3 == abyte[1]) {
-            this.a("Packet '" + StatusChallengeUtils.a(abyte[2]) + "' [" + socketaddress + "]");
+            RemoteStatusListener.LOGGER.debug("Packet '{}' [{}]", StatusChallengeUtils.a(abyte[2]), socketaddress);
             switch (abyte[2]) {
                 case 0:
                     if (!this.c(datagrampacket)) {
-                        this.a("Invalid challenge [" + socketaddress + "]");
+                        RemoteStatusListener.LOGGER.debug("Invalid challenge [{}]", socketaddress);
                         return false;
                     } else if (15 == i) {
                         this.a(this.b(datagrampacket), datagrampacket);
-                        this.a("Rules [" + socketaddress + "]");
+                        RemoteStatusListener.LOGGER.debug("Rules [{}]", socketaddress);
                     } else {
                         RemoteStatusReply remotestatusreply = new RemoteStatusReply(1460);
 
                         remotestatusreply.a((int) 0);
                         remotestatusreply.a(this.a(datagrampacket.getSocketAddress()));
-                        remotestatusreply.a(this.l);
+                        remotestatusreply.a(this.i);
                         remotestatusreply.a("SMP");
+                        remotestatusreply.a(this.j);
+                        remotestatusreply.a(Integer.toString(this.r.getPlayerCount()));
+                        remotestatusreply.a(Integer.toString(this.h));
+                        remotestatusreply.a((short) this.g);
                         remotestatusreply.a(this.m);
-                        remotestatusreply.a(Integer.toString(this.d()));
-                        remotestatusreply.a(Integer.toString(this.k));
-                        remotestatusreply.a((short) this.j);
-                        remotestatusreply.a(this.r);
                         this.a(remotestatusreply.a(), datagrampacket);
-                        this.a("Status [" + socketaddress + "]");
+                        RemoteStatusListener.LOGGER.debug("Status [{}]", socketaddress);
                     }
                 default:
                     return true;
                 case 9:
                     this.d(datagrampacket);
-                    this.a("Challenge [" + socketaddress + "]");
+                    RemoteStatusListener.LOGGER.debug("Challenge [{}]", socketaddress);
                     return true;
             }
         } else {
-            this.a("Invalid packet [" + socketaddress + "]");
+            RemoteStatusListener.LOGGER.debug("Invalid packet [{}]", socketaddress);
             return false;
         }
     }
@@ -117,8 +114,8 @@ public class RemoteStatusListener extends RemoteConnectionThread {
     private byte[] b(DatagramPacket datagrampacket) throws IOException {
         long i = SystemUtils.getMonotonicMillis();
 
-        if (i < this.w + 5000L) {
-            byte[] abyte = this.v.a();
+        if (i < this.q + 5000L) {
+            byte[] abyte = this.p.a();
             byte[] abyte1 = this.a(datagrampacket.getSocketAddress());
 
             abyte[1] = abyte1[0];
@@ -127,108 +124,101 @@ public class RemoteStatusListener extends RemoteConnectionThread {
             abyte[4] = abyte1[3];
             return abyte;
         } else {
-            this.w = i;
-            this.v.b();
-            this.v.a((int) 0);
-            this.v.a(this.a(datagrampacket.getSocketAddress()));
-            this.v.a("splitnum");
-            this.v.a((int) 128);
-            this.v.a((int) 0);
-            this.v.a("hostname");
-            this.v.a(this.l);
-            this.v.a("gametype");
-            this.v.a("SMP");
-            this.v.a("game_id");
-            this.v.a("MINECRAFT");
-            this.v.a("version");
-            this.v.a(this.b.getVersion());
-            this.v.a("plugins");
-            this.v.a(this.b.getPlugins());
-            this.v.a("map");
-            this.v.a(this.m);
-            this.v.a("numplayers");
-            this.v.a("" + this.d());
-            this.v.a("maxplayers");
-            this.v.a("" + this.k);
-            this.v.a("hostport");
-            this.v.a("" + this.j);
-            this.v.a("hostip");
-            this.v.a(this.r);
-            this.v.a((int) 0);
-            this.v.a((int) 1);
-            this.v.a("player_");
-            this.v.a((int) 0);
-            String[] astring = this.b.getPlayers();
+            this.q = i;
+            this.p.b();
+            this.p.a((int) 0);
+            this.p.a(this.a(datagrampacket.getSocketAddress()));
+            this.p.a("splitnum");
+            this.p.a((int) 128);
+            this.p.a((int) 0);
+            this.p.a("hostname");
+            this.p.a(this.i);
+            this.p.a("gametype");
+            this.p.a("SMP");
+            this.p.a("game_id");
+            this.p.a("MINECRAFT");
+            this.p.a("version");
+            this.p.a(this.r.getVersion());
+            this.p.a("plugins");
+            this.p.a(this.r.getPlugins());
+            this.p.a("map");
+            this.p.a(this.j);
+            this.p.a("numplayers");
+            this.p.a("" + this.r.getPlayerCount());
+            this.p.a("maxplayers");
+            this.p.a("" + this.h);
+            this.p.a("hostport");
+            this.p.a("" + this.g);
+            this.p.a("hostip");
+            this.p.a(this.m);
+            this.p.a((int) 0);
+            this.p.a((int) 1);
+            this.p.a("player_");
+            this.p.a((int) 0);
+            String[] astring = this.r.getPlayers();
             String[] astring1 = astring;
             int j = astring.length;
 
             for (int k = 0; k < j; ++k) {
                 String s = astring1[k];
 
-                this.v.a(s);
+                this.p.a(s);
             }
 
-            this.v.a((int) 0);
-            return this.v.a();
+            this.p.a((int) 0);
+            return this.p.a();
         }
     }
 
     private byte[] a(SocketAddress socketaddress) {
-        return ((RemoteStatusListener.RemoteStatusChallenge) this.t.get(socketaddress)).c();
+        return ((RemoteStatusListener.RemoteStatusChallenge) this.o.get(socketaddress)).c();
     }
 
     private Boolean c(DatagramPacket datagrampacket) {
         SocketAddress socketaddress = datagrampacket.getSocketAddress();
 
-        if (!this.t.containsKey(socketaddress)) {
+        if (!this.o.containsKey(socketaddress)) {
             return false;
         } else {
             byte[] abyte = datagrampacket.getData();
 
-            return ((RemoteStatusListener.RemoteStatusChallenge) this.t.get(socketaddress)).a() != StatusChallengeUtils.c(abyte, 7, datagrampacket.getLength()) ? false : true;
+            return ((RemoteStatusListener.RemoteStatusChallenge) this.o.get(socketaddress)).a() == StatusChallengeUtils.c(abyte, 7, datagrampacket.getLength());
         }
     }
 
     private void d(DatagramPacket datagrampacket) throws IOException {
         RemoteStatusListener.RemoteStatusChallenge remotestatuslistener_remotestatuschallenge = new RemoteStatusListener.RemoteStatusChallenge(datagrampacket);
 
-        this.t.put(datagrampacket.getSocketAddress(), remotestatuslistener_remotestatuschallenge);
+        this.o.put(datagrampacket.getSocketAddress(), remotestatuslistener_remotestatuschallenge);
         this.a(remotestatuslistener_remotestatuschallenge.b(), datagrampacket);
     }
 
-    private void f() {
+    private void d() {
         if (this.a) {
             long i = SystemUtils.getMonotonicMillis();
 
-            if (i >= this.h + 30000L) {
-                this.h = i;
-                Iterator iterator = this.t.entrySet().iterator();
-
-                while (iterator.hasNext()) {
-                    Entry<SocketAddress, RemoteStatusListener.RemoteStatusChallenge> entry = (Entry) iterator.next();
-
-                    if (((RemoteStatusListener.RemoteStatusChallenge) entry.getValue()).a(i)) {
-                        iterator.remove();
-                    }
-                }
-
+            if (i >= this.e + 30000L) {
+                this.e = i;
+                this.o.values().removeIf((remotestatuslistener_remotestatuschallenge) -> {
+                    return remotestatuslistener_remotestatuschallenge.a(i);
+                });
             }
         }
     }
 
     public void run() {
-        this.b("Query running on " + this.s + ":" + this.i);
-        this.h = SystemUtils.getMonotonicMillis();
-        this.p = new DatagramPacket(this.o, this.o.length);
+        RemoteStatusListener.LOGGER.info("Query running on {}:{}", this.n, this.f);
+        this.e = SystemUtils.getMonotonicMillis();
+        DatagramPacket datagrampacket = new DatagramPacket(this.l, this.l.length);
 
         try {
             while (this.a) {
                 try {
-                    this.n.receive(this.p);
-                    this.f();
-                    this.a(this.p);
+                    this.k.receive(datagrampacket);
+                    this.d();
+                    this.a(datagrampacket);
                 } catch (SocketTimeoutException sockettimeoutexception) {
-                    this.f();
+                    this.d();
                 } catch (PortUnreachableException portunreachableexception) {
                     ;
                 } catch (IOException ioexception) {
@@ -236,7 +226,8 @@ public class RemoteStatusListener extends RemoteConnectionThread {
                 }
             }
         } finally {
-            this.e();
+            RemoteStatusListener.LOGGER.debug("closeSocket: {}:{}", this.n, this.f);
+            this.k.close();
         }
 
     }
@@ -244,52 +235,46 @@ public class RemoteStatusListener extends RemoteConnectionThread {
     @Override
     public void a() {
         if (!this.a) {
-            if (0 < this.i && 65535 >= this.i) {
-                if (this.g()) {
+            if (0 < this.f && 65535 >= this.f) {
+                if (this.e()) {
                     super.a();
                 }
 
             } else {
-                this.c("Invalid query port " + this.i + " found in server.properties (queries disabled)");
+                RemoteStatusListener.LOGGER.warn("Invalid query port {} found in server.properties (queries disabled)", this.f);
             }
         }
     }
 
     private void a(Exception exception) {
         if (this.a) {
-            this.c("Unexpected exception, buggy JRE? (" + exception + ")");
-            if (!this.g()) {
-                this.d("Failed to recover from buggy JRE, shutting down!");
+            RemoteStatusListener.LOGGER.warn("Unexpected exception", exception);
+            if (!this.e()) {
+                RemoteStatusListener.LOGGER.error("Failed to recover from exception, shutting down!");
                 this.a = false;
             }
 
         }
     }
 
-    private boolean g() {
+    private boolean e() {
         try {
-            this.n = new DatagramSocket(this.i, InetAddress.getByName(this.s));
-            this.a(this.n);
-            this.n.setSoTimeout(500);
+            this.k = new DatagramSocket(this.f, InetAddress.getByName(this.n));
+            this.k.setSoTimeout(500);
             return true;
-        } catch (SocketException socketexception) {
-            this.c("Unable to initialise query system on " + this.s + ":" + this.i + " (Socket): " + socketexception.getMessage());
-        } catch (UnknownHostException unknownhostexception) {
-            this.c("Unable to initialise query system on " + this.s + ":" + this.i + " (Unknown Host): " + unknownhostexception.getMessage());
         } catch (Exception exception) {
-            this.c("Unable to initialise query system on " + this.s + ":" + this.i + " (E): " + exception.getMessage());
+            RemoteStatusListener.LOGGER.warn("Unable to initialise query system on {}:{}", this.n, this.f, exception);
+            return false;
         }
-
-        return false;
     }
 
-    class RemoteStatusChallenge {
+    static class RemoteStatusChallenge {
 
         private final long time = (new Date()).getTime();
         private final int token;
         private final byte[] identity;
-        private final byte[] e;
-        private final String f;
+        private final byte[] d;
+        private final String e;
 
         public RemoteStatusChallenge(DatagramPacket datagrampacket) {
             byte[] abyte = datagrampacket.getData();
@@ -299,9 +284,9 @@ public class RemoteStatusListener extends RemoteConnectionThread {
             this.identity[1] = abyte[4];
             this.identity[2] = abyte[5];
             this.identity[3] = abyte[6];
-            this.f = new String(this.identity, StandardCharsets.UTF_8);
+            this.e = new String(this.identity, StandardCharsets.UTF_8);
             this.token = (new Random()).nextInt(16777216);
-            this.e = String.format("\t%s%d\u0000", this.f, this.token).getBytes(StandardCharsets.UTF_8);
+            this.d = String.format("\t%s%d\u0000", this.e, this.token).getBytes(StandardCharsets.UTF_8);
         }
 
         public Boolean a(long i) {
@@ -313,7 +298,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
         }
 
         public byte[] b() {
-            return this.e;
+            return this.d;
         }
 
         public byte[] c() {

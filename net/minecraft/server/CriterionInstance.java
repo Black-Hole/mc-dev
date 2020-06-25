@@ -1,13 +1,10 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
 
 public interface CriterionInstance {
 
     MinecraftKey a();
 
-    default JsonElement b() {
-        return JsonNull.INSTANCE;
-    }
+    JsonObject a(LootSerializationContext lootserializationcontext);
 }

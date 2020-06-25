@@ -15,11 +15,11 @@ public class LootContextParameterSet {
         this.b = ImmutableSet.copyOf(Sets.union(set, set1));
     }
 
-    public Set<LootContextParameter<?>> a() {
+    public Set<LootContextParameter<?>> getRequired() {
         return this.a;
     }
 
-    public Set<LootContextParameter<?>> b() {
+    public Set<LootContextParameter<?>> getOptional() {
         return this.b;
     }
 
@@ -39,14 +39,14 @@ public class LootContextParameterSet {
 
     }
 
-    public static class a {
+    public static class Builder {
 
         private final Set<LootContextParameter<?>> a = Sets.newIdentityHashSet();
         private final Set<LootContextParameter<?>> b = Sets.newIdentityHashSet();
 
-        public a() {}
+        public Builder() {}
 
-        public LootContextParameterSet.a a(LootContextParameter<?> lootcontextparameter) {
+        public LootContextParameterSet.Builder addRequired(LootContextParameter<?> lootcontextparameter) {
             if (this.b.contains(lootcontextparameter)) {
                 throw new IllegalArgumentException("Parameter " + lootcontextparameter.a() + " is already optional");
             } else {
@@ -55,7 +55,7 @@ public class LootContextParameterSet {
             }
         }
 
-        public LootContextParameterSet.a b(LootContextParameter<?> lootcontextparameter) {
+        public LootContextParameterSet.Builder addOptional(LootContextParameter<?> lootcontextparameter) {
             if (this.a.contains(lootcontextparameter)) {
                 throw new IllegalArgumentException("Parameter " + lootcontextparameter.a() + " is already required");
             } else {
@@ -64,7 +64,7 @@ public class LootContextParameterSet {
             }
         }
 
-        public LootContextParameterSet a() {
+        public LootContextParameterSet build() {
             return new LootContextParameterSet(this.a, this.b);
         }
     }

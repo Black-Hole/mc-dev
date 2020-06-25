@@ -94,7 +94,7 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
             Block block = iblockdata.getBlock();
 
             if (block instanceof IBeaconBeam) {
-                float[] afloat = ((IBeaconBeam) block).a().d();
+                float[] afloat = ((IBeaconBeam) block).a().getColor();
 
                 if (this.g.size() <= 1) {
                     tileentitybeacon_beaconcolortracker = new TileEntityBeacon.BeaconColorTracker(afloat);
@@ -172,9 +172,7 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
 
             for (int j1 = i - l; j1 <= i + l && flag; ++j1) {
                 for (int k1 = k - l; k1 <= k + l; ++k1) {
-                    Block block = this.world.getType(new BlockPosition(j1, i1, k1)).getBlock();
-
-                    if (block != Blocks.EMERALD_BLOCK && block != Blocks.GOLD_BLOCK && block != Blocks.DIAMOND_BLOCK && block != Blocks.IRON_BLOCK) {
+                    if (!this.world.getType(new BlockPosition(j1, i1, k1)).a((Tag) TagsBlock.BEACON_BASE_BLOCKS)) {
                         flag = false;
                         break;
                     }
@@ -189,9 +187,9 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
     }
 
     @Override
-    public void ab_() {
+    public void an_() {
         this.a(SoundEffects.BLOCK_BEACON_DEACTIVATE);
-        super.ab_();
+        super.an_();
     }
 
     private void applyEffects() {
@@ -254,8 +252,8 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
         this.primaryEffect = b(nbttagcompound.getInt("Primary"));
         this.secondaryEffect = b(nbttagcompound.getInt("Secondary"));
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
@@ -291,7 +289,7 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
 
     @Override
     public IChatBaseComponent getScoreboardDisplayName() {
-        return (IChatBaseComponent) (this.customName != null ? this.customName : new ChatMessage("container.beacon", new Object[0]));
+        return (IChatBaseComponent) (this.customName != null ? this.customName : new ChatMessage("container.beacon"));
     }
 
     public static class BeaconColorTracker {

@@ -1,10 +1,12 @@
 package net.minecraft.server;
 
+import java.util.UUID;
+
 public interface ICommandListener {
 
     ICommandListener DUMMY = new ICommandListener() {
         @Override
-        public void sendMessage(IChatBaseComponent ichatbasecomponent) {}
+        public void sendMessage(IChatBaseComponent ichatbasecomponent, UUID uuid) {}
 
         @Override
         public boolean shouldSendSuccess() {
@@ -22,7 +24,7 @@ public interface ICommandListener {
         }
     };
 
-    void sendMessage(IChatBaseComponent ichatbasecomponent);
+    void sendMessage(IChatBaseComponent ichatbasecomponent, UUID uuid);
 
     boolean shouldSendSuccess();
 

@@ -8,11 +8,11 @@ public class EntityCreeper extends EntityMonster {
     private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Boolean> POWERED = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.i);
     private static final DataWatcherObject<Boolean> d = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.i);
-    private int bw;
+    private int bv;
     private int fuseTicks;
     public int maxFuseTicks = 30;
     public int explosionRadius = 3;
-    private int bA;
+    private int bz;
 
     public EntityCreeper(EntityTypes<? extends EntityCreeper> entitytypes, World world) {
         super(entitytypes, world);
@@ -32,14 +32,12 @@ public class EntityCreeper extends EntityMonster {
         this.targetSelector.a(2, new PathfinderGoalHurtByTarget(this, new Class[0]));
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.25D);
+    public static AttributeProvider.Builder m() {
+        return EntityMonster.eS().a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
     }
 
     @Override
-    public int bD() {
+    public int bL() {
         return this.getGoalTarget() == null ? 3 : 3 + (int) (this.getHealth() - 1.0F);
     }
 
@@ -64,8 +62,8 @@ public class EntityCreeper extends EntityMonster {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         if ((Boolean) this.datawatcher.get(EntityCreeper.POWERED)) {
             nbttagcompound.setBoolean("powered", true);
         }
@@ -76,8 +74,8 @@ public class EntityCreeper extends EntityMonster {
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.datawatcher.set(EntityCreeper.POWERED, nbttagcompound.getBoolean("powered"));
         if (nbttagcompound.hasKeyOfType("Fuse", 99)) {
             this.maxFuseTicks = nbttagcompound.getShort("Fuse");
@@ -96,15 +94,15 @@ public class EntityCreeper extends EntityMonster {
     @Override
     public void tick() {
         if (this.isAlive()) {
-            this.bw = this.fuseTicks;
+            this.bv = this.fuseTicks;
             if (this.isIgnited()) {
                 this.a(1);
             }
 
-            int i = this.l();
+            int i = this.eL();
 
             if (i > 0 && this.fuseTicks == 0) {
-                this.a(SoundEffects.ENTITY_CREEPER_PRIMED, 1.0F, 0.5F);
+                this.playSound(SoundEffects.ENTITY_CREEPER_PRIMED, 1.0F, 0.5F);
             }
 
             this.fuseTicks += i;
@@ -148,7 +146,7 @@ public class EntityCreeper extends EntityMonster {
     }
 
     @Override
-    public boolean B(Entity entity) {
+    public boolean attackEntity(Entity entity) {
         return true;
     }
 
@@ -156,7 +154,7 @@ public class EntityCreeper extends EntityMonster {
         return (Boolean) this.datawatcher.get(EntityCreeper.POWERED);
     }
 
-    public int l() {
+    public int eL() {
         return (Integer) this.datawatcher.get(EntityCreeper.b);
     }
 
@@ -171,7 +169,7 @@ public class EntityCreeper extends EntityMonster {
     }
 
     @Override
-    protected boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+    protected EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (itemstack.getItem() == Items.FLINT_AND_STEEL) {
@@ -183,9 +181,9 @@ public class EntityCreeper extends EntityMonster {
                 });
             }
 
-            return true;
+            return EnumInteractionResult.a(this.world.isClientSide);
         } else {
-            return super.a(entityhuman, enumhand);
+            return super.b(entityhuman, enumhand);
         }
     }
 
@@ -235,10 +233,10 @@ public class EntityCreeper extends EntityMonster {
     }
 
     public boolean canCauseHeadDrop() {
-        return this.isPowered() && this.bA < 1;
+        return this.isPowered() && this.bz < 1;
     }
 
     public void setCausedHeadDrop() {
-        ++this.bA;
+        ++this.bz;
     }
 }

@@ -1,40 +1,40 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
 import java.util.Random;
 
 public class WorldGenFeatureDefinedStructurePoolFeature extends WorldGenFeatureDefinedStructurePoolStructure {
 
-    private final WorldGenFeatureConfigured<?, ?> a;
-    private final NBTTagCompound b;
+    public static final Codec<WorldGenFeatureDefinedStructurePoolFeature> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(WorldGenFeatureConfigured.b.fieldOf("feature").forGetter((worldgenfeaturedefinedstructurepoolfeature) -> {
+            return worldgenfeaturedefinedstructurepoolfeature.b;
+        }), d()).apply(instance, WorldGenFeatureDefinedStructurePoolFeature::new);
+    });
+    private final WorldGenFeatureConfigured<?, ?> b;
+    private final NBTTagCompound c;
 
     @Deprecated
     public WorldGenFeatureDefinedStructurePoolFeature(WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured) {
         this(worldgenfeatureconfigured, WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID);
     }
 
-    public WorldGenFeatureDefinedStructurePoolFeature(WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
+    private WorldGenFeatureDefinedStructurePoolFeature(WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
         super(worldgenfeaturedefinedstructurepooltemplate_matching);
-        this.a = worldgenfeatureconfigured;
-        this.b = this.b();
+        this.b = worldgenfeatureconfigured;
+        this.c = this.b();
     }
 
-    public <T> WorldGenFeatureDefinedStructurePoolFeature(Dynamic<T> dynamic) {
-        super(dynamic);
-        this.a = WorldGenFeatureConfigured.a(dynamic.get("feature").orElseEmptyMap());
-        this.b = this.b();
-    }
-
-    public NBTTagCompound b() {
+    private NBTTagCompound b() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        nbttagcompound.setString("target_pool", "minecraft:empty");
-        nbttagcompound.setString("attachement_type", "minecraft:bottom");
+        nbttagcompound.setString("name", "minecraft:bottom");
         nbttagcompound.setString("final_state", "minecraft:air");
+        nbttagcompound.setString("pool", "minecraft:empty");
+        nbttagcompound.setString("target", "minecraft:empty");
+        nbttagcompound.setString("joint", TileEntityJigsaw.JointType.ROLLABLE.getName());
         return nbttagcompound;
     }
 
@@ -46,7 +46,7 @@ public class WorldGenFeatureDefinedStructurePoolFeature extends WorldGenFeatureD
     public List<DefinedStructure.BlockInfo> a(DefinedStructureManager definedstructuremanager, BlockPosition blockposition, EnumBlockRotation enumblockrotation, Random random) {
         List<DefinedStructure.BlockInfo> list = Lists.newArrayList();
 
-        list.add(new DefinedStructure.BlockInfo(blockposition, (IBlockData) Blocks.JIGSAW.getBlockData().set(BlockJigsaw.FACING, EnumDirection.DOWN), this.b));
+        list.add(new DefinedStructure.BlockInfo(blockposition, (IBlockData) Blocks.JIGSAW.getBlockData().set(BlockJigsaw.a, BlockPropertyJigsawOrientation.a(EnumDirection.DOWN, EnumDirection.SOUTH)), this.c));
         return list;
     }
 
@@ -58,21 +58,16 @@ public class WorldGenFeatureDefinedStructurePoolFeature extends WorldGenFeatureD
     }
 
     @Override
-    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, BlockPosition blockposition, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random) {
-        return this.a.a(generatoraccess, chunkgenerator, random, blockposition);
+    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, BlockPosition blockposition, BlockPosition blockposition1, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random, boolean flag) {
+        return this.b.a(generatoraccessseed, structuremanager, chunkgenerator, random, blockposition);
     }
 
     @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("feature"), this.a.a(dynamicops).getValue())));
-    }
-
-    @Override
-    public WorldGenFeatureDefinedStructurePools a() {
-        return WorldGenFeatureDefinedStructurePools.d;
+    public WorldGenFeatureDefinedStructurePools<?> a() {
+        return WorldGenFeatureDefinedStructurePools.c;
     }
 
     public String toString() {
-        return "Feature[" + IRegistry.FEATURE.getKey(this.a.b) + "]";
+        return "Feature[" + IRegistry.FEATURE.getKey(this.b.d) + "]";
     }
 }

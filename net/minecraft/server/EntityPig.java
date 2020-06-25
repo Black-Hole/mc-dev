@@ -1,18 +1,18 @@
 package net.minecraft.server;
 
+import com.google.common.collect.UnmodifiableIterator;
 import javax.annotation.Nullable;
 
-public class EntityPig extends EntityAnimal {
+public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
 
-    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityPig.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Integer> bx = DataWatcher.a(EntityPig.class, DataWatcherRegistry.b);
-    private static final RecipeItemStack by = RecipeItemStack.a(Items.CARROT, Items.POTATO, Items.BEETROOT);
-    private boolean bz;
-    private int bA;
-    private int bB;
+    private static final DataWatcherObject<Boolean> bv = DataWatcher.a(EntityPig.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Integer> bw = DataWatcher.a(EntityPig.class, DataWatcherRegistry.b);
+    private static final RecipeItemStack bx = RecipeItemStack.a(Items.CARROT, Items.POTATO, Items.BEETROOT);
+    public final SaddleStorage saddleStorage;
 
     public EntityPig(EntityTypes<? extends EntityPig> entitytypes, World world) {
         super(entitytypes, world);
+        this.saddleStorage = new SaddleStorage(this.datawatcher, EntityPig.bw, EntityPig.bv);
     }
 
     @Override
@@ -21,18 +21,15 @@ public class EntityPig extends EntityAnimal {
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 1.25D));
         this.goalSelector.a(3, new PathfinderGoalBreed(this, 1.0D));
         this.goalSelector.a(4, new PathfinderGoalTempt(this, 1.2D, RecipeItemStack.a(Items.CARROT_ON_A_STICK), false));
-        this.goalSelector.a(4, new PathfinderGoalTempt(this, 1.2D, false, EntityPig.by));
+        this.goalSelector.a(4, new PathfinderGoalTempt(this, 1.2D, false, EntityPig.bx));
         this.goalSelector.a(5, new PathfinderGoalFollowParent(this, 1.1D));
         this.goalSelector.a(6, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(7, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(10.0D);
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.25D);
+    public static AttributeProvider.Builder eL() {
+        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
     }
 
     @Nullable
@@ -42,7 +39,7 @@ public class EntityPig extends EntityAnimal {
     }
 
     @Override
-    public boolean dY() {
+    public boolean es() {
         Entity entity = this.getRidingPassenger();
 
         if (!(entity instanceof EntityHuman)) {
@@ -56,10 +53,8 @@ public class EntityPig extends EntityAnimal {
 
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityPig.bx.equals(datawatcherobject) && this.world.isClientSide) {
-            this.bz = true;
-            this.bA = 0;
-            this.bB = (Integer) this.datawatcher.get(EntityPig.bx);
+        if (EntityPig.bw.equals(datawatcherobject) && this.world.isClientSide) {
+            this.saddleStorage.a();
         }
 
         super.a(datawatcherobject);
@@ -68,20 +63,20 @@ public class EntityPig extends EntityAnimal {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityPig.bw, false);
-        this.datawatcher.register(EntityPig.bx, 0);
+        this.datawatcher.register(EntityPig.bv, false);
+        this.datawatcher.register(EntityPig.bw, 0);
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
-        nbttagcompound.setBoolean("Saddle", this.hasSaddle());
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
+        this.saddleStorage.a(nbttagcompound);
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
-        this.setSaddle(nbttagcompound.getBoolean("Saddle"));
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
+        this.saddleStorage.b(nbttagcompound);
     }
 
     @Override
@@ -101,29 +96,35 @@ public class EntityPig extends EntityAnimal {
 
     @Override
     protected void a(BlockPosition blockposition, IBlockData iblockdata) {
-        this.a(SoundEffects.ENTITY_PIG_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEffects.ENTITY_PIG_STEP, 0.15F, 1.0F);
     }
 
     @Override
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
-        if (super.a(entityhuman, enumhand)) {
-            return true;
+    public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
+        boolean flag = this.k(entityhuman.b(enumhand));
+
+        if (!flag && this.hasSaddle() && !this.isVehicle()) {
+            if (!this.world.isClientSide) {
+                entityhuman.startRiding(this);
+            }
+
+            return EnumInteractionResult.a(this.world.isClientSide);
         } else {
-            ItemStack itemstack = entityhuman.b(enumhand);
+            EnumInteractionResult enuminteractionresult = super.b(entityhuman, enumhand);
 
-            if (itemstack.getItem() == Items.NAME_TAG) {
-                itemstack.a(entityhuman, (EntityLiving) this, enumhand);
-                return true;
-            } else if (this.hasSaddle() && !this.isVehicle()) {
-                if (!this.world.isClientSide) {
-                    entityhuman.startRiding(this);
-                }
+            if (!enuminteractionresult.a()) {
+                ItemStack itemstack = entityhuman.b(enumhand);
 
-                return true;
+                return itemstack.getItem() == Items.SADDLE ? itemstack.a(entityhuman, (EntityLiving) this, enumhand) : EnumInteractionResult.PASS;
             } else {
-                return itemstack.getItem() == Items.SADDLE && itemstack.a(entityhuman, (EntityLiving) this, enumhand);
+                return enuminteractionresult;
             }
         }
+    }
+
+    @Override
+    public boolean canSaddle() {
+        return this.isAlive() && !this.isBaby();
     }
 
     @Override
@@ -135,96 +136,100 @@ public class EntityPig extends EntityAnimal {
 
     }
 
+    @Override
     public boolean hasSaddle() {
-        return (Boolean) this.datawatcher.get(EntityPig.bw);
+        return this.saddleStorage.hasSaddle();
     }
 
-    public void setSaddle(boolean flag) {
-        if (flag) {
-            this.datawatcher.set(EntityPig.bw, true);
-        } else {
-            this.datawatcher.set(EntityPig.bw, false);
+    @Override
+    public void saddle(@Nullable SoundCategory soundcategory) {
+        this.saddleStorage.setSaddle(true);
+        if (soundcategory != null) {
+            this.world.playSound((EntityHuman) null, (Entity) this, SoundEffects.ENTITY_PIG_SADDLE, soundcategory, 0.5F, 1.0F);
         }
 
+    }
+
+    @Override
+    public Vec3D c(EntityLiving entityliving) {
+        EnumDirection enumdirection = this.getAdjustedDirection();
+
+        if (enumdirection.n() == EnumDirection.EnumAxis.Y) {
+            return super.c(entityliving);
+        } else {
+            int[][] aint = DismountUtil.a(enumdirection);
+            BlockPosition blockposition = this.getChunkCoordinates();
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+            UnmodifiableIterator unmodifiableiterator = entityliving.ei().iterator();
+
+            while (unmodifiableiterator.hasNext()) {
+                EntityPose entitypose = (EntityPose) unmodifiableiterator.next();
+                AxisAlignedBB axisalignedbb = entityliving.f(entitypose);
+                int[][] aint1 = aint;
+                int i = aint.length;
+
+                for (int j = 0; j < i; ++j) {
+                    int[] aint2 = aint1[j];
+
+                    blockposition_mutableblockposition.d(blockposition.getX() + aint2[0], blockposition.getY(), blockposition.getZ() + aint2[1]);
+                    double d0 = this.world.m(blockposition_mutableblockposition);
+
+                    if (DismountUtil.a(d0)) {
+                        Vec3D vec3d = Vec3D.a((BaseBlockPosition) blockposition_mutableblockposition, d0);
+
+                        if (DismountUtil.a(this.world, entityliving, axisalignedbb.c(vec3d))) {
+                            entityliving.setPose(entitypose);
+                            return vec3d;
+                        }
+                    }
+                }
+            }
+
+            return super.c(entityliving);
+        }
     }
 
     @Override
     public void onLightningStrike(EntityLightning entitylightning) {
-        EntityPigZombie entitypigzombie = (EntityPigZombie) EntityTypes.ZOMBIE_PIGMAN.a(this.world);
+        if (this.world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+            EntityPigZombie entitypigzombie = (EntityPigZombie) EntityTypes.ZOMBIFIED_PIGLIN.a(this.world);
 
-        entitypigzombie.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
-        entitypigzombie.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.yaw, this.pitch);
-        entitypigzombie.setNoAI(this.isNoAI());
-        if (this.hasCustomName()) {
-            entitypigzombie.setCustomName(this.getCustomName());
-            entitypigzombie.setCustomNameVisible(this.getCustomNameVisible());
+            entitypigzombie.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
+            entitypigzombie.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.yaw, this.pitch);
+            entitypigzombie.setNoAI(this.isNoAI());
+            entitypigzombie.setBaby(this.isBaby());
+            if (this.hasCustomName()) {
+                entitypigzombie.setCustomName(this.getCustomName());
+                entitypigzombie.setCustomNameVisible(this.getCustomNameVisible());
+            }
+
+            entitypigzombie.setPersistent();
+            this.world.addEntity(entitypigzombie);
+            this.die();
+        } else {
+            super.onLightningStrike(entitylightning);
         }
 
-        this.world.addEntity(entitypigzombie);
-        this.die();
     }
 
     @Override
-    public void e(Vec3D vec3d) {
-        if (this.isAlive()) {
-            Entity entity = this.getPassengers().isEmpty() ? null : (Entity) this.getPassengers().get(0);
-
-            if (this.isVehicle() && this.dY()) {
-                this.yaw = entity.yaw;
-                this.lastYaw = this.yaw;
-                this.pitch = entity.pitch * 0.5F;
-                this.setYawPitch(this.yaw, this.pitch);
-                this.aI = this.yaw;
-                this.aK = this.yaw;
-                this.H = 1.0F;
-                this.aM = this.dt() * 0.1F;
-                if (this.bz && this.bA++ > this.bB) {
-                    this.bz = false;
-                }
-
-                if (this.cj()) {
-                    float f = (float) this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue() * 0.225F;
-
-                    if (this.bz) {
-                        f += f * 1.15F * MathHelper.sin((float) this.bA / (float) this.bB * 3.1415927F);
-                    }
-
-                    this.o(f);
-                    super.e(new Vec3D(0.0D, 0.0D, 1.0D));
-                    this.bc = 0;
-                } else {
-                    this.setMot(Vec3D.a);
-                }
-
-                this.aC = this.aD;
-                double d0 = this.locX() - this.lastX;
-                double d1 = this.locZ() - this.lastZ;
-                float f1 = MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0F;
-
-                if (f1 > 1.0F) {
-                    f1 = 1.0F;
-                }
-
-                this.aD += (f1 - this.aD) * 0.4F;
-                this.aE += this.aD;
-            } else {
-                this.H = 0.5F;
-                this.aM = 0.02F;
-                super.e(vec3d);
-            }
-        }
+    public void f(Vec3D vec3d) {
+        this.a((EntityInsentient) this, this.saddleStorage, vec3d);
     }
 
-    public boolean er() {
-        if (this.bz) {
-            return false;
-        } else {
-            this.bz = true;
-            this.bA = 0;
-            this.bB = this.getRandom().nextInt(841) + 140;
-            this.getDataWatcher().set(EntityPig.bx, this.bB);
-            return true;
-        }
+    @Override
+    public float O_() {
+        return (float) this.b(GenericAttributes.MOVEMENT_SPEED) * 0.225F;
+    }
+
+    @Override
+    public void a_(Vec3D vec3d) {
+        super.f(vec3d);
+    }
+
+    @Override
+    public boolean P_() {
+        return this.saddleStorage.a(this.getRandom());
     }
 
     @Override
@@ -233,7 +238,7 @@ public class EntityPig extends EntityAnimal {
     }
 
     @Override
-    public boolean i(ItemStack itemstack) {
-        return EntityPig.by.test(itemstack);
+    public boolean k(ItemStack itemstack) {
+        return EntityPig.bx.test(itemstack);
     }
 }

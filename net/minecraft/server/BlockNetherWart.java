@@ -4,22 +4,27 @@ import java.util.Random;
 
 public class BlockNetherWart extends BlockPlant {
 
-    public static final BlockStateInteger AGE = BlockProperties.aa;
+    public static final BlockStateInteger AGE = BlockProperties.ag;
     private static final VoxelShape[] b = new VoxelShape[]{Block.a(0.0D, 0.0D, 0.0D, 16.0D, 5.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 11.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D)};
 
-    protected BlockNetherWart(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockNetherWart.AGE, 0));
+    protected BlockNetherWart(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockNetherWart.AGE, 0));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockNetherWart.b[(Integer) iblockdata.get(BlockNetherWart.AGE)];
     }
 
     @Override
-    protected boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.getBlock() == Blocks.SOUL_SAND;
+    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockdata.a(Blocks.SOUL_SAND);
+    }
+
+    @Override
+    public boolean isTicking(IBlockData iblockdata) {
+        return (Integer) iblockdata.get(BlockNetherWart.AGE) < 3;
     }
 
     @Override
@@ -31,7 +36,6 @@ public class BlockNetherWart extends BlockPlant {
             worldserver.setTypeAndData(blockposition, iblockdata, 2);
         }
 
-        super.tick(iblockdata, worldserver, blockposition, random);
     }
 
     @Override

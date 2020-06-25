@@ -71,9 +71,9 @@ public class TileEntityEnderChest extends TileEntity implements ITickable {
     }
 
     @Override
-    public void ab_() {
+    public void an_() {
         this.invalidateBlockCache();
-        super.ab_();
+        super.an_();
     }
 
     public void d() {

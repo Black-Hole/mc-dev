@@ -1,25 +1,25 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
-import java.util.function.Function;
+import com.mojang.serialization.Codec;
 
 public class WorldGenFeatureStateProviders<P extends WorldGenFeatureStateProvider> {
 
-    public static final WorldGenFeatureStateProviders<WorldGenFeatureStateProviderSimpl> a = a("simple_state_provider", WorldGenFeatureStateProviderSimpl::new);
-    public static final WorldGenFeatureStateProviders<WorldGenFeatureStateProviderWeighted> b = a("weighted_state_provider", WorldGenFeatureStateProviderWeighted::new);
-    public static final WorldGenFeatureStateProviders<WorldGenFeatureStateProviderPlainFlower> c = a("plain_flower_provider", WorldGenFeatureStateProviderPlainFlower::new);
-    public static final WorldGenFeatureStateProviders<WorldGenFeatureStateProviderForestFlower> d = a("forest_flower_provider", WorldGenFeatureStateProviderForestFlower::new);
-    private final Function<Dynamic<?>, P> e;
+    public static final WorldGenFeatureStateProviders<WorldGenFeatureStateProviderSimpl> a = a("simple_state_provider", WorldGenFeatureStateProviderSimpl.b);
+    public static final WorldGenFeatureStateProviders<WorldGenFeatureStateProviderWeighted> b = a("weighted_state_provider", WorldGenFeatureStateProviderWeighted.b);
+    public static final WorldGenFeatureStateProviders<WorldGenFeatureStateProviderPlainFlower> c = a("plain_flower_provider", WorldGenFeatureStateProviderPlainFlower.b);
+    public static final WorldGenFeatureStateProviders<WorldGenFeatureStateProviderForestFlower> d = a("forest_flower_provider", WorldGenFeatureStateProviderForestFlower.b);
+    public static final WorldGenFeatureStateProviders<WorldGenFeatureStateProviderRotatedBlock> e = a("rotated_block_provider", WorldGenFeatureStateProviderRotatedBlock.b);
+    private final Codec<P> f;
 
-    private static <P extends WorldGenFeatureStateProvider> WorldGenFeatureStateProviders<P> a(String s, Function<Dynamic<?>, P> function) {
-        return (WorldGenFeatureStateProviders) IRegistry.a(IRegistry.t, s, (Object) (new WorldGenFeatureStateProviders<>(function)));
+    private static <P extends WorldGenFeatureStateProvider> WorldGenFeatureStateProviders<P> a(String s, Codec<P> codec) {
+        return (WorldGenFeatureStateProviders) IRegistry.a(IRegistry.BLOCK_STATE_PROVIDER_TYPE, s, (Object) (new WorldGenFeatureStateProviders<>(codec)));
     }
 
-    private WorldGenFeatureStateProviders(Function<Dynamic<?>, P> function) {
-        this.e = function;
+    private WorldGenFeatureStateProviders(Codec<P> codec) {
+        this.f = codec;
     }
 
-    public P a(Dynamic<?> dynamic) {
-        return (WorldGenFeatureStateProvider) this.e.apply(dynamic);
+    public Codec<P> a() {
+        return this.f;
     }
 }

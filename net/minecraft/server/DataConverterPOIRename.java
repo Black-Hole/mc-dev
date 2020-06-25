@@ -3,15 +3,14 @@ package net.minecraft.server;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.schemas.Schema;
-import com.mojang.datafixers.types.DynamicOps;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public abstract class DataConverterPOIRename extends DataFix {
 
@@ -49,13 +48,13 @@ public abstract class DataConverterPOIRename extends DataFix {
         return dynamic.asStreamOpt().map((stream) -> {
             return dynamic.createList(stream.map((dynamic1) -> {
                 return dynamic1.update("type", (dynamic2) -> {
-                    Optional optional = dynamic2.asString().map(this::a);
+                    DataResult dataresult = dynamic2.asString().map(this::a);
 
                     dynamic2.getClass();
-                    return (Dynamic) DataFixUtils.orElse(optional.map(dynamic2::createString), dynamic2);
+                    return (Dynamic) DataFixUtils.orElse(dataresult.map(dynamic2::createString).result(), dynamic2);
                 });
             }));
-        });
+        }).result();
     }
 
     protected abstract String a(String s);

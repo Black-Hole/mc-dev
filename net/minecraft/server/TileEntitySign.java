@@ -5,14 +5,17 @@ import javax.annotation.Nullable;
 
 public class TileEntitySign extends TileEntity {
 
-    public final IChatBaseComponent[] lines = new IChatBaseComponent[]{new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")};
-    public boolean isEditable = true;
+    public final IChatBaseComponent[] lines;
+    public boolean isEditable;
     private EntityHuman c;
-    private final String[] g = new String[4];
+    private final IChatFormatted[] g;
     private EnumColor color;
 
     public TileEntitySign() {
         super(TileEntityTypes.SIGN);
+        this.lines = new IChatBaseComponent[]{ChatComponentText.d, ChatComponentText.d, ChatComponentText.d, ChatComponentText.d};
+        this.isEditable = true;
+        this.g = new IChatFormatted[4];
         this.color = EnumColor.BLACK;
     }
 
@@ -26,28 +29,28 @@ public class TileEntitySign extends TileEntity {
             nbttagcompound.setString("Text" + (i + 1), s);
         }
 
-        nbttagcompound.setString("Color", this.color.b());
+        nbttagcompound.setString("Color", this.color.c());
         return nbttagcompound;
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
         this.isEditable = false;
-        super.load(nbttagcompound);
+        super.load(iblockdata, nbttagcompound);
         this.color = EnumColor.a(nbttagcompound.getString("Color"), EnumColor.BLACK);
 
         for (int i = 0; i < 4; ++i) {
             String s = nbttagcompound.getString("Text" + (i + 1));
-            IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s.isEmpty() ? "\"\"" : s);
+            IChatMutableComponent ichatmutablecomponent = IChatBaseComponent.ChatSerializer.a(s.isEmpty() ? "\"\"" : s);
 
             if (this.world instanceof WorldServer) {
                 try {
-                    this.lines[i] = ChatComponentUtils.filterForDisplay(this.a((EntityPlayer) null), ichatbasecomponent, (Entity) null, 0);
+                    this.lines[i] = ChatComponentUtils.filterForDisplay(this.a((EntityPlayer) null), ichatmutablecomponent, (Entity) null, 0);
                 } catch (CommandSyntaxException commandsyntaxexception) {
-                    this.lines[i] = ichatbasecomponent;
+                    this.lines[i] = ichatmutablecomponent;
                 }
             } else {
-                this.lines[i] = ichatbasecomponent;
+                this.lines[i] = ichatmutablecomponent;
             }
 
             this.g[i] = null;
@@ -112,7 +115,7 @@ public class TileEntitySign extends TileEntity {
         String s = entityplayer == null ? "Sign" : entityplayer.getDisplayName().getString();
         Object object = entityplayer == null ? new ChatComponentText("Sign") : entityplayer.getScoreboardDisplayName();
 
-        return new CommandListenerWrapper(ICommandListener.DUMMY, new Vec3D((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D), Vec2F.a, (WorldServer) this.world, 2, s, (IChatBaseComponent) object, this.world.getMinecraftServer(), entityplayer);
+        return new CommandListenerWrapper(ICommandListener.DUMMY, Vec3D.a((BaseBlockPosition) this.position), Vec2F.a, (WorldServer) this.world, 2, s, (IChatBaseComponent) object, this.world.getMinecraftServer(), entityplayer);
     }
 
     public EnumColor getColor() {

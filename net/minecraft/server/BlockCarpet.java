@@ -5,8 +5,8 @@ public class BlockCarpet extends Block {
     protected static final VoxelShape a = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
     private final EnumColor color;
 
-    protected BlockCarpet(EnumColor enumcolor, Block.Info block_info) {
-        super(block_info);
+    protected BlockCarpet(EnumColor enumcolor, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.color = enumcolor;
     }
 
@@ -15,7 +15,7 @@ public class BlockCarpet extends Block {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockCarpet.a;
     }
 

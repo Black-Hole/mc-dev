@@ -5,8 +5,8 @@ import com.google.common.collect.Maps;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Map.Entry;
+import java.util.Optional;
 import javax.annotation.Nullable;
 
 public class BehaviorPlay extends Behavior<EntityCreature> {
@@ -53,8 +53,8 @@ public class BehaviorPlay extends Behavior<EntityCreature> {
         BehaviorController<?> behaviorcontroller = entitycreature.getBehaviorController();
 
         behaviorcontroller.setMemory(MemoryModuleType.INTERACTION_TARGET, (Object) entityliving);
-        behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving)));
-        behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorPositionEntity(entityliving), 0.6F, 1)));
+        behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving, true)));
+        behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorPositionEntity(entityliving, false), 0.6F, 1)));
     }
 
     private Optional<EntityLiving> a(EntityCreature entitycreature) {

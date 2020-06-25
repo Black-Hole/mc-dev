@@ -13,13 +13,13 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
 
     protected EntityMinecartContainer(EntityTypes<?> entitytypes, World world) {
         super(entitytypes, world);
-        this.items = NonNullList.a(36, ItemStack.a);
+        this.items = NonNullList.a(36, ItemStack.b);
         this.c = true;
     }
 
     protected EntityMinecartContainer(EntityTypes<?> entitytypes, double d0, double d1, double d2, World world) {
         super(entitytypes, world, d0, d1, d2);
-        this.items = NonNullList.a(36, ItemStack.a);
+        this.items = NonNullList.a(36, ItemStack.b);
         this.c = true;
     }
 
@@ -67,9 +67,9 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         ItemStack itemstack = (ItemStack) this.items.get(i);
 
         if (itemstack.isEmpty()) {
-            return ItemStack.a;
+            return ItemStack.b;
         } else {
-            this.items.set(i, ItemStack.a);
+            this.items.set(i, ItemStack.b);
             return itemstack;
         }
     }
@@ -104,9 +104,9 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
 
     @Nullable
     @Override
-    public Entity a(DimensionManager dimensionmanager) {
+    public Entity a(WorldServer worldserver) {
         this.c = false;
-        return super.a(dimensionmanager);
+        return super.a(worldserver);
     }
 
     @Override
@@ -119,8 +119,8 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
     }
 
     @Override
-    protected void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    protected void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         if (this.lootTable != null) {
             nbttagcompound.setString("LootTable", this.lootTable.toString());
             if (this.lootTableSeed != 0L) {
@@ -133,9 +133,9 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
     }
 
     @Override
-    protected void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
-        this.items = NonNullList.a(this.getSize(), ItemStack.a);
+    protected void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
+        this.items = NonNullList.a(this.getSize(), ItemStack.b);
         if (nbttagcompound.hasKeyOfType("LootTable", 8)) {
             this.lootTable = new MinecraftKey(nbttagcompound.getString("LootTable"));
             this.lootTableSeed = nbttagcompound.getLong("LootTableSeed");
@@ -146,9 +146,9 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
     }
 
     @Override
-    public boolean b(EntityHuman entityhuman, EnumHand enumhand) {
+    public EnumInteractionResult a(EntityHuman entityhuman, EnumHand enumhand) {
         entityhuman.openContainer(this);
-        return true;
+        return EnumInteractionResult.a(this.world.isClientSide);
     }
 
     @Override
@@ -168,11 +168,15 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         if (this.lootTable != null && this.world.getMinecraftServer() != null) {
             LootTable loottable = this.world.getMinecraftServer().getLootTableRegistry().getLootTable(this.lootTable);
 
+            if (entityhuman instanceof EntityPlayer) {
+                CriterionTriggers.N.a((EntityPlayer) entityhuman, this.lootTable);
+            }
+
             this.lootTable = null;
-            LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).set(LootContextParameters.POSITION, new BlockPosition(this)).a(this.lootTableSeed);
+            LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).set(LootContextParameters.POSITION, this.getChunkCoordinates()).a(this.lootTableSeed);
 
             if (entityhuman != null) {
-                loottableinfo_builder.a(entityhuman.eA()).set(LootContextParameters.THIS_ENTITY, entityhuman);
+                loottableinfo_builder.a(entityhuman.eU()).set(LootContextParameters.THIS_ENTITY, entityhuman);
             }
 
             loottable.fillInventory(this, loottableinfo_builder.build(LootContextParameterSets.CHEST));

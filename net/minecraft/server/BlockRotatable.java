@@ -2,11 +2,11 @@ package net.minecraft.server;
 
 public class BlockRotatable extends Block {
 
-    public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockProperties.E;
+    public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockProperties.F;
 
-    public BlockRotatable(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) this.getBlockData().set(BlockRotatable.AXIS, EnumDirection.EnumAxis.Y));
+    public BlockRotatable(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) this.getBlockData().set(BlockRotatable.AXIS, EnumDirection.EnumAxis.Y));
     }
 
     @Override
@@ -34,6 +34,6 @@ public class BlockRotatable extends Block {
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockRotatable.AXIS, blockactioncontext.getClickedFace().m());
+        return (IBlockData) this.getBlockData().set(BlockRotatable.AXIS, blockactioncontext.getClickedFace().n());
     }
 }

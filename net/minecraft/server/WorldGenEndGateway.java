@@ -1,17 +1,16 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Iterator;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenEndGateway extends WorldGenerator<WorldGenEndGatewayConfiguration> {
 
-    public WorldGenEndGateway(Function<Dynamic<?>, ? extends WorldGenEndGatewayConfiguration> function) {
-        super(function);
+    public WorldGenEndGateway(Codec<WorldGenEndGatewayConfiguration> codec) {
+        super(codec);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenEndGatewayConfiguration worldgenendgatewayconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenEndGatewayConfiguration worldgenendgatewayconfiguration) {
         Iterator iterator = BlockPosition.a(blockposition.b(-1, -2, -1), blockposition.b(1, 2, 1)).iterator();
 
         while (iterator.hasNext()) {
@@ -24,9 +23,9 @@ public class WorldGenEndGateway extends WorldGenerator<WorldGenEndGatewayConfigu
             if (flag && flag1 && flag2) {
                 BlockPosition blockposition2 = blockposition1.immutableCopy();
 
-                this.a(generatoraccess, blockposition2, Blocks.END_GATEWAY.getBlockData());
+                this.a(generatoraccessseed, blockposition2, Blocks.END_GATEWAY.getBlockData());
                 worldgenendgatewayconfiguration.b().ifPresent((blockposition3) -> {
-                    TileEntity tileentity = generatoraccess.getTileEntity(blockposition2);
+                    TileEntity tileentity = generatoraccessseed.getTileEntity(blockposition2);
 
                     if (tileentity instanceof TileEntityEndGateway) {
                         TileEntityEndGateway tileentityendgateway = (TileEntityEndGateway) tileentity;
@@ -37,13 +36,13 @@ public class WorldGenEndGateway extends WorldGenerator<WorldGenEndGatewayConfigu
 
                 });
             } else if (flag1) {
-                this.a(generatoraccess, blockposition1, Blocks.AIR.getBlockData());
+                this.a(generatoraccessseed, blockposition1, Blocks.AIR.getBlockData());
             } else if (flag3 && flag && flag2) {
-                this.a(generatoraccess, blockposition1, Blocks.BEDROCK.getBlockData());
+                this.a(generatoraccessseed, blockposition1, Blocks.BEDROCK.getBlockData());
             } else if ((flag || flag2) && !flag3) {
-                this.a(generatoraccess, blockposition1, Blocks.BEDROCK.getBlockData());
+                this.a(generatoraccessseed, blockposition1, Blocks.BEDROCK.getBlockData());
             } else {
-                this.a(generatoraccess, blockposition1, Blocks.AIR.getBlockData());
+                this.a(generatoraccessseed, blockposition1, Blocks.AIR.getBlockData());
             }
         }
 

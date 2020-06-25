@@ -40,10 +40,10 @@ public abstract class DefinedStructurePiece extends StructurePiece {
     }
 
     @Override
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair, BlockPosition blockposition) {
         this.b.a(structureboundingbox);
         this.n = this.a.b(this.b, this.c);
-        if (this.a.a(generatoraccess, this.c, this.b, 2)) {
+        if (this.a.a(generatoraccessseed, this.c, blockposition, this.b, random, 2)) {
             List<DefinedStructure.BlockInfo> list = this.a.a(this.c, this.b, Blocks.STRUCTURE_BLOCK);
             Iterator iterator = list.iterator();
 
@@ -54,7 +54,7 @@ public abstract class DefinedStructurePiece extends StructurePiece {
                     BlockPropertyStructureMode blockpropertystructuremode = BlockPropertyStructureMode.valueOf(definedstructure_blockinfo.c.getString("mode"));
 
                     if (blockpropertystructuremode == BlockPropertyStructureMode.DATA) {
-                        this.a(definedstructure_blockinfo.c.getString("metadata"), definedstructure_blockinfo.a, generatoraccess, random, structureboundingbox);
+                        this.a(definedstructure_blockinfo.c.getString("metadata"), definedstructure_blockinfo.a, generatoraccessseed, random, structureboundingbox);
                     }
                 }
             }
@@ -83,7 +83,7 @@ public abstract class DefinedStructurePiece extends StructurePiece {
                         DefinedStructurePiece.LOGGER.error("Error while parsing blockstate {} in jigsaw block @ {}", s, definedstructure_blockinfo1.a);
                     }
 
-                    generatoraccess.setTypeAndData(definedstructure_blockinfo1.a, iblockdata, 3);
+                    generatoraccessseed.setTypeAndData(definedstructure_blockinfo1.a, iblockdata, 3);
                 }
             }
         }
@@ -100,7 +100,7 @@ public abstract class DefinedStructurePiece extends StructurePiece {
     }
 
     @Override
-    public EnumBlockRotation ad_() {
+    public EnumBlockRotation ap_() {
         return this.b.d();
     }
 }

@@ -8,40 +8,37 @@ import javax.annotation.Nullable;
 
 public class BossBattleCustomData {
 
-    private final MinecraftServer a;
-    private final Map<MinecraftKey, BossBattleCustom> b = Maps.newHashMap();
+    private final Map<MinecraftKey, BossBattleCustom> a = Maps.newHashMap();
 
-    public BossBattleCustomData(MinecraftServer minecraftserver) {
-        this.a = minecraftserver;
-    }
+    public BossBattleCustomData() {}
 
     @Nullable
     public BossBattleCustom a(MinecraftKey minecraftkey) {
-        return (BossBattleCustom) this.b.get(minecraftkey);
+        return (BossBattleCustom) this.a.get(minecraftkey);
     }
 
     public BossBattleCustom register(MinecraftKey minecraftkey, IChatBaseComponent ichatbasecomponent) {
         BossBattleCustom bossbattlecustom = new BossBattleCustom(minecraftkey, ichatbasecomponent);
 
-        this.b.put(minecraftkey, bossbattlecustom);
+        this.a.put(minecraftkey, bossbattlecustom);
         return bossbattlecustom;
     }
 
     public void remove(BossBattleCustom bossbattlecustom) {
-        this.b.remove(bossbattlecustom.getKey());
+        this.a.remove(bossbattlecustom.getKey());
     }
 
     public Collection<MinecraftKey> a() {
-        return this.b.keySet();
+        return this.a.keySet();
     }
 
     public Collection<BossBattleCustom> getBattles() {
-        return this.b.values();
+        return this.a.values();
     }
 
     public NBTTagCompound save() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
-        Iterator iterator = this.b.values().iterator();
+        Iterator iterator = this.a.values().iterator();
 
         while (iterator.hasNext()) {
             BossBattleCustom bossbattlecustom = (BossBattleCustom) iterator.next();
@@ -59,13 +56,13 @@ public class BossBattleCustomData {
             String s = (String) iterator.next();
             MinecraftKey minecraftkey = new MinecraftKey(s);
 
-            this.b.put(minecraftkey, BossBattleCustom.a(nbttagcompound.getCompound(s), minecraftkey));
+            this.a.put(minecraftkey, BossBattleCustom.a(nbttagcompound.getCompound(s), minecraftkey));
         }
 
     }
 
     public void a(EntityPlayer entityplayer) {
-        Iterator iterator = this.b.values().iterator();
+        Iterator iterator = this.a.values().iterator();
 
         while (iterator.hasNext()) {
             BossBattleCustom bossbattlecustom = (BossBattleCustom) iterator.next();
@@ -76,7 +73,7 @@ public class BossBattleCustomData {
     }
 
     public void b(EntityPlayer entityplayer) {
-        Iterator iterator = this.b.values().iterator();
+        Iterator iterator = this.a.values().iterator();
 
         while (iterator.hasNext()) {
             BossBattleCustom bossbattlecustom = (BossBattleCustom) iterator.next();

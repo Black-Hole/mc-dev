@@ -1,54 +1,27 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
-import java.util.function.Function;
+import com.mojang.serialization.Codec;
+import java.util.Random;
 
-public class WorldGenFeatureShipwreck extends WorldGenFeatureRandomScattered<WorldGenFeatureShipwreckConfiguration> {
+public class WorldGenFeatureShipwreck extends StructureGenerator<WorldGenFeatureShipwreckConfiguration> {
 
-    public WorldGenFeatureShipwreck(Function<Dynamic<?>, ? extends WorldGenFeatureShipwreckConfiguration> function) {
-        super(function);
+    public WorldGenFeatureShipwreck(Codec<WorldGenFeatureShipwreckConfiguration> codec) {
+        super(codec);
     }
 
     @Override
-    public String b() {
-        return "Shipwreck";
-    }
-
-    @Override
-    public int c() {
-        return 3;
-    }
-
-    @Override
-    public StructureGenerator.a a() {
+    public StructureGenerator.a<WorldGenFeatureShipwreckConfiguration> a() {
         return WorldGenFeatureShipwreck.a::new;
     }
 
-    @Override
-    protected int getSeed() {
-        return 165745295;
-    }
+    public static class a extends StructureStart<WorldGenFeatureShipwreckConfiguration> {
 
-    @Override
-    protected int a(ChunkGenerator<?> chunkgenerator) {
-        return chunkgenerator.getSettings().j();
-    }
-
-    @Override
-    protected int b(ChunkGenerator<?> chunkgenerator) {
-        return chunkgenerator.getSettings().k();
-    }
-
-    public static class a extends StructureStart {
-
-        public a(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+        public a(StructureGenerator<WorldGenFeatureShipwreckConfiguration> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
             super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
-        @Override
-        public void a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase) {
-            WorldGenFeatureShipwreckConfiguration worldgenfeatureshipwreckconfiguration = (WorldGenFeatureShipwreckConfiguration) chunkgenerator.getFeatureConfiguration(biomebase, WorldGenerator.SHIPWRECK);
-            EnumBlockRotation enumblockrotation = EnumBlockRotation.values()[this.d.nextInt(EnumBlockRotation.values().length)];
+        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureShipwreckConfiguration worldgenfeatureshipwreckconfiguration) {
+            EnumBlockRotation enumblockrotation = EnumBlockRotation.a((Random) this.d);
             BlockPosition blockposition = new BlockPosition(i * 16, 90, j * 16);
 
             WorldGenShipwreck.a(definedstructuremanager, blockposition, enumblockrotation, this.b, this.d, worldgenfeatureshipwreckconfiguration);

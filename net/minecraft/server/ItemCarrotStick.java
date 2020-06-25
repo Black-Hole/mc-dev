@@ -1,9 +1,14 @@
 package net.minecraft.server;
 
-public class ItemCarrotStick extends Item {
+public class ItemCarrotStick<T extends Entity & ISteerable> extends Item {
 
-    public ItemCarrotStick(Item.Info item_info) {
+    private final EntityTypes<T> a;
+    private final int b;
+
+    public ItemCarrotStick(Item.Info item_info, EntityTypes<T> entitytypes, int i) {
         super(item_info);
+        this.a = entitytypes;
+        this.b = i;
     }
 
     @Override
@@ -13,11 +18,13 @@ public class ItemCarrotStick extends Item {
         if (world.isClientSide) {
             return InteractionResultWrapper.pass(itemstack);
         } else {
-            if (entityhuman.isPassenger() && entityhuman.getVehicle() instanceof EntityPig) {
-                EntityPig entitypig = (EntityPig) entityhuman.getVehicle();
+            Entity entity = entityhuman.getVehicle();
 
-                if (itemstack.h() - itemstack.getDamage() >= 7 && entitypig.er()) {
-                    itemstack.damage(7, entityhuman, (entityhuman1) -> {
+            if (entityhuman.isPassenger() && entity instanceof ISteerable && entity.getEntityType() == this.a) {
+                ISteerable isteerable = (ISteerable) entity;
+
+                if (isteerable.P_()) {
+                    itemstack.damage(this.b, entityhuman, (entityhuman1) -> {
                         entityhuman1.broadcastItemBreak(enumhand);
                     });
                     if (itemstack.isEmpty()) {

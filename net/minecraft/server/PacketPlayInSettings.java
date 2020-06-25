@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class PacketPlayInSettings implements Packet<PacketListenerPlayIn> {
 
-    private String a;
+    public String locale;
     public int viewDistance;
     private EnumChatVisibility c;
     private boolean d;
@@ -15,7 +15,7 @@ public class PacketPlayInSettings implements Packet<PacketListenerPlayIn> {
 
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e(16);
+        this.locale = packetdataserializer.e(16);
         this.viewDistance = packetdataserializer.readByte();
         this.c = (EnumChatVisibility) packetdataserializer.a(EnumChatVisibility.class);
         this.d = packetdataserializer.readBoolean();
@@ -25,7 +25,7 @@ public class PacketPlayInSettings implements Packet<PacketListenerPlayIn> {
 
     @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
+        packetdataserializer.a(this.locale);
         packetdataserializer.writeByte(this.viewDistance);
         packetdataserializer.a((Enum) this.c);
         packetdataserializer.writeBoolean(this.d);
@@ -35,10 +35,6 @@ public class PacketPlayInSettings implements Packet<PacketListenerPlayIn> {
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
         packetlistenerplayin.a(this);
-    }
-
-    public String b() {
-        return this.a;
     }
 
     public EnumChatVisibility d() {

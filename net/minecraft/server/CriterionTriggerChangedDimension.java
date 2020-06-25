@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import javax.annotation.Nullable;
 
@@ -17,50 +15,50 @@ public class CriterionTriggerChangedDimension extends CriterionTriggerAbstract<C
     }
 
     @Override
-    public CriterionTriggerChangedDimension.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        DimensionManager dimensionmanager = jsonobject.has("from") ? DimensionManager.a(new MinecraftKey(ChatDeserializer.h(jsonobject, "from"))) : null;
-        DimensionManager dimensionmanager1 = jsonobject.has("to") ? DimensionManager.a(new MinecraftKey(ChatDeserializer.h(jsonobject, "to"))) : null;
+    public CriterionTriggerChangedDimension.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
+        ResourceKey<World> resourcekey = jsonobject.has("from") ? ResourceKey.a(IRegistry.ae, new MinecraftKey(ChatDeserializer.h(jsonobject, "from"))) : null;
+        ResourceKey<World> resourcekey1 = jsonobject.has("to") ? ResourceKey.a(IRegistry.ae, new MinecraftKey(ChatDeserializer.h(jsonobject, "to"))) : null;
 
-        return new CriterionTriggerChangedDimension.a(dimensionmanager, dimensionmanager1);
+        return new CriterionTriggerChangedDimension.a(criterionconditionentity_b, resourcekey, resourcekey1);
     }
 
-    public void a(EntityPlayer entityplayer, DimensionManager dimensionmanager, DimensionManager dimensionmanager1) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggerchangeddimension_a) -> {
-            return criteriontriggerchangeddimension_a.b(dimensionmanager, dimensionmanager1);
+    public void a(EntityPlayer entityplayer, ResourceKey<World> resourcekey, ResourceKey<World> resourcekey1) {
+        this.a(entityplayer, (criteriontriggerchangeddimension_a) -> {
+            return criteriontriggerchangeddimension_a.b(resourcekey, resourcekey1);
         });
     }
 
     public static class a extends CriterionInstanceAbstract {
 
         @Nullable
-        private final DimensionManager a;
+        private final ResourceKey<World> a;
         @Nullable
-        private final DimensionManager b;
+        private final ResourceKey<World> b;
 
-        public a(@Nullable DimensionManager dimensionmanager, @Nullable DimensionManager dimensionmanager1) {
-            super(CriterionTriggerChangedDimension.a);
-            this.a = dimensionmanager;
-            this.b = dimensionmanager1;
+        public a(CriterionConditionEntity.b criterionconditionentity_b, @Nullable ResourceKey<World> resourcekey, @Nullable ResourceKey<World> resourcekey1) {
+            super(CriterionTriggerChangedDimension.a, criterionconditionentity_b);
+            this.a = resourcekey;
+            this.b = resourcekey1;
         }
 
-        public static CriterionTriggerChangedDimension.a a(DimensionManager dimensionmanager) {
-            return new CriterionTriggerChangedDimension.a((DimensionManager) null, dimensionmanager);
+        public static CriterionTriggerChangedDimension.a a(ResourceKey<World> resourcekey) {
+            return new CriterionTriggerChangedDimension.a(CriterionConditionEntity.b.a, (ResourceKey) null, resourcekey);
         }
 
-        public boolean b(DimensionManager dimensionmanager, DimensionManager dimensionmanager1) {
-            return this.a != null && this.a != dimensionmanager ? false : this.b == null || this.b == dimensionmanager1;
+        public boolean b(ResourceKey<World> resourcekey, ResourceKey<World> resourcekey1) {
+            return this.a != null && this.a != resourcekey ? false : this.b == null || this.b == resourcekey1;
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             if (this.a != null) {
-                jsonobject.addProperty("from", DimensionManager.a(this.a).toString());
+                jsonobject.addProperty("from", this.a.a().toString());
             }
 
             if (this.b != null) {
-                jsonobject.addProperty("to", DimensionManager.a(this.b).toString());
+                jsonobject.addProperty("to", this.b.a().toString());
             }
 
             return jsonobject;

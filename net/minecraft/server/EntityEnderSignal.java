@@ -28,19 +28,19 @@ public class EntityEnderSignal extends Entity {
 
     }
 
-    private ItemStack i() {
+    private ItemStack h() {
         return (ItemStack) this.getDataWatcher().get(EntityEnderSignal.b);
     }
 
-    public ItemStack f() {
-        ItemStack itemstack = this.i();
+    public ItemStack g() {
+        ItemStack itemstack = this.h();
 
         return itemstack.isEmpty() ? new ItemStack(Items.ENDER_EYE) : itemstack;
     }
 
     @Override
     protected void initDatawatcher() {
-        this.getDataWatcher().register(EntityEnderSignal.b, ItemStack.a);
+        this.getDataWatcher().register(EntityEnderSignal.b, ItemStack.b);
     }
 
     public void a(BlockPosition blockposition) {
@@ -74,26 +74,8 @@ public class EntityEnderSignal extends Entity {
         double d2 = this.locZ() + vec3d.z;
         float f = MathHelper.sqrt(b(vec3d));
 
-        this.yaw = (float) (MathHelper.d(vec3d.x, vec3d.z) * 57.2957763671875D);
-
-        for (this.pitch = (float) (MathHelper.d(vec3d.y, (double) f) * 57.2957763671875D); this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {
-            ;
-        }
-
-        while (this.pitch - this.lastPitch >= 180.0F) {
-            this.lastPitch += 360.0F;
-        }
-
-        while (this.yaw - this.lastYaw < -180.0F) {
-            this.lastYaw -= 360.0F;
-        }
-
-        while (this.yaw - this.lastYaw >= 180.0F) {
-            this.lastYaw += 360.0F;
-        }
-
-        this.pitch = MathHelper.g(0.2F, this.lastPitch, this.pitch);
-        this.yaw = MathHelper.g(0.2F, this.lastYaw, this.yaw);
+        this.pitch = IProjectile.e(this.lastPitch, (float) (MathHelper.d(vec3d.y, (double) f) * 57.2957763671875D));
+        this.yaw = IProjectile.e(this.lastYaw, (float) (MathHelper.d(vec3d.x, vec3d.z) * 57.2957763671875D));
         if (!this.world.isClientSide) {
             double d3 = this.targetX - d0;
             double d4 = this.targetZ - d2;
@@ -127,12 +109,12 @@ public class EntityEnderSignal extends Entity {
             this.setPosition(d0, d1, d2);
             ++this.despawnTimer;
             if (this.despawnTimer > 80 && !this.world.isClientSide) {
-                this.a(SoundEffects.ENTITY_ENDER_EYE_DEATH, 1.0F, 1.0F);
+                this.playSound(SoundEffects.ENTITY_ENDER_EYE_DEATH, 1.0F, 1.0F);
                 this.die();
                 if (this.shouldDropItem) {
-                    this.world.addEntity(new EntityItem(this.world, this.locX(), this.locY(), this.locZ(), this.f()));
+                    this.world.addEntity(new EntityItem(this.world, this.locX(), this.locY(), this.locZ(), this.g()));
                 } else {
-                    this.world.triggerEffect(2003, new BlockPosition(this), 0);
+                    this.world.triggerEffect(2003, this.getChunkCoordinates(), 0);
                 }
             }
         } else {
@@ -142,8 +124,8 @@ public class EntityEnderSignal extends Entity {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        ItemStack itemstack = this.i();
+    public void saveData(NBTTagCompound nbttagcompound) {
+        ItemStack itemstack = this.h();
 
         if (!itemstack.isEmpty()) {
             nbttagcompound.set("Item", itemstack.save(new NBTTagCompound()));
@@ -152,24 +134,24 @@ public class EntityEnderSignal extends Entity {
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
+    public void loadData(NBTTagCompound nbttagcompound) {
         ItemStack itemstack = ItemStack.a(nbttagcompound.getCompound("Item"));
 
         this.b(itemstack);
     }
 
     @Override
-    public float aI() {
+    public float aO() {
         return 1.0F;
     }
 
     @Override
-    public boolean bA() {
+    public boolean bH() {
         return false;
     }
 
     @Override
-    public Packet<?> L() {
+    public Packet<?> O() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

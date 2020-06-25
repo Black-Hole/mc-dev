@@ -4,11 +4,11 @@ public interface IMinecraftServer {
 
     DedicatedServerProperties getDedicatedServerProperties();
 
-    String e_();
+    String h_();
 
-    int r();
+    int o();
 
-    String f_();
+    String i_();
 
     String getVersion();
 
@@ -23,14 +23,4 @@ public interface IMinecraftServer {
     String getPlugins();
 
     String executeRemoteCommand(String s);
-
-    boolean isDebugging();
-
-    void info(String s);
-
-    void warning(String s);
-
-    void g(String s);
-
-    void h(String s);
 }

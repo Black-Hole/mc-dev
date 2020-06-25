@@ -16,7 +16,7 @@ public class NavigationSpider extends Navigation {
 
     @Override
     public PathEntity a(Entity entity, int i) {
-        this.p = new BlockPosition(entity);
+        this.p = entity.getChunkCoordinates();
         return super.a(entity, i);
     }
 
@@ -27,7 +27,7 @@ public class NavigationSpider extends Navigation {
         if (pathentity != null) {
             return this.a(pathentity, d0);
         } else {
-            this.p = new BlockPosition(entity);
+            this.p = entity.getChunkCoordinates();
             this.d = d0;
             return true;
         }

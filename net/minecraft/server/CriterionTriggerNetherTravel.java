@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerNetherTravel extends CriterionTriggerAbstract<CriterionTriggerNetherTravel.a> {
@@ -16,16 +14,16 @@ public class CriterionTriggerNetherTravel extends CriterionTriggerAbstract<Crite
     }
 
     @Override
-    public CriterionTriggerNetherTravel.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerNetherTravel.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         CriterionConditionLocation criterionconditionlocation = CriterionConditionLocation.a(jsonobject.get("entered"));
         CriterionConditionLocation criterionconditionlocation1 = CriterionConditionLocation.a(jsonobject.get("exited"));
         CriterionConditionDistance criterionconditiondistance = CriterionConditionDistance.a(jsonobject.get("distance"));
 
-        return new CriterionTriggerNetherTravel.a(criterionconditionlocation, criterionconditionlocation1, criterionconditiondistance);
+        return new CriterionTriggerNetherTravel.a(criterionconditionentity_b, criterionconditionlocation, criterionconditionlocation1, criterionconditiondistance);
     }
 
     public void a(EntityPlayer entityplayer, Vec3D vec3d) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggernethertravel_a) -> {
+        this.a(entityplayer, (criteriontriggernethertravel_a) -> {
             return criteriontriggernethertravel_a.a(entityplayer.getWorldServer(), vec3d, entityplayer.locX(), entityplayer.locY(), entityplayer.locZ());
         });
     }
@@ -36,15 +34,15 @@ public class CriterionTriggerNetherTravel extends CriterionTriggerAbstract<Crite
         private final CriterionConditionLocation b;
         private final CriterionConditionDistance c;
 
-        public a(CriterionConditionLocation criterionconditionlocation, CriterionConditionLocation criterionconditionlocation1, CriterionConditionDistance criterionconditiondistance) {
-            super(CriterionTriggerNetherTravel.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionLocation criterionconditionlocation, CriterionConditionLocation criterionconditionlocation1, CriterionConditionDistance criterionconditiondistance) {
+            super(CriterionTriggerNetherTravel.a, criterionconditionentity_b);
             this.a = criterionconditionlocation;
             this.b = criterionconditionlocation1;
             this.c = criterionconditiondistance;
         }
 
         public static CriterionTriggerNetherTravel.a a(CriterionConditionDistance criterionconditiondistance) {
-            return new CriterionTriggerNetherTravel.a(CriterionConditionLocation.a, CriterionConditionLocation.a, criterionconditiondistance);
+            return new CriterionTriggerNetherTravel.a(CriterionConditionEntity.b.a, CriterionConditionLocation.a, CriterionConditionLocation.a, criterionconditiondistance);
         }
 
         public boolean a(WorldServer worldserver, Vec3D vec3d, double d0, double d1, double d2) {
@@ -52,8 +50,8 @@ public class CriterionTriggerNetherTravel extends CriterionTriggerAbstract<Crite
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             jsonobject.add("entered", this.a.a());
             jsonobject.add("exited", this.b.a());

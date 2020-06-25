@@ -10,13 +10,13 @@ public class BlockCoralFanWallAbstract extends BlockCoralFanAbstract {
     public static final BlockStateDirection a = BlockFacingHorizontal.FACING;
     private static final Map<EnumDirection, VoxelShape> c = Maps.newEnumMap(ImmutableMap.of(EnumDirection.NORTH, Block.a(0.0D, 4.0D, 5.0D, 16.0D, 12.0D, 16.0D), EnumDirection.SOUTH, Block.a(0.0D, 4.0D, 0.0D, 16.0D, 12.0D, 11.0D), EnumDirection.WEST, Block.a(5.0D, 4.0D, 0.0D, 16.0D, 12.0D, 16.0D), EnumDirection.EAST, Block.a(0.0D, 4.0D, 0.0D, 11.0D, 12.0D, 16.0D)));
 
-    protected BlockCoralFanWallAbstract(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCoralFanWallAbstract.a, EnumDirection.NORTH)).set(BlockCoralFanWallAbstract.b, true));
+    protected BlockCoralFanWallAbstract(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCoralFanWallAbstract.a, EnumDirection.NORTH)).set(BlockCoralFanWallAbstract.b, true));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return (VoxelShape) BlockCoralFanWallAbstract.c.get(iblockdata.get(BlockCoralFanWallAbstract.a));
     }
 
@@ -66,7 +66,7 @@ public class BlockCoralFanWallAbstract extends BlockCoralFanAbstract {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection1[j];
 
-            if (enumdirection.m().c()) {
+            if (enumdirection.n().d()) {
                 iblockdata = (IBlockData) iblockdata.set(BlockCoralFanWallAbstract.a, enumdirection.opposite());
                 if (iblockdata.canPlace(world, blockposition)) {
                     return iblockdata;

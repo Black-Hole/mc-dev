@@ -1,12 +1,14 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
 import java.util.Random;
 
 public class DefinedStructureTestTrue extends DefinedStructureRuleTest {
 
-    public static final DefinedStructureTestTrue a = new DefinedStructureTestTrue();
+    public static final Codec<DefinedStructureTestTrue> a = Codec.unit(() -> {
+        return DefinedStructureTestTrue.b;
+    });
+    public static final DefinedStructureTestTrue b = new DefinedStructureTestTrue();
 
     private DefinedStructureTestTrue() {}
 
@@ -16,12 +18,7 @@ public class DefinedStructureTestTrue extends DefinedStructureRuleTest {
     }
 
     @Override
-    protected DefinedStructureRuleTestType a() {
-        return DefinedStructureRuleTestType.b;
-    }
-
-    @Override
-    protected <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.emptyMap());
+    protected DefinedStructureRuleTestType<?> a() {
+        return DefinedStructureRuleTestType.a;
     }
 }

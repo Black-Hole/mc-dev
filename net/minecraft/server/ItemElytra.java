@@ -1,16 +1,13 @@
 package net.minecraft.server;
 
-public class ItemElytra extends Item {
+public class ItemElytra extends Item implements ItemWearable {
 
     public ItemElytra(Item.Info item_info) {
         super(item_info);
-        this.a(new MinecraftKey("broken"), (itemstack, world, entityliving) -> {
-            return e(itemstack) ? 0.0F : 1.0F;
-        });
         BlockDispenser.a((IMaterial) this, ItemArmor.a);
     }
 
-    public static boolean e(ItemStack itemstack) {
+    public static boolean d(ItemStack itemstack) {
         return itemstack.getDamage() < itemstack.h() - 1;
     }
 
@@ -22,13 +19,13 @@ public class ItemElytra extends Item {
     @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        EnumItemSlot enumitemslot = EntityInsentient.h(itemstack);
+        EnumItemSlot enumitemslot = EntityInsentient.j(itemstack);
         ItemStack itemstack1 = entityhuman.getEquipment(enumitemslot);
 
         if (itemstack1.isEmpty()) {
             entityhuman.setSlot(enumitemslot, itemstack.cloneItemStack());
             itemstack.setCount(0);
-            return InteractionResultWrapper.success(itemstack);
+            return InteractionResultWrapper.a(itemstack, world.s_());
         } else {
             return InteractionResultWrapper.fail(itemstack);
         }

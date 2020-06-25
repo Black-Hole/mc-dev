@@ -1,18 +1,17 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenFeatureChoice extends WorldGenerator<WorldGenFeatureChoiceConfiguration> {
 
-    public WorldGenFeatureChoice(Function<Dynamic<?>, ? extends WorldGenFeatureChoiceConfiguration> function) {
-        super(function);
+    public WorldGenFeatureChoice(Codec<WorldGenFeatureChoiceConfiguration> codec) {
+        super(codec);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureChoiceConfiguration worldgenfeaturechoiceconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureChoiceConfiguration worldgenfeaturechoiceconfiguration) {
         boolean flag = random.nextBoolean();
 
-        return flag ? worldgenfeaturechoiceconfiguration.a.a(generatoraccess, chunkgenerator, random, blockposition) : worldgenfeaturechoiceconfiguration.b.a(generatoraccess, chunkgenerator, random, blockposition);
+        return flag ? worldgenfeaturechoiceconfiguration.b.a(generatoraccessseed, structuremanager, chunkgenerator, random, blockposition) : worldgenfeaturechoiceconfiguration.c.a(generatoraccessseed, structuremanager, chunkgenerator, random, blockposition);
     }
 }

@@ -8,7 +8,7 @@ public class WorldGenFeatureDefinedStructurePoolTemplates {
     private final Map<MinecraftKey, WorldGenFeatureDefinedStructurePoolTemplate> a = Maps.newHashMap();
 
     public WorldGenFeatureDefinedStructurePoolTemplates() {
-        this.a(WorldGenFeatureDefinedStructurePoolTemplate.a);
+        this.a(WorldGenFeatureDefinedStructurePoolTemplate.b);
     }
 
     public void a(WorldGenFeatureDefinedStructurePoolTemplate worldgenfeaturedefinedstructurepooltemplate) {
@@ -18,6 +18,6 @@ public class WorldGenFeatureDefinedStructurePoolTemplates {
     public WorldGenFeatureDefinedStructurePoolTemplate a(MinecraftKey minecraftkey) {
         WorldGenFeatureDefinedStructurePoolTemplate worldgenfeaturedefinedstructurepooltemplate = (WorldGenFeatureDefinedStructurePoolTemplate) this.a.get(minecraftkey);
 
-        return worldgenfeaturedefinedstructurepooltemplate != null ? worldgenfeaturedefinedstructurepooltemplate : WorldGenFeatureDefinedStructurePoolTemplate.b;
+        return worldgenfeaturedefinedstructurepooltemplate != null ? worldgenfeaturedefinedstructurepooltemplate : WorldGenFeatureDefinedStructurePoolTemplate.c;
     }
 }

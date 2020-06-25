@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public abstract class EntityProjectileThrowable extends EntityProjectile {
 
-    private static final DataWatcherObject<ItemStack> e = DataWatcher.a(EntityProjectileThrowable.class, DataWatcherRegistry.g);
+    private static final DataWatcherObject<ItemStack> b = DataWatcher.a(EntityProjectileThrowable.class, DataWatcherRegistry.g);
 
     public EntityProjectileThrowable(EntityTypes<? extends EntityProjectileThrowable> entitytypes, World world) {
         super(entitytypes, world);
@@ -17,28 +17,34 @@ public abstract class EntityProjectileThrowable extends EntityProjectile {
     }
 
     public void setItem(ItemStack itemstack) {
-        if (itemstack.getItem() != this.i() || itemstack.hasTag()) {
-            this.getDataWatcher().set(EntityProjectileThrowable.e, SystemUtils.a((Object) itemstack.cloneItemStack(), (itemstack1) -> {
+        if (itemstack.getItem() != this.getDefaultItem() || itemstack.hasTag()) {
+            this.getDataWatcher().set(EntityProjectileThrowable.b, SystemUtils.a((Object) itemstack.cloneItemStack(), (itemstack1) -> {
                 itemstack1.setCount(1);
             }));
         }
 
     }
 
-    protected abstract Item i();
+    protected abstract Item getDefaultItem();
 
-    protected ItemStack getItem() {
-        return (ItemStack) this.getDataWatcher().get(EntityProjectileThrowable.e);
+    public ItemStack getItem() {
+        return (ItemStack) this.getDataWatcher().get(EntityProjectileThrowable.b);
+    }
+
+    public ItemStack g() {
+        ItemStack itemstack = this.getItem();
+
+        return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
     }
 
     @Override
     protected void initDatawatcher() {
-        this.getDataWatcher().register(EntityProjectileThrowable.e, ItemStack.a);
+        this.getDataWatcher().register(EntityProjectileThrowable.b, ItemStack.b);
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         ItemStack itemstack = this.getItem();
 
         if (!itemstack.isEmpty()) {
@@ -48,8 +54,8 @@ public abstract class EntityProjectileThrowable extends EntityProjectile {
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         ItemStack itemstack = ItemStack.a(nbttagcompound.getCompound("Item"));
 
         this.setItem(itemstack);

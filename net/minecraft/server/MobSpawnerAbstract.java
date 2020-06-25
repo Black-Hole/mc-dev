@@ -36,7 +36,7 @@ public abstract class MobSpawnerAbstract {
         } catch (ResourceKeyInvalidException resourcekeyinvalidexception) {
             BlockPosition blockposition = this.b();
 
-            MobSpawnerAbstract.LOGGER.warn("Invalid entity id '{}' at spawner {}:[{},{},{}]", s, this.a().worldProvider.getDimensionManager(), blockposition.getX(), blockposition.getY(), blockposition.getZ());
+            MobSpawnerAbstract.LOGGER.warn("Invalid entity id '{}' at spawner {}:[{},{},{}]", s, this.a().getDimensionKey().a(), blockposition.getX(), blockposition.getY(), blockposition.getZ());
             return null;
         }
     }
@@ -59,9 +59,9 @@ public abstract class MobSpawnerAbstract {
             BlockPosition blockposition = this.b();
 
             if (world.isClientSide) {
-                double d0 = (double) blockposition.getX() + (double) world.random.nextFloat();
-                double d1 = (double) blockposition.getY() + (double) world.random.nextFloat();
-                double d2 = (double) blockposition.getZ() + (double) world.random.nextFloat();
+                double d0 = (double) blockposition.getX() + world.random.nextDouble();
+                double d1 = (double) blockposition.getY() + world.random.nextDouble();
+                double d2 = (double) blockposition.getZ() + world.random.nextDouble();
 
                 world.addParticle(Particles.SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
                 world.addParticle(Particles.FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D);
@@ -98,7 +98,7 @@ public abstract class MobSpawnerAbstract {
                     double d4 = j >= 2 ? nbttaglist.h(1) : (double) (blockposition.getY() + world.random.nextInt(3) - 1);
                     double d5 = j >= 3 ? nbttaglist.h(2) : (double) blockposition.getZ() + (world.random.nextDouble() - world.random.nextDouble()) * (double) this.spawnRange + 0.5D;
 
-                    if (world.a(((EntityTypes) optional.get()).a(d3, d4, d5)) && EntityPositionTypes.a((EntityTypes) optional.get(), world.getMinecraftWorld(), EnumMobSpawn.SPAWNER, new BlockPosition(d3, d4, d5), world.getRandom())) {
+                    if (world.b(((EntityTypes) optional.get()).a(d3, d4, d5)) && EntityPositionTypes.a((EntityTypes) optional.get(), world.getMinecraftWorld(), EnumMobSpawn.SPAWNER, new BlockPosition(d3, d4, d5), world.getRandom())) {
                         Entity entity = EntityTypes.a(nbttagcompound, world, (entity1) -> {
                             entity1.setPositionRotation(d3, d4, d5, entity1.yaw, entity1.pitch);
                             return entity1;
@@ -125,7 +125,7 @@ public abstract class MobSpawnerAbstract {
                             }
 
                             if (this.spawnData.getEntity().e() == 1 && this.spawnData.getEntity().hasKeyOfType("id", 8)) {
-                                ((EntityInsentient) entity).prepare(world, world.getDamageScaler(new BlockPosition(entity)), EnumMobSpawn.SPAWNER, (GroupDataEntity) null, (NBTTagCompound) null);
+                                ((EntityInsentient) entity).prepare(world, world.getDamageScaler(entity.getChunkCoordinates()), EnumMobSpawn.SPAWNER, (GroupDataEntity) null, (NBTTagCompound) null);
                             }
                         }
 

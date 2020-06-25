@@ -1,83 +1,58 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.List;
-import java.util.Random;
-import java.util.function.Function;
 
-public class WorldGenFeaturePillagerOutpost extends WorldGenFeatureRandomScattered<WorldGenFeatureEmptyConfiguration> {
+public class WorldGenFeaturePillagerOutpost extends StructureGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    private static final List<BiomeBase.BiomeMeta> a = Lists.newArrayList(new BiomeBase.BiomeMeta[]{new BiomeBase.BiomeMeta(EntityTypes.PILLAGER, 1, 1, 1)});
+    private static final List<BiomeBase.BiomeMeta> u = Lists.newArrayList(new BiomeBase.BiomeMeta[]{new BiomeBase.BiomeMeta(EntityTypes.PILLAGER, 1, 1, 1)});
 
-    public WorldGenFeaturePillagerOutpost(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
-        super(function);
+    public WorldGenFeaturePillagerOutpost(Codec<WorldGenFeatureEmptyConfiguration> codec) {
+        super(codec);
     }
 
     @Override
-    public String b() {
-        return "Pillager_Outpost";
+    public List<BiomeBase.BiomeMeta> c() {
+        return WorldGenFeaturePillagerOutpost.u;
     }
 
-    @Override
-    public int c() {
-        return 3;
-    }
+    protected boolean a(ChunkGenerator chunkgenerator, WorldChunkManager worldchunkmanager, long i, SeededRandom seededrandom, int j, int k, BiomeBase biomebase, ChunkCoordIntPair chunkcoordintpair, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+        int l = j >> 4;
+        int i1 = k >> 4;
 
-    @Override
-    public List<BiomeBase.BiomeMeta> e() {
-        return WorldGenFeaturePillagerOutpost.a;
-    }
+        seededrandom.setSeed((long) (l ^ i1 << 4) ^ i);
+        seededrandom.nextInt();
+        if (seededrandom.nextInt(5) != 0) {
+            return false;
+        } else {
+            for (int j1 = j - 10; j1 <= j + 10; ++j1) {
+                for (int k1 = k - 10; k1 <= k + 10; ++k1) {
+                    ChunkCoordIntPair chunkcoordintpair1 = StructureGenerator.VILLAGE.a(chunkgenerator.getSettings().a(StructureGenerator.VILLAGE), i, seededrandom, j1, k1);
 
-    @Override
-    public boolean a(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, Random random, int i, int j, BiomeBase biomebase) {
-        ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, random, i, j, 0, 0);
-
-        if (i == chunkcoordintpair.x && j == chunkcoordintpair.z) {
-            int k = i >> 4;
-            int l = j >> 4;
-
-            random.setSeed((long) (k ^ l << 4) ^ chunkgenerator.getSeed());
-            random.nextInt();
-            if (random.nextInt(5) != 0) {
-                return false;
-            }
-
-            if (chunkgenerator.canSpawnStructure(biomebase, this)) {
-                for (int i1 = i - 10; i1 <= i + 10; ++i1) {
-                    for (int j1 = j - 10; j1 <= j + 10; ++j1) {
-                        if (WorldGenerator.VILLAGE.a(biomemanager, chunkgenerator, random, i1, j1, biomemanager.a(new BlockPosition((i1 << 4) + 9, 0, (j1 << 4) + 9)))) {
-                            return false;
-                        }
+                    if (j1 == chunkcoordintpair1.x && k1 == chunkcoordintpair1.z) {
+                        return false;
                     }
                 }
-
-                return true;
             }
-        }
 
-        return false;
+            return true;
+        }
     }
 
     @Override
-    public StructureGenerator.a a() {
+    public StructureGenerator.a<WorldGenFeatureEmptyConfiguration> a() {
         return WorldGenFeaturePillagerOutpost.a::new;
     }
 
-    @Override
-    protected int getSeed() {
-        return 165745296;
-    }
+    public static class a extends StructureAbstract<WorldGenFeatureEmptyConfiguration> {
 
-    public static class a extends StructureAbstract {
-
-        public a(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+        public a(StructureGenerator<WorldGenFeatureEmptyConfiguration> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
             super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
-        @Override
-        public void a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase) {
-            BlockPosition blockposition = new BlockPosition(i * 16, 90, j * 16);
+        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+            BlockPosition blockposition = new BlockPosition(i * 16, 0, j * 16);
 
             WorldGenFeaturePillagerOutpostPieces.a(chunkgenerator, definedstructuremanager, blockposition, this.b, this.d);
             this.b();

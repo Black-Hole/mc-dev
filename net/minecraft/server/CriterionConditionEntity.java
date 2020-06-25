@@ -4,36 +4,58 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class CriterionConditionEntity {
 
-    public static final CriterionConditionEntity a = new CriterionConditionEntity(CriterionConditionEntityType.a, CriterionConditionDistance.a, CriterionConditionLocation.a, CriterionConditionMobEffect.a, CriterionConditionNBT.a, CriterionConditionEntityFlags.a, CriterionConditionEntityEquipment.a, CriterionConditionPlayer.a, (String) null, (MinecraftKey) null);
-    public static final CriterionConditionEntity[] b = new CriterionConditionEntity[0];
-    private final CriterionConditionEntityType c;
-    private final CriterionConditionDistance d;
-    private final CriterionConditionLocation e;
-    private final CriterionConditionMobEffect f;
-    private final CriterionConditionNBT g;
-    private final CriterionConditionEntityFlags h;
-    private final CriterionConditionEntityEquipment i;
-    private final CriterionConditionPlayer j;
+    public static final CriterionConditionEntity a = new CriterionConditionEntity(CriterionConditionEntityType.a, CriterionConditionDistance.a, CriterionConditionLocation.a, CriterionConditionMobEffect.a, CriterionConditionNBT.a, CriterionConditionEntityFlags.a, CriterionConditionEntityEquipment.a, CriterionConditionPlayer.a, CriterionConditionInOpenWater.a, (String) null, (MinecraftKey) null);
+    private final CriterionConditionEntityType b;
+    private final CriterionConditionDistance c;
+    private final CriterionConditionLocation d;
+    private final CriterionConditionMobEffect e;
+    private final CriterionConditionNBT f;
+    private final CriterionConditionEntityFlags g;
+    private final CriterionConditionEntityEquipment h;
+    private final CriterionConditionPlayer i;
+    private final CriterionConditionInOpenWater j;
+    private final CriterionConditionEntity k;
+    private final CriterionConditionEntity l;
     @Nullable
-    private final String k;
+    private final String m;
     @Nullable
-    private final MinecraftKey l;
+    private final MinecraftKey n;
 
-    private CriterionConditionEntity(CriterionConditionEntityType criterionconditionentitytype, CriterionConditionDistance criterionconditiondistance, CriterionConditionLocation criterionconditionlocation, CriterionConditionMobEffect criterionconditionmobeffect, CriterionConditionNBT criterionconditionnbt, CriterionConditionEntityFlags criterionconditionentityflags, CriterionConditionEntityEquipment criterionconditionentityequipment, CriterionConditionPlayer criterionconditionplayer, @Nullable String s, @Nullable MinecraftKey minecraftkey) {
-        this.c = criterionconditionentitytype;
-        this.d = criterionconditiondistance;
-        this.e = criterionconditionlocation;
-        this.f = criterionconditionmobeffect;
-        this.g = criterionconditionnbt;
-        this.h = criterionconditionentityflags;
-        this.i = criterionconditionentityequipment;
-        this.j = criterionconditionplayer;
-        this.k = s;
-        this.l = minecraftkey;
+    private CriterionConditionEntity(CriterionConditionEntityType criterionconditionentitytype, CriterionConditionDistance criterionconditiondistance, CriterionConditionLocation criterionconditionlocation, CriterionConditionMobEffect criterionconditionmobeffect, CriterionConditionNBT criterionconditionnbt, CriterionConditionEntityFlags criterionconditionentityflags, CriterionConditionEntityEquipment criterionconditionentityequipment, CriterionConditionPlayer criterionconditionplayer, CriterionConditionInOpenWater criterionconditioninopenwater, @Nullable String s, @Nullable MinecraftKey minecraftkey) {
+        this.b = criterionconditionentitytype;
+        this.c = criterionconditiondistance;
+        this.d = criterionconditionlocation;
+        this.e = criterionconditionmobeffect;
+        this.f = criterionconditionnbt;
+        this.g = criterionconditionentityflags;
+        this.h = criterionconditionentityequipment;
+        this.i = criterionconditionplayer;
+        this.j = criterionconditioninopenwater;
+        this.k = this;
+        this.l = this;
+        this.m = s;
+        this.n = minecraftkey;
+    }
+
+    private CriterionConditionEntity(CriterionConditionEntityType criterionconditionentitytype, CriterionConditionDistance criterionconditiondistance, CriterionConditionLocation criterionconditionlocation, CriterionConditionMobEffect criterionconditionmobeffect, CriterionConditionNBT criterionconditionnbt, CriterionConditionEntityFlags criterionconditionentityflags, CriterionConditionEntityEquipment criterionconditionentityequipment, CriterionConditionPlayer criterionconditionplayer, CriterionConditionInOpenWater criterionconditioninopenwater, CriterionConditionEntity criterionconditionentity, CriterionConditionEntity criterionconditionentity1, @Nullable String s, @Nullable MinecraftKey minecraftkey) {
+        this.b = criterionconditionentitytype;
+        this.c = criterionconditiondistance;
+        this.d = criterionconditionlocation;
+        this.e = criterionconditionmobeffect;
+        this.f = criterionconditionnbt;
+        this.g = criterionconditionentityflags;
+        this.h = criterionconditionentityequipment;
+        this.i = criterionconditionplayer;
+        this.j = criterionconditioninopenwater;
+        this.k = criterionconditionentity;
+        this.l = criterionconditionentity1;
+        this.m = s;
+        this.n = minecraftkey;
     }
 
     public boolean a(EntityPlayer entityplayer, @Nullable Entity entity) {
@@ -45,18 +67,20 @@ public class CriterionConditionEntity {
             return true;
         } else if (entity == null) {
             return false;
-        } else if (!this.c.a(entity.getEntityType())) {
+        } else if (!this.b.a(entity.getEntityType())) {
             return false;
         } else {
             if (vec3d == null) {
-                if (this.d != CriterionConditionDistance.a) {
+                if (this.c != CriterionConditionDistance.a) {
                     return false;
                 }
-            } else if (!this.d.a(vec3d.x, vec3d.y, vec3d.z, entity.locX(), entity.locY(), entity.locZ())) {
+            } else if (!this.c.a(vec3d.x, vec3d.y, vec3d.z, entity.locX(), entity.locY(), entity.locZ())) {
                 return false;
             }
 
-            if (!this.e.a(worldserver, entity.locX(), entity.locY(), entity.locZ())) {
+            if (!this.d.a(worldserver, entity.locX(), entity.locY(), entity.locZ())) {
+                return false;
+            } else if (!this.e.a(entity)) {
                 return false;
             } else if (!this.f.a(entity)) {
                 return false;
@@ -68,16 +92,20 @@ public class CriterionConditionEntity {
                 return false;
             } else if (!this.j.a(entity)) {
                 return false;
+            } else if (!this.k.a(worldserver, vec3d, entity.getVehicle())) {
+                return false;
+            } else if (!this.l.a(worldserver, vec3d, entity instanceof EntityInsentient ? ((EntityInsentient) entity).getGoalTarget() : null)) {
+                return false;
             } else {
-                if (this.k != null) {
+                if (this.m != null) {
                     ScoreboardTeamBase scoreboardteambase = entity.getScoreboardTeam();
 
-                    if (scoreboardteambase == null || !this.k.equals(scoreboardteambase.getName())) {
+                    if (scoreboardteambase == null || !this.m.equals(scoreboardteambase.getName())) {
                         return false;
                     }
                 }
 
-                return this.l == null || entity instanceof EntityCat && ((EntityCat) entity).ez().equals(this.l);
+                return this.n == null || entity instanceof EntityCat && ((EntityCat) entity).eV().equals(this.n);
             }
         }
     }
@@ -93,27 +121,15 @@ public class CriterionConditionEntity {
             CriterionConditionEntityFlags criterionconditionentityflags = CriterionConditionEntityFlags.a(jsonobject.get("flags"));
             CriterionConditionEntityEquipment criterionconditionentityequipment = CriterionConditionEntityEquipment.a(jsonobject.get("equipment"));
             CriterionConditionPlayer criterionconditionplayer = CriterionConditionPlayer.a(jsonobject.get("player"));
+            CriterionConditionInOpenWater criterionconditioninopenwater = CriterionConditionInOpenWater.a(jsonobject.get("fishing_hook"));
+            CriterionConditionEntity criterionconditionentity = a(jsonobject.get("vehicle"));
+            CriterionConditionEntity criterionconditionentity1 = a(jsonobject.get("targeted_entity"));
             String s = ChatDeserializer.a(jsonobject, "team", (String) null);
             MinecraftKey minecraftkey = jsonobject.has("catType") ? new MinecraftKey(ChatDeserializer.h(jsonobject, "catType")) : null;
 
-            return (new CriterionConditionEntity.a()).a(criterionconditionentitytype).a(criterionconditiondistance).a(criterionconditionlocation).a(criterionconditionmobeffect).a(criterionconditionnbt).a(criterionconditionentityflags).a(criterionconditionentityequipment).a(criterionconditionplayer).a(s).b(minecraftkey).b();
+            return (new CriterionConditionEntity.a()).a(criterionconditionentitytype).a(criterionconditiondistance).a(criterionconditionlocation).a(criterionconditionmobeffect).a(criterionconditionnbt).a(criterionconditionentityflags).a(criterionconditionentityequipment).a(criterionconditionplayer).a(criterionconditioninopenwater).a(s).a(criterionconditionentity).b(criterionconditionentity1).b(minecraftkey).b();
         } else {
             return CriterionConditionEntity.a;
-        }
-    }
-
-    public static CriterionConditionEntity[] b(@Nullable JsonElement jsonelement) {
-        if (jsonelement != null && !jsonelement.isJsonNull()) {
-            JsonArray jsonarray = ChatDeserializer.n(jsonelement, "entities");
-            CriterionConditionEntity[] acriterionconditionentity = new CriterionConditionEntity[jsonarray.size()];
-
-            for (int i = 0; i < jsonarray.size(); ++i) {
-                acriterionconditionentity[i] = a(jsonarray.get(i));
-            }
-
-            return acriterionconditionentity;
-        } else {
-            return CriterionConditionEntity.b;
         }
     }
 
@@ -123,41 +139,114 @@ public class CriterionConditionEntity {
         } else {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.add("type", this.c.a());
-            jsonobject.add("distance", this.d.a());
-            jsonobject.add("location", this.e.a());
-            jsonobject.add("effects", this.f.b());
-            jsonobject.add("nbt", this.g.a());
-            jsonobject.add("flags", this.h.a());
-            jsonobject.add("equipment", this.i.a());
-            jsonobject.add("player", this.j.a());
-            jsonobject.addProperty("team", this.k);
-            if (this.l != null) {
-                jsonobject.addProperty("catType", this.l.toString());
+            jsonobject.add("type", this.b.a());
+            jsonobject.add("distance", this.c.a());
+            jsonobject.add("location", this.d.a());
+            jsonobject.add("effects", this.e.b());
+            jsonobject.add("nbt", this.f.a());
+            jsonobject.add("flags", this.g.a());
+            jsonobject.add("equipment", this.h.a());
+            jsonobject.add("player", this.i.a());
+            jsonobject.add("fishing_hook", this.j.a());
+            jsonobject.add("vehicle", this.k.a());
+            jsonobject.add("targeted_entity", this.l.a());
+            jsonobject.addProperty("team", this.m);
+            if (this.n != null) {
+                jsonobject.addProperty("catType", this.n.toString());
             }
 
             return jsonobject;
         }
     }
 
-    public static JsonElement a(CriterionConditionEntity[] acriterionconditionentity) {
-        if (acriterionconditionentity == CriterionConditionEntity.b) {
-            return JsonNull.INSTANCE;
-        } else {
-            JsonArray jsonarray = new JsonArray();
-            CriterionConditionEntity[] acriterionconditionentity1 = acriterionconditionentity;
-            int i = acriterionconditionentity.length;
+    public static LootTableInfo b(EntityPlayer entityplayer, Entity entity) {
+        return (new LootTableInfo.Builder(entityplayer.getWorldServer())).set(LootContextParameters.THIS_ENTITY, entity).set(LootContextParameters.POSITION, entity.getChunkCoordinates()).set(LootContextParameters.g, entityplayer.getPositionVector()).a(entityplayer.getRandom()).build(LootContextParameterSets.j);
+    }
 
-            for (int j = 0; j < i; ++j) {
-                CriterionConditionEntity criterionconditionentity = acriterionconditionentity1[j];
-                JsonElement jsonelement = criterionconditionentity.a();
+    public static class b {
 
-                if (!jsonelement.isJsonNull()) {
-                    jsonarray.add(jsonelement);
+        public static final CriterionConditionEntity.b a = new CriterionConditionEntity.b(new LootItemCondition[0]);
+        private final LootItemCondition[] b;
+        private final Predicate<LootTableInfo> c;
+
+        private b(LootItemCondition[] alootitemcondition) {
+            this.b = alootitemcondition;
+            this.c = LootItemConditions.a((Predicate[]) alootitemcondition);
+        }
+
+        public static CriterionConditionEntity.b a(LootItemCondition... alootitemcondition) {
+            return new CriterionConditionEntity.b(alootitemcondition);
+        }
+
+        public static CriterionConditionEntity.b a(JsonObject jsonobject, String s, LootDeserializationContext lootdeserializationcontext) {
+            JsonElement jsonelement = jsonobject.get(s);
+
+            return a(s, lootdeserializationcontext, jsonelement);
+        }
+
+        public static CriterionConditionEntity.b[] b(JsonObject jsonobject, String s, LootDeserializationContext lootdeserializationcontext) {
+            JsonElement jsonelement = jsonobject.get(s);
+
+            if (jsonelement != null && !jsonelement.isJsonNull()) {
+                JsonArray jsonarray = ChatDeserializer.n(jsonelement, s);
+                CriterionConditionEntity.b[] acriterionconditionentity_b = new CriterionConditionEntity.b[jsonarray.size()];
+
+                for (int i = 0; i < jsonarray.size(); ++i) {
+                    acriterionconditionentity_b[i] = a(s + "[" + i + "]", lootdeserializationcontext, jsonarray.get(i));
                 }
-            }
 
-            return jsonarray;
+                return acriterionconditionentity_b;
+            } else {
+                return new CriterionConditionEntity.b[0];
+            }
+        }
+
+        private static CriterionConditionEntity.b a(String s, LootDeserializationContext lootdeserializationcontext, @Nullable JsonElement jsonelement) {
+            if (jsonelement != null && jsonelement.isJsonArray()) {
+                LootItemCondition[] alootitemcondition = lootdeserializationcontext.a(jsonelement.getAsJsonArray(), lootdeserializationcontext.a().toString() + "/" + s, LootContextParameterSets.j);
+
+                return new CriterionConditionEntity.b(alootitemcondition);
+            } else {
+                CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonelement);
+
+                return a(criterionconditionentity);
+            }
+        }
+
+        public static CriterionConditionEntity.b a(CriterionConditionEntity criterionconditionentity) {
+            if (criterionconditionentity == CriterionConditionEntity.a) {
+                return CriterionConditionEntity.b.a;
+            } else {
+                LootItemCondition lootitemcondition = LootItemConditionEntityProperty.a(LootTableInfo.EntityTarget.THIS, criterionconditionentity).build();
+
+                return new CriterionConditionEntity.b(new LootItemCondition[]{lootitemcondition});
+            }
+        }
+
+        public boolean a(LootTableInfo loottableinfo) {
+            return this.c.test(loottableinfo);
+        }
+
+        public JsonElement a(LootSerializationContext lootserializationcontext) {
+            return (JsonElement) (this.b.length == 0 ? JsonNull.INSTANCE : lootserializationcontext.a(this.b));
+        }
+
+        public static JsonElement a(CriterionConditionEntity.b[] acriterionconditionentity_b, LootSerializationContext lootserializationcontext) {
+            if (acriterionconditionentity_b.length == 0) {
+                return JsonNull.INSTANCE;
+            } else {
+                JsonArray jsonarray = new JsonArray();
+                CriterionConditionEntity.b[] acriterionconditionentity_b1 = acriterionconditionentity_b;
+                int i = acriterionconditionentity_b.length;
+
+                for (int j = 0; j < i; ++j) {
+                    CriterionConditionEntity.b criterionconditionentity_b = acriterionconditionentity_b1[j];
+
+                    jsonarray.add(criterionconditionentity_b.a(lootserializationcontext));
+                }
+
+                return jsonarray;
+            }
         }
     }
 
@@ -171,8 +260,11 @@ public class CriterionConditionEntity {
         private CriterionConditionEntityFlags f;
         private CriterionConditionEntityEquipment g;
         private CriterionConditionPlayer h;
-        private String i;
-        private MinecraftKey j;
+        private CriterionConditionInOpenWater i;
+        private CriterionConditionEntity j;
+        private CriterionConditionEntity k;
+        private String l;
+        private MinecraftKey m;
 
         public a() {
             this.a = CriterionConditionEntityType.a;
@@ -183,6 +275,9 @@ public class CriterionConditionEntity {
             this.f = CriterionConditionEntityFlags.a;
             this.g = CriterionConditionEntityEquipment.a;
             this.h = CriterionConditionPlayer.a;
+            this.i = CriterionConditionInOpenWater.a;
+            this.j = CriterionConditionEntity.a;
+            this.k = CriterionConditionEntity.a;
         }
 
         public static CriterionConditionEntity.a a() {
@@ -200,7 +295,7 @@ public class CriterionConditionEntity {
         }
 
         public CriterionConditionEntity.a a(MinecraftKey minecraftkey) {
-            this.j = minecraftkey;
+            this.m = minecraftkey;
             return this;
         }
 
@@ -244,18 +339,33 @@ public class CriterionConditionEntity {
             return this;
         }
 
+        public CriterionConditionEntity.a a(CriterionConditionInOpenWater criterionconditioninopenwater) {
+            this.i = criterionconditioninopenwater;
+            return this;
+        }
+
+        public CriterionConditionEntity.a a(CriterionConditionEntity criterionconditionentity) {
+            this.j = criterionconditionentity;
+            return this;
+        }
+
+        public CriterionConditionEntity.a b(CriterionConditionEntity criterionconditionentity) {
+            this.k = criterionconditionentity;
+            return this;
+        }
+
         public CriterionConditionEntity.a a(@Nullable String s) {
-            this.i = s;
+            this.l = s;
             return this;
         }
 
         public CriterionConditionEntity.a b(@Nullable MinecraftKey minecraftkey) {
-            this.j = minecraftkey;
+            this.m = minecraftkey;
             return this;
         }
 
         public CriterionConditionEntity b() {
-            return new CriterionConditionEntity(this.a, this.b, this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j);
+            return new CriterionConditionEntity(this.a, this.b, this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j, this.k, this.l, this.m);
         }
     }
 }

@@ -37,8 +37,8 @@ public class TileEntityMobSpawner extends TileEntity implements ITickable {
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
         this.a.a(nbttagcompound);
     }
 

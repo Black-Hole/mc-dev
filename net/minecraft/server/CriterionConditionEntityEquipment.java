@@ -68,4 +68,51 @@ public class CriterionConditionEntityEquipment {
             return jsonobject;
         }
     }
+
+    public static class a {
+
+        private CriterionConditionItem a;
+        private CriterionConditionItem b;
+        private CriterionConditionItem c;
+        private CriterionConditionItem d;
+        private CriterionConditionItem e;
+        private CriterionConditionItem f;
+
+        public a() {
+            this.a = CriterionConditionItem.a;
+            this.b = CriterionConditionItem.a;
+            this.c = CriterionConditionItem.a;
+            this.d = CriterionConditionItem.a;
+            this.e = CriterionConditionItem.a;
+            this.f = CriterionConditionItem.a;
+        }
+
+        public static CriterionConditionEntityEquipment.a a() {
+            return new CriterionConditionEntityEquipment.a();
+        }
+
+        public CriterionConditionEntityEquipment.a a(CriterionConditionItem criterionconditionitem) {
+            this.a = criterionconditionitem;
+            return this;
+        }
+
+        public CriterionConditionEntityEquipment.a b(CriterionConditionItem criterionconditionitem) {
+            this.b = criterionconditionitem;
+            return this;
+        }
+
+        public CriterionConditionEntityEquipment.a c(CriterionConditionItem criterionconditionitem) {
+            this.c = criterionconditionitem;
+            return this;
+        }
+
+        public CriterionConditionEntityEquipment.a d(CriterionConditionItem criterionconditionitem) {
+            this.d = criterionconditionitem;
+            return this;
+        }
+
+        public CriterionConditionEntityEquipment b() {
+            return new CriterionConditionEntityEquipment(this.a, this.b, this.c, this.d, this.e, this.f);
+        }
+    }
 }

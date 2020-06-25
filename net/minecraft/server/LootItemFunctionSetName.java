@@ -14,14 +14,19 @@ import org.apache.logging.log4j.Logger;
 public class LootItemFunctionSetName extends LootItemFunctionConditional {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final IChatBaseComponent c;
+    private final IChatBaseComponent b;
     @Nullable
     private final LootTableInfo.EntityTarget d;
 
     private LootItemFunctionSetName(LootItemCondition[] alootitemcondition, @Nullable IChatBaseComponent ichatbasecomponent, @Nullable LootTableInfo.EntityTarget loottableinfo_entitytarget) {
         super(alootitemcondition);
-        this.c = ichatbasecomponent;
+        this.b = ichatbasecomponent;
         this.d = loottableinfo_entitytarget;
+    }
+
+    @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.j;
     }
 
     @Override
@@ -54,8 +59,8 @@ public class LootItemFunctionSetName extends LootItemFunctionConditional {
 
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
-        if (this.c != null) {
-            itemstack.a((IChatBaseComponent) a(loottableinfo, this.d).apply(this.c));
+        if (this.b != null) {
+            itemstack.a((IChatBaseComponent) a(loottableinfo, this.d).apply(this.b));
         }
 
         return itemstack;
@@ -63,14 +68,12 @@ public class LootItemFunctionSetName extends LootItemFunctionConditional {
 
     public static class a extends LootItemFunctionConditional.c<LootItemFunctionSetName> {
 
-        public a() {
-            super(new MinecraftKey("set_name"), LootItemFunctionSetName.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionSetName lootitemfunctionsetname, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsetname, jsonserializationcontext);
-            if (lootitemfunctionsetname.c != null) {
-                jsonobject.add("name", IChatBaseComponent.ChatSerializer.b(lootitemfunctionsetname.c));
+            if (lootitemfunctionsetname.b != null) {
+                jsonobject.add("name", IChatBaseComponent.ChatSerializer.b(lootitemfunctionsetname.b));
             }
 
             if (lootitemfunctionsetname.d != null) {
@@ -81,10 +84,10 @@ public class LootItemFunctionSetName extends LootItemFunctionConditional {
 
         @Override
         public LootItemFunctionSetName b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(jsonobject.get("name"));
+            IChatMutableComponent ichatmutablecomponent = IChatBaseComponent.ChatSerializer.a(jsonobject.get("name"));
             LootTableInfo.EntityTarget loottableinfo_entitytarget = (LootTableInfo.EntityTarget) ChatDeserializer.a(jsonobject, "entity", (Object) null, jsondeserializationcontext, LootTableInfo.EntityTarget.class);
 
-            return new LootItemFunctionSetName(alootitemcondition, ichatbasecomponent, loottableinfo_entitytarget);
+            return new LootItemFunctionSetName(alootitemcondition, ichatmutablecomponent, loottableinfo_entitytarget);
         }
     }
 }

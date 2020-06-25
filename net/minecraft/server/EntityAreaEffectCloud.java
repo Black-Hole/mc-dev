@@ -8,8 +8,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.Map.Entry;
+import java.util.UUID;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,8 +31,8 @@ public class EntityAreaEffectCloud extends Entity {
     public int durationOnUse;
     public float radiusOnUse;
     public float radiusPerTick;
-    private EntityLiving ax;
-    private UUID ay;
+    private EntityLiving aw;
+    private UUID ax;
 
     public EntityAreaEffectCloud(EntityTypes<? extends EntityAreaEffectCloud> entitytypes, World world) {
         super(entitytypes, world);
@@ -83,12 +83,12 @@ public class EntityAreaEffectCloud extends Entity {
     public void a(PotionRegistry potionregistry) {
         this.potionRegistry = potionregistry;
         if (!this.hasColor) {
-            this.z();
+            this.x();
         }
 
     }
 
-    private void z() {
+    private void x() {
         if (this.potionRegistry == Potions.EMPTY && this.effects.isEmpty()) {
             this.getDataWatcher().set(EntityAreaEffectCloud.COLOR, 0);
         } else {
@@ -100,7 +100,7 @@ public class EntityAreaEffectCloud extends Entity {
     public void addEffect(MobEffect mobeffect) {
         this.effects.add(mobeffect);
         if (!this.hasColor) {
-            this.z();
+            this.x();
         }
 
     }
@@ -126,7 +126,7 @@ public class EntityAreaEffectCloud extends Entity {
         this.getDataWatcher().set(EntityAreaEffectCloud.e, flag);
     }
 
-    public boolean l() {
+    public boolean k() {
         return (Boolean) this.getDataWatcher().get(EntityAreaEffectCloud.e);
     }
 
@@ -141,7 +141,7 @@ public class EntityAreaEffectCloud extends Entity {
     @Override
     public void tick() {
         super.tick();
-        boolean flag = this.l();
+        boolean flag = this.k();
         float f = this.getRadius();
 
         if (this.world.isClientSide) {
@@ -252,7 +252,7 @@ public class EntityAreaEffectCloud extends Entity {
                         while (iterator2.hasNext()) {
                             EntityLiving entityliving = (EntityLiving) iterator2.next();
 
-                            if (!this.affectedEntities.containsKey(entityliving) && entityliving.dM()) {
+                            if (!this.affectedEntities.containsKey(entityliving) && entityliving.eg()) {
                                 double d0 = entityliving.locX() - this.locX();
                                 double d1 = entityliving.locZ() - this.locZ();
                                 double d2 = d0 * d0 + d1 * d1;
@@ -311,25 +311,25 @@ public class EntityAreaEffectCloud extends Entity {
     }
 
     public void setSource(@Nullable EntityLiving entityliving) {
-        this.ax = entityliving;
-        this.ay = entityliving == null ? null : entityliving.getUniqueID();
+        this.aw = entityliving;
+        this.ax = entityliving == null ? null : entityliving.getUniqueID();
     }
 
     @Nullable
     public EntityLiving getSource() {
-        if (this.ax == null && this.ay != null && this.world instanceof WorldServer) {
-            Entity entity = ((WorldServer) this.world).getEntity(this.ay);
+        if (this.aw == null && this.ax != null && this.world instanceof WorldServer) {
+            Entity entity = ((WorldServer) this.world).getEntity(this.ax);
 
             if (entity instanceof EntityLiving) {
-                this.ax = (EntityLiving) entity;
+                this.aw = (EntityLiving) entity;
             }
         }
 
-        return this.ax;
+        return this.aw;
     }
 
     @Override
-    protected void a(NBTTagCompound nbttagcompound) {
+    protected void loadData(NBTTagCompound nbttagcompound) {
         this.ticksLived = nbttagcompound.getInt("Age");
         this.duration = nbttagcompound.getInt("Duration");
         this.waitTime = nbttagcompound.getInt("WaitTime");
@@ -338,7 +338,10 @@ public class EntityAreaEffectCloud extends Entity {
         this.radiusOnUse = nbttagcompound.getFloat("RadiusOnUse");
         this.radiusPerTick = nbttagcompound.getFloat("RadiusPerTick");
         this.setRadius(nbttagcompound.getFloat("Radius"));
-        this.ay = nbttagcompound.a("OwnerUUID");
+        if (nbttagcompound.b("Owner")) {
+            this.ax = nbttagcompound.a("Owner");
+        }
+
         if (nbttagcompound.hasKeyOfType("Particle", 8)) {
             try {
                 this.setParticle(ArgumentParticle.b(new StringReader(nbttagcompound.getString("Particle"))));
@@ -372,7 +375,7 @@ public class EntityAreaEffectCloud extends Entity {
     }
 
     @Override
-    protected void b(NBTTagCompound nbttagcompound) {
+    protected void saveData(NBTTagCompound nbttagcompound) {
         nbttagcompound.setInt("Age", this.ticksLived);
         nbttagcompound.setInt("Duration", this.duration);
         nbttagcompound.setInt("WaitTime", this.waitTime);
@@ -382,8 +385,8 @@ public class EntityAreaEffectCloud extends Entity {
         nbttagcompound.setFloat("RadiusPerTick", this.radiusPerTick);
         nbttagcompound.setFloat("Radius", this.getRadius());
         nbttagcompound.setString("Particle", this.getParticle().a());
-        if (this.ay != null) {
-            nbttagcompound.a("OwnerUUID", this.ay);
+        if (this.ax != null) {
+            nbttagcompound.a("Owner", this.ax);
         }
 
         if (this.hasColor) {
@@ -424,7 +427,7 @@ public class EntityAreaEffectCloud extends Entity {
     }
 
     @Override
-    public Packet<?> L() {
+    public Packet<?> O() {
         return new PacketPlayOutSpawnEntity(this);
     }
 

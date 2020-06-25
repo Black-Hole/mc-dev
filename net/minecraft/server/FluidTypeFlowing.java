@@ -14,7 +14,7 @@ import java.util.Map.Entry;
 public abstract class FluidTypeFlowing extends FluidType {
 
     public static final BlockStateBoolean FALLING = BlockProperties.i;
-    public static final BlockStateInteger LEVEL = BlockProperties.an;
+    public static final BlockStateInteger LEVEL = BlockProperties.at;
     private static final ThreadLocal<Object2ByteLinkedOpenHashMap<Block.a>> e = ThreadLocal.withInitial(() -> {
         Object2ByteLinkedOpenHashMap<Block.a> object2bytelinkedopenhashmap = new Object2ByteLinkedOpenHashMap<Block.a>(200) {
             protected void rehash(int i) {}
@@ -36,83 +36,59 @@ public abstract class FluidTypeFlowing extends FluidType {
     public Vec3D a(IBlockAccess iblockaccess, BlockPosition blockposition, Fluid fluid) {
         double d0 = 0.0D;
         double d1 = 0.0D;
-        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
-        Throwable throwable = null;
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+        Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
-        Vec3D vec3d;
+        while (iterator.hasNext()) {
+            EnumDirection enumdirection = (EnumDirection) iterator.next();
 
-        try {
-            Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
+            blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, enumdirection);
+            Fluid fluid1 = iblockaccess.getFluid(blockposition_mutableblockposition);
 
-            while (iterator.hasNext()) {
-                EnumDirection enumdirection = (EnumDirection) iterator.next();
+            if (this.g(fluid1)) {
+                float f = fluid1.d();
+                float f1 = 0.0F;
 
-                blockposition_pooledblockposition.g(blockposition).c(enumdirection);
-                Fluid fluid1 = iblockaccess.getFluid(blockposition_pooledblockposition);
+                if (f == 0.0F) {
+                    if (!iblockaccess.getType(blockposition_mutableblockposition).getMaterial().isSolid()) {
+                        BlockPosition blockposition1 = blockposition_mutableblockposition.down();
+                        Fluid fluid2 = iblockaccess.getFluid(blockposition1);
 
-                if (this.g(fluid1)) {
-                    float f = fluid1.f();
-                    float f1 = 0.0F;
-
-                    if (f == 0.0F) {
-                        if (!iblockaccess.getType(blockposition_pooledblockposition).getMaterial().isSolid()) {
-                            BlockPosition blockposition1 = blockposition_pooledblockposition.down();
-                            Fluid fluid2 = iblockaccess.getFluid(blockposition1);
-
-                            if (this.g(fluid2)) {
-                                f = fluid2.f();
-                                if (f > 0.0F) {
-                                    f1 = fluid.f() - (f - 0.8888889F);
-                                }
+                        if (this.g(fluid2)) {
+                            f = fluid2.d();
+                            if (f > 0.0F) {
+                                f1 = fluid.d() - (f - 0.8888889F);
                             }
                         }
-                    } else if (f > 0.0F) {
-                        f1 = fluid.f() - f;
                     }
+                } else if (f > 0.0F) {
+                    f1 = fluid.d() - f;
+                }
 
-                    if (f1 != 0.0F) {
-                        d0 += (double) ((float) enumdirection.getAdjacentX() * f1);
-                        d1 += (double) ((float) enumdirection.getAdjacentZ() * f1);
-                    }
+                if (f1 != 0.0F) {
+                    d0 += (double) ((float) enumdirection.getAdjacentX() * f1);
+                    d1 += (double) ((float) enumdirection.getAdjacentZ() * f1);
                 }
             }
-
-            Vec3D vec3d1 = new Vec3D(d0, 0.0D, d1);
-
-            if ((Boolean) fluid.get(FluidTypeFlowing.FALLING)) {
-                Iterator iterator1 = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
-
-                while (iterator1.hasNext()) {
-                    EnumDirection enumdirection1 = (EnumDirection) iterator1.next();
-
-                    blockposition_pooledblockposition.g(blockposition).c(enumdirection1);
-                    if (this.a(iblockaccess, (BlockPosition) blockposition_pooledblockposition, enumdirection1) || this.a(iblockaccess, blockposition_pooledblockposition.up(), enumdirection1)) {
-                        vec3d1 = vec3d1.d().add(0.0D, -6.0D, 0.0D);
-                        break;
-                    }
-                }
-            }
-
-            vec3d = vec3d1.d();
-        } catch (Throwable throwable1) {
-            throwable = throwable1;
-            throw throwable1;
-        } finally {
-            if (blockposition_pooledblockposition != null) {
-                if (throwable != null) {
-                    try {
-                        blockposition_pooledblockposition.close();
-                    } catch (Throwable throwable2) {
-                        throwable.addSuppressed(throwable2);
-                    }
-                } else {
-                    blockposition_pooledblockposition.close();
-                }
-            }
-
         }
 
-        return vec3d;
+        Vec3D vec3d = new Vec3D(d0, 0.0D, d1);
+
+        if ((Boolean) fluid.get(FluidTypeFlowing.FALLING)) {
+            Iterator iterator1 = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
+
+            while (iterator1.hasNext()) {
+                EnumDirection enumdirection1 = (EnumDirection) iterator1.next();
+
+                blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, enumdirection1);
+                if (this.a(iblockaccess, (BlockPosition) blockposition_mutableblockposition, enumdirection1) || this.a(iblockaccess, blockposition_mutableblockposition.up(), enumdirection1)) {
+                    vec3d = vec3d.d().add(0.0D, -6.0D, 0.0D);
+                    break;
+                }
+            }
+        }
+
+        return vec3d.d();
     }
 
     private boolean g(Fluid fluid) {
@@ -146,7 +122,7 @@ public abstract class FluidTypeFlowing extends FluidType {
     }
 
     private void a(GeneratorAccess generatoraccess, BlockPosition blockposition, Fluid fluid, IBlockData iblockdata) {
-        int i = fluid.g() - this.c((IWorldReader) generatoraccess);
+        int i = fluid.e() - this.c((IWorldReader) generatoraccess);
 
         if ((Boolean) fluid.get(FluidTypeFlowing.FALLING)) {
             i = 7;
@@ -187,7 +163,7 @@ public abstract class FluidTypeFlowing extends FluidType {
                     ++j;
                 }
 
-                i = Math.max(i, fluid.g());
+                i = Math.max(i, fluid.e());
             }
         }
 
@@ -216,7 +192,7 @@ public abstract class FluidTypeFlowing extends FluidType {
     private boolean a(EnumDirection enumdirection, IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, BlockPosition blockposition1, IBlockData iblockdata1) {
         Object2ByteLinkedOpenHashMap object2bytelinkedopenhashmap;
 
-        if (!iblockdata.getBlock().q() && !iblockdata1.getBlock().q()) {
+        if (!iblockdata.getBlock().o() && !iblockdata1.getBlock().o()) {
             object2bytelinkedopenhashmap = (Object2ByteLinkedOpenHashMap) FluidTypeFlowing.e.get();
         } else {
             object2bytelinkedopenhashmap = null;
@@ -415,7 +391,7 @@ public abstract class FluidTypeFlowing extends FluidType {
 
         if (block instanceof IFluidContainer) {
             return ((IFluidContainer) block).canPlace(iblockaccess, blockposition, iblockdata, fluidtype);
-        } else if (!(block instanceof BlockDoor) && !block.a(TagsBlock.SIGNS) && block != Blocks.LADDER && block != Blocks.SUGAR_CANE && block != Blocks.BUBBLE_COLUMN) {
+        } else if (!(block instanceof BlockDoor) && !block.a((Tag) TagsBlock.SIGNS) && block != Blocks.LADDER && block != Blocks.SUGAR_CANE && block != Blocks.BUBBLE_COLUMN) {
             Material material = iblockdata.getMaterial();
 
             return material != Material.PORTAL && material != Material.STRUCTURE_VOID && material != Material.WATER_PLANT && material != Material.REPLACEABLE_WATER_PLANT ? !material.isSolid() : false;
@@ -457,7 +433,7 @@ public abstract class FluidTypeFlowing extends FluidType {
     }
 
     protected static int e(Fluid fluid) {
-        return fluid.isSource() ? 0 : 8 - Math.min(fluid.g(), 8) + ((Boolean) fluid.get(FluidTypeFlowing.FALLING) ? 8 : 0);
+        return fluid.isSource() ? 0 : 8 - Math.min(fluid.e(), 8) + ((Boolean) fluid.get(FluidTypeFlowing.FALLING) ? 8 : 0);
     }
 
     private static boolean c(Fluid fluid, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -466,17 +442,17 @@ public abstract class FluidTypeFlowing extends FluidType {
 
     @Override
     public float a(Fluid fluid, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return c(fluid, iblockaccess, blockposition) ? 1.0F : fluid.f();
+        return c(fluid, iblockaccess, blockposition) ? 1.0F : fluid.d();
     }
 
     @Override
     public float a(Fluid fluid) {
-        return (float) fluid.g() / 9.0F;
+        return (float) fluid.e() / 9.0F;
     }
 
     @Override
     public VoxelShape b(Fluid fluid, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return fluid.g() == 9 && c(fluid, iblockaccess, blockposition) ? VoxelShapes.b() : (VoxelShape) this.f.computeIfAbsent(fluid, (fluid1) -> {
+        return fluid.e() == 9 && c(fluid, iblockaccess, blockposition) ? VoxelShapes.b() : (VoxelShape) this.f.computeIfAbsent(fluid, (fluid1) -> {
             return VoxelShapes.create(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid1.getHeight(iblockaccess, blockposition), 1.0D);
         });
     }

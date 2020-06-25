@@ -6,14 +6,14 @@ public class BlockTNT extends Block {
 
     public static final BlockStateBoolean a = BlockProperties.B;
 
-    public BlockTNT(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) this.getBlockData().set(BlockTNT.a, false));
+    public BlockTNT(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) this.getBlockData().set(BlockTNT.a, false));
     }
 
     @Override
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (iblockdata1.getBlock() != iblockdata.getBlock()) {
+        if (!iblockdata1.a(iblockdata.getBlock())) {
             if (world.isBlockIndirectlyPowered(blockposition)) {
                 a(world, blockposition);
                 world.a(blockposition, false);
@@ -33,7 +33,7 @@ public class BlockTNT extends Block {
 
     @Override
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
-        if (!world.p_() && !entityhuman.isCreative() && (Boolean) iblockdata.get(BlockTNT.a)) {
+        if (!world.s_() && !entityhuman.isCreative() && (Boolean) iblockdata.get(BlockTNT.a)) {
             a(world, blockposition);
         }
 
@@ -43,7 +43,7 @@ public class BlockTNT extends Block {
     @Override
     public void wasExploded(World world, BlockPosition blockposition, Explosion explosion) {
         if (!world.isClientSide) {
-            EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) blockposition.getX() + 0.5F), (double) blockposition.getY(), (double) ((float) blockposition.getZ() + 0.5F), explosion.getSource());
+            EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, explosion.getSource());
 
             entitytntprimed.setFuseTicks((short) (world.random.nextInt(entitytntprimed.getFuseTicks() / 4) + entitytntprimed.getFuseTicks() / 8));
             world.addEntity(entitytntprimed);
@@ -83,20 +83,19 @@ public class BlockTNT extends Block {
                 }
             }
 
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.a(world.isClientSide);
         }
     }
 
     @Override
-    public void a(World world, IBlockData iblockdata, MovingObjectPositionBlock movingobjectpositionblock, Entity entity) {
-        if (!world.isClientSide && entity instanceof EntityArrow) {
-            EntityArrow entityarrow = (EntityArrow) entity;
-            Entity entity1 = entityarrow.getShooter();
+    public void a(World world, IBlockData iblockdata, MovingObjectPositionBlock movingobjectpositionblock, IProjectile iprojectile) {
+        if (!world.isClientSide) {
+            Entity entity = iprojectile.getShooter();
 
-            if (entityarrow.isBurning()) {
+            if (iprojectile.isBurning()) {
                 BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
 
-                a(world, blockposition, entity1 instanceof EntityLiving ? (EntityLiving) entity1 : null);
+                a(world, blockposition, entity instanceof EntityLiving ? (EntityLiving) entity : null);
                 world.a(blockposition, false);
             }
         }

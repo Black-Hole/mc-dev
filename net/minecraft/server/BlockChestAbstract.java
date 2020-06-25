@@ -6,8 +6,8 @@ public abstract class BlockChestAbstract<E extends TileEntity> extends BlockTile
 
     protected final Supplier<TileEntityTypes<? extends E>> a;
 
-    protected BlockChestAbstract(Block.Info block_info, Supplier<TileEntityTypes<? extends E>> supplier) {
-        super(block_info);
+    protected BlockChestAbstract(BlockBase.Info blockbase_info, Supplier<TileEntityTypes<? extends E>> supplier) {
+        super(blockbase_info);
         this.a = supplier;
     }
 }

@@ -37,28 +37,27 @@ public class ItemHoneyBottle extends Item {
     }
 
     @Override
-    public int f_(ItemStack itemstack) {
+    public int e_(ItemStack itemstack) {
         return 40;
     }
 
     @Override
-    public EnumAnimation e_(ItemStack itemstack) {
+    public EnumAnimation d_(ItemStack itemstack) {
         return EnumAnimation.DRINK;
     }
 
     @Override
-    public SoundEffect U_() {
+    public SoundEffect ag_() {
         return SoundEffects.ITEM_HONEY_BOTTLE_DRINK;
     }
 
     @Override
-    public SoundEffect S_() {
+    public SoundEffect af_() {
         return SoundEffects.ITEM_HONEY_BOTTLE_DRINK;
     }
 
     @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
-        entityhuman.c(enumhand);
-        return InteractionResultWrapper.success(entityhuman.b(enumhand));
+        return ItemLiquidUtil.a(world, entityhuman, enumhand);
     }
 }

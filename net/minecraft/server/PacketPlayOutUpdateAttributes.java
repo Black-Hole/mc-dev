@@ -14,14 +14,14 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
 
     public PacketPlayOutUpdateAttributes() {}
 
-    public PacketPlayOutUpdateAttributes(int i, Collection<AttributeInstance> collection) {
+    public PacketPlayOutUpdateAttributes(int i, Collection<AttributeModifiable> collection) {
         this.a = i;
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
-            AttributeInstance attributeinstance = (AttributeInstance) iterator.next();
+            AttributeModifiable attributemodifiable = (AttributeModifiable) iterator.next();
 
-            this.b.add(new PacketPlayOutUpdateAttributes.AttributeSnapshot(attributeinstance.getAttribute().getName(), attributeinstance.getBaseValue(), attributeinstance.getModifiers()));
+            this.b.add(new PacketPlayOutUpdateAttributes.AttributeSnapshot(attributemodifiable.getAttribute(), attributemodifiable.getBaseValue(), attributemodifiable.getModifiers()));
         }
 
     }
@@ -32,7 +32,8 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
         int i = packetdataserializer.readInt();
 
         for (int j = 0; j < i; ++j) {
-            String s = packetdataserializer.e(64);
+            MinecraftKey minecraftkey = packetdataserializer.o();
+            AttributeBase attributebase = (AttributeBase) IRegistry.ATTRIBUTE.get(minecraftkey);
             double d0 = packetdataserializer.readDouble();
             List<AttributeModifier> list = Lists.newArrayList();
             int k = packetdataserializer.i();
@@ -43,7 +44,7 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
                 list.add(new AttributeModifier(uuid, "Unknown synced attribute modifier", packetdataserializer.readDouble(), AttributeModifier.Operation.a(packetdataserializer.readByte())));
             }
 
-            this.b.add(new PacketPlayOutUpdateAttributes.AttributeSnapshot(s, d0, list));
+            this.b.add(new PacketPlayOutUpdateAttributes.AttributeSnapshot(attributebase, d0, list));
         }
 
     }
@@ -57,7 +58,7 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
         while (iterator.hasNext()) {
             PacketPlayOutUpdateAttributes.AttributeSnapshot packetplayoutupdateattributes_attributesnapshot = (PacketPlayOutUpdateAttributes.AttributeSnapshot) iterator.next();
 
-            packetdataserializer.a(packetplayoutupdateattributes_attributesnapshot.a());
+            packetdataserializer.a(IRegistry.ATTRIBUTE.getKey(packetplayoutupdateattributes_attributesnapshot.a()));
             packetdataserializer.writeDouble(packetplayoutupdateattributes_attributesnapshot.b());
             packetdataserializer.d(packetplayoutupdateattributes_attributesnapshot.c().size());
             Iterator iterator1 = packetplayoutupdateattributes_attributesnapshot.c().iterator();
@@ -79,17 +80,17 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
 
     public class AttributeSnapshot {
 
-        private final String b;
+        private final AttributeBase b;
         private final double c;
         private final Collection<AttributeModifier> d;
 
-        public AttributeSnapshot(String s, double d0, Collection collection) {
-            this.b = s;
+        public AttributeSnapshot(AttributeBase attributebase, double d0, Collection collection) {
+            this.b = attributebase;
             this.c = d0;
             this.d = collection;
         }
 
-        public String a() {
+        public AttributeBase a() {
             return this.b;
         }
 

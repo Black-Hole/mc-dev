@@ -295,7 +295,7 @@ public class Scoreboard {
                     EnumChatFormat enumchatformat = EnumChatFormat.a(i - 3);
 
                     if (enumchatformat != null && enumchatformat != EnumChatFormat.RESET) {
-                        return "sidebar.team." + enumchatformat.g();
+                        return "sidebar.team." + enumchatformat.f();
                     }
                 }
 
@@ -313,7 +313,7 @@ public class Scoreboard {
         } else {
             if (s.startsWith("sidebar.team.")) {
                 String s1 = s.substring("sidebar.team.".length());
-                EnumChatFormat enumchatformat = EnumChatFormat.c(s1);
+                EnumChatFormat enumchatformat = EnumChatFormat.b(s1);
 
                 if (enumchatformat != null && enumchatformat.b() >= 0) {
                     return enumchatformat.b() + 3;

@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class EnchantmentVanishing extends Enchantment {
 
     public EnchantmentVanishing(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
-        super(enchantment_rarity, EnchantmentSlotType.ALL, aenumitemslot);
+        super(enchantment_rarity, EnchantmentSlotType.VANISHABLE, aenumitemslot);
     }
 
     @Override

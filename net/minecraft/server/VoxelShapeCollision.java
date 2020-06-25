@@ -15,4 +15,6 @@ public interface VoxelShapeCollision {
     boolean a(VoxelShape voxelshape, BlockPosition blockposition, boolean flag);
 
     boolean a(Item item);
+
+    boolean a(Fluid fluid, FluidTypeFlowing fluidtypeflowing);
 }

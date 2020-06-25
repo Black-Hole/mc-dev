@@ -65,9 +65,9 @@ public class NavigationGuardian extends NavigationAbstract {
             }
 
             boolean flag = true;
-            Vec3D vec3d2 = this.c.g();
+            Vec3D vec3d2 = Vec3D.c(this.c.g());
 
-            if (Math.abs(this.a.locX() - (vec3d2.x + 0.5D)) < (double) f1 && Math.abs(this.a.locZ() - (vec3d2.z + 0.5D)) < (double) f1 && Math.abs(this.a.locY() - vec3d2.y) < (double) (f1 * 2.0F)) {
+            if (Math.abs(this.a.locX() - vec3d2.x) < (double) f1 && Math.abs(this.a.locZ() - vec3d2.z) < (double) f1 && Math.abs(this.a.locY() - vec3d2.y) < (double) (f1 * 2.0F)) {
                 this.c.a();
             }
 
@@ -95,19 +95,19 @@ public class NavigationGuardian extends NavigationAbstract {
         }
 
         if (this.c != null && !this.c.b()) {
-            Vec3D vec3d1 = this.c.g();
+            BaseBlockPosition baseblockposition = this.c.g();
 
-            if (vec3d1.equals(this.h)) {
+            if (baseblockposition.equals(this.h)) {
                 this.i += SystemUtils.getMonotonicMillis() - this.j;
             } else {
-                this.h = vec3d1;
-                double d0 = vec3d.f(this.h);
+                this.h = baseblockposition;
+                double d0 = vec3d.f(Vec3D.a(this.h));
 
-                this.k = this.a.dt() > 0.0F ? d0 / (double) this.a.dt() * 100.0D : 0.0D;
+                this.k = this.a.dM() > 0.0F ? d0 / (double) this.a.dM() * 100.0D : 0.0D;
             }
 
             if (this.k > 0.0D && (double) this.i > this.k * 2.0D) {
-                this.h = Vec3D.a;
+                this.h = BaseBlockPosition.ZERO;
                 this.i = 0L;
                 this.k = 0.0D;
                 this.o();
@@ -127,7 +127,7 @@ public class NavigationGuardian extends NavigationAbstract {
 
     @Override
     public boolean a(BlockPosition blockposition) {
-        return !this.b.getType(blockposition).g(this.b, blockposition);
+        return !this.b.getType(blockposition).i(this.b, blockposition);
     }
 
     @Override

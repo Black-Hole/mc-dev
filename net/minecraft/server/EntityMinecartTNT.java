@@ -69,7 +69,7 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
 
         } else {
             if (this.b < 0) {
-                this.v();
+                this.u();
                 this.b = this.random.nextInt(20) + this.random.nextInt(20);
             }
 
@@ -104,12 +104,12 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
     @Override
     public void a(int i, int j, int k, boolean flag) {
         if (flag && this.b < 0) {
-            this.v();
+            this.u();
         }
 
     }
 
-    public void v() {
+    public void u() {
         this.b = 80;
         if (!this.world.isClientSide) {
             this.world.broadcastEntityEffect(this, (byte) 10);
@@ -120,23 +120,23 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
 
     }
 
-    public boolean z() {
+    public boolean x() {
         return this.b > -1;
     }
 
     @Override
     public float a(Explosion explosion, IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid, float f) {
-        return this.z() && (iblockdata.a(TagsBlock.RAILS) || iblockaccess.getType(blockposition.up()).a(TagsBlock.RAILS)) ? 0.0F : super.a(explosion, iblockaccess, blockposition, iblockdata, fluid, f);
+        return this.x() && (iblockdata.a((Tag) TagsBlock.RAILS) || iblockaccess.getType(blockposition.up()).a((Tag) TagsBlock.RAILS)) ? 0.0F : super.a(explosion, iblockaccess, blockposition, iblockdata, fluid, f);
     }
 
     @Override
     public boolean a(Explosion explosion, IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, float f) {
-        return this.z() && (iblockdata.a(TagsBlock.RAILS) || iblockaccess.getType(blockposition.up()).a(TagsBlock.RAILS)) ? false : super.a(explosion, iblockaccess, blockposition, iblockdata, f);
+        return this.x() && (iblockdata.a((Tag) TagsBlock.RAILS) || iblockaccess.getType(blockposition.up()).a((Tag) TagsBlock.RAILS)) ? false : super.a(explosion, iblockaccess, blockposition, iblockdata, f);
     }
 
     @Override
-    protected void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    protected void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("TNTFuse", 99)) {
             this.b = nbttagcompound.getInt("TNTFuse");
         }
@@ -144,8 +144,8 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
     }
 
     @Override
-    protected void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    protected void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setInt("TNTFuse", this.b);
     }
 }

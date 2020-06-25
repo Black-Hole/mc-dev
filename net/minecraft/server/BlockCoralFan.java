@@ -6,8 +6,8 @@ public class BlockCoralFan extends BlockCoralFanAbstract {
 
     private final Block a;
 
-    protected BlockCoralFan(Block block, Block.Info block_info) {
-        super(block_info);
+    protected BlockCoralFan(Block block, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.a = block;
     }
 
@@ -17,8 +17,8 @@ public class BlockCoralFan extends BlockCoralFanAbstract {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        if (!b_(iblockdata, worldserver, blockposition)) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!c(iblockdata, (IBlockAccess) worldserver, blockposition)) {
             worldserver.setTypeAndData(blockposition, (IBlockData) this.a.getBlockData().set(BlockCoralFan.b, false), 2);
         }
 

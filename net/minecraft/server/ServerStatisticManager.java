@@ -17,9 +17,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
-import java.util.Map.Entry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,7 +36,7 @@ public class ServerStatisticManager extends StatisticManager {
         this.d = file;
         if (file.isFile()) {
             try {
-                this.a(minecraftserver.aC(), org.apache.commons.io.FileUtils.readFileToString(file));
+                this.a(minecraftserver.getDataFixer(), org.apache.commons.io.FileUtils.readFileToString(file));
             } catch (IOException ioexception) {
                 ServerStatisticManager.LOGGER.error("Couldn't read statistics file {}", file, ioexception);
             } catch (JsonParseException jsonparseexception) {
@@ -46,7 +46,7 @@ public class ServerStatisticManager extends StatisticManager {
 
     }
 
-    public void a() {
+    public void save() {
         try {
             org.apache.commons.io.FileUtils.writeStringToFile(this.d, this.b());
         } catch (IOException ioexception) {
@@ -215,7 +215,7 @@ public class ServerStatisticManager extends StatisticManager {
     }
 
     public void a(EntityPlayer entityplayer) {
-        int i = this.c.ak();
+        int i = this.c.ag();
         Object2IntMap<Statistic<?>> object2intmap = new Object2IntOpenHashMap();
 
         if (i - this.f > 300) {

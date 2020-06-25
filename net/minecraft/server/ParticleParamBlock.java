@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
 
 public class ParticleParamBlock implements ParticleParam {
 
@@ -19,6 +20,14 @@ public class ParticleParamBlock implements ParticleParam {
     };
     private final Particle<ParticleParamBlock> b;
     private final IBlockData c;
+
+    public static Codec<ParticleParamBlock> a(Particle<ParticleParamBlock> particle) {
+        return IBlockData.b.xmap((iblockdata) -> {
+            return new ParticleParamBlock(particle, iblockdata);
+        }, (particleparamblock) -> {
+            return particleparamblock.c;
+        });
+    }
 
     public ParticleParamBlock(Particle<ParticleParamBlock> particle, IBlockData iblockdata) {
         this.b = particle;

@@ -41,7 +41,7 @@ public class DragonControllerLandingFly extends AbstractDragonController {
 
     private void j() {
         if (this.c == null || this.c.b()) {
-            int i = this.a.l();
+            int i = this.a.eJ();
             BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.a);
             EntityHuman entityhuman = this.a.world.a(DragonControllerLandingFly.b, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
             int j;
@@ -71,17 +71,17 @@ public class DragonControllerLandingFly extends AbstractDragonController {
 
     private void k() {
         if (this.c != null && !this.c.b()) {
-            Vec3D vec3d = this.c.g();
+            BaseBlockPosition baseblockposition = this.c.g();
 
             this.c.a();
-            double d0 = vec3d.x;
-            double d1 = vec3d.z;
+            double d0 = (double) baseblockposition.getX();
+            double d1 = (double) baseblockposition.getZ();
 
             double d2;
 
             do {
-                d2 = vec3d.y + (double) (this.a.getRandom().nextFloat() * 20.0F);
-            } while (d2 < vec3d.y);
+                d2 = (double) ((float) baseblockposition.getY() + this.a.getRandom().nextFloat() * 20.0F);
+            } while (d2 < (double) baseblockposition.getY());
 
             this.d = new Vec3D(d0, d2, d1);
         }

@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class BehaviorBell extends Behavior<EntityLiving> {
@@ -16,7 +15,7 @@ public class BehaviorBell extends Behavior<EntityLiving> {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
         Optional<GlobalPos> optional = behaviorcontroller.getMemory(MemoryModuleType.MEETING_POINT);
 
-        return worldserver.getRandom().nextInt(100) == 0 && optional.isPresent() && Objects.equals(worldserver.getWorldProvider().getDimensionManager(), ((GlobalPos) optional.get()).getDimensionManager()) && ((GlobalPos) optional.get()).getBlockPosition().a((IPosition) entityliving.getPositionVector(), 4.0D) && ((List) behaviorcontroller.getMemory(MemoryModuleType.VISIBLE_MOBS).get()).stream().anyMatch((entityliving1) -> {
+        return worldserver.getRandom().nextInt(100) == 0 && optional.isPresent() && worldserver.getDimensionKey() == ((GlobalPos) optional.get()).getDimensionManager() && ((GlobalPos) optional.get()).getBlockPosition().a((IPosition) entityliving.getPositionVector(), 4.0D) && ((List) behaviorcontroller.getMemory(MemoryModuleType.VISIBLE_MOBS).get()).stream().anyMatch((entityliving1) -> {
             return EntityTypes.VILLAGER.equals(entityliving1.getEntityType());
         });
     }
@@ -32,8 +31,8 @@ public class BehaviorBell extends Behavior<EntityLiving> {
                 return entityliving1.h((Entity) entityliving) <= 32.0D;
             }).findFirst().ifPresent((entityliving1) -> {
                 behaviorcontroller.setMemory(MemoryModuleType.INTERACTION_TARGET, (Object) entityliving1);
-                behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving1)));
-                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorPositionEntity(entityliving1), 0.3F, 1)));
+                behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving1, true)));
+                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorPositionEntity(entityliving1, false), 0.3F, 1)));
             });
         });
     }

@@ -7,12 +7,12 @@ public class EntitySalmon extends EntityFishSchool {
     }
 
     @Override
-    public int es() {
+    public int eO() {
         return 5;
     }
 
     @Override
-    protected ItemStack l() {
+    protected ItemStack eL() {
         return new ItemStack(Items.SALMON_BUCKET);
     }
 

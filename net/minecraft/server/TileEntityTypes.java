@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -19,7 +18,7 @@ public class TileEntityTypes<T extends TileEntity> {
     public static final TileEntityTypes<TileEntityJukeBox> JUKEBOX = a("jukebox", TileEntityTypes.a.a(TileEntityJukeBox::new, Blocks.JUKEBOX));
     public static final TileEntityTypes<TileEntityDispenser> DISPENSER = a("dispenser", TileEntityTypes.a.a(TileEntityDispenser::new, Blocks.DISPENSER));
     public static final TileEntityTypes<TileEntityDropper> DROPPER = a("dropper", TileEntityTypes.a.a(TileEntityDropper::new, Blocks.DROPPER));
-    public static final TileEntityTypes<TileEntitySign> SIGN = a("sign", TileEntityTypes.a.a(TileEntitySign::new, Blocks.OAK_SIGN, Blocks.SPRUCE_SIGN, Blocks.BIRCH_SIGN, Blocks.ACACIA_SIGN, Blocks.JUNGLE_SIGN, Blocks.DARK_OAK_SIGN, Blocks.OAK_WALL_SIGN, Blocks.SPRUCE_WALL_SIGN, Blocks.BIRCH_WALL_SIGN, Blocks.ACACIA_WALL_SIGN, Blocks.JUNGLE_WALL_SIGN, Blocks.DARK_OAK_WALL_SIGN));
+    public static final TileEntityTypes<TileEntitySign> SIGN = a("sign", TileEntityTypes.a.a(TileEntitySign::new, Blocks.OAK_SIGN, Blocks.SPRUCE_SIGN, Blocks.BIRCH_SIGN, Blocks.ACACIA_SIGN, Blocks.JUNGLE_SIGN, Blocks.DARK_OAK_SIGN, Blocks.OAK_WALL_SIGN, Blocks.SPRUCE_WALL_SIGN, Blocks.BIRCH_WALL_SIGN, Blocks.ACACIA_WALL_SIGN, Blocks.JUNGLE_WALL_SIGN, Blocks.DARK_OAK_WALL_SIGN, Blocks.CRIMSON_SIGN, Blocks.CRIMSON_WALL_SIGN, Blocks.WARPED_SIGN, Blocks.WARPED_WALL_SIGN));
     public static final TileEntityTypes<TileEntityMobSpawner> MOB_SPAWNER = a("mob_spawner", TileEntityTypes.a.a(TileEntityMobSpawner::new, Blocks.SPAWNER));
     public static final TileEntityTypes<TileEntityPiston> PISTON = a("piston", TileEntityTypes.a.a(TileEntityPiston::new, Blocks.MOVING_PISTON));
     public static final TileEntityTypes<TileEntityBrewingStand> BREWING_STAND = a("brewing_stand", TileEntityTypes.a.a(TileEntityBrewingStand::new, Blocks.BREWING_STAND));
@@ -43,7 +42,7 @@ public class TileEntityTypes<T extends TileEntity> {
     public static final TileEntityTypes<TileEntityLectern> LECTERN = a("lectern", TileEntityTypes.a.a(TileEntityLectern::new, Blocks.LECTERN));
     public static final TileEntityTypes<TileEntityBell> BELL = a("bell", TileEntityTypes.a.a(TileEntityBell::new, Blocks.BELL));
     public static final TileEntityTypes<TileEntityJigsaw> JIGSAW = a("jigsaw", TileEntityTypes.a.a(TileEntityJigsaw::new, Blocks.JIGSAW));
-    public static final TileEntityTypes<TileEntityCampfire> CAMPFIRE = a("campfire", TileEntityTypes.a.a(TileEntityCampfire::new, Blocks.CAMPFIRE));
+    public static final TileEntityTypes<TileEntityCampfire> CAMPFIRE = a("campfire", TileEntityTypes.a.a(TileEntityCampfire::new, Blocks.CAMPFIRE, Blocks.SOUL_CAMPFIRE));
     public static final TileEntityTypes<TileEntityBeehive> BEEHIVE = a("beehive", TileEntityTypes.a.a(TileEntityBeehive::new, Blocks.BEE_NEST, Blocks.BEEHIVE));
     private final Supplier<? extends T> I;
     private final Set<Block> J;
@@ -55,20 +54,11 @@ public class TileEntityTypes<T extends TileEntity> {
     }
 
     private static <T extends TileEntity> TileEntityTypes<T> a(String s, TileEntityTypes.a<T> tileentitytypes_a) {
-        Type type = null;
-
-        try {
-            type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.getGameVersion().getWorldVersion())).getChoiceType(DataConverterTypes.BLOCK_ENTITY, s);
-        } catch (IllegalArgumentException illegalargumentexception) {
-            TileEntityTypes.LOGGER.error("No data fixer registered for block entity {}", s);
-            if (SharedConstants.b) {
-                throw illegalargumentexception;
-            }
-        }
-
         if (tileentitytypes_a.b.isEmpty()) {
             TileEntityTypes.LOGGER.warn("Block entity type {} requires at least one valid block to be defined!", s);
         }
+
+        Type<?> type = SystemUtils.a(DataConverterTypes.BLOCK_ENTITY, s);
 
         return (TileEntityTypes) IRegistry.a(IRegistry.BLOCK_ENTITY_TYPE, s, (Object) tileentitytypes_a.a(type));
     }

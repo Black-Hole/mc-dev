@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -84,16 +83,16 @@ public class PersistentStructureLegacy {
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
-            StructureGenerator<?> structuregenerator = (StructureGenerator) WorldGenerator.ao.get(s.toLowerCase(Locale.ROOT));
+            StructureGenerator<?> structuregenerator = (StructureGenerator) StructureGenerator.a.get(s.toLowerCase(Locale.ROOT));
 
             if (!nbttagcompound3.hasKeyOfType(s, 12) && structuregenerator != null) {
-                int i = structuregenerator.c();
+                boolean flag = true;
                 LongArrayList longarraylist = new LongArrayList();
 
-                for (int j = chunkcoordintpair.x - i; j <= chunkcoordintpair.x + i; ++j) {
-                    for (int k = chunkcoordintpair.z - i; k <= chunkcoordintpair.z + i; ++k) {
-                        if (this.a(j, k, s)) {
-                            longarraylist.add(ChunkCoordIntPair.pair(j, k));
+                for (int i = chunkcoordintpair.x - 8; i <= chunkcoordintpair.x + 8; ++i) {
+                    for (int j = chunkcoordintpair.z - 8; j <= chunkcoordintpair.z + 8; ++j) {
+                        if (this.a(i, j, s)) {
+                            longarraylist.add(ChunkCoordIntPair.pair(i, j));
                         }
                     }
                 }
@@ -229,20 +228,20 @@ public class PersistentStructureLegacy {
         }
     }
 
-    public static PersistentStructureLegacy a(DimensionManager dimensionmanager, @Nullable WorldPersistentData worldpersistentdata) {
-        if (dimensionmanager == DimensionManager.OVERWORLD) {
+    public static PersistentStructureLegacy a(ResourceKey<World> resourcekey, @Nullable WorldPersistentData worldpersistentdata) {
+        if (resourcekey == World.OVERWORLD) {
             return new PersistentStructureLegacy(worldpersistentdata, ImmutableList.of("Monument", "Stronghold", "Village", "Mineshaft", "Temple", "Mansion"), ImmutableList.of("Village", "Mineshaft", "Mansion", "Igloo", "Desert_Pyramid", "Jungle_Pyramid", "Swamp_Hut", "Stronghold", "Monument"));
         } else {
             ImmutableList immutablelist;
 
-            if (dimensionmanager == DimensionManager.NETHER) {
+            if (resourcekey == World.THE_NETHER) {
                 immutablelist = ImmutableList.of("Fortress");
                 return new PersistentStructureLegacy(worldpersistentdata, immutablelist, immutablelist);
-            } else if (dimensionmanager == DimensionManager.THE_END) {
+            } else if (resourcekey == World.THE_END) {
                 immutablelist = ImmutableList.of("EndCity");
                 return new PersistentStructureLegacy(worldpersistentdata, immutablelist, immutablelist);
             } else {
-                throw new RuntimeException(String.format("Unknown dimension type : %s", dimensionmanager));
+                throw new RuntimeException(String.format("Unknown dimension type : %s", resourcekey));
             }
         }
     }

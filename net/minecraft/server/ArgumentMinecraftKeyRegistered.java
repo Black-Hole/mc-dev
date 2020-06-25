@@ -20,6 +20,9 @@ public class ArgumentMinecraftKeyRegistered implements ArgumentType<MinecraftKey
     private static final DynamicCommandExceptionType d = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("predicate.unknown", new Object[]{object});
     });
+    private static final DynamicCommandExceptionType e = new DynamicCommandExceptionType((object) -> {
+        return new ChatMessage("attribute.unknown", new Object[]{object});
+    });
 
     public ArgumentMinecraftKeyRegistered() {}
 
@@ -49,7 +52,7 @@ public class ArgumentMinecraftKeyRegistered implements ArgumentType<MinecraftKey
 
     public static LootItemCondition c(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
         MinecraftKey minecraftkey = (MinecraftKey) commandcontext.getArgument(s, MinecraftKey.class);
-        LootPredicateManager lootpredicatemanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aQ();
+        LootPredicateManager lootpredicatemanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aI();
         LootItemCondition lootitemcondition = lootpredicatemanager.a(minecraftkey);
 
         if (lootitemcondition == null) {
@@ -59,7 +62,15 @@ public class ArgumentMinecraftKeyRegistered implements ArgumentType<MinecraftKey
         }
     }
 
-    public static MinecraftKey d(CommandContext<CommandListenerWrapper> commandcontext, String s) {
+    public static AttributeBase d(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
+        MinecraftKey minecraftkey = (MinecraftKey) commandcontext.getArgument(s, MinecraftKey.class);
+
+        return (AttributeBase) IRegistry.ATTRIBUTE.getOptional(minecraftkey).orElseThrow(() -> {
+            return ArgumentMinecraftKeyRegistered.e.create(minecraftkey);
+        });
+    }
+
+    public static MinecraftKey e(CommandContext<CommandListenerWrapper> commandcontext, String s) {
         return (MinecraftKey) commandcontext.getArgument(s, MinecraftKey.class);
     }
 

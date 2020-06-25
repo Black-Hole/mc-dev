@@ -8,19 +8,24 @@ import java.util.Random;
 public class LootEnchantLevel extends LootItemFunctionConditional {
 
     private final LootValue a;
-    private final boolean c;
+    private final boolean b;
 
     private LootEnchantLevel(LootItemCondition[] alootitemcondition, LootValue lootvalue, boolean flag) {
         super(alootitemcondition);
         this.a = lootvalue;
-        this.c = flag;
+        this.b = flag;
+    }
+
+    @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.c;
     }
 
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
         Random random = loottableinfo.a();
 
-        return EnchantmentManager.a(random, itemstack, this.a.a(random), this.c);
+        return EnchantmentManager.a(random, itemstack, this.a.a(random), this.b);
     }
 
     public static LootEnchantLevel.a a(LootValue lootvalue) {
@@ -29,14 +34,12 @@ public class LootEnchantLevel extends LootItemFunctionConditional {
 
     public static class b extends LootItemFunctionConditional.c<LootEnchantLevel> {
 
-        public b() {
-            super(new MinecraftKey("enchant_with_levels"), LootEnchantLevel.class);
-        }
+        public b() {}
 
         public void a(JsonObject jsonobject, LootEnchantLevel lootenchantlevel, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootenchantlevel, jsonserializationcontext);
             jsonobject.add("levels", LootValueGenerators.a(lootenchantlevel.a, jsonserializationcontext));
-            jsonobject.addProperty("treasure", lootenchantlevel.c);
+            jsonobject.addProperty("treasure", lootenchantlevel.b);
         }
 
         @Override

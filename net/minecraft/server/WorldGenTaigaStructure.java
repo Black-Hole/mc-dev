@@ -1,23 +1,22 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Iterator;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenTaigaStructure extends WorldGenerator<WorldGenFeatureBlockOffsetConfiguration> {
 
-    public WorldGenTaigaStructure(Function<Dynamic<?>, ? extends WorldGenFeatureBlockOffsetConfiguration> function) {
-        super(function);
+    public WorldGenTaigaStructure(Codec<WorldGenFeatureBlockOffsetConfiguration> codec) {
+        super(codec);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureBlockOffsetConfiguration worldgenfeatureblockoffsetconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureBlockOffsetConfiguration worldgenfeatureblockoffsetconfiguration) {
         while (true) {
             if (blockposition.getY() > 3) {
                 label44:
                 {
-                    if (!generatoraccess.isEmpty(blockposition.down())) {
-                        Block block = generatoraccess.getType(blockposition.down()).getBlock();
+                    if (!generatoraccessseed.isEmpty(blockposition.down())) {
+                        Block block = generatoraccessseed.getType(blockposition.down()).getBlock();
 
                         if (b(block) || a(block)) {
                             break label44;
@@ -33,7 +32,7 @@ public class WorldGenTaigaStructure extends WorldGenerator<WorldGenFeatureBlockO
                 return false;
             }
 
-            int i = worldgenfeatureblockoffsetconfiguration.b;
+            int i = worldgenfeatureblockoffsetconfiguration.c;
 
             for (int j = 0; i >= 0 && j < 3; ++j) {
                 int k = i + random.nextInt(2);
@@ -45,8 +44,8 @@ public class WorldGenTaigaStructure extends WorldGenerator<WorldGenFeatureBlockO
                 while (iterator.hasNext()) {
                     BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
-                    if (blockposition1.m(blockposition) <= (double) (f * f)) {
-                        generatoraccess.setTypeAndData(blockposition1, worldgenfeatureblockoffsetconfiguration.a, 4);
+                    if (blockposition1.j(blockposition) <= (double) (f * f)) {
+                        generatoraccessseed.setTypeAndData(blockposition1, worldgenfeatureblockoffsetconfiguration.b, 4);
                     }
                 }
 

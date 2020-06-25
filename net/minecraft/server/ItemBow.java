@@ -2,16 +2,10 @@ package net.minecraft.server;
 
 import java.util.function.Predicate;
 
-public class ItemBow extends ItemProjectileWeapon {
+public class ItemBow extends ItemProjectileWeapon implements ItemVanishable {
 
     public ItemBow(Item.Info item_info) {
         super(item_info);
-        this.a(new MinecraftKey("pull"), (itemstack, world, entityliving) -> {
-            return entityliving == null ? 0.0F : (entityliving.dD().getItem() != Items.BOW ? 0.0F : (float) (itemstack.k() - entityliving.dE()) / 20.0F);
-        });
-        this.a(new MinecraftKey("pulling"), (itemstack, world, entityliving) -> {
-            return entityliving != null && entityliving.isHandRaised() && entityliving.dD() == itemstack ? 1.0F : 0.0F;
-        });
     }
 
     @Override
@@ -26,7 +20,7 @@ public class ItemBow extends ItemProjectileWeapon {
                     itemstack1 = new ItemStack(Items.ARROW);
                 }
 
-                int j = this.f_(itemstack) - i;
+                int j = this.e_(itemstack) - i;
                 float f = a(j);
 
                 if ((double) f >= 0.1D) {
@@ -67,7 +61,7 @@ public class ItemBow extends ItemProjectileWeapon {
                         world.addEntity(entityarrow);
                     }
 
-                    world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (ItemBow.i.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    world.playSound((EntityHuman) null, entityhuman.locX(), entityhuman.locY(), entityhuman.locZ(), SoundEffects.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (ItemBow.RANDOM.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
                     if (!flag1 && !entityhuman.abilities.canInstantlyBuild) {
                         itemstack1.subtract(1);
                         if (itemstack1.isEmpty()) {
@@ -93,12 +87,12 @@ public class ItemBow extends ItemProjectileWeapon {
     }
 
     @Override
-    public int f_(ItemStack itemstack) {
+    public int e_(ItemStack itemstack) {
         return 72000;
     }
 
     @Override
-    public EnumAnimation e_(ItemStack itemstack) {
+    public EnumAnimation d_(ItemStack itemstack) {
         return EnumAnimation.BOW;
     }
 
@@ -118,5 +112,10 @@ public class ItemBow extends ItemProjectileWeapon {
     @Override
     public Predicate<ItemStack> b() {
         return ItemBow.a;
+    }
+
+    @Override
+    public int d() {
+        return 15;
     }
 }

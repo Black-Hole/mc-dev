@@ -11,8 +11,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 public class Chunk implements IChunkAccess {
 
     private static final Logger LOGGER = LogManager.getLogger();
+    @Nullable
     public static final ChunkSection a = null;
     private final ChunkSection[] sections;
     private BiomeStorage d;
@@ -35,8 +36,8 @@ public class Chunk implements IChunkAccess {
     private final ChunkConverter i;
     public final Map<BlockPosition, TileEntity> tileEntities;
     public final EntitySlice<Entity>[] entitySlices;
-    private final Map<String, StructureStart> l;
-    private final Map<String, LongSet> m;
+    private final Map<StructureGenerator<?>, StructureStart<?>> l;
+    private final Map<StructureGenerator<?>, LongSet> m;
     private final ShortList[] n;
     private TickList<Block> o;
     private TickList<FluidType> p;
@@ -166,7 +167,7 @@ public class Chunk implements IChunkAccess {
         int j = blockposition.getY();
         int k = blockposition.getZ();
 
-        if (this.world.P() == WorldType.DEBUG_ALL_BLOCK_STATES) {
+        if (this.world.isDebugWorld()) {
             IBlockData iblockdata = null;
 
             if (j == 60) {
@@ -174,7 +175,7 @@ public class Chunk implements IChunkAccess {
             }
 
             if (j == 70) {
-                iblockdata = ChunkProviderDebug.a(i, k);
+                iblockdata = ChunkProviderDebug.b(i, k);
             }
 
             return iblockdata == null ? Blocks.AIR.getBlockData() : iblockdata;
@@ -270,7 +271,7 @@ public class Chunk implements IChunkAccess {
                 this.world.removeTileEntity(blockposition);
             }
 
-            if (chunksection.getType(i, j & 15, k).getBlock() != block) {
+            if (!chunksection.getType(i, j & 15, k).a(block)) {
                 return null;
             } else {
                 TileEntity tileentity;
@@ -357,7 +358,7 @@ public class Chunk implements IChunkAccess {
     }
 
     @Override
-    public int a(HeightMap.Type heightmap_type, int i, int j) {
+    public int getHighestBlock(HeightMap.Type heightmap_type, int i, int j) {
         return ((HeightMap) this.heightMap.get(heightmap_type)).a(i & 15, j & 15) - 1;
     }
 
@@ -406,7 +407,7 @@ public class Chunk implements IChunkAccess {
 
     public void a(TileEntity tileentity) {
         this.setTileEntity(tileentity.getPosition(), tileentity);
-        if (this.loaded || this.world.p_()) {
+        if (this.loaded || this.world.s_()) {
             this.world.setTileEntity(tileentity.getPosition(), tileentity);
         }
 
@@ -420,7 +421,7 @@ public class Chunk implements IChunkAccess {
             TileEntity tileentity1 = (TileEntity) this.tileEntities.put(blockposition.immutableCopy(), tileentity);
 
             if (tileentity1 != null && tileentity1 != tileentity) {
-                tileentity1.ab_();
+                tileentity1.an_();
             }
 
         }
@@ -454,11 +455,11 @@ public class Chunk implements IChunkAccess {
 
     @Override
     public void removeTileEntity(BlockPosition blockposition) {
-        if (this.loaded || this.world.p_()) {
+        if (this.loaded || this.world.s_()) {
             TileEntity tileentity = (TileEntity) this.tileEntities.remove(blockposition);
 
             if (tileentity != null) {
-                tileentity.ab_();
+                tileentity.an_();
             }
         }
 
@@ -484,27 +485,27 @@ public class Chunk implements IChunkAccess {
         j = MathHelper.clamp(j, 0, this.entitySlices.length - 1);
 
         for (int k = i; k <= j; ++k) {
-            if (!this.entitySlices[k].isEmpty()) {
-                Iterator iterator = this.entitySlices[k].iterator();
+            EntitySlice<Entity> entityslice = this.entitySlices[k];
+            List<Entity> list1 = entityslice.a();
+            int l = list1.size();
 
-                while (iterator.hasNext()) {
-                    Entity entity1 = (Entity) iterator.next();
+            for (int i1 = 0; i1 < l; ++i1) {
+                Entity entity1 = (Entity) list1.get(i1);
 
-                    if (entity1.getBoundingBox().c(axisalignedbb) && entity1 != entity) {
-                        if (predicate == null || predicate.test(entity1)) {
-                            list.add(entity1);
-                        }
+                if (entity1.getBoundingBox().c(axisalignedbb) && entity1 != entity) {
+                    if (predicate == null || predicate.test(entity1)) {
+                        list.add(entity1);
+                    }
 
-                        if (entity1 instanceof EntityEnderDragon) {
-                            EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity1).eo();
-                            int l = aentitycomplexpart.length;
+                    if (entity1 instanceof EntityEnderDragon) {
+                        EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity1).eK();
+                        int j1 = aentitycomplexpart.length;
 
-                            for (int i1 = 0; i1 < l; ++i1) {
-                                EntityComplexPart entitycomplexpart = aentitycomplexpart[i1];
+                        for (int k1 = 0; k1 < j1; ++k1) {
+                            EntityComplexPart entitycomplexpart = aentitycomplexpart[k1];
 
-                                if (entitycomplexpart != entity && entitycomplexpart.getBoundingBox().c(axisalignedbb) && (predicate == null || predicate.test(entitycomplexpart))) {
-                                    list.add(entitycomplexpart);
-                                }
+                            if (entitycomplexpart != entity && entitycomplexpart.getBoundingBox().c(axisalignedbb) && (predicate == null || predicate.test(entitycomplexpart))) {
+                                list.add(entitycomplexpart);
                             }
                         }
                     }
@@ -599,7 +600,7 @@ public class Chunk implements IChunkAccess {
     @Override
     public Stream<BlockPosition> m() {
         return StreamSupport.stream(BlockPosition.b(this.loc.d(), 0, this.loc.e(), this.loc.f(), 255, this.loc.g()).spliterator(), false).filter((blockposition) -> {
-            return this.getType(blockposition).h() != 0;
+            return this.getType(blockposition).f() != 0;
         });
     }
 
@@ -634,47 +635,47 @@ public class Chunk implements IChunkAccess {
 
     @Nullable
     @Override
-    public StructureStart a(String s) {
-        return (StructureStart) this.l.get(s);
+    public StructureStart<?> a(StructureGenerator<?> structuregenerator) {
+        return (StructureStart) this.l.get(structuregenerator);
     }
 
     @Override
-    public void a(String s, StructureStart structurestart) {
-        this.l.put(s, structurestart);
+    public void a(StructureGenerator<?> structuregenerator, StructureStart<?> structurestart) {
+        this.l.put(structuregenerator, structurestart);
     }
 
     @Override
-    public Map<String, StructureStart> h() {
+    public Map<StructureGenerator<?>, StructureStart<?>> h() {
         return this.l;
     }
 
     @Override
-    public void a(Map<String, StructureStart> map) {
+    public void a(Map<StructureGenerator<?>, StructureStart<?>> map) {
         this.l.clear();
         this.l.putAll(map);
     }
 
     @Override
-    public LongSet b(String s) {
-        return (LongSet) this.m.computeIfAbsent(s, (s1) -> {
+    public LongSet b(StructureGenerator<?> structuregenerator) {
+        return (LongSet) this.m.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
             return new LongOpenHashSet();
         });
     }
 
     @Override
-    public void a(String s, long i) {
-        ((LongSet) this.m.computeIfAbsent(s, (s1) -> {
+    public void a(StructureGenerator<?> structuregenerator, long i) {
+        ((LongSet) this.m.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
             return new LongOpenHashSet();
         })).add(i);
     }
 
     @Override
-    public Map<String, LongSet> v() {
+    public Map<StructureGenerator<?>, LongSet> v() {
         return this.m;
     }
 
     @Override
-    public void b(Map<String, LongSet> map) {
+    public void b(Map<StructureGenerator<?>, LongSet> map) {
         this.m.clear();
         this.m.putAll(map);
     }
@@ -724,26 +725,27 @@ public class Chunk implements IChunkAccess {
 
     @Nullable
     private TileEntity a(BlockPosition blockposition, NBTTagCompound nbttagcompound) {
+        IBlockData iblockdata = this.getType(blockposition);
         TileEntity tileentity;
 
         if ("DUMMY".equals(nbttagcompound.getString("id"))) {
-            Block block = this.getType(blockposition).getBlock();
+            Block block = iblockdata.getBlock();
 
             if (block instanceof ITileEntity) {
                 tileentity = ((ITileEntity) block).createTile(this.world);
             } else {
                 tileentity = null;
-                Chunk.LOGGER.warn("Tried to load a DUMMY block entity @ {} but found not block entity block {} at location", blockposition, this.getType(blockposition));
+                Chunk.LOGGER.warn("Tried to load a DUMMY block entity @ {} but found not block entity block {} at location", blockposition, iblockdata);
             }
         } else {
-            tileentity = TileEntity.create(nbttagcompound);
+            tileentity = TileEntity.create(iblockdata, nbttagcompound);
         }
 
         if (tileentity != null) {
             tileentity.setLocation(this.world, blockposition);
             this.a(tileentity);
         } else {
-            Chunk.LOGGER.warn("Tried to load a block entity for block {} but failed at location {}", this.getType(blockposition), blockposition);
+            Chunk.LOGGER.warn("Tried to load a block entity for block {} but failed at location {}", iblockdata, blockposition);
         }
 
         return tileentity;
@@ -766,7 +768,7 @@ public class Chunk implements IChunkAccess {
             });
             this.o = TickListEmpty.b();
         } else if (this.o instanceof TickListChunk) {
-            this.world.getBlockTickList().a(((TickListChunk) this.o).b());
+            ((TickListChunk) this.o).a(this.world.getBlockTickList());
             this.o = TickListEmpty.b();
         }
 
@@ -776,7 +778,7 @@ public class Chunk implements IChunkAccess {
             });
             this.p = TickListEmpty.b();
         } else if (this.p instanceof TickListChunk) {
-            this.world.getFluidTickList().a(((TickListChunk) this.p).b());
+            ((TickListChunk) this.p).a(this.world.getFluidTickList());
             this.p = TickListEmpty.b();
         }
 
@@ -784,12 +786,12 @@ public class Chunk implements IChunkAccess {
 
     public void a(WorldServer worldserver) {
         if (this.o == TickListEmpty.b()) {
-            this.o = new TickListChunk<>(IRegistry.BLOCK::getKey, worldserver.getBlockTickList().a(this.loc, true, false));
+            this.o = new TickListChunk<>(IRegistry.BLOCK::getKey, worldserver.getBlockTickList().a(this.loc, true, false), worldserver.getTime());
             this.setNeedsSaving(true);
         }
 
         if (this.p == TickListEmpty.b()) {
-            this.p = new TickListChunk<>(IRegistry.FLUID::getKey, worldserver.getFluidTickList().a(this.loc, true, false));
+            this.p = new TickListChunk<>(IRegistry.FLUID::getKey, worldserver.getFluidTickList().a(this.loc, true, false), worldserver.getTime());
             this.setNeedsSaving(true);
         }
 

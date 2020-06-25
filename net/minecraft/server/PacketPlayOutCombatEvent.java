@@ -13,7 +13,7 @@ public class PacketPlayOutCombatEvent implements Packet<PacketListenerPlayOut> {
     public PacketPlayOutCombatEvent() {}
 
     public PacketPlayOutCombatEvent(CombatTracker combattracker, PacketPlayOutCombatEvent.EnumCombatEventType packetplayoutcombatevent_enumcombateventtype) {
-        this(combattracker, packetplayoutcombatevent_enumcombateventtype, new ChatComponentText(""));
+        this(combattracker, packetplayoutcombatevent_enumcombateventtype, ChatComponentText.d);
     }
 
     public PacketPlayOutCombatEvent(CombatTracker combattracker, PacketPlayOutCombatEvent.EnumCombatEventType packetplayoutcombatevent_enumcombateventtype, IChatBaseComponent ichatbasecomponent) {

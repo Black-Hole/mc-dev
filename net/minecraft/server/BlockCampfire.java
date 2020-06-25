@@ -10,32 +10,34 @@ public class BlockCampfire extends BlockTileEntity implements IBlockWaterlogged 
     public static final BlockStateBoolean b = BlockProperties.r;
     public static final BlockStateBoolean c = BlockProperties.y;
     public static final BlockStateBoolean d = BlockProperties.C;
-    public static final BlockStateDirection e = BlockProperties.N;
+    public static final BlockStateDirection e = BlockProperties.O;
     private static final VoxelShape f = Block.a(6.0D, 0.0D, 6.0D, 10.0D, 16.0D, 10.0D);
+    private final boolean g;
+    private final int h;
 
-    public BlockCampfire(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCampfire.b, true)).set(BlockCampfire.c, false)).set(BlockCampfire.d, false)).set(BlockCampfire.e, EnumDirection.NORTH));
+    public BlockCampfire(boolean flag, int i, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.g = flag;
+        this.h = i;
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCampfire.b, true)).set(BlockCampfire.c, false)).set(BlockCampfire.d, false)).set(BlockCampfire.e, EnumDirection.NORTH));
     }
 
     @Override
     public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        if ((Boolean) iblockdata.get(BlockCampfire.b)) {
-            TileEntity tileentity = world.getTileEntity(blockposition);
+        TileEntity tileentity = world.getTileEntity(blockposition);
 
-            if (tileentity instanceof TileEntityCampfire) {
-                TileEntityCampfire tileentitycampfire = (TileEntityCampfire) tileentity;
-                ItemStack itemstack = entityhuman.b(enumhand);
-                Optional<RecipeCampfire> optional = tileentitycampfire.a(itemstack);
+        if (tileentity instanceof TileEntityCampfire) {
+            TileEntityCampfire tileentitycampfire = (TileEntityCampfire) tileentity;
+            ItemStack itemstack = entityhuman.b(enumhand);
+            Optional<RecipeCampfire> optional = tileentitycampfire.a(itemstack);
 
-                if (optional.isPresent()) {
-                    if (!world.isClientSide && tileentitycampfire.a(entityhuman.abilities.canInstantlyBuild ? itemstack.cloneItemStack() : itemstack, ((RecipeCampfire) optional.get()).e())) {
-                        entityhuman.a(StatisticList.INTERACT_WITH_CAMPFIRE);
-                        return EnumInteractionResult.SUCCESS;
-                    }
-
-                    return EnumInteractionResult.CONSUME;
+            if (optional.isPresent()) {
+                if (!world.isClientSide && tileentitycampfire.a(entityhuman.abilities.canInstantlyBuild ? itemstack.cloneItemStack() : itemstack, ((RecipeCampfire) optional.get()).getCookingTime())) {
+                    entityhuman.a(StatisticList.INTERACT_WITH_CAMPFIRE);
+                    return EnumInteractionResult.SUCCESS;
                 }
+
+                return EnumInteractionResult.CONSUME;
             }
         }
 
@@ -45,7 +47,7 @@ public class BlockCampfire extends BlockTileEntity implements IBlockWaterlogged 
     @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
         if (!entity.isFireProof() && (Boolean) iblockdata.get(BlockCampfire.b) && entity instanceof EntityLiving && !EnchantmentManager.i((EntityLiving) entity)) {
-            entity.damageEntity(DamageSource.FIRE, 1.0F);
+            entity.damageEntity(DamageSource.FIRE, (float) this.h);
         }
 
         super.a(iblockdata, world, blockposition, entity);
@@ -53,7 +55,7 @@ public class BlockCampfire extends BlockTileEntity implements IBlockWaterlogged 
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!iblockdata.a(iblockdata1.getBlock())) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityCampfire) {
@@ -71,7 +73,7 @@ public class BlockCampfire extends BlockTileEntity implements IBlockWaterlogged 
         BlockPosition blockposition = blockactioncontext.getClickPosition();
         boolean flag = world.getFluid(blockposition).getType() == FluidTypes.WATER;
 
-        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockCampfire.d, flag)).set(BlockCampfire.c, this.h(world.getType(blockposition.down())))).set(BlockCampfire.b, !flag)).set(BlockCampfire.e, blockactioncontext.f());
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockCampfire.d, flag)).set(BlockCampfire.c, this.l(world.getType(blockposition.down())))).set(BlockCampfire.b, !flag)).set(BlockCampfire.e, blockactioncontext.f());
     }
 
     @Override
@@ -80,26 +82,36 @@ public class BlockCampfire extends BlockTileEntity implements IBlockWaterlogged 
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
-        return enumdirection == EnumDirection.DOWN ? (IBlockData) iblockdata.set(BlockCampfire.c, this.h(iblockdata1)) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return enumdirection == EnumDirection.DOWN ? (IBlockData) iblockdata.set(BlockCampfire.c, this.l(iblockdata1)) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    private boolean h(IBlockData iblockdata) {
-        return iblockdata.getBlock() == Blocks.HAY_BLOCK;
-    }
-
-    @Override
-    public int a(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockCampfire.b) ? super.a(iblockdata) : 0;
+    private boolean l(IBlockData iblockdata) {
+        return iblockdata.a(Blocks.HAY_BLOCK);
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockCampfire.a;
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
+    }
+
+    public static void c(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+        if (generatoraccess.s_()) {
+            for (int i = 0; i < 20; ++i) {
+                a(generatoraccess.getMinecraftWorld(), blockposition, (Boolean) iblockdata.get(BlockCampfire.c), true);
+            }
+        }
+
+        TileEntity tileentity = generatoraccess.getTileEntity(blockposition);
+
+        if (tileentity instanceof TileEntityCampfire) {
+            ((TileEntityCampfire) tileentity).f();
+        }
+
     }
 
     @Override
@@ -108,19 +120,11 @@ public class BlockCampfire extends BlockTileEntity implements IBlockWaterlogged 
             boolean flag = (Boolean) iblockdata.get(BlockCampfire.b);
 
             if (flag) {
-                if (generatoraccess.p_()) {
-                    for (int i = 0; i < 20; ++i) {
-                        a(generatoraccess.getMinecraftWorld(), blockposition, (Boolean) iblockdata.get(BlockCampfire.c), true);
-                    }
-                } else {
+                if (!generatoraccess.s_()) {
                     generatoraccess.playSound((EntityHuman) null, blockposition, SoundEffects.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
 
-                TileEntity tileentity = generatoraccess.getTileEntity(blockposition);
-
-                if (tileentity instanceof TileEntityCampfire) {
-                    ((TileEntityCampfire) tileentity).f();
-                }
+                c(generatoraccess, blockposition, iblockdata);
             }
 
             generatoraccess.setTypeAndData(blockposition, (IBlockData) ((IBlockData) iblockdata.set(BlockCampfire.d, true)).set(BlockCampfire.b, false), 3);
@@ -131,25 +135,16 @@ public class BlockCampfire extends BlockTileEntity implements IBlockWaterlogged 
         }
     }
 
-    @Nullable
-    private Entity a(Entity entity) {
-        return (Entity) (entity instanceof EntityFireballFireball ? ((EntityFireballFireball) entity).shooter : (entity instanceof EntityArrow ? ((EntityArrow) entity).getShooter() : null));
-    }
-
     @Override
-    public void a(World world, IBlockData iblockdata, MovingObjectPositionBlock movingobjectpositionblock, Entity entity) {
-        if (!world.isClientSide) {
-            boolean flag = entity instanceof EntityFireballFireball || entity instanceof EntityArrow && entity.isBurning();
+    public void a(World world, IBlockData iblockdata, MovingObjectPositionBlock movingobjectpositionblock, IProjectile iprojectile) {
+        if (!world.isClientSide && iprojectile.isBurning()) {
+            Entity entity = iprojectile.getShooter();
+            boolean flag = entity == null || entity instanceof EntityHuman || world.getGameRules().getBoolean(GameRules.MOB_GRIEFING);
 
-            if (flag) {
-                Entity entity1 = this.a(entity);
-                boolean flag1 = entity1 == null || entity1 instanceof EntityHuman || world.getGameRules().getBoolean(GameRules.MOB_GRIEFING);
+            if (flag && !(Boolean) iblockdata.get(BlockCampfire.b) && !(Boolean) iblockdata.get(BlockCampfire.d)) {
+                BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
 
-                if (flag1 && !(Boolean) iblockdata.get(BlockCampfire.b) && !(Boolean) iblockdata.get(BlockCampfire.d)) {
-                    BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
-
-                    world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.r, true), 11);
-                }
+                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.r, true), 11);
             }
         }
 
@@ -166,12 +161,12 @@ public class BlockCampfire extends BlockTileEntity implements IBlockWaterlogged 
 
     }
 
-    public static boolean b(World world, BlockPosition blockposition, int i) {
-        for (int j = 1; j <= i; ++j) {
-            BlockPosition blockposition1 = blockposition.down(j);
+    public static boolean a(World world, BlockPosition blockposition) {
+        for (int i = 1; i <= 5; ++i) {
+            BlockPosition blockposition1 = blockposition.down(i);
             IBlockData iblockdata = world.getType(blockposition1);
 
-            if (i(iblockdata)) {
+            if (g(iblockdata)) {
                 return true;
             }
 
@@ -180,20 +175,20 @@ public class BlockCampfire extends BlockTileEntity implements IBlockWaterlogged 
             if (flag) {
                 IBlockData iblockdata1 = world.getType(blockposition1.down());
 
-                return i(iblockdata1);
+                return g(iblockdata1);
             }
         }
 
         return false;
     }
 
-    private static boolean i(IBlockData iblockdata) {
-        return iblockdata.getBlock() == Blocks.CAMPFIRE && (Boolean) iblockdata.get(BlockCampfire.b);
+    public static boolean g(IBlockData iblockdata) {
+        return iblockdata.b(BlockCampfire.b) && iblockdata.a((Tag) TagsBlock.CAMPFIRES) && (Boolean) iblockdata.get(BlockCampfire.b);
     }
 
     @Override
-    public Fluid a_(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockCampfire.d) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
+    public Fluid d(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockCampfire.d) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
     }
 
     @Override
@@ -219,5 +214,11 @@ public class BlockCampfire extends BlockTileEntity implements IBlockWaterlogged 
     @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         return false;
+    }
+
+    public static boolean h(IBlockData iblockdata) {
+        return iblockdata.a((Tag) TagsBlock.CAMPFIRES, (blockbase_blockdata) -> {
+            return blockbase_blockdata.b(BlockProperties.C) && blockbase_blockdata.b(BlockProperties.r);
+        }) && !(Boolean) iblockdata.get(BlockProperties.C) && !(Boolean) iblockdata.get(BlockProperties.r);
     }
 }

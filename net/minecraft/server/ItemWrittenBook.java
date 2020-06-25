@@ -8,8 +8,8 @@ public class ItemWrittenBook extends Item {
         super(item_info);
     }
 
-    public static boolean b(@Nullable NBTTagCompound nbttagcompound) {
-        if (!ItemBookAndQuill.b(nbttagcompound)) {
+    public static boolean a(@Nullable NBTTagCompound nbttagcompound) {
+        if (!ItemBookAndQuill.a(nbttagcompound)) {
             return false;
         } else if (!nbttagcompound.hasKeyOfType("title", 8)) {
             return false;
@@ -20,18 +20,18 @@ public class ItemWrittenBook extends Item {
         }
     }
 
-    public static int e(ItemStack itemstack) {
+    public static int d(ItemStack itemstack) {
         return itemstack.getTag().getInt("generation");
     }
 
-    public static int j(ItemStack itemstack) {
+    public static int g(ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.getTag();
 
         return nbttagcompound != null ? nbttagcompound.getList("pages", 8).size() : 0;
     }
 
     @Override
-    public IChatBaseComponent g(ItemStack itemstack) {
+    public IChatBaseComponent h(ItemStack itemstack) {
         if (itemstack.hasTag()) {
             NBTTagCompound nbttagcompound = itemstack.getTag();
             String s = nbttagcompound.getString("title");
@@ -41,7 +41,7 @@ public class ItemWrittenBook extends Item {
             }
         }
 
-        return super.g(itemstack);
+        return super.h(itemstack);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ItemWrittenBook extends Item {
         BlockPosition blockposition = itemactioncontext.getClickPosition();
         IBlockData iblockdata = world.getType(blockposition);
 
-        return iblockdata.getBlock() == Blocks.LECTERN ? (BlockLectern.a(world, blockposition, iblockdata, itemactioncontext.getItemStack()) ? EnumInteractionResult.SUCCESS : EnumInteractionResult.PASS) : EnumInteractionResult.PASS;
+        return iblockdata.a(Blocks.LECTERN) ? (BlockLectern.a(world, blockposition, iblockdata, itemactioncontext.getItemStack()) ? EnumInteractionResult.a(world.isClientSide) : EnumInteractionResult.PASS) : EnumInteractionResult.PASS;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class ItemWrittenBook extends Item {
 
         entityhuman.openBook(itemstack, enumhand);
         entityhuman.b(StatisticList.ITEM_USED.b(this));
-        return InteractionResultWrapper.success(itemstack);
+        return InteractionResultWrapper.a(itemstack, world.s_());
     }
 
     public static boolean a(ItemStack itemstack, @Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable EntityHuman entityhuman) {
@@ -67,7 +67,7 @@ public class ItemWrittenBook extends Item {
 
         if (nbttagcompound != null && !nbttagcompound.getBoolean("resolved")) {
             nbttagcompound.setBoolean("resolved", true);
-            if (!b(nbttagcompound)) {
+            if (!a(nbttagcompound)) {
                 return false;
             } else {
                 NBTTagList nbttaglist = nbttagcompound.getList("pages", 8);
@@ -78,9 +78,9 @@ public class ItemWrittenBook extends Item {
                     Object object;
 
                     try {
-                        IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.b(s);
+                        IChatMutableComponent ichatmutablecomponent = IChatBaseComponent.ChatSerializer.b(s);
 
-                        object = ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, entityhuman, 0);
+                        object = ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatmutablecomponent, entityhuman, 0);
                     } catch (Exception exception) {
                         object = new ChatComponentText(s);
                     }
@@ -97,7 +97,7 @@ public class ItemWrittenBook extends Item {
     }
 
     @Override
-    public boolean d_(ItemStack itemstack) {
+    public boolean e(ItemStack itemstack) {
         return true;
     }
 }

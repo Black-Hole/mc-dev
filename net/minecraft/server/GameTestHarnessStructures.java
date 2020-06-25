@@ -18,22 +18,51 @@ public class GameTestHarnessStructures {
 
     public static String a = "gameteststructures";
 
-    public static AxisAlignedBB a(TileEntityStructure tileentitystructure) {
-        BlockPosition blockposition = tileentitystructure.getPosition().a((BaseBlockPosition) tileentitystructure.h());
-
-        return new AxisAlignedBB(blockposition, blockposition.a((BaseBlockPosition) tileentitystructure.j()));
+    public static EnumBlockRotation a(int i) {
+        switch (i) {
+            case 0:
+                return EnumBlockRotation.NONE;
+            case 1:
+                return EnumBlockRotation.CLOCKWISE_90;
+            case 2:
+                return EnumBlockRotation.CLOCKWISE_180;
+            case 3:
+                return EnumBlockRotation.COUNTERCLOCKWISE_90;
+            default:
+                throw new IllegalArgumentException("rotationSteps must be a value from 0-3. Got value " + i);
+        }
     }
 
-    public static void a(BlockPosition blockposition, WorldServer worldserver) {
-        worldserver.setTypeUpdate(blockposition, Blocks.COMMAND_BLOCK.getBlockData());
-        TileEntityCommand tileentitycommand = (TileEntityCommand) worldserver.getTileEntity(blockposition);
+    public static AxisAlignedBB a(TileEntityStructure tileentitystructure) {
+        BlockPosition blockposition = tileentitystructure.getPosition();
+        BlockPosition blockposition1 = blockposition.a((BaseBlockPosition) tileentitystructure.j().b(-1, -1, -1));
+        BlockPosition blockposition2 = DefinedStructure.a(blockposition1, EnumBlockMirror.NONE, tileentitystructure.l(), blockposition);
+
+        return new AxisAlignedBB(blockposition, blockposition2);
+    }
+
+    public static StructureBoundingBox b(TileEntityStructure tileentitystructure) {
+        BlockPosition blockposition = tileentitystructure.getPosition();
+        BlockPosition blockposition1 = blockposition.a((BaseBlockPosition) tileentitystructure.j().b(-1, -1, -1));
+        BlockPosition blockposition2 = DefinedStructure.a(blockposition1, EnumBlockMirror.NONE, tileentitystructure.l(), blockposition);
+
+        return new StructureBoundingBox(blockposition, blockposition2);
+    }
+
+    public static void a(BlockPosition blockposition, BlockPosition blockposition1, EnumBlockRotation enumblockrotation, WorldServer worldserver) {
+        BlockPosition blockposition2 = DefinedStructure.a(blockposition.a((BaseBlockPosition) blockposition1), EnumBlockMirror.NONE, enumblockrotation, blockposition);
+
+        worldserver.setTypeUpdate(blockposition2, Blocks.COMMAND_BLOCK.getBlockData());
+        TileEntityCommand tileentitycommand = (TileEntityCommand) worldserver.getTileEntity(blockposition2);
 
         tileentitycommand.getCommandBlock().setCommand("test runthis");
-        worldserver.setTypeUpdate(blockposition.b(0, 0, -1), Blocks.STONE_BUTTON.getBlockData());
+        BlockPosition blockposition3 = DefinedStructure.a(blockposition2.b(0, 0, -1), EnumBlockMirror.NONE, enumblockrotation, blockposition2);
+
+        worldserver.setTypeUpdate(blockposition3, Blocks.STONE_BUTTON.getBlockData().a(enumblockrotation));
     }
 
-    public static void a(String s, BlockPosition blockposition, BlockPosition blockposition1, int i, WorldServer worldserver) {
-        StructureBoundingBox structureboundingbox = a(blockposition, blockposition1, i);
+    public static void a(String s, BlockPosition blockposition, BlockPosition blockposition1, EnumBlockRotation enumblockrotation, WorldServer worldserver) {
+        StructureBoundingBox structureboundingbox = a(blockposition, blockposition1, enumblockrotation);
 
         a(structureboundingbox, blockposition.getY(), worldserver);
         worldserver.setTypeUpdate(blockposition, Blocks.STRUCTURE_BLOCK.getBlockData());
@@ -46,19 +75,35 @@ public class GameTestHarnessStructures {
         tileentitystructure.f(true);
     }
 
-    public static TileEntityStructure a(String s, BlockPosition blockposition, int i, WorldServer worldserver, boolean flag) {
-        StructureBoundingBox structureboundingbox = a(blockposition, a(s, worldserver).a(), i);
+    public static TileEntityStructure a(String s, BlockPosition blockposition, EnumBlockRotation enumblockrotation, int i, WorldServer worldserver, boolean flag) {
+        BlockPosition blockposition1 = a(s, worldserver).a();
+        StructureBoundingBox structureboundingbox = a(blockposition, blockposition1, enumblockrotation);
+        BlockPosition blockposition2;
 
-        b(blockposition, worldserver);
+        if (enumblockrotation == EnumBlockRotation.NONE) {
+            blockposition2 = blockposition;
+        } else if (enumblockrotation == EnumBlockRotation.CLOCKWISE_90) {
+            blockposition2 = blockposition.b(blockposition1.getZ() - 1, 0, 0);
+        } else if (enumblockrotation == EnumBlockRotation.CLOCKWISE_180) {
+            blockposition2 = blockposition.b(blockposition1.getX() - 1, 0, blockposition1.getZ() - 1);
+        } else {
+            if (enumblockrotation != EnumBlockRotation.COUNTERCLOCKWISE_90) {
+                throw new IllegalArgumentException("Invalid rotation: " + enumblockrotation);
+            }
+
+            blockposition2 = blockposition.b(0, 0, blockposition1.getX() - 1);
+        }
+
+        a(blockposition, worldserver);
         a(structureboundingbox, blockposition.getY(), worldserver);
-        TileEntityStructure tileentitystructure = a(s, blockposition, worldserver, flag);
+        TileEntityStructure tileentitystructure = a(s, blockposition2, enumblockrotation, worldserver, flag);
 
         worldserver.getBlockTickList().a(structureboundingbox, true, false);
         worldserver.a(structureboundingbox);
         return tileentitystructure;
     }
 
-    private static void b(BlockPosition blockposition, WorldServer worldserver) {
+    private static void a(BlockPosition blockposition, WorldServer worldserver) {
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition);
 
         for (int i = -1; i < 4; ++i) {
@@ -73,12 +118,14 @@ public class GameTestHarnessStructures {
     }
 
     public static void a(StructureBoundingBox structureboundingbox, int i, WorldServer worldserver) {
-        BlockPosition.a(structureboundingbox).forEach((blockposition) -> {
+        StructureBoundingBox structureboundingbox1 = new StructureBoundingBox(structureboundingbox.a - 2, structureboundingbox.b - 3, structureboundingbox.c - 3, structureboundingbox.d + 3, structureboundingbox.e + 20, structureboundingbox.f + 3);
+
+        BlockPosition.a(structureboundingbox1).forEach((blockposition) -> {
             a(i, blockposition, worldserver);
         });
-        worldserver.getBlockTickList().a(structureboundingbox, true, false);
-        worldserver.a(structureboundingbox);
-        AxisAlignedBB axisalignedbb = new AxisAlignedBB((double) structureboundingbox.a, (double) structureboundingbox.b, (double) structureboundingbox.c, (double) structureboundingbox.d, (double) structureboundingbox.e, (double) structureboundingbox.f);
+        worldserver.getBlockTickList().a(structureboundingbox1, true, false);
+        worldserver.a(structureboundingbox1);
+        AxisAlignedBB axisalignedbb = new AxisAlignedBB((double) structureboundingbox1.a, (double) structureboundingbox1.b, (double) structureboundingbox1.c, (double) structureboundingbox1.d, (double) structureboundingbox1.e, (double) structureboundingbox1.f);
         List<Entity> list = worldserver.a(Entity.class, axisalignedbb, (entity) -> {
             return !(entity instanceof EntityHuman);
         });
@@ -86,11 +133,16 @@ public class GameTestHarnessStructures {
         list.forEach(Entity::die);
     }
 
-    public static StructureBoundingBox a(BlockPosition blockposition, BlockPosition blockposition1, int i) {
-        BlockPosition blockposition2 = blockposition.b(-i, -3, -i);
-        BlockPosition blockposition3 = blockposition.a((BaseBlockPosition) blockposition1).b(i - 1, 30, i - 1);
+    public static StructureBoundingBox a(BlockPosition blockposition, BlockPosition blockposition1, EnumBlockRotation enumblockrotation) {
+        BlockPosition blockposition2 = blockposition.a((BaseBlockPosition) blockposition1).b(-1, -1, -1);
+        BlockPosition blockposition3 = DefinedStructure.a(blockposition2, EnumBlockMirror.NONE, enumblockrotation, blockposition);
+        StructureBoundingBox structureboundingbox = StructureBoundingBox.a(blockposition.getX(), blockposition.getY(), blockposition.getZ(), blockposition3.getX(), blockposition3.getY(), blockposition3.getZ());
+        int i = Math.min(structureboundingbox.a, structureboundingbox.d);
+        int j = Math.min(structureboundingbox.c, structureboundingbox.f);
+        BlockPosition blockposition4 = new BlockPosition(blockposition.getX() - i, 0, blockposition.getZ() - j);
 
-        return StructureBoundingBox.a(blockposition2.getX(), blockposition2.getY(), blockposition2.getZ(), blockposition3.getX(), blockposition3.getY(), blockposition3.getZ());
+        structureboundingbox.a(blockposition4);
+        return structureboundingbox;
     }
 
     public static Optional<BlockPosition> a(BlockPosition blockposition, int i, WorldServer worldserver) {
@@ -102,7 +154,7 @@ public class GameTestHarnessStructures {
     @Nullable
     public static BlockPosition b(BlockPosition blockposition, int i, WorldServer worldserver) {
         Comparator<BlockPosition> comparator = Comparator.comparingInt((blockposition1) -> {
-            return blockposition1.n(blockposition);
+            return blockposition1.k(blockposition);
         });
         Collection<BlockPosition> collection = c(blockposition, i, worldserver);
         Optional<BlockPosition> optional = collection.stream().min(comparator);
@@ -122,7 +174,7 @@ public class GameTestHarnessStructures {
                     BlockPosition blockposition1 = new BlockPosition(j, k, l);
                     IBlockData iblockdata = worldserver.getType(blockposition1);
 
-                    if (iblockdata.getBlock() == Blocks.STRUCTURE_BLOCK) {
+                    if (iblockdata.a(Blocks.STRUCTURE_BLOCK)) {
                         collection.add(blockposition1);
                     }
                 }
@@ -133,7 +185,7 @@ public class GameTestHarnessStructures {
     }
 
     private static DefinedStructure a(String s, WorldServer worldserver) {
-        DefinedStructureManager definedstructuremanager = worldserver.r();
+        DefinedStructureManager definedstructuremanager = worldserver.r_();
         DefinedStructure definedstructure = definedstructuremanager.b(new MinecraftKey(s));
 
         if (definedstructure != null) {
@@ -151,11 +203,12 @@ public class GameTestHarnessStructures {
         }
     }
 
-    private static TileEntityStructure a(String s, BlockPosition blockposition, WorldServer worldserver, boolean flag) {
+    private static TileEntityStructure a(String s, BlockPosition blockposition, EnumBlockRotation enumblockrotation, WorldServer worldserver, boolean flag) {
         worldserver.setTypeUpdate(blockposition, Blocks.STRUCTURE_BLOCK.getBlockData());
         TileEntityStructure tileentitystructure = (TileEntityStructure) worldserver.getTileEntity(blockposition);
 
         tileentitystructure.setUsageMode(BlockPropertyStructureMode.LOAD);
+        tileentitystructure.b(enumblockrotation);
         tileentitystructure.a(false);
         tileentitystructure.a(new MinecraftKey(s));
         tileentitystructure.c(flag);
@@ -188,22 +241,22 @@ public class GameTestHarnessStructures {
     }
 
     private static void a(int i, BlockPosition blockposition, WorldServer worldserver) {
-        GeneratorSettingsDefault generatorsettingsdefault = worldserver.getChunkProvider().getChunkGenerator().getSettings();
-        IBlockData iblockdata;
+        IBlockData iblockdata = null;
+        GeneratorSettingsFlat generatorsettingsflat = GeneratorSettingsFlat.i();
 
-        if (generatorsettingsdefault instanceof GeneratorSettingsFlat) {
-            IBlockData[] aiblockdata = ((GeneratorSettingsFlat) generatorsettingsdefault).C();
+        if (generatorsettingsflat instanceof GeneratorSettingsFlat) {
+            IBlockData[] aiblockdata = generatorsettingsflat.g();
 
-            if (blockposition.getY() < i) {
+            if (blockposition.getY() < i && blockposition.getY() <= aiblockdata.length) {
                 iblockdata = aiblockdata[blockposition.getY() - 1];
-            } else {
-                iblockdata = Blocks.AIR.getBlockData();
             }
         } else if (blockposition.getY() == i - 1) {
-            iblockdata = worldserver.getBiome(blockposition).s().a();
+            iblockdata = worldserver.getBiome(blockposition).A().a();
         } else if (blockposition.getY() < i - 1) {
-            iblockdata = worldserver.getBiome(blockposition).s().b();
-        } else {
+            iblockdata = worldserver.getBiome(blockposition).A().b();
+        }
+
+        if (iblockdata == null) {
             iblockdata = Blocks.AIR.getBlockData();
         }
 
@@ -215,8 +268,8 @@ public class GameTestHarnessStructures {
 
     private static boolean a(BlockPosition blockposition, BlockPosition blockposition1, WorldServer worldserver) {
         TileEntityStructure tileentitystructure = (TileEntityStructure) worldserver.getTileEntity(blockposition);
-        AxisAlignedBB axisalignedbb = a(tileentitystructure);
+        AxisAlignedBB axisalignedbb = a(tileentitystructure).g(1.0D);
 
-        return axisalignedbb.c(new Vec3D(blockposition1));
+        return axisalignedbb.d(Vec3D.a((BaseBlockPosition) blockposition1));
     }
 }

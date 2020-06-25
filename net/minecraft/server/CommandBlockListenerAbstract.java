@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.context.CommandContext;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 import javax.annotation.Nullable;
 
 public abstract class CommandBlockListenerAbstract implements ICommandListener {
@@ -13,6 +13,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     private boolean updateLastExecution = true;
     private int successCount;
     private boolean trackOutput = true;
+    @Nullable
     private IChatBaseComponent lastOutput;
     private String command = "";
     private IChatBaseComponent customName;
@@ -30,7 +31,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     }
 
     public IChatBaseComponent j() {
-        return (IChatBaseComponent) (this.lastOutput == null ? new ChatComponentText("") : this.lastOutput);
+        return this.lastOutput == null ? ChatComponentText.d : this.lastOutput;
     }
 
     public NBTTagCompound a(NBTTagCompound nbttagcompound) {
@@ -102,7 +103,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
                 this.successCount = 0;
                 MinecraftServer minecraftserver = this.d().getMinecraftServer();
 
-                if (minecraftserver != null && minecraftserver.K() && minecraftserver.getEnableCommandBlock() && !UtilColor.b(this.command)) {
+                if (minecraftserver.getEnableCommandBlock() && !UtilColor.b(this.command)) {
                     try {
                         this.lastOutput = null;
                         CommandListenerWrapper commandlistenerwrapper = this.getWrapper().a((commandcontext, flag, i) -> {
@@ -152,7 +153,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     }
 
     @Override
-    public void sendMessage(IChatBaseComponent ichatbasecomponent) {
+    public void sendMessage(IChatBaseComponent ichatbasecomponent, UUID uuid) {
         if (this.trackOutput) {
             this.lastOutput = (new ChatComponentText("[" + CommandBlockListenerAbstract.b.format(new Date()) + "] ")).addSibling(ichatbasecomponent);
             this.e();
@@ -164,7 +165,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
 
     public abstract void e();
 
-    public void c(@Nullable IChatBaseComponent ichatbasecomponent) {
+    public void b(@Nullable IChatBaseComponent ichatbasecomponent) {
         this.lastOutput = ichatbasecomponent;
     }
 
@@ -172,15 +173,15 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
         this.trackOutput = flag;
     }
 
-    public boolean a(EntityHuman entityhuman) {
+    public EnumInteractionResult a(EntityHuman entityhuman) {
         if (!entityhuman.isCreativeAndOp()) {
-            return false;
+            return EnumInteractionResult.PASS;
         } else {
             if (entityhuman.getWorld().isClientSide) {
                 entityhuman.a(this);
             }
 
-            return true;
+            return EnumInteractionResult.a(entityhuman.world.isClientSide);
         }
     }
 

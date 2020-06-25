@@ -1,19 +1,18 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class WorldGenDecoratorForestRock extends WorldGenDecorator<WorldGenDecoratorFrequencyConfiguration> {
 
-    public WorldGenDecoratorForestRock(Function<Dynamic<?>, ? extends WorldGenDecoratorFrequencyConfiguration> function) {
-        super(function);
+    public WorldGenDecoratorForestRock(Codec<WorldGenDecoratorFrequencyConfiguration> codec) {
+        super(codec);
     }
 
-    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, BlockPosition blockposition) {
-        int i = random.nextInt(worldgendecoratorfrequencyconfiguration.a);
+    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator chunkgenerator, Random random, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, BlockPosition blockposition) {
+        int i = random.nextInt(worldgendecoratorfrequencyconfiguration.b);
 
         return IntStream.range(0, i).mapToObj((j) -> {
             int k = random.nextInt(16) + blockposition.getX();

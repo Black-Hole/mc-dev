@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class BlockEndGateway extends BlockTileEntity {
 
-    protected BlockEndGateway(Block.Info block_info) {
-        super(block_info);
+    protected BlockEndGateway(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override

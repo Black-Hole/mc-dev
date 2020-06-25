@@ -1,21 +1,20 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class WorldGenBonusChest extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    public WorldGenBonusChest(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
-        super(function);
+    public WorldGenBonusChest(Codec<WorldGenFeatureEmptyConfiguration> codec) {
+        super(codec);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition);
         List<Integer> list = (List) IntStream.rangeClosed(chunkcoordintpair.d(), chunkcoordintpair.f()).boxed().collect(Collectors.toList());
 
@@ -34,11 +33,11 @@ public class WorldGenBonusChest extends WorldGenerator<WorldGenFeatureEmptyConfi
                 Integer integer1 = (Integer) iterator1.next();
 
                 blockposition_mutableblockposition.d(integer, 0, integer1);
-                BlockPosition blockposition1 = generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, blockposition_mutableblockposition);
+                BlockPosition blockposition1 = generatoraccessseed.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, blockposition_mutableblockposition);
 
-                if (generatoraccess.isEmpty(blockposition1) || generatoraccess.getType(blockposition1).getCollisionShape(generatoraccess, blockposition1).isEmpty()) {
-                    generatoraccess.setTypeAndData(blockposition1, Blocks.CHEST.getBlockData(), 2);
-                    TileEntityLootable.a(generatoraccess, random, blockposition1, LootTables.b);
+                if (generatoraccessseed.isEmpty(blockposition1) || generatoraccessseed.getType(blockposition1).getCollisionShape(generatoraccessseed, blockposition1).isEmpty()) {
+                    generatoraccessseed.setTypeAndData(blockposition1, Blocks.CHEST.getBlockData(), 2);
+                    TileEntityLootable.a((IBlockAccess) generatoraccessseed, random, blockposition1, LootTables.b);
                     IBlockData iblockdata = Blocks.TORCH.getBlockData();
                     Iterator iterator2 = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
@@ -46,8 +45,8 @@ public class WorldGenBonusChest extends WorldGenerator<WorldGenFeatureEmptyConfi
                         EnumDirection enumdirection = (EnumDirection) iterator2.next();
                         BlockPosition blockposition2 = blockposition1.shift(enumdirection);
 
-                        if (iblockdata.canPlace(generatoraccess, blockposition2)) {
-                            generatoraccess.setTypeAndData(blockposition2, iblockdata, 2);
+                        if (iblockdata.canPlace(generatoraccessseed, blockposition2)) {
+                            generatoraccessseed.setTypeAndData(blockposition2, iblockdata, 2);
                         }
                     }
 

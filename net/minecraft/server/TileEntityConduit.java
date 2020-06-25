@@ -31,10 +31,10 @@ public class TileEntityConduit extends TileEntity implements ITickable {
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
-        if (nbttagcompound.hasKey("target_uuid")) {
-            this.k = GameProfileSerializer.b(nbttagcompound.getCompound("target_uuid"));
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
+        if (nbttagcompound.b("Target")) {
+            this.k = nbttagcompound.a("Target");
         } else {
             this.k = null;
         }
@@ -45,7 +45,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         if (this.target != null) {
-            nbttagcompound.set("target_uuid", GameProfileSerializer.a(this.target.getUniqueID()));
+            nbttagcompound.a("Target", this.target.getUniqueID());
         }
 
         return nbttagcompound;
@@ -106,7 +106,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
                 for (k = -1; k <= 1; ++k) {
                     BlockPosition blockposition = this.position.b(i, j, k);
 
-                    if (!this.world.y(blockposition)) {
+                    if (!this.world.A(blockposition)) {
                         return false;
                     }
                 }
@@ -129,7 +129,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
                         for (int l1 = 0; l1 < k1; ++l1) {
                             Block block = ablock[l1];
 
-                            if (iblockdata.getBlock() == block) {
+                            if (iblockdata.a(block)) {
                                 this.i.add(blockposition1);
                             }
                         }
@@ -157,7 +157,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
             while (iterator.hasNext()) {
                 EntityHuman entityhuman = (EntityHuman) iterator.next();
 
-                if (this.position.a((BaseBlockPosition) (new BlockPosition(entityhuman)), (double) j) && entityhuman.isInWaterOrRain()) {
+                if (this.position.a((BaseBlockPosition) entityhuman.getChunkCoordinates(), (double) j) && entityhuman.isInWaterOrRain()) {
                     entityhuman.addEffect(new MobEffect(MobEffects.CONDUIT_POWER, 260, 0, true, true));
                 }
             }
@@ -182,7 +182,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
             if (!list.isEmpty()) {
                 this.target = (EntityLiving) list.get(this.world.random.nextInt(list.size()));
             }
-        } else if (!this.target.isAlive() || !this.position.a((BaseBlockPosition) (new BlockPosition(this.target)), 8.0D)) {
+        } else if (!this.target.isAlive() || !this.position.a((BaseBlockPosition) this.target.getChunkCoordinates(), 8.0D)) {
             this.target = null;
         }
 

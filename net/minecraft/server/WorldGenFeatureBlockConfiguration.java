@@ -1,51 +1,31 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
 
 public class WorldGenFeatureBlockConfiguration implements WorldGenFeatureConfiguration {
 
-    public final IBlockData a;
-    public final List<IBlockData> b;
+    public static final Codec<WorldGenFeatureBlockConfiguration> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(IBlockData.b.fieldOf("to_place").forGetter((worldgenfeatureblockconfiguration) -> {
+            return worldgenfeatureblockconfiguration.b;
+        }), IBlockData.b.listOf().fieldOf("place_on").forGetter((worldgenfeatureblockconfiguration) -> {
+            return worldgenfeatureblockconfiguration.c;
+        }), IBlockData.b.listOf().fieldOf("place_in").forGetter((worldgenfeatureblockconfiguration) -> {
+            return worldgenfeatureblockconfiguration.d;
+        }), IBlockData.b.listOf().fieldOf("place_under").forGetter((worldgenfeatureblockconfiguration) -> {
+            return worldgenfeatureblockconfiguration.e;
+        })).apply(instance, WorldGenFeatureBlockConfiguration::new);
+    });
+    public final IBlockData b;
     public final List<IBlockData> c;
     public final List<IBlockData> d;
+    public final List<IBlockData> e;
 
     public WorldGenFeatureBlockConfiguration(IBlockData iblockdata, List<IBlockData> list, List<IBlockData> list1, List<IBlockData> list2) {
-        this.a = iblockdata;
-        this.b = list;
-        this.c = list1;
-        this.d = list2;
-    }
-
-    public WorldGenFeatureBlockConfiguration(IBlockData iblockdata, IBlockData[] aiblockdata, IBlockData[] aiblockdata1, IBlockData[] aiblockdata2) {
-        this(iblockdata, (List) Lists.newArrayList(aiblockdata), (List) Lists.newArrayList(aiblockdata1), (List) Lists.newArrayList(aiblockdata2));
-    }
-
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        T t0 = IBlockData.a(dynamicops, this.a).getValue();
-        T t1 = dynamicops.createList(this.b.stream().map((iblockdata) -> {
-            return IBlockData.a(dynamicops, iblockdata).getValue();
-        }));
-        T t2 = dynamicops.createList(this.c.stream().map((iblockdata) -> {
-            return IBlockData.a(dynamicops, iblockdata).getValue();
-        }));
-        T t3 = dynamicops.createList(this.d.stream().map((iblockdata) -> {
-            return IBlockData.a(dynamicops, iblockdata).getValue();
-        }));
-
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("to_place"), t0, dynamicops.createString("place_on"), t1, dynamicops.createString("place_in"), t2, dynamicops.createString("place_under"), t3)));
-    }
-
-    public static <T> WorldGenFeatureBlockConfiguration a(Dynamic<T> dynamic) {
-        IBlockData iblockdata = (IBlockData) dynamic.get("to_place").map(IBlockData::a).orElse(Blocks.AIR.getBlockData());
-        List<IBlockData> list = dynamic.get("place_on").asList(IBlockData::a);
-        List<IBlockData> list1 = dynamic.get("place_in").asList(IBlockData::a);
-        List<IBlockData> list2 = dynamic.get("place_under").asList(IBlockData::a);
-
-        return new WorldGenFeatureBlockConfiguration(iblockdata, list, list1, list2);
+        this.b = iblockdata;
+        this.c = list;
+        this.d = list1;
+        this.e = list2;
     }
 }

@@ -6,14 +6,16 @@ public class ScoreboardObjective {
     private final String b;
     private final IScoreboardCriteria c;
     public IChatBaseComponent displayName;
-    private IScoreboardCriteria.EnumScoreboardHealthDisplay e;
+    private IChatBaseComponent e;
+    private IScoreboardCriteria.EnumScoreboardHealthDisplay f;
 
     public ScoreboardObjective(Scoreboard scoreboard, String s, IScoreboardCriteria iscoreboardcriteria, IChatBaseComponent ichatbasecomponent, IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay) {
         this.a = scoreboard;
         this.b = s;
         this.c = iscoreboardcriteria;
         this.displayName = ichatbasecomponent;
-        this.e = iscoreboardcriteria_enumscoreboardhealthdisplay;
+        this.e = this.g();
+        this.f = iscoreboardcriteria_enumscoreboardhealthdisplay;
     }
 
     public String getName() {
@@ -28,23 +30,28 @@ public class ScoreboardObjective {
         return this.displayName;
     }
 
-    public IChatBaseComponent e() {
-        return ChatComponentUtils.a(this.displayName.h().a((chatmodifier) -> {
-            chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(this.getName())));
+    private IChatBaseComponent g() {
+        return ChatComponentUtils.a((IChatBaseComponent) this.displayName.mutableCopy().format((chatmodifier) -> {
+            return chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(this.b)));
         }));
+    }
+
+    public IChatBaseComponent e() {
+        return this.e;
     }
 
     public void setDisplayName(IChatBaseComponent ichatbasecomponent) {
         this.displayName = ichatbasecomponent;
+        this.e = this.g();
         this.a.handleObjectiveChanged(this);
     }
 
     public IScoreboardCriteria.EnumScoreboardHealthDisplay getRenderType() {
-        return this.e;
+        return this.f;
     }
 
     public void setRenderType(IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay) {
-        this.e = iscoreboardcriteria_enumscoreboardhealthdisplay;
+        this.f = iscoreboardcriteria_enumscoreboardhealthdisplay;
         this.a.handleObjectiveChanged(this);
     }
 }

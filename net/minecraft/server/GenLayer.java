@@ -16,7 +16,7 @@ public class GenLayer {
         BiomeBase biomebase = (BiomeBase) IRegistry.BIOME.fromId(i);
 
         if (biomebase == null) {
-            if (SharedConstants.b) {
+            if (SharedConstants.d) {
                 throw (IllegalStateException) SystemUtils.c(new IllegalStateException("Unknown biome id: " + i));
             } else {
                 GenLayer.LOGGER.warn("Unknown biome id: ", i);

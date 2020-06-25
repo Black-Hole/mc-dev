@@ -65,7 +65,7 @@ public class PathfinderTargetCondition {
         } else {
             if (entityliving != null) {
                 if (!this.f) {
-                    if (!entityliving.c(entityliving1)) {
+                    if (!entityliving.d(entityliving1)) {
                         return false;
                     }
 

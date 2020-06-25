@@ -15,11 +15,14 @@ public class EntityEgg extends EntityProjectileThrowable {
     }
 
     @Override
-    protected void a(MovingObjectPosition movingobjectposition) {
-        if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.ENTITY) {
-            ((MovingObjectPositionEntity) movingobjectposition).getEntity().damageEntity(DamageSource.projectile(this, this.getShooter()), 0.0F);
-        }
+    protected void a(MovingObjectPositionEntity movingobjectpositionentity) {
+        super.a(movingobjectpositionentity);
+        movingobjectpositionentity.getEntity().damageEntity(DamageSource.projectile(this, this.getShooter()), 0.0F);
+    }
 
+    @Override
+    protected void a(MovingObjectPosition movingobjectposition) {
+        super.a(movingobjectposition);
         if (!this.world.isClientSide) {
             if (this.random.nextInt(8) == 0) {
                 byte b0 = 1;
@@ -44,7 +47,7 @@ public class EntityEgg extends EntityProjectileThrowable {
     }
 
     @Override
-    protected Item i() {
+    protected Item getDefaultItem() {
         return Items.EGG;
     }
 }

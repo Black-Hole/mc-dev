@@ -20,7 +20,7 @@ public class ItemKnowledgeBook extends Item {
         NBTTagCompound nbttagcompound = itemstack.getTag();
 
         if (!entityhuman.abilities.canInstantlyBuild) {
-            entityhuman.a(enumhand, ItemStack.a);
+            entityhuman.a(enumhand, ItemStack.b);
         }
 
         if (nbttagcompound != null && nbttagcompound.hasKeyOfType("Recipes", 9)) {
@@ -45,7 +45,7 @@ public class ItemKnowledgeBook extends Item {
                 entityhuman.b(StatisticList.ITEM_USED.b(this));
             }
 
-            return InteractionResultWrapper.success(itemstack);
+            return InteractionResultWrapper.a(itemstack, world.s_());
         } else {
             ItemKnowledgeBook.LOGGER.error("Tag not valid: {}", nbttagcompound);
             return InteractionResultWrapper.fail(itemstack);

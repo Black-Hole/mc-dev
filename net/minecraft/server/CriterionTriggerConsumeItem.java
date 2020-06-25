@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerConsumeItem extends CriterionTriggerAbstract<CriterionTriggerConsumeItem.a> {
@@ -16,12 +14,12 @@ public class CriterionTriggerConsumeItem extends CriterionTriggerAbstract<Criter
     }
 
     @Override
-    public CriterionTriggerConsumeItem.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return new CriterionTriggerConsumeItem.a(CriterionConditionItem.a(jsonobject.get("item")));
+    public CriterionTriggerConsumeItem.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
+        return new CriterionTriggerConsumeItem.a(criterionconditionentity_b, CriterionConditionItem.a(jsonobject.get("item")));
     }
 
     public void a(EntityPlayer entityplayer, ItemStack itemstack) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggerconsumeitem_a) -> {
+        this.a(entityplayer, (criteriontriggerconsumeitem_a) -> {
             return criteriontriggerconsumeitem_a.a(itemstack);
         });
     }
@@ -30,17 +28,17 @@ public class CriterionTriggerConsumeItem extends CriterionTriggerAbstract<Criter
 
         private final CriterionConditionItem a;
 
-        public a(CriterionConditionItem criterionconditionitem) {
-            super(CriterionTriggerConsumeItem.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionItem criterionconditionitem) {
+            super(CriterionTriggerConsumeItem.a, criterionconditionentity_b);
             this.a = criterionconditionitem;
         }
 
         public static CriterionTriggerConsumeItem.a c() {
-            return new CriterionTriggerConsumeItem.a(CriterionConditionItem.a);
+            return new CriterionTriggerConsumeItem.a(CriterionConditionEntity.b.a, CriterionConditionItem.a);
         }
 
         public static CriterionTriggerConsumeItem.a a(IMaterial imaterial) {
-            return new CriterionTriggerConsumeItem.a(new CriterionConditionItem((Tag) null, imaterial.getItem(), CriterionConditionValue.IntegerRange.e, CriterionConditionValue.IntegerRange.e, CriterionConditionEnchantments.b, CriterionConditionEnchantments.b, (PotionRegistry) null, CriterionConditionNBT.a));
+            return new CriterionTriggerConsumeItem.a(CriterionConditionEntity.b.a, new CriterionConditionItem((Tag) null, imaterial.getItem(), CriterionConditionValue.IntegerRange.e, CriterionConditionValue.IntegerRange.e, CriterionConditionEnchantments.b, CriterionConditionEnchantments.b, (PotionRegistry) null, CriterionConditionNBT.a));
         }
 
         public boolean a(ItemStack itemstack) {
@@ -48,8 +46,8 @@ public class CriterionTriggerConsumeItem extends CriterionTriggerAbstract<Criter
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             jsonobject.add("item", this.a.a());
             return jsonobject;

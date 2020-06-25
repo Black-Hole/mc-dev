@@ -3,24 +3,23 @@ package net.minecraft.server;
 public final class BiomeDesertMutated extends BiomeBase {
 
     public BiomeDesertMutated() {
-        super((new BiomeBase.a()).a(WorldGenSurface.G, WorldGenSurface.z).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.DESERT).a(0.225F).b(0.25F).c(2.0F).d(0.0F).a(4159204).b(329011).a("desert"));
-        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
-        this.a(WorldGenerator.STRONGHOLD.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
-        BiomeDecoratorGroups.a(this);
-        BiomeDecoratorGroups.c(this);
-        BiomeDecoratorGroups.e(this);
-        BiomeDecoratorGroups.f(this);
+        super((new BiomeBase.a()).a(WorldGenSurface.S, WorldGenSurface.H).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.DESERT).a(0.225F).b(0.25F).c(2.0F).d(0.0F).a((new BiomeFog.a()).b(4159204).c(329011).a(12638463).a(CaveSoundSettings.b).a()).a("desert"));
+        BiomeDecoratorGroups.b(this);
+        this.a(BiomeDecoratorGroups.z);
+        BiomeDecoratorGroups.d(this);
         BiomeDecoratorGroups.g(this);
         BiomeDecoratorGroups.h(this);
-        BiomeDecoratorGroups.l(this);
-        BiomeDecoratorGroups.U(this);
+        BiomeDecoratorGroups.i(this);
+        BiomeDecoratorGroups.j(this);
+        BiomeDecoratorGroups.n(this);
         BiomeDecoratorGroups.W(this);
-        BiomeDecoratorGroups.S(this);
-        BiomeDecoratorGroups.Z(this);
-        BiomeDecoratorGroups.ad(this);
-        BiomeDecoratorGroups.am(this);
+        BiomeDecoratorGroups.Y(this);
+        BiomeDecoratorGroups.U(this);
+        BiomeDecoratorGroups.ab(this);
         BiomeDecoratorGroups.af(this);
-        BiomeDecoratorGroups.ap(this);
+        BiomeDecoratorGroups.ao(this);
+        BiomeDecoratorGroups.ah(this);
+        BiomeDecoratorGroups.ar(this);
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.RABBIT, 4, 2, 3));
         this.a(EnumCreatureType.AMBIENT, new BiomeBase.BiomeMeta(EntityTypes.BAT, 10, 8, 8));
         this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.SPIDER, 100, 4, 4));

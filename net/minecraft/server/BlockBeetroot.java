@@ -4,11 +4,11 @@ import java.util.Random;
 
 public class BlockBeetroot extends BlockCrops {
 
-    public static final BlockStateInteger a = BlockProperties.aa;
+    public static final BlockStateInteger a = BlockProperties.ag;
     private static final VoxelShape[] c = new VoxelShape[]{Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D)};
 
-    public BlockBeetroot(Block.Info block_info) {
-        super(block_info);
+    public BlockBeetroot(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class BlockBeetroot extends BlockCrops {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockBeetroot.c[(Integer) iblockdata.get(this.c())];
     }
 }

@@ -18,6 +18,9 @@ public final class IEntitySelector {
         return !(entity instanceof EntityHuman) || !entity.isSpectator() && !((EntityHuman) entity).isCreative();
     };
     public static final Predicate<Entity> f = (entity) -> {
+        return !(entity instanceof EntityHuman) || !entity.isSpectator() && !((EntityHuman) entity).isCreative() && entity.world.getDifficulty() != EnumDifficulty.PEACEFUL;
+    };
+    public static final Predicate<Entity> g = (entity) -> {
         return !entity.isSpectator();
     };
 
@@ -33,10 +36,10 @@ public final class IEntitySelector {
         ScoreboardTeamBase scoreboardteambase = entity.getScoreboardTeam();
         ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.getCollisionRule();
 
-        return (Predicate) (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : IEntitySelector.f.and((entity1) -> {
+        return (Predicate) (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : IEntitySelector.g.and((entity1) -> {
             if (!entity1.isCollidable()) {
                 return false;
-            } else if (entity.world.isClientSide && (!(entity1 instanceof EntityHuman) || !((EntityHuman) entity1).ec())) {
+            } else if (entity.world.isClientSide && (!(entity1 instanceof EntityHuman) || !((EntityHuman) entity1).ey())) {
                 return false;
             } else {
                 ScoreboardTeamBase scoreboardteambase1 = entity1.getScoreboardTeam();

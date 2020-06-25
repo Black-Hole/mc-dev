@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 public class BlockHay extends BlockRotatable {
 
-    public BlockHay(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockHay.AXIS, EnumDirection.EnumAxis.Y));
+    public BlockHay(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockHay.AXIS, EnumDirection.EnumAxis.Y));
     }
 
     @Override

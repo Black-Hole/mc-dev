@@ -3,10 +3,9 @@ package net.minecraft.server;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
+import com.mojang.serialization.Dynamic;
 
 public class DataConverterOptionsAddTextBackground extends DataFix {
 
@@ -19,7 +18,7 @@ public class DataConverterOptionsAddTextBackground extends DataFix {
             return typed.update(DSL.remainderFinder(), (dynamic) -> {
                 return (Dynamic) DataFixUtils.orElse(dynamic.get("chatOpacity").asString().map((s) -> {
                     return dynamic.set("textBackgroundOpacity", dynamic.createDouble(this.a(s)));
-                }), dynamic);
+                }).result(), dynamic);
             });
         });
     }

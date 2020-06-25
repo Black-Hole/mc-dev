@@ -61,8 +61,8 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
             int i;
 
             for (i = -1; i < 17; ++i) {
-                super.a(EnumSkyBlock.BLOCK, SectionPosition.a(chunkcoordintpair, i), (NibbleArray) null);
-                super.a(EnumSkyBlock.SKY, SectionPosition.a(chunkcoordintpair, i), (NibbleArray) null);
+                super.a(EnumSkyBlock.BLOCK, SectionPosition.a(chunkcoordintpair, i), (NibbleArray) null, true);
+                super.a(EnumSkyBlock.SKY, SectionPosition.a(chunkcoordintpair, i), (NibbleArray) null, true);
             }
 
             for (i = 0; i < 16; ++i) {
@@ -95,11 +95,11 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
     }
 
     @Override
-    public void a(EnumSkyBlock enumskyblock, SectionPosition sectionposition, @Nullable NibbleArray nibblearray) {
+    public void a(EnumSkyBlock enumskyblock, SectionPosition sectionposition, @Nullable NibbleArray nibblearray, boolean flag) {
         this.a(sectionposition.a(), sectionposition.c(), () -> {
             return 0;
         }, LightEngineThreaded.Update.PRE_UPDATE, SystemUtils.a(() -> {
-            super.a(enumskyblock, sectionposition, nibblearray);
+            super.a(enumskyblock, sectionposition, nibblearray, flag);
         }, () -> {
             return "queueData " + sectionposition;
         }));
@@ -110,7 +110,7 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
     }
 
     private void a(int i, int j, IntSupplier intsupplier, LightEngineThreaded.Update lightenginethreaded_update, Runnable runnable) {
-        this.e.a((Object) ChunkTaskQueueSorter.a(() -> {
+        this.e.a(ChunkTaskQueueSorter.a(() -> {
             this.c.add(Pair.of(lightenginethreaded_update, runnable));
             if (this.c.size() >= this.f) {
                 this.b();

@@ -23,7 +23,7 @@ public abstract class ExpirableListEntry<T> extends JsonListEntry<T> {
     }
 
     protected ExpirableListEntry(T t0, JsonObject jsonobject) {
-        super(t0, jsonobject);
+        super(t0);
 
         Date date;
 

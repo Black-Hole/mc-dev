@@ -15,14 +15,14 @@ public class ItemLeash extends Item {
         BlockPosition blockposition = itemactioncontext.getClickPosition();
         Block block = world.getType(blockposition).getBlock();
 
-        if (block.a(TagsBlock.FENCES)) {
+        if (block.a((Tag) TagsBlock.FENCES)) {
             EntityHuman entityhuman = itemactioncontext.getEntity();
 
             if (!world.isClientSide && entityhuman != null) {
                 a(entityhuman, world, blockposition);
             }
 
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.a(world.isClientSide);
         } else {
             return EnumInteractionResult.PASS;
         }

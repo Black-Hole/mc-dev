@@ -17,52 +17,51 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
     protected static final VoxelShape i = Block.a(0.0D, 6.0D, 5.0D, 2.0D, 10.0D, 11.0D);
     protected static final VoxelShape j = Block.a(6.0D, 15.0D, 5.0D, 10.0D, 16.0D, 11.0D);
     protected static final VoxelShape k = Block.a(5.0D, 15.0D, 6.0D, 11.0D, 16.0D, 10.0D);
-    protected static final VoxelShape w = Block.a(6.0D, 0.0D, 5.0D, 10.0D, 1.0D, 11.0D);
-    protected static final VoxelShape x = Block.a(5.0D, 0.0D, 6.0D, 11.0D, 1.0D, 10.0D);
-    protected static final VoxelShape y = Block.a(5.0D, 6.0D, 15.0D, 11.0D, 10.0D, 16.0D);
-    protected static final VoxelShape z = Block.a(5.0D, 6.0D, 0.0D, 11.0D, 10.0D, 1.0D);
-    protected static final VoxelShape A = Block.a(15.0D, 6.0D, 5.0D, 16.0D, 10.0D, 11.0D);
-    protected static final VoxelShape B = Block.a(0.0D, 6.0D, 5.0D, 1.0D, 10.0D, 11.0D);
-    private final boolean D;
+    protected static final VoxelShape o = Block.a(6.0D, 0.0D, 5.0D, 10.0D, 1.0D, 11.0D);
+    protected static final VoxelShape p = Block.a(5.0D, 0.0D, 6.0D, 11.0D, 1.0D, 10.0D);
+    protected static final VoxelShape q = Block.a(5.0D, 6.0D, 15.0D, 11.0D, 10.0D, 16.0D);
+    protected static final VoxelShape r = Block.a(5.0D, 6.0D, 0.0D, 11.0D, 10.0D, 1.0D);
+    protected static final VoxelShape s = Block.a(15.0D, 6.0D, 5.0D, 16.0D, 10.0D, 11.0D);
+    protected static final VoxelShape t = Block.a(0.0D, 6.0D, 5.0D, 1.0D, 10.0D, 11.0D);
+    private final boolean v;
 
-    protected BlockButtonAbstract(boolean flag, Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockButtonAbstract.FACING, EnumDirection.NORTH)).set(BlockButtonAbstract.POWERED, false)).set(BlockButtonAbstract.FACE, BlockPropertyAttachPosition.WALL));
-        this.D = flag;
+    protected BlockButtonAbstract(boolean flag, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockButtonAbstract.FACING, EnumDirection.NORTH)).set(BlockButtonAbstract.POWERED, false)).set(BlockButtonAbstract.FACE, BlockPropertyAttachPosition.WALL));
+        this.v = flag;
+    }
+
+    private int c() {
+        return this.v ? 30 : 20;
     }
 
     @Override
-    public int a(IWorldReader iworldreader) {
-        return this.D ? 30 : 20;
-    }
-
-    @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockButtonAbstract.FACING);
         boolean flag = (Boolean) iblockdata.get(BlockButtonAbstract.POWERED);
 
         switch ((BlockPropertyAttachPosition) iblockdata.get(BlockButtonAbstract.FACE)) {
             case FLOOR:
-                if (enumdirection.m() == EnumDirection.EnumAxis.X) {
-                    return flag ? BlockButtonAbstract.w : BlockButtonAbstract.d;
+                if (enumdirection.n() == EnumDirection.EnumAxis.X) {
+                    return flag ? BlockButtonAbstract.o : BlockButtonAbstract.d;
                 }
 
-                return flag ? BlockButtonAbstract.x : BlockButtonAbstract.e;
+                return flag ? BlockButtonAbstract.p : BlockButtonAbstract.e;
             case WALL:
                 switch (enumdirection) {
                     case EAST:
-                        return flag ? BlockButtonAbstract.B : BlockButtonAbstract.i;
+                        return flag ? BlockButtonAbstract.t : BlockButtonAbstract.i;
                     case WEST:
-                        return flag ? BlockButtonAbstract.A : BlockButtonAbstract.h;
+                        return flag ? BlockButtonAbstract.s : BlockButtonAbstract.h;
                     case SOUTH:
-                        return flag ? BlockButtonAbstract.z : BlockButtonAbstract.g;
+                        return flag ? BlockButtonAbstract.r : BlockButtonAbstract.g;
                     case NORTH:
                     default:
-                        return flag ? BlockButtonAbstract.y : BlockButtonAbstract.f;
+                        return flag ? BlockButtonAbstract.q : BlockButtonAbstract.f;
                 }
             case CEILING:
             default:
-                return enumdirection.m() == EnumDirection.EnumAxis.X ? (flag ? BlockButtonAbstract.j : BlockButtonAbstract.b) : (flag ? BlockButtonAbstract.k : BlockButtonAbstract.c);
+                return enumdirection.n() == EnumDirection.EnumAxis.X ? (flag ? BlockButtonAbstract.j : BlockButtonAbstract.b) : (flag ? BlockButtonAbstract.k : BlockButtonAbstract.c);
         }
     }
 
@@ -73,14 +72,14 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
         } else {
             this.d(iblockdata, world, blockposition);
             this.a(entityhuman, world, blockposition, true);
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.a(world.isClientSide);
         }
     }
 
     public void d(IBlockData iblockdata, World world, BlockPosition blockposition) {
         world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockButtonAbstract.POWERED, true), 3);
         this.f(iblockdata, world, blockposition);
-        world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
+        world.getBlockTickList().a(blockposition, this, this.c());
     }
 
     protected void a(@Nullable EntityHuman entityhuman, GeneratorAccess generatoraccess, BlockPosition blockposition, boolean flag) {
@@ -91,7 +90,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (!flag && iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!flag && !iblockdata.a(iblockdata1.getBlock())) {
             if ((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)) {
                 this.f(iblockdata, world, blockposition);
             }
@@ -116,13 +115,13 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if ((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)) {
-            if (this.D) {
+            if (this.v) {
                 this.e(iblockdata, (World) worldserver, blockposition);
             } else {
                 worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockButtonAbstract.POWERED, false), 3);
-                this.f(iblockdata, worldserver, blockposition);
+                this.f(iblockdata, (World) worldserver, blockposition);
                 this.a((EntityHuman) null, worldserver, blockposition, false);
             }
 
@@ -131,7 +130,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
 
     @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
-        if (!world.isClientSide && this.D && !(Boolean) iblockdata.get(BlockButtonAbstract.POWERED)) {
+        if (!world.isClientSide && this.v && !(Boolean) iblockdata.get(BlockButtonAbstract.POWERED)) {
             this.e(iblockdata, world, blockposition);
         }
     }
@@ -148,7 +147,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
         }
 
         if (flag) {
-            world.getBlockTickList().a(new BlockPosition(blockposition), this, this.a((IWorldReader) world));
+            world.getBlockTickList().a(new BlockPosition(blockposition), this, this.c());
         }
 
     }

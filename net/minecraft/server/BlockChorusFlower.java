@@ -6,88 +6,97 @@ import javax.annotation.Nullable;
 
 public class BlockChorusFlower extends Block {
 
-    public static final BlockStateInteger AGE = BlockProperties.ab;
+    public static final BlockStateInteger AGE = BlockProperties.ah;
     private final BlockChorusFruit b;
 
-    protected BlockChorusFlower(BlockChorusFruit blockchorusfruit, Block.Info block_info) {
-        super(block_info);
+    protected BlockChorusFlower(BlockChorusFruit blockchorusfruit, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.b = blockchorusfruit;
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChorusFlower.AGE, 0));
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChorusFlower.AGE, 0));
+    }
+
+    @Override
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!iblockdata.canPlace(worldserver, blockposition)) {
+            worldserver.b(blockposition, true);
+        }
+
+    }
+
+    @Override
+    public boolean isTicking(IBlockData iblockdata) {
+        return (Integer) iblockdata.get(BlockChorusFlower.AGE) < 5;
     }
 
     @Override
     public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        if (!iblockdata.canPlace(worldserver, blockposition)) {
-            worldserver.b(blockposition, true);
-        } else {
-            BlockPosition blockposition1 = blockposition.up();
+        BlockPosition blockposition1 = blockposition.up();
 
-            if (worldserver.isEmpty(blockposition1) && blockposition1.getY() < 256) {
-                int i = (Integer) iblockdata.get(BlockChorusFlower.AGE);
+        if (worldserver.isEmpty(blockposition1) && blockposition1.getY() < 256) {
+            int i = (Integer) iblockdata.get(BlockChorusFlower.AGE);
 
-                if (i < 5) {
-                    boolean flag = false;
-                    boolean flag1 = false;
-                    IBlockData iblockdata1 = worldserver.getType(blockposition.down());
-                    Block block = iblockdata1.getBlock();
-                    int j;
+            if (i < 5) {
+                boolean flag = false;
+                boolean flag1 = false;
+                IBlockData iblockdata1 = worldserver.getType(blockposition.down());
+                Block block = iblockdata1.getBlock();
+                int j;
 
-                    if (block == Blocks.END_STONE) {
-                        flag = true;
-                    } else if (block == this.b) {
-                        j = 1;
+                if (block == Blocks.END_STONE) {
+                    flag = true;
+                } else if (block == this.b) {
+                    j = 1;
 
-                        for (int k = 0; k < 4; ++k) {
-                            Block block1 = worldserver.getType(blockposition.down(j + 1)).getBlock();
+                    for (int k = 0; k < 4; ++k) {
+                        Block block1 = worldserver.getType(blockposition.down(j + 1)).getBlock();
 
-                            if (block1 != this.b) {
-                                if (block1 == Blocks.END_STONE) {
-                                    flag1 = true;
-                                }
-                                break;
+                        if (block1 != this.b) {
+                            if (block1 == Blocks.END_STONE) {
+                                flag1 = true;
                             }
-
-                            ++j;
+                            break;
                         }
 
-                        if (j < 2 || j <= random.nextInt(flag1 ? 5 : 4)) {
-                            flag = true;
-                        }
-                    } else if (iblockdata1.isAir()) {
-                        flag = true;
+                        ++j;
                     }
 
-                    if (flag && b((IWorldReader) worldserver, blockposition1, (EnumDirection) null) && worldserver.isEmpty(blockposition.up(2))) {
+                    if (j < 2 || j <= random.nextInt(flag1 ? 5 : 4)) {
+                        flag = true;
+                    }
+                } else if (iblockdata1.isAir()) {
+                    flag = true;
+                }
+
+                if (flag && b((IWorldReader) worldserver, blockposition1, (EnumDirection) null) && worldserver.isEmpty(blockposition.up(2))) {
+                    worldserver.setTypeAndData(blockposition, this.b.a((IBlockAccess) worldserver, blockposition), 2);
+                    this.b(worldserver, blockposition1, i);
+                } else if (i < 4) {
+                    j = random.nextInt(4);
+                    if (flag1) {
+                        ++j;
+                    }
+
+                    boolean flag2 = false;
+
+                    for (int l = 0; l < j; ++l) {
+                        EnumDirection enumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
+                        BlockPosition blockposition2 = blockposition.shift(enumdirection);
+
+                        if (worldserver.isEmpty(blockposition2) && worldserver.isEmpty(blockposition2.down()) && b((IWorldReader) worldserver, blockposition2, enumdirection.opposite())) {
+                            this.b(worldserver, blockposition2, i + 1);
+                            flag2 = true;
+                        }
+                    }
+
+                    if (flag2) {
                         worldserver.setTypeAndData(blockposition, this.b.a((IBlockAccess) worldserver, blockposition), 2);
-                        this.b(worldserver, blockposition1, i);
-                    } else if (i < 4) {
-                        j = random.nextInt(4);
-                        if (flag1) {
-                            ++j;
-                        }
-
-                        boolean flag2 = false;
-
-                        for (int l = 0; l < j; ++l) {
-                            EnumDirection enumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
-                            BlockPosition blockposition2 = blockposition.shift(enumdirection);
-
-                            if (worldserver.isEmpty(blockposition2) && worldserver.isEmpty(blockposition2.down()) && b((IWorldReader) worldserver, blockposition2, enumdirection.opposite())) {
-                                this.b(worldserver, blockposition2, i + 1);
-                                flag2 = true;
-                            }
-                        }
-
-                        if (flag2) {
-                            worldserver.setTypeAndData(blockposition, this.b.a((IBlockAccess) worldserver, blockposition), 2);
-                        } else {
-                            this.a((World) worldserver, blockposition);
-                        }
                     } else {
                         this.a((World) worldserver, blockposition);
                     }
-
+                } else {
+                    this.a((World) worldserver, blockposition);
                 }
+
             }
         }
     }
@@ -130,9 +139,8 @@ public class BlockChorusFlower extends Block {
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         IBlockData iblockdata1 = iworldreader.getType(blockposition.down());
-        Block block = iblockdata1.getBlock();
 
-        if (block != this.b && block != Blocks.END_STONE) {
+        if (iblockdata1.getBlock() != this.b && !iblockdata1.a(Blocks.END_STONE)) {
             if (!iblockdata1.isAir()) {
                 return false;
             } else {
@@ -143,7 +151,7 @@ public class BlockChorusFlower extends Block {
                     EnumDirection enumdirection = (EnumDirection) iterator.next();
                     IBlockData iblockdata2 = iworldreader.getType(blockposition.shift(enumdirection));
 
-                    if (iblockdata2.getBlock() == this.b) {
+                    if (iblockdata2.a((Block) this.b)) {
                         if (flag) {
                             return false;
                         }
@@ -219,9 +227,12 @@ public class BlockChorusFlower extends Block {
     }
 
     @Override
-    public void a(World world, IBlockData iblockdata, MovingObjectPositionBlock movingobjectpositionblock, Entity entity) {
-        BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
+    public void a(World world, IBlockData iblockdata, MovingObjectPositionBlock movingobjectpositionblock, IProjectile iprojectile) {
+        if (iprojectile.getEntityType().a((Tag) TagsEntity.IMPACT_PROJECTILES)) {
+            BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
 
-        world.a(blockposition, true, entity);
+            world.a(blockposition, true, iprojectile);
+        }
+
     }
 }

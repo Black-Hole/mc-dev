@@ -7,12 +7,12 @@ public class BlockTurtleEgg extends Block {
 
     private static final VoxelShape c = Block.a(3.0D, 0.0D, 3.0D, 12.0D, 7.0D, 12.0D);
     private static final VoxelShape d = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 7.0D, 15.0D);
-    public static final BlockStateInteger a = BlockProperties.aj;
-    public static final BlockStateInteger b = BlockProperties.ai;
+    public static final BlockStateInteger a = BlockProperties.ap;
+    public static final BlockStateInteger b = BlockProperties.ao;
 
-    public BlockTurtleEgg(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTurtleEgg.a, 0)).set(BlockTurtleEgg.b, 1));
+    public BlockTurtleEgg(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTurtleEgg.a, 0)).set(BlockTurtleEgg.b, 1));
     }
 
     @Override
@@ -31,11 +31,13 @@ public class BlockTurtleEgg extends Block {
     }
 
     private void a(World world, BlockPosition blockposition, Entity entity, int i) {
-        if (!this.a(world, entity)) {
-            super.stepOn(world, blockposition, entity);
-        } else {
+        if (this.a(world, entity)) {
             if (!world.isClientSide && world.random.nextInt(i) == 0) {
-                this.a(world, blockposition, world.getType(blockposition));
+                IBlockData iblockdata = world.getType(blockposition);
+
+                if (iblockdata.a(Blocks.TURTLE_EGG)) {
+                    this.a(world, blockposition, iblockdata);
+                }
             }
 
         }
@@ -56,7 +58,7 @@ public class BlockTurtleEgg extends Block {
 
     @Override
     public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        if (this.a((World) worldserver) && this.a((IBlockAccess) worldserver, blockposition)) {
+        if (this.a((World) worldserver) && a((IBlockAccess) worldserver, blockposition)) {
             int i = (Integer) iblockdata.get(BlockTurtleEgg.a);
 
             if (i < 2) {
@@ -71,7 +73,7 @@ public class BlockTurtleEgg extends Block {
                     EntityTurtle entityturtle = (EntityTurtle) EntityTypes.TURTLE.a((World) worldserver);
 
                     entityturtle.setAgeRaw(-24000);
-                    entityturtle.g(blockposition);
+                    entityturtle.setHomePos(blockposition);
                     entityturtle.setPositionRotation((double) blockposition.getX() + 0.3D + (double) j * 0.2D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.3D, 0.0F, 0.0F);
                     worldserver.addEntity(entityturtle);
                 }
@@ -80,13 +82,17 @@ public class BlockTurtleEgg extends Block {
 
     }
 
-    private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockaccess.getType(blockposition.down()).getBlock() == Blocks.SAND;
+    public static boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return b(iblockaccess, blockposition.down());
+    }
+
+    public static boolean b(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockaccess.getType(blockposition).a((Tag) TagsBlock.SAND);
     }
 
     @Override
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (this.a((IBlockAccess) world, blockposition) && !world.isClientSide) {
+        if (a((IBlockAccess) world, blockposition) && !world.isClientSide) {
             world.triggerEffect(2005, blockposition, 0);
         }
 
@@ -114,11 +120,11 @@ public class BlockTurtleEgg extends Block {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition());
 
-        return iblockdata.getBlock() == this ? (IBlockData) iblockdata.set(BlockTurtleEgg.b, Math.min(4, (Integer) iblockdata.get(BlockTurtleEgg.b) + 1)) : super.getPlacedState(blockactioncontext);
+        return iblockdata.a((Block) this) ? (IBlockData) iblockdata.set(BlockTurtleEgg.b, Math.min(4, (Integer) iblockdata.get(BlockTurtleEgg.b) + 1)) : super.getPlacedState(blockactioncontext);
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return (Integer) iblockdata.get(BlockTurtleEgg.b) > 1 ? BlockTurtleEgg.d : BlockTurtleEgg.c;
     }
 
@@ -128,6 +134,6 @@ public class BlockTurtleEgg extends Block {
     }
 
     private boolean a(World world, Entity entity) {
-        return entity instanceof EntityTurtle ? false : (entity instanceof EntityLiving && !(entity instanceof EntityHuman) ? world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) : true);
+        return !(entity instanceof EntityTurtle) && !(entity instanceof EntityBat) ? (!(entity instanceof EntityLiving) ? false : entity instanceof EntityHuman || world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) : false;
     }
 }

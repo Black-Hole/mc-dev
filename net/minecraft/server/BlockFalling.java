@@ -4,23 +4,23 @@ import java.util.Random;
 
 public class BlockFalling extends Block {
 
-    public BlockFalling(Block.Info block_info) {
-        super(block_info);
+    public BlockFalling(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
+        world.getBlockTickList().a(blockposition, this, this.c());
     }
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        generatoraccess.getBlockTickList().a(blockposition, this, this.a((IWorldReader) generatoraccess));
+        generatoraccess.getBlockTickList().a(blockposition, this, this.c());
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if (canFallThrough(worldserver.getType(blockposition.down())) && blockposition.getY() >= 0) {
             EntityFallingBlock entityfallingblock = new EntityFallingBlock(worldserver, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, worldserver.getType(blockposition));
 
@@ -31,19 +31,17 @@ public class BlockFalling extends Block {
 
     protected void a(EntityFallingBlock entityfallingblock) {}
 
-    @Override
-    public int a(IWorldReader iworldreader) {
+    protected int c() {
         return 2;
     }
 
     public static boolean canFallThrough(IBlockData iblockdata) {
-        Block block = iblockdata.getBlock();
         Material material = iblockdata.getMaterial();
 
-        return iblockdata.isAir() || block == Blocks.FIRE || material.isLiquid() || material.isReplaceable();
+        return iblockdata.isAir() || iblockdata.a((Tag) TagsBlock.FIRE) || material.isLiquid() || material.isReplaceable();
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {}
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1, EntityFallingBlock entityfallingblock) {}
 
-    public void a(World world, BlockPosition blockposition) {}
+    public void a(World world, BlockPosition blockposition, EntityFallingBlock entityfallingblock) {}
 }

@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.DataFixer;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,19 +16,18 @@ import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class DefinedStructureManager implements IResourcePackListener {
+public class DefinedStructureManager {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private final Map<MinecraftKey, DefinedStructure> b = Maps.newHashMap();
     private final DataFixer c;
-    private final MinecraftServer d;
+    private IResourceManager d;
     private final java.nio.file.Path e;
 
-    public DefinedStructureManager(MinecraftServer minecraftserver, File file, DataFixer datafixer) {
-        this.d = minecraftserver;
+    public DefinedStructureManager(IResourceManager iresourcemanager, Convertable.ConversionSession convertable_conversionsession, DataFixer datafixer) {
+        this.d = iresourcemanager;
         this.c = datafixer;
-        this.e = file.toPath().resolve("generated").normalize();
-        minecraftserver.getResourceManager().a((IReloadListener) this);
+        this.e = convertable_conversionsession.getWorldFolder(SavedFile.GENERATED).normalize();
     }
 
     public DefinedStructure a(MinecraftKey minecraftkey) {
@@ -52,8 +50,8 @@ public class DefinedStructureManager implements IResourcePackListener {
         });
     }
 
-    @Override
     public void a(IResourceManager iresourcemanager) {
+        this.d = iresourcemanager;
         this.b.clear();
     }
 
@@ -62,7 +60,7 @@ public class DefinedStructureManager implements IResourcePackListener {
         MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.getNamespace(), "structures/" + minecraftkey.getKey() + ".nbt");
 
         try {
-            IResource iresource = this.d.getResourceManager().a(minecraftkey1);
+            IResource iresource = this.d.a(minecraftkey1);
             Throwable throwable = null;
 
             DefinedStructure definedstructure;

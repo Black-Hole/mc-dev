@@ -5,13 +5,12 @@ import com.google.common.base.Splitter;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -36,10 +35,10 @@ public class DataConverterWorldGenSettings extends DataFix {
 
     private Dynamic<?> a(Dynamic<?> dynamic) {
         return dynamic.get("generatorName").asString("").equalsIgnoreCase("flat") ? dynamic.update("generatorOptions", (dynamic1) -> {
-            Optional optional = dynamic1.asString().map(this::a);
+            DataResult dataresult = dynamic1.asString().map(this::a);
 
             dynamic1.getClass();
-            return (Dynamic) DataFixUtils.orElse(optional.map(dynamic1::createString), dynamic1);
+            return (Dynamic) DataFixUtils.orElse(dataresult.map(dynamic1::createString).result(), dynamic1);
         }) : dynamic;
     }
 

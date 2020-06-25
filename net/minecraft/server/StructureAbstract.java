@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
-public abstract class StructureAbstract extends StructureStart {
+public abstract class StructureAbstract<C extends WorldGenFeatureConfiguration> extends StructureStart<C> {
 
-    public StructureAbstract(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+    public StructureAbstract(StructureGenerator<C> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
         super(structuregenerator, i, j, structureboundingbox, k, l);
     }
 

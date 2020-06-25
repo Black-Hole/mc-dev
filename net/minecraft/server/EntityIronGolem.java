@@ -4,36 +4,40 @@ import com.google.common.collect.ImmutableList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
+import javax.annotation.Nullable;
 
-public class EntityIronGolem extends EntityGolem {
+public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
 
     protected static final DataWatcherObject<Byte> b = DataWatcher.a(EntityIronGolem.class, DataWatcherRegistry.a);
     private int c;
     private int d;
+    private static final IntRange bv = TimeRange.a(20, 39);
+    private int bw;
+    private UUID bx;
 
     public EntityIronGolem(EntityTypes<? extends EntityIronGolem> entitytypes, World world) {
         super(entitytypes, world);
-        this.H = 1.0F;
+        this.G = 1.0F;
     }
 
     @Override
     protected void initPathfinder() {
         this.goalSelector.a(1, new PathfinderGoalMeleeAttack(this, 1.0D, true));
         this.goalSelector.a(2, new PathfinderGoalMoveTowardsTarget(this, 0.9D, 32.0F));
-        this.goalSelector.a(2, new PathfinderGoalStrollVillage(this, 0.6D));
-        this.goalSelector.a(3, new PathfinderGoalMoveThroughVillage(this, 0.6D, false, 4, () -> {
-            return false;
-        }));
+        this.goalSelector.a(2, new PathfinderGoalStrollVillage(this, 0.6D, false));
+        this.goalSelector.a(4, new PathfinderGoalStrollVillageGolem(this, 0.6D));
         this.goalSelector.a(5, new PathfinderGoalOfferFlower(this));
-        this.goalSelector.a(6, new PathfinderGoalRandomStrollLand(this, 0.6D));
         this.goalSelector.a(7, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(1, new PathfinderGoalDefendVillage(this));
         this.targetSelector.a(2, new PathfinderGoalHurtByTarget(this, new Class[0]));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, 10, true, false, this::b));
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityInsentient.class, 5, false, false, (entityliving) -> {
             return entityliving instanceof IMonster && !(entityliving instanceof EntityCreeper);
         }));
+        this.targetSelector.a(4, new PathfinderGoalUniversalAngerReset<>(this, false));
     }
 
     @Override
@@ -42,13 +46,8 @@ public class EntityIronGolem extends EntityGolem {
         this.datawatcher.register(EntityIronGolem.b, (byte) 0);
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(100.0D);
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.25D);
-        this.getAttributeInstance(GenericAttributes.KNOCKBACK_RESISTANCE).setValue(1.0D);
-        this.getAttributeMap().b(GenericAttributes.ATTACK_DAMAGE).setValue(15.0D);
+    public static AttributeProvider.Builder m() {
+        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 100.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D).a(GenericAttributes.KNOCKBACK_RESISTANCE, 1.0D).a(GenericAttributes.ATTACK_DAMAGE, 15.0D);
     }
 
     @Override
@@ -87,6 +86,10 @@ public class EntityIronGolem extends EntityGolem {
             }
         }
 
+        if (!this.world.isClientSide) {
+            this.a((WorldServer) this.world, true);
+        }
+
     }
 
     @Override
@@ -95,27 +98,54 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setBoolean("PlayerCreated", this.isPlayerCreated());
+        this.c(nbttagcompound);
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.setPlayerCreated(nbttagcompound.getBoolean("PlayerCreated"));
-    }
-
-    private float et() {
-        return (float) this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
+        this.a((WorldServer) this.world, nbttagcompound);
     }
 
     @Override
-    public boolean B(Entity entity) {
+    public void anger() {
+        this.setAnger(EntityIronGolem.bv.a(this.random));
+    }
+
+    @Override
+    public void setAnger(int i) {
+        this.bw = i;
+    }
+
+    @Override
+    public int getAnger() {
+        return this.bw;
+    }
+
+    @Override
+    public void setAngerTarget(@Nullable UUID uuid) {
+        this.bx = uuid;
+    }
+
+    @Override
+    public UUID getAngerTarget() {
+        return this.bx;
+    }
+
+    private float eP() {
+        return (float) this.b(GenericAttributes.ATTACK_DAMAGE);
+    }
+
+    @Override
+    public boolean attackEntity(Entity entity) {
         this.c = 10;
         this.world.broadcastEntityEffect(this, (byte) 4);
-        float f = this.et();
-        float f1 = f > 0.0F ? f / 2.0F + (float) this.random.nextInt((int) f) : 0.0F;
+        float f = this.eP();
+        float f1 = (int) f > 0 ? f / 2.0F + (float) this.random.nextInt((int) f) : f;
         boolean flag = entity.damageEntity(DamageSource.mobAttack(this), f1);
 
         if (flag) {
@@ -123,27 +153,27 @@ public class EntityIronGolem extends EntityGolem {
             this.a((EntityLiving) this, entity);
         }
 
-        this.a(SoundEffects.ENTITY_IRON_GOLEM_ATTACK, 1.0F, 1.0F);
+        this.playSound(SoundEffects.ENTITY_IRON_GOLEM_ATTACK, 1.0F, 1.0F);
         return flag;
     }
 
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
-        EntityIronGolem.CrackLevel entityirongolem_cracklevel = this.l();
+        EntityIronGolem.CrackLevel entityirongolem_cracklevel = this.eL();
         boolean flag = super.damageEntity(damagesource, f);
 
-        if (flag && this.l() != entityirongolem_cracklevel) {
-            this.a(SoundEffects.ENTITY_IRON_GOLEM_DAMAGE, 1.0F, 1.0F);
+        if (flag && this.eL() != entityirongolem_cracklevel) {
+            this.playSound(SoundEffects.ENTITY_IRON_GOLEM_DAMAGE, 1.0F, 1.0F);
         }
 
         return flag;
     }
 
-    public EntityIronGolem.CrackLevel l() {
+    public EntityIronGolem.CrackLevel eL() {
         return EntityIronGolem.CrackLevel.a(this.getHealth() / this.getMaxHealth());
     }
 
-    public void r(boolean flag) {
+    public void t(boolean flag) {
         if (flag) {
             this.d = 400;
             this.world.broadcastEntityEffect(this, (byte) 11);
@@ -165,34 +195,34 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     @Override
-    protected boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+    protected EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
         Item item = itemstack.getItem();
 
         if (item != Items.IRON_INGOT) {
-            return false;
+            return EnumInteractionResult.PASS;
         } else {
             float f = this.getHealth();
 
             this.heal(25.0F);
             if (this.getHealth() == f) {
-                return false;
+                return EnumInteractionResult.PASS;
             } else {
                 float f1 = 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F;
 
-                this.a(SoundEffects.ENTITY_IRON_GOLEM_REPAIR, 1.0F, f1);
+                this.playSound(SoundEffects.ENTITY_IRON_GOLEM_REPAIR, 1.0F, f1);
                 if (!entityhuman.abilities.canInstantlyBuild) {
                     itemstack.subtract(1);
                 }
 
-                return true;
+                return EnumInteractionResult.a(this.world.isClientSide);
             }
         }
     }
 
     @Override
     protected void a(BlockPosition blockposition, IBlockData iblockdata) {
-        this.a(SoundEffects.ENTITY_IRON_GOLEM_STEP, 1.0F, 1.0F);
+        this.playSound(SoundEffects.ENTITY_IRON_GOLEM_STEP, 1.0F, 1.0F);
     }
 
     public boolean isPlayerCreated() {
@@ -217,7 +247,7 @@ public class EntityIronGolem extends EntityGolem {
 
     @Override
     public boolean a(IWorldReader iworldreader) {
-        BlockPosition blockposition = new BlockPosition(this);
+        BlockPosition blockposition = this.getChunkCoordinates();
         BlockPosition blockposition1 = blockposition.down();
         IBlockData iblockdata = iworldreader.getType(blockposition1);
 
@@ -228,12 +258,12 @@ public class EntityIronGolem extends EntityGolem {
                 BlockPosition blockposition2 = blockposition.up(i);
                 IBlockData iblockdata1 = iworldreader.getType(blockposition2);
 
-                if (!SpawnerCreature.a((IBlockAccess) iworldreader, blockposition2, iblockdata1, iblockdata1.getFluid())) {
+                if (!SpawnerCreature.a((IBlockAccess) iworldreader, blockposition2, iblockdata1, iblockdata1.getFluid(), EntityTypes.IRON_GOLEM)) {
                     return false;
                 }
             }
 
-            return SpawnerCreature.a((IBlockAccess) iworldreader, blockposition, iworldreader.getType(blockposition), FluidTypes.EMPTY.h()) && iworldreader.i(this);
+            return SpawnerCreature.a((IBlockAccess) iworldreader, blockposition, iworldreader.getType(blockposition), FluidTypes.EMPTY.h(), EntityTypes.IRON_GOLEM) && iworldreader.i(this);
         }
     }
 

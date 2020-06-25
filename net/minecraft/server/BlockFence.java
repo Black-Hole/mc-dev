@@ -4,15 +4,20 @@ public class BlockFence extends BlockTall {
 
     private final VoxelShape[] i;
 
-    public BlockFence(Block.Info block_info) {
-        super(2.0F, 2.0F, 16.0F, 16.0F, 24.0F, block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFence.NORTH, false)).set(BlockFence.EAST, false)).set(BlockFence.SOUTH, false)).set(BlockFence.WEST, false)).set(BlockFence.e, false));
+    public BlockFence(BlockBase.Info blockbase_info) {
+        super(2.0F, 2.0F, 16.0F, 16.0F, 24.0F, blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFence.NORTH, false)).set(BlockFence.EAST, false)).set(BlockFence.SOUTH, false)).set(BlockFence.WEST, false)).set(BlockFence.e, false));
         this.i = this.a(2.0F, 1.0F, 16.0F, 6.0F, 15.0F);
     }
 
     @Override
-    public VoxelShape i(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.i[this.h(iblockdata)];
+    public VoxelShape d(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return this.i[this.g(iblockdata)];
+    }
+
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return this.b(iblockdata, iblockaccess, blockposition, voxelshapecollision);
     }
 
     @Override
@@ -22,10 +27,14 @@ public class BlockFence extends BlockTall {
 
     public boolean a(IBlockData iblockdata, boolean flag, EnumDirection enumdirection) {
         Block block = iblockdata.getBlock();
-        boolean flag1 = block.a(TagsBlock.FENCES) && iblockdata.getMaterial() == this.material;
+        boolean flag1 = this.c(block);
         boolean flag2 = block instanceof BlockFenceGate && BlockFenceGate.a(iblockdata, enumdirection);
 
-        return !a(block) && flag || flag1 || flag2;
+        return !b(block) && flag || flag1 || flag2;
+    }
+
+    private boolean c(Block block) {
+        return block.a((Tag) TagsBlock.FENCES) && block.a((Tag) TagsBlock.WOODEN_FENCES) == this.getBlockData().a((Tag) TagsBlock.WOODEN_FENCES);
     }
 
     @Override
@@ -62,7 +71,7 @@ public class BlockFence extends BlockTall {
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
-        return enumdirection.m().d() == EnumDirection.EnumDirectionLimit.HORIZONTAL ? (IBlockData) iblockdata.set((IBlockState) BlockFence.f.get(enumdirection), this.a(iblockdata1, iblockdata1.d(generatoraccess, blockposition1, enumdirection.opposite()), enumdirection.opposite())) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return enumdirection.n().e() == EnumDirection.EnumDirectionLimit.HORIZONTAL ? (IBlockData) iblockdata.set((IBlockState) BlockFence.f.get(enumdirection), this.a(iblockdata1, iblockdata1.d(generatoraccess, blockposition1, enumdirection.opposite()), enumdirection.opposite())) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     @Override

@@ -25,15 +25,11 @@ public class EntityEndermite extends EntityMonster {
 
     @Override
     protected float b(EntityPose entitypose, EntitySize entitysize) {
-        return 0.1F;
+        return 0.13F;
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(8.0D);
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.25D);
-        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(2.0D);
+    public static AttributeProvider.Builder m() {
+        return EntityMonster.eS().a(GenericAttributes.MAX_HEALTH, 8.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D).a(GenericAttributes.ATTACK_DAMAGE, 2.0D);
     }
 
     @Override
@@ -58,26 +54,26 @@ public class EntityEndermite extends EntityMonster {
 
     @Override
     protected void a(BlockPosition blockposition, IBlockData iblockdata) {
-        this.a(SoundEffects.ENTITY_ENDERMITE_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEffects.ENTITY_ENDERMITE_STEP, 0.15F, 1.0F);
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.b = nbttagcompound.getInt("Lifetime");
         this.c = nbttagcompound.getBoolean("PlayerSpawned");
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setInt("Lifetime", this.b);
         nbttagcompound.setBoolean("PlayerSpawned", this.c);
     }
 
     @Override
     public void tick() {
-        this.aI = this.yaw;
+        this.aH = this.yaw;
         super.tick();
     }
 
@@ -88,7 +84,7 @@ public class EntityEndermite extends EntityMonster {
     }
 
     @Override
-    public double aR() {
+    public double aX() {
         return 0.1D;
     }
 
@@ -105,7 +101,7 @@ public class EntityEndermite extends EntityMonster {
         super.movementTick();
         if (this.world.isClientSide) {
             for (int i = 0; i < 2; ++i) {
-                this.world.addParticle(Particles.PORTAL, this.d(0.5D), this.cv(), this.g(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
+                this.world.addParticle(Particles.PORTAL, this.d(0.5D), this.cE(), this.g(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
             }
         } else {
             if (!this.isPersistent()) {

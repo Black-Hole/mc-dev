@@ -7,11 +7,9 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -24,8 +22,9 @@ public class CommandDispatcher {
     private static final Logger LOGGER = LogManager.getLogger();
     private final com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> b = new com.mojang.brigadier.CommandDispatcher();
 
-    public CommandDispatcher(boolean flag) {
+    public CommandDispatcher(CommandDispatcher.ServerType commanddispatcher_servertype) {
         CommandAdvancement.a(this.b);
+        CommandAttribute.a(this.b);
         CommandExecute.a(this.b);
         CommandBossBar.a(this.b);
         CommandClear.a(this.b);
@@ -50,18 +49,18 @@ public class CommandDispatcher {
         CommandKill.a(this.b);
         CommandList.a(this.b);
         CommandLocate.a(this.b);
+        CommandLocateBiome.a(this.b);
         CommandLoot.a(this.b);
         CommandTell.a(this.b);
         CommandParticle.a(this.b);
         CommandPlaySound.a(this.b);
-        CommandPublish.a(this.b);
         CommandReload.a(this.b);
         CommandRecipe.a(this.b);
         CommandReplaceItem.a(this.b);
         CommandSay.a(this.b);
         CommandSchedule.a(this.b);
         CommandScoreboard.a(this.b);
-        CommandSeed.a(this.b);
+        CommandSeed.a(this.b, commanddispatcher_servertype != CommandDispatcher.ServerType.INTEGRATED);
         CommandSetBlock.a(this.b);
         CommandSpawnpoint.a(this.b);
         CommandSetWorldSpawn.a(this.b);
@@ -79,11 +78,11 @@ public class CommandDispatcher {
         CommandTrigger.a(this.b);
         CommandWeather.a(this.b);
         CommandWorldBorder.a(this.b);
-        if (SharedConstants.b) {
+        if (SharedConstants.d) {
             GameTestHarnessTestCommand.a(this.b);
         }
 
-        if (flag) {
+        if (commanddispatcher_servertype.e) {
             CommandBanIp.a(this.b);
             CommandBanList.a(this.b);
             CommandBan.a(this.b);
@@ -99,11 +98,15 @@ public class CommandDispatcher {
             CommandWhitelist.a(this.b);
         }
 
+        if (commanddispatcher_servertype.d) {
+            CommandPublish.a(this.b);
+        }
+
         this.b.findAmbiguities((commandnode, commandnode1, commandnode2, collection) -> {
             CommandDispatcher.LOGGER.warn("Ambiguity between arguments {} and {} with inputs: {}", this.b.getPath(commandnode1), this.b.getPath(commandnode2), collection);
         });
-        this.b.setConsumer((commandcontext, flag1, i) -> {
-            ((CommandListenerWrapper) commandcontext.getSource()).a(commandcontext, flag1, i);
+        this.b.setConsumer((commandcontext, flag, i) -> {
+            ((CommandListenerWrapper) commandcontext.getSource()).a(commandcontext, flag, i);
         });
     }
 
@@ -133,23 +136,23 @@ public class CommandDispatcher {
                 commandlistenerwrapper.sendFailureMessage(ChatComponentUtils.a(commandsyntaxexception.getRawMessage()));
                 if (commandsyntaxexception.getInput() != null && commandsyntaxexception.getCursor() >= 0) {
                     int j = Math.min(commandsyntaxexception.getInput().length(), commandsyntaxexception.getCursor());
-                    IChatBaseComponent ichatbasecomponent = (new ChatComponentText("")).a(EnumChatFormat.GRAY).a((chatmodifier) -> {
-                        chatmodifier.setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, s));
+                    IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("")).a(EnumChatFormat.GRAY).format((chatmodifier) -> {
+                        return chatmodifier.setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, s));
                     });
 
                     if (j > 10) {
-                        ichatbasecomponent.a("...");
+                        ichatmutablecomponent.c("...");
                     }
 
-                    ichatbasecomponent.a(commandsyntaxexception.getInput().substring(Math.max(0, j - 10), j));
+                    ichatmutablecomponent.c(commandsyntaxexception.getInput().substring(Math.max(0, j - 10), j));
                     if (j < commandsyntaxexception.getInput().length()) {
-                        IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText(commandsyntaxexception.getInput().substring(j))).a(new EnumChatFormat[]{EnumChatFormat.RED, EnumChatFormat.UNDERLINE});
+                        IChatMutableComponent ichatmutablecomponent1 = (new ChatComponentText(commandsyntaxexception.getInput().substring(j))).a(new EnumChatFormat[]{EnumChatFormat.RED, EnumChatFormat.UNDERLINE});
 
-                        ichatbasecomponent.addSibling(ichatbasecomponent1);
+                        ichatmutablecomponent.addSibling(ichatmutablecomponent1);
                     }
 
-                    ichatbasecomponent.addSibling((new ChatMessage("command.context.here", new Object[0])).a(new EnumChatFormat[]{EnumChatFormat.RED, EnumChatFormat.ITALIC}));
-                    commandlistenerwrapper.sendFailureMessage(ichatbasecomponent);
+                    ichatmutablecomponent.addSibling((new ChatMessage("command.context.here")).a(new EnumChatFormat[]{EnumChatFormat.RED, EnumChatFormat.ITALIC}));
+                    commandlistenerwrapper.sendFailureMessage(ichatmutablecomponent);
                 }
 
                 b1 = 0;
@@ -162,14 +165,14 @@ public class CommandDispatcher {
                     StackTraceElement[] astacktraceelement = exception.getStackTrace();
 
                     for (int k = 0; k < Math.min(astacktraceelement.length, 3); ++k) {
-                        chatcomponenttext.a("\n\n").a(astacktraceelement[k].getMethodName()).a("\n ").a(astacktraceelement[k].getFileName()).a(":").a(String.valueOf(astacktraceelement[k].getLineNumber()));
+                        chatcomponenttext.c("\n\n").c(astacktraceelement[k].getMethodName()).c("\n ").c(astacktraceelement[k].getFileName()).c(":").c(String.valueOf(astacktraceelement[k].getLineNumber()));
                     }
                 }
 
-                commandlistenerwrapper.sendFailureMessage((new ChatMessage("command.failed", new Object[0])).a((chatmodifier) -> {
-                    chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, chatcomponenttext));
+                commandlistenerwrapper.sendFailureMessage((new ChatMessage("command.failed")).format((chatmodifier) -> {
+                    return chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, chatcomponenttext));
                 }));
-                if (SharedConstants.b) {
+                if (SharedConstants.d) {
                     commandlistenerwrapper.sendFailureMessage(new ChatComponentText(SystemUtils.d(exception)));
                     CommandDispatcher.LOGGER.error("'" + s + "' threw an exception", exception);
                 }
@@ -242,10 +245,10 @@ public class CommandDispatcher {
         return RequiredArgumentBuilder.argument(s, argumenttype);
     }
 
-    public static Predicate<String> a(CommandDispatcher.a commanddispatcher_a) {
+    public static Predicate<String> a(CommandDispatcher.b commanddispatcher_b) {
         return (s) -> {
             try {
-                commanddispatcher_a.parse(new StringReader(s));
+                commanddispatcher_b.parse(new StringReader(s));
                 return true;
             } catch (CommandSyntaxException commandsyntaxexception) {
                 return false;
@@ -262,8 +265,21 @@ public class CommandDispatcher {
         return !parseresults.getReader().canRead() ? null : (parseresults.getExceptions().size() == 1 ? (CommandSyntaxException) parseresults.getExceptions().values().iterator().next() : (parseresults.getContext().getRange().isEmpty() ? CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(parseresults.getReader()) : CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().createWithContext(parseresults.getReader())));
     }
 
+    public static enum ServerType {
+
+        ALL(true, true), DEDICATED(false, true), INTEGRATED(true, false);
+
+        private final boolean d;
+        private final boolean e;
+
+        private ServerType(boolean flag, boolean flag1) {
+            this.d = flag;
+            this.e = flag1;
+        }
+    }
+
     @FunctionalInterface
-    public interface a {
+    public interface b {
 
         void parse(StringReader stringreader) throws CommandSyntaxException;
     }

@@ -8,18 +8,16 @@ import java.util.Set;
 
 public class ItemSpade extends ItemTool {
 
-    private static final Set<Block> e = Sets.newHashSet(new Block[]{Blocks.CLAY, Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.FARMLAND, Blocks.GRASS_BLOCK, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.RED_SAND, Blocks.SNOW_BLOCK, Blocks.SNOW, Blocks.SOUL_SAND, Blocks.GRASS_PATH, Blocks.WHITE_CONCRETE_POWDER, Blocks.ORANGE_CONCRETE_POWDER, Blocks.MAGENTA_CONCRETE_POWDER, Blocks.LIGHT_BLUE_CONCRETE_POWDER, Blocks.YELLOW_CONCRETE_POWDER, Blocks.LIME_CONCRETE_POWDER, Blocks.PINK_CONCRETE_POWDER, Blocks.GRAY_CONCRETE_POWDER, Blocks.LIGHT_GRAY_CONCRETE_POWDER, Blocks.CYAN_CONCRETE_POWDER, Blocks.PURPLE_CONCRETE_POWDER, Blocks.BLUE_CONCRETE_POWDER, Blocks.BROWN_CONCRETE_POWDER, Blocks.GREEN_CONCRETE_POWDER, Blocks.RED_CONCRETE_POWDER, Blocks.BLACK_CONCRETE_POWDER});
+    private static final Set<Block> c = Sets.newHashSet(new Block[]{Blocks.CLAY, Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.FARMLAND, Blocks.GRASS_BLOCK, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.RED_SAND, Blocks.SNOW_BLOCK, Blocks.SNOW, Blocks.SOUL_SAND, Blocks.GRASS_PATH, Blocks.WHITE_CONCRETE_POWDER, Blocks.ORANGE_CONCRETE_POWDER, Blocks.MAGENTA_CONCRETE_POWDER, Blocks.LIGHT_BLUE_CONCRETE_POWDER, Blocks.YELLOW_CONCRETE_POWDER, Blocks.LIME_CONCRETE_POWDER, Blocks.PINK_CONCRETE_POWDER, Blocks.GRAY_CONCRETE_POWDER, Blocks.LIGHT_GRAY_CONCRETE_POWDER, Blocks.CYAN_CONCRETE_POWDER, Blocks.PURPLE_CONCRETE_POWDER, Blocks.BLUE_CONCRETE_POWDER, Blocks.BROWN_CONCRETE_POWDER, Blocks.GREEN_CONCRETE_POWDER, Blocks.RED_CONCRETE_POWDER, Blocks.BLACK_CONCRETE_POWDER, Blocks.SOUL_SOIL});
     protected static final Map<Block, IBlockData> a = Maps.newHashMap(ImmutableMap.of(Blocks.GRASS_BLOCK, Blocks.GRASS_PATH.getBlockData()));
 
     public ItemSpade(ToolMaterial toolmaterial, float f, float f1, Item.Info item_info) {
-        super(f, f1, toolmaterial, ItemSpade.e, item_info);
+        super(f, f1, toolmaterial, ItemSpade.c, item_info);
     }
 
     @Override
     public boolean canDestroySpecialBlock(IBlockData iblockdata) {
-        Block block = iblockdata.getBlock();
-
-        return block == Blocks.SNOW || block == Blocks.SNOW_BLOCK;
+        return iblockdata.a(Blocks.SNOW) || iblockdata.a(Blocks.SNOW_BLOCK);
     }
 
     @Override
@@ -39,7 +37,11 @@ public class ItemSpade extends ItemTool {
                 world.playSound(entityhuman, blockposition, SoundEffects.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 iblockdata2 = iblockdata1;
             } else if (iblockdata.getBlock() instanceof BlockCampfire && (Boolean) iblockdata.get(BlockCampfire.b)) {
-                world.a((EntityHuman) null, 1009, blockposition, 0);
+                if (!world.s_()) {
+                    world.a((EntityHuman) null, 1009, blockposition, 0);
+                }
+
+                BlockCampfire.c((GeneratorAccess) world, blockposition, iblockdata);
                 iblockdata2 = (IBlockData) iblockdata.set(BlockCampfire.b, false);
             }
 
@@ -53,7 +55,7 @@ public class ItemSpade extends ItemTool {
                     }
                 }
 
-                return EnumInteractionResult.SUCCESS;
+                return EnumInteractionResult.a(world.isClientSide);
             } else {
                 return EnumInteractionResult.PASS;
             }

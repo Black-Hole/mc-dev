@@ -9,27 +9,27 @@ import java.util.stream.Collectors;
 
 public class BehaviorGate<E extends EntityLiving> extends Behavior<E> {
 
-    private final Set<MemoryModuleType<?>> a;
-    private final BehaviorGate.Order b;
-    private final BehaviorGate.Execution c;
-    private final WeightedList<Behavior<? super E>> d = new WeightedList<>();
+    private final Set<MemoryModuleType<?>> b;
+    private final BehaviorGate.Order c;
+    private final BehaviorGate.Execution d;
+    private final WeightedList<Behavior<? super E>> e = new WeightedList<>();
 
     public BehaviorGate(Map<MemoryModuleType<?>, MemoryStatus> map, Set<MemoryModuleType<?>> set, BehaviorGate.Order behaviorgate_order, BehaviorGate.Execution behaviorgate_execution, List<Pair<Behavior<? super E>, Integer>> list) {
         super(map);
-        this.a = set;
-        this.b = behaviorgate_order;
-        this.c = behaviorgate_execution;
+        this.b = set;
+        this.c = behaviorgate_order;
+        this.d = behaviorgate_execution;
         list.forEach((pair) -> {
-            this.d.a(pair.getFirst(), (Integer) pair.getSecond());
+            this.e.a(pair.getFirst(), (Integer) pair.getSecond());
         });
     }
 
     @Override
-    protected boolean g(WorldServer worldserver, E e0, long i) {
-        return this.d.b().filter((behavior) -> {
+    protected boolean b(WorldServer worldserver, E e0, long i) {
+        return this.e.c().filter((behavior) -> {
             return behavior.a() == Behavior.Status.RUNNING;
         }).anyMatch((behavior) -> {
-            return behavior.g(worldserver, e0, i);
+            return behavior.b(worldserver, e0, i);
         });
     }
 
@@ -40,27 +40,27 @@ public class BehaviorGate<E extends EntityLiving> extends Behavior<E> {
 
     @Override
     protected void a(WorldServer worldserver, E e0, long i) {
-        this.b.a(this.d);
-        this.c.a(this.d, worldserver, e0, i);
+        this.c.a(this.e);
+        this.d.a(this.e, worldserver, e0, i);
     }
 
     @Override
     protected void d(WorldServer worldserver, E e0, long i) {
-        this.d.b().filter((behavior) -> {
+        this.e.c().filter((behavior) -> {
             return behavior.a() == Behavior.Status.RUNNING;
         }).forEach((behavior) -> {
-            behavior.c(worldserver, e0, i);
+            behavior.f(worldserver, e0, i);
         });
     }
 
     @Override
-    protected void f(WorldServer worldserver, E e0, long i) {
-        this.d.b().filter((behavior) -> {
+    protected void c(WorldServer worldserver, E e0, long i) {
+        this.e.c().filter((behavior) -> {
             return behavior.a() == Behavior.Status.RUNNING;
         }).forEach((behavior) -> {
-            behavior.e(worldserver, e0, i);
+            behavior.g(worldserver, e0, i);
         });
-        Set set = this.a;
+        Set set = this.b;
         BehaviorController behaviorcontroller = e0.getBehaviorController();
 
         set.forEach(behaviorcontroller::removeMemory);
@@ -68,7 +68,7 @@ public class BehaviorGate<E extends EntityLiving> extends Behavior<E> {
 
     @Override
     public String toString() {
-        Set<? extends Behavior<? super E>> set = (Set) this.d.b().filter((behavior) -> {
+        Set<? extends Behavior<? super E>> set = (Set) this.e.c().filter((behavior) -> {
             return behavior.a() == Behavior.Status.RUNNING;
         }).collect(Collectors.toSet());
 
@@ -80,20 +80,20 @@ public class BehaviorGate<E extends EntityLiving> extends Behavior<E> {
         RUN_ONE {
             @Override
             public <E extends EntityLiving> void a(WeightedList<Behavior<? super E>> weightedlist, WorldServer worldserver, E e0, long i) {
-                weightedlist.b().filter((behavior) -> {
+                weightedlist.c().filter((behavior) -> {
                     return behavior.a() == Behavior.Status.STOPPED;
                 }).filter((behavior) -> {
-                    return behavior.b(worldserver, e0, i);
+                    return behavior.e(worldserver, e0, i);
                 }).findFirst();
             }
         },
         TRY_ALL {
             @Override
             public <E extends EntityLiving> void a(WeightedList<Behavior<? super E>> weightedlist, WorldServer worldserver, E e0, long i) {
-                weightedlist.b().filter((behavior) -> {
+                weightedlist.c().filter((behavior) -> {
                     return behavior.a() == Behavior.Status.STOPPED;
                 }).forEach((behavior) -> {
-                    behavior.b(worldserver, e0, i);
+                    behavior.e(worldserver, e0, i);
                 });
             }
         };

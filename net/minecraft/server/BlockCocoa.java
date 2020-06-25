@@ -5,15 +5,20 @@ import javax.annotation.Nullable;
 
 public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePlantElement {
 
-    public static final BlockStateInteger AGE = BlockProperties.Z;
+    public static final BlockStateInteger AGE = BlockProperties.af;
     protected static final VoxelShape[] b = new VoxelShape[]{Block.a(11.0D, 7.0D, 6.0D, 15.0D, 12.0D, 10.0D), Block.a(9.0D, 5.0D, 5.0D, 15.0D, 12.0D, 11.0D), Block.a(7.0D, 3.0D, 4.0D, 15.0D, 12.0D, 12.0D)};
     protected static final VoxelShape[] c = new VoxelShape[]{Block.a(1.0D, 7.0D, 6.0D, 5.0D, 12.0D, 10.0D), Block.a(1.0D, 5.0D, 5.0D, 7.0D, 12.0D, 11.0D), Block.a(1.0D, 3.0D, 4.0D, 9.0D, 12.0D, 12.0D)};
     protected static final VoxelShape[] d = new VoxelShape[]{Block.a(6.0D, 7.0D, 1.0D, 10.0D, 12.0D, 5.0D), Block.a(5.0D, 5.0D, 1.0D, 11.0D, 12.0D, 7.0D), Block.a(4.0D, 3.0D, 1.0D, 12.0D, 12.0D, 9.0D)};
     protected static final VoxelShape[] e = new VoxelShape[]{Block.a(6.0D, 7.0D, 11.0D, 10.0D, 12.0D, 15.0D), Block.a(5.0D, 5.0D, 9.0D, 11.0D, 12.0D, 15.0D), Block.a(4.0D, 3.0D, 7.0D, 12.0D, 12.0D, 15.0D)};
 
-    public BlockCocoa(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCocoa.FACING, EnumDirection.NORTH)).set(BlockCocoa.AGE, 0));
+    public BlockCocoa(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCocoa.FACING, EnumDirection.NORTH)).set(BlockCocoa.AGE, 0));
+    }
+
+    @Override
+    public boolean isTicking(IBlockData iblockdata) {
+        return (Integer) iblockdata.get(BlockCocoa.AGE) < 2;
     }
 
     @Override
@@ -32,11 +37,11 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         Block block = iworldreader.getType(blockposition.shift((EnumDirection) iblockdata.get(BlockCocoa.FACING))).getBlock();
 
-        return block.a(TagsBlock.JUNGLE_LOGS);
+        return block.a((Tag) TagsBlock.JUNGLE_LOGS);
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         int i = (Integer) iblockdata.get(BlockCocoa.AGE);
 
         switch ((EnumDirection) iblockdata.get(BlockCocoa.FACING)) {
@@ -64,7 +69,7 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection[j];
 
-            if (enumdirection.m().c()) {
+            if (enumdirection.n().d()) {
                 iblockdata = (IBlockData) iblockdata.set(BlockCocoa.FACING, enumdirection);
                 if (iblockdata.canPlace(world, blockposition)) {
                     return iblockdata;
@@ -98,5 +103,10 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockCocoa.FACING, BlockCocoa.AGE);
+    }
+
+    @Override
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
+        return false;
     }
 }

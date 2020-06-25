@@ -28,27 +28,24 @@ public abstract class LootEntryAbstract implements LootEntryChildren {
         return this.c.test(loottableinfo);
     }
 
-    public abstract static class b<T extends LootEntryAbstract> {
+    public abstract LootEntryType a();
 
-        private final MinecraftKey a;
-        private final Class<T> b;
+    public abstract static class Serializer<T extends LootEntryAbstract> implements LootSerializer<T> {
 
-        protected b(MinecraftKey minecraftkey, Class<T> oclass) {
-            this.a = minecraftkey;
-            this.b = oclass;
+        public Serializer() {}
+
+        public final void serializeType(JsonObject jsonobject, T t0, JsonSerializationContext jsonserializationcontext) {}
+
+        @Override
+        public final T a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+            LootItemCondition[] alootitemcondition = (LootItemCondition[]) ChatDeserializer.a(jsonobject, "conditions", new LootItemCondition[0], jsondeserializationcontext, LootItemCondition[].class);
+
+            return this.deserializeType(jsonobject, jsondeserializationcontext, alootitemcondition);
         }
 
-        public MinecraftKey a() {
-            return this.a;
-        }
+        public abstract void serializeType(JsonObject jsonobject, T t0, JsonSerializationContext jsonserializationcontext);
 
-        public Class<T> b() {
-            return this.b;
-        }
-
-        public abstract void a(JsonObject jsonobject, T t0, JsonSerializationContext jsonserializationcontext);
-
-        public abstract T b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition);
+        public abstract T deserializeType(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition);
     }
 
     public abstract static class a<T extends LootEntryAbstract.a<T>> implements LootItemConditionUser<T> {

@@ -8,22 +8,21 @@ public abstract class BlockPressurePlateAbstract extends Block {
     protected static final VoxelShape b = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 1.0D, 15.0D);
     protected static final AxisAlignedBB c = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.25D, 0.875D);
 
-    protected BlockPressurePlateAbstract(Block.Info block_info) {
-        super(block_info);
+    protected BlockPressurePlateAbstract(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return this.getPower(iblockdata) > 0 ? BlockPressurePlateAbstract.a : BlockPressurePlateAbstract.b;
     }
 
-    @Override
-    public int a(IWorldReader iworldreader) {
+    protected int c() {
         return 20;
     }
 
     @Override
-    public boolean Y_() {
+    public boolean ak_() {
         return true;
     }
 
@@ -40,11 +39,11 @@ public abstract class BlockPressurePlateAbstract extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         int i = this.getPower(iblockdata);
 
         if (i > 0) {
-            this.a((World) worldserver, blockposition, iblockdata, i);
+            this.a(worldserver, blockposition, iblockdata, i);
         }
 
     }
@@ -81,7 +80,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
         }
 
         if (flag1) {
-            world.getBlockTickList().a(new BlockPosition(blockposition), this, this.a((IWorldReader) world));
+            world.getBlockTickList().a(new BlockPosition(blockposition), this, this.c());
         }
 
     }
@@ -92,7 +91,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (!flag && iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!flag && !iblockdata.a(iblockdata1.getBlock())) {
             if (this.getPower(iblockdata) > 0) {
                 this.a(world, blockposition);
             }

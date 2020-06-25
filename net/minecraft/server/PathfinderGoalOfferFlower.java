@@ -34,12 +34,12 @@ public class PathfinderGoalOfferFlower extends PathfinderGoal {
     @Override
     public void c() {
         this.d = 400;
-        this.b.r(true);
+        this.b.t(true);
     }
 
     @Override
     public void d() {
-        this.b.r(false);
+        this.b.t(false);
         this.c = null;
     }
 

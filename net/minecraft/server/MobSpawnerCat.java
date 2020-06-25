@@ -3,12 +3,13 @@ package net.minecraft.server;
 import java.util.List;
 import java.util.Random;
 
-public class MobSpawnerCat {
+public class MobSpawnerCat implements MobSpawner {
 
     private int a;
 
     public MobSpawnerCat() {}
 
+    @Override
     public int a(WorldServer worldserver, boolean flag, boolean flag1) {
         if (flag1 && worldserver.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
             --this.a;
@@ -16,7 +17,7 @@ public class MobSpawnerCat {
                 return 0;
             } else {
                 this.a = 1200;
-                EntityPlayer entityplayer = worldserver.k();
+                EntityPlayer entityplayer = worldserver.h();
 
                 if (entityplayer == null) {
                     return 0;
@@ -24,7 +25,7 @@ public class MobSpawnerCat {
                     Random random = worldserver.random;
                     int i = (8 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
                     int j = (8 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
-                    BlockPosition blockposition = (new BlockPosition(entityplayer)).b(i, 0, j);
+                    BlockPosition blockposition = entityplayer.getChunkCoordinates().b(i, 0, j);
 
                     if (!worldserver.isAreaLoaded(blockposition.getX() - 10, blockposition.getY() - 10, blockposition.getZ() - 10, blockposition.getX() + 10, blockposition.getY() + 10, blockposition.getZ() + 10)) {
                         return 0;
@@ -34,7 +35,7 @@ public class MobSpawnerCat {
                                 return this.a(worldserver, blockposition);
                             }
 
-                            if (WorldGenerator.SWAMP_HUT.b(worldserver, blockposition)) {
+                            if (worldserver.getStructureManager().a(blockposition, true, StructureGenerator.SWAMP_HUT).e()) {
                                 return this.a((World) worldserver, blockposition);
                             }
                         }
@@ -51,7 +52,7 @@ public class MobSpawnerCat {
     private int a(WorldServer worldserver, BlockPosition blockposition) {
         boolean flag = true;
 
-        if (worldserver.B().a(VillagePlaceType.q.c(), blockposition, 48, VillagePlace.Occupancy.IS_OCCUPIED) > 4L) {
+        if (worldserver.x().a(VillagePlaceType.r.c(), blockposition, 48, VillagePlace.Occupancy.IS_OCCUPIED) > 4L) {
             List<EntityCat> list = worldserver.a(EntityCat.class, (new AxisAlignedBB(blockposition)).grow(48.0D, 8.0D, 48.0D));
 
             if (list.size() < 5) {

@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class BlockMobSpawner extends BlockTileEntity {
 
-    protected BlockMobSpawner(Block.Info block_info) {
-        super(block_info);
+    protected BlockMobSpawner(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
@@ -20,7 +20,7 @@ public class BlockMobSpawner extends BlockTileEntity {
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 }

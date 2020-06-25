@@ -1,26 +1,25 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenFeatureEndPlatform extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     private static final BlockPosition a = new BlockPosition(8, 3, 8);
-    private static final ChunkCoordIntPair aq = new ChunkCoordIntPair(WorldGenFeatureEndPlatform.a);
+    private static final ChunkCoordIntPair ac = new ChunkCoordIntPair(WorldGenFeatureEndPlatform.a);
 
-    public WorldGenFeatureEndPlatform(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
-        super(function);
+    public WorldGenFeatureEndPlatform(Codec<WorldGenFeatureEmptyConfiguration> codec) {
+        super(codec);
     }
 
     private static int a(int i, int j, int k, int l) {
         return Math.max(Math.abs(i - k), Math.abs(j - l));
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition);
 
-        if (a(chunkcoordintpair.x, chunkcoordintpair.z, WorldGenFeatureEndPlatform.aq.x, WorldGenFeatureEndPlatform.aq.z) > 1) {
+        if (a(chunkcoordintpair.x, chunkcoordintpair.z, WorldGenFeatureEndPlatform.ac.x, WorldGenFeatureEndPlatform.ac.z) > 1) {
             return true;
         } else {
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
@@ -30,9 +29,9 @@ public class WorldGenFeatureEndPlatform extends WorldGenerator<WorldGenFeatureEm
                     if (a(WorldGenFeatureEndPlatform.a.getX(), WorldGenFeatureEndPlatform.a.getZ(), j, i) <= 16) {
                         blockposition_mutableblockposition.d(j, WorldGenFeatureEndPlatform.a.getY(), i);
                         if (blockposition_mutableblockposition.equals(WorldGenFeatureEndPlatform.a)) {
-                            generatoraccess.setTypeAndData(blockposition_mutableblockposition, Blocks.COBBLESTONE.getBlockData(), 2);
+                            generatoraccessseed.setTypeAndData(blockposition_mutableblockposition, Blocks.COBBLESTONE.getBlockData(), 2);
                         } else {
-                            generatoraccess.setTypeAndData(blockposition_mutableblockposition, Blocks.STONE.getBlockData(), 2);
+                            generatoraccessseed.setTypeAndData(blockposition_mutableblockposition, Blocks.STONE.getBlockData(), 2);
                         }
                     }
                 }

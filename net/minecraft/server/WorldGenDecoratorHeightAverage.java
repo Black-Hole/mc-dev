@@ -1,21 +1,20 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class WorldGenDecoratorHeightAverage extends WorldGenDecoratorFeatureSimple<WorldGenDecoratorHeightAverageConfiguration> {
 
-    public WorldGenDecoratorHeightAverage(Function<Dynamic<?>, ? extends WorldGenDecoratorHeightAverageConfiguration> function) {
-        super(function);
+    public WorldGenDecoratorHeightAverage(Codec<WorldGenDecoratorHeightAverageConfiguration> codec) {
+        super(codec);
     }
 
     public Stream<BlockPosition> a(Random random, WorldGenDecoratorHeightAverageConfiguration worldgendecoratorheightaverageconfiguration, BlockPosition blockposition) {
-        int i = worldgendecoratorheightaverageconfiguration.a;
-        int j = worldgendecoratorheightaverageconfiguration.b;
-        int k = worldgendecoratorheightaverageconfiguration.c;
+        int i = worldgendecoratorheightaverageconfiguration.b;
+        int j = worldgendecoratorheightaverageconfiguration.c;
+        int k = worldgendecoratorheightaverageconfiguration.d;
 
         return IntStream.range(0, i).mapToObj((l) -> {
             int i1 = random.nextInt(16) + blockposition.getX();

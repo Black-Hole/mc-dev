@@ -5,16 +5,17 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
-import java.util.Map.Entry;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,7 +37,7 @@ public class DataConverterStatistic extends DataFix {
         return this.fixTypeEverywhereTyped("StatsCounterFix", this.getInputSchema().getType(DataConverterTypes.STATS), type, (typed) -> {
             Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
             Map<Dynamic<?>, Dynamic<?>> map = Maps.newHashMap();
-            Optional<? extends Map<? extends Dynamic<?>, ? extends Dynamic<?>>> optional = dynamic.getMapValues();
+            Optional<? extends Map<? extends Dynamic<?>, ? extends Dynamic<?>>> optional = dynamic.getMapValues().result();
 
             if (optional.isPresent()) {
                 Iterator iterator = ((Map) optional.get()).entrySet().iterator();
@@ -44,7 +45,7 @@ public class DataConverterStatistic extends DataFix {
                 while (iterator.hasNext()) {
                     Entry<? extends Dynamic<?>, ? extends Dynamic<?>> entry = (Entry) iterator.next();
 
-                    if (((Dynamic) entry.getValue()).asNumber().isPresent()) {
+                    if (((Dynamic) entry.getValue()).asNumber().result().isPresent()) {
                         String s = ((Dynamic) entry.getKey()).asString("");
 
                         if (!DataConverterStatistic.a.contains(s)) {
@@ -98,9 +99,9 @@ public class DataConverterStatistic extends DataFix {
                 }
             }
 
-            return (Typed) ((Optional) type.readTyped(dynamic.emptyMap().set("stats", dynamic.createMap(map))).getSecond()).orElseThrow(() -> {
+            return (Typed) ((Pair) type.readTyped(dynamic.emptyMap().set("stats", dynamic.createMap(map))).result().orElseThrow(() -> {
                 return new IllegalStateException("Could not parse new stats object.");
-            });
+            })).getFirst();
         });
     }
 

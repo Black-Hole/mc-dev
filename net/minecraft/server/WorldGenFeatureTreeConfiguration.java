@@ -1,69 +1,107 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.ImmutableMap.Builder;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.google.common.collect.ImmutableList;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
 
 public class WorldGenFeatureTreeConfiguration implements WorldGenFeatureConfiguration {
 
-    public final WorldGenFeatureStateProvider m;
-    public final WorldGenFeatureStateProvider n;
-    public final List<WorldGenFeatureTree> o;
-    public final int p;
-    public transient boolean q;
+    public static final Codec<WorldGenFeatureTreeConfiguration> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(WorldGenFeatureStateProvider.a.fieldOf("trunk_provider").forGetter((worldgenfeaturetreeconfiguration) -> {
+            return worldgenfeaturetreeconfiguration.b;
+        }), WorldGenFeatureStateProvider.a.fieldOf("leaves_provider").forGetter((worldgenfeaturetreeconfiguration) -> {
+            return worldgenfeaturetreeconfiguration.c;
+        }), WorldGenFoilagePlacer.d.fieldOf("foliage_placer").forGetter((worldgenfeaturetreeconfiguration) -> {
+            return worldgenfeaturetreeconfiguration.f;
+        }), TrunkPlacer.c.fieldOf("trunk_placer").forGetter((worldgenfeaturetreeconfiguration) -> {
+            return worldgenfeaturetreeconfiguration.g;
+        }), FeatureSize.a.fieldOf("minimum_size").forGetter((worldgenfeaturetreeconfiguration) -> {
+            return worldgenfeaturetreeconfiguration.h;
+        }), WorldGenFeatureTree.c.listOf().fieldOf("decorators").forGetter((worldgenfeaturetreeconfiguration) -> {
+            return worldgenfeaturetreeconfiguration.d;
+        }), Codec.INT.fieldOf("max_water_depth").withDefault(0).forGetter((worldgenfeaturetreeconfiguration) -> {
+            return worldgenfeaturetreeconfiguration.i;
+        }), Codec.BOOL.fieldOf("ignore_vines").withDefault(false).forGetter((worldgenfeaturetreeconfiguration) -> {
+            return worldgenfeaturetreeconfiguration.j;
+        }), HeightMap.Type.g.fieldOf("heightmap").forGetter((worldgenfeaturetreeconfiguration) -> {
+            return worldgenfeaturetreeconfiguration.l;
+        })).apply(instance, WorldGenFeatureTreeConfiguration::new);
+    });
+    public final WorldGenFeatureStateProvider b;
+    public final WorldGenFeatureStateProvider c;
+    public final List<WorldGenFeatureTree> d;
+    public transient boolean e;
+    public final WorldGenFoilagePlacer f;
+    public final TrunkPlacer g;
+    public final FeatureSize h;
+    public final int i;
+    public final boolean j;
+    public final HeightMap.Type l;
 
-    protected WorldGenFeatureTreeConfiguration(WorldGenFeatureStateProvider worldgenfeaturestateprovider, WorldGenFeatureStateProvider worldgenfeaturestateprovider1, List<WorldGenFeatureTree> list, int i) {
-        this.m = worldgenfeaturestateprovider;
-        this.n = worldgenfeaturestateprovider1;
-        this.o = list;
-        this.p = i;
+    protected WorldGenFeatureTreeConfiguration(WorldGenFeatureStateProvider worldgenfeaturestateprovider, WorldGenFeatureStateProvider worldgenfeaturestateprovider1, WorldGenFoilagePlacer worldgenfoilageplacer, TrunkPlacer trunkplacer, FeatureSize featuresize, List<WorldGenFeatureTree> list, int i, boolean flag, HeightMap.Type heightmap_type) {
+        this.b = worldgenfeaturestateprovider;
+        this.c = worldgenfeaturestateprovider1;
+        this.d = list;
+        this.f = worldgenfoilageplacer;
+        this.h = featuresize;
+        this.g = trunkplacer;
+        this.i = i;
+        this.j = flag;
+        this.l = heightmap_type;
     }
 
     public void a() {
-        this.q = true;
+        this.e = true;
     }
 
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        Builder<T, T> builder = ImmutableMap.builder();
-
-        builder.put(dynamicops.createString("trunk_provider"), this.m.a(dynamicops)).put(dynamicops.createString("leaves_provider"), this.n.a(dynamicops)).put(dynamicops.createString("decorators"), dynamicops.createList(this.o.stream().map((worldgenfeaturetree) -> {
-            return worldgenfeaturetree.a(dynamicops);
-        }))).put(dynamicops.createString("base_height"), dynamicops.createInt(this.p));
-        return new Dynamic(dynamicops, dynamicops.createMap(builder.build()));
-    }
-
-    public static <T> WorldGenFeatureTreeConfiguration b(Dynamic<T> dynamic) {
-        WorldGenFeatureStateProviders<?> worldgenfeaturestateproviders = (WorldGenFeatureStateProviders) IRegistry.t.get(new MinecraftKey((String) dynamic.get("trunk_provider").get("type").asString().orElseThrow(RuntimeException::new)));
-        WorldGenFeatureStateProviders<?> worldgenfeaturestateproviders1 = (WorldGenFeatureStateProviders) IRegistry.t.get(new MinecraftKey((String) dynamic.get("leaves_provider").get("type").asString().orElseThrow(RuntimeException::new)));
-
-        return new WorldGenFeatureTreeConfiguration(worldgenfeaturestateproviders.a(dynamic.get("trunk_provider").orElseEmptyMap()), worldgenfeaturestateproviders1.a(dynamic.get("leaves_provider").orElseEmptyMap()), dynamic.get("decorators").asList((dynamic1) -> {
-            return ((WorldGenFeatureTrees) IRegistry.w.get(new MinecraftKey((String) dynamic1.get("type").asString().orElseThrow(RuntimeException::new)))).a(dynamic1);
-        }), dynamic.get("base_height").asInt(0));
+    public WorldGenFeatureTreeConfiguration a(List<WorldGenFeatureTree> list) {
+        return new WorldGenFeatureTreeConfiguration(this.b, this.c, this.f, this.g, this.h, list, this.i, this.j, this.l);
     }
 
     public static class a {
 
         public final WorldGenFeatureStateProvider a;
         public final WorldGenFeatureStateProvider b;
-        private List<WorldGenFeatureTree> c = Lists.newArrayList();
-        private int d = 0;
+        private final WorldGenFoilagePlacer c;
+        private final TrunkPlacer d;
+        private final FeatureSize e;
+        private List<WorldGenFeatureTree> f = ImmutableList.of();
+        private int g;
+        private boolean h;
+        private HeightMap.Type i;
 
-        public a(WorldGenFeatureStateProvider worldgenfeaturestateprovider, WorldGenFeatureStateProvider worldgenfeaturestateprovider1) {
+        public a(WorldGenFeatureStateProvider worldgenfeaturestateprovider, WorldGenFeatureStateProvider worldgenfeaturestateprovider1, WorldGenFoilagePlacer worldgenfoilageplacer, TrunkPlacer trunkplacer, FeatureSize featuresize) {
+            this.i = HeightMap.Type.OCEAN_FLOOR;
             this.a = worldgenfeaturestateprovider;
             this.b = worldgenfeaturestateprovider1;
+            this.c = worldgenfoilageplacer;
+            this.d = trunkplacer;
+            this.e = featuresize;
         }
 
-        public WorldGenFeatureTreeConfiguration.a d(int i) {
-            this.d = i;
+        public WorldGenFeatureTreeConfiguration.a a(List<WorldGenFeatureTree> list) {
+            this.f = list;
+            return this;
+        }
+
+        public WorldGenFeatureTreeConfiguration.a a(int i) {
+            this.g = i;
+            return this;
+        }
+
+        public WorldGenFeatureTreeConfiguration.a a() {
+            this.h = true;
+            return this;
+        }
+
+        public WorldGenFeatureTreeConfiguration.a a(HeightMap.Type heightmap_type) {
+            this.i = heightmap_type;
             return this;
         }
 
         public WorldGenFeatureTreeConfiguration b() {
-            return new WorldGenFeatureTreeConfiguration(this.a, this.b, this.c, this.d);
+            return new WorldGenFeatureTreeConfiguration(this.a, this.b, this.c, this.d, this.e, this.f, this.g, this.h, this.i);
         }
     }
 }

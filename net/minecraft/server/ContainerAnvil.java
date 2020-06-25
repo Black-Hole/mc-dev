@@ -6,114 +6,76 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ContainerAnvil extends Container {
+public class ContainerAnvil extends ContainerAnvilAbstract {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final IInventory resultInventory;
-    private final IInventory repairInventory;
-    public final ContainerProperty levelCost;
-    private final ContainerAccess containerAccess;
     private int h;
     public String renameText;
-    private final EntityHuman player;
+    public final ContainerProperty levelCost;
 
     public ContainerAnvil(int i, PlayerInventory playerinventory) {
         this(i, playerinventory, ContainerAccess.a);
     }
 
-    public ContainerAnvil(int i, PlayerInventory playerinventory, final ContainerAccess containeraccess) {
-        super(Containers.ANVIL, i);
-        this.resultInventory = new InventoryCraftResult();
-        this.repairInventory = new InventorySubcontainer(2) {
-            @Override
-            public void update() {
-                super.update();
-                ContainerAnvil.this.a((IInventory) this);
-            }
-        };
+    public ContainerAnvil(int i, PlayerInventory playerinventory, ContainerAccess containeraccess) {
+        super(Containers.ANVIL, i, playerinventory, containeraccess);
         this.levelCost = ContainerProperty.a();
-        this.containerAccess = containeraccess;
-        this.player = playerinventory.player;
         this.a(this.levelCost);
-        this.a(new Slot(this.repairInventory, 0, 27, 47));
-        this.a(new Slot(this.repairInventory, 1, 76, 47));
-        this.a(new Slot(this.resultInventory, 2, 134, 47) {
-            @Override
-            public boolean isAllowed(ItemStack itemstack) {
-                return false;
-            }
-
-            @Override
-            public boolean isAllowed(EntityHuman entityhuman) {
-                return (entityhuman.abilities.canInstantlyBuild || entityhuman.expLevel >= ContainerAnvil.this.levelCost.get()) && ContainerAnvil.this.levelCost.get() > 0 && this.hasItem();
-            }
-
-            @Override
-            public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
-                if (!entityhuman.abilities.canInstantlyBuild) {
-                    entityhuman.levelDown(-ContainerAnvil.this.levelCost.get());
-                }
-
-                ContainerAnvil.this.repairInventory.setItem(0, ItemStack.a);
-                if (ContainerAnvil.this.h > 0) {
-                    ItemStack itemstack1 = ContainerAnvil.this.repairInventory.getItem(1);
-
-                    if (!itemstack1.isEmpty() && itemstack1.getCount() > ContainerAnvil.this.h) {
-                        itemstack1.subtract(ContainerAnvil.this.h);
-                        ContainerAnvil.this.repairInventory.setItem(1, itemstack1);
-                    } else {
-                        ContainerAnvil.this.repairInventory.setItem(1, ItemStack.a);
-                    }
-                } else {
-                    ContainerAnvil.this.repairInventory.setItem(1, ItemStack.a);
-                }
-
-                ContainerAnvil.this.levelCost.set(0);
-                containeraccess.a((world, blockposition) -> {
-                    IBlockData iblockdata = world.getType(blockposition);
-
-                    if (!entityhuman.abilities.canInstantlyBuild && iblockdata.a(TagsBlock.ANVIL) && entityhuman.getRandom().nextFloat() < 0.12F) {
-                        IBlockData iblockdata1 = BlockAnvil.e(iblockdata);
-
-                        if (iblockdata1 == null) {
-                            world.a(blockposition, false);
-                            world.triggerEffect(1029, blockposition, 0);
-                        } else {
-                            world.setTypeAndData(blockposition, iblockdata1, 2);
-                            world.triggerEffect(1030, blockposition, 0);
-                        }
-                    } else {
-                        world.triggerEffect(1030, blockposition, 0);
-                    }
-
-                });
-                return itemstack;
-            }
-        });
-
-        int j;
-
-        for (j = 0; j < 3; ++j) {
-            for (int k = 0; k < 9; ++k) {
-                this.a(new Slot(playerinventory, k + j * 9 + 9, 8 + k * 18, 84 + j * 18));
-            }
-        }
-
-        for (j = 0; j < 9; ++j) {
-            this.a(new Slot(playerinventory, j, 8 + j * 18, 142));
-        }
-
     }
 
     @Override
-    public void a(IInventory iinventory) {
-        super.a(iinventory);
-        if (iinventory == this.repairInventory) {
-            this.e();
-        }
-
+    protected boolean a(IBlockData iblockdata) {
+        return iblockdata.a((Tag) TagsBlock.ANVIL);
     }
 
+    @Override
+    protected boolean b(EntityHuman entityhuman, boolean flag) {
+        return (entityhuman.abilities.canInstantlyBuild || entityhuman.expLevel >= this.levelCost.get()) && this.levelCost.get() > 0;
+    }
+
+    @Override
+    protected ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
+        if (!entityhuman.abilities.canInstantlyBuild) {
+            entityhuman.levelDown(-this.levelCost.get());
+        }
+
+        this.repairInventory.setItem(0, ItemStack.b);
+        if (this.h > 0) {
+            ItemStack itemstack1 = this.repairInventory.getItem(1);
+
+            if (!itemstack1.isEmpty() && itemstack1.getCount() > this.h) {
+                itemstack1.subtract(this.h);
+                this.repairInventory.setItem(1, itemstack1);
+            } else {
+                this.repairInventory.setItem(1, ItemStack.b);
+            }
+        } else {
+            this.repairInventory.setItem(1, ItemStack.b);
+        }
+
+        this.levelCost.set(0);
+        this.containerAccess.a((world, blockposition) -> {
+            IBlockData iblockdata = world.getType(blockposition);
+
+            if (!entityhuman.abilities.canInstantlyBuild && iblockdata.a((Tag) TagsBlock.ANVIL) && entityhuman.getRandom().nextFloat() < 0.12F) {
+                IBlockData iblockdata1 = BlockAnvil.c(iblockdata);
+
+                if (iblockdata1 == null) {
+                    world.a(blockposition, false);
+                    world.triggerEffect(1029, blockposition, 0);
+                } else {
+                    world.setTypeAndData(blockposition, iblockdata1, 2);
+                    world.triggerEffect(1030, blockposition, 0);
+                }
+            } else {
+                world.triggerEffect(1030, blockposition, 0);
+            }
+
+        });
+        return itemstack;
+    }
+
+    @Override
     public void e() {
         ItemStack itemstack = this.repairInventory.getItem(0);
 
@@ -123,7 +85,7 @@ public class ContainerAnvil extends Container {
         byte b1 = 0;
 
         if (itemstack.isEmpty()) {
-            this.resultInventory.setItem(0, ItemStack.a);
+            this.resultInventory.setItem(0, ItemStack.b);
             this.levelCost.set(0);
         } else {
             ItemStack itemstack1 = itemstack.cloneItemStack();
@@ -133,7 +95,7 @@ public class ContainerAnvil extends Container {
 
             this.h = 0;
             if (!itemstack2.isEmpty()) {
-                boolean flag = itemstack2.getItem() == Items.ENCHANTED_BOOK && !ItemEnchantedBook.e(itemstack2).isEmpty();
+                boolean flag = itemstack2.getItem() == Items.ENCHANTED_BOOK && !ItemEnchantedBook.d(itemstack2).isEmpty();
                 int k;
                 int l;
                 int i1;
@@ -141,7 +103,7 @@ public class ContainerAnvil extends Container {
                 if (itemstack1.e() && itemstack1.getItem().a(itemstack, itemstack2)) {
                     k = Math.min(itemstack1.getDamage(), itemstack1.h() / 4);
                     if (k <= 0) {
-                        this.resultInventory.setItem(0, ItemStack.a);
+                        this.resultInventory.setItem(0, ItemStack.b);
                         this.levelCost.set(0);
                         return;
                     }
@@ -156,7 +118,7 @@ public class ContainerAnvil extends Container {
                     this.h = i1;
                 } else {
                     if (!flag && (itemstack1.getItem() != itemstack2.getItem() || !itemstack1.e())) {
-                        this.resultInventory.setItem(0, ItemStack.a);
+                        this.resultInventory.setItem(0, ItemStack.b);
                         this.levelCost.set(0);
                         return;
                     }
@@ -187,7 +149,7 @@ public class ContainerAnvil extends Container {
                         Enchantment enchantment = (Enchantment) iterator.next();
 
                         if (enchantment != null) {
-                            int l1 = map.containsKey(enchantment) ? (Integer) map.get(enchantment) : 0;
+                            int l1 = (Integer) map.getOrDefault(enchantment, 0);
                             int i2 = (Integer) map1.get(enchantment);
 
                             i2 = l1 == i2 ? i2 + 1 : Math.max(i2, l1);
@@ -246,7 +208,7 @@ public class ContainerAnvil extends Container {
                     }
 
                     if (flag2 && !flag1) {
-                        this.resultInventory.setItem(0, ItemStack.a);
+                        this.resultInventory.setItem(0, ItemStack.b);
                         this.levelCost.set(0);
                         return;
                     }
@@ -267,7 +229,7 @@ public class ContainerAnvil extends Container {
 
             this.levelCost.set(j + i);
             if (i <= 0) {
-                itemstack1 = ItemStack.a;
+                itemstack1 = ItemStack.b;
             }
 
             if (b1 == i && b1 > 0 && this.levelCost.get() >= 40) {
@@ -275,7 +237,7 @@ public class ContainerAnvil extends Container {
             }
 
             if (this.levelCost.get() >= 40 && !this.player.abilities.canInstantlyBuild) {
-                itemstack1 = ItemStack.a;
+                itemstack1 = ItemStack.b;
             }
 
             if (!itemstack1.isEmpty()) {
@@ -300,60 +262,6 @@ public class ContainerAnvil extends Container {
 
     public static int d(int i) {
         return i * 2 + 1;
-    }
-
-    @Override
-    public void b(EntityHuman entityhuman) {
-        super.b(entityhuman);
-        this.containerAccess.a((world, blockposition) -> {
-            this.a(entityhuman, world, this.repairInventory);
-        });
-    }
-
-    @Override
-    public boolean canUse(EntityHuman entityhuman) {
-        return (Boolean) this.containerAccess.a((world, blockposition) -> {
-            return !world.getType(blockposition).a(TagsBlock.ANVIL) ? false : entityhuman.g((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) <= 64.0D;
-        }, true);
-    }
-
-    @Override
-    public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.a;
-        Slot slot = (Slot) this.slots.get(i);
-
-        if (slot != null && slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-
-            itemstack = itemstack1.cloneItemStack();
-            if (i == 2) {
-                if (!this.a(itemstack1, 3, 39, true)) {
-                    return ItemStack.a;
-                }
-
-                slot.a(itemstack1, itemstack);
-            } else if (i != 0 && i != 1) {
-                if (i >= 3 && i < 39 && !this.a(itemstack1, 0, 2, false)) {
-                    return ItemStack.a;
-                }
-            } else if (!this.a(itemstack1, 3, 39, false)) {
-                return ItemStack.a;
-            }
-
-            if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.a);
-            } else {
-                slot.d();
-            }
-
-            if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.a;
-            }
-
-            slot.a(entityhuman, itemstack1);
-        }
-
-        return itemstack;
     }
 
     public void a(String s) {

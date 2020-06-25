@@ -4,7 +4,6 @@ import com.google.common.base.Joiner;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
@@ -18,8 +17,8 @@ public class CommandForceload {
     private static final Dynamic2CommandExceptionType b = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("commands.forceload.query.failure", new Object[]{object, object1});
     });
-    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.forceload.added.failure", new Object[0]));
-    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.forceload.removed.failure", new Object[0]));
+    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.forceload.added.failure"));
+    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.forceload.removed.failure"));
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("forceload").requires((commandlistenerwrapper) -> {
@@ -43,46 +42,48 @@ public class CommandForceload {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, BlockPosition2D blockposition2d) throws CommandSyntaxException {
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition2d.a >> 4, blockposition2d.b >> 4);
-        DimensionManager dimensionmanager = commandlistenerwrapper.getWorld().getWorldProvider().getDimensionManager();
-        boolean flag = commandlistenerwrapper.getServer().getWorldServer(dimensionmanager).getForceLoadedChunks().contains(chunkcoordintpair.pair());
+        WorldServer worldserver = commandlistenerwrapper.getWorld();
+        ResourceKey<World> resourcekey = worldserver.getDimensionKey();
+        boolean flag = worldserver.getForceLoadedChunks().contains(chunkcoordintpair.pair());
 
         if (flag) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.query.success", new Object[]{chunkcoordintpair, dimensionmanager}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.query.success", new Object[]{chunkcoordintpair, resourcekey.a()}), false);
             return 1;
         } else {
-            throw CommandForceload.b.create(chunkcoordintpair, dimensionmanager);
+            throw CommandForceload.b.create(chunkcoordintpair, resourcekey.a());
         }
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper) {
-        DimensionManager dimensionmanager = commandlistenerwrapper.getWorld().getWorldProvider().getDimensionManager();
-        LongSet longset = commandlistenerwrapper.getServer().getWorldServer(dimensionmanager).getForceLoadedChunks();
+        WorldServer worldserver = commandlistenerwrapper.getWorld();
+        ResourceKey<World> resourcekey = worldserver.getDimensionKey();
+        LongSet longset = worldserver.getForceLoadedChunks();
         int i = longset.size();
 
         if (i > 0) {
             String s = Joiner.on(", ").join(longset.stream().sorted().map(ChunkCoordIntPair::new).map(ChunkCoordIntPair::toString).iterator());
 
             if (i == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.list.single", new Object[]{dimensionmanager, s}), false);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.list.single", new Object[]{resourcekey.a(), s}), false);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.list.multiple", new Object[]{i, dimensionmanager, s}), false);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.list.multiple", new Object[]{i, resourcekey.a(), s}), false);
             }
         } else {
-            commandlistenerwrapper.sendFailureMessage(new ChatMessage("commands.forceload.added.none", new Object[]{dimensionmanager}));
+            commandlistenerwrapper.sendFailureMessage(new ChatMessage("commands.forceload.added.none", new Object[]{resourcekey.a()}));
         }
 
         return i;
     }
 
     private static int b(CommandListenerWrapper commandlistenerwrapper) {
-        DimensionManager dimensionmanager = commandlistenerwrapper.getWorld().getWorldProvider().getDimensionManager();
-        WorldServer worldserver = commandlistenerwrapper.getServer().getWorldServer(dimensionmanager);
+        WorldServer worldserver = commandlistenerwrapper.getWorld();
+        ResourceKey<World> resourcekey = worldserver.getDimensionKey();
         LongSet longset = worldserver.getForceLoadedChunks();
 
         longset.forEach((i) -> {
             worldserver.setForceLoaded(ChunkCoordIntPair.getX(i), ChunkCoordIntPair.getZ(i), false);
         });
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.removed.all", new Object[]{dimensionmanager}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.removed.all", new Object[]{resourcekey.a()}), true);
         return 0;
     }
 
@@ -102,8 +103,8 @@ public class CommandForceload {
             if (i2 > 256L) {
                 throw CommandForceload.a.create(256, i2);
             } else {
-                DimensionManager dimensionmanager = commandlistenerwrapper.getWorld().getWorldProvider().getDimensionManager();
-                WorldServer worldserver = commandlistenerwrapper.getServer().getWorldServer(dimensionmanager);
+                WorldServer worldserver = commandlistenerwrapper.getWorld();
+                ResourceKey<World> resourcekey = worldserver.getDimensionKey();
                 ChunkCoordIntPair chunkcoordintpair = null;
                 int j2 = 0;
 
@@ -124,12 +125,12 @@ public class CommandForceload {
                     throw (flag ? CommandForceload.c : CommandForceload.d).create();
                 } else {
                     if (j2 == 1) {
-                        commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload." + (flag ? "added" : "removed") + ".single", new Object[]{chunkcoordintpair, dimensionmanager}), true);
+                        commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload." + (flag ? "added" : "removed") + ".single", new Object[]{chunkcoordintpair, resourcekey.a()}), true);
                     } else {
                         ChunkCoordIntPair chunkcoordintpair1 = new ChunkCoordIntPair(i1, j1);
                         ChunkCoordIntPair chunkcoordintpair2 = new ChunkCoordIntPair(k1, l1);
 
-                        commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload." + (flag ? "added" : "removed") + ".multiple", new Object[]{j2, dimensionmanager, chunkcoordintpair1, chunkcoordintpair2}), true);
+                        commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload." + (flag ? "added" : "removed") + ".multiple", new Object[]{j2, resourcekey.a(), chunkcoordintpair1, chunkcoordintpair2}), true);
                     }
 
                     return j2;

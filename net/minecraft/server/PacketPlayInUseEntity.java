@@ -9,13 +9,9 @@ public class PacketPlayInUseEntity implements Packet<PacketListenerPlayIn> {
     private PacketPlayInUseEntity.EnumEntityUseAction action;
     private Vec3D c;
     private EnumHand d;
+    private boolean e;
 
     public PacketPlayInUseEntity() {}
-
-    public PacketPlayInUseEntity(Entity entity) {
-        this.a = entity.getId();
-        this.action = PacketPlayInUseEntity.EnumEntityUseAction.ATTACK;
-    }
 
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
@@ -29,6 +25,7 @@ public class PacketPlayInUseEntity implements Packet<PacketListenerPlayIn> {
             this.d = (EnumHand) packetdataserializer.a(EnumHand.class);
         }
 
+        this.e = packetdataserializer.readBoolean();
     }
 
     @Override
@@ -45,6 +42,7 @@ public class PacketPlayInUseEntity implements Packet<PacketListenerPlayIn> {
             packetdataserializer.a((Enum) this.d);
         }
 
+        packetdataserializer.writeBoolean(this.e);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -66,6 +64,10 @@ public class PacketPlayInUseEntity implements Packet<PacketListenerPlayIn> {
 
     public Vec3D d() {
         return this.c;
+    }
+
+    public boolean e() {
+        return this.e;
     }
 
     public static enum EnumEntityUseAction {

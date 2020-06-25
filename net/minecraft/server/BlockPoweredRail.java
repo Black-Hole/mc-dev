@@ -2,12 +2,12 @@ package net.minecraft.server;
 
 public class BlockPoweredRail extends BlockMinecartTrackAbstract {
 
-    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.X;
+    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.ad;
     public static final BlockStateBoolean POWERED = BlockProperties.w;
 
-    protected BlockPoweredRail(Block.Info block_info) {
-        super(true, block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPoweredRail.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH)).set(BlockPoweredRail.POWERED, false));
+    protected BlockPoweredRail(BlockBase.Info blockbase_info) {
+        super(true, blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPoweredRail.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH)).set(BlockPoweredRail.POWERED, false));
     }
 
     protected boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag, int i) {
@@ -87,7 +87,7 @@ public class BlockPoweredRail extends BlockMinecartTrackAbstract {
     protected boolean a(World world, BlockPosition blockposition, boolean flag, int i, BlockPropertyTrackPosition blockpropertytrackposition) {
         IBlockData iblockdata = world.getType(blockposition);
 
-        if (iblockdata.getBlock() != this) {
+        if (!iblockdata.a((Block) this)) {
             return false;
         } else {
             BlockPropertyTrackPosition blockpropertytrackposition1 = (BlockPropertyTrackPosition) iblockdata.get(BlockPoweredRail.SHAPE);
@@ -104,7 +104,7 @@ public class BlockPoweredRail extends BlockMinecartTrackAbstract {
         if (flag1 != flag) {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockPoweredRail.POWERED, flag1), 3);
             world.applyPhysics(blockposition.down(), this);
-            if (((BlockPropertyTrackPosition) iblockdata.get(BlockPoweredRail.SHAPE)).b()) {
+            if (((BlockPropertyTrackPosition) iblockdata.get(BlockPoweredRail.SHAPE)).c()) {
                 world.applyPhysics(blockposition.up(), this);
             }
         }

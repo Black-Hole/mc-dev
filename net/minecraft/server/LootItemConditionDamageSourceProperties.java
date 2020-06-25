@@ -15,6 +15,11 @@ public class LootItemConditionDamageSourceProperties implements LootItemConditio
     }
 
     @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.l;
+    }
+
+    @Override
     public Set<LootContextParameter<?>> a() {
         return ImmutableSet.of(LootContextParameters.POSITION, LootContextParameters.DAMAGE_SOURCE);
     }
@@ -23,7 +28,7 @@ public class LootItemConditionDamageSourceProperties implements LootItemConditio
         DamageSource damagesource = (DamageSource) loottableinfo.getContextParameter(LootContextParameters.DAMAGE_SOURCE);
         BlockPosition blockposition = (BlockPosition) loottableinfo.getContextParameter(LootContextParameters.POSITION);
 
-        return blockposition != null && damagesource != null && this.a.a(loottableinfo.c(), new Vec3D(blockposition), damagesource);
+        return blockposition != null && damagesource != null && this.a.a(loottableinfo.getWorld(), Vec3D.b((BaseBlockPosition) blockposition), damagesource);
     }
 
     public static LootItemCondition.a a(CriterionConditionDamageSource.a criterionconditiondamagesource_a) {
@@ -32,18 +37,16 @@ public class LootItemConditionDamageSourceProperties implements LootItemConditio
         };
     }
 
-    public static class a extends LootItemCondition.b<LootItemConditionDamageSourceProperties> {
+    public static class a implements LootSerializer<LootItemConditionDamageSourceProperties> {
 
-        protected a() {
-            super(new MinecraftKey("damage_source_properties"), LootItemConditionDamageSourceProperties.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionDamageSourceProperties lootitemconditiondamagesourceproperties, JsonSerializationContext jsonserializationcontext) {
             jsonobject.add("predicate", lootitemconditiondamagesourceproperties.a.a());
         }
 
         @Override
-        public LootItemConditionDamageSourceProperties b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionDamageSourceProperties a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             CriterionConditionDamageSource criterionconditiondamagesource = CriterionConditionDamageSource.a(jsonobject.get("predicate"));
 
             return new LootItemConditionDamageSourceProperties(criterionconditiondamagesource);

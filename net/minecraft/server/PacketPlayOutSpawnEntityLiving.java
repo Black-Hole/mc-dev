@@ -29,7 +29,7 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
         this.f = entityliving.locZ();
         this.j = (byte) ((int) (entityliving.yaw * 256.0F / 360.0F));
         this.k = (byte) ((int) (entityliving.pitch * 256.0F / 360.0F));
-        this.l = (byte) ((int) (entityliving.aK * 256.0F / 360.0F));
+        this.l = (byte) ((int) (entityliving.aJ * 256.0F / 360.0F));
         double d0 = 3.9D;
         Vec3D vec3d = entityliving.getMot();
         double d1 = MathHelper.a(vec3d.x, -3.9D, 3.9D);

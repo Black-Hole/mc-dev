@@ -103,7 +103,7 @@ public class ChunkCoordIntPair {
     }
 
     public BlockPosition l() {
-        return new BlockPosition(this.x << 4, 0, this.z << 4);
+        return new BlockPosition(this.d(), 0, this.e());
     }
 
     public int a(ChunkCoordIntPair chunkcoordintpair) {

@@ -119,20 +119,20 @@ public class NBTTagLongArray extends NBTList<NBTTagLong> {
 
     @Override
     public IChatBaseComponent a(String s, int i) {
-        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("L")).a(NBTTagLongArray.g);
-        IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText("[")).addSibling(ichatbasecomponent).a(";");
+        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("L")).a(NBTTagLongArray.g);
+        IChatMutableComponent ichatmutablecomponent1 = (new ChatComponentText("[")).addSibling(ichatmutablecomponent).c(";");
 
         for (int j = 0; j < this.b.length; ++j) {
-            IChatBaseComponent ichatbasecomponent2 = (new ChatComponentText(String.valueOf(this.b[j]))).a(NBTTagLongArray.f);
+            IChatMutableComponent ichatmutablecomponent2 = (new ChatComponentText(String.valueOf(this.b[j]))).a(NBTTagLongArray.f);
 
-            ichatbasecomponent1.a(" ").addSibling(ichatbasecomponent2).addSibling(ichatbasecomponent);
+            ichatmutablecomponent1.c(" ").addSibling(ichatmutablecomponent2).addSibling(ichatmutablecomponent);
             if (j != this.b.length - 1) {
-                ichatbasecomponent1.a(",");
+                ichatmutablecomponent1.c(",");
             }
         }
 
-        ichatbasecomponent1.a("]");
-        return ichatbasecomponent1;
+        ichatmutablecomponent1.c("]");
+        return ichatmutablecomponent1;
     }
 
     public long[] getLongs() {
@@ -184,6 +184,11 @@ public class NBTTagLongArray extends NBTList<NBTTagLong> {
 
         this.b = ArrayUtils.remove(this.b, i);
         return NBTTagLong.a(j);
+    }
+
+    @Override
+    public byte d_() {
+        return 4;
     }
 
     public void clear() {

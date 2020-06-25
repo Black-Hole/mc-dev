@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 public class ResourcePackLoader implements AutoCloseable {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final ResourcePackInfo b = new ResourcePackInfo((new ChatMessage("resourcePack.broken_assets", new Object[0])).a(new EnumChatFormat[]{EnumChatFormat.RED, EnumChatFormat.ITALIC}), SharedConstants.getGameVersion().getPackVersion());
+    private static final ResourcePackInfo b = new ResourcePackInfo((new ChatMessage("resourcePack.broken_assets")).a(new EnumChatFormat[]{EnumChatFormat.RED, EnumChatFormat.ITALIC}), SharedConstants.getGameVersion().getPackVersion());
     private final String c;
     private final Supplier<IResourcePack> d;
     private final IChatBaseComponent e;
@@ -21,9 +21,10 @@ public class ResourcePackLoader implements AutoCloseable {
     private final ResourcePackLoader.Position h;
     private final boolean i;
     private final boolean j;
+    private final PackSource k;
 
     @Nullable
-    public static <T extends ResourcePackLoader> T a(String s, boolean flag, Supplier<IResourcePack> supplier, ResourcePackLoader.b<T> resourcepackloader_b, ResourcePackLoader.Position resourcepackloader_position) {
+    public static <T extends ResourcePackLoader> T a(String s, boolean flag, Supplier<IResourcePack> supplier, ResourcePackLoader.a<T> resourcepackloader_a, ResourcePackLoader.Position resourcepackloader_position, PackSource packsource) {
         try {
             IResourcePack iresourcepack = (IResourcePack) supplier.get();
             Throwable throwable = null;
@@ -43,7 +44,7 @@ public class ResourcePackLoader implements AutoCloseable {
                     return null;
                 }
 
-                resourcepackloader = resourcepackloader_b.create(s, flag, supplier, iresourcepack, resourcepackinfo, resourcepackloader_position);
+                resourcepackloader = resourcepackloader_a.create(s, flag, supplier, iresourcepack, resourcepackinfo, resourcepackloader_position, packsource);
             } catch (Throwable throwable1) {
                 throwable = throwable1;
                 throw throwable1;
@@ -69,7 +70,7 @@ public class ResourcePackLoader implements AutoCloseable {
         }
     }
 
-    public ResourcePackLoader(String s, boolean flag, Supplier<IResourcePack> supplier, IChatBaseComponent ichatbasecomponent, IChatBaseComponent ichatbasecomponent1, EnumResourcePackVersion enumresourcepackversion, ResourcePackLoader.Position resourcepackloader_position, boolean flag1) {
+    public ResourcePackLoader(String s, boolean flag, Supplier<IResourcePack> supplier, IChatBaseComponent ichatbasecomponent, IChatBaseComponent ichatbasecomponent1, EnumResourcePackVersion enumresourcepackversion, ResourcePackLoader.Position resourcepackloader_position, boolean flag1, PackSource packsource) {
         this.c = s;
         this.d = supplier;
         this.e = ichatbasecomponent;
@@ -78,15 +79,16 @@ public class ResourcePackLoader implements AutoCloseable {
         this.i = flag;
         this.h = resourcepackloader_position;
         this.j = flag1;
+        this.k = packsource;
     }
 
-    public ResourcePackLoader(String s, boolean flag, Supplier<IResourcePack> supplier, IResourcePack iresourcepack, ResourcePackInfo resourcepackinfo, ResourcePackLoader.Position resourcepackloader_position) {
-        this(s, flag, supplier, new ChatComponentText(iresourcepack.a()), resourcepackinfo.a(), EnumResourcePackVersion.a(resourcepackinfo.b()), resourcepackloader_position, false);
+    public ResourcePackLoader(String s, boolean flag, Supplier<IResourcePack> supplier, IResourcePack iresourcepack, ResourcePackInfo resourcepackinfo, ResourcePackLoader.Position resourcepackloader_position, PackSource packsource) {
+        this(s, flag, supplier, new ChatComponentText(iresourcepack.a()), resourcepackinfo.a(), EnumResourcePackVersion.a(resourcepackinfo.b()), resourcepackloader_position, false, packsource);
     }
 
     public IChatBaseComponent a(boolean flag) {
-        return ChatComponentUtils.a((IChatBaseComponent) (new ChatComponentText(this.c))).a((chatmodifier) -> {
-            chatmodifier.setColor(flag ? EnumChatFormat.GREEN : EnumChatFormat.RED).setInsertion(StringArgumentType.escapeIfRequired(this.c)).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, (new ChatComponentText("")).addSibling(this.e).a("\n").addSibling(this.f)));
+        return ChatComponentUtils.a(this.k.decorate(new ChatComponentText(this.c))).format((chatmodifier) -> {
+            return chatmodifier.setColor(flag ? EnumChatFormat.GREEN : EnumChatFormat.RED).setInsertion(StringArgumentType.escapeIfRequired(this.c)).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, (new ChatComponentText("")).addSibling(this.e).c("\n").addSibling(this.f)));
         });
     }
 
@@ -172,9 +174,9 @@ public class ResourcePackLoader implements AutoCloseable {
     }
 
     @FunctionalInterface
-    public interface b<T extends ResourcePackLoader> {
+    public interface a<T extends ResourcePackLoader> {
 
         @Nullable
-        T create(String s, boolean flag, Supplier<IResourcePack> supplier, IResourcePack iresourcepack, ResourcePackInfo resourcepackinfo, ResourcePackLoader.Position resourcepackloader_position);
+        T create(String s, boolean flag, Supplier<IResourcePack> supplier, IResourcePack iresourcepack, ResourcePackInfo resourcepackinfo, ResourcePackLoader.Position resourcepackloader_position, PackSource packsource);
     }
 }

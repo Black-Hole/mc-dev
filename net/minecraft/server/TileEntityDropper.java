@@ -8,6 +8,6 @@ public class TileEntityDropper extends TileEntityDispenser {
 
     @Override
     protected IChatBaseComponent getContainerName() {
-        return new ChatMessage("container.dropper", new Object[0]);
+        return new ChatMessage("container.dropper");
     }
 }

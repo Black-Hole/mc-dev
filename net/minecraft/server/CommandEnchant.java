@@ -4,7 +4,6 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
@@ -26,7 +25,7 @@ public class CommandEnchant {
     private static final Dynamic2CommandExceptionType d = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("commands.enchant.failed.level", new Object[]{object, object1});
     });
-    private static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("commands.enchant.failed", new Object[0]));
+    private static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("commands.enchant.failed"));
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("enchant").requires((commandlistenerwrapper) -> {
@@ -57,7 +56,7 @@ public class CommandEnchant {
                             itemstack.addEnchantment(enchantment, i);
                             ++j;
                         } else if (collection.size() == 1) {
-                            throw CommandEnchant.c.create(itemstack.getItem().g(itemstack).getString());
+                            throw CommandEnchant.c.create(itemstack.getItem().h(itemstack).getString());
                         }
                     } else if (collection.size() == 1) {
                         throw CommandEnchant.b.create(entityliving.getDisplayName().getString());

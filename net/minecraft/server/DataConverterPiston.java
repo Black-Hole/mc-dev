@@ -1,12 +1,12 @@
 package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
-import java.util.Optional;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 
 public class DataConverterPiston extends DataConverterNamedEntity {
 
@@ -31,8 +31,8 @@ public class DataConverterPiston extends DataConverterNamedEntity {
             return new IllegalStateException("Could not create new piston block entity.");
         });
 
-        return typed1.set(DSL.remainderFinder(), dynamic).set(opticfinder, (Typed) ((Optional) type1.readTyped(dynamic1).getSecond()).orElseThrow(() -> {
+        return typed1.set(DSL.remainderFinder(), dynamic).set(opticfinder, (Typed) ((Pair) type1.readTyped(dynamic1).result().orElseThrow(() -> {
             return new IllegalStateException("Could not parse newly created block state tag.");
-        }));
+        })).getFirst());
     }
 }

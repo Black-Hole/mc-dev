@@ -15,13 +15,13 @@ public class PathfinderGoalCatSitOnBed extends PathfinderGoalGotoTarget {
 
     @Override
     public boolean a() {
-        return this.g.isTamed() && !this.g.isSitting() && !this.g.eB() && super.a();
+        return this.g.isTamed() && !this.g.isWillSit() && !this.g.eX() && super.a();
     }
 
     @Override
     public void c() {
         super.c();
-        this.g.getGoalSit().setSitting(false);
+        this.g.setSitting(false);
     }
 
     @Override
@@ -32,23 +32,23 @@ public class PathfinderGoalCatSitOnBed extends PathfinderGoalGotoTarget {
     @Override
     public void d() {
         super.d();
-        this.g.u(false);
+        this.g.x(false);
     }
 
     @Override
     public void e() {
         super.e();
-        this.g.getGoalSit().setSitting(false);
+        this.g.setSitting(false);
         if (!this.k()) {
-            this.g.u(false);
-        } else if (!this.g.eB()) {
-            this.g.u(true);
+            this.g.x(false);
+        } else if (!this.g.eX()) {
+            this.g.x(true);
         }
 
     }
 
     @Override
     protected boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
-        return iworldreader.isEmpty(blockposition.up()) && iworldreader.getType(blockposition).getBlock().a(TagsBlock.BEDS);
+        return iworldreader.isEmpty(blockposition.up()) && iworldreader.getType(blockposition).getBlock().a((Tag) TagsBlock.BEDS);
     }
 }

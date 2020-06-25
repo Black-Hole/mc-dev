@@ -4,8 +4,8 @@ public class BlockDropper extends BlockDispenser {
 
     private static final IDispenseBehavior c = new DispenseBehaviorItem();
 
-    public BlockDropper(Block.Info block_info) {
-        super(block_info);
+    public BlockDropper(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override

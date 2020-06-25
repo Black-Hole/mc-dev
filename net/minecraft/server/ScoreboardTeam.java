@@ -11,16 +11,21 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
     private final String b;
     private final Set<String> c = Sets.newHashSet();
     private IChatBaseComponent d;
-    private IChatBaseComponent e = new ChatComponentText("");
-    private IChatBaseComponent f = new ChatComponentText("");
-    private boolean g = true;
-    private boolean h = true;
+    private IChatBaseComponent e;
+    private IChatBaseComponent f;
+    private boolean g;
+    private boolean h;
     private ScoreboardTeamBase.EnumNameTagVisibility i;
     private ScoreboardTeamBase.EnumNameTagVisibility j;
     private EnumChatFormat k;
     private ScoreboardTeamBase.EnumTeamPush l;
+    private final ChatModifier m;
 
     public ScoreboardTeam(Scoreboard scoreboard, String s) {
+        this.e = ChatComponentText.d;
+        this.f = ChatComponentText.d;
+        this.g = true;
+        this.h = true;
         this.i = ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS;
         this.j = ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS;
         this.k = EnumChatFormat.RESET;
@@ -28,6 +33,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         this.a = scoreboard;
         this.b = s;
         this.d = new ChatComponentText(s);
+        this.m = ChatModifier.b.setInsertion(s).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(s)));
     }
 
     @Override
@@ -39,17 +45,15 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         return this.d;
     }
 
-    public IChatBaseComponent d() {
-        IChatBaseComponent ichatbasecomponent = ChatComponentUtils.a(this.d.h().a((chatmodifier) -> {
-            chatmodifier.setInsertion(this.b).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(this.b)));
-        }));
+    public IChatMutableComponent d() {
+        IChatMutableComponent ichatmutablecomponent = ChatComponentUtils.a((IChatBaseComponent) this.d.mutableCopy().c(this.m));
         EnumChatFormat enumchatformat = this.getColor();
 
         if (enumchatformat != EnumChatFormat.RESET) {
-            ichatbasecomponent.a(enumchatformat);
+            ichatmutablecomponent.a(enumchatformat);
         }
 
-        return ichatbasecomponent;
+        return ichatmutablecomponent;
     }
 
     public void setDisplayName(IChatBaseComponent ichatbasecomponent) {
@@ -62,7 +66,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
     }
 
     public void setPrefix(@Nullable IChatBaseComponent ichatbasecomponent) {
-        this.e = (IChatBaseComponent) (ichatbasecomponent == null ? new ChatComponentText("") : ichatbasecomponent.h());
+        this.e = ichatbasecomponent == null ? ChatComponentText.d : ichatbasecomponent;
         this.a.handleTeamChanged(this);
     }
 
@@ -71,7 +75,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
     }
 
     public void setSuffix(@Nullable IChatBaseComponent ichatbasecomponent) {
-        this.f = (IChatBaseComponent) (ichatbasecomponent == null ? new ChatComponentText("") : ichatbasecomponent.h());
+        this.f = ichatbasecomponent == null ? ChatComponentText.d : ichatbasecomponent;
         this.a.handleTeamChanged(this);
     }
 
@@ -85,19 +89,19 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
     }
 
     @Override
-    public IChatBaseComponent getFormattedName(IChatBaseComponent ichatbasecomponent) {
-        IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText("")).addSibling(this.e).addSibling(ichatbasecomponent).addSibling(this.f);
+    public IChatMutableComponent getFormattedName(IChatBaseComponent ichatbasecomponent) {
+        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("")).addSibling(this.e).addSibling(ichatbasecomponent).addSibling(this.f);
         EnumChatFormat enumchatformat = this.getColor();
 
         if (enumchatformat != EnumChatFormat.RESET) {
-            ichatbasecomponent1.a(enumchatformat);
+            ichatmutablecomponent.a(enumchatformat);
         }
 
-        return ichatbasecomponent1;
+        return ichatmutablecomponent;
     }
 
-    public static IChatBaseComponent a(@Nullable ScoreboardTeamBase scoreboardteambase, IChatBaseComponent ichatbasecomponent) {
-        return scoreboardteambase == null ? ichatbasecomponent.h() : scoreboardteambase.getFormattedName(ichatbasecomponent);
+    public static IChatMutableComponent a(@Nullable ScoreboardTeamBase scoreboardteambase, IChatBaseComponent ichatbasecomponent) {
+        return scoreboardteambase == null ? ichatbasecomponent.mutableCopy() : scoreboardteambase.getFormattedName(ichatbasecomponent);
     }
 
     @Override

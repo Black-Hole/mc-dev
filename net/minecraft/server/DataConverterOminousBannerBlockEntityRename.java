@@ -1,9 +1,9 @@
 package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
+import com.mojang.serialization.Dynamic;
 import java.util.Optional;
 
 public class DataConverterOminousBannerBlockEntityRename extends DataConverterNamedEntity {
@@ -18,7 +18,7 @@ public class DataConverterOminousBannerBlockEntityRename extends DataConverterNa
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic) {
-        Optional<String> optional = dynamic.get("CustomName").asString();
+        Optional<String> optional = dynamic.get("CustomName").asString().result();
 
         if (optional.isPresent()) {
             String s = (String) optional.get();

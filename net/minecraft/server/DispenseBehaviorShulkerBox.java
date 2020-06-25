@@ -6,7 +6,7 @@ public class DispenseBehaviorShulkerBox extends DispenseBehaviorMaybe {
 
     @Override
     protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-        this.dispensed = false;
+        this.a(false);
         Item item = itemstack.getItem();
 
         if (item instanceof ItemBlock) {
@@ -14,7 +14,7 @@ public class DispenseBehaviorShulkerBox extends DispenseBehaviorMaybe {
             BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
             EnumDirection enumdirection1 = isourceblock.getWorld().isEmpty(blockposition.down()) ? enumdirection : EnumDirection.UP;
 
-            this.dispensed = ((ItemBlock) item).a((BlockActionContext) (new BlockActionContextDirectional(isourceblock.getWorld(), blockposition, enumdirection, itemstack, enumdirection1))) == EnumInteractionResult.SUCCESS;
+            this.a(((ItemBlock) item).a((BlockActionContext) (new BlockActionContextDirectional(isourceblock.getWorld(), blockposition, enumdirection, itemstack, enumdirection1))).a());
         }
 
         return itemstack;

@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.shorts.ShortList;
 import java.util.BitSet;
 import java.util.Collection;
@@ -13,8 +14,8 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
@@ -37,8 +38,8 @@ public class ProtoChunk implements IChunkAccess {
     private final List<NBTTagCompound> k;
     private final List<BlockPosition> l;
     private final ShortList[] m;
-    private final Map<String, StructureStart> n;
-    private final Map<String, LongSet> o;
+    private final Map<StructureGenerator<?>, StructureStart<?>> n;
+    private final Map<StructureGenerator<?>, LongSet> o;
     private final ChunkConverter p;
     private final ProtoChunkTickList<Block> q;
     private final ProtoChunkTickList<FluidType> r;
@@ -65,7 +66,7 @@ public class ProtoChunk implements IChunkAccess {
         this.m = new ShortList[16];
         this.n = Maps.newHashMap();
         this.o = Maps.newHashMap();
-        this.t = Maps.newHashMap();
+        this.t = new Object2ObjectArrayMap();
         this.b = chunkcoordintpair;
         this.p = chunkconverter;
         this.q = protochunkticklist;
@@ -140,17 +141,17 @@ public class ProtoChunk implements IChunkAccess {
         int k = blockposition.getZ();
 
         if (j >= 0 && j < 256) {
-            if (this.j[j >> 4] == Chunk.a && iblockdata.getBlock() == Blocks.AIR) {
+            if (this.j[j >> 4] == Chunk.a && iblockdata.a(Blocks.AIR)) {
                 return iblockdata;
             } else {
-                if (iblockdata.h() > 0) {
+                if (iblockdata.f() > 0) {
                     this.l.add(new BlockPosition((i & 15) + this.getPos().d(), j, (k & 15) + this.getPos().e()));
                 }
 
                 ChunkSection chunksection = this.a(j >> 4);
                 IBlockData iblockdata1 = chunksection.setType(i & 15, j & 15, k & 15, iblockdata);
 
-                if (this.g.b(ChunkStatus.FEATURES) && iblockdata != iblockdata1 && (iblockdata.b((IBlockAccess) this, blockposition) != iblockdata1.b((IBlockAccess) this, blockposition) || iblockdata.h() != iblockdata1.h() || iblockdata.g() || iblockdata1.g())) {
+                if (this.g.b(ChunkStatus.FEATURES) && iblockdata != iblockdata1 && (iblockdata.b((IBlockAccess) this, blockposition) != iblockdata1.b((IBlockAccess) this, blockposition) || iblockdata.f() != iblockdata1.f() || iblockdata.e() || iblockdata1.e())) {
                     LightEngine lightengine = this.e();
 
                     lightengine.a(blockposition);
@@ -231,10 +232,12 @@ public class ProtoChunk implements IChunkAccess {
 
     @Override
     public void a(Entity entity) {
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
+        if (!entity.isPassenger()) {
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        entity.d(nbttagcompound);
-        this.b(nbttagcompound);
+            entity.d(nbttagcompound);
+            this.b(nbttagcompound);
+        }
     }
 
     public List<NBTTagCompound> y() {
@@ -299,7 +302,7 @@ public class ProtoChunk implements IChunkAccess {
     }
 
     @Override
-    public int a(HeightMap.Type heightmap_type, int i, int j) {
+    public int getHighestBlock(HeightMap.Type heightmap_type, int i, int j) {
         HeightMap heightmap = (HeightMap) this.f.get(heightmap_type);
 
         if (heightmap == null) {
@@ -320,50 +323,50 @@ public class ProtoChunk implements IChunkAccess {
 
     @Nullable
     @Override
-    public StructureStart a(String s) {
-        return (StructureStart) this.n.get(s);
+    public StructureStart<?> a(StructureGenerator<?> structuregenerator) {
+        return (StructureStart) this.n.get(structuregenerator);
     }
 
     @Override
-    public void a(String s, StructureStart structurestart) {
-        this.n.put(s, structurestart);
+    public void a(StructureGenerator<?> structuregenerator, StructureStart<?> structurestart) {
+        this.n.put(structuregenerator, structurestart);
         this.c = true;
     }
 
     @Override
-    public Map<String, StructureStart> h() {
+    public Map<StructureGenerator<?>, StructureStart<?>> h() {
         return Collections.unmodifiableMap(this.n);
     }
 
     @Override
-    public void a(Map<String, StructureStart> map) {
+    public void a(Map<StructureGenerator<?>, StructureStart<?>> map) {
         this.n.clear();
         this.n.putAll(map);
         this.c = true;
     }
 
     @Override
-    public LongSet b(String s) {
-        return (LongSet) this.o.computeIfAbsent(s, (s1) -> {
+    public LongSet b(StructureGenerator<?> structuregenerator) {
+        return (LongSet) this.o.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
             return new LongOpenHashSet();
         });
     }
 
     @Override
-    public void a(String s, long i) {
-        ((LongSet) this.o.computeIfAbsent(s, (s1) -> {
+    public void a(StructureGenerator<?> structuregenerator, long i) {
+        ((LongSet) this.o.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
             return new LongOpenHashSet();
         })).add(i);
         this.c = true;
     }
 
     @Override
-    public Map<String, LongSet> v() {
+    public Map<StructureGenerator<?>, LongSet> v() {
         return Collections.unmodifiableMap(this.o);
     }
 
     @Override
-    public void b(Map<String, LongSet> map) {
+    public void b(Map<StructureGenerator<?>, LongSet> map) {
         this.o.clear();
         this.o.putAll(map);
         this.c = true;
@@ -459,8 +462,12 @@ public class ProtoChunk implements IChunkAccess {
         this.i.remove(blockposition);
     }
 
-    @Override
+    @Nullable
     public BitSet a(WorldGenStage.Features worldgenstage_features) {
+        return (BitSet) this.t.get(worldgenstage_features);
+    }
+
+    public BitSet b(WorldGenStage.Features worldgenstage_features) {
         return (BitSet) this.t.computeIfAbsent(worldgenstage_features, (worldgenstage_features1) -> {
             return new BitSet(65536);
         });

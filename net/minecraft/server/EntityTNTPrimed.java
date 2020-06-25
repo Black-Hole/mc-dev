@@ -62,7 +62,7 @@ public class EntityTNTPrimed extends Entity {
                 this.explode();
             }
         } else {
-            this.aC();
+            this.aG();
             if (this.world.isClientSide) {
                 this.world.addParticle(Particles.SMOKE, this.locX(), this.locY() + 0.5D, this.locZ(), 0.0D, 0.0D, 0.0D);
             }
@@ -77,12 +77,12 @@ public class EntityTNTPrimed extends Entity {
     }
 
     @Override
-    protected void b(NBTTagCompound nbttagcompound) {
+    protected void saveData(NBTTagCompound nbttagcompound) {
         nbttagcompound.setShort("Fuse", (short) this.getFuseTicks());
     }
 
     @Override
-    protected void a(NBTTagCompound nbttagcompound) {
+    protected void loadData(NBTTagCompound nbttagcompound) {
         this.setFuseTicks(nbttagcompound.getShort("Fuse"));
     }
 
@@ -93,7 +93,7 @@ public class EntityTNTPrimed extends Entity {
 
     @Override
     protected float getHeadHeight(EntityPose entitypose, EntitySize entitysize) {
-        return 0.0F;
+        return 0.15F;
     }
 
     public void setFuseTicks(int i) {
@@ -104,12 +104,12 @@ public class EntityTNTPrimed extends Entity {
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
         if (EntityTNTPrimed.FUSE_TICKS.equals(datawatcherobject)) {
-            this.fuseTicks = this.i();
+            this.fuseTicks = this.h();
         }
 
     }
 
-    public int i() {
+    public int h() {
         return (Integer) this.datawatcher.get(EntityTNTPrimed.FUSE_TICKS);
     }
 
@@ -118,7 +118,7 @@ public class EntityTNTPrimed extends Entity {
     }
 
     @Override
-    public Packet<?> L() {
+    public Packet<?> O() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

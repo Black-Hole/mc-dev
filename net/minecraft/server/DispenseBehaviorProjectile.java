@@ -12,7 +12,7 @@ public abstract class DispenseBehaviorProjectile extends DispenseBehaviorItem {
         IProjectile iprojectile = this.a(world, iposition, itemstack);
 
         iprojectile.shoot((double) enumdirection.getAdjacentX(), (double) ((float) enumdirection.getAdjacentY() + 0.1F), (double) enumdirection.getAdjacentZ(), this.getPower(), this.a());
-        world.addEntity((Entity) iprojectile);
+        world.addEntity(iprojectile);
         itemstack.subtract(1);
         return itemstack;
     }

@@ -8,7 +8,7 @@ public class RecipeBookClone extends IRecipeComplex {
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
         int i = 0;
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
 
         for (int j = 0; j < inventorycrafting.getSize(); ++j) {
             ItemStack itemstack1 = inventorycrafting.getItem(j);
@@ -35,7 +35,7 @@ public class RecipeBookClone extends IRecipeComplex {
 
     public ItemStack a(InventoryCrafting inventorycrafting) {
         int i = 0;
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
 
         for (int j = 0; j < inventorycrafting.getSize(); ++j) {
             ItemStack itemstack1 = inventorycrafting.getItem(j);
@@ -43,13 +43,13 @@ public class RecipeBookClone extends IRecipeComplex {
             if (!itemstack1.isEmpty()) {
                 if (itemstack1.getItem() == Items.WRITTEN_BOOK) {
                     if (!itemstack.isEmpty()) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
 
                     itemstack = itemstack1;
                 } else {
                     if (itemstack1.getItem() != Items.WRITABLE_BOOK) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
 
                     ++i;
@@ -57,26 +57,26 @@ public class RecipeBookClone extends IRecipeComplex {
             }
         }
 
-        if (!itemstack.isEmpty() && itemstack.hasTag() && i >= 1 && ItemWrittenBook.e(itemstack) < 2) {
+        if (!itemstack.isEmpty() && itemstack.hasTag() && i >= 1 && ItemWrittenBook.d(itemstack) < 2) {
             ItemStack itemstack2 = new ItemStack(Items.WRITTEN_BOOK, i);
             NBTTagCompound nbttagcompound = itemstack.getTag().clone();
 
-            nbttagcompound.setInt("generation", ItemWrittenBook.e(itemstack) + 1);
+            nbttagcompound.setInt("generation", ItemWrittenBook.d(itemstack) + 1);
             itemstack2.setTag(nbttagcompound);
             return itemstack2;
         } else {
-            return ItemStack.a;
+            return ItemStack.b;
         }
     }
 
     public NonNullList<ItemStack> b(InventoryCrafting inventorycrafting) {
-        NonNullList<ItemStack> nonnulllist = NonNullList.a(inventorycrafting.getSize(), ItemStack.a);
+        NonNullList<ItemStack> nonnulllist = NonNullList.a(inventorycrafting.getSize(), ItemStack.b);
 
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
-            if (itemstack.getItem().q()) {
-                nonnulllist.set(i, new ItemStack(itemstack.getItem().p()));
+            if (itemstack.getItem().p()) {
+                nonnulllist.set(i, new ItemStack(itemstack.getItem().getCraftingRemainingItem()));
             } else if (itemstack.getItem() instanceof ItemWrittenBook) {
                 ItemStack itemstack1 = itemstack.cloneItemStack();
 

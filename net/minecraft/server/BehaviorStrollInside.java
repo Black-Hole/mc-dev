@@ -8,19 +8,19 @@ import java.util.stream.Collectors;
 
 public class BehaviorStrollInside extends Behavior<EntityCreature> {
 
-    private final float a;
+    private final float b;
 
     public BehaviorStrollInside(float f) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
-        this.a = f;
+        this.b = f;
     }
 
     protected boolean a(WorldServer worldserver, EntityCreature entitycreature) {
-        return !worldserver.f(new BlockPosition(entitycreature));
+        return !worldserver.f(entitycreature.getChunkCoordinates());
     }
 
     protected void a(WorldServer worldserver, EntityCreature entitycreature, long i) {
-        BlockPosition blockposition = new BlockPosition(entitycreature);
+        BlockPosition blockposition = entitycreature.getChunkCoordinates();
         List<BlockPosition> list = (List) BlockPosition.b(blockposition.b(-1, -1, -1), blockposition.b(1, 1, 1)).map(BlockPosition::immutableCopy).collect(Collectors.toList());
 
         Collections.shuffle(list);
@@ -33,7 +33,7 @@ public class BehaviorStrollInside extends Behavior<EntityCreature> {
         }).findFirst();
 
         optional.ifPresent((blockposition1) -> {
-            entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(blockposition1, this.a, 0)));
+            entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(blockposition1, this.b, 0)));
         });
     }
 }

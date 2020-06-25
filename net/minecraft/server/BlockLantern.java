@@ -8,9 +8,9 @@ public class BlockLantern extends Block {
     protected static final VoxelShape b = VoxelShapes.a(Block.a(5.0D, 0.0D, 5.0D, 11.0D, 7.0D, 11.0D), Block.a(6.0D, 7.0D, 6.0D, 10.0D, 9.0D, 10.0D));
     protected static final VoxelShape c = VoxelShapes.a(Block.a(5.0D, 1.0D, 5.0D, 11.0D, 8.0D, 11.0D), Block.a(6.0D, 8.0D, 6.0D, 10.0D, 10.0D, 10.0D));
 
-    public BlockLantern(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLantern.a, false));
+    public BlockLantern(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLantern.a, false));
     }
 
     @Nullable
@@ -22,7 +22,7 @@ public class BlockLantern extends Block {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection[j];
 
-            if (enumdirection.m() == EnumDirection.EnumAxis.Y) {
+            if (enumdirection.n() == EnumDirection.EnumAxis.Y) {
                 IBlockData iblockdata = (IBlockData) this.getBlockData().set(BlockLantern.a, enumdirection == EnumDirection.UP);
 
                 if (iblockdata.canPlace(blockactioncontext.getWorld(), blockactioncontext.getClickPosition())) {
@@ -35,7 +35,7 @@ public class BlockLantern extends Block {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return (Boolean) iblockdata.get(BlockLantern.a) ? BlockLantern.c : BlockLantern.b;
     }
 

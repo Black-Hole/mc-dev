@@ -1,28 +1,26 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class WorldGenFeatureVillageConfiguration implements WorldGenFeatureConfiguration {
 
-    public final MinecraftKey a;
-    public final int b;
+    public static final Codec<WorldGenFeatureVillageConfiguration> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(MinecraftKey.a.fieldOf("start_pool").forGetter(WorldGenFeatureVillageConfiguration::b), Codec.INT.fieldOf("size").forGetter(WorldGenFeatureVillageConfiguration::a)).apply(instance, WorldGenFeatureVillageConfiguration::new);
+    });
+    public final MinecraftKey b;
+    public final int c;
 
-    public WorldGenFeatureVillageConfiguration(String s, int i) {
-        this.a = new MinecraftKey(s);
-        this.b = i;
+    public WorldGenFeatureVillageConfiguration(MinecraftKey minecraftkey, int i) {
+        this.b = minecraftkey;
+        this.c = i;
     }
 
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("start_pool"), dynamicops.createString(this.a.toString()), dynamicops.createString("size"), dynamicops.createInt(this.b))));
+    public int a() {
+        return this.c;
     }
 
-    public static <T> WorldGenFeatureVillageConfiguration a(Dynamic<T> dynamic) {
-        String s = dynamic.get("start_pool").asString("");
-        int i = dynamic.get("size").asInt(6);
-
-        return new WorldGenFeatureVillageConfiguration(s, i);
+    public MinecraftKey b() {
+        return this.b;
     }
 }

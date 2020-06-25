@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.List;
-import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 public class BlockShulkerBox extends BlockTileEntity {
@@ -11,10 +10,10 @@ public class BlockShulkerBox extends BlockTileEntity {
     @Nullable
     public final EnumColor color;
 
-    public BlockShulkerBox(@Nullable EnumColor enumcolor, Block.Info block_info) {
-        super(block_info);
+    public BlockShulkerBox(@Nullable EnumColor enumcolor, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.color = enumcolor;
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockShulkerBox.a, EnumDirection.UP));
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockShulkerBox.a, EnumDirection.UP));
     }
 
     @Override
@@ -23,12 +22,7 @@ public class BlockShulkerBox extends BlockTileEntity {
     }
 
     @Override
-    public boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return true;
-    }
-
-    @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.ENTITYBLOCK_ANIMATED;
     }
 
@@ -37,19 +31,18 @@ public class BlockShulkerBox extends BlockTileEntity {
         if (world.isClientSide) {
             return EnumInteractionResult.SUCCESS;
         } else if (entityhuman.isSpectator()) {
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.CONSUME;
         } else {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityShulkerBox) {
-                EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockShulkerBox.a);
                 TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) tileentity;
                 boolean flag;
 
                 if (tileentityshulkerbox.j() == TileEntityShulkerBox.AnimationPhase.CLOSED) {
-                    AxisAlignedBB axisalignedbb = VoxelShapes.b().getBoundingBox().b((double) (0.5F * (float) enumdirection.getAdjacentX()), (double) (0.5F * (float) enumdirection.getAdjacentY()), (double) (0.5F * (float) enumdirection.getAdjacentZ())).a((double) enumdirection.getAdjacentX(), (double) enumdirection.getAdjacentY(), (double) enumdirection.getAdjacentZ());
+                    EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockShulkerBox.a);
 
-                    flag = world.a(axisalignedbb.a(blockposition.shift(enumdirection)));
+                    flag = world.b(ShulkerUtil.a(blockposition, enumdirection));
                 } else {
                     flag = true;
                 }
@@ -57,9 +50,10 @@ public class BlockShulkerBox extends BlockTileEntity {
                 if (flag) {
                     entityhuman.openContainer(tileentityshulkerbox);
                     entityhuman.a(StatisticList.OPEN_SHULKER_BOX);
+                    PiglinAI.a(entityhuman, true);
                 }
 
-                return EnumInteractionResult.SUCCESS;
+                return EnumInteractionResult.CONSUME;
             } else {
                 return EnumInteractionResult.PASS;
             }
@@ -85,7 +79,7 @@ public class BlockShulkerBox extends BlockTileEntity {
 
             if (!world.isClientSide && entityhuman.isCreative() && !tileentityshulkerbox.isEmpty()) {
                 ItemStack itemstack = b(this.c());
-                NBTTagCompound nbttagcompound = tileentityshulkerbox.g(new NBTTagCompound());
+                NBTTagCompound nbttagcompound = tileentityshulkerbox.e(new NBTTagCompound());
 
                 if (!nbttagcompound.isEmpty()) {
                     itemstack.a("BlockEntityTag", (NBTBase) nbttagcompound);
@@ -95,7 +89,7 @@ public class BlockShulkerBox extends BlockTileEntity {
                     itemstack.a(tileentityshulkerbox.getCustomName());
                 }
 
-                EntityItem entityitem = new EntityItem(world, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), itemstack);
+                EntityItem entityitem = new EntityItem(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, itemstack);
 
                 entityitem.defaultPickupDelay();
                 world.addEntity(entityitem);
@@ -139,7 +133,7 @@ public class BlockShulkerBox extends BlockTileEntity {
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!iblockdata.a(iblockdata1.getBlock())) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityShulkerBox) {
@@ -156,7 +150,7 @@ public class BlockShulkerBox extends BlockTileEntity {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
 
         return tileentity instanceof TileEntityShulkerBox ? VoxelShapes.a(((TileEntityShulkerBox) tileentity).a(iblockdata)) : VoxelShapes.b();

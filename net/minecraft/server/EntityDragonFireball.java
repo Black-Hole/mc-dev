@@ -16,12 +16,17 @@ public class EntityDragonFireball extends EntityFireball {
     @Override
     protected void a(MovingObjectPosition movingobjectposition) {
         super.a(movingobjectposition);
-        if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.ENTITY || !((MovingObjectPositionEntity) movingobjectposition).getEntity().s(this.shooter)) {
+        Entity entity = this.getShooter();
+
+        if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.ENTITY || !((MovingObjectPositionEntity) movingobjectposition).getEntity().s(entity)) {
             if (!this.world.isClientSide) {
                 List<EntityLiving> list = this.world.a(EntityLiving.class, this.getBoundingBox().grow(4.0D, 2.0D, 4.0D));
                 EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX(), this.locY(), this.locZ());
 
-                entityareaeffectcloud.setSource(this.shooter);
+                if (entity instanceof EntityLiving) {
+                    entityareaeffectcloud.setSource((EntityLiving) entity);
+                }
+
                 entityareaeffectcloud.setParticle(Particles.DRAGON_BREATH);
                 entityareaeffectcloud.setRadius(3.0F);
                 entityareaeffectcloud.setDuration(600);
@@ -41,7 +46,7 @@ public class EntityDragonFireball extends EntityFireball {
                     }
                 }
 
-                this.world.triggerEffect(2006, new BlockPosition(this), 0);
+                this.world.triggerEffect(2006, this.getChunkCoordinates(), this.isSilent() ? -1 : 1);
                 this.world.addEntity(entityareaeffectcloud);
                 this.die();
             }
@@ -60,12 +65,12 @@ public class EntityDragonFireball extends EntityFireball {
     }
 
     @Override
-    protected ParticleParam i() {
+    protected ParticleParam h() {
         return Particles.DRAGON_BREATH;
     }
 
     @Override
-    protected boolean M_() {
+    protected boolean Y_() {
         return false;
     }
 }

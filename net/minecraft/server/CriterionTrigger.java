@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 
 public interface CriterionTrigger<T extends CriterionInstance> {
@@ -13,7 +12,7 @@ public interface CriterionTrigger<T extends CriterionInstance> {
 
     void a(AdvancementDataPlayer advancementdataplayer);
 
-    T a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext);
+    T a(JsonObject jsonobject, LootDeserializationContext lootdeserializationcontext);
 
     public static class a<T extends CriterionInstance> {
 

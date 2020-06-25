@@ -5,8 +5,8 @@ import java.util.Random;
 
 public class BlockGrass extends BlockDirtSnowSpreadable implements IBlockFragilePlantElement {
 
-    public BlockGrass(Block.Info block_info) {
-        super(block_info);
+    public BlockGrass(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
@@ -32,14 +32,14 @@ public class BlockGrass extends BlockDirtSnowSpreadable implements IBlockFragile
             while (true) {
                 if (j < i / 16) {
                     blockposition2 = blockposition2.b(random.nextInt(3) - 1, (random.nextInt(3) - 1) * random.nextInt(3) / 2, random.nextInt(3) - 1);
-                    if (worldserver.getType(blockposition2.down()).getBlock() == this && !worldserver.getType(blockposition2).p(worldserver, blockposition2)) {
+                    if (worldserver.getType(blockposition2.down()).a((Block) this) && !worldserver.getType(blockposition2).r(worldserver, blockposition2)) {
                         ++j;
                         continue;
                     }
                 } else {
                     IBlockData iblockdata2 = worldserver.getType(blockposition2);
 
-                    if (iblockdata2.getBlock() == iblockdata1.getBlock() && random.nextInt(10) == 0) {
+                    if (iblockdata2.a(iblockdata1.getBlock()) && random.nextInt(10) == 0) {
                         ((IBlockFragilePlantElement) iblockdata1.getBlock()).a(worldserver, random, blockposition2, iblockdata2);
                     }
 
@@ -49,15 +49,15 @@ public class BlockGrass extends BlockDirtSnowSpreadable implements IBlockFragile
                             IBlockData iblockdata3;
 
                             if (random.nextInt(8) == 0) {
-                                List<WorldGenFeatureConfigured<?, ?>> list = worldserver.getBiome(blockposition2).g();
+                                List<WorldGenFeatureConfigured<?, ?>> list = worldserver.getBiome(blockposition2).h();
 
                                 if (list.isEmpty()) {
                                     break label38;
                                 }
 
-                                WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured = ((WorldGenFeatureCompositeConfiguration) ((WorldGenFeatureConfigured) list.get(0)).c).a;
+                                WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured = ((WorldGenFeatureCompositeConfiguration) ((WorldGenFeatureConfigured) list.get(0)).e).b;
 
-                                iblockdata3 = ((WorldGenFlowers) worldgenfeatureconfigured.b).b(random, blockposition2, worldgenfeatureconfigured.c);
+                                iblockdata3 = ((WorldGenFlowers) worldgenfeatureconfigured.d).b(random, blockposition2, worldgenfeatureconfigured.e);
                             } else {
                                 iblockdata3 = iblockdata1;
                             }

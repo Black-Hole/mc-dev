@@ -2,13 +2,13 @@ package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.types.templates.List.ListType;
+import com.mojang.serialization.Dynamic;
 import java.util.Optional;
 
 public class DataConverterVillagerLevelXp extends DataFix {
@@ -35,7 +35,7 @@ public class DataConverterVillagerLevelXp extends DataFix {
         return this.fixTypeEverywhereTyped("Villager level and xp rebuild", this.getInputSchema().getType(DataConverterTypes.ENTITY), (typed) -> {
             return typed.updateTyped(opticfinder, type, (typed1) -> {
                 Dynamic<?> dynamic = (Dynamic) typed1.get(DSL.remainderFinder());
-                int i = ((Number) dynamic.get("VillagerData").get("level").asNumber().orElse(0)).intValue();
+                int i = dynamic.get("VillagerData").get("level").asInt(0);
                 Typed<?> typed2 = typed1;
 
                 if (i == 0 || i == 1) {
@@ -51,7 +51,7 @@ public class DataConverterVillagerLevelXp extends DataFix {
                     }
                 }
 
-                Optional<Number> optional = dynamic.get("Xp").asNumber();
+                Optional<Number> optional = dynamic.get("Xp").asNumber().result();
 
                 if (!optional.isPresent()) {
                     typed2 = b(typed2, i);

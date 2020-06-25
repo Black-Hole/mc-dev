@@ -5,69 +5,34 @@ import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Reader;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class JsonList<K, V extends JsonListEntry<K>> {
+public abstract class JsonList<K, V extends JsonListEntry<K>> {
 
     protected static final Logger LOGGER = LogManager.getLogger();
-    protected final Gson b;
+    private static final Gson b = (new GsonBuilder()).setPrettyPrinting().create();
     private final File c;
     private final Map<String, V> d = Maps.newHashMap();
-    private boolean e = true;
-    private static final ParameterizedType f = new ParameterizedType() {
-        public Type[] getActualTypeArguments() {
-            return new Type[]{JsonListEntry.class};
-        }
-
-        public Type getRawType() {
-            return List.class;
-        }
-
-        public Type getOwnerType() {
-            return null;
-        }
-    };
 
     public JsonList(File file) {
         this.c = file;
-        GsonBuilder gsonbuilder = (new GsonBuilder()).setPrettyPrinting();
-
-        gsonbuilder.registerTypeHierarchyAdapter(JsonListEntry.class, new JsonList.JsonListEntrySerializer());
-        this.b = gsonbuilder.create();
     }
 
-    public boolean isEnabled() {
-        return this.e;
-    }
-
-    public void a(boolean flag) {
-        this.e = flag;
-    }
-
-    public File c() {
+    public File b() {
         return this.c;
     }
 
@@ -84,7 +49,7 @@ public class JsonList<K, V extends JsonListEntry<K>> {
 
     @Nullable
     public V get(K k0) {
-        this.h();
+        this.g();
         return (JsonListEntry) this.d.get(this.a(k0));
     }
 
@@ -119,7 +84,7 @@ public class JsonList<K, V extends JsonListEntry<K>> {
         return this.d.containsKey(this.a(k0));
     }
 
-    private void h() {
+    private void g() {
         List<K> list = Lists.newArrayList();
         Iterator iterator = this.d.values().iterator();
 
@@ -141,74 +106,84 @@ public class JsonList<K, V extends JsonListEntry<K>> {
 
     }
 
-    protected JsonListEntry<K> a(JsonObject jsonobject) {
-        return new JsonListEntry<>((Object) null, jsonobject);
-    }
+    protected abstract JsonListEntry<K> a(JsonObject jsonobject);
 
-    public Collection<V> e() {
+    public Collection<V> d() {
         return this.d.values();
     }
 
     public void save() throws IOException {
-        Collection<V> collection = this.d.values();
-        String s = this.b.toJson(collection);
-        BufferedWriter bufferedwriter = null;
+        JsonArray jsonarray = new JsonArray();
 
-        try {
-            bufferedwriter = Files.newWriter(this.c, StandardCharsets.UTF_8);
-            bufferedwriter.write(s);
-        } finally {
-            IOUtils.closeQuietly(bufferedwriter);
-        }
-
-    }
-
-    public void load() throws FileNotFoundException {
-        if (this.c.exists()) {
-            BufferedReader bufferedreader = null;
-
-            try {
-                bufferedreader = Files.newReader(this.c, StandardCharsets.UTF_8);
-                Collection<JsonListEntry<K>> collection = (Collection) ChatDeserializer.a(this.b, (Reader) bufferedreader, (Type) JsonList.f);
-
-                if (collection != null) {
-                    this.d.clear();
-                    Iterator iterator = collection.iterator();
-
-                    while (iterator.hasNext()) {
-                        JsonListEntry<K> jsonlistentry = (JsonListEntry) iterator.next();
-
-                        if (jsonlistentry.getKey() != null) {
-                            this.d.put(this.a(jsonlistentry.getKey()), jsonlistentry);
-                        }
-                    }
-                }
-            } finally {
-                IOUtils.closeQuietly(bufferedreader);
-            }
-
-        }
-    }
-
-    class JsonListEntrySerializer implements JsonDeserializer<JsonListEntry<K>>, JsonSerializer<JsonListEntry<K>> {
-
-        private JsonListEntrySerializer() {}
-
-        public JsonElement serialize(JsonListEntry<K> jsonlistentry, Type type, JsonSerializationContext jsonserializationcontext) {
+        this.d.values().stream().map((jsonlistentry) -> {
             JsonObject jsonobject = new JsonObject();
 
-            jsonlistentry.a(jsonobject);
-            return jsonobject;
+            jsonlistentry.getClass();
+            return (JsonObject) SystemUtils.a((Object) jsonobject, jsonlistentry::a);
+        }).forEach(jsonarray::add);
+        BufferedWriter bufferedwriter = Files.newWriter(this.c, StandardCharsets.UTF_8);
+        Throwable throwable = null;
+
+        try {
+            JsonList.b.toJson(jsonarray, bufferedwriter);
+        } catch (Throwable throwable1) {
+            throwable = throwable1;
+            throw throwable1;
+        } finally {
+            if (bufferedwriter != null) {
+                if (throwable != null) {
+                    try {
+                        bufferedwriter.close();
+                    } catch (Throwable throwable2) {
+                        throwable.addSuppressed(throwable2);
+                    }
+                } else {
+                    bufferedwriter.close();
+                }
+            }
+
         }
 
-        public JsonListEntry<K> deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            if (jsonelement.isJsonObject()) {
-                JsonObject jsonobject = jsonelement.getAsJsonObject();
+    }
 
-                return JsonList.this.a(jsonobject);
-            } else {
-                return null;
+    public void load() throws IOException {
+        if (this.c.exists()) {
+            BufferedReader bufferedreader = Files.newReader(this.c, StandardCharsets.UTF_8);
+            Throwable throwable = null;
+
+            try {
+                JsonArray jsonarray = (JsonArray) JsonList.b.fromJson(bufferedreader, JsonArray.class);
+
+                this.d.clear();
+                Iterator iterator = jsonarray.iterator();
+
+                while (iterator.hasNext()) {
+                    JsonElement jsonelement = (JsonElement) iterator.next();
+                    JsonObject jsonobject = ChatDeserializer.m(jsonelement, "entry");
+                    JsonListEntry<K> jsonlistentry = this.a(jsonobject);
+
+                    if (jsonlistentry.getKey() != null) {
+                        this.d.put(this.a(jsonlistentry.getKey()), jsonlistentry);
+                    }
+                }
+            } catch (Throwable throwable1) {
+                throwable = throwable1;
+                throw throwable1;
+            } finally {
+                if (bufferedreader != null) {
+                    if (throwable != null) {
+                        try {
+                            bufferedreader.close();
+                        } catch (Throwable throwable2) {
+                            throwable.addSuppressed(throwable2);
+                        }
+                    } else {
+                        bufferedreader.close();
+                    }
+                }
+
             }
+
         }
     }
 }

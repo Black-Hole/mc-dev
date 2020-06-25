@@ -29,17 +29,25 @@ public class PacketDebug {
 
     public static void a(WorldServer worldserver, ChunkCoordIntPair chunkcoordintpair) {}
 
-    public static void a(WorldServer worldserver, BlockPosition blockposition) {}
+    public static void a(WorldServer worldserver, BlockPosition blockposition) {
+        d(worldserver, blockposition);
+    }
 
-    public static void b(WorldServer worldserver, BlockPosition blockposition) {}
+    public static void b(WorldServer worldserver, BlockPosition blockposition) {
+        d(worldserver, blockposition);
+    }
 
-    public static void c(WorldServer worldserver, BlockPosition blockposition) {}
+    public static void c(WorldServer worldserver, BlockPosition blockposition) {
+        d(worldserver, blockposition);
+    }
+
+    private static void d(WorldServer worldserver, BlockPosition blockposition) {}
 
     public static void a(World world, EntityInsentient entityinsentient, @Nullable PathEntity pathentity, float f) {}
 
     public static void a(World world, BlockPosition blockposition) {}
 
-    public static void a(GeneratorAccess generatoraccess, StructureStart structurestart) {}
+    public static void a(GeneratorAccess generatoraccess, StructureStart<?> structurestart) {}
 
     public static void a(World world, EntityInsentient entityinsentient, PathfinderGoalSelector pathfindergoalselector) {}
 

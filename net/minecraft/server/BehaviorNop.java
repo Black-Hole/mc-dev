@@ -9,7 +9,7 @@ public class BehaviorNop extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected boolean g(WorldServer worldserver, EntityLiving entityliving, long i) {
+    protected boolean b(WorldServer worldserver, EntityLiving entityliving, long i) {
         return true;
     }
 }

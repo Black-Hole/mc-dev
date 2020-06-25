@@ -8,13 +8,13 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
     protected static final VoxelShape a = Block.a(5.0D, 0.0D, 5.0D, 11.0D, 16.0D, 11.0D);
     protected static final VoxelShape b = Block.a(3.0D, 0.0D, 3.0D, 13.0D, 16.0D, 13.0D);
     protected static final VoxelShape c = Block.a(6.5D, 0.0D, 6.5D, 9.5D, 16.0D, 9.5D);
-    public static final BlockStateInteger d = BlockProperties.Y;
-    public static final BlockStateEnum<BlockPropertyBambooSize> e = BlockProperties.aG;
-    public static final BlockStateInteger f = BlockProperties.au;
+    public static final BlockStateInteger d = BlockProperties.ae;
+    public static final BlockStateEnum<BlockPropertyBambooSize> e = BlockProperties.aN;
+    public static final BlockStateInteger f = BlockProperties.aA;
 
-    public BlockBamboo(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBamboo.d, 0)).set(BlockBamboo.e, BlockPropertyBambooSize.NONE)).set(BlockBamboo.f, 0));
+    public BlockBamboo(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBamboo.d, 0)).set(BlockBamboo.e, BlockPropertyBambooSize.NONE)).set(BlockBamboo.f, 0));
     }
 
     @Override
@@ -23,8 +23,8 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
     }
 
     @Override
-    public Block.EnumRandomOffset X_() {
-        return Block.EnumRandomOffset.XZ;
+    public BlockBase.EnumRandomOffset aj_() {
+        return BlockBase.EnumRandomOffset.XZ;
     }
 
     @Override
@@ -33,9 +33,9 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         VoxelShape voxelshape = iblockdata.get(BlockBamboo.e) == BlockPropertyBambooSize.LARGE ? BlockBamboo.b : BlockBamboo.a;
-        Vec3D vec3d = iblockdata.l(iblockaccess, blockposition);
+        Vec3D vec3d = iblockdata.n(iblockaccess, blockposition);
 
         return voxelshape.a(vec3d.x, vec3d.y, vec3d.z);
     }
@@ -46,8 +46,8 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        Vec3D vec3d = iblockdata.l(iblockaccess, blockposition);
+    public VoxelShape c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        Vec3D vec3d = iblockdata.n(iblockaccess, blockposition);
 
         return BlockBamboo.c.a(vec3d.x, vec3d.y, vec3d.z);
     }
@@ -62,12 +62,10 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
         } else {
             IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition().down());
 
-            if (iblockdata.a(TagsBlock.BAMBOO_PLANTABLE_ON)) {
-                Block block = iblockdata.getBlock();
-
-                if (block == Blocks.BAMBOO_SAPLING) {
+            if (iblockdata.a((Tag) TagsBlock.BAMBOO_PLANTABLE_ON)) {
+                if (iblockdata.a(Blocks.BAMBOO_SAPLING)) {
                     return (IBlockData) this.getBlockData().set(BlockBamboo.d, 0);
-                } else if (block == Blocks.BAMBOO) {
+                } else if (iblockdata.a(Blocks.BAMBOO)) {
                     int i = (Integer) iblockdata.get(BlockBamboo.d) > 0 ? 1 : 0;
 
                     return (IBlockData) this.getBlockData().set(BlockBamboo.d, i);
@@ -81,10 +79,21 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if (!iblockdata.canPlace(worldserver, blockposition)) {
             worldserver.b(blockposition, true);
-        } else if ((Integer) iblockdata.get(BlockBamboo.f) == 0) {
+        }
+
+    }
+
+    @Override
+    public boolean isTicking(IBlockData iblockdata) {
+        return (Integer) iblockdata.get(BlockBamboo.f) == 0;
+    }
+
+    @Override
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if ((Integer) iblockdata.get(BlockBamboo.f) == 0) {
             if (random.nextInt(3) == 0 && worldserver.isEmpty(blockposition.up()) && worldserver.getLightLevel(blockposition.up(), 0) >= 9) {
                 int i = this.b(worldserver, blockposition) + 1;
 
@@ -98,7 +107,7 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        return iworldreader.getType(blockposition.down()).a(TagsBlock.BAMBOO_PLANTABLE_ON);
+        return iworldreader.getType(blockposition.down()).a((Tag) TagsBlock.BAMBOO_PLANTABLE_ON);
     }
 
     @Override
@@ -107,7 +116,7 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
             generatoraccess.getBlockTickList().a(blockposition, this, 1);
         }
 
-        if (enumdirection == EnumDirection.UP && iblockdata1.getBlock() == Blocks.BAMBOO && (Integer) iblockdata1.get(BlockBamboo.d) > (Integer) iblockdata.get(BlockBamboo.d)) {
+        if (enumdirection == EnumDirection.UP && iblockdata1.a(Blocks.BAMBOO) && (Integer) iblockdata1.get(BlockBamboo.d) > (Integer) iblockdata.get(BlockBamboo.d)) {
             generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.a((IBlockState) BlockBamboo.d), 2);
         }
 
@@ -161,10 +170,10 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
         BlockPropertyBambooSize blockpropertybamboosize = BlockPropertyBambooSize.NONE;
 
         if (i >= 1) {
-            if (iblockdata1.getBlock() == Blocks.BAMBOO && iblockdata1.get(BlockBamboo.e) != BlockPropertyBambooSize.NONE) {
-                if (iblockdata1.getBlock() == Blocks.BAMBOO && iblockdata1.get(BlockBamboo.e) != BlockPropertyBambooSize.NONE) {
+            if (iblockdata1.a(Blocks.BAMBOO) && iblockdata1.get(BlockBamboo.e) != BlockPropertyBambooSize.NONE) {
+                if (iblockdata1.a(Blocks.BAMBOO) && iblockdata1.get(BlockBamboo.e) != BlockPropertyBambooSize.NONE) {
                     blockpropertybamboosize = BlockPropertyBambooSize.LARGE;
-                    if (iblockdata2.getBlock() == Blocks.BAMBOO) {
+                    if (iblockdata2.a(Blocks.BAMBOO)) {
                         world.setTypeAndData(blockposition.down(), (IBlockData) iblockdata1.set(BlockBamboo.e, BlockPropertyBambooSize.SMALL), 3);
                         world.setTypeAndData(blockposition1, (IBlockData) iblockdata2.set(BlockBamboo.e, BlockPropertyBambooSize.NONE), 3);
                     }
@@ -174,7 +183,7 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
             }
         }
 
-        int j = (Integer) iblockdata.get(BlockBamboo.d) != 1 && iblockdata2.getBlock() != Blocks.BAMBOO ? 0 : 1;
+        int j = (Integer) iblockdata.get(BlockBamboo.d) != 1 && !iblockdata2.a(Blocks.BAMBOO) ? 0 : 1;
         int k = (i < 11 || random.nextFloat() >= 0.25F) && i != 15 ? 0 : 1;
 
         world.setTypeAndData(blockposition.up(), (IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockBamboo.d, j)).set(BlockBamboo.e, blockpropertybamboosize)).set(BlockBamboo.f, k), 3);
@@ -183,7 +192,7 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
     protected int a(IBlockAccess iblockaccess, BlockPosition blockposition) {
         int i;
 
-        for (i = 0; i < 16 && iblockaccess.getType(blockposition.up(i + 1)).getBlock() == Blocks.BAMBOO; ++i) {
+        for (i = 0; i < 16 && iblockaccess.getType(blockposition.up(i + 1)).a(Blocks.BAMBOO); ++i) {
             ;
         }
 
@@ -193,7 +202,7 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
     protected int b(IBlockAccess iblockaccess, BlockPosition blockposition) {
         int i;
 
-        for (i = 0; i < 16 && iblockaccess.getType(blockposition.down(i + 1)).getBlock() == Blocks.BAMBOO; ++i) {
+        for (i = 0; i < 16 && iblockaccess.getType(blockposition.down(i + 1)).a(Blocks.BAMBOO); ++i) {
             ;
         }
 

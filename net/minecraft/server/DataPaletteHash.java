@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class DataPaletteHash<T> implements DataPalette<T> {
@@ -36,8 +37,14 @@ public class DataPaletteHash<T> implements DataPalette<T> {
     }
 
     @Override
-    public boolean b(T t0) {
-        return this.b.getId(t0) != -1;
+    public boolean a(Predicate<T> predicate) {
+        for (int i = 0; i < this.b(); ++i) {
+            if (predicate.test(this.b.fromId(i))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Nullable

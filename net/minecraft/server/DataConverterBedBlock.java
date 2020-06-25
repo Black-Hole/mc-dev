@@ -4,19 +4,17 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
-import com.mojang.datafixers.types.DynamicOps;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.types.templates.List.ListType;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -82,9 +80,9 @@ public class DataConverterBedBlock extends DataFix {
                         map.put(dynamic1.createString("y"), dynamic1.createInt(l1 + (l << 4)));
                         map.put(dynamic1.createString("z"), dynamic1.createInt(i2 + (j << 4)));
                         map.put(dynamic1.createString("color"), dynamic1.createShort((short) 14));
-                        list.add(((Optional) type1.read(dynamic1.createMap(map)).getSecond()).orElseThrow(() -> {
+                        list.add(((Pair) type1.read(dynamic1.createMap(map)).result().orElseThrow(() -> {
                             return new IllegalStateException("Could not parse newly created bed block entity.");
-                        }));
+                        })).getFirst());
                     }
                 }
             }

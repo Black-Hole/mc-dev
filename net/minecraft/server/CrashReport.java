@@ -64,7 +64,7 @@ public class CrashReport {
         });
         this.d.a("CPUs", (Object) Runtime.getRuntime().availableProcessors());
         this.d.a("JVM Flags", () -> {
-            List<String> list = (List) SystemUtils.h().collect(Collectors.toList());
+            List<String> list = (List) SystemUtils.j().collect(Collectors.toList());
 
             return String.format("%d total; %s", list.size(), list.stream().collect(Collectors.joining(" ")));
         });

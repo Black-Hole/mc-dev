@@ -14,7 +14,6 @@ import com.google.gson.stream.JsonReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.lang.reflect.Type;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
@@ -276,12 +275,12 @@ public class ChatDeserializer {
     }
 
     @Nullable
-    public static <T> T a(Gson gson, Reader reader, Type type, boolean flag) {
+    public static <T> T a(Gson gson, Reader reader, TypeToken<T> typetoken, boolean flag) {
         try {
             JsonReader jsonreader = new JsonReader(reader);
 
             jsonreader.setLenient(flag);
-            return gson.getAdapter(TypeToken.get(type)).read(jsonreader);
+            return gson.getAdapter(typetoken).read(jsonreader);
         } catch (IOException ioexception) {
             throw new JsonParseException(ioexception);
         }
@@ -293,8 +292,8 @@ public class ChatDeserializer {
     }
 
     @Nullable
-    public static <T> T a(Gson gson, Reader reader, Type type) {
-        return a(gson, reader, type, false);
+    public static <T> T a(Gson gson, Reader reader, TypeToken<T> typetoken) {
+        return a(gson, reader, typetoken, false);
     }
 
     @Nullable

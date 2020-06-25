@@ -11,11 +11,11 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public abstract class LootItemFunctionConditional implements LootItemFunction {
 
-    protected final LootItemCondition[] b;
+    protected final LootItemCondition[] c;
     private final Predicate<LootTableInfo> a;
 
     protected LootItemFunctionConditional(LootItemCondition[] alootitemcondition) {
-        this.b = alootitemcondition;
+        this.c = alootitemcondition;
         this.a = LootItemConditions.a((Predicate[]) alootitemcondition);
     }
 
@@ -29,8 +29,8 @@ public abstract class LootItemFunctionConditional implements LootItemFunction {
     public void a(LootCollector lootcollector) {
         LootItemFunction.super.a(lootcollector);
 
-        for (int i = 0; i < this.b.length; ++i) {
-            this.b[i].a(lootcollector.b(".conditions[" + i + "]"));
+        for (int i = 0; i < this.c.length; ++i) {
+            this.c[i].a(lootcollector.b(".conditions[" + i + "]"));
         }
 
     }
@@ -39,21 +39,19 @@ public abstract class LootItemFunctionConditional implements LootItemFunction {
         return new LootItemFunctionConditional.b(function);
     }
 
-    public abstract static class c<T extends LootItemFunctionConditional> extends LootItemFunction.b<T> {
+    public abstract static class c<T extends LootItemFunctionConditional> implements LootSerializer<T> {
 
-        public c(MinecraftKey minecraftkey, Class<T> oclass) {
-            super(minecraftkey, oclass);
-        }
+        public c() {}
 
         public void a(JsonObject jsonobject, T t0, JsonSerializationContext jsonserializationcontext) {
-            if (!ArrayUtils.isEmpty(t0.b)) {
-                jsonobject.add("conditions", jsonserializationcontext.serialize(t0.b));
+            if (!ArrayUtils.isEmpty(t0.c)) {
+                jsonobject.add("conditions", jsonserializationcontext.serialize(t0.c));
             }
 
         }
 
         @Override
-        public final T b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public final T a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             LootItemCondition[] alootitemcondition = (LootItemCondition[]) ChatDeserializer.a(jsonobject, "conditions", new LootItemCondition[0], jsondeserializationcontext, LootItemCondition[].class);
 
             return this.b(jsonobject, jsondeserializationcontext, alootitemcondition);

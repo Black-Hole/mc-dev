@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -11,24 +10,24 @@ import java.util.Optional;
 
 public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
 
-    private static final Map<VillagerProfession, MinecraftKey> a = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
-        hashmap.put(VillagerProfession.ARMORER, LootTables.ag);
-        hashmap.put(VillagerProfession.BUTCHER, LootTables.ah);
-        hashmap.put(VillagerProfession.CARTOGRAPHER, LootTables.ai);
-        hashmap.put(VillagerProfession.CLERIC, LootTables.aj);
-        hashmap.put(VillagerProfession.FARMER, LootTables.ak);
-        hashmap.put(VillagerProfession.FISHERMAN, LootTables.al);
-        hashmap.put(VillagerProfession.FLETCHER, LootTables.am);
-        hashmap.put(VillagerProfession.LEATHERWORKER, LootTables.an);
-        hashmap.put(VillagerProfession.LIBRARIAN, LootTables.ao);
-        hashmap.put(VillagerProfession.MASON, LootTables.ap);
-        hashmap.put(VillagerProfession.SHEPHERD, LootTables.aq);
-        hashmap.put(VillagerProfession.TOOLSMITH, LootTables.ar);
-        hashmap.put(VillagerProfession.WEAPONSMITH, LootTables.as);
+    private static final Map<VillagerProfession, MinecraftKey> b = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+        hashmap.put(VillagerProfession.ARMORER, LootTables.al);
+        hashmap.put(VillagerProfession.BUTCHER, LootTables.am);
+        hashmap.put(VillagerProfession.CARTOGRAPHER, LootTables.an);
+        hashmap.put(VillagerProfession.CLERIC, LootTables.ao);
+        hashmap.put(VillagerProfession.FARMER, LootTables.ap);
+        hashmap.put(VillagerProfession.FISHERMAN, LootTables.aq);
+        hashmap.put(VillagerProfession.FLETCHER, LootTables.ar);
+        hashmap.put(VillagerProfession.LEATHERWORKER, LootTables.as);
+        hashmap.put(VillagerProfession.LIBRARIAN, LootTables.at);
+        hashmap.put(VillagerProfession.MASON, LootTables.au);
+        hashmap.put(VillagerProfession.SHEPHERD, LootTables.av);
+        hashmap.put(VillagerProfession.TOOLSMITH, LootTables.aw);
+        hashmap.put(VillagerProfession.WEAPONSMITH, LootTables.ax);
     });
-    private int b = 600;
-    private boolean c;
-    private long d;
+    private int c = 600;
+    private boolean d;
+    private long e;
 
     public BehaviorVillageHeroGift(int i) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.INTERACTION_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryStatus.VALUE_PRESENT), i);
@@ -37,8 +36,8 @@ public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
         if (!this.b(entityvillager)) {
             return false;
-        } else if (this.b > 0) {
-            --this.b;
+        } else if (this.c > 0) {
+            --this.c;
             return false;
         } else {
             return true;
@@ -46,35 +45,35 @@ public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        this.c = false;
-        this.d = i;
+        this.d = false;
+        this.e = i;
         EntityHuman entityhuman = (EntityHuman) this.c(entityvillager).get();
 
         entityvillager.getBehaviorController().setMemory(MemoryModuleType.INTERACTION_TARGET, (Object) entityhuman);
-        BehaviorUtil.c(entityvillager, entityhuman);
+        BehaviorUtil.a((EntityLiving) entityvillager, (EntityLiving) entityhuman);
     }
 
-    protected boolean g(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        return this.b(entityvillager) && !this.c;
+    protected boolean b(WorldServer worldserver, EntityVillager entityvillager, long i) {
+        return this.b(entityvillager) && !this.d;
     }
 
     protected void d(WorldServer worldserver, EntityVillager entityvillager, long i) {
         EntityHuman entityhuman = (EntityHuman) this.c(entityvillager).get();
 
-        BehaviorUtil.c(entityvillager, entityhuman);
+        BehaviorUtil.a((EntityLiving) entityvillager, (EntityLiving) entityhuman);
         if (this.a(entityvillager, entityhuman)) {
-            if (i - this.d > 20L) {
+            if (i - this.e > 20L) {
                 this.a(entityvillager, (EntityLiving) entityhuman);
-                this.c = true;
+                this.d = true;
             }
         } else {
-            BehaviorUtil.a((EntityLiving) entityvillager, (EntityLiving) entityhuman, 5);
+            BehaviorUtil.a(entityvillager, (Entity) entityhuman, 0.5F, 5);
         }
 
     }
 
-    protected void f(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        this.b = a(worldserver);
+    protected void c(WorldServer worldserver, EntityVillager entityvillager, long i) {
+        this.c = a(worldserver);
         entityvillager.getBehaviorController().removeMemory(MemoryModuleType.INTERACTION_TARGET);
         entityvillager.getBehaviorController().removeMemory(MemoryModuleType.WALK_TARGET);
         entityvillager.getBehaviorController().removeMemory(MemoryModuleType.LOOK_TARGET);
@@ -87,20 +86,20 @@ public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
         while (iterator.hasNext()) {
             ItemStack itemstack = (ItemStack) iterator.next();
 
-            BehaviorUtil.a((EntityLiving) entityvillager, itemstack, entityliving);
+            BehaviorUtil.a((EntityLiving) entityvillager, itemstack, entityliving.getPositionVector());
         }
 
     }
 
     private List<ItemStack> a(EntityVillager entityvillager) {
         if (entityvillager.isBaby()) {
-            return ImmutableList.of(new ItemStack(Items.aV));
+            return ImmutableList.of(new ItemStack(Items.bi));
         } else {
             VillagerProfession villagerprofession = entityvillager.getVillagerData().getProfession();
 
-            if (BehaviorVillageHeroGift.a.containsKey(villagerprofession)) {
-                LootTable loottable = entityvillager.world.getMinecraftServer().getLootTableRegistry().getLootTable((MinecraftKey) BehaviorVillageHeroGift.a.get(villagerprofession));
-                LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) entityvillager.world)).set(LootContextParameters.POSITION, new BlockPosition(entityvillager)).set(LootContextParameters.THIS_ENTITY, entityvillager).a(entityvillager.getRandom());
+            if (BehaviorVillageHeroGift.b.containsKey(villagerprofession)) {
+                LootTable loottable = entityvillager.world.getMinecraftServer().getLootTableRegistry().getLootTable((MinecraftKey) BehaviorVillageHeroGift.b.get(villagerprofession));
+                LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) entityvillager.world)).set(LootContextParameters.POSITION, entityvillager.getChunkCoordinates()).set(LootContextParameters.THIS_ENTITY, entityvillager).a(entityvillager.getRandom());
 
                 return loottable.populateLoot(loottableinfo_builder.build(LootContextParameterSets.GIFT));
             } else {
@@ -122,8 +121,8 @@ public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
     }
 
     private boolean a(EntityVillager entityvillager, EntityHuman entityhuman) {
-        BlockPosition blockposition = new BlockPosition(entityhuman);
-        BlockPosition blockposition1 = new BlockPosition(entityvillager);
+        BlockPosition blockposition = entityhuman.getChunkCoordinates();
+        BlockPosition blockposition1 = entityvillager.getChunkCoordinates();
 
         return blockposition1.a((BaseBlockPosition) blockposition, 5.0D);
     }

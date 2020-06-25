@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 public class CommandDataAccessorTile implements CommandDataAccessor {
 
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.data.block.invalid", new Object[0]));
+    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.data.block.invalid"));
     public static final Function<String, CommandData.c> a = (s) -> {
         return new CommandData.c() {
             @Override
@@ -44,10 +44,10 @@ public class CommandDataAccessorTile implements CommandDataAccessor {
         nbttagcompound.setInt("x", this.d.getX());
         nbttagcompound.setInt("y", this.d.getY());
         nbttagcompound.setInt("z", this.d.getZ());
-        this.c.load(nbttagcompound);
-        this.c.update();
         IBlockData iblockdata = this.c.getWorld().getType(this.d);
 
+        this.c.load(iblockdata, nbttagcompound);
+        this.c.update();
         this.c.getWorld().notify(this.d, iblockdata, iblockdata, 3);
     }
 

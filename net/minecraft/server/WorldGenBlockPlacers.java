@@ -1,24 +1,23 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
-import java.util.function.Function;
+import com.mojang.serialization.Codec;
 
 public class WorldGenBlockPlacers<P extends WorldGenBlockPlacer> {
 
-    public static final WorldGenBlockPlacers<WorldGenBlockPlacerSimple> a = a("simple_block_placer", WorldGenBlockPlacerSimple::new);
-    public static final WorldGenBlockPlacers<WorldGenBlockPlacerDoublePlant> b = a("double_plant_placer", WorldGenBlockPlacerDoublePlant::new);
-    public static final WorldGenBlockPlacers<WorldGenBlockPlacerColumn> c = a("column_placer", WorldGenBlockPlacerColumn::new);
-    private final Function<Dynamic<?>, P> d;
+    public static final WorldGenBlockPlacers<WorldGenBlockPlacerSimple> a = a("simple_block_placer", WorldGenBlockPlacerSimple.b);
+    public static final WorldGenBlockPlacers<WorldGenBlockPlacerDoublePlant> b = a("double_plant_placer", WorldGenBlockPlacerDoublePlant.b);
+    public static final WorldGenBlockPlacers<WorldGenBlockPlacerColumn> c = a("column_placer", WorldGenBlockPlacerColumn.b);
+    private final Codec<P> d;
 
-    private static <P extends WorldGenBlockPlacer> WorldGenBlockPlacers<P> a(String s, Function<Dynamic<?>, P> function) {
-        return (WorldGenBlockPlacers) IRegistry.a(IRegistry.u, s, (Object) (new WorldGenBlockPlacers<>(function)));
+    private static <P extends WorldGenBlockPlacer> WorldGenBlockPlacers<P> a(String s, Codec<P> codec) {
+        return (WorldGenBlockPlacers) IRegistry.a(IRegistry.BLOCK_PLACER_TYPE, s, (Object) (new WorldGenBlockPlacers<>(codec)));
     }
 
-    private WorldGenBlockPlacers(Function<Dynamic<?>, P> function) {
-        this.d = function;
+    private WorldGenBlockPlacers(Codec<P> codec) {
+        this.d = codec;
     }
 
-    public P a(Dynamic<?> dynamic) {
-        return (WorldGenBlockPlacer) this.d.apply(dynamic);
+    public Codec<P> a() {
+        return this.d;
     }
 }

@@ -9,7 +9,7 @@ public class InventoryCraftResult implements IInventory, RecipeHolder {
     private IRecipe<?> b;
 
     public InventoryCraftResult() {
-        this.items = NonNullList.a(1, ItemStack.a);
+        this.items = NonNullList.a(1, ItemStack.b);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class InventoryCraftResult implements IInventory, RecipeHolder {
 
     @Nullable
     @Override
-    public IRecipe<?> aa_() {
+    public IRecipe<?> am_() {
         return this.b;
     }
 }

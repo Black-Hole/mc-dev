@@ -25,14 +25,14 @@ public class PathfinderGoalLeapAtTarget extends PathfinderGoal {
             } else {
                 double d0 = this.a.h((Entity) this.b);
 
-                return d0 >= 4.0D && d0 <= 16.0D ? (!this.a.onGround ? false : this.a.getRandom().nextInt(5) == 0) : false;
+                return d0 >= 4.0D && d0 <= 16.0D ? (!this.a.isOnGround() ? false : this.a.getRandom().nextInt(5) == 0) : false;
             }
         }
     }
 
     @Override
     public boolean b() {
-        return !this.a.onGround;
+        return !this.a.isOnGround();
     }
 
     @Override

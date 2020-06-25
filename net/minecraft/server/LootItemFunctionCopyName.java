@@ -16,6 +16,11 @@ public class LootItemFunctionCopyName extends LootItemFunctionConditional {
     }
 
     @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.m;
+    }
+
+    @Override
     public Set<LootContextParameter<?>> a() {
         return ImmutableSet.of(this.a.f);
     }
@@ -43,9 +48,7 @@ public class LootItemFunctionCopyName extends LootItemFunctionConditional {
 
     public static class b extends LootItemFunctionConditional.c<LootItemFunctionCopyName> {
 
-        public b() {
-            super(new MinecraftKey("copy_name"), LootItemFunctionCopyName.class);
-        }
+        public b() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionCopyName lootitemfunctioncopyname, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctioncopyname, jsonserializationcontext);

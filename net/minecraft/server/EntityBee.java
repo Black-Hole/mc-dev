@@ -12,16 +12,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
-public class EntityBee extends EntityAnimal implements EntityBird {
+public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityBird {
 
-    private static final DataWatcherObject<Byte> bw = DataWatcher.a(EntityBee.class, DataWatcherRegistry.a);
-    private static final DataWatcherObject<Integer> bx = DataWatcher.a(EntityBee.class, DataWatcherRegistry.b);
-    private UUID hurtBy;
+    private static final DataWatcherObject<Byte> bv = DataWatcher.a(EntityBee.class, DataWatcherRegistry.a);
+    private static final DataWatcherObject<Integer> bw = DataWatcher.a(EntityBee.class, DataWatcherRegistry.b);
+    private static final IntRange bx = TimeRange.a(20, 39);
+    private UUID by;
     private float bz;
     private float bA;
     private int bB;
     private int ticksSincePollination;
-    private int cannotEnterHiveTicks;
+    public int cannotEnterHiveTicks;
     private int numCropsGrownSincePollination;
     private int bF = 0;
     private int bG = 0;
@@ -38,7 +39,9 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         super(entitytypes, world);
         this.moveController = new ControllerMoveFlying(this, 20, true);
         this.lookController = new EntityBee.j(this);
+        this.a(PathType.DANGER_FIRE, -1.0F);
         this.a(PathType.WATER, -1.0F);
+        this.a(PathType.WATER_BORDER, 16.0F);
         this.a(PathType.COCOA, -1.0F);
         this.a(PathType.FENCE, -1.0F);
     }
@@ -46,8 +49,8 @@ public class EntityBee extends EntityAnimal implements EntityBird {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityBee.bw, (byte) 0);
-        this.datawatcher.register(EntityBee.bx, 0);
+        this.datawatcher.register(EntityBee.bv, (byte) 0);
+        this.datawatcher.register(EntityBee.bw, 0);
     }
 
     @Override
@@ -60,7 +63,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         this.goalSelector.a(0, new EntityBee.b(this, 1.399999976158142D, true));
         this.goalSelector.a(1, new EntityBee.d());
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
-        this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.25D, RecipeItemStack.a(TagsItem.FLOWERS), false));
+        this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.25D, RecipeItemStack.a((Tag) TagsItem.FLOWERS), false));
         this.bJ = new EntityBee.k();
         this.goalSelector.a(4, this.bJ);
         this.goalSelector.a(5, new PathfinderGoalFollowParent(this, 1.25D));
@@ -74,11 +77,12 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         this.goalSelector.a(9, new PathfinderGoalFloat(this));
         this.targetSelector.a(1, (new EntityBee.h(this)).a(new Class[0]));
         this.targetSelector.a(2, new EntityBee.c(this));
+        this.targetSelector.a(3, new PathfinderGoalUniversalAngerReset<>(this, true));
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         if (this.hasHivePos()) {
             nbttagcompound.set("HivePos", GameProfileSerializer.a(this.getHivePos()));
         }
@@ -92,57 +96,38 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         nbttagcompound.setInt("TicksSincePollination", this.ticksSincePollination);
         nbttagcompound.setInt("CannotEnterHiveTicks", this.cannotEnterHiveTicks);
         nbttagcompound.setInt("CropsGrownSincePollination", this.numCropsGrownSincePollination);
-        nbttagcompound.setInt("Anger", this.getAnger());
-        if (this.hurtBy != null) {
-            nbttagcompound.setString("HurtBy", this.hurtBy.toString());
-        } else {
-            nbttagcompound.setString("HurtBy", "");
-        }
-
+        this.c(nbttagcompound);
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
+    public void loadData(NBTTagCompound nbttagcompound) {
         this.hivePos = null;
         if (nbttagcompound.hasKey("HivePos")) {
-            this.hivePos = GameProfileSerializer.c(nbttagcompound.getCompound("HivePos"));
+            this.hivePos = GameProfileSerializer.b(nbttagcompound.getCompound("HivePos"));
         }
 
         this.flowerPos = null;
         if (nbttagcompound.hasKey("FlowerPos")) {
-            this.flowerPos = GameProfileSerializer.c(nbttagcompound.getCompound("FlowerPos"));
+            this.flowerPos = GameProfileSerializer.b(nbttagcompound.getCompound("FlowerPos"));
         }
 
-        super.a(nbttagcompound);
+        super.loadData(nbttagcompound);
         this.setHasNectar(nbttagcompound.getBoolean("HasNectar"));
         this.setHasStung(nbttagcompound.getBoolean("HasStung"));
-        this.setAnger(nbttagcompound.getInt("Anger"));
         this.ticksSincePollination = nbttagcompound.getInt("TicksSincePollination");
         this.cannotEnterHiveTicks = nbttagcompound.getInt("CannotEnterHiveTicks");
         this.numCropsGrownSincePollination = nbttagcompound.getInt("CropsGrownSincePollination");
-        String s = nbttagcompound.getString("HurtBy");
-
-        if (!s.isEmpty()) {
-            this.hurtBy = UUID.fromString(s);
-            EntityHuman entityhuman = this.world.b(this.hurtBy);
-
-            this.setLastDamager(entityhuman);
-            if (entityhuman != null) {
-                this.killer = entityhuman;
-                this.lastDamageByPlayerTime = this.cI();
-            }
-        }
-
+        this.a((WorldServer) this.world, nbttagcompound);
     }
 
     @Override
-    public boolean B(Entity entity) {
-        boolean flag = entity.damageEntity(DamageSource.a((EntityLiving) this), (float) ((int) this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue()));
+    public boolean attackEntity(Entity entity) {
+        boolean flag = entity.damageEntity(DamageSource.b(this), (float) ((int) this.b(GenericAttributes.ATTACK_DAMAGE)));
 
         if (flag) {
             this.a((EntityLiving) this, entity);
             if (entity instanceof EntityLiving) {
-                ((EntityLiving) entity).q(((EntityLiving) entity).df() + 1);
+                ((EntityLiving) entity).q(((EntityLiving) entity).dy() + 1);
                 byte b0 = 0;
 
                 if (this.world.getDifficulty() == EnumDifficulty.NORMAL) {
@@ -157,8 +142,8 @@ public class EntityBee extends EntityAnimal implements EntityBird {
             }
 
             this.setHasStung(true);
-            this.setGoalTarget((EntityLiving) null);
-            this.a(SoundEffects.ENTITY_BEE_STING, 1.0F, 1.0F);
+            this.pacify();
+            this.playSound(SoundEffects.ENTITY_BEE_STING, 1.0F, 1.0F);
         }
 
         return flag;
@@ -173,7 +158,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
             }
         }
 
-        this.eJ();
+        this.ff();
     }
 
     private void a(World world, double d0, double d1, double d2, double d3, double d4, ParticleParam particleparam) {
@@ -181,9 +166,9 @@ public class EntityBee extends EntityAnimal implements EntityBird {
     }
 
     private void h(BlockPosition blockposition) {
-        Vec3D vec3d = new Vec3D(blockposition);
+        Vec3D vec3d = Vec3D.c((BaseBlockPosition) blockposition);
         byte b0 = 0;
-        BlockPosition blockposition1 = new BlockPosition(this);
+        BlockPosition blockposition1 = this.getChunkCoordinates();
         int i = (int) vec3d.y - blockposition1.getY();
 
         if (i > 2) {
@@ -194,7 +179,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
 
         int j = 6;
         int k = 8;
-        int l = blockposition1.n(blockposition);
+        int l = blockposition1.k(blockposition);
 
         if (l < 15) {
             j = l / 2;
@@ -226,11 +211,11 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         return this.ticksSincePollination > 3600;
     }
 
-    private boolean eI() {
-        if (this.cannotEnterHiveTicks <= 0 && !this.bJ.k() && !this.hasStung()) {
+    private boolean fe() {
+        if (this.cannotEnterHiveTicks <= 0 && !this.bJ.k() && !this.hasStung() && this.getGoalTarget() == null) {
             boolean flag = this.canPollinate() || this.world.isRaining() || this.world.isNight() || this.hasNectar();
 
-            return flag && !this.eK();
+            return flag && !this.fg();
         } else {
             return false;
         }
@@ -240,9 +225,9 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         this.cannotEnterHiveTicks = i;
     }
 
-    private void eJ() {
+    private void ff() {
         this.bA = this.bz;
-        if (this.eQ()) {
+        if (this.fl()) {
             this.bz = Math.min(1.0F, this.bz + 0.2F);
         } else {
             this.bz = Math.max(0.0F, this.bz - 0.24F);
@@ -251,19 +236,10 @@ public class EntityBee extends EntityAnimal implements EntityBird {
     }
 
     @Override
-    public void setLastDamager(@Nullable EntityLiving entityliving) {
-        super.setLastDamager(entityliving);
-        if (entityliving != null) {
-            this.hurtBy = entityliving.getUniqueID();
-        }
-
-    }
-
-    @Override
     protected void mobTick() {
         boolean flag = this.hasStung();
 
-        if (this.az()) {
+        if (this.aD()) {
             ++this.bM;
         } else {
             this.bM = 0;
@@ -280,28 +256,21 @@ public class EntityBee extends EntityAnimal implements EntityBird {
             }
         }
 
-        if (this.isAngry()) {
-            int i = this.getAnger();
-
-            this.setAnger(i - 1);
-            EntityLiving entityliving = this.getGoalTarget();
-
-            if (i == 0 && entityliving != null) {
-                this.a((Entity) entityliving);
-            }
-        }
-
         if (!this.hasNectar()) {
             ++this.ticksSincePollination;
         }
 
+        if (!this.world.isClientSide) {
+            this.a((WorldServer) this.world, false);
+        }
+
     }
 
-    public void eu() {
+    public void eP() {
         this.ticksSincePollination = 0;
     }
 
-    private boolean eK() {
+    private boolean fg() {
         if (this.hivePos == null) {
             return false;
         } else {
@@ -311,16 +280,29 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         }
     }
 
-    public boolean isAngry() {
-        return this.getAnger() > 0;
-    }
-
+    @Override
     public int getAnger() {
-        return (Integer) this.datawatcher.get(EntityBee.bx);
+        return (Integer) this.datawatcher.get(EntityBee.bw);
     }
 
+    @Override
     public void setAnger(int i) {
-        this.datawatcher.set(EntityBee.bx, i);
+        this.datawatcher.set(EntityBee.bw, i);
+    }
+
+    @Override
+    public UUID getAngerTarget() {
+        return this.by;
+    }
+
+    @Override
+    public void setAngerTarget(@Nullable UUID uuid) {
+        this.by = uuid;
+    }
+
+    @Override
+    public void anger() {
+        this.setAnger(EntityBee.bx.a(this.random));
     }
 
     private boolean i(BlockPosition blockposition) {
@@ -339,8 +321,8 @@ public class EntityBee extends EntityAnimal implements EntityBird {
     }
 
     @Override
-    protected void K() {
-        super.K();
+    protected void M() {
+        super.M();
         PacketDebug.a(this);
     }
 
@@ -348,11 +330,11 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         return this.numCropsGrownSincePollination;
     }
 
-    private void eN() {
+    private void fi() {
         this.numCropsGrownSincePollination = 0;
     }
 
-    private void eO() {
+    private void fj() {
         ++this.numCropsGrownSincePollination;
     }
 
@@ -374,15 +356,15 @@ public class EntityBee extends EntityAnimal implements EntityBird {
 
             boolean flag = this.isAngry() && !this.hasStung() && this.getGoalTarget() != null && this.getGoalTarget().h((Entity) this) < 4.0D;
 
-            this.t(flag);
-            if (this.ticksLived % 20 == 0 && !this.eP()) {
+            this.v(flag);
+            if (this.ticksLived % 20 == 0 && !this.fk()) {
                 this.hivePos = null;
             }
         }
 
     }
 
-    private boolean eP() {
+    private boolean fk() {
         if (!this.hasHivePos()) {
             return false;
         } else {
@@ -393,59 +375,52 @@ public class EntityBee extends EntityAnimal implements EntityBird {
     }
 
     public boolean hasNectar() {
-        return this.v(8);
+        return this.u(8);
     }
 
     public void setHasNectar(boolean flag) {
         if (flag) {
-            this.eu();
+            this.eP();
         }
 
         this.d(8, flag);
     }
 
     public boolean hasStung() {
-        return this.v(4);
+        return this.u(4);
     }
 
     public void setHasStung(boolean flag) {
         this.d(4, flag);
     }
 
-    private boolean eQ() {
-        return this.v(2);
+    private boolean fl() {
+        return this.u(2);
     }
 
-    private void t(boolean flag) {
+    private void v(boolean flag) {
         this.d(2, flag);
     }
 
     private boolean j(BlockPosition blockposition) {
-        return !this.b(blockposition, 48);
+        return !this.b(blockposition, 32);
     }
 
     private void d(int i, boolean flag) {
         if (flag) {
-            this.datawatcher.set(EntityBee.bw, (byte) ((Byte) this.datawatcher.get(EntityBee.bw) | i));
+            this.datawatcher.set(EntityBee.bv, (byte) ((Byte) this.datawatcher.get(EntityBee.bv) | i));
         } else {
-            this.datawatcher.set(EntityBee.bw, (byte) ((Byte) this.datawatcher.get(EntityBee.bw) & ~i));
+            this.datawatcher.set(EntityBee.bv, (byte) ((Byte) this.datawatcher.get(EntityBee.bv) & ~i));
         }
 
     }
 
-    private boolean v(int i) {
-        return ((Byte) this.datawatcher.get(EntityBee.bw) & i) != 0;
+    private boolean u(int i) {
+        return ((Byte) this.datawatcher.get(EntityBee.bv) & i) != 0;
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeMap().b(GenericAttributes.FLYING_SPEED);
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(10.0D);
-        this.getAttributeInstance(GenericAttributes.FLYING_SPEED).setValue(0.6000000238418579D);
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.30000001192092896D);
-        this.getAttributeMap().b(GenericAttributes.ATTACK_DAMAGE).setValue(2.0D);
-        this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(48.0D);
+    public static AttributeProvider.Builder fa() {
+        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.FLYING_SPEED, 0.6000000238418579D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.ATTACK_DAMAGE, 2.0D).a(GenericAttributes.FOLLOW_RANGE, 48.0D);
     }
 
     @Override
@@ -471,12 +446,12 @@ public class EntityBee extends EntityAnimal implements EntityBird {
     }
 
     @Override
-    public boolean i(ItemStack itemstack) {
-        return itemstack.getItem().a(TagsItem.FLOWERS);
+    public boolean k(ItemStack itemstack) {
+        return itemstack.getItem().a((Tag) TagsItem.FLOWERS);
     }
 
     private boolean k(BlockPosition blockposition) {
-        return this.world.n(blockposition) && this.world.getType(blockposition).getBlock().a(TagsBlock.FLOWERS);
+        return this.world.p(blockposition) && this.world.getType(blockposition).getBlock().a((Tag) TagsBlock.FLOWERS);
     }
 
     @Override
@@ -521,22 +496,13 @@ public class EntityBee extends EntityAnimal implements EntityBird {
     protected void a(double d0, boolean flag, IBlockData iblockdata, BlockPosition blockposition) {}
 
     @Override
-    protected boolean aq() {
+    protected boolean au() {
         return true;
     }
 
-    public void eG() {
+    public void fc() {
         this.setHasNectar(false);
-        this.eN();
-    }
-
-    public boolean a(Entity entity) {
-        this.setAnger(400 + this.random.nextInt(400));
-        if (entity instanceof EntityLiving) {
-            this.setLastDamager((EntityLiving) entity);
-        }
-
-        return true;
+        this.fi();
     }
 
     @Override
@@ -546,9 +512,8 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         } else {
             Entity entity = damagesource.getEntity();
 
-            if (!this.world.isClientSide && entity instanceof EntityHuman && !((EntityHuman) entity).isCreative() && this.hasLineOfSight(entity) && !this.isNoAI()) {
+            if (!this.world.isClientSide) {
                 this.bJ.l();
-                this.a(entity);
             }
 
             return super.damageEntity(damagesource, f);
@@ -566,7 +531,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
     }
 
     private boolean b(BlockPosition blockposition, int i) {
-        return blockposition.a((BaseBlockPosition) (new BlockPosition(this)), (double) i);
+        return blockposition.a((BaseBlockPosition) this.getChunkCoordinates(), (double) i);
     }
 
     class d extends EntityBee.a {
@@ -577,7 +542,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
 
         @Override
         public boolean g() {
-            if (EntityBee.this.hasHivePos() && EntityBee.this.eI() && EntityBee.this.hivePos.a((IPosition) EntityBee.this.getPositionVector(), 2.0D)) {
+            if (EntityBee.this.hasHivePos() && EntityBee.this.fe() && EntityBee.this.hivePos.a((IPosition) EntityBee.this.getPositionVector(), 2.0D)) {
                 TileEntity tileentity = EntityBee.this.world.getTileEntity(EntityBee.this.hivePos);
 
                 if (tileentity instanceof TileEntityBeehive) {
@@ -606,7 +571,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
             if (tileentity instanceof TileEntityBeehive) {
                 TileEntityBeehive tileentitybeehive = (TileEntityBeehive) tileentity;
 
-                tileentitybeehive.a(EntityBee.this, EntityBee.this.hasNectar());
+                tileentitybeehive.addBee(EntityBee.this, EntityBee.this.hasNectar());
             }
 
         }
@@ -637,7 +602,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
 
         @Override
         public boolean g() {
-            return EntityBee.this.getNumCropsGrownSincePollination() >= 10 ? false : (EntityBee.this.random.nextFloat() < 0.3F ? false : EntityBee.this.hasNectar() && EntityBee.this.eP());
+            return EntityBee.this.getNumCropsGrownSincePollination() >= 10 ? false : (EntityBee.this.random.nextFloat() < 0.3F ? false : EntityBee.this.hasNectar() && EntityBee.this.fk());
         }
 
         @Override
@@ -649,13 +614,13 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         public void e() {
             if (EntityBee.this.random.nextInt(30) == 0) {
                 for (int i = 1; i <= 2; ++i) {
-                    BlockPosition blockposition = (new BlockPosition(EntityBee.this)).down(i);
+                    BlockPosition blockposition = EntityBee.this.getChunkCoordinates().down(i);
                     IBlockData iblockdata = EntityBee.this.world.getType(blockposition);
                     Block block = iblockdata.getBlock();
                     boolean flag = false;
                     BlockStateInteger blockstateinteger = null;
 
-                    if (block.a(TagsBlock.BEE_GROWABLES)) {
+                    if (block.a((Tag) TagsBlock.BEE_GROWABLES)) {
                         if (block instanceof BlockCrops) {
                             BlockCrops blockcrops = (BlockCrops) block;
 
@@ -684,7 +649,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
                         if (flag) {
                             EntityBee.this.world.triggerEffect(2005, blockposition, 0);
                             EntityBee.this.world.setTypeUpdate(blockposition, (IBlockData) iblockdata.set(blockstateinteger, (Integer) iblockdata.get(blockstateinteger) + 1));
-                            EntityBee.this.eO();
+                            EntityBee.this.fj();
                         }
                     }
                 }
@@ -701,7 +666,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
 
         @Override
         public boolean g() {
-            return EntityBee.this.bF == 0 && !EntityBee.this.hasHivePos() && EntityBee.this.eI();
+            return EntityBee.this.bF == 0 && !EntityBee.this.hasHivePos() && EntityBee.this.fe();
         }
 
         @Override
@@ -734,16 +699,16 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         }
 
         private List<BlockPosition> j() {
-            BlockPosition blockposition = new BlockPosition(EntityBee.this);
-            VillagePlace villageplace = ((WorldServer) EntityBee.this.world).B();
+            BlockPosition blockposition = EntityBee.this.getChunkCoordinates();
+            VillagePlace villageplace = ((WorldServer) EntityBee.this.world).x();
             Stream<VillagePlaceRecord> stream = villageplace.c((villageplacetype) -> {
-                return villageplacetype == VillagePlaceType.s || villageplacetype == VillagePlaceType.t;
+                return villageplacetype == VillagePlaceType.t || villageplacetype == VillagePlaceType.u;
             }, blockposition, 20, VillagePlace.Occupancy.ANY);
 
             return (List) stream.map(VillagePlaceRecord::f).filter((blockposition1) -> {
                 return EntityBee.this.i(blockposition1);
             }).sorted(Comparator.comparingDouble((blockposition1) -> {
-                return blockposition1.m(blockposition);
+                return blockposition1.j(blockposition);
             })).collect(Collectors.toList());
         }
     }
@@ -751,7 +716,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
     class k extends EntityBee.a {
 
         private final Predicate<IBlockData> c = (iblockdata) -> {
-            return iblockdata.a(TagsBlock.TALL_FLOWERS) ? (iblockdata.getBlock() == Blocks.SUNFLOWER ? iblockdata.get(BlockTallPlant.HALF) == BlockPropertyDoubleBlockHalf.UPPER : true) : iblockdata.a(TagsBlock.SMALL_FLOWERS);
+            return iblockdata.a((Tag) TagsBlock.TALL_FLOWERS) ? (iblockdata.a(Blocks.SUNFLOWER) ? iblockdata.get(BlockTallPlant.HALF) == BlockPropertyDoubleBlockHalf.UPPER : true) : iblockdata.a((Tag) TagsBlock.SMALL_FLOWERS);
         };
         private int d = 0;
         private int e = 0;
@@ -823,7 +788,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
             this.h = 0;
             this.e = 0;
             this.f = true;
-            EntityBee.this.eu();
+            EntityBee.this.eP();
         }
 
         @Override
@@ -843,7 +808,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
             if (this.h > 600) {
                 EntityBee.this.flowerPos = null;
             } else {
-                Vec3D vec3d = (new Vec3D(EntityBee.this.flowerPos)).add(0.5D, 0.6000000238418579D, 0.5D);
+                Vec3D vec3d = Vec3D.c((BaseBlockPosition) EntityBee.this.flowerPos).add(0.0D, 0.6000000238418579D, 0.0D);
 
                 if (vec3d.f(EntityBee.this.getPositionVector()) > 1.0D) {
                     this.g = vec3d;
@@ -860,7 +825,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
                         EntityBee.this.flowerPos = null;
                     } else {
                         if (flag) {
-                            boolean flag2 = EntityBee.this.random.nextInt(100) == 0;
+                            boolean flag2 = EntityBee.this.random.nextInt(25) == 0;
 
                             if (flag2) {
                                 this.g = new Vec3D(vec3d.getX() + (double) this.n(), vec3d.getY(), vec3d.getZ() + (double) this.n());
@@ -879,7 +844,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
                         ++this.d;
                         if (EntityBee.this.random.nextFloat() < 0.05F && this.d > this.e + 60) {
                             this.e = this.d;
-                            EntityBee.this.a(SoundEffects.ENTITY_BEE_POLLINATE, 1.0F, 1.0F);
+                            EntityBee.this.playSound(SoundEffects.ENTITY_BEE_POLLINATE, 1.0F, 1.0F);
                         }
 
                     }
@@ -900,14 +865,14 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         }
 
         private Optional<BlockPosition> a(Predicate<IBlockData> predicate, double d0) {
-            BlockPosition blockposition = new BlockPosition(EntityBee.this);
+            BlockPosition blockposition = EntityBee.this.getChunkCoordinates();
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
             for (int i = 0; (double) i <= d0; i = i > 0 ? -i : 1 - i) {
                 for (int j = 0; (double) j < d0; ++j) {
                     for (int k = 0; k <= j; k = k > 0 ? -k : 1 - k) {
                         for (int l = k < j && k > -j ? j : 0; l <= j; l = l > 0 ? -l : 1 - l) {
-                            blockposition_mutableblockposition.g(blockposition).e(k, i - 1, l);
+                            blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, k, i - 1, l);
                             if (blockposition.a((BaseBlockPosition) blockposition_mutableblockposition, d0) && predicate.test(EntityBee.this.world.getType(blockposition_mutableblockposition))) {
                                 return Optional.of(blockposition_mutableblockposition);
                             }
@@ -951,7 +916,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
 
         @Override
         public boolean g() {
-            return EntityBee.this.flowerPos != null && !EntityBee.this.eg() && this.j() && EntityBee.this.k(EntityBee.this.flowerPos) && !EntityBee.this.b(EntityBee.this.flowerPos, 2);
+            return EntityBee.this.flowerPos != null && !EntityBee.this.eA() && this.j() && EntityBee.this.k(EntityBee.this.flowerPos) && !EntityBee.this.b(EntityBee.this.flowerPos, 2);
         }
 
         @Override
@@ -999,6 +964,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         private List<BlockPosition> d;
         @Nullable
         private PathEntity e;
+        private int f;
 
         e() {
             super(null);
@@ -1010,7 +976,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
 
         @Override
         public boolean g() {
-            return EntityBee.this.hivePos != null && !EntityBee.this.eg() && EntityBee.this.eI() && !this.d(EntityBee.this.hivePos) && EntityBee.this.world.getType(EntityBee.this.hivePos).a(TagsBlock.BEEHIVES);
+            return EntityBee.this.hivePos != null && !EntityBee.this.eA() && EntityBee.this.fe() && !this.d(EntityBee.this.hivePos) && EntityBee.this.world.getType(EntityBee.this.hivePos).a((Tag) TagsBlock.BEEHIVES);
         }
 
         @Override
@@ -1021,12 +987,14 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         @Override
         public void c() {
             this.c = 0;
+            this.f = 0;
             super.c();
         }
 
         @Override
         public void d() {
             this.c = 0;
+            this.f = 0;
             EntityBee.this.navigation.o();
             EntityBee.this.navigation.g();
         }
@@ -1050,7 +1018,11 @@ public class EntityBee extends EntityAnimal implements EntityBird {
                         if (!flag) {
                             this.k();
                         } else if (this.e != null && EntityBee.this.navigation.k().a(this.e)) {
-                            this.l();
+                            ++this.f;
+                            if (this.f > 60) {
+                                this.l();
+                                this.f = 0;
+                            }
                         } else {
                             this.e = EntityBee.this.navigation.k();
                         }
@@ -1063,7 +1035,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         private boolean a(BlockPosition blockposition) {
             EntityBee.this.navigation.a(10.0F);
             EntityBee.this.navigation.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), 1.0D);
-            return EntityBee.this.navigation.k() != null && EntityBee.this.navigation.k().h();
+            return EntityBee.this.navigation.k() != null && EntityBee.this.navigation.k().i();
         }
 
         private boolean b(BlockPosition blockposition) {
@@ -1102,7 +1074,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
             } else {
                 PathEntity pathentity = EntityBee.this.navigation.k();
 
-                return pathentity != null && pathentity.k().equals(blockposition) && pathentity.h() && pathentity.b();
+                return pathentity != null && pathentity.m().equals(blockposition) && pathentity.i() && pathentity.b();
             }
         }
     }
@@ -1137,8 +1109,8 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         private Vec3D g() {
             Vec3D vec3d;
 
-            if (EntityBee.this.eP() && !EntityBee.this.b(EntityBee.this.hivePos, 40)) {
-                Vec3D vec3d1 = new Vec3D(EntityBee.this.hivePos);
+            if (EntityBee.this.fk() && !EntityBee.this.b(EntityBee.this.hivePos, 22)) {
+                Vec3D vec3d1 = Vec3D.a((BaseBlockPosition) EntityBee.this.hivePos);
 
                 vec3d = vec3d1.d(EntityBee.this.getPositionVector()).d();
             } else {
@@ -1174,7 +1146,7 @@ public class EntityBee extends EntityAnimal implements EntityBird {
     static class c extends PathfinderGoalNearestAttackableTarget<EntityHuman> {
 
         c(EntityBee entitybee) {
-            super(entitybee, EntityHuman.class, true);
+            super(entitybee, EntityHuman.class, 10, true, false, entitybee::b);
         }
 
         @Override
@@ -1208,8 +1180,13 @@ public class EntityBee extends EntityAnimal implements EntityBird {
         }
 
         @Override
+        public boolean b() {
+            return EntityBee.this.isAngry() && super.b();
+        }
+
+        @Override
         protected void a(EntityInsentient entityinsentient, EntityLiving entityliving) {
-            if (entityinsentient instanceof EntityBee && this.e.hasLineOfSight(entityliving) && ((EntityBee) entityinsentient).a((Entity) entityliving)) {
+            if (entityinsentient instanceof EntityBee && this.e.hasLineOfSight(entityliving)) {
                 entityinsentient.setGoalTarget(entityliving);
             }
 

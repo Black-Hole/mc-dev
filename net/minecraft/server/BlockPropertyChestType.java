@@ -18,7 +18,7 @@ public enum BlockPropertyChestType implements INamable {
         return this.e;
     }
 
-    public BlockPropertyChestType a() {
+    public BlockPropertyChestType b() {
         return BlockPropertyChestType.d[this.f];
     }
 }

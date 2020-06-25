@@ -5,9 +5,9 @@ import java.util.Random;
 
 public class BlockChorusFruit extends BlockSprawling {
 
-    protected BlockChorusFruit(Block.Info block_info) {
-        super(0.3125F, block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChorusFruit.a, false)).set(BlockChorusFruit.b, false)).set(BlockChorusFruit.c, false)).set(BlockChorusFruit.d, false)).set(BlockChorusFruit.e, false)).set(BlockChorusFruit.f, false));
+    protected BlockChorusFruit(BlockBase.Info blockbase_info) {
+        super(0.3125F, blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChorusFruit.a, false)).set(BlockChorusFruit.b, false)).set(BlockChorusFruit.c, false)).set(BlockChorusFruit.d, false)).set(BlockChorusFruit.e, false)).set(BlockChorusFruit.f, false));
     }
 
     @Override
@@ -32,15 +32,14 @@ public class BlockChorusFruit extends BlockSprawling {
             generatoraccess.getBlockTickList().a(blockposition, this, 1);
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
         } else {
-            Block block = iblockdata1.getBlock();
-            boolean flag = block == this || block == Blocks.CHORUS_FLOWER || enumdirection == EnumDirection.DOWN && block == Blocks.END_STONE;
+            boolean flag = iblockdata1.getBlock() == this || iblockdata1.a(Blocks.CHORUS_FLOWER) || enumdirection == EnumDirection.DOWN && iblockdata1.a(Blocks.END_STONE);
 
             return (IBlockData) iblockdata.set((IBlockState) BlockChorusFruit.g.get(enumdirection), flag);
         }
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if (!iblockdata.canPlace(worldserver, blockposition)) {
             worldserver.b(blockposition, true);
         }

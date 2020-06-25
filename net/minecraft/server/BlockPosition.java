@@ -1,13 +1,10 @@
 package net.minecraft.server;
 
 import com.google.common.collect.AbstractIterator;
-import com.google.common.collect.Lists;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
-import java.util.List;
-import java.util.Spliterator.OfInt;
-import java.util.Spliterators.AbstractSpliterator;
-import java.util.function.Consumer;
+import com.mojang.serialization.Codec;
+import java.util.Optional;
+import java.util.Random;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -16,18 +13,25 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Immutable
-public class BlockPosition extends BaseBlockPosition implements MinecraftSerializable {
+public class BlockPosition extends BaseBlockPosition {
 
+    public static final Codec<BlockPosition> a = Codec.INT_STREAM.comapFlatMap((intstream) -> {
+        return SystemUtils.a(intstream, 3).map((aint) -> {
+            return new BlockPosition(aint[0], aint[1], aint[2]);
+        });
+    }, (blockposition) -> {
+        return IntStream.of(new int[]{blockposition.getX(), blockposition.getY(), blockposition.getZ()});
+    }).stable();
     private static final Logger LOGGER = LogManager.getLogger();
     public static final BlockPosition ZERO = new BlockPosition(0, 0, 0);
-    private static final int c = 1 + MathHelper.e(MathHelper.c(30000000));
-    private static final int d = BlockPosition.c;
-    private static final int f = 64 - BlockPosition.c - BlockPosition.d;
-    private static final long g = (1L << BlockPosition.c) - 1L;
-    private static final long h = (1L << BlockPosition.f) - 1L;
-    private static final long i = (1L << BlockPosition.d) - 1L;
-    private static final int j = BlockPosition.f;
-    private static final int k = BlockPosition.f + BlockPosition.d;
+    private static final int f = 1 + MathHelper.f(MathHelper.c(30000000));
+    private static final int g = BlockPosition.f;
+    private static final int h = 64 - BlockPosition.f - BlockPosition.g;
+    private static final long i = (1L << BlockPosition.f) - 1L;
+    private static final long j = (1L << BlockPosition.h) - 1L;
+    private static final long k = (1L << BlockPosition.g) - 1L;
+    private static final int l = BlockPosition.h;
+    private static final int m = BlockPosition.h + BlockPosition.g;
 
     public BlockPosition(int i, int j, int k) {
         super(i, j, k);
@@ -35,10 +39,6 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
 
     public BlockPosition(double d0, double d1, double d2) {
         super(d0, d1, d2);
-    }
-
-    public BlockPosition(Entity entity) {
-        this(entity.locX(), entity.locY(), entity.locZ());
     }
 
     public BlockPosition(Vec3D vec3d) {
@@ -53,28 +53,6 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
         this(baseblockposition.getX(), baseblockposition.getY(), baseblockposition.getZ());
     }
 
-    public static <T> BlockPosition a(Dynamic<T> dynamic) {
-        OfInt ofint = dynamic.asIntStream().spliterator();
-        int[] aint = new int[3];
-
-        if (ofint.tryAdvance((i) -> {
-            aint[0] = i;
-        }) && ofint.tryAdvance((i) -> {
-            aint[1] = i;
-        })) {
-            ofint.tryAdvance((i) -> {
-                aint[2] = i;
-            });
-        }
-
-        return new BlockPosition(aint[0], aint[1], aint[2]);
-    }
-
-    @Override
-    public <T> T a(DynamicOps<T> dynamicops) {
-        return dynamicops.createIntList(IntStream.of(new int[]{this.getX(), this.getY(), this.getZ()}));
-    }
-
     public static long a(long i, EnumDirection enumdirection) {
         return a(i, enumdirection.getAdjacentX(), enumdirection.getAdjacentY(), enumdirection.getAdjacentZ());
     }
@@ -84,36 +62,36 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
     }
 
     public static int b(long i) {
-        return (int) (i << 64 - BlockPosition.k - BlockPosition.c >> 64 - BlockPosition.c);
+        return (int) (i << 64 - BlockPosition.m - BlockPosition.f >> 64 - BlockPosition.f);
     }
 
     public static int c(long i) {
-        return (int) (i << 64 - BlockPosition.f >> 64 - BlockPosition.f);
+        return (int) (i << 64 - BlockPosition.h >> 64 - BlockPosition.h);
     }
 
     public static int d(long i) {
-        return (int) (i << 64 - BlockPosition.j - BlockPosition.d >> 64 - BlockPosition.d);
+        return (int) (i << 64 - BlockPosition.l - BlockPosition.g >> 64 - BlockPosition.g);
     }
 
     public static BlockPosition fromLong(long i) {
         return new BlockPosition(b(i), c(i), d(i));
     }
 
+    public long asLong() {
+        return a(this.getX(), this.getY(), this.getZ());
+    }
+
     public static long a(int i, int j, int k) {
         long l = 0L;
 
-        l |= ((long) i & BlockPosition.g) << BlockPosition.k;
-        l |= ((long) j & BlockPosition.h) << 0;
-        l |= ((long) k & BlockPosition.i) << BlockPosition.j;
+        l |= ((long) i & BlockPosition.i) << BlockPosition.m;
+        l |= ((long) j & BlockPosition.j) << 0;
+        l |= ((long) k & BlockPosition.k) << BlockPosition.l;
         return l;
     }
 
     public static long f(long i) {
         return i & -16L;
-    }
-
-    public long asLong() {
-        return a(this.getX(), this.getY(), this.getZ());
     }
 
     public BlockPosition a(double d0, double d1, double d2) {
@@ -214,157 +192,160 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
         return this;
     }
 
+    public BlockPosition.MutableBlockPosition i() {
+        return new BlockPosition.MutableBlockPosition(this.getX(), this.getY(), this.getZ());
+    }
+
+    public static Iterable<BlockPosition> a(Random random, int i, int j, int k, int l, int i1, int j1, int k1) {
+        int l1 = i1 - j + 1;
+        int i2 = j1 - k + 1;
+        int j2 = k1 - l + 1;
+
+        return () -> {
+            return new AbstractIterator<BlockPosition>() {
+                final BlockPosition.MutableBlockPosition a = new BlockPosition.MutableBlockPosition();
+                int b = i;
+
+                protected BlockPosition computeNext() {
+                    if (this.b <= 0) {
+                        return (BlockPosition) this.endOfData();
+                    } else {
+                        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = this.a.d(j + random.nextInt(l1), k + random.nextInt(i2), l + random.nextInt(j2));
+
+                        --this.b;
+                        return blockposition_mutableblockposition;
+                    }
+                }
+            };
+        };
+    }
+
+    public static Iterable<BlockPosition> a(BlockPosition blockposition, int i, int j, int k) {
+        int l = i + j + k;
+        int i1 = blockposition.getX();
+        int j1 = blockposition.getY();
+        int k1 = blockposition.getZ();
+
+        return () -> {
+            return new AbstractIterator<BlockPosition>() {
+                private final BlockPosition.MutableBlockPosition h = new BlockPosition.MutableBlockPosition();
+                private int i;
+                private int j;
+                private int k;
+                private int l;
+                private int m;
+                private boolean n;
+
+                protected BlockPosition computeNext() {
+                    if (this.n) {
+                        this.n = false;
+                        this.h.q(k1 - (this.h.getZ() - k1));
+                        return this.h;
+                    } else {
+                        BlockPosition.MutableBlockPosition blockposition_mutableblockposition;
+
+                        for (blockposition_mutableblockposition = null; blockposition_mutableblockposition == null; ++this.m) {
+                            if (this.m > this.k) {
+                                ++this.l;
+                                if (this.l > this.j) {
+                                    ++this.i;
+                                    if (this.i > l) {
+                                        return (BlockPosition) this.endOfData();
+                                    }
+
+                                    this.j = Math.min(i, this.i);
+                                    this.l = -this.j;
+                                }
+
+                                this.k = Math.min(j, this.i - Math.abs(this.l));
+                                this.m = -this.k;
+                            }
+
+                            int l1 = this.l;
+                            int i2 = this.m;
+                            int j2 = this.i - Math.abs(l1) - Math.abs(i2);
+
+                            if (j2 <= k) {
+                                this.n = j2 != 0;
+                                blockposition_mutableblockposition = this.h.d(i1 + l1, j1 + i2, k1 + j2);
+                            }
+                        }
+
+                        return blockposition_mutableblockposition;
+                    }
+                }
+            };
+        };
+    }
+
+    public static Optional<BlockPosition> a(BlockPosition blockposition, int i, int j, Predicate<BlockPosition> predicate) {
+        return b(blockposition, i, j, i).filter(predicate).findFirst();
+    }
+
+    public static Stream<BlockPosition> b(BlockPosition blockposition, int i, int j, int k) {
+        return StreamSupport.stream(a(blockposition, i, j, k).spliterator(), false);
+    }
+
     public static Iterable<BlockPosition> a(BlockPosition blockposition, BlockPosition blockposition1) {
         return b(Math.min(blockposition.getX(), blockposition1.getX()), Math.min(blockposition.getY(), blockposition1.getY()), Math.min(blockposition.getZ(), blockposition1.getZ()), Math.max(blockposition.getX(), blockposition1.getX()), Math.max(blockposition.getY(), blockposition1.getY()), Math.max(blockposition.getZ(), blockposition1.getZ()));
     }
 
     public static Stream<BlockPosition> b(BlockPosition blockposition, BlockPosition blockposition1) {
-        return a(Math.min(blockposition.getX(), blockposition1.getX()), Math.min(blockposition.getY(), blockposition1.getY()), Math.min(blockposition.getZ(), blockposition1.getZ()), Math.max(blockposition.getX(), blockposition1.getX()), Math.max(blockposition.getY(), blockposition1.getY()), Math.max(blockposition.getZ(), blockposition1.getZ()));
+        return StreamSupport.stream(a(blockposition, blockposition1).spliterator(), false);
     }
 
     public static Stream<BlockPosition> a(StructureBoundingBox structureboundingbox) {
         return a(Math.min(structureboundingbox.a, structureboundingbox.d), Math.min(structureboundingbox.b, structureboundingbox.e), Math.min(structureboundingbox.c, structureboundingbox.f), Math.max(structureboundingbox.a, structureboundingbox.d), Math.max(structureboundingbox.b, structureboundingbox.e), Math.max(structureboundingbox.c, structureboundingbox.f));
     }
 
-    public static Stream<BlockPosition> a(final int i, final int j, final int k, final int l, final int i1, final int j1) {
-        return StreamSupport.stream(new AbstractSpliterator<BlockPosition>((long) ((l - i + 1) * (i1 - j + 1) * (j1 - k + 1)), 64) {
-            final CursorPosition a = new CursorPosition(i, j, k, l, i1, j1);
-            final BlockPosition.MutableBlockPosition b = new BlockPosition.MutableBlockPosition();
+    public static Stream<BlockPosition> a(AxisAlignedBB axisalignedbb) {
+        return a(MathHelper.floor(axisalignedbb.minX), MathHelper.floor(axisalignedbb.minY), MathHelper.floor(axisalignedbb.minZ), MathHelper.floor(axisalignedbb.maxX), MathHelper.floor(axisalignedbb.maxY), MathHelper.floor(axisalignedbb.maxZ));
+    }
 
-            public boolean tryAdvance(Consumer<? super BlockPosition> consumer) {
-                if (this.a.a()) {
-                    consumer.accept(this.b.d(this.a.b(), this.a.c(), this.a.d()));
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }, false);
+    public static Stream<BlockPosition> a(int i, int j, int k, int l, int i1, int j1) {
+        return StreamSupport.stream(b(i, j, k, l, i1, j1).spliterator(), false);
     }
 
     public static Iterable<BlockPosition> b(int i, int j, int k, int l, int i1, int j1) {
+        int k1 = l - i + 1;
+        int l1 = i1 - j + 1;
+        int i2 = j1 - k + 1;
+        int j2 = k1 * l1 * i2;
+
         return () -> {
             return new AbstractIterator<BlockPosition>() {
-                final CursorPosition a = new CursorPosition(i, j, k, l, i1, j1);
-                final BlockPosition.MutableBlockPosition b = new BlockPosition.MutableBlockPosition();
+                private final BlockPosition.MutableBlockPosition g = new BlockPosition.MutableBlockPosition();
+                private int h;
 
                 protected BlockPosition computeNext() {
-                    return (BlockPosition) (this.a.a() ? this.b.d(this.a.b(), this.a.c(), this.a.d()) : (BlockPosition) this.endOfData());
+                    if (this.h == j2) {
+                        return (BlockPosition) this.endOfData();
+                    } else {
+                        int k2 = this.h % k1;
+                        int l2 = this.h / k1;
+                        int i3 = l2 % l1;
+                        int j3 = l2 / l1;
+
+                        ++this.h;
+                        return this.g.d(i + k2, j + i3, k + j3);
+                    }
                 }
             };
         };
     }
 
-    public static final class PooledBlockPosition extends BlockPosition.MutableBlockPosition implements AutoCloseable {
-
-        private boolean f;
-        private static final List<BlockPosition.PooledBlockPosition> g = Lists.newArrayList();
-
-        private PooledBlockPosition(int i, int j, int k) {
-            super(i, j, k);
-        }
-
-        public static BlockPosition.PooledBlockPosition r() {
-            return f(0, 0, 0);
-        }
-
-        public static BlockPosition.PooledBlockPosition b(Entity entity) {
-            return d(entity.locX(), entity.locY(), entity.locZ());
-        }
-
-        public static BlockPosition.PooledBlockPosition d(double d0, double d1, double d2) {
-            return f(MathHelper.floor(d0), MathHelper.floor(d1), MathHelper.floor(d2));
-        }
-
-        public static BlockPosition.PooledBlockPosition f(int i, int j, int k) {
-            synchronized (BlockPosition.PooledBlockPosition.g) {
-                if (!BlockPosition.PooledBlockPosition.g.isEmpty()) {
-                    BlockPosition.PooledBlockPosition blockposition_pooledblockposition = (BlockPosition.PooledBlockPosition) BlockPosition.PooledBlockPosition.g.remove(BlockPosition.PooledBlockPosition.g.size() - 1);
-
-                    if (blockposition_pooledblockposition != null && blockposition_pooledblockposition.f) {
-                        blockposition_pooledblockposition.f = false;
-                        blockposition_pooledblockposition.d(i, j, k);
-                        return blockposition_pooledblockposition;
-                    }
-                }
-            }
-
-            return new BlockPosition.PooledBlockPosition(i, j, k);
-        }
-
-        @Override
-        public BlockPosition.PooledBlockPosition d(int i, int j, int k) {
-            return (BlockPosition.PooledBlockPosition) super.d(i, j, k);
-        }
-
-        @Override
-        public BlockPosition.PooledBlockPosition a(Entity entity) {
-            return (BlockPosition.PooledBlockPosition) super.a(entity);
-        }
-
-        @Override
-        public BlockPosition.PooledBlockPosition c(double d0, double d1, double d2) {
-            return (BlockPosition.PooledBlockPosition) super.c(d0, d1, d2);
-        }
-
-        @Override
-        public BlockPosition.PooledBlockPosition g(BaseBlockPosition baseblockposition) {
-            return (BlockPosition.PooledBlockPosition) super.g(baseblockposition);
-        }
-
-        @Override
-        public BlockPosition.PooledBlockPosition c(EnumDirection enumdirection) {
-            return (BlockPosition.PooledBlockPosition) super.c(enumdirection);
-        }
-
-        @Override
-        public BlockPosition.PooledBlockPosition c(EnumDirection enumdirection, int i) {
-            return (BlockPosition.PooledBlockPosition) super.c(enumdirection, i);
-        }
-
-        @Override
-        public BlockPosition.PooledBlockPosition e(int i, int j, int k) {
-            return (BlockPosition.PooledBlockPosition) super.e(i, j, k);
-        }
-
-        public void close() {
-            synchronized (BlockPosition.PooledBlockPosition.g) {
-                if (BlockPosition.PooledBlockPosition.g.size() < 100) {
-                    BlockPosition.PooledBlockPosition.g.add(this);
-                }
-
-                this.f = true;
-            }
-        }
-    }
-
     public static class MutableBlockPosition extends BlockPosition {
-
-        protected int b;
-        protected int c;
-        protected int d;
 
         public MutableBlockPosition() {
             this(0, 0, 0);
         }
 
-        public MutableBlockPosition(BlockPosition blockposition) {
-            this(blockposition.getX(), blockposition.getY(), blockposition.getZ());
-        }
-
         public MutableBlockPosition(int i, int j, int k) {
-            super(0, 0, 0);
-            this.b = i;
-            this.c = j;
-            this.d = k;
+            super(i, j, k);
         }
 
         public MutableBlockPosition(double d0, double d1, double d2) {
             this(MathHelper.floor(d0), MathHelper.floor(d1), MathHelper.floor(d2));
-        }
-
-        public MutableBlockPosition(Entity entity) {
-            this(entity.locX(), entity.locY(), entity.locZ());
         }
 
         @Override
@@ -387,30 +368,11 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
             return super.a(enumblockrotation).immutableCopy();
         }
 
-        @Override
-        public int getX() {
-            return this.b;
-        }
-
-        @Override
-        public int getY() {
-            return this.c;
-        }
-
-        @Override
-        public int getZ() {
-            return this.d;
-        }
-
         public BlockPosition.MutableBlockPosition d(int i, int j, int k) {
-            this.b = i;
-            this.c = j;
-            this.d = k;
+            this.o(i);
+            this.p(j);
+            this.q(k);
             return this;
-        }
-
-        public BlockPosition.MutableBlockPosition a(Entity entity) {
-            return this.c(entity.locX(), entity.locY(), entity.locZ());
         }
 
         public BlockPosition.MutableBlockPosition c(double d0, double d1, double d2) {
@@ -429,28 +391,52 @@ public class BlockPosition extends BaseBlockPosition implements MinecraftSeriali
             return this.d(enumaxiscycle.a(i, j, k, EnumDirection.EnumAxis.X), enumaxiscycle.a(i, j, k, EnumDirection.EnumAxis.Y), enumaxiscycle.a(i, j, k, EnumDirection.EnumAxis.Z));
         }
 
+        public BlockPosition.MutableBlockPosition a(BaseBlockPosition baseblockposition, EnumDirection enumdirection) {
+            return this.d(baseblockposition.getX() + enumdirection.getAdjacentX(), baseblockposition.getY() + enumdirection.getAdjacentY(), baseblockposition.getZ() + enumdirection.getAdjacentZ());
+        }
+
+        public BlockPosition.MutableBlockPosition a(BaseBlockPosition baseblockposition, int i, int j, int k) {
+            return this.d(baseblockposition.getX() + i, baseblockposition.getY() + j, baseblockposition.getZ() + k);
+        }
+
         public BlockPosition.MutableBlockPosition c(EnumDirection enumdirection) {
             return this.c(enumdirection, 1);
         }
 
         public BlockPosition.MutableBlockPosition c(EnumDirection enumdirection, int i) {
-            return this.d(this.b + enumdirection.getAdjacentX() * i, this.c + enumdirection.getAdjacentY() * i, this.d + enumdirection.getAdjacentZ() * i);
+            return this.d(this.getX() + enumdirection.getAdjacentX() * i, this.getY() + enumdirection.getAdjacentY() * i, this.getZ() + enumdirection.getAdjacentZ() * i);
         }
 
         public BlockPosition.MutableBlockPosition e(int i, int j, int k) {
-            return this.d(this.b + i, this.c + j, this.d + k);
+            return this.d(this.getX() + i, this.getY() + j, this.getZ() + k);
         }
 
+        public BlockPosition.MutableBlockPosition a(EnumDirection.EnumAxis enumdirection_enumaxis, int i, int j) {
+            switch (enumdirection_enumaxis) {
+                case X:
+                    return this.d(MathHelper.clamp(this.getX(), i, j), this.getY(), this.getZ());
+                case Y:
+                    return this.d(this.getX(), MathHelper.clamp(this.getY(), i, j), this.getZ());
+                case Z:
+                    return this.d(this.getX(), this.getY(), MathHelper.clamp(this.getZ(), i, j));
+                default:
+                    throw new IllegalStateException("Unable to clamp axis " + enumdirection_enumaxis);
+            }
+        }
+
+        @Override
         public void o(int i) {
-            this.b = i;
+            super.o(i);
         }
 
+        @Override
         public void p(int i) {
-            this.c = i;
+            super.p(i);
         }
 
+        @Override
         public void q(int i) {
-            this.d = i;
+            super.q(i);
         }
 
         @Override

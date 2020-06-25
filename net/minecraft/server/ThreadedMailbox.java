@@ -75,7 +75,23 @@ public class ThreadedMailbox<T> implements Mailbox<T>, AutoCloseable, Runnable {
             if (runnable == null) {
                 return false;
             } else {
+                Thread thread;
+                String s;
+
+                if (SharedConstants.d) {
+                    thread = Thread.currentThread();
+                    s = thread.getName();
+                    thread.setName(this.e);
+                } else {
+                    thread = null;
+                    s = null;
+                }
+
                 runnable.run();
+                if (thread != null) {
+                    thread.setName(s);
+                }
+
                 return true;
             }
         }
@@ -129,7 +145,7 @@ public class ThreadedMailbox<T> implements Mailbox<T>, AutoCloseable, Runnable {
     }
 
     @Override
-    public String bi() {
+    public String bh() {
         return this.e;
     }
 }

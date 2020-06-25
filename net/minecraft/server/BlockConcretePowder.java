@@ -4,13 +4,13 @@ public class BlockConcretePowder extends BlockFalling {
 
     private final IBlockData a;
 
-    public BlockConcretePowder(Block block, Block.Info block_info) {
-        super(block_info);
+    public BlockConcretePowder(Block block, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.a = block.getBlockData();
     }
 
     @Override
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1, EntityFallingBlock entityfallingblock) {
         if (canHarden(world, blockposition, iblockdata1)) {
             world.setTypeAndData(blockposition, this.a, 3);
         }
@@ -27,12 +27,12 @@ public class BlockConcretePowder extends BlockFalling {
     }
 
     private static boolean canHarden(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
-        return r(iblockdata) || a(iblockaccess, blockposition);
+        return l(iblockdata) || a(iblockaccess, blockposition);
     }
 
     private static boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
         boolean flag = false;
-        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(blockposition);
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i();
         EnumDirection[] aenumdirection = EnumDirection.values();
         int i = aenumdirection.length;
 
@@ -40,10 +40,10 @@ public class BlockConcretePowder extends BlockFalling {
             EnumDirection enumdirection = aenumdirection[j];
             IBlockData iblockdata = iblockaccess.getType(blockposition_mutableblockposition);
 
-            if (enumdirection != EnumDirection.DOWN || r(iblockdata)) {
-                blockposition_mutableblockposition.g(blockposition).c(enumdirection);
+            if (enumdirection != EnumDirection.DOWN || l(iblockdata)) {
+                blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, enumdirection);
                 iblockdata = iblockaccess.getType(blockposition_mutableblockposition);
-                if (r(iblockdata) && !iblockdata.d(iblockaccess, blockposition, enumdirection.opposite())) {
+                if (l(iblockdata) && !iblockdata.d(iblockaccess, blockposition, enumdirection.opposite())) {
                     flag = true;
                     break;
                 }
@@ -53,8 +53,8 @@ public class BlockConcretePowder extends BlockFalling {
         return flag;
     }
 
-    private static boolean r(IBlockData iblockdata) {
-        return iblockdata.getFluid().a(TagsFluid.WATER);
+    private static boolean l(IBlockData iblockdata) {
+        return iblockdata.getFluid().a((Tag) TagsFluid.WATER);
     }
 
     @Override

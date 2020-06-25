@@ -11,9 +11,9 @@ public class WorldGenShipwreck {
     private static final MinecraftKey[] c = new MinecraftKey[]{new MinecraftKey("shipwreck/with_mast"), new MinecraftKey("shipwreck/upsidedown_full"), new MinecraftKey("shipwreck/upsidedown_fronthalf"), new MinecraftKey("shipwreck/upsidedown_backhalf"), new MinecraftKey("shipwreck/sideways_full"), new MinecraftKey("shipwreck/sideways_fronthalf"), new MinecraftKey("shipwreck/sideways_backhalf"), new MinecraftKey("shipwreck/rightsideup_full"), new MinecraftKey("shipwreck/rightsideup_fronthalf"), new MinecraftKey("shipwreck/rightsideup_backhalf"), new MinecraftKey("shipwreck/with_mast_degraded"), new MinecraftKey("shipwreck/upsidedown_full_degraded"), new MinecraftKey("shipwreck/upsidedown_fronthalf_degraded"), new MinecraftKey("shipwreck/upsidedown_backhalf_degraded"), new MinecraftKey("shipwreck/sideways_full_degraded"), new MinecraftKey("shipwreck/sideways_fronthalf_degraded"), new MinecraftKey("shipwreck/sideways_backhalf_degraded"), new MinecraftKey("shipwreck/rightsideup_full_degraded"), new MinecraftKey("shipwreck/rightsideup_fronthalf_degraded"), new MinecraftKey("shipwreck/rightsideup_backhalf_degraded")};
 
     public static void a(DefinedStructureManager definedstructuremanager, BlockPosition blockposition, EnumBlockRotation enumblockrotation, List<StructurePiece> list, Random random, WorldGenFeatureShipwreckConfiguration worldgenfeatureshipwreckconfiguration) {
-        MinecraftKey minecraftkey = worldgenfeatureshipwreckconfiguration.a ? WorldGenShipwreck.b[random.nextInt(WorldGenShipwreck.b.length)] : WorldGenShipwreck.c[random.nextInt(WorldGenShipwreck.c.length)];
+        MinecraftKey minecraftkey = (MinecraftKey) SystemUtils.a((Object[]) (worldgenfeatureshipwreckconfiguration.b ? WorldGenShipwreck.b : WorldGenShipwreck.c), random);
 
-        list.add(new WorldGenShipwreck.a(definedstructuremanager, minecraftkey, blockposition, enumblockrotation, worldgenfeatureshipwreckconfiguration.a));
+        list.add(new WorldGenShipwreck.a(definedstructuremanager, minecraftkey, blockposition, enumblockrotation, worldgenfeatureshipwreckconfiguration.b));
     }
 
     public static class a extends DefinedStructurePiece {
@@ -23,7 +23,7 @@ public class WorldGenShipwreck {
         private final boolean f;
 
         public a(DefinedStructureManager definedstructuremanager, MinecraftKey minecraftkey, BlockPosition blockposition, EnumBlockRotation enumblockrotation, boolean flag) {
-            super(WorldGenFeatureStructurePieceType.ac, 0);
+            super(WorldGenFeatureStructurePieceType.ad, 0);
             this.c = blockposition;
             this.d = enumblockrotation;
             this.e = minecraftkey;
@@ -32,7 +32,7 @@ public class WorldGenShipwreck {
         }
 
         public a(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.ac, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.ad, nbttagcompound);
             this.e = new MinecraftKey(nbttagcompound.getString("Template"));
             this.f = nbttagcompound.getBoolean("isBeached");
             this.d = EnumBlockRotation.valueOf(nbttagcompound.getString("Rot"));
@@ -49,7 +49,7 @@ public class WorldGenShipwreck {
 
         private void a(DefinedStructureManager definedstructuremanager) {
             DefinedStructure definedstructure = definedstructuremanager.a(this.e);
-            DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.d).a(EnumBlockMirror.NONE).a(WorldGenShipwreck.a).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.c);
+            DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.d).a(EnumBlockMirror.NONE).a(WorldGenShipwreck.a).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.d);
 
             this.a(definedstructure, this.c, definedstructureinfo);
         }
@@ -57,44 +57,44 @@ public class WorldGenShipwreck {
         @Override
         protected void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
             if ("map_chest".equals(s)) {
-                TileEntityLootable.a(generatoraccess, random, blockposition.down(), LootTables.H);
+                TileEntityLootable.a((IBlockAccess) generatoraccess, random, blockposition.down(), LootTables.H);
             } else if ("treasure_chest".equals(s)) {
-                TileEntityLootable.a(generatoraccess, random, blockposition.down(), LootTables.J);
+                TileEntityLootable.a((IBlockAccess) generatoraccess, random, blockposition.down(), LootTables.J);
             } else if ("supply_chest".equals(s)) {
-                TileEntityLootable.a(generatoraccess, random, blockposition.down(), LootTables.I);
+                TileEntityLootable.a((IBlockAccess) generatoraccess, random, blockposition.down(), LootTables.I);
             }
 
         }
 
         @Override
-        public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair, BlockPosition blockposition) {
             int i = 256;
             int j = 0;
-            BlockPosition blockposition = this.a.a();
+            BlockPosition blockposition1 = this.a.a();
             HeightMap.Type heightmap_type = this.f ? HeightMap.Type.WORLD_SURFACE_WG : HeightMap.Type.OCEAN_FLOOR_WG;
-            int k = blockposition.getX() * blockposition.getZ();
+            int k = blockposition1.getX() * blockposition1.getZ();
 
             if (k == 0) {
-                j = generatoraccess.a(heightmap_type, this.c.getX(), this.c.getZ());
+                j = generatoraccessseed.a(heightmap_type, this.c.getX(), this.c.getZ());
             } else {
-                BlockPosition blockposition1 = this.c.b(blockposition.getX() - 1, 0, blockposition.getZ() - 1);
+                BlockPosition blockposition2 = this.c.b(blockposition1.getX() - 1, 0, blockposition1.getZ() - 1);
 
                 int l;
 
-                for (Iterator iterator = BlockPosition.a(this.c, blockposition1).iterator(); iterator.hasNext(); i = Math.min(i, l)) {
-                    BlockPosition blockposition2 = (BlockPosition) iterator.next();
+                for (Iterator iterator = BlockPosition.a(this.c, blockposition2).iterator(); iterator.hasNext(); i = Math.min(i, l)) {
+                    BlockPosition blockposition3 = (BlockPosition) iterator.next();
 
-                    l = generatoraccess.a(heightmap_type, blockposition2.getX(), blockposition2.getZ());
+                    l = generatoraccessseed.a(heightmap_type, blockposition3.getX(), blockposition3.getZ());
                     j += l;
                 }
 
                 j /= k;
             }
 
-            int i1 = this.f ? i - blockposition.getY() / 2 - random.nextInt(3) : j;
+            int i1 = this.f ? i - blockposition1.getY() / 2 - random.nextInt(3) : j;
 
             this.c = new BlockPosition(this.c.getX(), i1, this.c.getZ());
-            return super.a(generatoraccess, chunkgenerator, random, structureboundingbox, chunkcoordintpair);
+            return super.a(generatoraccessseed, structuremanager, chunkgenerator, random, structureboundingbox, chunkcoordintpair, blockposition);
         }
     }
 }

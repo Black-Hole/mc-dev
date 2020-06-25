@@ -80,7 +80,7 @@ public class AutoRecipeStackManager {
     }
 
     public static ItemStack a(int i) {
-        return i == 0 ? ItemStack.a : new ItemStack(Item.getById(i));
+        return i == 0 ? ItemStack.b : new ItemStack(Item.getById(i));
     }
 
     public void a() {

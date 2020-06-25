@@ -15,7 +15,7 @@ public class DataConverterSchemaV1451_4 extends DataConverterSchemaNamed {
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
         super.registerTypes(schema, map, map1);
         schema.registerType(false, DataConverterTypes.BLOCK_NAME, () -> {
-            return DSL.constType(DSL.namespacedString());
+            return DSL.constType(a());
         });
     }
 }

@@ -2,16 +2,21 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class WorldMap extends PersistentBase {
 
+    private static final Logger LOGGER = LogManager.getLogger();
     public int centerX;
     public int centerZ;
-    public DimensionManager map;
+    public ResourceKey<World> map;
     public boolean track;
     public boolean unlimitedTracking;
     public byte scale;
@@ -19,18 +24,18 @@ public class WorldMap extends PersistentBase {
     public boolean locked;
     public final List<WorldMap.WorldMapHumanTracker> i = Lists.newArrayList();
     public final Map<EntityHuman, WorldMap.WorldMapHumanTracker> humans = Maps.newHashMap();
-    private final Map<String, MapIconBanner> l = Maps.newHashMap();
+    private final Map<String, MapIconBanner> m = Maps.newHashMap();
     public final Map<String, MapIcon> decorations = Maps.newLinkedHashMap();
-    private final Map<String, WorldMapFrame> m = Maps.newHashMap();
+    private final Map<String, WorldMapFrame> n = Maps.newHashMap();
 
     public WorldMap(String s) {
         super(s);
     }
 
-    public void a(int i, int j, int k, boolean flag, boolean flag1, DimensionManager dimensionmanager) {
+    public void a(int i, int j, int k, boolean flag, boolean flag1, ResourceKey<World> resourcekey) {
         this.scale = (byte) k;
         this.a((double) i, (double) j, this.scale);
-        this.map = dimensionmanager;
+        this.map = resourcekey;
         this.track = flag;
         this.unlimitedTracking = flag1;
         this.b();
@@ -47,48 +52,53 @@ public class WorldMap extends PersistentBase {
 
     @Override
     public void a(NBTTagCompound nbttagcompound) {
-        int i = nbttagcompound.getInt("dimension");
-        DimensionManager dimensionmanager = DimensionManager.a(i);
+        DataResult dataresult = DimensionManager.a(new Dynamic(DynamicOpsNBT.a, nbttagcompound.get("dimension")));
+        Logger logger = WorldMap.LOGGER;
 
-        if (dimensionmanager == null) {
-            throw new IllegalArgumentException("Invalid map dimension: " + i);
-        } else {
-            this.map = dimensionmanager;
-            this.centerX = nbttagcompound.getInt("xCenter");
-            this.centerZ = nbttagcompound.getInt("zCenter");
-            this.scale = (byte) MathHelper.clamp(nbttagcompound.getByte("scale"), 0, 4);
-            this.track = !nbttagcompound.hasKeyOfType("trackingPosition", 1) || nbttagcompound.getBoolean("trackingPosition");
-            this.unlimitedTracking = nbttagcompound.getBoolean("unlimitedTracking");
-            this.locked = nbttagcompound.getBoolean("locked");
-            this.colors = nbttagcompound.getByteArray("colors");
-            if (this.colors.length != 16384) {
-                this.colors = new byte[16384];
-            }
-
-            NBTTagList nbttaglist = nbttagcompound.getList("banners", 10);
-
-            for (int j = 0; j < nbttaglist.size(); ++j) {
-                MapIconBanner mapiconbanner = MapIconBanner.a(nbttaglist.getCompound(j));
-
-                this.l.put(mapiconbanner.f(), mapiconbanner);
-                this.a(mapiconbanner.c(), (GeneratorAccess) null, mapiconbanner.f(), (double) mapiconbanner.a().getX(), (double) mapiconbanner.a().getZ(), 180.0D, mapiconbanner.d());
-            }
-
-            NBTTagList nbttaglist1 = nbttagcompound.getList("frames", 10);
-
-            for (int k = 0; k < nbttaglist1.size(); ++k) {
-                WorldMapFrame worldmapframe = WorldMapFrame.a(nbttaglist1.getCompound(k));
-
-                this.m.put(worldmapframe.e(), worldmapframe);
-                this.a(MapIcon.Type.FRAME, (GeneratorAccess) null, "frame-" + worldmapframe.d(), (double) worldmapframe.b().getX(), (double) worldmapframe.b().getZ(), (double) worldmapframe.c(), (IChatBaseComponent) null);
-            }
-
+        logger.getClass();
+        this.map = (ResourceKey) dataresult.resultOrPartial(logger::error).orElseThrow(() -> {
+            return new IllegalArgumentException("Invalid map dimension: " + nbttagcompound.get("dimension"));
+        });
+        this.centerX = nbttagcompound.getInt("xCenter");
+        this.centerZ = nbttagcompound.getInt("zCenter");
+        this.scale = (byte) MathHelper.clamp(nbttagcompound.getByte("scale"), 0, 4);
+        this.track = !nbttagcompound.hasKeyOfType("trackingPosition", 1) || nbttagcompound.getBoolean("trackingPosition");
+        this.unlimitedTracking = nbttagcompound.getBoolean("unlimitedTracking");
+        this.locked = nbttagcompound.getBoolean("locked");
+        this.colors = nbttagcompound.getByteArray("colors");
+        if (this.colors.length != 16384) {
+            this.colors = new byte[16384];
         }
+
+        NBTTagList nbttaglist = nbttagcompound.getList("banners", 10);
+
+        for (int i = 0; i < nbttaglist.size(); ++i) {
+            MapIconBanner mapiconbanner = MapIconBanner.a(nbttaglist.getCompound(i));
+
+            this.m.put(mapiconbanner.f(), mapiconbanner);
+            this.a(mapiconbanner.c(), (GeneratorAccess) null, mapiconbanner.f(), (double) mapiconbanner.a().getX(), (double) mapiconbanner.a().getZ(), 180.0D, mapiconbanner.d());
+        }
+
+        NBTTagList nbttaglist1 = nbttagcompound.getList("frames", 10);
+
+        for (int j = 0; j < nbttaglist1.size(); ++j) {
+            WorldMapFrame worldmapframe = WorldMapFrame.a(nbttaglist1.getCompound(j));
+
+            this.n.put(worldmapframe.e(), worldmapframe);
+            this.a(MapIcon.Type.FRAME, (GeneratorAccess) null, "frame-" + worldmapframe.d(), (double) worldmapframe.b().getX(), (double) worldmapframe.b().getZ(), (double) worldmapframe.c(), (IChatBaseComponent) null);
+        }
+
     }
 
     @Override
     public NBTTagCompound b(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setInt("dimension", this.map.getDimensionID());
+        DataResult dataresult = MinecraftKey.a.encodeStart(DynamicOpsNBT.a, this.map.a());
+        Logger logger = WorldMap.LOGGER;
+
+        logger.getClass();
+        dataresult.resultOrPartial(logger::error).ifPresent((nbtbase) -> {
+            nbttagcompound.set("dimension", nbtbase);
+        });
         nbttagcompound.setInt("xCenter", this.centerX);
         nbttagcompound.setInt("zCenter", this.centerZ);
         nbttagcompound.setByte("scale", this.scale);
@@ -97,7 +107,7 @@ public class WorldMap extends PersistentBase {
         nbttagcompound.setBoolean("unlimitedTracking", this.unlimitedTracking);
         nbttagcompound.setBoolean("locked", this.locked);
         NBTTagList nbttaglist = new NBTTagList();
-        Iterator iterator = this.l.values().iterator();
+        Iterator iterator = this.m.values().iterator();
 
         while (iterator.hasNext()) {
             MapIconBanner mapiconbanner = (MapIconBanner) iterator.next();
@@ -107,7 +117,7 @@ public class WorldMap extends PersistentBase {
 
         nbttagcompound.set("banners", nbttaglist);
         NBTTagList nbttaglist1 = new NBTTagList();
-        Iterator iterator1 = this.m.values().iterator();
+        Iterator iterator1 = this.n.values().iterator();
 
         while (iterator1.hasNext()) {
             WorldMapFrame worldmapframe = (WorldMapFrame) iterator1.next();
@@ -123,7 +133,7 @@ public class WorldMap extends PersistentBase {
         this.locked = true;
         this.centerX = worldmap.centerX;
         this.centerZ = worldmap.centerZ;
-        this.l.putAll(worldmap.l);
+        this.m.putAll(worldmap.m);
         this.decorations.putAll(worldmap.decorations);
         System.arraycopy(worldmap.colors, 0, this.colors, 0, worldmap.colors.length);
         this.b();
@@ -146,7 +156,7 @@ public class WorldMap extends PersistentBase {
             String s = worldmap_worldmaphumantracker1.trackee.getDisplayName().getString();
 
             if (!worldmap_worldmaphumantracker1.trackee.dead && (worldmap_worldmaphumantracker1.trackee.inventory.h(itemstack) || itemstack.y())) {
-                if (!itemstack.y() && worldmap_worldmaphumantracker1.trackee.dimension == this.map && this.track) {
+                if (!itemstack.y() && worldmap_worldmaphumantracker1.trackee.world.getDimensionKey() == this.map && this.track) {
                     this.a(MapIcon.Type.PLAYER, worldmap_worldmaphumantracker1.trackee.world, s, worldmap_worldmaphumantracker1.trackee.locX(), worldmap_worldmaphumantracker1.trackee.locZ(), (double) worldmap_worldmaphumantracker1.trackee.yaw, (IChatBaseComponent) null);
                 }
             } else {
@@ -159,16 +169,16 @@ public class WorldMap extends PersistentBase {
         if (itemstack.y() && this.track) {
             EntityItemFrame entityitemframe = itemstack.z();
             BlockPosition blockposition = entityitemframe.getBlockPosition();
-            WorldMapFrame worldmapframe = (WorldMapFrame) this.m.get(WorldMapFrame.a(blockposition));
+            WorldMapFrame worldmapframe = (WorldMapFrame) this.n.get(WorldMapFrame.a(blockposition));
 
-            if (worldmapframe != null && entityitemframe.getId() != worldmapframe.d() && this.m.containsKey(worldmapframe.e())) {
+            if (worldmapframe != null && entityitemframe.getId() != worldmapframe.d() && this.n.containsKey(worldmapframe.e())) {
                 this.decorations.remove("frame-" + worldmapframe.d());
             }
 
             WorldMapFrame worldmapframe1 = new WorldMapFrame(blockposition, entityitemframe.getDirection().get2DRotationValue() * 90, entityitemframe.getId());
 
             this.a(MapIcon.Type.FRAME, entityhuman.world, "frame-" + entityitemframe.getId(), (double) blockposition.getX(), (double) blockposition.getZ(), (double) (entityitemframe.getDirection().get2DRotationValue() * 90), (IChatBaseComponent) null);
-            this.m.put(worldmapframe1.e(), worldmapframe1);
+            this.n.put(worldmapframe1.e(), worldmapframe1);
         }
 
         NBTTagCompound nbttagcompound = itemstack.getTag();
@@ -225,7 +235,7 @@ public class WorldMap extends PersistentBase {
         if (f >= -63.0F && f1 >= -63.0F && f <= 63.0F && f1 <= 63.0F) {
             d2 += d2 < 0.0D ? -8.0D : 8.0D;
             b2 = (byte) ((int) (d2 * 16.0D / 360.0D));
-            if (this.map == DimensionManager.NETHER && generatoraccess != null) {
+            if (this.map == World.THE_NETHER && generatoraccess != null) {
                 int j = (int) (generatoraccess.getWorldData().getDayTime() / 10L);
 
                 b2 = (byte) (j * j * 34187121 + j * 121 >> 15 & 15);
@@ -302,15 +312,15 @@ public class WorldMap extends PersistentBase {
     }
 
     public void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        float f = (float) blockposition.getX() + 0.5F;
-        float f1 = (float) blockposition.getZ() + 0.5F;
+        double d0 = (double) blockposition.getX() + 0.5D;
+        double d1 = (double) blockposition.getZ() + 0.5D;
         int i = 1 << this.scale;
-        float f2 = (f - (float) this.centerX) / (float) i;
-        float f3 = (f1 - (float) this.centerZ) / (float) i;
+        double d2 = (d0 - (double) this.centerX) / (double) i;
+        double d3 = (d1 - (double) this.centerZ) / (double) i;
         boolean flag = true;
         boolean flag1 = false;
 
-        if (f2 >= -63.0F && f3 >= -63.0F && f2 <= 63.0F && f3 <= 63.0F) {
+        if (d2 >= -63.0D && d3 >= -63.0D && d2 <= 63.0D && d3 <= 63.0D) {
             MapIconBanner mapiconbanner = MapIconBanner.a(generatoraccess, blockposition);
 
             if (mapiconbanner == null) {
@@ -319,16 +329,16 @@ public class WorldMap extends PersistentBase {
 
             boolean flag2 = true;
 
-            if (this.l.containsKey(mapiconbanner.f()) && ((MapIconBanner) this.l.get(mapiconbanner.f())).equals(mapiconbanner)) {
-                this.l.remove(mapiconbanner.f());
+            if (this.m.containsKey(mapiconbanner.f()) && ((MapIconBanner) this.m.get(mapiconbanner.f())).equals(mapiconbanner)) {
+                this.m.remove(mapiconbanner.f());
                 this.decorations.remove(mapiconbanner.f());
                 flag2 = false;
                 flag1 = true;
             }
 
             if (flag2) {
-                this.l.put(mapiconbanner.f(), mapiconbanner);
-                this.a(mapiconbanner.c(), generatoraccess, mapiconbanner.f(), (double) f, (double) f1, 180.0D, mapiconbanner.d());
+                this.m.put(mapiconbanner.f(), mapiconbanner);
+                this.a(mapiconbanner.c(), generatoraccess, mapiconbanner.f(), d0, d1, 180.0D, mapiconbanner.d());
                 flag1 = true;
             }
 
@@ -340,7 +350,7 @@ public class WorldMap extends PersistentBase {
     }
 
     public void a(IBlockAccess iblockaccess, int i, int j) {
-        Iterator iterator = this.l.values().iterator();
+        Iterator iterator = this.m.values().iterator();
 
         while (iterator.hasNext()) {
             MapIconBanner mapiconbanner = (MapIconBanner) iterator.next();
@@ -359,7 +369,7 @@ public class WorldMap extends PersistentBase {
 
     public void a(BlockPosition blockposition, int i) {
         this.decorations.remove("frame-" + i);
-        this.m.remove(WorldMapFrame.a(blockposition));
+        this.n.remove(WorldMapFrame.a(blockposition));
     }
 
     public class WorldMapHumanTracker {
@@ -381,9 +391,9 @@ public class WorldMap extends PersistentBase {
         public Packet<?> a(ItemStack itemstack) {
             if (this.d) {
                 this.d = false;
-                return new PacketPlayOutMap(ItemWorldMap.e(itemstack), WorldMap.this.scale, WorldMap.this.track, WorldMap.this.locked, WorldMap.this.decorations.values(), WorldMap.this.colors, this.e, this.f, this.g + 1 - this.e, this.h + 1 - this.f);
+                return new PacketPlayOutMap(ItemWorldMap.d(itemstack), WorldMap.this.scale, WorldMap.this.track, WorldMap.this.locked, WorldMap.this.decorations.values(), WorldMap.this.colors, this.e, this.f, this.g + 1 - this.e, this.h + 1 - this.f);
             } else {
-                return this.i++ % 5 == 0 ? new PacketPlayOutMap(ItemWorldMap.e(itemstack), WorldMap.this.scale, WorldMap.this.track, WorldMap.this.locked, WorldMap.this.decorations.values(), WorldMap.this.colors, 0, 0, 0, 0) : null;
+                return this.i++ % 5 == 0 ? new PacketPlayOutMap(ItemWorldMap.d(itemstack), WorldMap.this.scale, WorldMap.this.track, WorldMap.this.locked, WorldMap.this.decorations.values(), WorldMap.this.colors, 0, 0, 0, 0) : null;
             }
         }
 

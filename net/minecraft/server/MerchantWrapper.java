@@ -34,7 +34,7 @@ public class MerchantWrapper implements IMerchant {
     }
 
     @Override
-    public void i(ItemStack itemstack) {}
+    public void k(ItemStack itemstack) {}
 
     @Override
     public World getWorld() {
@@ -47,7 +47,7 @@ public class MerchantWrapper implements IMerchant {
     }
 
     @Override
-    public void setExperience(int i) {
+    public void setForcedExperience(int i) {
         this.d = i;
     }
 

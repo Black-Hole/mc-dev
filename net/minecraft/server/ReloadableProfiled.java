@@ -19,10 +19,10 @@ public class ReloadableProfiled extends Reloadable<ReloadableProfiled.a> {
         super(executor, executor1, iresourcemanager, list, (ireloadlistener_a, iresourcemanager1, ireloadlistener, executor2, executor3) -> {
             AtomicLong atomiclong = new AtomicLong();
             AtomicLong atomiclong1 = new AtomicLong();
-            MethodProfiler methodprofiler = new MethodProfiler(SystemUtils.getMonotonicNanos(), () -> {
+            MethodProfiler methodprofiler = new MethodProfiler(SystemUtils.a, () -> {
                 return 0;
             }, false);
-            MethodProfiler methodprofiler1 = new MethodProfiler(SystemUtils.getMonotonicNanos(), () -> {
+            MethodProfiler methodprofiler1 = new MethodProfiler(SystemUtils.a, () -> {
                 return 0;
             }, false);
             CompletableFuture<Void> completablefuture1 = ireloadlistener.a(ireloadlistener_a, iresourcemanager1, methodprofiler, methodprofiler1, (runnable) -> {
@@ -42,7 +42,7 @@ public class ReloadableProfiled extends Reloadable<ReloadableProfiled.a> {
             });
 
             return completablefuture1.thenApplyAsync((ovoid) -> {
-                return new ReloadableProfiled.a(ireloadlistener.i(), methodprofiler.d(), methodprofiler1.d(), atomiclong, atomiclong1);
+                return new ReloadableProfiled.a(ireloadlistener.c(), methodprofiler.d(), methodprofiler1.d(), atomiclong, atomiclong1);
             }, executor1);
         }, completablefuture);
         this.e.start();

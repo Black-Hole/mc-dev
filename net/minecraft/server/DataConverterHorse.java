@@ -1,13 +1,13 @@
 package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
 import java.util.Objects;
-import java.util.Optional;
 
 public class DataConverterHorse extends DataConverterEntityName {
 
@@ -43,10 +43,12 @@ public class DataConverterHorse extends DataConverterEntityName {
 
             dynamic.remove("Type");
             Type<?> type = (Type) this.getOutputSchema().findChoiceType(DataConverterTypes.ENTITY).types().get(s1);
+            DataResult dataresult = typed.write();
 
-            return Pair.of(s1, ((Optional) type.readTyped(typed.write()).getSecond()).orElseThrow(() -> {
+            type.getClass();
+            return Pair.of(s1, ((Pair) dataresult.flatMap(type::readTyped).result().orElseThrow(() -> {
                 return new IllegalStateException("Could not parse the new horse");
-            }));
+            })).getFirst());
         } else {
             return Pair.of(s, typed);
         }

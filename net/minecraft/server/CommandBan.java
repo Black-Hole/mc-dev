@@ -4,7 +4,6 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import java.util.Collection;
@@ -14,11 +13,11 @@ import javax.annotation.Nullable;
 
 public class CommandBan {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.ban.failed", new Object[0]));
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.ban.failed"));
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("ban").requires((commandlistenerwrapper) -> {
-            return commandlistenerwrapper.getServer().getPlayerList().getProfileBans().isEnabled() && commandlistenerwrapper.hasPermission(3);
+            return commandlistenerwrapper.hasPermission(3);
         })).then(((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentProfile.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentProfile.a(commandcontext, "targets"), (IChatBaseComponent) null);
         })).then(CommandDispatcher.a("reason", (ArgumentType) ArgumentChat.a()).executes((commandcontext) -> {
@@ -40,10 +39,10 @@ public class CommandBan {
                 gameprofilebanlist.add(gameprofilebanentry);
                 ++i;
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.ban.success", new Object[]{ChatComponentUtils.a(gameprofile), gameprofilebanentry.getReason()}), true);
-                EntityPlayer entityplayer = commandlistenerwrapper.getServer().getPlayerList().a(gameprofile.getId());
+                EntityPlayer entityplayer = commandlistenerwrapper.getServer().getPlayerList().getPlayer(gameprofile.getId());
 
                 if (entityplayer != null) {
-                    entityplayer.playerConnection.disconnect(new ChatMessage("multiplayer.disconnect.banned", new Object[0]));
+                    entityplayer.playerConnection.disconnect(new ChatMessage("multiplayer.disconnect.banned"));
                 }
             }
         }

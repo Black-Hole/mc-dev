@@ -3,15 +3,13 @@ package net.minecraft.server;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 public class DataConverterKeybind extends DataFix {
@@ -167,7 +165,7 @@ public class DataConverterKeybind extends DataFix {
                             return Pair.of(entry.getKey(), entry.getValue());
                         }
                     }).collect(Collectors.toMap(Pair::getFirst, Pair::getSecond)));
-                }).orElse(dynamic);
+                }).result().orElse(dynamic);
             });
         });
     }

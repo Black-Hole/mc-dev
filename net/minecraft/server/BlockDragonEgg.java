@@ -4,19 +4,19 @@ public class BlockDragonEgg extends BlockFalling {
 
     protected static final VoxelShape a = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
 
-    public BlockDragonEgg(Block.Info block_info) {
-        super(block_info);
+    public BlockDragonEgg(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockDragonEgg.a;
     }
 
     @Override
     public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         this.d(iblockdata, world, blockposition);
-        return EnumInteractionResult.SUCCESS;
+        return EnumInteractionResult.a(world.isClientSide);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class BlockDragonEgg extends BlockFalling {
     }
 
     @Override
-    public int a(IWorldReader iworldreader) {
+    protected int c() {
         return 5;
     }
 

@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
@@ -16,11 +15,11 @@ import javax.annotation.Nullable;
 
 public class CommandClone {
 
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.clone.overlap", new Object[0]));
+    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.clone.overlap"));
     private static final Dynamic2CommandExceptionType c = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("commands.clone.toobig", new Object[]{object, object1});
     });
-    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.clone.failed", new Object[0]));
+    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.clone.failed"));
     public static final Predicate<ShapeDetectorBlock> a = (shapedetectorblock) -> {
         return !shapedetectorblock.a().isAir();
     };
@@ -69,13 +68,13 @@ public class CommandClone {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, BlockPosition blockposition, BlockPosition blockposition1, BlockPosition blockposition2, Predicate<ShapeDetectorBlock> predicate, CommandClone.Mode commandclone_mode) throws CommandSyntaxException {
         StructureBoundingBox structureboundingbox = new StructureBoundingBox(blockposition, blockposition1);
-        BlockPosition blockposition3 = blockposition2.a(structureboundingbox.b());
+        BlockPosition blockposition3 = blockposition2.a(structureboundingbox.c());
         StructureBoundingBox structureboundingbox1 = new StructureBoundingBox(blockposition2, blockposition3);
 
         if (!commandclone_mode.a() && structureboundingbox1.b(structureboundingbox)) {
             throw CommandClone.b.create();
         } else {
-            int i = structureboundingbox.c() * structureboundingbox.d() * structureboundingbox.e();
+            int i = structureboundingbox.d() * structureboundingbox.e() * structureboundingbox.f();
 
             if (i > 32768) {
                 throw CommandClone.c.create(32768, i);
@@ -107,7 +106,7 @@ public class CommandClone {
 
                                         list1.add(new CommandClone.CommandCloneStoredTileEntity(blockposition6, iblockdata, nbttagcompound));
                                         deque.addLast(blockposition5);
-                                    } else if (!iblockdata.g(worldserver, blockposition5) && !iblockdata.p(worldserver, blockposition5)) {
+                                    } else if (!iblockdata.i(worldserver, blockposition5) && !iblockdata.r(worldserver, blockposition5)) {
                                         list2.add(new CommandClone.CommandCloneStoredTileEntity(blockposition6, iblockdata, (NBTTagCompound) null));
                                         deque.addFirst(blockposition5);
                                     } else {
@@ -176,7 +175,7 @@ public class CommandClone {
                             commandclone_commandclonestoredtileentity1.c.setInt("x", commandclone_commandclonestoredtileentity1.a.getX());
                             commandclone_commandclonestoredtileentity1.c.setInt("y", commandclone_commandclonestoredtileentity1.a.getY());
                             commandclone_commandclonestoredtileentity1.c.setInt("z", commandclone_commandclonestoredtileentity1.a.getZ());
-                            tileentity3.load(commandclone_commandclonestoredtileentity1.c);
+                            tileentity3.load(commandclone_commandclonestoredtileentity1.b, commandclone_commandclonestoredtileentity1.c);
                             tileentity3.update();
                         }
                     }

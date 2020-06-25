@@ -1,19 +1,21 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 
-public interface DefinedStructureRuleTestType extends DynamicDeserializer<DefinedStructureRuleTest> {
+public interface DefinedStructureRuleTestType<P extends DefinedStructureRuleTest> {
 
-    DefinedStructureRuleTestType b = a("always_true", (dynamic) -> {
-        return DefinedStructureTestTrue.a;
-    });
-    DefinedStructureRuleTestType c = a("block_match", DefinedStructureTestBlock::new);
-    DefinedStructureRuleTestType d = a("blockstate_match", DefinedStructureTestBlockState::new);
-    DefinedStructureRuleTestType e = a("tag_match", DefinedStructureTestTag::new);
-    DefinedStructureRuleTestType f = a("random_block_match", DefinedStructureTestRandomBlock::new);
-    DefinedStructureRuleTestType g = a("random_blockstate_match", DefinedStructureTestRandomBlockState::new);
+    DefinedStructureRuleTestType<DefinedStructureTestTrue> a = a("always_true", DefinedStructureTestTrue.a);
+    DefinedStructureRuleTestType<DefinedStructureTestBlock> b = a("block_match", DefinedStructureTestBlock.a);
+    DefinedStructureRuleTestType<DefinedStructureTestBlockState> c = a("blockstate_match", DefinedStructureTestBlockState.a);
+    DefinedStructureRuleTestType<DefinedStructureTestTag> d = a("tag_match", DefinedStructureTestTag.a);
+    DefinedStructureRuleTestType<DefinedStructureTestRandomBlock> e = a("random_block_match", DefinedStructureTestRandomBlock.a);
+    DefinedStructureRuleTestType<DefinedStructureTestRandomBlockState> f = a("random_blockstate_match", DefinedStructureTestRandomBlockState.a);
 
-    static DefinedStructureRuleTestType a(String s, DefinedStructureRuleTestType definedstructureruletesttype) {
-        return (DefinedStructureRuleTestType) IRegistry.a(IRegistry.RULE_TEST, s, (Object) definedstructureruletesttype);
+    Codec<P> codec();
+
+    static <P extends DefinedStructureRuleTest> DefinedStructureRuleTestType<P> a(String s, Codec<P> codec) {
+        return (DefinedStructureRuleTestType) IRegistry.a(IRegistry.RULE_TEST, s, (Object) (() -> {
+            return codec;
+        }));
     }
 }

@@ -1,10 +1,7 @@
 package net.minecraft.server;
 
-public abstract class EntityFireball extends Entity {
+public abstract class EntityFireball extends IProjectile {
 
-    public EntityLiving shooter;
-    private int f;
-    private int g;
     public double dirX;
     public double dirY;
     public double dirZ;
@@ -16,28 +13,21 @@ public abstract class EntityFireball extends Entity {
     public EntityFireball(EntityTypes<? extends EntityFireball> entitytypes, double d0, double d1, double d2, double d3, double d4, double d5, World world) {
         this(entitytypes, world);
         this.setPositionRotation(d0, d1, d2, this.yaw, this.pitch);
-        this.setPosition(d0, d1, d2);
+        this.ac();
         double d6 = (double) MathHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
 
-        this.dirX = d3 / d6 * 0.1D;
-        this.dirY = d4 / d6 * 0.1D;
-        this.dirZ = d5 / d6 * 0.1D;
+        if (d6 != 0.0D) {
+            this.dirX = d3 / d6 * 0.1D;
+            this.dirY = d4 / d6 * 0.1D;
+            this.dirZ = d5 / d6 * 0.1D;
+        }
+
     }
 
     public EntityFireball(EntityTypes<? extends EntityFireball> entitytypes, EntityLiving entityliving, double d0, double d1, double d2, World world) {
-        this(entitytypes, world);
-        this.shooter = entityliving;
-        this.setPositionRotation(entityliving.locX(), entityliving.locY(), entityliving.locZ(), entityliving.yaw, entityliving.pitch);
-        this.Z();
-        this.setMot(Vec3D.a);
-        d0 += this.random.nextGaussian() * 0.4D;
-        d1 += this.random.nextGaussian() * 0.4D;
-        d2 += this.random.nextGaussian() * 0.4D;
-        double d3 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-
-        this.dirX = d0 / d3 * 0.1D;
-        this.dirY = d1 / d3 * 0.1D;
-        this.dirZ = d2 / d3 * 0.1D;
+        this(entitytypes, entityliving.locX(), entityliving.locY(), entityliving.locZ(), d0, d1, d2, world);
+        this.setShooter(entityliving);
+        this.setYawPitch(entityliving.yaw, entityliving.pitch);
     }
 
     @Override
@@ -45,16 +35,17 @@ public abstract class EntityFireball extends Entity {
 
     @Override
     public void tick() {
-        if (!this.world.isClientSide && (this.shooter != null && this.shooter.dead || !this.world.isLoaded(new BlockPosition(this)))) {
+        Entity entity = this.getShooter();
+
+        if (!this.world.isClientSide && (entity != null && entity.dead || !this.world.isLoaded(this.getChunkCoordinates()))) {
             this.die();
         } else {
             super.tick();
-            if (this.M_()) {
+            if (this.Y_()) {
                 this.setOnFire(1);
             }
 
-            ++this.g;
-            MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, true, this.g >= 25, this.shooter, RayTrace.BlockCollisionOption.COLLIDER);
+            MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, this::a, RayTrace.BlockCollisionOption.COLLIDER);
 
             if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.MISS) {
                 this.a(movingobjectposition);
@@ -66,7 +57,7 @@ public abstract class EntityFireball extends Entity {
             double d2 = this.locZ() + vec3d.z;
 
             ProjectileHelper.a(this, 0.2F);
-            float f = this.k();
+            float f = this.i();
 
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
@@ -79,63 +70,45 @@ public abstract class EntityFireball extends Entity {
             }
 
             this.setMot(vec3d.add(this.dirX, this.dirY, this.dirZ).a((double) f));
-            this.world.addParticle(this.i(), d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
+            this.world.addParticle(this.h(), d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
             this.setPosition(d0, d1, d2);
         }
     }
 
-    protected boolean M_() {
+    @Override
+    protected boolean a(Entity entity) {
+        return super.a(entity) && !entity.noclip;
+    }
+
+    protected boolean Y_() {
         return true;
     }
 
-    protected ParticleParam i() {
+    protected ParticleParam h() {
         return Particles.SMOKE;
     }
 
-    protected float k() {
+    protected float i() {
         return 0.95F;
     }
 
-    protected void a(MovingObjectPosition movingobjectposition) {
-        MovingObjectPosition.EnumMovingObjectType movingobjectposition_enummovingobjecttype = movingobjectposition.getType();
-
-        if (movingobjectposition_enummovingobjecttype == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-            MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;
-            IBlockData iblockdata = this.world.getType(movingobjectpositionblock.getBlockPosition());
-
-            iblockdata.a(this.world, iblockdata, movingobjectpositionblock, this);
-        }
-
-    }
-
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        Vec3D vec3d = this.getMot();
-
-        nbttagcompound.set("direction", this.a(new double[]{vec3d.x, vec3d.y, vec3d.z}));
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.set("power", this.a(new double[]{this.dirX, this.dirY, this.dirZ}));
-        nbttagcompound.setInt("life", this.f);
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        NBTTagList nbttaglist;
-
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("power", 9)) {
-            nbttaglist = nbttagcompound.getList("power", 6);
+            NBTTagList nbttaglist = nbttagcompound.getList("power", 6);
+
             if (nbttaglist.size() == 3) {
                 this.dirX = nbttaglist.h(0);
                 this.dirY = nbttaglist.h(1);
                 this.dirZ = nbttaglist.h(2);
             }
-        }
-
-        this.f = nbttagcompound.getInt("life");
-        if (nbttagcompound.hasKeyOfType("direction", 9) && nbttagcompound.getList("direction", 6).size() == 3) {
-            nbttaglist = nbttagcompound.getList("direction", 6);
-            this.setMot(nbttaglist.h(0), nbttaglist.h(1), nbttaglist.h(2));
-        } else {
-            this.die();
         }
 
     }
@@ -146,7 +119,7 @@ public abstract class EntityFireball extends Entity {
     }
 
     @Override
-    public float aV() {
+    public float bc() {
         return 1.0F;
     }
 
@@ -156,17 +129,16 @@ public abstract class EntityFireball extends Entity {
             return false;
         } else {
             this.velocityChanged();
-            if (damagesource.getEntity() != null) {
-                Vec3D vec3d = damagesource.getEntity().getLookDirection();
+            Entity entity = damagesource.getEntity();
+
+            if (entity != null) {
+                Vec3D vec3d = entity.getLookDirection();
 
                 this.setMot(vec3d);
                 this.dirX = vec3d.x * 0.1D;
                 this.dirY = vec3d.y * 0.1D;
                 this.dirZ = vec3d.z * 0.1D;
-                if (damagesource.getEntity() instanceof EntityLiving) {
-                    this.shooter = (EntityLiving) damagesource.getEntity();
-                }
-
+                this.setShooter(entity);
                 return true;
             } else {
                 return false;
@@ -175,13 +147,14 @@ public abstract class EntityFireball extends Entity {
     }
 
     @Override
-    public float aI() {
+    public float aO() {
         return 1.0F;
     }
 
     @Override
-    public Packet<?> L() {
-        int i = this.shooter == null ? 0 : this.shooter.getId();
+    public Packet<?> O() {
+        Entity entity = this.getShooter();
+        int i = entity == null ? 0 : entity.getId();
 
         return new PacketPlayOutSpawnEntity(this.getId(), this.getUniqueID(), this.locX(), this.locY(), this.locZ(), this.pitch, this.yaw, this.getEntityType(), i, new Vec3D(this.dirX, this.dirY, this.dirZ));
     }

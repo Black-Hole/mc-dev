@@ -2,22 +2,22 @@ package net.minecraft.server;
 
 public class BlockCauldron extends Block {
 
-    public static final BlockStateInteger LEVEL = BlockProperties.al;
+    public static final BlockStateInteger LEVEL = BlockProperties.ar;
     private static final VoxelShape c = a(2.0D, 4.0D, 2.0D, 14.0D, 16.0D, 14.0D);
     protected static final VoxelShape b = VoxelShapes.a(VoxelShapes.b(), VoxelShapes.a(a(0.0D, 0.0D, 4.0D, 16.0D, 3.0D, 12.0D), a(4.0D, 0.0D, 0.0D, 12.0D, 3.0D, 16.0D), a(2.0D, 0.0D, 2.0D, 14.0D, 3.0D, 14.0D), BlockCauldron.c), OperatorBoolean.ONLY_FIRST);
 
-    public BlockCauldron(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCauldron.LEVEL, 0));
+    public BlockCauldron(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCauldron.LEVEL, 0));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockCauldron.b;
     }
 
     @Override
-    public VoxelShape j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockCauldron.c;
     }
 
@@ -54,7 +54,7 @@ public class BlockCauldron extends Block {
                     world.playSound((EntityHuman) null, blockposition, SoundEffects.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
 
-                return EnumInteractionResult.SUCCESS;
+                return EnumInteractionResult.a(world.isClientSide);
             } else if (item == Items.BUCKET) {
                 if (i == 3 && !world.isClientSide) {
                     if (!entityhuman.abilities.canInstantlyBuild) {
@@ -71,7 +71,7 @@ public class BlockCauldron extends Block {
                     world.playSound((EntityHuman) null, blockposition, SoundEffects.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
 
-                return EnumInteractionResult.SUCCESS;
+                return EnumInteractionResult.a(world.isClientSide);
             } else {
                 ItemStack itemstack1;
 
@@ -94,7 +94,7 @@ public class BlockCauldron extends Block {
                         this.a(world, blockposition, iblockdata, i - 1);
                     }
 
-                    return EnumInteractionResult.SUCCESS;
+                    return EnumInteractionResult.a(world.isClientSide);
                 } else if (item == Items.POTION && PotionUtil.d(itemstack) == Potions.WATER) {
                     if (i < 3 && !world.isClientSide) {
                         if (!entityhuman.abilities.canInstantlyBuild) {
@@ -110,7 +110,7 @@ public class BlockCauldron extends Block {
                         this.a(world, blockposition, iblockdata, i + 1);
                     }
 
-                    return EnumInteractionResult.SUCCESS;
+                    return EnumInteractionResult.a(world.isClientSide);
                 } else {
                     if (i > 0 && item instanceof IDyeable) {
                         IDyeable idyeable = (IDyeable) item;
@@ -143,11 +143,11 @@ public class BlockCauldron extends Block {
                             }
                         }
 
-                        return EnumInteractionResult.SUCCESS;
+                        return EnumInteractionResult.a(world.isClientSide);
                     } else if (i > 0 && item instanceof ItemBlock) {
                         Block block = ((ItemBlock) item).getBlock();
 
-                        if (block instanceof BlockShulkerBox && !world.p_()) {
+                        if (block instanceof BlockShulkerBox && !world.s_()) {
                             ItemStack itemstack2 = new ItemStack(Blocks.SHULKER_BOX, 1);
 
                             if (itemstack.hasTag()) {

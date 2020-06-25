@@ -9,16 +9,18 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import javax.annotation.Nullable;
 
 public class ArgumentParserItemStack {
 
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.item.tag.disallowed", new Object[0]));
+    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.item.tag.disallowed"));
     public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.item.id.invalid", new Object[]{object});
     });
-    private static final Function<SuggestionsBuilder, CompletableFuture<Suggestions>> c = SuggestionsBuilder::buildFuture;
+    private static final BiFunction<SuggestionsBuilder, Tags<Item>, CompletableFuture<Suggestions>> c = (suggestionsbuilder, tags) -> {
+        return suggestionsbuilder.buildFuture();
+    };
     private final StringReader d;
     private final boolean e;
     private final Map<IBlockState<?>, Comparable<?>> f = Maps.newHashMap();
@@ -27,7 +29,7 @@ public class ArgumentParserItemStack {
     private NBTTagCompound h;
     private MinecraftKey i = new MinecraftKey("");
     private int j;
-    private Function<SuggestionsBuilder, CompletableFuture<Suggestions>> k;
+    private BiFunction<SuggestionsBuilder, Tags<Item>, CompletableFuture<Suggestions>> k;
 
     public ArgumentParserItemStack(StringReader stringreader, boolean flag) {
         this.k = ArgumentParserItemStack.c;
@@ -90,7 +92,7 @@ public class ArgumentParserItemStack {
         return this;
     }
 
-    private CompletableFuture<Suggestions> b(SuggestionsBuilder suggestionsbuilder) {
+    private CompletableFuture<Suggestions> b(SuggestionsBuilder suggestionsbuilder, Tags<Item> tags) {
         if (suggestionsbuilder.getRemaining().isEmpty()) {
             suggestionsbuilder.suggest(String.valueOf('{'));
         }
@@ -98,19 +100,19 @@ public class ArgumentParserItemStack {
         return suggestionsbuilder.buildFuture();
     }
 
-    private CompletableFuture<Suggestions> c(SuggestionsBuilder suggestionsbuilder) {
-        return ICompletionProvider.a((Iterable) TagsItem.a().a(), suggestionsbuilder.createOffset(this.j));
+    private CompletableFuture<Suggestions> c(SuggestionsBuilder suggestionsbuilder, Tags<Item> tags) {
+        return ICompletionProvider.a((Iterable) tags.a(), suggestionsbuilder.createOffset(this.j));
     }
 
-    private CompletableFuture<Suggestions> d(SuggestionsBuilder suggestionsbuilder) {
+    private CompletableFuture<Suggestions> d(SuggestionsBuilder suggestionsbuilder, Tags<Item> tags) {
         if (this.e) {
-            ICompletionProvider.a((Iterable) TagsItem.a().a(), suggestionsbuilder, String.valueOf('#'));
+            ICompletionProvider.a((Iterable) tags.a(), suggestionsbuilder, String.valueOf('#'));
         }
 
         return ICompletionProvider.a((Iterable) IRegistry.ITEM.keySet(), suggestionsbuilder);
     }
 
-    public CompletableFuture<Suggestions> a(SuggestionsBuilder suggestionsbuilder) {
-        return (CompletableFuture) this.k.apply(suggestionsbuilder.createOffset(this.d.getCursor()));
+    public CompletableFuture<Suggestions> a(SuggestionsBuilder suggestionsbuilder, Tags<Item> tags) {
+        return (CompletableFuture) this.k.apply(suggestionsbuilder.createOffset(this.d.getCursor()), tags);
     }
 }

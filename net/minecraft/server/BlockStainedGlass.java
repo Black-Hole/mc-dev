@@ -4,8 +4,8 @@ public class BlockStainedGlass extends BlockGlassAbstract implements IBeaconBeam
 
     private final EnumColor color;
 
-    public BlockStainedGlass(EnumColor enumcolor, Block.Info block_info) {
-        super(block_info);
+    public BlockStainedGlass(EnumColor enumcolor, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.color = enumcolor;
     }
 

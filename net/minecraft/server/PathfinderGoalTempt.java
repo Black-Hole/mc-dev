@@ -94,7 +94,7 @@ public class PathfinderGoalTempt extends PathfinderGoal {
 
     @Override
     public void e() {
-        this.a.getControllerLook().a(this.target, (float) (this.a.dV() + 20), (float) this.a.dU());
+        this.a.getControllerLook().a(this.target, (float) (this.a.ep() + 20), (float) this.a.eo());
         if (this.a.h((Entity) this.target) < 6.25D) {
             this.a.getNavigation().o();
         } else {

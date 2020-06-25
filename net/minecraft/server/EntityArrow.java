@@ -3,37 +3,33 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import javax.annotation.Nullable;
 
-public abstract class EntityArrow extends Entity implements IProjectile {
+public abstract class EntityArrow extends IProjectile {
 
-    private static final DataWatcherObject<Byte> ao = DataWatcher.a(EntityArrow.class, DataWatcherRegistry.a);
-    protected static final DataWatcherObject<Optional<UUID>> b = DataWatcher.a(EntityArrow.class, DataWatcherRegistry.o);
-    private static final DataWatcherObject<Byte> ap = DataWatcher.a(EntityArrow.class, DataWatcherRegistry.a);
+    private static final DataWatcherObject<Byte> f = DataWatcher.a(EntityArrow.class, DataWatcherRegistry.a);
+    private static final DataWatcherObject<Byte> g = DataWatcher.a(EntityArrow.class, DataWatcherRegistry.a);
     @Nullable
-    private IBlockData aq;
+    private IBlockData an;
     public boolean inGround;
-    protected int d;
+    protected int c;
     public EntityArrow.PickupStatus fromPlayer;
     public int shake;
-    public UUID shooter;
     public int despawnCounter;
-    private int as;
     private double damage;
     public int knockbackStrength;
-    private SoundEffect av;
-    private IntOpenHashSet aw;
-    private List<Entity> ax;
+    private SoundEffect ar;
+    private IntOpenHashSet as;
+    private List<Entity> at;
 
     protected EntityArrow(EntityTypes<? extends EntityArrow> entitytypes, World world) {
         super(entitytypes, world);
         this.fromPlayer = EntityArrow.PickupStatus.DISALLOWED;
         this.damage = 2.0D;
-        this.av = this.k();
+        this.ar = this.i();
     }
 
     protected EntityArrow(EntityTypes<? extends EntityArrow> entitytypes, double d0, double d1, double d2, World world) {
@@ -51,43 +47,25 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     }
 
     public void a(SoundEffect soundeffect) {
-        this.av = soundeffect;
+        this.ar = soundeffect;
     }
 
     @Override
     protected void initDatawatcher() {
-        this.datawatcher.register(EntityArrow.ao, (byte) 0);
-        this.datawatcher.register(EntityArrow.b, Optional.empty());
-        this.datawatcher.register(EntityArrow.ap, (byte) 0);
-    }
-
-    public void a(Entity entity, float f, float f1, float f2, float f3, float f4) {
-        float f5 = -MathHelper.sin(f1 * 0.017453292F) * MathHelper.cos(f * 0.017453292F);
-        float f6 = -MathHelper.sin(f * 0.017453292F);
-        float f7 = MathHelper.cos(f1 * 0.017453292F) * MathHelper.cos(f * 0.017453292F);
-
-        this.shoot((double) f5, (double) f6, (double) f7, f3, f4);
-        this.setMot(this.getMot().add(entity.getMot().x, entity.onGround ? 0.0D : entity.getMot().y, entity.getMot().z));
+        this.datawatcher.register(EntityArrow.f, (byte) 0);
+        this.datawatcher.register(EntityArrow.g, (byte) 0);
     }
 
     @Override
     public void shoot(double d0, double d1, double d2, float f, float f1) {
-        Vec3D vec3d = (new Vec3D(d0, d1, d2)).d().add(this.random.nextGaussian() * 0.007499999832361937D * (double) f1, this.random.nextGaussian() * 0.007499999832361937D * (double) f1, this.random.nextGaussian() * 0.007499999832361937D * (double) f1).a((double) f);
-
-        this.setMot(vec3d);
-        float f2 = MathHelper.sqrt(b(vec3d));
-
-        this.yaw = (float) (MathHelper.d(vec3d.x, vec3d.z) * 57.2957763671875D);
-        this.pitch = (float) (MathHelper.d(vec3d.y, (double) f2) * 57.2957763671875D);
-        this.lastYaw = this.yaw;
-        this.lastPitch = this.pitch;
+        super.shoot(d0, d1, d2, f, f1);
         this.despawnCounter = 0;
     }
 
     @Override
     public void tick() {
         super.tick();
-        boolean flag = this.v();
+        boolean flag = this.t();
         Vec3D vec3d = this.getMot();
 
         if (this.lastPitch == 0.0F && this.lastYaw == 0.0F) {
@@ -99,7 +77,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
             this.lastPitch = this.pitch;
         }
 
-        BlockPosition blockposition = new BlockPosition(this);
+        BlockPosition blockposition = this.getChunkCoordinates();
         IBlockData iblockdata = this.world.getType(blockposition);
         Vec3D vec3d1;
 
@@ -113,7 +91,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
                 while (iterator.hasNext()) {
                     AxisAlignedBB axisalignedbb = (AxisAlignedBB) iterator.next();
 
-                    if (axisalignedbb.a(blockposition).c(vec3d1)) {
+                    if (axisalignedbb.a(blockposition).d(vec3d1)) {
                         this.inGround = true;
                         break;
                     }
@@ -130,19 +108,15 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         }
 
         if (this.inGround && !flag) {
-            if (this.aq != iblockdata && this.world.a(this.getBoundingBox().g(0.06D))) {
-                this.inGround = false;
-                this.setMot(vec3d.d((double) (this.random.nextFloat() * 0.2F), (double) (this.random.nextFloat() * 0.2F), (double) (this.random.nextFloat() * 0.2F)));
-                this.despawnCounter = 0;
-                this.as = 0;
+            if (this.an != iblockdata && this.u()) {
+                this.z();
             } else if (!this.world.isClientSide) {
-                this.i();
+                this.h();
             }
 
-            ++this.d;
+            ++this.c;
         } else {
-            this.d = 0;
-            ++this.as;
+            this.c = 0;
             Vec3D vec3d2 = this.getPositionVector();
 
             vec3d1 = vec3d2.e(vec3d);
@@ -203,24 +177,9 @@ public abstract class EntityArrow extends Entity implements IProjectile {
                 this.yaw = (float) (MathHelper.d(d0, d2) * 57.2957763671875D);
             }
 
-            for (this.pitch = (float) (MathHelper.d(d1, (double) f1) * 57.2957763671875D); this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {
-                ;
-            }
-
-            while (this.pitch - this.lastPitch >= 180.0F) {
-                this.lastPitch += 360.0F;
-            }
-
-            while (this.yaw - this.lastYaw < -180.0F) {
-                this.lastYaw -= 360.0F;
-            }
-
-            while (this.yaw - this.lastYaw >= 180.0F) {
-                this.lastYaw += 360.0F;
-            }
-
-            this.pitch = MathHelper.g(0.2F, this.lastPitch, this.pitch);
-            this.yaw = MathHelper.g(0.2F, this.lastYaw, this.yaw);
+            this.pitch = (float) (MathHelper.d(d1, (double) f1) * 57.2957763671875D);
+            this.pitch = e(this.lastPitch, this.pitch);
+            this.yaw = e(this.lastYaw, this.yaw);
             float f2 = 0.99F;
             float f3 = 0.05F;
 
@@ -231,7 +190,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
                     this.world.addParticle(Particles.BUBBLE, d3 - d0 * 0.25D, d4 - d1 * 0.25D, d5 - d2 * 0.25D, d0, d1, d2);
                 }
 
-                f2 = this.u();
+                f2 = this.s();
             }
 
             this.setMot(vec3d.a((double) f2));
@@ -246,7 +205,28 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         }
     }
 
-    protected void i() {
+    private boolean u() {
+        return this.inGround && this.world.b((new AxisAlignedBB(this.getPositionVector(), this.getPositionVector())).g(0.06D));
+    }
+
+    private void z() {
+        this.inGround = false;
+        Vec3D vec3d = this.getMot();
+
+        this.setMot(vec3d.d((double) (this.random.nextFloat() * 0.2F), (double) (this.random.nextFloat() * 0.2F), (double) (this.random.nextFloat() * 0.2F)));
+        this.despawnCounter = 0;
+    }
+
+    @Override
+    public void move(EnumMoveType enummovetype, Vec3D vec3d) {
+        super.move(enummovetype, vec3d);
+        if (enummovetype != EnumMoveType.SELF && this.u()) {
+            this.z();
+        }
+
+    }
+
+    protected void h() {
         ++this.despawnCounter;
         if (this.despawnCounter >= 1200) {
             this.die();
@@ -254,70 +234,45 @@ public abstract class EntityArrow extends Entity implements IProjectile {
 
     }
 
-    protected void a(MovingObjectPosition movingobjectposition) {
-        MovingObjectPosition.EnumMovingObjectType movingobjectposition_enummovingobjecttype = movingobjectposition.getType();
+    private void A() {
+        if (this.at != null) {
+            this.at.clear();
+        }
 
-        if (movingobjectposition_enummovingobjecttype == MovingObjectPosition.EnumMovingObjectType.ENTITY) {
-            this.a((MovingObjectPositionEntity) movingobjectposition);
-        } else if (movingobjectposition_enummovingobjecttype == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-            MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;
-            IBlockData iblockdata = this.world.getType(movingobjectpositionblock.getBlockPosition());
-
-            this.aq = iblockdata;
-            Vec3D vec3d = movingobjectpositionblock.getPos().a(this.locX(), this.locY(), this.locZ());
-
-            this.setMot(vec3d);
-            Vec3D vec3d1 = vec3d.d().a(0.05000000074505806D);
-
-            this.setPositionRaw(this.locX() - vec3d1.x, this.locY() - vec3d1.y, this.locZ() - vec3d1.z);
-            this.a(this.getSoundHit(), 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
-            this.inGround = true;
-            this.shake = 7;
-            this.setCritical(false);
-            this.setPierceLevel((byte) 0);
-            this.a(SoundEffects.ENTITY_ARROW_HIT);
-            this.o(false);
-            this.w();
-            iblockdata.a(this.world, iblockdata, movingobjectpositionblock, this);
+        if (this.as != null) {
+            this.as.clear();
         }
 
     }
 
-    private void w() {
-        if (this.ax != null) {
-            this.ax.clear();
-        }
-
-        if (this.aw != null) {
-            this.aw.clear();
-        }
-
-    }
-
+    @Override
     protected void a(MovingObjectPositionEntity movingobjectpositionentity) {
+        super.a(movingobjectpositionentity);
         Entity entity = movingobjectpositionentity.getEntity();
         float f = (float) this.getMot().f();
-        int i = MathHelper.f(Math.max((double) f * this.damage, 0.0D));
+        int i = MathHelper.f(MathHelper.a((double) f * this.damage, 0.0D, 2.147483647E9D));
 
         if (this.getPierceLevel() > 0) {
-            if (this.aw == null) {
-                this.aw = new IntOpenHashSet(5);
+            if (this.as == null) {
+                this.as = new IntOpenHashSet(5);
             }
 
-            if (this.ax == null) {
-                this.ax = Lists.newArrayListWithCapacity(5);
+            if (this.at == null) {
+                this.at = Lists.newArrayListWithCapacity(5);
             }
 
-            if (this.aw.size() >= this.getPierceLevel() + 1) {
+            if (this.as.size() >= this.getPierceLevel() + 1) {
                 this.die();
                 return;
             }
 
-            this.aw.add(entity.getId());
+            this.as.add(entity.getId());
         }
 
         if (this.isCritical()) {
-            i += this.random.nextInt(i / 2 + 2);
+            long j = (long) this.random.nextInt(i / 2 + 2);
+
+            i = (int) Math.min(j + (long) i, 2147483647L);
         }
 
         Entity entity1 = this.getShooter();
@@ -333,7 +288,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         }
 
         boolean flag = entity.getEntityType() == EntityTypes.ENDERMAN;
-        int j = entity.ad();
+        int k = entity.getFireTicks();
 
         if (this.isBurning() && !flag) {
             entity.setOnFire(5);
@@ -365,35 +320,34 @@ public abstract class EntityArrow extends Entity implements IProjectile {
                 }
 
                 this.a(entityliving);
-                if (entity1 != null && entityliving != entity1 && entityliving instanceof EntityHuman && entity1 instanceof EntityPlayer) {
-                    ((EntityPlayer) entity1).playerConnection.sendPacket(new PacketPlayOutGameStateChange(6, 0.0F));
+                if (entity1 != null && entityliving != entity1 && entityliving instanceof EntityHuman && entity1 instanceof EntityPlayer && !this.isSilent()) {
+                    ((EntityPlayer) entity1).playerConnection.sendPacket(new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.g, 0.0F));
                 }
 
-                if (!entity.isAlive() && this.ax != null) {
-                    this.ax.add(entityliving);
+                if (!entity.isAlive() && this.at != null) {
+                    this.at.add(entityliving);
                 }
 
                 if (!this.world.isClientSide && entity1 instanceof EntityPlayer) {
                     EntityPlayer entityplayer = (EntityPlayer) entity1;
 
-                    if (this.ax != null && this.r()) {
-                        CriterionTriggers.G.a(entityplayer, this.ax, this.ax.size());
-                    } else if (!entity.isAlive() && this.r()) {
-                        CriterionTriggers.G.a(entityplayer, Arrays.asList(entity), 0);
+                    if (this.at != null && this.isShotFromCrossbow()) {
+                        CriterionTriggers.G.a(entityplayer, (Collection) this.at);
+                    } else if (!entity.isAlive() && this.isShotFromCrossbow()) {
+                        CriterionTriggers.G.a(entityplayer, (Collection) Arrays.asList(entity));
                     }
                 }
             }
 
-            this.a(this.av, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+            this.playSound(this.ar, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
             if (this.getPierceLevel() <= 0) {
                 this.die();
             }
         } else {
-            entity.g(j);
+            entity.setFireTicks(k);
             this.setMot(this.getMot().a(-0.1D));
             this.yaw += 180.0F;
             this.lastYaw += 180.0F;
-            this.as = 0;
             if (!this.world.isClientSide && this.getMot().g() < 1.0E-7D) {
                 if (this.fromPlayer == EntityArrow.PickupStatus.ALLOWED) {
                     this.a(this.getItemStack(), 0.1F);
@@ -405,28 +359,52 @@ public abstract class EntityArrow extends Entity implements IProjectile {
 
     }
 
-    protected SoundEffect k() {
+    @Override
+    protected void a(MovingObjectPositionBlock movingobjectpositionblock) {
+        this.an = this.world.getType(movingobjectpositionblock.getBlockPosition());
+        super.a(movingobjectpositionblock);
+        Vec3D vec3d = movingobjectpositionblock.getPos().a(this.locX(), this.locY(), this.locZ());
+
+        this.setMot(vec3d);
+        Vec3D vec3d1 = vec3d.d().a(0.05000000074505806D);
+
+        this.setPositionRaw(this.locX() - vec3d1.x, this.locY() - vec3d1.y, this.locZ() - vec3d1.z);
+        this.playSound(this.getSoundHit(), 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+        this.inGround = true;
+        this.shake = 7;
+        this.setCritical(false);
+        this.setPierceLevel((byte) 0);
+        this.a(SoundEffects.ENTITY_ARROW_HIT);
+        this.setShotFromCrossbow(false);
+        this.A();
+    }
+
+    protected SoundEffect i() {
         return SoundEffects.ENTITY_ARROW_HIT;
     }
 
     protected final SoundEffect getSoundHit() {
-        return this.av;
+        return this.ar;
     }
 
     protected void a(EntityLiving entityliving) {}
 
     @Nullable
     protected MovingObjectPositionEntity a(Vec3D vec3d, Vec3D vec3d1) {
-        return ProjectileHelper.a(this.world, this, vec3d, vec3d1, this.getBoundingBox().a(this.getMot()).g(1.0D), (entity) -> {
-            return !entity.isSpectator() && entity.isAlive() && entity.isInteractable() && (entity != this.getShooter() || this.as >= 5) && (this.aw == null || !this.aw.contains(entity.getId()));
-        });
+        return ProjectileHelper.a(this.world, this, vec3d, vec3d1, this.getBoundingBox().b(this.getMot()).g(1.0D), this::a);
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
+    protected boolean a(Entity entity) {
+        return super.a(entity) && (this.as == null || !this.as.contains(entity.getId()));
+    }
+
+    @Override
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setShort("life", (short) this.despawnCounter);
-        if (this.aq != null) {
-            nbttagcompound.set("inBlockState", GameProfileSerializer.a(this.aq));
+        if (this.an != null) {
+            nbttagcompound.set("inBlockState", GameProfileSerializer.a(this.an));
         }
 
         nbttagcompound.setByte("shake", (byte) this.shake);
@@ -435,19 +413,16 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         nbttagcompound.setDouble("damage", this.damage);
         nbttagcompound.setBoolean("crit", this.isCritical());
         nbttagcompound.setByte("PierceLevel", this.getPierceLevel());
-        if (this.shooter != null) {
-            nbttagcompound.a("OwnerUUID", this.shooter);
-        }
-
-        nbttagcompound.setString("SoundEvent", IRegistry.SOUND_EVENT.getKey(this.av).toString());
-        nbttagcompound.setBoolean("ShotFromCrossbow", this.r());
+        nbttagcompound.setString("SoundEvent", IRegistry.SOUND_EVENT.getKey(this.ar).toString());
+        nbttagcompound.setBoolean("ShotFromCrossbow", this.isShotFromCrossbow());
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.despawnCounter = nbttagcompound.getShort("life");
         if (nbttagcompound.hasKeyOfType("inBlockState", 10)) {
-            this.aq = GameProfileSerializer.d(nbttagcompound.getCompound("inBlockState"));
+            this.an = GameProfileSerializer.c(nbttagcompound.getCompound("inBlockState"));
         }
 
         this.shake = nbttagcompound.getByte("shake") & 255;
@@ -464,34 +439,26 @@ public abstract class EntityArrow extends Entity implements IProjectile {
 
         this.setCritical(nbttagcompound.getBoolean("crit"));
         this.setPierceLevel(nbttagcompound.getByte("PierceLevel"));
-        if (nbttagcompound.b("OwnerUUID")) {
-            this.shooter = nbttagcompound.a("OwnerUUID");
-        }
-
         if (nbttagcompound.hasKeyOfType("SoundEvent", 8)) {
-            this.av = (SoundEffect) IRegistry.SOUND_EVENT.getOptional(new MinecraftKey(nbttagcompound.getString("SoundEvent"))).orElse(this.k());
+            this.ar = (SoundEffect) IRegistry.SOUND_EVENT.getOptional(new MinecraftKey(nbttagcompound.getString("SoundEvent"))).orElse(this.i());
         }
 
-        this.o(nbttagcompound.getBoolean("ShotFromCrossbow"));
+        this.setShotFromCrossbow(nbttagcompound.getBoolean("ShotFromCrossbow"));
     }
 
+    @Override
     public void setShooter(@Nullable Entity entity) {
-        this.shooter = entity == null ? null : entity.getUniqueID();
+        super.setShooter(entity);
         if (entity instanceof EntityHuman) {
             this.fromPlayer = ((EntityHuman) entity).abilities.canInstantlyBuild ? EntityArrow.PickupStatus.CREATIVE_ONLY : EntityArrow.PickupStatus.ALLOWED;
         }
 
     }
 
-    @Nullable
-    public Entity getShooter() {
-        return this.shooter != null && this.world instanceof WorldServer ? ((WorldServer) this.world).getEntity(this.shooter) : null;
-    }
-
     @Override
     public void pickup(EntityHuman entityhuman) {
-        if (!this.world.isClientSide && (this.inGround || this.v()) && this.shake <= 0) {
-            boolean flag = this.fromPlayer == EntityArrow.PickupStatus.ALLOWED || this.fromPlayer == EntityArrow.PickupStatus.CREATIVE_ONLY && entityhuman.abilities.canInstantlyBuild || this.v() && this.getShooter().getUniqueID() == entityhuman.getUniqueID();
+        if (!this.world.isClientSide && (this.inGround || this.t()) && this.shake <= 0) {
+            boolean flag = this.fromPlayer == EntityArrow.PickupStatus.ALLOWED || this.fromPlayer == EntityArrow.PickupStatus.CREATIVE_ONLY && entityhuman.abilities.canInstantlyBuild || this.t() && this.getShooter().getUniqueID() == entityhuman.getUniqueID();
 
             if (this.fromPlayer == EntityArrow.PickupStatus.ALLOWED && !entityhuman.inventory.pickup(this.getItemStack())) {
                 flag = false;
@@ -525,13 +492,13 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     }
 
     @Override
-    public boolean bA() {
+    public boolean bH() {
         return false;
     }
 
     @Override
     protected float getHeadHeight(EntityPose entitypose, EntitySize entitysize) {
-        return 0.0F;
+        return 0.13F;
     }
 
     public void setCritical(boolean flag) {
@@ -539,34 +506,34 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     }
 
     public void setPierceLevel(byte b0) {
-        this.datawatcher.set(EntityArrow.ap, b0);
+        this.datawatcher.set(EntityArrow.g, b0);
     }
 
     private void a(int i, boolean flag) {
-        byte b0 = (Byte) this.datawatcher.get(EntityArrow.ao);
+        byte b0 = (Byte) this.datawatcher.get(EntityArrow.f);
 
         if (flag) {
-            this.datawatcher.set(EntityArrow.ao, (byte) (b0 | i));
+            this.datawatcher.set(EntityArrow.f, (byte) (b0 | i));
         } else {
-            this.datawatcher.set(EntityArrow.ao, (byte) (b0 & ~i));
+            this.datawatcher.set(EntityArrow.f, (byte) (b0 & ~i));
         }
 
     }
 
     public boolean isCritical() {
-        byte b0 = (Byte) this.datawatcher.get(EntityArrow.ao);
+        byte b0 = (Byte) this.datawatcher.get(EntityArrow.f);
 
         return (b0 & 1) != 0;
     }
 
-    public boolean r() {
-        byte b0 = (Byte) this.datawatcher.get(EntityArrow.ao);
+    public boolean isShotFromCrossbow() {
+        byte b0 = (Byte) this.datawatcher.get(EntityArrow.f);
 
         return (b0 & 4) != 0;
     }
 
     public byte getPierceLevel() {
-        return (Byte) this.datawatcher.get(EntityArrow.ap);
+        return (Byte) this.datawatcher.get(EntityArrow.g);
     }
 
     public void a(EntityLiving entityliving, float f) {
@@ -588,25 +555,25 @@ public abstract class EntityArrow extends Entity implements IProjectile {
 
     }
 
-    protected float u() {
+    protected float s() {
         return 0.6F;
     }
 
-    public void n(boolean flag) {
+    public void o(boolean flag) {
         this.noclip = flag;
         this.a(2, flag);
     }
 
-    public boolean v() {
-        return !this.world.isClientSide ? this.noclip : ((Byte) this.datawatcher.get(EntityArrow.ao) & 2) != 0;
+    public boolean t() {
+        return !this.world.isClientSide ? this.noclip : ((Byte) this.datawatcher.get(EntityArrow.f) & 2) != 0;
     }
 
-    public void o(boolean flag) {
+    public void setShotFromCrossbow(boolean flag) {
         this.a(4, flag);
     }
 
     @Override
-    public Packet<?> L() {
+    public Packet<?> O() {
         Entity entity = this.getShooter();
 
         return new PacketPlayOutSpawnEntity(this, entity == null ? 0 : entity.getId());

@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.reflect.TypeToken;
 import com.mojang.authlib.Agent;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.GameProfileRepository;
@@ -23,7 +24,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
@@ -49,18 +49,7 @@ public class UserCache {
     private final GameProfileRepository g;
     protected final Gson b;
     private final File h;
-    private static final ParameterizedType i = new ParameterizedType() {
-        public Type[] getActualTypeArguments() {
-            return new Type[]{UserCache.UserCacheEntry.class};
-        }
-
-        public Type getRawType() {
-            return List.class;
-        }
-
-        public Type getOwnerType() {
-            return null;
-        }
+    private static final TypeToken<List<UserCache.UserCacheEntry>> i = new TypeToken<List<UserCache.UserCacheEntry>>() {
     };
 
     public UserCache(GameProfileRepository gameprofilerepository, File file) {
@@ -189,7 +178,7 @@ public class UserCache {
 
         try {
             bufferedreader = Files.newReader(this.h, StandardCharsets.UTF_8);
-            List<UserCache.UserCacheEntry> list = (List) ChatDeserializer.a(this.b, (Reader) bufferedreader, (Type) UserCache.i);
+            List<UserCache.UserCacheEntry> list = (List) ChatDeserializer.a(this.b, (Reader) bufferedreader, UserCache.i);
 
             this.d.clear();
             this.e.clear();

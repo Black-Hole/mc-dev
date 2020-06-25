@@ -4,11 +4,11 @@ import com.google.common.collect.ImmutableMap;
 
 public class BehaviorInteractPlayer extends Behavior<EntityVillager> {
 
-    private final float a;
+    private final float b;
 
     public BehaviorInteractPlayer(float f) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED), Integer.MAX_VALUE);
-        this.a = f;
+        this.b = f;
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
@@ -17,7 +17,7 @@ public class BehaviorInteractPlayer extends Behavior<EntityVillager> {
         return entityvillager.isAlive() && entityhuman != null && !entityvillager.isInWater() && !entityvillager.velocityChanged && entityvillager.h((Entity) entityhuman) <= 16.0D && entityhuman.activeContainer != null;
     }
 
-    protected boolean g(WorldServer worldserver, EntityVillager entityvillager, long i) {
+    protected boolean b(WorldServer worldserver, EntityVillager entityvillager, long i) {
         return this.a(worldserver, entityvillager);
     }
 
@@ -25,7 +25,7 @@ public class BehaviorInteractPlayer extends Behavior<EntityVillager> {
         this.a(entityvillager);
     }
 
-    protected void f(WorldServer worldserver, EntityVillager entityvillager, long i) {
+    protected void c(WorldServer worldserver, EntityVillager entityvillager, long i) {
         BehaviorController<?> behaviorcontroller = entityvillager.getBehaviorController();
 
         behaviorcontroller.removeMemory(MemoryModuleType.WALK_TARGET);
@@ -42,10 +42,9 @@ public class BehaviorInteractPlayer extends Behavior<EntityVillager> {
     }
 
     private void a(EntityVillager entityvillager) {
-        BehaviorPositionEntity behaviorpositionentity = new BehaviorPositionEntity(entityvillager.getTrader());
         BehaviorController<?> behaviorcontroller = entityvillager.getBehaviorController();
 
-        behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(behaviorpositionentity, this.a, 2)));
-        behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) behaviorpositionentity);
+        behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorPositionEntity(entityvillager.getTrader(), false), this.b, 2)));
+        behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityvillager.getTrader(), true)));
     }
 }

@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -13,15 +12,15 @@ import javax.annotation.Nullable;
 
 public class EntityParrot extends EntityPerchable implements EntityBird {
 
-    private static final DataWatcherObject<Integer> bD = DataWatcher.a(EntityParrot.class, DataWatcherRegistry.b);
-    private static final Predicate<EntityInsentient> bE = new Predicate<EntityInsentient>() {
+    private static final DataWatcherObject<Integer> bB = DataWatcher.a(EntityParrot.class, DataWatcherRegistry.b);
+    private static final Predicate<EntityInsentient> bC = new Predicate<EntityInsentient>() {
         public boolean test(@Nullable EntityInsentient entityinsentient) {
-            return entityinsentient != null && EntityParrot.bH.containsKey(entityinsentient.getEntityType());
+            return entityinsentient != null && EntityParrot.bF.containsKey(entityinsentient.getEntityType());
         }
     };
-    private static final Item bF = Items.COOKIE;
-    private static final Set<Item> bG = Sets.newHashSet(new Item[]{Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS});
-    private static final Map<EntityTypes<?>, SoundEffect> bH = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+    private static final Item bD = Items.COOKIE;
+    private static final Set<Item> bE = Sets.newHashSet(new Item[]{Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS});
+    private static final Map<EntityTypes<?>, SoundEffect> bF = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         hashmap.put(EntityTypes.BLAZE, SoundEffects.ENTITY_PARROT_IMITATE_BLAZE);
         hashmap.put(EntityTypes.CAVE_SPIDER, SoundEffects.ENTITY_PARROT_IMITATE_SPIDER);
         hashmap.put(EntityTypes.CREEPER, SoundEffects.ENTITY_PARROT_IMITATE_CREEPER);
@@ -32,10 +31,12 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         hashmap.put(EntityTypes.EVOKER, SoundEffects.ENTITY_PARROT_IMITATE_EVOKER);
         hashmap.put(EntityTypes.GHAST, SoundEffects.ENTITY_PARROT_IMITATE_GHAST);
         hashmap.put(EntityTypes.GUARDIAN, SoundEffects.ENTITY_PARROT_IMITATE_GUARDIAN);
+        hashmap.put(EntityTypes.HOGLIN, SoundEffects.ENTITY_PARROT_IMITATE_HOGLIN);
         hashmap.put(EntityTypes.HUSK, SoundEffects.ENTITY_PARROT_IMITATE_HUSK);
         hashmap.put(EntityTypes.ILLUSIONER, SoundEffects.ENTITY_PARROT_IMITATE_ILLUSIONER);
         hashmap.put(EntityTypes.MAGMA_CUBE, SoundEffects.ENTITY_PARROT_IMITATE_MAGMA_CUBE);
         hashmap.put(EntityTypes.PHANTOM, SoundEffects.ENTITY_PARROT_IMITATE_PHANTOM);
+        hashmap.put(EntityTypes.PIGLIN, SoundEffects.ENTITY_PARROT_IMITATE_PIGLIN);
         hashmap.put(EntityTypes.PILLAGER, SoundEffects.ENTITY_PARROT_IMITATE_PILLAGER);
         hashmap.put(EntityTypes.RAVAGER, SoundEffects.ENTITY_PARROT_IMITATE_RAVAGER);
         hashmap.put(EntityTypes.SHULKER, SoundEffects.ENTITY_PARROT_IMITATE_SHULKER);
@@ -49,16 +50,17 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         hashmap.put(EntityTypes.WITCH, SoundEffects.ENTITY_PARROT_IMITATE_WITCH);
         hashmap.put(EntityTypes.WITHER, SoundEffects.ENTITY_PARROT_IMITATE_WITHER);
         hashmap.put(EntityTypes.WITHER_SKELETON, SoundEffects.ENTITY_PARROT_IMITATE_WITHER_SKELETON);
+        hashmap.put(EntityTypes.ZOGLIN, SoundEffects.ENTITY_PARROT_IMITATE_ZOGLIN);
         hashmap.put(EntityTypes.ZOMBIE, SoundEffects.ENTITY_PARROT_IMITATE_ZOMBIE);
         hashmap.put(EntityTypes.ZOMBIE_VILLAGER, SoundEffects.ENTITY_PARROT_IMITATE_ZOMBIE_VILLAGER);
     });
+    public float bx;
+    public float by;
     public float bz;
     public float bA;
-    public float bB;
-    public float bC;
-    private float bI = 1.0F;
-    private boolean bJ;
-    private BlockPosition bK;
+    private float bG = 1.0F;
+    private boolean bH;
+    private BlockPosition bI;
 
     public EntityParrot(EntityTypes<? extends EntityParrot> entitytypes, World world) {
         super(entitytypes, world);
@@ -81,25 +83,24 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
     }
 
     @Override
+    public boolean isBaby() {
+        return false;
+    }
+
+    @Override
     protected void initPathfinder() {
-        this.goalSit = new PathfinderGoalSit(this);
         this.goalSelector.a(0, new PathfinderGoalPanic(this, 1.25D));
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
-        this.goalSelector.a(2, this.goalSit);
+        this.goalSelector.a(2, new PathfinderGoalSit(this));
         this.goalSelector.a(2, new PathfinderGoalFollowOwner(this, 1.0D, 5.0F, 1.0F, true));
         this.goalSelector.a(2, new PathfinderGoalRandomFly(this, 1.0D));
         this.goalSelector.a(3, new PathfinderGoalPerch(this));
         this.goalSelector.a(3, new PathfinderGoalFollowEntity(this, 1.0D, 3.0F, 7.0F));
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeMap().b(GenericAttributes.FLYING_SPEED);
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(6.0D);
-        this.getAttributeInstance(GenericAttributes.FLYING_SPEED).setValue(0.4000000059604645D);
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
+    public static AttributeProvider.Builder eV() {
+        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 6.0D).a(GenericAttributes.FLYING_SPEED, 0.4000000059604645D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
     @Override
@@ -119,46 +120,49 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
 
     @Override
     public void movementTick() {
-        b(this.world, (Entity) this);
-        if (this.bK == null || !this.bK.a((IPosition) this.getPositionVector(), 3.46D) || this.world.getType(this.bK).getBlock() != Blocks.JUKEBOX) {
-            this.bJ = false;
-            this.bK = null;
+        if (this.bI == null || !this.bI.a((IPosition) this.getPositionVector(), 3.46D) || !this.world.getType(this.bI).a(Blocks.JUKEBOX)) {
+            this.bH = false;
+            this.bI = null;
+        }
+
+        if (this.world.random.nextInt(400) == 0) {
+            a(this.world, (Entity) this);
         }
 
         super.movementTick();
-        this.eD();
+        this.fa();
     }
 
-    private void eD() {
-        this.bC = this.bz;
-        this.bB = this.bA;
-        this.bA = (float) ((double) this.bA + (double) (!this.onGround && !this.isPassenger() ? 4 : -1) * 0.3D);
-        this.bA = MathHelper.a(this.bA, 0.0F, 1.0F);
-        if (!this.onGround && this.bI < 1.0F) {
-            this.bI = 1.0F;
+    private void fa() {
+        this.bA = this.bx;
+        this.bz = this.by;
+        this.by = (float) ((double) this.by + (double) (!this.onGround && !this.isPassenger() ? 4 : -1) * 0.3D);
+        this.by = MathHelper.a(this.by, 0.0F, 1.0F);
+        if (!this.onGround && this.bG < 1.0F) {
+            this.bG = 1.0F;
         }
 
-        this.bI = (float) ((double) this.bI * 0.9D);
+        this.bG = (float) ((double) this.bG * 0.9D);
         Vec3D vec3d = this.getMot();
 
         if (!this.onGround && vec3d.y < 0.0D) {
             this.setMot(vec3d.d(1.0D, 0.6D, 1.0D));
         }
 
-        this.bz += this.bI * 2.0F;
+        this.bx += this.bG * 2.0F;
     }
 
-    private static boolean b(World world, Entity entity) {
-        if (entity.isAlive() && !entity.isSilent() && world.random.nextInt(50) == 0) {
-            List<EntityInsentient> list = world.a(EntityInsentient.class, entity.getBoundingBox().g(20.0D), EntityParrot.bE);
+    public static boolean a(World world, Entity entity) {
+        if (entity.isAlive() && !entity.isSilent() && world.random.nextInt(2) == 0) {
+            List<EntityInsentient> list = world.a(EntityInsentient.class, entity.getBoundingBox().g(20.0D), EntityParrot.bC);
 
             if (!list.isEmpty()) {
                 EntityInsentient entityinsentient = (EntityInsentient) list.get(world.random.nextInt(list.size()));
 
                 if (!entityinsentient.isSilent()) {
-                    SoundEffect soundeffect = b(entityinsentient.getEntityType());
+                    SoundEffect soundeffect = c(entityinsentient.getEntityType());
 
-                    world.playSound((EntityHuman) null, entity.locX(), entity.locY(), entity.locZ(), soundeffect, entity.getSoundCategory(), 0.7F, b(world.random));
+                    world.playSound((EntityHuman) null, entity.locX(), entity.locY(), entity.locZ(), soundeffect, entity.getSoundCategory(), 0.7F, a(world.random));
                     return true;
                 }
             }
@@ -170,12 +174,10 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
     }
 
     @Override
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+    public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getItem() instanceof ItemMonsterEgg) {
-            return super.a(entityhuman, enumhand);
-        } else if (!this.isTamed() && EntityParrot.bG.contains(itemstack.getItem())) {
+        if (!this.isTamed() && EntityParrot.bE.contains(itemstack.getItem())) {
             if (!entityhuman.abilities.canInstantlyBuild) {
                 itemstack.subtract(1);
             }
@@ -193,8 +195,8 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
                 }
             }
 
-            return true;
-        } else if (itemstack.getItem() == EntityParrot.bF) {
+            return EnumInteractionResult.a(this.world.isClientSide);
+        } else if (itemstack.getItem() == EntityParrot.bD) {
             if (!entityhuman.abilities.canInstantlyBuild) {
                 itemstack.subtract(1);
             }
@@ -204,27 +206,27 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
                 this.damageEntity(DamageSource.playerAttack(entityhuman), Float.MAX_VALUE);
             }
 
-            return true;
-        } else if (!this.eF() && this.isTamed() && this.i((EntityLiving) entityhuman)) {
+            return EnumInteractionResult.a(this.world.isClientSide);
+        } else if (!this.fb() && this.isTamed() && this.j((EntityLiving) entityhuman)) {
             if (!this.world.isClientSide) {
-                this.goalSit.setSitting(!this.isSitting());
+                this.setWillSit(!this.isWillSit());
             }
 
-            return true;
+            return EnumInteractionResult.a(this.world.isClientSide);
         } else {
-            return super.a(entityhuman, enumhand);
+            return super.b(entityhuman, enumhand);
         }
     }
 
     @Override
-    public boolean i(ItemStack itemstack) {
+    public boolean k(ItemStack itemstack) {
         return false;
     }
 
     public static boolean c(EntityTypes<EntityParrot> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
-        Block block = generatoraccess.getType(blockposition.down()).getBlock();
+        IBlockData iblockdata = generatoraccess.getType(blockposition.down());
 
-        return (block.a(TagsBlock.LEAVES) || block == Blocks.GRASS_BLOCK || block instanceof BlockLogAbstract || block == Blocks.AIR) && generatoraccess.getLightLevel(blockposition, 0) > 8;
+        return (iblockdata.a((Tag) TagsBlock.LEAVES) || iblockdata.a(Blocks.GRASS_BLOCK) || iblockdata.a((Tag) TagsBlock.LOGS) || iblockdata.a(Blocks.AIR)) && generatoraccess.getLightLevel(blockposition, 0) > 8;
     }
 
     @Override
@@ -246,36 +248,29 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         return null;
     }
 
-    public static void a(World world, Entity entity) {
-        if (!entity.isSilent() && !b(world, entity) && world.random.nextInt(200) == 0) {
-            world.playSound((EntityHuman) null, entity.locX(), entity.locY(), entity.locZ(), a(world.random), entity.getSoundCategory(), 1.0F, b(world.random));
-        }
-
-    }
-
     @Override
-    public boolean B(Entity entity) {
+    public boolean attackEntity(Entity entity) {
         return entity.damageEntity(DamageSource.mobAttack(this), 3.0F);
     }
 
     @Nullable
     @Override
     public SoundEffect getSoundAmbient() {
-        return a(this.random);
+        return a(this.world, this.world.random);
     }
 
-    private static SoundEffect a(Random random) {
-        if (random.nextInt(1000) == 0) {
-            List<EntityTypes<?>> list = Lists.newArrayList(EntityParrot.bH.keySet());
+    public static SoundEffect a(World world, Random random) {
+        if (world.getDifficulty() != EnumDifficulty.PEACEFUL && random.nextInt(1000) == 0) {
+            List<EntityTypes<?>> list = Lists.newArrayList(EntityParrot.bF.keySet());
 
-            return b((EntityTypes) list.get(random.nextInt(list.size())));
+            return c((EntityTypes) list.get(random.nextInt(list.size())));
         } else {
             return SoundEffects.ENTITY_PARROT_AMBIENT;
         }
     }
 
-    private static SoundEffect b(EntityTypes<?> entitytypes) {
-        return (SoundEffect) EntityParrot.bH.getOrDefault(entitytypes, SoundEffects.ENTITY_PARROT_AMBIENT);
+    private static SoundEffect c(EntityTypes<?> entitytypes) {
+        return (SoundEffect) EntityParrot.bF.getOrDefault(entitytypes, SoundEffects.ENTITY_PARROT_AMBIENT);
     }
 
     @Override
@@ -290,26 +285,26 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
 
     @Override
     protected void a(BlockPosition blockposition, IBlockData iblockdata) {
-        this.a(SoundEffects.ENTITY_PARROT_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEffects.ENTITY_PARROT_STEP, 0.15F, 1.0F);
     }
 
     @Override
     protected float e(float f) {
-        this.a(SoundEffects.ENTITY_PARROT_FLY, 0.15F, 1.0F);
-        return f + this.bA / 2.0F;
+        this.playSound(SoundEffects.ENTITY_PARROT_FLY, 0.15F, 1.0F);
+        return f + this.by / 2.0F;
     }
 
     @Override
-    protected boolean aq() {
+    protected boolean au() {
         return true;
     }
 
     @Override
-    protected float dn() {
-        return b(this.random);
+    protected float dG() {
+        return a(this.random);
     }
 
-    private static float b(Random random) {
+    public static float a(Random random) {
         return (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F;
     }
 
@@ -335,41 +330,38 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            if (this.goalSit != null) {
-                this.goalSit.setSitting(false);
-            }
-
+            this.setWillSit(false);
             return super.damageEntity(damagesource, f);
         }
     }
 
     public int getVariant() {
-        return MathHelper.clamp((Integer) this.datawatcher.get(EntityParrot.bD), 0, 4);
+        return MathHelper.clamp((Integer) this.datawatcher.get(EntityParrot.bB), 0, 4);
     }
 
     public void setVariant(int i) {
-        this.datawatcher.set(EntityParrot.bD, i);
+        this.datawatcher.set(EntityParrot.bB, i);
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityParrot.bD, 0);
+        this.datawatcher.register(EntityParrot.bB, 0);
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setInt("Variant", this.getVariant());
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.setVariant(nbttagcompound.getInt("Variant"));
     }
 
-    public boolean eF() {
+    public boolean fb() {
         return !this.onGround;
     }
 }

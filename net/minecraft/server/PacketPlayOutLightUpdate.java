@@ -15,12 +15,14 @@ public class PacketPlayOutLightUpdate implements Packet<PacketListenerPlayOut> {
     private int f;
     private List<byte[]> g;
     private List<byte[]> h;
+    private boolean i;
 
     public PacketPlayOutLightUpdate() {}
 
-    public PacketPlayOutLightUpdate(ChunkCoordIntPair chunkcoordintpair, LightEngine lightengine) {
+    public PacketPlayOutLightUpdate(ChunkCoordIntPair chunkcoordintpair, LightEngine lightengine, boolean flag) {
         this.a = chunkcoordintpair.x;
         this.b = chunkcoordintpair.z;
+        this.i = flag;
         this.g = Lists.newArrayList();
         this.h = Lists.newArrayList();
 
@@ -49,9 +51,10 @@ public class PacketPlayOutLightUpdate implements Packet<PacketListenerPlayOut> {
 
     }
 
-    public PacketPlayOutLightUpdate(ChunkCoordIntPair chunkcoordintpair, LightEngine lightengine, int i, int j) {
+    public PacketPlayOutLightUpdate(ChunkCoordIntPair chunkcoordintpair, LightEngine lightengine, int i, int j, boolean flag) {
         this.a = chunkcoordintpair.x;
         this.b = chunkcoordintpair.z;
+        this.i = flag;
         this.c = i;
         this.d = j;
         this.g = Lists.newArrayList();
@@ -91,6 +94,7 @@ public class PacketPlayOutLightUpdate implements Packet<PacketListenerPlayOut> {
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.i();
         this.b = packetdataserializer.i();
+        this.i = packetdataserializer.readBoolean();
         this.c = packetdataserializer.i();
         this.d = packetdataserializer.i();
         this.e = packetdataserializer.i();
@@ -119,6 +123,7 @@ public class PacketPlayOutLightUpdate implements Packet<PacketListenerPlayOut> {
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.d(this.b);
+        packetdataserializer.writeBoolean(this.i);
         packetdataserializer.d(this.c);
         packetdataserializer.d(this.d);
         packetdataserializer.d(this.e);

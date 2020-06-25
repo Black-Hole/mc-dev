@@ -18,10 +18,10 @@ public class PathfinderGoalMoveTowardsRestriction extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        if (this.a.ec()) {
+        if (this.a.ew()) {
             return false;
         } else {
-            Vec3D vec3d = RandomPositionGenerator.a(this.a, 16, 7, new Vec3D(this.a.ed()));
+            Vec3D vec3d = RandomPositionGenerator.b(this.a, 16, 7, Vec3D.c((BaseBlockPosition) this.a.ex()));
 
             if (vec3d == null) {
                 return false;

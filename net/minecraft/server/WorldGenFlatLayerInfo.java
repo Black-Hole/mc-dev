@@ -1,33 +1,41 @@
 package net.minecraft.server;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 public class WorldGenFlatLayerInfo {
 
-    private final IBlockData a;
-    private final int b;
-    private int c;
+    public static final Codec<WorldGenFlatLayerInfo> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(Codecs.a(0, 256).fieldOf("height").forGetter(WorldGenFlatLayerInfo::a), IRegistry.BLOCK.fieldOf("block").withDefault(Blocks.AIR).forGetter((worldgenflatlayerinfo) -> {
+            return worldgenflatlayerinfo.b().getBlock();
+        })).apply(instance, WorldGenFlatLayerInfo::new);
+    });
+    private final IBlockData b;
+    private final int c;
+    private int d;
 
     public WorldGenFlatLayerInfo(int i, Block block) {
-        this.b = i;
-        this.a = block.getBlockData();
+        this.c = i;
+        this.b = block.getBlockData();
     }
 
     public int a() {
-        return this.b;
-    }
-
-    public IBlockData b() {
-        return this.a;
-    }
-
-    public int c() {
         return this.c;
     }
 
+    public IBlockData b() {
+        return this.b;
+    }
+
+    public int c() {
+        return this.d;
+    }
+
     public void a(int i) {
-        this.c = i;
+        this.d = i;
     }
 
     public String toString() {
-        return (this.b != 1 ? this.b + "*" : "") + IRegistry.BLOCK.getKey(this.a.getBlock());
+        return (this.c != 1 ? this.c + "*" : "") + IRegistry.BLOCK.getKey(this.b.getBlock());
     }
 }

@@ -13,7 +13,7 @@ public class PacketPlayOutWindowItems implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutWindowItems(int i, NonNullList<ItemStack> nonnulllist) {
         this.a = i;
-        this.b = NonNullList.a(nonnulllist.size(), ItemStack.a);
+        this.b = NonNullList.a(nonnulllist.size(), ItemStack.b);
 
         for (int j = 0; j < this.b.size(); ++j) {
             this.b.set(j, ((ItemStack) nonnulllist.get(j)).cloneItemStack());
@@ -26,7 +26,7 @@ public class PacketPlayOutWindowItems implements Packet<PacketListenerPlayOut> {
         this.a = packetdataserializer.readUnsignedByte();
         short short0 = packetdataserializer.readShort();
 
-        this.b = NonNullList.a(short0, ItemStack.a);
+        this.b = NonNullList.a(short0, ItemStack.b);
 
         for (int i = 0; i < short0; ++i) {
             this.b.set(i, packetdataserializer.m());

@@ -8,12 +8,13 @@ public class EntityHorseZombie extends EntityHorseAbstract {
         super(entitytypes, world);
     }
 
+    public static AttributeProvider.Builder eM() {
+        return fj().a(GenericAttributes.MAX_HEALTH, 15.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
+    }
+
     @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(15.0D);
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
-        this.getAttributeInstance(EntityHorseZombie.attributeJumpStrength).setValue(this.eT());
+    protected void eL() {
+        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.fr());
     }
 
     @Override
@@ -46,37 +47,37 @@ public class EntityHorseZombie extends EntityHorseAbstract {
     }
 
     @Override
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+    public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getItem() instanceof ItemMonsterEgg) {
-            return super.a(entityhuman, enumhand);
-        } else if (!this.isTamed()) {
-            return false;
+        if (!this.isTamed()) {
+            return EnumInteractionResult.PASS;
         } else if (this.isBaby()) {
-            return super.a(entityhuman, enumhand);
-        } else if (entityhuman.dT()) {
-            this.e(entityhuman);
-            return true;
+            return super.b(entityhuman, enumhand);
+        } else if (entityhuman.ep()) {
+            this.f(entityhuman);
+            return EnumInteractionResult.a(this.world.isClientSide);
         } else if (this.isVehicle()) {
-            return super.a(entityhuman, enumhand);
+            return super.b(entityhuman, enumhand);
         } else {
             if (!itemstack.isEmpty()) {
-                if (!this.eL() && itemstack.getItem() == Items.SADDLE) {
-                    this.e(entityhuman);
-                    return true;
+                if (itemstack.getItem() == Items.SADDLE && !this.hasSaddle()) {
+                    this.f(entityhuman);
+                    return EnumInteractionResult.a(this.world.isClientSide);
                 }
 
-                if (itemstack.a(entityhuman, (EntityLiving) this, enumhand)) {
-                    return true;
+                EnumInteractionResult enuminteractionresult = itemstack.a(entityhuman, (EntityLiving) this, enumhand);
+
+                if (enuminteractionresult.a()) {
+                    return enuminteractionresult;
                 }
             }
 
-            this.g(entityhuman);
-            return true;
+            this.h(entityhuman);
+            return EnumInteractionResult.a(this.world.isClientSide);
         }
     }
 
     @Override
-    protected void ez() {}
+    protected void eW() {}
 }

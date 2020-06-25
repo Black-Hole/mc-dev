@@ -1,29 +1,27 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Random;
 
 public class WorldGenFeatureRandomChoiceConfigurationWeight<FC extends WorldGenFeatureConfiguration> {
 
-    public final WorldGenFeatureConfigured<FC, ?> a;
-    public final float b;
+    public static final Codec<WorldGenFeatureRandomChoiceConfigurationWeight<?>> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(WorldGenFeatureConfigured.b.fieldOf("feature").forGetter((worldgenfeaturerandomchoiceconfigurationweight) -> {
+            return worldgenfeaturerandomchoiceconfigurationweight.b;
+        }), Codec.FLOAT.fieldOf("chance").forGetter((worldgenfeaturerandomchoiceconfigurationweight) -> {
+            return worldgenfeaturerandomchoiceconfigurationweight.c;
+        })).apply(instance, WorldGenFeatureRandomChoiceConfigurationWeight::new);
+    });
+    public final WorldGenFeatureConfigured<FC, ?> b;
+    public final float c;
 
     public WorldGenFeatureRandomChoiceConfigurationWeight(WorldGenFeatureConfigured<FC, ?> worldgenfeatureconfigured, float f) {
-        this.a = worldgenfeatureconfigured;
-        this.b = f;
+        this.b = worldgenfeatureconfigured;
+        this.c = f;
     }
 
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("name"), dynamicops.createString(IRegistry.FEATURE.getKey(this.a.b).toString()), dynamicops.createString("config"), this.a.c.a(dynamicops).getValue(), dynamicops.createString("chance"), dynamicops.createFloat(this.b))));
-    }
-
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition) {
-        return this.a.a(generatoraccess, chunkgenerator, random, blockposition);
-    }
-
-    public static <T> WorldGenFeatureRandomChoiceConfigurationWeight<?> a(Dynamic<T> dynamic) {
-        return WorldGenFeatureConfigured.a(dynamic).a(dynamic.get("chance").asFloat(0.0F));
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition) {
+        return this.b.a(generatoraccessseed, structuremanager, chunkgenerator, random, blockposition);
     }
 }

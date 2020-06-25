@@ -7,12 +7,12 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
 
     protected static final VoxelShape a = Block.a(5.0D, 0.0D, 5.0D, 11.0D, 6.0D, 11.0D);
 
-    public BlockMushroom(Block.Info block_info) {
-        super(block_info);
+    public BlockMushroom(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockMushroom.a;
     }
 
@@ -26,7 +26,7 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
             while (iterator.hasNext()) {
                 BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
-                if (worldserver.getType(blockposition1).getBlock() == this) {
+                if (worldserver.getType(blockposition1).a((Block) this)) {
                     --i;
                     if (i <= 0) {
                         return;
@@ -52,17 +52,16 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
     }
 
     @Override
-    protected boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.g(iblockaccess, blockposition);
+    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockdata.i(iblockaccess, blockposition);
     }
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.down();
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
-        Block block = iblockdata1.getBlock();
 
-        return block != Blocks.MYCELIUM && block != Blocks.PODZOL ? iworldreader.getLightLevel(blockposition, 0) < 13 && this.a_(iblockdata1, iworldreader, blockposition1) : true;
+        return !iblockdata1.a(Blocks.MYCELIUM) && !iblockdata1.a(Blocks.PODZOL) ? iworldreader.getLightLevel(blockposition, 0) < 13 && this.c(iblockdata1, (IBlockAccess) iworldreader, blockposition1) : true;
     }
 
     public boolean a(WorldServer worldserver, BlockPosition blockposition, IBlockData iblockdata, Random random) {
@@ -80,7 +79,7 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
             worldgenfeatureconfigured = WorldGenerator.HUGE_RED_MUSHROOM.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.HUGE_RED_MUSHROOM);
         }
 
-        if (worldgenfeatureconfigured.a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), random, blockposition)) {
+        if (worldgenfeatureconfigured.a(worldserver, worldserver.getStructureManager(), worldserver.getChunkProvider().getChunkGenerator(), random, blockposition)) {
             return true;
         } else {
             worldserver.setTypeAndData(blockposition, iblockdata, 3);
@@ -101,10 +100,5 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
     @Override
     public void a(WorldServer worldserver, Random random, BlockPosition blockposition, IBlockData iblockdata) {
         this.a(worldserver, blockposition, iblockdata, random);
-    }
-
-    @Override
-    public boolean h(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return true;
     }
 }

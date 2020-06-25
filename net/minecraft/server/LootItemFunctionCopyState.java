@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import java.util.Set;
@@ -13,12 +12,17 @@ import java.util.stream.Stream;
 public class LootItemFunctionCopyState extends LootItemFunctionConditional {
 
     private final Block a;
-    private final Set<IBlockState<?>> c;
+    private final Set<IBlockState<?>> b;
 
     private LootItemFunctionCopyState(LootItemCondition[] alootitemcondition, Block block, Set<IBlockState<?>> set) {
         super(alootitemcondition);
         this.a = block;
-        this.c = set;
+        this.b = set;
+    }
+
+    @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.v;
     }
 
     @Override
@@ -41,11 +45,11 @@ public class LootItemFunctionCopyState extends LootItemFunctionConditional {
                 nbttagcompound.set("BlockStateTag", nbttagcompound1);
             }
 
-            Stream stream = this.c.stream();
+            Stream stream = this.b.stream();
 
             iblockdata.getClass();
             stream.filter(iblockdata::b).forEach((iblockstate) -> {
-                nbttagcompound1.setString(iblockstate.a(), a(iblockdata, iblockstate));
+                nbttagcompound1.setString(iblockstate.getName(), a(iblockdata, iblockstate));
             });
         }
 
@@ -64,17 +68,15 @@ public class LootItemFunctionCopyState extends LootItemFunctionConditional {
 
     public static class b extends LootItemFunctionConditional.c<LootItemFunctionCopyState> {
 
-        public b() {
-            super(new MinecraftKey("copy_state"), LootItemFunctionCopyState.class);
-        }
+        public b() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionCopyState lootitemfunctioncopystate, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctioncopystate, jsonserializationcontext);
             jsonobject.addProperty("block", IRegistry.BLOCK.getKey(lootitemfunctioncopystate.a).toString());
             JsonArray jsonarray = new JsonArray();
 
-            lootitemfunctioncopystate.c.forEach((iblockstate) -> {
-                jsonarray.add(iblockstate.a());
+            lootitemfunctioncopystate.b.forEach((iblockstate) -> {
+                jsonarray.add(iblockstate.getName());
             });
             jsonobject.add("properties", jsonarray);
         }

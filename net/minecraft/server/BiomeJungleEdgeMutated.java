@@ -3,24 +3,23 @@ package net.minecraft.server;
 public final class BiomeJungleEdgeMutated extends BiomeBase {
 
     public BiomeJungleEdgeMutated() {
-        super((new BiomeBase.a()).a(WorldGenSurface.G, WorldGenSurface.v).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.JUNGLE).a(0.2F).b(0.4F).c(0.95F).d(0.8F).a(4159204).b(329011).a("jungle_edge"));
-        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
-        this.a(WorldGenerator.STRONGHOLD.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
-        BiomeDecoratorGroups.a(this);
-        BiomeDecoratorGroups.c(this);
+        super((new BiomeBase.a()).a(WorldGenSurface.S, WorldGenSurface.D).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.JUNGLE).a(0.2F).b(0.4F).c(0.95F).d(0.8F).a((new BiomeFog.a()).b(4159204).c(329011).a(12638463).a(CaveSoundSettings.b).a()).a("jungle_edge"));
+        BiomeDecoratorGroups.b(this);
+        this.a(BiomeDecoratorGroups.A);
         BiomeDecoratorGroups.d(this);
         BiomeDecoratorGroups.f(this);
-        BiomeDecoratorGroups.g(this);
         BiomeDecoratorGroups.h(this);
-        BiomeDecoratorGroups.l(this);
-        BiomeDecoratorGroups.D(this);
-        BiomeDecoratorGroups.V(this);
-        BiomeDecoratorGroups.I(this);
-        BiomeDecoratorGroups.Z(this);
-        BiomeDecoratorGroups.aa(this);
-        BiomeDecoratorGroups.am(this);
+        BiomeDecoratorGroups.i(this);
+        BiomeDecoratorGroups.j(this);
+        BiomeDecoratorGroups.n(this);
+        BiomeDecoratorGroups.F(this);
+        BiomeDecoratorGroups.X(this);
+        BiomeDecoratorGroups.K(this);
+        BiomeDecoratorGroups.ab(this);
         BiomeDecoratorGroups.ac(this);
-        BiomeDecoratorGroups.ap(this);
+        BiomeDecoratorGroups.ao(this);
+        BiomeDecoratorGroups.ae(this);
+        BiomeDecoratorGroups.ar(this);
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SHEEP, 12, 4, 4));
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.PIG, 10, 4, 4));
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.CHICKEN, 10, 4, 4));

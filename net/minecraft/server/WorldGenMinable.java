@@ -1,20 +1,19 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.BitSet;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenMinable extends WorldGenerator<WorldGenFeatureOreConfiguration> {
 
-    public WorldGenMinable(Function<Dynamic<?>, ? extends WorldGenFeatureOreConfiguration> function) {
-        super(function);
+    public WorldGenMinable(Codec<WorldGenFeatureOreConfiguration> codec) {
+        super(codec);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureOreConfiguration worldgenfeatureoreconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureOreConfiguration worldgenfeatureoreconfiguration) {
         float f = random.nextFloat() * 3.1415927F;
-        float f1 = (float) worldgenfeatureoreconfiguration.b / 8.0F;
-        int i = MathHelper.f(((float) worldgenfeatureoreconfiguration.b / 16.0F * 2.0F + 1.0F) / 2.0F);
+        float f1 = (float) worldgenfeatureoreconfiguration.c / 8.0F;
+        int i = MathHelper.f(((float) worldgenfeatureoreconfiguration.c / 16.0F * 2.0F + 1.0F) / 2.0F);
         double d0 = (double) ((float) blockposition.getX() + MathHelper.sin(f) * f1);
         double d1 = (double) ((float) blockposition.getX() - MathHelper.sin(f) * f1);
         double d2 = (double) ((float) blockposition.getZ() + MathHelper.cos(f) * f1);
@@ -30,8 +29,8 @@ public class WorldGenMinable extends WorldGenerator<WorldGenFeatureOreConfigurat
 
         for (int k1 = j; k1 <= j + i1; ++k1) {
             for (int l1 = l; l1 <= l + i1; ++l1) {
-                if (k <= generatoraccess.a(HeightMap.Type.OCEAN_FLOOR_WG, k1, l1)) {
-                    return this.a(generatoraccess, random, worldgenfeatureoreconfiguration, d0, d1, d2, d3, d4, d5, j, k, l, i1, j1);
+                if (k <= generatoraccessseed.a(HeightMap.Type.OCEAN_FLOOR_WG, k1, l1)) {
+                    return this.a(generatoraccessseed, random, worldgenfeatureoreconfiguration, d0, d1, d2, d3, d4, d5, j, k, l, i1, j1);
                 }
             }
         }
@@ -43,7 +42,7 @@ public class WorldGenMinable extends WorldGenerator<WorldGenFeatureOreConfigurat
         int j1 = 0;
         BitSet bitset = new BitSet(l * i1 * l);
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-        double[] adouble = new double[worldgenfeatureoreconfiguration.b * 4];
+        double[] adouble = new double[worldgenfeatureoreconfiguration.c * 4];
 
         int k1;
         double d6;
@@ -51,13 +50,13 @@ public class WorldGenMinable extends WorldGenerator<WorldGenFeatureOreConfigurat
         double d8;
         double d9;
 
-        for (k1 = 0; k1 < worldgenfeatureoreconfiguration.b; ++k1) {
-            float f = (float) k1 / (float) worldgenfeatureoreconfiguration.b;
+        for (k1 = 0; k1 < worldgenfeatureoreconfiguration.c; ++k1) {
+            float f = (float) k1 / (float) worldgenfeatureoreconfiguration.c;
 
             d6 = MathHelper.d((double) f, d0, d1);
             d7 = MathHelper.d((double) f, d4, d5);
             d8 = MathHelper.d((double) f, d2, d3);
-            d9 = random.nextDouble() * (double) worldgenfeatureoreconfiguration.b / 16.0D;
+            d9 = random.nextDouble() * (double) worldgenfeatureoreconfiguration.c / 16.0D;
             double d10 = ((double) (MathHelper.sin(3.1415927F * f) + 1.0F) * d9 + 1.0D) / 2.0D;
 
             adouble[k1 * 4 + 0] = d6;
@@ -66,9 +65,9 @@ public class WorldGenMinable extends WorldGenerator<WorldGenFeatureOreConfigurat
             adouble[k1 * 4 + 3] = d10;
         }
 
-        for (k1 = 0; k1 < worldgenfeatureoreconfiguration.b - 1; ++k1) {
+        for (k1 = 0; k1 < worldgenfeatureoreconfiguration.c - 1; ++k1) {
             if (adouble[k1 * 4 + 3] > 0.0D) {
-                for (int l1 = k1 + 1; l1 < worldgenfeatureoreconfiguration.b; ++l1) {
+                for (int l1 = k1 + 1; l1 < worldgenfeatureoreconfiguration.c; ++l1) {
                     if (adouble[l1 * 4 + 3] > 0.0D) {
                         d6 = adouble[k1 * 4 + 0] - adouble[l1 * 4 + 0];
                         d7 = adouble[k1 * 4 + 1] - adouble[l1 * 4 + 1];
@@ -86,7 +85,7 @@ public class WorldGenMinable extends WorldGenerator<WorldGenFeatureOreConfigurat
             }
         }
 
-        for (k1 = 0; k1 < worldgenfeatureoreconfiguration.b; ++k1) {
+        for (k1 = 0; k1 < worldgenfeatureoreconfiguration.c; ++k1) {
             double d11 = adouble[k1 * 4 + 3];
 
             if (d11 >= 0.0D) {
@@ -117,8 +116,8 @@ public class WorldGenMinable extends WorldGenerator<WorldGenFeatureOreConfigurat
                                         if (!bitset.get(j4)) {
                                             bitset.set(j4);
                                             blockposition_mutableblockposition.d(k3, l3, i4);
-                                            if (worldgenfeatureoreconfiguration.a.b().test(generatoraccess.getType(blockposition_mutableblockposition))) {
-                                                generatoraccess.setTypeAndData(blockposition_mutableblockposition, worldgenfeatureoreconfiguration.c, 2);
+                                            if (worldgenfeatureoreconfiguration.b.c().test(generatoraccess.getType(blockposition_mutableblockposition))) {
+                                                generatoraccess.setTypeAndData(blockposition_mutableblockposition, worldgenfeatureoreconfiguration.d, 2);
                                                 ++j1;
                                             }
                                         }

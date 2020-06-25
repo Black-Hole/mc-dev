@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import javax.annotation.Nullable;
 
 public class ItemMonsterEgg extends Item {
@@ -32,20 +33,19 @@ public class ItemMonsterEgg extends Item {
             BlockPosition blockposition = itemactioncontext.getClickPosition();
             EnumDirection enumdirection = itemactioncontext.getClickedFace();
             IBlockData iblockdata = world.getType(blockposition);
-            Block block = iblockdata.getBlock();
 
-            if (block == Blocks.SPAWNER) {
+            if (iblockdata.a(Blocks.SPAWNER)) {
                 TileEntity tileentity = world.getTileEntity(blockposition);
 
                 if (tileentity instanceof TileEntityMobSpawner) {
                     MobSpawnerAbstract mobspawnerabstract = ((TileEntityMobSpawner) tileentity).getSpawner();
-                    EntityTypes<?> entitytypes = this.b(itemstack.getTag());
+                    EntityTypes<?> entitytypes = this.a(itemstack.getTag());
 
                     mobspawnerabstract.setMobName(entitytypes);
                     tileentity.update();
                     world.notify(blockposition, iblockdata, iblockdata, 3);
                     itemstack.subtract(1);
-                    return EnumInteractionResult.SUCCESS;
+                    return EnumInteractionResult.CONSUME;
                 }
             }
 
@@ -57,33 +57,33 @@ public class ItemMonsterEgg extends Item {
                 blockposition1 = blockposition.shift(enumdirection);
             }
 
-            EntityTypes<?> entitytypes1 = this.b(itemstack.getTag());
+            EntityTypes<?> entitytypes1 = this.a(itemstack.getTag());
 
             if (entitytypes1.spawnCreature(world, itemstack, itemactioncontext.getEntity(), blockposition1, EnumMobSpawn.SPAWN_EGG, true, !Objects.equals(blockposition, blockposition1) && enumdirection == EnumDirection.UP) != null) {
                 itemstack.subtract(1);
             }
 
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.CONSUME;
         }
     }
 
     @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.SOURCE_ONLY);
+        MovingObjectPositionBlock movingobjectpositionblock = a(world, entityhuman, RayTrace.FluidCollisionOption.SOURCE_ONLY);
 
-        if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.BLOCK) {
+        if (movingobjectpositionblock.getType() != MovingObjectPosition.EnumMovingObjectType.BLOCK) {
             return InteractionResultWrapper.pass(itemstack);
         } else if (world.isClientSide) {
             return InteractionResultWrapper.success(itemstack);
         } else {
-            MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;
-            BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
+            MovingObjectPositionBlock movingobjectpositionblock1 = (MovingObjectPositionBlock) movingobjectpositionblock;
+            BlockPosition blockposition = movingobjectpositionblock1.getBlockPosition();
 
             if (!(world.getType(blockposition).getBlock() instanceof BlockFluids)) {
                 return InteractionResultWrapper.pass(itemstack);
-            } else if (world.a(entityhuman, blockposition) && entityhuman.a(blockposition, movingobjectpositionblock.getDirection(), itemstack)) {
-                EntityTypes<?> entitytypes = this.b(itemstack.getTag());
+            } else if (world.a(entityhuman, blockposition) && entityhuman.a(blockposition, movingobjectpositionblock1.getDirection(), itemstack)) {
+                EntityTypes<?> entitytypes = this.a(itemstack.getTag());
 
                 if (entitytypes.spawnCreature(world, itemstack, entityhuman, blockposition, EnumMobSpawn.SPAWN_EGG, false, false) == null) {
                     return InteractionResultWrapper.pass(itemstack);
@@ -93,7 +93,7 @@ public class ItemMonsterEgg extends Item {
                     }
 
                     entityhuman.b(StatisticList.ITEM_USED.b(this));
-                    return InteractionResultWrapper.success(itemstack);
+                    return InteractionResultWrapper.consume(itemstack);
                 }
             } else {
                 return InteractionResultWrapper.fail(itemstack);
@@ -102,14 +102,14 @@ public class ItemMonsterEgg extends Item {
     }
 
     public boolean a(@Nullable NBTTagCompound nbttagcompound, EntityTypes<?> entitytypes) {
-        return Objects.equals(this.b(nbttagcompound), entitytypes);
+        return Objects.equals(this.a(nbttagcompound), entitytypes);
     }
 
     public static Iterable<ItemMonsterEgg> f() {
         return Iterables.unmodifiableIterable(ItemMonsterEgg.a.values());
     }
 
-    public EntityTypes<?> b(@Nullable NBTTagCompound nbttagcompound) {
+    public EntityTypes<?> a(@Nullable NBTTagCompound nbttagcompound) {
         if (nbttagcompound != null && nbttagcompound.hasKeyOfType("EntityTag", 10)) {
             NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("EntityTag");
 
@@ -119,5 +119,40 @@ public class ItemMonsterEgg extends Item {
         }
 
         return this.d;
+    }
+
+    public Optional<EntityInsentient> a(EntityHuman entityhuman, EntityInsentient entityinsentient, EntityTypes<? extends EntityInsentient> entitytypes, World world, Vec3D vec3d, ItemStack itemstack) {
+        if (!this.a(itemstack.getTag(), entitytypes)) {
+            return Optional.empty();
+        } else {
+            Object object;
+
+            if (entityinsentient instanceof EntityAgeable) {
+                object = ((EntityAgeable) entityinsentient).createChild((EntityAgeable) entityinsentient);
+            } else {
+                object = (EntityInsentient) entitytypes.a(world);
+            }
+
+            if (object == null) {
+                return Optional.empty();
+            } else {
+                ((EntityInsentient) object).a(true);
+                if (!((EntityInsentient) object).isBaby()) {
+                    return Optional.empty();
+                } else {
+                    ((EntityInsentient) object).setPositionRotation(vec3d.getX(), vec3d.getY(), vec3d.getZ(), 0.0F, 0.0F);
+                    world.addEntity((Entity) object);
+                    if (itemstack.hasName()) {
+                        ((EntityInsentient) object).setCustomName(itemstack.getName());
+                    }
+
+                    if (!entityhuman.abilities.canInstantlyBuild) {
+                        itemstack.subtract(1);
+                    }
+
+                    return Optional.of(object);
+                }
+            }
+        }
     }
 }

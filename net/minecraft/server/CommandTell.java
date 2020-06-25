@@ -2,10 +2,10 @@ package net.minecraft.server;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.UUID;
 
 public class CommandTell {
 
@@ -19,13 +19,14 @@ public class CommandTell {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, IChatBaseComponent ichatbasecomponent) {
+        UUID uuid = commandlistenerwrapper.getEntity() == null ? SystemUtils.b : commandlistenerwrapper.getEntity().getUniqueID();
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            entityplayer.sendMessage((new ChatMessage("commands.message.display.incoming", new Object[]{commandlistenerwrapper.getScoreboardDisplayName(), ichatbasecomponent.h()})).a(new EnumChatFormat[]{EnumChatFormat.GRAY, EnumChatFormat.ITALIC}));
-            commandlistenerwrapper.sendMessage((new ChatMessage("commands.message.display.outgoing", new Object[]{entityplayer.getScoreboardDisplayName(), ichatbasecomponent.h()})).a(new EnumChatFormat[]{EnumChatFormat.GRAY, EnumChatFormat.ITALIC}), false);
+            entityplayer.sendMessage((new ChatMessage("commands.message.display.incoming", new Object[]{commandlistenerwrapper.getScoreboardDisplayName(), ichatbasecomponent})).a(new EnumChatFormat[]{EnumChatFormat.GRAY, EnumChatFormat.ITALIC}), uuid);
+            commandlistenerwrapper.sendMessage((new ChatMessage("commands.message.display.outgoing", new Object[]{entityplayer.getScoreboardDisplayName(), ichatbasecomponent})).a(new EnumChatFormat[]{EnumChatFormat.GRAY, EnumChatFormat.ITALIC}), false);
         }
 
         return collection.size();

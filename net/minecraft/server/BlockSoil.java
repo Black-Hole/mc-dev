@@ -5,12 +5,12 @@ import java.util.Random;
 
 public class BlockSoil extends Block {
 
-    public static final BlockStateInteger MOISTURE = BlockProperties.aq;
+    public static final BlockStateInteger MOISTURE = BlockProperties.aw;
     protected static final VoxelShape b = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
 
-    protected BlockSoil(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSoil.MOISTURE, 0));
+    protected BlockSoil(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSoil.MOISTURE, 0));
     }
 
     @Override
@@ -35,33 +35,37 @@ public class BlockSoil extends Block {
     }
 
     @Override
-    public boolean o(IBlockData iblockdata) {
+    public boolean c_(IBlockData iblockdata) {
         return true;
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockSoil.b;
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if (!iblockdata.canPlace(worldserver, blockposition)) {
             fade(iblockdata, worldserver, blockposition);
-        } else {
-            int i = (Integer) iblockdata.get(BlockSoil.MOISTURE);
-
-            if (!a((IWorldReader) worldserver, blockposition) && !worldserver.isRainingAt(blockposition.up())) {
-                if (i > 0) {
-                    worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSoil.MOISTURE, i - 1), 2);
-                } else if (!a((IBlockAccess) worldserver, blockposition)) {
-                    fade(iblockdata, worldserver, blockposition);
-                }
-            } else if (i < 7) {
-                worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSoil.MOISTURE, 7), 2);
-            }
-
         }
+
+    }
+
+    @Override
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        int i = (Integer) iblockdata.get(BlockSoil.MOISTURE);
+
+        if (!a((IWorldReader) worldserver, blockposition) && !worldserver.isRainingAt(blockposition.up())) {
+            if (i > 0) {
+                worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSoil.MOISTURE, i - 1), 2);
+            } else if (!a((IBlockAccess) worldserver, blockposition)) {
+                fade(iblockdata, worldserver, blockposition);
+            }
+        } else if (i < 7) {
+            worldserver.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSoil.MOISTURE, 7), 2);
+        }
+
     }
 
     @Override
@@ -94,7 +98,7 @@ public class BlockSoil extends Block {
             }
 
             blockposition1 = (BlockPosition) iterator.next();
-        } while (!iworldreader.getFluid(blockposition1).a(TagsFluid.WATER));
+        } while (!iworldreader.getFluid(blockposition1).a((Tag) TagsFluid.WATER));
 
         return true;
     }

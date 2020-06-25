@@ -7,7 +7,7 @@ public class TileEntityBarrel extends TileEntityLootable {
 
     private TileEntityBarrel(TileEntityTypes<?> tileentitytypes) {
         super(tileentitytypes);
-        this.items = NonNullList.a(27, ItemStack.a);
+        this.items = NonNullList.a(27, ItemStack.b);
     }
 
     public TileEntityBarrel() {
@@ -17,7 +17,7 @@ public class TileEntityBarrel extends TileEntityLootable {
     @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (!this.e(nbttagcompound)) {
+        if (!this.c(nbttagcompound)) {
             ContainerUtil.a(nbttagcompound, this.items);
         }
 
@@ -25,10 +25,10 @@ public class TileEntityBarrel extends TileEntityLootable {
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
-        this.items = NonNullList.a(this.getSize(), ItemStack.a);
-        if (!this.d(nbttagcompound)) {
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
+        this.items = NonNullList.a(this.getSize(), ItemStack.b);
+        if (!this.b(nbttagcompound)) {
             ContainerUtil.b(nbttagcompound, this.items);
         }
 
@@ -51,7 +51,7 @@ public class TileEntityBarrel extends TileEntityLootable {
 
     @Override
     protected IChatBaseComponent getContainerName() {
-        return new ChatMessage("container.barrel", new Object[0]);
+        return new ChatMessage("container.barrel");
     }
 
     @Override
@@ -95,8 +95,8 @@ public class TileEntityBarrel extends TileEntityLootable {
         } else {
             IBlockData iblockdata = this.getBlock();
 
-            if (iblockdata.getBlock() != Blocks.BARREL) {
-                this.ab_();
+            if (!iblockdata.a(Blocks.BARREL)) {
+                this.an_();
                 return;
             }
 

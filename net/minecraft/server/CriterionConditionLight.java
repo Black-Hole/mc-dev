@@ -15,7 +15,7 @@ public class CriterionConditionLight {
     }
 
     public boolean a(WorldServer worldserver, BlockPosition blockposition) {
-        return this == CriterionConditionLight.a ? true : (!worldserver.n(blockposition) ? false : this.b.d(worldserver.getLightLevel(blockposition)));
+        return this == CriterionConditionLight.a ? true : (!worldserver.p(blockposition) ? false : this.b.d(worldserver.getLightLevel(blockposition)));
     }
 
     public JsonElement a() {

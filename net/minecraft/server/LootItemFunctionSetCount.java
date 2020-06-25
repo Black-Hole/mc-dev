@@ -14,6 +14,11 @@ public class LootItemFunctionSetCount extends LootItemFunctionConditional {
     }
 
     @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.b;
+    }
+
+    @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
         itemstack.setCount(this.a.a(loottableinfo.a()));
         return itemstack;
@@ -27,9 +32,7 @@ public class LootItemFunctionSetCount extends LootItemFunctionConditional {
 
     public static class a extends LootItemFunctionConditional.c<LootItemFunctionSetCount> {
 
-        protected a() {
-            super(new MinecraftKey("set_count"), LootItemFunctionSetCount.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionSetCount lootitemfunctionsetcount, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsetcount, jsonserializationcontext);

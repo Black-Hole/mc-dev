@@ -3,12 +3,13 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Either;
-import io.netty.util.concurrent.Future;
+import com.mojang.serialization.DataResult;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.OptionalInt;
 import java.util.Random;
+import java.util.UUID;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +17,6 @@ import org.apache.logging.log4j.Logger;
 public class EntityPlayer extends EntityHuman implements ICrafting {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    public String locale = "en_US";
     public PlayerConnection playerConnection;
     public final MinecraftServer server;
     public final PlayerInteractManager playerInteractManager;
@@ -34,40 +34,44 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     private boolean lastSentSaturationZero = true;
     public int lastSentExp = -99999999;
     public int invulnerableTicks = 60;
-    private EnumChatVisibility ch;
-    private boolean ci = true;
-    private long cj = SystemUtils.getMonotonicMillis();
+    private EnumChatVisibility cf;
+    private boolean cg = true;
+    private long ch = SystemUtils.getMonotonicMillis();
     private Entity spectatedEntity;
     public boolean worldChangeInvuln;
-    private boolean cm;
-    private final RecipeBookServer recipeBook;
-    private Vec3D co;
-    private int cp;
-    private boolean cq;
+    private boolean ck;
+    private final RecipeBookServer recipeBook = new RecipeBookServer();
+    private Vec3D cm;
+    private int cn;
+    private boolean co;
     @Nullable
-    private Vec3D cr;
-    private SectionPosition cs = SectionPosition.a(0, 0, 0);
+    private Vec3D cp;
+    private SectionPosition cq = SectionPosition.a(0, 0, 0);
+    private ResourceKey<World> spawnDimension;
+    @Nullable
+    private BlockPosition spawn;
+    private boolean spawnForced;
     private int containerCounter;
     public boolean e;
     public int ping;
     public boolean viewingCredits;
 
     public EntityPlayer(MinecraftServer minecraftserver, WorldServer worldserver, GameProfile gameprofile, PlayerInteractManager playerinteractmanager) {
-        super((World) worldserver, gameprofile);
+        super(worldserver, worldserver.getSpawn(), gameprofile);
+        this.spawnDimension = World.OVERWORLD;
         playerinteractmanager.player = this;
         this.playerInteractManager = playerinteractmanager;
         this.server = minecraftserver;
-        this.recipeBook = new RecipeBookServer(minecraftserver.getCraftingManager());
         this.serverStatisticManager = minecraftserver.getPlayerList().getStatisticManager(this);
         this.advancementDataPlayer = minecraftserver.getPlayerList().f(this);
-        this.H = 1.0F;
-        this.a(worldserver);
+        this.G = 1.0F;
+        this.b(worldserver);
     }
 
-    private void a(WorldServer worldserver) {
+    private void b(WorldServer worldserver) {
         BlockPosition blockposition = worldserver.getSpawn();
 
-        if (worldserver.worldProvider.f() && worldserver.getWorldData().getGameType() != EnumGamemode.ADVENTURE) {
+        if (worldserver.getDimensionManager().hasSkyLight() && worldserver.getMinecraftServer().getSaveData().getGameType() != EnumGamemode.ADVENTURE) {
             int i = Math.max(0, this.server.a(worldserver));
             int j = MathHelper.floor(worldserver.getWorldBorder().b((double) blockposition.getX(), (double) blockposition.getZ()));
 
@@ -89,7 +93,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                 int i2 = (k1 + j1 * l1) % i1;
                 int j2 = i2 % (i * 2 + 1);
                 int k2 = i2 / (i * 2 + 1);
-                BlockPosition blockposition1 = worldserver.getWorldProvider().a(blockposition.getX() + j2 - i, blockposition.getZ() + k2 - i, false);
+                BlockPosition blockposition1 = WorldProviderNormal.a(worldserver, blockposition.getX() + j2 - i, blockposition.getZ() + k2 - i, false);
 
                 if (blockposition1 != null) {
                     this.setPositionRotation(blockposition1, 0.0F, 0.0F);
@@ -113,44 +117,57 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("playerGameType", 99)) {
             if (this.getMinecraftServer().getForceGamemode()) {
-                this.playerInteractManager.setGameMode(this.getMinecraftServer().getGamemode());
+                this.playerInteractManager.a(this.getMinecraftServer().getGamemode(), EnumGamemode.NOT_SET);
             } else {
-                this.playerInteractManager.setGameMode(EnumGamemode.getById(nbttagcompound.getInt("playerGameType")));
+                this.playerInteractManager.a(EnumGamemode.getById(nbttagcompound.getInt("playerGameType")), nbttagcompound.hasKeyOfType("previousPlayerGameType", 3) ? EnumGamemode.getById(nbttagcompound.getInt("previousPlayerGameType")) : EnumGamemode.NOT_SET);
             }
         }
 
         if (nbttagcompound.hasKeyOfType("enteredNetherPosition", 10)) {
             NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("enteredNetherPosition");
 
-            this.cr = new Vec3D(nbttagcompound1.getDouble("x"), nbttagcompound1.getDouble("y"), nbttagcompound1.getDouble("z"));
+            this.cp = new Vec3D(nbttagcompound1.getDouble("x"), nbttagcompound1.getDouble("y"), nbttagcompound1.getDouble("z"));
         }
 
-        this.cm = nbttagcompound.getBoolean("seenCredits");
+        this.ck = nbttagcompound.getBoolean("seenCredits");
         if (nbttagcompound.hasKeyOfType("recipeBook", 10)) {
-            this.recipeBook.a(nbttagcompound.getCompound("recipeBook"));
+            this.recipeBook.a(nbttagcompound.getCompound("recipeBook"), this.server.getCraftingManager());
         }
 
         if (this.isSleeping()) {
             this.entityWakeup();
         }
 
+        if (nbttagcompound.hasKeyOfType("SpawnX", 99) && nbttagcompound.hasKeyOfType("SpawnY", 99) && nbttagcompound.hasKeyOfType("SpawnZ", 99)) {
+            this.spawn = new BlockPosition(nbttagcompound.getInt("SpawnX"), nbttagcompound.getInt("SpawnY"), nbttagcompound.getInt("SpawnZ"));
+            this.spawnForced = nbttagcompound.getBoolean("SpawnForced");
+            if (nbttagcompound.hasKey("SpawnDimension")) {
+                DataResult dataresult = World.f.parse(DynamicOpsNBT.a, nbttagcompound.get("SpawnDimension"));
+                Logger logger = EntityPlayer.LOGGER;
+
+                logger.getClass();
+                this.spawnDimension = (ResourceKey) dataresult.resultOrPartial(logger::error).orElse(World.OVERWORLD);
+            }
+        }
+
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setInt("playerGameType", this.playerInteractManager.getGameMode().getId());
-        nbttagcompound.setBoolean("seenCredits", this.cm);
-        if (this.cr != null) {
+        nbttagcompound.setInt("previousPlayerGameType", this.playerInteractManager.c().getId());
+        nbttagcompound.setBoolean("seenCredits", this.ck);
+        if (this.cp != null) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-            nbttagcompound1.setDouble("x", this.cr.x);
-            nbttagcompound1.setDouble("y", this.cr.y);
-            nbttagcompound1.setDouble("z", this.cr.z);
+            nbttagcompound1.setDouble("x", this.cp.x);
+            nbttagcompound1.setDouble("y", this.cp.y);
+            nbttagcompound1.setDouble("z", this.cp.z);
             nbttagcompound.set("enteredNetherPosition", nbttagcompound1);
         }
 
@@ -168,6 +185,21 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
 
         nbttagcompound.set("recipeBook", this.recipeBook.save());
+        nbttagcompound.setString("Dimension", this.world.getDimensionKey().a().toString());
+        if (this.spawn != null) {
+            nbttagcompound.setInt("SpawnX", this.spawn.getX());
+            nbttagcompound.setInt("SpawnY", this.spawn.getY());
+            nbttagcompound.setInt("SpawnZ", this.spawn.getZ());
+            nbttagcompound.setBoolean("SpawnForced", this.spawnForced);
+            DataResult dataresult = MinecraftKey.a.encodeStart(DynamicOpsNBT.a, this.spawnDimension.a());
+            Logger logger = EntityPlayer.LOGGER;
+
+            logger.getClass();
+            dataresult.resultOrPartial(logger::error).ifPresent((nbtbase) -> {
+                nbttagcompound.set("SpawnDimension", nbtbase);
+            });
+        }
+
     }
 
     public void a(int i) {
@@ -217,7 +249,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     @Override
-    protected ItemCooldown g() {
+    protected ItemCooldown i() {
         return new ItemCooldownPlayer(this);
     }
 
@@ -255,7 +287,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             if (entity.isAlive()) {
                 this.setLocation(entity.locX(), entity.locY(), entity.locZ(), entity.yaw, entity.pitch);
                 this.getWorldServer().getChunkProvider().movePlayer(this);
-                if (this.dU()) {
+                if (this.eq()) {
                     this.setSpectatorTarget(this);
                 }
             } else {
@@ -264,8 +296,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
 
         CriterionTriggers.w.a(this);
-        if (this.co != null) {
-            CriterionTriggers.u.a(this, this.co, this.ticksLived - this.cp);
+        if (this.cm != null) {
+            CriterionTriggers.u.a(this, this.cm, this.ticksLived - this.cn);
         }
 
         this.advancementDataPlayer.b(this);
@@ -273,14 +305,14 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     public void playerTick() {
         try {
-            if (!this.isSpectator() || this.world.isLoaded(new BlockPosition(this))) {
+            if (!this.isSpectator() || this.world.isLoaded(this.getChunkCoordinates())) {
                 super.tick();
             }
 
             for (int i = 0; i < this.inventory.getSize(); ++i) {
                 ItemStack itemstack = this.inventory.getItem(i);
 
-                if (itemstack.getItem().R_()) {
+                if (itemstack.getItem().ae_()) {
                     Packet<?> packet = ((ItemWorldMapBase) itemstack.getItem()).a(itemstack, this.world, (EntityHuman) this);
 
                     if (packet != null) {
@@ -362,11 +394,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                     boolean flag1 = true;
                     String s = ichatbasecomponent.a(256);
                     ChatMessage chatmessage = new ChatMessage("death.attack.message_too_long", new Object[]{(new ChatComponentText(s)).a(EnumChatFormat.YELLOW)});
-                    IChatBaseComponent ichatbasecomponent1 = (new ChatMessage("death.attack.even_more_magic", new Object[]{this.getScoreboardDisplayName()})).a((chatmodifier) -> {
-                        chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, chatmessage));
+                    IChatMutableComponent ichatmutablecomponent = (new ChatMessage("death.attack.even_more_magic", new Object[]{this.getScoreboardDisplayName()})).format((chatmodifier) -> {
+                        return chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, chatmessage));
                     });
 
-                    this.playerConnection.sendPacket(new PacketPlayOutCombatEvent(this.getCombatTracker(), PacketPlayOutCombatEvent.EnumCombatEventType.ENTITY_DIED, ichatbasecomponent1));
+                    this.playerConnection.sendPacket(new PacketPlayOutCombatEvent(this.getCombatTracker(), PacketPlayOutCombatEvent.EnumCombatEventType.ENTITY_DIED, ichatmutablecomponent));
                 }
 
             });
@@ -379,13 +411,17 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                     this.server.getPlayerList().b(this, ichatbasecomponent);
                 }
             } else {
-                this.server.getPlayerList().sendMessage(ichatbasecomponent);
+                this.server.getPlayerList().sendMessage(ichatbasecomponent, ChatMessageType.SYSTEM, SystemUtils.b);
             }
         } else {
             this.playerConnection.sendPacket(new PacketPlayOutCombatEvent(this.getCombatTracker(), PacketPlayOutCombatEvent.EnumCombatEventType.ENTITY_DIED));
         }
 
         this.releaseShoulderEntities();
+        if (this.world.getGameRules().getBoolean(GameRules.FORGIVE_DEAD_PLAYERS)) {
+            this.eW();
+        }
+
         if (!this.isSpectator()) {
             this.d(damagesource);
         }
@@ -395,8 +431,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
         if (entityliving != null) {
             this.b(StatisticList.ENTITY_KILLED_BY.b(entityliving.getEntityType()));
-            entityliving.a(this, this.aW, damagesource);
-            this.f(entityliving);
+            entityliving.a(this, this.aV, damagesource);
+            this.g(entityliving);
         }
 
         this.world.broadcastEntityEffect(this, (byte) 3);
@@ -406,6 +442,16 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         this.extinguish();
         this.setFlag(0, false);
         this.getCombatTracker().g();
+    }
+
+    private void eW() {
+        AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.getChunkCoordinates())).grow(32.0D, 10.0D, 32.0D);
+
+        this.world.b(EntityInsentient.class, axisalignedbb).stream().filter((entityinsentient) -> {
+            return entityinsentient instanceof IEntityAngerable;
+        }).forEach((entityinsentient) -> {
+            ((IEntityAngerable) entityinsentient).b((EntityHuman) this);
+        });
     }
 
     @Override
@@ -448,7 +494,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            boolean flag = this.server.m() && this.canPvP() && "fall".equals(damagesource.translationIndex);
+            boolean flag = this.server.j() && this.canPvP() && "fall".equals(damagesource.translationIndex);
 
             if (!flag && this.invulnerableTicks > 0 && damagesource != DamageSource.OUT_OF_WORLD) {
                 return false;
@@ -486,106 +532,100 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     @Nullable
     @Override
-    public Entity a(DimensionManager dimensionmanager) {
+    public Entity a(WorldServer worldserver) {
         this.worldChangeInvuln = true;
-        DimensionManager dimensionmanager1 = this.dimension;
+        WorldServer worldserver1 = this.getWorldServer();
+        ResourceKey<World> resourcekey = worldserver1.getDimensionKey();
 
-        if (dimensionmanager1 == DimensionManager.THE_END && dimensionmanager == DimensionManager.OVERWORLD) {
+        if (resourcekey == World.THE_END && worldserver.getDimensionKey() == World.OVERWORLD) {
             this.decouple();
             this.getWorldServer().removePlayer(this);
             if (!this.viewingCredits) {
                 this.viewingCredits = true;
-                this.playerConnection.sendPacket(new PacketPlayOutGameStateChange(4, this.cm ? 0.0F : 1.0F));
-                this.cm = true;
+                this.playerConnection.sendPacket(new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.e, this.ck ? 0.0F : 1.0F));
+                this.ck = true;
             }
 
             return this;
         } else {
-            WorldServer worldserver = this.server.getWorldServer(dimensionmanager1);
+            WorldData worlddata = worldserver.getWorldData();
 
-            this.dimension = dimensionmanager;
-            WorldServer worldserver1 = this.server.getWorldServer(dimensionmanager);
-            WorldData worlddata = worldserver1.getWorldData();
-
-            this.playerConnection.sendPacket(new PacketPlayOutRespawn(dimensionmanager, WorldData.c(worlddata.getSeed()), worlddata.getType(), this.playerInteractManager.getGameMode()));
+            this.playerConnection.sendPacket(new PacketPlayOutRespawn(worldserver.getTypeKey(), worldserver.getDimensionKey(), BiomeManager.a(worldserver.getSeed()), this.playerInteractManager.getGameMode(), this.playerInteractManager.c(), worldserver.isDebugWorld(), worldserver.isFlatWorld(), true));
             this.playerConnection.sendPacket(new PacketPlayOutServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
             PlayerList playerlist = this.server.getPlayerList();
 
             playerlist.d(this);
-            worldserver.removePlayer(this);
+            worldserver1.removePlayer(this);
             this.dead = false;
             double d0 = this.locX();
             double d1 = this.locY();
             double d2 = this.locZ();
             float f = this.pitch;
             float f1 = this.yaw;
-            double d3 = 8.0D;
             float f2 = f1;
 
-            worldserver.getMethodProfiler().enter("moving");
-            if (dimensionmanager1 == DimensionManager.OVERWORLD && dimensionmanager == DimensionManager.NETHER) {
-                this.cr = this.getPositionVector();
-                d0 /= 8.0D;
-                d2 /= 8.0D;
-            } else if (dimensionmanager1 == DimensionManager.NETHER && dimensionmanager == DimensionManager.OVERWORLD) {
-                d0 *= 8.0D;
-                d2 *= 8.0D;
-            } else if (dimensionmanager1 == DimensionManager.OVERWORLD && dimensionmanager == DimensionManager.THE_END) {
-                BlockPosition blockposition = worldserver1.getDimensionSpawn();
+            worldserver1.getMethodProfiler().enter("moving");
+            double d3;
+
+            if (worldserver.getDimensionKey() == World.THE_END) {
+                BlockPosition blockposition = WorldServer.a;
 
                 d0 = (double) blockposition.getX();
                 d1 = (double) blockposition.getY();
                 d2 = (double) blockposition.getZ();
                 f1 = 90.0F;
                 f = 0.0F;
+            } else {
+                if (resourcekey == World.OVERWORLD && worldserver.getDimensionKey() == World.THE_NETHER) {
+                    this.cp = this.getPositionVector();
+                }
+
+                DimensionManager dimensionmanager = worldserver1.getDimensionManager();
+                DimensionManager dimensionmanager1 = worldserver.getDimensionManager();
+
+                d3 = 8.0D;
+                if (!dimensionmanager.h() && dimensionmanager1.h()) {
+                    d0 /= 8.0D;
+                    d2 /= 8.0D;
+                } else if (dimensionmanager.h() && !dimensionmanager1.h()) {
+                    d0 *= 8.0D;
+                    d2 *= 8.0D;
+                }
             }
 
             this.setPositionRotation(d0, d1, d2, f1, f);
-            worldserver.getMethodProfiler().exit();
-            worldserver.getMethodProfiler().enter("placing");
-            double d4 = Math.min(-2.9999872E7D, worldserver1.getWorldBorder().c() + 16.0D);
-            double d5 = Math.min(-2.9999872E7D, worldserver1.getWorldBorder().d() + 16.0D);
-            double d6 = Math.min(2.9999872E7D, worldserver1.getWorldBorder().e() - 16.0D);
-            double d7 = Math.min(2.9999872E7D, worldserver1.getWorldBorder().f() - 16.0D);
+            worldserver1.getMethodProfiler().exit();
+            worldserver1.getMethodProfiler().enter("placing");
+            double d4 = Math.min(-2.9999872E7D, worldserver.getWorldBorder().e() + 16.0D);
 
-            d0 = MathHelper.a(d0, d4, d6);
-            d2 = MathHelper.a(d2, d5, d7);
+            d3 = Math.min(-2.9999872E7D, worldserver.getWorldBorder().f() + 16.0D);
+            double d5 = Math.min(2.9999872E7D, worldserver.getWorldBorder().g() - 16.0D);
+            double d6 = Math.min(2.9999872E7D, worldserver.getWorldBorder().h() - 16.0D);
+
+            d0 = MathHelper.a(d0, d4, d5);
+            d2 = MathHelper.a(d2, d3, d6);
             this.setPositionRotation(d0, d1, d2, f1, f);
-            if (dimensionmanager == DimensionManager.THE_END) {
+            if (worldserver.getDimensionKey() == World.THE_END) {
                 int i = MathHelper.floor(this.locX());
                 int j = MathHelper.floor(this.locY()) - 1;
                 int k = MathHelper.floor(this.locZ());
-                boolean flag = true;
-                boolean flag1 = false;
 
-                for (int l = -2; l <= 2; ++l) {
-                    for (int i1 = -2; i1 <= 2; ++i1) {
-                        for (int j1 = -1; j1 < 3; ++j1) {
-                            int k1 = i + i1 * 1 + l * 0;
-                            int l1 = j + j1;
-                            int i2 = k + i1 * 0 - l * 1;
-                            boolean flag2 = j1 < 0;
-
-                            worldserver1.setTypeUpdate(new BlockPosition(k1, l1, i2), flag2 ? Blocks.OBSIDIAN.getBlockData() : Blocks.AIR.getBlockData());
-                        }
-                    }
-                }
-
+                WorldServer.a(worldserver);
                 this.setPositionRotation((double) i, (double) j, (double) k, f1, 0.0F);
                 this.setMot(Vec3D.a);
-            } else if (!worldserver1.getTravelAgent().findAndTeleport(this, f2)) {
-                worldserver1.getTravelAgent().createPortal(this);
-                worldserver1.getTravelAgent().findAndTeleport(this, f2);
+            } else if (!worldserver.getTravelAgent().findAndTeleport(this, f2)) {
+                worldserver.getTravelAgent().createPortal(this);
+                worldserver.getTravelAgent().findAndTeleport(this, f2);
             }
 
-            worldserver.getMethodProfiler().exit();
-            this.spawnIn(worldserver1);
-            worldserver1.addPlayerPortal(this);
-            this.triggerDimensionAdvancements(worldserver);
+            worldserver1.getMethodProfiler().exit();
+            this.spawnIn(worldserver);
+            worldserver.addPlayerPortal(this);
+            this.triggerDimensionAdvancements(worldserver1);
             this.playerConnection.a(this.locX(), this.locY(), this.locZ(), f1, f);
-            this.playerInteractManager.a(worldserver1);
+            this.playerInteractManager.a(worldserver);
             this.playerConnection.sendPacket(new PacketPlayOutAbilities(this.abilities));
-            playerlist.a(this, worldserver1);
+            playerlist.a(this, worldserver);
             playerlist.updateClient(this);
             Iterator iterator = this.getEffects().iterator();
 
@@ -604,16 +644,16 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void triggerDimensionAdvancements(WorldServer worldserver) {
-        DimensionManager dimensionmanager = worldserver.worldProvider.getDimensionManager();
-        DimensionManager dimensionmanager1 = this.world.worldProvider.getDimensionManager();
+        ResourceKey<World> resourcekey = worldserver.getDimensionKey();
+        ResourceKey<World> resourcekey1 = this.world.getDimensionKey();
 
-        CriterionTriggers.v.a(this, dimensionmanager, dimensionmanager1);
-        if (dimensionmanager == DimensionManager.NETHER && dimensionmanager1 == DimensionManager.OVERWORLD && this.cr != null) {
-            CriterionTriggers.C.a(this, this.cr);
+        CriterionTriggers.v.a(this, resourcekey, resourcekey1);
+        if (resourcekey == World.THE_NETHER && resourcekey1 == World.OVERWORLD && this.cp != null) {
+            CriterionTriggers.C.a(this, this.cp);
         }
 
-        if (dimensionmanager1 != DimensionManager.NETHER) {
-            this.cr = null;
+        if (resourcekey1 != World.THE_NETHER) {
+            this.cp = null;
         }
 
     }
@@ -642,10 +682,67 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     @Override
     public Either<EntityHuman.EnumBedResult, Unit> sleep(BlockPosition blockposition) {
-        return super.sleep(blockposition).ifRight((unit) -> {
-            this.a(StatisticList.SLEEP_IN_BED);
-            CriterionTriggers.q.a(this);
-        });
+        EnumDirection enumdirection = (EnumDirection) this.world.getType(blockposition).get(BlockFacingHorizontal.FACING);
+
+        if (!this.isSleeping() && this.isAlive()) {
+            if (!this.world.getDimensionManager().isNatural()) {
+                return Either.left(EntityHuman.EnumBedResult.NOT_POSSIBLE_HERE);
+            } else if (!this.a(blockposition, enumdirection)) {
+                return Either.left(EntityHuman.EnumBedResult.TOO_FAR_AWAY);
+            } else if (this.b(blockposition, enumdirection)) {
+                return Either.left(EntityHuman.EnumBedResult.OBSTRUCTED);
+            } else {
+                this.setRespawnPosition(this.world.getDimensionKey(), blockposition, false, true);
+                if (this.world.isDay()) {
+                    return Either.left(EntityHuman.EnumBedResult.NOT_POSSIBLE_NOW);
+                } else {
+                    if (!this.isCreative()) {
+                        double d0 = 8.0D;
+                        double d1 = 5.0D;
+                        Vec3D vec3d = Vec3D.c((BaseBlockPosition) blockposition);
+                        List<EntityMonster> list = this.world.a(EntityMonster.class, new AxisAlignedBB(vec3d.getX() - 8.0D, vec3d.getY() - 5.0D, vec3d.getZ() - 8.0D, vec3d.getX() + 8.0D, vec3d.getY() + 5.0D, vec3d.getZ() + 8.0D), (entitymonster) -> {
+                            return entitymonster.f((EntityHuman) this);
+                        });
+
+                        if (!list.isEmpty()) {
+                            return Either.left(EntityHuman.EnumBedResult.NOT_SAFE);
+                        }
+                    }
+
+                    Either<EntityHuman.EnumBedResult, Unit> either = super.sleep(blockposition).ifRight((unit) -> {
+                        this.a(StatisticList.SLEEP_IN_BED);
+                        CriterionTriggers.q.a(this);
+                    });
+
+                    ((WorldServer) this.world).everyoneSleeping();
+                    return either;
+                }
+            }
+        } else {
+            return Either.left(EntityHuman.EnumBedResult.OTHER_PROBLEM);
+        }
+    }
+
+    @Override
+    public void entitySleep(BlockPosition blockposition) {
+        this.a(StatisticList.CUSTOM.b(StatisticList.TIME_SINCE_REST));
+        super.entitySleep(blockposition);
+    }
+
+    private boolean a(BlockPosition blockposition, EnumDirection enumdirection) {
+        return this.g(blockposition) || this.g(blockposition.shift(enumdirection.opposite()));
+    }
+
+    private boolean g(BlockPosition blockposition) {
+        Vec3D vec3d = Vec3D.c((BaseBlockPosition) blockposition);
+
+        return Math.abs(this.locX() - vec3d.getX()) <= 3.0D && Math.abs(this.locY() - vec3d.getY()) <= 2.0D && Math.abs(this.locZ() - vec3d.getZ()) <= 3.0D;
+    }
+
+    private boolean b(BlockPosition blockposition, EnumDirection enumdirection) {
+        BlockPosition blockposition1 = blockposition.up();
+
+        return !this.f(blockposition1) || !this.f(blockposition1.shift(enumdirection.opposite()));
     }
 
     @Override
@@ -700,20 +797,18 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     protected void a(double d0, boolean flag, IBlockData iblockdata, BlockPosition blockposition) {}
 
     @Override
-    protected void b(BlockPosition blockposition) {
+    protected void c(BlockPosition blockposition) {
         if (!this.isSpectator()) {
-            super.b(blockposition);
+            super.c(blockposition);
         }
 
     }
 
     public void a(double d0, boolean flag) {
-        BlockPosition blockposition = this.ag();
+        BlockPosition blockposition = this.ak();
 
         if (this.world.isLoaded(blockposition)) {
-            IBlockData iblockdata = this.world.getType(blockposition);
-
-            super.a(d0, flag, iblockdata, blockposition);
+            super.a(d0, flag, this.world.getType(blockposition), blockposition);
         }
     }
 
@@ -741,7 +836,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
             if (container == null) {
                 if (this.isSpectator()) {
-                    this.a((new ChatMessage("container.spectatorCantOpen", new Object[0])).a(EnumChatFormat.RED), true);
+                    this.a((IChatBaseComponent) (new ChatMessage("container.spectatorCantOpen")).a(EnumChatFormat.RED), true);
                 }
 
                 return OptionalInt.empty();
@@ -795,7 +890,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public void a(Container container, int i, ItemStack itemstack) {
         if (!(container.getSlot(i) instanceof SlotResult)) {
             if (container == this.defaultContainer) {
-                CriterionTriggers.e.a(this, this.inventory);
+                CriterionTriggers.e.a(this, this.inventory, itemstack);
             }
 
             if (!this.e) {
@@ -822,7 +917,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     @Override
     public void closeInventory() {
         this.playerConnection.sendPacket(new PacketPlayOutCloseWindow(this.activeContainer.windowId));
-        this.m();
+        this.o();
     }
 
     public void broadcastCarriedItem() {
@@ -831,7 +926,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
     }
 
-    public void m() {
+    public void o() {
         this.activeContainer.b((EntityHuman) this);
         this.activeContainer = this.defaultContainer;
     }
@@ -839,11 +934,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public void a(float f, float f1, boolean flag, boolean flag1) {
         if (this.isPassenger()) {
             if (f >= -1.0F && f <= 1.0F) {
-                this.aZ = f;
+                this.aY = f;
             }
 
             if (f1 >= -1.0F && f1 <= 1.0F) {
-                this.bb = f1;
+                this.ba = f1;
             }
 
             this.jumping = flag;
@@ -897,8 +992,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         this.lastSentExp = -1;
     }
 
-    public void n() {
-        this.cq = true;
+    public void p() {
+        this.co = true;
         this.ejectPassengers();
         if (this.isSleeping()) {
             this.wakeup(true, false);
@@ -906,8 +1001,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     }
 
-    public boolean o() {
-        return this.cq;
+    public boolean q() {
+        return this.co;
     }
 
     public void triggerHealthUpdate() {
@@ -916,14 +1011,14 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     @Override
     public void a(IChatBaseComponent ichatbasecomponent, boolean flag) {
-        this.playerConnection.sendPacket(new PacketPlayOutChat(ichatbasecomponent, flag ? ChatMessageType.GAME_INFO : ChatMessageType.CHAT));
+        this.playerConnection.sendPacket(new PacketPlayOutChat(ichatbasecomponent, flag ? ChatMessageType.GAME_INFO : ChatMessageType.CHAT, SystemUtils.b));
     }
 
     @Override
-    protected void q() {
+    protected void s() {
         if (!this.activeItem.isEmpty() && this.isHandRaised()) {
             this.playerConnection.sendPacket(new PacketPlayOutEntityStatus(this, (byte) 9));
-            super.q();
+            super.s();
         }
 
     }
@@ -950,9 +1045,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             this.expTotal = entityplayer.expTotal;
             this.exp = entityplayer.exp;
             this.setScore(entityplayer.getScore());
+            this.ah = entityplayer.ah;
             this.ai = entityplayer.ai;
             this.aj = entityplayer.aj;
-            this.ak = entityplayer.ak;
         } else if (this.world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) || entityplayer.isSpectator()) {
             this.inventory.a(entityplayer.inventory);
             this.expLevel = entityplayer.expLevel;
@@ -961,16 +1056,16 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             this.setScore(entityplayer.getScore());
         }
 
-        this.bO = entityplayer.bO;
+        this.bN = entityplayer.bN;
         this.enderChest = entityplayer.enderChest;
-        this.getDataWatcher().set(EntityPlayer.bq, entityplayer.getDataWatcher().get(EntityPlayer.bq));
+        this.getDataWatcher().set(EntityPlayer.bp, entityplayer.getDataWatcher().get(EntityPlayer.bp));
         this.lastSentExp = -1;
         this.lastHealthSent = -1.0F;
         this.lastFoodSent = -1;
         this.recipeBook.a((RecipeBook) entityplayer.recipeBook);
         this.removeQueue.addAll(entityplayer.removeQueue);
-        this.cm = entityplayer.cm;
-        this.cr = entityplayer.cr;
+        this.ck = entityplayer.ck;
+        this.cp = entityplayer.cp;
         this.setShoulderEntityLeft(entityplayer.getShoulderEntityLeft());
         this.setShoulderEntityRight(entityplayer.getShoulderEntityRight());
     }
@@ -980,8 +1075,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         super.a(mobeffect);
         this.playerConnection.sendPacket(new PacketPlayOutEntityEffect(this.getId(), mobeffect));
         if (mobeffect.getMobEffect() == MobEffects.LEVITATION) {
-            this.cp = this.ticksLived;
-            this.co = this.getPositionVector();
+            this.cn = this.ticksLived;
+            this.cm = this.getPositionVector();
         }
 
         CriterionTriggers.A.a(this);
@@ -999,7 +1094,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         super.b(mobeffect);
         this.playerConnection.sendPacket(new PacketPlayOutRemoveEntityEffect(this.getId(), mobeffect.getMobEffect()));
         if (mobeffect.getMobEffect() == MobEffects.LEVITATION) {
-            this.co = null;
+            this.cm = null;
         }
 
         CriterionTriggers.A.a(this);
@@ -1041,7 +1136,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     @Override
     public void a(EnumGamemode enumgamemode) {
         this.playerInteractManager.setGameMode(enumgamemode);
-        this.playerConnection.sendPacket(new PacketPlayOutGameStateChange(3, (float) enumgamemode.getId()));
+        this.playerConnection.sendPacket(new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.d, (float) enumgamemode.getId()));
         if (enumgamemode == EnumGamemode.SPECTATOR) {
             this.releaseShoulderEntities();
             this.stopRiding();
@@ -1050,7 +1145,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
 
         this.updateAbilities();
-        this.dz();
+        this.dT();
     }
 
     @Override
@@ -1064,18 +1159,18 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     @Override
-    public void sendMessage(IChatBaseComponent ichatbasecomponent) {
-        this.a(ichatbasecomponent, ChatMessageType.SYSTEM);
+    public void sendMessage(IChatBaseComponent ichatbasecomponent, UUID uuid) {
+        this.a(ichatbasecomponent, ChatMessageType.SYSTEM, uuid);
     }
 
-    public void a(IChatBaseComponent ichatbasecomponent, ChatMessageType chatmessagetype) {
-        this.playerConnection.a((Packet) (new PacketPlayOutChat(ichatbasecomponent, chatmessagetype)), (future) -> {
+    public void a(IChatBaseComponent ichatbasecomponent, ChatMessageType chatmessagetype, UUID uuid) {
+        this.playerConnection.a((Packet) (new PacketPlayOutChat(ichatbasecomponent, chatmessagetype, uuid)), (future) -> {
             if (!future.isSuccess() && (chatmessagetype == ChatMessageType.GAME_INFO || chatmessagetype == ChatMessageType.SYSTEM)) {
                 boolean flag = true;
                 String s = ichatbasecomponent.a(256);
-                IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText(s)).a(EnumChatFormat.YELLOW);
+                IChatMutableComponent ichatmutablecomponent = (new ChatComponentText(s)).a(EnumChatFormat.YELLOW);
 
-                this.playerConnection.sendPacket(new PacketPlayOutChat((new ChatMessage("multiplayer.message_not_delivered", new Object[]{ichatbasecomponent1})).a(EnumChatFormat.RED), ChatMessageType.SYSTEM));
+                this.playerConnection.sendPacket(new PacketPlayOutChat((new ChatMessage("multiplayer.message_not_delivered", new Object[]{ichatmutablecomponent})).a(EnumChatFormat.RED), ChatMessageType.SYSTEM, uuid));
             }
 
         });
@@ -1090,15 +1185,14 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void a(PacketPlayInSettings packetplayinsettings) {
-        this.locale = packetplayinsettings.b();
-        this.ch = packetplayinsettings.d();
-        this.ci = packetplayinsettings.e();
-        this.getDataWatcher().set(EntityPlayer.bq, (byte) packetplayinsettings.f());
-        this.getDataWatcher().set(EntityPlayer.br, (byte) (packetplayinsettings.getMainHand() == EnumMainHand.LEFT ? 0 : 1));
+        this.cf = packetplayinsettings.d();
+        this.cg = packetplayinsettings.e();
+        this.getDataWatcher().set(EntityPlayer.bp, (byte) packetplayinsettings.f());
+        this.getDataWatcher().set(EntityPlayer.bq, (byte) (packetplayinsettings.getMainHand() == EnumMainHand.LEFT ? 0 : 1));
     }
 
     public EnumChatVisibility getChatFlags() {
-        return this.ch;
+        return this.cf;
     }
 
     public void setResourcePack(String s, String s1) {
@@ -1111,7 +1205,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void resetIdleTimer() {
-        this.cj = SystemUtils.getMonotonicMillis();
+        this.ch = SystemUtils.getMonotonicMillis();
     }
 
     public ServerStatisticManager getStatisticManager() {
@@ -1138,7 +1232,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     @Override
     protected void C() {
         if (this.isSpectator()) {
-            this.cN();
+            this.de();
             this.setInvisible(true);
         } else {
             super.C();
@@ -1180,7 +1274,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public long F() {
-        return this.cj;
+        return this.ch;
     }
 
     @Nullable
@@ -1189,9 +1283,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     @Override
-    public void a(EnumHand enumhand) {
-        super.a(enumhand);
-        this.ey();
+    public void swingHand(EnumHand enumhand) {
+        super.swingHand(enumhand);
+        this.resetAttackCooldown();
     }
 
     public boolean H() {
@@ -1213,11 +1307,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             this.playerConnection.a(d0, d1, d2, f, f1);
         } else {
             WorldServer worldserver1 = this.getWorldServer();
-
-            this.dimension = worldserver.worldProvider.getDimensionManager();
             WorldData worlddata = worldserver.getWorldData();
 
-            this.playerConnection.sendPacket(new PacketPlayOutRespawn(this.dimension, WorldData.c(worlddata.getSeed()), worlddata.getType(), this.playerInteractManager.getGameMode()));
+            this.playerConnection.sendPacket(new PacketPlayOutRespawn(worldserver.getTypeKey(), worldserver.getDimensionKey(), BiomeManager.a(worldserver.getSeed()), this.playerInteractManager.getGameMode(), this.playerInteractManager.c(), worldserver.isDebugWorld(), worldserver.isFlatWorld(), true));
             this.playerConnection.sendPacket(new PacketPlayOutServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
             this.server.getPlayerList().d(this);
             worldserver1.removePlayer(this);
@@ -1234,6 +1326,38 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     }
 
+    @Nullable
+    public BlockPosition getSpawn() {
+        return this.spawn;
+    }
+
+    public ResourceKey<World> getSpawnDimension() {
+        return this.spawnDimension;
+    }
+
+    public boolean isSpawnForced() {
+        return this.spawnForced;
+    }
+
+    public void setRespawnPosition(ResourceKey<World> resourcekey, @Nullable BlockPosition blockposition, boolean flag, boolean flag1) {
+        if (blockposition != null) {
+            boolean flag2 = blockposition.equals(this.spawn) && resourcekey.equals(this.spawnDimension);
+
+            if (flag1 && !flag2) {
+                this.sendMessage(new ChatMessage("block.minecraft.set_spawn"), SystemUtils.b);
+            }
+
+            this.spawn = blockposition;
+            this.spawnDimension = resourcekey;
+            this.spawnForced = flag;
+        } else {
+            this.spawn = null;
+            this.spawnDimension = World.OVERWORLD;
+            this.spawnForced = false;
+        }
+
+    }
+
     public void a(ChunkCoordIntPair chunkcoordintpair, Packet<?> packet, Packet<?> packet1) {
         this.playerConnection.sendPacket(packet1);
         this.playerConnection.sendPacket(packet);
@@ -1246,12 +1370,12 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     }
 
-    public SectionPosition K() {
-        return this.cs;
+    public SectionPosition N() {
+        return this.cq;
     }
 
     public void a(SectionPosition sectionposition) {
-        this.cs = sectionposition;
+        this.cq = sectionposition;
     }
 
     @Override
@@ -1260,7 +1384,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     @Override
-    public Packet<?> L() {
+    public Packet<?> O() {
         return new PacketPlayOutNamedEntitySpawn(this);
     }
 

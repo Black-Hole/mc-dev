@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 public class TickListWorldGen<T> implements TickList<T> {
 
@@ -24,12 +23,5 @@ public class TickListWorldGen<T> implements TickList<T> {
     @Override
     public boolean b(BlockPosition blockposition, T t0) {
         return false;
-    }
-
-    @Override
-    public void a(Stream<NextTickListEntry<T>> stream) {
-        stream.forEach((nextticklistentry) -> {
-            ((TickList) this.a.apply(nextticklistentry.a)).a(Stream.of(nextticklistentry));
-        });
     }
 }

@@ -2,12 +2,11 @@ package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
+import com.mojang.serialization.Dynamic;
 import java.util.Optional;
 
 public class DataConverterHeightmapRenaming extends DataFix {
@@ -28,20 +27,20 @@ public class DataConverterHeightmapRenaming extends DataFix {
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic) {
-        Optional<? extends Dynamic<?>> optional = dynamic.get("Heightmaps").get();
+        Optional<? extends Dynamic<?>> optional = dynamic.get("Heightmaps").result();
 
         if (!optional.isPresent()) {
             return dynamic;
         } else {
             Dynamic<?> dynamic1 = (Dynamic) optional.get();
-            Optional<? extends Dynamic<?>> optional1 = dynamic1.get("LIQUID").get();
+            Optional<? extends Dynamic<?>> optional1 = dynamic1.get("LIQUID").result();
 
             if (optional1.isPresent()) {
                 dynamic1 = dynamic1.remove("LIQUID");
                 dynamic1 = dynamic1.set("WORLD_SURFACE_WG", (Dynamic) optional1.get());
             }
 
-            Optional<? extends Dynamic<?>> optional2 = dynamic1.get("SOLID").get();
+            Optional<? extends Dynamic<?>> optional2 = dynamic1.get("SOLID").result();
 
             if (optional2.isPresent()) {
                 dynamic1 = dynamic1.remove("SOLID");
@@ -49,14 +48,14 @@ public class DataConverterHeightmapRenaming extends DataFix {
                 dynamic1 = dynamic1.set("OCEAN_FLOOR", (Dynamic) optional2.get());
             }
 
-            Optional<? extends Dynamic<?>> optional3 = dynamic1.get("LIGHT").get();
+            Optional<? extends Dynamic<?>> optional3 = dynamic1.get("LIGHT").result();
 
             if (optional3.isPresent()) {
                 dynamic1 = dynamic1.remove("LIGHT");
                 dynamic1 = dynamic1.set("LIGHT_BLOCKING", (Dynamic) optional3.get());
             }
 
-            Optional<? extends Dynamic<?>> optional4 = dynamic1.get("RAIN").get();
+            Optional<? extends Dynamic<?>> optional4 = dynamic1.get("RAIN").result();
 
             if (optional4.isPresent()) {
                 dynamic1 = dynamic1.remove("RAIN");

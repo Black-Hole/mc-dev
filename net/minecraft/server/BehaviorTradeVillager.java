@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class BehaviorTradeVillager extends Behavior<EntityVillager> {
 
-    private Set<Item> a = ImmutableSet.of();
+    private Set<Item> b = ImmutableSet.of();
 
     public BehaviorTradeVillager() {
         super(ImmutableMap.of(MemoryModuleType.INTERACTION_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.VISIBLE_MOBS, MemoryStatus.VALUE_PRESENT));
@@ -17,35 +17,39 @@ public class BehaviorTradeVillager extends Behavior<EntityVillager> {
         return BehaviorUtil.a(entityvillager.getBehaviorController(), MemoryModuleType.INTERACTION_TARGET, EntityTypes.VILLAGER);
     }
 
-    protected boolean g(WorldServer worldserver, EntityVillager entityvillager, long i) {
+    protected boolean b(WorldServer worldserver, EntityVillager entityvillager, long i) {
         return this.a(worldserver, entityvillager);
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
         EntityVillager entityvillager1 = (EntityVillager) entityvillager.getBehaviorController().getMemory(MemoryModuleType.INTERACTION_TARGET).get();
 
-        BehaviorUtil.a((EntityLiving) entityvillager, (EntityLiving) entityvillager1);
-        this.a = a(entityvillager, entityvillager1);
+        BehaviorUtil.a(entityvillager, entityvillager1, 0.5F);
+        this.b = a(entityvillager, entityvillager1);
     }
 
     protected void d(WorldServer worldserver, EntityVillager entityvillager, long i) {
         EntityVillager entityvillager1 = (EntityVillager) entityvillager.getBehaviorController().getMemory(MemoryModuleType.INTERACTION_TARGET).get();
 
         if (entityvillager.h((Entity) entityvillager1) <= 5.0D) {
-            BehaviorUtil.a((EntityLiving) entityvillager, (EntityLiving) entityvillager1);
+            BehaviorUtil.a(entityvillager, entityvillager1, 0.5F);
             entityvillager.a(entityvillager1, i);
-            if (entityvillager.eK() && (entityvillager.getVillagerData().getProfession() == VillagerProfession.FARMER || entityvillager1.eL())) {
-                a(entityvillager, EntityVillager.bx.keySet(), entityvillager1);
+            if (entityvillager.fg() && (entityvillager.getVillagerData().getProfession() == VillagerProfession.FARMER || entityvillager1.fh())) {
+                a(entityvillager, EntityVillager.bw.keySet(), entityvillager1);
             }
 
-            if (!this.a.isEmpty() && entityvillager.getInventory().a(this.a)) {
-                a(entityvillager, this.a, entityvillager1);
+            if (entityvillager1.getVillagerData().getProfession() == VillagerProfession.FARMER && entityvillager.getInventory().a(Items.WHEAT) > Items.WHEAT.getMaxStackSize() / 2) {
+                a(entityvillager, ImmutableSet.of(Items.WHEAT), entityvillager1);
+            }
+
+            if (!this.b.isEmpty() && entityvillager.getInventory().a(this.b)) {
+                a(entityvillager, this.b, entityvillager1);
             }
 
         }
     }
 
-    protected void f(WorldServer worldserver, EntityVillager entityvillager, long i) {
+    protected void c(WorldServer worldserver, EntityVillager entityvillager, long i) {
         entityvillager.getBehaviorController().removeMemory(MemoryModuleType.INTERACTION_TARGET);
     }
 
@@ -60,7 +64,7 @@ public class BehaviorTradeVillager extends Behavior<EntityVillager> {
 
     private static void a(EntityVillager entityvillager, Set<Item> set, EntityLiving entityliving) {
         InventorySubcontainer inventorysubcontainer = entityvillager.getInventory();
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
 
         for (int i = 0; i < inventorysubcontainer.getSize(); ++i) {
             ItemStack itemstack1 = inventorysubcontainer.getItem(i);
@@ -89,7 +93,7 @@ public class BehaviorTradeVillager extends Behavior<EntityVillager> {
         }
 
         if (!itemstack.isEmpty()) {
-            BehaviorUtil.a((EntityLiving) entityvillager, itemstack, entityliving);
+            BehaviorUtil.a((EntityLiving) entityvillager, itemstack, entityliving.getPositionVector());
         }
 
     }

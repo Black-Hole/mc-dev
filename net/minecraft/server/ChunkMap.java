@@ -68,7 +68,7 @@ public abstract class ChunkMap extends LightEngineGraph {
 
     protected abstract int b(long i);
 
-    public void b(long i, int j, boolean flag) {
+    public void update(long i, int j, boolean flag) {
         this.a(ChunkCoordIntPair.a, i, j, flag);
     }
 }

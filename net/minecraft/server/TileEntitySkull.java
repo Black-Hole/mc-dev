@@ -9,11 +9,14 @@ import javax.annotation.Nullable;
 
 public class TileEntitySkull extends TileEntity implements ITickable {
 
-    public GameProfile gameProfile;
-    private int b;
-    private boolean c;
+    @Nullable
     private static UserCache userCache;
+    @Nullable
     private static MinecraftSessionService sessionService;
+    @Nullable
+    public GameProfile gameProfile;
+    private int g;
+    private boolean h;
 
     public TileEntitySkull() {
         super(TileEntityTypes.SKULL);
@@ -34,17 +37,17 @@ public class TileEntitySkull extends TileEntity implements ITickable {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
             GameProfileSerializer.serialize(nbttagcompound1, this.gameProfile);
-            nbttagcompound.set("Owner", nbttagcompound1);
+            nbttagcompound.set("SkullOwner", nbttagcompound1);
         }
 
         return nbttagcompound;
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
-        if (nbttagcompound.hasKeyOfType("Owner", 10)) {
-            this.setGameProfile(GameProfileSerializer.deserialize(nbttagcompound.getCompound("Owner")));
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
+        if (nbttagcompound.hasKeyOfType("SkullOwner", 10)) {
+            this.setGameProfile(GameProfileSerializer.deserialize(nbttagcompound.getCompound("SkullOwner")));
         } else if (nbttagcompound.hasKeyOfType("ExtraType", 8)) {
             String s = nbttagcompound.getString("ExtraType");
 
@@ -57,14 +60,14 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
     @Override
     public void tick() {
-        Block block = this.getBlock().getBlock();
+        IBlockData iblockdata = this.getBlock();
 
-        if (block == Blocks.DRAGON_HEAD || block == Blocks.DRAGON_WALL_HEAD) {
+        if (iblockdata.a(Blocks.DRAGON_HEAD) || iblockdata.a(Blocks.DRAGON_WALL_HEAD)) {
             if (this.world.isBlockIndirectlyPowered(this.position)) {
-                this.c = true;
-                ++this.b;
+                this.h = true;
+                ++this.g;
             } else {
-                this.c = false;
+                this.h = false;
             }
         }
 
@@ -91,7 +94,8 @@ public class TileEntitySkull extends TileEntity implements ITickable {
         this.update();
     }
 
-    public static GameProfile b(GameProfile gameprofile) {
+    @Nullable
+    public static GameProfile b(@Nullable GameProfile gameprofile) {
         if (gameprofile != null && !UtilColor.b(gameprofile.getName())) {
             if (gameprofile.isComplete() && gameprofile.getProperties().containsKey("textures")) {
                 return gameprofile;

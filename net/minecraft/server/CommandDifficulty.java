@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 
@@ -37,7 +36,7 @@ public class CommandDifficulty {
     public static int a(CommandListenerWrapper commandlistenerwrapper, EnumDifficulty enumdifficulty) throws CommandSyntaxException {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
-        if (minecraftserver.getWorldServer(DimensionManager.OVERWORLD).getDifficulty() == enumdifficulty) {
+        if (minecraftserver.getSaveData().getDifficulty() == enumdifficulty) {
             throw CommandDifficulty.a.create(enumdifficulty.c());
         } else {
             minecraftserver.a(enumdifficulty, true);

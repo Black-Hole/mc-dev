@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSet.Builder;
 import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.Map;
@@ -10,7 +12,7 @@ public class TagsServer<T> extends Tags<T> {
     private final IRegistry<T> a;
 
     public TagsServer(IRegistry<T> iregistry, String s, String s1) {
-        super(iregistry::getOptional, s, false, s1);
+        super(iregistry::getOptional, s, s1);
         this.a = iregistry;
     }
 
@@ -24,8 +26,8 @@ public class TagsServer<T> extends Tags<T> {
             Entry<MinecraftKey, Tag<T>> entry = (Entry) iterator.next();
 
             packetdataserializer.a((MinecraftKey) entry.getKey());
-            packetdataserializer.d(((Tag) entry.getValue()).a().size());
-            Iterator iterator1 = ((Tag) entry.getValue()).a().iterator();
+            packetdataserializer.d(((Tag) entry.getValue()).getTagged().size());
+            Iterator iterator1 = ((Tag) entry.getValue()).getTagged().iterator();
 
             while (iterator1.hasNext()) {
                 T t0 = iterator1.next();
@@ -43,13 +45,13 @@ public class TagsServer<T> extends Tags<T> {
         for (int j = 0; j < i; ++j) {
             MinecraftKey minecraftkey = packetdataserializer.o();
             int k = packetdataserializer.i();
-            Tag.a<T> tag_a = Tag.a.a();
+            Builder<T> builder = ImmutableSet.builder();
 
             for (int l = 0; l < k; ++l) {
-                tag_a.a(this.a.fromId(packetdataserializer.i()));
+                builder.add(this.a.fromId(packetdataserializer.i()));
             }
 
-            map.put(minecraftkey, tag_a.b(minecraftkey));
+            map.put(minecraftkey, Tag.b(builder.build()));
         }
 
         this.b((Map) map);

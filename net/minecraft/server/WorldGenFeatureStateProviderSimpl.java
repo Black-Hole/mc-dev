@@ -1,34 +1,26 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMap.Builder;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
 import java.util.Random;
 
 public class WorldGenFeatureStateProviderSimpl extends WorldGenFeatureStateProvider {
 
-    private final IBlockData b;
+    public static final Codec<WorldGenFeatureStateProviderSimpl> b = IBlockData.b.fieldOf("state").xmap(WorldGenFeatureStateProviderSimpl::new, (worldgenfeaturestateprovidersimpl) -> {
+        return worldgenfeaturestateprovidersimpl.c;
+    }).codec();
+    private final IBlockData c;
 
     public WorldGenFeatureStateProviderSimpl(IBlockData iblockdata) {
-        super(WorldGenFeatureStateProviders.a);
-        this.b = iblockdata;
+        this.c = iblockdata;
     }
 
-    public <T> WorldGenFeatureStateProviderSimpl(Dynamic<T> dynamic) {
-        this(IBlockData.a(dynamic.get("state").orElseEmptyMap()));
+    @Override
+    protected WorldGenFeatureStateProviders<?> a() {
+        return WorldGenFeatureStateProviders.a;
     }
 
     @Override
     public IBlockData a(Random random, BlockPosition blockposition) {
-        return this.b;
-    }
-
-    @Override
-    public <T> T a(DynamicOps<T> dynamicops) {
-        Builder<T, T> builder = ImmutableMap.builder();
-
-        builder.put(dynamicops.createString("type"), dynamicops.createString(IRegistry.t.getKey(this.a).toString())).put(dynamicops.createString("state"), IBlockData.a(dynamicops, this.b).getValue());
-        return (new Dynamic(dynamicops, dynamicops.createMap(builder.build()))).getValue();
+        return this.c;
     }
 }

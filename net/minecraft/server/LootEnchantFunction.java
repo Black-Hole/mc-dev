@@ -9,12 +9,17 @@ import java.util.Set;
 public class LootEnchantFunction extends LootItemFunctionConditional {
 
     private final LootValueBounds a;
-    private final int c;
+    private final int b;
 
     private LootEnchantFunction(LootItemCondition[] alootitemcondition, LootValueBounds lootvaluebounds, int i) {
         super(alootitemcondition);
         this.a = lootvaluebounds;
-        this.c = i;
+        this.b = i;
+    }
+
+    @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.g;
     }
 
     @Override
@@ -22,8 +27,8 @@ public class LootEnchantFunction extends LootItemFunctionConditional {
         return ImmutableSet.of(LootContextParameters.KILLER_ENTITY);
     }
 
-    private boolean b() {
-        return this.c > 0;
+    private boolean c() {
+        return this.b > 0;
     }
 
     @Override
@@ -40,8 +45,8 @@ public class LootEnchantFunction extends LootItemFunctionConditional {
             float f = (float) i * this.a.b(loottableinfo.a());
 
             itemstack.add(Math.round(f));
-            if (this.b() && itemstack.getCount() > this.c) {
-                itemstack.setCount(this.c);
+            if (this.c() && itemstack.getCount() > this.b) {
+                itemstack.setCount(this.b);
             }
         }
 
@@ -54,15 +59,13 @@ public class LootEnchantFunction extends LootItemFunctionConditional {
 
     public static class b extends LootItemFunctionConditional.c<LootEnchantFunction> {
 
-        protected b() {
-            super(new MinecraftKey("looting_enchant"), LootEnchantFunction.class);
-        }
+        public b() {}
 
         public void a(JsonObject jsonobject, LootEnchantFunction lootenchantfunction, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootenchantfunction, jsonserializationcontext);
             jsonobject.add("count", jsonserializationcontext.serialize(lootenchantfunction.a));
-            if (lootenchantfunction.b()) {
-                jsonobject.add("limit", jsonserializationcontext.serialize(lootenchantfunction.c));
+            if (lootenchantfunction.c()) {
+                jsonobject.add("limit", jsonserializationcontext.serialize(lootenchantfunction.b));
             }
 
         }

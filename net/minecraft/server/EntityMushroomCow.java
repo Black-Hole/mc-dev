@@ -1,15 +1,16 @@
 package net.minecraft.server;
 
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class EntityMushroomCow extends EntityCow {
+public class EntityMushroomCow extends EntityCow implements IShearable {
 
-    private static final DataWatcherObject<String> bw = DataWatcher.a(EntityMushroomCow.class, DataWatcherRegistry.d);
-    private MobEffectList bx;
-    private int by;
-    private UUID bz;
+    private static final DataWatcherObject<String> bv = DataWatcher.a(EntityMushroomCow.class, DataWatcherRegistry.d);
+    private MobEffectList bw;
+    private int bx;
+    private UUID by;
 
     public EntityMushroomCow(EntityTypes<? extends EntityMushroomCow> entitytypes, World world) {
         super(entitytypes, world);
@@ -17,21 +18,21 @@ public class EntityMushroomCow extends EntityCow {
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return iworldreader.getType(blockposition.down()).getBlock() == Blocks.MYCELIUM ? 10.0F : iworldreader.w(blockposition) - 0.5F;
+        return iworldreader.getType(blockposition.down()).a(Blocks.MYCELIUM) ? 10.0F : iworldreader.y(blockposition) - 0.5F;
     }
 
     public static boolean c(EntityTypes<EntityMushroomCow> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
-        return generatoraccess.getType(blockposition.down()).getBlock() == Blocks.MYCELIUM && generatoraccess.getLightLevel(blockposition, 0) > 8;
+        return generatoraccess.getType(blockposition.down()).a(Blocks.MYCELIUM) && generatoraccess.getLightLevel(blockposition, 0) > 8;
     }
 
     @Override
     public void onLightningStrike(EntityLightning entitylightning) {
         UUID uuid = entitylightning.getUniqueID();
 
-        if (!uuid.equals(this.bz)) {
+        if (!uuid.equals(this.by)) {
             this.setVariant(this.getVariant() == EntityMushroomCow.Type.RED ? EntityMushroomCow.Type.BROWN : EntityMushroomCow.Type.RED);
-            this.bz = uuid;
-            this.a(SoundEffects.ENTITY_MOOSHROOM_CONVERT, 2.0F, 1.0F);
+            this.by = uuid;
+            this.playSound(SoundEffects.ENTITY_MOOSHROOM_CONVERT, 2.0F, 1.0F);
         }
 
     }
@@ -39,34 +40,30 @@ public class EntityMushroomCow extends EntityCow {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityMushroomCow.bw, EntityMushroomCow.Type.RED.c);
+        this.datawatcher.register(EntityMushroomCow.bv, EntityMushroomCow.Type.RED.c);
     }
 
     @Override
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+    public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getItem() == Items.BOWL && !this.isBaby() && !entityhuman.abilities.canInstantlyBuild) {
-            itemstack.subtract(1);
+        if (itemstack.getItem() == Items.BOWL && !this.isBaby()) {
             boolean flag = false;
             ItemStack itemstack1;
 
-            if (this.bx != null) {
+            if (this.bw != null) {
                 flag = true;
                 itemstack1 = new ItemStack(Items.SUSPICIOUS_STEW);
-                ItemSuspiciousStew.a(itemstack1, this.bx, this.by);
-                this.bx = null;
-                this.by = 0;
+                ItemSuspiciousStew.a(itemstack1, this.bw, this.bx);
+                this.bw = null;
+                this.bx = 0;
             } else {
                 itemstack1 = new ItemStack(Items.MUSHROOM_STEW);
             }
 
-            if (itemstack.isEmpty()) {
-                entityhuman.a(enumhand, itemstack1);
-            } else if (!entityhuman.inventory.pickup(itemstack1)) {
-                entityhuman.drop(itemstack1, false);
-            }
+            ItemStack itemstack2 = ItemLiquidUtil.a(itemstack, entityhuman, itemstack1);
 
+            entityhuman.a(enumhand, itemstack2);
             SoundEffect soundeffect;
 
             if (flag) {
@@ -75,108 +72,132 @@ public class EntityMushroomCow extends EntityCow {
                 soundeffect = SoundEffects.ENTITY_MOOSHROOM_MILK;
             }
 
-            this.a(soundeffect, 1.0F, 1.0F);
-            return true;
-        } else {
-            int i;
+            this.playSound(soundeffect, 1.0F, 1.0F);
+            return EnumInteractionResult.a(this.world.isClientSide);
+        } else if (itemstack.getItem() == Items.SHEARS && this.canShear()) {
+            this.shear(SoundCategory.PLAYERS);
+            if (!this.world.isClientSide) {
+                itemstack.damage(1, entityhuman, (entityhuman1) -> {
+                    entityhuman1.broadcastItemBreak(enumhand);
+                });
+            }
 
-            if (itemstack.getItem() == Items.SHEARS && !this.isBaby()) {
-                this.world.addParticle(Particles.EXPLOSION, this.locX(), this.e(0.5D), this.locZ(), 0.0D, 0.0D, 0.0D);
-                if (!this.world.isClientSide) {
-                    this.die();
-                    EntityCow entitycow = (EntityCow) EntityTypes.COW.a(this.world);
-
-                    entitycow.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.yaw, this.pitch);
-                    entitycow.setHealth(this.getHealth());
-                    entitycow.aI = this.aI;
-                    if (this.hasCustomName()) {
-                        entitycow.setCustomName(this.getCustomName());
-                        entitycow.setCustomNameVisible(this.getCustomNameVisible());
-                    }
-
-                    if (this.isPersistent()) {
-                        entitycow.setPersistent();
-                    }
-
-                    entitycow.setInvulnerable(this.isInvulnerable());
-                    this.world.addEntity(entitycow);
-
-                    for (i = 0; i < 5; ++i) {
-                        this.world.addEntity(new EntityItem(this.world, this.locX(), this.e(1.0D), this.locZ(), new ItemStack(this.getVariant().d.getBlock())));
-                    }
-
-                    itemstack.damage(1, entityhuman, (entityhuman1) -> {
-                        entityhuman1.broadcastItemBreak(enumhand);
-                    });
-                    this.a(SoundEffects.ENTITY_MOOSHROOM_SHEAR, 1.0F, 1.0F);
+            return EnumInteractionResult.a(this.world.isClientSide);
+        } else if (this.getVariant() == EntityMushroomCow.Type.BROWN && itemstack.getItem().a((Tag) TagsItem.SMALL_FLOWERS)) {
+            if (this.bw != null) {
+                for (int i = 0; i < 2; ++i) {
+                    this.world.addParticle(Particles.SMOKE, this.locX() + this.random.nextDouble() / 2.0D, this.e(0.5D), this.locZ() + this.random.nextDouble() / 2.0D, 0.0D, this.random.nextDouble() / 5.0D, 0.0D);
                 }
-
-                return true;
             } else {
-                if (this.getVariant() == EntityMushroomCow.Type.BROWN && itemstack.getItem().a(TagsItem.SMALL_FLOWERS)) {
-                    if (this.bx != null) {
-                        for (int j = 0; j < 2; ++j) {
-                            this.world.addParticle(Particles.SMOKE, this.locX() + (double) (this.random.nextFloat() / 2.0F), this.e(0.5D), this.locZ() + (double) (this.random.nextFloat() / 2.0F), 0.0D, (double) (this.random.nextFloat() / 5.0F), 0.0D);
-                        }
-                    } else {
-                        Pair<MobEffectList, Integer> pair = this.j(itemstack);
+                Optional<Pair<MobEffectList, Integer>> optional = this.l(itemstack);
 
-                        if (!entityhuman.abilities.canInstantlyBuild) {
-                            itemstack.subtract(1);
-                        }
-
-                        for (i = 0; i < 4; ++i) {
-                            this.world.addParticle(Particles.EFFECT, this.locX() + (double) (this.random.nextFloat() / 2.0F), this.e(0.5D), this.locZ() + (double) (this.random.nextFloat() / 2.0F), 0.0D, (double) (this.random.nextFloat() / 5.0F), 0.0D);
-                        }
-
-                        this.bx = (MobEffectList) pair.getLeft();
-                        this.by = (Integer) pair.getRight();
-                        this.a(SoundEffects.ENTITY_MOOSHROOM_EAT, 2.0F, 1.0F);
-                    }
+                if (!optional.isPresent()) {
+                    return EnumInteractionResult.PASS;
                 }
 
-                return super.a(entityhuman, enumhand);
+                Pair<MobEffectList, Integer> pair = (Pair) optional.get();
+
+                if (!entityhuman.abilities.canInstantlyBuild) {
+                    itemstack.subtract(1);
+                }
+
+                for (int j = 0; j < 4; ++j) {
+                    this.world.addParticle(Particles.EFFECT, this.locX() + this.random.nextDouble() / 2.0D, this.e(0.5D), this.locZ() + this.random.nextDouble() / 2.0D, 0.0D, this.random.nextDouble() / 5.0D, 0.0D);
+                }
+
+                this.bw = (MobEffectList) pair.getLeft();
+                this.bx = (Integer) pair.getRight();
+                this.playSound(SoundEffects.ENTITY_MOOSHROOM_EAT, 2.0F, 1.0F);
+            }
+
+            return EnumInteractionResult.a(this.world.isClientSide);
+        } else {
+            return super.b(entityhuman, enumhand);
+        }
+    }
+
+    @Override
+    public void shear(SoundCategory soundcategory) {
+        this.world.playSound((EntityHuman) null, (Entity) this, SoundEffects.ENTITY_MOOSHROOM_SHEAR, soundcategory, 1.0F, 1.0F);
+        if (!this.world.s_()) {
+            ((WorldServer) this.world).a(Particles.EXPLOSION, this.locX(), this.e(0.5D), this.locZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
+            this.die();
+            EntityCow entitycow = (EntityCow) EntityTypes.COW.a(this.world);
+
+            entitycow.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.yaw, this.pitch);
+            entitycow.setHealth(this.getHealth());
+            entitycow.aH = this.aH;
+            if (this.hasCustomName()) {
+                entitycow.setCustomName(this.getCustomName());
+                entitycow.setCustomNameVisible(this.getCustomNameVisible());
+            }
+
+            if (this.isPersistent()) {
+                entitycow.setPersistent();
+            }
+
+            entitycow.setInvulnerable(this.isInvulnerable());
+            this.world.addEntity(entitycow);
+
+            for (int i = 0; i < 5; ++i) {
+                this.world.addEntity(new EntityItem(this.world, this.locX(), this.e(1.0D), this.locZ(), new ItemStack(this.getVariant().d.getBlock())));
             }
         }
+
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public boolean canShear() {
+        return this.isAlive() && !this.isBaby();
+    }
+
+    @Override
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setString("Type", this.getVariant().c);
-        if (this.bx != null) {
-            nbttagcompound.setByte("EffectId", (byte) MobEffectList.getId(this.bx));
-            nbttagcompound.setInt("EffectDuration", this.by);
+        if (this.bw != null) {
+            nbttagcompound.setByte("EffectId", (byte) MobEffectList.getId(this.bw));
+            nbttagcompound.setInt("EffectDuration", this.bx);
         }
 
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.setVariant(EntityMushroomCow.Type.b(nbttagcompound.getString("Type")));
         if (nbttagcompound.hasKeyOfType("EffectId", 1)) {
-            this.bx = MobEffectList.fromId(nbttagcompound.getByte("EffectId"));
+            this.bw = MobEffectList.fromId(nbttagcompound.getByte("EffectId"));
         }
 
         if (nbttagcompound.hasKeyOfType("EffectDuration", 3)) {
-            this.by = nbttagcompound.getInt("EffectDuration");
+            this.bx = nbttagcompound.getInt("EffectDuration");
         }
 
     }
 
-    private Pair<MobEffectList, Integer> j(ItemStack itemstack) {
-        BlockFlowers blockflowers = (BlockFlowers) ((ItemBlock) itemstack.getItem()).getBlock();
+    private Optional<Pair<MobEffectList, Integer>> l(ItemStack itemstack) {
+        Item item = itemstack.getItem();
 
-        return Pair.of(blockflowers.c(), blockflowers.d());
+        if (item instanceof ItemBlock) {
+            Block block = ((ItemBlock) item).getBlock();
+
+            if (block instanceof BlockFlowers) {
+                BlockFlowers blockflowers = (BlockFlowers) block;
+
+                return Optional.of(Pair.of(blockflowers.c(), blockflowers.d()));
+            }
+        }
+
+        return Optional.empty();
     }
 
     public void setVariant(EntityMushroomCow.Type entitymushroomcow_type) {
-        this.datawatcher.set(EntityMushroomCow.bw, entitymushroomcow_type.c);
+        this.datawatcher.set(EntityMushroomCow.bv, entitymushroomcow_type.c);
     }
 
     public EntityMushroomCow.Type getVariant() {
-        return EntityMushroomCow.Type.b((String) this.datawatcher.get(EntityMushroomCow.bw));
+        return EntityMushroomCow.Type.b((String) this.datawatcher.get(EntityMushroomCow.bv));
     }
 
     @Override

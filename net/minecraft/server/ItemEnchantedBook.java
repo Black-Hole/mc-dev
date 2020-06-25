@@ -9,23 +9,23 @@ public class ItemEnchantedBook extends Item {
     }
 
     @Override
-    public boolean d_(ItemStack itemstack) {
+    public boolean e(ItemStack itemstack) {
         return true;
     }
 
     @Override
-    public boolean g_(ItemStack itemstack) {
+    public boolean f_(ItemStack itemstack) {
         return false;
     }
 
-    public static NBTTagList e(ItemStack itemstack) {
+    public static NBTTagList d(ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.getTag();
 
         return nbttagcompound != null ? nbttagcompound.getList("StoredEnchantments", 10) : new NBTTagList();
     }
 
     public static void a(ItemStack itemstack, WeightedRandomEnchant weightedrandomenchant) {
-        NBTTagList nbttaglist = e(itemstack);
+        NBTTagList nbttaglist = d(itemstack);
         boolean flag = true;
         MinecraftKey minecraftkey = IRegistry.ENCHANTMENT.getKey(weightedrandomenchant.enchantment);
 

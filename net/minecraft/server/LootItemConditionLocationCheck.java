@@ -9,15 +9,20 @@ public class LootItemConditionLocationCheck implements LootItemCondition {
     private final CriterionConditionLocation a;
     private final BlockPosition b;
 
-    public LootItemConditionLocationCheck(CriterionConditionLocation criterionconditionlocation, BlockPosition blockposition) {
+    private LootItemConditionLocationCheck(CriterionConditionLocation criterionconditionlocation, BlockPosition blockposition) {
         this.a = criterionconditionlocation;
         this.b = blockposition;
+    }
+
+    @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.m;
     }
 
     public boolean test(LootTableInfo loottableinfo) {
         BlockPosition blockposition = (BlockPosition) loottableinfo.getContextParameter(LootContextParameters.POSITION);
 
-        return blockposition != null && this.a.a(loottableinfo.c(), (float) (blockposition.getX() + this.b.getX()), (float) (blockposition.getY() + this.b.getY()), (float) (blockposition.getZ() + this.b.getZ()));
+        return blockposition != null && this.a.a(loottableinfo.getWorld(), (float) (blockposition.getX() + this.b.getX()), (float) (blockposition.getY() + this.b.getY()), (float) (blockposition.getZ() + this.b.getZ()));
     }
 
     public static LootItemCondition.a a(CriterionConditionLocation.a criterionconditionlocation_a) {
@@ -26,11 +31,15 @@ public class LootItemConditionLocationCheck implements LootItemCondition {
         };
     }
 
-    public static class a extends LootItemCondition.b<LootItemConditionLocationCheck> {
+    public static LootItemCondition.a a(CriterionConditionLocation.a criterionconditionlocation_a, BlockPosition blockposition) {
+        return () -> {
+            return new LootItemConditionLocationCheck(criterionconditionlocation_a.b(), blockposition);
+        };
+    }
 
-        public a() {
-            super(new MinecraftKey("location_check"), LootItemConditionLocationCheck.class);
-        }
+    public static class a implements LootSerializer<LootItemConditionLocationCheck> {
+
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionLocationCheck lootitemconditionlocationcheck, JsonSerializationContext jsonserializationcontext) {
             jsonobject.add("predicate", lootitemconditionlocationcheck.a.a());
@@ -49,7 +58,7 @@ public class LootItemConditionLocationCheck implements LootItemCondition {
         }
 
         @Override
-        public LootItemConditionLocationCheck b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionLocationCheck a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             CriterionConditionLocation criterionconditionlocation = CriterionConditionLocation.a(jsonobject.get("predicate"));
             int i = ChatDeserializer.a(jsonobject, "offsetX", (int) 0);
             int j = ChatDeserializer.a(jsonobject, "offsetY", (int) 0);

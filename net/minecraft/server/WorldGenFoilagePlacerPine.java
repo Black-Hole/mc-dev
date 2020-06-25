@@ -1,46 +1,60 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Random;
 import java.util.Set;
 
 public class WorldGenFoilagePlacerPine extends WorldGenFoilagePlacer {
 
-    public WorldGenFoilagePlacerPine(int i, int j) {
-        super(i, j, WorldGenFoilagePlacers.c);
-    }
+    public static final Codec<WorldGenFoilagePlacerPine> a = RecordCodecBuilder.create((instance) -> {
+        return b(instance).and(instance.group(Codec.INT.fieldOf("height").forGetter((worldgenfoilageplacerpine) -> {
+            return worldgenfoilageplacerpine.b;
+        }), Codec.INT.fieldOf("height_random").forGetter((worldgenfoilageplacerpine) -> {
+            return worldgenfoilageplacerpine.c;
+        }))).apply(instance, WorldGenFoilagePlacerPine::new);
+    });
+    private final int b;
+    private final int c;
 
-    public <T> WorldGenFoilagePlacerPine(Dynamic<T> dynamic) {
-        this(dynamic.get("radius").asInt(0), dynamic.get("radius_random").asInt(0));
+    public WorldGenFoilagePlacerPine(int i, int j, int k, int l, int i1, int j1) {
+        super(i, j, k, l);
+        this.b = i1;
+        this.c = j1;
     }
 
     @Override
-    public void a(VirtualLevelWritable virtuallevelwritable, Random random, WorldGenFeatureSmallTreeConfigurationConfiguration worldgenfeaturesmalltreeconfigurationconfiguration, int i, int j, int k, BlockPosition blockposition, Set<BlockPosition> set) {
-        int l = 0;
+    protected WorldGenFoilagePlacers<?> a() {
+        return WorldGenFoilagePlacers.c;
+    }
 
-        for (int i1 = i; i1 >= j; --i1) {
-            this.a(virtuallevelwritable, random, worldgenfeaturesmalltreeconfigurationconfiguration, i, blockposition, i1, l, set);
-            if (l >= 1 && i1 == j + 1) {
-                --l;
-            } else if (l < k) {
-                ++l;
+    @Override
+    protected void a(VirtualLevelWritable virtuallevelwritable, Random random, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration, int i, WorldGenFoilagePlacer.b worldgenfoilageplacer_b, int j, int k, Set<BlockPosition> set, int l, StructureBoundingBox structureboundingbox) {
+        int i1 = 0;
+
+        for (int j1 = l; j1 >= l - j; --j1) {
+            this.a(virtuallevelwritable, random, worldgenfeaturetreeconfiguration, worldgenfoilageplacer_b.a(), i1, set, j1, worldgenfoilageplacer_b.c(), structureboundingbox);
+            if (i1 >= 1 && j1 == l - j + 1) {
+                --i1;
+            } else if (i1 < k + worldgenfoilageplacer_b.b()) {
+                ++i1;
             }
         }
 
     }
 
     @Override
-    public int a(Random random, int i, int j, WorldGenFeatureSmallTreeConfigurationConfiguration worldgenfeaturesmalltreeconfigurationconfiguration) {
-        return this.a + random.nextInt(this.b + 1) + random.nextInt(j - i + 1);
+    public int a(Random random, int i) {
+        return super.a(random, i) + random.nextInt(i + 1);
     }
 
     @Override
-    protected boolean a(Random random, int i, int j, int k, int l, int i1) {
-        return Math.abs(j) == i1 && Math.abs(l) == i1 && i1 > 0;
+    public int a(Random random, int i, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
+        return this.b + random.nextInt(this.c + 1);
     }
 
     @Override
-    public int a(int i, int j, int k, int l) {
-        return l <= 1 ? 0 : 2;
+    protected boolean a(Random random, int i, int j, int k, int l, boolean flag) {
+        return i == l && k == l && l > 0;
     }
 }

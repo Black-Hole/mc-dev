@@ -1,21 +1,20 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenPackedIce2 extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    public WorldGenPackedIce2(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
-        super(function);
+    public WorldGenPackedIce2(Codec<WorldGenFeatureEmptyConfiguration> codec) {
+        super(codec);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-        while (generatoraccess.isEmpty(blockposition) && blockposition.getY() > 2) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+        while (generatoraccessseed.isEmpty(blockposition) && blockposition.getY() > 2) {
             blockposition = blockposition.down();
         }
 
-        if (generatoraccess.getType(blockposition).getBlock() != Blocks.SNOW_BLOCK) {
+        if (!generatoraccessseed.getType(blockposition).a(Blocks.SNOW_BLOCK)) {
             return false;
         } else {
             blockposition = blockposition.up(random.nextInt(4));
@@ -41,18 +40,18 @@ public class WorldGenPackedIce2 extends WorldGenerator<WorldGenFeatureEmptyConfi
                         float f2 = (float) MathHelper.a(j1) - 0.25F;
 
                         if ((i1 == 0 && j1 == 0 || f1 * f1 + f2 * f2 <= f * f) && (i1 != -l && i1 != l && j1 != -l && j1 != l || random.nextFloat() <= 0.75F)) {
-                            IBlockData iblockdata = generatoraccess.getType(blockposition.b(i1, k, j1));
+                            IBlockData iblockdata = generatoraccessseed.getType(blockposition.b(i1, k, j1));
                             Block block = iblockdata.getBlock();
 
                             if (iblockdata.isAir() || b(block) || block == Blocks.SNOW_BLOCK || block == Blocks.ICE) {
-                                this.a(generatoraccess, blockposition.b(i1, k, j1), Blocks.PACKED_ICE.getBlockData());
+                                this.a(generatoraccessseed, blockposition.b(i1, k, j1), Blocks.PACKED_ICE.getBlockData());
                             }
 
                             if (k != 0 && l > 1) {
-                                iblockdata = generatoraccess.getType(blockposition.b(i1, -k, j1));
+                                iblockdata = generatoraccessseed.getType(blockposition.b(i1, -k, j1));
                                 block = iblockdata.getBlock();
                                 if (iblockdata.isAir() || b(block) || block == Blocks.SNOW_BLOCK || block == Blocks.ICE) {
-                                    this.a(generatoraccess, blockposition.b(i1, -k, j1), Blocks.PACKED_ICE.getBlockData());
+                                    this.a(generatoraccessseed, blockposition.b(i1, -k, j1), Blocks.PACKED_ICE.getBlockData());
                                 }
                             }
                         }
@@ -80,11 +79,11 @@ public class WorldGenPackedIce2 extends WorldGenerator<WorldGenFeatureEmptyConfi
 
                     while (true) {
                         if (blockposition1.getY() > 50) {
-                            IBlockData iblockdata1 = generatoraccess.getType(blockposition1);
+                            IBlockData iblockdata1 = generatoraccessseed.getType(blockposition1);
                             Block block1 = iblockdata1.getBlock();
 
                             if (iblockdata1.isAir() || b(block1) || block1 == Blocks.SNOW_BLOCK || block1 == Blocks.ICE || block1 == Blocks.PACKED_ICE) {
-                                this.a(generatoraccess, blockposition1, Blocks.PACKED_ICE.getBlockData());
+                                this.a(generatoraccessseed, blockposition1, Blocks.PACKED_ICE.getBlockData());
                                 blockposition1 = blockposition1.down();
                                 --l1;
                                 if (l1 <= 0) {

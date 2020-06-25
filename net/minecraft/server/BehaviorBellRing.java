@@ -18,10 +18,10 @@ public class BehaviorBellRing extends Behavior<EntityLiving> {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
         BlockPosition blockposition = ((GlobalPos) behaviorcontroller.getMemory(MemoryModuleType.MEETING_POINT).get()).getBlockPosition();
 
-        if (blockposition.a((BaseBlockPosition) (new BlockPosition(entityliving)), 3.0D)) {
+        if (blockposition.a((BaseBlockPosition) entityliving.getChunkCoordinates(), 3.0D)) {
             IBlockData iblockdata = worldserver.getType(blockposition);
 
-            if (iblockdata.getBlock() == Blocks.BELL) {
+            if (iblockdata.a(Blocks.BELL)) {
                 BlockBell blockbell = (BlockBell) iblockdata.getBlock();
 
                 blockbell.a((World) worldserver, blockposition, (EnumDirection) null);

@@ -55,7 +55,7 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
     public void e() {
         super.e();
         World world = this.entity.world;
-        BlockPosition blockposition = new BlockPosition(this.entity);
+        BlockPosition blockposition = this.entity.getChunkCoordinates();
         BlockPosition blockposition1 = this.a(blockposition, (IBlockAccess) world);
         Random random = this.entity.getRandom();
 
@@ -102,7 +102,7 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
 
     @Nullable
     private BlockPosition a(BlockPosition blockposition, IBlockAccess iblockaccess) {
-        if (iblockaccess.getType(blockposition).getBlock() == this.g) {
+        if (iblockaccess.getType(blockposition).a(this.g)) {
             return blockposition;
         } else {
             BlockPosition[] ablockposition = new BlockPosition[]{blockposition.down(), blockposition.west(), blockposition.east(), blockposition.north(), blockposition.south(), blockposition.down().down()};
@@ -112,7 +112,7 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
             for (int j = 0; j < i; ++j) {
                 BlockPosition blockposition1 = ablockposition1[j];
 
-                if (iblockaccess.getType(blockposition1).getBlock() == this.g) {
+                if (iblockaccess.getType(blockposition1).a(this.g)) {
                     return blockposition1;
                 }
             }
@@ -125,6 +125,6 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
     protected boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
         IChunkAccess ichunkaccess = iworldreader.getChunkAt(blockposition.getX() >> 4, blockposition.getZ() >> 4, ChunkStatus.FULL, false);
 
-        return ichunkaccess == null ? false : ichunkaccess.getType(blockposition).getBlock() == this.g && ichunkaccess.getType(blockposition.up()).isAir() && ichunkaccess.getType(blockposition.up(2)).isAir();
+        return ichunkaccess == null ? false : ichunkaccess.getType(blockposition).a(this.g) && ichunkaccess.getType(blockposition.up()).isAir() && ichunkaccess.getType(blockposition.up(2)).isAir();
     }
 }

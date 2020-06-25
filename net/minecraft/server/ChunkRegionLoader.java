@@ -9,9 +9,10 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.function.Function;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +23,7 @@ public class ChunkRegionLoader {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static ProtoChunk loadChunk(WorldServer worldserver, DefinedStructureManager definedstructuremanager, VillagePlace villageplace, ChunkCoordIntPair chunkcoordintpair, NBTTagCompound nbttagcompound) {
-        ChunkGenerator<?> chunkgenerator = worldserver.getChunkProvider().getChunkGenerator();
+        ChunkGenerator chunkgenerator = worldserver.getChunkProvider().getChunkGenerator();
         WorldChunkManager worldchunkmanager = chunkgenerator.getWorldChunkManager();
         NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Level");
         ChunkCoordIntPair chunkcoordintpair1 = new ChunkCoordIntPair(nbttagcompound1.getInt("xPos"), nbttagcompound1.getInt("zPos"));
@@ -43,7 +44,7 @@ public class ChunkRegionLoader {
         NBTTagList nbttaglist = nbttagcompound1.getList("Sections", 10);
         boolean flag1 = true;
         ChunkSection[] achunksection = new ChunkSection[16];
-        boolean flag2 = worldserver.getWorldProvider().f();
+        boolean flag2 = worldserver.getDimensionManager().hasSkyLight();
         ChunkProviderServer chunkproviderserver = worldserver.getChunkProvider();
         LightEngine lightengine = chunkproviderserver.getLightEngine();
 
@@ -69,11 +70,11 @@ public class ChunkRegionLoader {
 
             if (flag) {
                 if (nbttagcompound2.hasKeyOfType("BlockLight", 7)) {
-                    lightengine.a(EnumSkyBlock.BLOCK, SectionPosition.a(chunkcoordintpair, b0), new NibbleArray(nbttagcompound2.getByteArray("BlockLight")));
+                    lightengine.a(EnumSkyBlock.BLOCK, SectionPosition.a(chunkcoordintpair, b0), new NibbleArray(nbttagcompound2.getByteArray("BlockLight")), true);
                 }
 
                 if (flag2 && nbttagcompound2.hasKeyOfType("SkyLight", 7)) {
-                    lightengine.a(EnumSkyBlock.SKY, SectionPosition.a(chunkcoordintpair, b0), new NibbleArray(nbttagcompound2.getByteArray("SkyLight")));
+                    lightengine.a(EnumSkyBlock.SKY, SectionPosition.a(chunkcoordintpair, b0), new NibbleArray(nbttagcompound2.getByteArray("SkyLight")), true);
                 }
             }
         }
@@ -130,7 +131,7 @@ public class ChunkRegionLoader {
                 while (iterator.hasNext()) {
                     BlockPosition blockposition = (BlockPosition) iterator.next();
 
-                    if (((IChunkAccess) object).getType(blockposition).h() != 0) {
+                    if (((IChunkAccess) object).getType(blockposition).f() != 0) {
                         protochunk.j(blockposition);
                     }
                 }
@@ -144,7 +145,7 @@ public class ChunkRegionLoader {
 
         while (iterator1.hasNext()) {
             HeightMap.Type heightmap_type = (HeightMap.Type) iterator1.next();
-            String s = heightmap_type.a();
+            String s = heightmap_type.b();
 
             if (nbttagcompound3.hasKeyOfType(s, 12)) {
                 ((IChunkAccess) object).a(heightmap_type, nbttagcompound3.getLongArray(s));
@@ -156,7 +157,7 @@ public class ChunkRegionLoader {
         HeightMap.a((IChunkAccess) object, enumset);
         NBTTagCompound nbttagcompound4 = nbttagcompound1.getCompound("Structures");
 
-        ((IChunkAccess) object).a(a(chunkgenerator, definedstructuremanager, nbttagcompound4));
+        ((IChunkAccess) object).a(a(definedstructuremanager, nbttagcompound4, worldserver.getSeed()));
         ((IChunkAccess) object).b(a(chunkcoordintpair, nbttagcompound4));
         if (nbttagcompound1.getBoolean("shouldSave")) {
             ((IChunkAccess) object).setNeedsSaving(true);
@@ -327,8 +328,11 @@ public class ChunkRegionLoader {
 
             for (int l = 0; l < k; ++l) {
                 WorldGenStage.Features worldgenstage_features = aworldgenstage_features[l];
+                BitSet bitset = protochunk.a(worldgenstage_features);
 
-                nbttagcompound3.setByteArray(worldgenstage_features.toString(), ichunkaccess.a(worldgenstage_features).toByteArray());
+                if (bitset != null) {
+                    nbttagcompound3.setByteArray(worldgenstage_features.toString(), bitset.toByteArray());
+                }
             }
 
             nbttagcompound1.set("CarvingMasks", nbttagcompound3);
@@ -340,7 +344,7 @@ public class ChunkRegionLoader {
         if (ticklist instanceof ProtoChunkTickList) {
             nbttagcompound1.set("ToBeTicked", ((ProtoChunkTickList) ticklist).b());
         } else if (ticklist instanceof TickListChunk) {
-            nbttagcompound1.set("TileTicks", ((TickListChunk) ticklist).a(worldserver.getTime()));
+            nbttagcompound1.set("TileTicks", ((TickListChunk) ticklist).b());
         } else {
             nbttagcompound1.set("TileTicks", worldserver.getBlockTickList().a(chunkcoordintpair));
         }
@@ -350,7 +354,7 @@ public class ChunkRegionLoader {
         if (ticklist1 instanceof ProtoChunkTickList) {
             nbttagcompound1.set("LiquidsToBeTicked", ((ProtoChunkTickList) ticklist1).b());
         } else if (ticklist1 instanceof TickListChunk) {
-            nbttagcompound1.set("LiquidTicks", ((TickListChunk) ticklist1).a(worldserver.getTime()));
+            nbttagcompound1.set("LiquidTicks", ((TickListChunk) ticklist1).b());
         } else {
             nbttagcompound1.set("LiquidTicks", worldserver.getFluidTickList().a(chunkcoordintpair));
         }
@@ -363,7 +367,7 @@ public class ChunkRegionLoader {
             Entry<HeightMap.Type, HeightMap> entry = (Entry) iterator2.next();
 
             if (ichunkaccess.getChunkStatus().h().contains(entry.getKey())) {
-                nbttagcompound2.set(((HeightMap.Type) entry.getKey()).a(), new NBTTagLongArray(((HeightMap) entry.getValue()).a()));
+                nbttagcompound2.set(((HeightMap.Type) entry.getKey()).b(), new NBTTagLongArray(((HeightMap) entry.getValue()).a()));
             }
         }
 
@@ -407,7 +411,8 @@ public class ChunkRegionLoader {
             if (flag) {
                 chunk.a(nbttagcompound2);
             } else {
-                TileEntity tileentity = TileEntity.create(nbttagcompound2);
+                BlockPosition blockposition = new BlockPosition(nbttagcompound2.getInt("x"), nbttagcompound2.getInt("y"), nbttagcompound2.getInt("z"));
+                TileEntity tileentity = TileEntity.create(chunk.getType(blockposition), nbttagcompound2);
 
                 if (tileentity != null) {
                     chunk.a(tileentity);
@@ -417,15 +422,15 @@ public class ChunkRegionLoader {
 
     }
 
-    private static NBTTagCompound a(ChunkCoordIntPair chunkcoordintpair, Map<String, StructureStart> map, Map<String, LongSet> map1) {
+    private static NBTTagCompound a(ChunkCoordIntPair chunkcoordintpair, Map<StructureGenerator<?>, StructureStart<?>> map, Map<StructureGenerator<?>, LongSet> map1) {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         NBTTagCompound nbttagcompound1 = new NBTTagCompound();
         Iterator iterator = map.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry<String, StructureStart> entry = (Entry) iterator.next();
+            Entry<StructureGenerator<?>, StructureStart<?>> entry = (Entry) iterator.next();
 
-            nbttagcompound1.set((String) entry.getKey(), ((StructureStart) entry.getValue()).a(chunkcoordintpair.x, chunkcoordintpair.z));
+            nbttagcompound1.set(((StructureGenerator) entry.getKey()).i(), ((StructureStart) entry.getValue()).a(chunkcoordintpair.x, chunkcoordintpair.z));
         }
 
         nbttagcompound.set("Starts", nbttagcompound1);
@@ -433,38 +438,48 @@ public class ChunkRegionLoader {
         Iterator iterator1 = map1.entrySet().iterator();
 
         while (iterator1.hasNext()) {
-            Entry<String, LongSet> entry1 = (Entry) iterator1.next();
+            Entry<StructureGenerator<?>, LongSet> entry1 = (Entry) iterator1.next();
 
-            nbttagcompound2.set((String) entry1.getKey(), new NBTTagLongArray((LongSet) entry1.getValue()));
+            nbttagcompound2.set(((StructureGenerator) entry1.getKey()).i(), new NBTTagLongArray((LongSet) entry1.getValue()));
         }
 
         nbttagcompound.set("References", nbttagcompound2);
         return nbttagcompound;
     }
 
-    private static Map<String, StructureStart> a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-        Map<String, StructureStart> map = Maps.newHashMap();
+    private static Map<StructureGenerator<?>, StructureStart<?>> a(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound, long i) {
+        Map<StructureGenerator<?>, StructureStart<?>> map = Maps.newHashMap();
         NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Starts");
         Iterator iterator = nbttagcompound1.getKeys().iterator();
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
+            String s1 = s.toLowerCase(Locale.ROOT);
+            StructureGenerator<?> structuregenerator = (StructureGenerator) StructureGenerator.a.get(s1);
 
-            map.put(s, WorldGenFactory.a(chunkgenerator, definedstructuremanager, nbttagcompound1.getCompound(s)));
+            if (structuregenerator == null) {
+                ChunkRegionLoader.LOGGER.error("Unknown structure start: {}", s1);
+            } else {
+                StructureStart<?> structurestart = StructureGenerator.a(definedstructuremanager, nbttagcompound1.getCompound(s), i);
+
+                if (structurestart != null) {
+                    map.put(structuregenerator, structurestart);
+                }
+            }
         }
 
         return map;
     }
 
-    private static Map<String, LongSet> a(ChunkCoordIntPair chunkcoordintpair, NBTTagCompound nbttagcompound) {
-        Map<String, LongSet> map = Maps.newHashMap();
+    private static Map<StructureGenerator<?>, LongSet> a(ChunkCoordIntPair chunkcoordintpair, NBTTagCompound nbttagcompound) {
+        Map<StructureGenerator<?>, LongSet> map = Maps.newHashMap();
         NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("References");
         Iterator iterator = nbttagcompound1.getKeys().iterator();
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
 
-            map.put(s, new LongOpenHashSet(Arrays.stream(nbttagcompound1.getLongArray(s)).filter((i) -> {
+            map.put(StructureGenerator.a.get(s.toLowerCase(Locale.ROOT)), new LongOpenHashSet(Arrays.stream(nbttagcompound1.getLongArray(s)).filter((i) -> {
                 ChunkCoordIntPair chunkcoordintpair1 = new ChunkCoordIntPair(i);
 
                 if (chunkcoordintpair1.a(chunkcoordintpair) > 8) {

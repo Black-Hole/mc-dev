@@ -57,6 +57,6 @@ public class NBTTagEnd implements NBTBase {
 
     @Override
     public IChatBaseComponent a(String s, int i) {
-        return new ChatComponentText("");
+        return ChatComponentText.d;
     }
 }

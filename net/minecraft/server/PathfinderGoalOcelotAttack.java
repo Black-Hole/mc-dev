@@ -56,7 +56,7 @@ public class PathfinderGoalOcelotAttack extends PathfinderGoal {
         if (d1 <= d0) {
             if (this.d <= 0) {
                 this.d = 20;
-                this.b.B(this.c);
+                this.b.attackEntity(this.c);
             }
         }
     }

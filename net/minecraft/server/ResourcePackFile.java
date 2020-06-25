@@ -96,6 +96,7 @@ public class ResourcePackFile extends ResourcePackAbstract {
         super.finalize();
     }
 
+    @Override
     public void close() {
         if (this.c != null) {
             IOUtils.closeQuietly(this.c);

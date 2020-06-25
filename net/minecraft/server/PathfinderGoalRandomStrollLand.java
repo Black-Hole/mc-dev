@@ -18,7 +18,7 @@ public class PathfinderGoalRandomStrollLand extends PathfinderGoalRandomStroll {
     @Nullable
     @Override
     protected Vec3D g() {
-        if (this.a.az()) {
+        if (this.a.aD()) {
             Vec3D vec3d = RandomPositionGenerator.b(this.a, 15, 7);
 
             return vec3d == null ? super.g() : vec3d;

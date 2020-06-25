@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
@@ -10,20 +11,20 @@ public class EntityPhantom extends EntityFlying implements IMonster {
     private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityPhantom.class, DataWatcherRegistry.b);
     private Vec3D c;
     private BlockPosition d;
-    private EntityPhantom.AttackPhase bw;
+    private EntityPhantom.AttackPhase bv;
 
     public EntityPhantom(EntityTypes<? extends EntityPhantom> entitytypes, World world) {
         super(entitytypes, world);
         this.c = Vec3D.a;
         this.d = BlockPosition.ZERO;
-        this.bw = EntityPhantom.AttackPhase.CIRCLE;
+        this.bv = EntityPhantom.AttackPhase.CIRCLE;
         this.f = 5;
         this.moveController = new EntityPhantom.g(this);
         this.lookController = new EntityPhantom.f(this);
     }
 
     @Override
-    protected EntityAIBodyControl o() {
+    protected EntityAIBodyControl r() {
         return new EntityPhantom.d(this);
     }
 
@@ -36,12 +37,6 @@ public class EntityPhantom extends EntityFlying implements IMonster {
     }
 
     @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeMap().b(GenericAttributes.ATTACK_DAMAGE);
-    }
-
-    @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
         this.datawatcher.register(EntityPhantom.b, 0);
@@ -51,7 +46,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
         this.datawatcher.set(EntityPhantom.b, MathHelper.clamp(i, 0, 64));
     }
 
-    private void ep() {
+    private void eK() {
         this.updateSize();
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double) (6 + this.getSize()));
     }
@@ -68,14 +63,14 @@ public class EntityPhantom extends EntityFlying implements IMonster {
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
         if (EntityPhantom.b.equals(datawatcherobject)) {
-            this.ep();
+            this.eK();
         }
 
         super.a(datawatcherobject);
     }
 
     @Override
-    protected boolean J() {
+    protected boolean L() {
         return true;
     }
 
@@ -103,7 +98,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
 
     @Override
     public void movementTick() {
-        if (this.isAlive() && this.en()) {
+        if (this.isAlive() && this.eH()) {
             this.setOnFire(8);
         }
 
@@ -117,14 +112,14 @@ public class EntityPhantom extends EntityFlying implements IMonster {
 
     @Override
     public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        this.d = (new BlockPosition(this)).up(5);
+        this.d = this.getChunkCoordinates().up(5);
         this.setSize(0);
         return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         if (nbttagcompound.hasKey("AX")) {
             this.d = new BlockPosition(nbttagcompound.getInt("AX"), nbttagcompound.getInt("AY"), nbttagcompound.getInt("AZ"));
         }
@@ -133,8 +128,8 @@ public class EntityPhantom extends EntityFlying implements IMonster {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setInt("AX", this.d.getX());
         nbttagcompound.setInt("AY", this.d.getY());
         nbttagcompound.setInt("AZ", this.d.getZ());
@@ -205,9 +200,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
                 List<EntityHuman> list = EntityPhantom.this.world.a(this.b, (EntityLiving) EntityPhantom.this, EntityPhantom.this.getBoundingBox().grow(16.0D, 64.0D, 16.0D));
 
                 if (!list.isEmpty()) {
-                    list.sort((entityhuman, entityhuman1) -> {
-                        return entityhuman.locY() > entityhuman1.locY() ? -1 : 1;
-                    });
+                    list.sort(Comparator.comparing(Entity::locY).reversed());
                     Iterator iterator = list.iterator();
 
                     while (iterator.hasNext()) {
@@ -248,7 +241,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
         @Override
         public void c() {
             this.b = 10;
-            EntityPhantom.this.bw = EntityPhantom.AttackPhase.CIRCLE;
+            EntityPhantom.this.bv = EntityPhantom.AttackPhase.CIRCLE;
             this.g();
         }
 
@@ -259,20 +252,20 @@ public class EntityPhantom extends EntityFlying implements IMonster {
 
         @Override
         public void e() {
-            if (EntityPhantom.this.bw == EntityPhantom.AttackPhase.CIRCLE) {
+            if (EntityPhantom.this.bv == EntityPhantom.AttackPhase.CIRCLE) {
                 --this.b;
                 if (this.b <= 0) {
-                    EntityPhantom.this.bw = EntityPhantom.AttackPhase.SWOOP;
+                    EntityPhantom.this.bv = EntityPhantom.AttackPhase.SWOOP;
                     this.g();
                     this.b = (8 + EntityPhantom.this.random.nextInt(4)) * 20;
-                    EntityPhantom.this.a(SoundEffects.ENTITY_PHANTOM_SWOOP, 10.0F, 0.95F + EntityPhantom.this.random.nextFloat() * 0.1F);
+                    EntityPhantom.this.playSound(SoundEffects.ENTITY_PHANTOM_SWOOP, 10.0F, 0.95F + EntityPhantom.this.random.nextFloat() * 0.1F);
                 }
             }
 
         }
 
         private void g() {
-            EntityPhantom.this.d = (new BlockPosition(EntityPhantom.this.getGoalTarget())).up(20 + EntityPhantom.this.random.nextInt(20));
+            EntityPhantom.this.d = EntityPhantom.this.getGoalTarget().getChunkCoordinates().up(20 + EntityPhantom.this.random.nextInt(20));
             if (EntityPhantom.this.d.getY() < EntityPhantom.this.world.getSeaLevel()) {
                 EntityPhantom.this.d = new BlockPosition(EntityPhantom.this.d.getX(), EntityPhantom.this.world.getSeaLevel() + 1, EntityPhantom.this.d.getZ());
             }
@@ -288,7 +281,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
 
         @Override
         public boolean a() {
-            return EntityPhantom.this.getGoalTarget() != null && EntityPhantom.this.bw == EntityPhantom.AttackPhase.SWOOP;
+            return EntityPhantom.this.getGoalTarget() != null && EntityPhantom.this.bv == EntityPhantom.AttackPhase.SWOOP;
         }
 
         @Override
@@ -313,7 +306,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
                         while (iterator.hasNext()) {
                             EntityCat entitycat = (EntityCat) iterator.next();
 
-                            entitycat.eE();
+                            entitycat.fa();
                         }
 
                         return false;
@@ -330,7 +323,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
         @Override
         public void d() {
             EntityPhantom.this.setGoalTarget((EntityLiving) null);
-            EntityPhantom.this.bw = EntityPhantom.AttackPhase.CIRCLE;
+            EntityPhantom.this.bv = EntityPhantom.AttackPhase.CIRCLE;
         }
 
         @Override
@@ -339,11 +332,13 @@ public class EntityPhantom extends EntityFlying implements IMonster {
 
             EntityPhantom.this.c = new Vec3D(entityliving.locX(), entityliving.e(0.5D), entityliving.locZ());
             if (EntityPhantom.this.getBoundingBox().g(0.20000000298023224D).c(entityliving.getBoundingBox())) {
-                EntityPhantom.this.B(entityliving);
-                EntityPhantom.this.bw = EntityPhantom.AttackPhase.CIRCLE;
-                EntityPhantom.this.world.triggerEffect(1039, new BlockPosition(EntityPhantom.this), 0);
+                EntityPhantom.this.attackEntity(entityliving);
+                EntityPhantom.this.bv = EntityPhantom.AttackPhase.CIRCLE;
+                if (!EntityPhantom.this.isSilent()) {
+                    EntityPhantom.this.world.triggerEffect(1039, EntityPhantom.this.getChunkCoordinates(), 0);
+                }
             } else if (EntityPhantom.this.positionChanged || EntityPhantom.this.hurtTicks > 0) {
-                EntityPhantom.this.bw = EntityPhantom.AttackPhase.CIRCLE;
+                EntityPhantom.this.bv = EntityPhantom.AttackPhase.CIRCLE;
             }
 
         }
@@ -362,7 +357,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
 
         @Override
         public boolean a() {
-            return EntityPhantom.this.getGoalTarget() == null || EntityPhantom.this.bw == EntityPhantom.AttackPhase.CIRCLE;
+            return EntityPhantom.this.getGoalTarget() == null || EntityPhantom.this.bv == EntityPhantom.AttackPhase.CIRCLE;
         }
 
         @Override
@@ -396,12 +391,12 @@ public class EntityPhantom extends EntityFlying implements IMonster {
                 this.h();
             }
 
-            if (EntityPhantom.this.c.y < EntityPhantom.this.locY() && !EntityPhantom.this.world.isEmpty((new BlockPosition(EntityPhantom.this)).down(1))) {
+            if (EntityPhantom.this.c.y < EntityPhantom.this.locY() && !EntityPhantom.this.world.isEmpty(EntityPhantom.this.getChunkCoordinates().down(1))) {
                 this.e = Math.max(1.0F, this.e);
                 this.h();
             }
 
-            if (EntityPhantom.this.c.y > EntityPhantom.this.locY() && !EntityPhantom.this.world.isEmpty((new BlockPosition(EntityPhantom.this)).up(1))) {
+            if (EntityPhantom.this.c.y > EntityPhantom.this.locY() && !EntityPhantom.this.world.isEmpty(EntityPhantom.this.getChunkCoordinates().up(1))) {
                 this.e = Math.min(-1.0F, this.e);
                 this.h();
             }
@@ -410,11 +405,11 @@ public class EntityPhantom extends EntityFlying implements IMonster {
 
         private void h() {
             if (BlockPosition.ZERO.equals(EntityPhantom.this.d)) {
-                EntityPhantom.this.d = new BlockPosition(EntityPhantom.this);
+                EntityPhantom.this.d = EntityPhantom.this.getChunkCoordinates();
             }
 
             this.c += this.f * 15.0F * 0.017453292F;
-            EntityPhantom.this.c = (new Vec3D(EntityPhantom.this.d)).add((double) (this.d * MathHelper.cos(this.c)), (double) (-4.0F + this.e), (double) (this.d * MathHelper.sin(this.c)));
+            EntityPhantom.this.c = Vec3D.b((BaseBlockPosition) EntityPhantom.this.d).add((double) (this.d * MathHelper.cos(this.c)), (double) (-4.0F + this.e), (double) (this.d * MathHelper.sin(this.c)));
         }
     }
 
@@ -447,8 +442,8 @@ public class EntityPhantom extends EntityFlying implements IMonster {
 
         @Override
         public void a() {
-            EntityPhantom.this.aK = EntityPhantom.this.aI;
-            EntityPhantom.this.aI = EntityPhantom.this.yaw;
+            EntityPhantom.this.aJ = EntityPhantom.this.aH;
+            EntityPhantom.this.aH = EntityPhantom.this.yaw;
         }
     }
 
@@ -483,7 +478,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
             float f6 = MathHelper.g(f4 * 57.295776F);
 
             EntityPhantom.this.yaw = MathHelper.d(f5, f6, 4.0F) - 90.0F;
-            EntityPhantom.this.aI = EntityPhantom.this.yaw;
+            EntityPhantom.this.aH = EntityPhantom.this.yaw;
             if (MathHelper.d(f3, EntityPhantom.this.yaw) < 3.0F) {
                 this.j = MathHelper.c(this.j, 1.8F, 0.005F * (1.8F / this.j));
             } else {

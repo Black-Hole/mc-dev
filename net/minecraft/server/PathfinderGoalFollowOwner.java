@@ -37,7 +37,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
             return false;
         } else if (entityliving.isSpectator()) {
             return false;
-        } else if (this.a.isSitting()) {
+        } else if (this.a.isWillSit()) {
             return false;
         } else if (this.a.h((Entity) entityliving) < (double) (this.h * this.h)) {
             return false;
@@ -49,7 +49,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
 
     @Override
     public boolean b() {
-        return this.e.m() ? false : (this.a.isSitting() ? false : this.a.h((Entity) this.b) > (double) (this.g * this.g));
+        return this.e.m() ? false : (this.a.isWillSit() ? false : this.a.h((Entity) this.b) > (double) (this.g * this.g));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
 
     @Override
     public void e() {
-        this.a.getControllerLook().a(this.b, 10.0F, (float) this.a.dU());
+        this.a.getControllerLook().a(this.b, 10.0F, (float) this.a.eo());
         if (--this.f <= 0) {
             this.f = 10;
             if (!this.a.isLeashed() && !this.a.isPassenger()) {
@@ -83,7 +83,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
     }
 
     private void g() {
-        BlockPosition blockposition = new BlockPosition(this.b);
+        BlockPosition blockposition = this.b.getChunkCoordinates();
 
         for (int i = 0; i < 10; ++i) {
             int j = this.a(-3, 3);
@@ -104,14 +104,14 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
         } else if (!this.a(new BlockPosition(i, j, k))) {
             return false;
         } else {
-            this.a.setPositionRotation((double) ((float) i + 0.5F), (double) j, (double) ((float) k + 0.5F), this.a.yaw, this.a.pitch);
+            this.a.setPositionRotation((double) i + 0.5D, (double) j, (double) k + 0.5D, this.a.yaw, this.a.pitch);
             this.e.o();
             return true;
         }
     }
 
     private boolean a(BlockPosition blockposition) {
-        PathType pathtype = PathfinderNormal.b(this.c, blockposition.getX(), blockposition.getY(), blockposition.getZ());
+        PathType pathtype = PathfinderNormal.a((IBlockAccess) this.c, blockposition.i());
 
         if (pathtype != PathType.WALKABLE) {
             return false;
@@ -121,7 +121,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
             if (!this.j && iblockdata.getBlock() instanceof BlockLeaves) {
                 return false;
             } else {
-                BlockPosition blockposition1 = blockposition.b(new BlockPosition(this.a));
+                BlockPosition blockposition1 = blockposition.b(this.a.getChunkCoordinates());
 
                 return this.c.getCubes(this.a, this.a.getBoundingBox().a(blockposition1));
             }

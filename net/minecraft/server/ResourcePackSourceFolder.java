@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class ResourcePackSourceFolder implements ResourcePackSource {
@@ -14,13 +14,15 @@ public class ResourcePackSourceFolder implements ResourcePackSource {
         return flag || flag1;
     };
     private final File file;
+    private final PackSource c;
 
-    public ResourcePackSourceFolder(File file) {
+    public ResourcePackSourceFolder(File file, PackSource packsource) {
         this.file = file;
+        this.c = packsource;
     }
 
     @Override
-    public <T extends ResourcePackLoader> void a(Map<String, T> map, ResourcePackLoader.b<T> resourcepackloader_b) {
+    public <T extends ResourcePackLoader> void a(Consumer<T> consumer, ResourcePackLoader.a<T> resourcepackloader_a) {
         if (!this.file.isDirectory()) {
             this.file.mkdirs();
         }
@@ -34,10 +36,10 @@ public class ResourcePackSourceFolder implements ResourcePackSource {
             for (int j = 0; j < i; ++j) {
                 File file = afile1[j];
                 String s = "file/" + file.getName();
-                T t0 = ResourcePackLoader.a(s, false, this.a(file), resourcepackloader_b, ResourcePackLoader.Position.TOP);
+                T t0 = ResourcePackLoader.a(s, false, this.a(file), resourcepackloader_a, ResourcePackLoader.Position.TOP, this.c);
 
                 if (t0 != null) {
-                    map.put(s, t0);
+                    consumer.accept(t0);
                 }
             }
 

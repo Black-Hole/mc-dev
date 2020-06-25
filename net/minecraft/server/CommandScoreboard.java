@@ -6,7 +6,6 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
@@ -21,11 +20,11 @@ import java.util.concurrent.CompletableFuture;
 
 public class CommandScoreboard {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.objectives.add.duplicate", new Object[0]));
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.objectives.display.alreadyEmpty", new Object[0]));
-    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.objectives.display.alreadySet", new Object[0]));
-    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.players.enable.failed", new Object[0]));
-    private static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.players.enable.invalid", new Object[0]));
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.objectives.add.duplicate"));
+    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.objectives.display.alreadyEmpty"));
+    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.objectives.display.alreadySet"));
+    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.players.enable.failed"));
+    private static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("commands.scoreboard.players.enable.invalid"));
     private static final Dynamic2CommandExceptionType f = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("commands.scoreboard.players.get.null", new Object[]{object, object1});
     });
@@ -302,7 +301,7 @@ public class CommandScoreboard {
         Collection<String> collection = commandlistenerwrapper.getServer().getScoreboard().getPlayers();
 
         if (collection.isEmpty()) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.list.empty", new Object[0]), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.list.empty"), false);
         } else {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.list.success", new Object[]{collection.size(), ChatComponentUtils.a(collection)}), false);
         }
@@ -399,7 +398,7 @@ public class CommandScoreboard {
         Collection<ScoreboardObjective> collection = commandlistenerwrapper.getServer().getScoreboard().getObjectives();
 
         if (collection.isEmpty()) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.objectives.list.empty", new Object[0]), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.objectives.list.empty"), false);
         } else {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.objectives.list.success", new Object[]{collection.size(), ChatComponentUtils.b(collection, ScoreboardObjective::e)}), false);
         }

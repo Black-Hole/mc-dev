@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerEnchantedItem extends CriterionTriggerAbstract<CriterionTriggerEnchantedItem.a> {
@@ -16,15 +14,15 @@ public class CriterionTriggerEnchantedItem extends CriterionTriggerAbstract<Crit
     }
 
     @Override
-    public CriterionTriggerEnchantedItem.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerEnchantedItem.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
         CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("levels"));
 
-        return new CriterionTriggerEnchantedItem.a(criterionconditionitem, criterionconditionvalue_integerrange);
+        return new CriterionTriggerEnchantedItem.a(criterionconditionentity_b, criterionconditionitem, criterionconditionvalue_integerrange);
     }
 
     public void a(EntityPlayer entityplayer, ItemStack itemstack, int i) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggerenchanteditem_a) -> {
+        this.a(entityplayer, (criteriontriggerenchanteditem_a) -> {
             return criteriontriggerenchanteditem_a.a(itemstack, i);
         });
     }
@@ -34,14 +32,14 @@ public class CriterionTriggerEnchantedItem extends CriterionTriggerAbstract<Crit
         private final CriterionConditionItem a;
         private final CriterionConditionValue.IntegerRange b;
 
-        public a(CriterionConditionItem criterionconditionitem, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
-            super(CriterionTriggerEnchantedItem.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionItem criterionconditionitem, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
+            super(CriterionTriggerEnchantedItem.a, criterionconditionentity_b);
             this.a = criterionconditionitem;
             this.b = criterionconditionvalue_integerrange;
         }
 
         public static CriterionTriggerEnchantedItem.a c() {
-            return new CriterionTriggerEnchantedItem.a(CriterionConditionItem.a, CriterionConditionValue.IntegerRange.e);
+            return new CriterionTriggerEnchantedItem.a(CriterionConditionEntity.b.a, CriterionConditionItem.a, CriterionConditionValue.IntegerRange.e);
         }
 
         public boolean a(ItemStack itemstack, int i) {
@@ -49,8 +47,8 @@ public class CriterionTriggerEnchantedItem extends CriterionTriggerAbstract<Crit
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             jsonobject.add("item", this.a.a());
             jsonobject.add("levels", this.b.d());

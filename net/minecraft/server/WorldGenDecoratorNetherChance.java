@@ -1,21 +1,20 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class WorldGenDecoratorNetherChance extends WorldGenDecoratorFeatureSimple<WorldGenFeatureChanceDecoratorRangeConfiguration> {
 
-    public WorldGenDecoratorNetherChance(Function<Dynamic<?>, ? extends WorldGenFeatureChanceDecoratorRangeConfiguration> function) {
-        super(function);
+    public WorldGenDecoratorNetherChance(Codec<WorldGenFeatureChanceDecoratorRangeConfiguration> codec) {
+        super(codec);
     }
 
     public Stream<BlockPosition> a(Random random, WorldGenFeatureChanceDecoratorRangeConfiguration worldgenfeaturechancedecoratorrangeconfiguration, BlockPosition blockposition) {
-        if (random.nextFloat() < worldgenfeaturechancedecoratorrangeconfiguration.a) {
+        if (random.nextFloat() < worldgenfeaturechancedecoratorrangeconfiguration.b) {
             int i = random.nextInt(16) + blockposition.getX();
             int j = random.nextInt(16) + blockposition.getZ();
-            int k = random.nextInt(worldgenfeaturechancedecoratorrangeconfiguration.d - worldgenfeaturechancedecoratorrangeconfiguration.c) + worldgenfeaturechancedecoratorrangeconfiguration.b;
+            int k = random.nextInt(worldgenfeaturechancedecoratorrangeconfiguration.e - worldgenfeaturechancedecoratorrangeconfiguration.d) + worldgenfeaturechancedecoratorrangeconfiguration.c;
 
             return Stream.of(new BlockPosition(i, k, j));
         } else {

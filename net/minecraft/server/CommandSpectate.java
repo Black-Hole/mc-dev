@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
@@ -11,7 +10,7 @@ import javax.annotation.Nullable;
 
 public class CommandSpectate {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.spectate.self", new Object[0]));
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.spectate.self"));
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.spectate.not_spectator", new Object[]{object});
     });
@@ -38,7 +37,7 @@ public class CommandSpectate {
             if (entity != null) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.spectate.success.started", new Object[]{entity.getScoreboardDisplayName()}), false);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.spectate.success.stopped", new Object[0]), false);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.spectate.success.stopped"), false);
             }
 
             return 1;

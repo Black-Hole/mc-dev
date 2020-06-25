@@ -5,8 +5,9 @@ import com.google.common.collect.Sets;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic4CommandExceptionType;
 import java.util.Collection;
@@ -28,12 +29,14 @@ public class CommandSpreadPlayers {
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("spreadplayers").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(CommandDispatcher.a("center", (ArgumentType) ArgumentVec2.a()).then(CommandDispatcher.a("spreadDistance", (ArgumentType) FloatArgumentType.floatArg(0.0F)).then(CommandDispatcher.a("maxRange", (ArgumentType) FloatArgumentType.floatArg(1.0F)).then(CommandDispatcher.a("respectTeams", (ArgumentType) BoolArgumentType.bool()).then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentVec2.a(commandcontext, "center"), FloatArgumentType.getFloat(commandcontext, "spreadDistance"), FloatArgumentType.getFloat(commandcontext, "maxRange"), BoolArgumentType.getBool(commandcontext, "respectTeams"), ArgumentEntity.b(commandcontext, "targets"));
-        })))))));
+        })).then(CommandDispatcher.a("center", (ArgumentType) ArgumentVec2.a()).then(CommandDispatcher.a("spreadDistance", (ArgumentType) FloatArgumentType.floatArg(0.0F)).then(((RequiredArgumentBuilder) CommandDispatcher.a("maxRange", (ArgumentType) FloatArgumentType.floatArg(1.0F)).then(CommandDispatcher.a("respectTeams", (ArgumentType) BoolArgumentType.bool()).then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentVec2.a(commandcontext, "center"), FloatArgumentType.getFloat(commandcontext, "spreadDistance"), FloatArgumentType.getFloat(commandcontext, "maxRange"), 256, BoolArgumentType.getBool(commandcontext, "respectTeams"), ArgumentEntity.b(commandcontext, "targets"));
+        })))).then(CommandDispatcher.a("under").then(CommandDispatcher.a("maxHeight", (ArgumentType) IntegerArgumentType.integer(0)).then(CommandDispatcher.a("respectTeams", (ArgumentType) BoolArgumentType.bool()).then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentVec2.a(commandcontext, "center"), FloatArgumentType.getFloat(commandcontext, "spreadDistance"), FloatArgumentType.getFloat(commandcontext, "maxRange"), IntegerArgumentType.getInteger(commandcontext, "maxHeight"), BoolArgumentType.getBool(commandcontext, "respectTeams"), ArgumentEntity.b(commandcontext, "targets"));
+        })))))))));
     }
 
-    private static int a(CommandListenerWrapper commandlistenerwrapper, Vec2F vec2f, float f, float f1, boolean flag, Collection<? extends Entity> collection) throws CommandSyntaxException {
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Vec2F vec2f, float f, float f1, int i, boolean flag, Collection<? extends Entity> collection) throws CommandSyntaxException {
         Random random = new Random();
         double d0 = (double) (vec2f.i - f1);
         double d1 = (double) (vec2f.j - f1);
@@ -41,8 +44,8 @@ public class CommandSpreadPlayers {
         double d3 = (double) (vec2f.j + f1);
         CommandSpreadPlayers.a[] acommandspreadplayers_a = a(random, flag ? a(collection) : collection.size(), d0, d1, d2, d3);
 
-        a(vec2f, (double) f, commandlistenerwrapper.getWorld(), random, d0, d1, d2, d3, acommandspreadplayers_a, flag);
-        double d4 = a(collection, commandlistenerwrapper.getWorld(), acommandspreadplayers_a, flag);
+        a(vec2f, (double) f, commandlistenerwrapper.getWorld(), random, d0, d1, d2, d3, i, acommandspreadplayers_a, flag);
+        double d4 = a(collection, commandlistenerwrapper.getWorld(), acommandspreadplayers_a, i, flag);
 
         commandlistenerwrapper.sendMessage(new ChatMessage("commands.spreadplayers.success." + (flag ? "teams" : "entities"), new Object[]{acommandspreadplayers_a.length, vec2f.i, vec2f.j, String.format(Locale.ROOT, "%.2f", d4)}), true);
         return acommandspreadplayers_a.length;
@@ -65,42 +68,42 @@ public class CommandSpreadPlayers {
         return set.size();
     }
 
-    private static void a(Vec2F vec2f, double d0, WorldServer worldserver, Random random, double d1, double d2, double d3, double d4, CommandSpreadPlayers.a[] acommandspreadplayers_a, boolean flag) throws CommandSyntaxException {
+    private static void a(Vec2F vec2f, double d0, WorldServer worldserver, Random random, double d1, double d2, double d3, double d4, int i, CommandSpreadPlayers.a[] acommandspreadplayers_a, boolean flag) throws CommandSyntaxException {
         boolean flag1 = true;
         double d5 = 3.4028234663852886E38D;
 
-        int i;
+        int j;
 
-        for (i = 0; i < 10000 && flag1; ++i) {
+        for (j = 0; j < 10000 && flag1; ++j) {
             flag1 = false;
             d5 = 3.4028234663852886E38D;
 
-            int j;
+            int k;
             CommandSpreadPlayers.a commandspreadplayers_a;
 
-            for (int k = 0; k < acommandspreadplayers_a.length; ++k) {
-                CommandSpreadPlayers.a commandspreadplayers_a1 = acommandspreadplayers_a[k];
+            for (int l = 0; l < acommandspreadplayers_a.length; ++l) {
+                CommandSpreadPlayers.a commandspreadplayers_a1 = acommandspreadplayers_a[l];
 
-                j = 0;
+                k = 0;
                 commandspreadplayers_a = new CommandSpreadPlayers.a();
 
-                for (int l = 0; l < acommandspreadplayers_a.length; ++l) {
-                    if (k != l) {
-                        CommandSpreadPlayers.a commandspreadplayers_a2 = acommandspreadplayers_a[l];
+                for (int i1 = 0; i1 < acommandspreadplayers_a.length; ++i1) {
+                    if (l != i1) {
+                        CommandSpreadPlayers.a commandspreadplayers_a2 = acommandspreadplayers_a[i1];
                         double d6 = commandspreadplayers_a1.a(commandspreadplayers_a2);
 
                         d5 = Math.min(d6, d5);
                         if (d6 < d0) {
-                            ++j;
+                            ++k;
                             commandspreadplayers_a.a = commandspreadplayers_a.a + (commandspreadplayers_a2.a - commandspreadplayers_a1.a);
                             commandspreadplayers_a.b = commandspreadplayers_a.b + (commandspreadplayers_a2.b - commandspreadplayers_a1.b);
                         }
                     }
                 }
 
-                if (j > 0) {
-                    commandspreadplayers_a.a = commandspreadplayers_a.a / (double) j;
-                    commandspreadplayers_a.b = commandspreadplayers_a.b / (double) j;
+                if (k > 0) {
+                    commandspreadplayers_a.a = commandspreadplayers_a.a / (double) k;
+                    commandspreadplayers_a.b = commandspreadplayers_a.b / (double) k;
                     double d7 = (double) commandspreadplayers_a.b();
 
                     if (d7 > 0.0D) {
@@ -120,11 +123,11 @@ public class CommandSpreadPlayers {
 
             if (!flag1) {
                 CommandSpreadPlayers.a[] acommandspreadplayers_a1 = acommandspreadplayers_a;
-                int i1 = acommandspreadplayers_a.length;
+                int j1 = acommandspreadplayers_a.length;
 
-                for (j = 0; j < i1; ++j) {
-                    commandspreadplayers_a = acommandspreadplayers_a1[j];
-                    if (!commandspreadplayers_a.b((IBlockAccess) worldserver)) {
+                for (k = 0; k < j1; ++k) {
+                    commandspreadplayers_a = acommandspreadplayers_a1[k];
+                    if (!commandspreadplayers_a.b(worldserver, i)) {
                         commandspreadplayers_a.a(random, d1, d2, d3, d4);
                         flag1 = true;
                     }
@@ -136,7 +139,7 @@ public class CommandSpreadPlayers {
             d5 = 0.0D;
         }
 
-        if (i >= 10000) {
+        if (j >= 10000) {
             if (flag) {
                 throw CommandSpreadPlayers.a.create(acommandspreadplayers_a.length, vec2f.i, vec2f.j, String.format(Locale.ROOT, "%.2f", d5));
             } else {
@@ -145,9 +148,9 @@ public class CommandSpreadPlayers {
         }
     }
 
-    private static double a(Collection<? extends Entity> collection, WorldServer worldserver, CommandSpreadPlayers.a[] acommandspreadplayers_a, boolean flag) {
+    private static double a(Collection<? extends Entity> collection, WorldServer worldserver, CommandSpreadPlayers.a[] acommandspreadplayers_a, int i, boolean flag) {
         double d0 = 0.0D;
-        int i = 0;
+        int j = 0;
         Map<ScoreboardTeamBase, CommandSpreadPlayers.a> map = Maps.newHashMap();
 
         double d1;
@@ -160,21 +163,21 @@ public class CommandSpreadPlayers {
                 ScoreboardTeamBase scoreboardteambase = entity instanceof EntityHuman ? entity.getScoreboardTeam() : null;
 
                 if (!map.containsKey(scoreboardteambase)) {
-                    map.put(scoreboardteambase, acommandspreadplayers_a[i++]);
+                    map.put(scoreboardteambase, acommandspreadplayers_a[j++]);
                 }
 
                 commandspreadplayers_a = (CommandSpreadPlayers.a) map.get(scoreboardteambase);
             } else {
-                commandspreadplayers_a = acommandspreadplayers_a[i++];
+                commandspreadplayers_a = acommandspreadplayers_a[j++];
             }
 
-            entity.enderTeleportAndLoad((double) ((float) MathHelper.floor(commandspreadplayers_a.a) + 0.5F), (double) commandspreadplayers_a.a((IBlockAccess) worldserver), (double) MathHelper.floor(commandspreadplayers_a.b) + 0.5D);
+            entity.enderTeleportAndLoad((double) MathHelper.floor(commandspreadplayers_a.a) + 0.5D, (double) commandspreadplayers_a.a(worldserver, i), (double) MathHelper.floor(commandspreadplayers_a.b) + 0.5D);
             d1 = Double.MAX_VALUE;
             CommandSpreadPlayers.a[] acommandspreadplayers_a1 = acommandspreadplayers_a;
-            int j = acommandspreadplayers_a.length;
+            int k = acommandspreadplayers_a.length;
 
-            for (int k = 0; k < j; ++k) {
-                CommandSpreadPlayers.a commandspreadplayers_a1 = acommandspreadplayers_a1[k];
+            for (int l = 0; l < k; ++l) {
+                CommandSpreadPlayers.a commandspreadplayers_a1 = acommandspreadplayers_a1[l];
 
                 if (commandspreadplayers_a != commandspreadplayers_a1) {
                     double d2 = commandspreadplayers_a.a(commandspreadplayers_a1);
@@ -257,37 +260,33 @@ public class CommandSpreadPlayers {
             return flag;
         }
 
-        public int a(IBlockAccess iblockaccess) {
-            BlockPosition blockposition = new BlockPosition(this.a, 256.0D, this.b);
+        public int a(IBlockAccess iblockaccess, int i) {
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(this.a, (double) (i + 1), this.b);
+            boolean flag = iblockaccess.getType(blockposition_mutableblockposition).isAir();
 
-            do {
-                if (blockposition.getY() <= 0) {
-                    return 257;
+            blockposition_mutableblockposition.c(EnumDirection.DOWN);
+
+            boolean flag1;
+
+            for (boolean flag2 = iblockaccess.getType(blockposition_mutableblockposition).isAir(); blockposition_mutableblockposition.getY() > 0; flag2 = flag1) {
+                blockposition_mutableblockposition.c(EnumDirection.DOWN);
+                flag1 = iblockaccess.getType(blockposition_mutableblockposition).isAir();
+                if (!flag1 && flag2 && flag) {
+                    return blockposition_mutableblockposition.getY() + 1;
                 }
 
-                blockposition = blockposition.down();
-            } while (iblockaccess.getType(blockposition).isAir());
+                flag = flag2;
+            }
 
-            return blockposition.getY() + 1;
+            return i + 1;
         }
 
-        public boolean b(IBlockAccess iblockaccess) {
-            BlockPosition blockposition = new BlockPosition(this.a, 256.0D, this.b);
-
-            IBlockData iblockdata;
-
-            do {
-                if (blockposition.getY() <= 0) {
-                    return false;
-                }
-
-                blockposition = blockposition.down();
-                iblockdata = iblockaccess.getType(blockposition);
-            } while (iblockdata.isAir());
-
+        public boolean b(IBlockAccess iblockaccess, int i) {
+            BlockPosition blockposition = new BlockPosition(this.a, (double) (this.a(iblockaccess, i) - 1), this.b);
+            IBlockData iblockdata = iblockaccess.getType(blockposition);
             Material material = iblockdata.getMaterial();
 
-            return !material.isLiquid() && material != Material.FIRE;
+            return blockposition.getY() < i && !material.isLiquid() && material != Material.FIRE;
         }
 
         public void a(Random random, double d0, double d1, double d2, double d3) {

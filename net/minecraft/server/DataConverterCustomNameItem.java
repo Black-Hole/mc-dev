@@ -2,12 +2,11 @@ package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
+import com.mojang.serialization.Dynamic;
 import java.util.Optional;
 
 public class DataConverterCustomNameItem extends DataFix {
@@ -17,19 +16,19 @@ public class DataConverterCustomNameItem extends DataFix {
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic) {
-        Optional<? extends Dynamic<?>> optional = dynamic.get("display").get();
+        Optional<? extends Dynamic<?>> optional = dynamic.get("display").result();
 
         if (optional.isPresent()) {
             Dynamic<?> dynamic1 = (Dynamic) optional.get();
-            Optional<String> optional1 = dynamic1.get("Name").asString();
+            Optional<String> optional1 = dynamic1.get("Name").asString().result();
 
             if (optional1.isPresent()) {
                 dynamic1 = dynamic1.set("Name", dynamic1.createString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) (new ChatComponentText((String) optional1.get())))));
             } else {
-                Optional<String> optional2 = dynamic1.get("LocName").asString();
+                Optional<String> optional2 = dynamic1.get("LocName").asString().result();
 
                 if (optional2.isPresent()) {
-                    dynamic1 = dynamic1.set("Name", dynamic1.createString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) (new ChatMessage((String) optional2.get(), new Object[0])))));
+                    dynamic1 = dynamic1.set("Name", dynamic1.createString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) (new ChatMessage((String) optional2.get())))));
                     dynamic1 = dynamic1.remove("LocName");
                 }
             }

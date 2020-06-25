@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.util.Comparator;
@@ -10,33 +11,31 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 public class Pathfinder {
 
-    private final Path a = new Path();
-    private final Set<PathPoint> b = Sets.newHashSet();
-    private final PathPoint[] c = new PathPoint[32];
-    private final int d;
-    private final PathfinderAbstract e;
+    private final PathPoint[] a = new PathPoint[32];
+    private final int b;
+    private final PathfinderAbstract c;
+    private final Path d = new Path();
 
     public Pathfinder(PathfinderAbstract pathfinderabstract, int i) {
-        this.e = pathfinderabstract;
-        this.d = i;
+        this.c = pathfinderabstract;
+        this.b = i;
     }
 
     @Nullable
     public PathEntity a(ChunkCache chunkcache, EntityInsentient entityinsentient, Set<BlockPosition> set, float f, int i, float f1) {
-        this.a.a();
-        this.e.a(chunkcache, entityinsentient);
-        PathPoint pathpoint = this.e.b();
+        this.d.a();
+        this.c.a(chunkcache, entityinsentient);
+        PathPoint pathpoint = this.c.b();
         Map<PathDestination, BlockPosition> map = (Map) set.stream().collect(Collectors.toMap((blockposition) -> {
-            return this.e.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
+            return this.c.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
         }, Function.identity()));
         PathEntity pathentity = this.a(pathpoint, map, f, i, f1);
 
-        this.e.a();
+        this.c.a();
         return pathentity;
     }
 
@@ -47,33 +46,42 @@ public class Pathfinder {
         pathpoint.e = 0.0F;
         pathpoint.f = this.a(pathpoint, set);
         pathpoint.g = pathpoint.f;
-        this.a.a();
-        this.b.clear();
-        this.a.a(pathpoint);
+        this.d.a();
+        this.d.a(pathpoint);
+        Set<PathPoint> set1 = ImmutableSet.of();
         int j = 0;
-        int k = (int) ((float) this.d * f1);
+        Set<PathDestination> set2 = Sets.newHashSetWithExpectedSize(set.size());
+        int k = (int) ((float) this.b * f1);
 
-        while (!this.a.e()) {
+        while (!this.d.e()) {
             ++j;
             if (j >= k) {
                 break;
             }
 
-            PathPoint pathpoint1 = this.a.c();
+            PathPoint pathpoint1 = this.d.c();
 
             pathpoint1.i = true;
-            set.stream().filter((pathdestination) -> {
-                return pathpoint1.c((PathPoint) pathdestination) <= (float) i;
-            }).forEach(PathDestination::e);
-            if (set.stream().anyMatch(PathDestination::f)) {
+            Iterator iterator = set.iterator();
+
+            while (iterator.hasNext()) {
+                PathDestination pathdestination = (PathDestination) iterator.next();
+
+                if (pathpoint1.c((PathPoint) pathdestination) <= (float) i) {
+                    pathdestination.e();
+                    set2.add(pathdestination);
+                }
+            }
+
+            if (!set2.isEmpty()) {
                 break;
             }
 
             if (pathpoint1.a(pathpoint) < f) {
-                int l = this.e.a(this.c, pathpoint1);
+                int l = this.c.a(this.a, pathpoint1);
 
                 for (int i1 = 0; i1 < l; ++i1) {
-                    PathPoint pathpoint2 = this.c[i1];
+                    PathPoint pathpoint2 = this.a[i1];
                     float f2 = pathpoint1.a(pathpoint2);
 
                     pathpoint2.j = pathpoint1.j + f2;
@@ -84,29 +92,21 @@ public class Pathfinder {
                         pathpoint2.e = f3;
                         pathpoint2.f = this.a(pathpoint2, set) * 1.5F;
                         if (pathpoint2.c()) {
-                            this.a.a(pathpoint2, pathpoint2.e + pathpoint2.f);
+                            this.d.a(pathpoint2, pathpoint2.e + pathpoint2.f);
                         } else {
                             pathpoint2.g = pathpoint2.e + pathpoint2.f;
-                            this.a.a(pathpoint2);
+                            this.d.a(pathpoint2);
                         }
                     }
                 }
             }
         }
 
-        Stream stream;
-
-        if (set.stream().anyMatch(PathDestination::f)) {
-            stream = set.stream().filter(PathDestination::f).map((pathdestination) -> {
-                return this.a(pathdestination.d(), (BlockPosition) map.get(pathdestination), true);
-            }).sorted(Comparator.comparingInt(PathEntity::e));
-        } else {
-            stream = set.stream().map((pathdestination) -> {
-                return this.a(pathdestination.d(), (BlockPosition) map.get(pathdestination), false);
-            }).sorted(Comparator.comparingDouble(PathEntity::l).thenComparingInt(PathEntity::e));
-        }
-
-        Optional<PathEntity> optional = stream.findFirst();
+        Optional<PathEntity> optional = !set2.isEmpty() ? set2.stream().map((pathdestination1) -> {
+            return this.a(pathdestination1.d(), (BlockPosition) map.get(pathdestination1), true);
+        }).min(Comparator.comparingInt(PathEntity::e)) : set.stream().map((pathdestination1) -> {
+            return this.a(pathdestination1.d(), (BlockPosition) map.get(pathdestination1), false);
+        }).min(Comparator.comparingDouble(PathEntity::n).thenComparingInt(PathEntity::e));
 
         if (!optional.isPresent()) {
             return null;

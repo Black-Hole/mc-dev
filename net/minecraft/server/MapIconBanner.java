@@ -17,11 +17,11 @@ public class MapIconBanner {
     }
 
     public static MapIconBanner a(NBTTagCompound nbttagcompound) {
-        BlockPosition blockposition = GameProfileSerializer.c(nbttagcompound.getCompound("Pos"));
+        BlockPosition blockposition = GameProfileSerializer.b(nbttagcompound.getCompound("Pos"));
         EnumColor enumcolor = EnumColor.a(nbttagcompound.getString("Color"), EnumColor.WHITE);
-        IChatBaseComponent ichatbasecomponent = nbttagcompound.hasKey("Name") ? IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("Name")) : null;
+        IChatMutableComponent ichatmutablecomponent = nbttagcompound.hasKey("Name") ? IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("Name")) : null;
 
-        return new MapIconBanner(blockposition, enumcolor, ichatbasecomponent);
+        return new MapIconBanner(blockposition, enumcolor, ichatmutablecomponent);
     }
 
     @Nullable
@@ -108,7 +108,7 @@ public class MapIconBanner {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.set("Pos", GameProfileSerializer.a(this.a));
-        nbttagcompound.setString("Color", this.b.b());
+        nbttagcompound.setString("Color", this.b.c());
         if (this.c != null) {
             nbttagcompound.setString("Name", IChatBaseComponent.ChatSerializer.a(this.c));
         }

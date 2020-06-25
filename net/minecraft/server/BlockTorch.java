@@ -3,13 +3,15 @@ package net.minecraft.server;
 public class BlockTorch extends Block {
 
     protected static final VoxelShape d = Block.a(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D);
+    protected final ParticleParam e;
 
-    protected BlockTorch(Block.Info block_info) {
-        super(block_info);
+    protected BlockTorch(BlockBase.Info blockbase_info, ParticleParam particleparam) {
+        super(blockbase_info);
+        this.e = particleparam;
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockTorch.d;
     }
 

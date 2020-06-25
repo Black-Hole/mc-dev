@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 public class ArgumentTime implements ArgumentType<Integer> {
 
     private static final Collection<String> a = Arrays.asList("0d", "0s", "0t", "0");
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.time.invalid_unit", new Object[0]));
+    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.time.invalid_unit"));
     private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.time.invalid_tick_count", new Object[]{object});
     });

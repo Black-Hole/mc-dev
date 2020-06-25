@@ -24,7 +24,7 @@ public enum EnumDifficulty {
     }
 
     public IChatBaseComponent b() {
-        return new ChatMessage("options.difficulty." + this.g, new Object[0]);
+        return new ChatMessage("options.difficulty." + this.g);
     }
 
     public static EnumDifficulty getById(int i) {

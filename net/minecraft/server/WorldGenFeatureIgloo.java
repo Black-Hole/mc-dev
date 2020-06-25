@@ -1,49 +1,32 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
-import java.util.function.Function;
+import com.mojang.serialization.Codec;
+import java.util.Random;
 
-public class WorldGenFeatureIgloo extends WorldGenFeatureRandomScattered<WorldGenFeatureEmptyConfiguration> {
+public class WorldGenFeatureIgloo extends StructureGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    public WorldGenFeatureIgloo(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
-        super(function);
+    public WorldGenFeatureIgloo(Codec<WorldGenFeatureEmptyConfiguration> codec) {
+        super(codec);
     }
 
     @Override
-    public String b() {
-        return "Igloo";
-    }
-
-    @Override
-    public int c() {
-        return 3;
-    }
-
-    @Override
-    public StructureGenerator.a a() {
+    public StructureGenerator.a<WorldGenFeatureEmptyConfiguration> a() {
         return WorldGenFeatureIgloo.a::new;
     }
 
-    @Override
-    protected int getSeed() {
-        return 14357618;
-    }
+    public static class a extends StructureStart<WorldGenFeatureEmptyConfiguration> {
 
-    public static class a extends StructureStart {
-
-        public a(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+        public a(StructureGenerator<WorldGenFeatureEmptyConfiguration> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
             super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
-        @Override
-        public void a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase) {
-            WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration = (WorldGenFeatureEmptyConfiguration) chunkgenerator.getFeatureConfiguration(biomebase, WorldGenerator.IGLOO);
+        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
             int k = i * 16;
             int l = j * 16;
             BlockPosition blockposition = new BlockPosition(k, 90, l);
-            EnumBlockRotation enumblockrotation = EnumBlockRotation.values()[this.d.nextInt(EnumBlockRotation.values().length)];
+            EnumBlockRotation enumblockrotation = EnumBlockRotation.a((Random) this.d);
 
-            WorldGenIglooPiece.a(definedstructuremanager, blockposition, enumblockrotation, this.b, this.d, worldgenfeatureemptyconfiguration);
+            WorldGenIglooPiece.a(definedstructuremanager, blockposition, enumblockrotation, this.b, this.d);
             this.b();
         }
     }

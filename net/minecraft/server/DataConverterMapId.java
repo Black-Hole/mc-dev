@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
@@ -24,7 +24,7 @@ public class DataConverterMapId extends DataFix {
             Optional<? extends Typed<?>> optional = typed.getOptionalTyped(opticfinder);
 
             return optional.isPresent() ? typed : typed.update(DSL.remainderFinder(), (dynamic) -> {
-                return dynamic.emptyMap().merge(dynamic.createString("data"), dynamic);
+                return dynamic.createMap(ImmutableMap.of(dynamic.createString("data"), dynamic));
             });
         });
     }

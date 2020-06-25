@@ -1,45 +1,40 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMap.Builder;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import java.util.Random;
 
 public class WorldGenFeatureStateProviderWeighted extends WorldGenFeatureStateProvider {
 
-    private final WeightedList<IBlockData> b;
+    public static final Codec<WorldGenFeatureStateProviderWeighted> b = WeightedList.a(IBlockData.b).comapFlatMap(WorldGenFeatureStateProviderWeighted::a, (worldgenfeaturestateproviderweighted) -> {
+        return worldgenfeaturestateproviderweighted.c;
+    }).fieldOf("entries").codec();
+    private final WeightedList<IBlockData> c;
+
+    private static DataResult<WorldGenFeatureStateProviderWeighted> a(WeightedList<IBlockData> weightedlist) {
+        return weightedlist.b() ? DataResult.error("WeightedStateProvider with no states") : DataResult.success(new WorldGenFeatureStateProviderWeighted(weightedlist));
+    }
 
     private WorldGenFeatureStateProviderWeighted(WeightedList<IBlockData> weightedlist) {
-        super(WorldGenFeatureStateProviders.b);
-        this.b = weightedlist;
+        this.c = weightedlist;
+    }
+
+    @Override
+    protected WorldGenFeatureStateProviders<?> a() {
+        return WorldGenFeatureStateProviders.b;
     }
 
     public WorldGenFeatureStateProviderWeighted() {
         this(new WeightedList<>());
     }
 
-    public <T> WorldGenFeatureStateProviderWeighted(Dynamic<T> dynamic) {
-        this(new WeightedList<>(dynamic.get("entries").orElseEmptyList(), IBlockData::a));
-    }
-
     public WorldGenFeatureStateProviderWeighted a(IBlockData iblockdata, int i) {
-        this.b.a(iblockdata, i);
+        this.c.a(iblockdata, i);
         return this;
     }
 
     @Override
     public IBlockData a(Random random, BlockPosition blockposition) {
-        return (IBlockData) this.b.b(random);
-    }
-
-    @Override
-    public <T> T a(DynamicOps<T> dynamicops) {
-        Builder<T, T> builder = ImmutableMap.builder();
-
-        builder.put(dynamicops.createString("type"), dynamicops.createString(IRegistry.t.getKey(this.a).toString())).put(dynamicops.createString("entries"), this.b.a(dynamicops, (iblockdata) -> {
-            return IBlockData.a(dynamicops, iblockdata);
-        }));
-        return (new Dynamic(dynamicops, dynamicops.createMap(builder.build()))).getValue();
+        return (IBlockData) this.c.b(random);
     }
 }

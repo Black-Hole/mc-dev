@@ -19,7 +19,7 @@ public enum EnumDragonRespawn {
                 entityendercrystal.setBeamTarget(blockposition1);
             }
 
-            enderdragonbattle.a(null.PREPARING_TO_SUMMON_PILLARS);
+            enderdragonbattle.setRespawnPhase(null.PREPARING_TO_SUMMON_PILLARS);
         }
     },
     PREPARING_TO_SUMMON_PILLARS {
@@ -30,7 +30,7 @@ public enum EnumDragonRespawn {
                     worldserver.triggerEffect(3001, new BlockPosition(0, 128, 0), 0);
                 }
             } else {
-                enderdragonbattle.a(null.SUMMONING_PILLARS);
+                enderdragonbattle.setRespawnPhase(null.SUMMONING_PILLARS);
             }
 
         }
@@ -43,7 +43,7 @@ public enum EnumDragonRespawn {
             boolean flag2 = i % 40 == 39;
 
             if (flag1 || flag2) {
-                List<WorldGenEnder.Spike> list1 = WorldGenEnder.a((GeneratorAccess) worldserver);
+                List<WorldGenEnder.Spike> list1 = WorldGenEnder.a((GeneratorAccessSeed) worldserver);
                 int j = i / 40;
 
                 if (j < list1.size()) {
@@ -70,10 +70,10 @@ public enum EnumDragonRespawn {
                         worldserver.explode((Entity) null, (double) ((float) worldgenender_spike.a() + 0.5F), (double) worldgenender_spike.d(), (double) ((float) worldgenender_spike.b() + 0.5F), 5.0F, Explosion.Effect.DESTROY);
                         WorldGenFeatureEndSpikeConfiguration worldgenfeatureendspikeconfiguration = new WorldGenFeatureEndSpikeConfiguration(true, ImmutableList.of(worldgenender_spike), new BlockPosition(0, 128, 0));
 
-                        WorldGenerator.END_SPIKE.b((WorldGenFeatureConfiguration) worldgenfeatureendspikeconfiguration).a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), new Random(), new BlockPosition(worldgenender_spike.a(), 45, worldgenender_spike.b()));
+                        WorldGenerator.END_SPIKE.b((WorldGenFeatureConfiguration) worldgenfeatureendspikeconfiguration).a(worldserver, worldserver.getStructureManager(), worldserver.getChunkProvider().getChunkGenerator(), new Random(), new BlockPosition(worldgenender_spike.a(), 45, worldgenender_spike.b()));
                     }
                 } else if (flag1) {
-                    enderdragonbattle.a(null.SUMMONING_DRAGON);
+                    enderdragonbattle.setRespawnPhase(null.SUMMONING_DRAGON);
                 }
             }
 
@@ -86,8 +86,8 @@ public enum EnumDragonRespawn {
             EntityEnderCrystal entityendercrystal;
 
             if (i >= 100) {
-                enderdragonbattle.a(null.END);
-                enderdragonbattle.f();
+                enderdragonbattle.setRespawnPhase(null.END);
+                enderdragonbattle.resetCrystals();
                 iterator = list.iterator();
 
                 while (iterator.hasNext()) {

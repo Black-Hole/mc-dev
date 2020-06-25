@@ -14,19 +14,19 @@ public interface IMerchant {
 
     void a(MerchantRecipe merchantrecipe);
 
-    void i(ItemStack itemstack);
+    void k(ItemStack itemstack);
 
     World getWorld();
 
     int getExperience();
 
-    void setExperience(int i);
+    void setForcedExperience(int i);
 
     boolean isRegularVillager();
 
     SoundEffect getTradeSound();
 
-    default boolean eD() {
+    default boolean fa() {
         return false;
     }
 
@@ -39,7 +39,7 @@ public interface IMerchant {
             MerchantRecipeList merchantrecipelist = this.getOffers();
 
             if (!merchantrecipelist.isEmpty()) {
-                entityhuman.openTrade(optionalint.getAsInt(), merchantrecipelist, i, this.getExperience(), this.isRegularVillager(), this.eD());
+                entityhuman.openTrade(optionalint.getAsInt(), merchantrecipelist, i, this.getExperience(), this.isRegularVillager(), this.fa());
             }
         }
 

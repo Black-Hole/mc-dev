@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -18,14 +17,15 @@ public class CriterionTriggerLocation extends CriterionTriggerAbstract<Criterion
     }
 
     @Override
-    public CriterionTriggerLocation.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        CriterionConditionLocation criterionconditionlocation = CriterionConditionLocation.a((JsonElement) jsonobject);
+    public CriterionTriggerLocation.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
+        JsonObject jsonobject1 = ChatDeserializer.a(jsonobject, "location", jsonobject);
+        CriterionConditionLocation criterionconditionlocation = CriterionConditionLocation.a((JsonElement) jsonobject1);
 
-        return new CriterionTriggerLocation.a(this.a, criterionconditionlocation);
+        return new CriterionTriggerLocation.a(this.a, criterionconditionentity_b, criterionconditionlocation);
     }
 
     public void a(EntityPlayer entityplayer) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggerlocation_a) -> {
+        this.a(entityplayer, (criteriontriggerlocation_a) -> {
             return criteriontriggerlocation_a.a(entityplayer.getWorldServer(), entityplayer.locX(), entityplayer.locY(), entityplayer.locZ());
         });
     }
@@ -34,21 +34,21 @@ public class CriterionTriggerLocation extends CriterionTriggerAbstract<Criterion
 
         private final CriterionConditionLocation a;
 
-        public a(MinecraftKey minecraftkey, CriterionConditionLocation criterionconditionlocation) {
-            super(minecraftkey);
+        public a(MinecraftKey minecraftkey, CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionLocation criterionconditionlocation) {
+            super(minecraftkey, criterionconditionentity_b);
             this.a = criterionconditionlocation;
         }
 
         public static CriterionTriggerLocation.a a(CriterionConditionLocation criterionconditionlocation) {
-            return new CriterionTriggerLocation.a(CriterionTriggers.p.a, criterionconditionlocation);
+            return new CriterionTriggerLocation.a(CriterionTriggers.p.a, CriterionConditionEntity.b.a, criterionconditionlocation);
         }
 
         public static CriterionTriggerLocation.a c() {
-            return new CriterionTriggerLocation.a(CriterionTriggers.q.a, CriterionConditionLocation.a);
+            return new CriterionTriggerLocation.a(CriterionTriggers.q.a, CriterionConditionEntity.b.a, CriterionConditionLocation.a);
         }
 
         public static CriterionTriggerLocation.a d() {
-            return new CriterionTriggerLocation.a(CriterionTriggers.H.a, CriterionConditionLocation.a);
+            return new CriterionTriggerLocation.a(CriterionTriggers.H.a, CriterionConditionEntity.b.a, CriterionConditionLocation.a);
         }
 
         public boolean a(WorldServer worldserver, double d0, double d1, double d2) {
@@ -56,8 +56,11 @@ public class CriterionTriggerLocation extends CriterionTriggerAbstract<Criterion
         }
 
         @Override
-        public JsonElement b() {
-            return this.a.a();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
+
+            jsonobject.add("location", this.a.a());
+            return jsonobject;
         }
     }
 }

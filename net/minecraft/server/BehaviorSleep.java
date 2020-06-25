@@ -3,13 +3,11 @@ package net.minecraft.server;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 public class BehaviorSleep extends Behavior<EntityLiving> {
 
-    private long a;
+    private long b;
 
     public BehaviorSleep() {
         super(ImmutableMap.of(MemoryModuleType.HOME, MemoryStatus.VALUE_PRESENT, MemoryModuleType.LAST_WOKEN, MemoryStatus.REGISTERED));
@@ -23,24 +21,28 @@ public class BehaviorSleep extends Behavior<EntityLiving> {
             BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
             GlobalPos globalpos = (GlobalPos) behaviorcontroller.getMemory(MemoryModuleType.HOME).get();
 
-            if (!Objects.equals(worldserver.getWorldProvider().getDimensionManager(), globalpos.getDimensionManager())) {
+            if (worldserver.getDimensionKey() != globalpos.getDimensionManager()) {
                 return false;
             } else {
-                Optional<MinecraftSerializableLong> optional = behaviorcontroller.getMemory(MemoryModuleType.LAST_WOKEN);
+                Optional<Long> optional = behaviorcontroller.getMemory(MemoryModuleType.LAST_WOKEN);
 
-                if (optional.isPresent() && worldserver.getTime() - ((MinecraftSerializableLong) optional.get()).a() < 100L) {
-                    return false;
-                } else {
-                    IBlockData iblockdata = worldserver.getType(globalpos.getBlockPosition());
+                if (optional.isPresent()) {
+                    long i = worldserver.getTime() - (Long) optional.get();
 
-                    return globalpos.getBlockPosition().a((IPosition) entityliving.getPositionVector(), 2.0D) && iblockdata.getBlock().a(TagsBlock.BEDS) && !(Boolean) iblockdata.get(BlockBed.OCCUPIED);
+                    if (i > 0L && i < 100L) {
+                        return false;
+                    }
                 }
+
+                IBlockData iblockdata = worldserver.getType(globalpos.getBlockPosition());
+
+                return globalpos.getBlockPosition().a((IPosition) entityliving.getPositionVector(), 2.0D) && iblockdata.getBlock().a((Tag) TagsBlock.BEDS) && !(Boolean) iblockdata.get(BlockBed.OCCUPIED);
             }
         }
     }
 
     @Override
-    protected boolean g(WorldServer worldserver, EntityLiving entityliving, long i) {
+    protected boolean b(WorldServer worldserver, EntityLiving entityliving, long i) {
         Optional<GlobalPos> optional = entityliving.getBehaviorController().getMemory(MemoryModuleType.HOME);
 
         if (!optional.isPresent()) {
@@ -54,7 +56,7 @@ public class BehaviorSleep extends Behavior<EntityLiving> {
 
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
-        if (i > this.a) {
+        if (i > this.b) {
             entityliving.getBehaviorController().getMemory(MemoryModuleType.OPENED_DOORS).ifPresent((set) -> {
                 BehaviorInteractDoor.a(worldserver, (List) ImmutableList.of(), 0, entityliving, entityliving.getBehaviorController());
             });
@@ -69,10 +71,10 @@ public class BehaviorSleep extends Behavior<EntityLiving> {
     }
 
     @Override
-    protected void f(WorldServer worldserver, EntityLiving entityliving, long i) {
+    protected void c(WorldServer worldserver, EntityLiving entityliving, long i) {
         if (entityliving.isSleeping()) {
             entityliving.entityWakeup();
-            this.a = i + 40L;
+            this.b = i + 40L;
         }
 
     }

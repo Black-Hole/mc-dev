@@ -18,6 +18,11 @@ public class LootItemConditionTableBonus implements LootItemCondition {
     }
 
     @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.j;
+    }
+
+    @Override
     public Set<LootContextParameter<?>> a() {
         return ImmutableSet.of(LootContextParameters.TOOL);
     }
@@ -36,11 +41,9 @@ public class LootItemConditionTableBonus implements LootItemCondition {
         };
     }
 
-    public static class a extends LootItemCondition.b<LootItemConditionTableBonus> {
+    public static class a implements LootSerializer<LootItemConditionTableBonus> {
 
-        public a() {
-            super(new MinecraftKey("table_bonus"), LootItemConditionTableBonus.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionTableBonus lootitemconditiontablebonus, JsonSerializationContext jsonserializationcontext) {
             jsonobject.addProperty("enchantment", IRegistry.ENCHANTMENT.getKey(lootitemconditiontablebonus.a).toString());
@@ -48,7 +51,7 @@ public class LootItemConditionTableBonus implements LootItemCondition {
         }
 
         @Override
-        public LootItemConditionTableBonus b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionTableBonus a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "enchantment"));
             Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.getOptional(minecraftkey).orElseThrow(() -> {
                 return new JsonParseException("Invalid enchantment id: " + minecraftkey);

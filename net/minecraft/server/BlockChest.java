@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 public class BlockChest extends BlockChestAbstract<TileEntityChest> implements IBlockWaterlogged {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
-    public static final BlockStateEnum<BlockPropertyChestType> c = BlockProperties.ay;
+    public static final BlockStateEnum<BlockPropertyChestType> c = BlockProperties.aF;
     public static final BlockStateBoolean d = BlockProperties.C;
     protected static final VoxelShape e = Block.a(1.0D, 0.0D, 0.0D, 15.0D, 14.0D, 15.0D);
     protected static final VoxelShape f = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 16.0D);
@@ -50,7 +50,7 @@ public class BlockChest extends BlockChestAbstract<TileEntityChest> implements I
 
                 @Override
                 public IChatBaseComponent getScoreboardDisplayName() {
-                    return (IChatBaseComponent) (tileentitychest.hasCustomName() ? tileentitychest.getScoreboardDisplayName() : (tileentitychest1.hasCustomName() ? tileentitychest1.getScoreboardDisplayName() : new ChatMessage("container.chestDouble", new Object[0])));
+                    return (IChatBaseComponent) (tileentitychest.hasCustomName() ? tileentitychest.getScoreboardDisplayName() : (tileentitychest1.hasCustomName() ? tileentitychest1.getScoreboardDisplayName() : new ChatMessage("container.chestDouble")));
                 }
             });
         }
@@ -65,19 +65,19 @@ public class BlockChest extends BlockChestAbstract<TileEntityChest> implements I
         }
     };
 
-    protected BlockChest(Block.Info block_info, Supplier<TileEntityTypes<? extends TileEntityChest>> supplier) {
-        super(block_info, supplier);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChest.FACING, EnumDirection.NORTH)).set(BlockChest.c, BlockPropertyChestType.SINGLE)).set(BlockChest.d, false));
+    protected BlockChest(BlockBase.Info blockbase_info, Supplier<TileEntityTypes<? extends TileEntityChest>> supplier) {
+        super(blockbase_info, supplier);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChest.FACING, EnumDirection.NORTH)).set(BlockChest.c, BlockPropertyChestType.SINGLE)).set(BlockChest.d, false));
     }
 
-    public static DoubleBlockFinder.BlockType h(IBlockData iblockdata) {
+    public static DoubleBlockFinder.BlockType g(IBlockData iblockdata) {
         BlockPropertyChestType blockpropertychesttype = (BlockPropertyChestType) iblockdata.get(BlockChest.c);
 
         return blockpropertychesttype == BlockPropertyChestType.SINGLE ? DoubleBlockFinder.BlockType.SINGLE : (blockpropertychesttype == BlockPropertyChestType.RIGHT ? DoubleBlockFinder.BlockType.FIRST : DoubleBlockFinder.BlockType.SECOND);
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.ENTITYBLOCK_ANIMATED;
     }
 
@@ -87,13 +87,13 @@ public class BlockChest extends BlockChestAbstract<TileEntityChest> implements I
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
-        if (iblockdata1.getBlock() == this && enumdirection.m().c()) {
+        if (iblockdata1.a((Block) this) && enumdirection.n().d()) {
             BlockPropertyChestType blockpropertychesttype = (BlockPropertyChestType) iblockdata1.get(BlockChest.c);
 
-            if (iblockdata.get(BlockChest.c) == BlockPropertyChestType.SINGLE && blockpropertychesttype != BlockPropertyChestType.SINGLE && iblockdata.get(BlockChest.FACING) == iblockdata1.get(BlockChest.FACING) && i(iblockdata1) == enumdirection.opposite()) {
-                return (IBlockData) iblockdata.set(BlockChest.c, blockpropertychesttype.a());
+            if (iblockdata.get(BlockChest.c) == BlockPropertyChestType.SINGLE && blockpropertychesttype != BlockPropertyChestType.SINGLE && iblockdata.get(BlockChest.FACING) == iblockdata1.get(BlockChest.FACING) && h(iblockdata1) == enumdirection.opposite()) {
+                return (IBlockData) iblockdata.set(BlockChest.c, blockpropertychesttype.b());
             }
-        } else if (i(iblockdata) == enumdirection) {
+        } else if (h(iblockdata) == enumdirection) {
             return (IBlockData) iblockdata.set(BlockChest.c, BlockPropertyChestType.SINGLE);
         }
 
@@ -101,11 +101,11 @@ public class BlockChest extends BlockChestAbstract<TileEntityChest> implements I
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         if (iblockdata.get(BlockChest.c) == BlockPropertyChestType.SINGLE) {
             return BlockChest.i;
         } else {
-            switch (i(iblockdata)) {
+            switch (h(iblockdata)) {
                 case NORTH:
                 default:
                     return BlockChest.e;
@@ -119,10 +119,10 @@ public class BlockChest extends BlockChestAbstract<TileEntityChest> implements I
         }
     }
 
-    public static EnumDirection i(IBlockData iblockdata) {
+    public static EnumDirection h(IBlockData iblockdata) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockChest.FACING);
 
-        return iblockdata.get(BlockChest.c) == BlockPropertyChestType.LEFT ? enumdirection.f() : enumdirection.g();
+        return iblockdata.get(BlockChest.c) == BlockPropertyChestType.LEFT ? enumdirection.g() : enumdirection.h();
     }
 
     @Override
@@ -133,19 +133,19 @@ public class BlockChest extends BlockChestAbstract<TileEntityChest> implements I
         boolean flag = blockactioncontext.isSneaking();
         EnumDirection enumdirection1 = blockactioncontext.getClickedFace();
 
-        if (enumdirection1.m().c() && flag) {
+        if (enumdirection1.n().d() && flag) {
             EnumDirection enumdirection2 = this.a(blockactioncontext, enumdirection1.opposite());
 
-            if (enumdirection2 != null && enumdirection2.m() != enumdirection1.m()) {
+            if (enumdirection2 != null && enumdirection2.n() != enumdirection1.n()) {
                 enumdirection = enumdirection2;
-                blockpropertychesttype = enumdirection2.g() == enumdirection1.opposite() ? BlockPropertyChestType.RIGHT : BlockPropertyChestType.LEFT;
+                blockpropertychesttype = enumdirection2.h() == enumdirection1.opposite() ? BlockPropertyChestType.RIGHT : BlockPropertyChestType.LEFT;
             }
         }
 
         if (blockpropertychesttype == BlockPropertyChestType.SINGLE && !flag) {
-            if (enumdirection == this.a(blockactioncontext, enumdirection.f())) {
+            if (enumdirection == this.a(blockactioncontext, enumdirection.g())) {
                 blockpropertychesttype = BlockPropertyChestType.LEFT;
-            } else if (enumdirection == this.a(blockactioncontext, enumdirection.g())) {
+            } else if (enumdirection == this.a(blockactioncontext, enumdirection.h())) {
                 blockpropertychesttype = BlockPropertyChestType.RIGHT;
             }
         }
@@ -154,15 +154,15 @@ public class BlockChest extends BlockChestAbstract<TileEntityChest> implements I
     }
 
     @Override
-    public Fluid a_(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockChest.d) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
+    public Fluid d(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockChest.d) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
     }
 
     @Nullable
     private EnumDirection a(BlockActionContext blockactioncontext, EnumDirection enumdirection) {
         IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition().shift(enumdirection));
 
-        return iblockdata.getBlock() == this && iblockdata.get(BlockChest.c) == BlockPropertyChestType.SINGLE ? (EnumDirection) iblockdata.get(BlockChest.FACING) : null;
+        return iblockdata.a((Block) this) && iblockdata.get(BlockChest.c) == BlockPropertyChestType.SINGLE ? (EnumDirection) iblockdata.get(BlockChest.FACING) : null;
     }
 
     @Override
@@ -179,7 +179,7 @@ public class BlockChest extends BlockChestAbstract<TileEntityChest> implements I
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!iblockdata.a(iblockdata1.getBlock())) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof IInventory) {
@@ -201,9 +201,10 @@ public class BlockChest extends BlockChestAbstract<TileEntityChest> implements I
             if (itileinventory != null) {
                 entityhuman.openContainer(itileinventory);
                 entityhuman.b(this.c());
+                PiglinAI.a(entityhuman, true);
             }
 
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.CONSUME;
         }
     }
 
@@ -227,7 +228,7 @@ public class BlockChest extends BlockChestAbstract<TileEntityChest> implements I
             bipredicate = BlockChest::a;
         }
 
-        return DoubleBlockFinder.a((TileEntityTypes) this.a.get(), BlockChest::h, BlockChest::i, BlockChest.FACING, iblockdata, world, blockposition, bipredicate);
+        return DoubleBlockFinder.a((TileEntityTypes) this.a.get(), BlockChest::g, BlockChest::h, BlockChest.FACING, iblockdata, world, blockposition, bipredicate);
     }
 
     @Nullable

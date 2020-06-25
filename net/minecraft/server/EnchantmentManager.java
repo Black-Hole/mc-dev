@@ -6,8 +6,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -35,7 +36,7 @@ public class EnchantmentManager {
     }
 
     public static Map<Enchantment, Integer> a(ItemStack itemstack) {
-        NBTTagList nbttaglist = itemstack.getItem() == Items.ENCHANTED_BOOK ? ItemEnchantedBook.e(itemstack) : itemstack.getEnchantments();
+        NBTTagList nbttaglist = itemstack.getItem() == Items.ENCHANTED_BOOK ? ItemEnchantedBook.d(itemstack) : itemstack.getEnchantments();
 
         return a(nbttaglist);
     }
@@ -140,7 +141,7 @@ public class EnchantmentManager {
         };
 
         if (entityliving != null) {
-            a(enchantmentmanager_a, entityliving.be());
+            a(enchantmentmanager_a, entityliving.bl());
         }
 
         if (entity instanceof EntityHuman) {
@@ -155,7 +156,7 @@ public class EnchantmentManager {
         };
 
         if (entityliving != null) {
-            a(enchantmentmanager_a, entityliving.be());
+            a(enchantmentmanager_a, entityliving.bl());
         }
 
         if (entityliving instanceof EntityHuman) {
@@ -226,6 +227,10 @@ public class EnchantmentManager {
         return a(Enchantments.FROST_WALKER, entityliving) > 0;
     }
 
+    public static boolean j(EntityLiving entityliving) {
+        return a(Enchantments.SOUL_SPEED, entityliving) > 0;
+    }
+
     public static boolean d(ItemStack itemstack) {
         return getEnchantmentLevel(Enchantments.BINDING_CURSE, itemstack) > 0;
     }
@@ -248,6 +253,13 @@ public class EnchantmentManager {
 
     @Nullable
     public static Entry<EnumItemSlot, ItemStack> b(Enchantment enchantment, EntityLiving entityliving) {
+        return a(enchantment, entityliving, (itemstack) -> {
+            return true;
+        });
+    }
+
+    @Nullable
+    public static Entry<EnumItemSlot, ItemStack> a(Enchantment enchantment, EntityLiving entityliving, Predicate<ItemStack> predicate) {
         Map<EnumItemSlot, ItemStack> map = enchantment.a(entityliving);
 
         if (map.isEmpty()) {
@@ -260,7 +272,7 @@ public class EnchantmentManager {
                 Entry<EnumItemSlot, ItemStack> entry = (Entry) iterator.next();
                 ItemStack itemstack = (ItemStack) entry.getValue();
 
-                if (!itemstack.isEmpty() && getEnchantmentLevel(enchantment, itemstack) > 0) {
+                if (!itemstack.isEmpty() && getEnchantmentLevel(enchantment, itemstack) > 0 && predicate.test(itemstack)) {
                     list.add(entry);
                 }
             }
@@ -377,7 +389,7 @@ public class EnchantmentManager {
         while (iterator.hasNext()) {
             Enchantment enchantment = (Enchantment) iterator.next();
 
-            if ((!enchantment.isTreasure() || flag) && (enchantment.itemTarget.canEnchant(item) || flag1)) {
+            if ((!enchantment.isTreasure() || flag) && enchantment.i() && (enchantment.itemTarget.canEnchant(item) || flag1)) {
                 for (int j = enchantment.getMaxLevel(); j > enchantment.getStartLevel() - 1; --j) {
                     if (i >= enchantment.a(j) && i <= enchantment.b(j)) {
                         list.add(new WeightedRandomEnchant(enchantment, j));

@@ -17,16 +17,16 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
     private int h;
 
     public PlayerInventory(EntityHuman entityhuman) {
-        this.items = NonNullList.a(36, ItemStack.a);
-        this.armor = NonNullList.a(4, ItemStack.a);
-        this.extraSlots = NonNullList.a(1, ItemStack.a);
+        this.items = NonNullList.a(36, ItemStack.b);
+        this.armor = NonNullList.a(4, ItemStack.b);
+        this.extraSlots = NonNullList.a(1, ItemStack.b);
         this.f = ImmutableList.of(this.items, this.armor, this.extraSlots);
-        this.carried = ItemStack.a;
+        this.carried = ItemStack.b;
         this.player = entityhuman;
     }
 
     public ItemStack getItemInHand() {
-        return d(this.itemInHandIndex) ? (ItemStack) this.items.get(this.itemInHandIndex) : ItemStack.a;
+        return d(this.itemInHandIndex) ? (ItemStack) this.items.get(this.itemInHandIndex) : ItemStack.b;
     }
 
     public static int getHotbarSize() {
@@ -96,44 +96,15 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
         return this.itemInHandIndex;
     }
 
-    public int a(Predicate<ItemStack> predicate, int i) {
-        int j = 0;
+    public int a(Predicate<ItemStack> predicate, int i, IInventory iinventory) {
+        byte b0 = 0;
+        boolean flag = i == 0;
+        int j = b0 + ContainerUtil.a((IInventory) this, predicate, i - b0, flag);
 
-        int k;
-
-        for (k = 0; k < this.getSize(); ++k) {
-            ItemStack itemstack = this.getItem(k);
-
-            if (!itemstack.isEmpty() && predicate.test(itemstack)) {
-                int l = i <= 0 ? itemstack.getCount() : Math.min(i - j, itemstack.getCount());
-
-                j += l;
-                if (i != 0) {
-                    itemstack.subtract(l);
-                    if (itemstack.isEmpty()) {
-                        this.setItem(k, ItemStack.a);
-                    }
-
-                    if (i > 0 && j >= i) {
-                        return j;
-                    }
-                }
-            }
-        }
-
-        if (!this.carried.isEmpty() && predicate.test(this.carried)) {
-            k = i <= 0 ? this.carried.getCount() : Math.min(i - j, this.carried.getCount());
-            j += k;
-            if (i != 0) {
-                this.carried.subtract(k);
-                if (this.carried.isEmpty()) {
-                    this.carried = ItemStack.a;
-                }
-
-                if (i > 0 && j >= i) {
-                    return j;
-                }
-            }
+        j += ContainerUtil.a(iinventory, predicate, i - j, flag);
+        j += ContainerUtil.a(this.carried, predicate, i - j, flag);
+        if (this.carried.isEmpty()) {
+            this.carried = ItemStack.b;
         }
 
         return j;
@@ -310,7 +281,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
             }
         }
 
-        return list != null && !((ItemStack) list.get(i)).isEmpty() ? ContainerUtil.a(list, i, j) : ItemStack.a;
+        return list != null && !((ItemStack) list.get(i)).isEmpty() ? ContainerUtil.a(list, i, j) : ItemStack.b;
     }
 
     public void f(ItemStack itemstack) {
@@ -321,7 +292,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
 
             for (int i = 0; i < nonnulllist.size(); ++i) {
                 if (nonnulllist.get(i) == itemstack) {
-                    nonnulllist.set(i, ItemStack.a);
+                    nonnulllist.set(i, ItemStack.b);
                     break;
                 }
             }
@@ -346,10 +317,10 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
         if (nonnulllist != null && !((ItemStack) nonnulllist.get(i)).isEmpty()) {
             ItemStack itemstack = (ItemStack) nonnulllist.get(i);
 
-            nonnulllist.set(i, ItemStack.a);
+            nonnulllist.set(i, ItemStack.b);
             return itemstack;
         } else {
-            return ItemStack.a;
+            return ItemStack.b;
         }
     }
 
@@ -490,19 +461,15 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
             }
         }
 
-        return list == null ? ItemStack.a : (ItemStack) list.get(i);
+        return list == null ? ItemStack.b : (ItemStack) list.get(i);
     }
 
     @Override
     public IChatBaseComponent getDisplayName() {
-        return new ChatMessage("container.inventory", new Object[0]);
+        return new ChatMessage("container.inventory");
     }
 
-    public boolean b(IBlockData iblockdata) {
-        return this.getItem(this.itemInHandIndex).canDestroySpecialBlock(iblockdata);
-    }
-
-    public void a(float f) {
+    public void a(DamageSource damagesource, float f) {
         if (f > 0.0F) {
             f /= 4.0F;
             if (f < 1.0F) {
@@ -512,7 +479,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
             for (int i = 0; i < this.armor.size(); ++i) {
                 ItemStack itemstack = (ItemStack) this.armor.get(i);
 
-                if (itemstack.getItem() instanceof ItemArmor) {
+                if ((!damagesource.isFire() || !itemstack.getItem().u()) && itemstack.getItem() instanceof ItemArmor) {
                     itemstack.damage((int) f, this.player, (entityhuman) -> {
                         entityhuman.broadcastItemBreak(EnumItemSlot.a(EnumItemSlot.Function.ARMOR, i));
                     });
@@ -533,7 +500,7 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
 
                 if (!itemstack.isEmpty()) {
                     this.player.a(itemstack, true, false);
-                    list.set(i, ItemStack.a);
+                    list.set(i, ItemStack.b);
                 }
             }
         }

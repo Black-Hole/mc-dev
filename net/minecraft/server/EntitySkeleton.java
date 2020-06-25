@@ -22,7 +22,7 @@ public class EntitySkeleton extends EntitySkeletonAbstract {
     }
 
     @Override
-    SoundEffect l() {
+    SoundEffect eL() {
         return SoundEffects.ENTITY_SKELETON_STEP;
     }
 

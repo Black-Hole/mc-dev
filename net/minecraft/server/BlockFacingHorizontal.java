@@ -2,10 +2,10 @@ package net.minecraft.server;
 
 public abstract class BlockFacingHorizontal extends Block {
 
-    public static final BlockStateDirection FACING = BlockProperties.N;
+    public static final BlockStateDirection FACING = BlockProperties.O;
 
-    protected BlockFacingHorizontal(Block.Info block_info) {
-        super(block_info);
+    protected BlockFacingHorizontal(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override

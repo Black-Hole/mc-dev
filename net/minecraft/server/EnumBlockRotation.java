@@ -7,9 +7,13 @@ import java.util.Random;
 
 public enum EnumBlockRotation {
 
-    NONE, CLOCKWISE_90, CLOCKWISE_180, COUNTERCLOCKWISE_90;
+    NONE(PointGroupO.IDENTITY), CLOCKWISE_90(PointGroupO.ROT_90_Y_NEG), CLOCKWISE_180(PointGroupO.ROT_180_FACE_XZ), COUNTERCLOCKWISE_90(PointGroupO.ROT_90_Y_POS);
 
-    private EnumBlockRotation() {}
+    private final PointGroupO e;
+
+    private EnumBlockRotation(PointGroupO pointgroupo) {
+        this.e = pointgroupo;
+    }
 
     public EnumBlockRotation a(EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
@@ -51,17 +55,21 @@ public enum EnumBlockRotation {
         }
     }
 
+    public PointGroupO a() {
+        return this.e;
+    }
+
     public EnumDirection a(EnumDirection enumdirection) {
-        if (enumdirection.m() == EnumDirection.EnumAxis.Y) {
+        if (enumdirection.n() == EnumDirection.EnumAxis.Y) {
             return enumdirection;
         } else {
             switch (this) {
                 case CLOCKWISE_90:
-                    return enumdirection.f();
+                    return enumdirection.g();
                 case CLOCKWISE_180:
                     return enumdirection.opposite();
                 case COUNTERCLOCKWISE_90:
-                    return enumdirection.g();
+                    return enumdirection.h();
                 default:
                     return enumdirection;
             }
@@ -82,9 +90,7 @@ public enum EnumBlockRotation {
     }
 
     public static EnumBlockRotation a(Random random) {
-        EnumBlockRotation[] aenumblockrotation = values();
-
-        return aenumblockrotation[random.nextInt(aenumblockrotation.length)];
+        return (EnumBlockRotation) SystemUtils.a((Object[]) values(), random);
     }
 
     public static List<EnumBlockRotation> b(Random random) {

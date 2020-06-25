@@ -68,9 +68,7 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
     }
 
     protected double k() {
-        AttributeInstance attributeinstance = this.e.getAttributeInstance(GenericAttributes.FOLLOW_RANGE);
-
-        return attributeinstance == null ? 16.0D : attributeinstance.getValue();
+        return this.e.b(GenericAttributes.FOLLOW_RANGE);
     }
 
     @Override
@@ -91,7 +89,7 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
             return false;
         } else if (!pathfindertargetcondition.a(this.e, entityliving)) {
             return false;
-        } else if (!this.e.a(new BlockPosition(entityliving))) {
+        } else if (!this.e.a(entityliving.getChunkCoordinates())) {
             return false;
         } else {
             if (this.a) {

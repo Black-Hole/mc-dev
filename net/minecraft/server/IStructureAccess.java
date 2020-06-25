@@ -7,15 +7,15 @@ import javax.annotation.Nullable;
 public interface IStructureAccess {
 
     @Nullable
-    StructureStart a(String s);
+    StructureStart<?> a(StructureGenerator<?> structuregenerator);
 
-    void a(String s, StructureStart structurestart);
+    void a(StructureGenerator<?> structuregenerator, StructureStart<?> structurestart);
 
-    LongSet b(String s);
+    LongSet b(StructureGenerator<?> structuregenerator);
 
-    void a(String s, long i);
+    void a(StructureGenerator<?> structuregenerator, long i);
 
-    Map<String, LongSet> v();
+    Map<StructureGenerator<?>, LongSet> v();
 
-    void b(Map<String, LongSet> map);
+    void b(Map<StructureGenerator<?>, LongSet> map);
 }

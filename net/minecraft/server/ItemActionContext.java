@@ -60,7 +60,7 @@ public class ItemActionContext {
     }
 
     public boolean isSneaking() {
-        return this.b != null && this.b.dT();
+        return this.b != null && this.b.ep();
     }
 
     public float h() {

@@ -1,19 +1,18 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenLakes extends WorldGenerator<WorldGenFeatureLakeConfiguration> {
 
     private static final IBlockData a = Blocks.CAVE_AIR.getBlockData();
 
-    public WorldGenLakes(Function<Dynamic<?>, ? extends WorldGenFeatureLakeConfiguration> function) {
-        super(function);
+    public WorldGenLakes(Codec<WorldGenFeatureLakeConfiguration> codec) {
+        super(codec);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureLakeConfiguration worldgenfeaturelakeconfiguration) {
-        while (blockposition.getY() > 5 && generatoraccess.isEmpty(blockposition)) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureLakeConfiguration worldgenfeaturelakeconfiguration) {
+        while (blockposition.getY() > 5 && generatoraccessseed.isEmpty(blockposition)) {
             blockposition = blockposition.down();
         }
 
@@ -21,9 +20,7 @@ public class WorldGenLakes extends WorldGenerator<WorldGenFeatureLakeConfigurati
             return false;
         } else {
             blockposition = blockposition.down(4);
-            ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition);
-
-            if (!generatoraccess.getChunkAt(chunkcoordintpair.x, chunkcoordintpair.z, ChunkStatus.STRUCTURE_REFERENCES).b(WorldGenerator.VILLAGE.b()).isEmpty()) {
+            if (structuremanager.a(SectionPosition.a(blockposition), StructureGenerator.VILLAGE).findAny().isPresent()) {
                 return false;
             } else {
                 boolean[] aboolean = new boolean[2048];
@@ -64,13 +61,13 @@ public class WorldGenLakes extends WorldGenerator<WorldGenFeatureLakeConfigurati
                         for (j1 = 0; j1 < 8; ++j1) {
                             flag = !aboolean[(j * 16 + k1) * 8 + j1] && (j < 15 && aboolean[((j + 1) * 16 + k1) * 8 + j1] || j > 0 && aboolean[((j - 1) * 16 + k1) * 8 + j1] || k1 < 15 && aboolean[(j * 16 + k1 + 1) * 8 + j1] || k1 > 0 && aboolean[(j * 16 + (k1 - 1)) * 8 + j1] || j1 < 7 && aboolean[(j * 16 + k1) * 8 + j1 + 1] || j1 > 0 && aboolean[(j * 16 + k1) * 8 + (j1 - 1)]);
                             if (flag) {
-                                Material material = generatoraccess.getType(blockposition.b(j, j1, k1)).getMaterial();
+                                Material material = generatoraccessseed.getType(blockposition.b(j, j1, k1)).getMaterial();
 
                                 if (j1 >= 4 && material.isLiquid()) {
                                     return false;
                                 }
 
-                                if (j1 < 4 && !material.isBuildable() && generatoraccess.getType(blockposition.b(j, j1, k1)) != worldgenfeaturelakeconfiguration.a) {
+                                if (j1 < 4 && !material.isBuildable() && generatoraccessseed.getType(blockposition.b(j, j1, k1)) != worldgenfeaturelakeconfiguration.b) {
                                     return false;
                                 }
                             }
@@ -82,7 +79,7 @@ public class WorldGenLakes extends WorldGenerator<WorldGenFeatureLakeConfigurati
                     for (k1 = 0; k1 < 16; ++k1) {
                         for (j1 = 0; j1 < 8; ++j1) {
                             if (aboolean[(j * 16 + k1) * 8 + j1]) {
-                                generatoraccess.setTypeAndData(blockposition.b(j, j1, k1), j1 >= 4 ? WorldGenLakes.a : worldgenfeaturelakeconfiguration.a, 2);
+                                generatoraccessseed.setTypeAndData(blockposition.b(j, j1, k1), j1 >= 4 ? WorldGenLakes.a : worldgenfeaturelakeconfiguration.b, 2);
                             }
                         }
                     }
@@ -95,13 +92,13 @@ public class WorldGenLakes extends WorldGenerator<WorldGenFeatureLakeConfigurati
                         for (j1 = 4; j1 < 8; ++j1) {
                             if (aboolean[(j * 16 + k1) * 8 + j1]) {
                                 blockposition1 = blockposition.b(j, j1 - 1, k1);
-                                if (b(generatoraccess.getType(blockposition1).getBlock()) && generatoraccess.getBrightness(EnumSkyBlock.SKY, blockposition.b(j, j1, k1)) > 0) {
-                                    BiomeBase biomebase = generatoraccess.getBiome(blockposition1);
+                                if (b(generatoraccessseed.getType(blockposition1).getBlock()) && generatoraccessseed.getBrightness(EnumSkyBlock.SKY, blockposition.b(j, j1, k1)) > 0) {
+                                    BiomeBase biomebase = generatoraccessseed.getBiome(blockposition1);
 
-                                    if (biomebase.s().a().getBlock() == Blocks.MYCELIUM) {
-                                        generatoraccess.setTypeAndData(blockposition1, Blocks.MYCELIUM.getBlockData(), 2);
+                                    if (biomebase.A().a().a(Blocks.MYCELIUM)) {
+                                        generatoraccessseed.setTypeAndData(blockposition1, Blocks.MYCELIUM.getBlockData(), 2);
                                     } else {
-                                        generatoraccess.setTypeAndData(blockposition1, Blocks.GRASS_BLOCK.getBlockData(), 2);
+                                        generatoraccessseed.setTypeAndData(blockposition1, Blocks.GRASS_BLOCK.getBlockData(), 2);
                                     }
                                 }
                             }
@@ -109,27 +106,27 @@ public class WorldGenLakes extends WorldGenerator<WorldGenFeatureLakeConfigurati
                     }
                 }
 
-                if (worldgenfeaturelakeconfiguration.a.getMaterial() == Material.LAVA) {
+                if (worldgenfeaturelakeconfiguration.b.getMaterial() == Material.LAVA) {
                     for (j = 0; j < 16; ++j) {
                         for (k1 = 0; k1 < 16; ++k1) {
                             for (j1 = 0; j1 < 8; ++j1) {
                                 flag = !aboolean[(j * 16 + k1) * 8 + j1] && (j < 15 && aboolean[((j + 1) * 16 + k1) * 8 + j1] || j > 0 && aboolean[((j - 1) * 16 + k1) * 8 + j1] || k1 < 15 && aboolean[(j * 16 + k1 + 1) * 8 + j1] || k1 > 0 && aboolean[(j * 16 + (k1 - 1)) * 8 + j1] || j1 < 7 && aboolean[(j * 16 + k1) * 8 + j1 + 1] || j1 > 0 && aboolean[(j * 16 + k1) * 8 + (j1 - 1)]);
-                                if (flag && (j1 < 4 || random.nextInt(2) != 0) && generatoraccess.getType(blockposition.b(j, j1, k1)).getMaterial().isBuildable()) {
-                                    generatoraccess.setTypeAndData(blockposition.b(j, j1, k1), Blocks.STONE.getBlockData(), 2);
+                                if (flag && (j1 < 4 || random.nextInt(2) != 0) && generatoraccessseed.getType(blockposition.b(j, j1, k1)).getMaterial().isBuildable()) {
+                                    generatoraccessseed.setTypeAndData(blockposition.b(j, j1, k1), Blocks.STONE.getBlockData(), 2);
                                 }
                             }
                         }
                     }
                 }
 
-                if (worldgenfeaturelakeconfiguration.a.getMaterial() == Material.WATER) {
+                if (worldgenfeaturelakeconfiguration.b.getMaterial() == Material.WATER) {
                     for (j = 0; j < 16; ++j) {
                         for (k1 = 0; k1 < 16; ++k1) {
                             boolean flag1 = true;
 
                             blockposition1 = blockposition.b(j, 4, k1);
-                            if (generatoraccess.getBiome(blockposition1).a(generatoraccess, blockposition1, false)) {
-                                generatoraccess.setTypeAndData(blockposition1, Blocks.ICE.getBlockData(), 2);
+                            if (generatoraccessseed.getBiome(blockposition1).a(generatoraccessseed, blockposition1, false)) {
+                                generatoraccessseed.setTypeAndData(blockposition1, Blocks.ICE.getBlockData(), 2);
                             }
                         }
                     }

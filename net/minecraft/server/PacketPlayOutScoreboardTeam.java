@@ -8,9 +8,9 @@ import java.util.Iterator;
 public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut> {
 
     private String a = "";
-    private IChatBaseComponent b = new ChatComponentText("");
-    private IChatBaseComponent c = new ChatComponentText("");
-    private IChatBaseComponent d = new ChatComponentText("");
+    private IChatBaseComponent b;
+    private IChatBaseComponent c;
+    private IChatBaseComponent d;
     private String e;
     private String f;
     private EnumChatFormat g;
@@ -19,6 +19,9 @@ public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut
     private int j;
 
     public PacketPlayOutScoreboardTeam() {
+        this.b = ChatComponentText.d;
+        this.c = ChatComponentText.d;
+        this.d = ChatComponentText.d;
         this.e = ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS.e;
         this.f = ScoreboardTeamBase.EnumTeamPush.ALWAYS.e;
         this.g = EnumChatFormat.RESET;
@@ -26,6 +29,9 @@ public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut
     }
 
     public PacketPlayOutScoreboardTeam(ScoreboardTeam scoreboardteam, int i) {
+        this.b = ChatComponentText.d;
+        this.c = ChatComponentText.d;
+        this.d = ChatComponentText.d;
         this.e = ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS.e;
         this.f = ScoreboardTeamBase.EnumTeamPush.ALWAYS.e;
         this.g = EnumChatFormat.RESET;
@@ -49,6 +55,9 @@ public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut
     }
 
     public PacketPlayOutScoreboardTeam(ScoreboardTeam scoreboardteam, Collection<String> collection, int i) {
+        this.b = ChatComponentText.d;
+        this.c = ChatComponentText.d;
+        this.d = ChatComponentText.d;
         this.e = ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS.e;
         this.f = ScoreboardTeamBase.EnumTeamPush.ALWAYS.e;
         this.g = EnumChatFormat.RESET;

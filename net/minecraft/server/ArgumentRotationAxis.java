@@ -12,7 +12,7 @@ import java.util.EnumSet;
 public class ArgumentRotationAxis implements ArgumentType<EnumSet<EnumDirection.EnumAxis>> {
 
     private static final Collection<String> a = Arrays.asList("xyz", "x");
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("arguments.swizzle.invalid", new Object[0]));
+    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("arguments.swizzle.invalid"));
 
     public ArgumentRotationAxis() {}
 

@@ -27,6 +27,10 @@ public class MovingObjectPositionBlock extends MovingObjectPosition {
         return new MovingObjectPositionBlock(this.d, this.pos, enumdirection, this.c, this.e);
     }
 
+    public MovingObjectPositionBlock a(BlockPosition blockposition) {
+        return new MovingObjectPositionBlock(this.d, this.pos, this.b, blockposition, this.e);
+    }
+
     public BlockPosition getBlockPosition() {
         return this.c;
     }

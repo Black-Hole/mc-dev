@@ -1,27 +1,24 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
 import java.util.Random;
 
 public class WorldGenBlockPlacerDoublePlant extends WorldGenBlockPlacer {
 
-    public WorldGenBlockPlacerDoublePlant() {
-        super(WorldGenBlockPlacers.b);
-    }
+    public static final Codec<WorldGenBlockPlacerDoublePlant> b = Codec.unit(() -> {
+        return WorldGenBlockPlacerDoublePlant.c;
+    });
+    public static final WorldGenBlockPlacerDoublePlant c = new WorldGenBlockPlacerDoublePlant();
 
-    public <T> WorldGenBlockPlacerDoublePlant(Dynamic<T> dynamic) {
-        this();
+    public WorldGenBlockPlacerDoublePlant() {}
+
+    @Override
+    protected WorldGenBlockPlacers<?> a() {
+        return WorldGenBlockPlacers.b;
     }
 
     @Override
     public void a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         ((BlockTallPlant) iblockdata.getBlock()).a(generatoraccess, blockposition, 2);
-    }
-
-    @Override
-    public <T> T a(DynamicOps<T> dynamicops) {
-        return (new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("type"), dynamicops.createString(IRegistry.u.getKey(this.a).toString()))))).getValue();
     }
 }

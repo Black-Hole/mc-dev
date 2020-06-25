@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import javax.annotation.Nullable;
@@ -18,7 +16,7 @@ public class CriterionTriggerBrewedPotion extends CriterionTriggerAbstract<Crite
     }
 
     @Override
-    public CriterionTriggerBrewedPotion.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerBrewedPotion.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         PotionRegistry potionregistry = null;
 
         if (jsonobject.has("potion")) {
@@ -29,11 +27,11 @@ public class CriterionTriggerBrewedPotion extends CriterionTriggerAbstract<Crite
             });
         }
 
-        return new CriterionTriggerBrewedPotion.a(potionregistry);
+        return new CriterionTriggerBrewedPotion.a(criterionconditionentity_b, potionregistry);
     }
 
     public void a(EntityPlayer entityplayer, PotionRegistry potionregistry) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggerbrewedpotion_a) -> {
+        this.a(entityplayer, (criteriontriggerbrewedpotion_a) -> {
             return criteriontriggerbrewedpotion_a.a(potionregistry);
         });
     }
@@ -42,13 +40,13 @@ public class CriterionTriggerBrewedPotion extends CriterionTriggerAbstract<Crite
 
         private final PotionRegistry a;
 
-        public a(@Nullable PotionRegistry potionregistry) {
-            super(CriterionTriggerBrewedPotion.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, @Nullable PotionRegistry potionregistry) {
+            super(CriterionTriggerBrewedPotion.a, criterionconditionentity_b);
             this.a = potionregistry;
         }
 
         public static CriterionTriggerBrewedPotion.a c() {
-            return new CriterionTriggerBrewedPotion.a((PotionRegistry) null);
+            return new CriterionTriggerBrewedPotion.a(CriterionConditionEntity.b.a, (PotionRegistry) null);
         }
 
         public boolean a(PotionRegistry potionregistry) {
@@ -56,8 +54,8 @@ public class CriterionTriggerBrewedPotion extends CriterionTriggerAbstract<Crite
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             if (this.a != null) {
                 jsonobject.addProperty("potion", IRegistry.POTION.getKey(this.a).toString());

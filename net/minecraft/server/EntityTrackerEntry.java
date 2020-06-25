@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import com.mojang.datafixers.util.Pair;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -42,7 +44,7 @@ public class EntityTrackerEntry {
         this.yRot = MathHelper.d(entity.yaw * 256.0F / 360.0F);
         this.xRot = MathHelper.d(entity.pitch * 256.0F / 360.0F);
         this.headYaw = MathHelper.d(entity.getHeadRotation() * 256.0F / 360.0F);
-        this.r = entity.onGround;
+        this.r = entity.isOnGround();
     }
 
     public void a() {
@@ -86,7 +88,7 @@ public class EntityTrackerEntry {
                 boolean flag = Math.abs(i - this.yRot) >= 1 || Math.abs(j - this.xRot) >= 1;
 
                 if (flag) {
-                    this.f.accept(new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) i, (byte) j, this.tracker.onGround));
+                    this.f.accept(new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) i, (byte) j, this.tracker.isOnGround()));
                     this.yRot = i;
                     this.xRot = j;
                 }
@@ -110,18 +112,18 @@ public class EntityTrackerEntry {
                     long i1 = PacketPlayOutEntity.a(vec3d.z);
                     boolean flag4 = k < -32768L || k > 32767L || l < -32768L || l > 32767L || i1 < -32768L || i1 > 32767L;
 
-                    if (!flag4 && this.o <= 400 && !this.q && this.r == this.tracker.onGround) {
+                    if (!flag4 && this.o <= 400 && !this.q && this.r == this.tracker.isOnGround()) {
                         if ((!flag2 || !flag3) && !(this.tracker instanceof EntityArrow)) {
                             if (flag2) {
-                                packet1 = new PacketPlayOutEntity.PacketPlayOutRelEntityMove(this.tracker.getId(), (short) ((int) k), (short) ((int) l), (short) ((int) i1), this.tracker.onGround);
+                                packet1 = new PacketPlayOutEntity.PacketPlayOutRelEntityMove(this.tracker.getId(), (short) ((int) k), (short) ((int) l), (short) ((int) i1), this.tracker.isOnGround());
                             } else if (flag3) {
-                                packet1 = new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) i, (byte) j, this.tracker.onGround);
+                                packet1 = new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) i, (byte) j, this.tracker.isOnGround());
                             }
                         } else {
-                            packet1 = new PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook(this.tracker.getId(), (short) ((int) k), (short) ((int) l), (short) ((int) i1), (byte) i, (byte) j, this.tracker.onGround);
+                            packet1 = new PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook(this.tracker.getId(), (short) ((int) k), (short) ((int) l), (short) ((int) i1), (byte) i, (byte) j, this.tracker.isOnGround());
                         }
                     } else {
-                        this.r = this.tracker.onGround;
+                        this.r = this.tracker.isOnGround();
                         this.o = 0;
                         packet1 = new PacketPlayOutEntityTeleport(this.tracker);
                     }
@@ -190,7 +192,7 @@ public class EntityTrackerEntry {
             EntityTrackerEntry.LOGGER.warn("Fetching packet for removed entity " + this.tracker);
         }
 
-        Packet<?> packet = this.tracker.L();
+        Packet<?> packet = this.tracker.O();
 
         this.headYaw = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
         consumer.accept(packet);
@@ -201,8 +203,7 @@ public class EntityTrackerEntry {
         boolean flag = this.e;
 
         if (this.tracker instanceof EntityLiving) {
-            AttributeMapServer attributemapserver = (AttributeMapServer) ((EntityLiving) this.tracker).getAttributeMap();
-            Collection<AttributeInstance> collection = attributemapserver.c();
+            Collection<AttributeModifiable> collection = ((EntityLiving) this.tracker).getAttributeMap().b();
 
             if (!collection.isEmpty()) {
                 consumer.accept(new PacketPlayOutUpdateAttributes(this.tracker.getId(), collection));
@@ -219,6 +220,7 @@ public class EntityTrackerEntry {
         }
 
         if (this.tracker instanceof EntityLiving) {
+            List<Pair<EnumItemSlot, ItemStack>> list = Lists.newArrayList();
             EnumItemSlot[] aenumitemslot = EnumItemSlot.values();
             int i = aenumitemslot.length;
 
@@ -227,8 +229,12 @@ public class EntityTrackerEntry {
                 ItemStack itemstack = ((EntityLiving) this.tracker).getEquipment(enumitemslot);
 
                 if (!itemstack.isEmpty()) {
-                    consumer.accept(new PacketPlayOutEntityEquipment(this.tracker.getId(), enumitemslot, itemstack));
+                    list.add(Pair.of(enumitemslot, itemstack.cloneItemStack()));
                 }
+            }
+
+            if (!list.isEmpty()) {
+                consumer.accept(new PacketPlayOutEntityEquipment(this.tracker.getId(), list));
             }
         }
 
@@ -269,8 +275,7 @@ public class EntityTrackerEntry {
         }
 
         if (this.tracker instanceof EntityLiving) {
-            AttributeMapServer attributemapserver = (AttributeMapServer) ((EntityLiving) this.tracker).getAttributeMap();
-            Set<AttributeInstance> set = attributemapserver.getAttributes();
+            Set<AttributeModifiable> set = ((EntityLiving) this.tracker).getAttributeMap().getAttributes();
 
             if (!set.isEmpty()) {
                 this.broadcastIncludingSelf(new PacketPlayOutUpdateAttributes(this.tracker.getId(), set));

@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class ChunkSection {
@@ -20,7 +21,7 @@ public class ChunkSection {
         this.nonEmptyBlockCount = short0;
         this.tickingBlockCount = short1;
         this.e = short2;
-        this.blockIds = new DataPaletteBlock<>(ChunkSection.GLOBAL_PALETTE, Block.REGISTRY_ID, GameProfileSerializer::d, GameProfileSerializer::a, Blocks.AIR.getBlockData());
+        this.blockIds = new DataPaletteBlock<>(ChunkSection.GLOBAL_PALETTE, Block.REGISTRY_ID, GameProfileSerializer::c, GameProfileSerializer::a, Blocks.AIR.getBlockData());
     }
 
     public IBlockData getType(int i, int j, int k) {
@@ -57,7 +58,7 @@ public class ChunkSection {
 
         if (!iblockdata1.isAir()) {
             --this.nonEmptyBlockCount;
-            if (iblockdata1.q()) {
+            if (iblockdata1.isTicking()) {
                 --this.tickingBlockCount;
             }
         }
@@ -68,7 +69,7 @@ public class ChunkSection {
 
         if (!iblockdata.isAir()) {
             ++this.nonEmptyBlockCount;
-            if (iblockdata.q()) {
+            if (iblockdata.isTicking()) {
                 ++this.tickingBlockCount;
             }
         }
@@ -113,14 +114,14 @@ public class ChunkSection {
 
             if (!iblockdata.isAir()) {
                 this.nonEmptyBlockCount = (short) (this.nonEmptyBlockCount + i);
-                if (iblockdata.q()) {
+                if (iblockdata.isTicking()) {
                     this.tickingBlockCount = (short) (this.tickingBlockCount + i);
                 }
             }
 
             if (!fluid.isEmpty()) {
                 this.nonEmptyBlockCount = (short) (this.nonEmptyBlockCount + i);
-                if (fluid.h()) {
+                if (fluid.f()) {
                     this.e = (short) (this.e + i);
                 }
             }
@@ -141,7 +142,7 @@ public class ChunkSection {
         return 2 + this.blockIds.c();
     }
 
-    public boolean a(IBlockData iblockdata) {
-        return this.blockIds.contains(iblockdata);
+    public boolean a(Predicate<IBlockData> predicate) {
+        return this.blockIds.contains(predicate);
     }
 }

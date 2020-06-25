@@ -31,7 +31,7 @@ public interface IDyeable {
     }
 
     static ItemStack a(ItemStack itemstack, List<ItemDye> list) {
-        ItemStack itemstack1 = ItemStack.a;
+        ItemStack itemstack1 = ItemStack.b;
         int[] aint = new int[3];
         int i = 0;
         int j = 0;
@@ -60,7 +60,7 @@ public interface IDyeable {
 
             for (Iterator iterator = list.iterator(); iterator.hasNext(); ++j) {
                 ItemDye itemdye = (ItemDye) iterator.next();
-                float[] afloat = itemdye.d().d();
+                float[] afloat = itemdye.d().getColor();
                 int i1 = (int) (afloat[0] * 255.0F);
                 int j1 = (int) (afloat[1] * 255.0F);
 
@@ -73,7 +73,7 @@ public interface IDyeable {
         }
 
         if (idyeable == null) {
-            return ItemStack.a;
+            return ItemStack.b;
         } else {
             k = aint[0] / j;
             int k1 = aint[1] / j;

@@ -38,6 +38,10 @@ public class AxisAlignedBB {
         return new AxisAlignedBB((double) structureboundingbox.a, (double) structureboundingbox.b, (double) structureboundingbox.c, (double) (structureboundingbox.d + 1), (double) (structureboundingbox.e + 1), (double) (structureboundingbox.f + 1));
     }
 
+    public static AxisAlignedBB a(Vec3D vec3d) {
+        return new AxisAlignedBB(vec3d.x, vec3d.y, vec3d.z, vec3d.x + 1.0D, vec3d.y + 1.0D, vec3d.z + 1.0D);
+    }
+
     public double a(EnumDirection.EnumAxis enumdirection_enumaxis) {
         return enumdirection_enumaxis.a(this.minX, this.minY, this.minZ);
     }
@@ -104,7 +108,7 @@ public class AxisAlignedBB {
         return new AxisAlignedBB(d3, d4, d5, d6, d7, d8);
     }
 
-    public AxisAlignedBB a(Vec3D vec3d) {
+    public AxisAlignedBB b(Vec3D vec3d) {
         return this.b(vec3d.x, vec3d.y, vec3d.z);
     }
 
@@ -182,7 +186,7 @@ public class AxisAlignedBB {
         return new AxisAlignedBB(this.minX + (double) blockposition.getX(), this.minY + (double) blockposition.getY(), this.minZ + (double) blockposition.getZ(), this.maxX + (double) blockposition.getX(), this.maxY + (double) blockposition.getY(), this.maxZ + (double) blockposition.getZ());
     }
 
-    public AxisAlignedBB b(Vec3D vec3d) {
+    public AxisAlignedBB c(Vec3D vec3d) {
         return this.d(vec3d.x, vec3d.y, vec3d.z);
     }
 
@@ -194,7 +198,7 @@ public class AxisAlignedBB {
         return this.minX < d3 && this.maxX > d0 && this.minY < d4 && this.maxY > d1 && this.minZ < d5 && this.maxZ > d2;
     }
 
-    public boolean c(Vec3D vec3d) {
+    public boolean d(Vec3D vec3d) {
         return this.e(vec3d.x, vec3d.y, vec3d.z);
     }
 
@@ -303,10 +307,14 @@ public class AxisAlignedBB {
     }
 
     public String toString() {
-        return "box[" + this.minX + ", " + this.minY + ", " + this.minZ + "] -> [" + this.maxX + ", " + this.maxY + ", " + this.maxZ + "]";
+        return "AABB[" + this.minX + ", " + this.minY + ", " + this.minZ + "] -> [" + this.maxX + ", " + this.maxY + ", " + this.maxZ + "]";
     }
 
     public Vec3D f() {
         return new Vec3D(MathHelper.d(0.5D, this.minX, this.maxX), MathHelper.d(0.5D, this.minY, this.maxY), MathHelper.d(0.5D, this.minZ, this.maxZ));
+    }
+
+    public static AxisAlignedBB g(double d0, double d1, double d2) {
+        return new AxisAlignedBB(-d0 / 2.0D, -d1 / 2.0D, -d2 / 2.0D, d0 / 2.0D, d1 / 2.0D, d2 / 2.0D);
     }
 }

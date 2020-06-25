@@ -50,7 +50,7 @@ public class PathfinderGoalBreed extends PathfinderGoal {
 
     @Override
     public void e() {
-        this.animal.getControllerLook().a(this.partner, 10.0F, (float) this.animal.dU());
+        this.animal.getControllerLook().a(this.partner, 10.0F, (float) this.animal.eo());
         this.animal.getNavigation().a((Entity) this.partner, this.g);
         ++this.f;
         if (this.f >= 60 && this.animal.h((Entity) this.partner) < 9.0D) {
@@ -79,32 +79,6 @@ public class PathfinderGoalBreed extends PathfinderGoal {
     }
 
     protected void g() {
-        EntityAgeable entityageable = this.animal.createChild(this.partner);
-
-        if (entityageable != null) {
-            EntityPlayer entityplayer = this.animal.getBreedCause();
-
-            if (entityplayer == null && this.partner.getBreedCause() != null) {
-                entityplayer = this.partner.getBreedCause();
-            }
-
-            if (entityplayer != null) {
-                entityplayer.a(StatisticList.ANIMALS_BRED);
-                CriterionTriggers.o.a(entityplayer, this.animal, this.partner, entityageable);
-            }
-
-            this.animal.setAgeRaw(6000);
-            this.partner.setAgeRaw(6000);
-            this.animal.resetLove();
-            this.partner.resetLove();
-            entityageable.setAgeRaw(-24000);
-            entityageable.setPositionRotation(this.animal.locX(), this.animal.locY(), this.animal.locZ(), 0.0F, 0.0F);
-            this.b.addEntity(entityageable);
-            this.b.broadcastEntityEffect(this.animal, (byte) 18);
-            if (this.b.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
-                this.b.addEntity(new EntityExperienceOrb(this.b, this.animal.locX(), this.animal.locY(), this.animal.locZ(), this.animal.getRandom().nextInt(7) + 1));
-            }
-
-        }
+        this.animal.a(this.b, this.partner);
     }
 }

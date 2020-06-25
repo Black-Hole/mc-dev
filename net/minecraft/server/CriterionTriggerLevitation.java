@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerLevitation extends CriterionTriggerAbstract<CriterionTriggerLevitation.a> {
@@ -16,15 +14,15 @@ public class CriterionTriggerLevitation extends CriterionTriggerAbstract<Criteri
     }
 
     @Override
-    public CriterionTriggerLevitation.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerLevitation.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         CriterionConditionDistance criterionconditiondistance = CriterionConditionDistance.a(jsonobject.get("distance"));
         CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("duration"));
 
-        return new CriterionTriggerLevitation.a(criterionconditiondistance, criterionconditionvalue_integerrange);
+        return new CriterionTriggerLevitation.a(criterionconditionentity_b, criterionconditiondistance, criterionconditionvalue_integerrange);
     }
 
     public void a(EntityPlayer entityplayer, Vec3D vec3d, int i) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggerlevitation_a) -> {
+        this.a(entityplayer, (criteriontriggerlevitation_a) -> {
             return criteriontriggerlevitation_a.a(entityplayer, vec3d, i);
         });
     }
@@ -34,14 +32,14 @@ public class CriterionTriggerLevitation extends CriterionTriggerAbstract<Criteri
         private final CriterionConditionDistance a;
         private final CriterionConditionValue.IntegerRange b;
 
-        public a(CriterionConditionDistance criterionconditiondistance, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
-            super(CriterionTriggerLevitation.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionDistance criterionconditiondistance, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
+            super(CriterionTriggerLevitation.a, criterionconditionentity_b);
             this.a = criterionconditiondistance;
             this.b = criterionconditionvalue_integerrange;
         }
 
         public static CriterionTriggerLevitation.a a(CriterionConditionDistance criterionconditiondistance) {
-            return new CriterionTriggerLevitation.a(criterionconditiondistance, CriterionConditionValue.IntegerRange.e);
+            return new CriterionTriggerLevitation.a(CriterionConditionEntity.b.a, criterionconditiondistance, CriterionConditionValue.IntegerRange.e);
         }
 
         public boolean a(EntityPlayer entityplayer, Vec3D vec3d, int i) {
@@ -49,8 +47,8 @@ public class CriterionTriggerLevitation extends CriterionTriggerAbstract<Criteri
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             jsonobject.add("distance", this.a.a());
             jsonobject.add("duration", this.b.d());

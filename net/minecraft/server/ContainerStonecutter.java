@@ -25,7 +25,7 @@ public class ContainerStonecutter extends Container {
         super(Containers.STONECUTTER, i);
         this.containerProperty = ContainerProperty.a();
         this.i = Lists.newArrayList();
-        this.j = ItemStack.a;
+        this.j = ItemStack.b;
         this.l = () -> {
         };
         this.inventory = new InventorySubcontainer(1) {
@@ -90,12 +90,16 @@ public class ContainerStonecutter extends Container {
 
     @Override
     public boolean a(EntityHuman entityhuman, int i) {
-        if (i >= 0 && i < this.i.size()) {
+        if (this.d(i)) {
             this.containerProperty.set(i);
             this.i();
         }
 
         return true;
+    }
+
+    private boolean d(int i) {
+        return i >= 0 && i < this.i.size();
     }
 
     @Override
@@ -112,7 +116,7 @@ public class ContainerStonecutter extends Container {
     private void a(IInventory iinventory, ItemStack itemstack) {
         this.i.clear();
         this.containerProperty.set(-1);
-        this.d.set(ItemStack.a);
+        this.d.set(ItemStack.b);
         if (!itemstack.isEmpty()) {
             this.i = this.world.getCraftingManager().b(Recipes.STONECUTTING, iinventory, this.world);
         }
@@ -120,12 +124,12 @@ public class ContainerStonecutter extends Container {
     }
 
     private void i() {
-        if (!this.i.isEmpty()) {
+        if (!this.i.isEmpty() && this.d(this.containerProperty.get())) {
             RecipeStonecutting recipestonecutting = (RecipeStonecutting) this.i.get(this.containerProperty.get());
 
             this.d.set(recipestonecutting.a(this.inventory));
         } else {
-            this.d.set(ItemStack.a);
+            this.d.set(ItemStack.b);
         }
 
         this.c();
@@ -143,7 +147,7 @@ public class ContainerStonecutter extends Container {
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -154,33 +158,33 @@ public class ContainerStonecutter extends Container {
             if (i == 1) {
                 item.b(itemstack1, entityhuman.world, entityhuman);
                 if (!this.a(itemstack1, 2, 38, true)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
 
                 slot.a(itemstack1, itemstack);
             } else if (i == 0) {
                 if (!this.a(itemstack1, 2, 38, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (this.world.getCraftingManager().craft(Recipes.STONECUTTING, new InventorySubcontainer(new ItemStack[]{itemstack1}), this.world).isPresent()) {
                 if (!this.a(itemstack1, 0, 1, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (i >= 2 && i < 29) {
                 if (!this.a(itemstack1, 29, 38, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (i >= 29 && i < 38 && !this.a(itemstack1, 2, 29, false)) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.a);
+                slot.set(ItemStack.b);
             }
 
             slot.d();
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             slot.a(entityhuman, itemstack1);

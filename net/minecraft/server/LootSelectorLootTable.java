@@ -7,32 +7,37 @@ import java.util.function.Consumer;
 
 public class LootSelectorLootTable extends LootSelectorEntry {
 
-    private final MinecraftKey c;
+    private final MinecraftKey g;
 
     private LootSelectorLootTable(MinecraftKey minecraftkey, int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
         super(i, j, alootitemcondition, alootitemfunction);
-        this.c = minecraftkey;
+        this.g = minecraftkey;
+    }
+
+    @Override
+    public LootEntryType a() {
+        return LootEntries.c;
     }
 
     @Override
     public void a(Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {
-        LootTable loottable = loottableinfo.a(this.c);
+        LootTable loottable = loottableinfo.a(this.g);
 
         loottable.populateLootDirect(loottableinfo, consumer);
     }
 
     @Override
     public void a(LootCollector lootcollector) {
-        if (lootcollector.a(this.c)) {
-            lootcollector.a("Table " + this.c + " is recursively called");
+        if (lootcollector.a(this.g)) {
+            lootcollector.a("Table " + this.g + " is recursively called");
         } else {
             super.a(lootcollector);
-            LootTable loottable = lootcollector.c(this.c);
+            LootTable loottable = lootcollector.c(this.g);
 
             if (loottable == null) {
-                lootcollector.a("Unknown loot table called " + this.c);
+                lootcollector.a("Unknown loot table called " + this.g);
             } else {
-                loottable.a(lootcollector.a("->{" + this.c + "}", this.c));
+                loottable.a(lootcollector.a("->{" + this.g + "}", this.g));
             }
 
         }
@@ -46,13 +51,11 @@ public class LootSelectorLootTable extends LootSelectorEntry {
 
     public static class a extends LootSelectorEntry.e<LootSelectorLootTable> {
 
-        public a() {
-            super(new MinecraftKey("loot_table"), LootSelectorLootTable.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootSelectorLootTable lootselectorloottable, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootSelectorEntry) lootselectorloottable, jsonserializationcontext);
-            jsonobject.addProperty("name", lootselectorloottable.c.toString());
+            jsonobject.addProperty("name", lootselectorloottable.g.toString());
         }
 
         @Override

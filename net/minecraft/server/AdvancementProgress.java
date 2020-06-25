@@ -15,8 +15,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import javax.annotation.Nullable;
 
 public class AdvancementProgress implements Comparable<AdvancementProgress> {

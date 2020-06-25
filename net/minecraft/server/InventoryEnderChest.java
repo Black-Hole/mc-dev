@@ -12,11 +12,12 @@ public class InventoryEnderChest extends InventorySubcontainer {
         this.a = tileentityenderchest;
     }
 
+    @Override
     public void a(NBTTagList nbttaglist) {
         int i;
 
         for (i = 0; i < this.getSize(); ++i) {
-            this.setItem(i, ItemStack.a);
+            this.setItem(i, ItemStack.b);
         }
 
         for (i = 0; i < nbttaglist.size(); ++i) {
@@ -30,7 +31,8 @@ public class InventoryEnderChest extends InventorySubcontainer {
 
     }
 
-    public NBTTagList f() {
+    @Override
+    public NBTTagList g() {
         NBTTagList nbttaglist = new NBTTagList();
 
         for (int i = 0; i < this.getSize(); ++i) {

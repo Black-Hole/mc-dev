@@ -3,12 +3,13 @@ package net.minecraft.server;
 import java.util.Iterator;
 import java.util.Random;
 
-public class MobSpawnerPhantom {
+public class MobSpawnerPhantom implements MobSpawner {
 
     private int a;
 
     public MobSpawnerPhantom() {}
 
+    @Override
     public int a(WorldServer worldserver, boolean flag, boolean flag1) {
         if (!flag) {
             return 0;
@@ -22,7 +23,7 @@ public class MobSpawnerPhantom {
                 return 0;
             } else {
                 this.a += (60 + random.nextInt(60)) * 20;
-                if (worldserver.c() < 5 && worldserver.worldProvider.f()) {
+                if (worldserver.c() < 5 && worldserver.getDimensionManager().hasSkyLight()) {
                     return 0;
                 } else {
                     int i = 0;
@@ -32,9 +33,9 @@ public class MobSpawnerPhantom {
                         EntityHuman entityhuman = (EntityHuman) iterator.next();
 
                         if (!entityhuman.isSpectator()) {
-                            BlockPosition blockposition = new BlockPosition(entityhuman);
+                            BlockPosition blockposition = entityhuman.getChunkCoordinates();
 
-                            if (!worldserver.worldProvider.f() || blockposition.getY() >= worldserver.getSeaLevel() && worldserver.f(blockposition)) {
+                            if (!worldserver.getDimensionManager().hasSkyLight() || blockposition.getY() >= worldserver.getSeaLevel() && worldserver.f(blockposition)) {
                                 DifficultyDamageScaler difficultydamagescaler = worldserver.getDamageScaler(blockposition);
 
                                 if (difficultydamagescaler.a(random.nextFloat() * 3.0F)) {
@@ -47,7 +48,7 @@ public class MobSpawnerPhantom {
                                         IBlockData iblockdata = worldserver.getType(blockposition1);
                                         Fluid fluid = worldserver.getFluid(blockposition1);
 
-                                        if (SpawnerCreature.a((IBlockAccess) worldserver, blockposition1, iblockdata, fluid)) {
+                                        if (SpawnerCreature.a((IBlockAccess) worldserver, blockposition1, iblockdata, fluid, EntityTypes.PHANTOM)) {
                                             GroupDataEntity groupdataentity = null;
                                             int k = 1 + random.nextInt(difficultydamagescaler.a().a() + 1);
 

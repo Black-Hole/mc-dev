@@ -1,25 +1,15 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
 
 public class WorldGenBuriedTreasureConfiguration implements WorldGenFeatureConfiguration {
 
-    public final float a;
+    public static final Codec<WorldGenBuriedTreasureConfiguration> a = Codec.FLOAT.xmap(WorldGenBuriedTreasureConfiguration::new, (worldgenburiedtreasureconfiguration) -> {
+        return worldgenburiedtreasureconfiguration.b;
+    });
+    public final float b;
 
     public WorldGenBuriedTreasureConfiguration(float f) {
-        this.a = f;
-    }
-
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("probability"), dynamicops.createFloat(this.a))));
-    }
-
-    public static <T> WorldGenBuriedTreasureConfiguration a(Dynamic<T> dynamic) {
-        float f = dynamic.get("probability").asFloat(0.0F);
-
-        return new WorldGenBuriedTreasureConfiguration(f);
+        this.b = f;
     }
 }

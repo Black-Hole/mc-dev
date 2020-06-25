@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerUsedEnderEye extends CriterionTriggerAbstract<CriterionTriggerUsedEnderEye.a> {
@@ -15,10 +14,10 @@ public class CriterionTriggerUsedEnderEye extends CriterionTriggerAbstract<Crite
     }
 
     @Override
-    public CriterionTriggerUsedEnderEye.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerUsedEnderEye.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         CriterionConditionValue.FloatRange criterionconditionvalue_floatrange = CriterionConditionValue.FloatRange.a(jsonobject.get("distance"));
 
-        return new CriterionTriggerUsedEnderEye.a(criterionconditionvalue_floatrange);
+        return new CriterionTriggerUsedEnderEye.a(criterionconditionentity_b, criterionconditionvalue_floatrange);
     }
 
     public void a(EntityPlayer entityplayer, BlockPosition blockposition) {
@@ -26,7 +25,7 @@ public class CriterionTriggerUsedEnderEye extends CriterionTriggerAbstract<Crite
         double d1 = entityplayer.locZ() - (double) blockposition.getZ();
         double d2 = d0 * d0 + d1 * d1;
 
-        this.a(entityplayer.getAdvancementData(), (criteriontriggerusedendereye_a) -> {
+        this.a(entityplayer, (criteriontriggerusedendereye_a) -> {
             return criteriontriggerusedendereye_a.a(d2);
         });
     }
@@ -35,8 +34,8 @@ public class CriterionTriggerUsedEnderEye extends CriterionTriggerAbstract<Crite
 
         private final CriterionConditionValue.FloatRange a;
 
-        public a(CriterionConditionValue.FloatRange criterionconditionvalue_floatrange) {
-            super(CriterionTriggerUsedEnderEye.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange) {
+            super(CriterionTriggerUsedEnderEye.a, criterionconditionentity_b);
             this.a = criterionconditionvalue_floatrange;
         }
 

@@ -71,8 +71,8 @@ public class ProtoChunkExtension extends ProtoChunk {
     }
 
     @Override
-    public int a(HeightMap.Type heightmap_type, int i, int j) {
-        return this.a.a(this.c(heightmap_type), i, j);
+    public int getHighestBlock(HeightMap.Type heightmap_type, int i, int j) {
+        return this.a.getHighestBlock(this.c(heightmap_type), i, j);
     }
 
     @Override
@@ -85,36 +85,36 @@ public class ProtoChunkExtension extends ProtoChunk {
 
     @Nullable
     @Override
-    public StructureStart a(String s) {
-        return this.a.a(s);
+    public StructureStart<?> a(StructureGenerator<?> structuregenerator) {
+        return this.a.a(structuregenerator);
     }
 
     @Override
-    public void a(String s, StructureStart structurestart) {}
+    public void a(StructureGenerator<?> structuregenerator, StructureStart<?> structurestart) {}
 
     @Override
-    public Map<String, StructureStart> h() {
+    public Map<StructureGenerator<?>, StructureStart<?>> h() {
         return this.a.h();
     }
 
     @Override
-    public void a(Map<String, StructureStart> map) {}
+    public void a(Map<StructureGenerator<?>, StructureStart<?>> map) {}
 
     @Override
-    public LongSet b(String s) {
-        return this.a.b(s);
+    public LongSet b(StructureGenerator<?> structuregenerator) {
+        return this.a.b(structuregenerator);
     }
 
     @Override
-    public void a(String s, long i) {}
+    public void a(StructureGenerator<?> structuregenerator, long i) {}
 
     @Override
-    public Map<String, LongSet> v() {
+    public Map<StructureGenerator<?>, LongSet> v() {
         return this.a.v();
     }
 
     @Override
-    public void b(Map<String, LongSet> map) {}
+    public void b(Map<StructureGenerator<?>, LongSet> map) {}
 
     @Override
     public BiomeStorage getBiomeIndex() {
@@ -179,7 +179,12 @@ public class ProtoChunkExtension extends ProtoChunk {
 
     @Override
     public BitSet a(WorldGenStage.Features worldgenstage_features) {
-        return this.a.a(worldgenstage_features);
+        throw (UnsupportedOperationException) SystemUtils.c(new UnsupportedOperationException("Meaningless in this context"));
+    }
+
+    @Override
+    public BitSet b(WorldGenStage.Features worldgenstage_features) {
+        throw (UnsupportedOperationException) SystemUtils.c(new UnsupportedOperationException("Meaningless in this context"));
     }
 
     public Chunk u() {

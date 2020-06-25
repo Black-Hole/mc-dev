@@ -2,14 +2,12 @@ package net.minecraft.server;
 
 public class BlockPlant extends Block {
 
-    protected BlockPlant(Block.Info block_info) {
-        super(block_info);
+    protected BlockPlant(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
-    protected boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        Block block = iblockdata.getBlock();
-
-        return block == Blocks.GRASS_BLOCK || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL || block == Blocks.FARMLAND;
+    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockdata.a(Blocks.GRASS_BLOCK) || iblockdata.a(Blocks.DIRT) || iblockdata.a(Blocks.COARSE_DIRT) || iblockdata.a(Blocks.PODZOL) || iblockdata.a(Blocks.FARMLAND);
     }
 
     @Override
@@ -21,16 +19,16 @@ public class BlockPlant extends Block {
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.down();
 
-        return this.a_(iworldreader.getType(blockposition1), iworldreader, blockposition1);
+        return this.c(iworldreader.getType(blockposition1), (IBlockAccess) iworldreader, blockposition1);
     }
 
     @Override
     public boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return true;
+        return iblockdata.getFluid().isEmpty();
     }
 
     @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
-        return pathmode == PathMode.AIR && !this.v ? true : super.a(iblockdata, iblockaccess, blockposition, pathmode);
+        return pathmode == PathMode.AIR && !this.at ? true : super.a(iblockdata, iblockaccess, blockposition, pathmode);
     }
 }

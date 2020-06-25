@@ -1,29 +1,59 @@
 package net.minecraft.server;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenFeatureDefinedStructurePoolSingle extends WorldGenFeatureDefinedStructurePoolStructure {
 
-    protected final MinecraftKey a;
-    protected final ImmutableList<DefinedStructureProcessor> b;
+    private static final Codec<Either<MinecraftKey, DefinedStructure>> a = Codec.of(WorldGenFeatureDefinedStructurePoolSingle::a, MinecraftKey.a.map(Either::left));
+    public static final Codec<WorldGenFeatureDefinedStructurePoolSingle> b = RecordCodecBuilder.create((instance) -> {
+        return instance.group(c(), b(), d()).apply(instance, WorldGenFeatureDefinedStructurePoolSingle::new);
+    });
+    protected final Either<MinecraftKey, DefinedStructure> c;
+    protected final ImmutableList<DefinedStructureProcessor> d;
+
+    private static <T> DataResult<T> a(Either<MinecraftKey, DefinedStructure> either, DynamicOps<T> dynamicops, T t0) {
+        Optional<MinecraftKey> optional = either.left();
+
+        return !optional.isPresent() ? DataResult.error("Can not serialize a runtime pool element") : MinecraftKey.a.encode(optional.get(), dynamicops, t0);
+    }
+
+    protected static <E extends WorldGenFeatureDefinedStructurePoolSingle> RecordCodecBuilder<E, List<DefinedStructureProcessor>> b() {
+        return DefinedStructureStructureProcessorType.j.listOf().fieldOf("processors").forGetter((worldgenfeaturedefinedstructurepoolsingle) -> {
+            return worldgenfeaturedefinedstructurepoolsingle.d;
+        });
+    }
+
+    protected static <E extends WorldGenFeatureDefinedStructurePoolSingle> RecordCodecBuilder<E, Either<MinecraftKey, DefinedStructure>> c() {
+        return WorldGenFeatureDefinedStructurePoolSingle.a.fieldOf("location").forGetter((worldgenfeaturedefinedstructurepoolsingle) -> {
+            return worldgenfeaturedefinedstructurepoolsingle.c;
+        });
+    }
 
     @Deprecated
     public WorldGenFeatureDefinedStructurePoolSingle(String s, List<DefinedStructureProcessor> list) {
-        this(s, list, WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID);
+        this(Either.left(new MinecraftKey(s)), list, WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID);
     }
 
-    public WorldGenFeatureDefinedStructurePoolSingle(String s, List<DefinedStructureProcessor> list, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
+    protected WorldGenFeatureDefinedStructurePoolSingle(Either<MinecraftKey, DefinedStructure> either, List<DefinedStructureProcessor> list, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
         super(worldgenfeaturedefinedstructurepooltemplate_matching);
-        this.a = new MinecraftKey(s);
-        this.b = ImmutableList.copyOf(list);
+        this.c = either;
+        this.d = ImmutableList.copyOf(list);
+    }
+
+    public WorldGenFeatureDefinedStructurePoolSingle(DefinedStructure definedstructure, List<DefinedStructureProcessor> list, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
+        this(Either.right(definedstructure), list, worldgenfeaturedefinedstructurepooltemplate_matching);
     }
 
     @Deprecated
@@ -31,16 +61,12 @@ public class WorldGenFeatureDefinedStructurePoolSingle extends WorldGenFeatureDe
         this(s, ImmutableList.of());
     }
 
-    public WorldGenFeatureDefinedStructurePoolSingle(Dynamic<?> dynamic) {
-        super(dynamic);
-        this.a = new MinecraftKey(dynamic.get("location").asString(""));
-        this.b = ImmutableList.copyOf(dynamic.get("processors").asList((dynamic1) -> {
-            return (DefinedStructureProcessor) DynamicDeserializer.a(dynamic1, IRegistry.STRUCTURE_PROCESSOR, "processor_type", DefinedStructureProcessorNop.a);
-        }));
+    private DefinedStructure a(DefinedStructureManager definedstructuremanager) {
+        return (DefinedStructure) this.c.map(definedstructuremanager::a, Function.identity());
     }
 
     public List<DefinedStructure.BlockInfo> a(DefinedStructureManager definedstructuremanager, BlockPosition blockposition, EnumBlockRotation enumblockrotation, boolean flag) {
-        DefinedStructure definedstructure = definedstructuremanager.a(this.a);
+        DefinedStructure definedstructure = this.a(definedstructuremanager);
         List<DefinedStructure.BlockInfo> list = definedstructure.a(blockposition, (new DefinedStructureInfo()).a(enumblockrotation), Blocks.STRUCTURE_BLOCK, flag);
         List<DefinedStructure.BlockInfo> list1 = Lists.newArrayList();
         Iterator iterator = list.iterator();
@@ -62,7 +88,7 @@ public class WorldGenFeatureDefinedStructurePoolSingle extends WorldGenFeatureDe
 
     @Override
     public List<DefinedStructure.BlockInfo> a(DefinedStructureManager definedstructuremanager, BlockPosition blockposition, EnumBlockRotation enumblockrotation, Random random) {
-        DefinedStructure definedstructure = definedstructuremanager.a(this.a);
+        DefinedStructure definedstructure = this.a(definedstructuremanager);
         List<DefinedStructure.BlockInfo> list = definedstructure.a(blockposition, (new DefinedStructureInfo()).a(enumblockrotation), Blocks.JIGSAW, true);
 
         Collections.shuffle(list, random);
@@ -71,59 +97,56 @@ public class WorldGenFeatureDefinedStructurePoolSingle extends WorldGenFeatureDe
 
     @Override
     public StructureBoundingBox a(DefinedStructureManager definedstructuremanager, BlockPosition blockposition, EnumBlockRotation enumblockrotation) {
-        DefinedStructure definedstructure = definedstructuremanager.a(this.a);
+        DefinedStructure definedstructure = this.a(definedstructuremanager);
 
         return definedstructure.b((new DefinedStructureInfo()).a(enumblockrotation), blockposition);
     }
 
     @Override
-    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, BlockPosition blockposition, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random) {
-        DefinedStructure definedstructure = definedstructuremanager.a(this.a);
-        DefinedStructureInfo definedstructureinfo = this.a(enumblockrotation, structureboundingbox);
+    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, BlockPosition blockposition, BlockPosition blockposition1, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random, boolean flag) {
+        DefinedStructure definedstructure = this.a(definedstructuremanager);
+        DefinedStructureInfo definedstructureinfo = this.a(enumblockrotation, structureboundingbox, flag);
 
-        if (!definedstructure.a(generatoraccess, blockposition, definedstructureinfo, 18)) {
+        if (!definedstructure.a(generatoraccessseed, blockposition, blockposition1, definedstructureinfo, random, 18)) {
             return false;
         } else {
-            List<DefinedStructure.BlockInfo> list = DefinedStructure.a(generatoraccess, blockposition, definedstructureinfo, this.a(definedstructuremanager, blockposition, enumblockrotation, false));
+            List<DefinedStructure.BlockInfo> list = DefinedStructure.a(generatoraccessseed, blockposition, blockposition1, definedstructureinfo, this.a(definedstructuremanager, blockposition, enumblockrotation, false));
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 DefinedStructure.BlockInfo definedstructure_blockinfo = (DefinedStructure.BlockInfo) iterator.next();
 
-                this.a(generatoraccess, definedstructure_blockinfo, blockposition, enumblockrotation, random, structureboundingbox);
+                this.a(generatoraccessseed, definedstructure_blockinfo, blockposition, enumblockrotation, random, structureboundingbox);
             }
 
             return true;
         }
     }
 
-    protected DefinedStructureInfo a(EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox) {
+    protected DefinedStructureInfo a(EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, boolean flag) {
         DefinedStructureInfo definedstructureinfo = new DefinedStructureInfo();
 
         definedstructureinfo.a(structureboundingbox);
         definedstructureinfo.a(enumblockrotation);
         definedstructureinfo.c(true);
         definedstructureinfo.a(false);
-        definedstructureinfo.a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.c);
-        definedstructureinfo.a((DefinedStructureProcessor) DefinedStructureProcessorJigsawReplacement.a);
-        this.b.forEach(definedstructureinfo::a);
-        this.c().b().forEach(definedstructureinfo::a);
+        definedstructureinfo.a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.b);
+        definedstructureinfo.d(true);
+        if (!flag) {
+            definedstructureinfo.a((DefinedStructureProcessor) DefinedStructureProcessorJigsawReplacement.b);
+        }
+
+        this.d.forEach(definedstructureinfo::a);
+        this.e().c().forEach(definedstructureinfo::a);
         return definedstructureinfo;
     }
 
     @Override
-    public WorldGenFeatureDefinedStructurePools a() {
-        return WorldGenFeatureDefinedStructurePools.b;
-    }
-
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("location"), dynamicops.createString(this.a.toString()), dynamicops.createString("processors"), dynamicops.createList(this.b.stream().map((definedstructureprocessor) -> {
-            return definedstructureprocessor.b(dynamicops).getValue();
-        })))));
+    public WorldGenFeatureDefinedStructurePools<?> a() {
+        return WorldGenFeatureDefinedStructurePools.a;
     }
 
     public String toString() {
-        return "Single[" + this.a + "]";
+        return "Single[" + this.c + "]";
     }
 }

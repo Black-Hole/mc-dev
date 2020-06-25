@@ -80,7 +80,7 @@ public class ArgumentChat implements ArgumentType<ArgumentChat.a> {
                     IChatBaseComponent ichatbasecomponent = argumentchat_b.a(commandlistenerwrapper);
 
                     if (i < argumentchat_b.a()) {
-                        chatcomponenttext.a(this.a.substring(i, argumentchat_b.a()));
+                        chatcomponenttext.c(this.a.substring(i, argumentchat_b.a()));
                     }
 
                     if (ichatbasecomponent != null) {
@@ -91,7 +91,7 @@ public class ArgumentChat implements ArgumentType<ArgumentChat.a> {
                 }
 
                 if (i < this.a.length()) {
-                    chatcomponenttext.a(this.a.substring(i, this.a.length()));
+                    chatcomponenttext.c(this.a.substring(i, this.a.length()));
                 }
 
                 return chatcomponenttext;

@@ -2,12 +2,11 @@ package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
+import com.mojang.serialization.Dynamic;
 
 public class DataConverterHanging extends DataFix {
 
@@ -18,10 +17,10 @@ public class DataConverterHanging extends DataFix {
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic, boolean flag, boolean flag1) {
-        if ((flag || flag1) && !dynamic.get("Facing").asNumber().isPresent()) {
+        if ((flag || flag1) && !dynamic.get("Facing").asNumber().result().isPresent()) {
             int i;
 
-            if (dynamic.get("Direction").asNumber().isPresent()) {
+            if (dynamic.get("Direction").asNumber().result().isPresent()) {
                 i = dynamic.get("Direction").asByte((byte) 0) % DataConverterHanging.a.length;
                 int[] aint = DataConverterHanging.a[i];
 
@@ -29,7 +28,7 @@ public class DataConverterHanging extends DataFix {
                 dynamic = dynamic.set("TileY", dynamic.createInt(dynamic.get("TileY").asInt(0) + aint[1]));
                 dynamic = dynamic.set("TileZ", dynamic.createInt(dynamic.get("TileZ").asInt(0) + aint[2]));
                 dynamic = dynamic.remove("Direction");
-                if (flag1 && dynamic.get("ItemRotation").asNumber().isPresent()) {
+                if (flag1 && dynamic.get("ItemRotation").asNumber().result().isPresent()) {
                     dynamic = dynamic.set("ItemRotation", dynamic.createByte((byte) (dynamic.get("ItemRotation").asByte((byte) 0) * 2)));
                 }
             } else {

@@ -1,23 +1,29 @@
 package net.minecraft.server;
 
 import com.google.common.base.MoreObjects;
+import com.mojang.serialization.Codec;
+import java.util.stream.IntStream;
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
 public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
 
+    public static final Codec<BaseBlockPosition> c = Codec.INT_STREAM.comapFlatMap((intstream) -> {
+        return SystemUtils.a(intstream, 3).map((aint) -> {
+            return new BaseBlockPosition(aint[0], aint[1], aint[2]);
+        });
+    }, (baseblockposition) -> {
+        return IntStream.of(new int[]{baseblockposition.getX(), baseblockposition.getY(), baseblockposition.getZ()});
+    });
     public static final BaseBlockPosition ZERO = new BaseBlockPosition(0, 0, 0);
-    @Deprecated
-    private final int a;
-    @Deprecated
-    private final int b;
-    @Deprecated
-    private final int c;
+    private int a;
+    private int b;
+    private int e;
 
     public BaseBlockPosition(int i, int j, int k) {
         this.a = i;
         this.b = j;
-        this.c = k;
+        this.e = k;
     }
 
     public BaseBlockPosition(double d0, double d1, double d2) {
@@ -53,7 +59,19 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
     }
 
     public int getZ() {
-        return this.c;
+        return this.e;
+    }
+
+    protected void o(int i) {
+        this.a = i;
+    }
+
+    protected void p(int i) {
+        this.b = i;
+    }
+
+    protected void q(int i) {
+        this.e = i;
     }
 
     public BaseBlockPosition down() {
@@ -80,7 +98,7 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
         return this.distanceSquared(iposition.getX(), iposition.getY(), iposition.getZ(), true) < d0 * d0;
     }
 
-    public double m(BaseBlockPosition baseblockposition) {
+    public double j(BaseBlockPosition baseblockposition) {
         return this.distanceSquared((double) baseblockposition.getX(), (double) baseblockposition.getY(), (double) baseblockposition.getZ(), true);
     }
 
@@ -97,7 +115,7 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
         return d4 * d4 + d5 * d5 + d6 * d6;
     }
 
-    public int n(BaseBlockPosition baseblockposition) {
+    public int k(BaseBlockPosition baseblockposition) {
         float f = (float) Math.abs(baseblockposition.getX() - this.getX());
         float f1 = (float) Math.abs(baseblockposition.getY() - this.getY());
         float f2 = (float) Math.abs(baseblockposition.getZ() - this.getZ());

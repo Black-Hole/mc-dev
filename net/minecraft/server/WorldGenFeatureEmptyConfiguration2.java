@@ -1,18 +1,13 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
 
 public class WorldGenFeatureEmptyConfiguration2 implements WorldGenFeatureDecoratorConfiguration {
 
+    public static final Codec<WorldGenFeatureEmptyConfiguration2> a = Codec.unit(() -> {
+        return WorldGenFeatureEmptyConfiguration2.b;
+    });
+    public static final WorldGenFeatureEmptyConfiguration2 b = new WorldGenFeatureEmptyConfiguration2();
+
     public WorldGenFeatureEmptyConfiguration2() {}
-
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.emptyMap());
-    }
-
-    public static WorldGenFeatureEmptyConfiguration2 a(Dynamic<?> dynamic) {
-        return new WorldGenFeatureEmptyConfiguration2();
-    }
 }

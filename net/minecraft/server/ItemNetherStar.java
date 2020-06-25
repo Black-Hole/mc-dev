@@ -7,7 +7,7 @@ public class ItemNetherStar extends Item {
     }
 
     @Override
-    public boolean d_(ItemStack itemstack) {
+    public boolean e(ItemStack itemstack) {
         return true;
     }
 }

@@ -2,40 +2,39 @@ package net.minecraft.server;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import javax.annotation.Nullable;
 
 public class BehaviorStrollPlaceList extends Behavior<EntityVillager> {
 
-    private final MemoryModuleType<List<GlobalPos>> a;
-    private final MemoryModuleType<GlobalPos> b;
-    private final float c;
-    private final int d;
+    private final MemoryModuleType<List<GlobalPos>> b;
+    private final MemoryModuleType<GlobalPos> c;
+    private final float d;
     private final int e;
-    private long f;
+    private final int f;
+    private long g;
     @Nullable
-    private GlobalPos g;
+    private GlobalPos h;
 
     public BehaviorStrollPlaceList(MemoryModuleType<List<GlobalPos>> memorymoduletype, float f, int i, int j, MemoryModuleType<GlobalPos> memorymoduletype1) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED, memorymoduletype, MemoryStatus.VALUE_PRESENT, memorymoduletype1, MemoryStatus.VALUE_PRESENT));
-        this.a = memorymoduletype;
-        this.c = f;
-        this.d = i;
-        this.e = j;
-        this.b = memorymoduletype1;
+        this.b = memorymoduletype;
+        this.d = f;
+        this.e = i;
+        this.f = j;
+        this.c = memorymoduletype1;
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
-        Optional<List<GlobalPos>> optional = entityvillager.getBehaviorController().getMemory(this.a);
-        Optional<GlobalPos> optional1 = entityvillager.getBehaviorController().getMemory(this.b);
+        Optional<List<GlobalPos>> optional = entityvillager.getBehaviorController().getMemory(this.b);
+        Optional<GlobalPos> optional1 = entityvillager.getBehaviorController().getMemory(this.c);
 
         if (optional.isPresent() && optional1.isPresent()) {
             List<GlobalPos> list = (List) optional.get();
 
             if (!list.isEmpty()) {
-                this.g = (GlobalPos) list.get(worldserver.getRandom().nextInt(list.size()));
-                return this.g != null && Objects.equals(worldserver.getWorldProvider().getDimensionManager(), this.g.getDimensionManager()) && ((GlobalPos) optional1.get()).getBlockPosition().a((IPosition) entityvillager.getPositionVector(), (double) this.e);
+                this.h = (GlobalPos) list.get(worldserver.getRandom().nextInt(list.size()));
+                return this.h != null && worldserver.getDimensionKey() == this.h.getDimensionManager() && ((GlobalPos) optional1.get()).getBlockPosition().a((IPosition) entityvillager.getPositionVector(), (double) this.f);
             }
         }
 
@@ -43,9 +42,9 @@ public class BehaviorStrollPlaceList extends Behavior<EntityVillager> {
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        if (i > this.f && this.g != null) {
-            entityvillager.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(this.g.getBlockPosition(), this.c, this.d)));
-            this.f = i + 100L;
+        if (i > this.g && this.h != null) {
+            entityvillager.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(this.h.getBlockPosition(), this.d, this.e)));
+            this.g = i + 100L;
         }
 
     }

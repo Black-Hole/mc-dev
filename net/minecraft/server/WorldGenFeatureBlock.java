@@ -1,18 +1,17 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenFeatureBlock extends WorldGenerator<WorldGenFeatureBlockConfiguration> {
 
-    public WorldGenFeatureBlock(Function<Dynamic<?>, ? extends WorldGenFeatureBlockConfiguration> function) {
-        super(function);
+    public WorldGenFeatureBlock(Codec<WorldGenFeatureBlockConfiguration> codec) {
+        super(codec);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureBlockConfiguration worldgenfeatureblockconfiguration) {
-        if (worldgenfeatureblockconfiguration.b.contains(generatoraccess.getType(blockposition.down())) && worldgenfeatureblockconfiguration.c.contains(generatoraccess.getType(blockposition)) && worldgenfeatureblockconfiguration.d.contains(generatoraccess.getType(blockposition.up()))) {
-            generatoraccess.setTypeAndData(blockposition, worldgenfeatureblockconfiguration.a, 2);
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureBlockConfiguration worldgenfeatureblockconfiguration) {
+        if (worldgenfeatureblockconfiguration.c.contains(generatoraccessseed.getType(blockposition.down())) && worldgenfeatureblockconfiguration.d.contains(generatoraccessseed.getType(blockposition)) && worldgenfeatureblockconfiguration.e.contains(generatoraccessseed.getType(blockposition.up()))) {
+            generatoraccessseed.setTypeAndData(blockposition, worldgenfeatureblockconfiguration.b, 2);
             return true;
         } else {
             return false;

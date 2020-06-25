@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerCuredZombieVillager extends CriterionTriggerAbstract<CriterionTriggerCuredZombieVillager.a> {
@@ -16,44 +14,47 @@ public class CriterionTriggerCuredZombieVillager extends CriterionTriggerAbstrac
     }
 
     @Override
-    public CriterionTriggerCuredZombieVillager.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("zombie"));
-        CriterionConditionEntity criterionconditionentity1 = CriterionConditionEntity.a(jsonobject.get("villager"));
+    public CriterionTriggerCuredZombieVillager.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
+        CriterionConditionEntity.b criterionconditionentity_b1 = CriterionConditionEntity.b.a(jsonobject, "zombie", lootdeserializationcontext);
+        CriterionConditionEntity.b criterionconditionentity_b2 = CriterionConditionEntity.b.a(jsonobject, "villager", lootdeserializationcontext);
 
-        return new CriterionTriggerCuredZombieVillager.a(criterionconditionentity, criterionconditionentity1);
+        return new CriterionTriggerCuredZombieVillager.a(criterionconditionentity_b, criterionconditionentity_b1, criterionconditionentity_b2);
     }
 
     public void a(EntityPlayer entityplayer, EntityZombie entityzombie, EntityVillager entityvillager) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggercuredzombievillager_a) -> {
-            return criteriontriggercuredzombievillager_a.a(entityplayer, entityzombie, entityvillager);
+        LootTableInfo loottableinfo = CriterionConditionEntity.b(entityplayer, entityzombie);
+        LootTableInfo loottableinfo1 = CriterionConditionEntity.b(entityplayer, entityvillager);
+
+        this.a(entityplayer, (criteriontriggercuredzombievillager_a) -> {
+            return criteriontriggercuredzombievillager_a.a(loottableinfo, loottableinfo1);
         });
     }
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionEntity a;
-        private final CriterionConditionEntity b;
+        private final CriterionConditionEntity.b a;
+        private final CriterionConditionEntity.b b;
 
-        public a(CriterionConditionEntity criterionconditionentity, CriterionConditionEntity criterionconditionentity1) {
-            super(CriterionTriggerCuredZombieVillager.a);
-            this.a = criterionconditionentity;
-            this.b = criterionconditionentity1;
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionEntity.b criterionconditionentity_b1, CriterionConditionEntity.b criterionconditionentity_b2) {
+            super(CriterionTriggerCuredZombieVillager.a, criterionconditionentity_b);
+            this.a = criterionconditionentity_b1;
+            this.b = criterionconditionentity_b2;
         }
 
         public static CriterionTriggerCuredZombieVillager.a c() {
-            return new CriterionTriggerCuredZombieVillager.a(CriterionConditionEntity.a, CriterionConditionEntity.a);
+            return new CriterionTriggerCuredZombieVillager.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a, CriterionConditionEntity.b.a);
         }
 
-        public boolean a(EntityPlayer entityplayer, EntityZombie entityzombie, EntityVillager entityvillager) {
-            return !this.a.a(entityplayer, entityzombie) ? false : this.b.a(entityplayer, entityvillager);
+        public boolean a(LootTableInfo loottableinfo, LootTableInfo loottableinfo1) {
+            return !this.a.a(loottableinfo) ? false : this.b.a(loottableinfo1);
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("zombie", this.a.a());
-            jsonobject.add("villager", this.b.a());
+            jsonobject.add("zombie", this.a.a(lootserializationcontext));
+            jsonobject.add("villager", this.b.a(lootserializationcontext));
             return jsonobject;
         }
     }

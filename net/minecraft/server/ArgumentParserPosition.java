@@ -6,8 +6,8 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 public class ArgumentParserPosition {
 
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.pos.missing.double", new Object[0]));
-    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.pos.missing.int", new Object[0]));
+    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.pos.missing.double"));
+    public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.pos.missing.int"));
     private final boolean c;
     private final double d;
 

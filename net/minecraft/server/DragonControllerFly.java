@@ -35,8 +35,8 @@ public class DragonControllerFly extends AbstractDragonController {
     }
 
     private void j() {
-        int i = this.a.l();
-        Vec3D vec3d = this.a.u(1.0F);
+        int i = this.a.eJ();
+        Vec3D vec3d = this.a.t(1.0F);
         int j = this.a.o(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
 
         if (this.a.getEnderDragonBattle() != null && this.a.getEnderDragonBattle().c() > 0) {
@@ -58,17 +58,17 @@ public class DragonControllerFly extends AbstractDragonController {
         if (this.c != null) {
             this.c.a();
             if (!this.c.b()) {
-                Vec3D vec3d = this.c.g();
+                BaseBlockPosition baseblockposition = this.c.g();
 
                 this.c.a();
 
                 double d0;
 
                 do {
-                    d0 = vec3d.y + (double) (this.a.getRandom().nextFloat() * 20.0F);
-                } while (d0 < vec3d.y);
+                    d0 = (double) ((float) baseblockposition.getY() + this.a.getRandom().nextFloat() * 20.0F);
+                } while (d0 < (double) baseblockposition.getY());
 
-                this.d = new Vec3D(vec3d.x, d0, vec3d.z);
+                this.d = new Vec3D((double) baseblockposition.getX(), d0, (double) baseblockposition.getZ());
             }
         }
 

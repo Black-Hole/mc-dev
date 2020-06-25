@@ -4,12 +4,11 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.schemas.Schema;
-import com.mojang.datafixers.types.DynamicOps;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,7 +38,7 @@ public class DataConverterPOI extends DataFix {
 
         for (int i = 0; i < 16; ++i) {
             String s = String.valueOf(i);
-            Optional<Dynamic<T>> optional = dynamic.get(s).get();
+            Optional<Dynamic<T>> optional = dynamic.get(s).result();
 
             if (optional.isPresent()) {
                 Dynamic<T> dynamic1 = (Dynamic) optional.get();

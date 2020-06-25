@@ -9,19 +9,19 @@ public class BlockFlowerPot extends Block {
     protected static final VoxelShape a = Block.a(5.0D, 0.0D, 5.0D, 11.0D, 6.0D, 11.0D);
     private final Block c;
 
-    public BlockFlowerPot(Block block, Block.Info block_info) {
-        super(block_info);
+    public BlockFlowerPot(Block block, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.c = block;
         BlockFlowerPot.b.put(block, this);
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockFlowerPot.a;
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
@@ -52,7 +52,7 @@ public class BlockFlowerPot extends Block {
                 world.setTypeAndData(blockposition, Blocks.FLOWER_POT.getBlockData(), 3);
             }
 
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.a(world.isClientSide);
         } else {
             return EnumInteractionResult.CONSUME;
         }
@@ -65,5 +65,10 @@ public class BlockFlowerPot extends Block {
 
     public Block c() {
         return this.c;
+    }
+
+    @Override
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
+        return false;
     }
 }

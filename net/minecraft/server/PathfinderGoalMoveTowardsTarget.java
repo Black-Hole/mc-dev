@@ -27,7 +27,7 @@ public class PathfinderGoalMoveTowardsTarget extends PathfinderGoal {
         } else if (this.b.h((Entity) this.a) > (double) (this.g * this.g)) {
             return false;
         } else {
-            Vec3D vec3d = RandomPositionGenerator.a(this.a, 16, 7, this.b.getPositionVector());
+            Vec3D vec3d = RandomPositionGenerator.b(this.a, 16, 7, this.b.getPositionVector());
 
             if (vec3d == null) {
                 return false;

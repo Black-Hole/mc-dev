@@ -8,7 +8,7 @@ public class BehaviorOutsideCelebrate extends BehaviorOutside {
 
     @Override
     protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
-        Raid raid = worldserver.c_(new BlockPosition(entityliving));
+        Raid raid = worldserver.c_(entityliving.getChunkCoordinates());
 
         return raid != null && raid.isVictory() && super.a(worldserver, entityliving);
     }

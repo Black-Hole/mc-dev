@@ -18,7 +18,7 @@ public class ItemBlock extends Item {
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         EnumInteractionResult enuminteractionresult = this.a(new BlockActionContext(itemactioncontext));
 
-        return enuminteractionresult != EnumInteractionResult.SUCCESS && this.isFood() ? this.a(itemactioncontext.e, itemactioncontext.b, itemactioncontext.c).a() : enuminteractionresult;
+        return !enuminteractionresult.a() && this.isFood() ? this.a(itemactioncontext.e, itemactioncontext.b, itemactioncontext.c).a() : enuminteractionresult;
     }
 
     public EnumInteractionResult a(BlockActionContext blockactioncontext) {
@@ -53,18 +53,21 @@ public class ItemBlock extends Item {
                         }
                     }
 
-                    SoundEffectType soundeffecttype = iblockdata1.r();
+                    SoundEffectType soundeffecttype = iblockdata1.getStepSound();
 
                     world.playSound(entityhuman, blockposition, this.a(iblockdata1), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
-                    itemstack.subtract(1);
-                    return EnumInteractionResult.SUCCESS;
+                    if (entityhuman == null || !entityhuman.abilities.canInstantlyBuild) {
+                        itemstack.subtract(1);
+                    }
+
+                    return EnumInteractionResult.a(world.isClientSide);
                 }
             }
         }
     }
 
     protected SoundEffect a(IBlockData iblockdata) {
-        return iblockdata.r().e();
+        return iblockdata.getStepSound().e();
     }
 
     @Nullable
@@ -121,10 +124,10 @@ public class ItemBlock extends Item {
         EntityHuman entityhuman = blockactioncontext.getEntity();
         VoxelShapeCollision voxelshapecollision = entityhuman == null ? VoxelShapeCollision.a() : VoxelShapeCollision.a((Entity) entityhuman);
 
-        return (!this.T_() || iblockdata.canPlace(blockactioncontext.getWorld(), blockactioncontext.getClickPosition())) && blockactioncontext.getWorld().a(iblockdata, blockactioncontext.getClickPosition(), voxelshapecollision);
+        return (!this.isCheckCollisions() || iblockdata.canPlace(blockactioncontext.getWorld(), blockactioncontext.getClickPosition())) && blockactioncontext.getWorld().a(iblockdata, blockactioncontext.getClickPosition(), voxelshapecollision);
     }
 
-    protected boolean T_() {
+    protected boolean isCheckCollisions() {
         return true;
     }
 
@@ -156,7 +159,7 @@ public class ItemBlock extends Item {
                     nbttagcompound1.setInt("y", blockposition.getY());
                     nbttagcompound1.setInt("z", blockposition.getZ());
                     if (!nbttagcompound1.equals(nbttagcompound2)) {
-                        tileentity.load(nbttagcompound1);
+                        tileentity.load(world.getType(blockposition), nbttagcompound1);
                         tileentity.update();
                         return true;
                     }
@@ -169,7 +172,7 @@ public class ItemBlock extends Item {
 
     @Override
     public String getName() {
-        return this.getBlock().k();
+        return this.getBlock().i();
     }
 
     @Override

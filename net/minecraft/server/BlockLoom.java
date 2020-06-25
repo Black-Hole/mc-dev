@@ -2,10 +2,10 @@ package net.minecraft.server;
 
 public class BlockLoom extends BlockFacingHorizontal {
 
-    private static final ChatMessage a = new ChatMessage("container.loom", new Object[0]);
+    private static final ChatMessage a = new ChatMessage("container.loom");
 
-    protected BlockLoom(Block.Info block_info) {
-        super(block_info);
+    protected BlockLoom(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
@@ -15,7 +15,7 @@ public class BlockLoom extends BlockFacingHorizontal {
         } else {
             entityhuman.openContainer(iblockdata.b(world, blockposition));
             entityhuman.a(StatisticList.INTERACT_WITH_LOOM);
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.CONSUME;
         }
     }
 

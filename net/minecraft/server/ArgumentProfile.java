@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
 
     private static final Collection<String> b = Arrays.asList("Player", "0123", "dd12be42-52a9-4a91-a8a1-11c01849e498", "@e");
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.player.unknown", new Object[0]));
+    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.player.unknown"));
 
     public ArgumentProfile() {}
 

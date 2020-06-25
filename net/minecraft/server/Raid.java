@@ -19,11 +19,11 @@ import javax.annotation.Nullable;
 
 public class Raid {
 
-    private static final ChatMessage a = new ChatMessage("event.minecraft.raid", new Object[0]);
-    private static final ChatMessage b = new ChatMessage("event.minecraft.raid.victory", new Object[0]);
-    private static final ChatMessage c = new ChatMessage("event.minecraft.raid.defeat", new Object[0]);
-    private static final IChatBaseComponent d = Raid.a.g().a(" - ").addSibling(Raid.b);
-    private static final IChatBaseComponent e = Raid.a.g().a(" - ").addSibling(Raid.c);
+    private static final ChatMessage a = new ChatMessage("event.minecraft.raid");
+    private static final ChatMessage b = new ChatMessage("event.minecraft.raid.victory");
+    private static final ChatMessage c = new ChatMessage("event.minecraft.raid.defeat");
+    private static final IChatBaseComponent d = Raid.a.mutableCopy().c(" - ").addSibling(Raid.b);
+    private static final IChatBaseComponent e = Raid.a.mutableCopy().c(" - ").addSibling(Raid.c);
     private final Map<Integer, EntityRaider> f = Maps.newHashMap();
     private final Map<Integer, Set<EntityRaider>> raiders = Maps.newHashMap();
     public final Set<UUID> heroes = Sets.newHashSet();
@@ -78,13 +78,10 @@ public class Raid {
         this.status = Raid.Status.b(nbttagcompound.getString("Status"));
         this.heroes.clear();
         if (nbttagcompound.hasKeyOfType("HeroesOfTheVillage", 9)) {
-            NBTTagList nbttaglist = nbttagcompound.getList("HeroesOfTheVillage", 10);
+            NBTTagList nbttaglist = nbttagcompound.getList("HeroesOfTheVillage", 11);
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
-                NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(i);
-                UUID uuid = nbttagcompound1.a("UUID");
-
-                this.heroes.add(uuid);
+                this.heroes.add(GameProfileSerializer.a(nbttaglist.get(i)));
             }
         }
 
@@ -128,7 +125,7 @@ public class Raid {
 
     private Predicate<EntityPlayer> x() {
         return (entityplayer) -> {
-            BlockPosition blockposition = new BlockPosition(entityplayer);
+            BlockPosition blockposition = entityplayer.getChunkCoordinates();
 
             return entityplayer.isAlive() && this.world.c_(blockposition) == this;
         };
@@ -261,7 +258,7 @@ public class Raid {
                     this.F();
                     if (i > 0) {
                         if (i <= 2) {
-                            this.bossBattle.a(Raid.a.g().a(" - ").addSibling(new ChatMessage("event.minecraft.raid.raiders_remaining", new Object[]{i})));
+                            this.bossBattle.a((IChatBaseComponent) Raid.a.mutableCopy().c(" - ").addSibling(new ChatMessage("event.minecraft.raid.raiders_remaining", new Object[]{i})));
                         } else {
                             this.bossBattle.a((IChatBaseComponent) Raid.a);
                         }
@@ -347,8 +344,8 @@ public class Raid {
         WorldServer worldserver = this.world;
 
         this.world.getClass();
-        stream.filter(worldserver::a).map(SectionPosition::t).min(Comparator.comparingDouble((blockposition) -> {
-            return blockposition.m(this.center);
+        stream.filter(worldserver::a).map(SectionPosition::q).min(Comparator.comparingDouble((blockposition) -> {
+            return blockposition.j(this.center);
         })).ifPresent(this::c);
     }
 
@@ -394,19 +391,19 @@ public class Raid {
 
             while (iterator1.hasNext()) {
                 EntityRaider entityraider = (EntityRaider) iterator1.next();
-                BlockPosition blockposition = new BlockPosition(entityraider);
+                BlockPosition blockposition = entityraider.getChunkCoordinates();
 
-                if (!entityraider.dead && entityraider.dimension == this.world.getWorldProvider().getDimensionManager() && this.center.m(blockposition) < 12544.0D) {
+                if (!entityraider.dead && entityraider.world.getDimensionKey() == this.world.getDimensionKey() && this.center.j(blockposition) < 12544.0D) {
                     if (entityraider.ticksLived > 600) {
                         if (this.world.getEntity(entityraider.getUniqueID()) == null) {
                             hashset.add(entityraider);
                         }
 
-                        if (!this.world.b_(blockposition) && entityraider.cL() > 2400) {
-                            entityraider.b(entityraider.eI() + 1);
+                        if (!this.world.b_(blockposition) && entityraider.dc() > 2400) {
+                            entityraider.b(entityraider.ff() + 1);
                         }
 
-                        if (entityraider.eI() >= 30) {
+                        if (entityraider.ff() >= 30) {
                             hashset.add(entityraider);
                         }
                     }
@@ -435,7 +432,7 @@ public class Raid {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
             Vec3D vec3d = entityplayer.getPositionVector();
-            Vec3D vec3d1 = new Vec3D(blockposition);
+            Vec3D vec3d1 = Vec3D.a((BaseBlockPosition) blockposition);
             float f1 = MathHelper.sqrt((vec3d1.x - vec3d.x) * (vec3d1.x - vec3d.x) + (vec3d1.z - vec3d.z) * (vec3d1.z - vec3d.z));
             double d0 = vec3d.x + (double) (13.0F / f1) * (vec3d1.x - vec3d.x);
             double d1 = vec3d.z + (double) (13.0F / f1) * (vec3d1.z - vec3d.z);
@@ -465,7 +462,7 @@ public class Raid {
             for (int j1 = 0; j1 < l; ++j1) {
                 EntityRaider entityraider = (EntityRaider) raid_wave.g.a((World) this.world);
 
-                if (!flag && entityraider.es()) {
+                if (!flag && entityraider.eO()) {
                     entityraider.setPatrolLeader(true);
                     this.a(i, entityraider);
                     flag = true;
@@ -513,7 +510,7 @@ public class Raid {
                 entityraider.setPosition((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 1.0D, (double) blockposition.getZ() + 0.5D);
                 entityraider.prepare(this.world, this.world.getDamageScaler(blockposition), EnumMobSpawn.EVENT, (GroupDataEntity) null, (NBTTagCompound) null);
                 entityraider.a(i, false);
-                entityraider.onGround = true;
+                entityraider.c(true);
                 this.world.addEntity(entityraider);
             }
         }
@@ -550,7 +547,7 @@ public class Raid {
     }
 
     public void a(EntityRaider entityraider, boolean flag) {
-        Set<EntityRaider> set = (Set) this.raiders.get(entityraider.eG());
+        Set<EntityRaider> set = (Set) this.raiders.get(entityraider.fd());
 
         if (set != null) {
             boolean flag1 = set.remove(entityraider);
@@ -578,7 +575,8 @@ public class Raid {
         NBTTagList nbttaglist = (new EnumBannerPatternType.a()).a(EnumBannerPatternType.RHOMBUS_MIDDLE, EnumColor.CYAN).a(EnumBannerPatternType.STRIPE_BOTTOM, EnumColor.LIGHT_GRAY).a(EnumBannerPatternType.STRIPE_CENTER, EnumColor.GRAY).a(EnumBannerPatternType.BORDER, EnumColor.LIGHT_GRAY).a(EnumBannerPatternType.STRIPE_MIDDLE, EnumColor.BLACK).a(EnumBannerPatternType.HALF_HORIZONTAL, EnumColor.LIGHT_GRAY).a(EnumBannerPatternType.CIRCLE_MIDDLE, EnumColor.LIGHT_GRAY).a(EnumBannerPatternType.BORDER, EnumColor.BLACK).a();
 
         nbttagcompound.set("Patterns", nbttaglist);
-        itemstack.a((new ChatMessage("block.minecraft.ominous_banner", new Object[0])).a(EnumChatFormat.GOLD));
+        itemstack.getOrCreateTag().setInt("HideFlags", 32);
+        itemstack.a((IChatBaseComponent) (new ChatMessage("block.minecraft.ominous_banner")).a(EnumChatFormat.GOLD));
         return itemstack;
     }
 
@@ -599,7 +597,7 @@ public class Raid {
             int k1 = this.world.a(HeightMap.Type.WORLD_SURFACE, i1, j1);
 
             blockposition_mutableblockposition.d(i1, k1, j1);
-            if ((!this.world.b_(blockposition_mutableblockposition) || i >= 2) && this.world.isAreaLoaded(blockposition_mutableblockposition.getX() - 10, blockposition_mutableblockposition.getY() - 10, blockposition_mutableblockposition.getZ() - 10, blockposition_mutableblockposition.getX() + 10, blockposition_mutableblockposition.getY() + 10, blockposition_mutableblockposition.getZ() + 10) && this.world.getChunkProvider().a(new ChunkCoordIntPair(blockposition_mutableblockposition)) && (SpawnerCreature.a(EntityPositionTypes.Surface.ON_GROUND, (IWorldReader) this.world, (BlockPosition) blockposition_mutableblockposition, EntityTypes.RAVAGER) || this.world.getType(blockposition_mutableblockposition.down()).getBlock() == Blocks.SNOW && this.world.getType(blockposition_mutableblockposition).isAir())) {
+            if ((!this.world.b_(blockposition_mutableblockposition) || i >= 2) && this.world.isAreaLoaded(blockposition_mutableblockposition.getX() - 10, blockposition_mutableblockposition.getY() - 10, blockposition_mutableblockposition.getZ() - 10, blockposition_mutableblockposition.getX() + 10, blockposition_mutableblockposition.getY() + 10, blockposition_mutableblockposition.getZ() + 10) && this.world.getChunkProvider().a(new ChunkCoordIntPair(blockposition_mutableblockposition)) && (SpawnerCreature.a(EntityPositionTypes.Surface.ON_GROUND, (IWorldReader) this.world, blockposition_mutableblockposition, EntityTypes.RAVAGER) || this.world.getType(blockposition_mutableblockposition.down()).a(Blocks.SNOW) && this.world.getType(blockposition_mutableblockposition).isAir())) {
                 return blockposition_mutableblockposition;
             }
         }
@@ -727,10 +725,8 @@ public class Raid {
 
         while (iterator.hasNext()) {
             UUID uuid = (UUID) iterator.next();
-            NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-            nbttagcompound1.a("UUID", uuid);
-            nbttaglist.add(nbttagcompound1);
+            nbttaglist.add(GameProfileSerializer.a(uuid));
         }
 
         nbttagcompound.set("HeroesOfTheVillage", nbttaglist);

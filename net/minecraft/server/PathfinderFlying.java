@@ -38,7 +38,7 @@ public class PathfinderFlying extends PathfinderNormal {
             i = MathHelper.floor(this.b.locY() + 0.5D);
         }
 
-        BlockPosition blockposition = new BlockPosition(this.b);
+        BlockPosition blockposition = this.b.getChunkCoordinates();
         PathType pathtype = this.a(this.b, blockposition.getX(), i, blockposition.getZ());
 
         if (this.b.a(pathtype) < 0.0F) {
@@ -181,49 +181,49 @@ public class PathfinderFlying extends PathfinderNormal {
 
         PathPoint pathpoint19 = this.a(pathpoint.a + 1, pathpoint.b + 1, pathpoint.c - 1);
 
-        if (this.b(pathpoint19) && this.a(pathpoint15) && this.a(pathpoint10) && this.a(pathpoint9)) {
+        if (this.b(pathpoint19) && this.a(pathpoint15) && this.a(pathpoint4) && this.a(pathpoint3) && this.a(pathpoint5) && this.a(pathpoint10) && this.a(pathpoint9)) {
             apathpoint[i++] = pathpoint19;
         }
 
         PathPoint pathpoint20 = this.a(pathpoint.a + 1, pathpoint.b + 1, pathpoint.c + 1);
 
-        if (this.b(pathpoint20) && this.a(pathpoint16) && this.a(pathpoint7) && this.a(pathpoint9)) {
+        if (this.b(pathpoint20) && this.a(pathpoint16) && this.a(pathpoint1) && this.a(pathpoint3) && this.a(pathpoint5) && this.a(pathpoint7) && this.a(pathpoint9)) {
             apathpoint[i++] = pathpoint20;
         }
 
         PathPoint pathpoint21 = this.a(pathpoint.a - 1, pathpoint.b + 1, pathpoint.c - 1);
 
-        if (this.b(pathpoint21) && this.a(pathpoint17) && this.a(pathpoint10) && this.a(pathpoint8)) {
+        if (this.b(pathpoint21) && this.a(pathpoint17) && this.a(pathpoint4) && this.a(pathpoint2) & this.a(pathpoint5) && this.a(pathpoint10) && this.a(pathpoint8)) {
             apathpoint[i++] = pathpoint21;
         }
 
         PathPoint pathpoint22 = this.a(pathpoint.a - 1, pathpoint.b + 1, pathpoint.c + 1);
 
-        if (this.b(pathpoint22) && this.a(pathpoint18) && this.a(pathpoint7) && this.a(pathpoint8)) {
+        if (this.b(pathpoint22) && this.a(pathpoint18) && this.a(pathpoint1) && this.a(pathpoint2) & this.a(pathpoint5) && this.a(pathpoint7) && this.a(pathpoint8)) {
             apathpoint[i++] = pathpoint22;
         }
 
         PathPoint pathpoint23 = this.a(pathpoint.a + 1, pathpoint.b - 1, pathpoint.c - 1);
 
-        if (this.b(pathpoint23) && this.a(pathpoint15) && this.a(pathpoint14) && this.a(pathpoint13)) {
+        if (this.b(pathpoint23) && this.a(pathpoint15) && this.a(pathpoint4) && this.a(pathpoint3) && this.a(pathpoint6) && this.a(pathpoint14) && this.a(pathpoint13)) {
             apathpoint[i++] = pathpoint23;
         }
 
         PathPoint pathpoint24 = this.a(pathpoint.a + 1, pathpoint.b - 1, pathpoint.c + 1);
 
-        if (this.b(pathpoint24) && this.a(pathpoint16) && this.a(pathpoint11) && this.a(pathpoint13)) {
+        if (this.b(pathpoint24) && this.a(pathpoint16) && this.a(pathpoint1) && this.a(pathpoint3) && this.a(pathpoint6) && this.a(pathpoint11) && this.a(pathpoint13)) {
             apathpoint[i++] = pathpoint24;
         }
 
         PathPoint pathpoint25 = this.a(pathpoint.a - 1, pathpoint.b - 1, pathpoint.c - 1);
 
-        if (this.b(pathpoint25) && this.a(pathpoint17) && this.a(pathpoint14) && this.a(pathpoint12)) {
+        if (this.b(pathpoint25) && this.a(pathpoint17) && this.a(pathpoint4) && this.a(pathpoint2) && this.a(pathpoint6) && this.a(pathpoint14) && this.a(pathpoint12)) {
             apathpoint[i++] = pathpoint25;
         }
 
         PathPoint pathpoint26 = this.a(pathpoint.a - 1, pathpoint.b - 1, pathpoint.c + 1);
 
-        if (this.b(pathpoint26) && this.a(pathpoint18) && this.a(pathpoint11) && this.a(pathpoint12)) {
+        if (this.b(pathpoint26) && this.a(pathpoint18) && this.a(pathpoint1) && this.a(pathpoint2) && this.a(pathpoint6) && this.a(pathpoint11) && this.a(pathpoint12)) {
             apathpoint[i++] = pathpoint26;
         }
 
@@ -261,7 +261,7 @@ public class PathfinderFlying extends PathfinderNormal {
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k, EntityInsentient entityinsentient, int l, int i1, int j1, boolean flag, boolean flag1) {
         EnumSet<PathType> enumset = EnumSet.noneOf(PathType.class);
         PathType pathtype = PathType.BLOCKED;
-        BlockPosition blockposition = new BlockPosition(entityinsentient);
+        BlockPosition blockposition = entityinsentient.getChunkCoordinates();
 
         pathtype = this.a(iblockaccess, i, j, k, l, i1, j1, flag, flag1, enumset, pathtype, blockposition);
         if (enumset.contains(PathType.FENCE)) {
@@ -292,13 +292,14 @@ public class PathfinderFlying extends PathfinderNormal {
 
     @Override
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k) {
-        PathType pathtype = c(iblockaccess, i, j, k);
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+        PathType pathtype = b(iblockaccess, blockposition_mutableblockposition.d(i, j, k));
 
         if (pathtype == PathType.OPEN && j >= 1) {
-            Block block = iblockaccess.getType(new BlockPosition(i, j - 1, k)).getBlock();
-            PathType pathtype1 = c(iblockaccess, i, j - 1, k);
+            IBlockData iblockdata = iblockaccess.getType(blockposition_mutableblockposition.d(i, j - 1, k));
+            PathType pathtype1 = b(iblockaccess, blockposition_mutableblockposition.d(i, j - 1, k));
 
-            if (pathtype1 != PathType.DAMAGE_FIRE && block != Blocks.MAGMA_BLOCK && pathtype1 != PathType.LAVA && block != Blocks.CAMPFIRE) {
+            if (pathtype1 != PathType.DAMAGE_FIRE && !iblockdata.a(Blocks.MAGMA_BLOCK) && pathtype1 != PathType.LAVA && !iblockdata.a((Tag) TagsBlock.CAMPFIRES)) {
                 if (pathtype1 == PathType.DAMAGE_CACTUS) {
                     pathtype = PathType.DAMAGE_CACTUS;
                 } else if (pathtype1 == PathType.DAMAGE_OTHER) {
@@ -316,7 +317,7 @@ public class PathfinderFlying extends PathfinderNormal {
         }
 
         if (pathtype == PathType.WALKABLE || pathtype == PathType.OPEN) {
-            pathtype = a(iblockaccess, i, j, k, pathtype);
+            pathtype = a(iblockaccess, blockposition_mutableblockposition.d(i, j, k), pathtype);
         }
 
         return pathtype;

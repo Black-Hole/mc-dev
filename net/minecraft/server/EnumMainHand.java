@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public enum EnumMainHand {
 
-    LEFT(new ChatMessage("options.mainHand.left", new Object[0])), RIGHT(new ChatMessage("options.mainHand.right", new Object[0]));
+    LEFT(new ChatMessage("options.mainHand.left")), RIGHT(new ChatMessage("options.mainHand.right"));
 
     private final IChatBaseComponent c;
 

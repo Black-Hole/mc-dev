@@ -106,7 +106,7 @@ public class ChunkConverter {
                 for (int j1 = 0; j1 < i1; ++j1) {
                     EnumDirection enumdirection = aenumdirection1[j1];
 
-                    blockposition_mutableblockposition.g(blockposition).c(enumdirection);
+                    blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, enumdirection);
                     iblockdata1 = a(iblockdata1, enumdirection, world, blockposition, blockposition_mutableblockposition);
                 }
 
@@ -121,96 +121,56 @@ public class ChunkConverter {
     }
 
     private void b(Chunk chunk) {
-        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
-        Throwable throwable = null;
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition1 = new BlockPosition.MutableBlockPosition();
+        ChunkCoordIntPair chunkcoordintpair = chunk.getPos();
+        World world = chunk.getWorld();
 
-        try {
-            BlockPosition.PooledBlockPosition blockposition_pooledblockposition1 = BlockPosition.PooledBlockPosition.r();
-            Throwable throwable1 = null;
+        int i;
 
-            try {
-                ChunkCoordIntPair chunkcoordintpair = chunk.getPos();
-                World world = chunk.getWorld();
+        for (i = 0; i < 16; ++i) {
+            ChunkSection chunksection = chunk.getSections()[i];
+            int[] aint = this.e[i];
 
-                int i;
+            this.e[i] = null;
+            if (chunksection != null && aint != null && aint.length > 0) {
+                EnumDirection[] aenumdirection = EnumDirection.values();
+                DataPaletteBlock<IBlockData> datapaletteblock = chunksection.getBlocks();
+                int[] aint1 = aint;
+                int j = aint.length;
 
-                for (i = 0; i < 16; ++i) {
-                    ChunkSection chunksection = chunk.getSections()[i];
-                    int[] aint = this.e[i];
+                for (int k = 0; k < j; ++k) {
+                    int l = aint1[k];
+                    int i1 = l & 15;
+                    int j1 = l >> 8 & 15;
+                    int k1 = l >> 4 & 15;
 
-                    this.e[i] = null;
-                    if (chunksection != null && aint != null && aint.length > 0) {
-                        EnumDirection[] aenumdirection = EnumDirection.values();
-                        DataPaletteBlock<IBlockData> datapaletteblock = chunksection.getBlocks();
-                        int[] aint1 = aint;
-                        int j = aint.length;
+                    blockposition_mutableblockposition.d(chunkcoordintpair.d() + i1, (i << 4) + j1, chunkcoordintpair.e() + k1);
+                    IBlockData iblockdata = (IBlockData) datapaletteblock.a(l);
+                    IBlockData iblockdata1 = iblockdata;
+                    EnumDirection[] aenumdirection1 = aenumdirection;
+                    int l1 = aenumdirection.length;
 
-                        for (int k = 0; k < j; ++k) {
-                            int l = aint1[k];
-                            int i1 = l & 15;
-                            int j1 = l >> 8 & 15;
-                            int k1 = l >> 4 & 15;
+                    for (int i2 = 0; i2 < l1; ++i2) {
+                        EnumDirection enumdirection = aenumdirection1[i2];
 
-                            blockposition_pooledblockposition.d(chunkcoordintpair.d() + i1, (i << 4) + j1, chunkcoordintpair.e() + k1);
-                            IBlockData iblockdata = (IBlockData) datapaletteblock.a(l);
-                            IBlockData iblockdata1 = iblockdata;
-                            EnumDirection[] aenumdirection1 = aenumdirection;
-                            int l1 = aenumdirection.length;
-
-                            for (int i2 = 0; i2 < l1; ++i2) {
-                                EnumDirection enumdirection = aenumdirection1[i2];
-
-                                blockposition_pooledblockposition1.g(blockposition_pooledblockposition).c(enumdirection);
-                                if (blockposition_pooledblockposition.getX() >> 4 == chunkcoordintpair.x && blockposition_pooledblockposition.getZ() >> 4 == chunkcoordintpair.z) {
-                                    iblockdata1 = a(iblockdata1, enumdirection, world, blockposition_pooledblockposition, blockposition_pooledblockposition1);
-                                }
-                            }
-
-                            Block.a(iblockdata, iblockdata1, world, blockposition_pooledblockposition, 18);
+                        blockposition_mutableblockposition1.a((BaseBlockPosition) blockposition_mutableblockposition, enumdirection);
+                        if (blockposition_mutableblockposition.getX() >> 4 == chunkcoordintpair.x && blockposition_mutableblockposition.getZ() >> 4 == chunkcoordintpair.z) {
+                            iblockdata1 = a(iblockdata1, enumdirection, world, blockposition_mutableblockposition, blockposition_mutableblockposition1);
                         }
                     }
-                }
 
-                for (i = 0; i < this.e.length; ++i) {
-                    if (this.e[i] != null) {
-                        ChunkConverter.LOGGER.warn("Discarding update data for section {} for chunk ({} {})", i, chunkcoordintpair.x, chunkcoordintpair.z);
-                    }
-
-                    this.e[i] = null;
-                }
-            } catch (Throwable throwable2) {
-                throwable1 = throwable2;
-                throw throwable2;
-            } finally {
-                if (blockposition_pooledblockposition1 != null) {
-                    if (throwable1 != null) {
-                        try {
-                            blockposition_pooledblockposition1.close();
-                        } catch (Throwable throwable3) {
-                            throwable1.addSuppressed(throwable3);
-                        }
-                    } else {
-                        blockposition_pooledblockposition1.close();
-                    }
-                }
-
-            }
-        } catch (Throwable throwable4) {
-            throwable = throwable4;
-            throw throwable4;
-        } finally {
-            if (blockposition_pooledblockposition != null) {
-                if (throwable != null) {
-                    try {
-                        blockposition_pooledblockposition.close();
-                    } catch (Throwable throwable5) {
-                        throwable.addSuppressed(throwable5);
-                    }
-                } else {
-                    blockposition_pooledblockposition.close();
+                    Block.a(iblockdata, iblockdata1, world, blockposition_mutableblockposition, 18);
                 }
             }
+        }
 
+        for (i = 0; i < this.e.length; ++i) {
+            if (this.e[i] != null) {
+                ChunkConverter.LOGGER.warn("Discarding update data for section {} for chunk ({} {})", i, chunkcoordintpair.x, chunkcoordintpair.z);
+            }
+
+            this.e[i] = null;
         }
 
     }
@@ -277,13 +237,13 @@ public class ChunkConverter {
         CHEST(new Block[]{Blocks.CHEST, Blocks.TRAPPED_CHEST}) {
             @Override
             public IBlockData a(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-                if (iblockdata1.getBlock() == iblockdata.getBlock() && enumdirection.m().c() && iblockdata.get(BlockChest.c) == BlockPropertyChestType.SINGLE && iblockdata1.get(BlockChest.c) == BlockPropertyChestType.SINGLE) {
+                if (iblockdata1.a(iblockdata.getBlock()) && enumdirection.n().d() && iblockdata.get(BlockChest.c) == BlockPropertyChestType.SINGLE && iblockdata1.get(BlockChest.c) == BlockPropertyChestType.SINGLE) {
                     EnumDirection enumdirection1 = (EnumDirection) iblockdata.get(BlockChest.FACING);
 
-                    if (enumdirection.m() != enumdirection1.m() && enumdirection1 == iblockdata1.get(BlockChest.FACING)) {
-                        BlockPropertyChestType blockpropertychesttype = enumdirection == enumdirection1.f() ? BlockPropertyChestType.LEFT : BlockPropertyChestType.RIGHT;
+                    if (enumdirection.n() != enumdirection1.n() && enumdirection1 == iblockdata1.get(BlockChest.FACING)) {
+                        BlockPropertyChestType blockpropertychesttype = enumdirection == enumdirection1.g() ? BlockPropertyChestType.LEFT : BlockPropertyChestType.RIGHT;
 
-                        generatoraccess.setTypeAndData(blockposition1, (IBlockData) iblockdata1.set(BlockChest.c, blockpropertychesttype.a()), 18);
+                        generatoraccess.setTypeAndData(blockposition1, (IBlockData) iblockdata1.set(BlockChest.c, blockpropertychesttype.b()), 18);
                         if (enumdirection1 == EnumDirection.NORTH || enumdirection1 == EnumDirection.EAST) {
                             TileEntity tileentity = generatoraccess.getTileEntity(blockposition);
                             TileEntity tileentity1 = generatoraccess.getTileEntity(blockposition1);
@@ -310,7 +270,7 @@ public class ChunkConverter {
                 IBlockData iblockdata2 = iblockdata.updateState(enumdirection, generatoraccess.getType(blockposition1), generatoraccess, blockposition, blockposition1);
 
                 if (iblockdata != iblockdata2) {
-                    int i = (Integer) iblockdata2.get(BlockProperties.ah);
+                    int i = (Integer) iblockdata2.get(BlockProperties.an);
                     List<ObjectSet<BlockPosition>> list = (List) this.g.get();
 
                     if (list.isEmpty()) {
@@ -340,8 +300,8 @@ public class ChunkConverter {
                         BlockPosition blockposition = (BlockPosition) objectiterator.next();
                         IBlockData iblockdata = generatoraccess.getType(blockposition);
 
-                        if ((Integer) iblockdata.get(BlockProperties.ah) >= j) {
-                            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.ah, j), 18);
+                        if ((Integer) iblockdata.get(BlockProperties.an) >= j) {
+                            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.an, j), 18);
                             if (i != 7) {
                                 EnumDirection[] aenumdirection = null.f;
                                 int k = aenumdirection.length;
@@ -349,10 +309,10 @@ public class ChunkConverter {
                                 for (int l = 0; l < k; ++l) {
                                     EnumDirection enumdirection = aenumdirection[l];
 
-                                    blockposition_mutableblockposition.g(blockposition).c(enumdirection);
+                                    blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, enumdirection);
                                     IBlockData iblockdata1 = generatoraccess.getType(blockposition_mutableblockposition);
 
-                                    if (iblockdata1.b((IBlockState) BlockProperties.ah) && (Integer) iblockdata.get(BlockProperties.ah) > i) {
+                                    if (iblockdata1.b(BlockProperties.an) && (Integer) iblockdata.get(BlockProperties.an) > i) {
                                         objectset1.add(blockposition_mutableblockposition.immutableCopy());
                                     }
                                 }
@@ -370,7 +330,7 @@ public class ChunkConverter {
                 if ((Integer) iblockdata.get(BlockStem.AGE) == 7) {
                     BlockStemmed blockstemmed = ((BlockStem) iblockdata.getBlock()).d();
 
-                    if (iblockdata1.getBlock() == blockstemmed) {
+                    if (iblockdata1.a((Block) blockstemmed)) {
                         return (IBlockData) blockstemmed.d().getBlockData().set(BlockFacingHorizontal.FACING, enumdirection);
                     }
                 }

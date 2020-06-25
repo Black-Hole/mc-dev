@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import javax.annotation.Nullable;
@@ -18,7 +16,7 @@ public class CriterionSlideDownBlock extends CriterionTriggerAbstract<CriterionS
     }
 
     @Override
-    public CriterionSlideDownBlock.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionSlideDownBlock.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         Block block = a(jsonobject);
         CriterionTriggerProperties criteriontriggerproperties = CriterionTriggerProperties.a(jsonobject.get("state"));
 
@@ -28,7 +26,7 @@ public class CriterionSlideDownBlock extends CriterionTriggerAbstract<CriterionS
             });
         }
 
-        return new CriterionSlideDownBlock.a(block, criteriontriggerproperties);
+        return new CriterionSlideDownBlock.a(criterionconditionentity_b, block, criteriontriggerproperties);
     }
 
     @Nullable
@@ -45,7 +43,7 @@ public class CriterionSlideDownBlock extends CriterionTriggerAbstract<CriterionS
     }
 
     public void a(EntityPlayer entityplayer, IBlockData iblockdata) {
-        this.a(entityplayer.getAdvancementData(), (criterionslidedownblock_a) -> {
+        this.a(entityplayer, (criterionslidedownblock_a) -> {
             return criterionslidedownblock_a.a(iblockdata);
         });
     }
@@ -55,19 +53,19 @@ public class CriterionSlideDownBlock extends CriterionTriggerAbstract<CriterionS
         private final Block a;
         private final CriterionTriggerProperties b;
 
-        public a(@Nullable Block block, CriterionTriggerProperties criteriontriggerproperties) {
-            super(CriterionSlideDownBlock.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, @Nullable Block block, CriterionTriggerProperties criteriontriggerproperties) {
+            super(CriterionSlideDownBlock.a, criterionconditionentity_b);
             this.a = block;
             this.b = criteriontriggerproperties;
         }
 
         public static CriterionSlideDownBlock.a a(Block block) {
-            return new CriterionSlideDownBlock.a(block, CriterionTriggerProperties.a);
+            return new CriterionSlideDownBlock.a(CriterionConditionEntity.b.a, block, CriterionTriggerProperties.a);
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             if (this.a != null) {
                 jsonobject.addProperty("block", IRegistry.BLOCK.getKey(this.a).toString());
@@ -78,7 +76,7 @@ public class CriterionSlideDownBlock extends CriterionTriggerAbstract<CriterionS
         }
 
         public boolean a(IBlockData iblockdata) {
-            return this.a != null && iblockdata.getBlock() != this.a ? false : this.b.a(iblockdata);
+            return this.a != null && !iblockdata.a(this.a) ? false : this.b.a(iblockdata);
         }
     }
 }

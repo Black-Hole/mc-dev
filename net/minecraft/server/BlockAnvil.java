@@ -14,16 +14,16 @@ public class BlockAnvil extends BlockFalling {
     private static final VoxelShape h = Block.a(3.0D, 10.0D, 0.0D, 13.0D, 16.0D, 16.0D);
     private static final VoxelShape i = VoxelShapes.a(BlockAnvil.b, BlockAnvil.c, BlockAnvil.d, BlockAnvil.e);
     private static final VoxelShape j = VoxelShapes.a(BlockAnvil.b, BlockAnvil.f, BlockAnvil.g, BlockAnvil.h);
-    private static final ChatMessage k = new ChatMessage("container.repair", new Object[0]);
+    private static final ChatMessage k = new ChatMessage("container.repair");
 
-    public BlockAnvil(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockAnvil.FACING, EnumDirection.NORTH));
+    public BlockAnvil(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockAnvil.FACING, EnumDirection.NORTH));
     }
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockAnvil.FACING, blockactioncontext.f().f());
+        return (IBlockData) this.getBlockData().set(BlockAnvil.FACING, blockactioncontext.f().g());
     }
 
     @Override
@@ -33,7 +33,7 @@ public class BlockAnvil extends BlockFalling {
         } else {
             entityhuman.openContainer(iblockdata.b(world, blockposition));
             entityhuman.a(StatisticList.INTERACT_WITH_ANVIL);
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.CONSUME;
         }
     }
 
@@ -46,10 +46,10 @@ public class BlockAnvil extends BlockFalling {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockAnvil.FACING);
 
-        return enumdirection.m() == EnumDirection.EnumAxis.X ? BlockAnvil.i : BlockAnvil.j;
+        return enumdirection.n() == EnumDirection.EnumAxis.X ? BlockAnvil.i : BlockAnvil.j;
     }
 
     @Override
@@ -58,20 +58,24 @@ public class BlockAnvil extends BlockFalling {
     }
 
     @Override
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {
-        world.triggerEffect(1031, blockposition, 0);
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1, EntityFallingBlock entityfallingblock) {
+        if (!entityfallingblock.isSilent()) {
+            world.triggerEffect(1031, blockposition, 0);
+        }
+
     }
 
     @Override
-    public void a(World world, BlockPosition blockposition) {
-        world.triggerEffect(1029, blockposition, 0);
+    public void a(World world, BlockPosition blockposition, EntityFallingBlock entityfallingblock) {
+        if (!entityfallingblock.isSilent()) {
+            world.triggerEffect(1029, blockposition, 0);
+        }
+
     }
 
     @Nullable
-    public static IBlockData e(IBlockData iblockdata) {
-        Block block = iblockdata.getBlock();
-
-        return block == Blocks.ANVIL ? (IBlockData) Blocks.CHIPPED_ANVIL.getBlockData().set(BlockAnvil.FACING, iblockdata.get(BlockAnvil.FACING)) : (block == Blocks.CHIPPED_ANVIL ? (IBlockData) Blocks.DAMAGED_ANVIL.getBlockData().set(BlockAnvil.FACING, iblockdata.get(BlockAnvil.FACING)) : null);
+    public static IBlockData c(IBlockData iblockdata) {
+        return iblockdata.a(Blocks.ANVIL) ? (IBlockData) Blocks.CHIPPED_ANVIL.getBlockData().set(BlockAnvil.FACING, iblockdata.get(BlockAnvil.FACING)) : (iblockdata.a(Blocks.CHIPPED_ANVIL) ? (IBlockData) Blocks.DAMAGED_ANVIL.getBlockData().set(BlockAnvil.FACING, iblockdata.get(BlockAnvil.FACING)) : null);
     }
 
     @Override

@@ -2,13 +2,17 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.List;
-import java.util.function.Consumer;
 import org.apache.commons.lang3.ArrayUtils;
 
 public class LootEntryAlternatives extends LootEntryChildrenAbstract {
 
     LootEntryAlternatives(LootEntryAbstract[] alootentryabstract, LootItemCondition[] alootitemcondition) {
         super(alootentryabstract, alootitemcondition);
+    }
+
+    @Override
+    public LootEntryType a() {
+        return LootEntries.f;
     }
 
     @Override

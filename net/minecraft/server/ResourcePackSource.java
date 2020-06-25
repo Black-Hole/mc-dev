@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
-import java.util.Map;
+import java.util.function.Consumer;
 
 public interface ResourcePackSource {
 
-    <T extends ResourcePackLoader> void a(Map<String, T> map, ResourcePackLoader.b<T> resourcepackloader_b);
+    <T extends ResourcePackLoader> void a(Consumer<T> consumer, ResourcePackLoader.a<T> resourcepackloader_a);
 }

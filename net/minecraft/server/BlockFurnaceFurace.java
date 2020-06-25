@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class BlockFurnaceFurace extends BlockFurnace {
 
-    protected BlockFurnaceFurace(Block.Info block_info) {
-        super(block_info);
+    protected BlockFurnaceFurace(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override

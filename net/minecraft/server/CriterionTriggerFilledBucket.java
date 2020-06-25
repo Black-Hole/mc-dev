@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerFilledBucket extends CriterionTriggerAbstract<CriterionTriggerFilledBucket.a> {
@@ -16,14 +14,14 @@ public class CriterionTriggerFilledBucket extends CriterionTriggerAbstract<Crite
     }
 
     @Override
-    public CriterionTriggerFilledBucket.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerFilledBucket.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
 
-        return new CriterionTriggerFilledBucket.a(criterionconditionitem);
+        return new CriterionTriggerFilledBucket.a(criterionconditionentity_b, criterionconditionitem);
     }
 
     public void a(EntityPlayer entityplayer, ItemStack itemstack) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggerfilledbucket_a) -> {
+        this.a(entityplayer, (criteriontriggerfilledbucket_a) -> {
             return criteriontriggerfilledbucket_a.a(itemstack);
         });
     }
@@ -32,13 +30,13 @@ public class CriterionTriggerFilledBucket extends CriterionTriggerAbstract<Crite
 
         private final CriterionConditionItem a;
 
-        public a(CriterionConditionItem criterionconditionitem) {
-            super(CriterionTriggerFilledBucket.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionItem criterionconditionitem) {
+            super(CriterionTriggerFilledBucket.a, criterionconditionentity_b);
             this.a = criterionconditionitem;
         }
 
         public static CriterionTriggerFilledBucket.a a(CriterionConditionItem criterionconditionitem) {
-            return new CriterionTriggerFilledBucket.a(criterionconditionitem);
+            return new CriterionTriggerFilledBucket.a(CriterionConditionEntity.b.a, criterionconditionitem);
         }
 
         public boolean a(ItemStack itemstack) {
@@ -46,8 +44,8 @@ public class CriterionTriggerFilledBucket extends CriterionTriggerAbstract<Crite
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             jsonobject.add("item", this.a.a());
             return jsonobject;

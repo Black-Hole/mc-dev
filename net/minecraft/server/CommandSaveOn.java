@@ -1,13 +1,12 @@
 package net.minecraft.server;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import java.util.Iterator;
 
 public class CommandSaveOn {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.save.alreadyOn", new Object[0]));
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.save.alreadyOn"));
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("save-on").requires((commandlistenerwrapper) -> {
@@ -29,7 +28,7 @@ public class CommandSaveOn {
             if (!flag) {
                 throw CommandSaveOn.a.create();
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.save.enabled", new Object[0]), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.save.enabled"), true);
                 return 1;
             }
         }));

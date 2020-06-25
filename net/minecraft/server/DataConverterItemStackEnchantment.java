@@ -3,16 +3,15 @@ package net.minecraft.server;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class DataConverterItemStackEnchantment extends DataFix {
 
@@ -69,28 +68,28 @@ public class DataConverterItemStackEnchantment extends DataFix {
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic) {
-        Optional optional = dynamic.get("ench").asStreamOpt().map((stream) -> {
+        DataResult dataresult = dynamic.get("ench").asStreamOpt().map((stream) -> {
             return stream.map((dynamic1) -> {
                 return dynamic1.set("id", dynamic1.createString((String) DataConverterItemStackEnchantment.a.getOrDefault(dynamic1.get("id").asInt(0), "null")));
             });
         });
 
         dynamic.getClass();
-        Optional<Dynamic<?>> optional1 = optional.map(dynamic::createList);
+        Optional<? extends Dynamic<?>> optional = dataresult.map(dynamic::createList).result();
 
-        if (optional1.isPresent()) {
-            dynamic = dynamic.remove("ench").set("Enchantments", (Dynamic) optional1.get());
+        if (optional.isPresent()) {
+            dynamic = dynamic.remove("ench").set("Enchantments", (Dynamic) optional.get());
         }
 
         return dynamic.update("StoredEnchantments", (dynamic1) -> {
-            Optional optional2 = dynamic1.asStreamOpt().map((stream) -> {
+            DataResult dataresult1 = dynamic1.asStreamOpt().map((stream) -> {
                 return stream.map((dynamic2) -> {
                     return dynamic2.set("id", dynamic2.createString((String) DataConverterItemStackEnchantment.a.getOrDefault(dynamic2.get("id").asInt(0), "null")));
                 });
             });
 
             dynamic1.getClass();
-            return (Dynamic) DataFixUtils.orElse(optional2.map(dynamic1::createList), dynamic1);
+            return (Dynamic) DataFixUtils.orElse(dataresult1.map(dynamic1::createList).result(), dynamic1);
         });
     }
 }

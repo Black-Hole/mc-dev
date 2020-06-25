@@ -7,8 +7,8 @@ public class BlockCoralPlant extends BlockCoralBase {
     private final Block c;
     protected static final VoxelShape a = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 15.0D, 14.0D);
 
-    protected BlockCoralPlant(Block block, Block.Info block_info) {
-        super(block_info);
+    protected BlockCoralPlant(Block block, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.c = block;
     }
 
@@ -18,8 +18,8 @@ public class BlockCoralPlant extends BlockCoralBase {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        if (!b_(iblockdata, worldserver, blockposition)) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!c(iblockdata, (IBlockAccess) worldserver, blockposition)) {
             worldserver.setTypeAndData(blockposition, (IBlockData) this.c.getBlockData().set(BlockCoralPlant.b, false), 2);
         }
 
@@ -40,7 +40,7 @@ public class BlockCoralPlant extends BlockCoralBase {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockCoralPlant.a;
     }
 }

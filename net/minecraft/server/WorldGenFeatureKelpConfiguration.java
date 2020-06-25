@@ -1,25 +1,15 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
 
 public class WorldGenFeatureKelpConfiguration implements WorldGenFeatureConfiguration {
 
-    public final int a;
+    public static final Codec<WorldGenFeatureKelpConfiguration> a = Codec.INT.fieldOf("count").xmap(WorldGenFeatureKelpConfiguration::new, (worldgenfeaturekelpconfiguration) -> {
+        return worldgenfeaturekelpconfiguration.b;
+    }).codec();
+    public final int b;
 
     public WorldGenFeatureKelpConfiguration(int i) {
-        this.a = i;
-    }
-
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("count"), dynamicops.createInt(this.a))));
-    }
-
-    public static <T> WorldGenFeatureKelpConfiguration a(Dynamic<T> dynamic) {
-        int i = dynamic.get("count").asInt(0);
-
-        return new WorldGenFeatureKelpConfiguration(i);
+        this.b = i;
     }
 }

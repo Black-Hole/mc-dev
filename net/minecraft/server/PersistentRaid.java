@@ -15,7 +15,7 @@ public class PersistentRaid extends PersistentBase {
     private int d;
 
     public PersistentRaid(WorldServer worldserver) {
-        super(a(worldserver.worldProvider));
+        super(a(worldserver.getDimensionManager()));
         this.b = worldserver;
         this.c = 1;
         this.b();
@@ -52,7 +52,7 @@ public class PersistentRaid extends PersistentBase {
     }
 
     public static boolean a(EntityRaider entityraider, Raid raid) {
-        return entityraider != null && raid != null && raid.getWorld() != null ? entityraider.isAlive() && entityraider.isCanJoinRaid() && entityraider.cL() <= 2400 && entityraider.world.getWorldProvider().getDimensionManager() == raid.getWorld().getWorldProvider().getDimensionManager() : false;
+        return entityraider != null && raid != null && raid.getWorld() != null ? entityraider.isAlive() && entityraider.isCanJoinRaid() && entityraider.dc() <= 2400 && entityraider.world.getDimensionManager() == raid.getWorld().getDimensionManager() : false;
     }
 
     @Nullable
@@ -62,13 +62,13 @@ public class PersistentRaid extends PersistentBase {
         } else if (this.b.getGameRules().getBoolean(GameRules.DISABLE_RAIDS)) {
             return null;
         } else {
-            DimensionManager dimensionmanager = entityplayer.world.getWorldProvider().getDimensionManager();
+            DimensionManager dimensionmanager = entityplayer.world.getDimensionManager();
 
-            if (dimensionmanager == DimensionManager.NETHER) {
+            if (!dimensionmanager.hasRaids()) {
                 return null;
             } else {
-                BlockPosition blockposition = new BlockPosition(entityplayer);
-                List<VillagePlaceRecord> list = (List) this.b.B().c(VillagePlaceType.a, blockposition, 64, VillagePlace.Occupancy.IS_OCCUPIED).collect(Collectors.toList());
+                BlockPosition blockposition = entityplayer.getChunkCoordinates();
+                List<VillagePlaceRecord> list = (List) this.b.x().c(VillagePlaceType.b, blockposition, 64, VillagePlace.Occupancy.IS_OCCUPIED).collect(Collectors.toList());
                 int i = 0;
                 Vec3D vec3d = Vec3D.a;
 
@@ -159,8 +159,8 @@ public class PersistentRaid extends PersistentBase {
         return nbttagcompound;
     }
 
-    public static String a(WorldProvider worldprovider) {
-        return "raids" + worldprovider.getDimensionManager().getSuffix();
+    public static String a(DimensionManager dimensionmanager) {
+        return "raids" + dimensionmanager.getSuffix();
     }
 
     private int e() {
@@ -175,7 +175,7 @@ public class PersistentRaid extends PersistentBase {
 
         while (iterator.hasNext()) {
             Raid raid1 = (Raid) iterator.next();
-            double d1 = raid1.getCenter().m(blockposition);
+            double d1 = raid1.getCenter().j(blockposition);
 
             if (raid1.v() && d1 < d0) {
                 raid = raid1;

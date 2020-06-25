@@ -1,8 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -10,15 +8,18 @@ import java.util.Set;
 
 public class WorldGenFeatureTreeCocoa extends WorldGenFeatureTree {
 
+    public static final Codec<WorldGenFeatureTreeCocoa> a = Codec.FLOAT.fieldOf("probability").xmap(WorldGenFeatureTreeCocoa::new, (worldgenfeaturetreecocoa) -> {
+        return worldgenfeaturetreecocoa.b;
+    }).codec();
     private final float b;
 
     public WorldGenFeatureTreeCocoa(float f) {
-        super(WorldGenFeatureTrees.c);
         this.b = f;
     }
 
-    public <T> WorldGenFeatureTreeCocoa(Dynamic<T> dynamic) {
-        this(dynamic.get("probability").asFloat(0.0F));
+    @Override
+    protected WorldGenFeatureTrees<?> a() {
+        return WorldGenFeatureTrees.c;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class WorldGenFeatureTreeCocoa extends WorldGenFeatureTree {
                         EnumDirection enumdirection1 = enumdirection.opposite();
                         BlockPosition blockposition1 = blockposition.b(enumdirection1.getAdjacentX(), 0, enumdirection1.getAdjacentZ());
 
-                        if (WorldGenTreeAbstract.b(generatoraccess, blockposition1)) {
+                        if (WorldGenerator.b(generatoraccess, blockposition1)) {
                             IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.COCOA.getBlockData().set(BlockCocoa.AGE, random.nextInt(3))).set(BlockCocoa.FACING, enumdirection);
 
                             this.a((IWorldWriter) generatoraccess, blockposition1, iblockdata, set, structureboundingbox);
@@ -48,10 +49,5 @@ public class WorldGenFeatureTreeCocoa extends WorldGenFeatureTree {
 
             });
         }
-    }
-
-    @Override
-    public <T> T a(DynamicOps<T> dynamicops) {
-        return (new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("type"), dynamicops.createString(IRegistry.w.getKey(this.a).toString()), dynamicops.createString("probability"), dynamicops.createFloat(this.b))))).getValue();
     }
 }

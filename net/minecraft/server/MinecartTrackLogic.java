@@ -96,18 +96,18 @@ public class MinecartTrackLogic {
     private MinecartTrackLogic b(BlockPosition blockposition) {
         IBlockData iblockdata = this.a.getType(blockposition);
 
-        if (BlockMinecartTrackAbstract.h(iblockdata)) {
+        if (BlockMinecartTrackAbstract.g(iblockdata)) {
             return new MinecartTrackLogic(this.a, blockposition, iblockdata);
         } else {
             BlockPosition blockposition1 = blockposition.up();
 
             iblockdata = this.a.getType(blockposition1);
-            if (BlockMinecartTrackAbstract.h(iblockdata)) {
+            if (BlockMinecartTrackAbstract.g(iblockdata)) {
                 return new MinecartTrackLogic(this.a, blockposition1, iblockdata);
             } else {
                 blockposition1 = blockposition.down();
                 iblockdata = this.a.getType(blockposition1);
-                return BlockMinecartTrackAbstract.h(iblockdata) ? new MinecartTrackLogic(this.a, blockposition1, iblockdata) : null;
+                return BlockMinecartTrackAbstract.g(iblockdata) ? new MinecartTrackLogic(this.a, blockposition1, iblockdata) : null;
             }
         }
     }

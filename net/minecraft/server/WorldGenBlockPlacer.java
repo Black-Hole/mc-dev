@@ -1,14 +1,15 @@
 package net.minecraft.server;
 
+import com.mojang.serialization.Codec;
 import java.util.Random;
 
-public abstract class WorldGenBlockPlacer implements MinecraftSerializable {
+public abstract class WorldGenBlockPlacer {
 
-    protected final WorldGenBlockPlacers<?> a;
+    public static final Codec<WorldGenBlockPlacer> a = IRegistry.BLOCK_PLACER_TYPE.dispatch(WorldGenBlockPlacer::a, WorldGenBlockPlacers::a);
 
-    protected WorldGenBlockPlacer(WorldGenBlockPlacers<?> worldgenblockplacers) {
-        this.a = worldgenblockplacers;
-    }
+    public WorldGenBlockPlacer() {}
 
     public abstract void a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random);
+
+    protected abstract WorldGenBlockPlacers<?> a();
 }

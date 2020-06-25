@@ -1,55 +1,32 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Maps;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-import com.google.gson.JsonSyntaxException;
-import java.lang.reflect.Type;
-import java.util.Map;
 import java.util.function.Predicate;
 
 public class LootItemConditions {
 
-    private static final Map<MinecraftKey, LootItemCondition.b<?>> a = Maps.newHashMap();
-    private static final Map<Class<? extends LootItemCondition>, LootItemCondition.b<?>> b = Maps.newHashMap();
+    public static final LootItemConditionType a = a("inverted", (LootSerializer) (new LootItemConditionInverted.a()));
+    public static final LootItemConditionType b = a("alternative", (LootSerializer) (new LootItemConditionAlternative.b()));
+    public static final LootItemConditionType c = a("random_chance", (LootSerializer) (new LootItemConditionRandomChance.a()));
+    public static final LootItemConditionType d = a("random_chance_with_looting", (LootSerializer) (new LootItemConditionRandomChanceWithLooting.a()));
+    public static final LootItemConditionType e = a("entity_properties", (LootSerializer) (new LootItemConditionEntityProperty.a()));
+    public static final LootItemConditionType f = a("killed_by_player", (LootSerializer) (new LootItemConditionKilledByPlayer.a()));
+    public static final LootItemConditionType g = a("entity_scores", (LootSerializer) (new LootItemConditionEntityScore.b()));
+    public static final LootItemConditionType h = a("block_state_property", (LootSerializer) (new LootItemConditionBlockStateProperty.b()));
+    public static final LootItemConditionType i = a("match_tool", (LootSerializer) (new LootItemConditionMatchTool.a()));
+    public static final LootItemConditionType j = a("table_bonus", (LootSerializer) (new LootItemConditionTableBonus.a()));
+    public static final LootItemConditionType k = a("survives_explosion", (LootSerializer) (new LootItemConditionSurvivesExplosion.a()));
+    public static final LootItemConditionType l = a("damage_source_properties", (LootSerializer) (new LootItemConditionDamageSourceProperties.a()));
+    public static final LootItemConditionType m = a("location_check", (LootSerializer) (new LootItemConditionLocationCheck.a()));
+    public static final LootItemConditionType n = a("weather_check", (LootSerializer) (new LootItemConditionWeatherCheck.b()));
+    public static final LootItemConditionType o = a("reference", (LootSerializer) (new LootItemConditionReference.a()));
+    public static final LootItemConditionType p = a("time_check", (LootSerializer) (new LootItemConditionTimeCheck.b()));
 
-    public static <T extends LootItemCondition> void a(LootItemCondition.b<? extends T> lootitemcondition_b) {
-        MinecraftKey minecraftkey = lootitemcondition_b.a();
-        Class<T> oclass = lootitemcondition_b.b();
-
-        if (LootItemConditions.a.containsKey(minecraftkey)) {
-            throw new IllegalArgumentException("Can't re-register item condition name " + minecraftkey);
-        } else if (LootItemConditions.b.containsKey(oclass)) {
-            throw new IllegalArgumentException("Can't re-register item condition class " + oclass.getName());
-        } else {
-            LootItemConditions.a.put(minecraftkey, lootitemcondition_b);
-            LootItemConditions.b.put(oclass, lootitemcondition_b);
-        }
+    private static LootItemConditionType a(String s, LootSerializer<? extends LootItemCondition> lootserializer) {
+        return (LootItemConditionType) IRegistry.a(IRegistry.ba, new MinecraftKey(s), (Object) (new LootItemConditionType(lootserializer)));
     }
 
-    public static LootItemCondition.b<?> a(MinecraftKey minecraftkey) {
-        LootItemCondition.b<?> lootitemcondition_b = (LootItemCondition.b) LootItemConditions.a.get(minecraftkey);
-
-        if (lootitemcondition_b == null) {
-            throw new IllegalArgumentException("Unknown loot item condition '" + minecraftkey + "'");
-        } else {
-            return lootitemcondition_b;
-        }
-    }
-
-    public static <T extends LootItemCondition> LootItemCondition.b<T> a(T t0) {
-        LootItemCondition.b<T> lootitemcondition_b = (LootItemCondition.b) LootItemConditions.b.get(t0.getClass());
-
-        if (lootitemcondition_b == null) {
-            throw new IllegalArgumentException("Unknown loot item condition " + t0);
-        } else {
-            return lootitemcondition_b;
-        }
+    public static Object a() {
+        return JsonRegistry.a(IRegistry.ba, "condition", "condition", LootItemCondition::b).a();
     }
 
     public static <T> Predicate<T> a(Predicate<T>[] apredicate) {
@@ -105,54 +82,6 @@ public class LootItemConditions {
 
                     return false;
                 };
-        }
-    }
-
-    static {
-        a((LootItemCondition.b) (new LootItemConditionInverted.a()));
-        a((LootItemCondition.b) (new LootItemConditionAlternative.b()));
-        a((LootItemCondition.b) (new LootItemConditionRandomChance.a()));
-        a((LootItemCondition.b) (new LootItemConditionRandomChanceWithLooting.a()));
-        a((LootItemCondition.b) (new LootItemConditionEntityProperty.a()));
-        a((LootItemCondition.b) (new LootItemConditionKilledByPlayer.a()));
-        a((LootItemCondition.b) (new LootItemConditionEntityScore.b()));
-        a((LootItemCondition.b) (new LootItemConditionBlockStateProperty.b()));
-        a((LootItemCondition.b) (new LootItemConditionMatchTool.a()));
-        a((LootItemCondition.b) (new LootItemConditionTableBonus.a()));
-        a((LootItemCondition.b) (new LootItemConditionSurvivesExplosion.a()));
-        a((LootItemCondition.b) (new LootItemConditionDamageSourceProperties.a()));
-        a((LootItemCondition.b) (new LootItemConditionLocationCheck.a()));
-        a((LootItemCondition.b) (new LootItemConditionWeatherCheck.b()));
-        a((LootItemCondition.b) (new LootItemConditionReference.a()));
-        a((LootItemCondition.b) (new LootItemConditionTimeCheck.b()));
-    }
-
-    public static class a implements JsonDeserializer<LootItemCondition>, JsonSerializer<LootItemCondition> {
-
-        public a() {}
-
-        public LootItemCondition deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            JsonObject jsonobject = ChatDeserializer.m(jsonelement, "condition");
-            MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "condition"));
-
-            LootItemCondition.b lootitemcondition_b;
-
-            try {
-                lootitemcondition_b = LootItemConditions.a(minecraftkey);
-            } catch (IllegalArgumentException illegalargumentexception) {
-                throw new JsonSyntaxException("Unknown condition '" + minecraftkey + "'");
-            }
-
-            return lootitemcondition_b.b(jsonobject, jsondeserializationcontext);
-        }
-
-        public JsonElement serialize(LootItemCondition lootitemcondition, Type type, JsonSerializationContext jsonserializationcontext) {
-            LootItemCondition.b<LootItemCondition> lootitemcondition_b = LootItemConditions.a(lootitemcondition);
-            JsonObject jsonobject = new JsonObject();
-
-            jsonobject.addProperty("condition", lootitemcondition_b.a().toString());
-            lootitemcondition_b.a(jsonobject, lootitemcondition, jsonserializationcontext);
-            return jsonobject;
         }
     }
 }

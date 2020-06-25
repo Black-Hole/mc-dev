@@ -7,18 +7,18 @@ public class BlockRedstoneTorchWall extends BlockRedstoneTorch {
     public static final BlockStateDirection b = BlockFacingHorizontal.FACING;
     public static final BlockStateBoolean c = BlockRedstoneTorch.LIT;
 
-    protected BlockRedstoneTorchWall(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneTorchWall.b, EnumDirection.NORTH)).set(BlockRedstoneTorchWall.c, true));
+    protected BlockRedstoneTorchWall(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneTorchWall.b, EnumDirection.NORTH)).set(BlockRedstoneTorchWall.c, true));
     }
 
     @Override
-    public String k() {
+    public String i() {
         return this.getItem().getName();
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockTorchWall.h(iblockdata);
     }
 

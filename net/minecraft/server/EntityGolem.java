@@ -32,7 +32,7 @@ public abstract class EntityGolem extends EntityCreature {
     }
 
     @Override
-    public int A() {
+    public int D() {
         return 120;
     }
 

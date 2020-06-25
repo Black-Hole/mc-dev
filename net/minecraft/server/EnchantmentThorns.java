@@ -1,7 +1,7 @@
 package net.minecraft.server;
 
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
 
 public class EnchantmentThorns extends Enchantment {
 
@@ -36,7 +36,7 @@ public class EnchantmentThorns extends Enchantment {
 
         if (a(i, random)) {
             if (entity != null) {
-                entity.damageEntity(DamageSource.a((Entity) entityliving), (float) b(i, random));
+                entity.damageEntity(DamageSource.a(entityliving), (float) b(i, random));
             }
 
             if (entry != null) {

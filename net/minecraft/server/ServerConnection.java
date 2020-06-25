@@ -16,7 +16,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
-import io.netty.util.concurrent.Future;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Collections;
@@ -52,7 +51,7 @@ public class ServerConnection {
             Class oclass;
             LazyInitVar lazyinitvar;
 
-            if (Epoll.isAvailable() && this.e.n()) {
+            if (Epoll.isAvailable() && this.e.k()) {
                 oclass = EpollServerSocketChannel.class;
                 lazyinitvar = ServerConnection.b;
                 ServerConnection.LOGGER.info("Using epoll channel type");
@@ -112,11 +111,7 @@ public class ServerConnection {
                             networkmanager.a();
                         } catch (Exception exception) {
                             if (networkmanager.isLocal()) {
-                                CrashReport crashreport = CrashReport.a(exception, "Ticking memory connection");
-                                CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Ticking connection");
-
-                                crashreportsystemdetails.a("Connection", networkmanager::toString);
-                                throw new ReportedException(crashreport);
+                                throw new ReportedException(CrashReport.a(exception, "Ticking memory connection"));
                             }
 
                             ServerConnection.LOGGER.warn("Failed to handle packet for {}", networkmanager.getSocketAddress(), exception);

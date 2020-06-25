@@ -7,44 +7,50 @@ import javax.annotation.Nullable;
 
 public class LootContextParameterSets {
 
-    private static final BiMap<MinecraftKey, LootContextParameterSet> k = HashBiMap.create();
-    public static final LootContextParameterSet EMPTY = a("empty", (lootcontextparameterset_a) -> {
+    private static final BiMap<MinecraftKey, LootContextParameterSet> m = HashBiMap.create();
+    public static final LootContextParameterSet EMPTY = a("empty", (lootcontextparameterset_builder) -> {
     });
-    public static final LootContextParameterSet CHEST = a("chest", (lootcontextparameterset_a) -> {
-        lootcontextparameterset_a.a(LootContextParameters.POSITION).b(LootContextParameters.THIS_ENTITY);
+    public static final LootContextParameterSet CHEST = a("chest", (lootcontextparameterset_builder) -> {
+        lootcontextparameterset_builder.addRequired(LootContextParameters.POSITION).addOptional(LootContextParameters.THIS_ENTITY);
     });
-    public static final LootContextParameterSet COMMAND = a("command", (lootcontextparameterset_a) -> {
-        lootcontextparameterset_a.a(LootContextParameters.POSITION).b(LootContextParameters.THIS_ENTITY);
+    public static final LootContextParameterSet COMMAND = a("command", (lootcontextparameterset_builder) -> {
+        lootcontextparameterset_builder.addRequired(LootContextParameters.POSITION).addOptional(LootContextParameters.THIS_ENTITY);
     });
-    public static final LootContextParameterSet SELECTOR = a("selector", (lootcontextparameterset_a) -> {
-        lootcontextparameterset_a.a(LootContextParameters.POSITION).a(LootContextParameters.THIS_ENTITY);
+    public static final LootContextParameterSet SELECTOR = a("selector", (lootcontextparameterset_builder) -> {
+        lootcontextparameterset_builder.addRequired(LootContextParameters.POSITION).addRequired(LootContextParameters.THIS_ENTITY);
     });
-    public static final LootContextParameterSet FISHING = a("fishing", (lootcontextparameterset_a) -> {
-        lootcontextparameterset_a.a(LootContextParameters.POSITION).a(LootContextParameters.TOOL);
+    public static final LootContextParameterSet FISHING = a("fishing", (lootcontextparameterset_builder) -> {
+        lootcontextparameterset_builder.addRequired(LootContextParameters.POSITION).addRequired(LootContextParameters.TOOL).addOptional(LootContextParameters.THIS_ENTITY);
     });
-    public static final LootContextParameterSet ENTITY = a("entity", (lootcontextparameterset_a) -> {
-        lootcontextparameterset_a.a(LootContextParameters.THIS_ENTITY).a(LootContextParameters.POSITION).a(LootContextParameters.DAMAGE_SOURCE).b(LootContextParameters.KILLER_ENTITY).b(LootContextParameters.DIRECT_KILLER_ENTITY).b(LootContextParameters.LAST_DAMAGE_PLAYER);
+    public static final LootContextParameterSet ENTITY = a("entity", (lootcontextparameterset_builder) -> {
+        lootcontextparameterset_builder.addRequired(LootContextParameters.THIS_ENTITY).addRequired(LootContextParameters.POSITION).addRequired(LootContextParameters.DAMAGE_SOURCE).addOptional(LootContextParameters.KILLER_ENTITY).addOptional(LootContextParameters.DIRECT_KILLER_ENTITY).addOptional(LootContextParameters.LAST_DAMAGE_PLAYER);
     });
-    public static final LootContextParameterSet GIFT = a("gift", (lootcontextparameterset_a) -> {
-        lootcontextparameterset_a.a(LootContextParameters.POSITION).a(LootContextParameters.THIS_ENTITY);
+    public static final LootContextParameterSet GIFT = a("gift", (lootcontextparameterset_builder) -> {
+        lootcontextparameterset_builder.addRequired(LootContextParameters.POSITION).addRequired(LootContextParameters.THIS_ENTITY);
     });
-    public static final LootContextParameterSet ADVANCEMENT_REWARD = a("advancement_reward", (lootcontextparameterset_a) -> {
-        lootcontextparameterset_a.a(LootContextParameters.THIS_ENTITY).a(LootContextParameters.POSITION);
+    public static final LootContextParameterSet BARTER = a("barter", (lootcontextparameterset_builder) -> {
+        lootcontextparameterset_builder.addRequired(LootContextParameters.THIS_ENTITY);
     });
-    public static final LootContextParameterSet GENERIC = a("generic", (lootcontextparameterset_a) -> {
-        lootcontextparameterset_a.a(LootContextParameters.THIS_ENTITY).a(LootContextParameters.LAST_DAMAGE_PLAYER).a(LootContextParameters.DAMAGE_SOURCE).a(LootContextParameters.KILLER_ENTITY).a(LootContextParameters.DIRECT_KILLER_ENTITY).a(LootContextParameters.POSITION).a(LootContextParameters.BLOCK_STATE).a(LootContextParameters.BLOCK_ENTITY).a(LootContextParameters.TOOL).a(LootContextParameters.EXPLOSION_RADIUS);
+    public static final LootContextParameterSet ADVANCEMENT_REWARD = a("advancement_reward", (lootcontextparameterset_builder) -> {
+        lootcontextparameterset_builder.addRequired(LootContextParameters.THIS_ENTITY).addRequired(LootContextParameters.POSITION);
     });
-    public static final LootContextParameterSet BLOCK = a("block", (lootcontextparameterset_a) -> {
-        lootcontextparameterset_a.a(LootContextParameters.BLOCK_STATE).a(LootContextParameters.POSITION).a(LootContextParameters.TOOL).b(LootContextParameters.THIS_ENTITY).b(LootContextParameters.BLOCK_ENTITY).b(LootContextParameters.EXPLOSION_RADIUS);
+    public static final LootContextParameterSet j = a("advancement_entity", (lootcontextparameterset_builder) -> {
+        lootcontextparameterset_builder.addRequired(LootContextParameters.THIS_ENTITY).addRequired(LootContextParameters.g).addRequired(LootContextParameters.POSITION);
+    });
+    public static final LootContextParameterSet GENERIC = a("generic", (lootcontextparameterset_builder) -> {
+        lootcontextparameterset_builder.addRequired(LootContextParameters.THIS_ENTITY).addRequired(LootContextParameters.LAST_DAMAGE_PLAYER).addRequired(LootContextParameters.DAMAGE_SOURCE).addRequired(LootContextParameters.KILLER_ENTITY).addRequired(LootContextParameters.DIRECT_KILLER_ENTITY).addRequired(LootContextParameters.POSITION).addRequired(LootContextParameters.BLOCK_STATE).addRequired(LootContextParameters.BLOCK_ENTITY).addRequired(LootContextParameters.TOOL).addRequired(LootContextParameters.EXPLOSION_RADIUS);
+    });
+    public static final LootContextParameterSet BLOCK = a("block", (lootcontextparameterset_builder) -> {
+        lootcontextparameterset_builder.addRequired(LootContextParameters.BLOCK_STATE).addRequired(LootContextParameters.POSITION).addRequired(LootContextParameters.TOOL).addOptional(LootContextParameters.THIS_ENTITY).addOptional(LootContextParameters.BLOCK_ENTITY).addOptional(LootContextParameters.EXPLOSION_RADIUS);
     });
 
-    private static LootContextParameterSet a(String s, Consumer<LootContextParameterSet.a> consumer) {
-        LootContextParameterSet.a lootcontextparameterset_a = new LootContextParameterSet.a();
+    private static LootContextParameterSet a(String s, Consumer<LootContextParameterSet.Builder> consumer) {
+        LootContextParameterSet.Builder lootcontextparameterset_builder = new LootContextParameterSet.Builder();
 
-        consumer.accept(lootcontextparameterset_a);
-        LootContextParameterSet lootcontextparameterset = lootcontextparameterset_a.a();
+        consumer.accept(lootcontextparameterset_builder);
+        LootContextParameterSet lootcontextparameterset = lootcontextparameterset_builder.build();
         MinecraftKey minecraftkey = new MinecraftKey(s);
-        LootContextParameterSet lootcontextparameterset1 = (LootContextParameterSet) LootContextParameterSets.k.put(minecraftkey, lootcontextparameterset);
+        LootContextParameterSet lootcontextparameterset1 = (LootContextParameterSet) LootContextParameterSets.m.put(minecraftkey, lootcontextparameterset);
 
         if (lootcontextparameterset1 != null) {
             throw new IllegalStateException("Loot table parameter set " + minecraftkey + " is already registered");
@@ -55,11 +61,11 @@ public class LootContextParameterSets {
 
     @Nullable
     public static LootContextParameterSet a(MinecraftKey minecraftkey) {
-        return (LootContextParameterSet) LootContextParameterSets.k.get(minecraftkey);
+        return (LootContextParameterSet) LootContextParameterSets.m.get(minecraftkey);
     }
 
     @Nullable
     public static MinecraftKey a(LootContextParameterSet lootcontextparameterset) {
-        return (MinecraftKey) LootContextParameterSets.k.inverse().get(lootcontextparameterset);
+        return (MinecraftKey) LootContextParameterSets.m.inverse().get(lootcontextparameterset);
     }
 }

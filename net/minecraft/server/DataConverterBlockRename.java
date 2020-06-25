@@ -2,11 +2,8 @@ package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
-import com.mojang.datafixers.types.DynamicOps;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
 import java.util.Objects;
@@ -24,7 +21,7 @@ public abstract class DataConverterBlockRename extends DataFix {
 
     public TypeRewriteRule makeRule() {
         Type<?> type = this.getInputSchema().getType(DataConverterTypes.BLOCK_NAME);
-        Type<Pair<String, String>> type1 = DSL.named(DataConverterTypes.BLOCK_NAME.typeName(), DSL.namespacedString());
+        Type<Pair<String, String>> type1 = DSL.named(DataConverterTypes.BLOCK_NAME.typeName(), DataConverterSchemaNamed.a());
 
         if (!Objects.equals(type, type1)) {
             throw new IllegalStateException("block type is not what was expected.");
@@ -36,7 +33,7 @@ public abstract class DataConverterBlockRename extends DataFix {
             });
             TypeRewriteRule typerewriterule1 = this.fixTypeEverywhereTyped(this.a + " for block_state", this.getInputSchema().getType(DataConverterTypes.BLOCK_STATE), (typed) -> {
                 return typed.update(DSL.remainderFinder(), (dynamic) -> {
-                    Optional<String> optional = dynamic.get("Name").asString();
+                    Optional<String> optional = dynamic.get("Name").asString().result();
 
                     return optional.isPresent() ? dynamic.set("Name", dynamic.createString(this.a((String) optional.get()))) : dynamic;
                 });

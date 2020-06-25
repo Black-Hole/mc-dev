@@ -32,13 +32,13 @@ public class CommandGamemode {
     }
 
     private static void a(CommandListenerWrapper commandlistenerwrapper, EntityPlayer entityplayer, EnumGamemode enumgamemode) {
-        ChatMessage chatmessage = new ChatMessage("gameMode." + enumgamemode.b(), new Object[0]);
+        ChatMessage chatmessage = new ChatMessage("gameMode." + enumgamemode.b());
 
         if (commandlistenerwrapper.getEntity() == entityplayer) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.gamemode.success.self", new Object[]{chatmessage}), true);
         } else {
             if (commandlistenerwrapper.getWorld().getGameRules().getBoolean(GameRules.SEND_COMMAND_FEEDBACK)) {
-                entityplayer.sendMessage(new ChatMessage("gameMode.changed", new Object[]{chatmessage}));
+                entityplayer.sendMessage(new ChatMessage("gameMode.changed", new Object[]{chatmessage}), SystemUtils.b);
             }
 
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.gamemode.success.other", new Object[]{entityplayer.getScoreboardDisplayName(), chatmessage}), true);

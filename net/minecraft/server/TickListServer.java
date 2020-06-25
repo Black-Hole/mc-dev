@@ -13,27 +13,24 @@ import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 public class TickListServer<T> implements TickList<T> {
 
     protected final Predicate<T> a;
     private final Function<T, MinecraftKey> b;
-    private final Function<MinecraftKey, T> c;
     private final Set<NextTickListEntry<T>> nextTickListHash = Sets.newHashSet();
     private final TreeSet<NextTickListEntry<T>> nextTickList = Sets.newTreeSet(NextTickListEntry.a());
-    private final WorldServer f;
-    private final Queue<NextTickListEntry<T>> g = Queues.newArrayDeque();
-    private final List<NextTickListEntry<T>> h = Lists.newArrayList();
-    private final Consumer<NextTickListEntry<T>> i;
+    private final WorldServer e;
+    private final Queue<NextTickListEntry<T>> f = Queues.newArrayDeque();
+    private final List<NextTickListEntry<T>> g = Lists.newArrayList();
+    private final Consumer<NextTickListEntry<T>> h;
 
-    public TickListServer(WorldServer worldserver, Predicate<T> predicate, Function<T, MinecraftKey> function, Function<MinecraftKey, T> function1, Consumer<NextTickListEntry<T>> consumer) {
+    public TickListServer(WorldServer worldserver, Predicate<T> predicate, Function<T, MinecraftKey> function, Consumer<NextTickListEntry<T>> consumer) {
         this.a = predicate;
         this.b = function;
-        this.c = function1;
-        this.f = worldserver;
-        this.i = consumer;
+        this.e = worldserver;
+        this.h = consumer;
     }
 
     public void b() {
@@ -46,34 +43,34 @@ public class TickListServer<T> implements TickList<T> {
                 i = 65536;
             }
 
-            ChunkProviderServer chunkproviderserver = this.f.getChunkProvider();
+            ChunkProviderServer chunkproviderserver = this.e.getChunkProvider();
             Iterator<NextTickListEntry<T>> iterator = this.nextTickList.iterator();
 
-            this.f.getMethodProfiler().enter("cleaning");
+            this.e.getMethodProfiler().enter("cleaning");
 
             NextTickListEntry nextticklistentry;
 
             while (i > 0 && iterator.hasNext()) {
                 nextticklistentry = (NextTickListEntry) iterator.next();
-                if (nextticklistentry.b > this.f.getTime()) {
+                if (nextticklistentry.b > this.e.getTime()) {
                     break;
                 }
 
                 if (chunkproviderserver.a(nextticklistentry.a)) {
                     iterator.remove();
                     this.nextTickListHash.remove(nextticklistentry);
-                    this.g.add(nextticklistentry);
+                    this.f.add(nextticklistentry);
                     --i;
                 }
             }
 
-            this.f.getMethodProfiler().exitEnter("ticking");
+            this.e.getMethodProfiler().exitEnter("ticking");
 
-            while ((nextticklistentry = (NextTickListEntry) this.g.poll()) != null) {
+            while ((nextticklistentry = (NextTickListEntry) this.f.poll()) != null) {
                 if (chunkproviderserver.a(nextticklistentry.a)) {
                     try {
-                        this.h.add(nextticklistentry);
-                        this.i.accept(nextticklistentry);
+                        this.g.add(nextticklistentry);
+                        this.h.accept(nextticklistentry);
                     } catch (Throwable throwable) {
                         CrashReport crashreport = CrashReport.a(throwable, "Exception while ticking");
                         CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Block being ticked");
@@ -86,20 +83,15 @@ public class TickListServer<T> implements TickList<T> {
                 }
             }
 
-            this.f.getMethodProfiler().exit();
-            this.h.clear();
+            this.e.getMethodProfiler().exit();
             this.g.clear();
+            this.f.clear();
         }
     }
 
     @Override
     public boolean b(BlockPosition blockposition, T t0) {
-        return this.g.contains(new NextTickListEntry<>(blockposition, t0));
-    }
-
-    @Override
-    public void a(Stream<NextTickListEntry<T>> stream) {
-        stream.forEach(this::a);
+        return this.f.contains(new NextTickListEntry<>(blockposition, t0));
     }
 
     public List<NextTickListEntry<T>> a(ChunkCoordIntPair chunkcoordintpair, boolean flag, boolean flag1) {
@@ -118,9 +110,9 @@ public class TickListServer<T> implements TickList<T> {
             this.nextTickListHash.removeAll(list);
         }
 
-        list = this.a(list, this.g, structureboundingbox, flag);
+        list = this.a(list, this.f, structureboundingbox, flag);
         if (!flag1) {
-            list = this.a(list, this.h, structureboundingbox, flag);
+            list = this.a(list, this.g, structureboundingbox, flag);
         }
 
         return list == null ? Collections.emptyList() : list;
@@ -170,10 +162,10 @@ public class TickListServer<T> implements TickList<T> {
     public NBTTagList a(ChunkCoordIntPair chunkcoordintpair) {
         List<NextTickListEntry<T>> list = this.a(chunkcoordintpair, false, true);
 
-        return a(this.b, list, this.f.getTime());
+        return a(this.b, list, this.e.getTime());
     }
 
-    public static <T> NBTTagList a(Function<T, MinecraftKey> function, Iterable<NextTickListEntry<T>> iterable, long i) {
+    private static <T> NBTTagList a(Function<T, MinecraftKey> function, Iterable<NextTickListEntry<T>> iterable, long i) {
         NBTTagList nbttaglist = new NBTTagList();
         Iterator iterator = iterable.iterator();
 
@@ -201,7 +193,7 @@ public class TickListServer<T> implements TickList<T> {
     @Override
     public void a(BlockPosition blockposition, T t0, int i, TickListPriority ticklistpriority) {
         if (!this.a.test(t0)) {
-            this.a(new NextTickListEntry<>(blockposition, t0, (long) i + this.f.getTime(), ticklistpriority));
+            this.a(new NextTickListEntry<>(blockposition, t0, (long) i + this.e.getTime(), ticklistpriority));
         }
 
     }

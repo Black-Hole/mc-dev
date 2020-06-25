@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import java.util.Iterator;
 
 public class CommandTellRaw {
@@ -16,7 +15,7 @@ public class CommandTellRaw {
             for (Iterator iterator = ArgumentEntity.f(commandcontext, "targets").iterator(); iterator.hasNext(); ++i) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                entityplayer.sendMessage(ChatComponentUtils.filterForDisplay((CommandListenerWrapper) commandcontext.getSource(), ArgumentChatComponent.a(commandcontext, "message"), entityplayer, 0));
+                entityplayer.sendMessage(ChatComponentUtils.filterForDisplay((CommandListenerWrapper) commandcontext.getSource(), ArgumentChatComponent.a(commandcontext, "message"), entityplayer, 0), SystemUtils.b);
             }
 
             return i;

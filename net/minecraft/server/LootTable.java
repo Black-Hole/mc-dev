@@ -33,7 +33,7 @@ public class LootTable {
         this.d = lootcontextparameterset;
         this.e = alootselector;
         this.f = alootitemfunction;
-        this.g = LootItemFunctions.a((BiFunction[]) alootitemfunction);
+        this.g = LootItemFunctions.a(alootitemfunction);
     }
 
     public static Consumer<ItemStack> a(Consumer<ItemStack> consumer) {
@@ -119,7 +119,7 @@ public class LootTable {
             }
 
             if (itemstack.isEmpty()) {
-                iinventory.setItem((Integer) list1.remove(list1.size() - 1), ItemStack.a);
+                iinventory.setItem((Integer) list1.remove(list1.size() - 1), ItemStack.b);
             } else {
                 iinventory.setItem((Integer) list1.remove(list1.size() - 1), itemstack);
             }

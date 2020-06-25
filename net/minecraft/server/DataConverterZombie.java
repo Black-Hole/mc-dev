@@ -1,9 +1,9 @@
 package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
+import com.mojang.serialization.Dynamic;
 import java.util.Random;
 
 public class DataConverterZombie extends DataConverterNamedEntity {
@@ -16,7 +16,7 @@ public class DataConverterZombie extends DataConverterNamedEntity {
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
         if (dynamic.get("IsVillager").asBoolean(false)) {
-            if (!dynamic.get("ZombieType").get().isPresent()) {
+            if (!dynamic.get("ZombieType").result().isPresent()) {
                 int i = this.a(dynamic.get("VillagerProfession").asInt(-1));
 
                 if (i == -1) {

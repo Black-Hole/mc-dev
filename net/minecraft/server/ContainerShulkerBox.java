@@ -44,7 +44,7 @@ public class ContainerShulkerBox extends Container {
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -53,14 +53,14 @@ public class ContainerShulkerBox extends Container {
             itemstack = itemstack1.cloneItemStack();
             if (i < this.c.getSize()) {
                 if (!this.a(itemstack1, this.c.getSize(), this.slots.size(), true)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (!this.a(itemstack1, 0, this.c.getSize(), false)) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.a);
+                slot.set(ItemStack.b);
             } else {
                 slot.d();
             }

@@ -18,7 +18,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
 
     public TileEntityBrewingStand() {
         super(TileEntityTypes.BREWING_STAND);
-        this.items = NonNullList.a(5, ItemStack.a);
+        this.items = NonNullList.a(5, ItemStack.b);
         this.a = new IContainerProperties() {
             @Override
             public int getProperty(int i) {
@@ -53,7 +53,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
 
     @Override
     protected IChatBaseComponent getContainerName() {
-        return new ChatMessage("container.brewing", new Object[0]);
+        return new ChatMessage("container.brewing");
     }
 
     @Override
@@ -176,8 +176,8 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         itemstack.subtract(1);
         BlockPosition blockposition = this.getPosition();
 
-        if (itemstack.getItem().q()) {
-            ItemStack itemstack1 = new ItemStack(itemstack.getItem().p());
+        if (itemstack.getItem().p()) {
+            ItemStack itemstack1 = new ItemStack(itemstack.getItem().getCraftingRemainingItem());
 
             if (itemstack.isEmpty()) {
                 itemstack = itemstack1;
@@ -191,9 +191,9 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
-        this.items = NonNullList.a(this.getSize(), ItemStack.a);
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
+        this.items = NonNullList.a(this.getSize(), ItemStack.b);
         ContainerUtil.b(nbttagcompound, this.items);
         this.brewTime = nbttagcompound.getShort("BrewTime");
         this.fuelLevel = nbttagcompound.getByte("Fuel");
@@ -210,7 +210,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
 
     @Override
     public ItemStack getItem(int i) {
-        return i >= 0 && i < this.items.size() ? (ItemStack) this.items.get(i) : ItemStack.a;
+        return i >= 0 && i < this.items.size() ? (ItemStack) this.items.get(i) : ItemStack.b;
     }
 
     @Override

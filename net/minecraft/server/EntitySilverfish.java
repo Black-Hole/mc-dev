@@ -23,21 +23,17 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     @Override
-    public double aR() {
+    public double aX() {
         return 0.1D;
     }
 
     @Override
     protected float b(EntityPose entitypose, EntitySize entitysize) {
-        return 0.1F;
+        return 0.13F;
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(8.0D);
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.25D);
-        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(1.0D);
+    public static AttributeProvider.Builder m() {
+        return EntityMonster.eS().a(GenericAttributes.MAX_HEALTH, 8.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D).a(GenericAttributes.ATTACK_DAMAGE, 1.0D);
     }
 
     @Override
@@ -62,7 +58,7 @@ public class EntitySilverfish extends EntityMonster {
 
     @Override
     protected void a(BlockPosition blockposition, IBlockData iblockdata) {
-        this.a(SoundEffects.ENTITY_SILVERFISH_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEffects.ENTITY_SILVERFISH_STEP, 0.15F, 1.0F);
     }
 
     @Override
@@ -80,7 +76,7 @@ public class EntitySilverfish extends EntityMonster {
 
     @Override
     public void tick() {
-        this.aI = this.yaw;
+        this.aH = this.yaw;
         super.tick();
     }
 
@@ -160,7 +156,7 @@ public class EntitySilverfish extends EntityMonster {
                 IBlockData iblockdata = world.getType(blockposition);
 
                 if (BlockMonsterEggs.h(iblockdata)) {
-                    world.setTypeAndData(blockposition, BlockMonsterEggs.d(iblockdata.getBlock()), 3);
+                    world.setTypeAndData(blockposition, BlockMonsterEggs.c(iblockdata.getBlock()), 3);
                     this.a.doSpawnEffect();
                     this.a.die();
                 }
@@ -196,7 +192,7 @@ public class EntitySilverfish extends EntityMonster {
             if (this.b <= 0) {
                 World world = this.silverfish.world;
                 Random random = this.silverfish.getRandom();
-                BlockPosition blockposition = new BlockPosition(this.silverfish);
+                BlockPosition blockposition = this.silverfish.getChunkCoordinates();
 
                 for (int i = 0; i <= 5 && i >= -5; i = (i <= 0 ? 1 : 0) - i) {
                     for (int j = 0; j <= 10 && j >= -10; j = (j <= 0 ? 1 : 0) - j) {

@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class BlockSmoker extends BlockFurnace {
 
-    protected BlockSmoker(Block.Info block_info) {
-        super(block_info);
+    protected BlockSmoker(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override

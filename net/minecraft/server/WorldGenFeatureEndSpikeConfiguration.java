@@ -1,77 +1,47 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import java.util.Optional;
 import javax.annotation.Nullable;
 
 public class WorldGenFeatureEndSpikeConfiguration implements WorldGenFeatureConfiguration {
 
-    private final boolean a;
-    private final List<WorldGenEnder.Spike> b;
+    public static final Codec<WorldGenFeatureEndSpikeConfiguration> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(Codec.BOOL.fieldOf("crystal_invulnerable").withDefault(false).forGetter((worldgenfeatureendspikeconfiguration) -> {
+            return worldgenfeatureendspikeconfiguration.b;
+        }), WorldGenEnder.Spike.a.listOf().fieldOf("spikes").forGetter((worldgenfeatureendspikeconfiguration) -> {
+            return worldgenfeatureendspikeconfiguration.c;
+        }), BlockPosition.a.optionalFieldOf("crystal_beam_target").forGetter((worldgenfeatureendspikeconfiguration) -> {
+            return Optional.ofNullable(worldgenfeatureendspikeconfiguration.d);
+        })).apply(instance, WorldGenFeatureEndSpikeConfiguration::new);
+    });
+    private final boolean b;
+    private final List<WorldGenEnder.Spike> c;
     @Nullable
-    private final BlockPosition c;
+    private final BlockPosition d;
 
     public WorldGenFeatureEndSpikeConfiguration(boolean flag, List<WorldGenEnder.Spike> list, @Nullable BlockPosition blockposition) {
-        this.a = flag;
-        this.b = list;
-        this.c = blockposition;
+        this(flag, list, Optional.ofNullable(blockposition));
     }
 
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        Dynamic dynamic = new Dynamic;
-        Object object = dynamicops.createString("crystalInvulnerable");
-        Object object1 = dynamicops.createBoolean(this.a);
-        Object object2 = dynamicops.createString("spikes");
-        Object object3 = dynamicops.createList(this.b.stream().map((worldgenender_spike) -> {
-            return worldgenender_spike.a(dynamicops).getValue();
-        }));
-        Object object4 = dynamicops.createString("crystalBeamTarget");
-        Object object5;
-
-        if (this.c == null) {
-            object5 = dynamicops.createList(Stream.empty());
-        } else {
-            IntStream intstream = IntStream.of(new int[]{this.c.getX(), this.c.getY(), this.c.getZ()});
-
-            dynamicops.getClass();
-            object5 = dynamicops.createList(intstream.mapToObj(dynamicops::createInt));
-        }
-
-        dynamic.<init>(dynamicops, dynamicops.createMap(ImmutableMap.of(object, object1, object2, object3, object4, object5)));
-        return dynamic;
-    }
-
-    public static <T> WorldGenFeatureEndSpikeConfiguration a(Dynamic<T> dynamic) {
-        List<WorldGenEnder.Spike> list = dynamic.get("spikes").asList(WorldGenEnder.Spike::a);
-        List<Integer> list1 = dynamic.get("crystalBeamTarget").asList((dynamic1) -> {
-            return dynamic1.asInt(0);
-        });
-        BlockPosition blockposition;
-
-        if (list1.size() == 3) {
-            blockposition = new BlockPosition((Integer) list1.get(0), (Integer) list1.get(1), (Integer) list1.get(2));
-        } else {
-            blockposition = null;
-        }
-
-        return new WorldGenFeatureEndSpikeConfiguration(dynamic.get("crystalInvulnerable").asBoolean(false), list, blockposition);
+    private WorldGenFeatureEndSpikeConfiguration(boolean flag, List<WorldGenEnder.Spike> list, Optional<BlockPosition> optional) {
+        this.b = flag;
+        this.c = list;
+        this.d = (BlockPosition) optional.orElse((Object) null);
     }
 
     public boolean a() {
-        return this.a;
+        return this.b;
     }
 
     public List<WorldGenEnder.Spike> b() {
-        return this.b;
+        return this.c;
     }
 
     @Nullable
     public BlockPosition c() {
-        return this.c;
+        return this.d;
     }
 }

@@ -16,15 +16,20 @@ import javax.annotation.Nullable;
 public class LootItemFunctionSetLore extends LootItemFunctionConditional {
 
     private final boolean a;
-    private final List<IChatBaseComponent> c;
+    private final List<IChatBaseComponent> b;
     @Nullable
     private final LootTableInfo.EntityTarget d;
 
     public LootItemFunctionSetLore(LootItemCondition[] alootitemcondition, boolean flag, List<IChatBaseComponent> list, @Nullable LootTableInfo.EntityTarget loottableinfo_entitytarget) {
         super(alootitemcondition);
         this.a = flag;
-        this.c = ImmutableList.copyOf(list);
+        this.b = ImmutableList.copyOf(list);
         this.d = loottableinfo_entitytarget;
+    }
+
+    @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.s;
     }
 
     @Override
@@ -34,7 +39,7 @@ public class LootItemFunctionSetLore extends LootItemFunctionConditional {
 
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
-        NBTTagList nbttaglist = this.a(itemstack, !this.c.isEmpty());
+        NBTTagList nbttaglist = this.a(itemstack, !this.b.isEmpty());
 
         if (nbttaglist != null) {
             if (this.a) {
@@ -43,7 +48,7 @@ public class LootItemFunctionSetLore extends LootItemFunctionConditional {
 
             UnaryOperator<IChatBaseComponent> unaryoperator = LootItemFunctionSetName.a(loottableinfo, this.d);
 
-            this.c.stream().map(unaryoperator).map(IChatBaseComponent.ChatSerializer::a).map(NBTTagString::a).forEach(nbttaglist::add);
+            this.b.stream().map(unaryoperator).map(IChatBaseComponent.ChatSerializer::a).map(NBTTagString::a).forEach(nbttaglist::add);
         }
 
         return itemstack;
@@ -91,15 +96,13 @@ public class LootItemFunctionSetLore extends LootItemFunctionConditional {
 
     public static class b extends LootItemFunctionConditional.c<LootItemFunctionSetLore> {
 
-        public b() {
-            super(new MinecraftKey("set_lore"), LootItemFunctionSetLore.class);
-        }
+        public b() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionSetLore lootitemfunctionsetlore, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsetlore, jsonserializationcontext);
             jsonobject.addProperty("replace", lootitemfunctionsetlore.a);
             JsonArray jsonarray = new JsonArray();
-            Iterator iterator = lootitemfunctionsetlore.c.iterator();
+            Iterator iterator = lootitemfunctionsetlore.b.iterator();
 
             while (iterator.hasNext()) {
                 IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();

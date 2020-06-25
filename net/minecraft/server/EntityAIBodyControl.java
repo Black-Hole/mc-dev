@@ -12,15 +12,15 @@ public class EntityAIBodyControl {
 
     public void a() {
         if (this.f()) {
-            this.a.aI = this.a.yaw;
+            this.a.aH = this.a.yaw;
             this.c();
-            this.c = this.a.aK;
+            this.c = this.a.aJ;
             this.b = 0;
         } else {
             if (this.e()) {
-                if (Math.abs(this.a.aK - this.c) > 15.0F) {
+                if (Math.abs(this.a.aJ - this.c) > 15.0F) {
                     this.b = 0;
-                    this.c = this.a.aK;
+                    this.c = this.a.aJ;
                     this.b();
                 } else {
                     ++this.b;
@@ -34,19 +34,19 @@ public class EntityAIBodyControl {
     }
 
     private void b() {
-        this.a.aI = MathHelper.b(this.a.aI, this.a.aK, (float) this.a.dV());
+        this.a.aH = MathHelper.b(this.a.aH, this.a.aJ, (float) this.a.ep());
     }
 
     private void c() {
-        this.a.aK = MathHelper.b(this.a.aK, this.a.aI, (float) this.a.dV());
+        this.a.aJ = MathHelper.b(this.a.aJ, this.a.aH, (float) this.a.ep());
     }
 
     private void d() {
         int i = this.b - 10;
         float f = MathHelper.a((float) i / 10.0F, 0.0F, 1.0F);
-        float f1 = (float) this.a.dV() * (1.0F - f);
+        float f1 = (float) this.a.ep() * (1.0F - f);
 
-        this.a.aI = MathHelper.b(this.a.aI, this.a.aK, f1);
+        this.a.aH = MathHelper.b(this.a.aH, this.a.aJ, f1);
     }
 
     private boolean e() {

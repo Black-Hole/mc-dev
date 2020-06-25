@@ -5,21 +5,21 @@ import javax.annotation.Nullable;
 
 public class VillagerProfession {
 
-    public static final VillagerProfession NONE = a("none", VillagePlaceType.b, (SoundEffect) null);
-    public static final VillagerProfession ARMORER = a("armorer", VillagePlaceType.c, SoundEffects.ENTITY_VILLAGER_WORK_ARMORER);
-    public static final VillagerProfession BUTCHER = a("butcher", VillagePlaceType.d, SoundEffects.ENTITY_VILLAGER_WORK_BUTCHER);
-    public static final VillagerProfession CARTOGRAPHER = a("cartographer", VillagePlaceType.e, SoundEffects.ENTITY_VILLAGER_WORK_CARTOGRAPHER);
-    public static final VillagerProfession CLERIC = a("cleric", VillagePlaceType.f, SoundEffects.ENTITY_VILLAGER_WORK_CLERIC);
-    public static final VillagerProfession FARMER = a("farmer", VillagePlaceType.g, ImmutableSet.of(Items.WHEAT, Items.WHEAT_SEEDS, Items.BEETROOT_SEEDS), ImmutableSet.of(Blocks.FARMLAND), SoundEffects.ENTITY_VILLAGER_WORK_FARMER);
-    public static final VillagerProfession FISHERMAN = a("fisherman", VillagePlaceType.h, SoundEffects.ENTITY_VILLAGER_WORK_FISHERMAN);
-    public static final VillagerProfession FLETCHER = a("fletcher", VillagePlaceType.i, SoundEffects.ENTITY_VILLAGER_WORK_FLETCHER);
-    public static final VillagerProfession LEATHERWORKER = a("leatherworker", VillagePlaceType.j, SoundEffects.ENTITY_VILLAGER_WORK_LEATHERWORKER);
-    public static final VillagerProfession LIBRARIAN = a("librarian", VillagePlaceType.k, SoundEffects.ENTITY_VILLAGER_WORK_LIBRARIAN);
-    public static final VillagerProfession MASON = a("mason", VillagePlaceType.l, SoundEffects.ENTITY_VILLAGER_WORK_MASON);
-    public static final VillagerProfession NITWIT = a("nitwit", VillagePlaceType.m, (SoundEffect) null);
-    public static final VillagerProfession SHEPHERD = a("shepherd", VillagePlaceType.n, SoundEffects.ENTITY_VILLAGER_WORK_SHEPHERD);
-    public static final VillagerProfession TOOLSMITH = a("toolsmith", VillagePlaceType.o, SoundEffects.ENTITY_VILLAGER_WORK_TOOLSMITH);
-    public static final VillagerProfession WEAPONSMITH = a("weaponsmith", VillagePlaceType.p, SoundEffects.ENTITY_VILLAGER_WORK_WEAPONSMITH);
+    public static final VillagerProfession NONE = a("none", VillagePlaceType.c, (SoundEffect) null);
+    public static final VillagerProfession ARMORER = a("armorer", VillagePlaceType.d, SoundEffects.ENTITY_VILLAGER_WORK_ARMORER);
+    public static final VillagerProfession BUTCHER = a("butcher", VillagePlaceType.e, SoundEffects.ENTITY_VILLAGER_WORK_BUTCHER);
+    public static final VillagerProfession CARTOGRAPHER = a("cartographer", VillagePlaceType.f, SoundEffects.ENTITY_VILLAGER_WORK_CARTOGRAPHER);
+    public static final VillagerProfession CLERIC = a("cleric", VillagePlaceType.g, SoundEffects.ENTITY_VILLAGER_WORK_CLERIC);
+    public static final VillagerProfession FARMER = a("farmer", VillagePlaceType.h, ImmutableSet.of(Items.WHEAT, Items.WHEAT_SEEDS, Items.BEETROOT_SEEDS, Items.BONE_MEAL), ImmutableSet.of(Blocks.FARMLAND), SoundEffects.ENTITY_VILLAGER_WORK_FARMER);
+    public static final VillagerProfession FISHERMAN = a("fisherman", VillagePlaceType.i, SoundEffects.ENTITY_VILLAGER_WORK_FISHERMAN);
+    public static final VillagerProfession FLETCHER = a("fletcher", VillagePlaceType.j, SoundEffects.ENTITY_VILLAGER_WORK_FLETCHER);
+    public static final VillagerProfession LEATHERWORKER = a("leatherworker", VillagePlaceType.k, SoundEffects.ENTITY_VILLAGER_WORK_LEATHERWORKER);
+    public static final VillagerProfession LIBRARIAN = a("librarian", VillagePlaceType.l, SoundEffects.ENTITY_VILLAGER_WORK_LIBRARIAN);
+    public static final VillagerProfession MASON = a("mason", VillagePlaceType.m, SoundEffects.ENTITY_VILLAGER_WORK_MASON);
+    public static final VillagerProfession NITWIT = a("nitwit", VillagePlaceType.n, (SoundEffect) null);
+    public static final VillagerProfession SHEPHERD = a("shepherd", VillagePlaceType.o, SoundEffects.ENTITY_VILLAGER_WORK_SHEPHERD);
+    public static final VillagerProfession TOOLSMITH = a("toolsmith", VillagePlaceType.p, SoundEffects.ENTITY_VILLAGER_WORK_TOOLSMITH);
+    public static final VillagerProfession WEAPONSMITH = a("weaponsmith", VillagePlaceType.q, SoundEffects.ENTITY_VILLAGER_WORK_WEAPONSMITH);
     private final String p;
     private final VillagePlaceType q;
     private final ImmutableSet<Item> r;

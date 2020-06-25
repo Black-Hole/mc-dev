@@ -7,9 +7,9 @@ public class ItemNameTag extends Item {
     }
 
     @Override
-    public boolean a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
+    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
         if (itemstack.hasName() && !(entityliving instanceof EntityHuman)) {
-            if (entityliving.isAlive()) {
+            if (!entityhuman.world.isClientSide && entityliving.isAlive()) {
                 entityliving.setCustomName(itemstack.getName());
                 if (entityliving instanceof EntityInsentient) {
                     ((EntityInsentient) entityliving).setPersistent();
@@ -18,9 +18,9 @@ public class ItemNameTag extends Item {
                 itemstack.subtract(1);
             }
 
-            return true;
+            return EnumInteractionResult.a(entityhuman.world.isClientSide);
         } else {
-            return false;
+            return EnumInteractionResult.PASS;
         }
     }
 }

@@ -2,15 +2,13 @@ package net.minecraft.server;
 
 public class BlockWitherRose extends BlockFlowers {
 
-    public BlockWitherRose(MobEffectList mobeffectlist, Block.Info block_info) {
-        super(mobeffectlist, 8, block_info);
+    public BlockWitherRose(MobEffectList mobeffectlist, BlockBase.Info blockbase_info) {
+        super(mobeffectlist, 8, blockbase_info);
     }
 
     @Override
-    protected boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        Block block = iblockdata.getBlock();
-
-        return super.a_(iblockdata, iblockaccess, blockposition) || block == Blocks.NETHERRACK || block == Blocks.SOUL_SAND;
+    protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return super.c(iblockdata, iblockaccess, blockposition) || iblockdata.a(Blocks.NETHERRACK) || iblockdata.a(Blocks.SOUL_SAND) || iblockdata.a(Blocks.SOUL_SOIL);
     }
 
     @Override

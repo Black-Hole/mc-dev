@@ -4,14 +4,13 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import javax.annotation.Nullable;
@@ -44,12 +43,12 @@ public class Advancement {
         } else {
             IChatBaseComponent ichatbasecomponent = advancementdisplay.a();
             EnumChatFormat enumchatformat = advancementdisplay.e().c();
-            IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent.h().a(enumchatformat).a("\n").addSibling(advancementdisplay.b());
-            IChatBaseComponent ichatbasecomponent2 = ichatbasecomponent.h().a((chatmodifier) -> {
-                chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, ichatbasecomponent1));
+            IChatMutableComponent ichatmutablecomponent = ChatComponentUtils.a(ichatbasecomponent.mutableCopy(), ChatModifier.b.setColor(enumchatformat)).c("\n").addSibling(advancementdisplay.b());
+            IChatMutableComponent ichatmutablecomponent1 = ichatbasecomponent.mutableCopy().format((chatmodifier) -> {
+                return chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, ichatmutablecomponent));
             });
 
-            this.chatComponent = (new ChatComponentText("[")).addSibling(ichatbasecomponent2).a("]").a(enumchatformat);
+            this.chatComponent = (new ChatComponentText("[")).addSibling(ichatmutablecomponent1).c("]").a(enumchatformat);
         }
 
     }
@@ -321,11 +320,11 @@ public class Advancement {
             return "Task Advancement{parentId=" + this.a + ", display=" + this.c + ", rewards=" + this.d + ", criteria=" + this.e + ", requirements=" + Arrays.deepToString(this.f) + '}';
         }
 
-        public static Advancement.SerializedAdvancement a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public static Advancement.SerializedAdvancement a(JsonObject jsonobject, LootDeserializationContext lootdeserializationcontext) {
             MinecraftKey minecraftkey = jsonobject.has("parent") ? new MinecraftKey(ChatDeserializer.h(jsonobject, "parent")) : null;
-            AdvancementDisplay advancementdisplay = jsonobject.has("display") ? AdvancementDisplay.a(ChatDeserializer.t(jsonobject, "display"), jsondeserializationcontext) : null;
-            AdvancementRewards advancementrewards = (AdvancementRewards) ChatDeserializer.a(jsonobject, "rewards", AdvancementRewards.a, jsondeserializationcontext, AdvancementRewards.class);
-            Map<String, Criterion> map = Criterion.b(ChatDeserializer.t(jsonobject, "criteria"), jsondeserializationcontext);
+            AdvancementDisplay advancementdisplay = jsonobject.has("display") ? AdvancementDisplay.a(ChatDeserializer.t(jsonobject, "display")) : null;
+            AdvancementRewards advancementrewards = jsonobject.has("rewards") ? AdvancementRewards.a(ChatDeserializer.t(jsonobject, "rewards")) : AdvancementRewards.a;
+            Map<String, Criterion> map = Criterion.b(ChatDeserializer.t(jsonobject, "criteria"), lootdeserializationcontext);
 
             if (map.isEmpty()) {
                 throw new JsonSyntaxException("Advancement criteria cannot be empty");

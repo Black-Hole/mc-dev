@@ -77,10 +77,14 @@ public class PathEntity {
         return this.a(entity, this.e);
     }
 
-    public Vec3D g() {
-        PathPoint pathpoint = (PathPoint) this.a.get(this.e);
+    public BaseBlockPosition g() {
+        PathPoint pathpoint = this.h();
 
-        return new Vec3D((double) pathpoint.a, (double) pathpoint.b, (double) pathpoint.c);
+        return new BaseBlockPosition(pathpoint.a, pathpoint.b, pathpoint.c);
+    }
+
+    public PathPoint h() {
+        return (PathPoint) this.a.get(this.e);
     }
 
     public boolean a(@Nullable PathEntity pathentity) {
@@ -102,7 +106,7 @@ public class PathEntity {
         }
     }
 
-    public boolean h() {
+    public boolean i() {
         return this.h;
     }
 
@@ -110,11 +114,11 @@ public class PathEntity {
         return "Path(length=" + this.a.size() + ")";
     }
 
-    public BlockPosition k() {
+    public BlockPosition m() {
         return this.f;
     }
 
-    public float l() {
+    public float n() {
         return this.g;
     }
 }

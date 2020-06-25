@@ -8,8 +8,7 @@ public abstract class Enchantment {
 
     private final EnumItemSlot[] a;
     private final Enchantment.Rarity d;
-    @Nullable
-    public EnchantmentSlotType itemTarget;
+    public final EnchantmentSlotType itemTarget;
     @Nullable
     protected String c;
 
@@ -85,7 +84,7 @@ public abstract class Enchantment {
     }
 
     public IChatBaseComponent d(int i) {
-        ChatMessage chatmessage = new ChatMessage(this.g(), new Object[0]);
+        ChatMessage chatmessage = new ChatMessage(this.g());
 
         if (this.c()) {
             chatmessage.a(EnumChatFormat.RED);
@@ -94,7 +93,7 @@ public abstract class Enchantment {
         }
 
         if (i != 1 || this.getMaxLevel() != 1) {
-            chatmessage.a(" ").addSibling(new ChatMessage("enchantment.level." + i, new Object[0]));
+            chatmessage.c(" ").addSibling(new ChatMessage("enchantment.level." + i));
         }
 
         return chatmessage;
@@ -114,6 +113,14 @@ public abstract class Enchantment {
 
     public boolean c() {
         return false;
+    }
+
+    public boolean h() {
+        return true;
+    }
+
+    public boolean i() {
+        return true;
     }
 
     public static enum Rarity {

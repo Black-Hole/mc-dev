@@ -36,11 +36,11 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
         this.age = nbttagcompound.getLong("Age");
         if (nbttagcompound.hasKeyOfType("ExitPortal", 10)) {
-            this.exitPortal = GameProfileSerializer.c(nbttagcompound.getCompound("ExitPortal"));
+            this.exitPortal = GameProfileSerializer.b(nbttagcompound.getCompound("ExitPortal"));
         }
 
         this.exactTeleport = nbttagcompound.getBoolean("ExactTeleport");
@@ -58,7 +58,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
             List<Entity> list = this.world.a(Entity.class, new AxisAlignedBB(this.getPosition()));
 
             if (!list.isEmpty()) {
-                this.a(((Entity) list.get(0)).getRootVehicle());
+                this.a((Entity) list.get(this.world.random.nextInt(list.size())));
             }
 
             if (this.age % 2400L == 0L) {
@@ -113,14 +113,32 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
     public void a(Entity entity) {
         if (this.world instanceof WorldServer && !this.f()) {
             this.c = 100;
-            if (this.exitPortal == null && this.world.worldProvider instanceof WorldProviderTheEnd) {
+            if (this.exitPortal == null && this.world.getDimensionKey() == World.THE_END) {
                 this.a((WorldServer) this.world);
             }
 
             if (this.exitPortal != null) {
                 BlockPosition blockposition = this.exactTeleport ? this.exitPortal : this.k();
+                Entity entity1;
 
-                entity.enderTeleportAndLoad((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
+                if (entity instanceof EntityEnderPearl) {
+                    Entity entity2 = ((EntityEnderPearl) entity).getShooter();
+
+                    if (entity2 instanceof EntityPlayer) {
+                        CriterionTriggers.d.a((EntityPlayer) entity2, this.world.getType(this.getPosition()));
+                    }
+
+                    if (entity2 != null) {
+                        entity1 = entity2;
+                        entity.die();
+                    } else {
+                        entity1 = entity;
+                    }
+                } else {
+                    entity1 = entity.getRootVehicle();
+                }
+
+                entity1.enderTeleportAndLoad((double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D);
             }
 
             this.h();
@@ -155,7 +173,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
         if (this.exitPortal == null) {
             this.exitPortal = new BlockPosition(vec3d1.x + 0.5D, 75.0D, vec3d1.z + 0.5D);
             TileEntityEndGateway.LOGGER.debug("Failed to find suitable block, settling on {}", this.exitPortal);
-            WorldGenerator.END_ISLAND.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e).a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), new Random(this.exitPortal.asLong()), this.exitPortal);
+            WorldGenerator.END_ISLAND.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.k).a(worldserver, worldserver.getStructureManager(), worldserver.getChunkProvider().getChunkGenerator(), new Random(this.exitPortal.asLong()), this.exitPortal);
         } else {
             TileEntityEndGateway.LOGGER.debug("Found block at {}", this.exitPortal);
         }
@@ -177,7 +195,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
                         BlockPosition blockposition2 = new BlockPosition(blockposition.getX() + j, l, blockposition.getZ() + k);
                         IBlockData iblockdata = iblockaccess.getType(blockposition2);
 
-                        if (iblockdata.p(iblockaccess, blockposition2) && (flag || iblockdata.getBlock() != Blocks.BEDROCK)) {
+                        if (iblockdata.r(iblockaccess, blockposition2) && (flag || !iblockdata.a(Blocks.BEDROCK))) {
                             blockposition1 = blockposition2;
                             break;
                         }
@@ -209,7 +227,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
             BlockPosition blockposition4 = blockposition3.up();
             BlockPosition blockposition5 = blockposition3.up(2);
 
-            if (iblockdata.getBlock() == Blocks.END_STONE && !chunk.getType(blockposition4).p(chunk, blockposition4) && !chunk.getType(blockposition5).p(chunk, blockposition5)) {
+            if (iblockdata.a(Blocks.END_STONE) && !chunk.getType(blockposition4).r(chunk, blockposition4) && !chunk.getType(blockposition5).r(chunk, blockposition5)) {
                 double d1 = blockposition3.distanceSquared(0.0D, 0.0D, 0.0D, true);
 
                 if (blockposition2 == null || d1 < d0) {
@@ -223,7 +241,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
     }
 
     private void a(WorldServer worldserver, BlockPosition blockposition) {
-        WorldGenerator.END_GATEWAY.b((WorldGenFeatureConfiguration) WorldGenEndGatewayConfiguration.a(this.getPosition(), false)).a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), new Random(), blockposition);
+        WorldGenerator.END_GATEWAY.b((WorldGenFeatureConfiguration) WorldGenEndGatewayConfiguration.a(this.getPosition(), false)).a(worldserver, worldserver.getStructureManager(), worldserver.getChunkProvider().getChunkGenerator(), new Random(), blockposition);
     }
 
     public void a(BlockPosition blockposition, boolean flag) {

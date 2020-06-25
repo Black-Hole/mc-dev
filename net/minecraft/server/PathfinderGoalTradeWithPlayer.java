@@ -17,7 +17,7 @@ public class PathfinderGoalTradeWithPlayer extends PathfinderGoal {
             return false;
         } else if (this.a.isInWater()) {
             return false;
-        } else if (!this.a.onGround) {
+        } else if (!this.a.isOnGround()) {
             return false;
         } else if (this.a.velocityChanged) {
             return false;

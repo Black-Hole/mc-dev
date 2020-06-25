@@ -18,6 +18,11 @@ public class LootItemConditionBlockStateProperty implements LootItemCondition {
     }
 
     @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.h;
+    }
+
+    @Override
     public Set<LootContextParameter<?>> a() {
         return ImmutableSet.of(LootContextParameters.BLOCK_STATE);
     }
@@ -32,11 +37,9 @@ public class LootItemConditionBlockStateProperty implements LootItemCondition {
         return new LootItemConditionBlockStateProperty.a(block);
     }
 
-    public static class b extends LootItemCondition.b<LootItemConditionBlockStateProperty> {
+    public static class b implements LootSerializer<LootItemConditionBlockStateProperty> {
 
-        protected b() {
-            super(new MinecraftKey("block_state_property"), LootItemConditionBlockStateProperty.class);
-        }
+        public b() {}
 
         public void a(JsonObject jsonobject, LootItemConditionBlockStateProperty lootitemconditionblockstateproperty, JsonSerializationContext jsonserializationcontext) {
             jsonobject.addProperty("block", IRegistry.BLOCK.getKey(lootitemconditionblockstateproperty.a).toString());
@@ -44,7 +47,7 @@ public class LootItemConditionBlockStateProperty implements LootItemCondition {
         }
 
         @Override
-        public LootItemConditionBlockStateProperty b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionBlockStateProperty a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "block"));
             Block block = (Block) IRegistry.BLOCK.getOptional(minecraftkey).orElseThrow(() -> {
                 return new IllegalArgumentException("Can't find block " + minecraftkey);

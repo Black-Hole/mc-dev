@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockMycel extends BlockDirtSnowSpreadable {
 
-    public BlockMycel(Block.Info block_info) {
-        super(block_info);
+    public BlockMycel(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 }

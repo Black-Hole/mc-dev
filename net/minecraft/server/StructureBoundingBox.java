@@ -29,6 +29,10 @@ public class StructureBoundingBox {
         return new StructureBoundingBox(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
     }
 
+    public static StructureBoundingBox b() {
+        return new StructureBoundingBox(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+    }
+
     public static StructureBoundingBox a(int i, int j, int k, int l, int i1, int j1, int k1, int l1, int i2, EnumDirection enumdirection) {
         switch (enumdirection) {
             case NORTH:
@@ -114,31 +118,39 @@ public class StructureBoundingBox {
         return new StructureBoundingBox(this.a + i, this.b + j, this.c + k, this.d + i, this.e + j, this.f + k);
     }
 
+    public void a(BaseBlockPosition baseblockposition) {
+        this.a(baseblockposition.getX(), baseblockposition.getY(), baseblockposition.getZ());
+    }
+
     public boolean b(BaseBlockPosition baseblockposition) {
         return baseblockposition.getX() >= this.a && baseblockposition.getX() <= this.d && baseblockposition.getZ() >= this.c && baseblockposition.getZ() <= this.f && baseblockposition.getY() >= this.b && baseblockposition.getY() <= this.e;
     }
 
-    public BaseBlockPosition b() {
+    public BaseBlockPosition c() {
         return new BaseBlockPosition(this.d - this.a, this.e - this.b, this.f - this.c);
     }
 
-    public int c() {
+    public int d() {
         return this.d - this.a + 1;
     }
 
-    public int d() {
+    public int e() {
         return this.e - this.b + 1;
     }
 
-    public int e() {
+    public int f() {
         return this.f - this.c + 1;
+    }
+
+    public BaseBlockPosition g() {
+        return new BlockPosition(this.a + (this.d - this.a + 1) / 2, this.b + (this.e - this.b + 1) / 2, this.c + (this.f - this.c + 1) / 2);
     }
 
     public String toString() {
         return MoreObjects.toStringHelper(this).add("x0", this.a).add("y0", this.b).add("z0", this.c).add("x1", this.d).add("y1", this.e).add("z1", this.f).toString();
     }
 
-    public NBTTagIntArray g() {
+    public NBTTagIntArray h() {
         return new NBTTagIntArray(new int[]{this.a, this.b, this.c, this.d, this.e, this.f});
     }
 }

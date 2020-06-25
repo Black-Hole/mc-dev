@@ -55,12 +55,19 @@ public class MaterialMapColor {
     public static final MaterialMapColor Y = new MaterialMapColor(49, 5001770);
     public static final MaterialMapColor Z = new MaterialMapColor(50, 9321518);
     public static final MaterialMapColor aa = new MaterialMapColor(51, 2430480);
+    public static final MaterialMapColor ab = new MaterialMapColor(52, 12398641);
+    public static final MaterialMapColor ac = new MaterialMapColor(53, 9715553);
+    public static final MaterialMapColor ad = new MaterialMapColor(54, 6035741);
+    public static final MaterialMapColor ae = new MaterialMapColor(55, 1474182);
+    public static final MaterialMapColor af = new MaterialMapColor(56, 3837580);
+    public static final MaterialMapColor ag = new MaterialMapColor(57, 5647422);
+    public static final MaterialMapColor ah = new MaterialMapColor(58, 1356933);
     public final int rgb;
-    public final int ac;
+    public final int aj;
 
     private MaterialMapColor(int i, int j) {
         if (i >= 0 && i <= 63) {
-            this.ac = i;
+            this.aj = i;
             this.rgb = j;
             MaterialMapColor.a[i] = this;
         } else {

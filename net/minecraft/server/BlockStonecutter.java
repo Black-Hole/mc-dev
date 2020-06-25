@@ -4,13 +4,13 @@ import javax.annotation.Nullable;
 
 public class BlockStonecutter extends Block {
 
-    private static final ChatMessage c = new ChatMessage("container.stonecutter", new Object[0]);
+    private static final ChatMessage c = new ChatMessage("container.stonecutter");
     public static final BlockStateDirection a = BlockFacingHorizontal.FACING;
     protected static final VoxelShape b = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D);
 
-    public BlockStonecutter(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStonecutter.a, EnumDirection.NORTH));
+    public BlockStonecutter(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStonecutter.a, EnumDirection.NORTH));
     }
 
     @Override
@@ -25,7 +25,7 @@ public class BlockStonecutter extends Block {
         } else {
             entityhuman.openContainer(iblockdata.b(world, blockposition));
             entityhuman.a(StatisticList.INTERACT_WITH_STONECUTTER);
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.CONSUME;
         }
     }
 
@@ -38,17 +38,17 @@ public class BlockStonecutter extends Block {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockStonecutter.b;
     }
 
     @Override
-    public boolean o(IBlockData iblockdata) {
+    public boolean c_(IBlockData iblockdata) {
         return true;
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 

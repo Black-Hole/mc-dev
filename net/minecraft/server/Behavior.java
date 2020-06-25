@@ -1,11 +1,12 @@
 package net.minecraft.server;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
 public abstract class Behavior<E extends EntityLiving> {
 
-    private final Map<MemoryModuleType<?>, MemoryStatus> a;
+    protected final Map<MemoryModuleType<?>, MemoryStatus> a;
     private Behavior.Status b;
     private long c;
     private final int d;
@@ -30,7 +31,7 @@ public abstract class Behavior<E extends EntityLiving> {
         return this.b;
     }
 
-    public final boolean b(WorldServer worldserver, E e0, long i) {
+    public final boolean e(WorldServer worldserver, E e0, long i) {
         if (this.a(e0) && this.a(worldserver, e0)) {
             this.b = Behavior.Status.RUNNING;
             int j = this.d + worldserver.getRandom().nextInt(this.e + 1 - this.d);
@@ -45,25 +46,25 @@ public abstract class Behavior<E extends EntityLiving> {
 
     protected void a(WorldServer worldserver, E e0, long i) {}
 
-    public final void c(WorldServer worldserver, E e0, long i) {
-        if (!this.a(i) && this.g(worldserver, e0, i)) {
+    public final void f(WorldServer worldserver, E e0, long i) {
+        if (!this.a(i) && this.b(worldserver, e0, i)) {
             this.d(worldserver, e0, i);
         } else {
-            this.e(worldserver, e0, i);
+            this.g(worldserver, e0, i);
         }
 
     }
 
     protected void d(WorldServer worldserver, E e0, long i) {}
 
-    public final void e(WorldServer worldserver, E e0, long i) {
+    public final void g(WorldServer worldserver, E e0, long i) {
         this.b = Behavior.Status.STOPPED;
-        this.f(worldserver, e0, i);
+        this.c(worldserver, e0, i);
     }
 
-    protected void f(WorldServer worldserver, E e0, long i) {}
+    protected void c(WorldServer worldserver, E e0, long i) {}
 
-    protected boolean g(WorldServer worldserver, E e0, long i) {
+    protected boolean b(WorldServer worldserver, E e0, long i) {
         return false;
     }
 
@@ -80,12 +81,23 @@ public abstract class Behavior<E extends EntityLiving> {
     }
 
     private boolean a(E e0) {
-        return this.a.entrySet().stream().allMatch((entry) -> {
-            MemoryModuleType<?> memorymoduletype = (MemoryModuleType) entry.getKey();
-            MemoryStatus memorystatus = (MemoryStatus) entry.getValue();
+        Iterator iterator = this.a.entrySet().iterator();
 
-            return e0.getBehaviorController().a(memorymoduletype, memorystatus);
-        });
+        MemoryModuleType memorymoduletype;
+        MemoryStatus memorystatus;
+
+        do {
+            if (!iterator.hasNext()) {
+                return true;
+            }
+
+            Entry<MemoryModuleType<?>, MemoryStatus> entry = (Entry) iterator.next();
+
+            memorymoduletype = (MemoryModuleType) entry.getKey();
+            memorystatus = (MemoryStatus) entry.getValue();
+        } while (e0.getBehaviorController().a(memorymoduletype, memorystatus));
+
+        return false;
     }
 
     public static enum Status {

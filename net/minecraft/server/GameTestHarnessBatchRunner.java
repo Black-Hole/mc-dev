@@ -1,10 +1,12 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,18 +16,20 @@ public class GameTestHarnessBatchRunner {
     private final BlockPosition b;
     private final WorldServer c;
     private final GameTestHarnessTicker d;
-    private final List<GameTestHarnessInfo> e = Lists.newArrayList();
-    private final List<Pair<GameTestHarnessBatch, Collection<GameTestHarnessInfo>>> f = Lists.newArrayList();
-    private GameTestHarnessCollector g;
-    private int h = 0;
-    private BlockPosition.MutableBlockPosition i;
+    private final int e;
+    private final List<GameTestHarnessInfo> f = Lists.newArrayList();
+    private final Map<GameTestHarnessInfo, BlockPosition> g = Maps.newHashMap();
+    private final List<Pair<GameTestHarnessBatch, Collection<GameTestHarnessInfo>>> h = Lists.newArrayList();
+    private GameTestHarnessCollector i;
     private int j = 0;
+    private BlockPosition.MutableBlockPosition k;
 
-    public GameTestHarnessBatchRunner(Collection<GameTestHarnessBatch> collection, BlockPosition blockposition, WorldServer worldserver, GameTestHarnessTicker gametestharnessticker) {
-        this.i = new BlockPosition.MutableBlockPosition(blockposition);
+    public GameTestHarnessBatchRunner(Collection<GameTestHarnessBatch> collection, BlockPosition blockposition, EnumBlockRotation enumblockrotation, WorldServer worldserver, GameTestHarnessTicker gametestharnessticker, int i) {
+        this.k = blockposition.i();
         this.b = blockposition;
         this.c = worldserver;
         this.d = gametestharnessticker;
+        this.e = i;
         collection.forEach((gametestharnessbatch) -> {
             Collection<GameTestHarnessInfo> collection1 = Lists.newArrayList();
             Collection<GameTestHarnessTestFunction> collection2 = gametestharnessbatch.b();
@@ -33,18 +37,18 @@ public class GameTestHarnessBatchRunner {
 
             while (iterator.hasNext()) {
                 GameTestHarnessTestFunction gametestharnesstestfunction = (GameTestHarnessTestFunction) iterator.next();
-                GameTestHarnessInfo gametestharnessinfo = new GameTestHarnessInfo(gametestharnesstestfunction, worldserver);
+                GameTestHarnessInfo gametestharnessinfo = new GameTestHarnessInfo(gametestharnesstestfunction, enumblockrotation, worldserver);
 
                 collection1.add(gametestharnessinfo);
-                this.e.add(gametestharnessinfo);
+                this.f.add(gametestharnessinfo);
             }
 
-            this.f.add(Pair.of(gametestharnessbatch, collection1));
+            this.h.add(Pair.of(gametestharnessbatch, collection1));
         });
     }
 
     public List<GameTestHarnessInfo> a() {
-        return this.e;
+        return this.f;
     }
 
     public void b() {
@@ -52,10 +56,10 @@ public class GameTestHarnessBatchRunner {
     }
 
     private void a(int i) {
-        this.h = i;
-        this.g = new GameTestHarnessCollector();
-        if (i < this.f.size()) {
-            Pair<GameTestHarnessBatch, Collection<GameTestHarnessInfo>> pair = (Pair) this.f.get(this.h);
+        this.j = i;
+        this.i = new GameTestHarnessCollector();
+        if (i < this.h.size()) {
+            Pair<GameTestHarnessBatch, Collection<GameTestHarnessInfo>> pair = (Pair) this.h.get(this.j);
             GameTestHarnessBatch gametestharnessbatch = (GameTestHarnessBatch) pair.getFirst();
             Collection<GameTestHarnessInfo> collection = (Collection) pair.getSecond();
 
@@ -65,8 +69,8 @@ public class GameTestHarnessBatchRunner {
 
             GameTestHarnessBatchRunner.LOGGER.info("Running test batch '" + s + "' (" + collection.size() + " tests)...");
             collection.forEach((gametestharnessinfo) -> {
-                this.g.a(gametestharnessinfo);
-                this.g.a(new GameTestHarnessListener() {
+                this.i.a(gametestharnessinfo);
+                this.i.a(new GameTestHarnessListener() {
                     @Override
                     public void a(GameTestHarnessInfo gametestharnessinfo1) {}
 
@@ -75,38 +79,39 @@ public class GameTestHarnessBatchRunner {
                         GameTestHarnessBatchRunner.this.a(gametestharnessinfo1);
                     }
                 });
-                GameTestHarnessRunner.a(gametestharnessinfo, this.d);
+                BlockPosition blockposition = (BlockPosition) this.g.get(gametestharnessinfo);
+
+                GameTestHarnessRunner.a(gametestharnessinfo, blockposition, this.d);
             });
         }
     }
 
     private void a(GameTestHarnessInfo gametestharnessinfo) {
-        if (this.g.i()) {
-            this.a(this.h + 1);
+        if (this.i.i()) {
+            this.a(this.j + 1);
         }
 
     }
 
     private void a(Collection<GameTestHarnessInfo> collection) {
         int i = 0;
+        AxisAlignedBB axisalignedbb = new AxisAlignedBB(this.k);
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
             GameTestHarnessInfo gametestharnessinfo = (GameTestHarnessInfo) iterator.next();
-            BlockPosition blockposition = new BlockPosition(this.i);
+            BlockPosition blockposition = new BlockPosition(this.k);
+            TileEntityStructure tileentitystructure = GameTestHarnessStructures.a(gametestharnessinfo.s(), blockposition, gametestharnessinfo.t(), 2, this.c, true);
+            AxisAlignedBB axisalignedbb1 = GameTestHarnessStructures.a(tileentitystructure);
 
-            gametestharnessinfo.a(blockposition);
-            GameTestHarnessStructures.a(gametestharnessinfo.s(), blockposition, 2, this.c, true);
-            BlockPosition blockposition1 = gametestharnessinfo.e();
-            int j = blockposition1 == null ? 1 : blockposition1.getX();
-            int k = blockposition1 == null ? 1 : blockposition1.getZ();
-
-            this.j = Math.max(this.j, k);
-            this.i.e(j + 4, 0, 0);
-            if (i++ % 8 == 0) {
-                this.i.e(0, 0, this.j + 5);
-                this.i.o(this.b.getX());
-                this.j = 0;
+            gametestharnessinfo.a(tileentitystructure.getPosition());
+            this.g.put(gametestharnessinfo, new BlockPosition(this.k));
+            axisalignedbb = axisalignedbb.b(axisalignedbb1);
+            this.k.e((int) axisalignedbb1.b() + 5, 0, 0);
+            if (i++ % this.e == this.e - 1) {
+                this.k.e(0, 0, (int) axisalignedbb.d() + 6);
+                this.k.o(this.b.getX());
+                axisalignedbb = new AxisAlignedBB(this.k);
             }
         }
 

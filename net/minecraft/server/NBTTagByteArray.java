@@ -103,20 +103,20 @@ public class NBTTagByteArray extends NBTList<NBTTagByte> {
 
     @Override
     public IChatBaseComponent a(String s, int i) {
-        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("B")).a(NBTTagByteArray.g);
-        IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText("[")).addSibling(ichatbasecomponent).a(";");
+        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("B")).a(NBTTagByteArray.g);
+        IChatMutableComponent ichatmutablecomponent1 = (new ChatComponentText("[")).addSibling(ichatmutablecomponent).c(";");
 
         for (int j = 0; j < this.data.length; ++j) {
-            IChatBaseComponent ichatbasecomponent2 = (new ChatComponentText(String.valueOf(this.data[j]))).a(NBTTagByteArray.f);
+            IChatMutableComponent ichatmutablecomponent2 = (new ChatComponentText(String.valueOf(this.data[j]))).a(NBTTagByteArray.f);
 
-            ichatbasecomponent1.a(" ").addSibling(ichatbasecomponent2).addSibling(ichatbasecomponent);
+            ichatmutablecomponent1.c(" ").addSibling(ichatmutablecomponent2).addSibling(ichatmutablecomponent);
             if (j != this.data.length - 1) {
-                ichatbasecomponent1.a(",");
+                ichatmutablecomponent1.c(",");
             }
         }
 
-        ichatbasecomponent1.a("]");
-        return ichatbasecomponent1;
+        ichatmutablecomponent1.c("]");
+        return ichatmutablecomponent1;
     }
 
     public byte[] getBytes() {
@@ -168,6 +168,11 @@ public class NBTTagByteArray extends NBTList<NBTTagByte> {
 
         this.data = ArrayUtils.remove(this.data, i);
         return NBTTagByte.a(b0);
+    }
+
+    @Override
+    public byte d_() {
+        return 1;
     }
 
     public void clear() {

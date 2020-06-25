@@ -8,7 +8,7 @@ public class RecipeMapClone extends IRecipeComplex {
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
         int i = 0;
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
 
         for (int j = 0; j < inventorycrafting.getSize(); ++j) {
             ItemStack itemstack1 = inventorycrafting.getItem(j);
@@ -35,7 +35,7 @@ public class RecipeMapClone extends IRecipeComplex {
 
     public ItemStack a(InventoryCrafting inventorycrafting) {
         int i = 0;
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
 
         for (int j = 0; j < inventorycrafting.getSize(); ++j) {
             ItemStack itemstack1 = inventorycrafting.getItem(j);
@@ -43,13 +43,13 @@ public class RecipeMapClone extends IRecipeComplex {
             if (!itemstack1.isEmpty()) {
                 if (itemstack1.getItem() == Items.FILLED_MAP) {
                     if (!itemstack.isEmpty()) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
 
                     itemstack = itemstack1;
                 } else {
                     if (itemstack1.getItem() != Items.MAP) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
 
                     ++i;
@@ -63,7 +63,7 @@ public class RecipeMapClone extends IRecipeComplex {
             itemstack2.setCount(i + 1);
             return itemstack2;
         } else {
-            return ItemStack.a;
+            return ItemStack.b;
         }
     }
 

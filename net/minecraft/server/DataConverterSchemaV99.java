@@ -3,12 +3,11 @@ package net.minecraft.server;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.schemas.Schema;
-import com.mojang.datafixers.types.DynamicOps;
-import com.mojang.datafixers.types.templates.TypeTemplate;
 import com.mojang.datafixers.types.templates.Hook.HookFunction;
-import java.util.HashMap;
+import com.mojang.datafixers.types.templates.TypeTemplate;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.DynamicOps;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -244,7 +243,7 @@ public class DataConverterSchemaV99 extends Schema {
             return DSL.optionalFields("Riding", DataConverterTypes.ENTITY_TREE.in(schema), DataConverterTypes.ENTITY.in(schema));
         });
         schema.registerType(false, DataConverterTypes.ENTITY_NAME, () -> {
-            return DSL.constType(DSL.namespacedString());
+            return DSL.constType(DataConverterSchemaNamed.a());
         });
         schema.registerType(true, DataConverterTypes.ENTITY, () -> {
             return DSL.taggedChoiceLazy("id", DSL.string(), map);
@@ -254,10 +253,10 @@ public class DataConverterSchemaV99 extends Schema {
         });
         schema.registerType(false, DataConverterTypes.OPTIONS, DSL::remainder);
         schema.registerType(false, DataConverterTypes.BLOCK_NAME, () -> {
-            return DSL.or(DSL.constType(DSL.intType()), DSL.constType(DSL.namespacedString()));
+            return DSL.or(DSL.constType(DSL.intType()), DSL.constType(DataConverterSchemaNamed.a()));
         });
         schema.registerType(false, DataConverterTypes.ITEM_NAME, () -> {
-            return DSL.constType(DSL.namespacedString());
+            return DSL.constType(DataConverterSchemaNamed.a());
         });
         schema.registerType(false, DataConverterTypes.STATS, DSL::remainder);
         schema.registerType(false, DataConverterTypes.SAVED_DATA, () -> {
@@ -268,6 +267,7 @@ public class DataConverterSchemaV99 extends Schema {
         schema.registerType(false, DataConverterTypes.TEAM, DSL::remainder);
         schema.registerType(true, DataConverterTypes.UNTAGGED_SPAWNER, DSL::remainder);
         schema.registerType(false, DataConverterTypes.POI_CHUNK, DSL::remainder);
+        schema.registerType(true, DataConverterTypes.WORLD_GEN_SETTINGS, DSL::remainder);
     }
 
     protected static <T> T a(Dynamic<T> dynamic, Map<String, String> map, String s) {

@@ -20,6 +20,6 @@ public abstract class IRecipeComplex implements RecipeCrafting {
 
     @Override
     public ItemStack getResult() {
-        return ItemStack.a;
+        return ItemStack.b;
     }
 }

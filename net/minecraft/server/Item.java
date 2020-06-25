@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import java.util.Map;
@@ -10,30 +10,15 @@ import javax.annotation.Nullable;
 
 public class Item implements IMaterial {
 
-    public static final Map<Block, Item> f = Maps.newHashMap();
-    private static final IDynamicTexture a = (itemstack, world, entityliving) -> {
-        return itemstack.f() ? 1.0F : 0.0F;
-    };
-    private static final IDynamicTexture b = (itemstack, world, entityliving) -> {
-        return MathHelper.a((float) itemstack.getDamage() / (float) itemstack.h(), 0.0F, 1.0F);
-    };
-    private static final IDynamicTexture c = (itemstack, world, entityliving) -> {
-        return entityliving != null && entityliving.getMainHand() != EnumMainHand.RIGHT ? 1.0F : 0.0F;
-    };
-    private static final IDynamicTexture d = (itemstack, world, entityliving) -> {
-        return entityliving instanceof EntityHuman ? ((EntityHuman) entityliving).getCooldownTracker().a(itemstack.getItem(), 0.0F) : 0.0F;
-    };
-    private static final IDynamicTexture e = (itemstack, world, entityliving) -> {
-        return itemstack.hasTag() ? (float) itemstack.getTag().getInt("CustomModelData") : 0.0F;
-    };
-    protected static final UUID g = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
-    protected static final UUID h = UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
-    protected static final Random i = new Random();
-    private final Map<MinecraftKey, IDynamicTexture> k = Maps.newHashMap();
-    protected final CreativeModeTab j;
-    private final EnumItemRarity l;
+    public static final Map<Block, Item> e = Maps.newHashMap();
+    protected static final UUID f = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
+    protected static final UUID g = UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
+    protected static final Random RANDOM = new Random();
+    protected final CreativeModeTab i;
+    private final EnumItemRarity a;
     private final int maxStackSize;
     private final int durability;
+    private final boolean d;
     private final Item craftingResult;
     @Nullable
     private String name;
@@ -50,29 +35,22 @@ public class Item implements IMaterial {
 
     @Deprecated
     public static Item getItemOf(Block block) {
-        return (Item) Item.f.getOrDefault(block, Items.AIR);
+        return (Item) Item.e.getOrDefault(block, Items.AIR);
     }
 
     public Item(Item.Info item_info) {
-        this.a(new MinecraftKey("lefthanded"), Item.c);
-        this.a(new MinecraftKey("cooldown"), Item.d);
-        this.a(new MinecraftKey("custom_model_data"), Item.e);
-        this.j = item_info.d;
-        this.l = item_info.e;
+        this.i = item_info.d;
+        this.a = item_info.e;
         this.craftingResult = item_info.c;
         this.durability = item_info.b;
         this.maxStackSize = item_info.a;
         this.foodInfo = item_info.f;
-        if (this.durability > 0) {
-            this.a(new MinecraftKey("damaged"), Item.a);
-            this.a(new MinecraftKey("damage"), Item.b);
-        }
-
+        this.d = item_info.g;
     }
 
     public void a(World world, EntityLiving entityliving, ItemStack itemstack, int i) {}
 
-    public boolean a(NBTTagCompound nbttagcompound) {
+    public boolean b(NBTTagCompound nbttagcompound) {
         return false;
     }
 
@@ -83,10 +61,6 @@ public class Item implements IMaterial {
     @Override
     public Item getItem() {
         return this;
-    }
-
-    public final void a(MinecraftKey minecraftkey, IDynamicTexture idynamictexture) {
-        this.k.put(minecraftkey, idynamictexture);
     }
 
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
@@ -101,7 +75,7 @@ public class Item implements IMaterial {
         if (this.isFood()) {
             ItemStack itemstack = entityhuman.b(enumhand);
 
-            if (entityhuman.p(this.getFoodInfo().d())) {
+            if (entityhuman.q(this.getFoodInfo().d())) {
                 entityhuman.c(enumhand);
                 return InteractionResultWrapper.consume(itemstack);
             } else {
@@ -140,15 +114,15 @@ public class Item implements IMaterial {
         return false;
     }
 
-    public boolean a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
-        return false;
+    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
+        return EnumInteractionResult.PASS;
     }
 
     public String toString() {
         return IRegistry.ITEM.getKey(this).getKey();
     }
 
-    protected String n() {
+    protected String m() {
         if (this.name == null) {
             this.name = SystemUtils.a("item", IRegistry.ITEM.getKey(this));
         }
@@ -157,23 +131,23 @@ public class Item implements IMaterial {
     }
 
     public String getName() {
-        return this.n();
+        return this.m();
     }
 
     public String f(ItemStack itemstack) {
         return this.getName();
     }
 
-    public boolean o() {
+    public boolean n() {
         return true;
     }
 
     @Nullable
-    public final Item p() {
+    public final Item getCraftingRemainingItem() {
         return this.craftingResult;
     }
 
-    public boolean q() {
+    public boolean p() {
         return this.craftingResult != null;
     }
 
@@ -181,33 +155,33 @@ public class Item implements IMaterial {
 
     public void b(ItemStack itemstack, World world, EntityHuman entityhuman) {}
 
-    public boolean R_() {
+    public boolean ae_() {
         return false;
     }
 
-    public EnumAnimation e_(ItemStack itemstack) {
+    public EnumAnimation d_(ItemStack itemstack) {
         return itemstack.getItem().isFood() ? EnumAnimation.EAT : EnumAnimation.NONE;
     }
 
-    public int f_(ItemStack itemstack) {
+    public int e_(ItemStack itemstack) {
         return itemstack.getItem().isFood() ? (this.getFoodInfo().e() ? 16 : 32) : 0;
     }
 
     public void a(ItemStack itemstack, World world, EntityLiving entityliving, int i) {}
 
-    public IChatBaseComponent g(ItemStack itemstack) {
-        return new ChatMessage(this.f(itemstack), new Object[0]);
+    public IChatBaseComponent h(ItemStack itemstack) {
+        return new ChatMessage(this.f(itemstack));
     }
 
-    public boolean d_(ItemStack itemstack) {
+    public boolean e(ItemStack itemstack) {
         return itemstack.hasEnchantments();
     }
 
-    public EnumItemRarity h(ItemStack itemstack) {
+    public EnumItemRarity i(ItemStack itemstack) {
         if (!itemstack.hasEnchantments()) {
-            return this.l;
+            return this.a;
         } else {
-            switch (this.l) {
+            switch (this.a) {
                 case COMMON:
                 case UNCOMMON:
                     return EnumItemRarity.RARE;
@@ -215,16 +189,16 @@ public class Item implements IMaterial {
                     return EnumItemRarity.EPIC;
                 case EPIC:
                 default:
-                    return this.l;
+                    return this.a;
             }
         }
     }
 
-    public boolean g_(ItemStack itemstack) {
+    public boolean f_(ItemStack itemstack) {
         return this.getMaxStackSize() == 1 && this.usesDurability();
     }
 
-    protected static MovingObjectPosition a(World world, EntityHuman entityhuman, RayTrace.FluidCollisionOption raytrace_fluidcollisionoption) {
+    protected static MovingObjectPositionBlock a(World world, EntityHuman entityhuman, RayTrace.FluidCollisionOption raytrace_fluidcollisionoption) {
         float f = entityhuman.pitch;
         float f1 = entityhuman.yaw;
         Vec3D vec3d = entityhuman.j(1.0F);
@@ -252,26 +226,30 @@ public class Item implements IMaterial {
     }
 
     protected boolean a(CreativeModeTab creativemodetab) {
-        CreativeModeTab creativemodetab1 = this.r();
+        CreativeModeTab creativemodetab1 = this.q();
 
         return creativemodetab1 != null && (creativemodetab == CreativeModeTab.g || creativemodetab == creativemodetab1);
     }
 
     @Nullable
-    public final CreativeModeTab r() {
-        return this.j;
+    public final CreativeModeTab q() {
+        return this.i;
     }
 
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {
         return false;
     }
 
-    public Multimap<String, AttributeModifier> a(EnumItemSlot enumitemslot) {
-        return HashMultimap.create();
+    public Multimap<AttributeBase, AttributeModifier> a(EnumItemSlot enumitemslot) {
+        return ImmutableMultimap.of();
     }
 
-    public boolean i(ItemStack itemstack) {
+    public boolean j(ItemStack itemstack) {
         return itemstack.getItem() == Items.CROSSBOW;
+    }
+
+    public ItemStack r() {
+        return new ItemStack(this);
     }
 
     public boolean a(Tag<Item> tag) {
@@ -287,12 +265,20 @@ public class Item implements IMaterial {
         return this.foodInfo;
     }
 
-    public SoundEffect U_() {
+    public SoundEffect ag_() {
         return SoundEffects.ENTITY_GENERIC_DRINK;
     }
 
-    public SoundEffect S_() {
+    public SoundEffect af_() {
         return SoundEffects.ENTITY_GENERIC_EAT;
+    }
+
+    public boolean u() {
+        return this.d;
+    }
+
+    public boolean a(DamageSource damagesource) {
+        return !this.d || !damagesource.isFire();
     }
 
     public static class Info {
@@ -303,6 +289,7 @@ public class Item implements IMaterial {
         private CreativeModeTab d;
         private EnumItemRarity e;
         private FoodInfo f;
+        private boolean g;
 
         public Info() {
             this.e = EnumItemRarity.COMMON;
@@ -344,6 +331,11 @@ public class Item implements IMaterial {
 
         public Item.Info a(EnumItemRarity enumitemrarity) {
             this.e = enumitemrarity;
+            return this;
+        }
+
+        public Item.Info a() {
+            this.g = true;
             return this;
         }
     }

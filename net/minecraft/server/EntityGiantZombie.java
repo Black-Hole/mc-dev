@@ -11,16 +11,12 @@ public class EntityGiantZombie extends EntityMonster {
         return 10.440001F;
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(100.0D);
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.5D);
-        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(50.0D);
+    public static AttributeProvider.Builder m() {
+        return EntityMonster.eS().a(GenericAttributes.MAX_HEALTH, 100.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.ATTACK_DAMAGE, 50.0D);
     }
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return iworldreader.w(blockposition) - 0.5F;
+        return iworldreader.y(blockposition) - 0.5F;
     }
 }

@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerSummonedEntity extends CriterionTriggerAbstract<CriterionTriggerSummonedEntity.a> {
@@ -16,40 +14,42 @@ public class CriterionTriggerSummonedEntity extends CriterionTriggerAbstract<Cri
     }
 
     @Override
-    public CriterionTriggerSummonedEntity.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("entity"));
+    public CriterionTriggerSummonedEntity.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
+        CriterionConditionEntity.b criterionconditionentity_b1 = CriterionConditionEntity.b.a(jsonobject, "entity", lootdeserializationcontext);
 
-        return new CriterionTriggerSummonedEntity.a(criterionconditionentity);
+        return new CriterionTriggerSummonedEntity.a(criterionconditionentity_b, criterionconditionentity_b1);
     }
 
     public void a(EntityPlayer entityplayer, Entity entity) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggersummonedentity_a) -> {
-            return criteriontriggersummonedentity_a.a(entityplayer, entity);
+        LootTableInfo loottableinfo = CriterionConditionEntity.b(entityplayer, entity);
+
+        this.a(entityplayer, (criteriontriggersummonedentity_a) -> {
+            return criteriontriggersummonedentity_a.a(loottableinfo);
         });
     }
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionEntity a;
+        private final CriterionConditionEntity.b a;
 
-        public a(CriterionConditionEntity criterionconditionentity) {
-            super(CriterionTriggerSummonedEntity.a);
-            this.a = criterionconditionentity;
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionEntity.b criterionconditionentity_b1) {
+            super(CriterionTriggerSummonedEntity.a, criterionconditionentity_b);
+            this.a = criterionconditionentity_b1;
         }
 
         public static CriterionTriggerSummonedEntity.a a(CriterionConditionEntity.a criterionconditionentity_a) {
-            return new CriterionTriggerSummonedEntity.a(criterionconditionentity_a.b());
+            return new CriterionTriggerSummonedEntity.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a(criterionconditionentity_a.b()));
         }
 
-        public boolean a(EntityPlayer entityplayer, Entity entity) {
-            return this.a.a(entityplayer, entity);
+        public boolean a(LootTableInfo loottableinfo) {
+            return this.a.a(loottableinfo);
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
-            jsonobject.add("entity", this.a.a());
+            jsonobject.add("entity", this.a.a(lootserializationcontext));
             return jsonobject;
         }
     }

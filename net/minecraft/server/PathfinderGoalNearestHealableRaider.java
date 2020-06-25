@@ -22,7 +22,7 @@ public class PathfinderGoalNearestHealableRaider<T extends EntityLiving> extends
     @Override
     public boolean a() {
         if (this.i <= 0 && this.e.getRandom().nextBoolean()) {
-            if (!((EntityRaider) this.e).eF()) {
+            if (!((EntityRaider) this.e).fc()) {
                 return false;
             } else {
                 this.g();

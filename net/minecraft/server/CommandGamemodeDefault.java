@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import java.util.Iterator;
 
 public class CommandGamemodeDefault {
@@ -30,7 +29,7 @@ public class CommandGamemodeDefault {
         int i = 0;
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
-        minecraftserver.setGamemode(enumgamemode);
+        minecraftserver.a(enumgamemode);
         if (minecraftserver.getForceGamemode()) {
             Iterator iterator = minecraftserver.getPlayerList().getPlayers().iterator();
 

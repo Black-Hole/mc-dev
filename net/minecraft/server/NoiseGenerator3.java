@@ -1,7 +1,9 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.IntRBTreeSet;
 import it.unimi.dsi.fastutil.ints.IntSortedSet;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class NoiseGenerator3 implements NoiseGenerator {
@@ -10,11 +12,15 @@ public class NoiseGenerator3 implements NoiseGenerator {
     private final double b;
     private final double c;
 
-    public NoiseGenerator3(SeededRandom seededrandom, int i, int j) {
-        this(seededrandom, new IntRBTreeSet(IntStream.rangeClosed(-i, j).toArray()));
+    public NoiseGenerator3(SeededRandom seededrandom, IntStream intstream) {
+        this(seededrandom, (List) intstream.boxed().collect(ImmutableList.toImmutableList()));
     }
 
-    public NoiseGenerator3(SeededRandom seededrandom, IntSortedSet intsortedset) {
+    public NoiseGenerator3(SeededRandom seededrandom, List<Integer> list) {
+        this(seededrandom, (IntSortedSet) (new IntRBTreeSet(list)));
+    }
+
+    private NoiseGenerator3(SeededRandom seededrandom, IntSortedSet intsortedset) {
         if (intsortedset.isEmpty()) {
             throw new IllegalArgumentException("Need some octaves!");
         } else {

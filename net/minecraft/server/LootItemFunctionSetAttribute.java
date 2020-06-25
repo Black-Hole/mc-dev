@@ -25,6 +25,11 @@ public class LootItemFunctionSetAttribute extends LootItemFunctionConditional {
     }
 
     @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.i;
+    }
+
+    @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
         Random random = loottableinfo.a();
         Iterator iterator = this.a.iterator();
@@ -37,7 +42,7 @@ public class LootItemFunctionSetAttribute extends LootItemFunctionConditional {
                 uuid = UUID.randomUUID();
             }
 
-            EnumItemSlot enumitemslot = lootitemfunctionsetattribute_b.f[random.nextInt(lootitemfunctionsetattribute_b.f.length)];
+            EnumItemSlot enumitemslot = (EnumItemSlot) SystemUtils.a((Object[]) lootitemfunctionsetattribute_b.f, random);
 
             itemstack.a(lootitemfunctionsetattribute_b.b, new AttributeModifier(uuid, lootitemfunctionsetattribute_b.a, (double) lootitemfunctionsetattribute_b.d.b(random), lootitemfunctionsetattribute_b.c), enumitemslot);
         }
@@ -48,16 +53,16 @@ public class LootItemFunctionSetAttribute extends LootItemFunctionConditional {
     static class b {
 
         private final String a;
-        private final String b;
+        private final AttributeBase b;
         private final AttributeModifier.Operation c;
         private final LootValueBounds d;
         @Nullable
         private final UUID e;
         private final EnumItemSlot[] f;
 
-        private b(String s, String s1, AttributeModifier.Operation attributemodifier_operation, LootValueBounds lootvaluebounds, EnumItemSlot[] aenumitemslot, @Nullable UUID uuid) {
+        private b(String s, AttributeBase attributebase, AttributeModifier.Operation attributemodifier_operation, LootValueBounds lootvaluebounds, EnumItemSlot[] aenumitemslot, @Nullable UUID uuid) {
             this.a = s;
-            this.b = s1;
+            this.b = attributebase;
             this.c = attributemodifier_operation;
             this.d = lootvaluebounds;
             this.e = uuid;
@@ -68,7 +73,7 @@ public class LootItemFunctionSetAttribute extends LootItemFunctionConditional {
             JsonObject jsonobject = new JsonObject();
 
             jsonobject.addProperty("name", this.a);
-            jsonobject.addProperty("attribute", this.b);
+            jsonobject.addProperty("attribute", IRegistry.ATTRIBUTE.getKey(this.b).toString());
             jsonobject.addProperty("operation", a(this.c));
             jsonobject.add("amount", jsonserializationcontext.serialize(this.d));
             if (this.e != null) {
@@ -96,46 +101,52 @@ public class LootItemFunctionSetAttribute extends LootItemFunctionConditional {
 
         public static LootItemFunctionSetAttribute.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             String s = ChatDeserializer.h(jsonobject, "name");
-            String s1 = ChatDeserializer.h(jsonobject, "attribute");
-            AttributeModifier.Operation attributemodifier_operation = a(ChatDeserializer.h(jsonobject, "operation"));
-            LootValueBounds lootvaluebounds = (LootValueBounds) ChatDeserializer.a(jsonobject, "amount", jsondeserializationcontext, LootValueBounds.class);
-            UUID uuid = null;
-            EnumItemSlot[] aenumitemslot;
+            MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "attribute"));
+            AttributeBase attributebase = (AttributeBase) IRegistry.ATTRIBUTE.get(minecraftkey);
 
-            if (ChatDeserializer.a(jsonobject, "slot")) {
-                aenumitemslot = new EnumItemSlot[]{EnumItemSlot.fromName(ChatDeserializer.h(jsonobject, "slot"))};
+            if (attributebase == null) {
+                throw new JsonSyntaxException("Unknown attribute: " + minecraftkey);
             } else {
-                if (!ChatDeserializer.d(jsonobject, "slot")) {
-                    throw new JsonSyntaxException("Invalid or missing attribute modifier slot; must be either string or array of strings.");
+                AttributeModifier.Operation attributemodifier_operation = a(ChatDeserializer.h(jsonobject, "operation"));
+                LootValueBounds lootvaluebounds = (LootValueBounds) ChatDeserializer.a(jsonobject, "amount", jsondeserializationcontext, LootValueBounds.class);
+                UUID uuid = null;
+                EnumItemSlot[] aenumitemslot;
+
+                if (ChatDeserializer.a(jsonobject, "slot")) {
+                    aenumitemslot = new EnumItemSlot[]{EnumItemSlot.fromName(ChatDeserializer.h(jsonobject, "slot"))};
+                } else {
+                    if (!ChatDeserializer.d(jsonobject, "slot")) {
+                        throw new JsonSyntaxException("Invalid or missing attribute modifier slot; must be either string or array of strings.");
+                    }
+
+                    JsonArray jsonarray = ChatDeserializer.u(jsonobject, "slot");
+
+                    aenumitemslot = new EnumItemSlot[jsonarray.size()];
+                    int i = 0;
+
+                    JsonElement jsonelement;
+
+                    for (Iterator iterator = jsonarray.iterator(); iterator.hasNext(); aenumitemslot[i++] = EnumItemSlot.fromName(ChatDeserializer.a(jsonelement, "slot"))) {
+                        jsonelement = (JsonElement) iterator.next();
+                    }
+
+                    if (aenumitemslot.length == 0) {
+                        throw new JsonSyntaxException("Invalid attribute modifier slot; must contain at least one entry.");
+                    }
                 }
 
-                JsonArray jsonarray = ChatDeserializer.u(jsonobject, "slot");
+                if (jsonobject.has("id")) {
+                    String s1 = ChatDeserializer.h(jsonobject, "id");
 
-                aenumitemslot = new EnumItemSlot[jsonarray.size()];
-                int i = 0;
-
-                JsonElement jsonelement;
-
-                for (Iterator iterator = jsonarray.iterator(); iterator.hasNext(); aenumitemslot[i++] = EnumItemSlot.fromName(ChatDeserializer.a(jsonelement, "slot"))) {
-                    jsonelement = (JsonElement) iterator.next();
+                    try {
+                        uuid = UUID.fromString(s1);
+                    } catch (IllegalArgumentException illegalargumentexception) {
+                        throw new JsonSyntaxException("Invalid attribute modifier id '" + s1 + "' (must be UUID format, with dashes)");
+                    }
                 }
 
-                if (aenumitemslot.length == 0) {
-                    throw new JsonSyntaxException("Invalid attribute modifier slot; must contain at least one entry.");
-                }
+                return new LootItemFunctionSetAttribute.b(s, attributebase, attributemodifier_operation, lootvaluebounds, aenumitemslot, uuid);
             }
-
-            if (jsonobject.has("id")) {
-                String s2 = ChatDeserializer.h(jsonobject, "id");
-
-                try {
-                    uuid = UUID.fromString(s2);
-                } catch (IllegalArgumentException illegalargumentexception) {
-                    throw new JsonSyntaxException("Invalid attribute modifier id '" + s2 + "' (must be UUID format, with dashes)");
-                }
-            }
-
-            return new LootItemFunctionSetAttribute.b(s, s1, attributemodifier_operation, lootvaluebounds, aenumitemslot, uuid);
         }
 
         private static String a(AttributeModifier.Operation attributemodifier_operation) {
@@ -186,9 +197,7 @@ public class LootItemFunctionSetAttribute extends LootItemFunctionConditional {
 
     public static class d extends LootItemFunctionConditional.c<LootItemFunctionSetAttribute> {
 
-        public d() {
-            super(new MinecraftKey("set_attributes"), LootItemFunctionSetAttribute.class);
-        }
+        public d() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionSetAttribute lootitemfunctionsetattribute, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsetattribute, jsonserializationcontext);

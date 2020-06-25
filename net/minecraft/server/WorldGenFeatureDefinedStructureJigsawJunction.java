@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.DynamicOps;
 
 public class WorldGenFeatureDefinedStructureJigsawJunction {
 
@@ -36,7 +36,7 @@ public class WorldGenFeatureDefinedStructureJigsawJunction {
     public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
         Builder<T, T> builder = ImmutableMap.builder();
 
-        builder.put(dynamicops.createString("source_x"), dynamicops.createInt(this.a)).put(dynamicops.createString("source_ground_y"), dynamicops.createInt(this.b)).put(dynamicops.createString("source_z"), dynamicops.createInt(this.c)).put(dynamicops.createString("delta_y"), dynamicops.createInt(this.d)).put(dynamicops.createString("dest_proj"), dynamicops.createString(this.e.a()));
+        builder.put(dynamicops.createString("source_x"), dynamicops.createInt(this.a)).put(dynamicops.createString("source_ground_y"), dynamicops.createInt(this.b)).put(dynamicops.createString("source_z"), dynamicops.createInt(this.c)).put(dynamicops.createString("delta_y"), dynamicops.createInt(this.d)).put(dynamicops.createString("dest_proj"), dynamicops.createString(this.e.b()));
         return new Dynamic(dynamicops, dynamicops.createMap(builder.build()));
     }
 

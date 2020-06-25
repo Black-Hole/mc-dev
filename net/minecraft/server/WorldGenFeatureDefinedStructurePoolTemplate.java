@@ -3,6 +3,8 @@ package net.minecraft.server;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrays;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -10,90 +12,112 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class WorldGenFeatureDefinedStructurePoolTemplate {
 
-    public static final WorldGenFeatureDefinedStructurePoolTemplate a = new WorldGenFeatureDefinedStructurePoolTemplate(new MinecraftKey("empty"), new MinecraftKey("empty"), ImmutableList.of(), WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID);
-    public static final WorldGenFeatureDefinedStructurePoolTemplate b = new WorldGenFeatureDefinedStructurePoolTemplate(new MinecraftKey("invalid"), new MinecraftKey("invalid"), ImmutableList.of(), WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID);
-    private final MinecraftKey c;
-    private final ImmutableList<Pair<WorldGenFeatureDefinedStructurePoolStructure, Integer>> d;
-    private final List<WorldGenFeatureDefinedStructurePoolStructure> e;
-    private final MinecraftKey f;
-    private final WorldGenFeatureDefinedStructurePoolTemplate.Matching g;
-    private int h = Integer.MIN_VALUE;
+    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Codec<WorldGenFeatureDefinedStructurePoolTemplate> a = RecordCodecBuilder.create((instance) -> {
+        RecordCodecBuilder recordcodecbuilder = MinecraftKey.a.fieldOf("name").forGetter(WorldGenFeatureDefinedStructurePoolTemplate::b);
+        RecordCodecBuilder recordcodecbuilder1 = MinecraftKey.a.fieldOf("fallback").forGetter(WorldGenFeatureDefinedStructurePoolTemplate::a);
+        Codec codec = Codec.mapPair(WorldGenFeatureDefinedStructurePoolStructure.e.fieldOf("element"), Codec.INT.fieldOf("weight")).codec().listOf();
+        Logger logger = WorldGenFeatureDefinedStructurePoolTemplate.LOGGER;
+
+        logger.getClass();
+        return instance.group(recordcodecbuilder, recordcodecbuilder1, codec.promotePartial(SystemUtils.a("Pool element: ", logger::error)).fieldOf("elements").forGetter((worldgenfeaturedefinedstructurepooltemplate) -> {
+            return worldgenfeaturedefinedstructurepooltemplate.f;
+        }), WorldGenFeatureDefinedStructurePoolTemplate.Matching.c.fieldOf("projection").forGetter((worldgenfeaturedefinedstructurepooltemplate) -> {
+            return worldgenfeaturedefinedstructurepooltemplate.i;
+        })).apply(instance, WorldGenFeatureDefinedStructurePoolTemplate::new);
+    });
+    public static final WorldGenFeatureDefinedStructurePoolTemplate b = new WorldGenFeatureDefinedStructurePoolTemplate(new MinecraftKey("empty"), new MinecraftKey("empty"), ImmutableList.of(), WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID);
+    public static final WorldGenFeatureDefinedStructurePoolTemplate c = new WorldGenFeatureDefinedStructurePoolTemplate(new MinecraftKey("invalid"), new MinecraftKey("invalid"), ImmutableList.of(), WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID);
+    private final MinecraftKey e;
+    private final ImmutableList<Pair<WorldGenFeatureDefinedStructurePoolStructure, Integer>> f;
+    private final List<WorldGenFeatureDefinedStructurePoolStructure> g;
+    private final MinecraftKey h;
+    private final WorldGenFeatureDefinedStructurePoolTemplate.Matching i;
+    private int j = Integer.MIN_VALUE;
 
     public WorldGenFeatureDefinedStructurePoolTemplate(MinecraftKey minecraftkey, MinecraftKey minecraftkey1, List<Pair<WorldGenFeatureDefinedStructurePoolStructure, Integer>> list, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
-        this.c = minecraftkey;
-        this.d = ImmutableList.copyOf(list);
-        this.e = Lists.newArrayList();
+        this.e = minecraftkey;
+        this.f = ImmutableList.copyOf(list);
+        this.g = Lists.newArrayList();
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
             Pair<WorldGenFeatureDefinedStructurePoolStructure, Integer> pair = (Pair) iterator.next();
 
-            for (Integer integer = 0; integer < (Integer) pair.getSecond(); integer = integer + 1) {
-                this.e.add(((WorldGenFeatureDefinedStructurePoolStructure) pair.getFirst()).a(worldgenfeaturedefinedstructurepooltemplate_matching));
+            for (int i = 0; i < (Integer) pair.getSecond(); ++i) {
+                this.g.add(((WorldGenFeatureDefinedStructurePoolStructure) pair.getFirst()).a(worldgenfeaturedefinedstructurepooltemplate_matching));
             }
         }
 
-        this.f = minecraftkey1;
-        this.g = worldgenfeaturedefinedstructurepooltemplate_matching;
+        this.h = minecraftkey1;
+        this.i = worldgenfeaturedefinedstructurepooltemplate_matching;
     }
 
     public int a(DefinedStructureManager definedstructuremanager) {
-        if (this.h == Integer.MIN_VALUE) {
-            this.h = this.e.stream().mapToInt((worldgenfeaturedefinedstructurepoolstructure) -> {
-                return worldgenfeaturedefinedstructurepoolstructure.a(definedstructuremanager, BlockPosition.ZERO, EnumBlockRotation.NONE).d();
+        if (this.j == Integer.MIN_VALUE) {
+            this.j = this.g.stream().mapToInt((worldgenfeaturedefinedstructurepoolstructure) -> {
+                return worldgenfeaturedefinedstructurepoolstructure.a(definedstructuremanager, BlockPosition.ZERO, EnumBlockRotation.NONE).e();
             }).max().orElse(0);
         }
 
-        return this.h;
+        return this.j;
     }
 
     public MinecraftKey a() {
-        return this.f;
+        return this.h;
     }
 
     public WorldGenFeatureDefinedStructurePoolStructure a(Random random) {
-        return (WorldGenFeatureDefinedStructurePoolStructure) this.e.get(random.nextInt(this.e.size()));
+        return (WorldGenFeatureDefinedStructurePoolStructure) this.g.get(random.nextInt(this.g.size()));
     }
 
     public List<WorldGenFeatureDefinedStructurePoolStructure> b(Random random) {
-        return ImmutableList.copyOf(ObjectArrays.shuffle(this.e.toArray(new WorldGenFeatureDefinedStructurePoolStructure[0]), random));
+        return ImmutableList.copyOf(ObjectArrays.shuffle(this.g.toArray(new WorldGenFeatureDefinedStructurePoolStructure[0]), random));
     }
 
     public MinecraftKey b() {
-        return this.c;
+        return this.e;
     }
 
     public int c() {
-        return this.e.size();
+        return this.g.size();
     }
 
-    public static enum Matching {
+    public static enum Matching implements INamable {
 
         TERRAIN_MATCHING("terrain_matching", ImmutableList.of(new DefinedStructureProcessorGravity(HeightMap.Type.WORLD_SURFACE_WG, -1))), RIGID("rigid", ImmutableList.of());
 
-        private static final Map<String, WorldGenFeatureDefinedStructurePoolTemplate.Matching> c = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenFeatureDefinedStructurePoolTemplate.Matching::a, (worldgenfeaturedefinedstructurepooltemplate_matching) -> {
+        public static final Codec<WorldGenFeatureDefinedStructurePoolTemplate.Matching> c = INamable.a(WorldGenFeatureDefinedStructurePoolTemplate.Matching::values, WorldGenFeatureDefinedStructurePoolTemplate.Matching::a);
+        private static final Map<String, WorldGenFeatureDefinedStructurePoolTemplate.Matching> d = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenFeatureDefinedStructurePoolTemplate.Matching::b, (worldgenfeaturedefinedstructurepooltemplate_matching) -> {
             return worldgenfeaturedefinedstructurepooltemplate_matching;
         }));
-        private final String d;
-        private final ImmutableList<DefinedStructureProcessor> e;
+        private final String e;
+        private final ImmutableList<DefinedStructureProcessor> f;
 
         private Matching(String s, ImmutableList immutablelist) {
-            this.d = s;
-            this.e = immutablelist;
+            this.e = s;
+            this.f = immutablelist;
         }
 
-        public String a() {
-            return this.d;
+        public String b() {
+            return this.e;
         }
 
         public static WorldGenFeatureDefinedStructurePoolTemplate.Matching a(String s) {
-            return (WorldGenFeatureDefinedStructurePoolTemplate.Matching) WorldGenFeatureDefinedStructurePoolTemplate.Matching.c.get(s);
+            return (WorldGenFeatureDefinedStructurePoolTemplate.Matching) WorldGenFeatureDefinedStructurePoolTemplate.Matching.d.get(s);
         }
 
-        public ImmutableList<DefinedStructureProcessor> b() {
+        public ImmutableList<DefinedStructureProcessor> c() {
+            return this.f;
+        }
+
+        @Override
+        public String getName() {
             return this.e;
         }
     }

@@ -1,43 +1,66 @@
 package net.minecraft.server;
 
+import com.mojang.serialization.Codec;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 
 public class WorldGenStage {
-    public static enum Features {
+    public static enum Features implements INamable {
 
         AIR("air"), LIQUID("liquid");
 
-        private static final Map<String, WorldGenStage.Features> c = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenStage.Features::a, (worldgenstage_features) -> {
+        public static final Codec<WorldGenStage.Features> c = INamable.a(WorldGenStage.Features::values, WorldGenStage.Features::a);
+        private static final Map<String, WorldGenStage.Features> d = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenStage.Features::b, (worldgenstage_features) -> {
             return worldgenstage_features;
         }));
-        private final String d;
+        private final String e;
 
         private Features(String s) {
-            this.d = s;
+            this.e = s;
         }
 
-        public String a() {
-            return this.d;
+        public String b() {
+            return this.e;
+        }
+
+        @Nullable
+        public static WorldGenStage.Features a(String s) {
+            return (WorldGenStage.Features) WorldGenStage.Features.d.get(s);
+        }
+
+        @Override
+        public String getName() {
+            return this.e;
         }
     }
 
-    public static enum Decoration {
+    public static enum Decoration implements INamable {
 
-        RAW_GENERATION("raw_generation"), LOCAL_MODIFICATIONS("local_modifications"), UNDERGROUND_STRUCTURES("underground_structures"), SURFACE_STRUCTURES("surface_structures"), UNDERGROUND_ORES("underground_ores"), UNDERGROUND_DECORATION("underground_decoration"), VEGETAL_DECORATION("vegetal_decoration"), TOP_LAYER_MODIFICATION("top_layer_modification");
+        RAW_GENERATION("raw_generation"), LAKES("lakes"), LOCAL_MODIFICATIONS("local_modifications"), UNDERGROUND_STRUCTURES("underground_structures"), SURFACE_STRUCTURES("surface_structures"), STRONGHOLDS("strongholds"), UNDERGROUND_ORES("underground_ores"), UNDERGROUND_DECORATION("underground_decoration"), VEGETAL_DECORATION("vegetal_decoration"), TOP_LAYER_MODIFICATION("top_layer_modification");
 
-        private static final Map<String, WorldGenStage.Decoration> i = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenStage.Decoration::a, (worldgenstage_decoration) -> {
+        public static final Codec<WorldGenStage.Decoration> k = INamable.a(WorldGenStage.Decoration::values, WorldGenStage.Decoration::a);
+        private static final Map<String, WorldGenStage.Decoration> l = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenStage.Decoration::b, (worldgenstage_decoration) -> {
             return worldgenstage_decoration;
         }));
-        private final String j;
+        private final String m;
 
         private Decoration(String s) {
-            this.j = s;
+            this.m = s;
         }
 
-        public String a() {
-            return this.j;
+        public String b() {
+            return this.m;
+        }
+
+        public static WorldGenStage.Decoration a(String s) {
+            return (WorldGenStage.Decoration) WorldGenStage.Decoration.l.get(s);
+        }
+
+        @Override
+        public String getName() {
+            return this.m;
         }
     }
 }

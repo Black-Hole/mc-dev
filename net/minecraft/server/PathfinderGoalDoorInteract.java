@@ -12,7 +12,7 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
     public PathfinderGoalDoorInteract(EntityInsentient entityinsentient) {
         this.door = BlockPosition.ZERO;
         this.entity = entityinsentient;
-        if (!(entityinsentient.getNavigation() instanceof Navigation)) {
+        if (!this.h()) {
             throw new IllegalArgumentException("Unsupported mob type for DoorInteractGoal");
         }
     }
@@ -45,7 +45,9 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        if (!this.entity.positionChanged) {
+        if (!this.h()) {
+            return false;
+        } else if (!this.entity.positionChanged) {
             return false;
         } else {
             Navigation navigation = (Navigation) this.entity.getNavigation();
@@ -57,15 +59,15 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
 
                     this.door = new BlockPosition(pathpoint.a, pathpoint.b + 1, pathpoint.c);
                     if (this.entity.g((double) this.door.getX(), this.entity.locY(), (double) this.door.getZ()) <= 2.25D) {
-                        this.f = a(this.entity.world, this.door);
+                        this.f = BlockDoor.a(this.entity.world, this.door);
                         if (this.f) {
                             return true;
                         }
                     }
                 }
 
-                this.door = (new BlockPosition(this.entity)).up();
-                this.f = a(this.entity.world, this.door);
+                this.door = this.entity.getChunkCoordinates().up();
+                this.f = BlockDoor.a(this.entity.world, this.door);
                 return this.f;
             } else {
                 return false;
@@ -81,14 +83,14 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
     @Override
     public void c() {
         this.a = false;
-        this.b = (float) ((double) ((float) this.door.getX() + 0.5F) - this.entity.locX());
-        this.c = (float) ((double) ((float) this.door.getZ() + 0.5F) - this.entity.locZ());
+        this.b = (float) ((double) this.door.getX() + 0.5D - this.entity.locX());
+        this.c = (float) ((double) this.door.getZ() + 0.5D - this.entity.locZ());
     }
 
     @Override
     public void e() {
-        float f = (float) ((double) ((float) this.door.getX() + 0.5F) - this.entity.locX());
-        float f1 = (float) ((double) ((float) this.door.getZ() + 0.5F) - this.entity.locZ());
+        float f = (float) ((double) this.door.getX() + 0.5D - this.entity.locX());
+        float f1 = (float) ((double) this.door.getZ() + 0.5D - this.entity.locZ());
         float f2 = this.b * f + this.c * f1;
 
         if (f2 < 0.0F) {
@@ -97,9 +99,7 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
 
     }
 
-    public static boolean a(World world, BlockPosition blockposition) {
-        IBlockData iblockdata = world.getType(blockposition);
-
-        return iblockdata.getBlock() instanceof BlockDoor && iblockdata.getMaterial() == Material.WOOD;
+    private boolean h() {
+        return this.entity.getNavigation() instanceof Navigation;
     }
 }

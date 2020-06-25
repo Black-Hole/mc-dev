@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerConstructBeacon extends CriterionTriggerAbstract<CriterionTriggerConstructBeacon.a> {
@@ -16,14 +14,14 @@ public class CriterionTriggerConstructBeacon extends CriterionTriggerAbstract<Cr
     }
 
     @Override
-    public CriterionTriggerConstructBeacon.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerConstructBeacon.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("level"));
 
-        return new CriterionTriggerConstructBeacon.a(criterionconditionvalue_integerrange);
+        return new CriterionTriggerConstructBeacon.a(criterionconditionentity_b, criterionconditionvalue_integerrange);
     }
 
     public void a(EntityPlayer entityplayer, TileEntityBeacon tileentitybeacon) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggerconstructbeacon_a) -> {
+        this.a(entityplayer, (criteriontriggerconstructbeacon_a) -> {
             return criteriontriggerconstructbeacon_a.a(tileentitybeacon);
         });
     }
@@ -32,13 +30,13 @@ public class CriterionTriggerConstructBeacon extends CriterionTriggerAbstract<Cr
 
         private final CriterionConditionValue.IntegerRange a;
 
-        public a(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
-            super(CriterionTriggerConstructBeacon.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
+            super(CriterionTriggerConstructBeacon.a, criterionconditionentity_b);
             this.a = criterionconditionvalue_integerrange;
         }
 
         public static CriterionTriggerConstructBeacon.a a(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
-            return new CriterionTriggerConstructBeacon.a(criterionconditionvalue_integerrange);
+            return new CriterionTriggerConstructBeacon.a(CriterionConditionEntity.b.a, criterionconditionvalue_integerrange);
         }
 
         public boolean a(TileEntityBeacon tileentitybeacon) {
@@ -46,8 +44,8 @@ public class CriterionTriggerConstructBeacon extends CriterionTriggerAbstract<Cr
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             jsonobject.add("level", this.a.d());
             return jsonobject;

@@ -37,6 +37,13 @@ public class RandomPositionGenerator {
     public static Vec3D a(EntityCreature entitycreature, int i, int j, Vec3D vec3d) {
         Vec3D vec3d1 = vec3d.a(entitycreature.locX(), entitycreature.locY(), entitycreature.locZ());
 
+        return a(entitycreature, i, j, 0, vec3d1, false, 1.5707963705062866D, entitycreature::f, true, 0, 0, true);
+    }
+
+    @Nullable
+    public static Vec3D b(EntityCreature entitycreature, int i, int j, Vec3D vec3d) {
+        Vec3D vec3d1 = vec3d.a(entitycreature.locX(), entitycreature.locY(), entitycreature.locZ());
+
         return a(entitycreature, i, j, 0, vec3d1, true, 1.5707963705062866D, entitycreature::f, false, 0, 0, true);
     }
 
@@ -55,14 +62,14 @@ public class RandomPositionGenerator {
     }
 
     @Nullable
-    public static Vec3D b(EntityCreature entitycreature, int i, int j, Vec3D vec3d) {
+    public static Vec3D c(EntityCreature entitycreature, int i, int j, Vec3D vec3d) {
         Vec3D vec3d1 = entitycreature.getPositionVector().d(vec3d);
 
         return a(entitycreature, i, j, 0, vec3d1, true, 1.5707963705062866D, entitycreature::f, false, 0, 0, true);
     }
 
     @Nullable
-    public static Vec3D c(EntityCreature entitycreature, int i, int j, Vec3D vec3d) {
+    public static Vec3D d(EntityCreature entitycreature, int i, int j, Vec3D vec3d) {
         Vec3D vec3d1 = entitycreature.getPositionVector().d(vec3d);
 
         return a(entitycreature, i, j, 0, vec3d1, false, 1.5707963705062866D, entitycreature::f, true, 0, 0, true);
@@ -74,15 +81,15 @@ public class RandomPositionGenerator {
         Random random = entitycreature.getRandom();
         boolean flag3;
 
-        if (entitycreature.eg()) {
-            flag3 = entitycreature.ed().a((IPosition) entitycreature.getPositionVector(), (double) (entitycreature.ee() + (float) i) + 1.0D);
+        if (entitycreature.eA()) {
+            flag3 = entitycreature.ex().a((IPosition) entitycreature.getPositionVector(), (double) (entitycreature.ey() + (float) i) + 1.0D);
         } else {
             flag3 = false;
         }
 
         boolean flag4 = false;
         double d1 = Double.NEGATIVE_INFINITY;
-        BlockPosition blockposition = new BlockPosition(entitycreature);
+        BlockPosition blockposition = entitycreature.getChunkCoordinates();
 
         for (int j1 = 0; j1 < 10; ++j1) {
             BlockPosition blockposition1 = a(random, i, j, k, vec3d, d0);
@@ -93,8 +100,8 @@ public class RandomPositionGenerator {
                 int i2 = blockposition1.getZ();
                 BlockPosition blockposition2;
 
-                if (entitycreature.eg() && i > 1) {
-                    blockposition2 = entitycreature.ed();
+                if (entitycreature.eA() && i > 1) {
+                    blockposition2 = entitycreature.ex();
                     if (entitycreature.locX() > (double) blockposition2.getX()) {
                         k1 -= random.nextInt(i / 2);
                     } else {
@@ -116,8 +123,8 @@ public class RandomPositionGenerator {
                         });
                     }
 
-                    if (flag || !entitycreature.world.getFluid(blockposition2).a(TagsFluid.WATER)) {
-                        PathType pathtype = PathfinderNormal.b(entitycreature.world, blockposition2.getX(), blockposition2.getY(), blockposition2.getZ());
+                    if (flag || !entitycreature.world.getFluid(blockposition2).a((Tag) TagsFluid.WATER)) {
+                        PathType pathtype = PathfinderNormal.a((IBlockAccess) entitycreature.world, blockposition2.i());
 
                         if (entitycreature.a(pathtype) == 0.0F) {
                             double d2 = todoublefunction.applyAsDouble(blockposition2);
@@ -134,7 +141,7 @@ public class RandomPositionGenerator {
         }
 
         if (flag4) {
-            return new Vec3D(blockposition);
+            return Vec3D.c((BaseBlockPosition) blockposition);
         } else {
             return null;
         }

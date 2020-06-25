@@ -2,13 +2,13 @@ package net.minecraft.server;
 
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -19,11 +19,11 @@ public class DataConverterOminousBannerRename extends DataFix {
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic) {
-        Optional<? extends Dynamic<?>> optional = dynamic.get("display").get();
+        Optional<? extends Dynamic<?>> optional = dynamic.get("display").result();
 
         if (optional.isPresent()) {
             Dynamic<?> dynamic1 = (Dynamic) optional.get();
-            Optional<String> optional1 = dynamic1.get("Name").asString();
+            Optional<String> optional1 = dynamic1.get("Name").asString().result();
 
             if (optional1.isPresent()) {
                 String s = (String) optional1.get();
@@ -40,7 +40,7 @@ public class DataConverterOminousBannerRename extends DataFix {
 
     public TypeRewriteRule makeRule() {
         Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString()));
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DataConverterSchemaNamed.a()));
         OpticFinder<?> opticfinder1 = type.findField("tag");
 
         return this.fixTypeEverywhereTyped("OminousBannerRenameFix", type, (typed) -> {

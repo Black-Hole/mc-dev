@@ -12,6 +12,11 @@ public class LootItemConditionRandomChance implements LootItemCondition {
         this.a = f;
     }
 
+    @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.c;
+    }
+
     public boolean test(LootTableInfo loottableinfo) {
         return loottableinfo.a().nextFloat() < this.a;
     }
@@ -22,18 +27,16 @@ public class LootItemConditionRandomChance implements LootItemCondition {
         };
     }
 
-    public static class a extends LootItemCondition.b<LootItemConditionRandomChance> {
+    public static class a implements LootSerializer<LootItemConditionRandomChance> {
 
-        protected a() {
-            super(new MinecraftKey("random_chance"), LootItemConditionRandomChance.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionRandomChance lootitemconditionrandomchance, JsonSerializationContext jsonserializationcontext) {
             jsonobject.addProperty("chance", lootitemconditionrandomchance.a);
         }
 
         @Override
-        public LootItemConditionRandomChance b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionRandomChance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             return new LootItemConditionRandomChance(ChatDeserializer.l(jsonobject, "chance"));
         }
     }

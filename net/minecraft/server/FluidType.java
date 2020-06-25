@@ -12,7 +12,7 @@ public abstract class FluidType {
         BlockStateList.a<FluidType, Fluid> blockstatelist_a = new BlockStateList.a<>(this);
 
         this.a(blockstatelist_a);
-        this.d = blockstatelist_a.a(FluidImpl::new);
+        this.d = blockstatelist_a.a(FluidType::h, Fluid::new);
         this.f((Fluid) this.d.getBlockData());
     }
 

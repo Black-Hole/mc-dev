@@ -1,14 +1,13 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class WorldGenDecoratorEndIsland extends WorldGenDecoratorFeatureSimple<WorldGenFeatureEmptyConfiguration2> {
 
-    public WorldGenDecoratorEndIsland(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration2> function) {
-        super(function);
+    public WorldGenDecoratorEndIsland(Codec<WorldGenFeatureEmptyConfiguration2> codec) {
+        super(codec);
     }
 
     public Stream<BlockPosition> a(Random random, WorldGenFeatureEmptyConfiguration2 worldgenfeatureemptyconfiguration2, BlockPosition blockposition) {

@@ -16,45 +16,59 @@ public class BlockLectern extends BlockTileEntity {
     public static final VoxelShape i = VoxelShapes.a(Block.a(1.0D, 10.0D, 0.0D, 5.333333D, 14.0D, 16.0D), Block.a(5.333333D, 12.0D, 0.0D, 9.666667D, 16.0D, 16.0D), Block.a(9.666667D, 14.0D, 0.0D, 14.0D, 18.0D, 16.0D), BlockLectern.f);
     public static final VoxelShape j = VoxelShapes.a(Block.a(0.0D, 10.0D, 1.0D, 16.0D, 14.0D, 5.333333D), Block.a(0.0D, 12.0D, 5.333333D, 16.0D, 16.0D, 9.666667D), Block.a(0.0D, 14.0D, 9.666667D, 16.0D, 18.0D, 14.0D), BlockLectern.f);
     public static final VoxelShape k = VoxelShapes.a(Block.a(15.0D, 10.0D, 0.0D, 10.666667D, 14.0D, 16.0D), Block.a(10.666667D, 12.0D, 0.0D, 6.333333D, 16.0D, 16.0D), Block.a(6.333333D, 14.0D, 0.0D, 2.0D, 18.0D, 16.0D), BlockLectern.f);
-    public static final VoxelShape w = VoxelShapes.a(Block.a(0.0D, 10.0D, 15.0D, 16.0D, 14.0D, 10.666667D), Block.a(0.0D, 12.0D, 10.666667D, 16.0D, 16.0D, 6.333333D), Block.a(0.0D, 14.0D, 6.333333D, 16.0D, 18.0D, 2.0D), BlockLectern.f);
+    public static final VoxelShape o = VoxelShapes.a(Block.a(0.0D, 10.0D, 15.0D, 16.0D, 14.0D, 10.666667D), Block.a(0.0D, 12.0D, 10.666667D, 16.0D, 16.0D, 6.333333D), Block.a(0.0D, 14.0D, 6.333333D, 16.0D, 18.0D, 2.0D), BlockLectern.f);
 
-    protected BlockLectern(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLectern.a, EnumDirection.NORTH)).set(BlockLectern.b, false)).set(BlockLectern.c, false));
+    protected BlockLectern(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLectern.a, EnumDirection.NORTH)).set(BlockLectern.b, false)).set(BlockLectern.c, false));
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
     @Override
-    public VoxelShape i(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape d(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockLectern.f;
     }
 
     @Override
-    public boolean o(IBlockData iblockdata) {
+    public boolean c_(IBlockData iblockdata) {
         return true;
     }
 
     @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockLectern.a, blockactioncontext.f().opposite());
+        World world = blockactioncontext.getWorld();
+        ItemStack itemstack = blockactioncontext.getItemStack();
+        NBTTagCompound nbttagcompound = itemstack.getTag();
+        EntityHuman entityhuman = blockactioncontext.getEntity();
+        boolean flag = false;
+
+        if (!world.isClientSide && entityhuman != null && nbttagcompound != null && entityhuman.isCreativeAndOp() && nbttagcompound.hasKey("BlockEntityTag")) {
+            NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("BlockEntityTag");
+
+            if (nbttagcompound1.hasKey("Book")) {
+                flag = true;
+            }
+        }
+
+        return (IBlockData) ((IBlockData) this.getBlockData().set(BlockLectern.a, blockactioncontext.f().opposite())).set(BlockLectern.c, flag);
     }
 
     @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockLectern.h;
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch ((EnumDirection) iblockdata.get(BlockLectern.a)) {
             case NORTH:
                 return BlockLectern.j;
             case SOUTH:
-                return BlockLectern.w;
+                return BlockLectern.o;
             case EAST:
                 return BlockLectern.k;
             case WEST:
@@ -131,13 +145,13 @@ public class BlockLectern extends BlockTileEntity {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         b(worldserver, blockposition, iblockdata, false);
     }
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!iblockdata.a(iblockdata1.getBlock())) {
             if ((Boolean) iblockdata.get(BlockLectern.c)) {
                 this.d(iblockdata, world, blockposition);
             }
@@ -208,11 +222,11 @@ public class BlockLectern extends BlockTileEntity {
                 this.a(world, blockposition, entityhuman);
             }
 
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.a(world.isClientSide);
         } else {
             ItemStack itemstack = entityhuman.b(enumhand);
 
-            return !itemstack.isEmpty() && !itemstack.getItem().a(TagsItem.LECTERN_BOOKS) ? EnumInteractionResult.CONSUME : EnumInteractionResult.PASS;
+            return !itemstack.isEmpty() && !itemstack.getItem().a((Tag) TagsItem.LECTERN_BOOKS) ? EnumInteractionResult.CONSUME : EnumInteractionResult.PASS;
         }
     }
 

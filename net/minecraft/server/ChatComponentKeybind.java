@@ -1,34 +1,39 @@
 package net.minecraft.server;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ChatComponentKeybind extends ChatBaseComponent {
 
-    public static Function<String, Supplier<String>> b = (s) -> {
+    private static Function<String, Supplier<IChatBaseComponent>> d = (s) -> {
         return () -> {
-            return s;
+            return new ChatComponentText(s);
         };
     };
-    private final String c;
-    private Supplier<String> d;
+    private final String e;
+    private Supplier<IChatBaseComponent> f;
 
     public ChatComponentKeybind(String s) {
-        this.c = s;
+        this.e = s;
     }
 
-    @Override
-    public String getText() {
-        if (this.d == null) {
-            this.d = (Supplier) ChatComponentKeybind.b.apply(this.c);
+    private IChatBaseComponent i() {
+        if (this.f == null) {
+            this.f = (Supplier) ChatComponentKeybind.d.apply(this.e);
         }
 
-        return (String) this.d.get();
+        return (IChatBaseComponent) this.f.get();
     }
 
     @Override
-    public ChatComponentKeybind g() {
-        return new ChatComponentKeybind(this.c);
+    public <T> Optional<T> b(IChatFormatted.a<T> ichatformatted_a) {
+        return this.i().a(ichatformatted_a);
+    }
+
+    @Override
+    public ChatComponentKeybind f() {
+        return new ChatComponentKeybind(this.e);
     }
 
     @Override
@@ -40,16 +45,16 @@ public class ChatComponentKeybind extends ChatBaseComponent {
         } else {
             ChatComponentKeybind chatcomponentkeybind = (ChatComponentKeybind) object;
 
-            return this.c.equals(chatcomponentkeybind.c) && super.equals(object);
+            return this.e.equals(chatcomponentkeybind.e) && super.equals(object);
         }
     }
 
     @Override
     public String toString() {
-        return "KeybindComponent{keybind='" + this.c + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
+        return "KeybindComponent{keybind='" + this.e + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
     }
 
-    public String j() {
-        return this.c;
+    public String h() {
+        return this.e;
     }
 }

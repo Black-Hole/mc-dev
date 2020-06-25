@@ -1,31 +1,26 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class WorldGenDecoratorFrequencyExtraChanceConfiguration implements WorldGenFeatureDecoratorConfiguration {
 
-    public final int a;
-    public final float b;
-    public final int c;
+    public static final Codec<WorldGenDecoratorFrequencyExtraChanceConfiguration> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(Codec.INT.fieldOf("count").forGetter((worldgendecoratorfrequencyextrachanceconfiguration) -> {
+            return worldgendecoratorfrequencyextrachanceconfiguration.b;
+        }), Codec.FLOAT.fieldOf("extra_chance").forGetter((worldgendecoratorfrequencyextrachanceconfiguration) -> {
+            return worldgendecoratorfrequencyextrachanceconfiguration.c;
+        }), Codec.INT.fieldOf("extra_count").forGetter((worldgendecoratorfrequencyextrachanceconfiguration) -> {
+            return worldgendecoratorfrequencyextrachanceconfiguration.d;
+        })).apply(instance, WorldGenDecoratorFrequencyExtraChanceConfiguration::new);
+    });
+    public final int b;
+    public final float c;
+    public final int d;
 
     public WorldGenDecoratorFrequencyExtraChanceConfiguration(int i, float f, int j) {
-        this.a = i;
-        this.b = f;
-        this.c = j;
-    }
-
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("count"), dynamicops.createInt(this.a), dynamicops.createString("extra_chance"), dynamicops.createFloat(this.b), dynamicops.createString("extra_count"), dynamicops.createInt(this.c))));
-    }
-
-    public static WorldGenDecoratorFrequencyExtraChanceConfiguration a(Dynamic<?> dynamic) {
-        int i = dynamic.get("count").asInt(0);
-        float f = dynamic.get("extra_chance").asFloat(0.0F);
-        int j = dynamic.get("extra_count").asInt(0);
-
-        return new WorldGenDecoratorFrequencyExtraChanceConfiguration(i, f, j);
+        this.b = i;
+        this.c = f;
+        this.d = j;
     }
 }

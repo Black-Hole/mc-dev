@@ -2,17 +2,16 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import java.util.Arrays;
-import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
-public class EntitySheep extends EntityAnimal {
+public class EntitySheep extends EntityAnimal implements IShearable {
 
-    private static final DataWatcherObject<Byte> bw = DataWatcher.a(EntitySheep.class, DataWatcherRegistry.a);
-    private static final Map<EnumColor, IMaterial> bx = (Map) SystemUtils.a((Object) Maps.newEnumMap(EnumColor.class), (enummap) -> {
+    private static final DataWatcherObject<Byte> bv = DataWatcher.a(EntitySheep.class, DataWatcherRegistry.a);
+    private static final Map<EnumColor, IMaterial> bw = (Map) SystemUtils.a((Object) Maps.newEnumMap(EnumColor.class), (enummap) -> {
         enummap.put(EnumColor.WHITE, Blocks.WHITE_WOOL);
         enummap.put(EnumColor.ORANGE, Blocks.ORANGE_WOOL);
         enummap.put(EnumColor.MAGENTA, Blocks.MAGENTA_WOOL);
@@ -30,17 +29,17 @@ public class EntitySheep extends EntityAnimal {
         enummap.put(EnumColor.RED, Blocks.RED_WOOL);
         enummap.put(EnumColor.BLACK, Blocks.BLACK_WOOL);
     });
-    private static final Map<EnumColor, float[]> by = Maps.newEnumMap((Map) Arrays.stream(EnumColor.values()).collect(Collectors.toMap((enumcolor) -> {
+    private static final Map<EnumColor, float[]> bx = Maps.newEnumMap((Map) Arrays.stream(EnumColor.values()).collect(Collectors.toMap((enumcolor) -> {
         return enumcolor;
     }, EntitySheep::c)));
-    private int bz;
-    private PathfinderGoalEatTile bA;
+    private int by;
+    private PathfinderGoalEatTile bz;
 
     private static float[] c(EnumColor enumcolor) {
         if (enumcolor == EnumColor.WHITE) {
             return new float[]{0.9019608F, 0.9019608F, 0.9019608F};
         } else {
-            float[] afloat = enumcolor.d();
+            float[] afloat = enumcolor.getColor();
             float f = 0.75F;
 
             return new float[]{afloat[0] * 0.75F, afloat[1] * 0.75F, afloat[2] * 0.75F};
@@ -53,13 +52,13 @@ public class EntitySheep extends EntityAnimal {
 
     @Override
     protected void initPathfinder() {
-        this.bA = new PathfinderGoalEatTile(this);
+        this.bz = new PathfinderGoalEatTile(this);
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 1.25D));
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
         this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.1D, RecipeItemStack.a(Items.WHEAT), false));
         this.goalSelector.a(4, new PathfinderGoalFollowParent(this, 1.1D));
-        this.goalSelector.a(5, this.bA);
+        this.goalSelector.a(5, this.bz);
         this.goalSelector.a(6, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(7, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
@@ -67,120 +66,122 @@ public class EntitySheep extends EntityAnimal {
 
     @Override
     protected void mobTick() {
-        this.bz = this.bA.g();
+        this.by = this.bz.g();
         super.mobTick();
     }
 
     @Override
     public void movementTick() {
         if (this.world.isClientSide) {
-            this.bz = Math.max(0, this.bz - 1);
+            this.by = Math.max(0, this.by - 1);
         }
 
         super.movementTick();
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(8.0D);
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.23000000417232513D);
+    public static AttributeProvider.Builder eL() {
+        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 8.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.23000000417232513D);
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntitySheep.bw, (byte) 0);
+        this.datawatcher.register(EntitySheep.bv, (byte) 0);
     }
 
     @Override
     public MinecraftKey getDefaultLootTable() {
         if (this.isSheared()) {
-            return this.getEntityType().h();
+            return this.getEntityType().i();
         } else {
             switch (this.getColor()) {
                 case WHITE:
                 default:
-                    return LootTables.L;
-                case ORANGE:
-                    return LootTables.M;
-                case MAGENTA:
-                    return LootTables.N;
-                case LIGHT_BLUE:
-                    return LootTables.O;
-                case YELLOW:
-                    return LootTables.P;
-                case LIME:
                     return LootTables.Q;
-                case PINK:
+                case ORANGE:
                     return LootTables.R;
-                case GRAY:
+                case MAGENTA:
                     return LootTables.S;
-                case LIGHT_GRAY:
+                case LIGHT_BLUE:
                     return LootTables.T;
-                case CYAN:
+                case YELLOW:
                     return LootTables.U;
-                case PURPLE:
+                case LIME:
                     return LootTables.V;
-                case BLUE:
+                case PINK:
                     return LootTables.W;
-                case BROWN:
+                case GRAY:
                     return LootTables.X;
-                case GREEN:
+                case LIGHT_GRAY:
                     return LootTables.Y;
-                case RED:
+                case CYAN:
                     return LootTables.Z;
-                case BLACK:
+                case PURPLE:
                     return LootTables.aa;
+                case BLUE:
+                    return LootTables.ab;
+                case BROWN:
+                    return LootTables.ac;
+                case GREEN:
+                    return LootTables.ad;
+                case RED:
+                    return LootTables.ae;
+                case BLACK:
+                    return LootTables.af;
             }
         }
     }
 
     @Override
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+    public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getItem() == Items.SHEARS && !this.isSheared() && !this.isBaby()) {
-            this.shear();
-            if (!this.world.isClientSide) {
+        if (itemstack.getItem() == Items.SHEARS) {
+            if (!this.world.isClientSide && this.canShear()) {
+                this.shear(SoundCategory.PLAYERS);
                 itemstack.damage(1, entityhuman, (entityhuman1) -> {
                     entityhuman1.broadcastItemBreak(enumhand);
                 });
+                return EnumInteractionResult.SUCCESS;
+            } else {
+                return EnumInteractionResult.CONSUME;
             }
-
-            return true;
         } else {
-            return super.a(entityhuman, enumhand);
+            return super.b(entityhuman, enumhand);
         }
-    }
-
-    public void shear() {
-        if (!this.world.isClientSide) {
-            this.setSheared(true);
-            int i = 1 + this.random.nextInt(3);
-
-            for (int j = 0; j < i; ++j) {
-                EntityItem entityitem = this.a((IMaterial) EntitySheep.bx.get(this.getColor()), 1);
-
-                if (entityitem != null) {
-                    entityitem.setMot(entityitem.getMot().add((double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F), (double) (this.random.nextFloat() * 0.05F), (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F)));
-                }
-            }
-        }
-
-        this.a(SoundEffects.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void shear(SoundCategory soundcategory) {
+        this.world.playSound((EntityHuman) null, (Entity) this, SoundEffects.ENTITY_SHEEP_SHEAR, soundcategory, 1.0F, 1.0F);
+        this.setSheared(true);
+        int i = 1 + this.random.nextInt(3);
+
+        for (int j = 0; j < i; ++j) {
+            EntityItem entityitem = this.a((IMaterial) EntitySheep.bw.get(this.getColor()), 1);
+
+            if (entityitem != null) {
+                entityitem.setMot(entityitem.getMot().add((double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F), (double) (this.random.nextFloat() * 0.05F), (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F)));
+            }
+        }
+
+    }
+
+    @Override
+    public boolean canShear() {
+        return this.isAlive() && !this.isSheared() && !this.isBaby();
+    }
+
+    @Override
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setBoolean("Sheared", this.isSheared());
         nbttagcompound.setByte("Color", (byte) this.getColor().getColorIndex());
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.setSheared(nbttagcompound.getBoolean("Sheared"));
         this.setColor(EnumColor.fromColorIndex(nbttagcompound.getByte("Color")));
     }
@@ -202,30 +203,30 @@ public class EntitySheep extends EntityAnimal {
 
     @Override
     protected void a(BlockPosition blockposition, IBlockData iblockdata) {
-        this.a(SoundEffects.ENTITY_SHEEP_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEffects.ENTITY_SHEEP_STEP, 0.15F, 1.0F);
     }
 
     public EnumColor getColor() {
-        return EnumColor.fromColorIndex((Byte) this.datawatcher.get(EntitySheep.bw) & 15);
+        return EnumColor.fromColorIndex((Byte) this.datawatcher.get(EntitySheep.bv) & 15);
     }
 
     public void setColor(EnumColor enumcolor) {
-        byte b0 = (Byte) this.datawatcher.get(EntitySheep.bw);
+        byte b0 = (Byte) this.datawatcher.get(EntitySheep.bv);
 
-        this.datawatcher.set(EntitySheep.bw, (byte) (b0 & 240 | enumcolor.getColorIndex() & 15));
+        this.datawatcher.set(EntitySheep.bv, (byte) (b0 & 240 | enumcolor.getColorIndex() & 15));
     }
 
     public boolean isSheared() {
-        return ((Byte) this.datawatcher.get(EntitySheep.bw) & 16) != 0;
+        return ((Byte) this.datawatcher.get(EntitySheep.bv) & 16) != 0;
     }
 
     public void setSheared(boolean flag) {
-        byte b0 = (Byte) this.datawatcher.get(EntitySheep.bw);
+        byte b0 = (Byte) this.datawatcher.get(EntitySheep.bv);
 
         if (flag) {
-            this.datawatcher.set(EntitySheep.bw, (byte) (b0 | 16));
+            this.datawatcher.set(EntitySheep.bv, (byte) (b0 | 16));
         } else {
-            this.datawatcher.set(EntitySheep.bw, (byte) (b0 & -17));
+            this.datawatcher.set(EntitySheep.bv, (byte) (b0 & -17));
         }
 
     }

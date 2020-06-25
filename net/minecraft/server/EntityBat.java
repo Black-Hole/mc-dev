@@ -28,8 +28,8 @@ public class EntityBat extends EntityAmbient {
     }
 
     @Override
-    protected float dn() {
-        return super.dn() * 0.95F;
+    protected float dG() {
+        return super.dG() * 0.95F;
     }
 
     @Nullable
@@ -59,10 +59,8 @@ public class EntityBat extends EntityAmbient {
     @Override
     protected void collideNearby() {}
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(6.0D);
+    public static AttributeProvider.Builder m() {
+        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 6.0D);
     }
 
     public boolean isAsleep() {
@@ -95,22 +93,28 @@ public class EntityBat extends EntityAmbient {
     @Override
     protected void mobTick() {
         super.mobTick();
-        BlockPosition blockposition = new BlockPosition(this);
+        BlockPosition blockposition = this.getChunkCoordinates();
         BlockPosition blockposition1 = blockposition.up();
 
         if (this.isAsleep()) {
+            boolean flag = this.isSilent();
+
             if (this.world.getType(blockposition1).isOccluding(this.world, blockposition)) {
                 if (this.random.nextInt(200) == 0) {
-                    this.aK = (float) this.random.nextInt(360);
+                    this.aJ = (float) this.random.nextInt(360);
                 }
 
                 if (this.world.a(EntityBat.c, (EntityLiving) this) != null) {
                     this.setAsleep(false);
-                    this.world.a((EntityHuman) null, 1025, blockposition, 0);
+                    if (!flag) {
+                        this.world.a((EntityHuman) null, 1025, blockposition, 0);
+                    }
                 }
             } else {
                 this.setAsleep(false);
-                this.world.a((EntityHuman) null, 1025, blockposition, 0);
+                if (!flag) {
+                    this.world.a((EntityHuman) null, 1025, blockposition, 0);
+                }
             }
         } else {
             if (this.d != null && (!this.world.isEmpty(this.d) || this.d.getY() < 1)) {
@@ -131,7 +135,7 @@ public class EntityBat extends EntityAmbient {
             float f = (float) (MathHelper.d(vec3d1.z, vec3d1.x) * 57.2957763671875D) - 90.0F;
             float f1 = MathHelper.g(f - this.yaw);
 
-            this.bb = 0.5F;
+            this.ba = 0.5F;
             this.yaw += f1;
             if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).isOccluding(this.world, blockposition1)) {
                 this.setAsleep(true);
@@ -172,14 +176,14 @@ public class EntityBat extends EntityAmbient {
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.datawatcher.set(EntityBat.b, nbttagcompound.getByte("BatFlags"));
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setByte("BatFlags", (Byte) this.datawatcher.get(EntityBat.b));
     }
 
@@ -190,7 +194,7 @@ public class EntityBat extends EntityAmbient {
             int i = generatoraccess.getLightLevel(blockposition);
             byte b0 = 4;
 
-            if (eo()) {
+            if (eK()) {
                 b0 = 7;
             } else if (random.nextBoolean()) {
                 return false;
@@ -200,7 +204,7 @@ public class EntityBat extends EntityAmbient {
         }
     }
 
-    private static boolean eo() {
+    private static boolean eK() {
         LocalDate localdate = LocalDate.now();
         int i = localdate.get(ChronoField.DAY_OF_MONTH);
         int j = localdate.get(ChronoField.MONTH_OF_YEAR);

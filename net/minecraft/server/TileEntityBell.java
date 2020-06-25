@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 public class TileEntityBell extends TileEntity implements ITickable {
 
@@ -74,7 +74,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
             this.b = true;
         }
 
-        this.world.playBlockAction(blockposition, this.getBlock().getBlock(), 1, enumdirection.b());
+        this.world.playBlockAction(blockposition, this.getBlock().getBlock(), 1, enumdirection.c());
     }
 
     private void f() {
@@ -113,7 +113,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
             }
 
             entityliving = (EntityLiving) iterator.next();
-        } while (!entityliving.isAlive() || entityliving.dead || !blockposition.a((IPosition) entityliving.getPositionVector(), 32.0D) || !entityliving.getEntityType().a(TagsEntity.RADIERS));
+        } while (!entityliving.isAlive() || entityliving.dead || !blockposition.a((IPosition) entityliving.getPositionVector(), 32.0D) || !entityliving.getEntityType().a((Tag) TagsEntity.RADIERS));
 
         return true;
     }
@@ -127,7 +127,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
     private void b(World world) {
         if (world.isClientSide) {
             BlockPosition blockposition = this.getPosition();
-            AtomicInteger atomicinteger = new AtomicInteger(16700985);
+            MutableInt mutableint = new MutableInt(16700985);
             int i = (int) this.h.stream().filter((entityliving) -> {
                 return blockposition.a((IPosition) entityliving.getPositionVector(), 48.0D);
             }).count();
@@ -140,10 +140,10 @@ public class TileEntityBell extends TileEntity implements ITickable {
                 int j = MathHelper.clamp((i - 21) / -2, 3, 15);
 
                 for (int k = 0; k < j; ++k) {
-                    atomicinteger.addAndGet(5);
-                    double d2 = (double) (atomicinteger.get() >> 16 & 255) / 255.0D;
-                    double d3 = (double) (atomicinteger.get() >> 8 & 255) / 255.0D;
-                    double d4 = (double) (atomicinteger.get() & 255) / 255.0D;
+                    int l = mutableint.addAndGet(5);
+                    double d2 = (double) ColorUtil.a.b(l) / 255.0D;
+                    double d3 = (double) ColorUtil.a.c(l) / 255.0D;
+                    double d4 = (double) ColorUtil.a.d(l) / 255.0D;
 
                     world.addParticle(Particles.ENTITY_EFFECT, d0, (double) ((float) blockposition.getY() + 0.5F), d1, d2, d3, d4);
                 }
@@ -153,7 +153,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
     }
 
     private boolean a(EntityLiving entityliving) {
-        return entityliving.isAlive() && !entityliving.dead && this.getPosition().a((IPosition) entityliving.getPositionVector(), 48.0D) && entityliving.getEntityType().a(TagsEntity.RADIERS);
+        return entityliving.isAlive() && !entityliving.dead && this.getPosition().a((IPosition) entityliving.getPositionVector(), 48.0D) && entityliving.getEntityType().a((Tag) TagsEntity.RADIERS);
     }
 
     private void b(EntityLiving entityliving) {

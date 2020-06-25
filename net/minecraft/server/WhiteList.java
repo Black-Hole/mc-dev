@@ -22,12 +22,12 @@ public class WhiteList extends JsonList<GameProfile, WhiteListEntry> {
 
     @Override
     public String[] getEntries() {
-        String[] astring = new String[this.e().size()];
+        String[] astring = new String[this.d().size()];
         int i = 0;
 
         JsonListEntry jsonlistentry;
 
-        for (Iterator iterator = this.e().iterator(); iterator.hasNext(); astring[i++] = ((GameProfile) jsonlistentry.getKey()).getName()) {
+        for (Iterator iterator = this.d().iterator(); iterator.hasNext(); astring[i++] = ((GameProfile) jsonlistentry.getKey()).getName()) {
             jsonlistentry = (JsonListEntry) iterator.next();
         }
 

@@ -13,7 +13,7 @@ public class InventoryMerchant implements IInventory {
     private int e;
 
     public InventoryMerchant(IMerchant imerchant) {
-        this.itemsInSlots = NonNullList.a(3, ItemStack.a);
+        this.itemsInSlots = NonNullList.a(3, ItemStack.b);
         this.merchant = imerchant;
     }
 
@@ -100,14 +100,14 @@ public class InventoryMerchant implements IInventory {
 
         if (((ItemStack) this.itemsInSlots.get(0)).isEmpty()) {
             itemstack = (ItemStack) this.itemsInSlots.get(1);
-            itemstack1 = ItemStack.a;
+            itemstack1 = ItemStack.b;
         } else {
             itemstack = (ItemStack) this.itemsInSlots.get(0);
             itemstack1 = (ItemStack) this.itemsInSlots.get(1);
         }
 
         if (itemstack.isEmpty()) {
-            this.setItem(2, ItemStack.a);
+            this.setItem(2, ItemStack.b);
             this.e = 0;
         } else {
             MerchantRecipeList merchantrecipelist = this.merchant.getOffers();
@@ -125,12 +125,12 @@ public class InventoryMerchant implements IInventory {
                     this.setItem(2, merchantrecipe.f());
                     this.e = merchantrecipe.getXp();
                 } else {
-                    this.setItem(2, ItemStack.a);
+                    this.setItem(2, ItemStack.b);
                     this.e = 0;
                 }
             }
 
-            this.merchant.i(this.getItem(2));
+            this.merchant.k(this.getItem(2));
         }
     }
 

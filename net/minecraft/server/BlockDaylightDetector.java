@@ -2,22 +2,22 @@ package net.minecraft.server;
 
 public class BlockDaylightDetector extends BlockTileEntity {
 
-    public static final BlockStateInteger POWER = BlockProperties.at;
+    public static final BlockStateInteger POWER = BlockProperties.az;
     public static final BlockStateBoolean b = BlockProperties.p;
     protected static final VoxelShape c = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D);
 
-    public BlockDaylightDetector(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDaylightDetector.POWER, 0)).set(BlockDaylightDetector.b, false));
+    public BlockDaylightDetector(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDaylightDetector.POWER, 0)).set(BlockDaylightDetector.b, false));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockDaylightDetector.c;
     }
 
     @Override
-    public boolean o(IBlockData iblockdata) {
+    public boolean c_(IBlockData iblockdata) {
         return true;
     }
 
@@ -27,7 +27,7 @@ public class BlockDaylightDetector extends BlockTileEntity {
     }
 
     public static void d(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        if (world.worldProvider.f()) {
+        if (world.getDimensionManager().hasSkyLight()) {
             int i = world.getBrightness(EnumSkyBlock.SKY, blockposition) - world.c();
             float f = world.a(1.0F);
             boolean flag = (Boolean) iblockdata.get(BlockDaylightDetector.b);
@@ -51,7 +51,7 @@ public class BlockDaylightDetector extends BlockTileEntity {
 
     @Override
     public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        if (entityhuman.ep()) {
+        if (entityhuman.eJ()) {
             if (world.isClientSide) {
                 return EnumInteractionResult.SUCCESS;
             } else {
@@ -59,7 +59,7 @@ public class BlockDaylightDetector extends BlockTileEntity {
 
                 world.setTypeAndData(blockposition, iblockdata1, 4);
                 d(iblockdata1, world, blockposition);
-                return EnumInteractionResult.SUCCESS;
+                return EnumInteractionResult.CONSUME;
             }
         } else {
             return super.interact(iblockdata, world, blockposition, entityhuman, enumhand, movingobjectpositionblock);
@@ -67,7 +67,7 @@ public class BlockDaylightDetector extends BlockTileEntity {
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 

@@ -1,16 +1,22 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Multimap;
 
-public class ItemSword extends ItemToolMaterial {
+public class ItemSword extends ItemToolMaterial implements ItemVanishable {
 
     private final float a;
-    private final float b;
+    private final Multimap<AttributeBase, AttributeModifier> b;
 
     public ItemSword(ToolMaterial toolmaterial, int i, float f, Item.Info item_info) {
         super(toolmaterial, item_info);
-        this.b = f;
         this.a = (float) i + toolmaterial.c();
+        Builder<AttributeBase, AttributeModifier> builder = ImmutableMultimap.builder();
+
+        builder.put(GenericAttributes.ATTACK_DAMAGE, new AttributeModifier(ItemSword.f, "Weapon modifier", (double) this.a, AttributeModifier.Operation.ADDITION));
+        builder.put(GenericAttributes.ATTACK_SPEED, new AttributeModifier(ItemSword.g, "Weapon modifier", (double) f, AttributeModifier.Operation.ADDITION));
+        this.b = builder.build();
     }
 
     public float f() {
@@ -24,14 +30,12 @@ public class ItemSword extends ItemToolMaterial {
 
     @Override
     public float getDestroySpeed(ItemStack itemstack, IBlockData iblockdata) {
-        Block block = iblockdata.getBlock();
-
-        if (block == Blocks.COBWEB) {
+        if (iblockdata.a(Blocks.COBWEB)) {
             return 15.0F;
         } else {
             Material material = iblockdata.getMaterial();
 
-            return material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.CORAL && !iblockdata.a(TagsBlock.LEAVES) && material != Material.PUMPKIN ? 1.0F : 1.5F;
+            return material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.CORAL && !iblockdata.a((Tag) TagsBlock.LEAVES) && material != Material.PUMPKIN ? 1.0F : 1.5F;
         }
     }
 
@@ -45,7 +49,7 @@ public class ItemSword extends ItemToolMaterial {
 
     @Override
     public boolean a(ItemStack itemstack, World world, IBlockData iblockdata, BlockPosition blockposition, EntityLiving entityliving) {
-        if (iblockdata.f(world, blockposition) != 0.0F) {
+        if (iblockdata.h(world, blockposition) != 0.0F) {
             itemstack.damage(2, entityliving, (entityliving1) -> {
                 entityliving1.broadcastItemBreak(EnumItemSlot.MAINHAND);
             });
@@ -56,18 +60,11 @@ public class ItemSword extends ItemToolMaterial {
 
     @Override
     public boolean canDestroySpecialBlock(IBlockData iblockdata) {
-        return iblockdata.getBlock() == Blocks.COBWEB;
+        return iblockdata.a(Blocks.COBWEB);
     }
 
     @Override
-    public Multimap<String, AttributeModifier> a(EnumItemSlot enumitemslot) {
-        Multimap<String, AttributeModifier> multimap = super.a(enumitemslot);
-
-        if (enumitemslot == EnumItemSlot.MAINHAND) {
-            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemSword.g, "Weapon modifier", (double) this.a, AttributeModifier.Operation.ADDITION));
-            multimap.put(GenericAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ItemSword.h, "Weapon modifier", (double) this.b, AttributeModifier.Operation.ADDITION));
-        }
-
-        return multimap;
+    public Multimap<AttributeBase, AttributeModifier> a(EnumItemSlot enumitemslot) {
+        return enumitemslot == EnumItemSlot.MAINHAND ? this.b : super.a(enumitemslot);
     }
 }

@@ -16,7 +16,7 @@ public abstract class ScoreboardTeamBase {
 
     public abstract String getName();
 
-    public abstract IChatBaseComponent getFormattedName(IChatBaseComponent ichatbasecomponent);
+    public abstract IChatMutableComponent getFormattedName(IChatBaseComponent ichatbasecomponent);
 
     public abstract boolean allowFriendlyFire();
 
@@ -49,7 +49,7 @@ public abstract class ScoreboardTeamBase {
         }
 
         public IChatBaseComponent b() {
-            return new ChatMessage("team.collision." + this.e, new Object[0]);
+            return new ChatMessage("team.collision." + this.e);
         }
     }
 
@@ -76,7 +76,7 @@ public abstract class ScoreboardTeamBase {
         }
 
         public IChatBaseComponent b() {
-            return new ChatMessage("team.visibility." + this.e, new Object[0]);
+            return new ChatMessage("team.visibility." + this.e);
         }
     }
 }

@@ -8,8 +8,8 @@ public enum EnumResourcePackVersion {
     private final IChatBaseComponent e;
 
     private EnumResourcePackVersion(String s) {
-        this.d = new ChatMessage("resourcePack.incompatible." + s, new Object[0]);
-        this.e = new ChatMessage("resourcePack.incompatible.confirm." + s, new Object[0]);
+        this.d = new ChatMessage("pack.incompatible." + s);
+        this.e = new ChatMessage("pack.incompatible.confirm." + s);
     }
 
     public boolean a() {

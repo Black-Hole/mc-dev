@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import javax.annotation.Nullable;
 
-public class EntitySnowman extends EntityGolem implements IRangedEntity {
+public class EntitySnowman extends EntityGolem implements IShearable, IRangedEntity {
 
     private static final DataWatcherObject<Byte> b = DataWatcher.a(EntitySnowman.class, DataWatcherRegistry.a);
 
@@ -21,11 +21,8 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
         }));
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(4.0D);
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
+    public static AttributeProvider.Builder m() {
+        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 4.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
     @Override
@@ -35,18 +32,23 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setBoolean("Pumpkin", this.hasPumpkin());
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         if (nbttagcompound.hasKey("Pumpkin")) {
             this.setHasPumpkin(nbttagcompound.getBoolean("Pumpkin"));
         }
 
+    }
+
+    @Override
+    public boolean dN() {
+        return true;
     }
 
     @Override
@@ -56,10 +58,6 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
             int i = MathHelper.floor(this.locX());
             int j = MathHelper.floor(this.locY());
             int k = MathHelper.floor(this.locZ());
-
-            if (this.ay()) {
-                this.damageEntity(DamageSource.DROWN, 1.0F);
-            }
 
             if (this.world.getBiome(new BlockPosition(i, 0, k)).getAdjustedTemperature(new BlockPosition(i, j, k)) > 1.0F) {
                 this.damageEntity(DamageSource.BURN, 1.0F);
@@ -95,7 +93,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
         float f1 = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
 
         entitysnowball.shoot(d1, d2 + (double) f1, d3, 1.6F, 12.0F);
-        this.a(SoundEffects.ENTITY_SNOW_GOLEM_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.playSound(SoundEffects.ENTITY_SNOW_GOLEM_SHOOT, 1.0F, 0.4F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.world.addEntity(entitysnowball);
     }
 
@@ -105,21 +103,36 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
     }
 
     @Override
-    protected boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+    protected EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getItem() == Items.SHEARS && this.hasPumpkin()) {
+        if (itemstack.getItem() == Items.SHEARS && this.canShear()) {
+            this.shear(SoundCategory.PLAYERS);
             if (!this.world.isClientSide) {
-                this.setHasPumpkin(false);
                 itemstack.damage(1, entityhuman, (entityhuman1) -> {
                     entityhuman1.broadcastItemBreak(enumhand);
                 });
             }
 
-            return true;
+            return EnumInteractionResult.a(this.world.isClientSide);
         } else {
-            return false;
+            return EnumInteractionResult.PASS;
         }
+    }
+
+    @Override
+    public void shear(SoundCategory soundcategory) {
+        this.world.playSound((EntityHuman) null, (Entity) this, SoundEffects.ENTITY_SNOW_GOLEM_SHEAR, soundcategory, 1.0F, 1.0F);
+        if (!this.world.s_()) {
+            this.setHasPumpkin(false);
+            this.a(new ItemStack(Items.dj), 1.7F);
+        }
+
+    }
+
+    @Override
+    public boolean canShear() {
+        return this.isAlive() && this.hasPumpkin();
     }
 
     public boolean hasPumpkin() {

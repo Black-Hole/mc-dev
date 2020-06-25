@@ -16,6 +16,7 @@ public class GameTestHarnessRegistry {
     private static final Collection<GameTestHarnessTestFunction> a = Lists.newArrayList();
     private static final Set<String> b = Sets.newHashSet();
     private static final Map<String, Consumer<WorldServer>> c = Maps.newHashMap();
+    private static final Collection<GameTestHarnessTestFunction> d = Sets.newHashSet();
 
     public static Collection<GameTestHarnessTestFunction> a(String s) {
         return (Collection) GameTestHarnessRegistry.a.stream().filter((gametestharnesstestfunction) -> {
@@ -58,5 +59,17 @@ public class GameTestHarnessRegistry {
 
     private static boolean a(GameTestHarnessTestFunction gametestharnesstestfunction, String s) {
         return gametestharnesstestfunction.a().toLowerCase().startsWith(s.toLowerCase() + ".");
+    }
+
+    public static Collection<GameTestHarnessTestFunction> c() {
+        return GameTestHarnessRegistry.d;
+    }
+
+    public static void a(GameTestHarnessTestFunction gametestharnesstestfunction) {
+        GameTestHarnessRegistry.d.add(gametestharnesstestfunction);
+    }
+
+    public static void d() {
+        GameTestHarnessRegistry.d.clear();
     }
 }

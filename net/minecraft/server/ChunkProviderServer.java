@@ -1,27 +1,28 @@
 package net.minecraft.server;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Lists;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.util.Either;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 public class ChunkProviderServer extends IChunkProvider {
 
-    private static final int b = (int) Math.pow(17.0D, 2.0D);
-    private static final List<ChunkStatus> c = ChunkStatus.a();
+    private static final List<ChunkStatus> b = ChunkStatus.a();
     private final ChunkMapDistance chunkMapDistance;
-    public final ChunkGenerator<?> chunkGenerator;
+    public final ChunkGenerator chunkGenerator;
     private final WorldServer world;
     private final Thread serverThread;
     private final LightEngineThreaded lightEngine;
@@ -34,18 +35,20 @@ public class ChunkProviderServer extends IChunkProvider {
     private final long[] cachePos = new long[4];
     private final ChunkStatus[] cacheStatus = new ChunkStatus[4];
     private final IChunkAccess[] cacheChunk = new IChunkAccess[4];
+    @Nullable
+    private SpawnerCreature.d p;
 
-    public ChunkProviderServer(WorldServer worldserver, File file, DataFixer datafixer, DefinedStructureManager definedstructuremanager, Executor executor, ChunkGenerator<?> chunkgenerator, int i, WorldLoadListener worldloadlistener, Supplier<WorldPersistentData> supplier) {
+    public ChunkProviderServer(WorldServer worldserver, Convertable.ConversionSession convertable_conversionsession, DataFixer datafixer, DefinedStructureManager definedstructuremanager, Executor executor, ChunkGenerator chunkgenerator, int i, boolean flag, WorldLoadListener worldloadlistener, Supplier<WorldPersistentData> supplier) {
         this.world = worldserver;
         this.serverThreadQueue = new ChunkProviderServer.a(worldserver);
         this.chunkGenerator = chunkgenerator;
         this.serverThread = Thread.currentThread();
-        File file1 = worldserver.getWorldProvider().getDimensionManager().a(file);
-        File file2 = new File(file1, "data");
+        File file = convertable_conversionsession.a(worldserver.getDimensionKey());
+        File file1 = new File(file, "data");
 
-        file2.mkdirs();
-        this.worldPersistentData = new WorldPersistentData(file2, datafixer);
-        this.playerChunkMap = new PlayerChunkMap(worldserver, file, datafixer, definedstructuremanager, executor, this.serverThreadQueue, this, this.getChunkGenerator(), worldloadlistener, supplier, i);
+        file1.mkdirs();
+        this.worldPersistentData = new WorldPersistentData(file1, datafixer);
+        this.playerChunkMap = new PlayerChunkMap(worldserver, convertable_conversionsession, datafixer, definedstructuremanager, executor, this.serverThreadQueue, this, this.getChunkGenerator(), worldloadlistener, supplier, i, flag);
         this.lightEngine = this.playerChunkMap.a();
         this.chunkMapDistance = this.playerChunkMap.e();
         this.clearCache();
@@ -210,10 +213,10 @@ public class ChunkProviderServer extends IChunkProvider {
         if (playerchunk == null) {
             return null;
         } else {
-            int l = ChunkProviderServer.c.size() - 1;
+            int l = ChunkProviderServer.b.size() - 1;
 
             while (true) {
-                ChunkStatus chunkstatus = (ChunkStatus) ChunkProviderServer.c.get(l);
+                ChunkStatus chunkstatus = (ChunkStatus) ChunkProviderServer.b.get(l);
                 Optional<IChunkAccess> optional = ((Either) playerchunk.getStatusFutureUnchecked(chunkstatus).getNow(PlayerChunk.UNLOADED_CHUNK_ACCESS)).left();
 
                 if (optional.isPresent()) {
@@ -269,12 +272,6 @@ public class ChunkProviderServer extends IChunkProvider {
         return this.a(i, PlayerChunk::a);
     }
 
-    public boolean b(Entity entity) {
-        long i = ChunkCoordIntPair.pair(MathHelper.floor(entity.locX()) >> 4, MathHelper.floor(entity.locZ()) >> 4);
-
-        return this.a(i, PlayerChunk::c);
-    }
-
     private boolean a(long i, Function<PlayerChunk, CompletableFuture<Either<Chunk, PlayerChunk.Failure>>> function) {
         PlayerChunk playerchunk = this.getChunk(i);
 
@@ -317,61 +314,50 @@ public class ChunkProviderServer extends IChunkProvider {
 
         this.lastTickTime = i;
         WorldData worlddata = this.world.getWorldData();
-        boolean flag = worlddata.getType() == WorldType.DEBUG_ALL_BLOCK_STATES;
+        boolean flag = this.world.isDebugWorld();
         boolean flag1 = this.world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING);
 
         if (!flag) {
             this.world.getMethodProfiler().enter("pollingChunks");
             int k = this.world.getGameRules().getInt(GameRules.RANDOM_TICK_SPEED);
-            BlockPosition blockposition = this.world.getSpawn();
             boolean flag2 = worlddata.getTime() % 400L == 0L;
 
             this.world.getMethodProfiler().enter("naturalSpawnCount");
             int l = this.chunkMapDistance.b();
-            EnumCreatureType[] aenumcreaturetype = EnumCreatureType.values();
-            Object2IntMap<EnumCreatureType> object2intmap = this.world.l();
+            SpawnerCreature.d spawnercreature_d = SpawnerCreature.a(l, this.world.z(), this::a);
 
+            this.p = spawnercreature_d;
             this.world.getMethodProfiler().exit();
-            this.playerChunkMap.f().forEach((playerchunk) -> {
-                Optional<Chunk> optional = ((Either) playerchunk.b().getNow(PlayerChunk.UNLOADED_CHUNK)).left();
+            List<PlayerChunk> list = Lists.newArrayList(this.playerChunkMap.f());
+
+            Collections.shuffle(list);
+            list.forEach((playerchunk) -> {
+                Optional<Chunk> optional = ((Either) playerchunk.a().getNow(PlayerChunk.UNLOADED_CHUNK)).left();
 
                 if (optional.isPresent()) {
-                    Chunk chunk = (Chunk) optional.get();
-
                     this.world.getMethodProfiler().enter("broadcast");
-                    playerchunk.a(chunk);
+                    playerchunk.a((Chunk) optional.get());
                     this.world.getMethodProfiler().exit();
-                    ChunkCoordIntPair chunkcoordintpair = playerchunk.i();
+                    Optional<Chunk> optional1 = ((Either) playerchunk.b().getNow(PlayerChunk.UNLOADED_CHUNK)).left();
 
-                    if (!this.playerChunkMap.isOutsideOfRange(chunkcoordintpair)) {
-                        chunk.setInhabitedTime(chunk.getInhabitedTime() + j);
-                        if (flag1 && (this.allowMonsters || this.allowAnimals) && this.world.getWorldBorder().isInBounds(chunk.getPos())) {
-                            this.world.getMethodProfiler().enter("spawner");
-                            EnumCreatureType[] aenumcreaturetype1 = aenumcreaturetype;
-                            int i1 = aenumcreaturetype.length;
+                    if (optional1.isPresent()) {
+                        Chunk chunk = (Chunk) optional1.get();
+                        ChunkCoordIntPair chunkcoordintpair = playerchunk.i();
 
-                            for (int j1 = 0; j1 < i1; ++j1) {
-                                EnumCreatureType enumcreaturetype = aenumcreaturetype1[j1];
-
-                                if (enumcreaturetype != EnumCreatureType.MISC && (!enumcreaturetype.c() || this.allowAnimals) && (enumcreaturetype.c() || this.allowMonsters) && (!enumcreaturetype.d() || flag2)) {
-                                    int k1 = enumcreaturetype.b() * l / ChunkProviderServer.b;
-
-                                    if (object2intmap.getInt(enumcreaturetype) <= k1) {
-                                        SpawnerCreature.a(enumcreaturetype, this.world, chunk, blockposition);
-                                    }
-                                }
+                        if (!this.playerChunkMap.isOutsideOfRange(chunkcoordintpair)) {
+                            chunk.setInhabitedTime(chunk.getInhabitedTime() + j);
+                            if (flag1 && (this.allowMonsters || this.allowAnimals) && this.world.getWorldBorder().isInBounds(chunk.getPos())) {
+                                SpawnerCreature.a(this.world, chunk, spawnercreature_d, this.allowAnimals, this.allowMonsters, flag2);
                             }
 
-                            this.world.getMethodProfiler().exit();
+                            this.world.a(chunk, k);
                         }
-
-                        this.world.a(chunk, k);
                     }
                 }
             });
             this.world.getMethodProfiler().enter("customSpawners");
             if (flag1) {
-                this.chunkGenerator.doMobSpawning(this.world, this.allowMonsters, this.allowAnimals);
+                this.world.doMobSpawning(this.allowMonsters, this.allowAnimals);
             }
 
             this.world.getMethodProfiler().exit();
@@ -381,6 +367,15 @@ public class ChunkProviderServer extends IChunkProvider {
         this.playerChunkMap.g();
     }
 
+    private void a(long i, Consumer<Chunk> consumer) {
+        PlayerChunk playerchunk = this.getChunk(i);
+
+        if (playerchunk != null) {
+            ((Either) playerchunk.c().getNow(PlayerChunk.UNLOADED_CHUNK)).left().ifPresent(consumer);
+        }
+
+    }
+
     @Override
     public String getName() {
         return "ServerChunkCache: " + this.h();
@@ -388,10 +383,10 @@ public class ChunkProviderServer extends IChunkProvider {
 
     @VisibleForTesting
     public int f() {
-        return this.serverThreadQueue.bh();
+        return this.serverThreadQueue.bg();
     }
 
-    public ChunkGenerator<?> getChunkGenerator() {
+    public ChunkGenerator getChunkGenerator() {
         return this.chunkGenerator;
     }
 
@@ -413,7 +408,7 @@ public class ChunkProviderServer extends IChunkProvider {
     @Override
     public void a(EnumSkyBlock enumskyblock, SectionPosition sectionposition) {
         this.serverThreadQueue.execute(() -> {
-            PlayerChunk playerchunk = this.getChunk(sectionposition.u().pair());
+            PlayerChunk playerchunk = this.getChunk(sectionposition.r().pair());
 
             if (playerchunk != null) {
                 playerchunk.a(enumskyblock, sectionposition.b());
@@ -473,10 +468,15 @@ public class ChunkProviderServer extends IChunkProvider {
         return this.playerChunkMap.h();
     }
 
+    @Nullable
+    public SpawnerCreature.d k() {
+        return this.p;
+    }
+
     final class a extends IAsyncTaskHandler<Runnable> {
 
         private a(World world) {
-            super("Chunk source main thread executor for " + IRegistry.DIMENSION_TYPE.getKey(world.getWorldProvider().getDimensionManager()));
+            super("Chunk source main thread executor for " + world.getDimensionKey().a());
         }
 
         @Override

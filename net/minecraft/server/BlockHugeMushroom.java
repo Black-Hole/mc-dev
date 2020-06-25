@@ -12,9 +12,9 @@ public class BlockHugeMushroom extends Block {
     public static final BlockStateBoolean f = BlockSprawling.f;
     private static final Map<EnumDirection, BlockStateBoolean> g = BlockSprawling.g;
 
-    public BlockHugeMushroom(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockHugeMushroom.a, true)).set(BlockHugeMushroom.b, true)).set(BlockHugeMushroom.c, true)).set(BlockHugeMushroom.d, true)).set(BlockHugeMushroom.e, true)).set(BlockHugeMushroom.f, true));
+    public BlockHugeMushroom(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockHugeMushroom.a, true)).set(BlockHugeMushroom.b, true)).set(BlockHugeMushroom.c, true)).set(BlockHugeMushroom.d, true)).set(BlockHugeMushroom.e, true)).set(BlockHugeMushroom.f, true));
     }
 
     @Override
@@ -27,7 +27,7 @@ public class BlockHugeMushroom extends Block {
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        return iblockdata1.getBlock() == this ? (IBlockData) iblockdata.set((IBlockState) BlockHugeMushroom.g.get(enumdirection), false) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return iblockdata1.a((Block) this) ? (IBlockData) iblockdata.set((IBlockState) BlockHugeMushroom.g.get(enumdirection), false) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     @Override

@@ -13,7 +13,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
 
     protected TileEntityChest(TileEntityTypes<?> tileentitytypes) {
         super(tileentitytypes);
-        this.items = NonNullList.a(27, ItemStack.a);
+        this.items = NonNullList.a(27, ItemStack.b);
     }
 
     public TileEntityChest() {
@@ -27,14 +27,14 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
 
     @Override
     protected IChatBaseComponent getContainerName() {
-        return new ChatMessage("container.chest", new Object[0]);
+        return new ChatMessage("container.chest");
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
-        this.items = NonNullList.a(this.getSize(), ItemStack.a);
-        if (!this.d(nbttagcompound)) {
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
+        this.items = NonNullList.a(this.getSize(), ItemStack.b);
+        if (!this.b(nbttagcompound)) {
             ContainerUtil.b(nbttagcompound, this.items);
         }
 
@@ -43,7 +43,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
     @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (!this.e(nbttagcompound)) {
+        if (!this.c(nbttagcompound)) {
             ContainerUtil.a(nbttagcompound, this.items);
         }
 
@@ -129,7 +129,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
             double d2 = (double) this.position.getZ() + 0.5D;
 
             if (blockpropertychesttype == BlockPropertyChestType.RIGHT) {
-                EnumDirection enumdirection = BlockChest.i(this.getBlock());
+                EnumDirection enumdirection = BlockChest.h(this.getBlock());
 
                 d0 += (double) enumdirection.getAdjacentX() * 0.5D;
                 d2 += (double) enumdirection.getAdjacentZ() * 0.5D;

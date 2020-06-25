@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import java.util.Collection;
 import java.util.Iterator;
 import javax.annotation.Nullable;
@@ -14,7 +13,7 @@ public class CommandStopSound {
         RequiredArgumentBuilder<CommandListenerWrapper, EntitySelector> requiredargumentbuilder = (RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), (SoundCategory) null, (MinecraftKey) null);
         })).then(CommandDispatcher.a("*").then(CommandDispatcher.a("sound", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.c).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), (SoundCategory) null, ArgumentMinecraftKeyRegistered.d(commandcontext, "sound"));
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), (SoundCategory) null, ArgumentMinecraftKeyRegistered.e(commandcontext, "sound"));
         })));
         SoundCategory[] asoundcategory = SoundCategory.values();
         int i = asoundcategory.length;
@@ -25,7 +24,7 @@ public class CommandStopSound {
             requiredargumentbuilder.then(((LiteralArgumentBuilder) CommandDispatcher.a(soundcategory.a()).executes((commandcontext) -> {
                 return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), soundcategory, (MinecraftKey) null);
             })).then(CommandDispatcher.a("sound", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.c).executes((commandcontext) -> {
-                return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), soundcategory, ArgumentMinecraftKeyRegistered.d(commandcontext, "sound"));
+                return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), soundcategory, ArgumentMinecraftKeyRegistered.e(commandcontext, "sound"));
             })));
         }
 
@@ -53,7 +52,7 @@ public class CommandStopSound {
         } else if (minecraftkey != null) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.stopsound.success.sourceless.sound", new Object[]{minecraftkey}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.stopsound.success.sourceless.any", new Object[0]), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.stopsound.success.sourceless.any"), true);
         }
 
         return collection.size();

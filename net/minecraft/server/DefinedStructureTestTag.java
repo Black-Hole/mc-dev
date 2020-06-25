@@ -1,34 +1,33 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
 import java.util.Random;
 
 public class DefinedStructureTestTag extends DefinedStructureRuleTest {
 
-    private final Tag<Block> a;
+    public static final Codec<DefinedStructureTestTag> a;
+    private final Tag<Block> b;
 
     public DefinedStructureTestTag(Tag<Block> tag) {
-        this.a = tag;
-    }
-
-    public <T> DefinedStructureTestTag(Dynamic<T> dynamic) {
-        this(TagsBlock.a().a(new MinecraftKey(dynamic.get("tag").asString(""))));
+        this.b = tag;
     }
 
     @Override
     public boolean a(IBlockData iblockdata, Random random) {
-        return iblockdata.a(this.a);
+        return iblockdata.a(this.b);
     }
 
     @Override
-    protected DefinedStructureRuleTestType a() {
-        return DefinedStructureRuleTestType.e;
+    protected DefinedStructureRuleTestType<?> a() {
+        return DefinedStructureRuleTestType.d;
     }
 
-    @Override
-    protected <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("tag"), dynamicops.createString(this.a.c().toString()))));
+    static {
+        TagsInstance tagsinstance = TagsInstance.e();
+
+        tagsinstance.getClass();
+        a = Tag.a(tagsinstance::a).fieldOf("tag").xmap(DefinedStructureTestTag::new, (definedstructuretesttag) -> {
+            return definedstructuretesttag.b;
+        }).codec();
     }
 }

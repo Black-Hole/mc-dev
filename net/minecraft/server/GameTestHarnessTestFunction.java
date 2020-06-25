@@ -11,6 +11,7 @@ public class GameTestHarnessTestFunction {
     private final Consumer<GameTestHarnessHelper> e;
     private final int f;
     private final long g;
+    private final EnumBlockRotation h;
 
     public void a(GameTestHarnessHelper gametestharnesshelper) {
         this.e.accept(gametestharnesshelper);
@@ -42,5 +43,9 @@ public class GameTestHarnessTestFunction {
 
     public long f() {
         return this.g;
+    }
+
+    public EnumBlockRotation g() {
+        return this.h;
     }
 }

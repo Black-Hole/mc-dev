@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class BlockTallPlantFlower extends BlockTallPlant implements IBlockFragilePlantElement {
 
-    public BlockTallPlantFlower(Block.Info block_info) {
-        super(block_info);
+    public BlockTallPlantFlower(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override

@@ -11,31 +11,31 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public abstract class LootSelectorEntry extends LootEntryAbstract {
 
+    protected final int c;
     protected final int e;
-    protected final int f;
-    protected final LootItemFunction[] g;
-    private final BiFunction<ItemStack, LootTableInfo, ItemStack> c;
+    protected final LootItemFunction[] f;
+    private final BiFunction<ItemStack, LootTableInfo, ItemStack> g;
     private final LootEntry h = new LootSelectorEntry.c() {
         @Override
         public void a(Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {
-            LootSelectorEntry.this.a(LootItemFunction.a(LootSelectorEntry.this.c, consumer, loottableinfo), loottableinfo);
+            LootSelectorEntry.this.a(LootItemFunction.a(LootSelectorEntry.this.g, consumer, loottableinfo), loottableinfo);
         }
     };
 
     protected LootSelectorEntry(int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
         super(alootitemcondition);
-        this.e = i;
-        this.f = j;
-        this.g = alootitemfunction;
-        this.c = LootItemFunctions.a((BiFunction[]) alootitemfunction);
+        this.c = i;
+        this.e = j;
+        this.f = alootitemfunction;
+        this.g = LootItemFunctions.a(alootitemfunction);
     }
 
     @Override
     public void a(LootCollector lootcollector) {
         super.a(lootcollector);
 
-        for (int i = 0; i < this.g.length; ++i) {
-            this.g[i].a(lootcollector.b(".functions[" + i + "]"));
+        for (int i = 0; i < this.f.length; ++i) {
+            this.f[i].a(lootcollector.b(".functions[" + i + "]"));
         }
 
     }
@@ -56,29 +56,27 @@ public abstract class LootSelectorEntry extends LootEntryAbstract {
         return new LootSelectorEntry.b(lootselectorentry_d);
     }
 
-    public abstract static class e<T extends LootSelectorEntry> extends LootEntryAbstract.b<T> {
+    public abstract static class e<T extends LootSelectorEntry> extends LootEntryAbstract.Serializer<T> {
 
-        public e(MinecraftKey minecraftkey, Class<T> oclass) {
-            super(minecraftkey, oclass);
-        }
+        public e() {}
 
         public void a(JsonObject jsonobject, T t0, JsonSerializationContext jsonserializationcontext) {
-            if (t0.e != 1) {
-                jsonobject.addProperty("weight", t0.e);
+            if (t0.c != 1) {
+                jsonobject.addProperty("weight", t0.c);
             }
 
-            if (t0.f != 0) {
-                jsonobject.addProperty("quality", t0.f);
+            if (t0.e != 0) {
+                jsonobject.addProperty("quality", t0.e);
             }
 
-            if (!ArrayUtils.isEmpty(t0.g)) {
-                jsonobject.add("functions", jsonserializationcontext.serialize(t0.g));
+            if (!ArrayUtils.isEmpty(t0.f)) {
+                jsonobject.add("functions", jsonserializationcontext.serialize(t0.f));
             }
 
         }
 
         @Override
-        public final T b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
+        public final T deserializeType(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
             int i = ChatDeserializer.a(jsonobject, "weight", (int) 1);
             int j = ChatDeserializer.a(jsonobject, "quality", (int) 0);
             LootItemFunction[] alootitemfunction = (LootItemFunction[]) ChatDeserializer.a(jsonobject, "functions", new LootItemFunction[0], jsondeserializationcontext, LootItemFunction[].class);
@@ -149,7 +147,7 @@ public abstract class LootSelectorEntry extends LootEntryAbstract {
 
         @Override
         public int a(float f) {
-            return Math.max(MathHelper.d((float) LootSelectorEntry.this.e + (float) LootSelectorEntry.this.f * f), 0);
+            return Math.max(MathHelper.d((float) LootSelectorEntry.this.c + (float) LootSelectorEntry.this.e * f), 0);
         }
     }
 }

@@ -9,17 +9,22 @@ import org.apache.logging.log4j.Logger;
 public class LootItemFunctionSetDamage extends LootItemFunctionConditional {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final LootValueBounds c;
+    private final LootValueBounds b;
 
     private LootItemFunctionSetDamage(LootItemCondition[] alootitemcondition, LootValueBounds lootvaluebounds) {
         super(alootitemcondition);
-        this.c = lootvaluebounds;
+        this.b = lootvaluebounds;
+    }
+
+    @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.h;
     }
 
     @Override
     public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
         if (itemstack.e()) {
-            float f = 1.0F - this.c.b(loottableinfo.a());
+            float f = 1.0F - this.b.b(loottableinfo.a());
 
             itemstack.setDamage(MathHelper.d(f * (float) itemstack.h()));
         } else {
@@ -37,13 +42,11 @@ public class LootItemFunctionSetDamage extends LootItemFunctionConditional {
 
     public static class a extends LootItemFunctionConditional.c<LootItemFunctionSetDamage> {
 
-        protected a() {
-            super(new MinecraftKey("set_damage"), LootItemFunctionSetDamage.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionSetDamage lootitemfunctionsetdamage, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsetdamage, jsonserializationcontext);
-            jsonobject.add("damage", jsonserializationcontext.serialize(lootitemfunctionsetdamage.c));
+            jsonobject.add("damage", jsonserializationcontext.serialize(lootitemfunctionsetdamage.b));
         }
 
         @Override

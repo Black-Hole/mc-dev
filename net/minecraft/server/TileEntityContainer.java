@@ -13,8 +13,8 @@ public abstract class TileEntityContainer extends TileEntity implements IInvento
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
         this.chestLock = ChestLock.b(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
             this.customName = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("CustomName"));

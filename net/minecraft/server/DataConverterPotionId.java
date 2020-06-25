@@ -3,13 +3,13 @@ package net.minecraft.server;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -152,7 +152,7 @@ public class DataConverterPotionId extends DataFix {
 
     public TypeRewriteRule makeRule() {
         Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DSL.namespacedString()));
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.ITEM_NAME.typeName(), DataConverterSchemaNamed.a()));
         OpticFinder<?> opticfinder1 = type.findField("tag");
 
         return this.fixTypeEverywhereTyped("ItemPotionFix", type, (typed) -> {
@@ -166,7 +166,7 @@ public class DataConverterPotionId extends DataFix {
                 if (optional1.isPresent()) {
                     Typed<?> typed1 = typed;
                     Dynamic<?> dynamic1 = (Dynamic) ((Typed) optional1.get()).get(DSL.remainderFinder());
-                    Optional<String> optional2 = dynamic1.get("Potion").asString();
+                    Optional<String> optional2 = dynamic1.get("Potion").asString().result();
 
                     if (!optional2.isPresent()) {
                         String s = DataConverterPotionId.a[short0 & 127];

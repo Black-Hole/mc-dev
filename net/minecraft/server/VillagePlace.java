@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
@@ -24,24 +25,32 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
     private final VillagePlace.a a = new VillagePlace.a();
     private final LongSet b = new LongOpenHashSet();
 
-    public VillagePlace(File file, DataFixer datafixer) {
-        super(file, VillagePlaceSection::new, VillagePlaceSection::new, datafixer, DataFixTypes.POI_CHUNK);
+    public VillagePlace(File file, DataFixer datafixer, boolean flag) {
+        super(file, VillagePlaceSection::a, VillagePlaceSection::new, datafixer, DataFixTypes.POI_CHUNK, flag);
     }
 
     public void a(BlockPosition blockposition, VillagePlaceType villageplacetype) {
-        ((VillagePlaceSection) this.e(SectionPosition.a(blockposition).v())).a(blockposition, villageplacetype);
+        ((VillagePlaceSection) this.e(SectionPosition.a(blockposition).s())).a(blockposition, villageplacetype);
     }
 
     public void a(BlockPosition blockposition) {
-        ((VillagePlaceSection) this.e(SectionPosition.a(blockposition).v())).a(blockposition);
+        ((VillagePlaceSection) this.e(SectionPosition.a(blockposition).s())).a(blockposition);
     }
 
     public long a(Predicate<VillagePlaceType> predicate, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
         return this.c(predicate, blockposition, i, villageplace_occupancy).count();
     }
 
+    public boolean a(VillagePlaceType villageplacetype, BlockPosition blockposition) {
+        Optional<VillagePlaceType> optional = ((VillagePlaceSection) this.e(SectionPosition.a(blockposition).s())).d(blockposition);
+
+        return optional.isPresent() && ((VillagePlaceType) optional.get()).equals(villageplacetype);
+    }
+
     public Stream<VillagePlaceRecord> b(Predicate<VillagePlaceType> predicate, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
-        return ChunkCoordIntPair.a(new ChunkCoordIntPair(blockposition), Math.floorDiv(i, 16)).flatMap((chunkcoordintpair) -> {
+        int j = Math.floorDiv(i, 16) + 1;
+
+        return ChunkCoordIntPair.a(new ChunkCoordIntPair(blockposition), j).flatMap((chunkcoordintpair) -> {
             return this.a(predicate, chunkcoordintpair, villageplace_occupancy);
         });
     }
@@ -50,20 +59,16 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
         int j = i * i;
 
         return this.b(predicate, blockposition, i, villageplace_occupancy).filter((villageplacerecord) -> {
-            return villageplacerecord.f().m(blockposition) <= (double) j;
+            return villageplacerecord.f().j(blockposition) <= (double) j;
         });
     }
 
     public Stream<VillagePlaceRecord> a(Predicate<VillagePlaceType> predicate, ChunkCoordIntPair chunkcoordintpair, VillagePlace.Occupancy villageplace_occupancy) {
-        return IntStream.range(0, 16).boxed().flatMap((integer) -> {
-            return this.a(predicate, SectionPosition.a(chunkcoordintpair, integer).v(), villageplace_occupancy);
+        return IntStream.range(0, 16).boxed().map((integer) -> {
+            return this.d(SectionPosition.a(chunkcoordintpair, integer).s());
+        }).filter(Optional::isPresent).flatMap((optional) -> {
+            return ((VillagePlaceSection) optional.get()).a(predicate, villageplace_occupancy);
         });
-    }
-
-    private Stream<VillagePlaceRecord> a(Predicate<VillagePlaceType> predicate, long i, VillagePlace.Occupancy villageplace_occupancy) {
-        return (Stream) this.d(i).map((villageplacesection) -> {
-            return villageplacesection.a(predicate, villageplace_occupancy);
-        }).orElseGet(Stream::empty);
     }
 
     public Stream<BlockPosition> a(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
@@ -74,10 +79,10 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
         return this.a(predicate, predicate1, blockposition, i, villageplace_occupancy).findFirst();
     }
 
-    public Optional<BlockPosition> c(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
-        return this.c(predicate, blockposition, i, villageplace_occupancy).map(VillagePlaceRecord::f).sorted(Comparator.comparingDouble((blockposition1) -> {
-            return blockposition1.m(blockposition);
-        })).filter(predicate1).findFirst();
+    public Optional<BlockPosition> d(Predicate<VillagePlaceType> predicate, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
+        return this.c(predicate, blockposition, i, villageplace_occupancy).map(VillagePlaceRecord::f).min(Comparator.comparingDouble((blockposition1) -> {
+            return blockposition1.j(blockposition);
+        }));
     }
 
     public Optional<BlockPosition> a(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i) {
@@ -99,31 +104,31 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
     }
 
     public boolean b(BlockPosition blockposition) {
-        return ((VillagePlaceSection) this.e(SectionPosition.a(blockposition).v())).c(blockposition);
+        return ((VillagePlaceSection) this.e(SectionPosition.a(blockposition).s())).c(blockposition);
     }
 
     public boolean a(BlockPosition blockposition, Predicate<VillagePlaceType> predicate) {
-        return (Boolean) this.d(SectionPosition.a(blockposition).v()).map((villageplacesection) -> {
+        return (Boolean) this.d(SectionPosition.a(blockposition).s()).map((villageplacesection) -> {
             return villageplacesection.a(blockposition, predicate);
         }).orElse(false);
     }
 
     public Optional<VillagePlaceType> c(BlockPosition blockposition) {
-        VillagePlaceSection villageplacesection = (VillagePlaceSection) this.e(SectionPosition.a(blockposition).v());
+        VillagePlaceSection villageplacesection = (VillagePlaceSection) this.e(SectionPosition.a(blockposition).s());
 
         return villageplacesection.d(blockposition);
     }
 
     public int a(SectionPosition sectionposition) {
         this.a.a();
-        return this.a.c(sectionposition.v());
+        return this.a.c(sectionposition.s());
     }
 
     private boolean f(long i) {
         Optional<VillagePlaceSection> optional = this.c(i);
 
         return optional == null ? false : (Boolean) optional.map((villageplacesection) -> {
-            return villageplacesection.a(VillagePlaceType.a, VillagePlace.Occupancy.IS_OCCUPIED).count() > 0L;
+            return villageplacesection.a(VillagePlaceType.b, VillagePlace.Occupancy.IS_OCCUPIED).count() > 0L;
         }).orElse(false);
     }
 
@@ -147,7 +152,7 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
     public void a(ChunkCoordIntPair chunkcoordintpair, ChunkSection chunksection) {
         SectionPosition sectionposition = SectionPosition.a(chunkcoordintpair, chunksection.getYPosition() >> 4);
 
-        SystemUtils.a(this.d(sectionposition.v()), (villageplacesection) -> {
+        SystemUtils.a(this.d(sectionposition.s()), (villageplacesection) -> {
             villageplacesection.a((biconsumer) -> {
                 if (a(chunksection)) {
                     this.a(chunksection, sectionposition, biconsumer);
@@ -156,7 +161,7 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
             });
         }, () -> {
             if (a(chunksection)) {
-                VillagePlaceSection villageplacesection = (VillagePlaceSection) this.e(sectionposition.v());
+                VillagePlaceSection villageplacesection = (VillagePlaceSection) this.e(sectionposition.s());
 
                 this.a(chunksection, sectionposition, villageplacesection::a);
             }
@@ -165,14 +170,14 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
     }
 
     private static boolean a(ChunkSection chunksection) {
-        Stream stream = VillagePlaceType.e();
+        Set set = VillagePlaceType.x;
 
-        chunksection.getClass();
-        return stream.anyMatch(chunksection::a);
+        set.getClass();
+        return chunksection.a(set::contains);
     }
 
     private void a(ChunkSection chunksection, SectionPosition sectionposition, BiConsumer<BlockPosition, VillagePlaceType> biconsumer) {
-        sectionposition.w().forEach((blockposition) -> {
+        sectionposition.t().forEach((blockposition) -> {
             IBlockData iblockdata = chunksection.getType(SectionPosition.b(blockposition.getX()), SectionPosition.b(blockposition.getY()), SectionPosition.b(blockposition.getZ()));
 
             VillagePlaceType.b(iblockdata).ifPresent((villageplacetype) -> {
@@ -183,11 +188,11 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
 
     public void a(IWorldReader iworldreader, BlockPosition blockposition, int i) {
         SectionPosition.b(new ChunkCoordIntPair(blockposition), Math.floorDiv(i, 16)).map((sectionposition) -> {
-            return Pair.of(sectionposition, this.d(sectionposition.v()));
+            return Pair.of(sectionposition, this.d(sectionposition.s()));
         }).filter((pair) -> {
             return !(Boolean) ((Optional) pair.getSecond()).map(VillagePlaceSection::a).orElse(false);
         }).map((pair) -> {
-            return ((SectionPosition) pair.getFirst()).u();
+            return ((SectionPosition) pair.getFirst()).r();
         }).filter((chunkcoordintpair) -> {
             return this.b.add(chunkcoordintpair.pair());
         }).forEach((chunkcoordintpair) -> {

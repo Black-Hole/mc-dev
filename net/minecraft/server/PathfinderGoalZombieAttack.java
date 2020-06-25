@@ -2,34 +2,34 @@ package net.minecraft.server;
 
 public class PathfinderGoalZombieAttack extends PathfinderGoalMeleeAttack {
 
-    private final EntityZombie d;
-    private int e;
+    private final EntityZombie b;
+    private int c;
 
     public PathfinderGoalZombieAttack(EntityZombie entityzombie, double d0, boolean flag) {
         super(entityzombie, d0, flag);
-        this.d = entityzombie;
+        this.b = entityzombie;
     }
 
     @Override
     public void c() {
         super.c();
-        this.e = 0;
+        this.c = 0;
     }
 
     @Override
     public void d() {
         super.d();
-        this.d.q(false);
+        this.b.setAggressive(false);
     }
 
     @Override
     public void e() {
         super.e();
-        ++this.e;
-        if (this.e >= 5 && this.b < 10) {
-            this.d.q(true);
+        ++this.c;
+        if (this.c >= 5 && this.j() < this.k() / 2) {
+            this.b.setAggressive(true);
         } else {
-            this.d.q(false);
+            this.b.setAggressive(false);
         }
 
     }

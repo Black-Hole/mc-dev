@@ -33,7 +33,7 @@ public class LootSelector {
         this.b = alootitemcondition;
         this.c = LootItemConditions.a((Predicate[]) alootitemcondition);
         this.d = alootitemfunction;
-        this.e = LootItemFunctions.a((BiFunction[]) alootitemfunction);
+        this.e = LootItemFunctions.a(alootitemfunction);
         this.f = lootvalue;
         this.g = lootvaluebounds;
     }
@@ -49,7 +49,7 @@ public class LootSelector {
             LootEntryAbstract lootentryabstract = alootentryabstract[j];
 
             lootentryabstract.expand(loottableinfo, (lootentry) -> {
-                int k = lootentry.a(loottableinfo.b());
+                int k = lootentry.a(loottableinfo.getLuck());
 
                 if (k > 0) {
                     list.add(lootentry);
@@ -76,7 +76,7 @@ public class LootSelector {
                     }
 
                     lootentry = (LootEntry) iterator.next();
-                    i -= lootentry.a(loottableinfo.b());
+                    i -= lootentry.a(loottableinfo.getLuck());
                 } while (i >= 0);
 
                 lootentry.a(consumer, loottableinfo);
@@ -88,7 +88,7 @@ public class LootSelector {
         if (this.c.test(loottableinfo)) {
             Consumer<ItemStack> consumer1 = LootItemFunction.a(this.e, consumer, loottableinfo);
             Random random = loottableinfo.a();
-            int i = this.f.a(random) + MathHelper.d(this.g.b(random) * loottableinfo.b());
+            int i = this.f.a(random) + MathHelper.d(this.g.b(random) * loottableinfo.getLuck());
 
             for (int j = 0; j < i; ++j) {
                 this.b(consumer1, loottableinfo);

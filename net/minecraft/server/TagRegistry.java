@@ -1,9 +1,11 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.util.Pair;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 public class TagRegistry implements IReloadListener {
 
@@ -54,39 +56,38 @@ public class TagRegistry implements IReloadListener {
 
     @Override
     public CompletableFuture<Void> a(IReloadListener.a ireloadlistener_a, IResourceManager iresourcemanager, GameProfilerFiller gameprofilerfiller, GameProfilerFiller gameprofilerfiller1, Executor executor, Executor executor1) {
-        CompletableFuture<Map<MinecraftKey, Tag.a<Block>>> completablefuture = this.blockTags.a(iresourcemanager, executor);
-        CompletableFuture<Map<MinecraftKey, Tag.a<Item>>> completablefuture1 = this.itemTags.a(iresourcemanager, executor);
-        CompletableFuture<Map<MinecraftKey, Tag.a<FluidType>>> completablefuture2 = this.fluidTags.a(iresourcemanager, executor);
-        CompletableFuture<Map<MinecraftKey, Tag.a<EntityTypes<?>>>> completablefuture3 = this.entityTags.a(iresourcemanager, executor);
-        CompletableFuture completablefuture4 = completablefuture.thenCombine(completablefuture1, Pair::of).thenCombine(completablefuture2.thenCombine(completablefuture3, Pair::of), (pair, pair1) -> {
-            return new TagRegistry.a((Map) pair.getFirst(), (Map) pair.getSecond(), (Map) pair1.getFirst(), (Map) pair1.getSecond());
-        });
+        CompletableFuture<Map<MinecraftKey, Tag.a>> completablefuture = this.blockTags.a(iresourcemanager, executor);
+        CompletableFuture<Map<MinecraftKey, Tag.a>> completablefuture1 = this.itemTags.a(iresourcemanager, executor);
+        CompletableFuture<Map<MinecraftKey, Tag.a>> completablefuture2 = this.fluidTags.a(iresourcemanager, executor);
+        CompletableFuture<Map<MinecraftKey, Tag.a>> completablefuture3 = this.entityTags.a(iresourcemanager, executor);
+        CompletableFuture completablefuture4 = CompletableFuture.allOf(completablefuture, completablefuture1, completablefuture2, completablefuture3);
 
         ireloadlistener_a.getClass();
-        return completablefuture4.thenCompose(ireloadlistener_a::a).thenAcceptAsync((tagregistry_a) -> {
-            this.blockTags.a(tagregistry_a.a);
-            this.itemTags.a(tagregistry_a.b);
-            this.fluidTags.a(tagregistry_a.c);
-            this.entityTags.a(tagregistry_a.d);
-            TagsBlock.a((Tags) this.blockTags);
-            TagsItem.a((Tags) this.itemTags);
-            TagsFluid.a((Tags) this.fluidTags);
-            TagsEntity.a((Tags) this.entityTags);
+        return completablefuture4.thenCompose(ireloadlistener_a::a).thenAcceptAsync((ovoid) -> {
+            this.blockTags.a((Map) completablefuture.join());
+            this.itemTags.a((Map) completablefuture1.join());
+            this.fluidTags.a((Map) completablefuture2.join());
+            this.entityTags.a((Map) completablefuture3.join());
+            TagsInstance.a(this.blockTags, this.itemTags, this.fluidTags, this.entityTags);
+            Multimap<String, MinecraftKey> multimap = HashMultimap.create();
+
+            multimap.putAll("blocks", TagsBlock.b(this.blockTags));
+            multimap.putAll("items", TagsItem.b(this.itemTags));
+            multimap.putAll("fluids", TagsFluid.b(this.fluidTags));
+            multimap.putAll("entity_types", TagsEntity.b(this.entityTags));
+            if (!multimap.isEmpty()) {
+                throw new IllegalStateException("Missing required tags: " + (String) multimap.entries().stream().map((entry) -> {
+                    return (String) entry.getKey() + ":" + entry.getValue();
+                }).sorted().collect(Collectors.joining(",")));
+            }
         }, executor1);
     }
 
-    public static class a {
-
-        final Map<MinecraftKey, Tag.a<Block>> a;
-        final Map<MinecraftKey, Tag.a<Item>> b;
-        final Map<MinecraftKey, Tag.a<FluidType>> c;
-        final Map<MinecraftKey, Tag.a<EntityTypes<?>>> d;
-
-        public a(Map<MinecraftKey, Tag.a<Block>> map, Map<MinecraftKey, Tag.a<Item>> map1, Map<MinecraftKey, Tag.a<FluidType>> map2, Map<MinecraftKey, Tag.a<EntityTypes<?>>> map3) {
-            this.a = map;
-            this.b = map1;
-            this.c = map2;
-            this.d = map3;
-        }
+    public void bind() {
+        TagsBlock.a((Tags) this.blockTags);
+        TagsItem.a((Tags) this.itemTags);
+        TagsFluid.a((Tags) this.fluidTags);
+        TagsEntity.a((Tags) this.entityTags);
+        Blocks.a();
     }
 }

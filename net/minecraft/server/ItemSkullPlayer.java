@@ -11,7 +11,7 @@ public class ItemSkullPlayer extends ItemBlockWallable {
     }
 
     @Override
-    public IChatBaseComponent g(ItemStack itemstack) {
+    public IChatBaseComponent h(ItemStack itemstack) {
         if (itemstack.getItem() == Items.PLAYER_HEAD && itemstack.hasTag()) {
             String s = null;
             NBTTagCompound nbttagcompound = itemstack.getTag();
@@ -31,12 +31,12 @@ public class ItemSkullPlayer extends ItemBlockWallable {
             }
         }
 
-        return super.g(itemstack);
+        return super.h(itemstack);
     }
 
     @Override
-    public boolean a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public boolean b(NBTTagCompound nbttagcompound) {
+        super.b(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("SkullOwner", 8) && !StringUtils.isBlank(nbttagcompound.getString("SkullOwner"))) {
             GameProfile gameprofile = new GameProfile((UUID) null, nbttagcompound.getString("SkullOwner"));
 

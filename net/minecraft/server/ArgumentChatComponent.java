@@ -28,12 +28,12 @@ public class ArgumentChatComponent implements ArgumentType<IChatBaseComponent> {
 
     public IChatBaseComponent parse(StringReader stringreader) throws CommandSyntaxException {
         try {
-            IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(stringreader);
+            IChatMutableComponent ichatmutablecomponent = IChatBaseComponent.ChatSerializer.a(stringreader);
 
-            if (ichatbasecomponent == null) {
+            if (ichatmutablecomponent == null) {
                 throw ArgumentChatComponent.a.createWithContext(stringreader, "empty");
             } else {
-                return ichatbasecomponent;
+                return ichatmutablecomponent;
             }
         } catch (JsonParseException jsonparseexception) {
             String s = jsonparseexception.getCause() != null ? jsonparseexception.getCause().getMessage() : jsonparseexception.getMessage();

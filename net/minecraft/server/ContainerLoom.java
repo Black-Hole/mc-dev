@@ -105,7 +105,7 @@ public class ContainerLoom extends Container {
 
     @Override
     public boolean a(EntityHuman entityhuman, int i) {
-        if (i > 0 && i <= EnumBannerPatternType.P) {
+        if (i > 0 && i <= EnumBannerPatternType.R) {
             this.d.set(i);
             this.j();
             return true;
@@ -121,8 +121,8 @@ public class ContainerLoom extends Container {
         ItemStack itemstack2 = this.h.getItem();
         ItemStack itemstack3 = this.i.getItem();
 
-        if (!itemstack3.isEmpty() && (itemstack.isEmpty() || itemstack1.isEmpty() || this.d.get() <= 0 || this.d.get() >= EnumBannerPatternType.O - 5 && itemstack2.isEmpty())) {
-            this.i.set(ItemStack.a);
+        if (!itemstack3.isEmpty() && (itemstack.isEmpty() || itemstack1.isEmpty() || this.d.get() <= 0 || this.d.get() >= EnumBannerPatternType.P - EnumBannerPatternType.Q && itemstack2.isEmpty())) {
+            this.i.set(ItemStack.b);
             this.d.set(0);
         } else if (!itemstack2.isEmpty() && itemstack2.getItem() instanceof ItemBannerPattern) {
             NBTTagCompound nbttagcompound = itemstack.a("BlockEntityTag");
@@ -141,7 +141,7 @@ public class ContainerLoom extends Container {
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -150,42 +150,42 @@ public class ContainerLoom extends Container {
             itemstack = itemstack1.cloneItemStack();
             if (i == this.i.rawSlotIndex) {
                 if (!this.a(itemstack1, 4, 40, true)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
 
                 slot.a(itemstack1, itemstack);
             } else if (i != this.g.rawSlotIndex && i != this.f.rawSlotIndex && i != this.h.rawSlotIndex) {
                 if (itemstack1.getItem() instanceof ItemBanner) {
                     if (!this.a(itemstack1, this.f.rawSlotIndex, this.f.rawSlotIndex + 1, false)) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
                 } else if (itemstack1.getItem() instanceof ItemDye) {
                     if (!this.a(itemstack1, this.g.rawSlotIndex, this.g.rawSlotIndex + 1, false)) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
                 } else if (itemstack1.getItem() instanceof ItemBannerPattern) {
                     if (!this.a(itemstack1, this.h.rawSlotIndex, this.h.rawSlotIndex + 1, false)) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
                 } else if (i >= 4 && i < 31) {
                     if (!this.a(itemstack1, 31, 40, false)) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
                 } else if (i >= 31 && i < 40 && !this.a(itemstack1, 4, 31, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (!this.a(itemstack1, 4, 40, false)) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.a);
+                slot.set(ItemStack.b);
             } else {
                 slot.d();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             slot.a(entityhuman, itemstack1);
@@ -206,7 +206,7 @@ public class ContainerLoom extends Container {
         if (this.d.get() > 0) {
             ItemStack itemstack = this.f.getItem();
             ItemStack itemstack1 = this.g.getItem();
-            ItemStack itemstack2 = ItemStack.a;
+            ItemStack itemstack2 = ItemStack.b;
 
             if (!itemstack.isEmpty() && !itemstack1.isEmpty()) {
                 itemstack2 = itemstack.cloneItemStack();

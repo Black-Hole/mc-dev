@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import java.util.stream.Stream;
-
 public class TickListEmpty<T> implements TickList<T> {
 
     private static final TickListEmpty<Object> a = new TickListEmpty<>();
@@ -27,7 +25,4 @@ public class TickListEmpty<T> implements TickList<T> {
     public boolean b(BlockPosition blockposition, T t0) {
         return false;
     }
-
-    @Override
-    public void a(Stream<NextTickListEntry<T>> stream) {}
 }

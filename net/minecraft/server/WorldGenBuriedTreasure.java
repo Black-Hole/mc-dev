@@ -1,50 +1,30 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
-import java.util.Random;
-import java.util.function.Function;
+import com.mojang.serialization.Codec;
 
 public class WorldGenBuriedTreasure extends StructureGenerator<WorldGenBuriedTreasureConfiguration> {
 
-    public WorldGenBuriedTreasure(Function<Dynamic<?>, ? extends WorldGenBuriedTreasureConfiguration> function) {
-        super(function);
+    public WorldGenBuriedTreasure(Codec<WorldGenBuriedTreasureConfiguration> codec) {
+        super(codec);
+    }
+
+    protected boolean a(ChunkGenerator chunkgenerator, WorldChunkManager worldchunkmanager, long i, SeededRandom seededrandom, int j, int k, BiomeBase biomebase, ChunkCoordIntPair chunkcoordintpair, WorldGenBuriedTreasureConfiguration worldgenburiedtreasureconfiguration) {
+        seededrandom.a(i, j, k, 10387320);
+        return seededrandom.nextFloat() < worldgenburiedtreasureconfiguration.b;
     }
 
     @Override
-    public boolean a(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, Random random, int i, int j, BiomeBase biomebase) {
-        if (chunkgenerator.canSpawnStructure(biomebase, this)) {
-            ((SeededRandom) random).a(chunkgenerator.getSeed(), i, j, 10387320);
-            WorldGenBuriedTreasureConfiguration worldgenburiedtreasureconfiguration = (WorldGenBuriedTreasureConfiguration) chunkgenerator.getFeatureConfiguration(biomebase, this);
-
-            return random.nextFloat() < worldgenburiedtreasureconfiguration.a;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public StructureGenerator.a a() {
+    public StructureGenerator.a<WorldGenBuriedTreasureConfiguration> a() {
         return WorldGenBuriedTreasure.a::new;
     }
 
-    @Override
-    public String b() {
-        return "Buried_Treasure";
-    }
+    public static class a extends StructureStart<WorldGenBuriedTreasureConfiguration> {
 
-    @Override
-    public int c() {
-        return 1;
-    }
-
-    public static class a extends StructureStart {
-
-        public a(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+        public a(StructureGenerator<WorldGenBuriedTreasureConfiguration> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
             super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
-        @Override
-        public void a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase) {
+        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenBuriedTreasureConfiguration worldgenburiedtreasureconfiguration) {
             int k = i * 16;
             int l = j * 16;
             BlockPosition blockposition = new BlockPosition(k + 9, 90, l + 9);

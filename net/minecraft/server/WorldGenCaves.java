@@ -1,22 +1,22 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.BitSet;
 import java.util.Random;
 import java.util.function.Function;
 
 public class WorldGenCaves extends WorldGenCarverAbstract<WorldGenFeatureConfigurationChance> {
 
-    public WorldGenCaves(Function<Dynamic<?>, ? extends WorldGenFeatureConfigurationChance> function, int i) {
-        super(function, i);
+    public WorldGenCaves(Codec<WorldGenFeatureConfigurationChance> codec, int i) {
+        super(codec, i);
     }
 
     public boolean a(Random random, int i, int j, WorldGenFeatureConfigurationChance worldgenfeatureconfigurationchance) {
-        return random.nextFloat() <= worldgenfeatureconfigurationchance.b;
+        return random.nextFloat() <= worldgenfeatureconfigurationchance.c;
     }
 
     public boolean a(IChunkAccess ichunkaccess, Function<BlockPosition, BiomeBase> function, Random random, int i, int j, int k, int l, int i1, BitSet bitset, WorldGenFeatureConfigurationChance worldgenfeatureconfigurationchance) {
-        int j1 = (this.c() * 2 - 1) * 16;
+        int j1 = (this.d() * 2 - 1) * 16;
         int k1 = random.nextInt(random.nextInt(random.nextInt(this.a()) + 1) + 1);
 
         for (int l1 = 0; l1 < k1; ++l1) {

@@ -13,13 +13,18 @@ import java.util.Set;
 public class LootItemFunctionApplyBonus extends LootItemFunctionConditional {
 
     private static final Map<MinecraftKey, LootItemFunctionApplyBonus.c> a = Maps.newHashMap();
-    private final Enchantment c;
+    private final Enchantment b;
     private final LootItemFunctionApplyBonus.b d;
 
     private LootItemFunctionApplyBonus(LootItemCondition[] alootitemcondition, Enchantment enchantment, LootItemFunctionApplyBonus.b lootitemfunctionapplybonus_b) {
         super(alootitemcondition);
-        this.c = enchantment;
+        this.b = enchantment;
         this.d = lootitemfunctionapplybonus_b;
+    }
+
+    @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.p;
     }
 
     @Override
@@ -32,7 +37,7 @@ public class LootItemFunctionApplyBonus extends LootItemFunctionConditional {
         ItemStack itemstack1 = (ItemStack) loottableinfo.getContextParameter(LootContextParameters.TOOL);
 
         if (itemstack1 != null) {
-            int i = EnchantmentManager.getEnchantmentLevel(this.c, itemstack1);
+            int i = EnchantmentManager.getEnchantmentLevel(this.b, itemstack1);
             int j = this.d.a(loottableinfo.a(), itemstack.getCount(), i);
 
             itemstack.setCount(j);
@@ -73,13 +78,11 @@ public class LootItemFunctionApplyBonus extends LootItemFunctionConditional {
 
     public static class e extends LootItemFunctionConditional.c<LootItemFunctionApplyBonus> {
 
-        public e() {
-            super(new MinecraftKey("apply_bonus"), LootItemFunctionApplyBonus.class);
-        }
+        public e() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionApplyBonus lootitemfunctionapplybonus, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionapplybonus, jsonserializationcontext);
-            jsonobject.addProperty("enchantment", IRegistry.ENCHANTMENT.getKey(lootitemfunctionapplybonus.c).toString());
+            jsonobject.addProperty("enchantment", IRegistry.ENCHANTMENT.getKey(lootitemfunctionapplybonus.b).toString());
             jsonobject.addProperty("formula", lootitemfunctionapplybonus.d.a().toString());
             JsonObject jsonobject1 = new JsonObject();
 

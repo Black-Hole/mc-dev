@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class BlockFletchingTable extends BlockWorkbench {
 
-    protected BlockFletchingTable(Block.Info block_info) {
-        super(block_info);
+    protected BlockFletchingTable(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override

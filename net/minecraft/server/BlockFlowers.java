@@ -6,8 +6,8 @@ public class BlockFlowers extends BlockPlant {
     private final MobEffectList b;
     private final int c;
 
-    public BlockFlowers(MobEffectList mobeffectlist, int i, Block.Info block_info) {
-        super(block_info);
+    public BlockFlowers(MobEffectList mobeffectlist, int i, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
         this.b = mobeffectlist;
         if (mobeffectlist.isInstant()) {
             this.c = i;
@@ -18,15 +18,15 @@ public class BlockFlowers extends BlockPlant {
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        Vec3D vec3d = iblockdata.l(iblockaccess, blockposition);
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        Vec3D vec3d = iblockdata.n(iblockaccess, blockposition);
 
         return BlockFlowers.a.a(vec3d.x, vec3d.y, vec3d.z);
     }
 
     @Override
-    public Block.EnumRandomOffset X_() {
-        return Block.EnumRandomOffset.XZ;
+    public BlockBase.EnumRandomOffset aj_() {
+        return BlockBase.EnumRandomOffset.XZ;
     }
 
     public MobEffectList c() {

@@ -4,22 +4,22 @@ import com.google.common.collect.ImmutableMap;
 
 public class BehaviorNearestVillage extends Behavior<EntityVillager> {
 
-    private final float a;
-    private final int b;
+    private final float b;
+    private final int c;
 
     public BehaviorNearestVillage(float f, int i) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
-        this.a = f;
-        this.b = i;
+        this.b = f;
+        this.c = i;
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
-        return !worldserver.b_(new BlockPosition(entityvillager));
+        return !worldserver.b_(entityvillager.getChunkCoordinates());
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        VillagePlace villageplace = worldserver.B();
-        int j = villageplace.a(SectionPosition.a(new BlockPosition(entityvillager)));
+        VillagePlace villageplace = worldserver.x();
+        int j = villageplace.a(SectionPosition.a(entityvillager.getChunkCoordinates()));
         Vec3D vec3d = null;
 
         for (int k = 0; k < 5; ++k) {
@@ -42,7 +42,7 @@ public class BehaviorNearestVillage extends Behavior<EntityVillager> {
         }
 
         if (vec3d != null) {
-            entityvillager.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(vec3d, this.a, this.b)));
+            entityvillager.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(vec3d, this.b, this.c)));
         }
 
     }

@@ -1,18 +1,16 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.google.common.collect.UnmodifiableIterator;
-import java.util.ArrayList;
+import com.google.gson.JsonObject;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
-public abstract class CriterionTriggerAbstract<T extends CriterionInstance> implements CriterionTrigger<T> {
+public abstract class CriterionTriggerAbstract<T extends CriterionInstanceAbstract> implements CriterionTrigger<T> {
 
     private final Map<AdvancementDataPlayer, Set<CriterionTrigger.a<T>>> a = Maps.newIdentityHashMap();
 
@@ -43,10 +41,21 @@ public abstract class CriterionTriggerAbstract<T extends CriterionInstance> impl
         this.a.remove(advancementdataplayer);
     }
 
-    protected void a(AdvancementDataPlayer advancementdataplayer, Predicate<T> predicate) {
+    protected abstract T b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext);
+
+    @Override
+    public final T a(JsonObject jsonobject, LootDeserializationContext lootdeserializationcontext) {
+        CriterionConditionEntity.b criterionconditionentity_b = CriterionConditionEntity.b.a(jsonobject, "player", lootdeserializationcontext);
+
+        return this.b(jsonobject, criterionconditionentity_b, lootdeserializationcontext);
+    }
+
+    protected void a(EntityPlayer entityplayer, Predicate<T> predicate) {
+        AdvancementDataPlayer advancementdataplayer = entityplayer.getAdvancementData();
         Set<CriterionTrigger.a<T>> set = (Set) this.a.get(advancementdataplayer);
 
-        if (set != null) {
+        if (set != null && !set.isEmpty()) {
+            LootTableInfo loottableinfo = CriterionConditionEntity.b(entityplayer, entityplayer);
             List<CriterionTrigger.a<T>> list = null;
             Iterator iterator = set.iterator();
 
@@ -54,7 +63,9 @@ public abstract class CriterionTriggerAbstract<T extends CriterionInstance> impl
 
             while (iterator.hasNext()) {
                 criteriontrigger_a = (CriterionTrigger.a) iterator.next();
-                if (predicate.test(criteriontrigger_a.a())) {
+                T t0 = (CriterionInstanceAbstract) criteriontrigger_a.a();
+
+                if (t0.b().a(loottableinfo) && predicate.test(t0)) {
                     if (list == null) {
                         list = Lists.newArrayList();
                     }
@@ -73,20 +84,5 @@ public abstract class CriterionTriggerAbstract<T extends CriterionInstance> impl
             }
 
         }
-    }
-
-    protected void b(AdvancementDataPlayer advancementdataplayer) {
-        Set<CriterionTrigger.a<T>> set = (Set) this.a.get(advancementdataplayer);
-
-        if (set != null && !set.isEmpty()) {
-            UnmodifiableIterator unmodifiableiterator = ImmutableSet.copyOf(set).iterator();
-
-            while (unmodifiableiterator.hasNext()) {
-                CriterionTrigger.a<T> criteriontrigger_a = (CriterionTrigger.a) unmodifiableiterator.next();
-
-                criteriontrigger_a.a(advancementdataplayer);
-            }
-        }
-
     }
 }

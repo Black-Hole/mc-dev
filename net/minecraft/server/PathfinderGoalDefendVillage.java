@@ -30,7 +30,7 @@ public class PathfinderGoalDefendVillage extends PathfinderGoalTarget {
 
             while (iterator1.hasNext()) {
                 EntityHuman entityhuman = (EntityHuman) iterator1.next();
-                int i = entityvillager.f(entityhuman);
+                int i = entityvillager.g(entityhuman);
 
                 if (i <= -100) {
                     this.b = entityhuman;

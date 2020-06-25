@@ -44,7 +44,7 @@ public class ContainerBrewingStand extends Container {
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -54,43 +54,43 @@ public class ContainerBrewingStand extends Container {
             if ((i < 0 || i > 2) && i != 3 && i != 4) {
                 if (ContainerBrewingStand.a.a_(itemstack)) {
                     if (this.a(itemstack1, 4, 5, false) || this.e.isAllowed(itemstack1) && !this.a(itemstack1, 3, 4, false)) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
                 } else if (this.e.isAllowed(itemstack1)) {
                     if (!this.a(itemstack1, 3, 4, false)) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
                 } else if (ContainerBrewingStand.SlotPotionBottle.b_(itemstack) && itemstack.getCount() == 1) {
                     if (!this.a(itemstack1, 0, 3, false)) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
                 } else if (i >= 5 && i < 32) {
                     if (!this.a(itemstack1, 32, 41, false)) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
                 } else if (i >= 32 && i < 41) {
                     if (!this.a(itemstack1, 5, 32, false)) {
-                        return ItemStack.a;
+                        return ItemStack.b;
                     }
                 } else if (!this.a(itemstack1, 5, 41, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else {
                 if (!this.a(itemstack1, 5, 41, true)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
 
                 slot.a(itemstack1, itemstack);
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.a);
+                slot.set(ItemStack.b);
             } else {
                 slot.d();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             slot.a(entityhuman, itemstack1);

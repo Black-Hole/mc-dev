@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerUsedTotem extends CriterionTriggerAbstract<CriterionTriggerUsedTotem.a> {
@@ -16,14 +14,14 @@ public class CriterionTriggerUsedTotem extends CriterionTriggerAbstract<Criterio
     }
 
     @Override
-    public CriterionTriggerUsedTotem.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerUsedTotem.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
 
-        return new CriterionTriggerUsedTotem.a(criterionconditionitem);
+        return new CriterionTriggerUsedTotem.a(criterionconditionentity_b, criterionconditionitem);
     }
 
     public void a(EntityPlayer entityplayer, ItemStack itemstack) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggerusedtotem_a) -> {
+        this.a(entityplayer, (criteriontriggerusedtotem_a) -> {
             return criteriontriggerusedtotem_a.a(itemstack);
         });
     }
@@ -32,13 +30,13 @@ public class CriterionTriggerUsedTotem extends CriterionTriggerAbstract<Criterio
 
         private final CriterionConditionItem a;
 
-        public a(CriterionConditionItem criterionconditionitem) {
-            super(CriterionTriggerUsedTotem.a);
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionItem criterionconditionitem) {
+            super(CriterionTriggerUsedTotem.a, criterionconditionentity_b);
             this.a = criterionconditionitem;
         }
 
         public static CriterionTriggerUsedTotem.a a(IMaterial imaterial) {
-            return new CriterionTriggerUsedTotem.a(CriterionConditionItem.a.a().a(imaterial).b());
+            return new CriterionTriggerUsedTotem.a(CriterionConditionEntity.b.a, CriterionConditionItem.a.a().a(imaterial).b());
         }
 
         public boolean a(ItemStack itemstack) {
@@ -46,8 +44,8 @@ public class CriterionTriggerUsedTotem extends CriterionTriggerAbstract<Criterio
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             jsonobject.add("item", this.a.a());
             return jsonobject;

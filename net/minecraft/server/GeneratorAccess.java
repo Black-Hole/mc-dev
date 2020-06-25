@@ -1,20 +1,18 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 public interface GeneratorAccess extends IEntityAccess, IWorldReader, VirtualLevelWritable {
 
-    long getSeed();
-
-    default float Y() {
-        return WorldProvider.a[this.getWorldProvider().a(this.getWorldData().getDayTime())];
+    default float aa() {
+        return DimensionManager.b[this.getDimensionManager().c(this.getWorldData().getDayTime())];
     }
 
     default float f(float f) {
-        return this.getWorldProvider().a(this.getWorldData().getDayTime(), f);
+        return this.getDimensionManager().b(this.getWorldData().getDayTime());
     }
 
     TickList<Block> getBlockTickList();
@@ -40,7 +38,7 @@ public interface GeneratorAccess extends IEntityAccess, IWorldReader, VirtualLev
 
     Random getRandom();
 
-    void update(BlockPosition blockposition, Block block);
+    default void update(BlockPosition blockposition, Block block) {}
 
     void playSound(@Nullable EntityHuman entityhuman, BlockPosition blockposition, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1);
 
@@ -48,13 +46,17 @@ public interface GeneratorAccess extends IEntityAccess, IWorldReader, VirtualLev
 
     void a(@Nullable EntityHuman entityhuman, int i, BlockPosition blockposition, int j);
 
+    default int getHeight() {
+        return this.getDimensionManager().getLogicalHeight();
+    }
+
     default void triggerEffect(int i, BlockPosition blockposition, int j) {
         this.a((EntityHuman) null, i, blockposition, j);
     }
 
     @Override
-    default Stream<VoxelShape> b(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
-        return IEntityAccess.super.b(entity, axisalignedbb, set);
+    default Stream<VoxelShape> c(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Predicate<Entity> predicate) {
+        return IEntityAccess.super.c(entity, axisalignedbb, predicate);
     }
 
     @Override

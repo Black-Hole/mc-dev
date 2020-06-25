@@ -15,7 +15,7 @@ public class EntityMinecartMobSpawner extends EntityMinecartAbstract {
 
         @Override
         public BlockPosition b() {
-            return new BlockPosition(EntityMinecartMobSpawner.this);
+            return EntityMinecartMobSpawner.this.getChunkCoordinates();
         }
     };
 
@@ -38,14 +38,14 @@ public class EntityMinecartMobSpawner extends EntityMinecartAbstract {
     }
 
     @Override
-    protected void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    protected void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.b.a(nbttagcompound);
     }
 
     @Override
-    protected void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    protected void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         this.b.b(nbttagcompound);
     }
 
@@ -56,7 +56,7 @@ public class EntityMinecartMobSpawner extends EntityMinecartAbstract {
     }
 
     @Override
-    public boolean cb() {
+    public boolean ci() {
         return true;
     }
 }

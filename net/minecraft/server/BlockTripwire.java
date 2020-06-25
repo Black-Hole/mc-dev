@@ -19,14 +19,14 @@ public class BlockTripwire extends Block {
     protected static final VoxelShape i = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
     private final BlockTripwireHook k;
 
-    public BlockTripwire(BlockTripwireHook blocktripwirehook, Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTripwire.POWERED, false)).set(BlockTripwire.ATTACHED, false)).set(BlockTripwire.DISARMED, false)).set(BlockTripwire.NORTH, false)).set(BlockTripwire.EAST, false)).set(BlockTripwire.SOUTH, false)).set(BlockTripwire.WEST, false));
+    public BlockTripwire(BlockTripwireHook blocktripwirehook, BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTripwire.POWERED, false)).set(BlockTripwire.ATTACHED, false)).set(BlockTripwire.DISARMED, false)).set(BlockTripwire.NORTH, false)).set(BlockTripwire.EAST, false)).set(BlockTripwire.SOUTH, false)).set(BlockTripwire.WEST, false));
         this.k = blocktripwirehook;
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return (Boolean) iblockdata.get(BlockTripwire.ATTACHED) ? BlockTripwire.h : BlockTripwire.i;
     }
 
@@ -40,19 +40,19 @@ public class BlockTripwire extends Block {
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        return enumdirection.m().c() ? (IBlockData) iblockdata.set((IBlockState) BlockTripwire.j.get(enumdirection), this.a(iblockdata1, enumdirection)) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return enumdirection.n().d() ? (IBlockData) iblockdata.set((IBlockState) BlockTripwire.j.get(enumdirection), this.a(iblockdata1, enumdirection)) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     @Override
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (iblockdata1.getBlock() != iblockdata.getBlock()) {
+        if (!iblockdata1.a(iblockdata.getBlock())) {
             this.a(world, blockposition, iblockdata);
         }
     }
 
     @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (!flag && iblockdata.getBlock() != iblockdata1.getBlock()) {
+        if (!flag && !iblockdata.a(iblockdata1.getBlock())) {
             this.a(world, blockposition, (IBlockData) iblockdata.set(BlockTripwire.POWERED, true));
         }
     }
@@ -80,11 +80,11 @@ public class BlockTripwire extends Block {
                     BlockPosition blockposition1 = blockposition.shift(enumdirection, k);
                     IBlockData iblockdata1 = world.getType(blockposition1);
 
-                    if (iblockdata1.getBlock() == this.k) {
+                    if (iblockdata1.a((Block) this.k)) {
                         if (iblockdata1.get(BlockTripwireHook.FACING) == enumdirection.opposite()) {
                             this.k.a(world, blockposition1, iblockdata1, false, true, k, iblockdata);
                         }
-                    } else if (iblockdata1.getBlock() == this) {
+                    } else if (iblockdata1.a((Block) this)) {
                         ++k;
                         continue;
                     }
@@ -107,7 +107,7 @@ public class BlockTripwire extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if ((Boolean) worldserver.getType(blockposition).get(BlockTripwire.POWERED)) {
             this.a((World) worldserver, blockposition);
         }
@@ -139,7 +139,7 @@ public class BlockTripwire extends Block {
         }
 
         if (flag1) {
-            world.getBlockTickList().a(new BlockPosition(blockposition), this, this.a((IWorldReader) world));
+            world.getBlockTickList().a(new BlockPosition(blockposition), this, 10);
         }
 
     }

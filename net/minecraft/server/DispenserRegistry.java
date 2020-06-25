@@ -16,7 +16,7 @@ public class DispenserRegistry {
     public static void init() {
         if (!DispenserRegistry.b) {
             DispenserRegistry.b = true;
-            if (IRegistry.f.c()) {
+            if (IRegistry.h.keySet().isEmpty()) {
                 throw new IllegalStateException("Unable to load registries");
             } else {
                 BlockFire.c();
@@ -34,10 +34,10 @@ public class DispenserRegistry {
         }
     }
 
-    private static <T> void a(IRegistry<T> iregistry, Function<T, String> function, Set<String> set) {
+    private static <T> void a(Iterable<T> iterable, Function<T, String> function, Set<String> set) {
         LocaleLanguage localelanguage = LocaleLanguage.a();
 
-        iregistry.iterator().forEachRemaining((object) -> {
+        iterable.forEach((object) -> {
             String s = (String) function.apply(object);
 
             if (!localelanguage.b(s)) {
@@ -47,18 +47,34 @@ public class DispenserRegistry {
         });
     }
 
+    private static void a(final Set<String> set) {
+        final LocaleLanguage localelanguage = LocaleLanguage.a();
+
+        GameRules.a(new GameRules.GameRuleVisitor() {
+            @Override
+            public <T extends GameRules.GameRuleValue<T>> void a(GameRules.GameRuleKey<T> gamerules_gamerulekey, GameRules.GameRuleDefinition<T> gamerules_gameruledefinition) {
+                if (!localelanguage.b(gamerules_gamerulekey.b())) {
+                    set.add(gamerules_gamerulekey.a());
+                }
+
+            }
+        });
+    }
+
     public static Set<String> b() {
         Set<String> set = new TreeSet();
 
+        a(IRegistry.ATTRIBUTE, AttributeBase::getName, set);
         a(IRegistry.ENTITY_TYPE, EntityTypes::f, set);
         a(IRegistry.MOB_EFFECT, MobEffectList::c, set);
         a(IRegistry.ITEM, Item::getName, set);
         a(IRegistry.ENCHANTMENT, Enchantment::g, set);
-        a(IRegistry.BIOME, BiomeBase::l, set);
-        a(IRegistry.BLOCK, Block::k, set);
+        a(IRegistry.BIOME, BiomeBase::n, set);
+        a(IRegistry.BLOCK, Block::i, set);
         a(IRegistry.CUSTOM_STAT, (minecraftkey) -> {
             return "stat." + minecraftkey.toString().replace(':', '.');
         }, set);
+        a((Set) set);
         return set;
     }
 
@@ -66,12 +82,13 @@ public class DispenserRegistry {
         if (!DispenserRegistry.b) {
             throw new IllegalArgumentException("Not bootstrapped");
         } else {
-            if (SharedConstants.b) {
+            if (SharedConstants.d) {
                 b().forEach((s) -> {
                     DispenserRegistry.LOGGER.error("Missing translations: " + s);
                 });
             }
 
+            AttributeDefaults.a();
         }
     }
 

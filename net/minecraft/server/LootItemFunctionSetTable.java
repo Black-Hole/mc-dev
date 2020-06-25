@@ -7,12 +7,17 @@ import com.google.gson.JsonSerializationContext;
 public class LootItemFunctionSetTable extends LootItemFunctionConditional {
 
     private final MinecraftKey a;
-    private final long c;
+    private final long b;
 
     private LootItemFunctionSetTable(LootItemCondition[] alootitemcondition, MinecraftKey minecraftkey, long i) {
         super(alootitemcondition);
         this.a = minecraftkey;
-        this.c = i;
+        this.b = i;
+    }
+
+    @Override
+    public LootItemFunctionType b() {
+        return LootItemFunctions.q;
     }
 
     @Override
@@ -23,8 +28,8 @@ public class LootItemFunctionSetTable extends LootItemFunctionConditional {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
             nbttagcompound.setString("LootTable", this.a.toString());
-            if (this.c != 0L) {
-                nbttagcompound.setLong("LootTableSeed", this.c);
+            if (this.b != 0L) {
+                nbttagcompound.setLong("LootTableSeed", this.b);
             }
 
             itemstack.getOrCreateTag().set("BlockEntityTag", nbttagcompound);
@@ -51,15 +56,13 @@ public class LootItemFunctionSetTable extends LootItemFunctionConditional {
 
     public static class a extends LootItemFunctionConditional.c<LootItemFunctionSetTable> {
 
-        protected a() {
-            super(new MinecraftKey("set_loot_table"), LootItemFunctionSetTable.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemFunctionSetTable lootitemfunctionsettable, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsettable, jsonserializationcontext);
             jsonobject.addProperty("name", lootitemfunctionsettable.a.toString());
-            if (lootitemfunctionsettable.c != 0L) {
-                jsonobject.addProperty("seed", lootitemfunctionsettable.c);
+            if (lootitemfunctionsettable.b != 0L) {
+                jsonobject.addProperty("seed", lootitemfunctionsettable.b);
             }
 
         }

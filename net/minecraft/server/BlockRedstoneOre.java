@@ -6,14 +6,9 @@ public class BlockRedstoneOre extends Block {
 
     public static final BlockStateBoolean a = BlockRedstoneTorch.LIT;
 
-    public BlockRedstoneOre(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) this.getBlockData().set(BlockRedstoneOre.a, false));
-    }
-
-    @Override
-    public int a(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockRedstoneOre.a) ? super.a(iblockdata) : 0;
+    public BlockRedstoneOre(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) this.getBlockData().set(BlockRedstoneOre.a, false));
     }
 
     @Override
@@ -32,11 +27,13 @@ public class BlockRedstoneOre extends Block {
     public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (world.isClientSide) {
             playEffect(world, blockposition);
-            return EnumInteractionResult.SUCCESS;
         } else {
             interact(iblockdata, world, blockposition);
-            return EnumInteractionResult.PASS;
         }
+
+        ItemStack itemstack = entityhuman.b(enumhand);
+
+        return itemstack.getItem() instanceof ItemBlock && (new BlockActionContext(entityhuman, enumhand, itemstack, movingobjectpositionblock)).b() ? EnumInteractionResult.PASS : EnumInteractionResult.SUCCESS;
     }
 
     private static void interact(IBlockData iblockdata, World world, BlockPosition blockposition) {
@@ -45,6 +42,11 @@ public class BlockRedstoneOre extends Block {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneOre.a, true), 3);
         }
 
+    }
+
+    @Override
+    public boolean isTicking(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockRedstoneOre.a);
     }
 
     @Override
@@ -76,8 +78,8 @@ public class BlockRedstoneOre extends Block {
             EnumDirection enumdirection = aenumdirection[j];
             BlockPosition blockposition1 = blockposition.shift(enumdirection);
 
-            if (!world.getType(blockposition1).g(world, blockposition1)) {
-                EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.m();
+            if (!world.getType(blockposition1).i(world, blockposition1)) {
+                EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.n();
                 double d1 = enumdirection_enumaxis == EnumDirection.EnumAxis.X ? 0.5D + 0.5625D * (double) enumdirection.getAdjacentX() : (double) random.nextFloat();
                 double d2 = enumdirection_enumaxis == EnumDirection.EnumAxis.Y ? 0.5D + 0.5625D * (double) enumdirection.getAdjacentY() : (double) random.nextFloat();
                 double d3 = enumdirection_enumaxis == EnumDirection.EnumAxis.Z ? 0.5D + 0.5625D * (double) enumdirection.getAdjacentZ() : (double) random.nextFloat();

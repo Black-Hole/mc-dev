@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 public interface IBlockAccess {
@@ -14,7 +15,7 @@ public interface IBlockAccess {
     Fluid getFluid(BlockPosition blockposition);
 
     default int h(BlockPosition blockposition) {
-        return this.getType(blockposition).h();
+        return this.getType(blockposition).f();
     }
 
     default int H() {
@@ -23,6 +24,10 @@ public interface IBlockAccess {
 
     default int getBuildHeight() {
         return 256;
+    }
+
+    default Stream<IBlockData> a(AxisAlignedBB axisalignedbb) {
+        return BlockPosition.a(axisalignedbb).map(this::getType);
     }
 
     default MovingObjectPositionBlock rayTrace(RayTrace raytrace) {
@@ -51,7 +56,7 @@ public interface IBlockAccess {
         MovingObjectPositionBlock movingobjectpositionblock = voxelshape.rayTrace(vec3d, vec3d1, blockposition);
 
         if (movingobjectpositionblock != null) {
-            MovingObjectPositionBlock movingobjectpositionblock1 = iblockdata.k(this, blockposition).rayTrace(vec3d, vec3d1, blockposition);
+            MovingObjectPositionBlock movingobjectpositionblock1 = iblockdata.m(this, blockposition).rayTrace(vec3d, vec3d1, blockposition);
 
             if (movingobjectpositionblock1 != null && movingobjectpositionblock1.getPos().d(vec3d).g() < movingobjectpositionblock.getPos().d(vec3d).g()) {
                 return movingobjectpositionblock.a(movingobjectpositionblock1.getDirection());

@@ -8,17 +8,12 @@ import javax.annotation.Nullable;
 
 public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
 
-    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.X;
+    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.ad;
     public static final BlockStateBoolean POWERED = BlockProperties.w;
 
-    public BlockMinecartDetector(Block.Info block_info) {
-        super(true, block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockMinecartDetector.POWERED, false)).set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH));
-    }
-
-    @Override
-    public int a(IWorldReader iworldreader) {
-        return 20;
+    public BlockMinecartDetector(BlockBase.Info blockbase_info) {
+        super(true, blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockMinecartDetector.POWERED, false)).set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH));
     }
 
     @Override
@@ -36,7 +31,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if ((Boolean) iblockdata.get(BlockMinecartDetector.POWERED)) {
             this.a((World) worldserver, blockposition, iblockdata);
         }
@@ -82,7 +77,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
         }
 
         if (flag1) {
-            world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
+            world.getBlockTickList().a(blockposition, this, 20);
         }
 
         world.updateAdjacentComparators(blockposition, this);
@@ -104,9 +99,8 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
 
     @Override
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (iblockdata1.getBlock() != iblockdata.getBlock()) {
-            super.onPlace(iblockdata, world, blockposition, iblockdata1, flag);
-            this.a(world, blockposition, iblockdata);
+        if (!iblockdata1.a(iblockdata.getBlock())) {
+            this.a(world, blockposition, this.a(iblockdata, world, blockposition, flag));
         }
     }
 
@@ -144,9 +138,9 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
     }
 
     private AxisAlignedBB a(BlockPosition blockposition) {
-        float f = 0.2F;
+        double d0 = 0.2D;
 
-        return new AxisAlignedBB((double) ((float) blockposition.getX() + 0.2F), (double) blockposition.getY(), (double) ((float) blockposition.getZ() + 0.2F), (double) ((float) (blockposition.getX() + 1) - 0.2F), (double) ((float) (blockposition.getY() + 1) - 0.2F), (double) ((float) (blockposition.getZ() + 1) - 0.2F));
+        return new AxisAlignedBB((double) blockposition.getX() + 0.2D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.2D, (double) (blockposition.getX() + 1) - 0.2D, (double) (blockposition.getY() + 1) - 0.2D, (double) (blockposition.getZ() + 1) - 0.2D);
     }
 
     @Override

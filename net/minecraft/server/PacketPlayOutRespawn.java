@@ -4,18 +4,26 @@ import java.io.IOException;
 
 public class PacketPlayOutRespawn implements Packet<PacketListenerPlayOut> {
 
-    private DimensionManager a;
-    private long b;
-    private EnumGamemode c;
-    private WorldType d;
+    private ResourceKey<DimensionManager> a;
+    private ResourceKey<World> b;
+    private long c;
+    private EnumGamemode d;
+    private EnumGamemode e;
+    private boolean f;
+    private boolean g;
+    private boolean h;
 
     public PacketPlayOutRespawn() {}
 
-    public PacketPlayOutRespawn(DimensionManager dimensionmanager, long i, WorldType worldtype, EnumGamemode enumgamemode) {
-        this.a = dimensionmanager;
-        this.b = i;
-        this.c = enumgamemode;
-        this.d = worldtype;
+    public PacketPlayOutRespawn(ResourceKey<DimensionManager> resourcekey, ResourceKey<World> resourcekey1, long i, EnumGamemode enumgamemode, EnumGamemode enumgamemode1, boolean flag, boolean flag1, boolean flag2) {
+        this.a = resourcekey;
+        this.b = resourcekey1;
+        this.c = i;
+        this.d = enumgamemode;
+        this.e = enumgamemode1;
+        this.f = flag;
+        this.g = flag1;
+        this.h = flag2;
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
@@ -24,21 +32,25 @@ public class PacketPlayOutRespawn implements Packet<PacketListenerPlayOut> {
 
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = DimensionManager.a(packetdataserializer.readInt());
-        this.b = packetdataserializer.readLong();
-        this.c = EnumGamemode.getById(packetdataserializer.readUnsignedByte());
-        this.d = WorldType.getType(packetdataserializer.e(16));
-        if (this.d == null) {
-            this.d = WorldType.NORMAL;
-        }
-
+        this.a = ResourceKey.a(IRegistry.ad, packetdataserializer.o());
+        this.b = ResourceKey.a(IRegistry.ae, packetdataserializer.o());
+        this.c = packetdataserializer.readLong();
+        this.d = EnumGamemode.getById(packetdataserializer.readUnsignedByte());
+        this.e = EnumGamemode.getById(packetdataserializer.readUnsignedByte());
+        this.f = packetdataserializer.readBoolean();
+        this.g = packetdataserializer.readBoolean();
+        this.h = packetdataserializer.readBoolean();
     }
 
     @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeInt(this.a.getDimensionID());
-        packetdataserializer.writeLong(this.b);
-        packetdataserializer.writeByte(this.c.getId());
-        packetdataserializer.a(this.d.name());
+        packetdataserializer.a(this.a.a());
+        packetdataserializer.a(this.b.a());
+        packetdataserializer.writeLong(this.c);
+        packetdataserializer.writeByte(this.d.getId());
+        packetdataserializer.writeByte(this.e.getId());
+        packetdataserializer.writeBoolean(this.f);
+        packetdataserializer.writeBoolean(this.g);
+        packetdataserializer.writeBoolean(this.h);
     }
 }

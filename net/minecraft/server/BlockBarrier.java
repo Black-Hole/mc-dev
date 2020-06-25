@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class BlockBarrier extends Block {
 
-    protected BlockBarrier(Block.Info block_info) {
-        super(block_info);
+    protected BlockBarrier(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
@@ -12,12 +12,7 @@ public class BlockBarrier extends Block {
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.INVISIBLE;
-    }
-
-    @Override
-    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EntityTypes<?> entitytypes) {
-        return false;
     }
 }

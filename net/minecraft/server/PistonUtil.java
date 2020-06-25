@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class PistonUtil {
 
     public static AxisAlignedBB a(AxisAlignedBB axisalignedbb, EnumDirection enumdirection, double d0) {
-        double d1 = d0 * (double) enumdirection.d().a();
+        double d1 = d0 * (double) enumdirection.e().a();
         double d2 = Math.min(d1, 0.0D);
         double d3 = Math.max(d1, 0.0D);
 

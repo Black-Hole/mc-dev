@@ -27,7 +27,7 @@ public class PathfinderGoalRandomFly extends PathfinderGoalRandomStrollLand {
 
     @Nullable
     private Vec3D j() {
-        BlockPosition blockposition = new BlockPosition(this.a);
+        BlockPosition blockposition = this.a.getChunkCoordinates();
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition1 = new BlockPosition.MutableBlockPosition();
         Iterable<BlockPosition> iterable = BlockPosition.b(MathHelper.floor(this.a.locX() - 3.0D), MathHelper.floor(this.a.locY() - 6.0D), MathHelper.floor(this.a.locZ() - 3.0D), MathHelper.floor(this.a.locX() + 3.0D), MathHelper.floor(this.a.locY() + 6.0D), MathHelper.floor(this.a.locZ() + 3.0D));
@@ -37,11 +37,11 @@ public class PathfinderGoalRandomFly extends PathfinderGoalRandomStrollLand {
             BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
             if (!blockposition.equals(blockposition1)) {
-                Block block = this.a.world.getType(blockposition_mutableblockposition1.g(blockposition1).c(EnumDirection.DOWN)).getBlock();
-                boolean flag = block instanceof BlockLeaves || block.a(TagsBlock.LOGS);
+                Block block = this.a.world.getType(blockposition_mutableblockposition1.a((BaseBlockPosition) blockposition1, EnumDirection.DOWN)).getBlock();
+                boolean flag = block instanceof BlockLeaves || block.a((Tag) TagsBlock.LOGS);
 
-                if (flag && this.a.world.isEmpty(blockposition1) && this.a.world.isEmpty(blockposition_mutableblockposition.g(blockposition1).c(EnumDirection.UP))) {
-                    return new Vec3D(blockposition1);
+                if (flag && this.a.world.isEmpty(blockposition1) && this.a.world.isEmpty(blockposition_mutableblockposition.a((BaseBlockPosition) blockposition1, EnumDirection.UP))) {
+                    return Vec3D.c((BaseBlockPosition) blockposition1);
                 }
             }
         }

@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.DSL.TypeReference;
 import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.DSL.TypeReference;
 import com.mojang.datafixers.schemas.Schema;
 
 public class DataConverterShoulderEntity extends DataFix {

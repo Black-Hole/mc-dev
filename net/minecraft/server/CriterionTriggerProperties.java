@@ -8,8 +8,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
@@ -41,7 +41,7 @@ public class CriterionTriggerProperties {
         this.b = ImmutableList.copyOf(list);
     }
 
-    public <S extends IBlockDataHolder<S>> boolean a(BlockStateList<?, S> blockstatelist, S s0) {
+    public <S extends IBlockDataHolder<?, S>> boolean a(BlockStateList<?, S> blockstatelist, S s0) {
         Iterator iterator = this.b.iterator();
 
         CriterionTriggerProperties.c criteriontriggerproperties_c;
@@ -116,7 +116,7 @@ public class CriterionTriggerProperties {
         }
 
         public CriterionTriggerProperties.a a(IBlockState<?> iblockstate, String s) {
-            this.a.add(new CriterionTriggerProperties.b(iblockstate.a(), s));
+            this.a.add(new CriterionTriggerProperties.b(iblockstate.getName(), s));
             return this;
         }
 
@@ -151,7 +151,7 @@ public class CriterionTriggerProperties {
         }
 
         @Override
-        protected <T extends Comparable<T>> boolean a(IBlockDataHolder<?> iblockdataholder, IBlockState<T> iblockstate) {
+        protected <T extends Comparable<T>> boolean a(IBlockDataHolder<?, ?> iblockdataholder, IBlockState<T> iblockstate) {
             T t0 = iblockdataholder.get(iblockstate);
             Optional optional;
 
@@ -198,7 +198,7 @@ public class CriterionTriggerProperties {
         }
 
         @Override
-        protected <T extends Comparable<T>> boolean a(IBlockDataHolder<?> iblockdataholder, IBlockState<T> iblockstate) {
+        protected <T extends Comparable<T>> boolean a(IBlockDataHolder<?, ?> iblockdataholder, IBlockState<T> iblockstate) {
             T t0 = iblockdataholder.get(iblockstate);
             Optional<T> optional = iblockstate.b(this.a);
 
@@ -219,13 +219,13 @@ public class CriterionTriggerProperties {
             this.a = s;
         }
 
-        public <S extends IBlockDataHolder<S>> boolean a(BlockStateList<?, S> blockstatelist, S s0) {
+        public <S extends IBlockDataHolder<?, S>> boolean a(BlockStateList<?, S> blockstatelist, S s0) {
             IBlockState<?> iblockstate = blockstatelist.a(this.a);
 
             return iblockstate == null ? false : this.a(s0, iblockstate);
         }
 
-        protected abstract <T extends Comparable<T>> boolean a(IBlockDataHolder<?> iblockdataholder, IBlockState<T> iblockstate);
+        protected abstract <T extends Comparable<T>> boolean a(IBlockDataHolder<?, ?> iblockdataholder, IBlockState<T> iblockstate);
 
         public abstract JsonElement a();
 

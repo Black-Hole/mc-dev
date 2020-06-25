@@ -5,10 +5,13 @@ import com.google.common.collect.Multimap;
 import com.google.gson.JsonParseException;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -18,30 +21,40 @@ import org.apache.logging.log4j.Logger;
 
 public final class ItemStack {
 
+    public static final Codec<ItemStack> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(IRegistry.ITEM.fieldOf("id").forGetter((itemstack) -> {
+            return itemstack.item;
+        }), Codec.INT.fieldOf("Count").forGetter((itemstack) -> {
+            return itemstack.count;
+        }), NBTTagCompound.a.optionalFieldOf("tag").forGetter((itemstack) -> {
+            return Optional.ofNullable(itemstack.tag);
+        })).apply(instance, ItemStack::new);
+    });
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final ItemStack a = new ItemStack((Item) null);
-    public static final DecimalFormat b = H();
+    public static final ItemStack b = new ItemStack((Item) null);
+    public static final DecimalFormat c = (DecimalFormat) SystemUtils.a((Object) (new DecimalFormat("#.##")), (decimalformat) -> {
+        decimalformat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ROOT));
+    });
+    private static final ChatModifier e = ChatModifier.b.setColor(EnumChatFormat.DARK_PURPLE).setItalic(true);
     private int count;
-    private int e;
+    private int g;
     @Deprecated
     private Item item;
     private NBTTagCompound tag;
-    private boolean h;
-    private EntityItemFrame i;
-    private ShapeDetectorBlock j;
-    private boolean k;
+    private boolean j;
+    private Entity k;
     private ShapeDetectorBlock l;
     private boolean m;
-
-    private static DecimalFormat H() {
-        DecimalFormat decimalformat = new DecimalFormat("#.##");
-
-        decimalformat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ROOT));
-        return decimalformat;
-    }
+    private ShapeDetectorBlock n;
+    private boolean o;
 
     public ItemStack(IMaterial imaterial) {
         this(imaterial, 1);
+    }
+
+    private ItemStack(IMaterial imaterial, int i, Optional<NBTTagCompound> optional) {
+        this(imaterial, i);
+        optional.ifPresent(this::setTag);
     }
 
     public ItemStack(IMaterial imaterial, int i) {
@@ -55,8 +68,8 @@ public final class ItemStack {
     }
 
     private void checkEmpty() {
-        this.h = false;
-        this.h = this.isEmpty();
+        this.j = false;
+        this.j = this.isEmpty();
     }
 
     private ItemStack(NBTTagCompound nbttagcompound) {
@@ -64,7 +77,7 @@ public final class ItemStack {
         this.count = nbttagcompound.getByte("Count");
         if (nbttagcompound.hasKeyOfType("tag", 10)) {
             this.tag = nbttagcompound.getCompound("tag");
-            this.getItem().a(nbttagcompound);
+            this.getItem().b(nbttagcompound);
         }
 
         if (this.getItem().usesDurability()) {
@@ -79,12 +92,12 @@ public final class ItemStack {
             return new ItemStack(nbttagcompound);
         } catch (RuntimeException runtimeexception) {
             ItemStack.LOGGER.debug("Tried to load invalid item: {}", nbttagcompound, runtimeexception);
-            return ItemStack.a;
+            return ItemStack.b;
         }
     }
 
     public boolean isEmpty() {
-        return this == ItemStack.a ? true : (this.getItem() != null && this.getItem() != Items.AIR ? this.count <= 0 : true);
+        return this == ItemStack.b ? true : (this.getItem() != null && this.getItem() != Items.AIR ? this.count <= 0 : true);
     }
 
     public ItemStack cloneAndSubtract(int i) {
@@ -97,7 +110,7 @@ public final class ItemStack {
     }
 
     public Item getItem() {
-        return this.h ? Items.AIR : this.item;
+        return this.j ? Items.AIR : this.item;
     }
 
     public EnumInteractionResult placeItem(ItemActionContext itemactioncontext) {
@@ -105,13 +118,13 @@ public final class ItemStack {
         BlockPosition blockposition = itemactioncontext.getClickPosition();
         ShapeDetectorBlock shapedetectorblock = new ShapeDetectorBlock(itemactioncontext.getWorld(), blockposition, false);
 
-        if (entityhuman != null && !entityhuman.abilities.mayBuild && !this.b(itemactioncontext.getWorld().t(), shapedetectorblock)) {
+        if (entityhuman != null && !entityhuman.abilities.mayBuild && !this.b(itemactioncontext.getWorld().p(), shapedetectorblock)) {
             return EnumInteractionResult.PASS;
         } else {
             Item item = this.getItem();
             EnumInteractionResult enuminteractionresult = item.a(itemactioncontext);
 
-            if (entityhuman != null && enuminteractionresult == EnumInteractionResult.SUCCESS) {
+            if (entityhuman != null && enuminteractionresult.a()) {
                 entityhuman.b(StatisticList.ITEM_USED.b(item));
             }
 
@@ -152,7 +165,7 @@ public final class ItemStack {
     }
 
     public boolean e() {
-        if (!this.h && this.getItem().getMaxDurability() > 0) {
+        if (!this.j && this.getItem().getMaxDurability() > 0) {
             NBTTagCompound nbttagcompound = this.getTag();
 
             return nbttagcompound == null || !nbttagcompound.getBoolean("Unbreakable");
@@ -250,17 +263,17 @@ public final class ItemStack {
         return this.getItem().canDestroySpecialBlock(iblockdata);
     }
 
-    public boolean a(EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
+    public EnumInteractionResult a(EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
         return this.getItem().a(this, entityhuman, entityliving, enumhand);
     }
 
     public ItemStack cloneItemStack() {
         if (this.isEmpty()) {
-            return ItemStack.a;
+            return ItemStack.b;
         } else {
             ItemStack itemstack = new ItemStack(this.getItem(), this.count);
 
-            itemstack.d(this.C());
+            itemstack.d(this.D());
             if (this.tag != null) {
                 itemstack.tag = this.tag.clone();
             }
@@ -306,8 +319,8 @@ public final class ItemStack {
     }
 
     public void a(World world, Entity entity, int i, boolean flag) {
-        if (this.e > 0) {
-            --this.e;
+        if (this.g > 0) {
+            --this.g;
         }
 
         if (this.getItem() != null) {
@@ -322,11 +335,11 @@ public final class ItemStack {
     }
 
     public int k() {
-        return this.getItem().f_(this);
+        return this.getItem().e_(this);
     }
 
     public EnumAnimation l() {
-        return this.getItem().e_(this);
+        return this.getItem().d_(this);
     }
 
     public void a(World world, EntityLiving entityliving, int i) {
@@ -334,11 +347,11 @@ public final class ItemStack {
     }
 
     public boolean m() {
-        return this.getItem().i(this);
+        return this.getItem().j(this);
     }
 
     public boolean hasTag() {
-        return !this.h && this.tag != null && !this.tag.isEmpty();
+        return !this.j && this.tag != null && !this.tag.isEmpty();
     }
 
     @Nullable
@@ -397,10 +410,10 @@ public final class ItemStack {
 
         if (nbttagcompound != null && nbttagcompound.hasKeyOfType("Name", 8)) {
             try {
-                IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("Name"));
+                IChatMutableComponent ichatmutablecomponent = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("Name"));
 
-                if (ichatbasecomponent != null) {
-                    return ichatbasecomponent;
+                if (ichatmutablecomponent != null) {
+                    return ichatmutablecomponent;
                 }
 
                 nbttagcompound.remove("Name");
@@ -409,7 +422,7 @@ public final class ItemStack {
             }
         }
 
-        return this.getItem().g(this);
+        return this.getItem().h(this);
     }
 
     public ItemStack a(@Nullable IChatBaseComponent ichatbasecomponent) {
@@ -447,15 +460,15 @@ public final class ItemStack {
     }
 
     public boolean u() {
-        return this.getItem().d_(this);
+        return this.getItem().e(this);
     }
 
     public EnumItemRarity v() {
-        return this.getItem().h(this);
+        return this.getItem().i(this);
     }
 
     public boolean canEnchant() {
-        return !this.getItem().g_(this) ? false : !this.hasEnchantments();
+        return !this.getItem().f_(this) ? false : !this.hasEnchantments();
     }
 
     public void addEnchantment(Enchantment enchantment, int i) {
@@ -481,16 +494,21 @@ public final class ItemStack {
     }
 
     public boolean y() {
-        return this.i != null;
+        return this.k instanceof EntityItemFrame;
     }
 
-    public void a(@Nullable EntityItemFrame entityitemframe) {
-        this.i = entityitemframe;
+    public void a(@Nullable Entity entity) {
+        this.k = entity;
     }
 
     @Nullable
     public EntityItemFrame z() {
-        return this.h ? null : this.i;
+        return this.k instanceof EntityItemFrame ? (EntityItemFrame) this.A() : null;
+    }
+
+    @Nullable
+    public Entity A() {
+        return !this.j ? this.k : null;
     }
 
     public int getRepairCost() {
@@ -501,7 +519,7 @@ public final class ItemStack {
         this.getOrCreateTag().setInt("RepairCost", i);
     }
 
-    public Multimap<String, AttributeModifier> a(EnumItemSlot enumitemslot) {
+    public Multimap<AttributeBase, AttributeModifier> a(EnumItemSlot enumitemslot) {
         Object object;
 
         if (this.hasTag() && this.tag.hasKeyOfType("AttributeModifiers", 9)) {
@@ -510,32 +528,36 @@ public final class ItemStack {
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
                 NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
-                AttributeModifier attributemodifier = GenericAttributes.a(nbttagcompound);
 
-                if (attributemodifier != null && (!nbttagcompound.hasKeyOfType("Slot", 8) || nbttagcompound.getString("Slot").equals(enumitemslot.getSlotName())) && attributemodifier.getUniqueId().getLeastSignificantBits() != 0L && attributemodifier.getUniqueId().getMostSignificantBits() != 0L) {
-                    ((Multimap) object).put(nbttagcompound.getString("AttributeName"), attributemodifier);
+                if (!nbttagcompound.hasKeyOfType("Slot", 8) || nbttagcompound.getString("Slot").equals(enumitemslot.getSlotName())) {
+                    Optional<AttributeBase> optional = IRegistry.ATTRIBUTE.getOptional(MinecraftKey.a(nbttagcompound.getString("AttributeName")));
+
+                    if (optional.isPresent()) {
+                        AttributeModifier attributemodifier = AttributeModifier.a(nbttagcompound);
+
+                        if (attributemodifier != null && attributemodifier.getUniqueId().getLeastSignificantBits() != 0L && attributemodifier.getUniqueId().getMostSignificantBits() != 0L) {
+                            ((Multimap) object).put(optional.get(), attributemodifier);
+                        }
+                    }
                 }
             }
         } else {
             object = this.getItem().a(enumitemslot);
         }
 
-        ((Multimap) object).values().forEach((attributemodifier1) -> {
-            attributemodifier1.a(false);
-        });
         return (Multimap) object;
     }
 
-    public void a(String s, AttributeModifier attributemodifier, @Nullable EnumItemSlot enumitemslot) {
+    public void a(AttributeBase attributebase, AttributeModifier attributemodifier, @Nullable EnumItemSlot enumitemslot) {
         this.getOrCreateTag();
         if (!this.tag.hasKeyOfType("AttributeModifiers", 9)) {
             this.tag.set("AttributeModifiers", new NBTTagList());
         }
 
         NBTTagList nbttaglist = this.tag.getList("AttributeModifiers", 10);
-        NBTTagCompound nbttagcompound = GenericAttributes.a(attributemodifier);
+        NBTTagCompound nbttagcompound = attributemodifier.save();
 
-        nbttagcompound.setString("AttributeName", s);
+        nbttagcompound.setString("AttributeName", IRegistry.ATTRIBUTE.getKey(attributebase).toString());
         if (enumitemslot != null) {
             nbttagcompound.setString("Slot", enumitemslot.getSlotName());
         }
@@ -543,24 +565,22 @@ public final class ItemStack {
         nbttaglist.add(nbttagcompound);
     }
 
-    public IChatBaseComponent B() {
-        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("")).addSibling(this.getName());
+    public IChatBaseComponent C() {
+        IChatMutableComponent ichatmutablecomponent = (new ChatComponentText("")).addSibling(this.getName());
 
         if (this.hasName()) {
-            ichatbasecomponent.a(EnumChatFormat.ITALIC);
+            ichatmutablecomponent.a(EnumChatFormat.ITALIC);
         }
 
-        IChatBaseComponent ichatbasecomponent1 = ChatComponentUtils.a(ichatbasecomponent);
+        IChatMutableComponent ichatmutablecomponent1 = ChatComponentUtils.a((IChatBaseComponent) ichatmutablecomponent);
 
-        if (!this.h) {
-            NBTTagCompound nbttagcompound = this.save(new NBTTagCompound());
-
-            ichatbasecomponent1.a(this.v().e).a((chatmodifier) -> {
-                chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_ITEM, new ChatComponentText(nbttagcompound.toString())));
+        if (!this.j) {
+            ichatmutablecomponent1.a(this.v().e).format((chatmodifier) -> {
+                return chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_ITEM, new ChatHoverable.c(this)));
             });
         }
 
-        return ichatbasecomponent1;
+        return ichatmutablecomponent1;
     }
 
     private static boolean a(ShapeDetectorBlock shapedetectorblock, @Nullable ShapeDetectorBlock shapedetectorblock1) {
@@ -568,41 +588,12 @@ public final class ItemStack {
     }
 
     public boolean a(TagRegistry tagregistry, ShapeDetectorBlock shapedetectorblock) {
-        if (a(shapedetectorblock, this.j)) {
-            return this.k;
-        } else {
-            this.j = shapedetectorblock;
-            if (this.hasTag() && this.tag.hasKeyOfType("CanDestroy", 9)) {
-                NBTTagList nbttaglist = this.tag.getList("CanDestroy", 8);
-
-                for (int i = 0; i < nbttaglist.size(); ++i) {
-                    String s = nbttaglist.getString(i);
-
-                    try {
-                        Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a().parse(new StringReader(s)).create(tagregistry);
-
-                        if (predicate.test(shapedetectorblock)) {
-                            this.k = true;
-                            return true;
-                        }
-                    } catch (CommandSyntaxException commandsyntaxexception) {
-                        ;
-                    }
-                }
-            }
-
-            this.k = false;
-            return false;
-        }
-    }
-
-    public boolean b(TagRegistry tagregistry, ShapeDetectorBlock shapedetectorblock) {
         if (a(shapedetectorblock, this.l)) {
             return this.m;
         } else {
             this.l = shapedetectorblock;
-            if (this.hasTag() && this.tag.hasKeyOfType("CanPlaceOn", 9)) {
-                NBTTagList nbttaglist = this.tag.getList("CanPlaceOn", 8);
+            if (this.hasTag() && this.tag.hasKeyOfType("CanDestroy", 9)) {
+                NBTTagList nbttaglist = this.tag.getList("CanDestroy", 8);
 
                 for (int i = 0; i < nbttaglist.size(); ++i) {
                     String s = nbttaglist.getString(i);
@@ -625,16 +616,45 @@ public final class ItemStack {
         }
     }
 
-    public int C() {
-        return this.e;
+    public boolean b(TagRegistry tagregistry, ShapeDetectorBlock shapedetectorblock) {
+        if (a(shapedetectorblock, this.n)) {
+            return this.o;
+        } else {
+            this.n = shapedetectorblock;
+            if (this.hasTag() && this.tag.hasKeyOfType("CanPlaceOn", 9)) {
+                NBTTagList nbttaglist = this.tag.getList("CanPlaceOn", 8);
+
+                for (int i = 0; i < nbttaglist.size(); ++i) {
+                    String s = nbttaglist.getString(i);
+
+                    try {
+                        Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a().parse(new StringReader(s)).create(tagregistry);
+
+                        if (predicate.test(shapedetectorblock)) {
+                            this.o = true;
+                            return true;
+                        }
+                    } catch (CommandSyntaxException commandsyntaxexception) {
+                        ;
+                    }
+                }
+            }
+
+            this.o = false;
+            return false;
+        }
+    }
+
+    public int D() {
+        return this.g;
     }
 
     public void d(int i) {
-        this.e = i;
+        this.g = i;
     }
 
     public int getCount() {
-        return this.h ? 0 : this.count;
+        return this.j ? 0 : this.count;
     }
 
     public void setCount(int i) {
@@ -654,15 +674,15 @@ public final class ItemStack {
         this.getItem().a(world, entityliving, this, i);
     }
 
-    public boolean E() {
+    public boolean F() {
         return this.getItem().isFood();
     }
 
-    public SoundEffect F() {
-        return this.getItem().U_();
+    public SoundEffect G() {
+        return this.getItem().ag_();
     }
 
-    public SoundEffect G() {
-        return this.getItem().S_();
+    public SoundEffect H() {
+        return this.getItem().af_();
     }
 }

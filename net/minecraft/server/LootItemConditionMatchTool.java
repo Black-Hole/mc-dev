@@ -15,6 +15,11 @@ public class LootItemConditionMatchTool implements LootItemCondition {
     }
 
     @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.i;
+    }
+
+    @Override
     public Set<LootContextParameter<?>> a() {
         return ImmutableSet.of(LootContextParameters.TOOL);
     }
@@ -31,18 +36,16 @@ public class LootItemConditionMatchTool implements LootItemCondition {
         };
     }
 
-    public static class a extends LootItemCondition.b<LootItemConditionMatchTool> {
+    public static class a implements LootSerializer<LootItemConditionMatchTool> {
 
-        protected a() {
-            super(new MinecraftKey("match_tool"), LootItemConditionMatchTool.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionMatchTool lootitemconditionmatchtool, JsonSerializationContext jsonserializationcontext) {
             jsonobject.add("predicate", lootitemconditionmatchtool.a.a());
         }
 
         @Override
-        public LootItemConditionMatchTool b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionMatchTool a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("predicate"));
 
             return new LootItemConditionMatchTool(criterionconditionitem);

@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class BlockWeb extends Block {
 
-    public BlockWeb(Block.Info block_info) {
-        super(block_info);
+    public BlockWeb(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override

@@ -4,10 +4,10 @@ import javax.annotation.Nullable;
 
 public class BlockCartographyTable extends Block {
 
-    private static final ChatMessage a = new ChatMessage("container.cartography_table", new Object[0]);
+    private static final ChatMessage a = new ChatMessage("container.cartography_table");
 
-    protected BlockCartographyTable(Block.Info block_info) {
-        super(block_info);
+    protected BlockCartographyTable(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
@@ -17,7 +17,7 @@ public class BlockCartographyTable extends Block {
         } else {
             entityhuman.openContainer(iblockdata.b(world, blockposition));
             entityhuman.a(StatisticList.INTERACT_WITH_CARTOGRAPHY_TABLE);
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.CONSUME;
         }
     }
 

@@ -1,17 +1,16 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Iterator;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenFeatureBlockPile extends WorldGenerator<WorldGenFeatureBlockPileConfiguration> {
 
-    public WorldGenFeatureBlockPile(Function<Dynamic<?>, ? extends WorldGenFeatureBlockPileConfiguration> function) {
-        super(function);
+    public WorldGenFeatureBlockPile(Codec<WorldGenFeatureBlockPileConfiguration> codec) {
+        super(codec);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureBlockPileConfiguration worldgenfeatureblockpileconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureBlockPileConfiguration worldgenfeatureblockpileconfiguration) {
         if (blockposition.getY() < 5) {
             return false;
         } else {
@@ -25,9 +24,9 @@ public class WorldGenFeatureBlockPile extends WorldGenerator<WorldGenFeatureBloc
                 int l = blockposition.getZ() - blockposition1.getZ();
 
                 if ((float) (k * k + l * l) <= random.nextFloat() * 10.0F - random.nextFloat() * 6.0F) {
-                    this.a(generatoraccess, blockposition1, random, worldgenfeatureblockpileconfiguration);
+                    this.a(generatoraccessseed, blockposition1, random, worldgenfeatureblockpileconfiguration);
                 } else if ((double) random.nextFloat() < 0.031D) {
-                    this.a(generatoraccess, blockposition1, random, worldgenfeatureblockpileconfiguration);
+                    this.a(generatoraccessseed, blockposition1, random, worldgenfeatureblockpileconfiguration);
                 }
             }
 
@@ -39,12 +38,12 @@ public class WorldGenFeatureBlockPile extends WorldGenerator<WorldGenFeatureBloc
         BlockPosition blockposition1 = blockposition.down();
         IBlockData iblockdata = generatoraccess.getType(blockposition1);
 
-        return iblockdata.getBlock() == Blocks.GRASS_PATH ? random.nextBoolean() : iblockdata.d(generatoraccess, blockposition1, EnumDirection.UP);
+        return iblockdata.a(Blocks.GRASS_PATH) ? random.nextBoolean() : iblockdata.d(generatoraccess, blockposition1, EnumDirection.UP);
     }
 
     private void a(GeneratorAccess generatoraccess, BlockPosition blockposition, Random random, WorldGenFeatureBlockPileConfiguration worldgenfeatureblockpileconfiguration) {
         if (generatoraccess.isEmpty(blockposition) && this.a(generatoraccess, blockposition, random)) {
-            generatoraccess.setTypeAndData(blockposition, worldgenfeatureblockpileconfiguration.a.a(random, blockposition), 4);
+            generatoraccess.setTypeAndData(blockposition, worldgenfeatureblockpileconfiguration.b.a(random, blockposition), 4);
         }
 
     }

@@ -75,7 +75,7 @@ public class DataWatcherRegistry {
         }
 
         public IChatBaseComponent a(IChatBaseComponent ichatbasecomponent) {
-            return ichatbasecomponent.h();
+            return ichatbasecomponent;
         }
     };
     public static final DataWatcherSerializer<Optional<IChatBaseComponent>> f = new DataWatcherSerializer<Optional<IChatBaseComponent>>() {
@@ -95,7 +95,7 @@ public class DataWatcherRegistry {
         }
 
         public Optional<IChatBaseComponent> a(Optional<IChatBaseComponent> optional) {
-            return optional.isPresent() ? Optional.of(((IChatBaseComponent) optional.get()).h()) : Optional.empty();
+            return optional;
         }
     };
     public static final DataWatcherSerializer<ItemStack> g = new DataWatcherSerializer<ItemStack>() {

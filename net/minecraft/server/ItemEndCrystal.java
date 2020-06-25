@@ -14,7 +14,7 @@ public class ItemEndCrystal extends Item {
         BlockPosition blockposition = itemactioncontext.getClickPosition();
         IBlockData iblockdata = world.getType(blockposition);
 
-        if (iblockdata.getBlock() != Blocks.OBSIDIAN && iblockdata.getBlock() != Blocks.BEDROCK) {
+        if (!iblockdata.a(Blocks.OBSIDIAN) && !iblockdata.a(Blocks.BEDROCK)) {
             return EnumInteractionResult.FAIL;
         } else {
             BlockPosition blockposition1 = blockposition.up();
@@ -30,27 +30,27 @@ public class ItemEndCrystal extends Item {
                 if (!list.isEmpty()) {
                     return EnumInteractionResult.FAIL;
                 } else {
-                    if (!world.isClientSide) {
+                    if (world instanceof WorldServer) {
                         EntityEnderCrystal entityendercrystal = new EntityEnderCrystal(world, d0 + 0.5D, d1, d2 + 0.5D);
 
                         entityendercrystal.setShowingBottom(false);
                         world.addEntity(entityendercrystal);
-                        if (world.worldProvider instanceof WorldProviderTheEnd) {
-                            EnderDragonBattle enderdragonbattle = ((WorldProviderTheEnd) world.worldProvider).o();
+                        EnderDragonBattle enderdragonbattle = ((WorldServer) world).getDragonBattle();
 
-                            enderdragonbattle.e();
+                        if (enderdragonbattle != null) {
+                            enderdragonbattle.initiateRespawn();
                         }
                     }
 
                     itemactioncontext.getItemStack().subtract(1);
-                    return EnumInteractionResult.SUCCESS;
+                    return EnumInteractionResult.a(world.isClientSide);
                 }
             }
         }
     }
 
     @Override
-    public boolean d_(ItemStack itemstack) {
+    public boolean e(ItemStack itemstack) {
         return true;
     }
 }

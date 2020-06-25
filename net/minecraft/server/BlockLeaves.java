@@ -4,12 +4,17 @@ import java.util.Random;
 
 public class BlockLeaves extends Block {
 
-    public static final BlockStateInteger DISTANCE = BlockProperties.ah;
+    public static final BlockStateInteger DISTANCE = BlockProperties.an;
     public static final BlockStateBoolean PERSISTENT = BlockProperties.v;
 
-    public BlockLeaves(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLeaves.DISTANCE, 7)).set(BlockLeaves.PERSISTENT, false));
+    public BlockLeaves(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLeaves.DISTANCE, 7)).set(BlockLeaves.PERSISTENT, false));
+    }
+
+    @Override
+    public VoxelShape e(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return VoxelShapes.a();
     }
 
     @Override
@@ -18,7 +23,7 @@ public class BlockLeaves extends Block {
     }
 
     @Override
-    public void b(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         if (!(Boolean) iblockdata.get(BlockLeaves.PERSISTENT) && (Integer) iblockdata.get(BlockLeaves.DISTANCE) == 7) {
             c(iblockdata, (World) worldserver, blockposition);
             worldserver.a(blockposition, false);
@@ -27,12 +32,12 @@ public class BlockLeaves extends Block {
     }
 
     @Override
-    public void tick(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
         worldserver.setTypeAndData(blockposition, a(iblockdata, (GeneratorAccess) worldserver, blockposition), 3);
     }
 
     @Override
-    public int l(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public int f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return 1;
     }
 
@@ -49,38 +54,18 @@ public class BlockLeaves extends Block {
 
     private static IBlockData a(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition) {
         int i = 7;
-        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
-        Throwable throwable = null;
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+        EnumDirection[] aenumdirection = EnumDirection.values();
+        int j = aenumdirection.length;
 
-        try {
-            EnumDirection[] aenumdirection = EnumDirection.values();
-            int j = aenumdirection.length;
+        for (int k = 0; k < j; ++k) {
+            EnumDirection enumdirection = aenumdirection[k];
 
-            for (int k = 0; k < j; ++k) {
-                EnumDirection enumdirection = aenumdirection[k];
-
-                blockposition_pooledblockposition.g(blockposition).c(enumdirection);
-                i = Math.min(i, h(generatoraccess.getType(blockposition_pooledblockposition)) + 1);
-                if (i == 1) {
-                    break;
-                }
+            blockposition_mutableblockposition.a((BaseBlockPosition) blockposition, enumdirection);
+            i = Math.min(i, h(generatoraccess.getType(blockposition_mutableblockposition)) + 1);
+            if (i == 1) {
+                break;
             }
-        } catch (Throwable throwable1) {
-            throwable = throwable1;
-            throw throwable1;
-        } finally {
-            if (blockposition_pooledblockposition != null) {
-                if (throwable != null) {
-                    try {
-                        blockposition_pooledblockposition.close();
-                    } catch (Throwable throwable2) {
-                        throwable.addSuppressed(throwable2);
-                    }
-                } else {
-                    blockposition_pooledblockposition.close();
-                }
-            }
-
         }
 
         return (IBlockData) iblockdata.set(BlockLeaves.DISTANCE, i);
@@ -88,16 +73,6 @@ public class BlockLeaves extends Block {
 
     private static int h(IBlockData iblockdata) {
         return TagsBlock.LOGS.isTagged(iblockdata.getBlock()) ? 0 : (iblockdata.getBlock() instanceof BlockLeaves ? (Integer) iblockdata.get(BlockLeaves.DISTANCE) : 7);
-    }
-
-    @Override
-    public boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return false;
-    }
-
-    @Override
-    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EntityTypes<?> entitytypes) {
-        return entitytypes == EntityTypes.OCELOT || entitytypes == EntityTypes.PARROT;
     }
 
     @Override

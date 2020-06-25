@@ -12,8 +12,9 @@ import com.google.gson.JsonParseException;
 import com.google.gson.internal.Streams;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.JsonOps;
+import com.mojang.datafixers.DataFixer;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.JsonOps;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,8 +25,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -38,22 +39,24 @@ public class AdvancementDataPlayer {
     private static final Gson b = (new GsonBuilder()).registerTypeAdapter(AdvancementProgress.class, new AdvancementProgress.a()).registerTypeAdapter(MinecraftKey.class, new MinecraftKey.a()).setPrettyPrinting().create();
     private static final TypeToken<Map<MinecraftKey, AdvancementProgress>> c = new TypeToken<Map<MinecraftKey, AdvancementProgress>>() {
     };
-    private final MinecraftServer d;
-    private final File e;
+    private final DataFixer d;
+    private final PlayerList e;
+    private final File f;
     public final Map<Advancement, AdvancementProgress> data = Maps.newLinkedHashMap();
-    private final Set<Advancement> g = Sets.newLinkedHashSet();
     private final Set<Advancement> h = Sets.newLinkedHashSet();
     private final Set<Advancement> i = Sets.newLinkedHashSet();
+    private final Set<Advancement> j = Sets.newLinkedHashSet();
     private EntityPlayer player;
     @Nullable
-    private Advancement k;
-    private boolean l = true;
+    private Advancement l;
+    private boolean m = true;
 
-    public AdvancementDataPlayer(MinecraftServer minecraftserver, File file, EntityPlayer entityplayer) {
-        this.d = minecraftserver;
-        this.e = file;
+    public AdvancementDataPlayer(DataFixer datafixer, PlayerList playerlist, AdvancementDataWorld advancementdataworld, File file, EntityPlayer entityplayer) {
+        this.d = datafixer;
+        this.e = playerlist;
+        this.f = file;
         this.player = entityplayer;
-        this.g();
+        this.d(advancementdataworld);
     }
 
     public void a(EntityPlayer entityplayer) {
@@ -71,19 +74,19 @@ public class AdvancementDataPlayer {
 
     }
 
-    public void b() {
+    public void a(AdvancementDataWorld advancementdataworld) {
         this.a();
         this.data.clear();
-        this.g.clear();
         this.h.clear();
         this.i.clear();
-        this.l = true;
-        this.k = null;
-        this.g();
+        this.j.clear();
+        this.m = true;
+        this.l = null;
+        this.d(advancementdataworld);
     }
 
-    private void d() {
-        Iterator iterator = this.d.getAdvancementData().getAdvancements().iterator();
+    private void b(AdvancementDataWorld advancementdataworld) {
+        Iterator iterator = advancementdataworld.getAdvancements().iterator();
 
         while (iterator.hasNext()) {
             Advancement advancement = (Advancement) iterator.next();
@@ -93,7 +96,7 @@ public class AdvancementDataPlayer {
 
     }
 
-    private void e() {
+    private void c() {
         List<Advancement> list = Lists.newArrayList();
         Iterator iterator = this.data.entrySet().iterator();
 
@@ -102,7 +105,7 @@ public class AdvancementDataPlayer {
 
             if (((AdvancementProgress) entry.getValue()).isDone()) {
                 list.add(entry.getKey());
-                this.i.add(entry.getKey());
+                this.j.add(entry.getKey());
             }
         }
 
@@ -116,8 +119,8 @@ public class AdvancementDataPlayer {
 
     }
 
-    private void f() {
-        Iterator iterator = this.d.getAdvancementData().getAdvancements().iterator();
+    private void c(AdvancementDataWorld advancementdataworld) {
+        Iterator iterator = advancementdataworld.getAdvancements().iterator();
 
         while (iterator.hasNext()) {
             Advancement advancement = (Advancement) iterator.next();
@@ -130,21 +133,21 @@ public class AdvancementDataPlayer {
 
     }
 
-    private void g() {
-        if (this.e.isFile()) {
+    private void d(AdvancementDataWorld advancementdataworld) {
+        if (this.f.isFile()) {
             try {
-                JsonReader jsonreader = new JsonReader(new StringReader(Files.toString(this.e, StandardCharsets.UTF_8)));
+                JsonReader jsonreader = new JsonReader(new StringReader(Files.toString(this.f, StandardCharsets.UTF_8)));
                 Throwable throwable = null;
 
                 try {
                     jsonreader.setLenient(false);
                     Dynamic<JsonElement> dynamic = new Dynamic(JsonOps.INSTANCE, Streams.parse(jsonreader));
 
-                    if (!dynamic.get("DataVersion").asNumber().isPresent()) {
+                    if (!dynamic.get("DataVersion").asNumber().result().isPresent()) {
                         dynamic = dynamic.set("DataVersion", dynamic.createInt(1343));
                     }
 
-                    dynamic = this.d.aC().update(DataFixTypes.ADVANCEMENTS.a(), dynamic, dynamic.get("DataVersion").asInt(0), SharedConstants.getGameVersion().getWorldVersion());
+                    dynamic = this.d.update(DataFixTypes.ADVANCEMENTS.a(), dynamic, dynamic.get("DataVersion").asInt(0), SharedConstants.getGameVersion().getWorldVersion());
                     dynamic = dynamic.remove("DataVersion");
                     Map<MinecraftKey, AdvancementProgress> map = (Map) AdvancementDataPlayer.b.getAdapter(AdvancementDataPlayer.c).fromJsonTree((JsonElement) dynamic.getValue());
 
@@ -157,10 +160,10 @@ public class AdvancementDataPlayer {
 
                     while (iterator.hasNext()) {
                         Entry<MinecraftKey, AdvancementProgress> entry = (Entry) iterator.next();
-                        Advancement advancement = this.d.getAdvancementData().a((MinecraftKey) entry.getKey());
+                        Advancement advancement = advancementdataworld.a((MinecraftKey) entry.getKey());
 
                         if (advancement == null) {
-                            AdvancementDataPlayer.LOGGER.warn("Ignored advancement '{}' in progress file {} - it doesn't exist anymore?", entry.getKey(), this.e);
+                            AdvancementDataPlayer.LOGGER.warn("Ignored advancement '{}' in progress file {} - it doesn't exist anymore?", entry.getKey(), this.f);
                         } else {
                             this.a(advancement, (AdvancementProgress) entry.getValue());
                         }
@@ -183,18 +186,18 @@ public class AdvancementDataPlayer {
 
                 }
             } catch (JsonParseException jsonparseexception) {
-                AdvancementDataPlayer.LOGGER.error("Couldn't parse player advancements in {}", this.e, jsonparseexception);
+                AdvancementDataPlayer.LOGGER.error("Couldn't parse player advancements in {}", this.f, jsonparseexception);
             } catch (IOException ioexception) {
-                AdvancementDataPlayer.LOGGER.error("Couldn't access player advancements in {}", this.e, ioexception);
+                AdvancementDataPlayer.LOGGER.error("Couldn't access player advancements in {}", this.f, ioexception);
             }
         }
 
-        this.f();
-        this.e();
-        this.d();
+        this.c(advancementdataworld);
+        this.c();
+        this.b(advancementdataworld);
     }
 
-    public void c() {
+    public void b() {
         Map<MinecraftKey, AdvancementProgress> map = Maps.newHashMap();
         Iterator iterator = this.data.entrySet().iterator();
 
@@ -207,8 +210,8 @@ public class AdvancementDataPlayer {
             }
         }
 
-        if (this.e.getParentFile() != null) {
-            this.e.getParentFile().mkdirs();
+        if (this.f.getParentFile() != null) {
+            this.f.getParentFile().mkdirs();
         }
 
         JsonElement jsonelement = AdvancementDataPlayer.b.toJsonTree(map);
@@ -216,7 +219,7 @@ public class AdvancementDataPlayer {
         jsonelement.getAsJsonObject().addProperty("DataVersion", SharedConstants.getGameVersion().getWorldVersion());
 
         try {
-            FileOutputStream fileoutputstream = new FileOutputStream(this.e);
+            FileOutputStream fileoutputstream = new FileOutputStream(this.f);
             Throwable throwable = null;
 
             try {
@@ -260,7 +263,7 @@ public class AdvancementDataPlayer {
 
             }
         } catch (IOException ioexception) {
-            AdvancementDataPlayer.LOGGER.error("Couldn't save player advancements to {}", this.e, ioexception);
+            AdvancementDataPlayer.LOGGER.error("Couldn't save player advancements to {}", this.f, ioexception);
         }
 
     }
@@ -272,12 +275,12 @@ public class AdvancementDataPlayer {
 
         if (advancementprogress.a(s)) {
             this.d(advancement);
-            this.i.add(advancement);
+            this.j.add(advancement);
             flag = true;
             if (!flag1 && advancementprogress.isDone()) {
                 advancement.d().a(this.player);
                 if (advancement.c() != null && advancement.c().i() && this.player.world.getGameRules().getBoolean(GameRules.ANNOUNCE_ADVANCEMENTS)) {
-                    this.d.getPlayerList().sendMessage(new ChatMessage("chat.type.advancement." + advancement.c().e().a(), new Object[]{this.player.getScoreboardDisplayName(), advancement.j()}));
+                    this.e.sendMessage(new ChatMessage("chat.type.advancement." + advancement.c().e().a(), new Object[]{this.player.getScoreboardDisplayName(), advancement.j()}), ChatMessageType.SYSTEM, SystemUtils.b);
                 }
             }
         }
@@ -295,7 +298,7 @@ public class AdvancementDataPlayer {
 
         if (advancementprogress.b(s)) {
             this.c(advancement);
-            this.i.add(advancement);
+            this.j.add(advancement);
             flag = true;
         }
 
@@ -356,53 +359,53 @@ public class AdvancementDataPlayer {
     }
 
     public void b(EntityPlayer entityplayer) {
-        if (this.l || !this.h.isEmpty() || !this.i.isEmpty()) {
+        if (this.m || !this.i.isEmpty() || !this.j.isEmpty()) {
             Map<MinecraftKey, AdvancementProgress> map = Maps.newHashMap();
             Set<Advancement> set = Sets.newLinkedHashSet();
             Set<MinecraftKey> set1 = Sets.newLinkedHashSet();
-            Iterator iterator = this.i.iterator();
+            Iterator iterator = this.j.iterator();
 
             Advancement advancement;
 
             while (iterator.hasNext()) {
                 advancement = (Advancement) iterator.next();
-                if (this.g.contains(advancement)) {
+                if (this.h.contains(advancement)) {
                     map.put(advancement.getName(), this.data.get(advancement));
                 }
             }
 
-            iterator = this.h.iterator();
+            iterator = this.i.iterator();
 
             while (iterator.hasNext()) {
                 advancement = (Advancement) iterator.next();
-                if (this.g.contains(advancement)) {
+                if (this.h.contains(advancement)) {
                     set.add(advancement);
                 } else {
                     set1.add(advancement.getName());
                 }
             }
 
-            if (this.l || !map.isEmpty() || !set.isEmpty() || !set1.isEmpty()) {
-                entityplayer.playerConnection.sendPacket(new PacketPlayOutAdvancements(this.l, set, set1, map));
-                this.h.clear();
+            if (this.m || !map.isEmpty() || !set.isEmpty() || !set1.isEmpty()) {
+                entityplayer.playerConnection.sendPacket(new PacketPlayOutAdvancements(this.m, set, set1, map));
                 this.i.clear();
+                this.j.clear();
             }
         }
 
-        this.l = false;
+        this.m = false;
     }
 
     public void a(@Nullable Advancement advancement) {
-        Advancement advancement1 = this.k;
+        Advancement advancement1 = this.l;
 
         if (advancement != null && advancement.b() == null && advancement.c() != null) {
-            this.k = advancement;
+            this.l = advancement;
         } else {
-            this.k = null;
+            this.l = null;
         }
 
-        if (advancement1 != this.k) {
-            this.player.playerConnection.sendPacket(new PacketPlayOutSelectAdvancementTab(this.k == null ? null : this.k.getName()));
+        if (advancement1 != this.l) {
+            this.player.playerConnection.sendPacket(new PacketPlayOutSelectAdvancementTab(this.l == null ? null : this.l.getName()));
         }
 
     }
@@ -425,17 +428,17 @@ public class AdvancementDataPlayer {
 
     private void e(Advancement advancement) {
         boolean flag = this.f(advancement);
-        boolean flag1 = this.g.contains(advancement);
+        boolean flag1 = this.h.contains(advancement);
 
         if (flag && !flag1) {
-            this.g.add(advancement);
             this.h.add(advancement);
+            this.i.add(advancement);
             if (this.data.containsKey(advancement)) {
-                this.i.add(advancement);
+                this.j.add(advancement);
             }
         } else if (!flag && flag1) {
-            this.g.remove(advancement);
-            this.h.add(advancement);
+            this.h.remove(advancement);
+            this.i.add(advancement);
         }
 
         if (flag != flag1 && advancement.b() != null) {

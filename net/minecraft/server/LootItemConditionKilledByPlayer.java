@@ -13,6 +13,11 @@ public class LootItemConditionKilledByPlayer implements LootItemCondition {
     private LootItemConditionKilledByPlayer() {}
 
     @Override
+    public LootItemConditionType b() {
+        return LootItemConditions.f;
+    }
+
+    @Override
     public Set<LootContextParameter<?>> a() {
         return ImmutableSet.of(LootContextParameters.LAST_DAMAGE_PLAYER);
     }
@@ -21,22 +26,20 @@ public class LootItemConditionKilledByPlayer implements LootItemCondition {
         return loottableinfo.hasContextParameter(LootContextParameters.LAST_DAMAGE_PLAYER);
     }
 
-    public static LootItemCondition.a b() {
+    public static LootItemCondition.a c() {
         return () -> {
             return LootItemConditionKilledByPlayer.a;
         };
     }
 
-    public static class a extends LootItemCondition.b<LootItemConditionKilledByPlayer> {
+    public static class a implements LootSerializer<LootItemConditionKilledByPlayer> {
 
-        protected a() {
-            super(new MinecraftKey("killed_by_player"), LootItemConditionKilledByPlayer.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootItemConditionKilledByPlayer lootitemconditionkilledbyplayer, JsonSerializationContext jsonserializationcontext) {}
 
         @Override
-        public LootItemConditionKilledByPlayer b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionKilledByPlayer a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             return LootItemConditionKilledByPlayer.a;
         }
     }

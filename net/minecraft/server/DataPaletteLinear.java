@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
-import org.apache.commons.lang3.ArrayUtils;
 
 public class DataPaletteLinear<T> implements DataPalette<T> {
 
@@ -42,8 +42,14 @@ public class DataPaletteLinear<T> implements DataPalette<T> {
     }
 
     @Override
-    public boolean b(T t0) {
-        return ArrayUtils.contains(this.b, t0);
+    public boolean a(Predicate<T> predicate) {
+        for (int i = 0; i < this.f; ++i) {
+            if (predicate.test(this.b[i])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Nullable

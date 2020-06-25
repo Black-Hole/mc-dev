@@ -1,129 +1,113 @@
 package net.minecraft.server;
 
 import java.util.function.IntConsumer;
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.Validate;
 
 public class DataBits {
 
-    private final long[] a;
-    private final int b;
-    private final long c;
-    private final int d;
+    private static final int[] a = new int[]{-1, -1, 0, Integer.MIN_VALUE, 0, 0, 1431655765, 1431655765, 0, Integer.MIN_VALUE, 0, 1, 858993459, 858993459, 0, 715827882, 715827882, 0, 613566756, 613566756, 0, Integer.MIN_VALUE, 0, 2, 477218588, 477218588, 0, 429496729, 429496729, 0, 390451572, 390451572, 0, 357913941, 357913941, 0, 330382099, 330382099, 0, 306783378, 306783378, 0, 286331153, 286331153, 0, Integer.MIN_VALUE, 0, 3, 252645135, 252645135, 0, 238609294, 238609294, 0, 226050910, 226050910, 0, 214748364, 214748364, 0, 204522252, 204522252, 0, 195225786, 195225786, 0, 186737708, 186737708, 0, 178956970, 178956970, 0, 171798691, 171798691, 0, 165191049, 165191049, 0, 159072862, 159072862, 0, 153391689, 153391689, 0, 148102320, 148102320, 0, 143165576, 143165576, 0, 138547332, 138547332, 0, Integer.MIN_VALUE, 0, 4, 130150524, 130150524, 0, 126322567, 126322567, 0, 122713351, 122713351, 0, 119304647, 119304647, 0, 116080197, 116080197, 0, 113025455, 113025455, 0, 110127366, 110127366, 0, 107374182, 107374182, 0, 104755299, 104755299, 0, 102261126, 102261126, 0, 99882960, 99882960, 0, 97612893, 97612893, 0, 95443717, 95443717, 0, 93368854, 93368854, 0, 91382282, 91382282, 0, 89478485, 89478485, 0, 87652393, 87652393, 0, 85899345, 85899345, 0, 84215045, 84215045, 0, 82595524, 82595524, 0, 81037118, 81037118, 0, 79536431, 79536431, 0, 78090314, 78090314, 0, 76695844, 76695844, 0, 75350303, 75350303, 0, 74051160, 74051160, 0, 72796055, 72796055, 0, 71582788, 71582788, 0, 70409299, 70409299, 0, 69273666, 69273666, 0, 68174084, 68174084, 0, Integer.MIN_VALUE, 0, 5};
+    private final long[] b;
+    private final int c;
+    private final long d;
+    private final int e;
+    private final int f;
+    private final int g;
+    private final int h;
+    private final int i;
 
     public DataBits(int i, int j) {
-        this(i, j, new long[MathHelper.c(j * i, 64) / 64]);
+        this(i, j, (long[]) null);
     }
 
-    public DataBits(int i, int j, long[] along) {
+    public DataBits(int i, int j, @Nullable long[] along) {
         Validate.inclusiveBetween(1L, 32L, (long) i);
-        this.d = j;
-        this.b = i;
-        this.a = along;
-        this.c = (1L << i) - 1L;
-        int k = MathHelper.c(j * i, 64) / 64;
+        this.e = j;
+        this.c = i;
+        this.d = (1L << i) - 1L;
+        this.f = (char) (64 / i);
+        int k = 3 * (this.f - 1);
 
-        if (along.length != k) {
-            throw (RuntimeException) SystemUtils.c(new RuntimeException("Invalid length given for storage, got: " + along.length + " but expected: " + k));
+        this.g = DataBits.a[k + 0];
+        this.h = DataBits.a[k + 1];
+        this.i = DataBits.a[k + 2];
+        int l = (j + this.f - 1) / this.f;
+
+        if (along != null) {
+            if (along.length != l) {
+                throw (RuntimeException) SystemUtils.c(new RuntimeException("Invalid length given for storage, got: " + along.length + " but expected: " + l));
+            }
+
+            this.b = along;
+        } else {
+            this.b = new long[l];
         }
+
+    }
+
+    private int b(int i) {
+        long j = Integer.toUnsignedLong(this.g);
+        long k = Integer.toUnsignedLong(this.h);
+
+        return (int) ((long) i * j + k >> 32 >> this.i);
     }
 
     public int a(int i, int j) {
-        Validate.inclusiveBetween(0L, (long) (this.d - 1), (long) i);
-        Validate.inclusiveBetween(0L, this.c, (long) j);
-        int k = i * this.b;
-        int l = k >> 6;
-        int i1 = (i + 1) * this.b - 1 >> 6;
-        int j1 = k ^ l << 6;
-        byte b0 = 0;
-        int k1 = b0 | (int) (this.a[l] >>> j1 & this.c);
+        Validate.inclusiveBetween(0L, (long) (this.e - 1), (long) i);
+        Validate.inclusiveBetween(0L, this.d, (long) j);
+        int k = this.b(i);
+        long l = this.b[k];
+        int i1 = (i - k * this.f) * this.c;
+        int j1 = (int) (l >> i1 & this.d);
 
-        this.a[l] = this.a[l] & ~(this.c << j1) | ((long) j & this.c) << j1;
-        if (l != i1) {
-            int l1 = 64 - j1;
-            int i2 = this.b - l1;
-
-            k1 |= (int) (this.a[i1] << l1 & this.c);
-            this.a[i1] = this.a[i1] >>> i2 << i2 | ((long) j & this.c) >> l1;
-        }
-
-        return k1;
+        this.b[k] = l & ~(this.d << i1) | ((long) j & this.d) << i1;
+        return j1;
     }
 
     public void b(int i, int j) {
-        Validate.inclusiveBetween(0L, (long) (this.d - 1), (long) i);
-        Validate.inclusiveBetween(0L, this.c, (long) j);
-        int k = i * this.b;
-        int l = k >> 6;
-        int i1 = (i + 1) * this.b - 1 >> 6;
-        int j1 = k ^ l << 6;
+        Validate.inclusiveBetween(0L, (long) (this.e - 1), (long) i);
+        Validate.inclusiveBetween(0L, this.d, (long) j);
+        int k = this.b(i);
+        long l = this.b[k];
+        int i1 = (i - k * this.f) * this.c;
 
-        this.a[l] = this.a[l] & ~(this.c << j1) | ((long) j & this.c) << j1;
-        if (l != i1) {
-            int k1 = 64 - j1;
-            int l1 = this.b - k1;
-
-            this.a[i1] = this.a[i1] >>> l1 << l1 | ((long) j & this.c) >> k1;
-        }
-
+        this.b[k] = l & ~(this.d << i1) | ((long) j & this.d) << i1;
     }
 
     public int a(int i) {
-        Validate.inclusiveBetween(0L, (long) (this.d - 1), (long) i);
-        int j = i * this.b;
-        int k = j >> 6;
-        int l = (i + 1) * this.b - 1 >> 6;
-        int i1 = j ^ k << 6;
+        Validate.inclusiveBetween(0L, (long) (this.e - 1), (long) i);
+        int j = this.b(i);
+        long k = this.b[j];
+        int l = (i - j * this.f) * this.c;
 
-        if (k == l) {
-            return (int) (this.a[k] >>> i1 & this.c);
-        } else {
-            int j1 = 64 - i1;
-
-            return (int) ((this.a[k] >>> i1 | this.a[l] << j1) & this.c);
-        }
+        return (int) (k >> l & this.d);
     }
 
     public long[] a() {
-        return this.a;
-    }
-
-    public int b() {
-        return this.d;
-    }
-
-    public int c() {
         return this.b;
     }
 
+    public int b() {
+        return this.e;
+    }
+
     public void a(IntConsumer intconsumer) {
-        int i = this.a.length;
+        int i = 0;
+        long[] along = this.b;
+        int j = along.length;
 
-        if (i != 0) {
-            int j = 0;
-            long k = this.a[0];
-            long l = i > 1 ? this.a[1] : 0L;
+        for (int k = 0; k < j; ++k) {
+            long l = along[k];
 
-            for (int i1 = 0; i1 < this.d; ++i1) {
-                int j1 = i1 * this.b;
-                int k1 = j1 >> 6;
-                int l1 = (i1 + 1) * this.b - 1 >> 6;
-                int i2 = j1 ^ k1 << 6;
-
-                if (k1 != j) {
-                    k = l;
-                    l = k1 + 1 < i ? this.a[k1 + 1] : 0L;
-                    j = k1;
-                }
-
-                if (k1 == l1) {
-                    intconsumer.accept((int) (k >>> i2 & this.c));
-                } else {
-                    int j2 = 64 - i2;
-
-                    intconsumer.accept((int) ((k >>> i2 | l << j2) & this.c));
+            for (int i1 = 0; i1 < this.f; ++i1) {
+                intconsumer.accept((int) (l & this.d));
+                l >>= this.c;
+                ++i;
+                if (i >= this.e) {
+                    return;
                 }
             }
-
         }
+
     }
 }

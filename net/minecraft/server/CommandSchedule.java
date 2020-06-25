@@ -5,22 +5,21 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Pair;
 
 public class CommandSchedule {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.schedule.same_tick", new Object[0]));
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.schedule.same_tick"));
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.schedule.cleared.failure", new Object[]{object});
     });
     private static final SuggestionProvider<CommandListenerWrapper> c = (commandcontext, suggestionsbuilder) -> {
-        return ICompletionProvider.b((Iterable) ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldData().y().a(), suggestionsbuilder);
+        return ICompletionProvider.b((Iterable) ((CommandListenerWrapper) commandcontext.getSource()).getServer().getSaveData().G().t().a(), suggestionsbuilder);
     };
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
@@ -37,15 +36,15 @@ public class CommandSchedule {
         }))));
     }
 
-    private static int a(CommandListenerWrapper commandlistenerwrapper, Either<CustomFunction, Tag<CustomFunction>> either, int i, boolean flag) throws CommandSyntaxException {
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Pair<MinecraftKey, Either<CustomFunction, Tag<CustomFunction>>> pair, int i, boolean flag) throws CommandSyntaxException {
         if (i == 0) {
             throw CommandSchedule.a.create();
         } else {
             long j = commandlistenerwrapper.getWorld().getTime() + (long) i;
-            CustomFunctionCallbackTimerQueue<MinecraftServer> customfunctioncallbacktimerqueue = commandlistenerwrapper.getWorld().getWorldData().y();
+            MinecraftKey minecraftkey = (MinecraftKey) pair.getFirst();
+            CustomFunctionCallbackTimerQueue<MinecraftServer> customfunctioncallbacktimerqueue = commandlistenerwrapper.getServer().getSaveData().G().t();
 
-            either.ifLeft((customfunction) -> {
-                MinecraftKey minecraftkey = customfunction.a();
+            ((Either) pair.getSecond()).ifLeft((customfunction) -> {
                 String s = minecraftkey.toString();
 
                 if (flag) {
@@ -55,7 +54,6 @@ public class CommandSchedule {
                 customfunctioncallbacktimerqueue.a(s, j, new CustomFunctionCallback(minecraftkey));
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.schedule.created.function", new Object[]{minecraftkey, i, j}), true);
             }).ifRight((tag) -> {
-                MinecraftKey minecraftkey = tag.c();
                 String s = "#" + minecraftkey.toString();
 
                 if (flag) {
@@ -70,7 +68,7 @@ public class CommandSchedule {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, String s) throws CommandSyntaxException {
-        int i = commandlistenerwrapper.getWorld().getWorldData().y().a(s);
+        int i = commandlistenerwrapper.getServer().getSaveData().G().t().a(s);
 
         if (i == 0) {
             throw CommandSchedule.b.create(s);

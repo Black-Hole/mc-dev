@@ -17,19 +17,17 @@ public abstract class EntityFish extends EntityWaterAnimal {
         return entitysize.height * 0.65F;
     }
 
-    @Override
-    protected void initAttributes() {
-        super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(3.0D);
+    public static AttributeProvider.Builder m() {
+        return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 3.0D);
     }
 
     @Override
-    public boolean I() {
-        return this.isFromBucket();
+    public boolean isSpecialPersistence() {
+        return super.isSpecialPersistence() || this.isFromBucket();
     }
 
     public static boolean b(EntityTypes<? extends EntityFish> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
-        return generatoraccess.getType(blockposition).getBlock() == Blocks.WATER && generatoraccess.getType(blockposition.up()).getBlock() == Blocks.WATER;
+        return generatoraccess.getType(blockposition).a(Blocks.WATER) && generatoraccess.getType(blockposition.up()).a(Blocks.WATER);
     }
 
     @Override
@@ -57,14 +55,14 @@ public abstract class EntityFish extends EntityWaterAnimal {
     }
 
     @Override
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void saveData(NBTTagCompound nbttagcompound) {
+        super.saveData(nbttagcompound);
         nbttagcompound.setBoolean("FromBucket", this.isFromBucket());
     }
 
     @Override
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void loadData(NBTTagCompound nbttagcompound) {
+        super.loadData(nbttagcompound);
         this.setFromBucket(nbttagcompound.getBoolean("FromBucket"));
     }
 
@@ -73,7 +71,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
         super.initPathfinder();
         this.goalSelector.a(0, new PathfinderGoalPanic(this, 1.25D));
         PathfinderGoalSelector pathfindergoalselector = this.goalSelector;
-        Predicate predicate = IEntitySelector.f;
+        Predicate predicate = IEntitySelector.g;
 
         predicate.getClass();
         pathfindergoalselector.a(2, new PathfinderGoalAvoidTarget<>(this, EntityHuman.class, 8.0F, 1.6D, 1.4D, predicate::test));
@@ -86,7 +84,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
     }
 
     @Override
-    public void e(Vec3D vec3d) {
+    public void f(Vec3D vec3d) {
         if (this.doAITick() && this.isInWater()) {
             this.a(0.01F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
@@ -95,7 +93,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
                 this.setMot(this.getMot().add(0.0D, -0.005D, 0.0D));
             }
         } else {
-            super.e(vec3d);
+            super.f(vec3d);
         }
 
     }
@@ -106,22 +104,22 @@ public abstract class EntityFish extends EntityWaterAnimal {
             this.setMot(this.getMot().add((double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F), 0.4000000059604645D, (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F)));
             this.onGround = false;
             this.impulse = true;
-            this.a(this.getSoundFlop(), this.getSoundVolume(), this.dn());
+            this.playSound(this.getSoundFlop(), this.getSoundVolume(), this.dG());
         }
 
         super.movementTick();
     }
 
     @Override
-    protected boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+    protected EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (itemstack.getItem() == Items.WATER_BUCKET && this.isAlive()) {
-            this.a(SoundEffects.ITEM_BUCKET_FILL_FISH, 1.0F, 1.0F);
+            this.playSound(SoundEffects.ITEM_BUCKET_FILL_FISH, 1.0F, 1.0F);
             itemstack.subtract(1);
-            ItemStack itemstack1 = this.l();
+            ItemStack itemstack1 = this.eL();
 
-            this.i(itemstack1);
+            this.k(itemstack1);
             if (!this.world.isClientSide) {
                 CriterionTriggers.j.a((EntityPlayer) entityhuman, itemstack1);
             }
@@ -133,22 +131,22 @@ public abstract class EntityFish extends EntityWaterAnimal {
             }
 
             this.die();
-            return true;
+            return EnumInteractionResult.a(this.world.isClientSide);
         } else {
-            return super.a(entityhuman, enumhand);
+            return super.b(entityhuman, enumhand);
         }
     }
 
-    protected void i(ItemStack itemstack) {
+    protected void k(ItemStack itemstack) {
         if (this.hasCustomName()) {
             itemstack.a(this.getCustomName());
         }
 
     }
 
-    protected abstract ItemStack l();
+    protected abstract ItemStack eL();
 
-    protected boolean eq() {
+    protected boolean eM() {
         return true;
     }
 
@@ -158,6 +156,9 @@ public abstract class EntityFish extends EntityWaterAnimal {
     protected SoundEffect getSoundSwim() {
         return SoundEffects.ENTITY_FISH_SWIM;
     }
+
+    @Override
+    protected void a(BlockPosition blockposition, IBlockData iblockdata) {}
 
     static class a extends ControllerMove {
 
@@ -170,27 +171,33 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
         @Override
         public void a() {
-            if (this.i.a(TagsFluid.WATER)) {
+            if (this.i.a((Tag) TagsFluid.WATER)) {
                 this.i.setMot(this.i.getMot().add(0.0D, 0.005D, 0.0D));
             }
 
             if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().m()) {
+                float f = (float) (this.e * this.i.b(GenericAttributes.MOVEMENT_SPEED));
+
+                this.i.n(MathHelper.g(0.125F, this.i.dM(), f));
                 double d0 = this.b - this.i.locX();
                 double d1 = this.c - this.i.locY();
                 double d2 = this.d - this.i.locZ();
-                double d3 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
 
-                d1 /= d3;
-                float f = (float) (MathHelper.d(d2, d0) * 57.2957763671875D) - 90.0F;
+                if (d1 != 0.0D) {
+                    double d3 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
 
-                this.i.yaw = this.a(this.i.yaw, f, 90.0F);
-                this.i.aI = this.i.yaw;
-                float f1 = (float) (this.e * this.i.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+                    this.i.setMot(this.i.getMot().add(0.0D, (double) this.i.dM() * (d1 / d3) * 0.1D, 0.0D));
+                }
 
-                this.i.o(MathHelper.g(0.125F, this.i.dt(), f1));
-                this.i.setMot(this.i.getMot().add(0.0D, (double) this.i.dt() * d1 * 0.1D, 0.0D));
+                if (d0 != 0.0D || d2 != 0.0D) {
+                    float f1 = (float) (MathHelper.d(d2, d0) * 57.2957763671875D) - 90.0F;
+
+                    this.i.yaw = this.a(this.i.yaw, f1, 90.0F);
+                    this.i.aH = this.i.yaw;
+                }
+
             } else {
-                this.i.o(0.0F);
+                this.i.n(0.0F);
             }
         }
     }
@@ -206,7 +213,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
         @Override
         public boolean a() {
-            return this.h.eq() && super.a();
+            return this.h.eM() && super.a();
         }
     }
 }

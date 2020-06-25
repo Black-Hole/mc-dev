@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Pair;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,12 +38,12 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
                 public Collection<CustomFunction> a(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException {
                     Tag<CustomFunction> tag = ArgumentTag.d(commandcontext, minecraftkey);
 
-                    return tag.a();
+                    return tag.getTagged();
                 }
 
                 @Override
-                public Either<CustomFunction, Tag<CustomFunction>> b(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException {
-                    return Either.right(ArgumentTag.d(commandcontext, minecraftkey));
+                public Pair<MinecraftKey, Either<CustomFunction, Tag<CustomFunction>>> b(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException {
+                    return Pair.of(minecraftkey, Either.right(ArgumentTag.d(commandcontext, minecraftkey)));
                 }
             };
         } else {
@@ -54,8 +55,8 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
                 }
 
                 @Override
-                public Either<CustomFunction, Tag<CustomFunction>> b(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException {
-                    return Either.left(ArgumentTag.c(commandcontext, minecraftkey));
+                public Pair<MinecraftKey, Either<CustomFunction, Tag<CustomFunction>>> b(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException {
+                    return Pair.of(minecraftkey, Either.left(ArgumentTag.c(commandcontext, minecraftkey)));
                 }
             };
         }
@@ -68,7 +69,7 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
     }
 
     private static Tag<CustomFunction> d(CommandContext<CommandListenerWrapper> commandcontext, MinecraftKey minecraftkey) throws CommandSyntaxException {
-        Tag<CustomFunction> tag = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getFunctionData().h().a(minecraftkey);
+        Tag<CustomFunction> tag = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getFunctionData().b(minecraftkey);
 
         if (tag == null) {
             throw ArgumentTag.b.create(minecraftkey.toString());
@@ -81,7 +82,7 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
         return ((ArgumentTag.a) commandcontext.getArgument(s, ArgumentTag.a.class)).a(commandcontext);
     }
 
-    public static Either<CustomFunction, Tag<CustomFunction>> b(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
+    public static Pair<MinecraftKey, Either<CustomFunction, Tag<CustomFunction>>> b(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
         return ((ArgumentTag.a) commandcontext.getArgument(s, ArgumentTag.a.class)).b(commandcontext);
     }
 
@@ -93,6 +94,6 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
 
         Collection<CustomFunction> a(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException;
 
-        Either<CustomFunction, Tag<CustomFunction>> b(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException;
+        Pair<MinecraftKey, Either<CustomFunction, Tag<CustomFunction>>> b(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException;
     }
 }

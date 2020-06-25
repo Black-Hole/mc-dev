@@ -1,71 +1,76 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Dynamic;
 
 public final class WorldSettings {
 
-    private final long a;
-    private final EnumGamemode b;
-    private final boolean c;
-    private final boolean d;
-    private final WorldType e;
-    private boolean f;
-    private boolean g;
-    private JsonElement h;
+    public String levelName;
+    private final EnumGamemode gameType;
+    public boolean hardcore;
+    private final EnumDifficulty difficulty;
+    private final boolean allowCommands;
+    private final GameRules gameRules;
+    private final DataPackConfiguration g;
 
-    public WorldSettings(long i, EnumGamemode enumgamemode, boolean flag, boolean flag1, WorldType worldtype) {
-        this.h = new JsonObject();
-        this.a = i;
-        this.b = enumgamemode;
-        this.c = flag;
-        this.d = flag1;
-        this.e = worldtype;
+    public WorldSettings(String s, EnumGamemode enumgamemode, boolean flag, EnumDifficulty enumdifficulty, boolean flag1, GameRules gamerules, DataPackConfiguration datapackconfiguration) {
+        this.levelName = s;
+        this.gameType = enumgamemode;
+        this.hardcore = flag;
+        this.difficulty = enumdifficulty;
+        this.allowCommands = flag1;
+        this.gameRules = gamerules;
+        this.g = datapackconfiguration;
     }
 
-    public WorldSettings(WorldData worlddata) {
-        this(worlddata.getSeed(), worlddata.getGameType(), worlddata.shouldGenerateMapFeatures(), worlddata.isHardcore(), worlddata.getType());
+    public static WorldSettings a(Dynamic<?> dynamic, DataPackConfiguration datapackconfiguration) {
+        EnumGamemode enumgamemode = EnumGamemode.getById(dynamic.get("GameType").asInt(0));
+
+        return new WorldSettings(dynamic.get("LevelName").asString(""), enumgamemode, dynamic.get("hardcore").asBoolean(false), (EnumDifficulty) dynamic.get("Difficulty").asNumber().map((number) -> {
+            return EnumDifficulty.getById(number.byteValue());
+        }).result().orElse(EnumDifficulty.NORMAL), dynamic.get("allowCommands").asBoolean(enumgamemode == EnumGamemode.CREATIVE), new GameRules(dynamic.get("GameRules")), datapackconfiguration);
     }
 
-    public WorldSettings a() {
-        this.g = true;
-        return this;
+    public String getLevelName() {
+        return this.levelName;
     }
 
-    public WorldSettings setGeneratorSettings(JsonElement jsonelement) {
-        this.h = jsonelement;
-        return this;
+    public EnumGamemode getGameType() {
+        return this.gameType;
     }
 
-    public boolean c() {
+    public boolean isHardcore() {
+        return this.hardcore;
+    }
+
+    public EnumDifficulty getDifficulty() {
+        return this.difficulty;
+    }
+
+    public boolean e() {
+        return this.allowCommands;
+    }
+
+    public GameRules getGameRules() {
+        return this.gameRules;
+    }
+
+    public DataPackConfiguration g() {
         return this.g;
     }
 
-    public long d() {
-        return this.a;
+    public WorldSettings a(EnumGamemode enumgamemode) {
+        return new WorldSettings(this.levelName, enumgamemode, this.hardcore, this.difficulty, this.allowCommands, this.gameRules, this.g);
     }
 
-    public EnumGamemode e() {
-        return this.b;
+    public WorldSettings a(EnumDifficulty enumdifficulty) {
+        return new WorldSettings(this.levelName, this.gameType, this.hardcore, enumdifficulty, this.allowCommands, this.gameRules, this.g);
     }
 
-    public boolean f() {
-        return this.d;
+    public WorldSettings a(DataPackConfiguration datapackconfiguration) {
+        return new WorldSettings(this.levelName, this.gameType, this.hardcore, this.difficulty, this.allowCommands, this.gameRules, datapackconfiguration);
     }
 
-    public boolean g() {
-        return this.c;
-    }
-
-    public WorldType h() {
-        return this.e;
-    }
-
-    public boolean i() {
-        return this.f;
-    }
-
-    public JsonElement j() {
-        return this.h;
+    public WorldSettings h() {
+        return new WorldSettings(this.levelName, this.gameType, this.hardcore, this.difficulty, this.allowCommands, this.gameRules.b(), this.g);
     }
 }

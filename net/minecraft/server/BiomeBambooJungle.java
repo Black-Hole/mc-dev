@@ -1,27 +1,29 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableList;
+import java.util.List;
+
 public class BiomeBambooJungle extends BiomeBase {
 
     public BiomeBambooJungle() {
-        super((new BiomeBase.a()).a(WorldGenSurface.G, WorldGenSurface.v).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.JUNGLE).a(0.1F).b(0.2F).c(0.95F).d(0.9F).a(4159204).b(329011).a((String) null));
-        this.a(WorldGenerator.JUNGLE_TEMPLE.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
-        this.a(WorldGenerator.MINESHAFT.b((WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL))));
-        this.a(WorldGenerator.STRONGHOLD.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e));
-        BiomeDecoratorGroups.a(this);
-        BiomeDecoratorGroups.c(this);
+        super((new BiomeBase.a()).a(WorldGenSurface.S, WorldGenSurface.D).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.JUNGLE).a(0.1F).b(0.2F).c(0.95F).d(0.9F).a((new BiomeFog.a()).b(4159204).c(329011).a(12638463).a(CaveSoundSettings.b).a()).a((String) null).a((List) ImmutableList.of(new BiomeBase.d(0.5F, 0.5F, 0.0F, 0.2F, 1.0F))));
+        this.a(BiomeDecoratorGroups.e);
+        BiomeDecoratorGroups.b(this);
+        this.a(BiomeDecoratorGroups.A);
         BiomeDecoratorGroups.d(this);
         BiomeDecoratorGroups.f(this);
-        BiomeDecoratorGroups.g(this);
         BiomeDecoratorGroups.h(this);
-        BiomeDecoratorGroups.l(this);
-        BiomeDecoratorGroups.s(this);
-        BiomeDecoratorGroups.V(this);
-        BiomeDecoratorGroups.I(this);
-        BiomeDecoratorGroups.Z(this);
-        BiomeDecoratorGroups.aa(this);
-        BiomeDecoratorGroups.am(this);
+        BiomeDecoratorGroups.i(this);
+        BiomeDecoratorGroups.j(this);
+        BiomeDecoratorGroups.n(this);
+        BiomeDecoratorGroups.u(this);
+        BiomeDecoratorGroups.X(this);
+        BiomeDecoratorGroups.K(this);
+        BiomeDecoratorGroups.ab(this);
         BiomeDecoratorGroups.ac(this);
-        BiomeDecoratorGroups.ap(this);
+        BiomeDecoratorGroups.ao(this);
+        BiomeDecoratorGroups.ae(this);
+        BiomeDecoratorGroups.ar(this);
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SHEEP, 12, 4, 4));
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.PIG, 10, 4, 4));
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.CHICKEN, 10, 4, 4));

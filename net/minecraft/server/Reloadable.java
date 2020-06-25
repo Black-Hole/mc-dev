@@ -75,7 +75,7 @@ public class Reloadable<S> implements IReloadable {
             list1.add(completablefuture2);
         }
 
-        this.c = SystemUtils.b(list1);
+        this.c = SystemUtils.b((List) list1);
     }
 
     @Override

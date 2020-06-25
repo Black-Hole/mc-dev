@@ -1,11 +1,14 @@
 package net.minecraft.server;
 
-import java.util.function.Consumer;
-
 public class LootEntryGroup extends LootEntryChildrenAbstract {
 
     LootEntryGroup(LootEntryAbstract[] alootentryabstract, LootItemCondition[] alootitemcondition) {
         super(alootentryabstract, alootitemcondition);
+    }
+
+    @Override
+    public LootEntryType a() {
+        return LootEntries.h;
     }
 
     @Override

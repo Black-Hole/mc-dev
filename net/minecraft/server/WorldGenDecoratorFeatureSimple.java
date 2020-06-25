@@ -1,18 +1,17 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public abstract class WorldGenDecoratorFeatureSimple<DC extends WorldGenFeatureDecoratorConfiguration> extends WorldGenDecorator<DC> {
 
-    public WorldGenDecoratorFeatureSimple(Function<Dynamic<?>, ? extends DC> function) {
-        super(function);
+    public WorldGenDecoratorFeatureSimple(Codec<DC> codec) {
+        super(codec);
     }
 
     @Override
-    public final Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, DC dc, BlockPosition blockposition) {
+    public final Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator chunkgenerator, Random random, DC dc, BlockPosition blockposition) {
         return this.a(random, dc, blockposition);
     }
 

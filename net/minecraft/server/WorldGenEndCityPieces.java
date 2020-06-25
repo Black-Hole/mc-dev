@@ -7,8 +7,8 @@ import java.util.Random;
 
 public class WorldGenEndCityPieces {
 
-    private static final DefinedStructureInfo a = (new DefinedStructureInfo()).a(true).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.a);
-    private static final DefinedStructureInfo b = (new DefinedStructureInfo()).a(true).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.c);
+    private static final DefinedStructureInfo a = (new DefinedStructureInfo()).a(true).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.b);
+    private static final DefinedStructureInfo b = (new DefinedStructureInfo()).a(true).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.d);
     private static final WorldGenEndCityPieces.PieceGenerator c = new WorldGenEndCityPieces.PieceGenerator() {
         @Override
         public void a() {}
@@ -234,7 +234,7 @@ public class WorldGenEndCityPieces {
         private final boolean f;
 
         public Piece(DefinedStructureManager definedstructuremanager, String s, BlockPosition blockposition, EnumBlockRotation enumblockrotation, boolean flag) {
-            super(WorldGenFeatureStructurePieceType.Z, 0);
+            super(WorldGenFeatureStructurePieceType.aa, 0);
             this.d = s;
             this.c = blockposition;
             this.e = enumblockrotation;
@@ -243,7 +243,7 @@ public class WorldGenEndCityPieces {
         }
 
         public Piece(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.Z, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.aa, nbttagcompound);
             this.d = nbttagcompound.getString("Template");
             this.e = EnumBlockRotation.valueOf(nbttagcompound.getString("Rot"));
             this.f = nbttagcompound.getBoolean("OW");
@@ -271,13 +271,13 @@ public class WorldGenEndCityPieces {
                 BlockPosition blockposition1 = blockposition.down();
 
                 if (structureboundingbox.b((BaseBlockPosition) blockposition1)) {
-                    TileEntityLootable.a(generatoraccess, random, blockposition1, LootTables.c);
+                    TileEntityLootable.a((IBlockAccess) generatoraccess, random, blockposition1, LootTables.c);
                 }
             } else if (s.startsWith("Sentry")) {
                 EntityShulker entityshulker = (EntityShulker) EntityTypes.SHULKER.a(generatoraccess.getMinecraftWorld());
 
                 entityshulker.setPosition((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
-                entityshulker.g(blockposition);
+                entityshulker.h(blockposition);
                 generatoraccess.addEntity(entityshulker);
             } else if (s.startsWith("Elytra")) {
                 EntityItemFrame entityitemframe = new EntityItemFrame(generatoraccess.getMinecraftWorld(), blockposition, this.e.a(EnumDirection.SOUTH));

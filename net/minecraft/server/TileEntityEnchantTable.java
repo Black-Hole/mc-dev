@@ -33,8 +33,8 @@ public class TileEntityEnchantTable extends TileEntity implements INamableTileEn
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
             this.o = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("CustomName"));
         }
@@ -45,7 +45,7 @@ public class TileEntityEnchantTable extends TileEntity implements INamableTileEn
     public void tick() {
         this.j = this.i;
         this.l = this.k;
-        EntityHuman entityhuman = this.world.a((double) ((float) this.position.getX() + 0.5F), (double) ((float) this.position.getY() + 0.5F), (double) ((float) this.position.getZ() + 0.5F), 3.0D, false);
+        EntityHuman entityhuman = this.world.a((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D, 3.0D, false);
 
         if (entityhuman != null) {
             double d0 = entityhuman.locX() - ((double) this.position.getX() + 0.5D);
@@ -105,7 +105,7 @@ public class TileEntityEnchantTable extends TileEntity implements INamableTileEn
 
     @Override
     public IChatBaseComponent getDisplayName() {
-        return (IChatBaseComponent) (this.o != null ? this.o : new ChatMessage("container.enchant", new Object[0]));
+        return (IChatBaseComponent) (this.o != null ? this.o : new ChatMessage("container.enchant"));
     }
 
     public void setCustomName(@Nullable IChatBaseComponent ichatbasecomponent) {

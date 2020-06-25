@@ -30,7 +30,7 @@ public class BehaviorInteractDoor extends Behavior<EntityLiving> {
 
     private Set<BlockPosition> a(WorldServer worldserver, List<GlobalPos> list, List<BlockPosition> list1) {
         Stream stream = list.stream().filter((globalpos) -> {
-            return globalpos.getDimensionManager() == worldserver.getWorldProvider().getDimensionManager();
+            return globalpos.getDimensionManager() == worldserver.getDimensionKey();
         }).map(GlobalPos::getBlockPosition);
 
         list1.getClass();
@@ -47,7 +47,7 @@ public class BehaviorInteractDoor extends Behavior<EntityLiving> {
                 boolean flag = j >= i;
 
                 ((BlockDoor) block).setDoor(worldserver, blockposition, flag);
-                GlobalPos globalpos = GlobalPos.create(worldserver.getWorldProvider().getDimensionManager(), blockposition);
+                GlobalPos globalpos = GlobalPos.create(worldserver.getDimensionKey(), blockposition);
 
                 if (!behaviorcontroller.getMemory(MemoryModuleType.OPENED_DOORS).isPresent() && flag) {
                     behaviorcontroller.setMemory(MemoryModuleType.OPENED_DOORS, (Object) Sets.newHashSet(new GlobalPos[]{globalpos}));
@@ -76,7 +76,7 @@ public class BehaviorInteractDoor extends Behavior<EntityLiving> {
                 BlockPosition blockposition = globalpos.getBlockPosition();
                 int j = list.indexOf(blockposition);
 
-                if (worldserver.getWorldProvider().getDimensionManager() != globalpos.getDimensionManager()) {
+                if (worldserver.getDimensionKey() != globalpos.getDimensionManager()) {
                     iterator.remove();
                 } else {
                     IBlockData iblockdata = worldserver.getType(blockposition);

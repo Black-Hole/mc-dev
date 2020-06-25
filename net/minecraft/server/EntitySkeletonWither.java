@@ -10,6 +10,12 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
     }
 
     @Override
+    protected void initPathfinder() {
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityPiglin.class, true));
+        super.initPathfinder();
+    }
+
+    @Override
     protected SoundEffect getSoundAmbient() {
         return SoundEffects.ENTITY_WITHER_SKELETON_AMBIENT;
     }
@@ -25,7 +31,7 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
     }
 
     @Override
-    SoundEffect l() {
+    SoundEffect eL() {
         return SoundEffects.ENTITY_WITHER_SKELETON_STEP;
     }
 
@@ -59,7 +65,7 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
         GroupDataEntity groupdataentity1 = super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
 
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(4.0D);
-        this.eq();
+        this.eM();
         return groupdataentity1;
     }
 
@@ -69,8 +75,8 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
     }
 
     @Override
-    public boolean B(Entity entity) {
-        if (!super.B(entity)) {
+    public boolean attackEntity(Entity entity) {
+        if (!super.attackEntity(entity)) {
             return false;
         } else {
             if (entity instanceof EntityLiving) {

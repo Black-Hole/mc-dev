@@ -1,101 +1,95 @@
 package net.minecraft.server;
 
 import com.google.common.base.Functions;
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 public class ResourcePackRepository<T extends ResourcePackLoader> implements AutoCloseable {
 
-    private final Set<ResourcePackSource> a = Sets.newHashSet();
-    private final Map<String, T> b = Maps.newLinkedHashMap();
-    private final List<T> c = Lists.newLinkedList();
-    private final ResourcePackLoader.b<T> d;
+    private final Set<ResourcePackSource> a;
+    private Map<String, T> b = ImmutableMap.of();
+    private List<T> c = ImmutableList.of();
+    private final ResourcePackLoader.a<T> d;
 
-    public ResourcePackRepository(ResourcePackLoader.b<T> resourcepackloader_b) {
-        this.d = resourcepackloader_b;
+    public ResourcePackRepository(ResourcePackLoader.a<T> resourcepackloader_a, ResourcePackSource... aresourcepacksource) {
+        this.d = resourcepackloader_a;
+        this.a = ImmutableSet.copyOf(aresourcepacksource);
     }
 
     public void a() {
-        this.close();
-        Set<String> set = (Set) this.c.stream().map(ResourcePackLoader::e).collect(Collectors.toCollection(LinkedHashSet::new));
+        List<String> list = (List) this.c.stream().map(ResourcePackLoader::e).collect(ImmutableList.toImmutableList());
 
-        this.b.clear();
-        this.c.clear();
+        this.close();
+        this.b = this.g();
+        this.c = this.b((Collection) list);
+    }
+
+    private Map<String, T> g() {
+        Map<String, T> map = Maps.newTreeMap();
         Iterator iterator = this.a.iterator();
 
         while (iterator.hasNext()) {
             ResourcePackSource resourcepacksource = (ResourcePackSource) iterator.next();
 
-            resourcepacksource.a(this.b, this.d);
+            resourcepacksource.a((resourcepackloader) -> {
+                ResourcePackLoader resourcepackloader1 = (ResourcePackLoader) map.put(resourcepackloader.e(), resourcepackloader);
+            }, this.d);
         }
 
-        this.e();
-        List list = this.c;
-        Stream stream = set.stream();
-        Map map = this.b;
-
-        this.b.getClass();
-        list.addAll((Collection) stream.map(map::get).filter(Objects::nonNull).collect(Collectors.toCollection(LinkedHashSet::new)));
-        iterator = this.b.values().iterator();
-
-        while (iterator.hasNext()) {
-            T t0 = (ResourcePackLoader) iterator.next();
-
-            if (t0.f() && !this.c.contains(t0)) {
-                t0.h().a(this.c, t0, Functions.identity(), false);
-            }
-        }
-
+        return ImmutableMap.copyOf(map);
     }
 
-    private void e() {
-        List<Entry<String, T>> list = Lists.newArrayList(this.b.entrySet());
-
-        this.b.clear();
-        list.stream().sorted(Entry.comparingByKey()).forEachOrdered((entry) -> {
-            ResourcePackLoader resourcepackloader = (ResourcePackLoader) this.b.put(entry.getKey(), entry.getValue());
-        });
+    public void a(Collection<String> collection) {
+        this.c = this.b(collection);
     }
 
-    public void a(Collection<T> collection) {
-        this.c.clear();
-        this.c.addAll(collection);
+    private List<T> b(Collection<String> collection) {
+        List<T> list = (List) this.c(collection).collect(Collectors.toList());
         Iterator iterator = this.b.values().iterator();
 
         while (iterator.hasNext()) {
             T t0 = (ResourcePackLoader) iterator.next();
 
-            if (t0.f() && !this.c.contains(t0)) {
-                t0.h().a(this.c, t0, Functions.identity(), false);
+            if (t0.f() && !list.contains(t0)) {
+                t0.h().a(list, t0, Functions.identity(), false);
             }
         }
 
+        return ImmutableList.copyOf(list);
     }
 
-    public Collection<T> b() {
-        return this.b.values();
+    private Stream<T> c(Collection<String> collection) {
+        Stream stream = collection.stream();
+        Map map = this.b;
+
+        this.b.getClass();
+        return stream.map(map::get).filter(Objects::nonNull);
+    }
+
+    public Collection<String> b() {
+        return this.b.keySet();
     }
 
     public Collection<T> c() {
-        Collection<T> collection = Lists.newArrayList(this.b.values());
-
-        collection.removeAll(this.c);
-        return collection;
+        return this.b.values();
     }
 
-    public Collection<T> d() {
+    public Collection<String> d() {
+        return (Collection) this.c.stream().map(ResourcePackLoader::e).collect(ImmutableSet.toImmutableSet());
+    }
+
+    public Collection<T> e() {
         return this.c;
     }
 
@@ -104,11 +98,15 @@ public class ResourcePackRepository<T extends ResourcePackLoader> implements Aut
         return (ResourcePackLoader) this.b.get(s);
     }
 
-    public void a(ResourcePackSource resourcepacksource) {
-        this.a.add(resourcepacksource);
-    }
-
     public void close() {
         this.b.values().forEach(ResourcePackLoader::close);
+    }
+
+    public boolean b(String s) {
+        return this.b.containsKey(s);
+    }
+
+    public List<IResourcePack> f() {
+        return (List) this.c.stream().map(ResourcePackLoader::d).collect(ImmutableList.toImmutableList());
     }
 }

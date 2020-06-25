@@ -10,7 +10,7 @@ public class InventoryCrafting implements IInventory, AutoRecipeOutput {
     public final Container container;
 
     public InventoryCrafting(Container container, int i, int j) {
-        this.items = NonNullList.a(i * j, ItemStack.a);
+        this.items = NonNullList.a(i * j, ItemStack.b);
         this.container = container;
         this.b = i;
         this.c = j;
@@ -40,7 +40,7 @@ public class InventoryCrafting implements IInventory, AutoRecipeOutput {
 
     @Override
     public ItemStack getItem(int i) {
-        return i >= this.getSize() ? ItemStack.a : (ItemStack) this.items.get(i);
+        return i >= this.getSize() ? ItemStack.b : (ItemStack) this.items.get(i);
     }
 
     @Override

@@ -1,34 +1,26 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMap.Builder;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class WorldGenFeatureMushroomConfiguration implements WorldGenFeatureConfiguration {
 
-    public final WorldGenFeatureStateProvider a;
+    public static final Codec<WorldGenFeatureMushroomConfiguration> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(WorldGenFeatureStateProvider.a.fieldOf("cap_provider").forGetter((worldgenfeaturemushroomconfiguration) -> {
+            return worldgenfeaturemushroomconfiguration.b;
+        }), WorldGenFeatureStateProvider.a.fieldOf("stem_provider").forGetter((worldgenfeaturemushroomconfiguration) -> {
+            return worldgenfeaturemushroomconfiguration.c;
+        }), Codec.INT.fieldOf("foliage_radius").withDefault(2).forGetter((worldgenfeaturemushroomconfiguration) -> {
+            return worldgenfeaturemushroomconfiguration.d;
+        })).apply(instance, WorldGenFeatureMushroomConfiguration::new);
+    });
     public final WorldGenFeatureStateProvider b;
-    public final int c;
+    public final WorldGenFeatureStateProvider c;
+    public final int d;
 
     public WorldGenFeatureMushroomConfiguration(WorldGenFeatureStateProvider worldgenfeaturestateprovider, WorldGenFeatureStateProvider worldgenfeaturestateprovider1, int i) {
-        this.a = worldgenfeaturestateprovider;
-        this.b = worldgenfeaturestateprovider1;
-        this.c = i;
-    }
-
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        Builder<T, T> builder = ImmutableMap.builder();
-
-        builder.put(dynamicops.createString("cap_provider"), this.a.a(dynamicops)).put(dynamicops.createString("stem_provider"), this.b.a(dynamicops)).put(dynamicops.createString("foliage_radius"), dynamicops.createInt(this.c));
-        return new Dynamic(dynamicops, dynamicops.createMap(builder.build()));
-    }
-
-    public static <T> WorldGenFeatureMushroomConfiguration a(Dynamic<T> dynamic) {
-        WorldGenFeatureStateProviders<?> worldgenfeaturestateproviders = (WorldGenFeatureStateProviders) IRegistry.t.get(new MinecraftKey((String) dynamic.get("cap_provider").get("type").asString().orElseThrow(RuntimeException::new)));
-        WorldGenFeatureStateProviders<?> worldgenfeaturestateproviders1 = (WorldGenFeatureStateProviders) IRegistry.t.get(new MinecraftKey((String) dynamic.get("stem_provider").get("type").asString().orElseThrow(RuntimeException::new)));
-
-        return new WorldGenFeatureMushroomConfiguration(worldgenfeaturestateproviders.a(dynamic.get("cap_provider").orElseEmptyMap()), worldgenfeaturestateproviders1.a(dynamic.get("stem_provider").orElseEmptyMap()), dynamic.get("foliage_radius").asInt(2));
+        this.b = worldgenfeaturestateprovider;
+        this.c = worldgenfeaturestateprovider1;
+        this.d = i;
     }
 }

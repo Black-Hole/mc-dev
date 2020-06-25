@@ -75,6 +75,10 @@ public class PathPoint {
         return f + f1 + f2;
     }
 
+    public BlockPosition a() {
+        return new BlockPosition(this.a, this.b, this.c);
+    }
+
     public boolean equals(Object object) {
         if (!(object instanceof PathPoint)) {
             return false;

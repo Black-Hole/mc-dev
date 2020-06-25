@@ -11,18 +11,18 @@ public class BlockEnderPortalFrame extends Block {
     protected static final VoxelShape e = VoxelShapes.a(BlockEnderPortalFrame.c, BlockEnderPortalFrame.d);
     private static ShapeDetector f;
 
-    public BlockEnderPortalFrame(Block.Info block_info) {
-        super(block_info);
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockEnderPortalFrame.FACING, EnumDirection.NORTH)).set(BlockEnderPortalFrame.EYE, false));
+    public BlockEnderPortalFrame(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockEnderPortalFrame.FACING, EnumDirection.NORTH)).set(BlockEnderPortalFrame.EYE, false));
     }
 
     @Override
-    public boolean o(IBlockData iblockdata) {
+    public boolean c_(IBlockData iblockdata) {
         return true;
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return (Boolean) iblockdata.get(BlockEnderPortalFrame.EYE) ? BlockEnderPortalFrame.e : BlockEnderPortalFrame.c;
     }
 

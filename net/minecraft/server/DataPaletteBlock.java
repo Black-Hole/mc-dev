@@ -1,12 +1,11 @@
 package net.minecraft.server;
 
-import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
-import it.unimi.dsi.fastutil.ints.Int2IntMap.Entry;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
@@ -66,7 +65,7 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
                 this.h = new DataPaletteHash<>(this.d, this.i, this, this.e, this.f);
             } else {
                 this.h = this.b;
-                this.i = MathHelper.d(this.d.a());
+                this.i = MathHelper.e(this.d.a());
             }
 
             this.h.a(this.g);
@@ -143,7 +142,7 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
 
     public void a(NBTTagList nbttaglist, long[] along) {
         this.a();
-        int i = Math.max(4, MathHelper.d(nbttaglist.size()));
+        int i = Math.max(4, MathHelper.e(nbttaglist.size()));
 
         if (i != this.i) {
             this.b(i);
@@ -196,7 +195,7 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
 
         datapalettehash.b(nbttaglist);
         nbttagcompound.set(s, nbttaglist);
-        int k = Math.max(4, MathHelper.d(nbttaglist.size()));
+        int k = Math.max(4, MathHelper.e(nbttaglist.size()));
         DataBits databits = new DataBits(k, 4096);
 
         for (int l = 0; l < aint.length; ++l) {
@@ -211,8 +210,8 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
         return 1 + this.h.a() + PacketDataSerializer.a(this.a.b()) + this.a.a().length * 8;
     }
 
-    public boolean contains(T t0) {
-        return this.h.b(t0);
+    public boolean contains(Predicate<T> predicate) {
+        return this.h.a(predicate);
     }
 
     public void a(DataPaletteBlock.a<T> datapaletteblock_a) {

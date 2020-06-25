@@ -25,7 +25,7 @@ public class NavigationFlying extends NavigationAbstract {
 
     @Override
     public PathEntity a(Entity entity, int i) {
-        return this.a(new BlockPosition(entity), i);
+        return this.a(entity.getChunkCoordinates(), i);
     }
 
     @Override

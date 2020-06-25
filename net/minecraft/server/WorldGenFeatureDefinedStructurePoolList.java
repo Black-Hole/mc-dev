@@ -1,8 +1,7 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -10,7 +9,12 @@ import java.util.stream.Collectors;
 
 public class WorldGenFeatureDefinedStructurePoolList extends WorldGenFeatureDefinedStructurePoolStructure {
 
-    private final List<WorldGenFeatureDefinedStructurePoolStructure> a;
+    public static final Codec<WorldGenFeatureDefinedStructurePoolList> a = RecordCodecBuilder.create((instance) -> {
+        return instance.group(WorldGenFeatureDefinedStructurePoolStructure.e.listOf().fieldOf("elements").forGetter((worldgenfeaturedefinedstructurepoollist) -> {
+            return worldgenfeaturedefinedstructurepoollist.b;
+        }), d()).apply(instance, WorldGenFeatureDefinedStructurePoolList::new);
+    });
+    private final List<WorldGenFeatureDefinedStructurePoolStructure> b;
 
     @Deprecated
     public WorldGenFeatureDefinedStructurePoolList(List<WorldGenFeatureDefinedStructurePoolStructure> list) {
@@ -22,33 +26,20 @@ public class WorldGenFeatureDefinedStructurePoolList extends WorldGenFeatureDefi
         if (list.isEmpty()) {
             throw new IllegalArgumentException("Elements are empty");
         } else {
-            this.a = list;
+            this.b = list;
             this.b(worldgenfeaturedefinedstructurepooltemplate_matching);
-        }
-    }
-
-    public WorldGenFeatureDefinedStructurePoolList(Dynamic<?> dynamic) {
-        super(dynamic);
-        List<WorldGenFeatureDefinedStructurePoolStructure> list = dynamic.get("elements").asList((dynamic1) -> {
-            return (WorldGenFeatureDefinedStructurePoolStructure) DynamicDeserializer.a(dynamic1, IRegistry.STRUCTURE_POOL_ELEMENT, "element_type", WorldGenFeatureDefinedStructurePoolEmpty.a);
-        });
-
-        if (list.isEmpty()) {
-            throw new IllegalArgumentException("Elements are empty");
-        } else {
-            this.a = list;
         }
     }
 
     @Override
     public List<DefinedStructure.BlockInfo> a(DefinedStructureManager definedstructuremanager, BlockPosition blockposition, EnumBlockRotation enumblockrotation, Random random) {
-        return ((WorldGenFeatureDefinedStructurePoolStructure) this.a.get(0)).a(definedstructuremanager, blockposition, enumblockrotation, random);
+        return ((WorldGenFeatureDefinedStructurePoolStructure) this.b.get(0)).a(definedstructuremanager, blockposition, enumblockrotation, random);
     }
 
     @Override
     public StructureBoundingBox a(DefinedStructureManager definedstructuremanager, BlockPosition blockposition, EnumBlockRotation enumblockrotation) {
         StructureBoundingBox structureboundingbox = StructureBoundingBox.a();
-        Iterator iterator = this.a.iterator();
+        Iterator iterator = this.b.iterator();
 
         while (iterator.hasNext()) {
             WorldGenFeatureDefinedStructurePoolStructure worldgenfeaturedefinedstructurepoolstructure = (WorldGenFeatureDefinedStructurePoolStructure) iterator.next();
@@ -61,8 +52,8 @@ public class WorldGenFeatureDefinedStructurePoolList extends WorldGenFeatureDefi
     }
 
     @Override
-    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, BlockPosition blockposition, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random) {
-        Iterator iterator = this.a.iterator();
+    public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, BlockPosition blockposition, BlockPosition blockposition1, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random, boolean flag) {
+        Iterator iterator = this.b.iterator();
 
         WorldGenFeatureDefinedStructurePoolStructure worldgenfeaturedefinedstructurepoolstructure;
 
@@ -72,14 +63,14 @@ public class WorldGenFeatureDefinedStructurePoolList extends WorldGenFeatureDefi
             }
 
             worldgenfeaturedefinedstructurepoolstructure = (WorldGenFeatureDefinedStructurePoolStructure) iterator.next();
-        } while (worldgenfeaturedefinedstructurepoolstructure.a(definedstructuremanager, generatoraccess, chunkgenerator, blockposition, enumblockrotation, structureboundingbox, random));
+        } while (worldgenfeaturedefinedstructurepoolstructure.a(definedstructuremanager, generatoraccessseed, structuremanager, chunkgenerator, blockposition, blockposition1, enumblockrotation, structureboundingbox, random, flag));
 
         return false;
     }
 
     @Override
-    public WorldGenFeatureDefinedStructurePools a() {
-        return WorldGenFeatureDefinedStructurePools.c;
+    public WorldGenFeatureDefinedStructurePools<?> a() {
+        return WorldGenFeatureDefinedStructurePools.b;
     }
 
     @Override
@@ -89,21 +80,12 @@ public class WorldGenFeatureDefinedStructurePoolList extends WorldGenFeatureDefi
         return this;
     }
 
-    @Override
-    public <T> Dynamic<T> a(DynamicOps<T> dynamicops) {
-        T t0 = dynamicops.createList(this.a.stream().map((worldgenfeaturedefinedstructurepoolstructure) -> {
-            return worldgenfeaturedefinedstructurepoolstructure.b(dynamicops).getValue();
-        }));
-
-        return new Dynamic(dynamicops, dynamicops.createMap(ImmutableMap.of(dynamicops.createString("elements"), t0)));
-    }
-
     public String toString() {
-        return "List[" + (String) this.a.stream().map(Object::toString).collect(Collectors.joining(", ")) + "]";
+        return "List[" + (String) this.b.stream().map(Object::toString).collect(Collectors.joining(", ")) + "]";
     }
 
     private void b(WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
-        this.a.forEach((worldgenfeaturedefinedstructurepoolstructure) -> {
+        this.b.forEach((worldgenfeaturedefinedstructurepoolstructure) -> {
             worldgenfeaturedefinedstructurepoolstructure.a(worldgenfeaturedefinedstructurepooltemplate_matching);
         });
     }

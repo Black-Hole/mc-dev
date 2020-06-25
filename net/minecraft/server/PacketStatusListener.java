@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class PacketStatusListener implements PacketStatusInListener {
 
-    private static final IChatBaseComponent a = new ChatMessage("multiplayer.status.request_handled", new Object[0]);
+    private static final IChatBaseComponent a = new ChatMessage("multiplayer.status.request_handled");
     private final MinecraftServer minecraftServer;
     private final NetworkManager networkManager;
     private boolean d;

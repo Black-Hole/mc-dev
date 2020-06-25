@@ -1,64 +1,45 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class WorldGenMineshaft extends StructureGenerator<WorldGenMineshaftConfiguration> {
 
-    public WorldGenMineshaft(Function<Dynamic<?>, ? extends WorldGenMineshaftConfiguration> function) {
-        super(function);
+    public WorldGenMineshaft(Codec<WorldGenMineshaftConfiguration> codec) {
+        super(codec);
+    }
+
+    protected boolean a(ChunkGenerator chunkgenerator, WorldChunkManager worldchunkmanager, long i, SeededRandom seededrandom, int j, int k, BiomeBase biomebase, ChunkCoordIntPair chunkcoordintpair, WorldGenMineshaftConfiguration worldgenmineshaftconfiguration) {
+        seededrandom.c(i, j, k);
+        double d0 = worldgenmineshaftconfiguration.b;
+
+        return seededrandom.nextDouble() < d0;
     }
 
     @Override
-    public boolean a(BiomeManager biomemanager, ChunkGenerator<?> chunkgenerator, Random random, int i, int j, BiomeBase biomebase) {
-        ((SeededRandom) random).c(chunkgenerator.getSeed(), i, j);
-        if (chunkgenerator.canSpawnStructure(biomebase, this)) {
-            WorldGenMineshaftConfiguration worldgenmineshaftconfiguration = (WorldGenMineshaftConfiguration) chunkgenerator.getFeatureConfiguration(biomebase, this);
-            double d0 = worldgenmineshaftconfiguration.a;
-
-            return random.nextDouble() < d0;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public StructureGenerator.a a() {
+    public StructureGenerator.a<WorldGenMineshaftConfiguration> a() {
         return WorldGenMineshaft.a::new;
     }
 
-    @Override
-    public String b() {
-        return "Mineshaft";
-    }
+    public static class a extends StructureStart<WorldGenMineshaftConfiguration> {
 
-    @Override
-    public int c() {
-        return 8;
-    }
-
-    public static class a extends StructureStart {
-
-        public a(StructureGenerator<?> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
+        public a(StructureGenerator<WorldGenMineshaftConfiguration> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
             super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
-        @Override
-        public void a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase) {
-            WorldGenMineshaftConfiguration worldgenmineshaftconfiguration = (WorldGenMineshaftConfiguration) chunkgenerator.getFeatureConfiguration(biomebase, WorldGenerator.MINESHAFT);
-            WorldGenMineshaftPieces.WorldGenMineshaftRoom worldgenmineshaftpieces_worldgenmineshaftroom = new WorldGenMineshaftPieces.WorldGenMineshaftRoom(0, this.d, (i << 4) + 2, (j << 4) + 2, worldgenmineshaftconfiguration.b);
+        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenMineshaftConfiguration worldgenmineshaftconfiguration) {
+            WorldGenMineshaftPieces.WorldGenMineshaftRoom worldgenmineshaftpieces_worldgenmineshaftroom = new WorldGenMineshaftPieces.WorldGenMineshaftRoom(0, this.d, (i << 4) + 2, (j << 4) + 2, worldgenmineshaftconfiguration.c);
 
             this.b.add(worldgenmineshaftpieces_worldgenmineshaftroom);
             worldgenmineshaftpieces_worldgenmineshaftroom.a((StructurePiece) worldgenmineshaftpieces_worldgenmineshaftroom, this.b, (Random) this.d);
             this.b();
-            if (worldgenmineshaftconfiguration.b == WorldGenMineshaft.Type.MESA) {
+            if (worldgenmineshaftconfiguration.c == WorldGenMineshaft.Type.MESA) {
                 boolean flag = true;
-                int k = chunkgenerator.getSeaLevel() - this.c.e + this.c.d() / 2 - -5;
+                int k = chunkgenerator.getSeaLevel() - this.c.e + this.c.e() / 2 - -5;
 
                 this.c.a(0, k, 0);
                 Iterator iterator = this.b.iterator();
@@ -75,29 +56,35 @@ public class WorldGenMineshaft extends StructureGenerator<WorldGenMineshaftConfi
         }
     }
 
-    public static enum Type {
+    public static enum Type implements INamable {
 
         NORMAL("normal"), MESA("mesa");
 
-        private static final Map<String, WorldGenMineshaft.Type> c = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenMineshaft.Type::a, (worldgenmineshaft_type) -> {
+        public static final Codec<WorldGenMineshaft.Type> c = INamable.a(WorldGenMineshaft.Type::values, WorldGenMineshaft.Type::a);
+        private static final Map<String, WorldGenMineshaft.Type> d = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenMineshaft.Type::b, (worldgenmineshaft_type) -> {
             return worldgenmineshaft_type;
         }));
-        private final String d;
+        private final String e;
 
         private Type(String s) {
-            this.d = s;
+            this.e = s;
         }
 
-        public String a() {
-            return this.d;
+        public String b() {
+            return this.e;
         }
 
-        public static WorldGenMineshaft.Type a(String s) {
-            return (WorldGenMineshaft.Type) WorldGenMineshaft.Type.c.get(s);
+        private static WorldGenMineshaft.Type a(String s) {
+            return (WorldGenMineshaft.Type) WorldGenMineshaft.Type.d.get(s);
         }
 
         public static WorldGenMineshaft.Type a(int i) {
             return i >= 0 && i < values().length ? values()[i] : WorldGenMineshaft.Type.NORMAL;
+        }
+
+        @Override
+        public String getName() {
+            return this.e;
         }
     }
 }

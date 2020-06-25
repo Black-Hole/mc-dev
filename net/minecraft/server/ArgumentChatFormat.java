@@ -30,7 +30,7 @@ public class ArgumentChatFormat implements ArgumentType<EnumChatFormat> {
 
     public EnumChatFormat parse(StringReader stringreader) throws CommandSyntaxException {
         String s = stringreader.readUnquotedString();
-        EnumChatFormat enumchatformat = EnumChatFormat.c(s);
+        EnumChatFormat enumchatformat = EnumChatFormat.b(s);
 
         if (enumchatformat != null && !enumchatformat.isFormat()) {
             return enumchatformat;

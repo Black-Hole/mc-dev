@@ -18,4 +18,8 @@ public enum BlockPropertyRedstoneSide implements INamable {
     public String getName() {
         return this.d;
     }
+
+    public boolean b() {
+        return this != BlockPropertyRedstoneSide.NONE;
+    }
 }

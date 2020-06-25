@@ -41,7 +41,7 @@ public class ContainerPlayer extends ContainerRecipeBook<InventoryCrafting> {
 
                 @Override
                 public boolean isAllowed(ItemStack itemstack) {
-                    return enumitemslot == EntityInsentient.h(itemstack);
+                    return enumitemslot == EntityInsentient.j(itemstack);
                 }
 
                 @Override
@@ -104,59 +104,59 @@ public class ContainerPlayer extends ContainerRecipeBook<InventoryCrafting> {
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
 
             itemstack = itemstack1.cloneItemStack();
-            EnumItemSlot enumitemslot = EntityInsentient.h(itemstack);
+            EnumItemSlot enumitemslot = EntityInsentient.j(itemstack);
 
             if (i == 0) {
                 if (!this.a(itemstack1, 9, 45, true)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
 
                 slot.a(itemstack1, itemstack);
             } else if (i >= 1 && i < 5) {
                 if (!this.a(itemstack1, 9, 45, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (i >= 5 && i < 9) {
                 if (!this.a(itemstack1, 9, 45, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (enumitemslot.a() == EnumItemSlot.Function.ARMOR && !((Slot) this.slots.get(8 - enumitemslot.b())).hasItem()) {
                 int j = 8 - enumitemslot.b();
 
                 if (!this.a(itemstack1, j, j + 1, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (enumitemslot == EnumItemSlot.OFFHAND && !((Slot) this.slots.get(45)).hasItem()) {
                 if (!this.a(itemstack1, 45, 46, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (i >= 9 && i < 36) {
                 if (!this.a(itemstack1, 36, 45, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (i >= 36 && i < 45) {
                 if (!this.a(itemstack1, 9, 36, false)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (!this.a(itemstack1, 9, 45, false)) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.a);
+                slot.set(ItemStack.b);
             } else {
                 slot.d();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             ItemStack itemstack2 = slot.a(entityhuman, itemstack1);
@@ -187,5 +187,9 @@ public class ContainerPlayer extends ContainerRecipeBook<InventoryCrafting> {
     @Override
     public int h() {
         return this.craftInventory.f();
+    }
+
+    public InventoryCrafting j() {
+        return this.craftInventory;
     }
 }

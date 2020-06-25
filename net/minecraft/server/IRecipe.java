@@ -9,13 +9,13 @@ public interface IRecipe<C extends IInventory> {
     ItemStack getResult();
 
     default NonNullList<ItemStack> b(C c0) {
-        NonNullList<ItemStack> nonnulllist = NonNullList.a(c0.getSize(), ItemStack.a);
+        NonNullList<ItemStack> nonnulllist = NonNullList.a(c0.getSize(), ItemStack.b);
 
         for (int i = 0; i < nonnulllist.size(); ++i) {
             Item item = c0.getItem(i).getItem();
 
-            if (item.q()) {
-                nonnulllist.set(i, new ItemStack(item.p()));
+            if (item.p()) {
+                nonnulllist.set(i, new ItemStack(item.getCraftingRemainingItem()));
             }
         }
 

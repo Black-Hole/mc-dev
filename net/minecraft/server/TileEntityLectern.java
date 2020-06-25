@@ -17,7 +17,7 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
 
         @Override
         public ItemStack getItem(int i) {
-            return i == 0 ? TileEntityLectern.this.book : ItemStack.a;
+            return i == 0 ? TileEntityLectern.this.book : ItemStack.b;
         }
 
         @Override
@@ -31,7 +31,7 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
 
                 return itemstack;
             } else {
-                return ItemStack.a;
+                return ItemStack.b;
             }
         }
 
@@ -40,11 +40,11 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
             if (i == 0) {
                 ItemStack itemstack = TileEntityLectern.this.book;
 
-                TileEntityLectern.this.book = ItemStack.a;
+                TileEntityLectern.this.book = ItemStack.b;
                 TileEntityLectern.this.k();
                 return itemstack;
             } else {
-                return ItemStack.a;
+                return ItemStack.b;
             }
         }
 
@@ -99,7 +99,7 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
 
     public TileEntityLectern() {
         super(TileEntityTypes.LECTERN);
-        this.book = ItemStack.a;
+        this.book = ItemStack.b;
     }
 
     public ItemStack getBook() {
@@ -125,7 +125,7 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
     public void a(ItemStack itemstack, @Nullable EntityHuman entityhuman) {
         this.book = this.b(itemstack, entityhuman);
         this.page = 0;
-        this.maxPage = ItemWrittenBook.j(this.book);
+        this.maxPage = ItemWrittenBook.g(this.book);
         this.update();
     }
 
@@ -170,7 +170,7 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
             object = entityhuman.getScoreboardDisplayName();
         }
 
-        Vec3D vec3d = new Vec3D((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D);
+        Vec3D vec3d = Vec3D.a((BaseBlockPosition) this.position);
 
         return new CommandListenerWrapper(ICommandListener.DUMMY, vec3d, Vec2F.a, (WorldServer) this.world, 2, s, (IChatBaseComponent) object, this.world.getMinecraftServer(), entityhuman);
     }
@@ -181,15 +181,15 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-        super.load(nbttagcompound);
+    public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        super.load(iblockdata, nbttagcompound);
         if (nbttagcompound.hasKeyOfType("Book", 10)) {
             this.book = this.b(ItemStack.a(nbttagcompound.getCompound("Book")), (EntityHuman) null);
         } else {
-            this.book = ItemStack.a;
+            this.book = ItemStack.b;
         }
 
-        this.maxPage = ItemWrittenBook.j(this.book);
+        this.maxPage = ItemWrittenBook.g(this.book);
         this.page = MathHelper.clamp(nbttagcompound.getInt("Page"), 0, this.maxPage - 1);
     }
 
@@ -206,7 +206,7 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
 
     @Override
     public void clear() {
-        this.setBook(ItemStack.a);
+        this.setBook(ItemStack.b);
     }
 
     @Override
@@ -216,6 +216,6 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
 
     @Override
     public IChatBaseComponent getScoreboardDisplayName() {
-        return new ChatMessage("container.lectern", new Object[0]);
+        return new ChatMessage("container.lectern");
     }
 }

@@ -3,14 +3,13 @@ package net.minecraft.server;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
-import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.types.templates.CompoundList.CompoundListType;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -52,10 +51,10 @@ public class DataConverterNewVillage extends DataFix {
                         });
                     }).update(DSL.remainderFinder(), (dynamic) -> {
                         return dynamic.update("References", (dynamic1) -> {
-                            Optional<? extends Dynamic<?>> optional = dynamic1.get("New_Village").get();
+                            Optional<? extends Dynamic<?>> optional = dynamic1.get("New_Village").result();
 
                             return ((Dynamic) DataFixUtils.orElse(optional.map((dynamic2) -> {
-                                return dynamic1.remove("New_Village").merge(dynamic1.createString("Village"), dynamic2);
+                                return dynamic1.remove("New_Village").set("Village", dynamic2);
                             }), dynamic1)).remove("Village");
                         });
                     });

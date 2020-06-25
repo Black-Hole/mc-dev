@@ -12,8 +12,8 @@ public class SensorSecondaryPlaces extends Sensor<EntityVillager> {
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager) {
-        DimensionManager dimensionmanager = worldserver.getWorldProvider().getDimensionManager();
-        BlockPosition blockposition = new BlockPosition(entityvillager);
+        ResourceKey<World> resourcekey = worldserver.getDimensionKey();
+        BlockPosition blockposition = entityvillager.getChunkCoordinates();
         List<GlobalPos> list = Lists.newArrayList();
         boolean flag = true;
 
@@ -23,7 +23,7 @@ public class SensorSecondaryPlaces extends Sensor<EntityVillager> {
                     BlockPosition blockposition1 = blockposition.b(i, j, k);
 
                     if (entityvillager.getVillagerData().getProfession().d().contains(worldserver.getType(blockposition1).getBlock())) {
-                        list.add(GlobalPos.create(dimensionmanager, blockposition1));
+                        list.add(GlobalPos.create(resourcekey, blockposition1));
                     }
                 }
             }

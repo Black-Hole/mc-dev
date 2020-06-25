@@ -6,22 +6,22 @@ public class BlockEnchantmentTable extends BlockTileEntity {
 
     protected static final VoxelShape a = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
 
-    protected BlockEnchantmentTable(Block.Info block_info) {
-        super(block_info);
+    protected BlockEnchantmentTable(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
-    public boolean o(IBlockData iblockdata) {
+    public boolean c_(IBlockData iblockdata) {
         return true;
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockEnchantmentTable.a;
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
@@ -36,7 +36,7 @@ public class BlockEnchantmentTable extends BlockTileEntity {
             return EnumInteractionResult.SUCCESS;
         } else {
             entityhuman.openContainer(iblockdata.b(world, blockposition));
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.CONSUME;
         }
     }
 

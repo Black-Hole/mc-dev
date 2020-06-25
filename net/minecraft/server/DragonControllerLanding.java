@@ -13,12 +13,12 @@ public class DragonControllerLanding extends AbstractDragonController {
 
     @Override
     public void b() {
-        Vec3D vec3d = this.a.u(1.0F).d();
+        Vec3D vec3d = this.a.t(1.0F).d();
 
         vec3d.b(-0.7853982F);
-        double d0 = this.a.bw.locX();
-        double d1 = this.a.bw.e(0.5D);
-        double d2 = this.a.bw.locZ();
+        double d0 = this.a.bv.locX();
+        double d1 = this.a.bv.e(0.5D);
+        double d2 = this.a.bv.locZ();
 
         for (int i = 0; i < 8; ++i) {
             Random random = this.a.getRandom();
@@ -36,7 +36,7 @@ public class DragonControllerLanding extends AbstractDragonController {
     @Override
     public void c() {
         if (this.b == null) {
-            this.b = new Vec3D(this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.a));
+            this.b = Vec3D.c((BaseBlockPosition) this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.a));
         }
 
         if (this.b.c(this.a.locX(), this.a.locY(), this.a.locZ()) < 1.0D) {

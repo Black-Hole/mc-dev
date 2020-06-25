@@ -74,7 +74,8 @@ public class ArgumentRegistry {
         a("entity_summon", ArgumentEntitySummon.class, new ArgumentSerializerVoid<>(ArgumentEntitySummon::a));
         a("dimension", ArgumentDimension.class, new ArgumentSerializerVoid<>(ArgumentDimension::a));
         a("time", ArgumentTime.class, new ArgumentSerializerVoid<>(ArgumentTime::a));
-        if (SharedConstants.b) {
+        a("uuid", ArgumentUUID.class, new ArgumentSerializerVoid<>(ArgumentUUID::a));
+        if (SharedConstants.d) {
             a("test_argument", GameTestHarnessTestFunctionArgument.class, new ArgumentSerializerVoid<>(GameTestHarnessTestFunctionArgument::a));
             a("test_class", GameTestHarnessTestClassArgument.class, new ArgumentSerializerVoid<>(GameTestHarnessTestClassArgument::a));
         }

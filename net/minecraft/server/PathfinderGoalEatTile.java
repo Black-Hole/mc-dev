@@ -21,9 +21,9 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
         if (this.b.getRandom().nextInt(this.b.isBaby() ? 50 : 1000) != 0) {
             return false;
         } else {
-            BlockPosition blockposition = new BlockPosition(this.b);
+            BlockPosition blockposition = this.b.getChunkCoordinates();
 
-            return PathfinderGoalEatTile.a.test(this.c.getType(blockposition)) ? true : this.c.getType(blockposition.down()).getBlock() == Blocks.GRASS_BLOCK;
+            return PathfinderGoalEatTile.a.test(this.c.getType(blockposition)) ? true : this.c.getType(blockposition.down()).a(Blocks.GRASS_BLOCK);
         }
     }
 
@@ -52,7 +52,7 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
     public void e() {
         this.d = Math.max(0, this.d - 1);
         if (this.d == 4) {
-            BlockPosition blockposition = new BlockPosition(this.b);
+            BlockPosition blockposition = this.b.getChunkCoordinates();
 
             if (PathfinderGoalEatTile.a.test(this.c.getType(blockposition))) {
                 if (this.c.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
@@ -63,7 +63,7 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
             } else {
                 BlockPosition blockposition1 = blockposition.down();
 
-                if (this.c.getType(blockposition1).getBlock() == Blocks.GRASS_BLOCK) {
+                if (this.c.getType(blockposition1).a(Blocks.GRASS_BLOCK)) {
                     if (this.c.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
                         this.c.triggerEffect(2001, blockposition1, Block.getCombinedId(Blocks.GRASS_BLOCK.getBlockData()));
                         this.c.setTypeAndData(blockposition1, Blocks.DIRT.getBlockData(), 2);

@@ -7,17 +7,21 @@ import java.util.function.Consumer;
 
 public class LootSelectorDynamic extends LootSelectorEntry {
 
-    public static final MinecraftKey c = new MinecraftKey("dynamic");
-    private final MinecraftKey h;
+    private final MinecraftKey g;
 
     private LootSelectorDynamic(MinecraftKey minecraftkey, int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
         super(i, j, alootitemcondition, alootitemfunction);
-        this.h = minecraftkey;
+        this.g = minecraftkey;
+    }
+
+    @Override
+    public LootEntryType a() {
+        return LootEntries.d;
     }
 
     @Override
     public void a(Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {
-        loottableinfo.a(this.h, consumer);
+        loottableinfo.a(this.g, consumer);
     }
 
     public static LootSelectorEntry.a<?> a(MinecraftKey minecraftkey) {
@@ -28,13 +32,11 @@ public class LootSelectorDynamic extends LootSelectorEntry {
 
     public static class a extends LootSelectorEntry.e<LootSelectorDynamic> {
 
-        public a() {
-            super(new MinecraftKey("dynamic"), LootSelectorDynamic.class);
-        }
+        public a() {}
 
         public void a(JsonObject jsonobject, LootSelectorDynamic lootselectordynamic, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootSelectorEntry) lootselectordynamic, jsonserializationcontext);
-            jsonobject.addProperty("name", lootselectordynamic.h.toString());
+            jsonobject.addProperty("name", lootselectordynamic.g.toString());
         }
 
         @Override

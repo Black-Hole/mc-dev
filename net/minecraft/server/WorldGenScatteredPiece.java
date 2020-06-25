@@ -15,7 +15,7 @@ public abstract class WorldGenScatteredPiece extends StructurePiece {
         this.b = i1;
         this.c = j1;
         this.a(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
-        if (this.i().m() == EnumDirection.EnumAxis.Z) {
+        if (this.i().n() == EnumDirection.EnumAxis.Z) {
             this.n = new StructureBoundingBox(i, j, k, i + l - 1, j + i1 - 1, k + j1 - 1);
         } else {
             this.n = new StructureBoundingBox(i, j, k, i + j1 - 1, j + i1 - 1, k + l - 1);

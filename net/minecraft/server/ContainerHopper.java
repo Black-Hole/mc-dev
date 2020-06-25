@@ -40,7 +40,7 @@ public class ContainerHopper extends Container {
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -49,14 +49,14 @@ public class ContainerHopper extends Container {
             itemstack = itemstack1.cloneItemStack();
             if (i < this.hopper.getSize()) {
                 if (!this.a(itemstack1, this.hopper.getSize(), this.slots.size(), true)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (!this.a(itemstack1, 0, this.hopper.getSize(), false)) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.a);
+                slot.set(ItemStack.b);
             } else {
                 slot.d();
             }

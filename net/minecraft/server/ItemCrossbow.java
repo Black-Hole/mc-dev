@@ -5,29 +5,17 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
-public class ItemCrossbow extends ItemProjectileWeapon {
+public class ItemCrossbow extends ItemProjectileWeapon implements ItemVanishable {
 
     private boolean c = false;
     private boolean d = false;
 
     public ItemCrossbow(Item.Info item_info) {
         super(item_info);
-        this.a(new MinecraftKey("pull"), (itemstack, world, entityliving) -> {
-            return entityliving != null && itemstack.getItem() == this ? (d(itemstack) ? 0.0F : (float) (itemstack.k() - entityliving.dE()) / (float) e(itemstack)) : 0.0F;
-        });
-        this.a(new MinecraftKey("pulling"), (itemstack, world, entityliving) -> {
-            return entityliving != null && entityliving.isHandRaised() && entityliving.dD() == itemstack && !d(itemstack) ? 1.0F : 0.0F;
-        });
-        this.a(new MinecraftKey("charged"), (itemstack, world, entityliving) -> {
-            return entityliving != null && d(itemstack) ? 1.0F : 0.0F;
-        });
-        this.a(new MinecraftKey("firework"), (itemstack, world, entityliving) -> {
-            return entityliving != null && d(itemstack) && a(itemstack, Items.FIREWORK_ROCKET) ? 1.0F : 0.0F;
-        });
     }
 
     @Override
-    public Predicate<ItemStack> d() {
+    public Predicate<ItemStack> e() {
         return ItemCrossbow.b;
     }
 
@@ -41,7 +29,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (d(itemstack)) {
-            a(world, entityhuman, enumhand, itemstack, l(itemstack), 1.0F);
+            a(world, entityhuman, enumhand, itemstack, m(itemstack), 1.0F);
             a(itemstack, false);
             return InteractionResultWrapper.consume(itemstack);
         } else if (!entityhuman.f(itemstack).isEmpty()) {
@@ -59,14 +47,14 @@ public class ItemCrossbow extends ItemProjectileWeapon {
 
     @Override
     public void a(ItemStack itemstack, World world, EntityLiving entityliving, int i) {
-        int j = this.f_(itemstack) - i;
+        int j = this.e_(itemstack) - i;
         float f = a(j, itemstack);
 
         if (f >= 1.0F && !d(itemstack) && a(entityliving, itemstack)) {
             a(itemstack, true);
             SoundCategory soundcategory = entityliving instanceof EntityHuman ? SoundCategory.PLAYERS : SoundCategory.HOSTILE;
 
-            world.playSound((EntityHuman) null, entityliving.locX(), entityliving.locY(), entityliving.locZ(), SoundEffects.ITEM_CROSSBOW_LOADING_END, soundcategory, 1.0F, 1.0F / (ItemCrossbow.i.nextFloat() * 0.5F + 1.0F) + 0.2F);
+            world.playSound((EntityHuman) null, entityliving.locX(), entityliving.locY(), entityliving.locZ(), SoundEffects.ITEM_CROSSBOW_LOADING_END, soundcategory, 1.0F, 1.0F / (ItemCrossbow.RANDOM.nextFloat() * 0.5F + 1.0F) + 0.2F);
         }
 
     }
@@ -146,7 +134,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
         nbttagcompound.set("ChargedProjectiles", nbttaglist);
     }
 
-    private static List<ItemStack> j(ItemStack itemstack) {
+    private static List<ItemStack> k(ItemStack itemstack) {
         List<ItemStack> list = Lists.newArrayList();
         NBTTagCompound nbttagcompound = itemstack.getTag();
 
@@ -165,7 +153,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
         return list;
     }
 
-    private static void k(ItemStack itemstack) {
+    private static void l(ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.getTag();
 
         if (nbttagcompound != null) {
@@ -177,8 +165,8 @@ public class ItemCrossbow extends ItemProjectileWeapon {
 
     }
 
-    private static boolean a(ItemStack itemstack, Item item) {
-        return j(itemstack).stream().anyMatch((itemstack1) -> {
+    public static boolean a(ItemStack itemstack, Item item) {
+        return k(itemstack).stream().anyMatch((itemstack1) -> {
             return itemstack1.getItem() == item;
         });
     }
@@ -189,7 +177,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
             Object object;
 
             if (flag1) {
-                object = new EntityFireworks(world, itemstack1, entityliving.locX(), entityliving.getHeadY() - 0.15000000596046448D, entityliving.locZ(), true);
+                object = new EntityFireworks(world, itemstack1, entityliving, entityliving.locX(), entityliving.getHeadY() - 0.15000000596046448D, entityliving.locZ(), true);
             } else {
                 object = a(world, entityliving, itemstack, itemstack1);
                 if (flag || f3 != 0.0F) {
@@ -228,7 +216,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
         }
 
         entityarrow.a(SoundEffects.ITEM_CROSSBOW_HIT);
-        entityarrow.o(true);
+        entityarrow.setShotFromCrossbow(true);
         int i = EnchantmentManager.getEnchantmentLevel(Enchantments.PIERCING, itemstack);
 
         if (i > 0) {
@@ -239,7 +227,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
     }
 
     public static void a(World world, EntityLiving entityliving, EnumHand enumhand, ItemStack itemstack, float f, float f1) {
-        List<ItemStack> list = j(itemstack);
+        List<ItemStack> list = k(itemstack);
         float[] afloat = a(entityliving.getRandom());
 
         for (int i = 0; i < list.size(); ++i) {
@@ -269,7 +257,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
     private static float a(boolean flag) {
         float f = flag ? 0.63F : 0.43F;
 
-        return 1.0F / (ItemCrossbow.i.nextFloat() * 0.5F + 1.8F) + f;
+        return 1.0F / (ItemCrossbow.RANDOM.nextFloat() * 0.5F + 1.8F) + f;
     }
 
     private static void a(World world, EntityLiving entityliving, ItemStack itemstack) {
@@ -283,7 +271,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
             entityplayer.b(StatisticList.ITEM_USED.b(itemstack.getItem()));
         }
 
-        k(itemstack);
+        l(itemstack);
     }
 
     @Override
@@ -292,7 +280,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
             int j = EnchantmentManager.getEnchantmentLevel(Enchantments.QUICK_CHARGE, itemstack);
             SoundEffect soundeffect = this.a(j);
             SoundEffect soundeffect1 = j == 0 ? SoundEffects.ITEM_CROSSBOW_LOADING_MIDDLE : null;
-            float f = (float) (itemstack.k() - i) / (float) e(itemstack);
+            float f = (float) (itemstack.k() - i) / (float) g(itemstack);
 
             if (f < 0.2F) {
                 this.c = false;
@@ -313,18 +301,18 @@ public class ItemCrossbow extends ItemProjectileWeapon {
     }
 
     @Override
-    public int f_(ItemStack itemstack) {
-        return e(itemstack) + 3;
+    public int e_(ItemStack itemstack) {
+        return g(itemstack) + 3;
     }
 
-    public static int e(ItemStack itemstack) {
+    public static int g(ItemStack itemstack) {
         int i = EnchantmentManager.getEnchantmentLevel(Enchantments.QUICK_CHARGE, itemstack);
 
         return i == 0 ? 25 : 25 - 5 * i;
     }
 
     @Override
-    public EnumAnimation e_(ItemStack itemstack) {
+    public EnumAnimation d_(ItemStack itemstack) {
         return EnumAnimation.CROSSBOW;
     }
 
@@ -342,7 +330,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
     }
 
     private static float a(int i, ItemStack itemstack) {
-        float f = (float) i / (float) e(itemstack);
+        float f = (float) i / (float) g(itemstack);
 
         if (f > 1.0F) {
             f = 1.0F;
@@ -351,7 +339,12 @@ public class ItemCrossbow extends ItemProjectileWeapon {
         return f;
     }
 
-    private static float l(ItemStack itemstack) {
+    private static float m(ItemStack itemstack) {
         return itemstack.getItem() == Items.CROSSBOW && a(itemstack, Items.FIREWORK_ROCKET) ? 1.6F : 3.15F;
+    }
+
+    @Override
+    public int d() {
+        return 8;
     }
 }

@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class BlockChestTrapped extends BlockChest {
 
-    public BlockChestTrapped(Block.Info block_info) {
-        super(block_info, () -> {
+    public BlockChestTrapped(BlockBase.Info blockbase_info) {
+        super(blockbase_info, () -> {
             return TileEntityTypes.TRAPPED_CHEST;
         });
     }

@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class BlockBeacon extends BlockTileEntity implements IBeaconBeam {
 
-    public BlockBeacon(Block.Info block_info) {
-        super(block_info);
+    public BlockBeacon(BlockBase.Info blockbase_info) {
+        super(blockbase_info);
     }
 
     @Override
@@ -28,17 +28,12 @@ public class BlockBeacon extends BlockTileEntity implements IBeaconBeam {
                 entityhuman.a(StatisticList.INTERACT_WITH_BEACON);
             }
 
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.CONSUME;
         }
     }
 
     @Override
-    public boolean isOccluding(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return false;
-    }
-
-    @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 

@@ -1,18 +1,18 @@
 package net.minecraft.server;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
 import java.util.Map;
+import java.util.Set;
 
-public class ItemHoe extends ItemToolMaterial {
+public class ItemHoe extends ItemTool {
 
-    private final float b;
+    private static final Set<Block> c = ImmutableSet.of(Blocks.NETHER_WART_BLOCK, Blocks.WARPED_WART_BLOCK, Blocks.HAY_BLOCK, Blocks.DRIED_KELP_BLOCK, Blocks.TARGET, Blocks.SHROOMLIGHT, new Block[]{Blocks.SPONGE, Blocks.WET_SPONGE, Blocks.JUNGLE_LEAVES, Blocks.OAK_LEAVES, Blocks.SPRUCE_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.ACACIA_LEAVES, Blocks.BIRCH_LEAVES});
     protected static final Map<Block, IBlockData> a = Maps.newHashMap(ImmutableMap.of(Blocks.GRASS_BLOCK, Blocks.FARMLAND.getBlockData(), Blocks.GRASS_PATH, Blocks.FARMLAND.getBlockData(), Blocks.DIRT, Blocks.FARMLAND.getBlockData(), Blocks.COARSE_DIRT, Blocks.DIRT.getBlockData()));
 
-    public ItemHoe(ToolMaterial toolmaterial, float f, Item.Info item_info) {
-        super(toolmaterial, item_info);
-        this.b = f;
+    protected ItemHoe(ToolMaterial toolmaterial, int i, float f, Item.Info item_info) {
+        super((float) i, f, toolmaterial, ItemHoe.c, item_info);
     }
 
     @Override
@@ -36,30 +36,10 @@ public class ItemHoe extends ItemToolMaterial {
                     }
                 }
 
-                return EnumInteractionResult.SUCCESS;
+                return EnumInteractionResult.a(world.isClientSide);
             }
         }
 
         return EnumInteractionResult.PASS;
-    }
-
-    @Override
-    public boolean a(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1) {
-        itemstack.damage(1, entityliving1, (entityliving2) -> {
-            entityliving2.broadcastItemBreak(EnumItemSlot.MAINHAND);
-        });
-        return true;
-    }
-
-    @Override
-    public Multimap<String, AttributeModifier> a(EnumItemSlot enumitemslot) {
-        Multimap<String, AttributeModifier> multimap = super.a(enumitemslot);
-
-        if (enumitemslot == EnumItemSlot.MAINHAND) {
-            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemHoe.g, "Weapon modifier", 0.0D, AttributeModifier.Operation.ADDITION));
-            multimap.put(GenericAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ItemHoe.h, "Weapon modifier", (double) this.b, AttributeModifier.Operation.ADDITION));
-        }
-
-        return multimap;
     }
 }

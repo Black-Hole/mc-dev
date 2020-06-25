@@ -9,18 +9,18 @@ public class BlockSkullWall extends BlockSkullAbstract {
     public static final BlockStateDirection a = BlockFacingHorizontal.FACING;
     private static final Map<EnumDirection, VoxelShape> b = Maps.newEnumMap(ImmutableMap.of(EnumDirection.NORTH, Block.a(4.0D, 4.0D, 8.0D, 12.0D, 12.0D, 16.0D), EnumDirection.SOUTH, Block.a(4.0D, 4.0D, 0.0D, 12.0D, 12.0D, 8.0D), EnumDirection.EAST, Block.a(0.0D, 4.0D, 4.0D, 8.0D, 12.0D, 12.0D), EnumDirection.WEST, Block.a(8.0D, 4.0D, 4.0D, 16.0D, 12.0D, 12.0D)));
 
-    protected BlockSkullWall(BlockSkull.a blockskull_a, Block.Info block_info) {
-        super(blockskull_a, block_info);
-        this.p((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSkullWall.a, EnumDirection.NORTH));
+    protected BlockSkullWall(BlockSkull.a blockskull_a, BlockBase.Info blockbase_info) {
+        super(blockskull_a, blockbase_info);
+        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSkullWall.a, EnumDirection.NORTH));
     }
 
     @Override
-    public String k() {
+    public String i() {
         return this.getItem().getName();
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return (VoxelShape) BlockSkullWall.b.get(iblockdata.get(BlockSkullWall.a));
     }
 
@@ -36,7 +36,7 @@ public class BlockSkullWall extends BlockSkullAbstract {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection1[j];
 
-            if (enumdirection.m().c()) {
+            if (enumdirection.n().d()) {
                 EnumDirection enumdirection1 = enumdirection.opposite();
 
                 iblockdata = (IBlockData) iblockdata.set(BlockSkullWall.a, enumdirection1);

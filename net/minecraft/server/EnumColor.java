@@ -46,19 +46,19 @@ public enum EnumColor implements INamable {
         return this.s;
     }
 
-    public String b() {
+    public String c() {
         return this.t;
     }
 
-    public float[] d() {
+    public float[] getColor() {
         return this.x;
     }
 
-    public MaterialMapColor e() {
+    public MaterialMapColor f() {
         return this.u;
     }
 
-    public int f() {
+    public int getFireworksColor() {
         return this.y;
     }
 

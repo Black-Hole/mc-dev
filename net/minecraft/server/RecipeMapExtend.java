@@ -13,7 +13,7 @@ public class RecipeMapExtend extends ShapedRecipes {
         if (!super.a(inventorycrafting, world)) {
             return false;
         } else {
-            ItemStack itemstack = ItemStack.a;
+            ItemStack itemstack = ItemStack.b;
 
             for (int i = 0; i < inventorycrafting.getSize() && itemstack.isEmpty(); ++i) {
                 ItemStack itemstack1 = inventorycrafting.getItem(i);
@@ -51,7 +51,7 @@ public class RecipeMapExtend extends ShapedRecipes {
 
     @Override
     public ItemStack a(InventoryCrafting inventorycrafting) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
 
         for (int i = 0; i < inventorycrafting.getSize() && itemstack.isEmpty(); ++i) {
             ItemStack itemstack1 = inventorycrafting.getItem(i);

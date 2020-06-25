@@ -1,36 +1,56 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import com.mojang.datafixers.util.Pair;
 import java.io.IOException;
+import java.util.List;
 
 public class PacketPlayOutEntityEquipment implements Packet<PacketListenerPlayOut> {
 
     private int a;
-    private EnumItemSlot b;
-    private ItemStack c;
+    private final List<Pair<EnumItemSlot, ItemStack>> b;
 
     public PacketPlayOutEntityEquipment() {
-        this.c = ItemStack.a;
+        this.b = Lists.newArrayList();
     }
 
-    public PacketPlayOutEntityEquipment(int i, EnumItemSlot enumitemslot, ItemStack itemstack) {
-        this.c = ItemStack.a;
+    public PacketPlayOutEntityEquipment(int i, List<Pair<EnumItemSlot, ItemStack>> list) {
         this.a = i;
-        this.b = enumitemslot;
-        this.c = itemstack.cloneItemStack();
+        this.b = list;
     }
 
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.i();
-        this.b = (EnumItemSlot) packetdataserializer.a(EnumItemSlot.class);
-        this.c = packetdataserializer.m();
+        EnumItemSlot[] aenumitemslot = EnumItemSlot.values();
+
+        byte b0;
+
+        do {
+            b0 = packetdataserializer.readByte();
+            EnumItemSlot enumitemslot = aenumitemslot[b0 & 127];
+            ItemStack itemstack = packetdataserializer.m();
+
+            this.b.add(Pair.of(enumitemslot, itemstack));
+        } while ((b0 & -128) != 0);
+
     }
 
     @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
-        packetdataserializer.a((Enum) this.b);
-        packetdataserializer.a(this.c);
+        int i = this.b.size();
+
+        for (int j = 0; j < i; ++j) {
+            Pair<EnumItemSlot, ItemStack> pair = (Pair) this.b.get(j);
+            EnumItemSlot enumitemslot = (EnumItemSlot) pair.getFirst();
+            boolean flag = j != i - 1;
+            int k = enumitemslot.ordinal();
+
+            packetdataserializer.writeByte(flag ? k | -128 : k);
+            packetdataserializer.a((ItemStack) pair.getSecond());
+        }
+
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

@@ -24,7 +24,7 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.h> {
 
     private static final Collection<String> c = Arrays.asList("foo", "foo.bar", "foo[0]", "[0]", "[]", "{foo=bar}");
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("arguments.nbtpath.node.invalid", new Object[0]));
+    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("arguments.nbtpath.node.invalid"));
     public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("arguments.nbtpath.nothing_found", new Object[]{object});
     });

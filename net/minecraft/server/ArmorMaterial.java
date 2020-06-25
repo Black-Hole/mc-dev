@@ -13,4 +13,6 @@ public interface ArmorMaterial {
     RecipeItemStack c();
 
     float e();
+
+    float f();
 }

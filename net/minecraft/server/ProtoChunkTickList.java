@@ -4,7 +4,6 @@ import it.unimi.dsi.fastutil.shorts.ShortList;
 import it.unimi.dsi.fastutil.shorts.ShortListIterator;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public class ProtoChunkTickList<T> implements TickList<T> {
 
@@ -66,12 +65,5 @@ public class ProtoChunkTickList<T> implements TickList<T> {
     @Override
     public boolean b(BlockPosition blockposition, T t0) {
         return false;
-    }
-
-    @Override
-    public void a(Stream<NextTickListEntry<T>> stream) {
-        stream.forEach((nextticklistentry) -> {
-            this.a(nextticklistentry.a, nextticklistentry.b(), 0, nextticklistentry.c);
-        });
     }
 }

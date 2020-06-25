@@ -6,22 +6,20 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonElement;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
-import com.mojang.datafixers.types.DynamicOps;
-import com.mojang.datafixers.types.JsonOps;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.JsonOps;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
@@ -111,23 +109,24 @@ public class DataConverterLevelDataGeneratorOptions extends DataFix {
         Type<?> type = this.getOutputSchema().getType(DataConverterTypes.LEVEL);
 
         return this.fixTypeEverywhereTyped("LevelDataGeneratorOptionsFix", this.getInputSchema().getType(DataConverterTypes.LEVEL), type, (typed) -> {
-            Dynamic<?> dynamic = typed.write();
-            Optional<String> optional = dynamic.get("generatorOptions").asString();
-            Dynamic dynamic1;
+            return (Typed) typed.write().flatMap((dynamic) -> {
+                Optional<String> optional = dynamic.get("generatorOptions").asString().result();
+                Dynamic dynamic1;
 
-            if ("flat".equalsIgnoreCase(dynamic.get("generatorName").asString(""))) {
-                String s = (String) optional.orElse("");
+                if ("flat".equalsIgnoreCase(dynamic.get("generatorName").asString(""))) {
+                    String s = (String) optional.orElse("");
 
-                dynamic1 = dynamic.set("generatorOptions", a(s, dynamic.getOps()));
-            } else if ("buffet".equalsIgnoreCase(dynamic.get("generatorName").asString("")) && optional.isPresent()) {
-                Dynamic<JsonElement> dynamic2 = new Dynamic(JsonOps.INSTANCE, ChatDeserializer.a((String) optional.get(), true));
+                    dynamic1 = dynamic.set("generatorOptions", a(s, dynamic.getOps()));
+                } else if ("buffet".equalsIgnoreCase(dynamic.get("generatorName").asString("")) && optional.isPresent()) {
+                    Dynamic<JsonElement> dynamic2 = new Dynamic(JsonOps.INSTANCE, ChatDeserializer.a((String) optional.get(), true));
 
-                dynamic1 = dynamic.set("generatorOptions", dynamic2.convert(dynamic.getOps()));
-            } else {
-                dynamic1 = dynamic;
-            }
+                    dynamic1 = dynamic.set("generatorOptions", dynamic2.convert(dynamic.getOps()));
+                } else {
+                    dynamic1 = dynamic;
+                }
 
-            return (Typed) ((Optional) type.readTyped(dynamic1).getSecond()).orElseThrow(() -> {
+                return type.readTyped(dynamic1);
+            }).map(Pair::getFirst).result().orElseThrow(() -> {
                 return new IllegalStateException("Could not read new level type.");
             });
         });

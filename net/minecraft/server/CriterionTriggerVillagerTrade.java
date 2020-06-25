@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class CriterionTriggerVillagerTrade extends CriterionTriggerAbstract<CriterionTriggerVillagerTrade.a> {
@@ -16,44 +14,46 @@ public class CriterionTriggerVillagerTrade extends CriterionTriggerAbstract<Crit
     }
 
     @Override
-    public CriterionTriggerVillagerTrade.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("villager"));
+    public CriterionTriggerVillagerTrade.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
+        CriterionConditionEntity.b criterionconditionentity_b1 = CriterionConditionEntity.b.a(jsonobject, "villager", lootdeserializationcontext);
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
 
-        return new CriterionTriggerVillagerTrade.a(criterionconditionentity, criterionconditionitem);
+        return new CriterionTriggerVillagerTrade.a(criterionconditionentity_b, criterionconditionentity_b1, criterionconditionitem);
     }
 
     public void a(EntityPlayer entityplayer, EntityVillagerAbstract entityvillagerabstract, ItemStack itemstack) {
-        this.a(entityplayer.getAdvancementData(), (criteriontriggervillagertrade_a) -> {
-            return criteriontriggervillagertrade_a.a(entityplayer, entityvillagerabstract, itemstack);
+        LootTableInfo loottableinfo = CriterionConditionEntity.b(entityplayer, entityvillagerabstract);
+
+        this.a(entityplayer, (criteriontriggervillagertrade_a) -> {
+            return criteriontriggervillagertrade_a.a(loottableinfo, itemstack);
         });
     }
 
     public static class a extends CriterionInstanceAbstract {
 
-        private final CriterionConditionEntity a;
+        private final CriterionConditionEntity.b a;
         private final CriterionConditionItem b;
 
-        public a(CriterionConditionEntity criterionconditionentity, CriterionConditionItem criterionconditionitem) {
-            super(CriterionTriggerVillagerTrade.a);
-            this.a = criterionconditionentity;
+        public a(CriterionConditionEntity.b criterionconditionentity_b, CriterionConditionEntity.b criterionconditionentity_b1, CriterionConditionItem criterionconditionitem) {
+            super(CriterionTriggerVillagerTrade.a, criterionconditionentity_b);
+            this.a = criterionconditionentity_b1;
             this.b = criterionconditionitem;
         }
 
         public static CriterionTriggerVillagerTrade.a c() {
-            return new CriterionTriggerVillagerTrade.a(CriterionConditionEntity.a, CriterionConditionItem.a);
+            return new CriterionTriggerVillagerTrade.a(CriterionConditionEntity.b.a, CriterionConditionEntity.b.a, CriterionConditionItem.a);
         }
 
-        public boolean a(EntityPlayer entityplayer, EntityVillagerAbstract entityvillagerabstract, ItemStack itemstack) {
-            return !this.a.a(entityplayer, entityvillagerabstract) ? false : this.b.a(itemstack);
+        public boolean a(LootTableInfo loottableinfo, ItemStack itemstack) {
+            return !this.a.a(loottableinfo) ? false : this.b.a(itemstack);
         }
 
         @Override
-        public JsonElement b() {
-            JsonObject jsonobject = new JsonObject();
+        public JsonObject a(LootSerializationContext lootserializationcontext) {
+            JsonObject jsonobject = super.a(lootserializationcontext);
 
             jsonobject.add("item", this.b.a());
-            jsonobject.add("villager", this.a.a());
+            jsonobject.add("villager", this.a.a(lootserializationcontext));
             return jsonobject;
         }
     }

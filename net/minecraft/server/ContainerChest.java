@@ -77,7 +77,7 @@ public class ContainerChest extends Container {
 
     @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack = ItemStack.b;
         Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -86,14 +86,14 @@ public class ContainerChest extends Container {
             itemstack = itemstack1.cloneItemStack();
             if (i < this.d * 9) {
                 if (!this.a(itemstack1, this.d * 9, this.slots.size(), true)) {
-                    return ItemStack.a;
+                    return ItemStack.b;
                 }
             } else if (!this.a(itemstack1, 0, this.d * 9, false)) {
-                return ItemStack.a;
+                return ItemStack.b;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.a);
+                slot.set(ItemStack.b);
             } else {
                 slot.d();
             }

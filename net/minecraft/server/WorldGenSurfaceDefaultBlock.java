@@ -1,13 +1,12 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.function.Function;
 
 public class WorldGenSurfaceDefaultBlock extends WorldGenSurface<WorldGenSurfaceConfigurationBase> {
 
-    public WorldGenSurfaceDefaultBlock(Function<Dynamic<?>, ? extends WorldGenSurfaceConfigurationBase> function) {
-        super(function);
+    public WorldGenSurfaceDefaultBlock(Codec<WorldGenSurfaceConfigurationBase> codec) {
+        super(codec);
     }
 
     public void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, long i1, WorldGenSurfaceConfigurationBase worldgensurfaceconfigurationbase) {
@@ -29,7 +28,7 @@ public class WorldGenSurfaceDefaultBlock extends WorldGenSurface<WorldGenSurface
 
             if (iblockdata7.isAir()) {
                 i1 = -1;
-            } else if (iblockdata7.getBlock() == iblockdata.getBlock()) {
+            } else if (iblockdata7.a(iblockdata.getBlock())) {
                 if (i1 == -1) {
                     if (j1 <= 0) {
                         iblockdata5 = Blocks.AIR.getBlockData();
@@ -62,9 +61,9 @@ public class WorldGenSurfaceDefaultBlock extends WorldGenSurface<WorldGenSurface
                 } else if (i1 > 0) {
                     --i1;
                     ichunkaccess.setType(blockposition_mutableblockposition, iblockdata6, false);
-                    if (i1 == 0 && iblockdata6.getBlock() == Blocks.SAND && j1 > 1) {
+                    if (i1 == 0 && iblockdata6.a(Blocks.SAND) && j1 > 1) {
                         i1 = random.nextInt(4) + Math.max(0, i2 - 63);
-                        iblockdata6 = iblockdata6.getBlock() == Blocks.RED_SAND ? Blocks.RED_SANDSTONE.getBlockData() : Blocks.SANDSTONE.getBlockData();
+                        iblockdata6 = iblockdata6.a(Blocks.RED_SAND) ? Blocks.RED_SANDSTONE.getBlockData() : Blocks.SANDSTONE.getBlockData();
                     }
                 }
             }

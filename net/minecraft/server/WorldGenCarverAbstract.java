@@ -1,41 +1,49 @@
 package net.minecraft.server;
 
 import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import java.util.BitSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
+import org.apache.commons.lang3.mutable.MutableBoolean;
 
 public abstract class WorldGenCarverAbstract<C extends WorldGenCarverConfiguration> {
 
-    public static final WorldGenCarverAbstract<WorldGenFeatureConfigurationChance> a = a("cave", (WorldGenCarverAbstract) (new WorldGenCaves(WorldGenFeatureConfigurationChance::a, 256)));
-    public static final WorldGenCarverAbstract<WorldGenFeatureConfigurationChance> b = a("hell_cave", (WorldGenCarverAbstract) (new WorldGenCavesHell(WorldGenFeatureConfigurationChance::a)));
-    public static final WorldGenCarverAbstract<WorldGenFeatureConfigurationChance> c = a("canyon", (WorldGenCarverAbstract) (new WorldGenCanyon(WorldGenFeatureConfigurationChance::a)));
-    public static final WorldGenCarverAbstract<WorldGenFeatureConfigurationChance> d = a("underwater_canyon", (WorldGenCarverAbstract) (new WorldGenCanyonOcean(WorldGenFeatureConfigurationChance::a)));
-    public static final WorldGenCarverAbstract<WorldGenFeatureConfigurationChance> e = a("underwater_cave", (WorldGenCarverAbstract) (new WorldGenCavesOcean(WorldGenFeatureConfigurationChance::a)));
+    public static final WorldGenCarverAbstract<WorldGenFeatureConfigurationChance> a = a("cave", (WorldGenCarverAbstract) (new WorldGenCaves(WorldGenFeatureConfigurationChance.b, 256)));
+    public static final WorldGenCarverAbstract<WorldGenFeatureConfigurationChance> b = a("nether_cave", (WorldGenCarverAbstract) (new WorldGenCavesHell(WorldGenFeatureConfigurationChance.b)));
+    public static final WorldGenCarverAbstract<WorldGenFeatureConfigurationChance> c = a("canyon", (WorldGenCarverAbstract) (new WorldGenCanyon(WorldGenFeatureConfigurationChance.b)));
+    public static final WorldGenCarverAbstract<WorldGenFeatureConfigurationChance> d = a("underwater_canyon", (WorldGenCarverAbstract) (new WorldGenCanyonOcean(WorldGenFeatureConfigurationChance.b)));
+    public static final WorldGenCarverAbstract<WorldGenFeatureConfigurationChance> e = a("underwater_cave", (WorldGenCarverAbstract) (new WorldGenCavesOcean(WorldGenFeatureConfigurationChance.b)));
     protected static final IBlockData f = Blocks.AIR.getBlockData();
     protected static final IBlockData g = Blocks.CAVE_AIR.getBlockData();
     protected static final Fluid h = FluidTypes.WATER.h();
     protected static final Fluid i = FluidTypes.LAVA.h();
     protected Set<Block> j;
     protected Set<FluidType> k;
-    private final Function<Dynamic<?>, ? extends C> m;
+    private final Codec<WorldGenCarverWrapper<C>> m;
     protected final int l;
 
     private static <C extends WorldGenCarverConfiguration, F extends WorldGenCarverAbstract<C>> F a(String s, F f0) {
         return (WorldGenCarverAbstract) IRegistry.a(IRegistry.CARVER, s, (Object) f0);
     }
 
-    public WorldGenCarverAbstract(Function<Dynamic<?>, ? extends C> function, int i) {
+    public WorldGenCarverAbstract(Codec<C> codec, int i) {
         this.j = ImmutableSet.of(Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.DIRT, Blocks.COARSE_DIRT, new Block[]{Blocks.PODZOL, Blocks.GRASS_BLOCK, Blocks.TERRACOTTA, Blocks.WHITE_TERRACOTTA, Blocks.ORANGE_TERRACOTTA, Blocks.MAGENTA_TERRACOTTA, Blocks.LIGHT_BLUE_TERRACOTTA, Blocks.YELLOW_TERRACOTTA, Blocks.LIME_TERRACOTTA, Blocks.PINK_TERRACOTTA, Blocks.GRAY_TERRACOTTA, Blocks.LIGHT_GRAY_TERRACOTTA, Blocks.CYAN_TERRACOTTA, Blocks.PURPLE_TERRACOTTA, Blocks.BLUE_TERRACOTTA, Blocks.BROWN_TERRACOTTA, Blocks.GREEN_TERRACOTTA, Blocks.RED_TERRACOTTA, Blocks.BLACK_TERRACOTTA, Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.MYCELIUM, Blocks.SNOW, Blocks.PACKED_ICE});
         this.k = ImmutableSet.of(FluidTypes.WATER);
-        this.m = function;
         this.l = i;
+        this.m = codec.fieldOf("config").xmap((worldgencarverconfiguration) -> {
+            return new WorldGenCarverWrapper<>(this, worldgencarverconfiguration);
+        }, (worldgencarverwrapper) -> {
+            return worldgencarverwrapper.c;
+        }).codec();
     }
 
-    public int c() {
+    public Codec<WorldGenCarverWrapper<C>> c() {
+        return this.m;
+    }
+
+    public int d() {
         return 4;
     }
 
@@ -69,13 +77,13 @@ public abstract class WorldGenCarverAbstract<C extends WorldGenCarverConfigurati
                         double d8 = ((double) j3 + 0.5D - d2) / d3;
 
                         if (d7 * d7 + d8 * d8 < 1.0D) {
-                            AtomicBoolean atomicboolean = new AtomicBoolean(false);
+                            MutableBoolean mutableboolean = new MutableBoolean(false);
 
                             for (int k3 = l1; k3 > k1; --k3) {
                                 double d9 = ((double) k3 - 0.5D - d1) / d4;
 
                                 if (!this.a(d7, d9, d8, k3)) {
-                                    flag |= this.a(ichunkaccess, function, bitset, random, blockposition_mutableblockposition, blockposition_mutableblockposition1, blockposition_mutableblockposition2, j, k, l, l2, j3, k2, k3, i3, atomicboolean);
+                                    flag |= this.a(ichunkaccess, function, bitset, random, blockposition_mutableblockposition, blockposition_mutableblockposition1, blockposition_mutableblockposition2, j, k, l, l2, j3, k2, k3, i3, mutableboolean);
                                 }
                             }
                         }
@@ -89,7 +97,7 @@ public abstract class WorldGenCarverAbstract<C extends WorldGenCarverConfigurati
         }
     }
 
-    protected boolean a(IChunkAccess ichunkaccess, Function<BlockPosition, BiomeBase> function, BitSet bitset, Random random, BlockPosition.MutableBlockPosition blockposition_mutableblockposition, BlockPosition.MutableBlockPosition blockposition_mutableblockposition1, BlockPosition.MutableBlockPosition blockposition_mutableblockposition2, int i, int j, int k, int l, int i1, int j1, int k1, int l1, AtomicBoolean atomicboolean) {
+    protected boolean a(IChunkAccess ichunkaccess, Function<BlockPosition, BiomeBase> function, BitSet bitset, Random random, BlockPosition.MutableBlockPosition blockposition_mutableblockposition, BlockPosition.MutableBlockPosition blockposition_mutableblockposition1, BlockPosition.MutableBlockPosition blockposition_mutableblockposition2, int i, int j, int k, int l, int i1, int j1, int k1, int l1, MutableBoolean mutableboolean) {
         int i2 = j1 | l1 << 4 | k1 << 8;
 
         if (bitset.get(i2)) {
@@ -98,10 +106,10 @@ public abstract class WorldGenCarverAbstract<C extends WorldGenCarverConfigurati
             bitset.set(i2);
             blockposition_mutableblockposition.d(l, k1, i1);
             IBlockData iblockdata = ichunkaccess.getType(blockposition_mutableblockposition);
-            IBlockData iblockdata1 = ichunkaccess.getType(blockposition_mutableblockposition1.g(blockposition_mutableblockposition).c(EnumDirection.UP));
+            IBlockData iblockdata1 = ichunkaccess.getType(blockposition_mutableblockposition1.a((BaseBlockPosition) blockposition_mutableblockposition, EnumDirection.UP));
 
-            if (iblockdata.getBlock() == Blocks.GRASS_BLOCK || iblockdata.getBlock() == Blocks.MYCELIUM) {
-                atomicboolean.set(true);
+            if (iblockdata.a(Blocks.GRASS_BLOCK) || iblockdata.a(Blocks.MYCELIUM)) {
+                mutableboolean.setTrue();
             }
 
             if (!this.a(iblockdata, iblockdata1)) {
@@ -111,10 +119,10 @@ public abstract class WorldGenCarverAbstract<C extends WorldGenCarverConfigurati
                     ichunkaccess.setType(blockposition_mutableblockposition, WorldGenCarverAbstract.i.getBlockData(), false);
                 } else {
                     ichunkaccess.setType(blockposition_mutableblockposition, WorldGenCarverAbstract.g, false);
-                    if (atomicboolean.get()) {
-                        blockposition_mutableblockposition2.g(blockposition_mutableblockposition).c(EnumDirection.DOWN);
-                        if (ichunkaccess.getType(blockposition_mutableblockposition2).getBlock() == Blocks.DIRT) {
-                            ichunkaccess.setType(blockposition_mutableblockposition2, ((BiomeBase) function.apply(blockposition_mutableblockposition)).s().a(), false);
+                    if (mutableboolean.isTrue()) {
+                        blockposition_mutableblockposition2.a((BaseBlockPosition) blockposition_mutableblockposition, EnumDirection.DOWN);
+                        if (ichunkaccess.getType(blockposition_mutableblockposition2).a(Blocks.DIRT)) {
+                            ichunkaccess.setType(blockposition_mutableblockposition2, ((BiomeBase) function.apply(blockposition_mutableblockposition)).A().a(), false);
                         }
                     }
                 }
@@ -133,9 +141,7 @@ public abstract class WorldGenCarverAbstract<C extends WorldGenCarverConfigurati
     }
 
     protected boolean a(IBlockData iblockdata, IBlockData iblockdata1) {
-        Block block = iblockdata.getBlock();
-
-        return this.a(iblockdata) || (block == Blocks.SAND || block == Blocks.GRAVEL) && !iblockdata1.getFluid().a(TagsFluid.WATER);
+        return this.a(iblockdata) || (iblockdata.a(Blocks.SAND) || iblockdata.a(Blocks.GRAVEL)) && !iblockdata1.getFluid().a((Tag) TagsFluid.WATER);
     }
 
     protected boolean a(IChunkAccess ichunkaccess, int i, int j, int k, int l, int i1, int j1, int k1, int l1) {

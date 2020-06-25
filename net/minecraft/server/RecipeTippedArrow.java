@@ -40,7 +40,7 @@ public class RecipeTippedArrow extends IRecipeComplex {
         ItemStack itemstack = inventorycrafting.getItem(1 + inventorycrafting.g());
 
         if (itemstack.getItem() != Items.LINGERING_POTION) {
-            return ItemStack.a;
+            return ItemStack.b;
         } else {
             ItemStack itemstack1 = new ItemStack(Items.TIPPED_ARROW, 8);
 

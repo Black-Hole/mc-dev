@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import java.util.List;
 import java.util.function.Function;
 
@@ -20,15 +19,15 @@ public class CommandList {
     }
 
     private static int b(CommandListenerWrapper commandlistenerwrapper) {
-        return a(commandlistenerwrapper, EntityHuman::et);
+        return a(commandlistenerwrapper, EntityHuman::eN);
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Function<EntityPlayer, IChatBaseComponent> function) {
         PlayerList playerlist = commandlistenerwrapper.getServer().getPlayerList();
         List<EntityPlayer> list = playerlist.getPlayers();
-        IChatBaseComponent ichatbasecomponent = ChatComponentUtils.b(list, function);
+        IChatMutableComponent ichatmutablecomponent = ChatComponentUtils.b(list, function);
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.list.players", new Object[]{list.size(), playerlist.getMaxPlayers(), ichatbasecomponent}), false);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.list.players", new Object[]{list.size(), playerlist.getMaxPlayers(), ichatmutablecomponent}), false);
         return list.size();
     }
 }

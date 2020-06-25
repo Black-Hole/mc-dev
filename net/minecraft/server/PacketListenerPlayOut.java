@@ -6,8 +6,6 @@ public interface PacketListenerPlayOut extends PacketListener {
 
     void a(PacketPlayOutSpawnEntityExperienceOrb packetplayoutspawnentityexperienceorb);
 
-    void a(PacketPlayOutSpawnEntityWeather packetplayoutspawnentityweather);
-
     void a(PacketPlayOutSpawnEntityLiving packetplayoutspawnentityliving);
 
     void a(PacketPlayOutScoreboardObjective packetplayoutscoreboardobjective);

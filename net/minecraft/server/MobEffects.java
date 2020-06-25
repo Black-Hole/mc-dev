@@ -48,7 +48,7 @@ public class MobEffects {
                     return;
                 }
 
-                if (worldserver.b_(new BlockPosition(entityliving))) {
+                if (worldserver.b_(entityliving.getChunkCoordinates())) {
                     worldserver.getPersistentRaid().a(entityplayer);
                 }
             }

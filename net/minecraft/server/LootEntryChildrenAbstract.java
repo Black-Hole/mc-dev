@@ -36,33 +36,19 @@ public abstract class LootEntryChildrenAbstract extends LootEntryAbstract {
         return !this.a(loottableinfo) ? false : this.e.expand(loottableinfo, consumer);
     }
 
-    public static <T extends LootEntryChildrenAbstract> LootEntryChildrenAbstract.b<T> a(MinecraftKey minecraftkey, Class<T> oclass, final LootEntryChildrenAbstract.a<T> lootentrychildrenabstract_a) {
-        return new LootEntryChildrenAbstract.b<T>(minecraftkey, oclass) {
+    public static <T extends LootEntryChildrenAbstract> LootEntryAbstract.Serializer<T> a(final LootEntryChildrenAbstract.a<T> lootentrychildrenabstract_a) {
+        return new LootEntryAbstract.Serializer<T>() {
+            public void a(JsonObject jsonobject, T t0, JsonSerializationContext jsonserializationcontext) {
+                jsonobject.add("children", jsonserializationcontext.serialize(t0.c));
+            }
+
             @Override
-            protected T a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootEntryAbstract[] alootentryabstract, LootItemCondition[] alootitemcondition) {
+            public final T deserializeType(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
+                LootEntryAbstract[] alootentryabstract = (LootEntryAbstract[]) ChatDeserializer.a(jsonobject, "children", jsondeserializationcontext, LootEntryAbstract[].class);
+
                 return lootentrychildrenabstract_a.create(alootentryabstract, alootitemcondition);
             }
         };
-    }
-
-    public abstract static class b<T extends LootEntryChildrenAbstract> extends LootEntryAbstract.b<T> {
-
-        public b(MinecraftKey minecraftkey, Class<T> oclass) {
-            super(minecraftkey, oclass);
-        }
-
-        public void a(JsonObject jsonobject, T t0, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.add("children", jsonserializationcontext.serialize(t0.c));
-        }
-
-        @Override
-        public final T b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            LootEntryAbstract[] alootentryabstract = (LootEntryAbstract[]) ChatDeserializer.a(jsonobject, "children", jsondeserializationcontext, LootEntryAbstract[].class);
-
-            return this.a(jsonobject, jsondeserializationcontext, alootentryabstract, alootitemcondition);
-        }
-
-        protected abstract T a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootEntryAbstract[] alootentryabstract, LootItemCondition[] alootitemcondition);
     }
 
     @FunctionalInterface

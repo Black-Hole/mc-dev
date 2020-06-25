@@ -14,7 +14,6 @@ import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import java.util.Collection;
@@ -31,7 +30,7 @@ public class CommandExecute {
     private static final Dynamic2CommandExceptionType a = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("commands.execute.blocks.toobig", new Object[]{object, object1});
     });
-    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.execute.conditional.fail", new Object[0]));
+    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.execute.conditional.fail"));
     private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.execute.conditional.fail_count", new Object[]{object});
     });
@@ -42,7 +41,7 @@ public class CommandExecute {
         };
     };
     private static final SuggestionProvider<CommandListenerWrapper> e = (commandcontext, suggestionsbuilder) -> {
-        LootPredicateManager lootpredicatemanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aQ();
+        LootPredicateManager lootpredicatemanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aI();
 
         return ICompletionProvider.a((Iterable) lootpredicatemanager.a(), suggestionsbuilder);
     };
@@ -72,7 +71,7 @@ public class CommandExecute {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.bX()).a(entity.aX()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.getPositionVector()).a(entity.be()));
             }
 
             return list;
@@ -85,7 +84,7 @@ public class CommandExecute {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.bX()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.getPositionVector()));
             }
 
             return list;
@@ -98,7 +97,7 @@ public class CommandExecute {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.aX()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.be()));
             }
 
             return list;
@@ -121,7 +120,7 @@ public class CommandExecute {
         })))).then(CommandDispatcher.a("anchored").then(CommandDispatcher.a("anchor", (ArgumentType) ArgumentAnchor.a()).redirect(literalcommandnode, (commandcontext) -> {
             return ((CommandListenerWrapper) commandcontext.getSource()).a(ArgumentAnchor.a(commandcontext, "anchor"));
         })))).then(CommandDispatcher.a("in").then(CommandDispatcher.a("dimension", (ArgumentType) ArgumentDimension.a()).redirect(literalcommandnode, (commandcontext) -> {
-            return ((CommandListenerWrapper) commandcontext.getSource()).a(((CommandListenerWrapper) commandcontext.getSource()).getServer().getWorldServer(ArgumentDimension.a(commandcontext, "dimension")));
+            return ((CommandListenerWrapper) commandcontext.getSource()).a(ArgumentDimension.a(commandcontext, "dimension"));
         }))));
     }
 
@@ -279,7 +278,7 @@ public class CommandExecute {
             int i = commandexecute_a.test(commandcontext);
 
             if (i == 0) {
-                ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass", new Object[0]), false);
+                ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass"), false);
                 return 1;
             } else {
                 throw CommandExecute.c.create(i);
@@ -332,7 +331,7 @@ public class CommandExecute {
             return a(commandcontext, flag, commandexecute_b.test(commandcontext));
         }).executes((commandcontext) -> {
             if (flag == commandexecute_b.test(commandcontext)) {
-                ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass", new Object[0]), false);
+                ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass"), false);
                 return 1;
             } else {
                 throw CommandExecute.b.create();
@@ -367,7 +366,7 @@ public class CommandExecute {
         if (optionalint.isPresent()) {
             throw CommandExecute.c.create(optionalint.getAsInt());
         } else {
-            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass", new Object[0]), false);
+            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass"), false);
             return 1;
         }
     }
@@ -378,9 +377,9 @@ public class CommandExecute {
 
     private static OptionalInt a(WorldServer worldserver, BlockPosition blockposition, BlockPosition blockposition1, BlockPosition blockposition2, boolean flag) throws CommandSyntaxException {
         StructureBoundingBox structureboundingbox = new StructureBoundingBox(blockposition, blockposition1);
-        StructureBoundingBox structureboundingbox1 = new StructureBoundingBox(blockposition2, blockposition2.a(structureboundingbox.b()));
+        StructureBoundingBox structureboundingbox1 = new StructureBoundingBox(blockposition2, blockposition2.a(structureboundingbox.c()));
         BlockPosition blockposition3 = new BlockPosition(structureboundingbox1.a - structureboundingbox.a, structureboundingbox1.b - structureboundingbox.b, structureboundingbox1.c - structureboundingbox.c);
-        int i = structureboundingbox.c() * structureboundingbox.d() * structureboundingbox.e();
+        int i = structureboundingbox.d() * structureboundingbox.e() * structureboundingbox.f();
 
         if (i > 32768) {
             throw CommandExecute.a.create(32768, i);
@@ -394,7 +393,7 @@ public class CommandExecute {
                         BlockPosition blockposition5 = blockposition4.a((BaseBlockPosition) blockposition3);
                         IBlockData iblockdata = worldserver.getType(blockposition4);
 
-                        if (!flag || iblockdata.getBlock() != Blocks.AIR) {
+                        if (!flag || !iblockdata.a(Blocks.AIR)) {
                             if (iblockdata != worldserver.getType(blockposition5)) {
                                 return OptionalInt.empty();
                             }

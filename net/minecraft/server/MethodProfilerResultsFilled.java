@@ -17,6 +17,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -227,7 +228,7 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
 
     private void a(int i, String s, StringBuilder stringbuilder) {
         List<MethodProfilerResultsField> list = this.a(s);
-        Object2LongMap<String> object2longmap = ((MethodProfilerResult) this.e.get(s)).c();
+        Object2LongMap<String> object2longmap = ((MethodProfilerResult) ObjectUtils.firstNonNull(new MethodProfilerResult[]{(MethodProfilerResult) this.e.get(s), MethodProfilerResultsFilled.b})).c();
 
         object2longmap.forEach((s1, olong) -> {
             a(stringbuilder, i).append('#').append(s1).append(' ').append(olong).append('/').append(olong / (long) this.j).append('\n');

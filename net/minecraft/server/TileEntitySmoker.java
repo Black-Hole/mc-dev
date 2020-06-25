@@ -8,7 +8,7 @@ public class TileEntitySmoker extends TileEntityFurnace {
 
     @Override
     protected IChatBaseComponent getContainerName() {
-        return new ChatMessage("container.smoker", new Object[0]);
+        return new ChatMessage("container.smoker");
     }
 
     @Override

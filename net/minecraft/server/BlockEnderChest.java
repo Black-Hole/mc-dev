@@ -5,22 +5,22 @@ public class BlockEnderChest extends BlockChestAbstract<TileEntityEnderChest> im
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
     public static final BlockStateBoolean c = BlockProperties.C;
     protected static final VoxelShape d = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
-    public static final ChatMessage e = new ChatMessage("container.enderchest", new Object[0]);
+    public static final ChatMessage e = new ChatMessage("container.enderchest");
 
-    protected BlockEnderChest(Block.Info block_info) {
-        super(block_info, () -> {
+    protected BlockEnderChest(BlockBase.Info blockbase_info) {
+        super(blockbase_info, () -> {
             return TileEntityTypes.ENDER_CHEST;
         });
-        this.p((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockEnderChest.FACING, EnumDirection.NORTH)).set(BlockEnderChest.c, false));
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockEnderChest.FACING, EnumDirection.NORTH)).set(BlockEnderChest.c, false));
     }
 
     @Override
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockEnderChest.d;
     }
 
     @Override
-    public EnumRenderType c(IBlockData iblockdata) {
+    public EnumRenderType b(IBlockData iblockdata) {
         return EnumRenderType.ENTITYBLOCK_ANIMATED;
     }
 
@@ -40,7 +40,7 @@ public class BlockEnderChest extends BlockChestAbstract<TileEntityEnderChest> im
             BlockPosition blockposition1 = blockposition.up();
 
             if (world.getType(blockposition1).isOccluding(world, blockposition1)) {
-                return EnumInteractionResult.SUCCESS;
+                return EnumInteractionResult.a(world.isClientSide);
             } else if (world.isClientSide) {
                 return EnumInteractionResult.SUCCESS;
             } else {
@@ -51,10 +51,11 @@ public class BlockEnderChest extends BlockChestAbstract<TileEntityEnderChest> im
                     return ContainerChest.a(i, playerinventory, inventoryenderchest);
                 }, BlockEnderChest.e));
                 entityhuman.a(StatisticList.OPEN_ENDERCHEST);
-                return EnumInteractionResult.SUCCESS;
+                PiglinAI.a(entityhuman, true);
+                return EnumInteractionResult.CONSUME;
             }
         } else {
-            return EnumInteractionResult.SUCCESS;
+            return EnumInteractionResult.a(world.isClientSide);
         }
     }
 
@@ -79,8 +80,8 @@ public class BlockEnderChest extends BlockChestAbstract<TileEntityEnderChest> im
     }
 
     @Override
-    public Fluid a_(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockEnderChest.c) ? FluidTypes.WATER.a(false) : super.a_(iblockdata);
+    public Fluid d(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockEnderChest.c) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
     }
 
     @Override

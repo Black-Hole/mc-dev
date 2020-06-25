@@ -31,7 +31,7 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
 
                 for (int j = 0; j < i; ++j) {
                     blockposition1 = blockposition1.b(random.nextInt(3) - 1, 1, random.nextInt(3) - 1);
-                    if (!world.n(blockposition1)) {
+                    if (!world.p(blockposition1)) {
                         return;
                     }
 
@@ -39,7 +39,7 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
 
                     if (iblockdata.isAir()) {
                         if (this.a((IWorldReader) world, blockposition1)) {
-                            world.setTypeUpdate(blockposition1, Blocks.FIRE.getBlockData());
+                            world.setTypeUpdate(blockposition1, BlockFireAbstract.a((IBlockAccess) world, blockposition1));
                             return;
                         }
                     } else if (iblockdata.getMaterial().isSolid()) {
@@ -50,12 +50,12 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
                 for (int k = 0; k < 3; ++k) {
                     BlockPosition blockposition2 = blockposition.b(random.nextInt(3) - 1, 0, random.nextInt(3) - 1);
 
-                    if (!world.n(blockposition2)) {
+                    if (!world.p(blockposition2)) {
                         return;
                     }
 
                     if (world.isEmpty(blockposition2.up()) && this.b(world, blockposition2)) {
-                        world.setTypeUpdate(blockposition2.up(), Blocks.FIRE.getBlockData());
+                        world.setTypeUpdate(blockposition2.up(), BlockFireAbstract.a((IBlockAccess) world, blockposition2));
                     }
                 }
             }
@@ -89,7 +89,7 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
 
     @Override
     public int b(IWorldReader iworldreader) {
-        return iworldreader.getWorldProvider().isNether() ? 4 : 2;
+        return iworldreader.getDimensionManager().isNether() ? 4 : 2;
     }
 
     @Override
@@ -104,17 +104,17 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
 
     @Override
     public int c(IWorldReader iworldreader) {
-        return iworldreader.getWorldProvider().isNether() ? 1 : 2;
+        return iworldreader.getDimensionManager().isNether() ? 1 : 2;
     }
 
     @Override
     public boolean a(Fluid fluid, IBlockAccess iblockaccess, BlockPosition blockposition, FluidType fluidtype, EnumDirection enumdirection) {
-        return fluid.getHeight(iblockaccess, blockposition) >= 0.44444445F && fluidtype.a(TagsFluid.WATER);
+        return fluid.getHeight(iblockaccess, blockposition) >= 0.44444445F && fluidtype.a((Tag) TagsFluid.WATER);
     }
 
     @Override
     public int a(IWorldReader iworldreader) {
-        return iworldreader.getWorldProvider().g() ? 10 : 30;
+        return iworldreader.getDimensionManager().isNether() ? 10 : 30;
     }
 
     @Override
@@ -142,7 +142,7 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
         if (enumdirection == EnumDirection.DOWN) {
             Fluid fluid1 = generatoraccess.getFluid(blockposition);
 
-            if (this.a(TagsFluid.LAVA) && fluid1.a(TagsFluid.WATER)) {
+            if (this.a((Tag) TagsFluid.LAVA) && fluid1.a((Tag) TagsFluid.WATER)) {
                 if (iblockdata.getBlock() instanceof BlockFluids) {
                     generatoraccess.setTypeAndData(blockposition, Blocks.STONE.getBlockData(), 3);
                 }
