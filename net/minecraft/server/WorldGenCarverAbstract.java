@@ -32,11 +32,11 @@ public abstract class WorldGenCarverAbstract<C extends WorldGenCarverConfigurati
         this.j = ImmutableSet.of(Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.DIRT, Blocks.COARSE_DIRT, new Block[]{Blocks.PODZOL, Blocks.GRASS_BLOCK, Blocks.TERRACOTTA, Blocks.WHITE_TERRACOTTA, Blocks.ORANGE_TERRACOTTA, Blocks.MAGENTA_TERRACOTTA, Blocks.LIGHT_BLUE_TERRACOTTA, Blocks.YELLOW_TERRACOTTA, Blocks.LIME_TERRACOTTA, Blocks.PINK_TERRACOTTA, Blocks.GRAY_TERRACOTTA, Blocks.LIGHT_GRAY_TERRACOTTA, Blocks.CYAN_TERRACOTTA, Blocks.PURPLE_TERRACOTTA, Blocks.BLUE_TERRACOTTA, Blocks.BROWN_TERRACOTTA, Blocks.GREEN_TERRACOTTA, Blocks.RED_TERRACOTTA, Blocks.BLACK_TERRACOTTA, Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.MYCELIUM, Blocks.SNOW, Blocks.PACKED_ICE});
         this.k = ImmutableSet.of(FluidTypes.WATER);
         this.l = i;
-        this.m = codec.fieldOf("config").xmap((worldgencarverconfiguration) -> {
-            return new WorldGenCarverWrapper<>(this, worldgencarverconfiguration);
-        }, (worldgencarverwrapper) -> {
-            return worldgencarverwrapper.c;
-        }).codec();
+        this.m = codec.fieldOf("config").xmap(this::a, WorldGenCarverWrapper::a).codec();
+    }
+
+    public WorldGenCarverWrapper<C> a(C c0) {
+        return new WorldGenCarverWrapper<>(this, c0);
     }
 
     public Codec<WorldGenCarverWrapper<C>> c() {
@@ -122,7 +122,7 @@ public abstract class WorldGenCarverAbstract<C extends WorldGenCarverConfigurati
                     if (mutableboolean.isTrue()) {
                         blockposition_mutableblockposition2.a((BaseBlockPosition) blockposition_mutableblockposition, EnumDirection.DOWN);
                         if (ichunkaccess.getType(blockposition_mutableblockposition2).a(Blocks.DIRT)) {
-                            ichunkaccess.setType(blockposition_mutableblockposition2, ((BiomeBase) function.apply(blockposition_mutableblockposition)).A().a(), false);
+                            ichunkaccess.setType(blockposition_mutableblockposition2, ((BiomeBase) function.apply(blockposition_mutableblockposition)).e().e().a(), false);
                         }
                     }
                 }

@@ -173,7 +173,7 @@ public class Blocks {
     public static final Block DIAMOND_BLOCK = a("diamond_block", new Block(BlockBase.Info.a(Material.ORE, MaterialMapColor.G).h().a(5.0F, 6.0F).a(SoundEffectType.f)));
     public static final Block CRAFTING_TABLE = a("crafting_table", (Block) (new BlockWorkbench(BlockBase.Info.a(Material.WOOD).d(2.5F).a(SoundEffectType.a))));
     public static final Block WHEAT = a("wheat", (Block) (new BlockCrops(BlockBase.Info.a(Material.PLANT).a().d().c().a(SoundEffectType.u))));
-    public static final Block FARMLAND = a("farmland", (Block) (new BlockSoil(BlockBase.Info.a(Material.EARTH).d().d(0.6F).a(SoundEffectType.b).c(Blocks::a))));
+    public static final Block FARMLAND = a("farmland", (Block) (new BlockSoil(BlockBase.Info.a(Material.EARTH).d().d(0.6F).a(SoundEffectType.b).c(Blocks::a).b(Blocks::a))));
     public static final Block FURNACE = a("furnace", (Block) (new BlockFurnaceFurace(BlockBase.Info.a(Material.STONE).h().d(3.5F).a(a(13)))));
     public static final Block OAK_SIGN = a("oak_sign", (Block) (new BlockFloorSign(BlockBase.Info.a(Material.WOOD).a().d(1.0F).a(SoundEffectType.a), BlockPropertyWood.a)));
     public static final Block SPRUCE_SIGN = a("spruce_sign", (Block) (new BlockFloorSign(BlockBase.Info.a(Material.WOOD, Blocks.SPRUCE_LOG.s()).a().d(1.0F).a(SoundEffectType.a), BlockPropertyWood.b)));
@@ -216,7 +216,7 @@ public class Blocks {
     public static final Block OAK_FENCE = a("oak_fence", (Block) (new BlockFence(BlockBase.Info.a(Material.WOOD, Blocks.OAK_PLANKS.s()).a(2.0F, 3.0F).a(SoundEffectType.a))));
     public static final Block PUMPKIN = a("pumpkin", (Block) (new BlockPumpkin(BlockBase.Info.a(Material.PUMPKIN, MaterialMapColor.q).d(1.0F).a(SoundEffectType.a))));
     public static final Block NETHERRACK = a("netherrack", (Block) (new BlockNetherrack(BlockBase.Info.a(Material.STONE, MaterialMapColor.K).h().d(0.4F).a(SoundEffectType.K))));
-    public static final Block SOUL_SAND = a("soul_sand", (Block) (new BlockSlowSand(BlockBase.Info.a(Material.SAND, MaterialMapColor.B).d(0.5F).b(0.4F).a(SoundEffectType.G).a(Blocks::b).a(Blocks::a).c(Blocks::a))));
+    public static final Block SOUL_SAND = a("soul_sand", (Block) (new BlockSlowSand(BlockBase.Info.a(Material.SAND, MaterialMapColor.B).d(0.5F).b(0.4F).a(SoundEffectType.G).a(Blocks::b).a(Blocks::a).c(Blocks::a).b(Blocks::a))));
     public static final Block SOUL_SOIL = a("soul_soil", new Block(BlockBase.Info.a(Material.EARTH, MaterialMapColor.B).d(0.5F).a(SoundEffectType.H)));
     public static final Block BASALT = a("basalt", (Block) (new BlockRotatable(BlockBase.Info.a(Material.STONE, MaterialMapColor.E).h().a(1.25F, 4.2F).a(SoundEffectType.I))));
     public static final Block cP = a("polished_basalt", (Block) (new BlockRotatable(BlockBase.Info.a(Material.STONE, MaterialMapColor.E).h().a(1.25F, 4.2F).a(SoundEffectType.I))));
@@ -423,7 +423,7 @@ public class Blocks {
     public static final Block DARK_OAK_STAIRS = a("dark_oak_stairs", (Block) (new BlockStairs(Blocks.DARK_OAK_PLANKS.getBlockData(), BlockBase.Info.a((BlockBase) Blocks.DARK_OAK_PLANKS))));
     public static final Block SLIME_BLOCK = a("slime_block", (Block) (new BlockSlime(BlockBase.Info.a(Material.CLAY, MaterialMapColor.c).a(0.8F).a(SoundEffectType.m).b())));
     public static final Block BARRIER = a("barrier", (Block) (new BlockBarrier(BlockBase.Info.a(Material.BANNER).a(-1.0F, 3600000.8F).f().b().a(Blocks::a))));
-    public static final Block IRON_TRAPDOOR = a("iron_trapdoor", (Block) (new BlockTrapdoor(BlockBase.Info.a(Material.ORE).h().d(5.0F).a(SoundEffectType.f).b())));
+    public static final Block IRON_TRAPDOOR = a("iron_trapdoor", (Block) (new BlockTrapdoor(BlockBase.Info.a(Material.ORE).h().d(5.0F).a(SoundEffectType.f).b().a(Blocks::a))));
     public static final Block PRISMARINE = a("prismarine", new Block(BlockBase.Info.a(Material.STONE, MaterialMapColor.y).h().a(1.5F, 6.0F)));
     public static final Block PRISMARINE_BRICKS = a("prismarine_bricks", new Block(BlockBase.Info.a(Material.STONE, MaterialMapColor.G).h().a(1.5F, 6.0F)));
     public static final Block DARK_PRISMARINE = a("dark_prismarine", new Block(BlockBase.Info.a(Material.STONE, MaterialMapColor.G).h().a(1.5F, 6.0F)));
@@ -546,7 +546,7 @@ public class Blocks {
     public static final Block PURPUR_STAIRS = a("purpur_stairs", (Block) (new BlockStairs(Blocks.PURPUR_BLOCK.getBlockData(), BlockBase.Info.a((BlockBase) Blocks.PURPUR_BLOCK))));
     public static final Block END_STONE_BRICKS = a("end_stone_bricks", new Block(BlockBase.Info.a(Material.STONE, MaterialMapColor.d).h().a(3.0F, 9.0F)));
     public static final Block BEETROOTS = a("beetroots", (Block) (new BlockBeetroot(BlockBase.Info.a(Material.PLANT).a().d().c().a(SoundEffectType.u))));
-    public static final Block GRASS_PATH = a("grass_path", (Block) (new BlockGrassPath(BlockBase.Info.a(Material.EARTH).d(0.65F).a(SoundEffectType.c).c(Blocks::a))));
+    public static final Block GRASS_PATH = a("grass_path", (Block) (new BlockGrassPath(BlockBase.Info.a(Material.EARTH).d(0.65F).a(SoundEffectType.c).c(Blocks::a).b(Blocks::a))));
     public static final Block END_GATEWAY = a("end_gateway", (Block) (new BlockEndGateway(BlockBase.Info.a(Material.PORTAL, MaterialMapColor.E).a().a((iblockdata) -> {
         return 15;
     }).a(-1.0F, 3600000.0F).f())));
@@ -753,18 +753,18 @@ public class Blocks {
     public static final Block STRIPPED_WARPED_HYPHAE = a("stripped_warped_hyphae", (Block) (new BlockRotatable(BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.ag).d(2.0F).a(SoundEffectType.z))));
     public static final Block WARPED_NYLIUM = a("warped_nylium", (Block) (new BlockNylium(BlockBase.Info.a(Material.STONE, MaterialMapColor.ae).h().d(0.4F).a(SoundEffectType.A).d())));
     public static final Block WARPED_FUNGUS = a("warped_fungus", (Block) (new BlockFungi(BlockBase.Info.a(Material.PLANT, MaterialMapColor.y).c().a().a(SoundEffectType.B), () -> {
-        return WorldGenerator.HUGE_FUNGUS.b((WorldGenFeatureConfiguration) WorldGenFeatureHugeFungiConfiguration.d);
+        return BiomeDecoratorGroups.WARPED_FUNGI_PLANTED;
     })));
     public static final Block WARPED_WART_BLOCK = a("warped_wart_block", new Block(BlockBase.Info.a(Material.GRASS, MaterialMapColor.ah).d(1.0F).a(SoundEffectType.J)));
-    public static final Block WARPED_ROOTS = a("warped_roots", (Block) (new BlockRoots(BlockBase.Info.a(Material.REPLACEABLE_PLANT, MaterialMapColor.y).a().c().a(SoundEffectType.C))));
-    public static final Block NETHER_SPROUTS = a("nether_sprouts", (Block) (new BlockNetherSprouts(BlockBase.Info.a(Material.REPLACEABLE_PLANT, MaterialMapColor.y).a().c().a(SoundEffectType.M))));
+    public static final Block WARPED_ROOTS = a("warped_roots", (Block) (new BlockRoots(BlockBase.Info.a(Material.h, MaterialMapColor.y).a().c().a(SoundEffectType.C))));
+    public static final Block NETHER_SPROUTS = a("nether_sprouts", (Block) (new BlockNetherSprouts(BlockBase.Info.a(Material.h, MaterialMapColor.y).a().c().a(SoundEffectType.M))));
     public static final Block CRIMSON_STEM = a("crimson_stem", a(MaterialMapColor.ac));
     public static final Block STRIPPED_CRIMSON_STEM = a("stripped_crimson_stem", a(MaterialMapColor.ac));
     public static final Block CRIMSON_HYPHAE = a("crimson_hyphae", (Block) (new BlockRotatable(BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.ad).d(2.0F).a(SoundEffectType.z))));
     public static final Block STRIPPED_CRIMSON_HYPHAE = a("stripped_crimson_hyphae", (Block) (new BlockRotatable(BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.ad).d(2.0F).a(SoundEffectType.z))));
     public static final Block CRIMSON_NYLIUM = a("crimson_nylium", (Block) (new BlockNylium(BlockBase.Info.a(Material.STONE, MaterialMapColor.ab).h().d(0.4F).a(SoundEffectType.A).d())));
     public static final Block CRIMSON_FUNGUS = a("crimson_fungus", (Block) (new BlockFungi(BlockBase.Info.a(Material.PLANT, MaterialMapColor.K).c().a().a(SoundEffectType.B), () -> {
-        return WorldGenerator.HUGE_FUNGUS.b((WorldGenFeatureConfiguration) WorldGenFeatureHugeFungiConfiguration.b);
+        return BiomeDecoratorGroups.CRIMSON_FUNGI_PLANTED;
     })));
     public static final Block SHROOMLIGHT = a("shroomlight", new Block(BlockBase.Info.a(Material.GRASS, MaterialMapColor.D).d(1.0F).a(SoundEffectType.D).a((iblockdata) -> {
         return 15;
@@ -773,29 +773,29 @@ public class Blocks {
     public static final Block WEEPING_VINES_PLANT = a("weeping_vines_plant", (Block) (new BlockWeepingVinesPlant(BlockBase.Info.a(Material.PLANT, MaterialMapColor.K).a().c().a(SoundEffectType.E))));
     public static final Block TWISTING_VINES = a("twisting_vines", (Block) (new BlockTwistingVines(BlockBase.Info.a(Material.PLANT, MaterialMapColor.y).d().a().c().a(SoundEffectType.E))));
     public static final Block TWISTING_VINES_PLANT = a("twisting_vines_plant", (Block) (new BlockTwistingVinesPlant(BlockBase.Info.a(Material.PLANT, MaterialMapColor.y).a().c().a(SoundEffectType.E))));
-    public static final Block CRIMSON_ROOTS = a("crimson_roots", (Block) (new BlockRoots(BlockBase.Info.a(Material.REPLACEABLE_PLANT, MaterialMapColor.K).a().c().a(SoundEffectType.C))));
+    public static final Block CRIMSON_ROOTS = a("crimson_roots", (Block) (new BlockRoots(BlockBase.Info.a(Material.h, MaterialMapColor.K).a().c().a(SoundEffectType.C))));
     public static final Block CRIMSON_PLANKS = a("crimson_planks", new Block(BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.ac).a(2.0F, 3.0F).a(SoundEffectType.a)));
     public static final Block WARPED_PLANKS = a("warped_planks", new Block(BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.af).a(2.0F, 3.0F).a(SoundEffectType.a)));
-    public static final Block CRIMSON_SLAB = a("crimson_slab", (Block) (new BlockStepAbstract(BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.K).a(2.0F, 3.0F).a(SoundEffectType.a))));
-    public static final Block WARPED_SLAB = a("warped_slab", (Block) (new BlockStepAbstract(BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.y).a(2.0F, 3.0F).a(SoundEffectType.a))));
-    public static final Block CRIMSON_PRESSURE_PLATE = a("crimson_pressure_plate", (Block) (new BlockPressurePlateBinary(BlockPressurePlateBinary.EnumMobType.EVERYTHING, BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.K).a().d(0.5F).a(SoundEffectType.a))));
-    public static final Block WARPED_PRESSURE_PLATE = a("warped_pressure_plate", (Block) (new BlockPressurePlateBinary(BlockPressurePlateBinary.EnumMobType.EVERYTHING, BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.y).a().d(0.5F).a(SoundEffectType.a))));
-    public static final Block CRIMSON_FENCE = a("crimson_fence", (Block) (new BlockFence(BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.K).a(2.0F, 3.0F).a(SoundEffectType.a))));
-    public static final Block WARPED_FENCE = a("warped_fence", (Block) (new BlockFence(BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.y).a(2.0F, 3.0F).a(SoundEffectType.a))));
-    public static final Block CRIMSON_TRAPDOOR = a("crimson_trapdoor", (Block) (new BlockTrapdoor(BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.K).d(3.0F).a(SoundEffectType.a).b())));
-    public static final Block WARPED_TRAPDOOR = a("warped_trapdoor", (Block) (new BlockTrapdoor(BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.y).d(3.0F).a(SoundEffectType.a).b())));
-    public static final Block CRIMSON_FENCE_GATE = a("crimson_fence_gate", (Block) (new BlockFenceGate(BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.K).a(2.0F, 3.0F).a(SoundEffectType.a))));
-    public static final Block WARPED_FENCE_GATE = a("warped_fence_gate", (Block) (new BlockFenceGate(BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.y).a(2.0F, 3.0F).a(SoundEffectType.a))));
+    public static final Block CRIMSON_SLAB = a("crimson_slab", (Block) (new BlockStepAbstract(BlockBase.Info.a(Material.NETHER_WOOD, Blocks.CRIMSON_PLANKS.s()).a(2.0F, 3.0F).a(SoundEffectType.a))));
+    public static final Block WARPED_SLAB = a("warped_slab", (Block) (new BlockStepAbstract(BlockBase.Info.a(Material.NETHER_WOOD, Blocks.WARPED_PLANKS.s()).a(2.0F, 3.0F).a(SoundEffectType.a))));
+    public static final Block CRIMSON_PRESSURE_PLATE = a("crimson_pressure_plate", (Block) (new BlockPressurePlateBinary(BlockPressurePlateBinary.EnumMobType.EVERYTHING, BlockBase.Info.a(Material.NETHER_WOOD, Blocks.CRIMSON_PLANKS.s()).a().d(0.5F).a(SoundEffectType.a))));
+    public static final Block WARPED_PRESSURE_PLATE = a("warped_pressure_plate", (Block) (new BlockPressurePlateBinary(BlockPressurePlateBinary.EnumMobType.EVERYTHING, BlockBase.Info.a(Material.NETHER_WOOD, Blocks.WARPED_PLANKS.s()).a().d(0.5F).a(SoundEffectType.a))));
+    public static final Block CRIMSON_FENCE = a("crimson_fence", (Block) (new BlockFence(BlockBase.Info.a(Material.NETHER_WOOD, Blocks.CRIMSON_PLANKS.s()).a(2.0F, 3.0F).a(SoundEffectType.a))));
+    public static final Block WARPED_FENCE = a("warped_fence", (Block) (new BlockFence(BlockBase.Info.a(Material.NETHER_WOOD, Blocks.WARPED_PLANKS.s()).a(2.0F, 3.0F).a(SoundEffectType.a))));
+    public static final Block CRIMSON_TRAPDOOR = a("crimson_trapdoor", (Block) (new BlockTrapdoor(BlockBase.Info.a(Material.NETHER_WOOD, Blocks.CRIMSON_PLANKS.s()).d(3.0F).a(SoundEffectType.a).b().a(Blocks::a))));
+    public static final Block WARPED_TRAPDOOR = a("warped_trapdoor", (Block) (new BlockTrapdoor(BlockBase.Info.a(Material.NETHER_WOOD, Blocks.WARPED_PLANKS.s()).d(3.0F).a(SoundEffectType.a).b().a(Blocks::a))));
+    public static final Block CRIMSON_FENCE_GATE = a("crimson_fence_gate", (Block) (new BlockFenceGate(BlockBase.Info.a(Material.NETHER_WOOD, Blocks.CRIMSON_PLANKS.s()).a(2.0F, 3.0F).a(SoundEffectType.a))));
+    public static final Block WARPED_FENCE_GATE = a("warped_fence_gate", (Block) (new BlockFenceGate(BlockBase.Info.a(Material.NETHER_WOOD, Blocks.WARPED_PLANKS.s()).a(2.0F, 3.0F).a(SoundEffectType.a))));
     public static final Block CRIMSON_STAIRS = a("crimson_stairs", (Block) (new BlockStairs(Blocks.CRIMSON_PLANKS.getBlockData(), BlockBase.Info.a((BlockBase) Blocks.CRIMSON_PLANKS))));
     public static final Block WARPED_STAIRS = a("warped_stairs", (Block) (new BlockStairs(Blocks.WARPED_PLANKS.getBlockData(), BlockBase.Info.a((BlockBase) Blocks.WARPED_PLANKS))));
     public static final Block CRIMSON_BUTTON = a("crimson_button", (Block) (new BlockWoodButton(BlockBase.Info.a(Material.ORIENTABLE).a().d(0.5F).a(SoundEffectType.a))));
     public static final Block WARPED_BUTTON = a("warped_button", (Block) (new BlockWoodButton(BlockBase.Info.a(Material.ORIENTABLE).a().d(0.5F).a(SoundEffectType.a))));
     public static final Block CRIMSON_DOOR = a("crimson_door", (Block) (new BlockDoor(BlockBase.Info.a(Material.NETHER_WOOD, Blocks.CRIMSON_PLANKS.s()).d(3.0F).a(SoundEffectType.a).b())));
     public static final Block WARPED_DOOR = a("warped_door", (Block) (new BlockDoor(BlockBase.Info.a(Material.NETHER_WOOD, Blocks.WARPED_PLANKS.s()).d(3.0F).a(SoundEffectType.a).b())));
-    public static final Block CRIMSON_SIGN = a("crimson_sign", (Block) (new BlockFloorSign(BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.K).a().d(1.0F).a(SoundEffectType.a), BlockPropertyWood.g)));
-    public static final Block WARPED_SIGN = a("warped_sign", (Block) (new BlockFloorSign(BlockBase.Info.a(Material.NETHER_WOOD, MaterialMapColor.y).a().d(1.0F).a(SoundEffectType.a), BlockPropertyWood.h)));
-    public static final Block CRIMSON_WALL_SIGN = a("crimson_wall_sign", (Block) (new BlockWallSign(BlockBase.Info.a(Material.NETHER_WOOD).a().d(1.0F).a(SoundEffectType.a).a(Blocks.CRIMSON_SIGN), BlockPropertyWood.g)));
-    public static final Block WARPED_WALL_SIGN = a("warped_wall_sign", (Block) (new BlockWallSign(BlockBase.Info.a(Material.NETHER_WOOD).a().d(1.0F).a(SoundEffectType.a).a(Blocks.WARPED_SIGN), BlockPropertyWood.h)));
+    public static final Block CRIMSON_SIGN = a("crimson_sign", (Block) (new BlockFloorSign(BlockBase.Info.a(Material.NETHER_WOOD, Blocks.CRIMSON_PLANKS.s()).a().d(1.0F).a(SoundEffectType.a), BlockPropertyWood.g)));
+    public static final Block WARPED_SIGN = a("warped_sign", (Block) (new BlockFloorSign(BlockBase.Info.a(Material.NETHER_WOOD, Blocks.WARPED_PLANKS.s()).a().d(1.0F).a(SoundEffectType.a), BlockPropertyWood.h)));
+    public static final Block CRIMSON_WALL_SIGN = a("crimson_wall_sign", (Block) (new BlockWallSign(BlockBase.Info.a(Material.NETHER_WOOD, Blocks.CRIMSON_PLANKS.s()).a().d(1.0F).a(SoundEffectType.a).a(Blocks.CRIMSON_SIGN), BlockPropertyWood.g)));
+    public static final Block WARPED_WALL_SIGN = a("warped_wall_sign", (Block) (new BlockWallSign(BlockBase.Info.a(Material.NETHER_WOOD, Blocks.WARPED_PLANKS.s()).a().d(1.0F).a(SoundEffectType.a).a(Blocks.WARPED_SIGN), BlockPropertyWood.h)));
     public static final Block STRUCTURE_BLOCK = a("structure_block", (Block) (new BlockStructure(BlockBase.Info.a(Material.ORE, MaterialMapColor.x).h().a(-1.0F, 3600000.0F).f())));
     public static final Block JIGSAW = a("jigsaw", (Block) (new BlockJigsaw(BlockBase.Info.a(Material.ORE, MaterialMapColor.x).h().a(-1.0F, 3600000.0F).f())));
     public static final Block COMPOSTER = a("composter", (Block) (new BlockComposter(BlockBase.Info.a(Material.WOOD).d(0.6F).a(SoundEffectType.a))));

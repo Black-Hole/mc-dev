@@ -29,8 +29,8 @@ public class WorldGenEnder extends WorldGenerator<WorldGenFeatureEndSpikeConfigu
         return (List) WorldGenEnder.a.getUnchecked(i);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEndSpikeConfiguration worldgenfeatureendspikeconfiguration) {
-        List<WorldGenEnder.Spike> list = worldgenfeatureendspikeconfiguration.b();
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEndSpikeConfiguration worldgenfeatureendspikeconfiguration) {
+        List<WorldGenEnder.Spike> list = worldgenfeatureendspikeconfiguration.c();
 
         if (list.isEmpty()) {
             list = a(generatoraccessseed);
@@ -49,7 +49,7 @@ public class WorldGenEnder extends WorldGenerator<WorldGenFeatureEndSpikeConfigu
         return true;
     }
 
-    private void a(GeneratorAccess generatoraccess, Random random, WorldGenFeatureEndSpikeConfiguration worldgenfeatureendspikeconfiguration, WorldGenEnder.Spike worldgenender_spike) {
+    private void a(WorldAccess worldaccess, Random random, WorldGenFeatureEndSpikeConfiguration worldgenfeatureendspikeconfiguration, WorldGenEnder.Spike worldgenender_spike) {
         int i = worldgenender_spike.c();
         Iterator iterator = BlockPosition.a(new BlockPosition(worldgenender_spike.a() - i, 0, worldgenender_spike.b() - i), new BlockPosition(worldgenender_spike.a() + i, worldgenender_spike.d() + 10, worldgenender_spike.b() + i)).iterator();
 
@@ -57,9 +57,9 @@ public class WorldGenEnder extends WorldGenerator<WorldGenFeatureEndSpikeConfigu
             BlockPosition blockposition = (BlockPosition) iterator.next();
 
             if (blockposition.distanceSquared((double) worldgenender_spike.a(), (double) blockposition.getY(), (double) worldgenender_spike.b(), false) <= (double) (i * i + 1) && blockposition.getY() < worldgenender_spike.d()) {
-                this.a(generatoraccess, blockposition, Blocks.OBSIDIAN.getBlockData());
+                this.a(worldaccess, blockposition, Blocks.OBSIDIAN.getBlockData());
             } else if (blockposition.getY() > 65) {
-                this.a(generatoraccess, blockposition, Blocks.AIR.getBlockData());
+                this.a(worldaccess, blockposition, Blocks.AIR.getBlockData());
             }
         }
 
@@ -81,20 +81,20 @@ public class WorldGenEnder extends WorldGenerator<WorldGenFeatureEndSpikeConfigu
                             boolean flag7 = k == -2 || k == 2 || flag5;
                             IBlockData iblockdata = (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) Blocks.IRON_BARS.getBlockData().set(BlockIronBars.NORTH, flag6 && k != -2)).set(BlockIronBars.SOUTH, flag6 && k != 2)).set(BlockIronBars.WEST, flag7 && j != -2)).set(BlockIronBars.EAST, flag7 && j != 2);
 
-                            this.a(generatoraccess, blockposition_mutableblockposition.d(worldgenender_spike.a() + j, worldgenender_spike.d() + l, worldgenender_spike.b() + k), iblockdata);
+                            this.a(worldaccess, blockposition_mutableblockposition.d(worldgenender_spike.a() + j, worldgenender_spike.d() + l, worldgenender_spike.b() + k), iblockdata);
                         }
                     }
                 }
             }
         }
 
-        EntityEnderCrystal entityendercrystal = (EntityEnderCrystal) EntityTypes.END_CRYSTAL.a(generatoraccess.getMinecraftWorld());
+        EntityEnderCrystal entityendercrystal = (EntityEnderCrystal) EntityTypes.END_CRYSTAL.a((World) worldaccess.getMinecraftWorld());
 
-        entityendercrystal.setBeamTarget(worldgenfeatureendspikeconfiguration.c());
-        entityendercrystal.setInvulnerable(worldgenfeatureendspikeconfiguration.a());
+        entityendercrystal.setBeamTarget(worldgenfeatureendspikeconfiguration.d());
+        entityendercrystal.setInvulnerable(worldgenfeatureendspikeconfiguration.b());
         entityendercrystal.setPositionRotation((double) worldgenender_spike.a() + 0.5D, (double) (worldgenender_spike.d() + 1), (double) worldgenender_spike.b() + 0.5D, random.nextFloat() * 360.0F, 0.0F);
-        generatoraccess.addEntity(entityendercrystal);
-        this.a(generatoraccess, new BlockPosition(worldgenender_spike.a(), worldgenender_spike.d(), worldgenender_spike.b()), Blocks.BEDROCK.getBlockData());
+        worldaccess.addEntity(entityendercrystal);
+        this.a(worldaccess, new BlockPosition(worldgenender_spike.a(), worldgenender_spike.d(), worldgenender_spike.b()), Blocks.BEDROCK.getBlockData());
     }
 
     static class b extends CacheLoader<Long, List<WorldGenEnder.Spike>> {
@@ -125,15 +125,15 @@ public class WorldGenEnder extends WorldGenerator<WorldGenFeatureEndSpikeConfigu
     public static class Spike {
 
         public static final Codec<WorldGenEnder.Spike> a = RecordCodecBuilder.create((instance) -> {
-            return instance.group(Codec.INT.fieldOf("centerX").withDefault(0).forGetter((worldgenender_spike) -> {
+            return instance.group(Codec.INT.fieldOf("centerX").orElse(0).forGetter((worldgenender_spike) -> {
                 return worldgenender_spike.b;
-            }), Codec.INT.fieldOf("centerZ").withDefault(0).forGetter((worldgenender_spike) -> {
+            }), Codec.INT.fieldOf("centerZ").orElse(0).forGetter((worldgenender_spike) -> {
                 return worldgenender_spike.c;
-            }), Codec.INT.fieldOf("radius").withDefault(0).forGetter((worldgenender_spike) -> {
+            }), Codec.INT.fieldOf("radius").orElse(0).forGetter((worldgenender_spike) -> {
                 return worldgenender_spike.d;
-            }), Codec.INT.fieldOf("height").withDefault(0).forGetter((worldgenender_spike) -> {
+            }), Codec.INT.fieldOf("height").orElse(0).forGetter((worldgenender_spike) -> {
                 return worldgenender_spike.e;
-            }), Codec.BOOL.fieldOf("guarded").withDefault(false).forGetter((worldgenender_spike) -> {
+            }), Codec.BOOL.fieldOf("guarded").orElse(false).forGetter((worldgenender_spike) -> {
                 return worldgenender_spike.f;
             })).apply(instance, WorldGenEnder.Spike::new);
         });

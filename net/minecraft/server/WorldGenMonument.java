@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import java.util.Iterator;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class WorldGenMonument extends StructureGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    private static final List<BiomeBase.BiomeMeta> u = Lists.newArrayList(new BiomeBase.BiomeMeta[]{new BiomeBase.BiomeMeta(EntityTypes.GUARDIAN, 1, 2, 4)});
+    private static final List<BiomeSettingsMobs.c> u = ImmutableList.of(new BiomeSettingsMobs.c(EntityTypes.GUARDIAN, 1, 2, 4));
 
     public WorldGenMonument(Codec<WorldGenFeatureEmptyConfiguration> codec) {
         super(codec);
@@ -39,13 +39,13 @@ public class WorldGenMonument extends StructureGenerator<WorldGenFeatureEmptyCon
                     }
 
                     biomebase2 = (BiomeBase) iterator1.next();
-                } while (biomebase2.y() == BiomeBase.Geography.OCEAN || biomebase2.y() == BiomeBase.Geography.RIVER);
+                } while (biomebase2.t() == BiomeBase.Geography.OCEAN || biomebase2.t() == BiomeBase.Geography.RIVER);
 
                 return false;
             }
 
             biomebase1 = (BiomeBase) iterator.next();
-        } while (biomebase1.a((StructureGenerator) this));
+        } while (biomebase1.e().a((StructureGenerator) this));
 
         return false;
     }
@@ -56,7 +56,7 @@ public class WorldGenMonument extends StructureGenerator<WorldGenFeatureEmptyCon
     }
 
     @Override
-    public List<BiomeBase.BiomeMeta> c() {
+    public List<BiomeSettingsMobs.c> c() {
         return WorldGenMonument.u;
     }
 
@@ -68,7 +68,7 @@ public class WorldGenMonument extends StructureGenerator<WorldGenFeatureEmptyCon
             super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
-        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
             this.b(i, j);
         }
 

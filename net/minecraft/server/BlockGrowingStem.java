@@ -10,14 +10,6 @@ public abstract class BlockGrowingStem extends BlockGrowingAbstract implements I
     }
 
     @Override
-    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        if (!iblockdata.canPlace(worldserver, blockposition)) {
-            worldserver.b(blockposition, true);
-        }
-
-    }
-
-    @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (enumdirection == this.a.opposite() && !iblockdata.canPlace(generatoraccess, blockposition)) {
             generatoraccess.getBlockTickList().a(blockposition, this, 1);

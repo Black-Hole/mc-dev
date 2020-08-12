@@ -48,7 +48,7 @@ public class MobSpawnerPatrol implements MobSpawner {
                                     return 0;
                                 } else {
                                     BiomeBase biomebase = worldserver.getBiome(blockposition_mutableblockposition);
-                                    BiomeBase.Geography biomebase_geography = biomebase.y();
+                                    BiomeBase.Geography biomebase_geography = biomebase.t();
 
                                     if (biomebase_geography == BiomeBase.Geography.MUSHROOM) {
                                         return 0;
@@ -84,25 +84,25 @@ public class MobSpawnerPatrol implements MobSpawner {
         }
     }
 
-    private boolean a(World world, BlockPosition blockposition, Random random, boolean flag) {
-        IBlockData iblockdata = world.getType(blockposition);
+    private boolean a(WorldServer worldserver, BlockPosition blockposition, Random random, boolean flag) {
+        IBlockData iblockdata = worldserver.getType(blockposition);
 
-        if (!SpawnerCreature.a((IBlockAccess) world, blockposition, iblockdata, iblockdata.getFluid(), EntityTypes.PILLAGER)) {
+        if (!SpawnerCreature.a((IBlockAccess) worldserver, blockposition, iblockdata, iblockdata.getFluid(), EntityTypes.PILLAGER)) {
             return false;
-        } else if (!EntityMonsterPatrolling.b(EntityTypes.PILLAGER, world, EnumMobSpawn.PATROL, blockposition, random)) {
+        } else if (!EntityMonsterPatrolling.b(EntityTypes.PILLAGER, (GeneratorAccess) worldserver, EnumMobSpawn.PATROL, blockposition, random)) {
             return false;
         } else {
-            EntityMonsterPatrolling entitymonsterpatrolling = (EntityMonsterPatrolling) EntityTypes.PILLAGER.a(world);
+            EntityMonsterPatrolling entitymonsterpatrolling = (EntityMonsterPatrolling) EntityTypes.PILLAGER.a((World) worldserver);
 
             if (entitymonsterpatrolling != null) {
                 if (flag) {
                     entitymonsterpatrolling.setPatrolLeader(true);
-                    entitymonsterpatrolling.eV();
+                    entitymonsterpatrolling.eU();
                 }
 
                 entitymonsterpatrolling.setPosition((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
-                entitymonsterpatrolling.prepare(world, world.getDamageScaler(blockposition), EnumMobSpawn.PATROL, (GroupDataEntity) null, (NBTTagCompound) null);
-                world.addEntity(entitymonsterpatrolling);
+                entitymonsterpatrolling.prepare(worldserver, worldserver.getDamageScaler(blockposition), EnumMobSpawn.PATROL, (GroupDataEntity) null, (NBTTagCompound) null);
+                worldserver.addAllEntities(entitymonsterpatrolling);
                 return true;
             } else {
                 return false;

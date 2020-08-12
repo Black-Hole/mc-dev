@@ -1,61 +1,48 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import java.util.List;
 
-public class WorldGenFeaturePillagerOutpost extends StructureGenerator<WorldGenFeatureEmptyConfiguration> {
+public class WorldGenFeaturePillagerOutpost extends WorldGenFeatureJigsaw {
 
-    private static final List<BiomeBase.BiomeMeta> u = Lists.newArrayList(new BiomeBase.BiomeMeta[]{new BiomeBase.BiomeMeta(EntityTypes.PILLAGER, 1, 1, 1)});
+    private static final List<BiomeSettingsMobs.c> u = ImmutableList.of(new BiomeSettingsMobs.c(EntityTypes.PILLAGER, 1, 1, 1));
 
-    public WorldGenFeaturePillagerOutpost(Codec<WorldGenFeatureEmptyConfiguration> codec) {
-        super(codec);
+    public WorldGenFeaturePillagerOutpost(Codec<WorldGenFeatureVillageConfiguration> codec) {
+        super(codec, 0, true, true);
     }
 
     @Override
-    public List<BiomeBase.BiomeMeta> c() {
+    public List<BiomeSettingsMobs.c> c() {
         return WorldGenFeaturePillagerOutpost.u;
     }
 
-    protected boolean a(ChunkGenerator chunkgenerator, WorldChunkManager worldchunkmanager, long i, SeededRandom seededrandom, int j, int k, BiomeBase biomebase, ChunkCoordIntPair chunkcoordintpair, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    protected boolean a(ChunkGenerator chunkgenerator, WorldChunkManager worldchunkmanager, long i, SeededRandom seededrandom, int j, int k, BiomeBase biomebase, ChunkCoordIntPair chunkcoordintpair, WorldGenFeatureVillageConfiguration worldgenfeaturevillageconfiguration) {
         int l = j >> 4;
         int i1 = k >> 4;
 
         seededrandom.setSeed((long) (l ^ i1 << 4) ^ i);
         seededrandom.nextInt();
-        if (seededrandom.nextInt(5) != 0) {
+        return seededrandom.nextInt(5) != 0 ? false : !this.a(chunkgenerator, i, seededrandom, j, k);
+    }
+
+    private boolean a(ChunkGenerator chunkgenerator, long i, SeededRandom seededrandom, int j, int k) {
+        StructureSettingsFeature structuresettingsfeature = chunkgenerator.getSettings().a(StructureGenerator.VILLAGE);
+
+        if (structuresettingsfeature == null) {
             return false;
         } else {
-            for (int j1 = j - 10; j1 <= j + 10; ++j1) {
-                for (int k1 = k - 10; k1 <= k + 10; ++k1) {
-                    ChunkCoordIntPair chunkcoordintpair1 = StructureGenerator.VILLAGE.a(chunkgenerator.getSettings().a(StructureGenerator.VILLAGE), i, seededrandom, j1, k1);
+            for (int l = j - 10; l <= j + 10; ++l) {
+                for (int i1 = k - 10; i1 <= k + 10; ++i1) {
+                    ChunkCoordIntPair chunkcoordintpair = StructureGenerator.VILLAGE.a(structuresettingsfeature, i, seededrandom, l, i1);
 
-                    if (j1 == chunkcoordintpair1.x && k1 == chunkcoordintpair1.z) {
-                        return false;
+                    if (l == chunkcoordintpair.x && i1 == chunkcoordintpair.z) {
+                        return true;
                     }
                 }
             }
 
-            return true;
-        }
-    }
-
-    @Override
-    public StructureGenerator.a<WorldGenFeatureEmptyConfiguration> a() {
-        return WorldGenFeaturePillagerOutpost.a::new;
-    }
-
-    public static class a extends StructureAbstract<WorldGenFeatureEmptyConfiguration> {
-
-        public a(StructureGenerator<WorldGenFeatureEmptyConfiguration> structuregenerator, int i, int j, StructureBoundingBox structureboundingbox, int k, long l) {
-            super(structuregenerator, i, j, structureboundingbox, k, l);
-        }
-
-        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-            BlockPosition blockposition = new BlockPosition(i * 16, 0, j * 16);
-
-            WorldGenFeaturePillagerOutpostPieces.a(chunkgenerator, definedstructuremanager, blockposition, this.b, this.d);
-            this.b();
+            return false;
         }
     }
 }

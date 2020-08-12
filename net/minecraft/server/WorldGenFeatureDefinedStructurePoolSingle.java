@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
@@ -13,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class WorldGenFeatureDefinedStructurePoolSingle extends WorldGenFeatureDefinedStructurePoolStructure {
 
@@ -21,7 +21,7 @@ public class WorldGenFeatureDefinedStructurePoolSingle extends WorldGenFeatureDe
         return instance.group(c(), b(), d()).apply(instance, WorldGenFeatureDefinedStructurePoolSingle::new);
     });
     protected final Either<MinecraftKey, DefinedStructure> c;
-    protected final ImmutableList<DefinedStructureProcessor> d;
+    protected final Supplier<ProcessorList> d;
 
     private static <T> DataResult<T> a(Either<MinecraftKey, DefinedStructure> either, DynamicOps<T> dynamicops, T t0) {
         Optional<MinecraftKey> optional = either.left();
@@ -29,8 +29,8 @@ public class WorldGenFeatureDefinedStructurePoolSingle extends WorldGenFeatureDe
         return !optional.isPresent() ? DataResult.error("Can not serialize a runtime pool element") : MinecraftKey.a.encode(optional.get(), dynamicops, t0);
     }
 
-    protected static <E extends WorldGenFeatureDefinedStructurePoolSingle> RecordCodecBuilder<E, List<DefinedStructureProcessor>> b() {
-        return DefinedStructureStructureProcessorType.j.listOf().fieldOf("processors").forGetter((worldgenfeaturedefinedstructurepoolsingle) -> {
+    protected static <E extends WorldGenFeatureDefinedStructurePoolSingle> RecordCodecBuilder<E, Supplier<ProcessorList>> b() {
+        return DefinedStructureStructureProcessorType.m.fieldOf("processors").forGetter((worldgenfeaturedefinedstructurepoolsingle) -> {
             return worldgenfeaturedefinedstructurepoolsingle.d;
         });
     }
@@ -41,24 +41,16 @@ public class WorldGenFeatureDefinedStructurePoolSingle extends WorldGenFeatureDe
         });
     }
 
-    @Deprecated
-    public WorldGenFeatureDefinedStructurePoolSingle(String s, List<DefinedStructureProcessor> list) {
-        this(Either.left(new MinecraftKey(s)), list, WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID);
-    }
-
-    protected WorldGenFeatureDefinedStructurePoolSingle(Either<MinecraftKey, DefinedStructure> either, List<DefinedStructureProcessor> list, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
+    protected WorldGenFeatureDefinedStructurePoolSingle(Either<MinecraftKey, DefinedStructure> either, Supplier<ProcessorList> supplier, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
         super(worldgenfeaturedefinedstructurepooltemplate_matching);
         this.c = either;
-        this.d = ImmutableList.copyOf(list);
+        this.d = supplier;
     }
 
-    public WorldGenFeatureDefinedStructurePoolSingle(DefinedStructure definedstructure, List<DefinedStructureProcessor> list, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
-        this(Either.right(definedstructure), list, worldgenfeaturedefinedstructurepooltemplate_matching);
-    }
-
-    @Deprecated
-    public WorldGenFeatureDefinedStructurePoolSingle(String s) {
-        this(s, ImmutableList.of());
+    public WorldGenFeatureDefinedStructurePoolSingle(DefinedStructure definedstructure) {
+        this(Either.right(definedstructure), () -> {
+            return ProcessorLists.a;
+        }, WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID);
     }
 
     private DefinedStructure a(DefinedStructureManager definedstructuremanager) {
@@ -136,7 +128,7 @@ public class WorldGenFeatureDefinedStructurePoolSingle extends WorldGenFeatureDe
             definedstructureinfo.a((DefinedStructureProcessor) DefinedStructureProcessorJigsawReplacement.b);
         }
 
-        this.d.forEach(definedstructureinfo::a);
+        ((ProcessorList) this.d.get()).a().forEach(definedstructureinfo::a);
         this.e().c().forEach(definedstructureinfo::a);
         return definedstructureinfo;
     }

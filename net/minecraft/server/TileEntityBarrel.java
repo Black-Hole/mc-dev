@@ -71,8 +71,8 @@ public class TileEntityBarrel extends TileEntityLootable {
             boolean flag = (Boolean) iblockdata.get(BlockBarrel.b);
 
             if (!flag) {
-                this.a(iblockdata, SoundEffects.BLOCK_BARREL_OPEN);
-                this.a(iblockdata, true);
+                this.playOpenSound(iblockdata, SoundEffects.BLOCK_BARREL_OPEN);
+                this.setOpenFlag(iblockdata, true);
             }
 
             this.j();
@@ -96,15 +96,15 @@ public class TileEntityBarrel extends TileEntityLootable {
             IBlockData iblockdata = this.getBlock();
 
             if (!iblockdata.a(Blocks.BARREL)) {
-                this.an_();
+                this.al_();
                 return;
             }
 
             boolean flag = (Boolean) iblockdata.get(BlockBarrel.b);
 
             if (flag) {
-                this.a(iblockdata, SoundEffects.BLOCK_BARREL_CLOSE);
-                this.a(iblockdata, false);
+                this.playOpenSound(iblockdata, SoundEffects.BLOCK_BARREL_CLOSE);
+                this.setOpenFlag(iblockdata, false);
             }
         }
 
@@ -118,11 +118,11 @@ public class TileEntityBarrel extends TileEntityLootable {
 
     }
 
-    private void a(IBlockData iblockdata, boolean flag) {
+    public void setOpenFlag(IBlockData iblockdata, boolean flag) {
         this.world.setTypeAndData(this.getPosition(), (IBlockData) iblockdata.set(BlockBarrel.b, flag), 3);
     }
 
-    private void a(IBlockData iblockdata, SoundEffect soundeffect) {
+    public void playOpenSound(IBlockData iblockdata, SoundEffect soundeffect) {
         BaseBlockPosition baseblockposition = ((EnumDirection) iblockdata.get(BlockBarrel.a)).p();
         double d0 = (double) this.position.getX() + 0.5D + (double) baseblockposition.getX() / 2.0D;
         double d1 = (double) this.position.getY() + 0.5D + (double) baseblockposition.getY() / 2.0D;

@@ -24,7 +24,7 @@ public class PacketPlayOutStopSound implements Packet<PacketListenerPlayOut> {
         }
 
         if ((b0 & 2) > 0) {
-            this.a = packetdataserializer.o();
+            this.a = packetdataserializer.p();
         }
 
     }

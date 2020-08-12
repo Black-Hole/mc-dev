@@ -7,12 +7,12 @@ import javax.annotation.Nullable;
 
 public final class ProjectileHelper {
 
-    public static MovingObjectPosition a(Entity entity, Predicate<Entity> predicate, RayTrace.BlockCollisionOption raytrace_blockcollisionoption) {
+    public static MovingObjectPosition a(Entity entity, Predicate<Entity> predicate) {
         Vec3D vec3d = entity.getMot();
         World world = entity.world;
         Vec3D vec3d1 = entity.getPositionVector();
         Vec3D vec3d2 = vec3d1.e(vec3d);
-        Object object = world.rayTrace(new RayTrace(vec3d1, vec3d2, raytrace_blockcollisionoption, RayTrace.FluidCollisionOption.NONE, entity));
+        Object object = world.rayTrace(new RayTrace(vec3d1, vec3d2, RayTrace.BlockCollisionOption.COLLIDER, RayTrace.FluidCollisionOption.NONE, entity));
 
         if (((MovingObjectPosition) object).getType() != MovingObjectPosition.EnumMovingObjectType.MISS) {
             vec3d2 = ((MovingObjectPosition) object).getPos();
@@ -59,7 +59,7 @@ public final class ProjectileHelper {
         Vec3D vec3d = entity.getMot();
 
         if (vec3d.g() != 0.0D) {
-            float f1 = MathHelper.sqrt(Entity.b(vec3d));
+            float f1 = MathHelper.sqrt(Entity.c(vec3d));
 
             entity.yaw = (float) (MathHelper.d(vec3d.z, vec3d.x) * 57.2957763671875D) + 90.0F;
 

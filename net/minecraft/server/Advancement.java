@@ -43,12 +43,12 @@ public class Advancement {
         } else {
             IChatBaseComponent ichatbasecomponent = advancementdisplay.a();
             EnumChatFormat enumchatformat = advancementdisplay.e().c();
-            IChatMutableComponent ichatmutablecomponent = ChatComponentUtils.a(ichatbasecomponent.mutableCopy(), ChatModifier.b.setColor(enumchatformat)).c("\n").addSibling(advancementdisplay.b());
+            IChatMutableComponent ichatmutablecomponent = ChatComponentUtils.a(ichatbasecomponent.mutableCopy(), ChatModifier.a.setColor(enumchatformat)).c("\n").addSibling(advancementdisplay.b());
             IChatMutableComponent ichatmutablecomponent1 = ichatbasecomponent.mutableCopy().format((chatmodifier) -> {
                 return chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, ichatmutablecomponent));
             });
 
-            this.chatComponent = (new ChatComponentText("[")).addSibling(ichatmutablecomponent1).c("]").a(enumchatformat);
+            this.chatComponent = ChatComponentUtils.a((IChatBaseComponent) ichatmutablecomponent1).a(enumchatformat);
         }
 
     }
@@ -415,7 +415,7 @@ public class Advancement {
         }
 
         public static Advancement.SerializedAdvancement b(PacketDataSerializer packetdataserializer) {
-            MinecraftKey minecraftkey = packetdataserializer.readBoolean() ? packetdataserializer.o() : null;
+            MinecraftKey minecraftkey = packetdataserializer.readBoolean() ? packetdataserializer.p() : null;
             AdvancementDisplay advancementdisplay = packetdataserializer.readBoolean() ? AdvancementDisplay.b(packetdataserializer) : null;
             Map<String, Criterion> map = Criterion.c(packetdataserializer);
             String[][] astring = new String[packetdataserializer.i()][];

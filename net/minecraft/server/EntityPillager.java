@@ -28,8 +28,8 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow {
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, true));
     }
 
-    public static AttributeProvider.Builder eL() {
-        return EntityMonster.eS().a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.MAX_HEALTH, 24.0D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D).a(GenericAttributes.FOLLOW_RANGE, 32.0D);
+    public static AttributeProvider.Builder eK() {
+        return EntityMonster.eR().a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.MAX_HEALTH, 24.0D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D).a(GenericAttributes.FOLLOW_RANGE, 32.0D);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow {
     }
 
     @Override
-    public void V_() {
+    public void U_() {
         this.ticksFarFromPlayer = 0;
     }
 
@@ -99,24 +99,32 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow {
 
     @Nullable
     @Override
-    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+    public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         this.a(difficultydamagescaler);
         this.b(difficultydamagescaler);
-        return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
+        return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
     @Override
     protected void a(DifficultyDamageScaler difficultydamagescaler) {
-        ItemStack itemstack = new ItemStack(Items.CROSSBOW);
+        this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.CROSSBOW));
+    }
 
+    @Override
+    protected void w(float f) {
+        super.w(f);
         if (this.random.nextInt(300) == 0) {
-            Map<Enchantment, Integer> map = Maps.newHashMap();
+            ItemStack itemstack = this.getItemInMainHand();
 
-            map.put(Enchantments.PIERCING, 1);
-            EnchantmentManager.a((Map) map, itemstack);
+            if (itemstack.getItem() == Items.CROSSBOW) {
+                Map<Enchantment, Integer> map = EnchantmentManager.a(itemstack);
+
+                map.putIfAbsent(Enchantments.PIERCING, 1);
+                EnchantmentManager.a(map, itemstack);
+                this.setSlot(EnumItemSlot.MAINHAND, itemstack);
+            }
         }
 
-        this.setSlot(EnumItemSlot.MAINHAND, itemstack);
     }
 
     @Override
@@ -173,7 +181,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow {
     }
 
     private boolean b(Item item) {
-        return this.fc() && item == Items.WHITE_BANNER;
+        return this.fb() && item == Items.WHITE_BANNER;
     }
 
     @Override
@@ -194,7 +202,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow {
 
     @Override
     public void a(int i, boolean flag) {
-        Raid raid = this.fb();
+        Raid raid = this.fa();
         boolean flag1 = this.random.nextFloat() <= raid.w();
 
         if (flag1) {
@@ -215,7 +223,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow {
     }
 
     @Override
-    public SoundEffect eM() {
+    public SoundEffect eL() {
         return SoundEffects.ENTITY_PILLAGER_CELEBRATE;
     }
 }

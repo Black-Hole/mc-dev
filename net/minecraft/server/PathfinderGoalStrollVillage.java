@@ -13,7 +13,7 @@ public class PathfinderGoalStrollVillage extends PathfinderGoalRandomStroll {
         WorldServer worldserver = (WorldServer) this.a.world;
         BlockPosition blockposition = this.a.getChunkCoordinates();
 
-        return worldserver.b_(blockposition) ? false : super.a();
+        return worldserver.a_(blockposition) ? false : super.a();
     }
 
     @Nullable

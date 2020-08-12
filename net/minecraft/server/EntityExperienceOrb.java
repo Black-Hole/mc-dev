@@ -55,7 +55,7 @@ public class EntityExperienceOrb extends Entity {
         }
 
         if (!this.world.b(this.getBoundingBox())) {
-            this.k(this.locX(), (this.getBoundingBox().minY + this.getBoundingBox().maxY) / 2.0D, this.locZ());
+            this.l(this.locX(), (this.getBoundingBox().minY + this.getBoundingBox().maxY) / 2.0D, this.locZ());
         }
 
         double d0 = 8.0D;
@@ -110,7 +110,7 @@ public class EntityExperienceOrb extends Entity {
     }
 
     @Override
-    protected void aI() {}
+    protected void aL() {}
 
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
@@ -144,8 +144,8 @@ public class EntityExperienceOrb extends Entity {
     @Override
     public void pickup(EntityHuman entityhuman) {
         if (!this.world.isClientSide) {
-            if (this.d == 0 && entityhuman.bB == 0) {
-                entityhuman.bB = 2;
+            if (this.d == 0 && entityhuman.bu == 0) {
+                entityhuman.bu = 2;
                 entityhuman.receive(this, 1);
                 Entry<EnumItemSlot, ItemStack> entry = EnchantmentManager.a(Enchantments.MENDING, (EntityLiving) entityhuman, ItemStack::f);
 
@@ -187,12 +187,12 @@ public class EntityExperienceOrb extends Entity {
     }
 
     @Override
-    public boolean bH() {
+    public boolean bK() {
         return false;
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         return new PacketPlayOutSpawnEntityExperienceOrb(this);
     }
 }

@@ -1,9 +1,8 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
-import com.mojang.serialization.MapCodec;
 import java.util.Optional;
 
 public class RegistryWriteOps<T> extends DynamicOpsWrapper<T> {
@@ -19,7 +18,7 @@ public class RegistryWriteOps<T> extends DynamicOpsWrapper<T> {
         this.b = iregistrycustom;
     }
 
-    protected <E> DataResult<T> a(E e0, T t0, ResourceKey<IRegistry<E>> resourcekey, MapCodec<E> mapcodec) {
+    protected <E> DataResult<T> a(E e0, T t0, ResourceKey<? extends IRegistry<E>> resourcekey, Codec<E> codec) {
         Optional<IRegistryWritable<E>> optional = this.b.a(resourcekey);
 
         if (optional.isPresent()) {
@@ -29,14 +28,10 @@ public class RegistryWriteOps<T> extends DynamicOpsWrapper<T> {
             if (optional1.isPresent()) {
                 ResourceKey<E> resourcekey1 = (ResourceKey) optional1.get();
 
-                if (iregistrywritable.c(resourcekey1)) {
-                    return Codecs.a(resourcekey, mapcodec).codec().encode(Pair.of(resourcekey1, e0), this.a, t0);
-                }
-
                 return MinecraftKey.a.encode(resourcekey1.a(), this.a, t0);
             }
         }
 
-        return mapcodec.codec().encode(e0, this.a, t0);
+        return codec.encode(e0, this, t0);
     }
 }

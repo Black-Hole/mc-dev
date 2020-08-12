@@ -2,8 +2,11 @@ package net.minecraft.server;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.stream.Collectors;
 
 public class BiomeFog {
 
@@ -14,36 +17,85 @@ public class BiomeFog {
             return biomefog.c;
         }), Codec.INT.fieldOf("water_fog_color").forGetter((biomefog) -> {
             return biomefog.d;
-        }), BiomeParticles.a.optionalFieldOf("particle").forGetter((biomefog) -> {
+        }), Codec.INT.fieldOf("sky_color").forGetter((biomefog) -> {
             return biomefog.e;
-        }), SoundEffect.a.optionalFieldOf("ambient_sound").forGetter((biomefog) -> {
+        }), Codec.INT.optionalFieldOf("foliage_color").forGetter((biomefog) -> {
             return biomefog.f;
-        }), CaveSoundSettings.a.optionalFieldOf("mood_sound").forGetter((biomefog) -> {
+        }), Codec.INT.optionalFieldOf("grass_color").forGetter((biomefog) -> {
             return biomefog.g;
-        }), CaveSound.a.optionalFieldOf("additions_sound").forGetter((biomefog) -> {
+        }), BiomeFog.GrassColor.d.optionalFieldOf("grass_color_modifier", BiomeFog.GrassColor.NONE).forGetter((biomefog) -> {
             return biomefog.h;
-        }), Music.a.optionalFieldOf("music").forGetter((biomefog) -> {
+        }), BiomeParticles.a.optionalFieldOf("particle").forGetter((biomefog) -> {
             return biomefog.i;
+        }), SoundEffect.a.optionalFieldOf("ambient_sound").forGetter((biomefog) -> {
+            return biomefog.j;
+        }), CaveSoundSettings.a.optionalFieldOf("mood_sound").forGetter((biomefog) -> {
+            return biomefog.k;
+        }), CaveSound.a.optionalFieldOf("additions_sound").forGetter((biomefog) -> {
+            return biomefog.l;
+        }), Music.a.optionalFieldOf("music").forGetter((biomefog) -> {
+            return biomefog.m;
         })).apply(instance, BiomeFog::new);
     });
     private final int b;
     private final int c;
     private final int d;
-    private final Optional<BiomeParticles> e;
-    private final Optional<SoundEffect> f;
-    private final Optional<CaveSoundSettings> g;
-    private final Optional<CaveSound> h;
-    private final Optional<Music> i;
+    private final int e;
+    private final Optional<Integer> f;
+    private final Optional<Integer> g;
+    private final BiomeFog.GrassColor h;
+    private final Optional<BiomeParticles> i;
+    private final Optional<SoundEffect> j;
+    private final Optional<CaveSoundSettings> k;
+    private final Optional<CaveSound> l;
+    private final Optional<Music> m;
 
-    private BiomeFog(int i, int j, int k, Optional<BiomeParticles> optional, Optional<SoundEffect> optional1, Optional<CaveSoundSettings> optional2, Optional<CaveSound> optional3, Optional<Music> optional4) {
+    private BiomeFog(int i, int j, int k, int l, Optional<Integer> optional, Optional<Integer> optional1, BiomeFog.GrassColor biomefog_grasscolor, Optional<BiomeParticles> optional2, Optional<SoundEffect> optional3, Optional<CaveSoundSettings> optional4, Optional<CaveSound> optional5, Optional<Music> optional6) {
         this.b = i;
         this.c = j;
         this.d = k;
-        this.e = optional;
-        this.f = optional1;
-        this.g = optional2;
-        this.h = optional3;
-        this.i = optional4;
+        this.e = l;
+        this.f = optional;
+        this.g = optional1;
+        this.h = biomefog_grasscolor;
+        this.i = optional2;
+        this.j = optional3;
+        this.k = optional4;
+        this.l = optional5;
+        this.m = optional6;
+    }
+
+    public static enum GrassColor implements INamable {
+
+        NONE("none") {
+        },
+        DARK_FOREST("dark_forest") {
+        },
+        SWAMP("swamp") {
+        };
+
+        private final String e;
+        public static final Codec<BiomeFog.GrassColor> d = INamable.a(BiomeFog.GrassColor::values, BiomeFog.GrassColor::a);
+        private static final Map<String, BiomeFog.GrassColor> f = (Map) Arrays.stream(values()).collect(Collectors.toMap(BiomeFog.GrassColor::b, (biomefog_grasscolor) -> {
+            return biomefog_grasscolor;
+        }));
+
+        private GrassColor(String s) {
+            this.e = s;
+        }
+
+        public String b() {
+            return this.e;
+        }
+
+        @Override
+        public String getName() {
+            return this.e;
+        }
+
+        public static BiomeFog.GrassColor a(String s) {
+            return (BiomeFog.GrassColor) BiomeFog.GrassColor.f.get(s);
+        }
     }
 
     public static class a {
@@ -51,13 +103,24 @@ public class BiomeFog {
         private OptionalInt a = OptionalInt.empty();
         private OptionalInt b = OptionalInt.empty();
         private OptionalInt c = OptionalInt.empty();
-        private Optional<BiomeParticles> d = Optional.empty();
-        private Optional<SoundEffect> e = Optional.empty();
-        private Optional<CaveSoundSettings> f = Optional.empty();
-        private Optional<CaveSound> g = Optional.empty();
-        private Optional<Music> h = Optional.empty();
+        private OptionalInt d = OptionalInt.empty();
+        private Optional<Integer> e = Optional.empty();
+        private Optional<Integer> f = Optional.empty();
+        private BiomeFog.GrassColor g;
+        private Optional<BiomeParticles> h;
+        private Optional<SoundEffect> i;
+        private Optional<CaveSoundSettings> j;
+        private Optional<CaveSound> k;
+        private Optional<Music> l;
 
-        public a() {}
+        public a() {
+            this.g = BiomeFog.GrassColor.NONE;
+            this.h = Optional.empty();
+            this.i = Optional.empty();
+            this.j = Optional.empty();
+            this.k = Optional.empty();
+            this.l = Optional.empty();
+        }
 
         public BiomeFog.a a(int i) {
             this.a = OptionalInt.of(i);
@@ -74,28 +137,48 @@ public class BiomeFog {
             return this;
         }
 
+        public BiomeFog.a d(int i) {
+            this.d = OptionalInt.of(i);
+            return this;
+        }
+
+        public BiomeFog.a e(int i) {
+            this.e = Optional.of(i);
+            return this;
+        }
+
+        public BiomeFog.a f(int i) {
+            this.f = Optional.of(i);
+            return this;
+        }
+
+        public BiomeFog.a a(BiomeFog.GrassColor biomefog_grasscolor) {
+            this.g = biomefog_grasscolor;
+            return this;
+        }
+
         public BiomeFog.a a(BiomeParticles biomeparticles) {
-            this.d = Optional.of(biomeparticles);
+            this.h = Optional.of(biomeparticles);
             return this;
         }
 
         public BiomeFog.a a(SoundEffect soundeffect) {
-            this.e = Optional.of(soundeffect);
+            this.i = Optional.of(soundeffect);
             return this;
         }
 
         public BiomeFog.a a(CaveSoundSettings cavesoundsettings) {
-            this.f = Optional.of(cavesoundsettings);
+            this.j = Optional.of(cavesoundsettings);
             return this;
         }
 
         public BiomeFog.a a(CaveSound cavesound) {
-            this.g = Optional.of(cavesound);
+            this.k = Optional.of(cavesound);
             return this;
         }
 
         public BiomeFog.a a(Music music) {
-            this.h = Optional.of(music);
+            this.l = Optional.of(music);
             return this;
         }
 
@@ -106,7 +189,9 @@ public class BiomeFog {
                 return new IllegalStateException("Missing 'water' color.");
             }), this.c.orElseThrow(() -> {
                 return new IllegalStateException("Missing 'water fog' color.");
-            }), this.d, this.e, this.f, this.g, this.h);
+            }), this.d.orElseThrow(() -> {
+                return new IllegalStateException("Missing 'sky' color.");
+            }), this.e, this.f, this.g, this.h, this.i, this.j, this.k, this.l);
         }
     }
 }

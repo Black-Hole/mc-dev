@@ -12,13 +12,12 @@ public class WorldGenDecoratorCarveMask extends WorldGenDecorator<WorldGenDecora
         super(codec);
     }
 
-    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator chunkgenerator, Random random, WorldGenDecoratorCarveMaskConfiguration worldgendecoratorcarvemaskconfiguration, BlockPosition blockposition) {
-        IChunkAccess ichunkaccess = generatoraccess.z(blockposition);
-        ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
-        BitSet bitset = ((ProtoChunk) ichunkaccess).a(worldgendecoratorcarvemaskconfiguration.b);
+    public Stream<BlockPosition> a(WorldGenDecoratorContext worldgendecoratorcontext, Random random, WorldGenDecoratorCarveMaskConfiguration worldgendecoratorcarvemaskconfiguration, BlockPosition blockposition) {
+        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition);
+        BitSet bitset = worldgendecoratorcontext.a(chunkcoordintpair, worldgendecoratorcarvemaskconfiguration.c);
 
-        return bitset == null ? Stream.empty() : IntStream.range(0, bitset.length()).filter((i) -> {
-            return bitset.get(i) && random.nextFloat() < worldgendecoratorcarvemaskconfiguration.c;
+        return IntStream.range(0, bitset.length()).filter((i) -> {
+            return bitset.get(i) && random.nextFloat() < worldgendecoratorcarvemaskconfiguration.d;
         }).mapToObj((i) -> {
             int j = i & 15;
             int k = i >> 4 & 15;

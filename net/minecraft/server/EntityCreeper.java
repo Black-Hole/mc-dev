@@ -8,11 +8,11 @@ public class EntityCreeper extends EntityMonster {
     private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Boolean> POWERED = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.i);
     private static final DataWatcherObject<Boolean> d = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.i);
-    private int bv;
+    private int bo;
     private int fuseTicks;
     public int maxFuseTicks = 30;
     public int explosionRadius = 3;
-    private int bz;
+    private int bs;
 
     public EntityCreeper(EntityTypes<? extends EntityCreeper> entitytypes, World world) {
         super(entitytypes, world);
@@ -33,11 +33,11 @@ public class EntityCreeper extends EntityMonster {
     }
 
     public static AttributeProvider.Builder m() {
-        return EntityMonster.eS().a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
+        return EntityMonster.eR().a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
     }
 
     @Override
-    public int bL() {
+    public int bO() {
         return this.getGoalTarget() == null ? 3 : 3 + (int) (this.getHealth() - 1.0F);
     }
 
@@ -94,12 +94,12 @@ public class EntityCreeper extends EntityMonster {
     @Override
     public void tick() {
         if (this.isAlive()) {
-            this.bv = this.fuseTicks;
+            this.bo = this.fuseTicks;
             if (this.isIgnited()) {
                 this.a(1);
             }
 
-            int i = this.eL();
+            int i = this.eK();
 
             if (i > 0 && this.fuseTicks == 0) {
                 this.playSound(SoundEffects.ENTITY_CREEPER_PRIMED, 1.0F, 0.5F);
@@ -154,7 +154,7 @@ public class EntityCreeper extends EntityMonster {
         return (Boolean) this.datawatcher.get(EntityCreeper.POWERED);
     }
 
-    public int eL() {
+    public int eK() {
         return (Integer) this.datawatcher.get(EntityCreeper.b);
     }
 
@@ -163,8 +163,8 @@ public class EntityCreeper extends EntityMonster {
     }
 
     @Override
-    public void onLightningStrike(EntityLightning entitylightning) {
-        super.onLightningStrike(entitylightning);
+    public void onLightningStrike(WorldServer worldserver, EntityLightning entitylightning) {
+        super.onLightningStrike(worldserver, entitylightning);
         this.datawatcher.set(EntityCreeper.POWERED, true);
     }
 
@@ -233,10 +233,10 @@ public class EntityCreeper extends EntityMonster {
     }
 
     public boolean canCauseHeadDrop() {
-        return this.isPowered() && this.bz < 1;
+        return this.isPowered() && this.bs < 1;
     }
 
     public void setCausedHeadDrop() {
-        ++this.bz;
+        ++this.bs;
     }
 }

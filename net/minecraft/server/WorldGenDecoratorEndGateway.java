@@ -10,11 +10,11 @@ public class WorldGenDecoratorEndGateway extends WorldGenDecorator<WorldGenFeatu
         super(codec);
     }
 
-    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator chunkgenerator, Random random, WorldGenFeatureEmptyConfiguration2 worldgenfeatureemptyconfiguration2, BlockPosition blockposition) {
+    public Stream<BlockPosition> a(WorldGenDecoratorContext worldgendecoratorcontext, Random random, WorldGenFeatureEmptyConfiguration2 worldgenfeatureemptyconfiguration2, BlockPosition blockposition) {
         if (random.nextInt(700) == 0) {
             int i = random.nextInt(16) + blockposition.getX();
             int j = random.nextInt(16) + blockposition.getZ();
-            int k = generatoraccess.a(HeightMap.Type.MOTION_BLOCKING, i, j);
+            int k = worldgendecoratorcontext.a(HeightMap.Type.MOTION_BLOCKING, i, j);
 
             if (k > 0) {
                 int l = k + 3 + random.nextInt(7);

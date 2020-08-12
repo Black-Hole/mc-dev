@@ -6,14 +6,14 @@ import java.util.Random;
 public class WorldGenEndTrophy extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     public static final BlockPosition a = BlockPosition.ZERO;
-    private final boolean ac;
+    private final boolean ab;
 
     public WorldGenEndTrophy(boolean flag) {
         super(WorldGenFeatureEmptyConfiguration.a);
-        this.ac = flag;
+        this.ab = flag;
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         Iterator iterator = BlockPosition.a(new BlockPosition(blockposition.getX() - 4, blockposition.getY() - 1, blockposition.getZ() - 4), new BlockPosition(blockposition.getX() + 4, blockposition.getY() + 32, blockposition.getZ() + 4)).iterator();
 
         while (iterator.hasNext()) {
@@ -31,7 +31,7 @@ public class WorldGenEndTrophy extends WorldGenerator<WorldGenFeatureEmptyConfig
                     this.a(generatoraccessseed, blockposition1, Blocks.AIR.getBlockData());
                 } else if (!flag) {
                     this.a(generatoraccessseed, blockposition1, Blocks.BEDROCK.getBlockData());
-                } else if (this.ac) {
+                } else if (this.ab) {
                     this.a(generatoraccessseed, new BlockPosition(blockposition1), Blocks.END_PORTAL.getBlockData());
                 } else {
                     this.a(generatoraccessseed, new BlockPosition(blockposition1), Blocks.AIR.getBlockData());

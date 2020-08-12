@@ -5,11 +5,11 @@ import com.mojang.serialization.Codec;
 public class WorldGenDecoratorDungeonConfiguration implements WorldGenFeatureDecoratorConfiguration {
 
     public static final Codec<WorldGenDecoratorDungeonConfiguration> a = Codec.INT.fieldOf("chance").xmap(WorldGenDecoratorDungeonConfiguration::new, (worldgendecoratordungeonconfiguration) -> {
-        return worldgendecoratordungeonconfiguration.b;
+        return worldgendecoratordungeonconfiguration.c;
     }).codec();
-    public final int b;
+    public final int c;
 
     public WorldGenDecoratorDungeonConfiguration(int i) {
-        this.b = i;
+        this.c = i;
     }
 }

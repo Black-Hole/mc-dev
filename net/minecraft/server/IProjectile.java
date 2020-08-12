@@ -81,7 +81,7 @@ public abstract class IProjectile extends Entity {
         Vec3D vec3d = (new Vec3D(d0, d1, d2)).d().add(this.random.nextGaussian() * 0.007499999832361937D * (double) f1, this.random.nextGaussian() * 0.007499999832361937D * (double) f1, this.random.nextGaussian() * 0.007499999832361937D * (double) f1).a((double) f);
 
         this.setMot(vec3d);
-        float f2 = MathHelper.sqrt(b(vec3d));
+        float f2 = MathHelper.sqrt(c(vec3d));
 
         this.yaw = (float) (MathHelper.d(vec3d.x, vec3d.z) * 57.2957763671875D);
         this.pitch = (float) (MathHelper.d(vec3d.y, (double) f2) * 57.2957763671875D);
@@ -131,7 +131,7 @@ public abstract class IProjectile extends Entity {
 
     protected void x() {
         Vec3D vec3d = this.getMot();
-        float f = MathHelper.sqrt(b(vec3d));
+        float f = MathHelper.sqrt(c(vec3d));
 
         this.pitch = e(this.lastPitch, (float) (MathHelper.d(vec3d.y, (double) f) * 57.2957763671875D));
         this.yaw = e(this.lastYaw, (float) (MathHelper.d(vec3d.x, vec3d.z) * 57.2957763671875D));

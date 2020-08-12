@@ -1,10 +1,9 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import java.util.List;
+import java.util.function.Supplier;
 
 public class WorldGenFeatureDefinedStructurePoolLegacySingle extends WorldGenFeatureDefinedStructurePoolSingle {
 
@@ -12,18 +11,8 @@ public class WorldGenFeatureDefinedStructurePoolLegacySingle extends WorldGenFea
         return instance.group(c(), b(), d()).apply(instance, WorldGenFeatureDefinedStructurePoolLegacySingle::new);
     });
 
-    @Deprecated
-    public WorldGenFeatureDefinedStructurePoolLegacySingle(String s, List<DefinedStructureProcessor> list) {
-        super(s, list);
-    }
-
-    private WorldGenFeatureDefinedStructurePoolLegacySingle(Either<MinecraftKey, DefinedStructure> either, List<DefinedStructureProcessor> list, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
-        super(either, list, worldgenfeaturedefinedstructurepooltemplate_matching);
-    }
-
-    @Deprecated
-    public WorldGenFeatureDefinedStructurePoolLegacySingle(String s) {
-        super(s, ImmutableList.of());
+    protected WorldGenFeatureDefinedStructurePoolLegacySingle(Either<MinecraftKey, DefinedStructure> either, Supplier<ProcessorList> supplier, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
+        super(either, supplier, worldgenfeaturedefinedstructurepooltemplate_matching);
     }
 
     @Override

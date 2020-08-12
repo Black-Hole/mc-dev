@@ -12,6 +12,17 @@ public class EntitySize {
         this.c = flag;
     }
 
+    public AxisAlignedBB a(Vec3D vec3d) {
+        return this.a(vec3d.x, vec3d.y, vec3d.z);
+    }
+
+    public AxisAlignedBB a(double d0, double d1, double d2) {
+        float f = this.width / 2.0F;
+        float f1 = this.height;
+
+        return new AxisAlignedBB(d0 - (double) f, d1, d2 - (double) f, d0 + (double) f, d1 + (double) f1, d2 + (double) f);
+    }
+
     public EntitySize a(float f) {
         return this.a(f, f);
     }

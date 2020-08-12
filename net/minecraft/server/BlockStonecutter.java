@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class BlockStonecutter extends Block {
 
-    private static final ChatMessage c = new ChatMessage("container.stonecutter");
+    private static final IChatBaseComponent c = new ChatMessage("container.stonecutter");
     public static final BlockStateDirection a = BlockFacingHorizontal.FACING;
     protected static final VoxelShape b = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D);
 

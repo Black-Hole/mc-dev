@@ -8,11 +8,11 @@ import java.util.function.Predicate;
 public class EntityWitch extends EntityRaider implements IRangedEntity {
 
     private static final UUID b = UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E");
-    private static final AttributeModifier bv = new AttributeModifier(EntityWitch.b, "Drinking speed penalty", -0.25D, AttributeModifier.Operation.ADDITION);
-    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityWitch.class, DataWatcherRegistry.i);
-    private int bx;
-    private PathfinderGoalNearestHealableRaider<EntityRaider> by;
-    private PathfinderGoalNearestAttackableTargetWitch<EntityHuman> bz;
+    private static final AttributeModifier bo = new AttributeModifier(EntityWitch.b, "Drinking speed penalty", -0.25D, AttributeModifier.Operation.ADDITION);
+    private static final DataWatcherObject<Boolean> bp = DataWatcher.a(EntityWitch.class, DataWatcherRegistry.i);
+    private int bq;
+    private PathfinderGoalNearestHealableRaider<EntityRaider> br;
+    private PathfinderGoalNearestAttackableTargetWitch<EntityHuman> bs;
 
     public EntityWitch(EntityTypes<? extends EntityWitch> entitytypes, World world) {
         super(entitytypes, world);
@@ -21,24 +21,24 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
     @Override
     protected void initPathfinder() {
         super.initPathfinder();
-        this.by = new PathfinderGoalNearestHealableRaider<>(this, EntityRaider.class, true, (entityliving) -> {
-            return entityliving != null && this.fc() && entityliving.getEntityType() != EntityTypes.WITCH;
+        this.br = new PathfinderGoalNearestHealableRaider<>(this, EntityRaider.class, true, (entityliving) -> {
+            return entityliving != null && this.fb() && entityliving.getEntityType() != EntityTypes.WITCH;
         });
-        this.bz = new PathfinderGoalNearestAttackableTargetWitch<>(this, EntityHuman.class, 10, true, false, (Predicate) null);
+        this.bs = new PathfinderGoalNearestAttackableTargetWitch<>(this, EntityHuman.class, 10, true, false, (Predicate) null);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(2, new PathfinderGoalArrowAttack(this, 1.0D, 60, 10.0F));
         this.goalSelector.a(2, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(3, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(3, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, new Class[]{EntityRaider.class}));
-        this.targetSelector.a(2, this.by);
-        this.targetSelector.a(3, this.bz);
+        this.targetSelector.a(2, this.br);
+        this.targetSelector.a(3, this.bs);
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.getDataWatcher().register(EntityWitch.bw, false);
+        this.getDataWatcher().register(EntityWitch.bp, false);
     }
 
     @Override
@@ -57,29 +57,29 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
     }
 
     public void v(boolean flag) {
-        this.getDataWatcher().set(EntityWitch.bw, flag);
+        this.getDataWatcher().set(EntityWitch.bp, flag);
     }
 
     public boolean m() {
-        return (Boolean) this.getDataWatcher().get(EntityWitch.bw);
+        return (Boolean) this.getDataWatcher().get(EntityWitch.bp);
     }
 
-    public static AttributeProvider.Builder eL() {
-        return EntityMonster.eS().a(GenericAttributes.MAX_HEALTH, 26.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
+    public static AttributeProvider.Builder eK() {
+        return EntityMonster.eR().a(GenericAttributes.MAX_HEALTH, 26.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
     }
 
     @Override
     public void movementTick() {
         if (!this.world.isClientSide && this.isAlive()) {
-            this.by.j();
-            if (this.by.h() <= 0) {
-                this.bz.a(true);
+            this.br.j();
+            if (this.br.h() <= 0) {
+                this.bs.a(true);
             } else {
-                this.bz.a(false);
+                this.bs.a(false);
             }
 
             if (this.m()) {
-                if (this.bx-- <= 0) {
+                if (this.bq-- <= 0) {
                     this.v(false);
                     ItemStack itemstack = this.getItemInMainHand();
 
@@ -98,7 +98,7 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
                         }
                     }
 
-                    this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).removeModifier(EntityWitch.bv);
+                    this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).removeModifier(EntityWitch.bo);
                 }
             } else {
                 PotionRegistry potionregistry = null;
@@ -115,7 +115,7 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
 
                 if (potionregistry != null) {
                     this.setSlot(EnumItemSlot.MAINHAND, PotionUtil.a(new ItemStack(Items.POTION), potionregistry));
-                    this.bx = this.getItemInMainHand().k();
+                    this.bq = this.getItemInMainHand().k();
                     this.v(true);
                     if (!this.isSilent()) {
                         this.world.playSound((EntityHuman) null, this.locX(), this.locY(), this.locZ(), SoundEffects.ENTITY_WITCH_DRINK, this.getSoundCategory(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
@@ -123,8 +123,8 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
 
                     AttributeModifiable attributemodifiable = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
-                    attributemodifiable.removeModifier(EntityWitch.bv);
-                    attributemodifiable.b(EntityWitch.bv);
+                    attributemodifiable.removeModifier(EntityWitch.bo);
+                    attributemodifiable.b(EntityWitch.bo);
                 }
             }
 
@@ -137,7 +137,7 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
     }
 
     @Override
-    public SoundEffect eM() {
+    public SoundEffect eL() {
         return SoundEffects.ENTITY_WITCH_CELEBRATE;
     }
 
@@ -203,7 +203,7 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
     public void a(int i, boolean flag) {}
 
     @Override
-    public boolean eO() {
+    public boolean eN() {
         return false;
     }
 }

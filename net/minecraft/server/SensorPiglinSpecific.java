@@ -14,7 +14,7 @@ public class SensorPiglinSpecific extends Sensor<EntityLiving> {
 
     @Override
     public Set<MemoryModuleType<?>> a() {
-        return ImmutableSet.of(MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.MOBS, MemoryModuleType.NEAREST_VISIBLE_NEMSIS, MemoryModuleType.NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD, MemoryModuleType.NEAREST_PLAYER_HOLDING_WANTED_ITEM, MemoryModuleType.NEAREST_VISIBLE_HUNTABLE_HOGLIN, new MemoryModuleType[]{MemoryModuleType.NEAREST_VISIBLE_BABY_HOGLIN, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLINS, MemoryModuleType.NEAREST_ADULT_PIGLINS, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.NEAREST_REPELLENT});
+        return ImmutableSet.of(MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.MOBS, MemoryModuleType.NEAREST_VISIBLE_NEMSIS, MemoryModuleType.NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD, MemoryModuleType.NEAREST_PLAYER_HOLDING_WANTED_ITEM, MemoryModuleType.NEAREST_VISIBLE_HUNTABLE_HOGLIN, new MemoryModuleType[]{MemoryModuleType.NEAREST_VISIBLE_BABY_HOGLIN, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLINS, MemoryModuleType.NEARBY_ADULT_PIGLINS, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.NEAREST_REPELLENT});
     }
 
     @Override
@@ -30,8 +30,8 @@ public class SensorPiglinSpecific extends Sensor<EntityLiving> {
         Optional<EntityHuman> optional5 = Optional.empty();
         Optional<EntityHuman> optional6 = Optional.empty();
         int i = 0;
-        List<EntityPiglin> list = Lists.newArrayList();
-        List<EntityPiglin> list1 = Lists.newArrayList();
+        List<EntityPiglinAbstract> list = Lists.newArrayList();
+        List<EntityPiglinAbstract> list1 = Lists.newArrayList();
         List<EntityLiving> list2 = (List) behaviorcontroller.getMemory(MemoryModuleType.VISIBLE_MOBS).orElse(ImmutableList.of());
         Iterator iterator = list2.iterator();
 
@@ -43,12 +43,14 @@ public class SensorPiglinSpecific extends Sensor<EntityLiving> {
 
                 if (entityhoglin.isBaby() && !optional2.isPresent()) {
                     optional2 = Optional.of(entityhoglin);
-                } else if (entityhoglin.eM()) {
+                } else if (entityhoglin.eL()) {
                     ++i;
-                    if (!optional1.isPresent() && entityhoglin.eP()) {
+                    if (!optional1.isPresent() && entityhoglin.eO()) {
                         optional1 = Optional.of(entityhoglin);
                     }
                 }
+            } else if (entityliving1 instanceof EntityPiglinBrute) {
+                list.add((EntityPiglinBrute) entityliving1);
             } else if (entityliving1 instanceof EntityPiglin) {
                 EntityPiglin entitypiglin = (EntityPiglin) entityliving1;
 
@@ -80,19 +82,18 @@ public class SensorPiglinSpecific extends Sensor<EntityLiving> {
         while (iterator1.hasNext()) {
             EntityLiving entityliving2 = (EntityLiving) iterator1.next();
 
-            if (entityliving2 instanceof EntityPiglin && ((EntityPiglin) entityliving2).eM()) {
-                list1.add((EntityPiglin) entityliving2);
+            if (entityliving2 instanceof EntityPiglinAbstract && ((EntityPiglinAbstract) entityliving2).eM()) {
+                list1.add((EntityPiglinAbstract) entityliving2);
             }
         }
 
         behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_NEMSIS, optional);
         behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_HUNTABLE_HOGLIN, optional1);
         behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_BABY_HOGLIN, optional2);
-        behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_BABY_PIGLIN, optional3);
         behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_ZOMBIFIED, optional4);
         behaviorcontroller.setMemory(MemoryModuleType.NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD, optional5);
         behaviorcontroller.setMemory(MemoryModuleType.NEAREST_PLAYER_HOLDING_WANTED_ITEM, optional6);
-        behaviorcontroller.setMemory(MemoryModuleType.NEAREST_ADULT_PIGLINS, (Object) list1);
+        behaviorcontroller.setMemory(MemoryModuleType.NEARBY_ADULT_PIGLINS, (Object) list1);
         behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLINS, (Object) list);
         behaviorcontroller.setMemory(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, (Object) list.size());
         behaviorcontroller.setMemory(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, (Object) i);

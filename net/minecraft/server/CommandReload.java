@@ -19,10 +19,10 @@ public class CommandReload {
         });
     }
 
-    private static Collection<String> a(ResourcePackRepository<?> resourcepackrepository, SaveData savedata, Collection<String> collection) {
+    private static Collection<String> a(ResourcePackRepository resourcepackrepository, SaveData savedata, Collection<String> collection) {
         resourcepackrepository.a();
         Collection<String> collection1 = Lists.newArrayList(collection);
-        Collection<String> collection2 = savedata.C().b();
+        Collection<String> collection2 = savedata.D().b();
         Iterator iterator = resourcepackrepository.b().iterator();
 
         while (iterator.hasNext()) {
@@ -42,7 +42,7 @@ public class CommandReload {
         })).executes((commandcontext) -> {
             CommandListenerWrapper commandlistenerwrapper = (CommandListenerWrapper) commandcontext.getSource();
             MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
-            ResourcePackRepository<?> resourcepackrepository = minecraftserver.getResourcePackRepository();
+            ResourcePackRepository resourcepackrepository = minecraftserver.getResourcePackRepository();
             SaveData savedata = minecraftserver.getSaveData();
             Collection<String> collection = resourcepackrepository.d();
             Collection<String> collection1 = a(resourcepackrepository, savedata, collection);

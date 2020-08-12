@@ -35,7 +35,7 @@ public abstract class WorldGenMushrooms extends WorldGenerator<WorldGenFeatureMu
         if (j >= 1 && j + i + 1 < 256) {
             Block block = generatoraccess.getType(blockposition.down()).getBlock();
 
-            if (!b(block)) {
+            if (!b(block) && !block.a((Tag) TagsBlock.aD)) {
                 return false;
             } else {
                 for (int k = 0; k <= i; ++k) {
@@ -59,7 +59,7 @@ public abstract class WorldGenMushrooms extends WorldGenerator<WorldGenFeatureMu
         }
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureMushroomConfiguration worldgenfeaturemushroomconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureMushroomConfiguration worldgenfeaturemushroomconfiguration) {
         int i = this.a(random);
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 

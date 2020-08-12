@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 import javax.annotation.Nullable;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
 
@@ -89,7 +89,7 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
 
     @Override
     public void a(IBlockAccess iblockaccess, Entity entity) {
-        if (entity.bs()) {
+        if (entity.bv()) {
             super.a(iblockaccess, entity);
         } else {
             this.a(entity);
@@ -168,75 +168,75 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
         return iblockdata.get(BlockBed.PART) == BlockPropertyBedPart.HEAD ? enumdirection.opposite() : enumdirection;
     }
 
-    public static Optional<Vec3D> a(EntityTypes<?> entitytypes, IWorldReader iworldreader, BlockPosition blockposition, int i) {
-        EnumDirection enumdirection = (EnumDirection) iworldreader.getType(blockposition).get(BlockBed.FACING);
-        int j = blockposition.getX();
-        int k = blockposition.getY();
-        int l = blockposition.getZ();
+    private static boolean b(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockaccess.getType(blockposition.down()).getBlock() instanceof BlockBed;
+    }
 
-        for (int i1 = 0; i1 <= 1; ++i1) {
-            int j1 = j - enumdirection.getAdjacentX() * i1 - 1;
-            int k1 = l - enumdirection.getAdjacentZ() * i1 - 1;
-            int l1 = j1 + 2;
-            int i2 = k1 + 2;
+    public static Optional<Vec3D> a(EntityTypes<?> entitytypes, ICollisionAccess icollisionaccess, BlockPosition blockposition, float f) {
+        EnumDirection enumdirection = (EnumDirection) icollisionaccess.getType(blockposition).get(BlockBed.FACING);
+        EnumDirection enumdirection1 = enumdirection.g();
+        EnumDirection enumdirection2 = enumdirection1.a(f) ? enumdirection1.opposite() : enumdirection1;
 
-            for (int j2 = j1; j2 <= l1; ++j2) {
-                for (int k2 = k1; k2 <= i2; ++k2) {
-                    BlockPosition blockposition1 = new BlockPosition(j2, k, k2);
-                    Optional<Vec3D> optional = a(entitytypes, iworldreader, blockposition1);
+        if (b((IBlockAccess) icollisionaccess, blockposition)) {
+            return a(entitytypes, icollisionaccess, blockposition, enumdirection, enumdirection2);
+        } else {
+            int[][] aint = a(enumdirection, enumdirection2);
+            Optional<Vec3D> optional = a(entitytypes, icollisionaccess, blockposition, aint, true);
 
-                    if (optional.isPresent()) {
-                        if (i <= 0) {
-                            return optional;
-                        }
+            return optional.isPresent() ? optional : a(entitytypes, icollisionaccess, blockposition, aint, false);
+        }
+    }
 
-                        --i;
+    private static Optional<Vec3D> a(EntityTypes<?> entitytypes, ICollisionAccess icollisionaccess, BlockPosition blockposition, EnumDirection enumdirection, EnumDirection enumdirection1) {
+        int[][] aint = b(enumdirection, enumdirection1);
+        Optional<Vec3D> optional = a(entitytypes, icollisionaccess, blockposition, aint, true);
+
+        if (optional.isPresent()) {
+            return optional;
+        } else {
+            BlockPosition blockposition1 = blockposition.down();
+            Optional<Vec3D> optional1 = a(entitytypes, icollisionaccess, blockposition1, aint, true);
+
+            if (optional1.isPresent()) {
+                return optional1;
+            } else {
+                int[][] aint1 = a(enumdirection);
+                Optional<Vec3D> optional2 = a(entitytypes, icollisionaccess, blockposition, aint1, true);
+
+                if (optional2.isPresent()) {
+                    return optional2;
+                } else {
+                    Optional<Vec3D> optional3 = a(entitytypes, icollisionaccess, blockposition, aint, false);
+
+                    if (optional3.isPresent()) {
+                        return optional3;
+                    } else {
+                        Optional<Vec3D> optional4 = a(entitytypes, icollisionaccess, blockposition1, aint, false);
+
+                        return optional4.isPresent() ? optional4 : a(entitytypes, icollisionaccess, blockposition, aint1, false);
                     }
                 }
+            }
+        }
+    }
+
+    private static Optional<Vec3D> a(EntityTypes<?> entitytypes, ICollisionAccess icollisionaccess, BlockPosition blockposition, int[][] aint, boolean flag) {
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+        int[][] aint1 = aint;
+        int i = aint.length;
+
+        for (int j = 0; j < i; ++j) {
+            int[] aint2 = aint1[j];
+
+            blockposition_mutableblockposition.d(blockposition.getX() + aint2[0], blockposition.getY(), blockposition.getZ() + aint2[1]);
+            Vec3D vec3d = DismountUtil.a(entitytypes, icollisionaccess, blockposition_mutableblockposition, flag);
+
+            if (vec3d != null) {
+                return Optional.of(vec3d);
             }
         }
 
         return Optional.empty();
-    }
-
-    public static Optional<Vec3D> a(EntityTypes<?> entitytypes, IWorldReader iworldreader, BlockPosition blockposition) {
-        VoxelShape voxelshape = iworldreader.getType(blockposition).getCollisionShape(iworldreader, blockposition);
-
-        if (voxelshape.c(EnumDirection.EnumAxis.Y) > 0.4375D) {
-            return Optional.empty();
-        } else {
-            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i();
-
-            while (blockposition_mutableblockposition.getY() >= 0 && blockposition.getY() - blockposition_mutableblockposition.getY() <= 2 && iworldreader.getType(blockposition_mutableblockposition).getCollisionShape(iworldreader, blockposition_mutableblockposition).isEmpty()) {
-                blockposition_mutableblockposition.c(EnumDirection.DOWN);
-            }
-
-            VoxelShape voxelshape1 = iworldreader.getType(blockposition_mutableblockposition).getCollisionShape(iworldreader, blockposition_mutableblockposition);
-
-            if (voxelshape1.isEmpty()) {
-                return Optional.empty();
-            } else {
-                double d0 = (double) blockposition_mutableblockposition.getY() + voxelshape1.c(EnumDirection.EnumAxis.Y) + 2.0E-7D;
-
-                if ((double) blockposition.getY() - d0 > 2.0D) {
-                    return Optional.empty();
-                } else {
-                    Vec3D vec3d = new Vec3D((double) blockposition_mutableblockposition.getX() + 0.5D, d0, (double) blockposition_mutableblockposition.getZ() + 0.5D);
-                    AxisAlignedBB axisalignedbb = entitytypes.a(vec3d.x, vec3d.y, vec3d.z);
-
-                    if (iworldreader.b(axisalignedbb)) {
-                        Stream stream = iworldreader.a(axisalignedbb.b(0.0D, -0.20000000298023224D, 0.0D));
-
-                        entitytypes.getClass();
-                        if (stream.noneMatch(entitytypes::a)) {
-                            return Optional.of(vec3d);
-                        }
-                    }
-
-                    return Optional.empty();
-                }
-            }
-        }
     }
 
     @Override
@@ -275,5 +275,17 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
     @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         return false;
+    }
+
+    private static int[][] a(EnumDirection enumdirection, EnumDirection enumdirection1) {
+        return (int[][]) ArrayUtils.addAll(b(enumdirection, enumdirection1), a(enumdirection));
+    }
+
+    private static int[][] b(EnumDirection enumdirection, EnumDirection enumdirection1) {
+        return new int[][]{{enumdirection1.getAdjacentX(), enumdirection1.getAdjacentZ()}, {enumdirection1.getAdjacentX() - enumdirection.getAdjacentX(), enumdirection1.getAdjacentZ() - enumdirection.getAdjacentZ()}, {enumdirection1.getAdjacentX() - enumdirection.getAdjacentX() * 2, enumdirection1.getAdjacentZ() - enumdirection.getAdjacentZ() * 2}, {-enumdirection.getAdjacentX() * 2, -enumdirection.getAdjacentZ() * 2}, {-enumdirection1.getAdjacentX() - enumdirection.getAdjacentX() * 2, -enumdirection1.getAdjacentZ() - enumdirection.getAdjacentZ() * 2}, {-enumdirection1.getAdjacentX() - enumdirection.getAdjacentX(), -enumdirection1.getAdjacentZ() - enumdirection.getAdjacentZ()}, {-enumdirection1.getAdjacentX(), -enumdirection1.getAdjacentZ()}, {-enumdirection1.getAdjacentX() + enumdirection.getAdjacentX(), -enumdirection1.getAdjacentZ() + enumdirection.getAdjacentZ()}, {enumdirection.getAdjacentX(), enumdirection.getAdjacentZ()}, {enumdirection1.getAdjacentX() + enumdirection.getAdjacentX(), enumdirection1.getAdjacentZ() + enumdirection.getAdjacentZ()}};
+    }
+
+    private static int[][] a(EnumDirection enumdirection) {
+        return new int[][]{{0, 0}, {-enumdirection.getAdjacentX(), -enumdirection.getAdjacentZ()}};
     }
 }

@@ -15,7 +15,7 @@ public class PathfinderGoalWrapped extends PathfinderGoal {
     }
 
     public boolean a(PathfinderGoalWrapped pathfindergoalwrapped) {
-        return this.D_() && pathfindergoalwrapped.h() < this.h();
+        return this.C_() && pathfindergoalwrapped.h() < this.h();
     }
 
     @Override
@@ -29,8 +29,8 @@ public class PathfinderGoalWrapped extends PathfinderGoal {
     }
 
     @Override
-    public boolean D_() {
-        return this.a.D_();
+    public boolean C_() {
+        return this.a.C_();
     }
 
     @Override

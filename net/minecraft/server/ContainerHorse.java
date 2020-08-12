@@ -36,8 +36,8 @@ public class ContainerHorse extends Container {
 
         if (entityhorseabstract instanceof EntityHorseChestedAbstract && ((EntityHorseChestedAbstract) entityhorseabstract).isCarryingChest()) {
             for (j = 0; j < 3; ++j) {
-                for (k = 0; k < ((EntityHorseChestedAbstract) entityhorseabstract).eV(); ++k) {
-                    this.a(new Slot(iinventory, 2 + k + j * ((EntityHorseChestedAbstract) entityhorseabstract).eV(), 80 + k * 18, 18 + j * 18));
+                for (k = 0; k < ((EntityHorseChestedAbstract) entityhorseabstract).eU(); ++k) {
+                    this.a(new Slot(iinventory, 2 + k + j * ((EntityHorseChestedAbstract) entityhorseabstract).eU(), 80 + k * 18, 18 + j * 18));
                 }
             }
         }

@@ -48,13 +48,14 @@ public class ContainerStonecutter extends Container {
 
             @Override
             public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
+                itemstack.a(entityhuman.world, entityhuman, itemstack.getCount());
+                ContainerStonecutter.this.resultInventory.b(entityhuman);
                 ItemStack itemstack1 = ContainerStonecutter.this.c.a(1);
 
                 if (!itemstack1.isEmpty()) {
                     ContainerStonecutter.this.i();
                 }
 
-                itemstack.getItem().b(itemstack, entityhuman.world, entityhuman);
                 containeraccess.a((world, blockposition) -> {
                     long j = world.getTime();
 
@@ -127,6 +128,7 @@ public class ContainerStonecutter extends Container {
         if (!this.i.isEmpty() && this.d(this.containerProperty.get())) {
             RecipeStonecutting recipestonecutting = (RecipeStonecutting) this.i.get(this.containerProperty.get());
 
+            this.resultInventory.a((IRecipe) recipestonecutting);
             this.d.set(recipestonecutting.a(this.inventory));
         } else {
             this.d.set(ItemStack.b);

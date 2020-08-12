@@ -66,7 +66,7 @@ public class PathfinderGoalTame extends PathfinderGoal {
             }
 
             this.entity.ejectPassengers();
-            this.entity.fn();
+            this.entity.fm();
             this.entity.world.broadcastEntityEffect(this.entity, (byte) 6);
         }
 

@@ -2,33 +2,17 @@ package net.minecraft.server;
 
 public class GenLayerBiome implements AreaTransformer5 {
 
-    private static final int a = IRegistry.BIOME.a((Object) Biomes.BIRCH_FOREST);
-    private static final int b = IRegistry.BIOME.a((Object) Biomes.DESERT);
-    private static final int c = IRegistry.BIOME.a((Object) Biomes.MOUNTAINS);
-    private static final int d = IRegistry.BIOME.a((Object) Biomes.FOREST);
-    private static final int e = IRegistry.BIOME.a((Object) Biomes.SNOWY_TUNDRA);
-    private static final int f = IRegistry.BIOME.a((Object) Biomes.JUNGLE);
-    private static final int g = IRegistry.BIOME.a((Object) Biomes.BADLANDS_PLATEAU);
-    private static final int h = IRegistry.BIOME.a((Object) Biomes.WOODED_BADLANDS_PLATEAU);
-    private static final int i = IRegistry.BIOME.a((Object) Biomes.MUSHROOM_FIELDS);
-    private static final int j = IRegistry.BIOME.a((Object) Biomes.PLAINS);
-    private static final int k = IRegistry.BIOME.a((Object) Biomes.GIANT_TREE_TAIGA);
-    private static final int l = IRegistry.BIOME.a((Object) Biomes.DARK_FOREST);
-    private static final int m = IRegistry.BIOME.a((Object) Biomes.SAVANNA);
-    private static final int n = IRegistry.BIOME.a((Object) Biomes.SWAMP);
-    private static final int o = IRegistry.BIOME.a((Object) Biomes.TAIGA);
-    private static final int p = IRegistry.BIOME.a((Object) Biomes.SNOWY_TAIGA);
-    private static final int[] q = new int[]{GenLayerBiome.b, GenLayerBiome.d, GenLayerBiome.c, GenLayerBiome.n, GenLayerBiome.j, GenLayerBiome.o};
-    private static final int[] r = new int[]{GenLayerBiome.b, GenLayerBiome.b, GenLayerBiome.b, GenLayerBiome.m, GenLayerBiome.m, GenLayerBiome.j};
-    private static final int[] s = new int[]{GenLayerBiome.d, GenLayerBiome.l, GenLayerBiome.c, GenLayerBiome.j, GenLayerBiome.a, GenLayerBiome.n};
-    private static final int[] t = new int[]{GenLayerBiome.d, GenLayerBiome.c, GenLayerBiome.o, GenLayerBiome.j};
-    private static final int[] u = new int[]{GenLayerBiome.e, GenLayerBiome.e, GenLayerBiome.e, GenLayerBiome.p};
-    private int[] v;
+    private static final int[] a = new int[]{2, 4, 3, 6, 1, 5};
+    private static final int[] b = new int[]{2, 2, 2, 35, 35, 1};
+    private static final int[] c = new int[]{4, 29, 3, 1, 27, 6};
+    private static final int[] d = new int[]{4, 3, 5, 1};
+    private static final int[] e = new int[]{12, 12, 12, 30};
+    private int[] f;
 
     public GenLayerBiome(boolean flag) {
-        this.v = GenLayerBiome.r;
+        this.f = GenLayerBiome.b;
         if (flag) {
-            this.v = GenLayerBiome.q;
+            this.f = GenLayerBiome.a;
         }
 
     }
@@ -38,30 +22,30 @@ public class GenLayerBiome implements AreaTransformer5 {
         int j = (i & 3840) >> 8;
 
         i &= -3841;
-        if (!GenLayers.a(i) && i != GenLayerBiome.i) {
+        if (!GenLayers.a(i) && i != 14) {
             switch (i) {
                 case 1:
                     if (j > 0) {
-                        return worldgencontext.a(3) == 0 ? GenLayerBiome.g : GenLayerBiome.h;
+                        return worldgencontext.a(3) == 0 ? 39 : 38;
                     }
 
-                    return this.v[worldgencontext.a(this.v.length)];
+                    return this.f[worldgencontext.a(this.f.length)];
                 case 2:
                     if (j > 0) {
-                        return GenLayerBiome.f;
+                        return 21;
                     }
 
-                    return GenLayerBiome.s[worldgencontext.a(GenLayerBiome.s.length)];
+                    return GenLayerBiome.c[worldgencontext.a(GenLayerBiome.c.length)];
                 case 3:
                     if (j > 0) {
-                        return GenLayerBiome.k;
+                        return 32;
                     }
 
-                    return GenLayerBiome.t[worldgencontext.a(GenLayerBiome.t.length)];
+                    return GenLayerBiome.d[worldgencontext.a(GenLayerBiome.d.length)];
                 case 4:
-                    return GenLayerBiome.u[worldgencontext.a(GenLayerBiome.u.length)];
+                    return GenLayerBiome.e[worldgencontext.a(GenLayerBiome.e.length)];
                 default:
-                    return GenLayerBiome.i;
+                    return 14;
             }
         } else {
             return i;

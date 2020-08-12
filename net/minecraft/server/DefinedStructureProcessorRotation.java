@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public class DefinedStructureProcessorRotation extends DefinedStructureProcessor {
 
-    public static final Codec<DefinedStructureProcessorRotation> a = Codec.FLOAT.fieldOf("integrity").withDefault(1.0F).xmap(DefinedStructureProcessorRotation::new, (definedstructureprocessorrotation) -> {
+    public static final Codec<DefinedStructureProcessorRotation> a = Codec.FLOAT.fieldOf("integrity").orElse(1.0F).xmap(DefinedStructureProcessorRotation::new, (definedstructureprocessorrotation) -> {
         return definedstructureprocessorrotation.b;
     }).codec();
     private final float b;

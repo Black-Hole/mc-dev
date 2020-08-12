@@ -17,7 +17,7 @@ public class MobSpawnerCat implements MobSpawner {
                 return 0;
             } else {
                 this.a = 1200;
-                EntityPlayer entityplayer = worldserver.h();
+                EntityPlayer entityplayer = worldserver.q_();
 
                 if (entityplayer == null) {
                     return 0;
@@ -36,7 +36,7 @@ public class MobSpawnerCat implements MobSpawner {
                             }
 
                             if (worldserver.getStructureManager().a(blockposition, true, StructureGenerator.SWAMP_HUT).e()) {
-                                return this.a((World) worldserver, blockposition);
+                                return this.b(worldserver, blockposition);
                             }
                         }
 
@@ -52,33 +52,33 @@ public class MobSpawnerCat implements MobSpawner {
     private int a(WorldServer worldserver, BlockPosition blockposition) {
         boolean flag = true;
 
-        if (worldserver.x().a(VillagePlaceType.r.c(), blockposition, 48, VillagePlace.Occupancy.IS_OCCUPIED) > 4L) {
+        if (worldserver.y().a(VillagePlaceType.r.c(), blockposition, 48, VillagePlace.Occupancy.IS_OCCUPIED) > 4L) {
             List<EntityCat> list = worldserver.a(EntityCat.class, (new AxisAlignedBB(blockposition)).grow(48.0D, 8.0D, 48.0D));
 
             if (list.size() < 5) {
-                return this.a(blockposition, (World) worldserver);
+                return this.a(blockposition, worldserver);
             }
         }
 
         return 0;
     }
 
-    private int a(World world, BlockPosition blockposition) {
+    private int b(WorldServer worldserver, BlockPosition blockposition) {
         boolean flag = true;
-        List<EntityCat> list = world.a(EntityCat.class, (new AxisAlignedBB(blockposition)).grow(16.0D, 8.0D, 16.0D));
+        List<EntityCat> list = worldserver.a(EntityCat.class, (new AxisAlignedBB(blockposition)).grow(16.0D, 8.0D, 16.0D));
 
-        return list.size() < 1 ? this.a(blockposition, world) : 0;
+        return list.size() < 1 ? this.a(blockposition, worldserver) : 0;
     }
 
-    private int a(BlockPosition blockposition, World world) {
-        EntityCat entitycat = (EntityCat) EntityTypes.CAT.a(world);
+    private int a(BlockPosition blockposition, WorldServer worldserver) {
+        EntityCat entitycat = (EntityCat) EntityTypes.CAT.a((World) worldserver);
 
         if (entitycat == null) {
             return 0;
         } else {
-            entitycat.prepare(world, world.getDamageScaler(blockposition), EnumMobSpawn.NATURAL, (GroupDataEntity) null, (NBTTagCompound) null);
+            entitycat.prepare(worldserver, worldserver.getDamageScaler(blockposition), EnumMobSpawn.NATURAL, (GroupDataEntity) null, (NBTTagCompound) null);
             entitycat.setPositionRotation(blockposition, 0.0F, 0.0F);
-            world.addEntity(entitycat);
+            worldserver.addAllEntities(entitycat);
             return 1;
         }
     }

@@ -23,9 +23,10 @@ public class CustomFunctionManager implements IReloadListener {
     private static final int b = "functions/".length();
     private static final int c = ".mcfunction".length();
     private volatile Map<MinecraftKey, CustomFunction> d = ImmutableMap.of();
-    private final Tags<CustomFunction> e = new Tags<>(this::a, "tags/functions", "function");
-    private final int f;
-    private final com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> g;
+    private final TagDataPack<CustomFunction> e = new TagDataPack<>(this::a, "tags/functions", "function");
+    private volatile Tags<CustomFunction> f = Tags.c();
+    private final int g;
+    private final com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> h;
 
     public Optional<CustomFunction> a(MinecraftKey minecraftkey) {
         return Optional.ofNullable(this.d.get(minecraftkey));
@@ -36,16 +37,16 @@ public class CustomFunctionManager implements IReloadListener {
     }
 
     public Tags<CustomFunction> b() {
-        return this.e;
+        return this.f;
     }
 
     public Tag<CustomFunction> b(MinecraftKey minecraftkey) {
-        return this.e.b(minecraftkey);
+        return this.f.b(minecraftkey);
     }
 
     public CustomFunctionManager(int i, com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
-        this.f = i;
-        this.g = com_mojang_brigadier_commanddispatcher;
+        this.g = i;
+        this.h = com_mojang_brigadier_commanddispatcher;
     }
 
     @Override
@@ -57,7 +58,7 @@ public class CustomFunctionManager implements IReloadListener {
             });
         }, executor).thenCompose((collection) -> {
             Map<MinecraftKey, CompletableFuture<CustomFunction>> map = Maps.newHashMap();
-            CommandListenerWrapper commandlistenerwrapper = new CommandListenerWrapper(ICommandListener.DUMMY, Vec3D.a, Vec2F.a, (WorldServer) null, this.f, "", ChatComponentText.d, (MinecraftServer) null, (Entity) null);
+            CommandListenerWrapper commandlistenerwrapper = new CommandListenerWrapper(ICommandListener.DUMMY, Vec3D.a, Vec2F.a, (WorldServer) null, this.g, "", ChatComponentText.d, (MinecraftServer) null, (Entity) null);
             Iterator iterator = collection.iterator();
 
             while (iterator.hasNext()) {
@@ -68,7 +69,7 @@ public class CustomFunctionManager implements IReloadListener {
                 map.put(minecraftkey1, CompletableFuture.supplyAsync(() -> {
                     List<String> list = a(iresourcemanager, minecraftkey);
 
-                    return CustomFunction.a(minecraftkey1, this.g, commandlistenerwrapper, list);
+                    return CustomFunction.a(minecraftkey1, this.h, commandlistenerwrapper, list);
                 }, executor));
             }
 
@@ -97,7 +98,7 @@ public class CustomFunctionManager implements IReloadListener {
                 }).join();
             });
             this.d = builder.build();
-            this.e.a((Map) pair.getFirst());
+            this.f = this.e.a((Map) pair.getFirst());
         }, executor1);
     }
 

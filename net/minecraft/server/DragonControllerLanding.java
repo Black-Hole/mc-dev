@@ -13,12 +13,12 @@ public class DragonControllerLanding extends AbstractDragonController {
 
     @Override
     public void b() {
-        Vec3D vec3d = this.a.t(1.0F).d();
+        Vec3D vec3d = this.a.x(1.0F).d();
 
         vec3d.b(-0.7853982F);
-        double d0 = this.a.bv.locX();
-        double d1 = this.a.bv.e(0.5D);
-        double d2 = this.a.bv.locZ();
+        double d0 = this.a.bo.locX();
+        double d1 = this.a.bo.e(0.5D);
+        double d2 = this.a.bo.locZ();
 
         for (int i = 0; i < 8; ++i) {
             Random random = this.a.getRandom();
@@ -53,7 +53,7 @@ public class DragonControllerLanding extends AbstractDragonController {
 
     @Override
     public float h() {
-        float f = MathHelper.sqrt(Entity.b(this.a.getMot())) + 1.0F;
+        float f = MathHelper.sqrt(Entity.c(this.a.getMot())) + 1.0F;
         float f1 = Math.min(f, 40.0F);
 
         return f1 / f;

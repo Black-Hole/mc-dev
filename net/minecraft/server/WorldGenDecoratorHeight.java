@@ -2,22 +2,20 @@ package net.minecraft.server;
 
 import com.mojang.serialization.Codec;
 import java.util.Random;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class WorldGenDecoratorHeight extends WorldGenDecorator<WorldGenDecoratorFrequencyConfiguration> {
+public abstract class WorldGenDecoratorHeight<DC extends WorldGenFeatureDecoratorConfiguration> extends WorldGenDecoratorHeightAbstract<DC> {
 
-    public WorldGenDecoratorHeight(Codec<WorldGenDecoratorFrequencyConfiguration> codec) {
+    public WorldGenDecoratorHeight(Codec<DC> codec) {
         super(codec);
     }
 
-    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator chunkgenerator, Random random, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, BlockPosition blockposition) {
-        return IntStream.range(0, worldgendecoratorfrequencyconfiguration.b).mapToObj((i) -> {
-            int j = random.nextInt(16) + blockposition.getX();
-            int k = random.nextInt(16) + blockposition.getZ();
-            int l = generatoraccess.a(HeightMap.Type.MOTION_BLOCKING, j, k);
+    @Override
+    public Stream<BlockPosition> a(WorldGenDecoratorContext worldgendecoratorcontext, Random random, DC dc, BlockPosition blockposition) {
+        int i = blockposition.getX();
+        int j = blockposition.getZ();
+        int k = worldgendecoratorcontext.a(this.a(dc), i, j);
 
-            return new BlockPosition(j, l, k);
-        });
+        return k > 0 ? Stream.of(new BlockPosition(i, k, j)) : Stream.of();
     }
 }

@@ -30,7 +30,7 @@ public class WorldGenWoodlandMansion extends StructureGenerator<WorldGenFeatureE
             }
 
             biomebase1 = (BiomeBase) iterator.next();
-        } while (biomebase1.a((StructureGenerator) this));
+        } while (biomebase1.e().a((StructureGenerator) this));
 
         return false;
     }
@@ -46,7 +46,7 @@ public class WorldGenWoodlandMansion extends StructureGenerator<WorldGenFeatureE
             super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
-        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
             EnumBlockRotation enumblockrotation = EnumBlockRotation.a((Random) this.d);
             byte b0 = 5;
             byte b1 = 5;

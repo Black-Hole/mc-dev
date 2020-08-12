@@ -103,7 +103,7 @@ public class EntityWitherSkull extends EntityFireball {
     }
 
     @Override
-    protected boolean Y_() {
+    protected boolean W_() {
         return false;
     }
 }

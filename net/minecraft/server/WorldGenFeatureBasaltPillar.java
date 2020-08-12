@@ -9,7 +9,7 @@ public class WorldGenFeatureBasaltPillar extends WorldGenerator<WorldGenFeatureE
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         if (generatoraccessseed.isEmpty(blockposition) && !generatoraccessseed.isEmpty(blockposition.up())) {
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i();
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition1 = blockposition.i();

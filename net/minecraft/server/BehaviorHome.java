@@ -19,7 +19,7 @@ public class BehaviorHome extends Behavior<EntityLiving> {
 
     @Override
     protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
-        Optional<BlockPosition> optional = worldserver.x().b((villageplacetype) -> {
+        Optional<BlockPosition> optional = worldserver.y().c((villageplacetype) -> {
             return villageplacetype == VillagePlaceType.r;
         }, (blockposition) -> {
             return true;
@@ -40,7 +40,7 @@ public class BehaviorHome extends Behavior<EntityLiving> {
         Optional<BlockPosition> optional = this.e;
 
         if (!optional.isPresent()) {
-            optional = worldserver.x().a((villageplacetype) -> {
+            optional = worldserver.y().a((villageplacetype) -> {
                 return villageplacetype == VillagePlaceType.r;
             }, (blockposition) -> {
                 return true;

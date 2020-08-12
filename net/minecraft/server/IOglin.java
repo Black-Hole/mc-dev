@@ -37,7 +37,7 @@ public interface IOglin {
             Vec3D vec3d = (new Vec3D(d3, 0.0D, d4)).d().a(d5).b(f);
             double d6 = d2 * (double) entityliving.world.random.nextFloat() * 0.5D;
 
-            entityliving1.h(vec3d.x, d6, vec3d.z);
+            entityliving1.i(vec3d.x, d6, vec3d.z);
             entityliving1.velocityChanged = true;
         }
     }

@@ -9,9 +9,13 @@ public class PacketPlayOutBlockChange implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutBlockChange() {}
 
-    public PacketPlayOutBlockChange(IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public PacketPlayOutBlockChange(BlockPosition blockposition, IBlockData iblockdata) {
         this.a = blockposition;
-        this.block = iblockaccess.getType(blockposition);
+        this.block = iblockdata;
+    }
+
+    public PacketPlayOutBlockChange(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        this(blockposition, iblockaccess.getType(blockposition));
     }
 
     @Override

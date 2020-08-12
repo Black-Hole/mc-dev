@@ -127,7 +127,7 @@ public class WorldGenFeatureRuinedPortal extends StructureGenerator<WorldGenFeat
             super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
-        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureRuinedPortalConfiguration worldgenfeatureruinedportalconfiguration) {
+        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureRuinedPortalConfiguration worldgenfeatureruinedportalconfiguration) {
             WorldGenFeatureRuinedPortalPieces.a worldgenfeatureruinedportalpieces_a = new WorldGenFeatureRuinedPortalPieces.a();
             WorldGenFeatureRuinedPortalPieces.Position worldgenfeatureruinedportalpieces_position;
 

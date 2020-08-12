@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public abstract class EntityAgeable extends EntityCreature {
 
-    private static final DataWatcherObject<Boolean> bv = DataWatcher.a(EntityAgeable.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> bo = DataWatcher.a(EntityAgeable.class, DataWatcherRegistry.i);
     protected int b;
     protected int c;
     protected int d;
@@ -14,9 +14,9 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     @Override
-    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+    public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         if (groupdataentity == null) {
-            groupdataentity = new EntityAgeable.a();
+            groupdataentity = new EntityAgeable.a(true);
         }
 
         EntityAgeable.a entityageable_a = (EntityAgeable.a) groupdataentity;
@@ -26,16 +26,16 @@ public abstract class EntityAgeable extends EntityCreature {
         }
 
         entityageable_a.b();
-        return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
+        return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
     }
 
     @Nullable
-    public abstract EntityAgeable createChild(EntityAgeable entityageable);
+    public abstract EntityAgeable createChild(WorldServer worldserver, EntityAgeable entityageable);
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityAgeable.bv, false);
+        this.datawatcher.register(EntityAgeable.bo, false);
     }
 
     public boolean canBreed() {
@@ -43,7 +43,7 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     public int getAge() {
-        return this.world.isClientSide ? ((Boolean) this.datawatcher.get(EntityAgeable.bv) ? -1 : 1) : this.b;
+        return this.world.isClientSide ? ((Boolean) this.datawatcher.get(EntityAgeable.bo) ? -1 : 1) : this.b;
     }
 
     public void setAge(int i, boolean flag) {
@@ -80,7 +80,7 @@ public abstract class EntityAgeable extends EntityCreature {
 
         this.b = i;
         if (j < 0 && i >= 0 || j >= 0 && i < 0) {
-            this.datawatcher.set(EntityAgeable.bv, i < 0);
+            this.datawatcher.set(EntityAgeable.bo, i < 0);
             this.m();
         }
 
@@ -102,7 +102,7 @@ public abstract class EntityAgeable extends EntityCreature {
 
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityAgeable.bv.equals(datawatcherobject)) {
+        if (EntityAgeable.bo.equals(datawatcherobject)) {
             this.updateSize();
         }
 
@@ -142,17 +142,28 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     @Override
-    public void a(boolean flag) {
+    public void setBaby(boolean flag) {
         this.setAgeRaw(flag ? -24000 : 0);
     }
 
     public static class a implements GroupDataEntity {
 
         private int a;
-        private boolean b = true;
-        private float c = 0.05F;
+        private final boolean b;
+        private final float c;
 
-        public a() {}
+        private a(boolean flag, float f) {
+            this.b = flag;
+            this.c = f;
+        }
+
+        public a(boolean flag) {
+            this(flag, 0.05F);
+        }
+
+        public a(float f) {
+            this(true, f);
+        }
 
         public int a() {
             return this.a;
@@ -166,16 +177,8 @@ public abstract class EntityAgeable extends EntityCreature {
             return this.b;
         }
 
-        public void a(boolean flag) {
-            this.b = flag;
-        }
-
         public float d() {
             return this.c;
-        }
-
-        public void a(float f) {
-            this.c = f;
         }
     }
 }

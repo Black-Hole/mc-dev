@@ -9,7 +9,7 @@ public class EntityPufferFish extends EntityFish {
     private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityPufferFish.class, DataWatcherRegistry.b);
     private int c;
     private int d;
-    private static final Predicate<EntityLiving> bv = (entityliving) -> {
+    private static final Predicate<EntityLiving> bo = (entityliving) -> {
         return entityliving == null ? false : (entityliving instanceof EntityHuman && (entityliving.isSpectator() || ((EntityHuman) entityliving).isCreative()) ? false : entityliving.getMonsterType() != EnumMonsterType.e);
     };
 
@@ -53,7 +53,7 @@ public class EntityPufferFish extends EntityFish {
     }
 
     @Override
-    protected ItemStack eL() {
+    protected ItemStack eK() {
         return new ItemStack(Items.PUFFERFISH_BUCKET);
     }
 
@@ -96,7 +96,7 @@ public class EntityPufferFish extends EntityFish {
     public void movementTick() {
         super.movementTick();
         if (this.isAlive() && this.getPuffState() > 0) {
-            List<EntityInsentient> list = this.world.a(EntityInsentient.class, this.getBoundingBox().g(0.3D), EntityPufferFish.bv);
+            List<EntityInsentient> list = this.world.a(EntityInsentient.class, this.getBoundingBox().g(0.3D), EntityPufferFish.bo);
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
@@ -180,7 +180,7 @@ public class EntityPufferFish extends EntityFish {
 
         @Override
         public boolean a() {
-            List<EntityLiving> list = this.a.world.a(EntityLiving.class, this.a.getBoundingBox().g(2.0D), EntityPufferFish.bv);
+            List<EntityLiving> list = this.a.world.a(EntityLiving.class, this.a.getBoundingBox().g(2.0D), EntityPufferFish.bo);
 
             return !list.isEmpty();
         }
@@ -198,7 +198,7 @@ public class EntityPufferFish extends EntityFish {
 
         @Override
         public boolean b() {
-            List<EntityLiving> list = this.a.world.a(EntityLiving.class, this.a.getBoundingBox().g(2.0D), EntityPufferFish.bv);
+            List<EntityLiving> list = this.a.world.a(EntityLiving.class, this.a.getBoundingBox().g(2.0D), EntityPufferFish.bo);
 
             return !list.isEmpty();
         }

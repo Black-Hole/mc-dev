@@ -9,7 +9,7 @@ public class WorldGenFeatureBlock extends WorldGenerator<WorldGenFeatureBlockCon
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureBlockConfiguration worldgenfeatureblockconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureBlockConfiguration worldgenfeatureblockconfiguration) {
         if (worldgenfeatureblockconfiguration.c.contains(generatoraccessseed.getType(blockposition.down())) && worldgenfeatureblockconfiguration.d.contains(generatoraccessseed.getType(blockposition)) && worldgenfeatureblockconfiguration.e.contains(generatoraccessseed.getType(blockposition.up()))) {
             generatoraccessseed.setTypeAndData(blockposition, worldgenfeatureblockconfiguration.b, 2);
             return true;

@@ -23,7 +23,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
 
     protected EntitySkeletonAbstract(EntityTypes<? extends EntitySkeletonAbstract> entitytypes, World world) {
         super(entitytypes, world);
-        this.eM();
+        this.eL();
     }
 
     @Override
@@ -37,19 +37,19 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, new Class[0]));
         this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, true));
-        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityTurtle.class, 10, true, false, EntityTurtle.bv));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityTurtle.class, 10, true, false, EntityTurtle.bo));
     }
 
     public static AttributeProvider.Builder m() {
-        return EntityMonster.eS().a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
+        return EntityMonster.eR().a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
     }
 
     @Override
-    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
-        this.playSound(this.eL(), 0.15F, 1.0F);
+    protected void b(BlockPosition blockposition, IBlockData iblockdata) {
+        this.playSound(this.eK(), 0.15F, 1.0F);
     }
 
-    abstract SoundEffect eL();
+    abstract SoundEffect eK();
 
     @Override
     public EnumMonsterType getMonsterType() {
@@ -58,7 +58,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
 
     @Override
     public void movementTick() {
-        boolean flag = this.eH();
+        boolean flag = this.eG();
 
         if (flag) {
             ItemStack itemstack = this.getEquipment(EnumItemSlot.HEAD);
@@ -89,7 +89,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         if (this.getVehicle() instanceof EntityCreature) {
             EntityCreature entitycreature = (EntityCreature) this.getVehicle();
 
-            this.aH = entitycreature.aH;
+            this.aA = entitycreature.aA;
         }
 
     }
@@ -102,11 +102,11 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
 
     @Nullable
     @Override
-    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        groupdataentity = super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
+    public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        groupdataentity = super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
         this.a(difficultydamagescaler);
         this.b(difficultydamagescaler);
-        this.eM();
+        this.eL();
         this.setCanPickupLoot(this.random.nextFloat() < 0.55F * difficultydamagescaler.d());
         if (this.getEquipment(EnumItemSlot.HEAD).isEmpty()) {
             LocalDate localdate = LocalDate.now();
@@ -122,11 +122,11 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         return groupdataentity;
     }
 
-    public void eM() {
+    public void eL() {
         if (this.world != null && !this.world.isClientSide) {
             this.goalSelector.a((PathfinderGoal) this.c);
             this.goalSelector.a((PathfinderGoal) this.b);
-            ItemStack itemstack = this.b(ProjectileHelper.a(this, Items.BOW));
+            ItemStack itemstack = this.b(ProjectileHelper.a((EntityLiving) this, Items.BOW));
 
             if (itemstack.getItem() == Items.BOW) {
                 byte b0 = 20;
@@ -146,7 +146,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
 
     @Override
     public void a(EntityLiving entityliving, float f) {
-        ItemStack itemstack = this.f(this.b(ProjectileHelper.a(this, Items.BOW)));
+        ItemStack itemstack = this.f(this.b(ProjectileHelper.a((EntityLiving) this, Items.BOW)));
         EntityArrow entityarrow = this.b(itemstack, f);
         double d0 = entityliving.locX() - this.locX();
         double d1 = entityliving.e(0.3333333333333333D) - entityarrow.locY();
@@ -170,14 +170,14 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
-        this.eM();
+        this.eL();
     }
 
     @Override
     public void setSlot(EnumItemSlot enumitemslot, ItemStack itemstack) {
         super.setSlot(enumitemslot, itemstack);
         if (!this.world.isClientSide) {
-            this.eM();
+            this.eL();
         }
 
     }
@@ -188,7 +188,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
     }
 
     @Override
-    public double aX() {
+    public double ba() {
         return -0.6D;
     }
 }

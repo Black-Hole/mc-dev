@@ -13,7 +13,7 @@ public class PacketPlayInCustomPayload implements Packet<PacketListenerPlayIn> {
 
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.tag = packetdataserializer.o();
+        this.tag = packetdataserializer.p();
         int i = packetdataserializer.readableBytes();
 
         if (i >= 0 && i <= 32767) {

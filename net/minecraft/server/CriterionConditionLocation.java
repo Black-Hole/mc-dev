@@ -3,9 +3,9 @@ package net.minecraft.server;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
+import java.util.Optional;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,12 +13,12 @@ import org.apache.logging.log4j.Logger;
 public class CriterionConditionLocation {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final CriterionConditionLocation a = new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, (BiomeBase) null, (StructureGenerator) null, (ResourceKey) null, (Boolean) null, CriterionConditionLight.a, CriterionConditionBlock.a, CriterionConditionFluid.a);
+    public static final CriterionConditionLocation a = new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, (ResourceKey) null, (StructureGenerator) null, (ResourceKey) null, (Boolean) null, CriterionConditionLight.a, CriterionConditionBlock.a, CriterionConditionFluid.a);
     private final CriterionConditionValue.FloatRange c;
     private final CriterionConditionValue.FloatRange d;
     private final CriterionConditionValue.FloatRange e;
     @Nullable
-    private final BiomeBase f;
+    private final ResourceKey<BiomeBase> f;
     @Nullable
     private final StructureGenerator<?> g;
     @Nullable
@@ -29,29 +29,29 @@ public class CriterionConditionLocation {
     private final CriterionConditionBlock k;
     private final CriterionConditionFluid l;
 
-    public CriterionConditionLocation(CriterionConditionValue.FloatRange criterionconditionvalue_floatrange, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange1, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange2, @Nullable BiomeBase biomebase, @Nullable StructureGenerator<?> structuregenerator, @Nullable ResourceKey<World> resourcekey, @Nullable Boolean obool, CriterionConditionLight criterionconditionlight, CriterionConditionBlock criterionconditionblock, CriterionConditionFluid criterionconditionfluid) {
+    public CriterionConditionLocation(CriterionConditionValue.FloatRange criterionconditionvalue_floatrange, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange1, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange2, @Nullable ResourceKey<BiomeBase> resourcekey, @Nullable StructureGenerator<?> structuregenerator, @Nullable ResourceKey<World> resourcekey1, @Nullable Boolean obool, CriterionConditionLight criterionconditionlight, CriterionConditionBlock criterionconditionblock, CriterionConditionFluid criterionconditionfluid) {
         this.c = criterionconditionvalue_floatrange;
         this.d = criterionconditionvalue_floatrange1;
         this.e = criterionconditionvalue_floatrange2;
-        this.f = biomebase;
+        this.f = resourcekey;
         this.g = structuregenerator;
-        this.h = resourcekey;
+        this.h = resourcekey1;
         this.i = obool;
         this.j = criterionconditionlight;
         this.k = criterionconditionblock;
         this.l = criterionconditionfluid;
     }
 
-    public static CriterionConditionLocation a(BiomeBase biomebase) {
-        return new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, biomebase, (StructureGenerator) null, (ResourceKey) null, (Boolean) null, CriterionConditionLight.a, CriterionConditionBlock.a, CriterionConditionFluid.a);
+    public static CriterionConditionLocation a(ResourceKey<BiomeBase> resourcekey) {
+        return new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, resourcekey, (StructureGenerator) null, (ResourceKey) null, (Boolean) null, CriterionConditionLight.a, CriterionConditionBlock.a, CriterionConditionFluid.a);
     }
 
-    public static CriterionConditionLocation a(ResourceKey<World> resourcekey) {
-        return new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, (BiomeBase) null, (StructureGenerator) null, resourcekey, (Boolean) null, CriterionConditionLight.a, CriterionConditionBlock.a, CriterionConditionFluid.a);
+    public static CriterionConditionLocation b(ResourceKey<World> resourcekey) {
+        return new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, (ResourceKey) null, (StructureGenerator) null, resourcekey, (Boolean) null, CriterionConditionLight.a, CriterionConditionBlock.a, CriterionConditionFluid.a);
     }
 
     public static CriterionConditionLocation a(StructureGenerator<?> structuregenerator) {
-        return new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, (BiomeBase) null, structuregenerator, (ResourceKey) null, (Boolean) null, CriterionConditionLight.a, CriterionConditionBlock.a, CriterionConditionFluid.a);
+        return new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, (ResourceKey) null, structuregenerator, (ResourceKey) null, (Boolean) null, CriterionConditionLight.a, CriterionConditionBlock.a, CriterionConditionFluid.a);
     }
 
     public boolean a(WorldServer worldserver, double d0, double d1, double d2) {
@@ -70,8 +70,9 @@ public class CriterionConditionLocation {
         } else {
             BlockPosition blockposition = new BlockPosition((double) f, (double) f1, (double) f2);
             boolean flag = worldserver.p(blockposition);
+            Optional<ResourceKey<BiomeBase>> optional = worldserver.r().b(IRegistry.ay).c(worldserver.getBiome(blockposition));
 
-            return this.f != null && (!flag || this.f != worldserver.getBiome(blockposition)) ? false : (this.g != null && (!flag || !worldserver.getStructureManager().a(blockposition, true, this.g).e()) ? false : (this.i != null && (!flag || this.i != BlockCampfire.a((World) worldserver, blockposition)) ? false : (!this.j.a(worldserver, blockposition) ? false : (!this.k.a(worldserver, blockposition) ? false : this.l.a(worldserver, blockposition)))));
+            return !optional.isPresent() ? false : (this.f != null && (!flag || this.f != optional.get()) ? false : (this.g != null && (!flag || !worldserver.getStructureManager().a(blockposition, true, this.g).e()) ? false : (this.i != null && (!flag || this.i != BlockCampfire.a((World) worldserver, blockposition)) ? false : (!this.j.a(worldserver, blockposition) ? false : (!this.k.a(worldserver, blockposition) ? false : this.l.a(worldserver, blockposition))))));
         }
     }
 
@@ -105,7 +106,7 @@ public class CriterionConditionLocation {
             }
 
             if (this.f != null) {
-                jsonobject.addProperty("biome", IRegistry.BIOME.getKey(this.f).toString());
+                jsonobject.addProperty("biome", this.f.a().toString());
             }
 
             if (this.i != null) {
@@ -134,7 +135,7 @@ public class CriterionConditionLocation {
 
                 logger.getClass();
                 resourcekey = (ResourceKey) dataresult.resultOrPartial(logger::error).map((minecraftkey) -> {
-                    return ResourceKey.a(IRegistry.ae, minecraftkey);
+                    return ResourceKey.a(IRegistry.L, minecraftkey);
                 }).orElse((Object) null);
             } else {
                 resourcekey = null;
@@ -142,14 +143,12 @@ public class CriterionConditionLocation {
 
             ResourceKey<World> resourcekey1 = resourcekey;
             StructureGenerator<?> structuregenerator = jsonobject.has("feature") ? (StructureGenerator) StructureGenerator.a.get(ChatDeserializer.h(jsonobject, "feature")) : null;
-            BiomeBase biomebase = null;
+            ResourceKey<BiomeBase> resourcekey2 = null;
 
             if (jsonobject.has("biome")) {
                 MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "biome"));
 
-                biomebase = (BiomeBase) IRegistry.BIOME.getOptional(minecraftkey).orElseThrow(() -> {
-                    return new JsonSyntaxException("Unknown biome '" + minecraftkey + "'");
-                });
+                resourcekey2 = ResourceKey.a(IRegistry.ay, minecraftkey);
             }
 
             Boolean obool = jsonobject.has("smokey") ? jsonobject.get("smokey").getAsBoolean() : null;
@@ -157,7 +156,7 @@ public class CriterionConditionLocation {
             CriterionConditionBlock criterionconditionblock = CriterionConditionBlock.a(jsonobject.get("block"));
             CriterionConditionFluid criterionconditionfluid = CriterionConditionFluid.a(jsonobject.get("fluid"));
 
-            return new CriterionConditionLocation(criterionconditionvalue_floatrange, criterionconditionvalue_floatrange1, criterionconditionvalue_floatrange2, biomebase, structuregenerator, resourcekey1, obool, criterionconditionlight, criterionconditionblock, criterionconditionfluid);
+            return new CriterionConditionLocation(criterionconditionvalue_floatrange, criterionconditionvalue_floatrange1, criterionconditionvalue_floatrange2, resourcekey2, structuregenerator, resourcekey1, obool, criterionconditionlight, criterionconditionblock, criterionconditionfluid);
         } else {
             return CriterionConditionLocation.a;
         }
@@ -169,7 +168,7 @@ public class CriterionConditionLocation {
         private CriterionConditionValue.FloatRange b;
         private CriterionConditionValue.FloatRange c;
         @Nullable
-        private BiomeBase d;
+        private ResourceKey<BiomeBase> d;
         @Nullable
         private StructureGenerator<?> e;
         @Nullable
@@ -193,8 +192,8 @@ public class CriterionConditionLocation {
             return new CriterionConditionLocation.a();
         }
 
-        public CriterionConditionLocation.a a(@Nullable BiomeBase biomebase) {
-            this.d = biomebase;
+        public CriterionConditionLocation.a a(@Nullable ResourceKey<BiomeBase> resourcekey) {
+            this.d = resourcekey;
             return this;
         }
 

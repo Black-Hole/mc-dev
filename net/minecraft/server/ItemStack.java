@@ -35,7 +35,7 @@ public final class ItemStack {
     public static final DecimalFormat c = (DecimalFormat) SystemUtils.a((Object) (new DecimalFormat("#.##")), (decimalformat) -> {
         decimalformat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ROOT));
     });
-    private static final ChatModifier e = ChatModifier.b.setColor(EnumChatFormat.DARK_PURPLE).setItalic(true);
+    private static final ChatModifier e = ChatModifier.a.setColor(EnumChatFormat.DARK_PURPLE).setItalic(true);
     private int count;
     private int g;
     @Deprecated
@@ -459,6 +459,12 @@ public final class ItemStack {
         return nbttagcompound != null && nbttagcompound.hasKeyOfType("Name", 8);
     }
 
+    public void a(ItemStack.HideFlags itemstack_hideflags) {
+        NBTTagCompound nbttagcompound = this.getOrCreateTag();
+
+        nbttagcompound.setInt("HideFlags", nbttagcompound.getInt("HideFlags") | itemstack_hideflags.a());
+    }
+
     public boolean u() {
         return this.getItem().e(this);
     }
@@ -587,7 +593,7 @@ public final class ItemStack {
         return shapedetectorblock1 != null && shapedetectorblock.a() == shapedetectorblock1.a() ? (shapedetectorblock.b() == null && shapedetectorblock1.b() == null ? true : (shapedetectorblock.b() != null && shapedetectorblock1.b() != null ? Objects.equals(shapedetectorblock.b().save(new NBTTagCompound()), shapedetectorblock1.b().save(new NBTTagCompound())) : false)) : false;
     }
 
-    public boolean a(TagRegistry tagregistry, ShapeDetectorBlock shapedetectorblock) {
+    public boolean a(ITagRegistry itagregistry, ShapeDetectorBlock shapedetectorblock) {
         if (a(shapedetectorblock, this.l)) {
             return this.m;
         } else {
@@ -599,7 +605,7 @@ public final class ItemStack {
                     String s = nbttaglist.getString(i);
 
                     try {
-                        Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a().parse(new StringReader(s)).create(tagregistry);
+                        Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a().parse(new StringReader(s)).create(itagregistry);
 
                         if (predicate.test(shapedetectorblock)) {
                             this.m = true;
@@ -616,7 +622,7 @@ public final class ItemStack {
         }
     }
 
-    public boolean b(TagRegistry tagregistry, ShapeDetectorBlock shapedetectorblock) {
+    public boolean b(ITagRegistry itagregistry, ShapeDetectorBlock shapedetectorblock) {
         if (a(shapedetectorblock, this.n)) {
             return this.o;
         } else {
@@ -628,7 +634,7 @@ public final class ItemStack {
                     String s = nbttaglist.getString(i);
 
                     try {
-                        Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a().parse(new StringReader(s)).create(tagregistry);
+                        Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a().parse(new StringReader(s)).create(itagregistry);
 
                         if (predicate.test(shapedetectorblock)) {
                             this.o = true;
@@ -679,10 +685,23 @@ public final class ItemStack {
     }
 
     public SoundEffect G() {
-        return this.getItem().ag_();
+        return this.getItem().ae_();
     }
 
     public SoundEffect H() {
-        return this.getItem().af_();
+        return this.getItem().ad_();
+    }
+
+    public static enum HideFlags {
+
+        ENCHANTMENTS, MODIFIERS, UNBREAKABLE, CAN_DESTROY, CAN_PLACE, ADDITIONAL, DYE;
+
+        private int h = 1 << this.ordinal();
+
+        private HideFlags() {}
+
+        public int a() {
+            return this.h;
+        }
     }
 }

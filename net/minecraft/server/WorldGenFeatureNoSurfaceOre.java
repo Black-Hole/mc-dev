@@ -9,13 +9,13 @@ public class WorldGenFeatureNoSurfaceOre extends WorldGenerator<WorldGenFeatureO
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureOreConfiguration worldgenfeatureoreconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureOreConfiguration worldgenfeatureoreconfiguration) {
         int i = random.nextInt(worldgenfeatureoreconfiguration.c + 1);
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
         for (int j = 0; j < i; ++j) {
             this.a(blockposition_mutableblockposition, random, blockposition, Math.min(j, 7));
-            if (worldgenfeatureoreconfiguration.b.c().test(generatoraccessseed.getType(blockposition_mutableblockposition)) && !this.a((GeneratorAccess) generatoraccessseed, (BlockPosition) blockposition_mutableblockposition)) {
+            if (worldgenfeatureoreconfiguration.b.a(generatoraccessseed.getType(blockposition_mutableblockposition), random) && !this.a((GeneratorAccess) generatoraccessseed, (BlockPosition) blockposition_mutableblockposition)) {
                 generatoraccessseed.setTypeAndData(blockposition_mutableblockposition, worldgenfeatureoreconfiguration.d, 2);
             }
         }

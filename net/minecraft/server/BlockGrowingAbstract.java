@@ -1,5 +1,8 @@
 package net.minecraft.server;
 
+import java.util.Random;
+import javax.annotation.Nullable;
+
 public abstract class BlockGrowingAbstract extends Block {
 
     protected final EnumDirection a;
@@ -13,6 +16,18 @@ public abstract class BlockGrowingAbstract extends Block {
         this.b = flag;
     }
 
+    @Nullable
+    @Override
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition().shift(this.a));
+
+        return !iblockdata.a((Block) this.c()) && !iblockdata.a(this.d()) ? this.a((GeneratorAccess) blockactioncontext.getWorld()) : this.d().getBlockData();
+    }
+
+    public IBlockData a(GeneratorAccess generatoraccess) {
+        return this.getBlockData();
+    }
+
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.shift(this.a.opposite());
@@ -20,6 +35,14 @@ public abstract class BlockGrowingAbstract extends Block {
         Block block = iblockdata1.getBlock();
 
         return !this.c(block) ? false : block == this.c() || block == this.d() || iblockdata1.d(iworldreader, blockposition1, this.a);
+    }
+
+    @Override
+    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
+        if (!iblockdata.canPlace(worldserver, blockposition)) {
+            worldserver.b(blockposition, true);
+        }
+
     }
 
     protected boolean c(Block block) {

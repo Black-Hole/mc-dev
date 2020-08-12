@@ -10,11 +10,7 @@ import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.Lifecycle;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.time.format.DateTimeFormatter;
@@ -54,8 +50,8 @@ public class Convertable {
         return new Convertable(java_nio_file_path, java_nio_file_path.resolve("../backups"), DataConverterRegistry.a());
     }
 
-    private static Pair<GeneratorSettings, Lifecycle> a(Dynamic<?> dynamic, DataFixer datafixer, int i) {
-        Dynamic<?> dynamic1 = dynamic.get("WorldGenSettings").orElseEmptyMap();
+    private static <T> Pair<GeneratorSettings, Lifecycle> a(Dynamic<T> dynamic, DataFixer datafixer, int i) {
+        Dynamic<T> dynamic1 = dynamic.get("WorldGenSettings").orElseEmptyMap();
         UnmodifiableIterator unmodifiableiterator = Convertable.c.iterator();
 
         while (unmodifiableiterator.hasNext()) {
@@ -67,12 +63,36 @@ public class Convertable {
             }
         }
 
-        Dynamic<?> dynamic2 = datafixer.update(DataConverterTypes.WORLD_GEN_SETTINGS, dynamic1, i, SharedConstants.getGameVersion().getWorldVersion());
+        Dynamic<T> dynamic2 = datafixer.update(DataConverterTypes.WORLD_GEN_SETTINGS, dynamic1, i, SharedConstants.getGameVersion().getWorldVersion());
         DataResult<GeneratorSettings> dataresult = GeneratorSettings.a.parse(dynamic2);
         Logger logger = Convertable.LOGGER;
 
         logger.getClass();
-        return Pair.of(dataresult.resultOrPartial(SystemUtils.a("WorldGenSettings: ", logger::error)).orElseGet(GeneratorSettings::a), dataresult.lifecycle());
+        return Pair.of(dataresult.resultOrPartial(SystemUtils.a("WorldGenSettings: ", logger::error)).orElseGet(() -> {
+            DataResult dataresult1 = RegistryLookupCodec.a(IRegistry.K).codec().parse(dynamic2);
+            Logger logger1 = Convertable.LOGGER;
+
+            logger1.getClass();
+            IRegistry<DimensionManager> iregistry = (IRegistry) dataresult1.resultOrPartial(SystemUtils.a("Dimension type registry: ", logger1::error)).orElseThrow(() -> {
+                return new IllegalStateException("Failed to get dimension registry");
+            });
+
+            dataresult1 = RegistryLookupCodec.a(IRegistry.ay).codec().parse(dynamic2);
+            logger1 = Convertable.LOGGER;
+            logger1.getClass();
+            IRegistry<BiomeBase> iregistry1 = (IRegistry) dataresult1.resultOrPartial(SystemUtils.a("Biome registry: ", logger1::error)).orElseThrow(() -> {
+                return new IllegalStateException("Failed to get biome registry");
+            });
+
+            dataresult1 = RegistryLookupCodec.a(IRegistry.ar).codec().parse(dynamic2);
+            logger1 = Convertable.LOGGER;
+            logger1.getClass();
+            IRegistry<GeneratorSettingBase> iregistry2 = (IRegistry) dataresult1.resultOrPartial(SystemUtils.a("Noise settings registry: ", logger1::error)).orElseThrow(() -> {
+                return new IllegalStateException("Failed to get noise settings registry");
+            });
+
+            return GeneratorSettings.a(iregistry, iregistry1, iregistry2);
+        }), dataresult.lifecycle());
     }
 
     private static DataPackConfiguration a(Dynamic<?> dynamic) {
@@ -110,7 +130,7 @@ public class Convertable {
     @Nullable
     private static DataPackConfiguration b(File file, DataFixer datafixer) {
         try {
-            NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file)));
+            NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a(file);
             NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Data");
 
             nbttagcompound1.remove("Player");
@@ -127,7 +147,7 @@ public class Convertable {
     private static BiFunction<File, DataFixer, WorldDataServer> b(DynamicOps<NBTBase> dynamicops, DataPackConfiguration datapackconfiguration) {
         return (file, datafixer) -> {
             try {
-                NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file)));
+                NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a(file);
                 NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Data");
                 NBTTagCompound nbttagcompound2 = nbttagcompound1.hasKeyOfType("Player", 10) ? nbttagcompound1.getCompound("Player") : null;
 
@@ -149,7 +169,7 @@ public class Convertable {
     private BiFunction<File, DataFixer, WorldInfo> a(File file, boolean flag) {
         return (file1, datafixer) -> {
             try {
-                NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file1)));
+                NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a(file1);
                 NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Data");
 
                 nbttagcompound1.remove("Player");
@@ -262,7 +282,7 @@ public class Convertable {
             try {
                 File file1 = File.createTempFile("level", ".dat", file);
 
-                NBTCompressedStreamTools.a(nbttagcompound2, (OutputStream) (new FileOutputStream(file1)));
+                NBTCompressedStreamTools.a(nbttagcompound2, file1);
                 File file2 = new File(file, "level.dat_old");
                 File file3 = new File(file, "level.dat");
 

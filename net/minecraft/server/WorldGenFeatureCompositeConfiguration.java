@@ -2,6 +2,8 @@ package net.minecraft.server;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class WorldGenFeatureCompositeConfiguration implements WorldGenFeatureConfiguration {
 
@@ -12,15 +14,20 @@ public class WorldGenFeatureCompositeConfiguration implements WorldGenFeatureCon
             return worldgenfeaturecompositeconfiguration.c;
         })).apply(instance, WorldGenFeatureCompositeConfiguration::new);
     });
-    public final WorldGenFeatureConfigured<?, ?> b;
+    public final Supplier<WorldGenFeatureConfigured<?, ?>> b;
     public final WorldGenDecoratorConfigured<?> c;
 
-    public WorldGenFeatureCompositeConfiguration(WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured, WorldGenDecoratorConfigured<?> worldgendecoratorconfigured) {
-        this.b = worldgenfeatureconfigured;
+    public WorldGenFeatureCompositeConfiguration(Supplier<WorldGenFeatureConfigured<?, ?>> supplier, WorldGenDecoratorConfigured<?> worldgendecoratorconfigured) {
+        this.b = supplier;
         this.c = worldgendecoratorconfigured;
     }
 
     public String toString() {
-        return String.format("< %s [%s | %s] >", this.getClass().getSimpleName(), IRegistry.FEATURE.getKey(this.b.d), IRegistry.DECORATOR.getKey(this.c.b));
+        return String.format("< %s [%s | %s] >", this.getClass().getSimpleName(), IRegistry.FEATURE.getKey(((WorldGenFeatureConfigured) this.b.get()).b()), this.c);
+    }
+
+    @Override
+    public Stream<WorldGenFeatureConfigured<?, ?>> an_() {
+        return ((WorldGenFeatureConfigured) this.b.get()).d();
     }
 }

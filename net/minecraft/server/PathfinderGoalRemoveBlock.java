@@ -22,7 +22,7 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
         } else if (this.c > 0) {
             --this.c;
             return false;
-        } else if (this.m()) {
+        } else if (this.n()) {
             this.c = 20;
             return true;
         } else {
@@ -31,8 +31,8 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
         }
     }
 
-    private boolean m() {
-        return this.e != null && this.a((IWorldReader) this.a.world, this.e) ? true : this.l();
+    private boolean n() {
+        return this.e != null && this.a((IWorldReader) this.a.world, this.e) ? true : this.m();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
         BlockPosition blockposition1 = this.a(blockposition, (IBlockAccess) world);
         Random random = this.entity.getRandom();
 
-        if (this.k() && blockposition1 != null) {
+        if (this.l() && blockposition1 != null) {
             Vec3D vec3d;
             double d0;
 

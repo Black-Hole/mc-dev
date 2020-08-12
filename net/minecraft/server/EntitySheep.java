@@ -10,8 +10,8 @@ import javax.annotation.Nullable;
 
 public class EntitySheep extends EntityAnimal implements IShearable {
 
-    private static final DataWatcherObject<Byte> bv = DataWatcher.a(EntitySheep.class, DataWatcherRegistry.a);
-    private static final Map<EnumColor, IMaterial> bw = (Map) SystemUtils.a((Object) Maps.newEnumMap(EnumColor.class), (enummap) -> {
+    private static final DataWatcherObject<Byte> bo = DataWatcher.a(EntitySheep.class, DataWatcherRegistry.a);
+    private static final Map<EnumColor, IMaterial> bp = (Map) SystemUtils.a((Object) Maps.newEnumMap(EnumColor.class), (enummap) -> {
         enummap.put(EnumColor.WHITE, Blocks.WHITE_WOOL);
         enummap.put(EnumColor.ORANGE, Blocks.ORANGE_WOOL);
         enummap.put(EnumColor.MAGENTA, Blocks.MAGENTA_WOOL);
@@ -29,11 +29,11 @@ public class EntitySheep extends EntityAnimal implements IShearable {
         enummap.put(EnumColor.RED, Blocks.RED_WOOL);
         enummap.put(EnumColor.BLACK, Blocks.BLACK_WOOL);
     });
-    private static final Map<EnumColor, float[]> bx = Maps.newEnumMap((Map) Arrays.stream(EnumColor.values()).collect(Collectors.toMap((enumcolor) -> {
+    private static final Map<EnumColor, float[]> bq = Maps.newEnumMap((Map) Arrays.stream(EnumColor.values()).collect(Collectors.toMap((enumcolor) -> {
         return enumcolor;
     }, EntitySheep::c)));
-    private int by;
-    private PathfinderGoalEatTile bz;
+    private int br;
+    private PathfinderGoalEatTile bs;
 
     private static float[] c(EnumColor enumcolor) {
         if (enumcolor == EnumColor.WHITE) {
@@ -52,13 +52,13 @@ public class EntitySheep extends EntityAnimal implements IShearable {
 
     @Override
     protected void initPathfinder() {
-        this.bz = new PathfinderGoalEatTile(this);
+        this.bs = new PathfinderGoalEatTile(this);
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 1.25D));
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
         this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.1D, RecipeItemStack.a(Items.WHEAT), false));
         this.goalSelector.a(4, new PathfinderGoalFollowParent(this, 1.1D));
-        this.goalSelector.a(5, this.bz);
+        this.goalSelector.a(5, this.bs);
         this.goalSelector.a(6, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(7, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
@@ -66,27 +66,27 @@ public class EntitySheep extends EntityAnimal implements IShearable {
 
     @Override
     protected void mobTick() {
-        this.by = this.bz.g();
+        this.br = this.bs.g();
         super.mobTick();
     }
 
     @Override
     public void movementTick() {
         if (this.world.isClientSide) {
-            this.by = Math.max(0, this.by - 1);
+            this.br = Math.max(0, this.br - 1);
         }
 
         super.movementTick();
     }
 
-    public static AttributeProvider.Builder eL() {
+    public static AttributeProvider.Builder eK() {
         return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 8.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.23000000417232513D);
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntitySheep.bv, (byte) 0);
+        this.datawatcher.register(EntitySheep.bo, (byte) 0);
     }
 
     @Override
@@ -158,7 +158,7 @@ public class EntitySheep extends EntityAnimal implements IShearable {
         int i = 1 + this.random.nextInt(3);
 
         for (int j = 0; j < i; ++j) {
-            EntityItem entityitem = this.a((IMaterial) EntitySheep.bw.get(this.getColor()), 1);
+            EntityItem entityitem = this.a((IMaterial) EntitySheep.bp.get(this.getColor()), 1);
 
             if (entityitem != null) {
                 entityitem.setMot(entityitem.getMot().add((double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F), (double) (this.random.nextFloat() * 0.05F), (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F)));
@@ -202,31 +202,31 @@ public class EntitySheep extends EntityAnimal implements IShearable {
     }
 
     @Override
-    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
+    protected void b(BlockPosition blockposition, IBlockData iblockdata) {
         this.playSound(SoundEffects.ENTITY_SHEEP_STEP, 0.15F, 1.0F);
     }
 
     public EnumColor getColor() {
-        return EnumColor.fromColorIndex((Byte) this.datawatcher.get(EntitySheep.bv) & 15);
+        return EnumColor.fromColorIndex((Byte) this.datawatcher.get(EntitySheep.bo) & 15);
     }
 
     public void setColor(EnumColor enumcolor) {
-        byte b0 = (Byte) this.datawatcher.get(EntitySheep.bv);
+        byte b0 = (Byte) this.datawatcher.get(EntitySheep.bo);
 
-        this.datawatcher.set(EntitySheep.bv, (byte) (b0 & 240 | enumcolor.getColorIndex() & 15));
+        this.datawatcher.set(EntitySheep.bo, (byte) (b0 & 240 | enumcolor.getColorIndex() & 15));
     }
 
     public boolean isSheared() {
-        return ((Byte) this.datawatcher.get(EntitySheep.bv) & 16) != 0;
+        return ((Byte) this.datawatcher.get(EntitySheep.bo) & 16) != 0;
     }
 
     public void setSheared(boolean flag) {
-        byte b0 = (Byte) this.datawatcher.get(EntitySheep.bv);
+        byte b0 = (Byte) this.datawatcher.get(EntitySheep.bo);
 
         if (flag) {
-            this.datawatcher.set(EntitySheep.bv, (byte) (b0 | 16));
+            this.datawatcher.set(EntitySheep.bo, (byte) (b0 | 16));
         } else {
-            this.datawatcher.set(EntitySheep.bv, (byte) (b0 & -17));
+            this.datawatcher.set(EntitySheep.bo, (byte) (b0 & -17));
         }
 
     }
@@ -238,9 +238,9 @@ public class EntitySheep extends EntityAnimal implements IShearable {
     }
 
     @Override
-    public EntitySheep createChild(EntityAgeable entityageable) {
+    public EntitySheep createChild(WorldServer worldserver, EntityAgeable entityageable) {
         EntitySheep entitysheep = (EntitySheep) entityageable;
-        EntitySheep entitysheep1 = (EntitySheep) EntityTypes.SHEEP.a(this.world);
+        EntitySheep entitysheep1 = (EntitySheep) EntityTypes.SHEEP.a((World) worldserver);
 
         entitysheep1.setColor(this.a((EntityAnimal) this, (EntityAnimal) entitysheep));
         return entitysheep1;
@@ -257,9 +257,9 @@ public class EntitySheep extends EntityAnimal implements IShearable {
 
     @Nullable
     @Override
-    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        this.setColor(a(generatoraccess.getRandom()));
-        return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
+    public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        this.setColor(a(worldaccess.getRandom()));
+        return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
     private EnumColor a(EntityAnimal entityanimal, EntityAnimal entityanimal1) {

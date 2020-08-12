@@ -8,27 +8,21 @@ import java.util.Random;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-public class EntityPiglin extends EntityMonster implements ICrossbow {
+public class EntityPiglin extends EntityPiglinAbstract implements ICrossbow {
 
-    private static final DataWatcherObject<Boolean> d = DataWatcher.a(EntityPiglin.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Boolean> bv = DataWatcher.a(EntityPiglin.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityPiglin.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Boolean> bx = DataWatcher.a(EntityPiglin.class, DataWatcherRegistry.i);
-    private static final UUID by = UUID.fromString("766bfa64-11f3-11ea-8d71-362b9e155667");
-    private static final AttributeModifier bz = new AttributeModifier(EntityPiglin.by, "Baby speed boost", 0.20000000298023224D, AttributeModifier.Operation.MULTIPLY_BASE);
-    private int bA = 0;
-    private final InventorySubcontainer bB = new InventorySubcontainer(8);
-    private boolean bC = false;
-    protected static final ImmutableList<SensorType<? extends Sensor<? super EntityPiglin>>> b = ImmutableList.of(SensorType.c, SensorType.d, SensorType.b, SensorType.g, SensorType.e, SensorType.l);
-    protected static final ImmutableList<MemoryModuleType<?>> c = ImmutableList.of(MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTABLE_DOORS, MemoryModuleType.OPENED_DOORS, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLINS, MemoryModuleType.NEAREST_ADULT_PIGLINS, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, new MemoryModuleType[]{MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.PATH, MemoryModuleType.ANGRY_AT, MemoryModuleType.UNIVERSAL_ANGER, MemoryModuleType.AVOID_TARGET, MemoryModuleType.ADMIRING_ITEM, MemoryModuleType.ADMIRING_DISABLED, MemoryModuleType.CELEBRATE_LOCATION, MemoryModuleType.DANCING, MemoryModuleType.HUNTED_RECENTLY, MemoryModuleType.NEAREST_VISIBLE_BABY_HOGLIN, MemoryModuleType.NEAREST_VISIBLE_BABY_PIGLIN, MemoryModuleType.NEAREST_VISIBLE_NEMSIS, MemoryModuleType.NEAREST_VISIBLE_ZOMBIFIED, MemoryModuleType.RIDE_TARGET, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.NEAREST_VISIBLE_HUNTABLE_HOGLIN, MemoryModuleType.NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD, MemoryModuleType.NEAREST_PLAYER_HOLDING_WANTED_ITEM, MemoryModuleType.ATE_RECENTLY, MemoryModuleType.NEAREST_REPELLENT});
+    private static final DataWatcherObject<Boolean> bp = DataWatcher.a(EntityPiglin.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> bq = DataWatcher.a(EntityPiglin.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> br = DataWatcher.a(EntityPiglin.class, DataWatcherRegistry.i);
+    private static final UUID bs = UUID.fromString("766bfa64-11f3-11ea-8d71-362b9e155667");
+    private static final AttributeModifier bt = new AttributeModifier(EntityPiglin.bs, "Baby speed boost", 0.20000000298023224D, AttributeModifier.Operation.MULTIPLY_BASE);
+    private final InventorySubcontainer bu = new InventorySubcontainer(8);
+    public boolean cannotHunt = false;
+    protected static final ImmutableList<SensorType<? extends Sensor<? super EntityPiglin>>> d = ImmutableList.of(SensorType.c, SensorType.d, SensorType.b, SensorType.f, SensorType.k);
+    protected static final ImmutableList<MemoryModuleType<?>> bo = ImmutableList.of(MemoryModuleType.LOOK_TARGET, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLINS, MemoryModuleType.NEARBY_ADULT_PIGLINS, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.WALK_TARGET, new MemoryModuleType[]{MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.PATH, MemoryModuleType.ANGRY_AT, MemoryModuleType.UNIVERSAL_ANGER, MemoryModuleType.AVOID_TARGET, MemoryModuleType.ADMIRING_ITEM, MemoryModuleType.TIME_TRYING_TO_REACH_ADMIRE_ITEM, MemoryModuleType.ADMIRING_DISABLED, MemoryModuleType.DISABLE_WALK_TO_ADMIRE_ITEM, MemoryModuleType.CELEBRATE_LOCATION, MemoryModuleType.DANCING, MemoryModuleType.HUNTED_RECENTLY, MemoryModuleType.NEAREST_VISIBLE_BABY_HOGLIN, MemoryModuleType.NEAREST_VISIBLE_NEMSIS, MemoryModuleType.NEAREST_VISIBLE_ZOMBIFIED, MemoryModuleType.RIDE_TARGET, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.NEAREST_VISIBLE_HUNTABLE_HOGLIN, MemoryModuleType.NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD, MemoryModuleType.NEAREST_PLAYER_HOLDING_WANTED_ITEM, MemoryModuleType.ATE_RECENTLY, MemoryModuleType.NEAREST_REPELLENT});
 
-    public EntityPiglin(EntityTypes<? extends EntityMonster> entitytypes, World world) {
+    public EntityPiglin(EntityTypes<? extends EntityPiglinAbstract> entitytypes, World world) {
         super(entitytypes, world);
-        this.setCanPickupLoot(true);
-        ((Navigation) this.getNavigation()).a(true);
         this.f = 5;
-        this.a(PathType.DANGER_FIRE, 16.0F);
-        this.a(PathType.DAMAGE_FIRE, -1.0F);
     }
 
     @Override
@@ -38,62 +32,54 @@ public class EntityPiglin extends EntityMonster implements ICrossbow {
             nbttagcompound.setBoolean("IsBaby", true);
         }
 
-        if (this.eT()) {
-            nbttagcompound.setBoolean("IsImmuneToZombification", true);
-        }
-
-        if (this.bC) {
+        if (this.cannotHunt) {
             nbttagcompound.setBoolean("CannotHunt", true);
         }
 
-        nbttagcompound.setInt("TimeInOverworld", this.bA);
-        nbttagcompound.set("Inventory", this.bB.g());
+        nbttagcompound.set("Inventory", this.bu.g());
     }
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
-        this.a(nbttagcompound.getBoolean("IsBaby"));
-        this.t(nbttagcompound.getBoolean("IsImmuneToZombification"));
+        this.setBaby(nbttagcompound.getBoolean("IsBaby"));
         this.v(nbttagcompound.getBoolean("CannotHunt"));
-        this.bA = nbttagcompound.getInt("TimeInOverworld");
-        this.bB.a(nbttagcompound.getList("Inventory", 10));
+        this.bu.a(nbttagcompound.getList("Inventory", 10));
     }
 
     @Override
     protected void dropDeathLoot(DamageSource damagesource, int i, boolean flag) {
         super.dropDeathLoot(damagesource, i, flag);
-        this.bB.f().forEach(this::a);
+        this.bu.f().forEach(this::a);
     }
 
     protected ItemStack k(ItemStack itemstack) {
-        return this.bB.a(itemstack);
+        return this.bu.a(itemstack);
     }
 
     protected boolean l(ItemStack itemstack) {
-        return this.bB.b(itemstack);
+        return this.bu.b(itemstack);
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityPiglin.d, false);
-        this.datawatcher.register(EntityPiglin.bw, false);
-        this.datawatcher.register(EntityPiglin.bv, false);
-        this.datawatcher.register(EntityPiglin.bx, false);
+        this.datawatcher.register(EntityPiglin.bp, false);
+        this.datawatcher.register(EntityPiglin.bq, false);
+        this.datawatcher.register(EntityPiglin.br, false);
     }
 
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
         super.a(datawatcherobject);
-        if (EntityPiglin.d.equals(datawatcherobject)) {
+        if (EntityPiglin.bp.equals(datawatcherobject)) {
             this.updateSize();
         }
 
     }
 
-    public static AttributeProvider.Builder eL() {
-        return EntityMonster.eS().a(GenericAttributes.MAX_HEALTH, 16.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D);
+    public static AttributeProvider.Builder eT() {
+        return EntityMonster.eR().a(GenericAttributes.MAX_HEALTH, 16.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.3499999940395355D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D);
     }
 
     public static boolean b(EntityTypes<EntityPiglin> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
@@ -102,19 +88,19 @@ public class EntityPiglin extends EntityMonster implements ICrossbow {
 
     @Nullable
     @Override
-    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+    public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         if (enummobspawn != EnumMobSpawn.STRUCTURE) {
-            if (generatoraccess.getRandom().nextFloat() < 0.2F) {
-                this.a(true);
+            if (worldaccess.getRandom().nextFloat() < 0.2F) {
+                this.setBaby(true);
             } else if (this.eM()) {
-                this.setSlot(EnumItemSlot.MAINHAND, this.eU());
+                this.setSlot(EnumItemSlot.MAINHAND, this.eV());
             }
         }
 
         PiglinAI.a(this);
         this.a(difficultydamagescaler);
         this.b(difficultydamagescaler);
-        return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
+        return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
     @Override
@@ -147,7 +133,7 @@ public class EntityPiglin extends EntityMonster implements ICrossbow {
 
     @Override
     protected BehaviorController.b<EntityPiglin> cJ() {
-        return BehaviorController.a((Collection) EntityPiglin.c, (Collection) EntityPiglin.b);
+        return BehaviorController.a((Collection) EntityPiglin.bo, (Collection) EntityPiglin.d);
     }
 
     @Override
@@ -169,7 +155,7 @@ public class EntityPiglin extends EntityMonster implements ICrossbow {
         } else if (!this.world.isClientSide) {
             return PiglinAI.a(this, entityhuman, enumhand);
         } else {
-            boolean flag = PiglinAI.b(this, entityhuman.b(enumhand)) && this.eP() != EntityPiglin.ArmPose.ADMIRING_ITEM;
+            boolean flag = PiglinAI.b(this, entityhuman.b(enumhand)) && this.eN() != EntityPiglinArmPose.ADMIRING_ITEM;
 
             return flag ? EnumInteractionResult.SUCCESS : EnumInteractionResult.PASS;
         }
@@ -181,24 +167,19 @@ public class EntityPiglin extends EntityMonster implements ICrossbow {
     }
 
     @Override
-    public double aX() {
-        return this.isBaby() ? -0.1D : -0.45D;
-    }
-
-    @Override
-    public double aY() {
+    public double bb() {
         return (double) this.getHeight() * 0.92D;
     }
 
     @Override
-    public void a(boolean flag) {
-        this.getDataWatcher().set(EntityPiglin.d, flag);
+    public void setBaby(boolean flag) {
+        this.getDataWatcher().set(EntityPiglin.bp, flag);
         if (!this.world.isClientSide) {
             AttributeModifiable attributemodifiable = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
-            attributemodifiable.removeModifier(EntityPiglin.bz);
+            attributemodifiable.removeModifier(EntityPiglin.bt);
             if (flag) {
-                attributemodifiable.b(EntityPiglin.bz);
+                attributemodifiable.b(EntityPiglin.bt);
             }
         }
 
@@ -206,31 +187,16 @@ public class EntityPiglin extends EntityMonster implements ICrossbow {
 
     @Override
     public boolean isBaby() {
-        return (Boolean) this.getDataWatcher().get(EntityPiglin.d);
-    }
-
-    public boolean eM() {
-        return !this.isBaby();
-    }
-
-    public void t(boolean flag) {
-        this.getDataWatcher().set(EntityPiglin.bv, flag);
-    }
-
-    private boolean eT() {
-        return (Boolean) this.getDataWatcher().get(EntityPiglin.bv);
+        return (Boolean) this.getDataWatcher().get(EntityPiglin.bp);
     }
 
     private void v(boolean flag) {
-        this.bC = flag;
+        this.cannotHunt = flag;
     }
 
-    protected boolean eN() {
-        return !this.bC;
-    }
-
-    public boolean eO() {
-        return !this.world.getDimensionManager().isPiglinSafe() && !this.eT() && !this.isNoAI();
+    @Override
+    protected boolean m() {
+        return !this.cannotHunt;
     }
 
     @Override
@@ -239,17 +205,7 @@ public class EntityPiglin extends EntityMonster implements ICrossbow {
         this.getBehaviorController().a((WorldServer) this.world, (EntityLiving) this);
         this.world.getMethodProfiler().exit();
         PiglinAI.b(this);
-        if (this.eO()) {
-            ++this.bA;
-        } else {
-            this.bA = 0;
-        }
-
-        if (this.bA > 300) {
-            this.a(SoundEffects.ENTITY_PIGLIN_CONVERTED_TO_ZOMBIFIED);
-            this.b((WorldServer) this.world);
-        }
-
+        super.mobTick();
     }
 
     @Override
@@ -257,52 +213,41 @@ public class EntityPiglin extends EntityMonster implements ICrossbow {
         return this.f;
     }
 
-    private void b(WorldServer worldserver) {
-        PiglinAI.c(this);
-        this.bB.f().forEach(this::a);
-        EntityPigZombie entitypigzombie = (EntityPigZombie) this.b(EntityTypes.ZOMBIFIED_PIGLIN);
-
-        entitypigzombie.addEffect(new MobEffect(MobEffects.CONFUSION, 200, 0));
-    }
-
-    @Nullable
     @Override
-    public EntityLiving getGoalTarget() {
-        return (EntityLiving) this.bn.getMemory(MemoryModuleType.ATTACK_TARGET).orElse((Object) null);
+    protected void c(WorldServer worldserver) {
+        PiglinAI.c(this);
+        this.bu.f().forEach(this::a);
+        super.c(worldserver);
     }
 
-    private ItemStack eU() {
+    private ItemStack eV() {
         return (double) this.random.nextFloat() < 0.5D ? new ItemStack(Items.CROSSBOW) : new ItemStack(Items.GOLDEN_SWORD);
     }
 
-    private boolean eV() {
-        return (Boolean) this.datawatcher.get(EntityPiglin.bw);
+    private boolean eW() {
+        return (Boolean) this.datawatcher.get(EntityPiglin.bq);
     }
 
     @Override
     public void b(boolean flag) {
-        this.datawatcher.set(EntityPiglin.bw, flag);
+        this.datawatcher.set(EntityPiglin.bq, flag);
     }
 
     @Override
-    public void V_() {
+    public void U_() {
         this.ticksFarFromPlayer = 0;
     }
 
-    public EntityPiglin.ArmPose eP() {
-        return this.eQ() ? EntityPiglin.ArmPose.DANCING : (PiglinAI.a(this.getItemInOffHand().getItem()) ? EntityPiglin.ArmPose.ADMIRING_ITEM : (this.isAggressive() && this.eW() ? EntityPiglin.ArmPose.ATTACKING_WITH_MELEE_WEAPON : (this.eV() ? EntityPiglin.ArmPose.CROSSBOW_CHARGE : (this.isAggressive() && this.a(Items.CROSSBOW) ? EntityPiglin.ArmPose.CROSSBOW_HOLD : EntityPiglin.ArmPose.DEFAULT))));
+    public EntityPiglinArmPose eN() {
+        return this.eU() ? EntityPiglinArmPose.DANCING : (PiglinAI.a(this.getItemInOffHand().getItem()) ? EntityPiglinArmPose.ADMIRING_ITEM : (this.isAggressive() && this.eO() ? EntityPiglinArmPose.ATTACKING_WITH_MELEE_WEAPON : (this.eW() ? EntityPiglinArmPose.CROSSBOW_CHARGE : (this.isAggressive() && this.a(Items.CROSSBOW) ? EntityPiglinArmPose.CROSSBOW_HOLD : EntityPiglinArmPose.DEFAULT))));
     }
 
-    public boolean eQ() {
-        return (Boolean) this.datawatcher.get(EntityPiglin.bx);
+    public boolean eU() {
+        return (Boolean) this.datawatcher.get(EntityPiglin.br);
     }
 
     public void u(boolean flag) {
-        this.datawatcher.set(EntityPiglin.bx, flag);
-    }
-
-    private boolean eW() {
-        return this.getItemInMainHand().getItem() instanceof ItemToolMaterial;
+        this.datawatcher.set(EntityPiglin.br, flag);
     }
 
     @Override
@@ -351,7 +296,7 @@ public class EntityPiglin extends EntityMonster implements ICrossbow {
 
     @Override
     public boolean i(ItemStack itemstack) {
-        return this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) && PiglinAI.a(this, itemstack);
+        return this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.canPickupLoot() && PiglinAI.a(this, itemstack);
     }
 
     protected boolean o(ItemStack itemstack) {
@@ -410,7 +355,7 @@ public class EntityPiglin extends EntityMonster implements ICrossbow {
     }
 
     @Override
-    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
+    protected void b(BlockPosition blockposition, IBlockData iblockdata) {
         this.playSound(SoundEffects.ENTITY_PIGLIN_STEP, 0.15F, 1.0F);
     }
 
@@ -419,15 +364,7 @@ public class EntityPiglin extends EntityMonster implements ICrossbow {
     }
 
     @Override
-    protected void M() {
-        super.M();
-        PacketDebug.a((EntityLiving) this);
-    }
-
-    public static enum ArmPose {
-
-        ATTACKING_WITH_MELEE_WEAPON, CROSSBOW_HOLD, CROSSBOW_CHARGE, ADMIRING_ITEM, DANCING, DEFAULT;
-
-        private ArmPose() {}
+    protected void eP() {
+        this.a(SoundEffects.ENTITY_PIGLIN_CONVERTED_TO_ZOMBIFIED);
     }
 }

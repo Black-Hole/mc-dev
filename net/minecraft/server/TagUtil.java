@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -12,47 +11,47 @@ import javax.annotation.Nullable;
 
 public class TagUtil<T> {
 
-    private final Tags<T> a = new Tags<>((minecraftkey) -> {
-        return Optional.empty();
-    }, "", "");
-    private Tags<T> b;
-    private final List<TagUtil.a<T>> c;
+    private Tags<T> a = Tags.c();
+    private final List<TagUtil.a<T>> b = Lists.newArrayList();
+    private final Function<ITagRegistry, Tags<T>> c;
 
-    public TagUtil() {
-        this.b = this.a;
-        this.c = Lists.newArrayList();
+    public TagUtil(Function<ITagRegistry, Tags<T>> function) {
+        this.c = function;
     }
 
     public Tag.e<T> a(String s) {
         TagUtil.a<T> tagutil_a = new TagUtil.a<>(new MinecraftKey(s));
 
-        this.c.add(tagutil_a);
+        this.b.add(tagutil_a);
         return tagutil_a;
     }
 
-    public void a(Tags<T> tags) {
-        this.b = tags;
-        this.c.forEach((tagutil_a) -> {
+    public void a(ITagRegistry itagregistry) {
+        Tags<T> tags = (Tags) this.c.apply(itagregistry);
+
+        this.a = tags;
+        this.b.forEach((tagutil_a) -> {
             tagutil_a.a(tags::a);
         });
     }
 
     public Tags<T> b() {
+        return this.a;
+    }
+
+    public List<? extends Tag.e<T>> c() {
         return this.b;
     }
 
-    public List<TagUtil.a<T>> c() {
-        return this.c;
-    }
-
-    public Set<MinecraftKey> b(Tags<T> tags) {
-        Set<MinecraftKey> set = (Set) this.c.stream().map(TagUtil.a::a).collect(Collectors.toSet());
-        ImmutableSet<MinecraftKey> immutableset = ImmutableSet.copyOf(tags.a());
+    public Set<MinecraftKey> b(ITagRegistry itagregistry) {
+        Tags<T> tags = (Tags) this.c.apply(itagregistry);
+        Set<MinecraftKey> set = (Set) this.b.stream().map(TagUtil.a::a).collect(Collectors.toSet());
+        ImmutableSet<MinecraftKey> immutableset = ImmutableSet.copyOf(tags.b());
 
         return Sets.difference(set, immutableset);
     }
 
-    public static class a<T> implements Tag.e<T> {
+    static class a<T> implements Tag.e<T> {
 
         @Nullable
         private Tag<T> b;

@@ -240,6 +240,14 @@ public enum EnumDirection implements INamable {
         return this.m;
     }
 
+    public boolean a(float f) {
+        float f1 = f * 0.017453292F;
+        float f2 = -MathHelper.sin(f1);
+        float f3 = MathHelper.cos(f1);
+
+        return (float) this.m.getX() * f2 + (float) this.m.getZ() * f3 > 0.0F;
+    }
+
     public static enum EnumDirectionLimit implements Iterable<EnumDirection>, Predicate<EnumDirection> {
 
         HORIZONTAL(new EnumDirection[]{EnumDirection.NORTH, EnumDirection.EAST, EnumDirection.SOUTH, EnumDirection.WEST}, new EnumDirection.EnumAxis[]{EnumDirection.EnumAxis.X, EnumDirection.EnumAxis.Z}), VERTICAL(new EnumDirection[]{EnumDirection.UP, EnumDirection.DOWN}, new EnumDirection.EnumAxis[]{EnumDirection.EnumAxis.Y});

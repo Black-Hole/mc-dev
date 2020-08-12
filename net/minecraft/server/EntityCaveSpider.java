@@ -9,7 +9,7 @@ public class EntityCaveSpider extends EntitySpider {
     }
 
     public static AttributeProvider.Builder m() {
-        return EntitySpider.eL().a(GenericAttributes.MAX_HEALTH, 12.0D);
+        return EntitySpider.eK().a(GenericAttributes.MAX_HEALTH, 12.0D);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class EntityCaveSpider extends EntitySpider {
 
     @Nullable
     @Override
-    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+    public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         return groupdataentity;
     }
 

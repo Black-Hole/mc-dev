@@ -8,12 +8,12 @@ public class EntityZombieHusk extends EntityZombie {
         super(entitytypes, world);
     }
 
-    public static boolean b(EntityTypes<EntityZombieHusk> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
-        return c(entitytypes, generatoraccess, enummobspawn, blockposition, random) && (enummobspawn == EnumMobSpawn.SPAWNER || generatoraccess.f(blockposition));
+    public static boolean a(EntityTypes<EntityZombieHusk> entitytypes, WorldAccess worldaccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        return b(entitytypes, worldaccess, enummobspawn, blockposition, random) && (enummobspawn == EnumMobSpawn.SPAWNER || worldaccess.e(blockposition));
     }
 
     @Override
-    protected boolean U_() {
+    protected boolean T_() {
         return false;
     }
 
@@ -51,13 +51,13 @@ public class EntityZombieHusk extends EntityZombie {
     }
 
     @Override
-    protected boolean eO() {
+    protected boolean eN() {
         return true;
     }
 
     @Override
-    protected void eQ() {
-        this.c(EntityTypes.ZOMBIE);
+    protected void eP() {
+        this.b(EntityTypes.ZOMBIE);
         if (!this.isSilent()) {
             this.world.a((EntityHuman) null, 1041, this.getChunkCoordinates(), 0);
         }
@@ -65,7 +65,7 @@ public class EntityZombieHusk extends EntityZombie {
     }
 
     @Override
-    protected ItemStack eN() {
+    protected ItemStack eM() {
         return ItemStack.b;
     }
 }

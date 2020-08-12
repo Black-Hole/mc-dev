@@ -8,7 +8,7 @@ import java.util.Random;
 public abstract class StructureStart<C extends WorldGenFeatureConfiguration> {
 
     public static final StructureStart<?> a = new StructureStart<WorldGenMineshaftConfiguration>(StructureGenerator.MINESHAFT, 0, 0, StructureBoundingBox.a(), 0, 0L) {
-        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenMineshaftConfiguration worldgenmineshaftconfiguration) {}
+        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenMineshaftConfiguration worldgenmineshaftconfiguration) {}
     };
     private final StructureGenerator<C> e;
     protected final List<StructurePiece> b = Lists.newArrayList();
@@ -28,7 +28,7 @@ public abstract class StructureStart<C extends WorldGenFeatureConfiguration> {
         this.c = structureboundingbox;
     }
 
-    public abstract void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, C c0);
+    public abstract void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, C c0);
 
     public StructureBoundingBox c() {
         return this.c;

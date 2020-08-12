@@ -52,7 +52,7 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
 
     List<IChatBaseComponent> getSiblings();
 
-    IChatMutableComponent f();
+    IChatMutableComponent g();
 
     IChatMutableComponent mutableCopy();
 
@@ -166,7 +166,7 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
                                     ChatComponentText chatcomponenttext = (ChatComponentText) aobject[i];
 
                                     if (chatcomponenttext.getChatModifier().g() && chatcomponenttext.getSiblings().isEmpty()) {
-                                        aobject[i] = chatcomponenttext.g();
+                                        aobject[i] = chatcomponenttext.h();
                                     }
                                 }
                             }
@@ -263,7 +263,7 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
             }
 
             if (ichatbasecomponent instanceof ChatComponentText) {
-                jsonobject.addProperty("text", ((ChatComponentText) ichatbasecomponent).g());
+                jsonobject.addProperty("text", ((ChatComponentText) ichatbasecomponent).h());
             } else if (ichatbasecomponent instanceof ChatMessage) {
                 ChatMessage chatmessage = (ChatMessage) ichatbasecomponent;
 
@@ -289,17 +289,17 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
                 ChatComponentScore chatcomponentscore = (ChatComponentScore) ichatbasecomponent;
                 JsonObject jsonobject1 = new JsonObject();
 
-                jsonobject1.addProperty("name", chatcomponentscore.g());
-                jsonobject1.addProperty("objective", chatcomponentscore.i());
+                jsonobject1.addProperty("name", chatcomponentscore.h());
+                jsonobject1.addProperty("objective", chatcomponentscore.j());
                 jsonobject.add("score", jsonobject1);
             } else if (ichatbasecomponent instanceof ChatComponentSelector) {
                 ChatComponentSelector chatcomponentselector = (ChatComponentSelector) ichatbasecomponent;
 
-                jsonobject.addProperty("selector", chatcomponentselector.g());
+                jsonobject.addProperty("selector", chatcomponentselector.h());
             } else if (ichatbasecomponent instanceof ChatComponentKeybind) {
                 ChatComponentKeybind chatcomponentkeybind = (ChatComponentKeybind) ichatbasecomponent;
 
-                jsonobject.addProperty("keybind", chatcomponentkeybind.h());
+                jsonobject.addProperty("keybind", chatcomponentkeybind.i());
             } else {
                 if (!(ichatbasecomponent instanceof ChatComponentNBT)) {
                     throw new IllegalArgumentException("Don't know how to serialize " + ichatbasecomponent + " as a Component");
@@ -307,16 +307,16 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
 
                 ChatComponentNBT chatcomponentnbt = (ChatComponentNBT) ichatbasecomponent;
 
-                jsonobject.addProperty("nbt", chatcomponentnbt.g());
-                jsonobject.addProperty("interpret", chatcomponentnbt.h());
+                jsonobject.addProperty("nbt", chatcomponentnbt.h());
+                jsonobject.addProperty("interpret", chatcomponentnbt.i());
                 if (ichatbasecomponent instanceof ChatComponentNBT.a) {
                     ChatComponentNBT.a chatcomponentnbt_a = (ChatComponentNBT.a) ichatbasecomponent;
 
-                    jsonobject.addProperty("block", chatcomponentnbt_a.i());
+                    jsonobject.addProperty("block", chatcomponentnbt_a.j());
                 } else if (ichatbasecomponent instanceof ChatComponentNBT.b) {
                     ChatComponentNBT.b chatcomponentnbt_b = (ChatComponentNBT.b) ichatbasecomponent;
 
-                    jsonobject.addProperty("entity", chatcomponentnbt_b.i());
+                    jsonobject.addProperty("entity", chatcomponentnbt_b.j());
                 } else {
                     if (!(ichatbasecomponent instanceof ChatComponentNBT.c)) {
                         throw new IllegalArgumentException("Don't know how to serialize " + ichatbasecomponent + " as a Component");
@@ -324,7 +324,7 @@ public interface IChatBaseComponent extends Message, IChatFormatted {
 
                     ChatComponentNBT.c chatcomponentnbt_c = (ChatComponentNBT.c) ichatbasecomponent;
 
-                    jsonobject.addProperty("storage", chatcomponentnbt_c.i().toString());
+                    jsonobject.addProperty("storage", chatcomponentnbt_c.j().toString());
                 }
             }
 

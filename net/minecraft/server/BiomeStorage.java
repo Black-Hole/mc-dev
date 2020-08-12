@@ -12,50 +12,35 @@ public class BiomeStorage implements BiomeManager.Provider {
     public static final int a = 1 << BiomeStorage.e + BiomeStorage.e + BiomeStorage.f;
     public static final int b = (1 << BiomeStorage.e) - 1;
     public static final int c = (1 << BiomeStorage.f) - 1;
-    private final BiomeBase[] g;
+    private final Registry<BiomeBase> g;
+    private final BiomeBase[] h;
 
-    public BiomeStorage(BiomeBase[] abiomebase) {
-        this.g = abiomebase;
+    public BiomeStorage(Registry<BiomeBase> registry, BiomeBase[] abiomebase) {
+        this.g = registry;
+        this.h = abiomebase;
     }
 
-    private BiomeStorage() {
-        this(new BiomeBase[BiomeStorage.a]);
+    private BiomeStorage(Registry<BiomeBase> registry) {
+        this(registry, new BiomeBase[BiomeStorage.a]);
     }
 
-    public BiomeStorage(PacketDataSerializer packetdataserializer) {
-        this();
-
-        for (int i = 0; i < this.g.length; ++i) {
-            int j = packetdataserializer.readInt();
-            BiomeBase biomebase = (BiomeBase) IRegistry.BIOME.fromId(j);
-
-            if (biomebase == null) {
-                BiomeStorage.LOGGER.warn("Received invalid biome id: " + j);
-                this.g[i] = Biomes.PLAINS;
-            } else {
-                this.g[i] = biomebase;
-            }
-        }
-
-    }
-
-    public BiomeStorage(ChunkCoordIntPair chunkcoordintpair, WorldChunkManager worldchunkmanager) {
-        this();
+    public BiomeStorage(Registry<BiomeBase> registry, ChunkCoordIntPair chunkcoordintpair, WorldChunkManager worldchunkmanager) {
+        this(registry);
         int i = chunkcoordintpair.d() >> 2;
         int j = chunkcoordintpair.e() >> 2;
 
-        for (int k = 0; k < this.g.length; ++k) {
+        for (int k = 0; k < this.h.length; ++k) {
             int l = k & BiomeStorage.b;
             int i1 = k >> BiomeStorage.e + BiomeStorage.e & BiomeStorage.c;
             int j1 = k >> BiomeStorage.e & BiomeStorage.b;
 
-            this.g[k] = worldchunkmanager.getBiome(i + l, i1, j + j1);
+            this.h[k] = worldchunkmanager.getBiome(i + l, i1, j + j1);
         }
 
     }
 
-    public BiomeStorage(ChunkCoordIntPair chunkcoordintpair, WorldChunkManager worldchunkmanager, @Nullable int[] aint) {
-        this();
+    public BiomeStorage(Registry<BiomeBase> registry, ChunkCoordIntPair chunkcoordintpair, WorldChunkManager worldchunkmanager, @Nullable int[] aint) {
+        this(registry);
         int i = chunkcoordintpair.d() >> 2;
         int j = chunkcoordintpair.e() >> 2;
         int k;
@@ -65,49 +50,33 @@ public class BiomeStorage implements BiomeManager.Provider {
 
         if (aint != null) {
             for (k = 0; k < aint.length; ++k) {
-                this.g[k] = (BiomeBase) IRegistry.BIOME.fromId(aint[k]);
-                if (this.g[k] == null) {
+                this.h[k] = (BiomeBase) registry.fromId(aint[k]);
+                if (this.h[k] == null) {
                     l = k & BiomeStorage.b;
                     i1 = k >> BiomeStorage.e + BiomeStorage.e & BiomeStorage.c;
                     j1 = k >> BiomeStorage.e & BiomeStorage.b;
-                    this.g[k] = worldchunkmanager.getBiome(i + l, i1, j + j1);
+                    this.h[k] = worldchunkmanager.getBiome(i + l, i1, j + j1);
                 }
             }
         } else {
-            for (k = 0; k < this.g.length; ++k) {
+            for (k = 0; k < this.h.length; ++k) {
                 l = k & BiomeStorage.b;
                 i1 = k >> BiomeStorage.e + BiomeStorage.e & BiomeStorage.c;
                 j1 = k >> BiomeStorage.e & BiomeStorage.b;
-                this.g[k] = worldchunkmanager.getBiome(i + l, i1, j + j1);
+                this.h[k] = worldchunkmanager.getBiome(i + l, i1, j + j1);
             }
         }
 
     }
 
     public int[] a() {
-        int[] aint = new int[this.g.length];
+        int[] aint = new int[this.h.length];
 
-        for (int i = 0; i < this.g.length; ++i) {
-            aint[i] = IRegistry.BIOME.a((Object) this.g[i]);
+        for (int i = 0; i < this.h.length; ++i) {
+            aint[i] = this.g.a(this.h[i]);
         }
 
         return aint;
-    }
-
-    public void a(PacketDataSerializer packetdataserializer) {
-        BiomeBase[] abiomebase = this.g;
-        int i = abiomebase.length;
-
-        for (int j = 0; j < i; ++j) {
-            BiomeBase biomebase = abiomebase[j];
-
-            packetdataserializer.writeInt(IRegistry.BIOME.a((Object) biomebase));
-        }
-
-    }
-
-    public BiomeStorage b() {
-        return new BiomeStorage((BiomeBase[]) this.g.clone());
     }
 
     @Override
@@ -116,6 +85,6 @@ public class BiomeStorage implements BiomeManager.Provider {
         int i1 = MathHelper.clamp(j, 0, BiomeStorage.c);
         int j1 = k & BiomeStorage.b;
 
-        return this.g[i1 << BiomeStorage.e + BiomeStorage.e | j1 << BiomeStorage.e | l];
+        return this.h[i1 << BiomeStorage.e + BiomeStorage.e | j1 << BiomeStorage.e | l];
     }
 }

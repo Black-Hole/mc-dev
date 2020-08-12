@@ -19,7 +19,7 @@ public abstract class BlockDirtSnowSpreadable extends BlockDirtSnow {
         } else {
             int i = LightEngineLayer.a(iworldreader, iblockdata, blockposition, iblockdata1, blockposition1, EnumDirection.UP, iblockdata1.b((IBlockAccess) iworldreader, blockposition1));
 
-            return i < iworldreader.H();
+            return i < iworldreader.J();
         }
     }
 

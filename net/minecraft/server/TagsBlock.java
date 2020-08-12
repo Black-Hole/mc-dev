@@ -1,10 +1,10 @@
 package net.minecraft.server;
 
-import java.util.Set;
+import java.util.List;
 
-public class TagsBlock {
+public final class TagsBlock {
 
-    private static final TagUtil<Block> aF = new TagUtil<>();
+    protected static final TagUtil<Block> a = TagStatic.a(new MinecraftKey("block"), ITagRegistry::getBlockTags);
     public static final Tag.e<Block> WOOL = a("wool");
     public static final Tag.e<Block> PLANKS = a("planks");
     public static final Tag.e<Block> STONE_BRICKS = a("stone_bricks");
@@ -83,25 +83,24 @@ public class TagsBlock {
     public static final Tag.e<Block> CAMPFIRES = a("campfires");
     public static final Tag.e<Block> GUARDED_BY_PIGLINS = a("guarded_by_piglins");
     public static final Tag.e<Block> PREVENT_MOB_SPAWNING_INSIDE = a("prevent_mob_spawning_inside");
-    public static final Tag.e<Block> aA = a("fence_gates");
-    public static final Tag.e<Block> aB = a("unstable_bottom_center");
-    public static final Tag.e<Block> aC = a("infiniburn_overworld");
-    public static final Tag.e<Block> aD = a("infiniburn_nether");
-    public static final Tag.e<Block> aE = a("infiniburn_end");
+    public static final Tag.e<Block> aB = a("fence_gates");
+    public static final Tag.e<Block> aC = a("unstable_bottom_center");
+    public static final Tag.e<Block> aD = a("mushroom_grow_block");
+    public static final Tag.e<Block> aE = a("infiniburn_overworld");
+    public static final Tag.e<Block> aF = a("infiniburn_nether");
+    public static final Tag.e<Block> aG = a("infiniburn_end");
+    public static final Tag.e<Block> aH = a("base_stone_overworld");
+    public static final Tag.e<Block> aI = a("base_stone_nether");
 
     private static Tag.e<Block> a(String s) {
-        return TagsBlock.aF.a(s);
+        return TagsBlock.a.a(s);
     }
 
-    public static void a(Tags<Block> tags) {
-        TagsBlock.aF.a(tags);
+    public static Tags<Block> a() {
+        return TagsBlock.a.b();
     }
 
-    public static Tags<Block> b() {
-        return TagsBlock.aF.b();
-    }
-
-    public static Set<MinecraftKey> b(Tags<Block> tags) {
-        return TagsBlock.aF.b(tags);
+    public static List<? extends Tag.e<Block>> b() {
+        return TagsBlock.a.c();
     }
 }

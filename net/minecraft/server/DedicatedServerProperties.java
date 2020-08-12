@@ -39,6 +39,7 @@ public class DedicatedServerProperties extends PropertyManager<DedicatedServerPr
     public final int opPermissionLevel;
     public final int functionPermissionLevel;
     public final long maxTickTime;
+    public final int rateLimit;
     public final int viewDistance;
     public final int maxPlayers;
     public final int networkCompressionThreshold;
@@ -53,7 +54,7 @@ public class DedicatedServerProperties extends PropertyManager<DedicatedServerPr
     public final PropertyManager<DedicatedServerProperties>.EditableProperty<Boolean> whiteList;
     public final GeneratorSettings generatorSettings;
 
-    public DedicatedServerProperties(Properties properties) {
+    public DedicatedServerProperties(Properties properties, IRegistryCustom iregistrycustom) {
         super(properties);
         this.difficulty = (EnumDifficulty) this.a("difficulty", a(EnumDifficulty::getById, EnumDifficulty::a), EnumDifficulty::c, EnumDifficulty.EASY);
         this.gamemode = (EnumGamemode) this.a("gamemode", a(EnumGamemode::getById, EnumGamemode::a), EnumGamemode::b, EnumGamemode.SURVIVAL);
@@ -84,6 +85,7 @@ public class DedicatedServerProperties extends PropertyManager<DedicatedServerPr
         this.opPermissionLevel = this.getInt("op-permission-level", 4);
         this.functionPermissionLevel = this.getInt("function-permission-level", 2);
         this.maxTickTime = this.getLong("max-tick-time", TimeUnit.MINUTES.toMillis(1L));
+        this.rateLimit = this.getInt("rate-limit", 0);
         this.viewDistance = this.getInt("view-distance", 10);
         this.maxPlayers = this.getInt("max-players", 20);
         this.networkCompressionThreshold = this.getInt("network-compression-threshold", 256);
@@ -100,15 +102,15 @@ public class DedicatedServerProperties extends PropertyManager<DedicatedServerPr
         }, 100);
         this.playerIdleTimeout = this.b("player-idle-timeout", 0);
         this.whiteList = this.b("white-list", false);
-        this.generatorSettings = GeneratorSettings.a(properties);
+        this.generatorSettings = GeneratorSettings.a(iregistrycustom, properties);
     }
 
-    public static DedicatedServerProperties load(java.nio.file.Path java_nio_file_path) {
-        return new DedicatedServerProperties(loadPropertiesFile(java_nio_file_path));
+    public static DedicatedServerProperties load(IRegistryCustom iregistrycustom, java.nio.file.Path java_nio_file_path) {
+        return new DedicatedServerProperties(loadPropertiesFile(java_nio_file_path), iregistrycustom);
     }
 
     @Override
-    protected DedicatedServerProperties reload(Properties properties) {
-        return new DedicatedServerProperties(properties);
+    protected DedicatedServerProperties reload(IRegistryCustom iregistrycustom, Properties properties) {
+        return new DedicatedServerProperties(properties, iregistrycustom);
     }
 }

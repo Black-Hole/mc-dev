@@ -14,11 +14,11 @@ public class BehaviorNearestVillage extends Behavior<EntityVillager> {
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
-        return !worldserver.b_(entityvillager.getChunkCoordinates());
+        return !worldserver.a_(entityvillager.getChunkCoordinates());
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        VillagePlace villageplace = worldserver.x();
+        VillagePlace villageplace = worldserver.y();
         int j = villageplace.a(SectionPosition.a(entityvillager.getChunkCoordinates()));
         Vec3D vec3d = null;
 

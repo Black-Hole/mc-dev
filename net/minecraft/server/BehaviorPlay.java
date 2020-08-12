@@ -41,7 +41,7 @@ public class BehaviorPlay extends Behavior<EntityCreature> {
         for (int i = 0; i < 10; ++i) {
             Vec3D vec3d = RandomPositionGenerator.b(entitycreature, 20, 8);
 
-            if (vec3d != null && worldserver.b_(new BlockPosition(vec3d))) {
+            if (vec3d != null && worldserver.a_(new BlockPosition(vec3d))) {
                 entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(vec3d, 0.6F, 0)));
                 return;
             }

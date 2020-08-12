@@ -81,8 +81,8 @@ public class RandomPositionGenerator {
         Random random = entitycreature.getRandom();
         boolean flag3;
 
-        if (entitycreature.eA()) {
-            flag3 = entitycreature.ex().a((IPosition) entitycreature.getPositionVector(), (double) (entitycreature.ey() + (float) i) + 1.0D);
+        if (entitycreature.ez()) {
+            flag3 = entitycreature.ew().a((IPosition) entitycreature.getPositionVector(), (double) (entitycreature.ex() + (float) i) + 1.0D);
         } else {
             flag3 = false;
         }
@@ -100,8 +100,8 @@ public class RandomPositionGenerator {
                 int i2 = blockposition1.getZ();
                 BlockPosition blockposition2;
 
-                if (entitycreature.eA() && i > 1) {
-                    blockposition2 = entitycreature.ex();
+                if (entitycreature.ez() && i > 1) {
+                    blockposition2 = entitycreature.ew();
                     if (entitycreature.locX() > (double) blockposition2.getX()) {
                         k1 -= random.nextInt(i / 2);
                     } else {

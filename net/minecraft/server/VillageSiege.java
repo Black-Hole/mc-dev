@@ -2,19 +2,22 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import javax.annotation.Nullable;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class VillageSiege implements MobSpawner {
 
-    private boolean a;
-    private VillageSiege.State b;
-    private int c;
+    private static final Logger LOGGER = LogManager.getLogger();
+    private boolean b;
+    private VillageSiege.State c;
     private int d;
     private int e;
     private int f;
     private int g;
+    private int h;
 
     public VillageSiege() {
-        this.b = VillageSiege.State.SIEGE_DONE;
+        this.c = VillageSiege.State.SIEGE_DONE;
     }
 
     @Override
@@ -23,38 +26,38 @@ public class VillageSiege implements MobSpawner {
             float f = worldserver.f(0.0F);
 
             if ((double) f == 0.5D) {
-                this.b = worldserver.random.nextInt(10) == 0 ? VillageSiege.State.SIEGE_TONIGHT : VillageSiege.State.SIEGE_DONE;
+                this.c = worldserver.random.nextInt(10) == 0 ? VillageSiege.State.SIEGE_TONIGHT : VillageSiege.State.SIEGE_DONE;
             }
 
-            if (this.b == VillageSiege.State.SIEGE_DONE) {
+            if (this.c == VillageSiege.State.SIEGE_DONE) {
                 return 0;
             } else {
-                if (!this.a) {
+                if (!this.b) {
                     if (!this.a(worldserver)) {
                         return 0;
                     }
 
-                    this.a = true;
+                    this.b = true;
                 }
 
-                if (this.d > 0) {
-                    --this.d;
+                if (this.e > 0) {
+                    --this.e;
                     return 0;
                 } else {
-                    this.d = 2;
-                    if (this.c > 0) {
+                    this.e = 2;
+                    if (this.d > 0) {
                         this.b(worldserver);
-                        --this.c;
+                        --this.d;
                     } else {
-                        this.b = VillageSiege.State.SIEGE_DONE;
+                        this.c = VillageSiege.State.SIEGE_DONE;
                     }
 
                     return 1;
                 }
             }
         } else {
-            this.b = VillageSiege.State.SIEGE_DONE;
-            this.a = false;
+            this.c = VillageSiege.State.SIEGE_DONE;
+            this.b = false;
             return 0;
         }
     }
@@ -68,16 +71,16 @@ public class VillageSiege implements MobSpawner {
             if (!entityhuman.isSpectator()) {
                 BlockPosition blockposition = entityhuman.getChunkCoordinates();
 
-                if (worldserver.b_(blockposition) && worldserver.getBiome(blockposition).y() != BiomeBase.Geography.MUSHROOM) {
+                if (worldserver.a_(blockposition) && worldserver.getBiome(blockposition).t() != BiomeBase.Geography.MUSHROOM) {
                     for (int i = 0; i < 10; ++i) {
                         float f = worldserver.random.nextFloat() * 6.2831855F;
 
-                        this.e = blockposition.getX() + MathHelper.d(MathHelper.cos(f) * 32.0F);
-                        this.f = blockposition.getY();
-                        this.g = blockposition.getZ() + MathHelper.d(MathHelper.sin(f) * 32.0F);
-                        if (this.a(worldserver, new BlockPosition(this.e, this.f, this.g)) != null) {
-                            this.d = 0;
-                            this.c = 20;
+                        this.f = blockposition.getX() + MathHelper.d(MathHelper.cos(f) * 32.0F);
+                        this.g = blockposition.getY();
+                        this.h = blockposition.getZ() + MathHelper.d(MathHelper.sin(f) * 32.0F);
+                        if (this.a(worldserver, new BlockPosition(this.f, this.g, this.h)) != null) {
+                            this.e = 0;
+                            this.d = 20;
                             break;
                         }
                     }
@@ -91,7 +94,7 @@ public class VillageSiege implements MobSpawner {
     }
 
     private void b(WorldServer worldserver) {
-        Vec3D vec3d = this.a(worldserver, new BlockPosition(this.e, this.f, this.g));
+        Vec3D vec3d = this.a(worldserver, new BlockPosition(this.f, this.g, this.h));
 
         if (vec3d != null) {
             EntityZombie entityzombie;
@@ -100,12 +103,12 @@ public class VillageSiege implements MobSpawner {
                 entityzombie = new EntityZombie(worldserver);
                 entityzombie.prepare(worldserver, worldserver.getDamageScaler(entityzombie.getChunkCoordinates()), EnumMobSpawn.EVENT, (GroupDataEntity) null, (NBTTagCompound) null);
             } catch (Exception exception) {
-                exception.printStackTrace();
+                VillageSiege.LOGGER.warn("Failed to create zombie for village siege at {}", vec3d, exception);
                 return;
             }
 
             entityzombie.setPositionRotation(vec3d.x, vec3d.y, vec3d.z, worldserver.random.nextFloat() * 360.0F, 0.0F);
-            worldserver.addEntity(entityzombie);
+            worldserver.addAllEntities(entityzombie);
         }
     }
 
@@ -117,7 +120,7 @@ public class VillageSiege implements MobSpawner {
             int l = worldserver.a(HeightMap.Type.WORLD_SURFACE, j, k);
             BlockPosition blockposition1 = new BlockPosition(j, l, k);
 
-            if (worldserver.b_(blockposition1) && EntityMonster.c(EntityTypes.ZOMBIE, worldserver, EnumMobSpawn.EVENT, blockposition1, worldserver.random)) {
+            if (worldserver.a_(blockposition1) && EntityMonster.b(EntityTypes.ZOMBIE, worldserver, EnumMobSpawn.EVENT, blockposition1, worldserver.random)) {
                 return Vec3D.c((BaseBlockPosition) blockposition1);
             }
         }

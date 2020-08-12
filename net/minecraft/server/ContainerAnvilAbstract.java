@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public abstract class ContainerAnvilAbstract extends Container {
 
-    protected final IInventory resultInventory = new InventoryCraftResult();
+    protected final InventoryCraftResult resultInventory = new InventoryCraftResult();
     protected final IInventory repairInventory = new InventorySubcontainer(2) {
         @Override
         public void update() {
@@ -80,7 +80,7 @@ public abstract class ContainerAnvilAbstract extends Container {
     @Override
     public boolean canUse(EntityHuman entityhuman) {
         return (Boolean) this.containerAccess.a((world, blockposition) -> {
-            return !this.a(world.getType(blockposition)) ? false : entityhuman.g((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) <= 64.0D;
+            return !this.a(world.getType(blockposition)) ? false : entityhuman.h((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) <= 64.0D;
         }, true);
     }
 

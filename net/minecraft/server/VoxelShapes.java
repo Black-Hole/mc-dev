@@ -105,7 +105,7 @@ public final class VoxelShapes {
 
     public static VoxelShape b(VoxelShape voxelshape, VoxelShape voxelshape1, OperatorBoolean operatorboolean) {
         if (operatorboolean.apply(false, false)) {
-            throw (IllegalArgumentException) SystemUtils.c(new IllegalArgumentException());
+            throw (IllegalArgumentException) SystemUtils.c((Throwable) (new IllegalArgumentException()));
         } else if (voxelshape == voxelshape1) {
             return operatorboolean.apply(true, true) ? voxelshape : a();
         } else {
@@ -129,7 +129,7 @@ public final class VoxelShapes {
 
     public static boolean c(VoxelShape voxelshape, VoxelShape voxelshape1, OperatorBoolean operatorboolean) {
         if (operatorboolean.apply(false, false)) {
-            throw (IllegalArgumentException) SystemUtils.c(new IllegalArgumentException());
+            throw (IllegalArgumentException) SystemUtils.c((Throwable) (new IllegalArgumentException()));
         } else if (voxelshape == voxelshape1) {
             return operatorboolean.apply(true, true);
         } else if (voxelshape.isEmpty()) {

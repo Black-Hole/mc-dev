@@ -16,7 +16,7 @@ public class EntityLightning extends Entity {
 
     public EntityLightning(EntityTypes<? extends EntityLightning> entitytypes, World world) {
         super(entitytypes, world);
-        this.ac = true;
+        this.Y = true;
         this.lifeTicks = 2;
         this.b = this.random.nextLong();
         this.d = this.random.nextInt(3) + 1;
@@ -62,7 +62,7 @@ public class EntityLightning extends Entity {
         }
 
         if (this.lifeTicks >= 0) {
-            if (this.world.isClientSide) {
+            if (!(this.world instanceof WorldServer)) {
                 this.world.c(2);
             } else if (!this.isEffect) {
                 double d0 = 3.0D;
@@ -72,7 +72,7 @@ public class EntityLightning extends Entity {
                 while (iterator.hasNext()) {
                     Entity entity = (Entity) iterator.next();
 
-                    entity.onLightningStrike(this);
+                    entity.onLightningStrike((WorldServer) this.world, this);
                 }
 
                 if (this.f != null) {
@@ -114,7 +114,7 @@ public class EntityLightning extends Entity {
     protected void saveData(NBTTagCompound nbttagcompound) {}
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

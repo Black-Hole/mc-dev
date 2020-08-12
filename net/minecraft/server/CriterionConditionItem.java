@@ -127,7 +127,7 @@ public class CriterionConditionItem {
                 if (jsonobject.has("tag")) {
                     MinecraftKey minecraftkey1 = new MinecraftKey(ChatDeserializer.h(jsonobject, "tag"));
 
-                    tag = TagsInstance.e().b().a(minecraftkey1);
+                    tag = TagsInstance.a().getItemTags().a(minecraftkey1);
                     if (tag == null) {
                         throw new JsonSyntaxException("Unknown item tag '" + minecraftkey1 + "'");
                     }
@@ -164,7 +164,7 @@ public class CriterionConditionItem {
             }
 
             if (this.b != null) {
-                jsonobject.addProperty("tag", TagsInstance.e().b().b(this.b).toString());
+                jsonobject.addProperty("tag", TagsInstance.a().getItemTags().b(this.b).toString());
             }
 
             jsonobject.add("count", this.d.d());

@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
 import java.util.Random;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,12 +35,12 @@ public class RemoteStatusListener extends RemoteConnectionThread {
     private long q;
     private final IMinecraftServer r;
 
-    public RemoteStatusListener(IMinecraftServer iminecraftserver) {
+    private RemoteStatusListener(IMinecraftServer iminecraftserver, int i) {
         super("Query Listener");
         this.r = iminecraftserver;
-        this.f = iminecraftserver.getDedicatedServerProperties().queryPort;
+        this.f = i;
         this.n = iminecraftserver.h_();
-        this.g = iminecraftserver.o();
+        this.g = iminecraftserver.p();
         this.i = iminecraftserver.i_();
         this.h = iminecraftserver.getMaxPlayers();
         this.j = iminecraftserver.getWorld();
@@ -61,6 +62,20 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
         this.p = new RemoteStatusReply(1460);
         this.o = Maps.newHashMap();
+    }
+
+    @Nullable
+    public static RemoteStatusListener a(IMinecraftServer iminecraftserver) {
+        int i = iminecraftserver.getDedicatedServerProperties().queryPort;
+
+        if (0 < i && 65535 >= i) {
+            RemoteStatusListener remotestatuslistener = new RemoteStatusListener(iminecraftserver, i);
+
+            return !remotestatuslistener.a() ? null : remotestatuslistener;
+        } else {
+            RemoteStatusListener.LOGGER.warn("Invalid query port {} found in server.properties (queries disabled)", i);
+            return null;
+        }
     }
 
     private void a(byte[] abyte, DatagramPacket datagrampacket) throws IOException {
@@ -233,17 +248,8 @@ public class RemoteStatusListener extends RemoteConnectionThread {
     }
 
     @Override
-    public void a() {
-        if (!this.a) {
-            if (0 < this.f && 65535 >= this.f) {
-                if (this.e()) {
-                    super.a();
-                }
-
-            } else {
-                RemoteStatusListener.LOGGER.warn("Invalid query port {} found in server.properties (queries disabled)", this.f);
-            }
-        }
+    public boolean a() {
+        return this.a ? true : (!this.e() ? false : super.a());
     }
 
     private void a(Exception exception) {

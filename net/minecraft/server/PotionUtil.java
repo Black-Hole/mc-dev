@@ -8,6 +8,8 @@ import javax.annotation.Nullable;
 
 public class PotionUtil {
 
+    private static final IChatMutableComponent a = (new ChatMessage("effect.none")).a(EnumChatFormat.GRAY);
+
     public static List<MobEffect> getEffects(ItemStack itemstack) {
         return a(itemstack.getTag());
     }

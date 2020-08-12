@@ -1,5 +1,8 @@
 package net.minecraft.server;
 
+import java.util.function.Function;
+import javax.annotation.Nullable;
+
 public class DismountUtil {
 
     public static int[][] a(EnumDirection enumdirection) {
@@ -14,7 +17,65 @@ public class DismountUtil {
         return !Double.isInfinite(d0) && d0 < 1.0D;
     }
 
-    public static boolean a(World world, EntityLiving entityliving, AxisAlignedBB axisalignedbb) {
-        return world.b((Entity) entityliving, axisalignedbb).allMatch(VoxelShape::isEmpty);
+    public static boolean a(ICollisionAccess icollisionaccess, EntityLiving entityliving, AxisAlignedBB axisalignedbb) {
+        return icollisionaccess.b(entityliving, axisalignedbb).allMatch(VoxelShape::isEmpty);
+    }
+
+    @Nullable
+    public static Vec3D a(ICollisionAccess icollisionaccess, double d0, double d1, double d2, EntityLiving entityliving, EntityPose entitypose) {
+        if (a(d1)) {
+            Vec3D vec3d = new Vec3D(d0, d1, d2);
+
+            if (a(icollisionaccess, entityliving, entityliving.f(entitypose).c(vec3d))) {
+                return vec3d;
+            }
+        }
+
+        return null;
+    }
+
+    public static VoxelShape a(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        IBlockData iblockdata = iblockaccess.getType(blockposition);
+
+        return !iblockdata.a((Tag) TagsBlock.CLIMBABLE) && (!(iblockdata.getBlock() instanceof BlockTrapdoor) || !(Boolean) iblockdata.get(BlockTrapdoor.OPEN)) ? iblockdata.getCollisionShape(iblockaccess, blockposition) : VoxelShapes.a();
+    }
+
+    public static double a(BlockPosition blockposition, int i, Function<BlockPosition, VoxelShape> function) {
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i();
+        int j = 0;
+
+        while (j < i) {
+            VoxelShape voxelshape = (VoxelShape) function.apply(blockposition_mutableblockposition);
+
+            if (!voxelshape.isEmpty()) {
+                return (double) (blockposition.getY() + j) + voxelshape.b(EnumDirection.EnumAxis.Y);
+            }
+
+            ++j;
+            blockposition_mutableblockposition.c(EnumDirection.UP);
+        }
+
+        return Double.POSITIVE_INFINITY;
+    }
+
+    @Nullable
+    public static Vec3D a(EntityTypes<?> entitytypes, ICollisionAccess icollisionaccess, BlockPosition blockposition, boolean flag) {
+        if (flag && entitytypes.a(icollisionaccess.getType(blockposition))) {
+            return null;
+        } else {
+            double d0 = icollisionaccess.a(a((IBlockAccess) icollisionaccess, blockposition), () -> {
+                return a((IBlockAccess) icollisionaccess, blockposition.down());
+            });
+
+            if (!a(d0)) {
+                return null;
+            } else if (flag && d0 <= 0.0D && entitytypes.a(icollisionaccess.getType(blockposition.down()))) {
+                return null;
+            } else {
+                Vec3D vec3d = Vec3D.a((BaseBlockPosition) blockposition, d0);
+
+                return icollisionaccess.b((Entity) null, entitytypes.l().a(vec3d)).allMatch(VoxelShape::isEmpty) ? vec3d : null;
+            }
+        }
     }
 }

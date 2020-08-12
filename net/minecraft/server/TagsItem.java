@@ -1,10 +1,10 @@
 package net.minecraft.server;
 
-import java.util.Set;
+import java.util.List;
 
-public class TagsItem {
+public final class TagsItem {
 
-    private static final TagUtil<Item> ac = new TagUtil<>();
+    protected static final TagUtil<Item> a = TagStatic.a(new MinecraftKey("item"), ITagRegistry::getItemTags);
     public static final Tag.e<Item> WOOL = a("wool");
     public static final Tag.e<Item> PLANKS = a("planks");
     public static final Tag.e<Item> STONE_BRICKS = a("stone_bricks");
@@ -58,21 +58,17 @@ public class TagsItem {
     public static final Tag.e<Item> LECTERN_BOOKS = a("lectern_books");
     public static final Tag.e<Item> BEACON_PAYMENT_ITEMS = a("beacon_payment_items");
     public static final Tag.e<Item> STONE_TOOL_MATERIALS = a("stone_tool_materials");
-    public static final Tag.e<Item> FURNACE_MATERIALS = a("furnace_materials");
+    public static final Tag.e<Item> STONE_CRAFTING_MATERIALS = a("stone_crafting_materials");
 
     private static Tag.e<Item> a(String s) {
-        return TagsItem.ac.a(s);
+        return TagsItem.a.a(s);
     }
 
-    public static void a(Tags<Item> tags) {
-        TagsItem.ac.a(tags);
+    public static Tags<Item> a() {
+        return TagsItem.a.b();
     }
 
-    public static Tags<Item> b() {
-        return TagsItem.ac.b();
-    }
-
-    public static Set<MinecraftKey> b(Tags<Item> tags) {
-        return TagsItem.ac.b(tags);
+    public static List<? extends Tag.e<Item>> b() {
+        return TagsItem.a.c();
     }
 }

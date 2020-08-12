@@ -55,7 +55,7 @@ public class PathfinderGoalAvoidTarget<T extends EntityLiving> extends Pathfinde
 
             if (vec3d == null) {
                 return false;
-            } else if (this.b.g(vec3d.x, vec3d.y, vec3d.z) < this.b.h((Entity) this.a)) {
+            } else if (this.b.h(vec3d.x, vec3d.y, vec3d.z) < this.b.h((Entity) this.a)) {
                 return false;
             } else {
                 this.d = this.e.a(vec3d.x, vec3d.y, vec3d.z, 0);

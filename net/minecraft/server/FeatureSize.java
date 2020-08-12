@@ -11,7 +11,7 @@ public abstract class FeatureSize {
     protected final OptionalInt b;
 
     protected static <S extends FeatureSize> RecordCodecBuilder<S, OptionalInt> a() {
-        return Codec.INT.optionalFieldOf("min_clipped_height").xmap((optional) -> {
+        return Codec.intRange(0, 80).optionalFieldOf("min_clipped_height").xmap((optional) -> {
             return (OptionalInt) optional.map(OptionalInt::of).orElse(OptionalInt.empty());
         }, (optionalint) -> {
             return optionalint.isPresent() ? Optional.of(optionalint.getAsInt()) : Optional.empty();

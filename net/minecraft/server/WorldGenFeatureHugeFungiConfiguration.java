@@ -14,14 +14,14 @@ public class WorldGenFeatureHugeFungiConfiguration implements WorldGenFeatureCon
             return worldgenfeaturehugefungiconfiguration.h;
         }), IBlockData.b.fieldOf("decor_state").forGetter((worldgenfeaturehugefungiconfiguration) -> {
             return worldgenfeaturehugefungiconfiguration.i;
-        }), Codec.BOOL.fieldOf("planted").withDefault(false).forGetter((worldgenfeaturehugefungiconfiguration) -> {
+        }), Codec.BOOL.fieldOf("planted").orElse(false).forGetter((worldgenfeaturehugefungiconfiguration) -> {
             return worldgenfeaturehugefungiconfiguration.j;
         })).apply(instance, WorldGenFeatureHugeFungiConfiguration::new);
     });
-    public static final WorldGenFeatureHugeFungiConfiguration b = new WorldGenFeatureHugeFungiConfiguration(Blocks.CRIMSON_NYLIUM.getBlockData(), Blocks.CRIMSON_STEM.getBlockData(), Blocks.NETHER_WART_BLOCK.getBlockData(), Blocks.SHROOMLIGHT.getBlockData(), true);
-    public static final WorldGenFeatureHugeFungiConfiguration c = new WorldGenFeatureHugeFungiConfiguration(WorldGenFeatureHugeFungiConfiguration.b.f, WorldGenFeatureHugeFungiConfiguration.b.g, WorldGenFeatureHugeFungiConfiguration.b.h, WorldGenFeatureHugeFungiConfiguration.b.i, false);
-    public static final WorldGenFeatureHugeFungiConfiguration d = new WorldGenFeatureHugeFungiConfiguration(Blocks.WARPED_NYLIUM.getBlockData(), Blocks.WARPED_STEM.getBlockData(), Blocks.WARPED_WART_BLOCK.getBlockData(), Blocks.SHROOMLIGHT.getBlockData(), true);
-    public static final WorldGenFeatureHugeFungiConfiguration e = new WorldGenFeatureHugeFungiConfiguration(WorldGenFeatureHugeFungiConfiguration.d.f, WorldGenFeatureHugeFungiConfiguration.d.g, WorldGenFeatureHugeFungiConfiguration.d.h, WorldGenFeatureHugeFungiConfiguration.d.i, false);
+    public static final WorldGenFeatureHugeFungiConfiguration CRIMSON_FUNGUS = new WorldGenFeatureHugeFungiConfiguration(Blocks.CRIMSON_NYLIUM.getBlockData(), Blocks.CRIMSON_STEM.getBlockData(), Blocks.NETHER_WART_BLOCK.getBlockData(), Blocks.SHROOMLIGHT.getBlockData(), true);
+    public static final WorldGenFeatureHugeFungiConfiguration c = new WorldGenFeatureHugeFungiConfiguration(WorldGenFeatureHugeFungiConfiguration.CRIMSON_FUNGUS.f, WorldGenFeatureHugeFungiConfiguration.CRIMSON_FUNGUS.g, WorldGenFeatureHugeFungiConfiguration.CRIMSON_FUNGUS.h, WorldGenFeatureHugeFungiConfiguration.CRIMSON_FUNGUS.i, false);
+    public static final WorldGenFeatureHugeFungiConfiguration WARPED_FUNGUS = new WorldGenFeatureHugeFungiConfiguration(Blocks.WARPED_NYLIUM.getBlockData(), Blocks.WARPED_STEM.getBlockData(), Blocks.WARPED_WART_BLOCK.getBlockData(), Blocks.SHROOMLIGHT.getBlockData(), true);
+    public static final WorldGenFeatureHugeFungiConfiguration e = new WorldGenFeatureHugeFungiConfiguration(WorldGenFeatureHugeFungiConfiguration.WARPED_FUNGUS.f, WorldGenFeatureHugeFungiConfiguration.WARPED_FUNGUS.g, WorldGenFeatureHugeFungiConfiguration.WARPED_FUNGUS.h, WorldGenFeatureHugeFungiConfiguration.WARPED_FUNGUS.i, false);
     public final IBlockData f;
     public final IBlockData g;
     public final IBlockData h;

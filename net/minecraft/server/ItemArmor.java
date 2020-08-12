@@ -72,7 +72,7 @@ public class ItemArmor extends Item implements ItemWearable {
         return this.d.a();
     }
 
-    public ArmorMaterial ad_() {
+    public ArmorMaterial ab_() {
         return this.d;
     }
 

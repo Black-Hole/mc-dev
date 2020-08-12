@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Products.P5;
+import com.mojang.datafixers.Products.P3;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mojang.serialization.codecs.RecordCodecBuilder.Instance;
@@ -15,19 +15,15 @@ public class WorldGenFoilagePlacerBlob extends WorldGenFoilagePlacer {
     });
     protected final int b;
 
-    protected static <P extends WorldGenFoilagePlacerBlob> P5<Mu<P>, Integer, Integer, Integer, Integer, Integer> a(Instance<P> instance) {
-        return b(instance).and(Codec.INT.fieldOf("height").forGetter((worldgenfoilageplacerblob) -> {
+    protected static <P extends WorldGenFoilagePlacerBlob> P3<Mu<P>, IntSpread, IntSpread, Integer> a(Instance<P> instance) {
+        return b(instance).and(Codec.intRange(0, 16).fieldOf("height").forGetter((worldgenfoilageplacerblob) -> {
             return worldgenfoilageplacerblob.b;
         }));
     }
 
-    protected WorldGenFoilagePlacerBlob(int i, int j, int k, int l, int i1, WorldGenFoilagePlacers<?> worldgenfoilageplacers) {
-        super(i, j, k, l);
-        this.b = i1;
-    }
-
-    public WorldGenFoilagePlacerBlob(int i, int j, int k, int l, int i1) {
-        this(i, j, k, l, i1, WorldGenFoilagePlacers.a);
+    public WorldGenFoilagePlacerBlob(IntSpread intspread, IntSpread intspread1, int i) {
+        super(intspread, intspread1);
+        this.b = i;
     }
 
     @Override

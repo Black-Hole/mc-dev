@@ -46,11 +46,10 @@ public final class SpawnerCreature {
                 long j = ChunkCoordIntPair.pair(blockposition.getX() >> 4, blockposition.getZ() >> 4);
 
                 spawnercreature_b.query(j, (chunk) -> {
-                    BiomeBase biomebase = b(blockposition, chunk);
-                    BiomeBase.e biomebase_e = biomebase.a(entity.getEntityType());
+                    BiomeSettingsMobs.b biomesettingsmobs_b = b(blockposition, chunk).b().a(entity.getEntityType());
 
-                    if (biomebase_e != null) {
-                        spawnercreatureprobabilities.a(entity.getChunkCoordinates(), biomebase_e.b());
+                    if (biomesettingsmobs_b != null) {
+                        spawnercreatureprobabilities.a(entity.getChunkCoordinates(), biomesettingsmobs_b.b());
                     }
 
                     object2intopenhashmap.addTo(enumcreaturetype, 1);
@@ -108,7 +107,7 @@ public final class SpawnerCreature {
                 int l = blockposition.getX();
                 int i1 = blockposition.getZ();
                 boolean flag = true;
-                BiomeBase.BiomeMeta biomebase_biomemeta = null;
+                BiomeSettingsMobs.c biomesettingsmobs_c = null;
                 GroupDataEntity groupdataentity = null;
                 int j1 = MathHelper.f(worldserver.random.nextFloat() * 4.0F);
                 int k1 = 0;
@@ -126,20 +125,20 @@ public final class SpawnerCreature {
                             EntityHuman entityhuman = worldserver.a(d0, (double) i, d1, -1.0D, false);
 
                             if (entityhuman != null) {
-                                double d2 = entityhuman.g(d0, (double) i, d1);
+                                double d2 = entityhuman.h(d0, (double) i, d1);
 
                                 if (a(worldserver, ichunkaccess, blockposition_mutableblockposition, d2)) {
-                                    if (biomebase_biomemeta == null) {
-                                        biomebase_biomemeta = a(worldserver, structuremanager, chunkgenerator, enumcreaturetype, worldserver.random, (BlockPosition) blockposition_mutableblockposition);
-                                        if (biomebase_biomemeta == null) {
+                                    if (biomesettingsmobs_c == null) {
+                                        biomesettingsmobs_c = a(worldserver, structuremanager, chunkgenerator, enumcreaturetype, worldserver.random, (BlockPosition) blockposition_mutableblockposition);
+                                        if (biomesettingsmobs_c == null) {
                                             break label53;
                                         }
 
-                                        j1 = biomebase_biomemeta.d + worldserver.random.nextInt(1 + biomebase_biomemeta.e - biomebase_biomemeta.d);
+                                        j1 = biomesettingsmobs_c.d + worldserver.random.nextInt(1 + biomesettingsmobs_c.e - biomesettingsmobs_c.d);
                                     }
 
-                                    if (a(worldserver, enumcreaturetype, structuremanager, chunkgenerator, biomebase_biomemeta, blockposition_mutableblockposition, d2) && spawnercreature_c.test(biomebase_biomemeta.c, blockposition_mutableblockposition, ichunkaccess)) {
-                                        EntityInsentient entityinsentient = a(worldserver, biomebase_biomemeta.c);
+                                    if (a(worldserver, enumcreaturetype, structuremanager, chunkgenerator, biomesettingsmobs_c, blockposition_mutableblockposition, d2) && spawnercreature_c.test(biomesettingsmobs_c.c, blockposition_mutableblockposition, ichunkaccess)) {
+                                        EntityInsentient entityinsentient = a(worldserver, biomesettingsmobs_c.c);
 
                                         if (entityinsentient == null) {
                                             return;
@@ -150,7 +149,7 @@ public final class SpawnerCreature {
                                             groupdataentity = entityinsentient.prepare(worldserver, worldserver.getDamageScaler(entityinsentient.getChunkCoordinates()), EnumMobSpawn.NATURAL, groupdataentity, (NBTTagCompound) null);
                                             ++j;
                                             ++k1;
-                                            worldserver.addEntity(entityinsentient);
+                                            worldserver.addAllEntities(entityinsentient);
                                             spawnercreature_a.run(entityinsentient, ichunkaccess);
                                             if (j >= entityinsentient.getMaxSpawnGroup()) {
                                                 return;
@@ -189,14 +188,14 @@ public final class SpawnerCreature {
         }
     }
 
-    private static boolean a(WorldServer worldserver, EnumCreatureType enumcreaturetype, StructureManager structuremanager, ChunkGenerator chunkgenerator, BiomeBase.BiomeMeta biomebase_biomemeta, BlockPosition.MutableBlockPosition blockposition_mutableblockposition, double d0) {
-        EntityTypes<?> entitytypes = biomebase_biomemeta.c;
+    private static boolean a(WorldServer worldserver, EnumCreatureType enumcreaturetype, StructureManager structuremanager, ChunkGenerator chunkgenerator, BiomeSettingsMobs.c biomesettingsmobs_c, BlockPosition.MutableBlockPosition blockposition_mutableblockposition, double d0) {
+        EntityTypes<?> entitytypes = biomesettingsmobs_c.c;
 
         if (entitytypes.e() == EnumCreatureType.MISC) {
             return false;
         } else if (!entitytypes.d() && d0 > (double) (entitytypes.e().f() * entitytypes.e().f())) {
             return false;
-        } else if (entitytypes.b() && a(worldserver, structuremanager, chunkgenerator, enumcreaturetype, biomebase_biomemeta, (BlockPosition) blockposition_mutableblockposition)) {
+        } else if (entitytypes.b() && a(worldserver, structuremanager, chunkgenerator, enumcreaturetype, biomesettingsmobs_c, (BlockPosition) blockposition_mutableblockposition)) {
             EntityPositionTypes.Surface entitypositiontypes_surface = EntityPositionTypes.a(entitytypes);
 
             return !a(entitypositiontypes_surface, (IWorldReader) worldserver, blockposition_mutableblockposition, entitytypes) ? false : (!EntityPositionTypes.a(entitytypes, worldserver, EnumMobSpawn.NATURAL, blockposition_mutableblockposition, worldserver.random) ? false : worldserver.b(entitytypes.a((double) blockposition_mutableblockposition.getX() + 0.5D, (double) blockposition_mutableblockposition.getY(), (double) blockposition_mutableblockposition.getZ() + 0.5D)));
@@ -228,23 +227,23 @@ public final class SpawnerCreature {
     }
 
     @Nullable
-    private static BiomeBase.BiomeMeta a(WorldServer worldserver, StructureManager structuremanager, ChunkGenerator chunkgenerator, EnumCreatureType enumcreaturetype, Random random, BlockPosition blockposition) {
+    private static BiomeSettingsMobs.c a(WorldServer worldserver, StructureManager structuremanager, ChunkGenerator chunkgenerator, EnumCreatureType enumcreaturetype, Random random, BlockPosition blockposition) {
         BiomeBase biomebase = worldserver.getBiome(blockposition);
 
-        if (enumcreaturetype == EnumCreatureType.WATER_AMBIENT && biomebase.y() == BiomeBase.Geography.RIVER && random.nextFloat() < 0.98F) {
+        if (enumcreaturetype == EnumCreatureType.WATER_AMBIENT && biomebase.t() == BiomeBase.Geography.RIVER && random.nextFloat() < 0.98F) {
             return null;
         } else {
-            List<BiomeBase.BiomeMeta> list = a(worldserver, structuremanager, chunkgenerator, enumcreaturetype, blockposition, biomebase);
+            List<BiomeSettingsMobs.c> list = a(worldserver, structuremanager, chunkgenerator, enumcreaturetype, blockposition, biomebase);
 
-            return list.isEmpty() ? null : (BiomeBase.BiomeMeta) WeightedRandom.a(random, list);
+            return list.isEmpty() ? null : (BiomeSettingsMobs.c) WeightedRandom.a(random, list);
         }
     }
 
-    private static boolean a(WorldServer worldserver, StructureManager structuremanager, ChunkGenerator chunkgenerator, EnumCreatureType enumcreaturetype, BiomeBase.BiomeMeta biomebase_biomemeta, BlockPosition blockposition) {
-        return a(worldserver, structuremanager, chunkgenerator, enumcreaturetype, blockposition, (BiomeBase) null).contains(biomebase_biomemeta);
+    private static boolean a(WorldServer worldserver, StructureManager structuremanager, ChunkGenerator chunkgenerator, EnumCreatureType enumcreaturetype, BiomeSettingsMobs.c biomesettingsmobs_c, BlockPosition blockposition) {
+        return a(worldserver, structuremanager, chunkgenerator, enumcreaturetype, blockposition, (BiomeBase) null).contains(biomesettingsmobs_c);
     }
 
-    private static List<BiomeBase.BiomeMeta> a(WorldServer worldserver, StructureManager structuremanager, ChunkGenerator chunkgenerator, EnumCreatureType enumcreaturetype, BlockPosition blockposition, @Nullable BiomeBase biomebase) {
+    private static List<BiomeSettingsMobs.c> a(WorldServer worldserver, StructureManager structuremanager, ChunkGenerator chunkgenerator, EnumCreatureType enumcreaturetype, BlockPosition blockposition, @Nullable BiomeBase biomebase) {
         return enumcreaturetype == EnumCreatureType.MONSTER && worldserver.getType(blockposition.down()).getBlock() == Blocks.NETHER_BRICKS && structuremanager.a(blockposition, false, StructureGenerator.FORTRESS).e() ? StructureGenerator.FORTRESS.c() : chunkgenerator.getMobsFor(biomebase != null ? biomebase : worldserver.getBiome(blockposition), structuremanager, enumcreaturetype, blockposition);
     }
 
@@ -258,7 +257,7 @@ public final class SpawnerCreature {
         return new BlockPosition(i, l, j);
     }
 
-    public static boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid, EntityTypes entitytypes) {
+    public static boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid, EntityTypes<?> entitytypes) {
         return iblockdata.r(iblockaccess, blockposition) ? false : (iblockdata.isPowerSource() ? false : (!fluid.isEmpty() ? false : (iblockdata.a((Tag) TagsBlock.PREVENT_MOB_SPAWNING_INSIDE) ? false : !entitytypes.a(iblockdata))));
     }
 
@@ -287,16 +286,17 @@ public final class SpawnerCreature {
         }
     }
 
-    public static void a(GeneratorAccess generatoraccess, BiomeBase biomebase, int i, int j, Random random) {
-        List<BiomeBase.BiomeMeta> list = biomebase.getMobs(EnumCreatureType.CREATURE);
+    public static void a(WorldAccess worldaccess, BiomeBase biomebase, int i, int j, Random random) {
+        BiomeSettingsMobs biomesettingsmobs = biomebase.b();
+        List<BiomeSettingsMobs.c> list = biomesettingsmobs.a(EnumCreatureType.CREATURE);
 
         if (!list.isEmpty()) {
             int k = i << 4;
             int l = j << 4;
 
-            while (random.nextFloat() < biomebase.f()) {
-                BiomeBase.BiomeMeta biomebase_biomemeta = (BiomeBase.BiomeMeta) WeightedRandom.a(random, list);
-                int i1 = biomebase_biomemeta.d + random.nextInt(1 + biomebase_biomemeta.e - biomebase_biomemeta.d);
+            while (random.nextFloat() < biomesettingsmobs.a()) {
+                BiomeSettingsMobs.c biomesettingsmobs_c = (BiomeSettingsMobs.c) WeightedRandom.a(random, list);
+                int i1 = biomesettingsmobs_c.d + random.nextInt(1 + biomesettingsmobs_c.e - biomesettingsmobs_c.d);
                 GroupDataEntity groupdataentity = null;
                 int j1 = k + random.nextInt(16);
                 int k1 = l + random.nextInt(16);
@@ -307,21 +307,21 @@ public final class SpawnerCreature {
                     boolean flag = false;
 
                     for (int k2 = 0; !flag && k2 < 4; ++k2) {
-                        BlockPosition blockposition = a(generatoraccess, biomebase_biomemeta.c, j1, k1);
+                        BlockPosition blockposition = a(worldaccess, biomesettingsmobs_c.c, j1, k1);
 
-                        if (biomebase_biomemeta.c.b() && a(EntityPositionTypes.a(biomebase_biomemeta.c), (IWorldReader) generatoraccess, blockposition, biomebase_biomemeta.c)) {
-                            float f = biomebase_biomemeta.c.j();
+                        if (biomesettingsmobs_c.c.b() && a(EntityPositionTypes.a(biomesettingsmobs_c.c), (IWorldReader) worldaccess, blockposition, biomesettingsmobs_c.c)) {
+                            float f = biomesettingsmobs_c.c.j();
                             double d0 = MathHelper.a((double) j1, (double) k + (double) f, (double) k + 16.0D - (double) f);
                             double d1 = MathHelper.a((double) k1, (double) l + (double) f, (double) l + 16.0D - (double) f);
 
-                            if (!generatoraccess.b(biomebase_biomemeta.c.a(d0, (double) blockposition.getY(), d1)) || !EntityPositionTypes.a(biomebase_biomemeta.c, generatoraccess, EnumMobSpawn.CHUNK_GENERATION, new BlockPosition(d0, (double) blockposition.getY(), d1), generatoraccess.getRandom())) {
+                            if (!worldaccess.b(biomesettingsmobs_c.c.a(d0, (double) blockposition.getY(), d1)) || !EntityPositionTypes.a(biomesettingsmobs_c.c, worldaccess, EnumMobSpawn.CHUNK_GENERATION, new BlockPosition(d0, (double) blockposition.getY(), d1), worldaccess.getRandom())) {
                                 continue;
                             }
 
                             Entity entity;
 
                             try {
-                                entity = biomebase_biomemeta.c.a(generatoraccess.getMinecraftWorld());
+                                entity = biomesettingsmobs_c.c.a((World) worldaccess.getMinecraftWorld());
                             } catch (Exception exception) {
                                 SpawnerCreature.LOGGER.warn("Failed to create mob", exception);
                                 continue;
@@ -331,9 +331,9 @@ public final class SpawnerCreature {
                             if (entity instanceof EntityInsentient) {
                                 EntityInsentient entityinsentient = (EntityInsentient) entity;
 
-                                if (entityinsentient.a(generatoraccess, EnumMobSpawn.CHUNK_GENERATION) && entityinsentient.a((IWorldReader) generatoraccess)) {
-                                    groupdataentity = entityinsentient.prepare(generatoraccess, generatoraccess.getDamageScaler(entityinsentient.getChunkCoordinates()), EnumMobSpawn.CHUNK_GENERATION, groupdataentity, (NBTTagCompound) null);
-                                    generatoraccess.addEntity(entityinsentient);
+                                if (entityinsentient.a((GeneratorAccess) worldaccess, EnumMobSpawn.CHUNK_GENERATION) && entityinsentient.a((IWorldReader) worldaccess)) {
+                                    groupdataentity = entityinsentient.prepare(worldaccess, worldaccess.getDamageScaler(entityinsentient.getChunkCoordinates()), EnumMobSpawn.CHUNK_GENERATION, groupdataentity, (NBTTagCompound) null);
+                                    worldaccess.addAllEntities(entityinsentient);
                                     flag = true;
                                 }
                             }
@@ -416,19 +416,18 @@ public final class SpawnerCreature {
         private boolean a(EntityTypes<?> entitytypes, BlockPosition blockposition, IChunkAccess ichunkaccess) {
             this.e = blockposition;
             this.f = entitytypes;
-            BiomeBase biomebase = SpawnerCreature.b(blockposition, ichunkaccess);
-            BiomeBase.e biomebase_e = biomebase.a(entitytypes);
+            BiomeSettingsMobs.b biomesettingsmobs_b = SpawnerCreature.b(blockposition, ichunkaccess).b().a(entitytypes);
 
-            if (biomebase_e == null) {
+            if (biomesettingsmobs_b == null) {
                 this.g = 0.0D;
                 return true;
             } else {
-                double d0 = biomebase_e.b();
+                double d0 = biomesettingsmobs_b.b();
 
                 this.g = d0;
                 double d1 = this.c.b(blockposition, d0);
 
-                return d1 <= biomebase_e.a();
+                return d1 <= biomesettingsmobs_b.a();
             }
         }
 
@@ -440,11 +439,10 @@ public final class SpawnerCreature {
             if (blockposition.equals(this.e) && entitytypes == this.f) {
                 d0 = this.g;
             } else {
-                BiomeBase biomebase = SpawnerCreature.b(blockposition, ichunkaccess);
-                BiomeBase.e biomebase_e = biomebase.a(entitytypes);
+                BiomeSettingsMobs.b biomesettingsmobs_b = SpawnerCreature.b(blockposition, ichunkaccess).b().a(entitytypes);
 
-                if (biomebase_e != null) {
-                    d0 = biomebase_e.b();
+                if (biomesettingsmobs_b != null) {
+                    d0 = biomesettingsmobs_b.b();
                 } else {
                     d0 = 0.0D;
                 }

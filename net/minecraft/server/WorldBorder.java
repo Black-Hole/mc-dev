@@ -8,7 +8,7 @@ import java.util.List;
 public class WorldBorder {
 
     private final List<IWorldBorderListener> a = Lists.newArrayList();
-    private double c = 0.2D;
+    private double b = 0.2D;
     private double d = 5.0D;
     private int e = 15;
     private int f = 5;
@@ -16,7 +16,7 @@ public class WorldBorder {
     private double h;
     private int i = 29999984;
     private WorldBorder.a j = new WorldBorder.d(6.0E7D);
-    public static final WorldBorder.c b = new WorldBorder.c(0.0D, 0.0D, 0.2D, 5.0D, 5, 15, 6.0E7D, 0L, 0.0D);
+    public static final WorldBorder.c c = new WorldBorder.c(0.0D, 0.0D, 0.2D, 5.0D, 5, 15, 6.0E7D, 0L, 0.0D);
 
     public WorldBorder() {}
 
@@ -159,11 +159,11 @@ public class WorldBorder {
     }
 
     public double getDamageAmount() {
-        return this.c;
+        return this.b;
     }
 
     public void setDamageAmount(double d0) {
-        this.c = d0;
+        this.b = d0;
         Iterator iterator = this.l().iterator();
 
         while (iterator.hasNext()) {

@@ -8,12 +8,12 @@ public class ItemMinecart extends Item {
         @Override
         public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
             EnumDirection enumdirection = (EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING);
-            World world = isourceblock.getWorld();
+            WorldServer worldserver = isourceblock.getWorld();
             double d0 = isourceblock.getX() + (double) enumdirection.getAdjacentX() * 1.125D;
             double d1 = Math.floor(isourceblock.getY()) + (double) enumdirection.getAdjacentY();
             double d2 = isourceblock.getZ() + (double) enumdirection.getAdjacentZ() * 1.125D;
             BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
-            IBlockData iblockdata = world.getType(blockposition);
+            IBlockData iblockdata = worldserver.getType(blockposition);
             BlockPropertyTrackPosition blockpropertytrackposition = iblockdata.getBlock() instanceof BlockMinecartTrackAbstract ? (BlockPropertyTrackPosition) iblockdata.get(((BlockMinecartTrackAbstract) iblockdata.getBlock()).d()) : BlockPropertyTrackPosition.NORTH_SOUTH;
             double d3;
 
@@ -24,11 +24,11 @@ public class ItemMinecart extends Item {
                     d3 = 0.1D;
                 }
             } else {
-                if (!iblockdata.isAir() || !world.getType(blockposition.down()).a((Tag) TagsBlock.RAILS)) {
+                if (!iblockdata.isAir() || !worldserver.getType(blockposition.down()).a((Tag) TagsBlock.RAILS)) {
                     return this.b.dispense(isourceblock, itemstack);
                 }
 
-                IBlockData iblockdata1 = world.getType(blockposition.down());
+                IBlockData iblockdata1 = worldserver.getType(blockposition.down());
                 BlockPropertyTrackPosition blockpropertytrackposition1 = iblockdata1.getBlock() instanceof BlockMinecartTrackAbstract ? (BlockPropertyTrackPosition) iblockdata1.get(((BlockMinecartTrackAbstract) iblockdata1.getBlock()).d()) : BlockPropertyTrackPosition.NORTH_SOUTH;
 
                 if (enumdirection != EnumDirection.DOWN && blockpropertytrackposition1.c()) {
@@ -38,13 +38,13 @@ public class ItemMinecart extends Item {
                 }
             }
 
-            EntityMinecartAbstract entityminecartabstract = EntityMinecartAbstract.a(world, d0, d1 + d3, d2, ((ItemMinecart) itemstack.getItem()).b);
+            EntityMinecartAbstract entityminecartabstract = EntityMinecartAbstract.a(worldserver, d0, d1 + d3, d2, ((ItemMinecart) itemstack.getItem()).b);
 
             if (itemstack.hasName()) {
                 entityminecartabstract.setCustomName(itemstack.getName());
             }
 
-            world.addEntity(entityminecartabstract);
+            worldserver.addEntity(entityminecartabstract);
             itemstack.subtract(1);
             return itemstack;
         }

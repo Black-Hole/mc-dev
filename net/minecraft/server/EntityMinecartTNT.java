@@ -29,11 +29,11 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
             --this.b;
             this.world.addParticle(Particles.SMOKE, this.locX(), this.locY() + 0.5D, this.locZ(), 0.0D, 0.0D, 0.0D);
         } else if (this.b == 0) {
-            this.h(b(this.getMot()));
+            this.h(c(this.getMot()));
         }
 
         if (this.positionChanged) {
-            double d0 = b(this.getMot());
+            double d0 = c(this.getMot());
 
             if (d0 >= 0.009999999776482582D) {
                 this.h(d0);
@@ -59,7 +59,7 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
 
     @Override
     public void a(DamageSource damagesource) {
-        double d0 = b(this.getMot());
+        double d0 = c(this.getMot());
 
         if (!damagesource.isFire() && !damagesource.isExplosion() && d0 < 0.009999999776482582D) {
             super.a(damagesource);

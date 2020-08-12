@@ -22,7 +22,7 @@ public class ItemScaffolding extends ItemBlock {
             EnumDirection enumdirection;
 
             if (blockactioncontext.isSneaking()) {
-                enumdirection = blockactioncontext.k() ? blockactioncontext.getClickedFace().opposite() : blockactioncontext.getClickedFace();
+                enumdirection = blockactioncontext.l() ? blockactioncontext.getClickedFace().opposite() : blockactioncontext.getClickedFace();
             } else {
                 enumdirection = blockactioncontext.getClickedFace() == EnumDirection.UP ? blockactioncontext.f() : EnumDirection.UP;
             }

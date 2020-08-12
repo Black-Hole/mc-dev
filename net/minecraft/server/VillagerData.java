@@ -7,15 +7,15 @@ public class VillagerData {
 
     private static final int[] b = new int[]{0, 10, 70, 150, 250};
     public static final Codec<VillagerData> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(IRegistry.VILLAGER_TYPE.fieldOf("type").withDefault(() -> {
+        return instance.group(IRegistry.VILLAGER_TYPE.fieldOf("type").orElseGet(() -> {
             return VillagerType.PLAINS;
         }).forGetter((villagerdata) -> {
             return villagerdata.c;
-        }), IRegistry.VILLAGER_PROFESSION.fieldOf("profession").withDefault(() -> {
+        }), IRegistry.VILLAGER_PROFESSION.fieldOf("profession").orElseGet(() -> {
             return VillagerProfession.NONE;
         }).forGetter((villagerdata) -> {
             return villagerdata.d;
-        }), Codec.INT.fieldOf("level").withDefault(1).forGetter((villagerdata) -> {
+        }), Codec.INT.fieldOf("level").orElse(1).forGetter((villagerdata) -> {
             return villagerdata.e;
         })).apply(instance, VillagerData::new);
     });

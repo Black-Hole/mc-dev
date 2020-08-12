@@ -2,21 +2,21 @@ package net.minecraft.server;
 
 public class BlockActionContextDirectional extends BlockActionContext {
 
-    private final EnumDirection g;
+    private final EnumDirection b;
 
     public BlockActionContextDirectional(World world, BlockPosition blockposition, EnumDirection enumdirection, ItemStack itemstack, EnumDirection enumdirection1) {
         super(world, (EntityHuman) null, EnumHand.MAIN_HAND, itemstack, new MovingObjectPositionBlock(Vec3D.c((BaseBlockPosition) blockposition), enumdirection1, blockposition, false));
-        this.g = enumdirection;
+        this.b = enumdirection;
     }
 
     @Override
     public BlockPosition getClickPosition() {
-        return this.d.getBlockPosition();
+        return this.i().getBlockPosition();
     }
 
     @Override
     public boolean b() {
-        return this.e.getType(this.d.getBlockPosition()).a((BlockActionContext) this);
+        return this.getWorld().getType(this.i().getBlockPosition()).a((BlockActionContext) this);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class BlockActionContextDirectional extends BlockActionContext {
 
     @Override
     public EnumDirection[] e() {
-        switch (this.g) {
+        switch (this.b) {
             case DOWN:
             default:
                 return new EnumDirection[]{EnumDirection.DOWN, EnumDirection.NORTH, EnumDirection.EAST, EnumDirection.SOUTH, EnumDirection.WEST, EnumDirection.UP};
@@ -50,7 +50,7 @@ public class BlockActionContextDirectional extends BlockActionContext {
 
     @Override
     public EnumDirection f() {
-        return this.g.n() == EnumDirection.EnumAxis.Y ? EnumDirection.NORTH : this.g;
+        return this.b.n() == EnumDirection.EnumAxis.Y ? EnumDirection.NORTH : this.b;
     }
 
     @Override
@@ -60,6 +60,6 @@ public class BlockActionContextDirectional extends BlockActionContext {
 
     @Override
     public float h() {
-        return (float) (this.g.get2DRotationValue() * 90);
+        return (float) (this.b.get2DRotationValue() * 90);
     }
 }

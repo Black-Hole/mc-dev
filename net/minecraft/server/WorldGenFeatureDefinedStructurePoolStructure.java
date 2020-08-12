@@ -1,9 +1,12 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 public abstract class WorldGenFeatureDefinedStructurePoolStructure {
@@ -47,5 +50,59 @@ public abstract class WorldGenFeatureDefinedStructurePoolStructure {
 
     public int f() {
         return 1;
+    }
+
+    public static Function<WorldGenFeatureDefinedStructurePoolTemplate.Matching, WorldGenFeatureDefinedStructurePoolEmpty> g() {
+        return (worldgenfeaturedefinedstructurepooltemplate_matching) -> {
+            return WorldGenFeatureDefinedStructurePoolEmpty.b;
+        };
+    }
+
+    public static Function<WorldGenFeatureDefinedStructurePoolTemplate.Matching, WorldGenFeatureDefinedStructurePoolLegacySingle> a(String s) {
+        return (worldgenfeaturedefinedstructurepooltemplate_matching) -> {
+            return new WorldGenFeatureDefinedStructurePoolLegacySingle(Either.left(new MinecraftKey(s)), () -> {
+                return ProcessorLists.a;
+            }, worldgenfeaturedefinedstructurepooltemplate_matching);
+        };
+    }
+
+    public static Function<WorldGenFeatureDefinedStructurePoolTemplate.Matching, WorldGenFeatureDefinedStructurePoolLegacySingle> a(String s, ProcessorList processorlist) {
+        return (worldgenfeaturedefinedstructurepooltemplate_matching) -> {
+            return new WorldGenFeatureDefinedStructurePoolLegacySingle(Either.left(new MinecraftKey(s)), () -> {
+                return processorlist;
+            }, worldgenfeaturedefinedstructurepooltemplate_matching);
+        };
+    }
+
+    public static Function<WorldGenFeatureDefinedStructurePoolTemplate.Matching, WorldGenFeatureDefinedStructurePoolSingle> b(String s) {
+        return (worldgenfeaturedefinedstructurepooltemplate_matching) -> {
+            return new WorldGenFeatureDefinedStructurePoolSingle(Either.left(new MinecraftKey(s)), () -> {
+                return ProcessorLists.a;
+            }, worldgenfeaturedefinedstructurepooltemplate_matching);
+        };
+    }
+
+    public static Function<WorldGenFeatureDefinedStructurePoolTemplate.Matching, WorldGenFeatureDefinedStructurePoolSingle> b(String s, ProcessorList processorlist) {
+        return (worldgenfeaturedefinedstructurepooltemplate_matching) -> {
+            return new WorldGenFeatureDefinedStructurePoolSingle(Either.left(new MinecraftKey(s)), () -> {
+                return processorlist;
+            }, worldgenfeaturedefinedstructurepooltemplate_matching);
+        };
+    }
+
+    public static Function<WorldGenFeatureDefinedStructurePoolTemplate.Matching, WorldGenFeatureDefinedStructurePoolFeature> a(WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured) {
+        return (worldgenfeaturedefinedstructurepooltemplate_matching) -> {
+            return new WorldGenFeatureDefinedStructurePoolFeature(() -> {
+                return worldgenfeatureconfigured;
+            }, worldgenfeaturedefinedstructurepooltemplate_matching);
+        };
+    }
+
+    public static Function<WorldGenFeatureDefinedStructurePoolTemplate.Matching, WorldGenFeatureDefinedStructurePoolList> a(List<Function<WorldGenFeatureDefinedStructurePoolTemplate.Matching, ? extends WorldGenFeatureDefinedStructurePoolStructure>> list) {
+        return (worldgenfeaturedefinedstructurepooltemplate_matching) -> {
+            return new WorldGenFeatureDefinedStructurePoolList((List) list.stream().map((function) -> {
+                return (WorldGenFeatureDefinedStructurePoolStructure) function.apply(worldgenfeaturedefinedstructurepooltemplate_matching);
+            }).collect(Collectors.toList()), worldgenfeaturedefinedstructurepooltemplate_matching);
+        };
     }
 }

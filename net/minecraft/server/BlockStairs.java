@@ -162,7 +162,7 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
         if (h(iblockdata1) && iblockdata.get(BlockStairs.HALF) == iblockdata1.get(BlockStairs.HALF)) {
             EnumDirection enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
 
-            if (enumdirection1.n() != ((EnumDirection) iblockdata.get(BlockStairs.FACING)).n() && e(iblockdata, iblockaccess, blockposition, enumdirection1.opposite())) {
+            if (enumdirection1.n() != ((EnumDirection) iblockdata.get(BlockStairs.FACING)).n() && d(iblockdata, iblockaccess, blockposition, enumdirection1.opposite())) {
                 if (enumdirection1 == enumdirection.h()) {
                     return BlockPropertyStairsShape.OUTER_LEFT;
                 }
@@ -176,7 +176,7 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
         if (h(iblockdata2) && iblockdata.get(BlockStairs.HALF) == iblockdata2.get(BlockStairs.HALF)) {
             EnumDirection enumdirection2 = (EnumDirection) iblockdata2.get(BlockStairs.FACING);
 
-            if (enumdirection2.n() != ((EnumDirection) iblockdata.get(BlockStairs.FACING)).n() && e(iblockdata, iblockaccess, blockposition, enumdirection2)) {
+            if (enumdirection2.n() != ((EnumDirection) iblockdata.get(BlockStairs.FACING)).n() && d(iblockdata, iblockaccess, blockposition, enumdirection2)) {
                 if (enumdirection2 == enumdirection.h()) {
                     return BlockPropertyStairsShape.INNER_LEFT;
                 }
@@ -188,7 +188,7 @@ public class BlockStairs extends Block implements IBlockWaterlogged {
         return BlockPropertyStairsShape.STRAIGHT;
     }
 
-    private static boolean e(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+    private static boolean d(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         IBlockData iblockdata1 = iblockaccess.getType(blockposition.shift(enumdirection));
 
         return !h(iblockdata1) || iblockdata1.get(BlockStairs.FACING) != iblockdata.get(BlockStairs.FACING) || iblockdata1.get(BlockStairs.HALF) != iblockdata.get(BlockStairs.HALF);

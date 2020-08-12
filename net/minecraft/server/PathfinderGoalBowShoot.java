@@ -60,7 +60,7 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
         EntityLiving entityliving = this.a.getGoalTarget();
 
         if (entityliving != null) {
-            double d0 = this.a.g(entityliving.locX(), entityliving.locY(), entityliving.locZ());
+            double d0 = this.a.h(entityliving.locX(), entityliving.locY(), entityliving.locZ());
             boolean flag = this.a.getEntitySenses().a(entityliving);
             boolean flag1 = this.f > 0;
 
@@ -120,7 +120,7 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
                     }
                 }
             } else if (--this.e <= 0 && this.f >= -60) {
-                this.a.c(ProjectileHelper.a(this.a, Items.BOW));
+                this.a.c(ProjectileHelper.a((EntityLiving) this.a, Items.BOW));
             }
 
         }

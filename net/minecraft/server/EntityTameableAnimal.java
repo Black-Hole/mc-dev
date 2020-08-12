@@ -6,20 +6,20 @@ import javax.annotation.Nullable;
 
 public abstract class EntityTameableAnimal extends EntityAnimal {
 
-    protected static final DataWatcherObject<Byte> bv = DataWatcher.a(EntityTameableAnimal.class, DataWatcherRegistry.a);
-    protected static final DataWatcherObject<Optional<UUID>> bw = DataWatcher.a(EntityTameableAnimal.class, DataWatcherRegistry.o);
+    protected static final DataWatcherObject<Byte> bo = DataWatcher.a(EntityTameableAnimal.class, DataWatcherRegistry.a);
+    protected static final DataWatcherObject<Optional<UUID>> bp = DataWatcher.a(EntityTameableAnimal.class, DataWatcherRegistry.o);
     private boolean willSit;
 
     protected EntityTameableAnimal(EntityTypes<? extends EntityTameableAnimal> entitytypes, World world) {
         super(entitytypes, world);
-        this.eM();
+        this.eL();
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityTameableAnimal.bv, (byte) 0);
-        this.datawatcher.register(EntityTameableAnimal.bw, Optional.empty());
+        this.datawatcher.register(EntityTameableAnimal.bo, (byte) 0);
+        this.datawatcher.register(EntityTameableAnimal.bp, Optional.empty());
     }
 
     @Override
@@ -64,45 +64,45 @@ public abstract class EntityTameableAnimal extends EntityAnimal {
     }
 
     public boolean isTamed() {
-        return ((Byte) this.datawatcher.get(EntityTameableAnimal.bv) & 4) != 0;
+        return ((Byte) this.datawatcher.get(EntityTameableAnimal.bo) & 4) != 0;
     }
 
     public void setTamed(boolean flag) {
-        byte b0 = (Byte) this.datawatcher.get(EntityTameableAnimal.bv);
+        byte b0 = (Byte) this.datawatcher.get(EntityTameableAnimal.bo);
 
         if (flag) {
-            this.datawatcher.set(EntityTameableAnimal.bv, (byte) (b0 | 4));
+            this.datawatcher.set(EntityTameableAnimal.bo, (byte) (b0 | 4));
         } else {
-            this.datawatcher.set(EntityTameableAnimal.bv, (byte) (b0 & -5));
+            this.datawatcher.set(EntityTameableAnimal.bo, (byte) (b0 & -5));
         }
 
-        this.eM();
+        this.eL();
     }
 
-    protected void eM() {}
+    protected void eL() {}
 
     public boolean isSitting() {
-        return ((Byte) this.datawatcher.get(EntityTameableAnimal.bv) & 1) != 0;
+        return ((Byte) this.datawatcher.get(EntityTameableAnimal.bo) & 1) != 0;
     }
 
     public void setSitting(boolean flag) {
-        byte b0 = (Byte) this.datawatcher.get(EntityTameableAnimal.bv);
+        byte b0 = (Byte) this.datawatcher.get(EntityTameableAnimal.bo);
 
         if (flag) {
-            this.datawatcher.set(EntityTameableAnimal.bv, (byte) (b0 | 1));
+            this.datawatcher.set(EntityTameableAnimal.bo, (byte) (b0 | 1));
         } else {
-            this.datawatcher.set(EntityTameableAnimal.bv, (byte) (b0 & -2));
+            this.datawatcher.set(EntityTameableAnimal.bo, (byte) (b0 & -2));
         }
 
     }
 
     @Nullable
     public UUID getOwnerUUID() {
-        return (UUID) ((Optional) this.datawatcher.get(EntityTameableAnimal.bw)).orElse((Object) null);
+        return (UUID) ((Optional) this.datawatcher.get(EntityTameableAnimal.bp)).orElse((Object) null);
     }
 
     public void setOwnerUUID(@Nullable UUID uuid) {
-        this.datawatcher.set(EntityTameableAnimal.bw, Optional.ofNullable(uuid));
+        this.datawatcher.set(EntityTameableAnimal.bp, Optional.ofNullable(uuid));
     }
 
     public void tame(EntityHuman entityhuman) {
@@ -126,11 +126,11 @@ public abstract class EntityTameableAnimal extends EntityAnimal {
     }
 
     @Override
-    public boolean d(EntityLiving entityliving) {
-        return this.j(entityliving) ? false : super.d(entityliving);
+    public boolean c(EntityLiving entityliving) {
+        return this.i(entityliving) ? false : super.c(entityliving);
     }
 
-    public boolean j(EntityLiving entityliving) {
+    public boolean i(EntityLiving entityliving) {
         return entityliving == this.getOwner();
     }
 

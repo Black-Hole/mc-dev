@@ -9,9 +9,9 @@ public class WorldGenFeatureChorusPlant extends WorldGenerator<WorldGenFeatureEm
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-        if (generatoraccessseed.isEmpty(blockposition.up()) && generatoraccessseed.getType(blockposition).a(Blocks.END_STONE)) {
-            BlockChorusFlower.a(generatoraccessseed, blockposition.up(), random, 8);
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+        if (generatoraccessseed.isEmpty(blockposition) && generatoraccessseed.getType(blockposition.down()).a(Blocks.END_STONE)) {
+            BlockChorusFlower.a(generatoraccessseed, blockposition, random, 8);
             return true;
         } else {
             return false;

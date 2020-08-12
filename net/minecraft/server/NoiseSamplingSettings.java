@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class NoiseSamplingSettings {
 
-    private static final Codec<Double> b = Codecs.a(0.001D, 1000.0D);
+    private static final Codec<Double> b = Codec.doubleRange(0.001D, 1000.0D);
     public static final Codec<NoiseSamplingSettings> a = RecordCodecBuilder.create((instance) -> {
         return instance.group(NoiseSamplingSettings.b.fieldOf("xz_scale").forGetter(NoiseSamplingSettings::a), NoiseSamplingSettings.b.fieldOf("y_scale").forGetter(NoiseSamplingSettings::b), NoiseSamplingSettings.b.fieldOf("xz_factor").forGetter(NoiseSamplingSettings::c), NoiseSamplingSettings.b.fieldOf("y_factor").forGetter(NoiseSamplingSettings::d)).apply(instance, NoiseSamplingSettings::new);
     });

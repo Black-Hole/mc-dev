@@ -86,9 +86,9 @@ public class LoginListener implements PacketLoginInListener {
             this.disconnect(ichatbasecomponent);
         } else {
             this.g = LoginListener.EnumProtocolState.ACCEPTED;
-            if (this.server.av() >= 0 && !this.networkManager.isLocal()) {
-                this.networkManager.sendPacket(new PacketLoginOutSetCompression(this.server.av()), (channelfuture) -> {
-                    this.networkManager.setCompressionLevel(this.server.av());
+            if (this.server.aw() >= 0 && !this.networkManager.isLocal()) {
+                this.networkManager.sendPacket(new PacketLoginOutSetCompression(this.server.aw()), (channelfuture) -> {
+                    this.networkManager.setCompressionLevel(this.server.aw());
                 });
             }
 
@@ -174,7 +174,7 @@ public class LoginListener implements PacketLoginInListener {
                 private InetAddress a() {
                     SocketAddress socketaddress = LoginListener.this.networkManager.getSocketAddress();
 
-                    return LoginListener.this.server.U() && socketaddress instanceof InetSocketAddress ? ((InetSocketAddress) socketaddress).getAddress() : null;
+                    return LoginListener.this.server.V() && socketaddress instanceof InetSocketAddress ? ((InetSocketAddress) socketaddress).getAddress() : null;
                 }
             };
 

@@ -37,10 +37,10 @@ public class NavigationGuardian extends NavigationAbstract {
 
             if (this.a()) {
                 this.l();
-            } else if (this.c != null && this.c.f() < this.c.e()) {
-                vec3d = this.c.a(this.a, this.c.f());
+            } else if (this.c != null && !this.c.c()) {
+                vec3d = this.c.a((Entity) this.a);
                 if (MathHelper.floor(this.a.locX()) == MathHelper.floor(vec3d.x) && MathHelper.floor(this.a.locY()) == MathHelper.floor(vec3d.y) && MathHelper.floor(this.a.locZ()) == MathHelper.floor(vec3d.z)) {
-                    this.c.c(this.c.f() + 1);
+                    this.c.a();
                 }
             }
 
@@ -65,7 +65,7 @@ public class NavigationGuardian extends NavigationAbstract {
             }
 
             boolean flag = true;
-            Vec3D vec3d2 = Vec3D.c(this.c.g());
+            Vec3D vec3d2 = Vec3D.c((BaseBlockPosition) this.c.g());
 
             if (Math.abs(this.a.locX() - vec3d2.x) < (double) f1 && Math.abs(this.a.locZ() - vec3d2.z) < (double) f1 && Math.abs(this.a.locY() - vec3d2.y) < (double) (f1 * 2.0F)) {
                 this.c.a();
@@ -94,13 +94,13 @@ public class NavigationGuardian extends NavigationAbstract {
             this.g = vec3d;
         }
 
-        if (this.c != null && !this.c.b()) {
-            BaseBlockPosition baseblockposition = this.c.g();
+        if (this.c != null && !this.c.c()) {
+            BlockPosition blockposition = this.c.g();
 
-            if (baseblockposition.equals(this.h)) {
+            if (blockposition.equals(this.h)) {
                 this.i += SystemUtils.getMonotonicMillis() - this.j;
             } else {
-                this.h = baseblockposition;
+                this.h = blockposition;
                 double d0 = vec3d.f(Vec3D.a(this.h));
 
                 this.k = this.a.dM() > 0.0F ? d0 / (double) this.a.dM() * 100.0D : 0.0D;

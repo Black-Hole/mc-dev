@@ -43,7 +43,7 @@ public class DragonControllerHold extends AbstractDragonController {
     private void j() {
         int i;
 
-        if (this.c != null && this.c.b()) {
+        if (this.c != null && this.c.c()) {
             BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, new BlockPosition(WorldGenEndTrophy.a));
 
             i = this.a.getEnderDragonBattle() == null ? 0 : this.a.getEnderDragonBattle().c();
@@ -65,8 +65,8 @@ public class DragonControllerHold extends AbstractDragonController {
             }
         }
 
-        if (this.c == null || this.c.b()) {
-            int j = this.a.eJ();
+        if (this.c == null || this.c.c()) {
+            int j = this.a.eI();
 
             i = j;
             if (this.a.getRandom().nextInt(8) == 0) {
@@ -106,18 +106,18 @@ public class DragonControllerHold extends AbstractDragonController {
     }
 
     private void k() {
-        if (this.c != null && !this.c.b()) {
-            BaseBlockPosition baseblockposition = this.c.g();
+        if (this.c != null && !this.c.c()) {
+            BlockPosition blockposition = this.c.g();
 
             this.c.a();
-            double d0 = (double) baseblockposition.getX();
-            double d1 = (double) baseblockposition.getZ();
+            double d0 = (double) blockposition.getX();
+            double d1 = (double) blockposition.getZ();
 
             double d2;
 
             do {
-                d2 = (double) ((float) baseblockposition.getY() + this.a.getRandom().nextFloat() * 20.0F);
-            } while (d2 < (double) baseblockposition.getY());
+                d2 = (double) ((float) blockposition.getY() + this.a.getRandom().nextFloat() * 20.0F);
+            } while (d2 < (double) blockposition.getY());
 
             this.d = new Vec3D(d0, d2, d1);
         }

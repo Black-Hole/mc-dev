@@ -8,6 +8,6 @@ public enum LayerIsland implements AreaTransformer1 {
 
     @Override
     public int a(WorldGenContext worldgencontext, int i, int j) {
-        return i == 0 && j == 0 ? 1 : (worldgencontext.a(10) == 0 ? 1 : GenLayers.c);
+        return i == 0 && j == 0 ? 1 : (worldgencontext.a(10) == 0 ? 1 : 0);
     }
 }

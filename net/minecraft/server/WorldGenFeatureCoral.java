@@ -10,7 +10,7 @@ public abstract class WorldGenFeatureCoral extends WorldGenerator<WorldGenFeatur
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         IBlockData iblockdata = ((Block) TagsBlock.CORAL_BLOCKS.a(random)).getBlockData();
 
         return this.a(generatoraccessseed, random, blockposition, iblockdata);

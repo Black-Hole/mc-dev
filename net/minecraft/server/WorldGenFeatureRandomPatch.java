@@ -9,7 +9,7 @@ public class WorldGenFeatureRandomPatch extends WorldGenerator<WorldGenFeatureRa
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRandomPatchConfiguration worldgenfeaturerandompatchconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRandomPatchConfiguration worldgenfeaturerandompatchconfiguration) {
         IBlockData iblockdata = worldgenfeaturerandompatchconfiguration.b.a(random, blockposition);
         BlockPosition blockposition1;
 

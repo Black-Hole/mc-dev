@@ -86,17 +86,17 @@ public class Navigation extends NavigationAbstract {
     }
 
     @Override
-    protected void E_() {
-        super.E_();
+    protected void D_() {
+        super.D_();
         if (this.p) {
-            if (this.b.f(new BlockPosition(this.a.locX(), this.a.locY() + 0.5D, this.a.locZ()))) {
+            if (this.b.e(new BlockPosition(this.a.locX(), this.a.locY() + 0.5D, this.a.locZ()))) {
                 return;
             }
 
             for (int i = 0; i < this.c.e(); ++i) {
                 PathPoint pathpoint = this.c.a(i);
 
-                if (this.b.f(new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c))) {
+                if (this.b.e(new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c))) {
                     this.c.b(i);
                     return;
                 }

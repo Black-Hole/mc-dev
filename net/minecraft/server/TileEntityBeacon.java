@@ -187,9 +187,9 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
     }
 
     @Override
-    public void an_() {
+    public void al_() {
         this.a(SoundEffects.BLOCK_BEACON_DEACTIVATE);
-        super.an_();
+        super.al_();
     }
 
     private void applyEffects() {

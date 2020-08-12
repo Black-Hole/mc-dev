@@ -24,15 +24,15 @@ public class HoglinAI {
     }
 
     private static void b(BehaviorController<EntityHoglin> behaviorcontroller) {
-        behaviorcontroller.a(Activity.CORE, 0, ImmutableList.of(new BehaviorLook(45, 90), new BehavorMove(200)));
+        behaviorcontroller.a(Activity.CORE, 0, ImmutableList.of(new BehaviorLook(45, 90), new BehavorMove()));
     }
 
     private static void c(BehaviorController<EntityHoglin> behaviorcontroller) {
-        behaviorcontroller.a(Activity.IDLE, 10, ImmutableList.of(new BehaviorPacify(MemoryModuleType.NEAREST_REPELLENT, 200), new BehaviorMakeLoveAnimal(EntityTypes.HOGLIN, 0.6F), BehaviorWalkAway.a(MemoryModuleType.NEAREST_REPELLENT, 1.0F, 8, true), new BehaviorAttackTargetSet<>(HoglinAI::d), new BehaviorRunIf<>(EntityHoglin::eM, BehaviorWalkAway.b(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN, 0.4F, 8, false)), new BehaviorRunSometimes<>(new BehaviorLookTarget(8.0F), IntRange.a(30, 60)), new BehaviorFollowAdult<>(HoglinAI.b, 0.6F), a()));
+        behaviorcontroller.a(Activity.IDLE, 10, ImmutableList.of(new BehaviorPacify(MemoryModuleType.NEAREST_REPELLENT, 200), new BehaviorMakeLoveAnimal(EntityTypes.HOGLIN, 0.6F), BehaviorWalkAway.a(MemoryModuleType.NEAREST_REPELLENT, 1.0F, 8, true), new BehaviorAttackTargetSet<>(HoglinAI::d), new BehaviorRunIf<>(EntityHoglin::eL, BehaviorWalkAway.b(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN, 0.4F, 8, false)), new BehaviorRunSometimes<>(new BehaviorLookTarget(8.0F), IntRange.a(30, 60)), new BehaviorFollowAdult<>(HoglinAI.b, 0.6F), a()));
     }
 
     private static void d(BehaviorController<EntityHoglin> behaviorcontroller) {
-        behaviorcontroller.a(Activity.FLIGHT, 10, ImmutableList.of(new BehaviorPacify(MemoryModuleType.NEAREST_REPELLENT, 200), new BehaviorMakeLoveAnimal(EntityTypes.HOGLIN, 0.6F), new BehaviorWalkAwayOutOfRange(1.0F), new BehaviorRunIf<>(EntityHoglin::eM, new BehaviorAttack(40)), new BehaviorRunIf<>(EntityAgeable::isBaby, new BehaviorAttack(15)), new BehaviorAttackTargetForget<>(), new BehaviorRemoveMemory<>(HoglinAI::i, MemoryModuleType.ATTACK_TARGET)), MemoryModuleType.ATTACK_TARGET);
+        behaviorcontroller.a(Activity.FLIGHT, 10, ImmutableList.of(new BehaviorPacify(MemoryModuleType.NEAREST_REPELLENT, 200), new BehaviorMakeLoveAnimal(EntityTypes.HOGLIN, 0.6F), new BehaviorWalkAwayOutOfRange(1.0F), new BehaviorRunIf<>(EntityHoglin::eL, new BehaviorAttack(40)), new BehaviorRunIf<>(EntityAgeable::isBaby, new BehaviorAttack(15)), new BehaviorAttackTargetForget<>(), new BehaviorRemoveMemory<>(HoglinAI::i, MemoryModuleType.ATTACK_TARGET)), MemoryModuleType.ATTACK_TARGET);
     }
 
     private static void e(BehaviorController<EntityHoglin> behaviorcontroller) {
@@ -99,7 +99,7 @@ public class HoglinAI {
     }
 
     private static boolean e(EntityHoglin entityhoglin) {
-        return entityhoglin.eM() && !f(entityhoglin);
+        return entityhoglin.eL() && !f(entityhoglin);
     }
 
     private static boolean f(EntityHoglin entityhoglin) {
@@ -168,7 +168,7 @@ public class HoglinAI {
     }
 
     private static SoundEffect a(EntityHoglin entityhoglin, Activity activity) {
-        return activity != Activity.AVOID && !entityhoglin.eO() ? (activity == Activity.FLIGHT ? SoundEffects.ENTITY_HOGLIN_ANGRY : (h(entityhoglin) ? SoundEffects.ENTITY_HOGLIN_RETREAT : SoundEffects.ENTITY_HOGLIN_AMBIENT)) : SoundEffects.ENTITY_HOGLIN_RETREAT;
+        return activity != Activity.AVOID && !entityhoglin.isConverting() ? (activity == Activity.FLIGHT ? SoundEffects.ENTITY_HOGLIN_ANGRY : (h(entityhoglin) ? SoundEffects.ENTITY_HOGLIN_RETREAT : SoundEffects.ENTITY_HOGLIN_AMBIENT)) : SoundEffects.ENTITY_HOGLIN_RETREAT;
     }
 
     private static List<EntityHoglin> g(EntityHoglin entityhoglin) {

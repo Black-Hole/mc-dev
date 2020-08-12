@@ -26,7 +26,7 @@ public class OldChunkLoader {
         return oldchunkloader_oldchunk;
     }
 
-    public static void a(OldChunkLoader.OldChunk oldchunkloader_oldchunk, NBTTagCompound nbttagcompound, WorldChunkManager worldchunkmanager) {
+    public static void a(IRegistryCustom.Dimension iregistrycustom_dimension, OldChunkLoader.OldChunk oldchunkloader_oldchunk, NBTTagCompound nbttagcompound, WorldChunkManager worldchunkmanager) {
         nbttagcompound.setInt("xPos", oldchunkloader_oldchunk.k);
         nbttagcompound.setInt("zPos", oldchunkloader_oldchunk.l);
         nbttagcompound.setLong("LastUpdate", oldchunkloader_oldchunk.a);
@@ -100,7 +100,7 @@ public class OldChunkLoader {
         }
 
         nbttagcompound.set("Sections", nbttaglist);
-        nbttagcompound.setIntArray("Biomes", (new BiomeStorage(new ChunkCoordIntPair(oldchunkloader_oldchunk.k, oldchunkloader_oldchunk.l), worldchunkmanager)).a());
+        nbttagcompound.setIntArray("Biomes", (new BiomeStorage(iregistrycustom_dimension.b(IRegistry.ay), new ChunkCoordIntPair(oldchunkloader_oldchunk.k, oldchunkloader_oldchunk.l), worldchunkmanager)).a());
         nbttagcompound.set("Entities", oldchunkloader_oldchunk.h);
         nbttagcompound.set("TileEntities", oldchunkloader_oldchunk.i);
         if (oldchunkloader_oldchunk.j != null) {

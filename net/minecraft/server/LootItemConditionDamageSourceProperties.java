@@ -21,14 +21,14 @@ public class LootItemConditionDamageSourceProperties implements LootItemConditio
 
     @Override
     public Set<LootContextParameter<?>> a() {
-        return ImmutableSet.of(LootContextParameters.POSITION, LootContextParameters.DAMAGE_SOURCE);
+        return ImmutableSet.of(LootContextParameters.ORIGIN, LootContextParameters.DAMAGE_SOURCE);
     }
 
     public boolean test(LootTableInfo loottableinfo) {
         DamageSource damagesource = (DamageSource) loottableinfo.getContextParameter(LootContextParameters.DAMAGE_SOURCE);
-        BlockPosition blockposition = (BlockPosition) loottableinfo.getContextParameter(LootContextParameters.POSITION);
+        Vec3D vec3d = (Vec3D) loottableinfo.getContextParameter(LootContextParameters.ORIGIN);
 
-        return blockposition != null && damagesource != null && this.a.a(loottableinfo.getWorld(), Vec3D.b((BaseBlockPosition) blockposition), damagesource);
+        return vec3d != null && damagesource != null && this.a.a(loottableinfo.getWorld(), vec3d, damagesource);
     }
 
     public static LootItemCondition.a a(CriterionConditionDamageSource.a criterionconditiondamagesource_a) {

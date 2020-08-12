@@ -32,14 +32,14 @@ public class BehaviorWork extends Behavior<EntityVillager> {
             behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorTarget(globalpos.getBlockPosition())));
         });
         entityvillager.fd();
-        this.a(worldserver, entityvillager);
+        this.doWork(worldserver, entityvillager);
         if (entityvillager.fc()) {
             entityvillager.fb();
         }
 
     }
 
-    protected void a(WorldServer worldserver, EntityVillager entityvillager) {}
+    protected void doWork(WorldServer worldserver, EntityVillager entityvillager) {}
 
     protected boolean b(WorldServer worldserver, EntityVillager entityvillager, long i) {
         Optional<GlobalPos> optional = entityvillager.getBehaviorController().getMemory(MemoryModuleType.JOB_SITE);

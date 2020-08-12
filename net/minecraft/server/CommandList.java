@@ -19,7 +19,9 @@ public class CommandList {
     }
 
     private static int b(CommandListenerWrapper commandlistenerwrapper) {
-        return a(commandlistenerwrapper, EntityHuman::eN);
+        return a(commandlistenerwrapper, (entityplayer) -> {
+            return new ChatMessage("commands.list.nameAndId", new Object[]{entityplayer.getDisplayName(), entityplayer.getProfile().getId()});
+        });
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Function<EntityPlayer, IChatBaseComponent> function) {

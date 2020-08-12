@@ -75,7 +75,7 @@ public class RecipeSmithing implements IRecipe<IInventory> {
         public RecipeSmithing a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
             RecipeItemStack recipeitemstack = RecipeItemStack.b(packetdataserializer);
             RecipeItemStack recipeitemstack1 = RecipeItemStack.b(packetdataserializer);
-            ItemStack itemstack = packetdataserializer.m();
+            ItemStack itemstack = packetdataserializer.n();
 
             return new RecipeSmithing(minecraftkey, recipeitemstack, recipeitemstack1, itemstack);
         }

@@ -20,9 +20,9 @@ public class LootItemConditionLocationCheck implements LootItemCondition {
     }
 
     public boolean test(LootTableInfo loottableinfo) {
-        BlockPosition blockposition = (BlockPosition) loottableinfo.getContextParameter(LootContextParameters.POSITION);
+        Vec3D vec3d = (Vec3D) loottableinfo.getContextParameter(LootContextParameters.ORIGIN);
 
-        return blockposition != null && this.a.a(loottableinfo.getWorld(), (float) (blockposition.getX() + this.b.getX()), (float) (blockposition.getY() + this.b.getY()), (float) (blockposition.getZ() + this.b.getZ()));
+        return vec3d != null && this.a.a(loottableinfo.getWorld(), vec3d.getX() + (double) this.b.getX(), vec3d.getY() + (double) this.b.getY(), vec3d.getZ() + (double) this.b.getZ());
     }
 
     public static LootItemCondition.a a(CriterionConditionLocation.a criterionconditionlocation_a) {

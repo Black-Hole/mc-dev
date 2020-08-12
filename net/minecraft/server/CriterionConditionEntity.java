@@ -105,7 +105,7 @@ public class CriterionConditionEntity {
                     }
                 }
 
-                return this.n == null || entity instanceof EntityCat && ((EntityCat) entity).eV().equals(this.n);
+                return this.n == null || entity instanceof EntityCat && ((EntityCat) entity).eU().equals(this.n);
             }
         }
     }
@@ -160,7 +160,7 @@ public class CriterionConditionEntity {
     }
 
     public static LootTableInfo b(EntityPlayer entityplayer, Entity entity) {
-        return (new LootTableInfo.Builder(entityplayer.getWorldServer())).set(LootContextParameters.THIS_ENTITY, entity).set(LootContextParameters.POSITION, entity.getChunkCoordinates()).set(LootContextParameters.g, entityplayer.getPositionVector()).a(entityplayer.getRandom()).build(LootContextParameterSets.j);
+        return (new LootTableInfo.Builder(entityplayer.getWorldServer())).set(LootContextParameters.THIS_ENTITY, entity).set(LootContextParameters.ORIGIN, entityplayer.getPositionVector()).a(entityplayer.getRandom()).build(LootContextParameterSets.j);
     }
 
     public static class b {

@@ -12,21 +12,15 @@ public class PacketPlayOutRecipes implements Packet<PacketListenerPlayOut> {
     private PacketPlayOutRecipes.Action a;
     private List<MinecraftKey> b;
     private List<MinecraftKey> c;
-    private boolean d;
-    private boolean e;
-    private boolean f;
-    private boolean g;
+    private RecipeBookSettings d;
 
     public PacketPlayOutRecipes() {}
 
-    public PacketPlayOutRecipes(PacketPlayOutRecipes.Action packetplayoutrecipes_action, Collection<MinecraftKey> collection, Collection<MinecraftKey> collection1, boolean flag, boolean flag1, boolean flag2, boolean flag3) {
+    public PacketPlayOutRecipes(PacketPlayOutRecipes.Action packetplayoutrecipes_action, Collection<MinecraftKey> collection, Collection<MinecraftKey> collection1, RecipeBookSettings recipebooksettings) {
         this.a = packetplayoutrecipes_action;
         this.b = ImmutableList.copyOf(collection);
         this.c = ImmutableList.copyOf(collection1);
-        this.d = flag;
-        this.e = flag1;
-        this.f = flag2;
-        this.g = flag3;
+        this.d = recipebooksettings;
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
@@ -36,10 +30,7 @@ public class PacketPlayOutRecipes implements Packet<PacketListenerPlayOut> {
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = (PacketPlayOutRecipes.Action) packetdataserializer.a(PacketPlayOutRecipes.Action.class);
-        this.d = packetdataserializer.readBoolean();
-        this.e = packetdataserializer.readBoolean();
-        this.f = packetdataserializer.readBoolean();
-        this.g = packetdataserializer.readBoolean();
+        this.d = RecipeBookSettings.a(packetdataserializer);
         int i = packetdataserializer.i();
 
         this.b = Lists.newArrayList();
@@ -47,7 +38,7 @@ public class PacketPlayOutRecipes implements Packet<PacketListenerPlayOut> {
         int j;
 
         for (j = 0; j < i; ++j) {
-            this.b.add(packetdataserializer.o());
+            this.b.add(packetdataserializer.p());
         }
 
         if (this.a == PacketPlayOutRecipes.Action.INIT) {
@@ -55,7 +46,7 @@ public class PacketPlayOutRecipes implements Packet<PacketListenerPlayOut> {
             this.c = Lists.newArrayList();
 
             for (j = 0; j < i; ++j) {
-                this.c.add(packetdataserializer.o());
+                this.c.add(packetdataserializer.p());
             }
         }
 
@@ -64,10 +55,7 @@ public class PacketPlayOutRecipes implements Packet<PacketListenerPlayOut> {
     @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a((Enum) this.a);
-        packetdataserializer.writeBoolean(this.d);
-        packetdataserializer.writeBoolean(this.e);
-        packetdataserializer.writeBoolean(this.f);
-        packetdataserializer.writeBoolean(this.g);
+        this.d.b(packetdataserializer);
         packetdataserializer.d(this.b.size());
         Iterator iterator = this.b.iterator();
 

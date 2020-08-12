@@ -25,7 +25,7 @@ public class SensorVillagerHostiles extends Sensor<EntityLiving> {
     private Optional<EntityLiving> a(EntityLiving entityliving) {
         return this.b(entityliving).flatMap((list) -> {
             return list.stream().filter(this::c).filter((entityliving1) -> {
-                return this.a(entityliving, entityliving1);
+                return this.b(entityliving, entityliving1);
             }).min((entityliving1, entityliving2) -> {
                 return this.a(entityliving, entityliving1, entityliving2);
             });
@@ -40,7 +40,7 @@ public class SensorVillagerHostiles extends Sensor<EntityLiving> {
         return MathHelper.floor(entityliving1.h((Entity) entityliving) - entityliving2.h((Entity) entityliving));
     }
 
-    private boolean a(EntityLiving entityliving, EntityLiving entityliving1) {
+    private boolean b(EntityLiving entityliving, EntityLiving entityliving1) {
         float f = (Float) SensorVillagerHostiles.a.get(entityliving1.getEntityType());
 
         return entityliving1.h((Entity) entityliving) <= (double) (f * f);

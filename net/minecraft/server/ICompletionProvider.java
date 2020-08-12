@@ -44,6 +44,8 @@ public interface ICompletionProvider {
 
     Set<ResourceKey<World>> p();
 
+    IRegistryCustom q();
+
     boolean hasPermission(int i);
 
     static <T> void a(Iterable<T> iterable, String s, Function<T, MinecraftKey> function, Consumer<T> consumer) {

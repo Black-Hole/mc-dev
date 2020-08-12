@@ -55,10 +55,10 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
         if (flag1) {
             --this.c;
         } else if (!this.world.isClientSide) {
-            List<Entity> list = this.world.a(Entity.class, new AxisAlignedBB(this.getPosition()));
+            List<Entity> list = this.world.a(Entity.class, new AxisAlignedBB(this.getPosition()), TileEntityEndGateway::a);
 
             if (!list.isEmpty()) {
-                this.a((Entity) list.get(this.world.random.nextInt(list.size())));
+                this.b((Entity) list.get(this.world.random.nextInt(list.size())));
             }
 
             if (this.age % 2400L == 0L) {
@@ -70,6 +70,10 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
             this.update();
         }
 
+    }
+
+    public static boolean a(Entity entity) {
+        return IEntitySelector.g.test(entity) && !entity.getRootVehicle().ah();
     }
 
     public boolean d() {
@@ -110,7 +114,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
         }
     }
 
-    public void a(Entity entity) {
+    public void b(Entity entity) {
         if (this.world instanceof WorldServer && !this.f()) {
             this.c = 100;
             if (this.exitPortal == null && this.world.getDimensionKey() == World.THE_END) {
@@ -138,6 +142,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
                     entity1 = entity.getRootVehicle();
                 }
 
+                entity1.resetPortalCooldown();
                 entity1.enderTeleportAndLoad((double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D);
             }
 
@@ -146,7 +151,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
     }
 
     private BlockPosition k() {
-        BlockPosition blockposition = a(this.world, this.exitPortal, 5, false);
+        BlockPosition blockposition = a(this.world, this.exitPortal.b(0, 2, 0), 5, false);
 
         TileEntityEndGateway.LOGGER.debug("Best exit position for portal at {} is {}", this.exitPortal, blockposition);
         return blockposition.up();
@@ -173,7 +178,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
         if (this.exitPortal == null) {
             this.exitPortal = new BlockPosition(vec3d1.x + 0.5D, 75.0D, vec3d1.z + 0.5D);
             TileEntityEndGateway.LOGGER.debug("Failed to find suitable block, settling on {}", this.exitPortal);
-            WorldGenerator.END_ISLAND.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.k).a(worldserver, worldserver.getStructureManager(), worldserver.getChunkProvider().getChunkGenerator(), new Random(this.exitPortal.asLong()), this.exitPortal);
+            BiomeDecoratorGroups.END_ISLAND.a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), new Random(this.exitPortal.asLong()), this.exitPortal);
         } else {
             TileEntityEndGateway.LOGGER.debug("Found block at {}", this.exitPortal);
         }
@@ -241,7 +246,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
     }
 
     private void a(WorldServer worldserver, BlockPosition blockposition) {
-        WorldGenerator.END_GATEWAY.b((WorldGenFeatureConfiguration) WorldGenEndGatewayConfiguration.a(this.getPosition(), false)).a(worldserver, worldserver.getStructureManager(), worldserver.getChunkProvider().getChunkGenerator(), new Random(), blockposition);
+        WorldGenerator.END_GATEWAY.b((WorldGenFeatureConfiguration) WorldGenEndGatewayConfiguration.a(this.getPosition(), false)).a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), new Random(), blockposition);
     }
 
     public void a(BlockPosition blockposition, boolean flag) {

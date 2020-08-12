@@ -10,7 +10,7 @@ public abstract class WorldGenFlowers<U extends WorldGenFeatureConfiguration> ex
     }
 
     @Override
-    public boolean generate(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, U u0) {
+    public boolean generate(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, U u0) {
         IBlockData iblockdata = this.b(random, blockposition, u0);
         int i = 0;
 

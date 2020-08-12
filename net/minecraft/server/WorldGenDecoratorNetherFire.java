@@ -15,7 +15,7 @@ public class WorldGenDecoratorNetherFire extends WorldGenDecoratorFeatureSimple<
     public Stream<BlockPosition> a(Random random, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, BlockPosition blockposition) {
         List<BlockPosition> list = Lists.newArrayList();
 
-        for (int i = 0; i < random.nextInt(random.nextInt(worldgendecoratorfrequencyconfiguration.b) + 1) + 1; ++i) {
+        for (int i = 0; i < random.nextInt(random.nextInt(worldgendecoratorfrequencyconfiguration.a().a(random)) + 1) + 1; ++i) {
             int j = random.nextInt(16) + blockposition.getX();
             int k = random.nextInt(16) + blockposition.getZ();
             int l = random.nextInt(120) + 4;

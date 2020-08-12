@@ -84,7 +84,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
     }
 
     @Override
-    public void f(Vec3D vec3d) {
+    public void g(Vec3D vec3d) {
         if (this.doAITick() && this.isInWater()) {
             this.a(0.01F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
@@ -93,7 +93,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
                 this.setMot(this.getMot().add(0.0D, -0.005D, 0.0D));
             }
         } else {
-            super.f(vec3d);
+            super.g(vec3d);
         }
 
     }
@@ -117,7 +117,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
         if (itemstack.getItem() == Items.WATER_BUCKET && this.isAlive()) {
             this.playSound(SoundEffects.ITEM_BUCKET_FILL_FISH, 1.0F, 1.0F);
             itemstack.subtract(1);
-            ItemStack itemstack1 = this.eL();
+            ItemStack itemstack1 = this.eK();
 
             this.k(itemstack1);
             if (!this.world.isClientSide) {
@@ -144,9 +144,9 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
     }
 
-    protected abstract ItemStack eL();
+    protected abstract ItemStack eK();
 
-    protected boolean eM() {
+    protected boolean eL() {
         return true;
     }
 
@@ -158,7 +158,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
     }
 
     @Override
-    protected void a(BlockPosition blockposition, IBlockData iblockdata) {}
+    protected void b(BlockPosition blockposition, IBlockData iblockdata) {}
 
     static class a extends ControllerMove {
 
@@ -178,7 +178,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
             if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().m()) {
                 float f = (float) (this.e * this.i.b(GenericAttributes.MOVEMENT_SPEED));
 
-                this.i.n(MathHelper.g(0.125F, this.i.dM(), f));
+                this.i.q(MathHelper.g(0.125F, this.i.dM(), f));
                 double d0 = this.b - this.i.locX();
                 double d1 = this.c - this.i.locY();
                 double d2 = this.d - this.i.locZ();
@@ -193,11 +193,11 @@ public abstract class EntityFish extends EntityWaterAnimal {
                     float f1 = (float) (MathHelper.d(d2, d0) * 57.2957763671875D) - 90.0F;
 
                     this.i.yaw = this.a(this.i.yaw, f1, 90.0F);
-                    this.i.aH = this.i.yaw;
+                    this.i.aA = this.i.yaw;
                 }
 
             } else {
-                this.i.n(0.0F);
+                this.i.q(0.0F);
             }
         }
     }
@@ -213,7 +213,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
 
         @Override
         public boolean a() {
-            return this.h.eM() && super.a();
+            return this.h.eL() && super.a();
         }
     }
 }

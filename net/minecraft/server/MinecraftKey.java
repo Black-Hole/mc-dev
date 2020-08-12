@@ -155,7 +155,7 @@ public class MinecraftKey implements Comparable<MinecraftKey> {
         return true;
     }
 
-    private static boolean b(char c0) {
+    public static boolean b(char c0) {
         return c0 == '_' || c0 == '-' || c0 >= 'a' && c0 <= 'z' || c0 >= '0' && c0 <= '9' || c0 == '/' || c0 == '.';
     }
 

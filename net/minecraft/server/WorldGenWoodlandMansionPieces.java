@@ -1026,7 +1026,7 @@ public class WorldGenWoodlandMansionPieces {
         }
 
         public i(DefinedStructureManager definedstructuremanager, String s, BlockPosition blockposition, EnumBlockRotation enumblockrotation, EnumBlockMirror enumblockmirror) {
-            super(WorldGenFeatureStructurePieceType.ab, 0);
+            super(WorldGenFeatureStructurePieceType.Z, 0);
             this.d = s;
             this.c = blockposition;
             this.e = enumblockrotation;
@@ -1035,7 +1035,7 @@ public class WorldGenWoodlandMansionPieces {
         }
 
         public i(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.ab, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.Z, nbttagcompound);
             this.d = nbttagcompound.getString("Template");
             this.e = EnumBlockRotation.valueOf(nbttagcompound.getString("Rot"));
             this.f = EnumBlockMirror.valueOf(nbttagcompound.getString("Mi"));
@@ -1058,7 +1058,7 @@ public class WorldGenWoodlandMansionPieces {
         }
 
         @Override
-        protected void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
+        protected void a(String s, BlockPosition blockposition, WorldAccess worldaccess, Random random, StructureBoundingBox structureboundingbox) {
             if (s.startsWith("Chest")) {
                 EnumBlockRotation enumblockrotation = this.b.d();
                 IBlockData iblockdata = Blocks.CHEST.getBlockData();
@@ -1073,7 +1073,7 @@ public class WorldGenWoodlandMansionPieces {
                     iblockdata = (IBlockData) iblockdata.set(BlockChest.FACING, enumblockrotation.a(EnumDirection.NORTH));
                 }
 
-                this.a(generatoraccess, structureboundingbox, random, blockposition, LootTables.D, iblockdata);
+                this.a(worldaccess, structureboundingbox, random, blockposition, LootTables.D, iblockdata);
             } else {
                 byte b0 = -1;
 
@@ -1093,10 +1093,10 @@ public class WorldGenWoodlandMansionPieces {
 
                 switch (b0) {
                     case 0:
-                        entityillagerabstract = (EntityIllagerAbstract) EntityTypes.EVOKER.a(generatoraccess.getMinecraftWorld());
+                        entityillagerabstract = (EntityIllagerAbstract) EntityTypes.EVOKER.a((World) worldaccess.getMinecraftWorld());
                         break;
                     case 1:
-                        entityillagerabstract = (EntityIllagerAbstract) EntityTypes.VINDICATOR.a(generatoraccess.getMinecraftWorld());
+                        entityillagerabstract = (EntityIllagerAbstract) EntityTypes.VINDICATOR.a((World) worldaccess.getMinecraftWorld());
                         break;
                     default:
                         return;
@@ -1104,9 +1104,9 @@ public class WorldGenWoodlandMansionPieces {
 
                 entityillagerabstract.setPersistent();
                 entityillagerabstract.setPositionRotation(blockposition, 0.0F, 0.0F);
-                entityillagerabstract.prepare(generatoraccess, generatoraccess.getDamageScaler(entityillagerabstract.getChunkCoordinates()), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
-                generatoraccess.addEntity(entityillagerabstract);
-                generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 2);
+                entityillagerabstract.prepare(worldaccess, worldaccess.getDamageScaler(entityillagerabstract.getChunkCoordinates()), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
+                worldaccess.addAllEntities(entityillagerabstract);
+                worldaccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 2);
             }
 
         }

@@ -153,8 +153,8 @@ public class EnderDragonBattle {
         } else {
             EnderDragonBattle.LOGGER.info("Found that the dragon has not yet been killed in this world.");
             this.previouslyKilled = false;
-            if (this.j() == null) {
-                this.a(false);
+            if (this.getExitPortalShape() == null) {
+                this.generateExitPortal(false);
             }
         }
 
@@ -245,7 +245,7 @@ public class EnderDragonBattle {
     }
 
     @Nullable
-    private ShapeDetector.ShapeDetectorCollection j() {
+    public ShapeDetector.ShapeDetectorCollection getExitPortalShape() {
         int i;
         int j;
 
@@ -352,7 +352,7 @@ public class EnderDragonBattle {
         if (entityenderdragon.getUniqueID().equals(this.dragonUUID)) {
             this.bossBattle.setProgress(0.0F);
             this.bossBattle.setVisible(false);
-            this.a(true);
+            this.generateExitPortal(true);
             this.n();
             if (!this.previouslyKilled) {
                 this.world.setTypeUpdate(this.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, WorldGenEndTrophy.a), Blocks.DRAGON_EGG.getBlockData());
@@ -376,10 +376,10 @@ public class EnderDragonBattle {
 
     private void a(BlockPosition blockposition) {
         this.world.triggerEffect(3000, blockposition, 0);
-        WorldGenerator.END_GATEWAY.b((WorldGenFeatureConfiguration) WorldGenEndGatewayConfiguration.a()).a(this.world, this.world.getStructureManager(), this.world.getChunkProvider().getChunkGenerator(), new Random(), blockposition);
+        BiomeDecoratorGroups.END_GATEWAY_DELAYED.a(this.world, this.world.getChunkProvider().getChunkGenerator(), new Random(), blockposition);
     }
 
-    private void a(boolean flag) {
+    public void generateExitPortal(boolean flag) {
         WorldGenEndTrophy worldgenendtrophy = new WorldGenEndTrophy(flag);
 
         if (this.exitPortalLocation == null) {
@@ -388,7 +388,7 @@ public class EnderDragonBattle {
             }
         }
 
-        worldgenendtrophy.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.k).a(this.world, this.world.getStructureManager(), this.world.getChunkProvider().getChunkGenerator(), new Random(), this.exitPortalLocation);
+        worldgenendtrophy.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.k).a(this.world, this.world.getChunkProvider().getChunkGenerator(), new Random(), this.exitPortalLocation);
     }
 
     private EntityEnderDragon o() {
@@ -423,7 +423,7 @@ public class EnderDragonBattle {
             this.respawnPhase = null;
             this.q = 0;
             this.resetCrystals();
-            this.a(true);
+            this.generateExitPortal(true);
         } else {
             this.m();
             Entity entity = this.world.getEntity(this.dragonUUID);
@@ -445,11 +445,11 @@ public class EnderDragonBattle {
 
             if (blockposition == null) {
                 EnderDragonBattle.LOGGER.debug("Tried to respawn, but need to find the portal first.");
-                ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.j();
+                ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.getExitPortalShape();
 
                 if (shapedetector_shapedetectorcollection == null) {
                     EnderDragonBattle.LOGGER.debug("Couldn't find a portal, so we made one.");
-                    this.a(true);
+                    this.generateExitPortal(true);
                 } else {
                     EnderDragonBattle.LOGGER.debug("Found the exit portal & temporarily using it.");
                 }
@@ -480,7 +480,7 @@ public class EnderDragonBattle {
 
     private void a(List<EntityEnderCrystal> list) {
         if (this.dragonKilled && this.respawnPhase == null) {
-            for (ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.j(); shapedetector_shapedetectorcollection != null; shapedetector_shapedetectorcollection = this.j()) {
+            for (ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.getExitPortalShape(); shapedetector_shapedetectorcollection != null; shapedetector_shapedetectorcollection = this.getExitPortalShape()) {
                 for (int i = 0; i < this.f.c(); ++i) {
                     for (int j = 0; j < this.f.b(); ++j) {
                         for (int k = 0; k < this.f.a(); ++k) {
@@ -496,7 +496,7 @@ public class EnderDragonBattle {
 
             this.respawnPhase = EnumDragonRespawn.START;
             this.q = 0;
-            this.a(false);
+            this.generateExitPortal(false);
             this.r = list;
         }
 

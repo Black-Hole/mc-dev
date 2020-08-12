@@ -45,14 +45,14 @@ public class ArgumentMinecraftKeyRegistered implements ArgumentType<MinecraftKey
         CraftingManager craftingmanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getCraftingManager();
         MinecraftKey minecraftkey = (MinecraftKey) commandcontext.getArgument(s, MinecraftKey.class);
 
-        return (IRecipe) craftingmanager.a(minecraftkey).orElseThrow(() -> {
+        return (IRecipe) craftingmanager.getRecipe(minecraftkey).orElseThrow(() -> {
             return ArgumentMinecraftKeyRegistered.c.create(minecraftkey);
         });
     }
 
     public static LootItemCondition c(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
         MinecraftKey minecraftkey = (MinecraftKey) commandcontext.getArgument(s, MinecraftKey.class);
-        LootPredicateManager lootpredicatemanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aI();
+        LootPredicateManager lootpredicatemanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getLootPredicateManager();
         LootItemCondition lootitemcondition = lootpredicatemanager.a(minecraftkey);
 
         if (lootitemcondition == null) {

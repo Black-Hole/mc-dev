@@ -13,13 +13,13 @@ public class BlockOre extends Block {
     }
 
     @Override
-    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, ItemStack itemstack) {
-        super.dropNaturally(iblockdata, world, blockposition, itemstack);
+    public void dropNaturally(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, ItemStack itemstack) {
+        super.dropNaturally(iblockdata, worldserver, blockposition, itemstack);
         if (EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) == 0) {
-            int i = this.a(world.random);
+            int i = this.a(worldserver.random);
 
             if (i > 0) {
-                this.dropExperience(world, blockposition, i);
+                this.dropExperience(worldserver, blockposition, i);
             }
         }
 

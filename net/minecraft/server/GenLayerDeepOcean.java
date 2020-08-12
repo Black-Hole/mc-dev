@@ -28,27 +28,27 @@ public enum GenLayerDeepOcean implements AreaTransformer7 {
             }
 
             if (j1 > 3) {
-                if (i1 == GenLayers.a) {
-                    return GenLayers.f;
+                if (i1 == 44) {
+                    return 47;
                 }
 
-                if (i1 == GenLayers.b) {
-                    return GenLayers.g;
+                if (i1 == 45) {
+                    return 48;
                 }
 
-                if (i1 == GenLayers.c) {
-                    return GenLayers.h;
+                if (i1 == 0) {
+                    return 24;
                 }
 
-                if (i1 == GenLayers.d) {
-                    return GenLayers.i;
+                if (i1 == 46) {
+                    return 49;
                 }
 
-                if (i1 == GenLayers.e) {
-                    return GenLayers.j;
+                if (i1 == 10) {
+                    return 50;
                 }
 
-                return GenLayers.h;
+                return 24;
             }
         }
 

@@ -23,7 +23,7 @@ public class BehaviorStrollRandom extends Behavior<EntityCreature> {
     protected void a(WorldServer worldserver, EntityCreature entitycreature, long i) {
         BlockPosition blockposition = entitycreature.getChunkCoordinates();
 
-        if (worldserver.b_(blockposition)) {
+        if (worldserver.a_(blockposition)) {
             this.a(entitycreature);
         } else {
             SectionPosition sectionposition = SectionPosition.a(blockposition);

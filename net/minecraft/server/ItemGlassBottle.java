@@ -46,16 +46,7 @@ public class ItemGlassBottle extends Item {
     }
 
     protected ItemStack a(ItemStack itemstack, EntityHuman entityhuman, ItemStack itemstack1) {
-        itemstack.subtract(1);
         entityhuman.b(StatisticList.ITEM_USED.b(this));
-        if (itemstack.isEmpty()) {
-            return itemstack1;
-        } else {
-            if (!entityhuman.inventory.pickup(itemstack1)) {
-                entityhuman.drop(itemstack1, false);
-            }
-
-            return itemstack;
-        }
+        return ItemLiquidUtil.a(itemstack, entityhuman, itemstack1);
     }
 }

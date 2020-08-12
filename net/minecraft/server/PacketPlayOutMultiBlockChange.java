@@ -1,48 +1,64 @@
 package net.minecraft.server;
 
+import it.unimi.dsi.fastutil.shorts.ShortIterator;
+import it.unimi.dsi.fastutil.shorts.ShortSet;
 import java.io.IOException;
+import java.util.function.BiConsumer;
 
 public class PacketPlayOutMultiBlockChange implements Packet<PacketListenerPlayOut> {
 
-    private ChunkCoordIntPair a;
-    private PacketPlayOutMultiBlockChange.MultiBlockChangeInfo[] b;
+    private SectionPosition a;
+    private short[] b;
+    private IBlockData[] c;
+    private boolean d;
 
     public PacketPlayOutMultiBlockChange() {}
 
-    public PacketPlayOutMultiBlockChange(int i, short[] ashort, Chunk chunk) {
-        this.a = chunk.getPos();
-        this.b = new PacketPlayOutMultiBlockChange.MultiBlockChangeInfo[i];
+    public PacketPlayOutMultiBlockChange(SectionPosition sectionposition, ShortSet shortset, ChunkSection chunksection, boolean flag) {
+        this.a = sectionposition;
+        this.d = flag;
+        this.a(shortset.size());
+        int i = 0;
 
-        for (int j = 0; j < this.b.length; ++j) {
-            this.b[j] = new PacketPlayOutMultiBlockChange.MultiBlockChangeInfo(ashort[j], chunk);
+        for (ShortIterator shortiterator = shortset.iterator(); shortiterator.hasNext(); ++i) {
+            short short0 = (Short) shortiterator.next();
+
+            this.b[i] = short0;
+            this.c[i] = chunksection.getType(SectionPosition.a(short0), SectionPosition.b(short0), SectionPosition.c(short0));
         }
 
     }
 
+    private void a(int i) {
+        this.b = new short[i];
+        this.c = new IBlockData[i];
+    }
+
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = new ChunkCoordIntPair(packetdataserializer.readInt(), packetdataserializer.readInt());
-        this.b = new PacketPlayOutMultiBlockChange.MultiBlockChangeInfo[packetdataserializer.i()];
+        this.a = SectionPosition.a(packetdataserializer.readLong());
+        this.d = packetdataserializer.readBoolean();
+        int i = packetdataserializer.i();
 
-        for (int i = 0; i < this.b.length; ++i) {
-            this.b[i] = new PacketPlayOutMultiBlockChange.MultiBlockChangeInfo(packetdataserializer.readShort(), (IBlockData) Block.REGISTRY_ID.fromId(packetdataserializer.i()));
+        this.a(i);
+
+        for (int j = 0; j < this.b.length; ++j) {
+            long k = packetdataserializer.j();
+
+            this.b[j] = (short) ((int) (k & 4095L));
+            this.c[j] = (IBlockData) Block.REGISTRY_ID.fromId((int) (k >>> 12));
         }
 
     }
 
     @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeInt(this.a.x);
-        packetdataserializer.writeInt(this.a.z);
+        packetdataserializer.writeLong(this.a.s());
+        packetdataserializer.writeBoolean(this.d);
         packetdataserializer.d(this.b.length);
-        PacketPlayOutMultiBlockChange.MultiBlockChangeInfo[] apacketplayoutmultiblockchange_multiblockchangeinfo = this.b;
-        int i = apacketplayoutmultiblockchange_multiblockchangeinfo.length;
 
-        for (int j = 0; j < i; ++j) {
-            PacketPlayOutMultiBlockChange.MultiBlockChangeInfo packetplayoutmultiblockchange_multiblockchangeinfo = apacketplayoutmultiblockchange_multiblockchangeinfo[j];
-
-            packetdataserializer.writeShort(packetplayoutmultiblockchange_multiblockchangeinfo.b());
-            packetdataserializer.d(Block.getCombinedId(packetplayoutmultiblockchange_multiblockchangeinfo.c()));
+        for (int i = 0; i < this.b.length; ++i) {
+            packetdataserializer.b((long) (Block.getCombinedId(this.c[i]) << 12 | this.b[i]));
         }
 
     }
@@ -51,31 +67,15 @@ public class PacketPlayOutMultiBlockChange implements Packet<PacketListenerPlayO
         packetlistenerplayout.a(this);
     }
 
-    public class MultiBlockChangeInfo {
+    public void a(BiConsumer<BlockPosition, IBlockData> biconsumer) {
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-        private final short b;
-        private final IBlockData c;
+        for (int i = 0; i < this.b.length; ++i) {
+            short short0 = this.b[i];
 
-        public MultiBlockChangeInfo(short short0, IBlockData iblockdata) {
-            this.b = short0;
-            this.c = iblockdata;
+            blockposition_mutableblockposition.d(this.a.d(short0), this.a.e(short0), this.a.f(short0));
+            biconsumer.accept(blockposition_mutableblockposition, this.c[i]);
         }
 
-        public MultiBlockChangeInfo(short short0, Chunk chunk) {
-            this.b = short0;
-            this.c = chunk.getType(this.a());
-        }
-
-        public BlockPosition a() {
-            return new BlockPosition(PacketPlayOutMultiBlockChange.this.a.a(this.b >> 12 & 15, this.b & 255, this.b >> 8 & 15));
-        }
-
-        public short b() {
-            return this.b;
-        }
-
-        public IBlockData c() {
-            return this.c;
-        }
     }
 }

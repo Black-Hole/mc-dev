@@ -18,7 +18,7 @@ public class BehaviorCelebrate extends Behavior<EntityVillager> {
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
         BlockPosition blockposition = entityvillager.getChunkCoordinates();
 
-        this.b = worldserver.c_(blockposition);
+        this.b = worldserver.b_(blockposition);
         return this.b != null && this.b.isVictory() && BehaviorOutside.a(worldserver, entityvillager, blockposition);
     }
 
@@ -35,7 +35,7 @@ public class BehaviorCelebrate extends Behavior<EntityVillager> {
         Random random = entityvillager.getRandom();
 
         if (random.nextInt(100) == 0) {
-            entityvillager.eS();
+            entityvillager.eR();
         }
 
         if (random.nextInt(200) == 0 && BehaviorOutside.a(worldserver, entityvillager, entityvillager.getChunkCoordinates())) {

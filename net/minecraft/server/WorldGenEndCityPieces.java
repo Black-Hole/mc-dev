@@ -234,7 +234,7 @@ public class WorldGenEndCityPieces {
         private final boolean f;
 
         public Piece(DefinedStructureManager definedstructuremanager, String s, BlockPosition blockposition, EnumBlockRotation enumblockrotation, boolean flag) {
-            super(WorldGenFeatureStructurePieceType.aa, 0);
+            super(WorldGenFeatureStructurePieceType.Y, 0);
             this.d = s;
             this.c = blockposition;
             this.e = enumblockrotation;
@@ -243,7 +243,7 @@ public class WorldGenEndCityPieces {
         }
 
         public Piece(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.aa, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.Y, nbttagcompound);
             this.d = nbttagcompound.getString("Template");
             this.e = EnumBlockRotation.valueOf(nbttagcompound.getString("Rot"));
             this.f = nbttagcompound.getBoolean("OW");
@@ -266,24 +266,24 @@ public class WorldGenEndCityPieces {
         }
 
         @Override
-        protected void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
+        protected void a(String s, BlockPosition blockposition, WorldAccess worldaccess, Random random, StructureBoundingBox structureboundingbox) {
             if (s.startsWith("Chest")) {
                 BlockPosition blockposition1 = blockposition.down();
 
                 if (structureboundingbox.b((BaseBlockPosition) blockposition1)) {
-                    TileEntityLootable.a((IBlockAccess) generatoraccess, random, blockposition1, LootTables.c);
+                    TileEntityLootable.a((IBlockAccess) worldaccess, random, blockposition1, LootTables.c);
                 }
             } else if (s.startsWith("Sentry")) {
-                EntityShulker entityshulker = (EntityShulker) EntityTypes.SHULKER.a(generatoraccess.getMinecraftWorld());
+                EntityShulker entityshulker = (EntityShulker) EntityTypes.SHULKER.a((World) worldaccess.getMinecraftWorld());
 
                 entityshulker.setPosition((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
                 entityshulker.h(blockposition);
-                generatoraccess.addEntity(entityshulker);
+                worldaccess.addEntity(entityshulker);
             } else if (s.startsWith("Elytra")) {
-                EntityItemFrame entityitemframe = new EntityItemFrame(generatoraccess.getMinecraftWorld(), blockposition, this.e.a(EnumDirection.SOUTH));
+                EntityItemFrame entityitemframe = new EntityItemFrame(worldaccess.getMinecraftWorld(), blockposition, this.e.a(EnumDirection.SOUTH));
 
                 entityitemframe.setItem(new ItemStack(Items.ELYTRA), false);
-                generatoraccess.addEntity(entityitemframe);
+                worldaccess.addEntity(entityitemframe);
             }
 
         }

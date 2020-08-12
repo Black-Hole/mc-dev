@@ -49,15 +49,16 @@ public class BlockGrass extends BlockDirtSnowSpreadable implements IBlockFragile
                             IBlockData iblockdata3;
 
                             if (random.nextInt(8) == 0) {
-                                List<WorldGenFeatureConfigured<?, ?>> list = worldserver.getBiome(blockposition2).h();
+                                List<WorldGenFeatureConfigured<?, ?>> list = worldserver.getBiome(blockposition2).e().b();
 
                                 if (list.isEmpty()) {
                                     break label38;
                                 }
 
-                                WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured = ((WorldGenFeatureCompositeConfiguration) ((WorldGenFeatureConfigured) list.get(0)).e).b;
+                                WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured = (WorldGenFeatureConfigured) list.get(0);
+                                WorldGenFlowers worldgenflowers = (WorldGenFlowers) worldgenfeatureconfigured.e;
 
-                                iblockdata3 = ((WorldGenFlowers) worldgenfeatureconfigured.d).b(random, blockposition2, worldgenfeatureconfigured.e);
+                                iblockdata3 = worldgenflowers.b(random, blockposition2, worldgenfeatureconfigured.c());
                             } else {
                                 iblockdata3 = iblockdata1;
                             }

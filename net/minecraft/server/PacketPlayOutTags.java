@@ -4,17 +4,17 @@ import java.io.IOException;
 
 public class PacketPlayOutTags implements Packet<PacketListenerPlayOut> {
 
-    private TagRegistry a;
+    private ITagRegistry a;
 
     public PacketPlayOutTags() {}
 
-    public PacketPlayOutTags(TagRegistry tagregistry) {
-        this.a = tagregistry;
+    public PacketPlayOutTags(ITagRegistry itagregistry) {
+        this.a = itagregistry;
     }
 
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = TagRegistry.b(packetdataserializer);
+        this.a = ITagRegistry.b(packetdataserializer);
     }
 
     @Override

@@ -105,7 +105,7 @@ public class DataWatcherRegistry {
 
         @Override
         public ItemStack a(PacketDataSerializer packetdataserializer) {
-            return packetdataserializer.m();
+            return packetdataserializer.n();
         }
 
         public ItemStack a(ItemStack itemstack) {

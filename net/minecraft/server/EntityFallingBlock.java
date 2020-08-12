@@ -37,7 +37,7 @@ public class EntityFallingBlock extends Entity {
     }
 
     @Override
-    public boolean bH() {
+    public boolean bK() {
         return false;
     }
 
@@ -256,7 +256,7 @@ public class EntityFallingBlock extends Entity {
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         return new PacketPlayOutSpawnEntity(this, Block.getCombinedId(this.getBlock()));
     }
 }

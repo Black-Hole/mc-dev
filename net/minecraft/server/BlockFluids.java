@@ -148,17 +148,4 @@ public class BlockFluids extends Block implements IFluidSource {
             return FluidTypes.EMPTY;
         }
     }
-
-    @Override
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
-        if (this.b.a((Tag) TagsFluid.LAVA)) {
-            float f = (float) blockposition.getY() + iblockdata.getFluid().getHeight(world, blockposition);
-            AxisAlignedBB axisalignedbb = entity.getBoundingBox();
-
-            if (axisalignedbb.minY < (double) f || (double) f > axisalignedbb.maxY) {
-                entity.aM();
-            }
-        }
-
-    }
 }

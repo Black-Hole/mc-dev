@@ -8,8 +8,8 @@ public class EntitySkeletonStray extends EntitySkeletonAbstract {
         super(entitytypes, world);
     }
 
-    public static boolean b(EntityTypes<EntitySkeletonStray> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
-        return c(entitytypes, generatoraccess, enummobspawn, blockposition, random) && (enummobspawn == EnumMobSpawn.SPAWNER || generatoraccess.f(blockposition));
+    public static boolean a(EntityTypes<EntitySkeletonStray> entitytypes, WorldAccess worldaccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        return b(entitytypes, worldaccess, enummobspawn, blockposition, random) && (enummobspawn == EnumMobSpawn.SPAWNER || worldaccess.e(blockposition));
     }
 
     @Override
@@ -28,7 +28,7 @@ public class EntitySkeletonStray extends EntitySkeletonAbstract {
     }
 
     @Override
-    SoundEffect eL() {
+    SoundEffect eK() {
         return SoundEffects.ENTITY_STRAY_STEP;
     }
 

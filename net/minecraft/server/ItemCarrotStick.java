@@ -23,7 +23,7 @@ public class ItemCarrotStick<T extends Entity & ISteerable> extends Item {
             if (entityhuman.isPassenger() && entity instanceof ISteerable && entity.getEntityType() == this.a) {
                 ISteerable isteerable = (ISteerable) entity;
 
-                if (isteerable.P_()) {
+                if (isteerable.O_()) {
                     itemstack.damage(this.b, entityhuman, (entityhuman1) -> {
                         entityhuman1.broadcastItemBreak(enumhand);
                     });

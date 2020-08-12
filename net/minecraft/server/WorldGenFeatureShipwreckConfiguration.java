@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 
 public class WorldGenFeatureShipwreckConfiguration implements WorldGenFeatureConfiguration {
 
-    public static final Codec<WorldGenFeatureShipwreckConfiguration> a = Codec.BOOL.fieldOf("is_beached").withDefault(false).xmap(WorldGenFeatureShipwreckConfiguration::new, (worldgenfeatureshipwreckconfiguration) -> {
+    public static final Codec<WorldGenFeatureShipwreckConfiguration> a = Codec.BOOL.fieldOf("is_beached").orElse(false).xmap(WorldGenFeatureShipwreckConfiguration::new, (worldgenfeatureshipwreckconfiguration) -> {
         return worldgenfeatureshipwreckconfiguration.b;
     }).codec();
     public final boolean b;

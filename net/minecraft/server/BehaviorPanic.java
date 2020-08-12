@@ -31,7 +31,7 @@ public class BehaviorPanic extends Behavior<EntityVillager> {
 
     protected void d(WorldServer worldserver, EntityVillager entityvillager, long i) {
         if (i % 100L == 0L) {
-            entityvillager.a(i, 3);
+            entityvillager.a(worldserver, i, 3);
         }
 
     }

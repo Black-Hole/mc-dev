@@ -1,9 +1,12 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class BlockFire extends BlockFireAbstract {
 
@@ -13,15 +16,50 @@ public class BlockFire extends BlockFireAbstract {
     public static final BlockStateBoolean SOUTH = BlockSprawling.c;
     public static final BlockStateBoolean WEST = BlockSprawling.d;
     public static final BlockStateBoolean UPPER = BlockSprawling.e;
-    private static final Map<EnumDirection, BlockStateBoolean> p = (Map) BlockSprawling.g.entrySet().stream().filter((entry) -> {
+    private static final Map<EnumDirection, BlockStateBoolean> h = (Map) BlockSprawling.g.entrySet().stream().filter((entry) -> {
         return entry.getKey() != EnumDirection.DOWN;
     }).collect(SystemUtils.a());
+    private static final VoxelShape i = Block.a(0.0D, 15.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    private static final VoxelShape j = Block.a(0.0D, 0.0D, 0.0D, 1.0D, 16.0D, 16.0D);
+    private static final VoxelShape k = Block.a(15.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    private static final VoxelShape o = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 1.0D);
+    private static final VoxelShape p = Block.a(0.0D, 0.0D, 15.0D, 16.0D, 16.0D, 16.0D);
+    private final Map<IBlockData, VoxelShape> q;
     private final Object2IntMap<Block> flameChances = new Object2IntOpenHashMap();
     private final Object2IntMap<Block> burnChances = new Object2IntOpenHashMap();
 
     public BlockFire(BlockBase.Info blockbase_info) {
         super(blockbase_info, 1.0F);
         this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFire.AGE, 0)).set(BlockFire.NORTH, false)).set(BlockFire.EAST, false)).set(BlockFire.SOUTH, false)).set(BlockFire.WEST, false)).set(BlockFire.UPPER, false));
+        this.q = ImmutableMap.copyOf((Map) this.blockStateList.a().stream().filter((iblockdata) -> {
+            return (Integer) iblockdata.get(BlockFire.AGE) == 0;
+        }).collect(Collectors.toMap(Function.identity(), BlockFire::h)));
+    }
+
+    private static VoxelShape h(IBlockData iblockdata) {
+        VoxelShape voxelshape = VoxelShapes.a();
+
+        if ((Boolean) iblockdata.get(BlockFire.UPPER)) {
+            voxelshape = BlockFire.i;
+        }
+
+        if ((Boolean) iblockdata.get(BlockFire.NORTH)) {
+            voxelshape = VoxelShapes.a(voxelshape, BlockFire.o);
+        }
+
+        if ((Boolean) iblockdata.get(BlockFire.SOUTH)) {
+            voxelshape = VoxelShapes.a(voxelshape, BlockFire.p);
+        }
+
+        if ((Boolean) iblockdata.get(BlockFire.EAST)) {
+            voxelshape = VoxelShapes.a(voxelshape, BlockFire.k);
+        }
+
+        if ((Boolean) iblockdata.get(BlockFire.WEST)) {
+            voxelshape = VoxelShapes.a(voxelshape, BlockFire.j);
+        }
+
+        return voxelshape.isEmpty() ? BlockFire.a : voxelshape;
     }
 
     @Override
@@ -31,29 +69,7 @@ public class BlockFire extends BlockFireAbstract {
 
     @Override
     public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        VoxelShape voxelshape = VoxelShapes.a();
-
-        if ((Boolean) iblockdata.get(BlockFire.UPPER)) {
-            voxelshape = BlockFire.a;
-        }
-
-        if ((Boolean) iblockdata.get(BlockFire.WEST)) {
-            voxelshape = VoxelShapes.a(voxelshape, BlockFire.c);
-        }
-
-        if ((Boolean) iblockdata.get(BlockFire.EAST)) {
-            voxelshape = VoxelShapes.a(voxelshape, BlockFire.d);
-        }
-
-        if ((Boolean) iblockdata.get(BlockFire.NORTH)) {
-            voxelshape = VoxelShapes.a(voxelshape, BlockFire.e);
-        }
-
-        if ((Boolean) iblockdata.get(BlockFire.SOUTH)) {
-            voxelshape = VoxelShapes.a(voxelshape, BlockFire.f);
-        }
-
-        return voxelshape == VoxelShapes.a() ? BlockFire.b : voxelshape;
+        return (VoxelShape) this.q.get(iblockdata.set(BlockFire.AGE, 0));
     }
 
     @Override
@@ -72,7 +88,7 @@ public class BlockFire extends BlockFireAbstract {
 
             for (int j = 0; j < i; ++j) {
                 EnumDirection enumdirection = aenumdirection[j];
-                BlockStateBoolean blockstateboolean = (BlockStateBoolean) BlockFire.p.get(enumdirection);
+                BlockStateBoolean blockstateboolean = (BlockStateBoolean) BlockFire.h.get(enumdirection);
 
                 if (blockstateboolean != null) {
                     iblockdata1 = (IBlockData) iblockdata1.set(blockstateboolean, this.e(iblockaccess.getType(blockposition.shift(enumdirection))));
@@ -101,7 +117,7 @@ public class BlockFire extends BlockFireAbstract {
             }
 
             IBlockData iblockdata1 = worldserver.getType(blockposition.down());
-            boolean flag = iblockdata1.a(worldserver.getDimensionManager().q());
+            boolean flag = iblockdata1.a(worldserver.getDimensionManager().o());
             int i = (Integer) iblockdata.get(BlockFire.AGE);
 
             if (!flag && worldserver.isRaining() && this.a((World) worldserver, blockposition) && random.nextFloat() < 0.2F + (float) i * 0.03F) {

@@ -28,6 +28,13 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         super.a(damagesource);
         if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
             InventoryUtils.dropEntity(this.world, this, this);
+            if (!this.world.isClientSide) {
+                Entity entity = damagesource.j();
+
+                if (entity != null && entity.getEntityType() == EntityTypes.PLAYER) {
+                    PiglinAI.a((EntityHuman) entity, true);
+                }
+            }
         }
 
     }
@@ -104,9 +111,9 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
 
     @Nullable
     @Override
-    public Entity a(WorldServer worldserver) {
+    public Entity b(WorldServer worldserver) {
         this.c = false;
-        return super.a(worldserver);
+        return super.b(worldserver);
     }
 
     @Override
@@ -148,7 +155,12 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
     @Override
     public EnumInteractionResult a(EntityHuman entityhuman, EnumHand enumhand) {
         entityhuman.openContainer(this);
-        return EnumInteractionResult.a(this.world.isClientSide);
+        if (!entityhuman.world.isClientSide) {
+            PiglinAI.a(entityhuman, true);
+            return EnumInteractionResult.CONSUME;
+        } else {
+            return EnumInteractionResult.SUCCESS;
+        }
     }
 
     @Override
@@ -173,10 +185,10 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
             }
 
             this.lootTable = null;
-            LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).set(LootContextParameters.POSITION, this.getChunkCoordinates()).a(this.lootTableSeed);
+            LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).set(LootContextParameters.ORIGIN, this.getPositionVector()).a(this.lootTableSeed);
 
             if (entityhuman != null) {
-                loottableinfo_builder.a(entityhuman.eU()).set(LootContextParameters.THIS_ENTITY, entityhuman);
+                loottableinfo_builder.a(entityhuman.eT()).set(LootContextParameters.THIS_ENTITY, entityhuman);
             }
 
             loottable.fillInventory(this, loottableinfo_builder.build(LootContextParameterSets.CHEST));

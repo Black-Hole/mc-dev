@@ -9,13 +9,13 @@ public class DispenseBehaviorShears extends DispenseBehaviorMaybe {
 
     @Override
     protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-        World world = isourceblock.getWorld();
+        WorldServer worldserver = isourceblock.getWorld();
 
-        if (!world.s_()) {
+        if (!worldserver.s_()) {
             BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
 
-            this.a(a((WorldServer) world, blockposition) || b((WorldServer) world, blockposition));
-            if (this.a() && itemstack.isDamaged(1, world.getRandom(), (EntityPlayer) null)) {
+            this.a(a((WorldServer) worldserver, blockposition) || b((WorldServer) worldserver, blockposition));
+            if (this.a() && itemstack.isDamaged(1, worldserver.getRandom(), (EntityPlayer) null)) {
                 itemstack.setCount(0);
             }
         }

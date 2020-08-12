@@ -108,19 +108,6 @@ public class ShapeDetector {
         }
     }
 
-    public static class Shape {
-
-        public final Vec3D position;
-        public final Vec3D velocity;
-        public final int yaw;
-
-        public Shape(Vec3D vec3d, Vec3D vec3d1, int i) {
-            this.position = vec3d;
-            this.velocity = vec3d1;
-            this.yaw = i;
-        }
-    }
-
     public static class ShapeDetectorCollection {
 
         private final BlockPosition a;
@@ -153,63 +140,12 @@ public class ShapeDetector {
             return this.c;
         }
 
-        public int d() {
-            return this.e;
-        }
-
-        public int e() {
-            return this.f;
-        }
-
         public ShapeDetectorBlock a(int i, int j, int k) {
             return (ShapeDetectorBlock) this.d.getUnchecked(ShapeDetector.a(this.a, this.getFacing(), this.c(), i, j, k));
         }
 
         public String toString() {
             return MoreObjects.toStringHelper(this).add("up", this.c).add("forwards", this.b).add("frontTopLeft", this.a).toString();
-        }
-
-        public ShapeDetector.Shape a(EnumDirection enumdirection, BlockPosition blockposition, double d0, Vec3D vec3d, double d1) {
-            EnumDirection enumdirection1 = this.getFacing();
-            EnumDirection enumdirection2 = enumdirection1.g();
-            double d2 = (double) (this.a().getY() + 1) - d0 * (double) this.e();
-            double d3;
-            double d4;
-
-            if (enumdirection2 == EnumDirection.NORTH) {
-                d3 = (double) blockposition.getX() + 0.5D;
-                d4 = (double) (this.a().getZ() + 1) - (1.0D - d1) * (double) this.d();
-            } else if (enumdirection2 == EnumDirection.SOUTH) {
-                d3 = (double) blockposition.getX() + 0.5D;
-                d4 = (double) this.a().getZ() + (1.0D - d1) * (double) this.d();
-            } else if (enumdirection2 == EnumDirection.WEST) {
-                d3 = (double) (this.a().getX() + 1) - (1.0D - d1) * (double) this.d();
-                d4 = (double) blockposition.getZ() + 0.5D;
-            } else {
-                d3 = (double) this.a().getX() + (1.0D - d1) * (double) this.d();
-                d4 = (double) blockposition.getZ() + 0.5D;
-            }
-
-            double d5;
-            double d6;
-
-            if (enumdirection1.opposite() == enumdirection) {
-                d5 = vec3d.x;
-                d6 = vec3d.z;
-            } else if (enumdirection1.opposite() == enumdirection.opposite()) {
-                d5 = -vec3d.x;
-                d6 = -vec3d.z;
-            } else if (enumdirection1.opposite() == enumdirection.g()) {
-                d5 = -vec3d.z;
-                d6 = vec3d.x;
-            } else {
-                d5 = vec3d.z;
-                d6 = -vec3d.x;
-            }
-
-            int i = (enumdirection1.get2DRotationValue() - enumdirection.opposite().get2DRotationValue()) * 90;
-
-            return new ShapeDetector.Shape(new Vec3D(d3, d2, d4), new Vec3D(d5, vec3d.y, d6), i);
         }
     }
 

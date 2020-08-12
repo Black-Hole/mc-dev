@@ -68,7 +68,7 @@ public class RegionFileSection<R> implements AutoCloseable {
                 this.b(sectionposition.r());
                 optional = this.c(i);
                 if (optional == null) {
-                    throw (IllegalStateException) SystemUtils.c(new IllegalStateException());
+                    throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException()));
                 } else {
                     return optional;
                 }

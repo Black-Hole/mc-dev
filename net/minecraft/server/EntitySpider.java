@@ -25,7 +25,7 @@ public class EntitySpider extends EntityMonster {
     }
 
     @Override
-    public double aY() {
+    public double bb() {
         return (double) (this.getHeight() * 0.5F);
     }
 
@@ -49,8 +49,8 @@ public class EntitySpider extends EntityMonster {
 
     }
 
-    public static AttributeProvider.Builder eL() {
-        return EntityMonster.eS().a(GenericAttributes.MAX_HEALTH, 16.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D);
+    public static AttributeProvider.Builder eK() {
+        return EntityMonster.eR().a(GenericAttributes.MAX_HEALTH, 16.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D);
     }
 
     @Override
@@ -69,13 +69,13 @@ public class EntitySpider extends EntityMonster {
     }
 
     @Override
-    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
+    protected void b(BlockPosition blockposition, IBlockData iblockdata) {
         this.playSound(SoundEffects.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
     }
 
     @Override
     public boolean isClimbing() {
-        return this.eM();
+        return this.eL();
     }
 
     @Override
@@ -96,7 +96,7 @@ public class EntitySpider extends EntityMonster {
         return mobeffect.getMobEffect() == MobEffects.POISON ? false : super.d(mobeffect);
     }
 
-    public boolean eM() {
+    public boolean eL() {
         return ((Byte) this.datawatcher.get(EntitySpider.b) & 1) != 0;
     }
 
@@ -114,22 +114,21 @@ public class EntitySpider extends EntityMonster {
 
     @Nullable
     @Override
-    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        Object object = super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
+    public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        Object object = super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
 
-        if (generatoraccess.getRandom().nextInt(100) == 0) {
+        if (worldaccess.getRandom().nextInt(100) == 0) {
             EntitySkeleton entityskeleton = (EntitySkeleton) EntityTypes.SKELETON.a(this.world);
 
             entityskeleton.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.yaw, 0.0F);
-            entityskeleton.prepare(generatoraccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) null, (NBTTagCompound) null);
+            entityskeleton.prepare(worldaccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) null, (NBTTagCompound) null);
             entityskeleton.startRiding(this);
-            generatoraccess.addEntity(entityskeleton);
         }
 
         if (object == null) {
             object = new EntitySpider.GroupDataSpider();
-            if (generatoraccess.getDifficulty() == EnumDifficulty.HARD && generatoraccess.getRandom().nextFloat() < 0.1F * difficultydamagescaler.d()) {
-                ((EntitySpider.GroupDataSpider) object).a(generatoraccess.getRandom());
+            if (worldaccess.getDifficulty() == EnumDifficulty.HARD && worldaccess.getRandom().nextFloat() < 0.1F * difficultydamagescaler.d()) {
+                ((EntitySpider.GroupDataSpider) object).a(worldaccess.getRandom());
             }
         }
 
@@ -157,7 +156,7 @@ public class EntitySpider extends EntityMonster {
 
         @Override
         public boolean a() {
-            float f = this.e.aO();
+            float f = this.e.aQ();
 
             return f >= 0.5F ? false : super.a();
         }
@@ -176,7 +175,7 @@ public class EntitySpider extends EntityMonster {
 
         @Override
         public boolean b() {
-            float f = this.a.aO();
+            float f = this.a.aQ();
 
             if (f >= 0.5F && this.a.getRandom().nextInt(100) == 0) {
                 this.a.setGoalTarget((EntityLiving) null);

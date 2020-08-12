@@ -88,7 +88,7 @@ public class PathfinderGoalCrossbowAttack<T extends EntityMonster & IRangedEntit
             this.b.getControllerLook().a(entityliving, 30.0F, 30.0F);
             if (this.c == PathfinderGoalCrossbowAttack.State.UNCHARGED) {
                 if (!flag2) {
-                    this.b.c(ProjectileHelper.a(this.b, Items.CROSSBOW));
+                    this.b.c(ProjectileHelper.a((EntityLiving) this.b, Items.CROSSBOW));
                     this.c = PathfinderGoalCrossbowAttack.State.CHARGING;
                     ((ICrossbow) this.b).b(true);
                 }
@@ -113,7 +113,7 @@ public class PathfinderGoalCrossbowAttack<T extends EntityMonster & IRangedEntit
                 }
             } else if (this.c == PathfinderGoalCrossbowAttack.State.READY_TO_ATTACK && flag) {
                 ((IRangedEntity) this.b).a(entityliving, 1.0F);
-                ItemStack itemstack1 = this.b.b(ProjectileHelper.a(this.b, Items.CROSSBOW));
+                ItemStack itemstack1 = this.b.b(ProjectileHelper.a((EntityLiving) this.b, Items.CROSSBOW));
 
                 ItemCrossbow.a(itemstack1, false);
                 this.c = PathfinderGoalCrossbowAttack.State.UNCHARGED;

@@ -2,6 +2,8 @@ package net.minecraft.server;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class WorldGenFeatureChoiceConfiguration implements WorldGenFeatureConfiguration {
 
@@ -12,11 +14,16 @@ public class WorldGenFeatureChoiceConfiguration implements WorldGenFeatureConfig
             return worldgenfeaturechoiceconfiguration.c;
         })).apply(instance, WorldGenFeatureChoiceConfiguration::new);
     });
-    public final WorldGenFeatureConfigured<?, ?> b;
-    public final WorldGenFeatureConfigured<?, ?> c;
+    public final Supplier<WorldGenFeatureConfigured<?, ?>> b;
+    public final Supplier<WorldGenFeatureConfigured<?, ?>> c;
 
-    public WorldGenFeatureChoiceConfiguration(WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured, WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured1) {
-        this.b = worldgenfeatureconfigured;
-        this.c = worldgenfeatureconfigured1;
+    public WorldGenFeatureChoiceConfiguration(Supplier<WorldGenFeatureConfigured<?, ?>> supplier, Supplier<WorldGenFeatureConfigured<?, ?>> supplier1) {
+        this.b = supplier;
+        this.c = supplier1;
+    }
+
+    @Override
+    public Stream<WorldGenFeatureConfigured<?, ?>> an_() {
+        return Stream.concat(((WorldGenFeatureConfigured) this.b.get()).d(), ((WorldGenFeatureConfigured) this.c.get()).d());
     }
 }

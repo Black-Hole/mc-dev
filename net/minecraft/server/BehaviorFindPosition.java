@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap.Builder;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -15,19 +16,21 @@ public class BehaviorFindPosition extends Behavior<EntityCreature> {
     private final VillagePlaceType b;
     private final MemoryModuleType<GlobalPos> c;
     private final boolean d;
-    private long e;
-    private final Long2ObjectMap<BehaviorFindPosition.a> f;
+    private final Optional<Byte> e;
+    private long f;
+    private final Long2ObjectMap<BehaviorFindPosition.a> g;
 
-    public BehaviorFindPosition(VillagePlaceType villageplacetype, MemoryModuleType<GlobalPos> memorymoduletype, MemoryModuleType<GlobalPos> memorymoduletype1, boolean flag) {
+    public BehaviorFindPosition(VillagePlaceType villageplacetype, MemoryModuleType<GlobalPos> memorymoduletype, MemoryModuleType<GlobalPos> memorymoduletype1, boolean flag, Optional<Byte> optional) {
         super(a(memorymoduletype, memorymoduletype1));
-        this.f = new Long2ObjectOpenHashMap();
+        this.g = new Long2ObjectOpenHashMap();
         this.b = villageplacetype;
         this.c = memorymoduletype1;
         this.d = flag;
+        this.e = optional;
     }
 
-    public BehaviorFindPosition(VillagePlaceType villageplacetype, MemoryModuleType<GlobalPos> memorymoduletype, boolean flag) {
-        this(villageplacetype, memorymoduletype, memorymoduletype, flag);
+    public BehaviorFindPosition(VillagePlaceType villageplacetype, MemoryModuleType<GlobalPos> memorymoduletype, boolean flag, Optional<Byte> optional) {
+        this(villageplacetype, memorymoduletype, memorymoduletype, flag, optional);
     }
 
     private static ImmutableMap<MemoryModuleType<?>, MemoryStatus> a(MemoryModuleType<GlobalPos> memorymoduletype, MemoryModuleType<GlobalPos> memorymoduletype1) {
@@ -44,23 +47,23 @@ public class BehaviorFindPosition extends Behavior<EntityCreature> {
     protected boolean a(WorldServer worldserver, EntityCreature entitycreature) {
         if (this.d && entitycreature.isBaby()) {
             return false;
-        } else if (this.e == 0L) {
-            this.e = entitycreature.world.getTime() + (long) worldserver.random.nextInt(20);
+        } else if (this.f == 0L) {
+            this.f = entitycreature.world.getTime() + (long) worldserver.random.nextInt(20);
             return false;
         } else {
-            return worldserver.getTime() >= this.e;
+            return worldserver.getTime() >= this.f;
         }
     }
 
     protected void a(WorldServer worldserver, EntityCreature entitycreature, long i) {
-        this.e = i + 20L + (long) worldserver.getRandom().nextInt(20);
-        VillagePlace villageplace = worldserver.x();
+        this.f = i + 20L + (long) worldserver.getRandom().nextInt(20);
+        VillagePlace villageplace = worldserver.y();
 
-        this.f.long2ObjectEntrySet().removeIf((entry) -> {
+        this.g.long2ObjectEntrySet().removeIf((entry) -> {
             return !((BehaviorFindPosition.a) entry.getValue()).b(i);
         });
         Predicate<BlockPosition> predicate = (blockposition) -> {
-            BehaviorFindPosition.a behaviorfindposition_a = (BehaviorFindPosition.a) this.f.get(blockposition.asLong());
+            BehaviorFindPosition.a behaviorfindposition_a = (BehaviorFindPosition.a) this.g.get(blockposition.asLong());
 
             if (behaviorfindposition_a == null) {
                 return true;
@@ -71,10 +74,10 @@ public class BehaviorFindPosition extends Behavior<EntityCreature> {
                 return true;
             }
         };
-        Set<BlockPosition> set = (Set) villageplace.a(this.b.c(), predicate, entitycreature.getChunkCoordinates(), 48, VillagePlace.Occupancy.HAS_SPACE).limit(5L).collect(Collectors.toSet());
+        Set<BlockPosition> set = (Set) villageplace.b(this.b.c(), predicate, entitycreature.getChunkCoordinates(), 48, VillagePlace.Occupancy.HAS_SPACE).limit(5L).collect(Collectors.toSet());
         PathEntity pathentity = entitycreature.getNavigation().a(set, this.b.d());
 
-        if (pathentity != null && pathentity.i()) {
+        if (pathentity != null && pathentity.j()) {
             BlockPosition blockposition = pathentity.m();
 
             villageplace.c(blockposition).ifPresent((villageplacetype) -> {
@@ -82,7 +85,10 @@ public class BehaviorFindPosition extends Behavior<EntityCreature> {
                     return blockposition1.equals(blockposition);
                 }, blockposition, 1);
                 entitycreature.getBehaviorController().setMemory(this.c, (Object) GlobalPos.create(worldserver.getDimensionKey(), blockposition));
-                this.f.clear();
+                this.e.ifPresent((obyte) -> {
+                    worldserver.broadcastEntityEffect(entitycreature, obyte);
+                });
+                this.g.clear();
                 PacketDebug.c(worldserver, blockposition);
             });
         } else {
@@ -91,7 +97,7 @@ public class BehaviorFindPosition extends Behavior<EntityCreature> {
             while (iterator.hasNext()) {
                 BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
-                this.f.computeIfAbsent(blockposition1.asLong(), (j) -> {
+                this.g.computeIfAbsent(blockposition1.asLong(), (j) -> {
                     return new BehaviorFindPosition.a(entitycreature.world.random, i);
                 });
             }

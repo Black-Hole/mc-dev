@@ -4,5 +4,5 @@ import java.util.function.Consumer;
 
 public interface ResourcePackSource {
 
-    <T extends ResourcePackLoader> void a(Consumer<T> consumer, ResourcePackLoader.a<T> resourcepackloader_a);
+    void a(Consumer<ResourcePackLoader> consumer, ResourcePackLoader.a resourcepackloader_a);
 }

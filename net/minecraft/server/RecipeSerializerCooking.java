@@ -33,7 +33,7 @@ public class RecipeSerializerCooking<T extends RecipeCooking> implements RecipeS
     public T a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
         String s = packetdataserializer.e(32767);
         RecipeItemStack recipeitemstack = RecipeItemStack.b(packetdataserializer);
-        ItemStack itemstack = packetdataserializer.m();
+        ItemStack itemstack = packetdataserializer.n();
         float f = packetdataserializer.readFloat();
         int i = packetdataserializer.i();
 

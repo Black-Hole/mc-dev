@@ -48,39 +48,41 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
     }
 
     private void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        boolean flag = (Boolean) iblockdata.get(BlockMinecartDetector.POWERED);
-        boolean flag1 = false;
-        List<EntityMinecartAbstract> list = this.a(world, blockposition, EntityMinecartAbstract.class, (Predicate) null);
+        if (this.canPlace(iblockdata, world, blockposition)) {
+            boolean flag = (Boolean) iblockdata.get(BlockMinecartDetector.POWERED);
+            boolean flag1 = false;
+            List<EntityMinecartAbstract> list = this.a(world, blockposition, EntityMinecartAbstract.class, (Predicate) null);
 
-        if (!list.isEmpty()) {
-            flag1 = true;
+            if (!list.isEmpty()) {
+                flag1 = true;
+            }
+
+            IBlockData iblockdata1;
+
+            if (flag1 && !flag) {
+                iblockdata1 = (IBlockData) iblockdata.set(BlockMinecartDetector.POWERED, true);
+                world.setTypeAndData(blockposition, iblockdata1, 3);
+                this.b(world, blockposition, iblockdata1, true);
+                world.applyPhysics(blockposition, this);
+                world.applyPhysics(blockposition.down(), this);
+                world.b(blockposition, iblockdata, iblockdata1);
+            }
+
+            if (!flag1 && flag) {
+                iblockdata1 = (IBlockData) iblockdata.set(BlockMinecartDetector.POWERED, false);
+                world.setTypeAndData(blockposition, iblockdata1, 3);
+                this.b(world, blockposition, iblockdata1, false);
+                world.applyPhysics(blockposition, this);
+                world.applyPhysics(blockposition.down(), this);
+                world.b(blockposition, iblockdata, iblockdata1);
+            }
+
+            if (flag1) {
+                world.getBlockTickList().a(blockposition, this, 20);
+            }
+
+            world.updateAdjacentComparators(blockposition, this);
         }
-
-        IBlockData iblockdata1;
-
-        if (flag1 && !flag) {
-            iblockdata1 = (IBlockData) iblockdata.set(BlockMinecartDetector.POWERED, true);
-            world.setTypeAndData(blockposition, iblockdata1, 3);
-            this.b(world, blockposition, iblockdata1, true);
-            world.applyPhysics(blockposition, this);
-            world.applyPhysics(blockposition.down(), this);
-            world.b(blockposition, iblockdata, iblockdata1);
-        }
-
-        if (!flag1 && flag) {
-            iblockdata1 = (IBlockData) iblockdata.set(BlockMinecartDetector.POWERED, false);
-            world.setTypeAndData(blockposition, iblockdata1, 3);
-            this.b(world, blockposition, iblockdata1, false);
-            world.applyPhysics(blockposition, this);
-            world.applyPhysics(blockposition.down(), this);
-            world.b(blockposition, iblockdata, iblockdata1);
-        }
-
-        if (flag1) {
-            world.getBlockTickList().a(blockposition, this, 20);
-        }
-
-        world.updateAdjacentComparators(blockposition, this);
     }
 
     protected void b(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {

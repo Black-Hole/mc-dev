@@ -13,16 +13,9 @@ public abstract class BlockGrowingTop extends BlockGrowingAbstract implements IB
         this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockGrowingTop.d, 0));
     }
 
+    @Override
     public IBlockData a(GeneratorAccess generatoraccess) {
         return (IBlockData) this.getBlockData().set(BlockGrowingTop.d, generatoraccess.getRandom().nextInt(25));
-    }
-
-    @Override
-    public void tickAlways(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, Random random) {
-        if (!iblockdata.canPlace(worldserver, blockposition)) {
-            worldserver.b(blockposition, true);
-        }
-
     }
 
     @Override
@@ -48,7 +41,7 @@ public abstract class BlockGrowingTop extends BlockGrowingAbstract implements IB
             generatoraccess.getBlockTickList().a(blockposition, this, 1);
         }
 
-        if (enumdirection == this.a && iblockdata1.a((Block) this)) {
+        if (enumdirection == this.a && (iblockdata1.a((Block) this) || iblockdata1.a(this.d()))) {
             return this.d().getBlockData();
         } else {
             if (this.b) {

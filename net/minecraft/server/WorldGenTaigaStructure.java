@@ -4,22 +4,22 @@ import com.mojang.serialization.Codec;
 import java.util.Iterator;
 import java.util.Random;
 
-public class WorldGenTaigaStructure extends WorldGenerator<WorldGenFeatureBlockOffsetConfiguration> {
+public class WorldGenTaigaStructure extends WorldGenerator<WorldGenFeatureLakeConfiguration> {
 
-    public WorldGenTaigaStructure(Codec<WorldGenFeatureBlockOffsetConfiguration> codec) {
+    public WorldGenTaigaStructure(Codec<WorldGenFeatureLakeConfiguration> codec) {
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureBlockOffsetConfiguration worldgenfeatureblockoffsetconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureLakeConfiguration worldgenfeaturelakeconfiguration) {
         while (true) {
             if (blockposition.getY() > 3) {
-                label44:
+                label38:
                 {
                     if (!generatoraccessseed.isEmpty(blockposition.down())) {
                         Block block = generatoraccessseed.getType(blockposition.down()).getBlock();
 
                         if (b(block) || a(block)) {
-                            break label44;
+                            break label38;
                         }
                     }
 
@@ -32,24 +32,22 @@ public class WorldGenTaigaStructure extends WorldGenerator<WorldGenFeatureBlockO
                 return false;
             }
 
-            int i = worldgenfeatureblockoffsetconfiguration.c;
-
-            for (int j = 0; i >= 0 && j < 3; ++j) {
-                int k = i + random.nextInt(2);
-                int l = i + random.nextInt(2);
-                int i1 = i + random.nextInt(2);
-                float f = (float) (k + l + i1) * 0.333F + 0.5F;
-                Iterator iterator = BlockPosition.a(blockposition.b(-k, -l, -i1), blockposition.b(k, l, i1)).iterator();
+            for (int i = 0; i < 3; ++i) {
+                int j = random.nextInt(2);
+                int k = random.nextInt(2);
+                int l = random.nextInt(2);
+                float f = (float) (j + k + l) * 0.333F + 0.5F;
+                Iterator iterator = BlockPosition.a(blockposition.b(-j, -k, -l), blockposition.b(j, k, l)).iterator();
 
                 while (iterator.hasNext()) {
                     BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
                     if (blockposition1.j(blockposition) <= (double) (f * f)) {
-                        generatoraccessseed.setTypeAndData(blockposition1, worldgenfeatureblockoffsetconfiguration.b, 4);
+                        generatoraccessseed.setTypeAndData(blockposition1, worldgenfeaturelakeconfiguration.b, 4);
                     }
                 }
 
-                blockposition = blockposition.b(-(i + 1) + random.nextInt(2 + i * 2), 0 - random.nextInt(2), -(i + 1) + random.nextInt(2 + i * 2));
+                blockposition = blockposition.b(-1 + random.nextInt(2), -random.nextInt(2), -1 + random.nextInt(2));
             }
 
             return true;

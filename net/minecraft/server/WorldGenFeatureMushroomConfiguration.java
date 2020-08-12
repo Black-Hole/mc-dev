@@ -10,7 +10,7 @@ public class WorldGenFeatureMushroomConfiguration implements WorldGenFeatureConf
             return worldgenfeaturemushroomconfiguration.b;
         }), WorldGenFeatureStateProvider.a.fieldOf("stem_provider").forGetter((worldgenfeaturemushroomconfiguration) -> {
             return worldgenfeaturemushroomconfiguration.c;
-        }), Codec.INT.fieldOf("foliage_radius").withDefault(2).forGetter((worldgenfeaturemushroomconfiguration) -> {
+        }), Codec.INT.fieldOf("foliage_radius").orElse(2).forGetter((worldgenfeaturemushroomconfiguration) -> {
             return worldgenfeaturemushroomconfiguration.d;
         })).apply(instance, WorldGenFeatureMushroomConfiguration::new);
     });

@@ -16,7 +16,7 @@ public class DispenserRegistry {
     public static void init() {
         if (!DispenserRegistry.b) {
             DispenserRegistry.b = true;
-            if (IRegistry.h.keySet().isEmpty()) {
+            if (IRegistry.f.keySet().isEmpty()) {
                 throw new IllegalStateException("Unable to load registries");
             } else {
                 BlockFire.c();
@@ -28,6 +28,7 @@ public class DispenserRegistry {
                     PlayerSelector.a();
                     IDispenseBehavior.c();
                     ArgumentRegistry.a();
+                    TagStatic.b();
                     d();
                 }
             }
@@ -69,7 +70,6 @@ public class DispenserRegistry {
         a(IRegistry.MOB_EFFECT, MobEffectList::c, set);
         a(IRegistry.ITEM, Item::getName, set);
         a(IRegistry.ENCHANTMENT, Enchantment::g, set);
-        a(IRegistry.BIOME, BiomeBase::n, set);
         a(IRegistry.BLOCK, Block::i, set);
         a(IRegistry.CUSTOM_STAT, (minecraftkey) -> {
             return "stat." + minecraftkey.toString().replace(':', '.');
@@ -86,6 +86,7 @@ public class DispenserRegistry {
                 b().forEach((s) -> {
                     DispenserRegistry.LOGGER.error("Missing translations: " + s);
                 });
+                CommandDispatcher.b();
             }
 
             AttributeDefaults.a();

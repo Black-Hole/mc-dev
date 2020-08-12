@@ -22,7 +22,7 @@ public class ResourcePackSourceFolder implements ResourcePackSource {
     }
 
     @Override
-    public <T extends ResourcePackLoader> void a(Consumer<T> consumer, ResourcePackLoader.a<T> resourcepackloader_a) {
+    public void a(Consumer<ResourcePackLoader> consumer, ResourcePackLoader.a resourcepackloader_a) {
         if (!this.file.isDirectory()) {
             this.file.mkdirs();
         }
@@ -36,10 +36,10 @@ public class ResourcePackSourceFolder implements ResourcePackSource {
             for (int j = 0; j < i; ++j) {
                 File file = afile1[j];
                 String s = "file/" + file.getName();
-                T t0 = ResourcePackLoader.a(s, false, this.a(file), resourcepackloader_a, ResourcePackLoader.Position.TOP, this.c);
+                ResourcePackLoader resourcepackloader = ResourcePackLoader.a(s, false, this.a(file), resourcepackloader_a, ResourcePackLoader.Position.TOP, this.c);
 
-                if (t0 != null) {
-                    consumer.accept(t0);
+                if (resourcepackloader != null) {
+                    consumer.accept(resourcepackloader);
                 }
             }
 

@@ -317,7 +317,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
     }
 
     public static List<EntityItem> c(IHopper ihopper) {
-        return (List) ihopper.ac_().d().stream().flatMap((axisalignedbb) -> {
+        return (List) ihopper.aa_().d().stream().flatMap((axisalignedbb) -> {
             return ihopper.getWorld().a(EntityItem.class, axisalignedbb.d(ihopper.x() - 0.5D, ihopper.z() - 0.5D, ihopper.A() - 0.5D), IEntitySelector.a).stream();
         }).collect(Collectors.toList());
     }
@@ -403,7 +403,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         if (entity instanceof EntityItem) {
             BlockPosition blockposition = this.getPosition();
 
-            if (VoxelShapes.c(VoxelShapes.a(entity.getBoundingBox().d((double) (-blockposition.getX()), (double) (-blockposition.getY()), (double) (-blockposition.getZ()))), this.ac_(), OperatorBoolean.AND)) {
+            if (VoxelShapes.c(VoxelShapes.a(entity.getBoundingBox().d((double) (-blockposition.getX()), (double) (-blockposition.getY()), (double) (-blockposition.getZ()))), this.aa_(), OperatorBoolean.AND)) {
                 this.a(() -> {
                     return a((IInventory) this, (EntityItem) entity);
                 });

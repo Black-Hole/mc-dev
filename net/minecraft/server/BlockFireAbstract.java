@@ -1,20 +1,15 @@
 package net.minecraft.server;
 
-import java.util.Iterator;
+import java.util.Optional;
 
 public abstract class BlockFireAbstract extends Block {
 
-    private final float g;
-    protected static final VoxelShape a = Block.a(0.0D, 15.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape b = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
-    protected static final VoxelShape c = Block.a(0.0D, 0.0D, 0.0D, 1.0D, 16.0D, 16.0D);
-    protected static final VoxelShape d = Block.a(15.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape e = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 1.0D);
-    protected static final VoxelShape f = Block.a(0.0D, 0.0D, 15.0D, 16.0D, 16.0D, 16.0D);
+    private final float b;
+    protected static final VoxelShape a = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
 
     public BlockFireAbstract(BlockBase.Info blockbase_info, float f) {
         super(blockbase_info);
-        this.g = f;
+        this.b = f;
     }
 
     @Override
@@ -31,7 +26,7 @@ public abstract class BlockFireAbstract extends Block {
 
     @Override
     public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockFireAbstract.b;
+        return BlockFireAbstract.a;
     }
 
     protected abstract boolean e(IBlockData iblockdata);
@@ -44,7 +39,7 @@ public abstract class BlockFireAbstract extends Block {
                 entity.setOnFire(8);
             }
 
-            entity.damageEntity(DamageSource.FIRE, this.g);
+            entity.damageEntity(DamageSource.FIRE, this.b);
         }
 
         super.a(iblockdata, world, blockposition, entity);
@@ -53,13 +48,24 @@ public abstract class BlockFireAbstract extends Block {
     @Override
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (!iblockdata1.a(iblockdata.getBlock())) {
-            if (world.getDimensionKey() != World.OVERWORLD && world.getDimensionKey() != World.THE_NETHER || !BlockPortal.a((GeneratorAccess) world, blockposition)) {
-                if (!iblockdata.canPlace(world, blockposition)) {
-                    world.a(blockposition, false);
-                }
+            if (a(world)) {
+                Optional<BlockPortalShape> optional = BlockPortalShape.a((GeneratorAccess) world, blockposition, EnumDirection.EnumAxis.X);
 
+                if (optional.isPresent()) {
+                    ((BlockPortalShape) optional.get()).createPortal();
+                    return;
+                }
             }
+
+            if (!iblockdata.canPlace(world, blockposition)) {
+                world.a(blockposition, false);
+            }
+
         }
+    }
+
+    private static boolean a(World world) {
+        return world.getDimensionKey() == World.OVERWORLD || world.getDimensionKey() == World.THE_NETHER;
     }
 
     @Override
@@ -70,26 +76,31 @@ public abstract class BlockFireAbstract extends Block {
 
     }
 
-    public static boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        IBlockData iblockdata = generatoraccess.getType(blockposition);
-        IBlockData iblockdata1 = a((IBlockAccess) generatoraccess, blockposition);
+    public static boolean a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
+        IBlockData iblockdata = world.getType(blockposition);
 
-        return iblockdata.isAir() && (iblockdata1.canPlace(generatoraccess, blockposition) || b(generatoraccess, blockposition));
+        return !iblockdata.isAir() ? false : a((IBlockAccess) world, blockposition).canPlace(world, blockposition) || b(world, blockposition, enumdirection);
     }
 
-    private static boolean b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
+    private static boolean b(World world, BlockPosition blockposition, EnumDirection enumdirection) {
+        if (!a(world)) {
+            return false;
+        } else {
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i();
+            boolean flag = false;
+            EnumDirection[] aenumdirection = EnumDirection.values();
+            int i = aenumdirection.length;
 
-        EnumDirection enumdirection;
+            for (int j = 0; j < i; ++j) {
+                EnumDirection enumdirection1 = aenumdirection[j];
 
-        do {
-            if (!iterator.hasNext()) {
-                return false;
+                if (world.getType(blockposition_mutableblockposition.g(blockposition).c(enumdirection1)).a(Blocks.OBSIDIAN)) {
+                    flag = true;
+                    break;
+                }
             }
 
-            enumdirection = (EnumDirection) iterator.next();
-        } while (!generatoraccess.getType(blockposition.shift(enumdirection)).a(Blocks.OBSIDIAN) || BlockPortal.b(generatoraccess, blockposition) == null);
-
-        return true;
+            return flag && BlockPortalShape.a((GeneratorAccess) world, blockposition, enumdirection.h().n()).isPresent();
+        }
     }
 }

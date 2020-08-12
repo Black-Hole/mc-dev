@@ -6,6 +6,9 @@ import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,6 +16,35 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class NBTCompressedStreamTools {
+
+    public static NBTTagCompound a(File file) throws IOException {
+        FileInputStream fileinputstream = new FileInputStream(file);
+        Throwable throwable = null;
+
+        NBTTagCompound nbttagcompound;
+
+        try {
+            nbttagcompound = a((InputStream) fileinputstream);
+        } catch (Throwable throwable1) {
+            throwable = throwable1;
+            throw throwable1;
+        } finally {
+            if (fileinputstream != null) {
+                if (throwable != null) {
+                    try {
+                        fileinputstream.close();
+                    } catch (Throwable throwable2) {
+                        throwable.addSuppressed(throwable2);
+                    }
+                } else {
+                    fileinputstream.close();
+                }
+            }
+
+        }
+
+        return nbttagcompound;
+    }
 
     public static NBTTagCompound a(InputStream inputstream) throws IOException {
         DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new GZIPInputStream(inputstream)));
@@ -43,6 +75,32 @@ public class NBTCompressedStreamTools {
         return nbttagcompound;
     }
 
+    public static void a(NBTTagCompound nbttagcompound, File file) throws IOException {
+        FileOutputStream fileoutputstream = new FileOutputStream(file);
+        Throwable throwable = null;
+
+        try {
+            a(nbttagcompound, (OutputStream) fileoutputstream);
+        } catch (Throwable throwable1) {
+            throwable = throwable1;
+            throw throwable1;
+        } finally {
+            if (fileoutputstream != null) {
+                if (throwable != null) {
+                    try {
+                        fileoutputstream.close();
+                    } catch (Throwable throwable2) {
+                        throwable.addSuppressed(throwable2);
+                    }
+                } else {
+                    fileoutputstream.close();
+                }
+            }
+
+        }
+
+    }
+
     public static void a(NBTTagCompound nbttagcompound, OutputStream outputstream) throws IOException {
         DataOutputStream dataoutputstream = new DataOutputStream(new BufferedOutputStream(new GZIPOutputStream(outputstream)));
         Throwable throwable = null;
@@ -69,8 +127,8 @@ public class NBTCompressedStreamTools {
 
     }
 
-    public static NBTTagCompound a(DataInputStream datainputstream) throws IOException {
-        return a((DataInput) datainputstream, NBTReadLimiter.a);
+    public static NBTTagCompound a(DataInput datainput) throws IOException {
+        return a(datainput, NBTReadLimiter.a);
     }
 
     public static NBTTagCompound a(DataInput datainput, NBTReadLimiter nbtreadlimiter) throws IOException {

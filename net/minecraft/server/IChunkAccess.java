@@ -104,10 +104,10 @@ public interface IChunkAccess extends IBlockAccess, IStructureAccess {
     }
 
     @Nullable
-    NBTTagCompound f(BlockPosition blockposition);
+    NBTTagCompound i(BlockPosition blockposition);
 
     @Nullable
-    NBTTagCompound i(BlockPosition blockposition);
+    NBTTagCompound j(BlockPosition blockposition);
 
     Stream<BlockPosition> m();
 

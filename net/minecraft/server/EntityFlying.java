@@ -15,12 +15,12 @@ public abstract class EntityFlying extends EntityInsentient {
     protected void a(double d0, boolean flag, IBlockData iblockdata, BlockPosition blockposition) {}
 
     @Override
-    public void f(Vec3D vec3d) {
+    public void g(Vec3D vec3d) {
         if (this.isInWater()) {
             this.a(0.02F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.800000011920929D));
-        } else if (this.aN()) {
+        } else if (this.aP()) {
             this.a(0.02F, vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.5D));

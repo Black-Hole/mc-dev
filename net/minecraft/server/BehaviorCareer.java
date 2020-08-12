@@ -20,18 +20,19 @@ public class BehaviorCareer extends Behavior<EntityVillager> {
 
         entityvillager.getBehaviorController().removeMemory(MemoryModuleType.POTENTIAL_JOB_SITE);
         entityvillager.getBehaviorController().setMemory(MemoryModuleType.JOB_SITE, (Object) globalpos);
+        worldserver.broadcastEntityEffect(entityvillager, (byte) 14);
         if (entityvillager.getVillagerData().getProfession() == VillagerProfession.NONE) {
             MinecraftServer minecraftserver = worldserver.getMinecraftServer();
 
             Optional.ofNullable(minecraftserver.getWorldServer(globalpos.getDimensionManager())).flatMap((worldserver1) -> {
-                return worldserver1.x().c(globalpos.getBlockPosition());
+                return worldserver1.y().c(globalpos.getBlockPosition());
             }).flatMap((villageplacetype) -> {
-                return IRegistry.VILLAGER_PROFESSION.e().filter((villagerprofession) -> {
+                return IRegistry.VILLAGER_PROFESSION.g().filter((villagerprofession) -> {
                     return villagerprofession.b() == villageplacetype;
                 }).findFirst();
             }).ifPresent((villagerprofession) -> {
                 entityvillager.setVillagerData(entityvillager.getVillagerData().withProfession(villagerprofession));
-                entityvillager.b(worldserver);
+                entityvillager.c(worldserver);
             });
         }
     }

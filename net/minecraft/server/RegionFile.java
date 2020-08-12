@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -24,31 +25,32 @@ import org.apache.logging.log4j.Logger;
 public class RegionFile implements AutoCloseable {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final ByteBuffer b = ByteBuffer.allocateDirect(1);
+    private static final ByteBuffer c = ByteBuffer.allocateDirect(1);
     private final FileChannel dataFile;
-    private final java.nio.file.Path d;
-    private final RegionFileCompression e;
-    private final ByteBuffer f;
-    private final IntBuffer g;
+    private final java.nio.file.Path e;
+    private final RegionFileCompression f;
+    private final ByteBuffer g;
     private final IntBuffer h;
-    private final RegionFileBitSet freeSectors;
+    private final IntBuffer i;
+    @VisibleForTesting
+    protected final RegionFileBitSet freeSectors;
 
     public RegionFile(File file, File file1, boolean flag) throws IOException {
         this(file.toPath(), file1.toPath(), RegionFileCompression.b, flag);
     }
 
     public RegionFile(java.nio.file.Path java_nio_file_path, java.nio.file.Path java_nio_file_path1, RegionFileCompression regionfilecompression, boolean flag) throws IOException {
-        this.f = ByteBuffer.allocateDirect(8192);
+        this.g = ByteBuffer.allocateDirect(8192);
         this.freeSectors = new RegionFileBitSet();
-        this.e = regionfilecompression;
+        this.f = regionfilecompression;
         if (!Files.isDirectory(java_nio_file_path1, new LinkOption[0])) {
             throw new IllegalArgumentException("Expected directory, got " + java_nio_file_path1.toAbsolutePath());
         } else {
-            this.d = java_nio_file_path1;
-            this.g = this.f.asIntBuffer();
-            this.g.limit(1024);
-            this.f.position(4096);
-            this.h = this.f.asIntBuffer();
+            this.e = java_nio_file_path1;
+            this.h = this.g.asIntBuffer();
+            this.h.limit(1024);
+            this.g.position(4096);
+            this.i = this.g.asIntBuffer();
             if (flag) {
                 this.dataFile = FileChannel.open(java_nio_file_path, StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE, StandardOpenOption.DSYNC);
             } else {
@@ -56,22 +58,35 @@ public class RegionFile implements AutoCloseable {
             }
 
             this.freeSectors.a(0, 2);
-            this.f.position(0);
-            int i = this.dataFile.read(this.f, 0L);
+            this.g.position(0);
+            int i = this.dataFile.read(this.g, 0L);
 
             if (i != -1) {
                 if (i != 8192) {
                     RegionFile.LOGGER.warn("Region file {} has truncated header: {}", java_nio_file_path, i);
                 }
 
-                for (int j = 0; j < 1024; ++j) {
-                    int k = this.g.get(j);
+                long j = Files.size(java_nio_file_path);
 
-                    if (k != 0) {
-                        int l = b(k);
-                        int i1 = a(k);
+                for (int k = 0; k < 1024; ++k) {
+                    int l = this.h.get(k);
 
-                        this.freeSectors.a(l, i1);
+                    if (l != 0) {
+                        int i1 = b(l);
+                        int j1 = a(l);
+
+                        if (i1 < 2) {
+                            RegionFile.LOGGER.warn("Region file {} has invalid sector at index: {}; sector {} overlaps with header", java_nio_file_path, k, i1);
+                            this.h.put(k, 0);
+                        } else if (j1 == 0) {
+                            RegionFile.LOGGER.warn("Region file {} has an invalid sector at index: {}; size has to be > 0", java_nio_file_path, k);
+                            this.h.put(k, 0);
+                        } else if ((long) i1 * 4096L > j) {
+                            RegionFile.LOGGER.warn("Region file {} has an invalid sector at index: {}; sector {} is out of bounds", java_nio_file_path, k, i1);
+                            this.h.put(k, 0);
+                        } else {
+                            this.freeSectors.a(i1, j1);
+                        }
                     }
                 }
             }
@@ -82,7 +97,7 @@ public class RegionFile implements AutoCloseable {
     private java.nio.file.Path e(ChunkCoordIntPair chunkcoordintpair) {
         String s = "c." + chunkcoordintpair.x + "." + chunkcoordintpair.z + ".mcc";
 
-        return this.d.resolve(s);
+        return this.e.resolve(s);
     }
 
     @Nullable
@@ -177,7 +192,7 @@ public class RegionFile implements AutoCloseable {
     }
 
     private static int b(int i) {
-        return i >> 8;
+        return i >> 8 & 16777215;
     }
 
     private static int c(int i) {
@@ -236,7 +251,7 @@ public class RegionFile implements AutoCloseable {
     }
 
     public DataOutputStream c(ChunkCoordIntPair chunkcoordintpair) throws IOException {
-        return new DataOutputStream(new BufferedOutputStream(this.e.a((OutputStream) (new RegionFile.ChunkBuffer(chunkcoordintpair)))));
+        return new DataOutputStream(new BufferedOutputStream(this.f.a((OutputStream) (new RegionFile.ChunkBuffer(chunkcoordintpair)))));
     }
 
     public void a() throws IOException {
@@ -245,7 +260,7 @@ public class RegionFile implements AutoCloseable {
 
     protected synchronized void a(ChunkCoordIntPair chunkcoordintpair, ByteBuffer bytebuffer) throws IOException {
         int i = g(chunkcoordintpair);
-        int j = this.g.get(i);
+        int j = this.h.get(i);
         int k = b(j);
         int l = a(j);
         int i1 = bytebuffer.remaining();
@@ -273,8 +288,8 @@ public class RegionFile implements AutoCloseable {
 
         int l1 = (int) (SystemUtils.getTimeMillis() / 1000L);
 
-        this.g.put(i, this.a(k1, j1));
-        this.h.put(i, l1);
+        this.h.put(i, this.a(k1, j1));
+        this.i.put(i, l1);
         this.c();
         regionfile_b.run();
         if (k != 0) {
@@ -287,13 +302,13 @@ public class RegionFile implements AutoCloseable {
         ByteBuffer bytebuffer = ByteBuffer.allocate(5);
 
         bytebuffer.putInt(1);
-        bytebuffer.put((byte) (this.e.a() | 128));
+        bytebuffer.put((byte) (this.f.a() | 128));
         bytebuffer.flip();
         return bytebuffer;
     }
 
     private RegionFile.b a(java.nio.file.Path java_nio_file_path, ByteBuffer bytebuffer) throws IOException {
-        java.nio.file.Path java_nio_file_path1 = Files.createTempFile(this.d, "tmp", (String) null);
+        java.nio.file.Path java_nio_file_path1 = Files.createTempFile(this.e, "tmp", (String) null);
         FileChannel filechannel = FileChannel.open(java_nio_file_path1, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
         Throwable throwable = null;
 
@@ -324,12 +339,12 @@ public class RegionFile implements AutoCloseable {
     }
 
     private void c() throws IOException {
-        this.f.position(0);
-        this.dataFile.write(this.f, 0L);
+        this.g.position(0);
+        this.dataFile.write(this.g, 0L);
     }
 
     private int getOffset(ChunkCoordIntPair chunkcoordintpair) {
-        return this.g.get(g(chunkcoordintpair));
+        return this.h.get(g(chunkcoordintpair));
     }
 
     public boolean chunkExists(ChunkCoordIntPair chunkcoordintpair) {
@@ -358,7 +373,7 @@ public class RegionFile implements AutoCloseable {
         int j = c(i) * 4096;
 
         if (i != j) {
-            ByteBuffer bytebuffer = RegionFile.b.duplicate();
+            ByteBuffer bytebuffer = RegionFile.c.duplicate();
 
             bytebuffer.position(0);
             this.dataFile.write(bytebuffer, (long) (j - 1));
@@ -381,7 +396,7 @@ public class RegionFile implements AutoCloseable {
             super.write(0);
             super.write(0);
             super.write(0);
-            super.write(RegionFile.this.e.a());
+            super.write(RegionFile.this.f.a());
             this.b = chunkcoordintpair;
         }
 

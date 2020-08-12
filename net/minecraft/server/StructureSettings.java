@@ -38,8 +38,9 @@ public class StructureSettings {
         return this.d;
     }
 
+    @Nullable
     public StructureSettingsFeature a(StructureGenerator<?> structuregenerator) {
-        return (StructureSettingsFeature) this.d.getOrDefault(structuregenerator, new StructureSettingsFeature(1, 0, 0));
+        return (StructureSettingsFeature) this.d.get(structuregenerator);
     }
 
     @Nullable

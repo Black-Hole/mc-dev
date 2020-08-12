@@ -10,19 +10,19 @@ public class WorldGenFeatureRandomChoice extends WorldGenerator<WorldGenFeatureR
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRandomChoiceConfiguration worldgenfeaturerandomchoiceconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRandomChoiceConfiguration worldgenfeaturerandomchoiceconfiguration) {
         Iterator iterator = worldgenfeaturerandomchoiceconfiguration.b.iterator();
 
         WorldGenFeatureRandomChoiceConfigurationWeight worldgenfeaturerandomchoiceconfigurationweight;
 
         do {
             if (!iterator.hasNext()) {
-                return worldgenfeaturerandomchoiceconfiguration.c.a(generatoraccessseed, structuremanager, chunkgenerator, random, blockposition);
+                return ((WorldGenFeatureConfigured) worldgenfeaturerandomchoiceconfiguration.c.get()).a(generatoraccessseed, chunkgenerator, random, blockposition);
             }
 
             worldgenfeaturerandomchoiceconfigurationweight = (WorldGenFeatureRandomChoiceConfigurationWeight) iterator.next();
         } while (random.nextFloat() >= worldgenfeaturerandomchoiceconfigurationweight.c);
 
-        return worldgenfeaturerandomchoiceconfigurationweight.a(generatoraccessseed, structuremanager, chunkgenerator, random, blockposition);
+        return worldgenfeaturerandomchoiceconfigurationweight.a(generatoraccessseed, chunkgenerator, random, blockposition);
     }
 }

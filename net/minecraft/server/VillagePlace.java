@@ -52,6 +52,10 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
 
         return ChunkCoordIntPair.a(new ChunkCoordIntPair(blockposition), j).flatMap((chunkcoordintpair) -> {
             return this.a(predicate, chunkcoordintpair, villageplace_occupancy);
+        }).filter((villageplacerecord) -> {
+            BlockPosition blockposition1 = villageplacerecord.f();
+
+            return Math.abs(blockposition1.getX() - blockposition.getX()) <= i && Math.abs(blockposition1.getZ() - blockposition.getZ()) <= i;
         });
     }
 
@@ -75,7 +79,13 @@ public class VillagePlace extends RegionFileSection<VillagePlaceSection> {
         return this.c(predicate, blockposition, i, villageplace_occupancy).map(VillagePlaceRecord::f).filter(predicate1);
     }
 
-    public Optional<BlockPosition> b(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
+    public Stream<BlockPosition> b(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
+        return this.a(predicate, predicate1, blockposition, i, villageplace_occupancy).sorted(Comparator.comparingDouble((blockposition1) -> {
+            return blockposition1.j(blockposition);
+        }));
+    }
+
+    public Optional<BlockPosition> c(Predicate<VillagePlaceType> predicate, Predicate<BlockPosition> predicate1, BlockPosition blockposition, int i, VillagePlace.Occupancy villageplace_occupancy) {
         return this.a(predicate, predicate1, blockposition, i, villageplace_occupancy).findFirst();
     }
 

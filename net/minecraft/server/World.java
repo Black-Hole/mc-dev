@@ -17,10 +17,10 @@ import org.apache.logging.log4j.Logger;
 public abstract class World implements GeneratorAccess, AutoCloseable {
 
     protected static final Logger LOGGER = LogManager.getLogger();
-    public static final Codec<ResourceKey<World>> f = MinecraftKey.a.xmap(ResourceKey.a(IRegistry.ae), ResourceKey::a);
-    public static final ResourceKey<World> OVERWORLD = ResourceKey.a(IRegistry.ae, new MinecraftKey("overworld"));
-    public static final ResourceKey<World> THE_NETHER = ResourceKey.a(IRegistry.ae, new MinecraftKey("the_nether"));
-    public static final ResourceKey<World> THE_END = ResourceKey.a(IRegistry.ae, new MinecraftKey("the_end"));
+    public static final Codec<ResourceKey<World>> f = MinecraftKey.a.xmap(ResourceKey.b(IRegistry.L), ResourceKey::a);
+    public static final ResourceKey<World> OVERWORLD = ResourceKey.a(IRegistry.L, new MinecraftKey("overworld"));
+    public static final ResourceKey<World> THE_NETHER = ResourceKey.a(IRegistry.L, new MinecraftKey("the_nether"));
+    public static final ResourceKey<World> THE_END = ResourceKey.a(IRegistry.L, new MinecraftKey("the_end"));
     private static final EnumDirection[] a = EnumDirection.values();
     public final List<TileEntity> tileEntityList = Lists.newArrayList();
     public final List<TileEntity> tileEntityListTick = Lists.newArrayList();
@@ -44,25 +44,23 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
     private final WorldBorder worldBorder;
     private final BiomeManager biomeManager;
     private final ResourceKey<World> dimensionKey;
-    private final ResourceKey<DimensionManager> typeKey;
 
-    protected World(WorldDataMutable worlddatamutable, ResourceKey<World> resourcekey, ResourceKey<DimensionManager> resourcekey1, DimensionManager dimensionmanager, Supplier<GameProfilerFiller> supplier, boolean flag, boolean flag1, long i) {
+    protected World(WorldDataMutable worlddatamutable, ResourceKey<World> resourcekey, final DimensionManager dimensionmanager, Supplier<GameProfilerFiller> supplier, boolean flag, boolean flag1, long i) {
         this.methodProfiler = supplier;
         this.worldData = worlddatamutable;
         this.x = dimensionmanager;
         this.dimensionKey = resourcekey;
-        this.typeKey = resourcekey1;
         this.isClientSide = flag;
-        if (dimensionmanager.h()) {
+        if (dimensionmanager.getCoordinateScale() != 1.0D) {
             this.worldBorder = new WorldBorder() {
                 @Override
                 public double getCenterX() {
-                    return super.getCenterX() / 8.0D;
+                    return super.getCenterX() / dimensionmanager.getCoordinateScale();
                 }
 
                 @Override
                 public double getCenterZ() {
-                    return super.getCenterZ() / 8.0D;
+                    return super.getCenterZ() / dimensionmanager.getCoordinateScale();
                 }
             };
         } else {
@@ -85,14 +83,14 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
     }
 
     public static boolean isValidLocation(BlockPosition blockposition) {
-        return !isOutsideWorld(blockposition) && e(blockposition);
+        return !isOutsideWorld(blockposition) && D(blockposition);
     }
 
-    public static boolean k(BlockPosition blockposition) {
-        return !d(blockposition.getY()) && e(blockposition);
+    public static boolean l(BlockPosition blockposition) {
+        return !d(blockposition.getY()) && D(blockposition);
     }
 
-    private static boolean e(BlockPosition blockposition) {
+    private static boolean D(BlockPosition blockposition) {
         return blockposition.getX() >= -30000000 && blockposition.getZ() >= -30000000 && blockposition.getX() < 30000000 && blockposition.getZ() < 30000000;
     }
 
@@ -106,47 +104,6 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
 
     public static boolean b(int i) {
         return i < 0 || i >= 256;
-    }
-
-    public double m(BlockPosition blockposition) {
-        return this.c(blockposition, (iblockdata) -> {
-            return false;
-        });
-    }
-
-    public double c(BlockPosition blockposition, Predicate<IBlockData> predicate) {
-        IBlockData iblockdata = this.getType(blockposition);
-        VoxelShape voxelshape = predicate.test(iblockdata) ? VoxelShapes.a() : iblockdata.getCollisionShape(this, blockposition);
-
-        if (voxelshape.isEmpty()) {
-            BlockPosition blockposition1 = blockposition.down();
-            IBlockData iblockdata1 = this.getType(blockposition1);
-            VoxelShape voxelshape1 = predicate.test(iblockdata1) ? VoxelShapes.a() : iblockdata1.getCollisionShape(this, blockposition1);
-            double d0 = voxelshape1.c(EnumDirection.EnumAxis.Y);
-
-            return d0 >= 1.0D ? d0 - 1.0D : Double.NEGATIVE_INFINITY;
-        } else {
-            return voxelshape.c(EnumDirection.EnumAxis.Y);
-        }
-    }
-
-    public double a(BlockPosition blockposition, double d0) {
-        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i();
-        int i = MathHelper.f(d0);
-        int j = 0;
-
-        while (j < i) {
-            VoxelShape voxelshape = this.getType(blockposition_mutableblockposition).getCollisionShape(this, blockposition_mutableblockposition);
-
-            if (!voxelshape.isEmpty()) {
-                return (double) j + voxelshape.b(EnumDirection.EnumAxis.Y);
-            }
-
-            ++j;
-            blockposition_mutableblockposition.c(EnumDirection.UP);
-        }
-
-        return Double.POSITIVE_INFINITY;
     }
 
     public Chunk getChunkAtWorldCoords(BlockPosition blockposition) {
@@ -190,7 +147,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
             } else {
                 IBlockData iblockdata2 = this.getType(blockposition);
 
-                if (iblockdata2 != iblockdata1 && (iblockdata2.b((IBlockAccess) this, blockposition) != iblockdata1.b((IBlockAccess) this, blockposition) || iblockdata2.f() != iblockdata1.f() || iblockdata2.e() || iblockdata1.e())) {
+                if ((i & 128) == 0 && iblockdata2 != iblockdata1 && (iblockdata2.b((IBlockAccess) this, blockposition) != iblockdata1.b((IBlockAccess) this, blockposition) || iblockdata2.f() != iblockdata1.f() || iblockdata2.e() || iblockdata1.e())) {
                     this.getMethodProfiler().enter("queueCheckLight");
                     this.getChunkProvider().getLightEngine().a(blockposition);
                     this.getMethodProfiler().exit();
@@ -557,7 +514,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
             TileEntity tileentity = null;
 
             if (this.tickingTileEntities) {
-                tileentity = this.D(blockposition);
+                tileentity = this.E(blockposition);
             }
 
             if (tileentity == null) {
@@ -565,7 +522,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
             }
 
             if (tileentity == null) {
-                tileentity = this.D(blockposition);
+                tileentity = this.E(blockposition);
             }
 
             return tileentity;
@@ -573,7 +530,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
     }
 
     @Nullable
-    private TileEntity D(BlockPosition blockposition) {
+    private TileEntity E(BlockPosition blockposition) {
         for (int i = 0; i < this.tileEntityListPending.size(); ++i) {
             TileEntity tileentity = (TileEntity) this.tileEntityListPending.get(i);
 
@@ -596,7 +553,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
                         TileEntity tileentity1 = (TileEntity) iterator.next();
 
                         if (tileentity1.getPosition().equals(blockposition)) {
-                            tileentity1.an_();
+                            tileentity1.al_();
                             iterator.remove();
                         }
                     }
@@ -615,7 +572,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
         TileEntity tileentity = this.getTileEntity(blockposition);
 
         if (tileentity != null && this.tickingTileEntities) {
-            tileentity.an_();
+            tileentity.al_();
             this.tileEntityListPending.remove(tileentity);
         } else {
             if (tileentity != null) {
@@ -647,7 +604,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
         return this.a(blockposition, entity, EnumDirection.UP);
     }
 
-    public void N() {
+    public void P() {
         double d0 = 1.0D - (double) (this.d(1.0F) * 5.0F) / 16.0D;
         double d1 = 1.0D - (double) (this.b(1.0F) * 5.0F) / 16.0D;
         double d2 = 0.5D + 2.0D * MathHelper.a((double) MathHelper.cos(this.f(1.0F) * 6.2831855F), -0.25D, 0.25D);
@@ -659,7 +616,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
         this.getChunkProvider().a(flag, flag1);
     }
 
-    protected void O() {
+    protected void Q() {
         if (this.worldData.hasStorm()) {
             this.rainLevel = 1.0F;
             if (this.worldData.isThundering()) {
@@ -784,11 +741,6 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
         return 63;
     }
 
-    @Override
-    public World getMinecraftWorld() {
-        return this;
-    }
-
     public int getBlockPower(BlockPosition blockposition) {
         byte b0 = 0;
         int i = Math.max(b0, this.c(blockposition.down(), EnumDirection.DOWN));
@@ -881,7 +833,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
     }
 
     public GameRules getGameRules() {
-        return this.worldData.p();
+        return this.worldData.q();
     }
 
     public float b(float f) {
@@ -892,7 +844,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
         return MathHelper.g(f, this.lastRainLevel, this.rainLevel);
     }
 
-    public boolean T() {
+    public boolean V() {
         return this.getDimensionManager().hasSkyLight() && !this.getDimensionManager().hasCeiling() ? (double) this.b(1.0F) > 0.9D : false;
     }
 
@@ -903,21 +855,21 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
     public boolean isRainingAt(BlockPosition blockposition) {
         if (!this.isRaining()) {
             return false;
-        } else if (!this.f(blockposition)) {
+        } else if (!this.e(blockposition)) {
             return false;
         } else if (this.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition).getY() > blockposition.getY()) {
             return false;
         } else {
             BiomeBase biomebase = this.getBiome(blockposition);
 
-            return biomebase.d() == BiomeBase.Precipitation.RAIN && biomebase.getAdjustedTemperature(blockposition) >= 0.15F;
+            return biomebase.c() == BiomeBase.Precipitation.RAIN && biomebase.getAdjustedTemperature(blockposition) >= 0.15F;
         }
     }
 
     public boolean u(BlockPosition blockposition) {
         BiomeBase biomebase = this.getBiome(blockposition);
 
-        return biomebase.e();
+        return biomebase.d();
     }
 
     @Nullable
@@ -985,7 +937,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
         float f = 0.0F;
 
         if (this.isLoaded(blockposition)) {
-            f = this.aa();
+            f = this.ae();
             i = this.getChunkAtWorldCoords(blockposition).getInhabitedTime();
         }
 
@@ -1013,10 +965,6 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
         return this.x;
     }
 
-    public ResourceKey<DimensionManager> getTypeKey() {
-        return this.typeKey;
-    }
-
     public ResourceKey<World> getDimensionKey() {
         return this.dimensionKey;
     }
@@ -1033,7 +981,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
 
     public abstract CraftingManager getCraftingManager();
 
-    public abstract TagRegistry p();
+    public abstract ITagRegistry p();
 
     public BlockPosition a(int i, int j, int k, int l) {
         this.n = this.n * 3 + 1013904223;

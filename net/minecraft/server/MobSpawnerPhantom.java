@@ -35,7 +35,7 @@ public class MobSpawnerPhantom implements MobSpawner {
                         if (!entityhuman.isSpectator()) {
                             BlockPosition blockposition = entityhuman.getChunkCoordinates();
 
-                            if (!worldserver.getDimensionManager().hasSkyLight() || blockposition.getY() >= worldserver.getSeaLevel() && worldserver.f(blockposition)) {
+                            if (!worldserver.getDimensionManager().hasSkyLight() || blockposition.getY() >= worldserver.getSeaLevel() && worldserver.e(blockposition)) {
                                 DifficultyDamageScaler difficultydamagescaler = worldserver.getDamageScaler(blockposition);
 
                                 if (difficultydamagescaler.a(random.nextFloat() * 3.0F)) {
@@ -57,7 +57,7 @@ public class MobSpawnerPhantom implements MobSpawner {
 
                                                 entityphantom.setPositionRotation(blockposition1, 0.0F, 0.0F);
                                                 groupdataentity = entityphantom.prepare(worldserver, difficultydamagescaler, EnumMobSpawn.NATURAL, groupdataentity, (NBTTagCompound) null);
-                                                worldserver.addEntity(entityphantom);
+                                                worldserver.addAllEntities(entityphantom);
                                             }
 
                                             i += k;

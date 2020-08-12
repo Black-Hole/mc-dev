@@ -25,47 +25,63 @@ import org.apache.logging.log4j.Logger;
 public class GeneratorSettings {
 
     public static final Codec<GeneratorSettings> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(Codec.LONG.fieldOf("seed").stable().forGetter(GeneratorSettings::getSeed), Codec.BOOL.fieldOf("generate_features").withDefault(true).stable().forGetter(GeneratorSettings::shouldGenerateMapFeatures), Codec.BOOL.fieldOf("bonus_chest").withDefault(false).stable().forGetter(GeneratorSettings::d), RegistryMaterials.b(IRegistry.af, Lifecycle.stable(), WorldDimension.a).xmap(WorldDimension::a, Function.identity()).fieldOf("dimensions").forGetter(GeneratorSettings::e), Codec.STRING.optionalFieldOf("legacy_custom_options").stable().forGetter((generatorsettings) -> {
-            return generatorsettings.i;
+        return instance.group(Codec.LONG.fieldOf("seed").stable().forGetter(GeneratorSettings::getSeed), Codec.BOOL.fieldOf("generate_features").orElse(true).stable().forGetter(GeneratorSettings::shouldGenerateMapFeatures), Codec.BOOL.fieldOf("bonus_chest").orElse(false).stable().forGetter(GeneratorSettings::c), RegistryMaterials.b(IRegistry.M, Lifecycle.stable(), WorldDimension.a).xmap(WorldDimension::a, Function.identity()).fieldOf("dimensions").forGetter(GeneratorSettings::d), Codec.STRING.optionalFieldOf("legacy_custom_options").stable().forGetter((generatorsettings) -> {
+            return generatorsettings.g;
         })).apply(instance, instance.stable(GeneratorSettings::new));
-    }).comapFlatMap(GeneratorSettings::n, Function.identity());
+    }).comapFlatMap(GeneratorSettings::m, Function.identity());
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final int d = "North Carolina".hashCode();
-    public static final GeneratorSettings b = new GeneratorSettings((long) GeneratorSettings.d, true, true, a(DimensionManager.a((long) GeneratorSettings.d), a((long) GeneratorSettings.d)));
     private final long seed;
-    private final boolean f;
-    private final boolean g;
-    private final RegistryMaterials<WorldDimension> h;
-    private final Optional<String> i;
+    private final boolean d;
+    private final boolean e;
+    private final RegistryMaterials<WorldDimension> f;
+    private final Optional<String> g;
 
-    private DataResult<GeneratorSettings> n() {
-        return this.o() ? DataResult.success(this, Lifecycle.stable()) : DataResult.success(this);
+    private DataResult<GeneratorSettings> m() {
+        WorldDimension worlddimension = (WorldDimension) this.f.a(WorldDimension.OVERWORLD);
+
+        return worlddimension == null ? DataResult.error("Overworld settings missing") : (this.n() ? DataResult.success(this, Lifecycle.stable()) : DataResult.success(this));
     }
 
-    private boolean o() {
-        return WorldDimension.a(this.seed, this.h);
+    private boolean n() {
+        return WorldDimension.a(this.seed, this.f);
     }
 
     public GeneratorSettings(long i, boolean flag, boolean flag1, RegistryMaterials<WorldDimension> registrymaterials) {
         this(i, flag, flag1, registrymaterials, Optional.empty());
+        WorldDimension worlddimension = (WorldDimension) registrymaterials.a(WorldDimension.OVERWORLD);
+
+        if (worlddimension == null) {
+            throw new IllegalStateException("Overworld settings missing");
+        }
     }
 
     private GeneratorSettings(long i, boolean flag, boolean flag1, RegistryMaterials<WorldDimension> registrymaterials, Optional<String> optional) {
         this.seed = i;
-        this.f = flag;
-        this.g = flag1;
-        this.h = registrymaterials;
-        this.i = optional;
+        this.d = flag;
+        this.e = flag1;
+        this.f = registrymaterials;
+        this.g = optional;
     }
 
-    public static GeneratorSettings a() {
+    public static GeneratorSettings a(IRegistryCustom iregistrycustom) {
+        IRegistry<BiomeBase> iregistry = iregistrycustom.b(IRegistry.ay);
+        int i = "North Carolina".hashCode();
+        IRegistry<DimensionManager> iregistry1 = iregistrycustom.b(IRegistry.K);
+        IRegistry<GeneratorSettingBase> iregistry2 = iregistrycustom.b(IRegistry.ar);
+
+        return new GeneratorSettings((long) i, true, true, a((IRegistry) iregistry1, DimensionManager.a(iregistry1, iregistry, iregistry2, (long) i), (ChunkGenerator) a(iregistry, iregistry2, (long) i)));
+    }
+
+    public static GeneratorSettings a(IRegistry<DimensionManager> iregistry, IRegistry<BiomeBase> iregistry1, IRegistry<GeneratorSettingBase> iregistry2) {
         long i = (new Random()).nextLong();
 
-        return new GeneratorSettings(i, true, false, a(DimensionManager.a(i), a(i)));
+        return new GeneratorSettings(i, true, false, a(iregistry, DimensionManager.a(iregistry, iregistry1, iregistry2, i), (ChunkGenerator) a(iregistry1, iregistry2, i)));
     }
 
-    public static ChunkGeneratorAbstract a(long i) {
-        return new ChunkGeneratorAbstract(new WorldChunkManagerOverworld(i, false, false), i, GeneratorSettingBase.a.b.b());
+    public static ChunkGeneratorAbstract a(IRegistry<BiomeBase> iregistry, IRegistry<GeneratorSettingBase> iregistry1, long i) {
+        return new ChunkGeneratorAbstract(new WorldChunkManagerOverworld(i, false, false, iregistry), i, () -> {
+            return (GeneratorSettingBase) iregistry1.d(GeneratorSettingBase.c);
+        });
     }
 
     public long getSeed() {
@@ -73,57 +89,57 @@ public class GeneratorSettings {
     }
 
     public boolean shouldGenerateMapFeatures() {
-        return this.f;
+        return this.d;
     }
 
-    public boolean d() {
-        return this.g;
+    public boolean c() {
+        return this.e;
     }
 
-    public static RegistryMaterials<WorldDimension> a(RegistryMaterials<WorldDimension> registrymaterials, ChunkGenerator chunkgenerator) {
+    public static RegistryMaterials<WorldDimension> a(IRegistry<DimensionManager> iregistry, RegistryMaterials<WorldDimension> registrymaterials, ChunkGenerator chunkgenerator) {
         WorldDimension worlddimension = (WorldDimension) registrymaterials.a(WorldDimension.OVERWORLD);
         Supplier<DimensionManager> supplier = () -> {
-            return worlddimension == null ? DimensionManager.a() : worlddimension.b();
+            return worlddimension == null ? (DimensionManager) iregistry.d(DimensionManager.OVERWORLD) : worlddimension.b();
         };
 
         return a(registrymaterials, supplier, chunkgenerator);
     }
 
     public static RegistryMaterials<WorldDimension> a(RegistryMaterials<WorldDimension> registrymaterials, Supplier<DimensionManager> supplier, ChunkGenerator chunkgenerator) {
-        RegistryMaterials<WorldDimension> registrymaterials1 = new RegistryMaterials<>(IRegistry.af, Lifecycle.experimental());
+        RegistryMaterials<WorldDimension> registrymaterials1 = new RegistryMaterials<>(IRegistry.M, Lifecycle.experimental());
 
-        registrymaterials1.a(WorldDimension.OVERWORLD, (Object) (new WorldDimension(supplier, chunkgenerator)));
-        registrymaterials1.d(WorldDimension.OVERWORLD);
-        Iterator iterator = registrymaterials.c().iterator();
+        registrymaterials1.a(WorldDimension.OVERWORLD, (Object) (new WorldDimension(supplier, chunkgenerator)), Lifecycle.stable());
+        Iterator iterator = registrymaterials.d().iterator();
 
         while (iterator.hasNext()) {
             Entry<ResourceKey<WorldDimension>, WorldDimension> entry = (Entry) iterator.next();
             ResourceKey<WorldDimension> resourcekey = (ResourceKey) entry.getKey();
 
             if (resourcekey != WorldDimension.OVERWORLD) {
-                registrymaterials1.a(resourcekey, entry.getValue());
-                if (registrymaterials.c(resourcekey)) {
-                    registrymaterials1.d(resourcekey);
-                }
+                registrymaterials1.a(resourcekey, entry.getValue(), registrymaterials.d(entry.getValue()));
             }
         }
 
         return registrymaterials1;
     }
 
-    public RegistryMaterials<WorldDimension> e() {
-        return this.h;
+    public RegistryMaterials<WorldDimension> d() {
+        return this.f;
     }
 
     public ChunkGenerator getChunkGenerator() {
-        WorldDimension worlddimension = (WorldDimension) this.h.a(WorldDimension.OVERWORLD);
+        WorldDimension worlddimension = (WorldDimension) this.f.a(WorldDimension.OVERWORLD);
 
-        return (ChunkGenerator) (worlddimension == null ? a((new Random()).nextLong()) : worlddimension.c());
+        if (worlddimension == null) {
+            throw new IllegalStateException("Overworld settings missing");
+        } else {
+            return worlddimension.c();
+        }
     }
 
-    public ImmutableSet<ResourceKey<World>> g() {
-        return (ImmutableSet) this.e().c().stream().map((entry) -> {
-            return ResourceKey.a(IRegistry.ae, ((ResourceKey) entry.getKey()).a());
+    public ImmutableSet<ResourceKey<World>> f() {
+        return (ImmutableSet) this.d().d().stream().map((entry) -> {
+            return ResourceKey.a(IRegistry.L, ((ResourceKey) entry.getKey()).a());
         }).collect(ImmutableSet.toImmutableSet());
     }
 
@@ -135,11 +151,11 @@ public class GeneratorSettings {
         return this.getChunkGenerator() instanceof ChunkProviderFlat;
     }
 
-    public GeneratorSettings k() {
-        return new GeneratorSettings(this.seed, this.f, true, this.h, this.i);
+    public GeneratorSettings j() {
+        return new GeneratorSettings(this.seed, this.d, true, this.f, this.g);
     }
 
-    public static GeneratorSettings a(Properties properties) {
+    public static GeneratorSettings a(IRegistryCustom iregistrycustom, Properties properties) {
         String s = (String) MoreObjects.firstNonNull((String) properties.get("generator-settings"), "");
 
         properties.put("generator-settings", s);
@@ -170,7 +186,10 @@ public class GeneratorSettings {
             }
         }
 
-        RegistryMaterials<WorldDimension> registrymaterials = DimensionManager.a(i);
+        IRegistry<DimensionManager> iregistry = iregistrycustom.b(IRegistry.K);
+        IRegistry<BiomeBase> iregistry1 = iregistrycustom.b(IRegistry.ay);
+        IRegistry<GeneratorSettingBase> iregistry2 = iregistrycustom.b(IRegistry.ar);
+        RegistryMaterials<WorldDimension> registrymaterials = DimensionManager.a(iregistry, iregistry1, iregistry2, i);
         byte b0 = -1;
 
         switch (s4.hashCode()) {
@@ -203,15 +222,21 @@ public class GeneratorSettings {
                 Logger logger = GeneratorSettings.LOGGER;
 
                 logger.getClass();
-                return new GeneratorSettings(i, flag, false, a(registrymaterials, new ChunkProviderFlat((GeneratorSettingsFlat) dataresult.resultOrPartial(logger::error).orElseGet(GeneratorSettingsFlat::i))));
+                return new GeneratorSettings(i, flag, false, a((IRegistry) iregistry, registrymaterials, (ChunkGenerator) (new ChunkProviderFlat((GeneratorSettingsFlat) dataresult.resultOrPartial(logger::error).orElseGet(() -> {
+                    return GeneratorSettingsFlat.a(iregistry1);
+                })))));
             case 1:
-                return new GeneratorSettings(i, flag, false, a(registrymaterials, ChunkProviderDebug.d));
+                return new GeneratorSettings(i, flag, false, a((IRegistry) iregistry, registrymaterials, (ChunkGenerator) (new ChunkProviderDebug(iregistry1))));
             case 2:
-                return new GeneratorSettings(i, flag, false, a(registrymaterials, new ChunkGeneratorAbstract(new WorldChunkManagerOverworld(i, false, false), i, GeneratorSettingBase.a.c.b())));
+                return new GeneratorSettings(i, flag, false, a((IRegistry) iregistry, registrymaterials, (ChunkGenerator) (new ChunkGeneratorAbstract(new WorldChunkManagerOverworld(i, false, false, iregistry1), i, () -> {
+                    return (GeneratorSettingBase) iregistry2.d(GeneratorSettingBase.d);
+                }))));
             case 3:
-                return new GeneratorSettings(i, flag, false, a(registrymaterials, new ChunkGeneratorAbstract(new WorldChunkManagerOverworld(i, false, true), i, GeneratorSettingBase.a.b.b())));
+                return new GeneratorSettings(i, flag, false, a((IRegistry) iregistry, registrymaterials, (ChunkGenerator) (new ChunkGeneratorAbstract(new WorldChunkManagerOverworld(i, false, true, iregistry1), i, () -> {
+                    return (GeneratorSettingBase) iregistry2.d(GeneratorSettingBase.c);
+                }))));
             default:
-                return new GeneratorSettings(i, flag, false, a(registrymaterials, a(i)));
+                return new GeneratorSettings(i, flag, false, a((IRegistry) iregistry, registrymaterials, (ChunkGenerator) a(iregistry1, iregistry2, i)));
         }
     }
 }

@@ -39,11 +39,11 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
 
     protected abstract Stream<NBTTagCompound> a(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException;
 
-    public String g() {
+    public String h() {
         return this.e;
     }
 
-    public boolean h() {
+    public boolean i() {
         return this.d;
     }
 
@@ -89,18 +89,18 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
             this.g = minecraftkey;
         }
 
-        public MinecraftKey i() {
+        public MinecraftKey j() {
             return this.g;
         }
 
         @Override
-        public ChatComponentNBT.c f() {
+        public ChatComponentNBT.c g() {
             return new ChatComponentNBT.c(this.e, this.f, this.d, this.g);
         }
 
         @Override
         protected Stream<NBTTagCompound> a(CommandListenerWrapper commandlistenerwrapper) {
-            NBTTagCompound nbttagcompound = commandlistenerwrapper.getServer().aG().a(this.g);
+            NBTTagCompound nbttagcompound = commandlistenerwrapper.getServer().aH().a(this.g);
 
             return Stream.of(nbttagcompound);
         }
@@ -152,12 +152,12 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
         }
 
         @Nullable
-        public String i() {
+        public String j() {
             return this.g;
         }
 
         @Override
-        public ChatComponentNBT.a f() {
+        public ChatComponentNBT.a g() {
             return new ChatComponentNBT.a(this.e, this.f, this.d, this.g, this.h);
         }
 
@@ -227,12 +227,12 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
             this.h = entityselector;
         }
 
-        public String i() {
+        public String j() {
             return this.g;
         }
 
         @Override
-        public ChatComponentNBT.b f() {
+        public ChatComponentNBT.b g() {
             return new ChatComponentNBT.b(this.e, this.f, this.d, this.g, this.h);
         }
 

@@ -16,8 +16,8 @@ public class MobSpawnerTrader implements MobSpawner {
     public MobSpawnerTrader(IWorldDataServer iworlddataserver) {
         this.b = iworlddataserver;
         this.c = 1200;
-        this.d = iworlddataserver.u();
-        this.e = iworlddataserver.v();
+        this.d = iworlddataserver.v();
+        this.e = iworlddataserver.w();
         if (this.d == 0 && this.e == 0) {
             this.d = 24000;
             iworlddataserver.g(this.d);
@@ -62,7 +62,7 @@ public class MobSpawnerTrader implements MobSpawner {
     }
 
     private boolean a(WorldServer worldserver) {
-        EntityPlayer entityplayer = worldserver.h();
+        EntityPlayer entityplayer = worldserver.q_();
 
         if (entityplayer == null) {
             return true;
@@ -71,15 +71,15 @@ public class MobSpawnerTrader implements MobSpawner {
         } else {
             BlockPosition blockposition = entityplayer.getChunkCoordinates();
             boolean flag = true;
-            VillagePlace villageplace = worldserver.x();
-            Optional<BlockPosition> optional = villageplace.b(VillagePlaceType.s.c(), (blockposition1) -> {
+            VillagePlace villageplace = worldserver.y();
+            Optional<BlockPosition> optional = villageplace.c(VillagePlaceType.s.c(), (blockposition1) -> {
                 return true;
             }, blockposition, 48, VillagePlace.Occupancy.ANY);
             BlockPosition blockposition1 = (BlockPosition) optional.orElse(blockposition);
-            BlockPosition blockposition2 = this.a(worldserver, blockposition1, 48);
+            BlockPosition blockposition2 = this.a((IWorldReader) worldserver, blockposition1, 48);
 
             if (blockposition2 != null && this.a(worldserver, blockposition2)) {
-                if (worldserver.getBiome(blockposition2) == Biomes.THE_VOID) {
+                if (worldserver.i(blockposition2).equals(Optional.of(Biomes.THE_VOID))) {
                     return false;
                 }
 
@@ -87,7 +87,7 @@ public class MobSpawnerTrader implements MobSpawner {
 
                 if (entityvillagertrader != null) {
                     for (int i = 0; i < 2; ++i) {
-                        this.a(entityvillagertrader, 4);
+                        this.a(worldserver, entityvillagertrader, 4);
                     }
 
                     this.b.a(entityvillagertrader.getUniqueID());
@@ -102,11 +102,11 @@ public class MobSpawnerTrader implements MobSpawner {
         }
     }
 
-    private void a(EntityVillagerTrader entityvillagertrader, int i) {
-        BlockPosition blockposition = this.a(entityvillagertrader.world, entityvillagertrader.getChunkCoordinates(), i);
+    private void a(WorldServer worldserver, EntityVillagerTrader entityvillagertrader, int i) {
+        BlockPosition blockposition = this.a((IWorldReader) worldserver, entityvillagertrader.getChunkCoordinates(), i);
 
         if (blockposition != null) {
-            EntityLlamaTrader entityllamatrader = (EntityLlamaTrader) EntityTypes.TRADER_LLAMA.spawnCreature(entityvillagertrader.world, (NBTTagCompound) null, (IChatBaseComponent) null, (EntityHuman) null, blockposition, EnumMobSpawn.EVENT, false, false);
+            EntityLlamaTrader entityllamatrader = (EntityLlamaTrader) EntityTypes.TRADER_LLAMA.spawnCreature(worldserver, (NBTTagCompound) null, (IChatBaseComponent) null, (EntityHuman) null, blockposition, EnumMobSpawn.EVENT, false, false);
 
             if (entityllamatrader != null) {
                 entityllamatrader.setLeashHolder(entityvillagertrader, true);

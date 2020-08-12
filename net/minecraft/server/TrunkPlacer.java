@@ -16,11 +16,11 @@ public abstract class TrunkPlacer {
     protected final int f;
 
     protected static <P extends TrunkPlacer> P3<Mu<P>, Integer, Integer, Integer> a(Instance<P> instance) {
-        return instance.group(Codec.INT.fieldOf("base_height").forGetter((trunkplacer) -> {
+        return instance.group(Codec.intRange(0, 32).fieldOf("base_height").forGetter((trunkplacer) -> {
             return trunkplacer.d;
-        }), Codec.INT.fieldOf("height_rand_a").forGetter((trunkplacer) -> {
+        }), Codec.intRange(0, 24).fieldOf("height_rand_a").forGetter((trunkplacer) -> {
             return trunkplacer.e;
-        }), Codec.INT.fieldOf("height_rand_b").forGetter((trunkplacer) -> {
+        }), Codec.intRange(0, 24).fieldOf("height_rand_b").forGetter((trunkplacer) -> {
             return trunkplacer.f;
         }));
     }

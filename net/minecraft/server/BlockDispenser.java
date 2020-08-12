@@ -41,13 +41,13 @@ public class BlockDispenser extends BlockTileEntity {
         }
     }
 
-    public void dispense(World world, BlockPosition blockposition) {
-        SourceBlock sourceblock = new SourceBlock(world, blockposition);
+    public void dispense(WorldServer worldserver, BlockPosition blockposition) {
+        SourceBlock sourceblock = new SourceBlock(worldserver, blockposition);
         TileEntityDispenser tileentitydispenser = (TileEntityDispenser) sourceblock.getTileEntity();
         int i = tileentitydispenser.h();
 
         if (i < 0) {
-            world.triggerEffect(1001, blockposition, 0);
+            worldserver.triggerEffect(1001, blockposition, 0);
         } else {
             ItemStack itemstack = tileentitydispenser.getItem(i);
             IDispenseBehavior idispensebehavior = this.a(itemstack);

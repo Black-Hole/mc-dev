@@ -45,8 +45,8 @@ public class DataPackResources implements AutoCloseable {
         return this.g;
     }
 
-    public TagRegistry d() {
-        return this.e;
+    public ITagRegistry d() {
+        return this.e.a();
     }
 
     public CraftingManager e() {
@@ -80,7 +80,7 @@ public class DataPackResources implements AutoCloseable {
     }
 
     public void i() {
-        this.e.bind();
+        this.e.a().bind();
     }
 
     public void close() {

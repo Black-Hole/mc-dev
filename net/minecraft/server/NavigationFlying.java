@@ -40,10 +40,10 @@ public class NavigationFlying extends NavigationAbstract {
 
             if (this.a()) {
                 this.l();
-            } else if (this.c != null && this.c.f() < this.c.e()) {
-                vec3d = this.c.a(this.a, this.c.f());
+            } else if (this.c != null && !this.c.c()) {
+                vec3d = this.c.a((Entity) this.a);
                 if (MathHelper.floor(this.a.locX()) == MathHelper.floor(vec3d.x) && MathHelper.floor(this.a.locY()) == MathHelper.floor(vec3d.y) && MathHelper.floor(this.a.locZ()) == MathHelper.floor(vec3d.z)) {
-                    this.c.c(this.c.f() + 1);
+                    this.c.a();
                 }
             }
 

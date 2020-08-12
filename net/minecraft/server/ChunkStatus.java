@@ -28,7 +28,7 @@ public class ChunkStatus {
     public static final ChunkStatus STRUCTURE_STARTS = a("structure_starts", ChunkStatus.EMPTY, 0, ChunkStatus.n, ChunkStatus.Type.PROTOCHUNK, (chunkstatus, worldserver, chunkgenerator, definedstructuremanager, lightenginethreaded, function, list, ichunkaccess) -> {
         if (!ichunkaccess.getChunkStatus().b(chunkstatus)) {
             if (worldserver.getMinecraftServer().getSaveData().getGeneratorSettings().shouldGenerateMapFeatures()) {
-                chunkgenerator.createStructures(worldserver.getStructureManager(), ichunkaccess, definedstructuremanager, worldserver.getSeed());
+                chunkgenerator.createStructures(worldserver.r(), worldserver.getStructureManager(), ichunkaccess, definedstructuremanager, worldserver.getSeed());
             }
 
             if (ichunkaccess instanceof ProtoChunk) {
@@ -44,7 +44,7 @@ public class ChunkStatus {
         chunkgenerator.storeStructures(regionlimitedworldaccess, worldserver.getStructureManager().a(regionlimitedworldaccess), ichunkaccess);
     });
     public static final ChunkStatus BIOMES = a("biomes", ChunkStatus.STRUCTURE_REFERENCES, 0, ChunkStatus.n, ChunkStatus.Type.PROTOCHUNK, (worldserver, chunkgenerator, list, ichunkaccess) -> {
-        chunkgenerator.createBiomes(ichunkaccess);
+        chunkgenerator.createBiomes(worldserver.r().b(IRegistry.ay), ichunkaccess);
     });
     public static final ChunkStatus NOISE = a("noise", ChunkStatus.BIOMES, 8, ChunkStatus.n, ChunkStatus.Type.PROTOCHUNK, (worldserver, chunkgenerator, list, ichunkaccess) -> {
         RegionLimitedWorldAccess regionlimitedworldaccess = new RegionLimitedWorldAccess(worldserver, list);

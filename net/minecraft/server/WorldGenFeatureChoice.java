@@ -9,9 +9,9 @@ public class WorldGenFeatureChoice extends WorldGenerator<WorldGenFeatureChoiceC
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureChoiceConfiguration worldgenfeaturechoiceconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureChoiceConfiguration worldgenfeaturechoiceconfiguration) {
         boolean flag = random.nextBoolean();
 
-        return flag ? worldgenfeaturechoiceconfiguration.b.a(generatoraccessseed, structuremanager, chunkgenerator, random, blockposition) : worldgenfeaturechoiceconfiguration.c.a(generatoraccessseed, structuremanager, chunkgenerator, random, blockposition);
+        return flag ? ((WorldGenFeatureConfigured) worldgenfeaturechoiceconfiguration.b.get()).a(generatoraccessseed, chunkgenerator, random, blockposition) : ((WorldGenFeatureConfigured) worldgenfeaturechoiceconfiguration.c.get()).a(generatoraccessseed, chunkgenerator, random, blockposition);
     }
 }

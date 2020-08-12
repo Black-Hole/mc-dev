@@ -11,7 +11,7 @@ public class WorldGenLakes extends WorldGenerator<WorldGenFeatureLakeConfigurati
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureLakeConfiguration worldgenfeaturelakeconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureLakeConfiguration worldgenfeaturelakeconfiguration) {
         while (blockposition.getY() > 5 && generatoraccessseed.isEmpty(blockposition)) {
             blockposition = blockposition.down();
         }
@@ -20,7 +20,7 @@ public class WorldGenLakes extends WorldGenerator<WorldGenFeatureLakeConfigurati
             return false;
         } else {
             blockposition = blockposition.down(4);
-            if (structuremanager.a(SectionPosition.a(blockposition), StructureGenerator.VILLAGE).findAny().isPresent()) {
+            if (generatoraccessseed.a(SectionPosition.a(blockposition), StructureGenerator.VILLAGE).findAny().isPresent()) {
                 return false;
             } else {
                 boolean[] aboolean = new boolean[2048];
@@ -95,7 +95,7 @@ public class WorldGenLakes extends WorldGenerator<WorldGenFeatureLakeConfigurati
                                 if (b(generatoraccessseed.getType(blockposition1).getBlock()) && generatoraccessseed.getBrightness(EnumSkyBlock.SKY, blockposition.b(j, j1, k1)) > 0) {
                                     BiomeBase biomebase = generatoraccessseed.getBiome(blockposition1);
 
-                                    if (biomebase.A().a().a(Blocks.MYCELIUM)) {
+                                    if (biomebase.e().e().a().a(Blocks.MYCELIUM)) {
                                         generatoraccessseed.setTypeAndData(blockposition1, Blocks.MYCELIUM.getBlockData(), 2);
                                     } else {
                                         generatoraccessseed.setTypeAndData(blockposition1, Blocks.GRASS_BLOCK.getBlockData(), 2);

@@ -36,10 +36,6 @@ public class RegistryID<K> implements Registry<K> {
         return i == -1 ? -1 : this.c[i];
     }
 
-    public boolean b(int i) {
-        return this.fromId(i) != null;
-    }
-
     public int c(K k0) {
         int i = this.c();
 

@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -9,49 +8,22 @@ import java.util.stream.Collectors;
 
 public class TagRegistry implements IReloadListener {
 
-    private final TagsServer<Block> blockTags;
-    private final TagsServer<Item> itemTags;
-    private final TagsServer<FluidType> fluidTags;
-    private final TagsServer<EntityTypes<?>> entityTags;
+    private final TagDataPack<Block> blockTags;
+    private final TagDataPack<Item> itemTags;
+    private final TagDataPack<FluidType> fluidTags;
+    private final TagDataPack<EntityTypes<?>> entityTags;
+    private ITagRegistry e;
 
     public TagRegistry() {
-        this.blockTags = new TagsServer<>(IRegistry.BLOCK, "tags/blocks", "block");
-        this.itemTags = new TagsServer<>(IRegistry.ITEM, "tags/items", "item");
-        this.fluidTags = new TagsServer<>(IRegistry.FLUID, "tags/fluids", "fluid");
-        this.entityTags = new TagsServer<>(IRegistry.ENTITY_TYPE, "tags/entity_types", "entity_type");
+        this.blockTags = new TagDataPack<>(IRegistry.BLOCK::getOptional, "tags/blocks", "block");
+        this.itemTags = new TagDataPack<>(IRegistry.ITEM::getOptional, "tags/items", "item");
+        this.fluidTags = new TagDataPack<>(IRegistry.FLUID::getOptional, "tags/fluids", "fluid");
+        this.entityTags = new TagDataPack<>(IRegistry.ENTITY_TYPE::getOptional, "tags/entity_types", "entity_type");
+        this.e = ITagRegistry.a;
     }
 
-    public TagsServer<Block> getBlockTags() {
-        return this.blockTags;
-    }
-
-    public TagsServer<Item> getItemTags() {
-        return this.itemTags;
-    }
-
-    public TagsServer<FluidType> getFluidTags() {
-        return this.fluidTags;
-    }
-
-    public TagsServer<EntityTypes<?>> getEntityTags() {
-        return this.entityTags;
-    }
-
-    public void a(PacketDataSerializer packetdataserializer) {
-        this.blockTags.a(packetdataserializer);
-        this.itemTags.a(packetdataserializer);
-        this.fluidTags.a(packetdataserializer);
-        this.entityTags.a(packetdataserializer);
-    }
-
-    public static TagRegistry b(PacketDataSerializer packetdataserializer) {
-        TagRegistry tagregistry = new TagRegistry();
-
-        tagregistry.getBlockTags().b(packetdataserializer);
-        tagregistry.getItemTags().b(packetdataserializer);
-        tagregistry.getFluidTags().b(packetdataserializer);
-        tagregistry.getEntityTags().b(packetdataserializer);
-        return tagregistry;
+    public ITagRegistry a() {
+        return this.e;
     }
 
     @Override
@@ -64,30 +36,21 @@ public class TagRegistry implements IReloadListener {
 
         ireloadlistener_a.getClass();
         return completablefuture4.thenCompose(ireloadlistener_a::a).thenAcceptAsync((ovoid) -> {
-            this.blockTags.a((Map) completablefuture.join());
-            this.itemTags.a((Map) completablefuture1.join());
-            this.fluidTags.a((Map) completablefuture2.join());
-            this.entityTags.a((Map) completablefuture3.join());
-            TagsInstance.a(this.blockTags, this.itemTags, this.fluidTags, this.entityTags);
-            Multimap<String, MinecraftKey> multimap = HashMultimap.create();
+            Tags<Block> tags = this.blockTags.a((Map) completablefuture.join());
+            Tags<Item> tags1 = this.itemTags.a((Map) completablefuture1.join());
+            Tags<FluidType> tags2 = this.fluidTags.a((Map) completablefuture2.join());
+            Tags<EntityTypes<?>> tags3 = this.entityTags.a((Map) completablefuture3.join());
+            ITagRegistry itagregistry = ITagRegistry.a(tags, tags1, tags2, tags3);
+            Multimap<MinecraftKey, MinecraftKey> multimap = TagStatic.b(itagregistry);
 
-            multimap.putAll("blocks", TagsBlock.b(this.blockTags));
-            multimap.putAll("items", TagsItem.b(this.itemTags));
-            multimap.putAll("fluids", TagsFluid.b(this.fluidTags));
-            multimap.putAll("entity_types", TagsEntity.b(this.entityTags));
             if (!multimap.isEmpty()) {
                 throw new IllegalStateException("Missing required tags: " + (String) multimap.entries().stream().map((entry) -> {
-                    return (String) entry.getKey() + ":" + entry.getValue();
+                    return entry.getKey() + ":" + entry.getValue();
                 }).sorted().collect(Collectors.joining(",")));
+            } else {
+                TagsInstance.a(itagregistry);
+                this.e = itagregistry;
             }
         }, executor1);
-    }
-
-    public void bind() {
-        TagsBlock.a((Tags) this.blockTags);
-        TagsItem.a((Tags) this.itemTags);
-        TagsFluid.a((Tags) this.fluidTags);
-        TagsEntity.a((Tags) this.entityTags);
-        Blocks.a();
     }
 }

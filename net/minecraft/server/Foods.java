@@ -31,7 +31,7 @@ public class Foods {
     public static final FoodInfo A = (new FoodInfo.a()).a(2).a(0.3F).a(new MobEffect(MobEffects.POISON, 100, 0), 0.6F).d();
     public static final FoodInfo B = (new FoodInfo.a()).a(3).a(0.3F).a().d();
     public static final FoodInfo C = (new FoodInfo.a()).a(1).a(0.3F).d();
-    public static final FoodInfo D = (new FoodInfo.a()).a(1).a(0.1F).a(new MobEffect(MobEffects.POISON, 1200, 3), 1.0F).a(new MobEffect(MobEffects.HUNGER, 300, 2), 1.0F).a(new MobEffect(MobEffects.CONFUSION, 300, 1), 1.0F).d();
+    public static final FoodInfo D = (new FoodInfo.a()).a(1).a(0.1F).a(new MobEffect(MobEffects.POISON, 1200, 3), 1.0F).a(new MobEffect(MobEffects.HUNGER, 300, 2), 1.0F).a(new MobEffect(MobEffects.CONFUSION, 300, 0), 1.0F).d();
     public static final FoodInfo E = (new FoodInfo.a()).a(8).a(0.3F).d();
     public static final FoodInfo F = (new FoodInfo.a()).a(3).a(0.3F).a().d();
     public static final FoodInfo G = a(10);

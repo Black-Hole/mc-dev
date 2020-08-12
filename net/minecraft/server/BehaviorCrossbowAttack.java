@@ -43,7 +43,7 @@ public class BehaviorCrossbowAttack<E extends EntityInsentient & ICrossbow, T ex
 
     private void a(E e0, EntityLiving entityliving) {
         if (this.c == BehaviorCrossbowAttack.BowState.UNCHARGED) {
-            e0.c(ProjectileHelper.a(e0, Items.CROSSBOW));
+            e0.c(ProjectileHelper.a((EntityLiving) e0, Items.CROSSBOW));
             this.c = BehaviorCrossbowAttack.BowState.CHARGING;
             ((ICrossbow) e0).b(true);
         } else if (this.c == BehaviorCrossbowAttack.BowState.CHARGING) {
@@ -67,7 +67,7 @@ public class BehaviorCrossbowAttack<E extends EntityInsentient & ICrossbow, T ex
             }
         } else if (this.c == BehaviorCrossbowAttack.BowState.READY_TO_ATTACK) {
             ((IRangedEntity) e0).a(entityliving, 1.0F);
-            ItemStack itemstack1 = e0.b(ProjectileHelper.a(e0, Items.CROSSBOW));
+            ItemStack itemstack1 = e0.b(ProjectileHelper.a((EntityLiving) e0, Items.CROSSBOW));
 
             ItemCrossbow.a(itemstack1, false);
             this.c = BehaviorCrossbowAttack.BowState.UNCHARGED;

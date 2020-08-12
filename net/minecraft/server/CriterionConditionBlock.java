@@ -69,7 +69,7 @@ public class CriterionConditionBlock {
             if (jsonobject.has("tag")) {
                 MinecraftKey minecraftkey1 = new MinecraftKey(ChatDeserializer.h(jsonobject, "tag"));
 
-                tag = TagsInstance.e().a().a(minecraftkey1);
+                tag = TagsInstance.a().getBlockTags().a(minecraftkey1);
                 if (tag == null) {
                     throw new JsonSyntaxException("Unknown block tag '" + minecraftkey1 + "'");
                 }
@@ -94,7 +94,7 @@ public class CriterionConditionBlock {
             }
 
             if (this.b != null) {
-                jsonobject.addProperty("tag", TagsInstance.e().a().b(this.b).toString());
+                jsonobject.addProperty("tag", TagsInstance.a().getBlockTags().b(this.b).toString());
             }
 
             jsonobject.add("nbt", this.e.a());

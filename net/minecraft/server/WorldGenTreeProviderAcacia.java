@@ -10,6 +10,6 @@ public class WorldGenTreeProviderAcacia extends WorldGenTreeProvider {
     @Nullable
     @Override
     protected WorldGenFeatureConfigured<WorldGenFeatureTreeConfiguration, ?> a(Random random, boolean flag) {
-        return WorldGenerator.TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.ACACIA_TREE);
+        return BiomeDecoratorGroups.ACACIA;
     }
 }

@@ -74,7 +74,7 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
     @Override
     public void e() {
         if (this.c != null && !this.a.isLeashed()) {
-            this.a.getControllerLook().a(this.c, 10.0F, (float) this.a.eo());
+            this.a.getControllerLook().a(this.c, 10.0F, (float) this.a.O());
             if (--this.f <= 0) {
                 this.f = 10;
                 double d0 = this.a.locX() - this.c.locX();

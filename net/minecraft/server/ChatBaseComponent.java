@@ -7,10 +7,12 @@ import java.util.Objects;
 public abstract class ChatBaseComponent implements IChatMutableComponent {
 
     protected final List<IChatBaseComponent> siblings = Lists.newArrayList();
-    private ChatModifier d;
+    private FormattedString d;
+    private ChatModifier f;
 
     public ChatBaseComponent() {
-        this.d = ChatModifier.b;
+        this.d = FormattedString.a;
+        this.f = ChatModifier.a;
     }
 
     @Override
@@ -31,24 +33,24 @@ public abstract class ChatBaseComponent implements IChatMutableComponent {
 
     @Override
     public IChatMutableComponent setChatModifier(ChatModifier chatmodifier) {
-        this.d = chatmodifier;
+        this.f = chatmodifier;
         return this;
     }
 
     @Override
     public ChatModifier getChatModifier() {
-        return this.d;
+        return this.f;
     }
 
     @Override
-    public abstract ChatBaseComponent f();
+    public abstract ChatBaseComponent g();
 
     @Override
     public final IChatMutableComponent mutableCopy() {
-        ChatBaseComponent chatbasecomponent = this.f();
+        ChatBaseComponent chatbasecomponent = this.g();
 
         chatbasecomponent.siblings.addAll(this.siblings);
-        chatbasecomponent.setChatModifier(this.d);
+        chatbasecomponent.setChatModifier(this.f);
         return chatbasecomponent;
     }
 
@@ -69,6 +71,6 @@ public abstract class ChatBaseComponent implements IChatMutableComponent {
     }
 
     public String toString() {
-        return "BaseComponent{style=" + this.d + ", siblings=" + this.siblings + '}';
+        return "BaseComponent{style=" + this.f + ", siblings=" + this.siblings + '}';
     }
 }

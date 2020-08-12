@@ -131,10 +131,10 @@ public class AdvancementDisplay {
     public static AdvancementDisplay b(PacketDataSerializer packetdataserializer) {
         IChatBaseComponent ichatbasecomponent = packetdataserializer.h();
         IChatBaseComponent ichatbasecomponent1 = packetdataserializer.h();
-        ItemStack itemstack = packetdataserializer.m();
+        ItemStack itemstack = packetdataserializer.n();
         AdvancementFrameType advancementframetype = (AdvancementFrameType) packetdataserializer.a(AdvancementFrameType.class);
         int i = packetdataserializer.readInt();
-        MinecraftKey minecraftkey = (i & 1) != 0 ? packetdataserializer.o() : null;
+        MinecraftKey minecraftkey = (i & 1) != 0 ? packetdataserializer.p() : null;
         boolean flag = (i & 2) != 0;
         boolean flag1 = (i & 4) != 0;
         AdvancementDisplay advancementdisplay = new AdvancementDisplay(itemstack, ichatbasecomponent, ichatbasecomponent1, minecraftkey, advancementframetype, flag, false, flag1);

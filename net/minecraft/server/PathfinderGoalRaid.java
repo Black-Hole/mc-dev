@@ -17,24 +17,24 @@ public class PathfinderGoalRaid<T extends EntityRaider> extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        return this.a.getGoalTarget() == null && !this.a.isVehicle() && this.a.fc() && !this.a.fb().a() && !((WorldServer) this.a.world).b_(this.a.getChunkCoordinates());
+        return this.a.getGoalTarget() == null && !this.a.isVehicle() && this.a.fb() && !this.a.fa().a() && !((WorldServer) this.a.world).a_(this.a.getChunkCoordinates());
     }
 
     @Override
     public boolean b() {
-        return this.a.fc() && !this.a.fb().a() && this.a.world instanceof WorldServer && !((WorldServer) this.a.world).b_(this.a.getChunkCoordinates());
+        return this.a.fb() && !this.a.fa().a() && this.a.world instanceof WorldServer && !((WorldServer) this.a.world).a_(this.a.getChunkCoordinates());
     }
 
     @Override
     public void e() {
-        if (this.a.fc()) {
-            Raid raid = this.a.fb();
+        if (this.a.fb()) {
+            Raid raid = this.a.fa();
 
             if (this.a.ticksLived % 20 == 0) {
                 this.a(raid);
             }
 
-            if (!this.a.eJ()) {
+            if (!this.a.eI()) {
                 Vec3D vec3d = RandomPositionGenerator.b(this.a, 15, 4, Vec3D.c((BaseBlockPosition) raid.getCenter()));
 
                 if (vec3d != null) {
@@ -49,7 +49,7 @@ public class PathfinderGoalRaid<T extends EntityRaider> extends PathfinderGoal {
         if (raid.v()) {
             Set<EntityRaider> set = Sets.newHashSet();
             List<EntityRaider> list = this.a.world.a(EntityRaider.class, this.a.getBoundingBox().g(16.0D), (entityraider) -> {
-                return !entityraider.fc() && PersistentRaid.a(entityraider, raid);
+                return !entityraider.fb() && PersistentRaid.a(entityraider, raid);
             });
 
             set.addAll(list);

@@ -8,13 +8,12 @@ import java.util.stream.Collectors;
 
 public class SensorNearestLivingEntities extends Sensor<EntityLiving> {
 
-    private static final PathfinderTargetCondition a = (new PathfinderTargetCondition()).a(16.0D).b().d();
-
     public SensorNearestLivingEntities() {}
 
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving) {
-        List<EntityLiving> list = worldserver.a(EntityLiving.class, entityliving.getBoundingBox().grow(16.0D, 16.0D, 16.0D), (entityliving1) -> {
+        AxisAlignedBB axisalignedbb = entityliving.getBoundingBox().grow(16.0D, 16.0D, 16.0D);
+        List<EntityLiving> list = worldserver.a(EntityLiving.class, axisalignedbb, (entityliving1) -> {
             return entityliving1 != entityliving && entityliving1.isAlive();
         });
 
@@ -24,7 +23,7 @@ public class SensorNearestLivingEntities extends Sensor<EntityLiving> {
 
         behaviorcontroller.setMemory(MemoryModuleType.MOBS, (Object) list);
         behaviorcontroller.setMemory(MemoryModuleType.VISIBLE_MOBS, list.stream().filter((entityliving1) -> {
-            return SensorNearestLivingEntities.a.a(entityliving, entityliving1);
+            return a(entityliving, entityliving1);
         }).collect(Collectors.toList()));
     }
 

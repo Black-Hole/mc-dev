@@ -117,7 +117,7 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
         if (pathentity == null) {
             return false;
         } else {
-            PathPoint pathpoint = pathentity.c();
+            PathPoint pathpoint = pathentity.d();
 
             if (pathpoint == null) {
                 return false;

@@ -17,7 +17,7 @@ public class VillagePlaceRecord {
                 return villageplacerecord.a;
             }), IRegistry.POINT_OF_INTEREST_TYPE.fieldOf("type").forGetter((villageplacerecord) -> {
                 return villageplacerecord.b;
-            }), Codec.INT.fieldOf("free_tickets").withDefault(0).forGetter((villageplacerecord) -> {
+            }), Codec.INT.fieldOf("free_tickets").orElse(0).forGetter((villageplacerecord) -> {
                 return villageplacerecord.c;
             }), RecordCodecBuilder.point(runnable)).apply(instance, VillagePlaceRecord::new);
         });

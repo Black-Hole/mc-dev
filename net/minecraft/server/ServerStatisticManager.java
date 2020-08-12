@@ -215,7 +215,7 @@ public class ServerStatisticManager extends StatisticManager {
     }
 
     public void a(EntityPlayer entityplayer) {
-        int i = this.c.ag();
+        int i = this.c.ah();
         Object2IntMap<Statistic<?>> object2intmap = new Object2IntOpenHashMap();
 
         if (i - this.f > 300) {

@@ -50,7 +50,7 @@ public class PathfinderGoalBreed extends PathfinderGoal {
 
     @Override
     public void e() {
-        this.animal.getControllerLook().a(this.partner, 10.0F, (float) this.animal.eo());
+        this.animal.getControllerLook().a(this.partner, 10.0F, (float) this.animal.O());
         this.animal.getNavigation().a((Entity) this.partner, this.g);
         ++this.f;
         if (this.f >= 60 && this.animal.h((Entity) this.partner) < 9.0D) {
@@ -79,6 +79,6 @@ public class PathfinderGoalBreed extends PathfinderGoal {
     }
 
     protected void g() {
-        this.animal.a(this.b, this.partner);
+        this.animal.a((WorldServer) this.b, this.partner);
     }
 }

@@ -2,10 +2,6 @@ package net.minecraft.server;
 
 import com.mojang.datafixers.DataFixer;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,7 +23,7 @@ public class WorldNBTStorage {
             NBTTagCompound nbttagcompound = entityhuman.save(new NBTTagCompound());
             File file = File.createTempFile(entityhuman.getUniqueIDString() + "-", ".dat", this.playerDir);
 
-            NBTCompressedStreamTools.a(nbttagcompound, (OutputStream) (new FileOutputStream(file)));
+            NBTCompressedStreamTools.a(nbttagcompound, file);
             File file1 = new File(this.playerDir, entityhuman.getUniqueIDString() + ".dat");
             File file2 = new File(this.playerDir, entityhuman.getUniqueIDString() + ".dat_old");
 
@@ -46,7 +42,7 @@ public class WorldNBTStorage {
             File file = new File(this.playerDir, entityhuman.getUniqueIDString() + ".dat");
 
             if (file.exists() && file.isFile()) {
-                nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file)));
+                nbttagcompound = NBTCompressedStreamTools.a(file);
             }
         } catch (Exception exception) {
             WorldNBTStorage.LOGGER.warn("Failed to load player data for {}", entityhuman.getDisplayName().getString());

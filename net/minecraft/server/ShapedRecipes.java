@@ -279,7 +279,7 @@ public class ShapedRecipes implements RecipeCrafting {
                 nonnulllist.set(k, RecipeItemStack.b(packetdataserializer));
             }
 
-            ItemStack itemstack = packetdataserializer.m();
+            ItemStack itemstack = packetdataserializer.n();
 
             return new ShapedRecipes(minecraftkey, s, i, j, nonnulllist, itemstack);
         }

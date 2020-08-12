@@ -6,32 +6,18 @@ import javax.annotation.Nullable;
 
 public class RecipeBook {
 
-    protected final Set<MinecraftKey> a = Sets.newHashSet();
-    protected final Set<MinecraftKey> b = Sets.newHashSet();
-    protected boolean c;
-    protected boolean d;
-    protected boolean e;
-    protected boolean f;
-    protected boolean g;
-    protected boolean h;
-    protected boolean i;
-    protected boolean j;
+    public final Set<MinecraftKey> recipes = Sets.newHashSet();
+    protected final Set<MinecraftKey> toBeDisplayed = Sets.newHashSet();
+    private final RecipeBookSettings c = new RecipeBookSettings();
 
     public RecipeBook() {}
 
     public void a(RecipeBook recipebook) {
-        this.a.clear();
-        this.b.clear();
-        this.c = recipebook.c;
-        this.d = recipebook.d;
-        this.e = recipebook.e;
-        this.f = recipebook.f;
-        this.g = recipebook.g;
-        this.h = recipebook.h;
-        this.i = recipebook.i;
-        this.j = recipebook.j;
-        this.a.addAll(recipebook.a);
-        this.b.addAll(recipebook.b);
+        this.recipes.clear();
+        this.toBeDisplayed.clear();
+        this.c.a(recipebook.c);
+        this.recipes.addAll(recipebook.recipes);
+        this.toBeDisplayed.addAll(recipebook.toBeDisplayed);
     }
 
     public void a(IRecipe<?> irecipe) {
@@ -42,24 +28,24 @@ public class RecipeBook {
     }
 
     protected void a(MinecraftKey minecraftkey) {
-        this.a.add(minecraftkey);
+        this.recipes.add(minecraftkey);
     }
 
     public boolean b(@Nullable IRecipe<?> irecipe) {
-        return irecipe == null ? false : this.a.contains(irecipe.getKey());
+        return irecipe == null ? false : this.recipes.contains(irecipe.getKey());
     }
 
-    public boolean b(MinecraftKey minecraftkey) {
-        return this.a.contains(minecraftkey);
+    public boolean hasDiscoveredRecipe(MinecraftKey minecraftkey) {
+        return this.recipes.contains(minecraftkey);
     }
 
     protected void c(MinecraftKey minecraftkey) {
-        this.a.remove(minecraftkey);
-        this.b.remove(minecraftkey);
+        this.recipes.remove(minecraftkey);
+        this.toBeDisplayed.remove(minecraftkey);
     }
 
     public void e(IRecipe<?> irecipe) {
-        this.b.remove(irecipe.getKey());
+        this.toBeDisplayed.remove(irecipe.getKey());
     }
 
     public void f(IRecipe<?> irecipe) {
@@ -67,38 +53,19 @@ public class RecipeBook {
     }
 
     protected void d(MinecraftKey minecraftkey) {
-        this.b.add(minecraftkey);
+        this.toBeDisplayed.add(minecraftkey);
     }
 
-    public void a(boolean flag) {
-        this.c = flag;
+    public void a(RecipeBookSettings recipebooksettings) {
+        this.c.a(recipebooksettings);
     }
 
-    public void b(boolean flag) {
-        this.d = flag;
+    public RecipeBookSettings a() {
+        return this.c.a();
     }
 
-    public void c(boolean flag) {
-        this.e = flag;
-    }
-
-    public void d(boolean flag) {
-        this.f = flag;
-    }
-
-    public void e(boolean flag) {
-        this.g = flag;
-    }
-
-    public void f(boolean flag) {
-        this.h = flag;
-    }
-
-    public void g(boolean flag) {
-        this.i = flag;
-    }
-
-    public void h(boolean flag) {
-        this.j = flag;
+    public void a(RecipeBookType recipebooktype, boolean flag, boolean flag1) {
+        this.c.a(recipebooktype, flag);
+        this.c.b(recipebooktype, flag1);
     }
 }

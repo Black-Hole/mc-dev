@@ -11,7 +11,7 @@ public abstract class WorldGenDecoratorFeatureSimple<DC extends WorldGenFeatureD
     }
 
     @Override
-    public final Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator chunkgenerator, Random random, DC dc, BlockPosition blockposition) {
+    public final Stream<BlockPosition> a(WorldGenDecoratorContext worldgendecoratorcontext, Random random, DC dc, BlockPosition blockposition) {
         return this.a(random, dc, blockposition);
     }
 

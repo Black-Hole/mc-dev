@@ -66,7 +66,7 @@ public class ArgumentItemPredicate implements ArgumentType<ArgumentItemPredicate
             ;
         }
 
-        return argumentparseritemstack.a(suggestionsbuilder, TagsItem.b());
+        return argumentparseritemstack.a(suggestionsbuilder, TagsItem.a());
     }
 
     public Collection<String> getExamples() {

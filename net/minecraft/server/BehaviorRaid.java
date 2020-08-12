@@ -16,7 +16,7 @@ public class BehaviorRaid extends Behavior<EntityLiving> {
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
-        Raid raid = worldserver.c_(entityliving.getChunkCoordinates());
+        Raid raid = worldserver.b_(entityliving.getChunkCoordinates());
 
         if (raid != null) {
             if (raid.c() && !raid.b()) {

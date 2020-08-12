@@ -363,7 +363,7 @@ public class Chunk implements IChunkAccess {
     }
 
     @Nullable
-    private TileEntity j(BlockPosition blockposition) {
+    private TileEntity k(BlockPosition blockposition) {
         IBlockData iblockdata = this.getType(blockposition);
         Block block = iblockdata.getBlock();
 
@@ -394,7 +394,7 @@ public class Chunk implements IChunkAccess {
 
         if (tileentity == null) {
             if (chunk_enumtileentitystate == Chunk.EnumTileEntityState.IMMEDIATE) {
-                tileentity = this.j(blockposition);
+                tileentity = this.k(blockposition);
                 this.world.setTileEntity(blockposition, tileentity);
             }
         } else if (tileentity.isRemoved()) {
@@ -421,7 +421,7 @@ public class Chunk implements IChunkAccess {
             TileEntity tileentity1 = (TileEntity) this.tileEntities.put(blockposition.immutableCopy(), tileentity);
 
             if (tileentity1 != null && tileentity1 != tileentity) {
-                tileentity1.an_();
+                tileentity1.al_();
             }
 
         }
@@ -434,7 +434,7 @@ public class Chunk implements IChunkAccess {
 
     @Nullable
     @Override
-    public NBTTagCompound i(BlockPosition blockposition) {
+    public NBTTagCompound j(BlockPosition blockposition) {
         TileEntity tileentity = this.getTileEntity(blockposition);
         NBTTagCompound nbttagcompound;
 
@@ -459,7 +459,7 @@ public class Chunk implements IChunkAccess {
             TileEntity tileentity = (TileEntity) this.tileEntities.remove(blockposition);
 
             if (tileentity != null) {
-                tileentity.an_();
+                tileentity.al_();
             }
         }
 
@@ -498,7 +498,7 @@ public class Chunk implements IChunkAccess {
                     }
 
                     if (entity1 instanceof EntityEnderDragon) {
-                        EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity1).eK();
+                        EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity1).eJ();
                         int j1 = aentitycomplexpart.length;
 
                         for (int k1 = 0; k1 < j1; ++k1) {
@@ -593,7 +593,7 @@ public class Chunk implements IChunkAccess {
     }
 
     @Override
-    public NBTTagCompound f(BlockPosition blockposition) {
+    public NBTTagCompound i(BlockPosition blockposition) {
         return (NBTTagCompound) this.e.get(blockposition);
     }
 

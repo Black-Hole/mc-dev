@@ -36,7 +36,7 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
             return false;
         } else {
             this.c = this.a(this.a);
-            return this.l();
+            return this.m();
         }
     }
 
@@ -64,13 +64,19 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
         return 1.0D;
     }
 
+    protected BlockPosition j() {
+        return this.e.up();
+    }
+
     @Override
     public void e() {
-        if (!this.e.up().a((IPosition) this.a.getPositionVector(), this.h())) {
+        BlockPosition blockposition = this.j();
+
+        if (!blockposition.a((IPosition) this.a.getPositionVector(), this.h())) {
             this.h = false;
             ++this.d;
-            if (this.j()) {
-                this.a.getNavigation().a((double) ((float) this.e.getX()) + 0.5D, (double) (this.e.getY() + 1), (double) ((float) this.e.getZ()) + 0.5D, this.b);
+            if (this.k()) {
+                this.a.getNavigation().a((double) ((float) blockposition.getX()) + 0.5D, (double) blockposition.getY(), (double) ((float) blockposition.getZ()) + 0.5D, this.b);
             }
         } else {
             this.h = true;
@@ -79,15 +85,15 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
 
     }
 
-    public boolean j() {
+    public boolean k() {
         return this.d % 40 == 0;
     }
 
-    protected boolean k() {
+    protected boolean l() {
         return this.h;
     }
 
-    protected boolean l() {
+    protected boolean m() {
         int i = this.i;
         int j = this.j;
         BlockPosition blockposition = this.a.getChunkCoordinates();

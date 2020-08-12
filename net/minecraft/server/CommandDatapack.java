@@ -28,7 +28,7 @@ public class CommandDatapack {
         return ICompletionProvider.b(((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository().d().stream().map(StringArgumentType::escapeIfRequired), suggestionsbuilder);
     };
     private static final SuggestionProvider<CommandListenerWrapper> e = (commandcontext, suggestionsbuilder) -> {
-        ResourcePackRepository<?> resourcepackrepository = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository();
+        ResourcePackRepository resourcepackrepository = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository();
         Collection<String> collection = resourcepackrepository.d();
 
         return ICompletionProvider.b(resourcepackrepository.b().stream().filter((s) -> {
@@ -71,7 +71,7 @@ public class CommandDatapack {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ResourcePackLoader resourcepackloader, CommandDatapack.a commanddatapack_a) throws CommandSyntaxException {
-        ResourcePackRepository<?> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
+        ResourcePackRepository resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
         List<ResourcePackLoader> list = Lists.newArrayList(resourcepackrepository.e());
 
         commanddatapack_a.apply(list, resourcepackloader);
@@ -81,7 +81,7 @@ public class CommandDatapack {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ResourcePackLoader resourcepackloader) {
-        ResourcePackRepository<?> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
+        ResourcePackRepository resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
         List<ResourcePackLoader> list = Lists.newArrayList(resourcepackrepository.e());
 
         list.remove(resourcepackloader);
@@ -95,7 +95,7 @@ public class CommandDatapack {
     }
 
     private static int b(CommandListenerWrapper commandlistenerwrapper) {
-        ResourcePackRepository<?> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
+        ResourcePackRepository resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
 
         resourcepackrepository.a();
         Collection<? extends ResourcePackLoader> collection = resourcepackrepository.e();
@@ -116,7 +116,7 @@ public class CommandDatapack {
     }
 
     private static int c(CommandListenerWrapper commandlistenerwrapper) {
-        ResourcePackRepository<?> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
+        ResourcePackRepository resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
 
         resourcepackrepository.a();
         Collection<? extends ResourcePackLoader> collection = resourcepackrepository.e();
@@ -134,7 +134,7 @@ public class CommandDatapack {
 
     private static ResourcePackLoader a(CommandContext<CommandListenerWrapper> commandcontext, String s, boolean flag) throws CommandSyntaxException {
         String s1 = StringArgumentType.getString(commandcontext, s);
-        ResourcePackRepository<?> resourcepackrepository = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository();
+        ResourcePackRepository resourcepackrepository = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository();
         ResourcePackLoader resourcepackloader = resourcepackrepository.a(s1);
 
         if (resourcepackloader == null) {

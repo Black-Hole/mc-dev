@@ -73,6 +73,7 @@ public class EntityTypes<T extends Entity> {
     public static final EntityTypes<EntityPhantom> PHANTOM = a("phantom", EntityTypes.Builder.a(EntityPhantom::new, EnumCreatureType.MONSTER).a(0.9F, 0.5F).trackingRange(8));
     public static final EntityTypes<EntityPig> PIG = a("pig", EntityTypes.Builder.a(EntityPig::new, EnumCreatureType.CREATURE).a(0.9F, 0.9F).trackingRange(10));
     public static final EntityTypes<EntityPiglin> PIGLIN = a("piglin", EntityTypes.Builder.a(EntityPiglin::new, EnumCreatureType.MONSTER).a(0.6F, 1.95F).trackingRange(8));
+    public static final EntityTypes<EntityPiglinBrute> PIGLIN_BRUTE = a("piglin_brute", EntityTypes.Builder.a(EntityPiglinBrute::new, EnumCreatureType.MONSTER).a(0.6F, 1.95F).trackingRange(8));
     public static final EntityTypes<EntityPillager> PILLAGER = a("pillager", EntityTypes.Builder.a(EntityPillager::new, EnumCreatureType.MONSTER).d().a(0.6F, 1.95F).trackingRange(8));
     public static final EntityTypes<EntityPolarBear> POLAR_BEAR = a("polar_bear", EntityTypes.Builder.a(EntityPolarBear::new, EnumCreatureType.CREATURE).a(1.4F, 1.4F).trackingRange(10));
     public static final EntityTypes<EntityTNTPrimed> TNT = a("tnt", EntityTypes.Builder.a(EntityTNTPrimed::new, EnumCreatureType.MISC).c().a(0.98F, 0.98F).trackingRange(10).updateInterval(10));
@@ -119,22 +120,22 @@ public class EntityTypes<T extends Entity> {
     public static final EntityTypes<EntityPigZombie> ZOMBIFIED_PIGLIN = a("zombified_piglin", EntityTypes.Builder.a(EntityPigZombie::new, EnumCreatureType.MONSTER).c().a(0.6F, 1.95F).trackingRange(8));
     public static final EntityTypes<EntityHuman> PLAYER = a("player", EntityTypes.Builder.a(EnumCreatureType.MISC).b().a().a(0.6F, 1.8F).trackingRange(32).updateInterval(2));
     public static final EntityTypes<EntityFishingHook> FISHING_BOBBER = a("fishing_bobber", EntityTypes.Builder.a(EnumCreatureType.MISC).b().a().a(0.25F, 0.25F).trackingRange(4).updateInterval(5));
-    private final EntityTypes.b<T> be;
-    private final EnumCreatureType bf;
-    private final ImmutableSet<Block> bg;
-    private final boolean bh;
+    private final EntityTypes.b<T> bf;
+    private final EnumCreatureType bg;
+    private final ImmutableSet<Block> bh;
     private final boolean bi;
     private final boolean bj;
     private final boolean bk;
-    private final int bl;
+    private final boolean bl;
     private final int bm;
+    private final int bn;
     @Nullable
-    private String bn;
+    private String bo;
     @Nullable
-    private IChatBaseComponent bo;
+    private IChatBaseComponent bp;
     @Nullable
-    private MinecraftKey bp;
-    private final EntitySize bq;
+    private MinecraftKey bq;
+    private final EntitySize br;
 
     private static <T extends Entity> EntityTypes<T> a(String s, EntityTypes.Builder<T> entitytypes_builder) {
         return (EntityTypes) IRegistry.a((IRegistry) IRegistry.ENTITY_TYPE, s, (Object) entitytypes_builder.a(s));
@@ -149,34 +150,37 @@ public class EntityTypes<T extends Entity> {
     }
 
     public EntityTypes(EntityTypes.b<T> entitytypes_b, EnumCreatureType enumcreaturetype, boolean flag, boolean flag1, boolean flag2, boolean flag3, ImmutableSet<Block> immutableset, EntitySize entitysize, int i, int j) {
-        this.be = entitytypes_b;
-        this.bf = enumcreaturetype;
-        this.bk = flag3;
-        this.bh = flag;
-        this.bi = flag1;
-        this.bj = flag2;
-        this.bg = immutableset;
-        this.bq = entitysize;
-        this.bl = i;
-        this.bm = j;
+        this.bf = entitytypes_b;
+        this.bg = enumcreaturetype;
+        this.bl = flag3;
+        this.bi = flag;
+        this.bj = flag1;
+        this.bk = flag2;
+        this.bh = immutableset;
+        this.br = entitysize;
+        this.bm = i;
+        this.bn = j;
     }
 
     @Nullable
-    public Entity spawnCreature(World world, @Nullable ItemStack itemstack, @Nullable EntityHuman entityhuman, BlockPosition blockposition, EnumMobSpawn enummobspawn, boolean flag, boolean flag1) {
-        return this.spawnCreature(world, itemstack == null ? null : itemstack.getTag(), itemstack != null && itemstack.hasName() ? itemstack.getName() : null, entityhuman, blockposition, enummobspawn, flag, flag1);
+    public Entity spawnCreature(WorldServer worldserver, @Nullable ItemStack itemstack, @Nullable EntityHuman entityhuman, BlockPosition blockposition, EnumMobSpawn enummobspawn, boolean flag, boolean flag1) {
+        return this.spawnCreature(worldserver, itemstack == null ? null : itemstack.getTag(), itemstack != null && itemstack.hasName() ? itemstack.getName() : null, entityhuman, blockposition, enummobspawn, flag, flag1);
     }
 
     @Nullable
-    public T spawnCreature(World world, @Nullable NBTTagCompound nbttagcompound, @Nullable IChatBaseComponent ichatbasecomponent, @Nullable EntityHuman entityhuman, BlockPosition blockposition, EnumMobSpawn enummobspawn, boolean flag, boolean flag1) {
-        T t0 = this.createCreature(world, nbttagcompound, ichatbasecomponent, entityhuman, blockposition, enummobspawn, flag, flag1);
+    public T spawnCreature(WorldServer worldserver, @Nullable NBTTagCompound nbttagcompound, @Nullable IChatBaseComponent ichatbasecomponent, @Nullable EntityHuman entityhuman, BlockPosition blockposition, EnumMobSpawn enummobspawn, boolean flag, boolean flag1) {
+        T t0 = this.createCreature(worldserver, nbttagcompound, ichatbasecomponent, entityhuman, blockposition, enummobspawn, flag, flag1);
 
-        world.addEntity(t0);
+        if (t0 != null) {
+            worldserver.addAllEntities(t0);
+        }
+
         return t0;
     }
 
     @Nullable
-    public T createCreature(World world, @Nullable NBTTagCompound nbttagcompound, @Nullable IChatBaseComponent ichatbasecomponent, @Nullable EntityHuman entityhuman, BlockPosition blockposition, EnumMobSpawn enummobspawn, boolean flag, boolean flag1) {
-        T t0 = this.a(world);
+    public T createCreature(WorldServer worldserver, @Nullable NBTTagCompound nbttagcompound, @Nullable IChatBaseComponent ichatbasecomponent, @Nullable EntityHuman entityhuman, BlockPosition blockposition, EnumMobSpawn enummobspawn, boolean flag, boolean flag1) {
+        T t0 = this.a((World) worldserver);
 
         if (t0 == null) {
             return null;
@@ -185,18 +189,18 @@ public class EntityTypes<T extends Entity> {
 
             if (flag) {
                 t0.setPosition((double) blockposition.getX() + 0.5D, (double) (blockposition.getY() + 1), (double) blockposition.getZ() + 0.5D);
-                d0 = a(world, blockposition, flag1, t0.getBoundingBox());
+                d0 = a(worldserver, blockposition, flag1, t0.getBoundingBox());
             } else {
                 d0 = 0.0D;
             }
 
-            t0.setPositionRotation((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + d0, (double) blockposition.getZ() + 0.5D, MathHelper.g(world.random.nextFloat() * 360.0F), 0.0F);
+            t0.setPositionRotation((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + d0, (double) blockposition.getZ() + 0.5D, MathHelper.g(worldserver.random.nextFloat() * 360.0F), 0.0F);
             if (t0 instanceof EntityInsentient) {
                 EntityInsentient entityinsentient = (EntityInsentient) t0;
 
-                entityinsentient.aJ = entityinsentient.yaw;
-                entityinsentient.aH = entityinsentient.yaw;
-                entityinsentient.prepare(world, world.getDamageScaler(entityinsentient.getChunkCoordinates()), enummobspawn, (GroupDataEntity) null, nbttagcompound);
+                entityinsentient.aC = entityinsentient.yaw;
+                entityinsentient.aA = entityinsentient.yaw;
+                entityinsentient.prepare(worldserver, worldserver.getDamageScaler(entityinsentient.getChunkCoordinates()), enummobspawn, (GroupDataEntity) null, nbttagcompound);
                 entityinsentient.F();
             }
 
@@ -204,7 +208,7 @@ public class EntityTypes<T extends Entity> {
                 t0.setCustomName(ichatbasecomponent);
             }
 
-            a(world, entityhuman, t0, nbttagcompound);
+            a((World) worldserver, entityhuman, t0, nbttagcompound);
             return t0;
         }
     }
@@ -241,39 +245,39 @@ public class EntityTypes<T extends Entity> {
     }
 
     public boolean a() {
-        return this.bh;
-    }
-
-    public boolean b() {
         return this.bi;
     }
 
-    public boolean c() {
+    public boolean b() {
         return this.bj;
     }
 
-    public boolean d() {
+    public boolean c() {
         return this.bk;
     }
 
+    public boolean d() {
+        return this.bl;
+    }
+
     public EnumCreatureType e() {
-        return this.bf;
+        return this.bg;
     }
 
     public String f() {
-        if (this.bn == null) {
-            this.bn = SystemUtils.a("entity", IRegistry.ENTITY_TYPE.getKey(this));
-        }
-
-        return this.bn;
-    }
-
-    public IChatBaseComponent g() {
         if (this.bo == null) {
-            this.bo = new ChatMessage(this.f());
+            this.bo = SystemUtils.a("entity", IRegistry.ENTITY_TYPE.getKey(this));
         }
 
         return this.bo;
+    }
+
+    public IChatBaseComponent g() {
+        if (this.bp == null) {
+            this.bp = new ChatMessage(this.f());
+        }
+
+        return this.bp;
     }
 
     public String toString() {
@@ -281,26 +285,26 @@ public class EntityTypes<T extends Entity> {
     }
 
     public MinecraftKey i() {
-        if (this.bp == null) {
+        if (this.bq == null) {
             MinecraftKey minecraftkey = IRegistry.ENTITY_TYPE.getKey(this);
 
-            this.bp = new MinecraftKey(minecraftkey.getNamespace(), "entities/" + minecraftkey.getKey());
+            this.bq = new MinecraftKey(minecraftkey.getNamespace(), "entities/" + minecraftkey.getKey());
         }
 
-        return this.bp;
+        return this.bq;
     }
 
     public float j() {
-        return this.bq.width;
+        return this.br.width;
     }
 
     public float k() {
-        return this.bq.height;
+        return this.br.height;
     }
 
     @Nullable
     public T a(World world) {
-        return this.be.create(this, world);
+        return this.bf.create(this, world);
     }
 
     public static Optional<Entity> a(NBTTagCompound nbttagcompound, World world) {
@@ -320,11 +324,11 @@ public class EntityTypes<T extends Entity> {
     }
 
     public boolean a(IBlockData iblockdata) {
-        return this.bg.contains(iblockdata.getBlock()) ? false : (!this.bj && (iblockdata.a((Tag) TagsBlock.FIRE) || iblockdata.a(Blocks.MAGMA_BLOCK) || BlockCampfire.g(iblockdata) || iblockdata.a(Blocks.LAVA)) ? true : iblockdata.a(Blocks.WITHER_ROSE) || iblockdata.a(Blocks.SWEET_BERRY_BUSH) || iblockdata.a(Blocks.CACTUS));
+        return this.bh.contains(iblockdata.getBlock()) ? false : (!this.bk && (iblockdata.a((Tag) TagsBlock.FIRE) || iblockdata.a(Blocks.MAGMA_BLOCK) || BlockCampfire.g(iblockdata) || iblockdata.a(Blocks.LAVA)) ? true : iblockdata.a(Blocks.WITHER_ROSE) || iblockdata.a(Blocks.SWEET_BERRY_BUSH) || iblockdata.a(Blocks.CACTUS));
     }
 
     public EntitySize l() {
-        return this.bq;
+        return this.br;
     }
 
     public static Optional<EntityTypes<?>> a(NBTTagCompound nbttagcompound) {
@@ -360,11 +364,11 @@ public class EntityTypes<T extends Entity> {
     }
 
     public int getChunkRange() {
-        return this.bl;
+        return this.bm;
     }
 
     public int getUpdateInterval() {
-        return this.bm;
+        return this.bn;
     }
 
     public boolean isDeltaTracking() {

@@ -18,7 +18,7 @@ public class EntityCow extends EntityAnimal {
         this.goalSelector.a(7, new PathfinderGoalRandomLookaround(this));
     }
 
-    public static AttributeProvider.Builder eL() {
+    public static AttributeProvider.Builder eK() {
         return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
@@ -38,7 +38,7 @@ public class EntityCow extends EntityAnimal {
     }
 
     @Override
-    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
+    protected void b(BlockPosition blockposition, IBlockData iblockdata) {
         this.playSound(SoundEffects.ENTITY_COW_STEP, 0.15F, 1.0F);
     }
 
@@ -63,8 +63,8 @@ public class EntityCow extends EntityAnimal {
     }
 
     @Override
-    public EntityCow createChild(EntityAgeable entityageable) {
-        return (EntityCow) EntityTypes.COW.a(this.world);
+    public EntityCow createChild(WorldServer worldserver, EntityAgeable entityageable) {
+        return (EntityCow) EntityTypes.COW.a((World) worldserver);
     }
 
     @Override

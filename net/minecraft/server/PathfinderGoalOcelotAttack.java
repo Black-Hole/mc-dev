@@ -42,7 +42,7 @@ public class PathfinderGoalOcelotAttack extends PathfinderGoal {
     public void e() {
         this.b.getControllerLook().a(this.c, 30.0F, 30.0F);
         double d0 = (double) (this.b.getWidth() * 2.0F * this.b.getWidth() * 2.0F);
-        double d1 = this.b.g(this.c.locX(), this.c.locY(), this.c.locZ());
+        double d1 = this.b.h(this.c.locX(), this.c.locY(), this.c.locZ());
         double d2 = 0.8D;
 
         if (d1 > d0 && d1 < 16.0D) {

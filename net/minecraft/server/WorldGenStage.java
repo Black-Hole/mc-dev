@@ -36,31 +36,10 @@ public class WorldGenStage {
         }
     }
 
-    public static enum Decoration implements INamable {
+    public static enum Decoration {
 
-        RAW_GENERATION("raw_generation"), LAKES("lakes"), LOCAL_MODIFICATIONS("local_modifications"), UNDERGROUND_STRUCTURES("underground_structures"), SURFACE_STRUCTURES("surface_structures"), STRONGHOLDS("strongholds"), UNDERGROUND_ORES("underground_ores"), UNDERGROUND_DECORATION("underground_decoration"), VEGETAL_DECORATION("vegetal_decoration"), TOP_LAYER_MODIFICATION("top_layer_modification");
+        RAW_GENERATION, LAKES, LOCAL_MODIFICATIONS, UNDERGROUND_STRUCTURES, SURFACE_STRUCTURES, STRONGHOLDS, UNDERGROUND_ORES, UNDERGROUND_DECORATION, VEGETAL_DECORATION, TOP_LAYER_MODIFICATION;
 
-        public static final Codec<WorldGenStage.Decoration> k = INamable.a(WorldGenStage.Decoration::values, WorldGenStage.Decoration::a);
-        private static final Map<String, WorldGenStage.Decoration> l = (Map) Arrays.stream(values()).collect(Collectors.toMap(WorldGenStage.Decoration::b, (worldgenstage_decoration) -> {
-            return worldgenstage_decoration;
-        }));
-        private final String m;
-
-        private Decoration(String s) {
-            this.m = s;
-        }
-
-        public String b() {
-            return this.m;
-        }
-
-        public static WorldGenStage.Decoration a(String s) {
-            return (WorldGenStage.Decoration) WorldGenStage.Decoration.l.get(s);
-        }
-
-        @Override
-        public String getName() {
-            return this.m;
-        }
+        private Decoration() {}
     }
 }

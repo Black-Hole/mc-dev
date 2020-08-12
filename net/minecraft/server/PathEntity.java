@@ -25,20 +25,20 @@ public class PathEntity {
     }
 
     public boolean b() {
+        return this.e <= 0;
+    }
+
+    public boolean c() {
         return this.e >= this.a.size();
     }
 
     @Nullable
-    public PathPoint c() {
+    public PathPoint d() {
         return !this.a.isEmpty() ? (PathPoint) this.a.get(this.a.size() - 1) : null;
     }
 
     public PathPoint a(int i) {
         return (PathPoint) this.a.get(i);
-    }
-
-    public List<PathPoint> d() {
-        return this.a;
     }
 
     public void b(int i) {
@@ -73,18 +73,25 @@ public class PathEntity {
         return new Vec3D(d0, d1, d2);
     }
 
+    public BlockPosition d(int i) {
+        return ((PathPoint) this.a.get(i)).a();
+    }
+
     public Vec3D a(Entity entity) {
         return this.a(entity, this.e);
     }
 
-    public BaseBlockPosition g() {
-        PathPoint pathpoint = this.h();
-
-        return new BaseBlockPosition(pathpoint.a, pathpoint.b, pathpoint.c);
+    public BlockPosition g() {
+        return ((PathPoint) this.a.get(this.e)).a();
     }
 
     public PathPoint h() {
         return (PathPoint) this.a.get(this.e);
+    }
+
+    @Nullable
+    public PathPoint i() {
+        return this.e > 0 ? (PathPoint) this.a.get(this.e - 1) : null;
     }
 
     public boolean a(@Nullable PathEntity pathentity) {
@@ -106,7 +113,7 @@ public class PathEntity {
         }
     }
 
-    public boolean i() {
+    public boolean j() {
         return this.h;
     }
 

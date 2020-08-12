@@ -9,7 +9,7 @@ public class WorldGenPackedIce2 extends WorldGenerator<WorldGenFeatureEmptyConfi
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         while (generatoraccessseed.isEmpty(blockposition) && blockposition.getY() > 2) {
             blockposition = blockposition.down();
         }

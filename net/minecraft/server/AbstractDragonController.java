@@ -48,7 +48,7 @@ public abstract class AbstractDragonController implements IDragonController {
 
     @Override
     public float h() {
-        float f = MathHelper.sqrt(Entity.b(this.a.getMot())) + 1.0F;
+        float f = MathHelper.sqrt(Entity.c(this.a.getMot())) + 1.0F;
         float f1 = Math.min(f, 40.0F);
 
         return 0.7F / f1 / f;

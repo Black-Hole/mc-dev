@@ -119,7 +119,7 @@ public abstract class TileEntity {
         return this.f;
     }
 
-    public void an_() {
+    public void al_() {
         this.f = true;
     }
 

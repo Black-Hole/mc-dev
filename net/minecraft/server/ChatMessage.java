@@ -32,7 +32,7 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
         this.args = aobject;
     }
 
-    private void j() {
+    private void k() {
         LocaleLanguage localelanguage = LocaleLanguage.a();
 
         if (localelanguage != this.i) {
@@ -41,7 +41,7 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
             String s = localelanguage.a(this.key);
 
             try {
-                this.a(localelanguage.a(s, true), localelanguage);
+                this.d(s);
             } catch (ChatMessageException chatmessageexception) {
                 this.j.clear();
                 this.j.add(IChatFormatted.b(s));
@@ -50,7 +50,7 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
         }
     }
 
-    private void a(String s, LocaleLanguage localelanguage) {
+    private void d(String s) {
         Matcher matcher = ChatMessage.k.matcher(s);
 
         try {
@@ -88,7 +88,7 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
                     int i1 = s3 != null ? Integer.parseInt(s3) - 1 : i++;
 
                     if (i1 < this.args.length) {
-                        this.j.add(this.a(i1, localelanguage));
+                        this.j.add(this.b(i1));
                     }
                 }
             }
@@ -108,24 +108,24 @@ public class ChatMessage extends ChatBaseComponent implements ChatComponentConte
         }
     }
 
-    private IChatFormatted a(int i, LocaleLanguage localelanguage) {
+    private IChatFormatted b(int i) {
         if (i >= this.args.length) {
             throw new ChatMessageException(this, i);
         } else {
             Object object = this.args[i];
 
-            return (IChatFormatted) (object instanceof IChatBaseComponent ? (IChatBaseComponent) object : (object == null ? ChatMessage.f : IChatFormatted.b(localelanguage.a(object.toString(), false))));
+            return (IChatFormatted) (object instanceof IChatBaseComponent ? (IChatBaseComponent) object : (object == null ? ChatMessage.f : IChatFormatted.b(object.toString())));
         }
     }
 
     @Override
-    public ChatMessage f() {
+    public ChatMessage g() {
         return new ChatMessage(this.key, this.args);
     }
 
     @Override
     public <T> Optional<T> b(IChatFormatted.a<T> ichatformatted_a) {
-        this.j();
+        this.k();
         Iterator iterator = this.j.iterator();
 
         Optional optional;

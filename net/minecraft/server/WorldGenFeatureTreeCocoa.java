@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class WorldGenFeatureTreeCocoa extends WorldGenFeatureTree {
 
-    public static final Codec<WorldGenFeatureTreeCocoa> a = Codec.FLOAT.fieldOf("probability").xmap(WorldGenFeatureTreeCocoa::new, (worldgenfeaturetreecocoa) -> {
+    public static final Codec<WorldGenFeatureTreeCocoa> a = Codec.floatRange(0.0F, 1.0F).fieldOf("probability").xmap(WorldGenFeatureTreeCocoa::new, (worldgenfeaturetreecocoa) -> {
         return worldgenfeaturetreecocoa.b;
     }).codec();
     private final float b;
@@ -23,7 +23,7 @@ public class WorldGenFeatureTreeCocoa extends WorldGenFeatureTree {
     }
 
     @Override
-    public void a(GeneratorAccess generatoraccess, Random random, List<BlockPosition> list, List<BlockPosition> list1, Set<BlockPosition> set, StructureBoundingBox structureboundingbox) {
+    public void a(GeneratorAccessSeed generatoraccessseed, Random random, List<BlockPosition> list, List<BlockPosition> list1, Set<BlockPosition> set, StructureBoundingBox structureboundingbox) {
         if (random.nextFloat() < this.b) {
             int i = ((BlockPosition) list.get(0)).getY();
 
@@ -39,10 +39,10 @@ public class WorldGenFeatureTreeCocoa extends WorldGenFeatureTree {
                         EnumDirection enumdirection1 = enumdirection.opposite();
                         BlockPosition blockposition1 = blockposition.b(enumdirection1.getAdjacentX(), 0, enumdirection1.getAdjacentZ());
 
-                        if (WorldGenerator.b(generatoraccess, blockposition1)) {
+                        if (WorldGenerator.b(generatoraccessseed, blockposition1)) {
                             IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.COCOA.getBlockData().set(BlockCocoa.AGE, random.nextInt(3))).set(BlockCocoa.FACING, enumdirection);
 
-                            this.a((IWorldWriter) generatoraccess, blockposition1, iblockdata, set, structureboundingbox);
+                            this.a((IWorldWriter) generatoraccessseed, blockposition1, iblockdata, set, structureboundingbox);
                         }
                     }
                 }

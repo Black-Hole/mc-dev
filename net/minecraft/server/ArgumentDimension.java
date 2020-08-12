@@ -41,7 +41,7 @@ public class ArgumentDimension implements ArgumentType<MinecraftKey> {
 
     public static WorldServer a(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
         MinecraftKey minecraftkey = (MinecraftKey) commandcontext.getArgument(s, MinecraftKey.class);
-        ResourceKey<World> resourcekey = ResourceKey.a(IRegistry.ae, minecraftkey);
+        ResourceKey<World> resourcekey = ResourceKey.a(IRegistry.L, minecraftkey);
         WorldServer worldserver = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getWorldServer(resourcekey);
 
         if (worldserver == null) {

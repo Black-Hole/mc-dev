@@ -10,8 +10,8 @@ public class EntityItemFrame extends EntityHanging {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final DataWatcherObject<ItemStack> ITEM = DataWatcher.a(EntityItemFrame.class, DataWatcherRegistry.g);
     private static final DataWatcherObject<Integer> g = DataWatcher.a(EntityItemFrame.class, DataWatcherRegistry.b);
-    private float an = 1.0F;
-    private boolean ao;
+    private float ag = 1.0F;
+    public boolean fixed;
 
     public EntityItemFrame(EntityTypes<? extends EntityItemFrame> entitytypes, World world) {
         super(entitytypes, world);
@@ -84,7 +84,7 @@ public class EntityItemFrame extends EntityHanging {
 
     @Override
     public boolean survives() {
-        if (this.ao) {
+        if (this.fixed) {
             return true;
         } else if (!this.world.getCubes(this)) {
             return false;
@@ -97,22 +97,22 @@ public class EntityItemFrame extends EntityHanging {
 
     @Override
     public void move(EnumMoveType enummovetype, Vec3D vec3d) {
-        if (!this.ao) {
+        if (!this.fixed) {
             super.move(enummovetype, vec3d);
         }
 
     }
 
     @Override
-    public void h(double d0, double d1, double d2) {
-        if (!this.ao) {
-            super.h(d0, d1, d2);
+    public void i(double d0, double d1, double d2) {
+        if (!this.fixed) {
+            super.i(d0, d1, d2);
         }
 
     }
 
     @Override
-    public float bc() {
+    public float bf() {
         return 0.0F;
     }
 
@@ -124,7 +124,7 @@ public class EntityItemFrame extends EntityHanging {
 
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
-        if (this.ao) {
+        if (this.fixed) {
             return damagesource != DamageSource.OUT_OF_WORLD && !damagesource.v() ? false : super.damageEntity(damagesource, f);
         } else if (this.isInvulnerable(damagesource)) {
             return false;
@@ -162,16 +162,16 @@ public class EntityItemFrame extends EntityHanging {
     }
 
     private void b(@Nullable Entity entity, boolean flag) {
-        if (!this.ao) {
+        if (!this.fixed) {
+            ItemStack itemstack = this.getItem();
+
+            this.setItem(ItemStack.b);
             if (!this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
                 if (entity == null) {
-                    this.c(this.getItem());
+                    this.c(itemstack);
                 }
 
             } else {
-                ItemStack itemstack = this.getItem();
-
-                this.setItem(ItemStack.b);
                 if (entity instanceof EntityHuman) {
                     EntityHuman entityhuman = (EntityHuman) entity;
 
@@ -188,7 +188,7 @@ public class EntityItemFrame extends EntityHanging {
                 if (!itemstack.isEmpty()) {
                     itemstack = itemstack.cloneItemStack();
                     this.c(itemstack);
-                    if (this.random.nextFloat() < this.an) {
+                    if (this.random.nextFloat() < this.ag) {
                         this.a(itemstack);
                     }
                 }
@@ -278,12 +278,12 @@ public class EntityItemFrame extends EntityHanging {
         if (!this.getItem().isEmpty()) {
             nbttagcompound.set("Item", this.getItem().save(new NBTTagCompound()));
             nbttagcompound.setByte("ItemRotation", (byte) this.getRotation());
-            nbttagcompound.setFloat("ItemDropChance", this.an);
+            nbttagcompound.setFloat("ItemDropChance", this.ag);
         }
 
         nbttagcompound.setByte("Facing", (byte) this.direction.c());
         nbttagcompound.setBoolean("Invisible", this.isInvisible());
-        nbttagcompound.setBoolean("Fixed", this.ao);
+        nbttagcompound.setBoolean("Fixed", this.fixed);
     }
 
     @Override
@@ -307,13 +307,13 @@ public class EntityItemFrame extends EntityHanging {
             this.setItem(itemstack, false);
             this.setRotation(nbttagcompound.getByte("ItemRotation"), false);
             if (nbttagcompound.hasKeyOfType("ItemDropChance", 99)) {
-                this.an = nbttagcompound.getFloat("ItemDropChance");
+                this.ag = nbttagcompound.getFloat("ItemDropChance");
             }
         }
 
         this.setDirection(EnumDirection.fromType1(nbttagcompound.getByte("Facing")));
         this.setInvisible(nbttagcompound.getBoolean("Invisible"));
-        this.ao = nbttagcompound.getBoolean("Fixed");
+        this.fixed = nbttagcompound.getBoolean("Fixed");
     }
 
     @Override
@@ -322,7 +322,7 @@ public class EntityItemFrame extends EntityHanging {
         boolean flag = !this.getItem().isEmpty();
         boolean flag1 = !itemstack.isEmpty();
 
-        if (this.ao) {
+        if (this.fixed) {
             return EnumInteractionResult.PASS;
         } else if (!this.world.isClientSide) {
             if (!flag) {
@@ -348,7 +348,7 @@ public class EntityItemFrame extends EntityHanging {
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         return new PacketPlayOutSpawnEntity(this, this.getEntityType(), this.direction.c(), this.getBlockPosition());
     }
 }

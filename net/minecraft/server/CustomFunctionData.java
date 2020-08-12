@@ -143,7 +143,7 @@ public class CustomFunctionData {
     }
 
     public Iterable<MinecraftKey> g() {
-        return this.i.b().a();
+        return this.i.b().b();
     }
 
     public static class a {

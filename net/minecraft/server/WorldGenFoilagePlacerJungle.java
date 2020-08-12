@@ -8,15 +8,15 @@ import java.util.Set;
 public class WorldGenFoilagePlacerJungle extends WorldGenFoilagePlacer {
 
     public static final Codec<WorldGenFoilagePlacerJungle> a = RecordCodecBuilder.create((instance) -> {
-        return b(instance).and(Codec.INT.fieldOf("height").forGetter((worldgenfoilageplacerjungle) -> {
+        return b(instance).and(Codec.intRange(0, 16).fieldOf("height").forGetter((worldgenfoilageplacerjungle) -> {
             return worldgenfoilageplacerjungle.b;
         })).apply(instance, WorldGenFoilagePlacerJungle::new);
     });
     protected final int b;
 
-    public WorldGenFoilagePlacerJungle(int i, int j, int k, int l, int i1) {
-        super(i, j, k, l);
-        this.b = i1;
+    public WorldGenFoilagePlacerJungle(IntSpread intspread, IntSpread intspread1, int i) {
+        super(intspread, intspread1);
+        this.b = i;
     }
 
     @Override

@@ -49,13 +49,13 @@ public class WorldGenNetherPieces {
     public static class WorldGenNetherPiece5 extends WorldGenNetherPieces.WorldGenNetherPiece {
 
         public WorldGenNetherPiece5(int i, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(WorldGenFeatureStructurePieceType.k, i);
+            super(WorldGenFeatureStructurePieceType.i, i);
             this.a(enumdirection);
             this.n = structureboundingbox;
         }
 
         public WorldGenNetherPiece5(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.k, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.i, nbttagcompound);
         }
 
         @Override
@@ -117,13 +117,13 @@ public class WorldGenNetherPieces {
     public static class WorldGenNetherPiece4 extends WorldGenNetherPieces.WorldGenNetherPiece {
 
         public WorldGenNetherPiece4(int i, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(WorldGenFeatureStructurePieceType.j, i);
+            super(WorldGenFeatureStructurePieceType.h, i);
             this.a(enumdirection);
             this.n = structureboundingbox;
         }
 
         public WorldGenNetherPiece4(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.j, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.h, nbttagcompound);
         }
 
         @Override
@@ -177,14 +177,14 @@ public class WorldGenNetherPieces {
         private boolean a;
 
         public WorldGenNetherPiece8(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(WorldGenFeatureStructurePieceType.n, i);
+            super(WorldGenFeatureStructurePieceType.l, i);
             this.a(enumdirection);
             this.n = structureboundingbox;
             this.a = random.nextInt(3) == 0;
         }
 
         public WorldGenNetherPiece8(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.n, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.l, nbttagcompound);
             this.a = nbttagcompound.getBoolean("Chest");
         }
 
@@ -241,14 +241,14 @@ public class WorldGenNetherPieces {
         private boolean a;
 
         public WorldGenNetherPiece10(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(WorldGenFeatureStructurePieceType.p, i);
+            super(WorldGenFeatureStructurePieceType.n, i);
             this.a(enumdirection);
             this.n = structureboundingbox;
             this.a = random.nextInt(3) == 0;
         }
 
         public WorldGenNetherPiece10(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.p, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.n, nbttagcompound);
             this.a = nbttagcompound.getBoolean("Chest");
         }
 
@@ -303,13 +303,13 @@ public class WorldGenNetherPieces {
     public static class WorldGenNetherPiece7 extends WorldGenNetherPieces.WorldGenNetherPiece {
 
         public WorldGenNetherPiece7(int i, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(WorldGenFeatureStructurePieceType.m, i);
+            super(WorldGenFeatureStructurePieceType.k, i);
             this.a(enumdirection);
             this.n = structureboundingbox;
         }
 
         public WorldGenNetherPiece7(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.m, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.k, nbttagcompound);
         }
 
         @Override
@@ -348,13 +348,13 @@ public class WorldGenNetherPieces {
     public static class WorldGenNetherPiece9 extends WorldGenNetherPieces.WorldGenNetherPiece {
 
         public WorldGenNetherPiece9(int i, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(WorldGenFeatureStructurePieceType.o, i);
+            super(WorldGenFeatureStructurePieceType.m, i);
             this.a(enumdirection);
             this.n = structureboundingbox;
         }
 
         public WorldGenNetherPiece9(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.o, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.m, nbttagcompound);
         }
 
         @Override
@@ -395,13 +395,13 @@ public class WorldGenNetherPieces {
     public static class WorldGenNetherPiece11 extends WorldGenNetherPieces.WorldGenNetherPiece {
 
         public WorldGenNetherPiece11(int i, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(WorldGenFeatureStructurePieceType.q, i);
+            super(WorldGenFeatureStructurePieceType.o, i);
             this.a(enumdirection);
             this.n = structureboundingbox;
         }
 
         public WorldGenNetherPiece11(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.q, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.o, nbttagcompound);
         }
 
         @Override
@@ -544,13 +544,13 @@ public class WorldGenNetherPieces {
     public static class WorldGenNetherPiece6 extends WorldGenNetherPieces.WorldGenNetherPiece {
 
         public WorldGenNetherPiece6(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(WorldGenFeatureStructurePieceType.l, i);
+            super(WorldGenFeatureStructurePieceType.j, i);
             this.a(enumdirection);
             this.n = structureboundingbox;
         }
 
         public WorldGenNetherPiece6(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.l, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.j, nbttagcompound);
         }
 
         @Override
@@ -652,13 +652,13 @@ public class WorldGenNetherPieces {
         private boolean a;
 
         public WorldGenNetherPiece12(int i, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(WorldGenFeatureStructurePieceType.r, i);
+            super(WorldGenFeatureStructurePieceType.p, i);
             this.a(enumdirection);
             this.n = structureboundingbox;
         }
 
         public WorldGenNetherPiece12(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.r, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.p, nbttagcompound);
             this.a = nbttagcompound.getBoolean("Mob");
         }
 
@@ -733,13 +733,13 @@ public class WorldGenNetherPieces {
     public static class WorldGenNetherPiece14 extends WorldGenNetherPieces.WorldGenNetherPiece {
 
         public WorldGenNetherPiece14(int i, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(WorldGenFeatureStructurePieceType.t, i);
+            super(WorldGenFeatureStructurePieceType.r, i);
             this.a(enumdirection);
             this.n = structureboundingbox;
         }
 
         public WorldGenNetherPiece14(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.t, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.r, nbttagcompound);
         }
 
         @Override
@@ -791,13 +791,13 @@ public class WorldGenNetherPieces {
     public static class WorldGenNetherPiece13 extends WorldGenNetherPieces.WorldGenNetherPiece {
 
         public WorldGenNetherPiece13(int i, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(WorldGenFeatureStructurePieceType.s, i);
+            super(WorldGenFeatureStructurePieceType.q, i);
             this.a(enumdirection);
             this.n = structureboundingbox;
         }
 
         public WorldGenNetherPiece13(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.s, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.q, nbttagcompound);
         }
 
         @Override
@@ -850,13 +850,13 @@ public class WorldGenNetherPieces {
     public static class WorldGenNetherPiece1 extends WorldGenNetherPieces.WorldGenNetherPiece {
 
         public WorldGenNetherPiece1(int i, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(WorldGenFeatureStructurePieceType.g, i);
+            super(WorldGenFeatureStructurePieceType.e, i);
             this.a(enumdirection);
             this.n = structureboundingbox;
         }
 
         protected WorldGenNetherPiece1(Random random, int i, int j) {
-            super(WorldGenFeatureStructurePieceType.g, 0);
+            super(WorldGenFeatureStructurePieceType.e, 0);
             this.a(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
             if (this.i().n() == EnumDirection.EnumAxis.Z) {
                 this.n = new StructureBoundingBox(i, 64, j, i + 19 - 1, 73, j + 19 - 1);
@@ -871,7 +871,7 @@ public class WorldGenNetherPieces {
         }
 
         public WorldGenNetherPiece1(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            this(WorldGenFeatureStructurePieceType.g, nbttagcompound);
+            this(WorldGenFeatureStructurePieceType.e, nbttagcompound);
         }
 
         @Override
@@ -937,14 +937,14 @@ public class WorldGenNetherPieces {
         private final int a;
 
         public WorldGenNetherPiece2(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(WorldGenFeatureStructurePieceType.h, i);
+            super(WorldGenFeatureStructurePieceType.f, i);
             this.a(enumdirection);
             this.n = structureboundingbox;
             this.a = random.nextInt();
         }
 
         public WorldGenNetherPiece2(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.h, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.f, nbttagcompound);
             this.a = nbttagcompound.getInt("Seed");
         }
 
@@ -999,13 +999,13 @@ public class WorldGenNetherPieces {
     public static class WorldGenNetherPiece3 extends WorldGenNetherPieces.WorldGenNetherPiece {
 
         public WorldGenNetherPiece3(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(WorldGenFeatureStructurePieceType.i, i);
+            super(WorldGenFeatureStructurePieceType.g, i);
             this.a(enumdirection);
             this.n = structureboundingbox;
         }
 
         public WorldGenNetherPiece3(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.i, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.g, nbttagcompound);
         }
 
         @Override
@@ -1088,7 +1088,7 @@ public class WorldGenNetherPieces {
         }
 
         public WorldGenNetherPiece15(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.u, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.s, nbttagcompound);
         }
     }
 

@@ -1,10 +1,11 @@
 package net.minecraft.server;
 
 import java.io.IOException;
+import java.util.function.Supplier;
 
 public class PacketPlayOutRespawn implements Packet<PacketListenerPlayOut> {
 
-    private ResourceKey<DimensionManager> a;
+    private DimensionManager a;
     private ResourceKey<World> b;
     private long c;
     private EnumGamemode d;
@@ -15,9 +16,9 @@ public class PacketPlayOutRespawn implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutRespawn() {}
 
-    public PacketPlayOutRespawn(ResourceKey<DimensionManager> resourcekey, ResourceKey<World> resourcekey1, long i, EnumGamemode enumgamemode, EnumGamemode enumgamemode1, boolean flag, boolean flag1, boolean flag2) {
-        this.a = resourcekey;
-        this.b = resourcekey1;
+    public PacketPlayOutRespawn(DimensionManager dimensionmanager, ResourceKey<World> resourcekey, long i, EnumGamemode enumgamemode, EnumGamemode enumgamemode1, boolean flag, boolean flag1, boolean flag2) {
+        this.a = dimensionmanager;
+        this.b = resourcekey;
         this.c = i;
         this.d = enumgamemode;
         this.e = enumgamemode1;
@@ -32,8 +33,8 @@ public class PacketPlayOutRespawn implements Packet<PacketListenerPlayOut> {
 
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = ResourceKey.a(IRegistry.ad, packetdataserializer.o());
-        this.b = ResourceKey.a(IRegistry.ae, packetdataserializer.o());
+        this.a = (DimensionManager) ((Supplier) packetdataserializer.a(DimensionManager.n)).get();
+        this.b = ResourceKey.a(IRegistry.L, packetdataserializer.p());
         this.c = packetdataserializer.readLong();
         this.d = EnumGamemode.getById(packetdataserializer.readUnsignedByte());
         this.e = EnumGamemode.getById(packetdataserializer.readUnsignedByte());
@@ -44,7 +45,9 @@ public class PacketPlayOutRespawn implements Packet<PacketListenerPlayOut> {
 
     @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a.a());
+        packetdataserializer.a(DimensionManager.n, () -> {
+            return this.a;
+        });
         packetdataserializer.a(this.b.a());
         packetdataserializer.writeLong(this.c);
         packetdataserializer.writeByte(this.d.getId());

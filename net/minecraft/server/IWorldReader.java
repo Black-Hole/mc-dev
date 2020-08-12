@@ -58,11 +58,11 @@ public interface IWorldReader extends IBlockLightAccess, ICollisionAccess, Biome
 
     default boolean x(BlockPosition blockposition) {
         if (blockposition.getY() >= this.getSeaLevel()) {
-            return this.f(blockposition);
+            return this.e(blockposition);
         } else {
             BlockPosition blockposition1 = new BlockPosition(blockposition.getX(), this.getSeaLevel(), blockposition.getZ());
 
-            if (!this.f(blockposition1)) {
+            if (!this.e(blockposition1)) {
                 return false;
             } else {
                 for (blockposition1 = blockposition1.down(); blockposition1.getY() > blockposition.getY(); blockposition1 = blockposition1.down()) {

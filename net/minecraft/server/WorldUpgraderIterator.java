@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.DynamicOps;
+import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -41,20 +42,21 @@ public class WorldUpgraderIterator {
 
         WorldUpgraderIterator.LOGGER.info("Total conversion count is {}", i);
         IRegistryCustom.Dimension iregistrycustom_dimension = IRegistryCustom.b();
-        RegistryReadOps<NBTBase> registryreadops = RegistryReadOps.a((DynamicOps) DynamicOpsNBT.a, (IResourceManager) IResourceManager.Empty.INSTANCE, (IRegistryCustom) iregistrycustom_dimension);
+        RegistryReadOps<NBTBase> registryreadops = RegistryReadOps.a((DynamicOps) DynamicOpsNBT.a, (IResourceManager) IResourceManager.Empty.INSTANCE, iregistrycustom_dimension);
         SaveData savedata = convertable_conversionsession.a((DynamicOps) registryreadops, DataPackConfiguration.a);
         long j = savedata != null ? savedata.getGeneratorSettings().getSeed() : 0L;
+        IRegistry<BiomeBase> iregistry = iregistrycustom_dimension.b(IRegistry.ay);
         Object object;
 
         if (savedata != null && savedata.getGeneratorSettings().isFlatWorld()) {
-            object = new WorldChunkManagerHell(Biomes.PLAINS);
+            object = new WorldChunkManagerHell((BiomeBase) iregistry.d(Biomes.PLAINS));
         } else {
-            object = new WorldChunkManagerOverworld(j, false, false);
+            object = new WorldChunkManagerOverworld(j, false, false, iregistry);
         }
 
-        a(new File(file, "region"), (Iterable) list, (WorldChunkManager) object, 0, i, iprogressupdate);
-        a(new File(file1, "region"), (Iterable) list1, new WorldChunkManagerHell(Biomes.NETHER_WASTES), list.size(), i, iprogressupdate);
-        a(new File(file2, "region"), (Iterable) list2, new WorldChunkManagerHell(Biomes.THE_END), list.size() + list1.size(), i, iprogressupdate);
+        a(iregistrycustom_dimension, new File(file, "region"), (Iterable) list, (WorldChunkManager) object, 0, i, iprogressupdate);
+        a(iregistrycustom_dimension, new File(file1, "region"), (Iterable) list1, new WorldChunkManagerHell((BiomeBase) iregistry.d(Biomes.NETHER_WASTES)), list.size(), i, iprogressupdate);
+        a(iregistrycustom_dimension, new File(file2, "region"), (Iterable) list2, new WorldChunkManagerHell((BiomeBase) iregistry.d(Biomes.THE_END)), list.size() + list1.size(), i, iprogressupdate);
         a(convertable_conversionsession);
         convertable_conversionsession.a((IRegistryCustom) iregistrycustom_dimension, savedata);
         return true;
@@ -75,13 +77,13 @@ public class WorldUpgraderIterator {
         }
     }
 
-    private static void a(File file, Iterable<File> iterable, WorldChunkManager worldchunkmanager, int i, int j, IProgressUpdate iprogressupdate) {
+    private static void a(IRegistryCustom.Dimension iregistrycustom_dimension, File file, Iterable<File> iterable, WorldChunkManager worldchunkmanager, int i, int j, IProgressUpdate iprogressupdate) {
         Iterator iterator = iterable.iterator();
 
         while (iterator.hasNext()) {
             File file1 = (File) iterator.next();
 
-            a(file, file1, worldchunkmanager, i, j, iprogressupdate);
+            a(iregistrycustom_dimension, file, file1, worldchunkmanager, i, j, iprogressupdate);
             ++i;
             int k = (int) Math.round(100.0D * (double) i / (double) j);
 
@@ -90,7 +92,7 @@ public class WorldUpgraderIterator {
 
     }
 
-    private static void a(File file, File file1, WorldChunkManager worldchunkmanager, int i, int j, IProgressUpdate iprogressupdate) {
+    private static void a(IRegistryCustom.Dimension iregistrycustom_dimension, File file, File file1, WorldChunkManager worldchunkmanager, int i, int j, IProgressUpdate iprogressupdate) {
         String s = file1.getName();
 
         try {
@@ -121,7 +123,7 @@ public class WorldUpgraderIterator {
                                             continue;
                                         }
 
-                                        nbttagcompound = NBTCompressedStreamTools.a(datainputstream);
+                                        nbttagcompound = NBTCompressedStreamTools.a((DataInput) datainputstream);
                                     } catch (Throwable throwable3) {
                                         throwable2 = throwable3;
                                         throw throwable3;
@@ -150,7 +152,7 @@ public class WorldUpgraderIterator {
                                 NBTTagCompound nbttagcompound3 = new NBTTagCompound();
 
                                 nbttagcompound2.set("Level", nbttagcompound3);
-                                OldChunkLoader.a(oldchunkloader_oldchunk, nbttagcompound3, worldchunkmanager);
+                                OldChunkLoader.a(iregistrycustom_dimension, oldchunkloader_oldchunk, nbttagcompound3, worldchunkmanager);
                                 DataOutputStream dataoutputstream = regionfile1.c(chunkcoordintpair);
                                 Throwable throwable5 = null;
 

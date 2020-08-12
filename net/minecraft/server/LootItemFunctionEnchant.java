@@ -41,7 +41,7 @@ public class LootItemFunctionEnchant extends LootItemFunctionConditional {
 
         if (this.b.isEmpty()) {
             boolean flag = itemstack.getItem() == Items.BOOK;
-            List<Enchantment> list = (List) IRegistry.ENCHANTMENT.e().filter(Enchantment::i).filter((enchantment1) -> {
+            List<Enchantment> list = (List) IRegistry.ENCHANTMENT.g().filter(Enchantment::i).filter((enchantment1) -> {
                 return flag || enchantment1.canEnchant(itemstack);
             }).collect(Collectors.toList());
 

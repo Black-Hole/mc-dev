@@ -28,7 +28,7 @@ public class BlockEnderPortal extends BlockTileEntity {
                 return;
             }
 
-            entity.a(worldserver);
+            entity.b(worldserver);
         }
 
     }

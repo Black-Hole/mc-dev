@@ -49,7 +49,7 @@ public class PacketPlayOutAdvancements implements Packet<PacketListenerPlayOut> 
         int j;
 
         for (j = 0; j < i; ++j) {
-            minecraftkey = packetdataserializer.o();
+            minecraftkey = packetdataserializer.p();
             Advancement.SerializedAdvancement advancement_serializedadvancement = Advancement.SerializedAdvancement.b(packetdataserializer);
 
             this.b.put(minecraftkey, advancement_serializedadvancement);
@@ -58,14 +58,14 @@ public class PacketPlayOutAdvancements implements Packet<PacketListenerPlayOut> 
         i = packetdataserializer.i();
 
         for (j = 0; j < i; ++j) {
-            minecraftkey = packetdataserializer.o();
+            minecraftkey = packetdataserializer.p();
             this.c.add(minecraftkey);
         }
 
         i = packetdataserializer.i();
 
         for (j = 0; j < i; ++j) {
-            minecraftkey = packetdataserializer.o();
+            minecraftkey = packetdataserializer.p();
             this.d.put(minecraftkey, AdvancementProgress.b(packetdataserializer));
         }
 

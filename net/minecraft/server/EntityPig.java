@@ -5,14 +5,14 @@ import javax.annotation.Nullable;
 
 public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
 
-    private static final DataWatcherObject<Boolean> bv = DataWatcher.a(EntityPig.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Integer> bw = DataWatcher.a(EntityPig.class, DataWatcherRegistry.b);
-    private static final RecipeItemStack bx = RecipeItemStack.a(Items.CARROT, Items.POTATO, Items.BEETROOT);
+    private static final DataWatcherObject<Boolean> bo = DataWatcher.a(EntityPig.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Integer> bp = DataWatcher.a(EntityPig.class, DataWatcherRegistry.b);
+    private static final RecipeItemStack bq = RecipeItemStack.a(Items.CARROT, Items.POTATO, Items.BEETROOT);
     public final SaddleStorage saddleStorage;
 
     public EntityPig(EntityTypes<? extends EntityPig> entitytypes, World world) {
         super(entitytypes, world);
-        this.saddleStorage = new SaddleStorage(this.datawatcher, EntityPig.bw, EntityPig.bv);
+        this.saddleStorage = new SaddleStorage(this.datawatcher, EntityPig.bp, EntityPig.bo);
     }
 
     @Override
@@ -21,14 +21,14 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 1.25D));
         this.goalSelector.a(3, new PathfinderGoalBreed(this, 1.0D));
         this.goalSelector.a(4, new PathfinderGoalTempt(this, 1.2D, RecipeItemStack.a(Items.CARROT_ON_A_STICK), false));
-        this.goalSelector.a(4, new PathfinderGoalTempt(this, 1.2D, false, EntityPig.bx));
+        this.goalSelector.a(4, new PathfinderGoalTempt(this, 1.2D, false, EntityPig.bq));
         this.goalSelector.a(5, new PathfinderGoalFollowParent(this, 1.1D));
         this.goalSelector.a(6, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(7, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
     }
 
-    public static AttributeProvider.Builder eL() {
+    public static AttributeProvider.Builder eK() {
         return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
     }
 
@@ -39,7 +39,7 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
     }
 
     @Override
-    public boolean es() {
+    public boolean er() {
         Entity entity = this.getRidingPassenger();
 
         if (!(entity instanceof EntityHuman)) {
@@ -53,7 +53,7 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
 
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityPig.bw.equals(datawatcherobject) && this.world.isClientSide) {
+        if (EntityPig.bp.equals(datawatcherobject) && this.world.isClientSide) {
             this.saddleStorage.a();
         }
 
@@ -63,8 +63,8 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityPig.bv, false);
-        this.datawatcher.register(EntityPig.bw, 0);
+        this.datawatcher.register(EntityPig.bo, false);
+        this.datawatcher.register(EntityPig.bp, 0);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
     }
 
     @Override
-    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
+    protected void b(BlockPosition blockposition, IBlockData iblockdata) {
         this.playSound(SoundEffects.ENTITY_PIG_STEP, 0.15F, 1.0F);
     }
 
@@ -103,7 +103,7 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
     public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         boolean flag = this.k(entityhuman.b(enumhand));
 
-        if (!flag && this.hasSaddle() && !this.isVehicle()) {
+        if (!flag && this.hasSaddle() && !this.isVehicle() && !entityhuman.ep()) {
             if (!this.world.isClientSide) {
                 entityhuman.startRiding(this);
             }
@@ -151,11 +151,11 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
     }
 
     @Override
-    public Vec3D c(EntityLiving entityliving) {
+    public Vec3D b(EntityLiving entityliving) {
         EnumDirection enumdirection = this.getAdjustedDirection();
 
         if (enumdirection.n() == EnumDirection.EnumAxis.Y) {
-            return super.c(entityliving);
+            return super.b(entityliving);
         } else {
             int[][] aint = DismountUtil.a(enumdirection);
             BlockPosition blockposition = this.getChunkCoordinates();
@@ -172,7 +172,7 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
                     int[] aint2 = aint1[j];
 
                     blockposition_mutableblockposition.d(blockposition.getX() + aint2[0], blockposition.getY(), blockposition.getZ() + aint2[1]);
-                    double d0 = this.world.m(blockposition_mutableblockposition);
+                    double d0 = this.world.h(blockposition_mutableblockposition);
 
                     if (DismountUtil.a(d0)) {
                         Vec3D vec3d = Vec3D.a((BaseBlockPosition) blockposition_mutableblockposition, d0);
@@ -185,14 +185,14 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
                 }
             }
 
-            return super.c(entityliving);
+            return super.b(entityliving);
         }
     }
 
     @Override
-    public void onLightningStrike(EntityLightning entitylightning) {
-        if (this.world.getDifficulty() != EnumDifficulty.PEACEFUL) {
-            EntityPigZombie entitypigzombie = (EntityPigZombie) EntityTypes.ZOMBIFIED_PIGLIN.a(this.world);
+    public void onLightningStrike(WorldServer worldserver, EntityLightning entitylightning) {
+        if (worldserver.getDifficulty() != EnumDifficulty.PEACEFUL) {
+            EntityPigZombie entitypigzombie = (EntityPigZombie) EntityTypes.ZOMBIFIED_PIGLIN.a((World) worldserver);
 
             entitypigzombie.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
             entitypigzombie.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.yaw, this.pitch);
@@ -204,41 +204,41 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
             }
 
             entitypigzombie.setPersistent();
-            this.world.addEntity(entitypigzombie);
+            worldserver.addEntity(entitypigzombie);
             this.die();
         } else {
-            super.onLightningStrike(entitylightning);
+            super.onLightningStrike(worldserver, entitylightning);
         }
 
     }
 
     @Override
-    public void f(Vec3D vec3d) {
+    public void g(Vec3D vec3d) {
         this.a((EntityInsentient) this, this.saddleStorage, vec3d);
     }
 
     @Override
-    public float O_() {
+    public float N_() {
         return (float) this.b(GenericAttributes.MOVEMENT_SPEED) * 0.225F;
     }
 
     @Override
     public void a_(Vec3D vec3d) {
-        super.f(vec3d);
+        super.g(vec3d);
     }
 
     @Override
-    public boolean P_() {
+    public boolean O_() {
         return this.saddleStorage.a(this.getRandom());
     }
 
     @Override
-    public EntityPig createChild(EntityAgeable entityageable) {
-        return (EntityPig) EntityTypes.PIG.a(this.world);
+    public EntityPig createChild(WorldServer worldserver, EntityAgeable entityageable) {
+        return (EntityPig) EntityTypes.PIG.a((World) worldserver);
     }
 
     @Override
     public boolean k(ItemStack itemstack) {
-        return EntityPig.bx.test(itemstack);
+        return EntityPig.bq.test(itemstack);
     }
 }

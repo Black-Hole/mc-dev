@@ -31,7 +31,7 @@ public class ItemKnowledgeBook extends Item {
 
                 for (int i = 0; i < nbttaglist.size(); ++i) {
                     String s = nbttaglist.getString(i);
-                    Optional<? extends IRecipe<?>> optional = craftingmanager.a(new MinecraftKey(s));
+                    Optional<? extends IRecipe<?>> optional = craftingmanager.getRecipe(new MinecraftKey(s));
 
                     if (!optional.isPresent()) {
                         ItemKnowledgeBook.LOGGER.error("Invalid recipe: {}", s);

@@ -28,7 +28,7 @@ public class EntityHorseMule extends EntityHorseChestedAbstract {
 
     @Nullable
     @Override
-    protected SoundEffect fh() {
+    protected SoundEffect fg() {
         return SoundEffects.ENTITY_MULE_EAT;
     }
 
@@ -39,12 +39,12 @@ public class EntityHorseMule extends EntityHorseChestedAbstract {
     }
 
     @Override
-    protected void eP() {
+    protected void eO() {
         this.playSound(SoundEffects.ENTITY_MULE_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 
     @Override
-    public EntityAgeable createChild(EntityAgeable entityageable) {
-        return (EntityAgeable) EntityTypes.MULE.a(this.world);
+    public EntityAgeable createChild(WorldServer worldserver, EntityAgeable entityageable) {
+        return (EntityAgeable) EntityTypes.MULE.a((World) worldserver);
     }
 }

@@ -4,21 +4,16 @@ import com.mojang.serialization.Codec;
 import java.util.Random;
 import java.util.stream.Stream;
 
-public class WorldGenDecoratorIceburg extends WorldGenDecorator<WorldGenDecoratorDungeonConfiguration> {
+public class WorldGenDecoratorIceburg extends WorldGenDecoratorFeatureSimple<WorldGenFeatureEmptyConfiguration2> {
 
-    public WorldGenDecoratorIceburg(Codec<WorldGenDecoratorDungeonConfiguration> codec) {
+    public WorldGenDecoratorIceburg(Codec<WorldGenFeatureEmptyConfiguration2> codec) {
         super(codec);
     }
 
-    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator chunkgenerator, Random random, WorldGenDecoratorDungeonConfiguration worldgendecoratordungeonconfiguration, BlockPosition blockposition) {
-        if (random.nextFloat() < 1.0F / (float) worldgendecoratordungeonconfiguration.b) {
-            int i = random.nextInt(8) + 4 + blockposition.getX();
-            int j = random.nextInt(8) + 4 + blockposition.getZ();
-            int k = generatoraccess.a(HeightMap.Type.MOTION_BLOCKING, i, j);
+    public Stream<BlockPosition> a(Random random, WorldGenFeatureEmptyConfiguration2 worldgenfeatureemptyconfiguration2, BlockPosition blockposition) {
+        int i = random.nextInt(8) + 4 + blockposition.getX();
+        int j = random.nextInt(8) + 4 + blockposition.getZ();
 
-            return Stream.of(new BlockPosition(i, k, j));
-        } else {
-            return Stream.empty();
-        }
+        return Stream.of(new BlockPosition(i, blockposition.getY(), j));
     }
 }

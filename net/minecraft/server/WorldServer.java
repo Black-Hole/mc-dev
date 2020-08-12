@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -30,6 +29,7 @@ import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
@@ -63,8 +63,8 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     private final StructureManager structureManager;
     private final boolean Q;
 
-    public WorldServer(MinecraftServer minecraftserver, Executor executor, Convertable.ConversionSession convertable_conversionsession, IWorldDataServer iworlddataserver, ResourceKey<World> resourcekey, ResourceKey<DimensionManager> resourcekey1, DimensionManager dimensionmanager, WorldLoadListener worldloadlistener, ChunkGenerator chunkgenerator, boolean flag, long i, List<MobSpawner> list, boolean flag1) {
-        super(iworlddataserver, resourcekey, resourcekey1, dimensionmanager, minecraftserver::getMethodProfiler, false, flag, i);
+    public WorldServer(MinecraftServer minecraftserver, Executor executor, Convertable.ConversionSession convertable_conversionsession, IWorldDataServer iworlddataserver, ResourceKey<World> resourcekey, DimensionManager dimensionmanager, WorldLoadListener worldloadlistener, ChunkGenerator chunkgenerator, boolean flag, long i, List<MobSpawner> list, boolean flag1) {
+        super(iworlddataserver, resourcekey, dimensionmanager, minecraftserver::getMethodProfiler, false, flag, i);
         this.nextTickListBlock = new TickListServer<>(this, (block) -> {
             return block == null || block.getBlockData().isAir();
         }, IRegistry.BLOCK::getKey, this::b);
@@ -78,12 +78,12 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         this.mobSpawners = list;
         this.worldDataServer = iworlddataserver;
         this.chunkProvider = new ChunkProviderServer(this, convertable_conversionsession, minecraftserver.getDataFixer(), minecraftserver.getDefinedStructureManager(), executor, chunkgenerator, minecraftserver.getPlayerList().getViewDistance(), minecraftserver.isSyncChunkWrites(), worldloadlistener, () -> {
-            return minecraftserver.D().getWorldPersistentData();
+            return minecraftserver.E().getWorldPersistentData();
         });
         this.portalTravelAgent = new PortalTravelAgent(this);
-        this.N();
-        this.O();
-        this.getWorldBorder().a(minecraftserver.as());
+        this.P();
+        this.Q();
+        this.getWorldBorder().a(minecraftserver.at());
         this.persistentRaid = (PersistentRaid) this.getWorldPersistentData().a(() -> {
             return new PersistentRaid(this);
         }, PersistentRaid.a(this.getDimensionManager()));
@@ -93,7 +93,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
         this.structureManager = new StructureManager(this, minecraftserver.getSaveData().getGeneratorSettings());
         if (this.getDimensionManager().isCreateDragonBattle()) {
-            this.dragonBattle = new EnderDragonBattle(this, minecraftserver.getSaveData().getGeneratorSettings().getSeed(), minecraftserver.getSaveData().B());
+            this.dragonBattle = new EnderDragonBattle(this, minecraftserver.getSaveData().getGeneratorSettings().getSeed(), minecraftserver.getSaveData().C());
         } else {
             this.dragonBattle = null;
         }
@@ -128,7 +128,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
         if (this.getDimensionManager().hasSkyLight()) {
             if (this.getGameRules().getBoolean(GameRules.DO_WEATHER_CYCLE)) {
-                int i = this.worldDataServer.g();
+                int i = this.worldDataServer.h();
                 int j = this.worldDataServer.getThunderDuration();
                 int k = this.worldDataServer.getWeatherDuration();
                 boolean flag1 = this.worldData.isThundering();
@@ -224,7 +224,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
             }
         }
 
-        this.N();
+        this.P();
         this.b();
         gameprofilerfiller.exitEnter("chunkSource");
         this.getChunkProvider().tick(booleansupplier);
@@ -237,7 +237,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         gameprofilerfiller.exitEnter("raid");
         this.persistentRaid.a();
         gameprofilerfiller.exitEnter("blockEvents");
-        this.ah();
+        this.aj();
         this.ticking = false;
         gameprofilerfiller.exitEnter("entities");
         boolean flag3 = !this.players.isEmpty() || !this.getForceLoadedChunks().isEmpty();
@@ -316,8 +316,8 @@ public class WorldServer extends World implements GeneratorAccessSeed {
             long i = this.worldData.getTime() + 1L;
 
             this.worldDataServer.setTime(i);
-            this.worldDataServer.t().a(this.server, i);
-            if (this.worldData.p().getBoolean(GameRules.DO_DAYLIGHT_CYCLE)) {
+            this.worldDataServer.u().a(this.server, i);
+            if (this.worldData.q().getBoolean(GameRules.DO_DAYLIGHT_CYCLE)) {
                 this.setDayTime(this.worldData.getDayTime() + 1L);
             }
 
@@ -355,7 +355,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         gameprofilerfiller.enter("thunder");
         BlockPosition blockposition;
 
-        if (flag && this.T() && this.random.nextInt(100000) == 0) {
+        if (flag && this.V() && this.random.nextInt(100000) == 0) {
             blockposition = this.a(this.a(j, 0, k, 15));
             if (this.isRainingAt(blockposition)) {
                 DifficultyDamageScaler difficultydamagescaler = this.getDamageScaler(blockposition);
@@ -372,7 +372,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
                 EntityLightning entitylightning = (EntityLightning) EntityTypes.LIGHTNING_BOLT.a((World) this);
 
-                entitylightning.c(Vec3D.c((BaseBlockPosition) blockposition));
+                entitylightning.d(Vec3D.c((BaseBlockPosition) blockposition));
                 entitylightning.setEffect(flag1);
                 this.addEntity(entitylightning);
             }
@@ -384,7 +384,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
             BlockPosition blockposition1 = blockposition.down();
             BiomeBase biomebase = this.getBiome(blockposition);
 
-            if (biomebase.a((IWorldReader) this, blockposition1)) {
+            if (biomebase.a(this, blockposition1)) {
                 this.setTypeUpdate(blockposition1, Blocks.ICE.getBlockData());
             }
 
@@ -392,7 +392,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
                 this.setTypeUpdate(blockposition, Blocks.SNOW.getBlockData());
             }
 
-            if (flag && this.getBiome(blockposition1).d() == BiomeBase.Precipitation.RAIN) {
+            if (flag && this.getBiome(blockposition1).c() == BiomeBase.Precipitation.RAIN) {
                 this.getType(blockposition1).getBlock().c((World) this, blockposition1);
             }
         }
@@ -437,7 +437,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         BlockPosition blockposition1 = this.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition);
         AxisAlignedBB axisalignedbb = (new AxisAlignedBB(blockposition1, new BlockPosition(blockposition1.getX(), this.getBuildHeight(), blockposition1.getZ()))).g(3.0D);
         List<EntityLiving> list = this.a(EntityLiving.class, axisalignedbb, (entityliving) -> {
-            return entityliving != null && entityliving.isAlive() && this.f(entityliving.getChunkCoordinates());
+            return entityliving != null && entityliving.isAlive() && this.e(entityliving.getChunkCoordinates());
         });
 
         if (!list.isEmpty()) {
@@ -515,7 +515,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         if (!(entity instanceof EntityHuman) && !this.getChunkProvider().a(entity)) {
             this.chunkCheck(entity);
         } else {
-            entity.f(entity.locX(), entity.locY(), entity.locZ());
+            entity.g(entity.locX(), entity.locY(), entity.locZ());
             entity.lastYaw = entity.yaw;
             entity.lastPitch = entity.pitch;
             if (entity.inChunk) {
@@ -547,7 +547,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     public void a(Entity entity, Entity entity1) {
         if (!entity1.dead && entity1.getVehicle() == entity) {
             if (entity1 instanceof EntityHuman || this.getChunkProvider().a(entity1)) {
-                entity1.f(entity1.locX(), entity1.locY(), entity1.locZ());
+                entity1.g(entity1.locX(), entity1.locY(), entity1.locZ());
                 entity1.lastYaw = entity1.yaw;
                 entity1.lastPitch = entity1.pitch;
                 if (entity1.inChunk) {
@@ -619,7 +619,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
                 iprogressupdate.a(new ChatMessage("menu.savingLevel"));
             }
 
-            this.ag();
+            this.ai();
             if (iprogressupdate != null) {
                 iprogressupdate.c(new ChatMessage("menu.savingChunks"));
             }
@@ -628,7 +628,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         }
     }
 
-    private void ag() {
+    private void ai() {
         if (this.dragonBattle != null) {
             this.server.getSaveData().a(this.dragonBattle.a());
         }
@@ -683,7 +683,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     @Nullable
-    public EntityPlayer h() {
+    public EntityPlayer q_() {
         List<EntityPlayer> list = this.a(EntityLiving::isAlive);
 
         return list.isEmpty() ? null : (EntityPlayer) list.get(this.random.nextInt(list.size()));
@@ -774,12 +774,45 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     private boolean isUUIDTaken(Entity entity) {
-        Entity entity1 = (Entity) this.entitiesByUUID.get(entity.getUniqueID());
+        UUID uuid = entity.getUniqueID();
+        Entity entity1 = this.c(uuid);
 
         if (entity1 == null) {
             return false;
         } else {
-            WorldServer.LOGGER.warn("Keeping entity {} that already exists with UUID {}", EntityTypes.getName(entity1.getEntityType()), entity.getUniqueID().toString());
+            WorldServer.LOGGER.warn("Trying to add entity with duplicated UUID {}. Existing {}#{}, new: {}#{}", uuid, EntityTypes.getName(entity1.getEntityType()), entity1.getId(), EntityTypes.getName(entity.getEntityType()), entity.getId());
+            return true;
+        }
+    }
+
+    @Nullable
+    private Entity c(UUID uuid) {
+        Entity entity = (Entity) this.entitiesByUUID.get(uuid);
+
+        if (entity != null) {
+            return entity;
+        } else {
+            if (this.tickingEntities) {
+                Iterator iterator = this.entitiesToAdd.iterator();
+
+                while (iterator.hasNext()) {
+                    Entity entity1 = (Entity) iterator.next();
+
+                    if (entity1.getUniqueID().equals(uuid)) {
+                        return entity1;
+                    }
+                }
+            }
+
+            return null;
+        }
+    }
+
+    public boolean addAllEntitiesSafely(Entity entity) {
+        if (entity.co().anyMatch(this::isUUIDTaken)) {
+            return false;
+        } else {
+            this.addAllEntities(entity);
             return true;
         }
     }
@@ -798,7 +831,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
                 if (!(entity instanceof EntityPlayer)) {
                     if (this.tickingEntities) {
-                        throw (IllegalStateException) SystemUtils.c(new IllegalStateException("Removing entity while ticking!"));
+                        throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException("Removing entity while ticking!")));
                     }
 
                     this.entitiesById.remove(entity.getId());
@@ -811,7 +844,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
     public void unregisterEntity(Entity entity) {
         if (entity instanceof EntityEnderDragon) {
-            EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).eK();
+            EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).eJ();
             int i = aentitycomplexpart.length;
 
             for (int j = 0; j < i; ++j) {
@@ -842,7 +875,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         } else {
             this.entitiesById.put(entity.getId(), entity);
             if (entity instanceof EntityEnderDragon) {
-                EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).eK();
+                EntityComplexPart[] aentitycomplexpart = ((EntityEnderDragon) entity).eJ();
                 int i = aentitycomplexpart.length;
 
                 for (int j = 0; j < i; ++j) {
@@ -863,7 +896,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
     public void removeEntity(Entity entity) {
         if (this.tickingEntities) {
-            throw (IllegalStateException) SystemUtils.c(new IllegalStateException("Removing entity while ticking!"));
+            throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException("Removing entity while ticking!")));
         } else {
             this.removeEntityFromChunk(entity);
             this.entitiesById.remove(entity.getId());
@@ -971,7 +1004,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            if (entityplayer.g(d0, d1, d2) < 4096.0D) {
+            if (entityplayer.h(d0, d1, d2) < 4096.0D) {
                 entityplayer.playerConnection.sendPacket(new PacketPlayOutExplosion(d0, d1, d2, f, explosion.getBlocks(), (Vec3D) explosion.c().get(entityplayer)));
             }
         }
@@ -984,7 +1017,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         this.L.add(new BlockActionData(blockposition, block, i, j));
     }
 
-    private void ah() {
+    private void aj() {
         while (!this.L.isEmpty()) {
             BlockActionData blockactiondata = (BlockActionData) this.L.removeFirst();
 
@@ -1021,7 +1054,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         return this.portalTravelAgent;
     }
 
-    public DefinedStructureManager r_() {
+    public DefinedStructureManager n() {
         return this.server.getDefinedStructureManager();
     }
 
@@ -1079,7 +1112,9 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
     @Nullable
     public BlockPosition a(BiomeBase biomebase, BlockPosition blockposition, int i, int j) {
-        return this.getChunkProvider().getChunkGenerator().getWorldChunkManager().a(blockposition.getX(), blockposition.getY(), blockposition.getZ(), i, j, ImmutableList.of(biomebase), this.random, true);
+        return this.getChunkProvider().getChunkGenerator().getWorldChunkManager().a(blockposition.getX(), blockposition.getY(), blockposition.getZ(), i, j, (biomebase1) -> {
+            return biomebase1 == biomebase;
+        }, this.random, true);
     }
 
     @Override
@@ -1088,13 +1123,18 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     @Override
-    public TagRegistry p() {
+    public ITagRegistry p() {
         return this.server.getTagRegistry();
     }
 
     @Override
     public boolean isSavingDisabled() {
         return this.savingDisabled;
+    }
+
+    @Override
+    public IRegistryCustom r() {
+        return this.server.aX();
     }
 
     public WorldPersistentData getWorldPersistentData() {
@@ -1104,28 +1144,28 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     @Nullable
     @Override
     public WorldMap a(String s) {
-        return (WorldMap) this.getMinecraftServer().D().getWorldPersistentData().b(() -> {
+        return (WorldMap) this.getMinecraftServer().E().getWorldPersistentData().b(() -> {
             return new WorldMap(s);
         }, s);
     }
 
     @Override
     public void a(WorldMap worldmap) {
-        this.getMinecraftServer().D().getWorldPersistentData().a((PersistentBase) worldmap);
+        this.getMinecraftServer().E().getWorldPersistentData().a((PersistentBase) worldmap);
     }
 
     @Override
     public int getWorldMapCount() {
-        return ((PersistentIdCounts) this.getMinecraftServer().D().getWorldPersistentData().a(PersistentIdCounts::new, "idcounts")).a();
+        return ((PersistentIdCounts) this.getMinecraftServer().E().getWorldPersistentData().a(PersistentIdCounts::new, "idcounts")).a();
     }
 
-    public void a_(BlockPosition blockposition) {
+    public void a(BlockPosition blockposition, float f) {
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(new BlockPosition(this.worldData.a(), 0, this.worldData.c()));
 
-        this.worldData.setSpawn(blockposition);
+        this.worldData.setSpawn(blockposition, f);
         this.getChunkProvider().removeTicket(TicketType.START, chunkcoordintpair, 11, Unit.INSTANCE);
         this.getChunkProvider().addTicket(TicketType.START, new ChunkCoordIntPair(blockposition), 11, Unit.INSTANCE);
-        this.getMinecraftServer().getPlayerList().sendAll(new PacketPlayOutSpawnPosition(blockposition));
+        this.getMinecraftServer().getPlayerList().sendAll(new PacketPlayOutSpawnPosition(blockposition, f));
     }
 
     public BlockPosition getSpawn() {
@@ -1136,6 +1176,10 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         }
 
         return blockposition;
+    }
+
+    public float v() {
+        return this.worldData.d();
     }
 
     public LongSet getForceLoadedChunks() {
@@ -1182,29 +1226,29 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
             optional.ifPresent((villageplacetype) -> {
                 this.getMinecraftServer().execute(() -> {
-                    this.x().a(blockposition1);
+                    this.y().a(blockposition1);
                     PacketDebug.b(this, blockposition1);
                 });
             });
             optional1.ifPresent((villageplacetype) -> {
                 this.getMinecraftServer().execute(() -> {
-                    this.x().a(blockposition1, villageplacetype);
+                    this.y().a(blockposition1, villageplacetype);
                     PacketDebug.a(this, blockposition1);
                 });
             });
         }
     }
 
-    public VillagePlace x() {
+    public VillagePlace y() {
         return this.getChunkProvider().j();
     }
 
-    public boolean b_(BlockPosition blockposition) {
+    public boolean a_(BlockPosition blockposition) {
         return this.a(blockposition, 1);
     }
 
     public boolean a(SectionPosition sectionposition) {
-        return this.b_(sectionposition.q());
+        return this.a_(sectionposition.q());
     }
 
     public boolean a(BlockPosition blockposition, int i) {
@@ -1212,7 +1256,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     public int b(SectionPosition sectionposition) {
-        return this.x().a(sectionposition);
+        return this.y().a(sectionposition);
     }
 
     public PersistentRaid getPersistentRaid() {
@@ -1220,12 +1264,12 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     @Nullable
-    public Raid c_(BlockPosition blockposition) {
+    public Raid b_(BlockPosition blockposition) {
         return this.persistentRaid.getNearbyRaid(blockposition, 9216);
     }
 
-    public boolean e(BlockPosition blockposition) {
-        return this.c_(blockposition) != null;
+    public boolean c_(BlockPosition blockposition) {
+        return this.b_(blockposition) != null;
     }
 
     public void a(ReputationEvent reputationevent, Entity entity, ReputationHandler reputationhandler) {
@@ -1417,7 +1461,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
     }
 
-    public Iterable<Entity> z() {
+    public Iterable<Entity> A() {
         return Iterables.unmodifiableIterable(this.entitiesById.values());
     }
 
@@ -1437,6 +1481,16 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     @Nullable
     public EnderDragonBattle getDragonBattle() {
         return this.dragonBattle;
+    }
+
+    @Override
+    public Stream<? extends StructureStart<?>> a(SectionPosition sectionposition, StructureGenerator<?> structuregenerator) {
+        return this.getStructureManager().a(sectionposition, structuregenerator);
+    }
+
+    @Override
+    public WorldServer getMinecraftWorld() {
+        return this;
     }
 
     public static void a(WorldServer worldserver) {

@@ -10,7 +10,7 @@ public class WorldGenEndGateway extends WorldGenerator<WorldGenEndGatewayConfigu
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenEndGatewayConfiguration worldgenendgatewayconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenEndGatewayConfiguration worldgenendgatewayconfiguration) {
         Iterator iterator = BlockPosition.a(blockposition.b(-1, -2, -1), blockposition.b(1, 2, 1)).iterator();
 
         while (iterator.hasNext()) {
@@ -24,13 +24,13 @@ public class WorldGenEndGateway extends WorldGenerator<WorldGenEndGatewayConfigu
                 BlockPosition blockposition2 = blockposition1.immutableCopy();
 
                 this.a(generatoraccessseed, blockposition2, Blocks.END_GATEWAY.getBlockData());
-                worldgenendgatewayconfiguration.b().ifPresent((blockposition3) -> {
+                worldgenendgatewayconfiguration.c().ifPresent((blockposition3) -> {
                     TileEntity tileentity = generatoraccessseed.getTileEntity(blockposition2);
 
                     if (tileentity instanceof TileEntityEndGateway) {
                         TileEntityEndGateway tileentityendgateway = (TileEntityEndGateway) tileentity;
 
-                        tileentityendgateway.a(blockposition3, worldgenendgatewayconfiguration.c());
+                        tileentityendgateway.a(blockposition3, worldgenendgatewayconfiguration.d());
                         tileentity.update();
                     }
 

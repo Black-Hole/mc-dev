@@ -10,12 +10,12 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 public class ArgumentSerializers {
 
     public static void a() {
-        ArgumentRegistry.a("brigadier:bool", BoolArgumentType.class, new ArgumentSerializerVoid<>(BoolArgumentType::bool));
-        ArgumentRegistry.a("brigadier:float", FloatArgumentType.class, new ArgumentSerializerFloat());
-        ArgumentRegistry.a("brigadier:double", DoubleArgumentType.class, new ArgumentSerializerDouble());
-        ArgumentRegistry.a("brigadier:integer", IntegerArgumentType.class, new ArgumentSerializerInteger());
-        ArgumentRegistry.a("brigadier:long", LongArgumentType.class, new ArgumentSerializerLong());
-        ArgumentRegistry.a("brigadier:string", StringArgumentType.class, new ArgumentSerializerString());
+        ArgumentRegistry.a("brigadier:bool", BoolArgumentType.class, (ArgumentSerializer) (new ArgumentSerializerVoid<>(BoolArgumentType::bool)));
+        ArgumentRegistry.a("brigadier:float", FloatArgumentType.class, (ArgumentSerializer) (new ArgumentSerializerFloat()));
+        ArgumentRegistry.a("brigadier:double", DoubleArgumentType.class, (ArgumentSerializer) (new ArgumentSerializerDouble()));
+        ArgumentRegistry.a("brigadier:integer", IntegerArgumentType.class, (ArgumentSerializer) (new ArgumentSerializerInteger()));
+        ArgumentRegistry.a("brigadier:long", LongArgumentType.class, (ArgumentSerializer) (new ArgumentSerializerLong()));
+        ArgumentRegistry.a("brigadier:string", StringArgumentType.class, (ArgumentSerializer) (new ArgumentSerializerString()));
     }
 
     public static byte a(boolean flag, boolean flag1) {

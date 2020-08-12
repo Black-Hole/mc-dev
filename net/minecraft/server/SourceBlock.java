@@ -2,16 +2,16 @@ package net.minecraft.server;
 
 public class SourceBlock implements ISourceBlock {
 
-    private final World a;
+    private final WorldServer a;
     private final BlockPosition b;
 
-    public SourceBlock(World world, BlockPosition blockposition) {
-        this.a = world;
+    public SourceBlock(WorldServer worldserver, BlockPosition blockposition) {
+        this.a = worldserver;
         this.b = blockposition;
     }
 
     @Override
-    public World getWorld() {
+    public WorldServer getWorld() {
         return this.a;
     }
 

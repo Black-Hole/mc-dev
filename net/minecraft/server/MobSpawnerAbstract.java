@@ -58,7 +58,7 @@ public abstract class MobSpawnerAbstract {
             World world = this.a();
             BlockPosition blockposition = this.b();
 
-            if (world.isClientSide) {
+            if (!(world instanceof WorldServer)) {
                 double d0 = (double) blockposition.getX() + world.random.nextDouble();
                 double d1 = (double) blockposition.getY() + world.random.nextDouble();
                 double d2 = (double) blockposition.getZ() + world.random.nextDouble();
@@ -98,63 +98,58 @@ public abstract class MobSpawnerAbstract {
                     double d4 = j >= 2 ? nbttaglist.h(1) : (double) (blockposition.getY() + world.random.nextInt(3) - 1);
                     double d5 = j >= 3 ? nbttaglist.h(2) : (double) blockposition.getZ() + (world.random.nextDouble() - world.random.nextDouble()) * (double) this.spawnRange + 0.5D;
 
-                    if (world.b(((EntityTypes) optional.get()).a(d3, d4, d5)) && EntityPositionTypes.a((EntityTypes) optional.get(), world.getMinecraftWorld(), EnumMobSpawn.SPAWNER, new BlockPosition(d3, d4, d5), world.getRandom())) {
-                        Entity entity = EntityTypes.a(nbttagcompound, world, (entity1) -> {
-                            entity1.setPositionRotation(d3, d4, d5, entity1.yaw, entity1.pitch);
-                            return entity1;
-                        });
+                    if (world.b(((EntityTypes) optional.get()).a(d3, d4, d5))) {
+                        WorldServer worldserver = (WorldServer) world;
 
-                        if (entity == null) {
-                            this.i();
-                            return;
-                        }
+                        if (EntityPositionTypes.a((EntityTypes) optional.get(), worldserver, EnumMobSpawn.SPAWNER, new BlockPosition(d3, d4, d5), world.getRandom())) {
+                            Entity entity = EntityTypes.a(nbttagcompound, world, (entity1) -> {
+                                entity1.setPositionRotation(d3, d4, d5, entity1.yaw, entity1.pitch);
+                                return entity1;
+                            });
 
-                        int k = world.a(entity.getClass(), (new AxisAlignedBB((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), (double) (blockposition.getX() + 1), (double) (blockposition.getY() + 1), (double) (blockposition.getZ() + 1))).g((double) this.spawnRange)).size();
-
-                        if (k >= this.maxNearbyEntities) {
-                            this.i();
-                            return;
-                        }
-
-                        entity.setPositionRotation(entity.locX(), entity.locY(), entity.locZ(), world.random.nextFloat() * 360.0F, 0.0F);
-                        if (entity instanceof EntityInsentient) {
-                            EntityInsentient entityinsentient = (EntityInsentient) entity;
-
-                            if (!entityinsentient.a((GeneratorAccess) world, EnumMobSpawn.SPAWNER) || !entityinsentient.a((IWorldReader) world)) {
-                                continue;
+                            if (entity == null) {
+                                this.i();
+                                return;
                             }
 
-                            if (this.spawnData.getEntity().e() == 1 && this.spawnData.getEntity().hasKeyOfType("id", 8)) {
-                                ((EntityInsentient) entity).prepare(world, world.getDamageScaler(entity.getChunkCoordinates()), EnumMobSpawn.SPAWNER, (GroupDataEntity) null, (NBTTagCompound) null);
+                            int k = world.a(entity.getClass(), (new AxisAlignedBB((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), (double) (blockposition.getX() + 1), (double) (blockposition.getY() + 1), (double) (blockposition.getZ() + 1))).g((double) this.spawnRange)).size();
+
+                            if (k >= this.maxNearbyEntities) {
+                                this.i();
+                                return;
                             }
-                        }
 
-                        this.a(entity);
-                        world.triggerEffect(2004, blockposition, 0);
-                        if (entity instanceof EntityInsentient) {
-                            ((EntityInsentient) entity).doSpawnEffect();
-                        }
+                            entity.setPositionRotation(entity.locX(), entity.locY(), entity.locZ(), world.random.nextFloat() * 360.0F, 0.0F);
+                            if (entity instanceof EntityInsentient) {
+                                EntityInsentient entityinsentient = (EntityInsentient) entity;
 
-                        flag = true;
+                                if (!entityinsentient.a((GeneratorAccess) world, EnumMobSpawn.SPAWNER) || !entityinsentient.a((IWorldReader) world)) {
+                                    continue;
+                                }
+
+                                if (this.spawnData.getEntity().e() == 1 && this.spawnData.getEntity().hasKeyOfType("id", 8)) {
+                                    ((EntityInsentient) entity).prepare(worldserver, world.getDamageScaler(entity.getChunkCoordinates()), EnumMobSpawn.SPAWNER, (GroupDataEntity) null, (NBTTagCompound) null);
+                                }
+                            }
+
+                            if (!worldserver.addAllEntitiesSafely(entity)) {
+                                this.i();
+                                return;
+                            }
+
+                            world.triggerEffect(2004, blockposition, 0);
+                            if (entity instanceof EntityInsentient) {
+                                ((EntityInsentient) entity).doSpawnEffect();
+                            }
+
+                            flag = true;
+                        }
                     }
                 }
 
                 if (flag) {
                     this.i();
                 }
-            }
-
-        }
-    }
-
-    private void a(Entity entity) {
-        if (this.a().addEntity(entity)) {
-            Iterator iterator = entity.getPassengers().iterator();
-
-            while (iterator.hasNext()) {
-                Entity entity1 = (Entity) iterator.next();
-
-                this.a(entity1);
             }
 
         }

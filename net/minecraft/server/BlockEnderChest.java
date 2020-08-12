@@ -5,7 +5,7 @@ public class BlockEnderChest extends BlockChestAbstract<TileEntityEnderChest> im
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
     public static final BlockStateBoolean c = BlockProperties.C;
     protected static final VoxelShape d = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
-    public static final ChatMessage e = new ChatMessage("container.enderchest");
+    private static final IChatBaseComponent e = new ChatMessage("container.enderchest");
 
     protected BlockEnderChest(BlockBase.Info blockbase_info) {
         super(blockbase_info, () -> {

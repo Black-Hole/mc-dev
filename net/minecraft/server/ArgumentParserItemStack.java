@@ -101,12 +101,12 @@ public class ArgumentParserItemStack {
     }
 
     private CompletableFuture<Suggestions> c(SuggestionsBuilder suggestionsbuilder, Tags<Item> tags) {
-        return ICompletionProvider.a((Iterable) tags.a(), suggestionsbuilder.createOffset(this.j));
+        return ICompletionProvider.a((Iterable) tags.b(), suggestionsbuilder.createOffset(this.j));
     }
 
     private CompletableFuture<Suggestions> d(SuggestionsBuilder suggestionsbuilder, Tags<Item> tags) {
         if (this.e) {
-            ICompletionProvider.a((Iterable) tags.a(), suggestionsbuilder, String.valueOf('#'));
+            ICompletionProvider.a((Iterable) tags.b(), suggestionsbuilder, String.valueOf('#'));
         }
 
         return ICompletionProvider.a((Iterable) IRegistry.ITEM.keySet(), suggestionsbuilder);

@@ -7,15 +7,15 @@ import java.util.OptionalInt;
 public class FeatureSizeThreeLayers extends FeatureSize {
 
     public static final Codec<FeatureSizeThreeLayers> c = RecordCodecBuilder.create((instance) -> {
-        return instance.group(Codec.INT.fieldOf("limit").withDefault(1).forGetter((featuresizethreelayers) -> {
+        return instance.group(Codec.intRange(0, 80).fieldOf("limit").orElse(1).forGetter((featuresizethreelayers) -> {
             return featuresizethreelayers.d;
-        }), Codec.INT.fieldOf("upper_limit").withDefault(1).forGetter((featuresizethreelayers) -> {
+        }), Codec.intRange(0, 80).fieldOf("upper_limit").orElse(1).forGetter((featuresizethreelayers) -> {
             return featuresizethreelayers.e;
-        }), Codec.INT.fieldOf("lower_size").withDefault(0).forGetter((featuresizethreelayers) -> {
+        }), Codec.intRange(0, 16).fieldOf("lower_size").orElse(0).forGetter((featuresizethreelayers) -> {
             return featuresizethreelayers.f;
-        }), Codec.INT.fieldOf("middle_size").withDefault(1).forGetter((featuresizethreelayers) -> {
+        }), Codec.intRange(0, 16).fieldOf("middle_size").orElse(1).forGetter((featuresizethreelayers) -> {
             return featuresizethreelayers.g;
-        }), Codec.INT.fieldOf("upper_size").withDefault(1).forGetter((featuresizethreelayers) -> {
+        }), Codec.intRange(0, 16).fieldOf("upper_size").orElse(1).forGetter((featuresizethreelayers) -> {
             return featuresizethreelayers.h;
         }), a()).apply(instance, FeatureSizeThreeLayers::new);
     });

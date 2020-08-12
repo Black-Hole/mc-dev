@@ -10,7 +10,7 @@ import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class WorldGenFeaturePillagerOutpostPoolPiece extends StructurePiece {
+public class WorldGenFeaturePillagerOutpostPoolPiece extends StructurePiece {
 
     private static final Logger LOGGER = LogManager.getLogger();
     protected final WorldGenFeatureDefinedStructurePoolStructure a;
@@ -20,8 +20,8 @@ public abstract class WorldGenFeaturePillagerOutpostPoolPiece extends StructureP
     private final List<WorldGenFeatureDefinedStructureJigsawJunction> f = Lists.newArrayList();
     private final DefinedStructureManager g;
 
-    public WorldGenFeaturePillagerOutpostPoolPiece(WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype, DefinedStructureManager definedstructuremanager, WorldGenFeatureDefinedStructurePoolStructure worldgenfeaturedefinedstructurepoolstructure, BlockPosition blockposition, int i, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox) {
-        super(worldgenfeaturestructurepiecetype, 0);
+    public WorldGenFeaturePillagerOutpostPoolPiece(DefinedStructureManager definedstructuremanager, WorldGenFeatureDefinedStructurePoolStructure worldgenfeaturedefinedstructurepoolstructure, BlockPosition blockposition, int i, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox) {
+        super(WorldGenFeatureStructurePieceType.ad, 0);
         this.g = definedstructuremanager;
         this.a = worldgenfeaturedefinedstructurepoolstructure;
         this.b = blockposition;
@@ -30,8 +30,8 @@ public abstract class WorldGenFeaturePillagerOutpostPoolPiece extends StructureP
         this.n = structureboundingbox;
     }
 
-    public WorldGenFeaturePillagerOutpostPoolPiece(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound, WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype) {
-        super(worldgenfeaturestructurepiecetype, nbttagcompound);
+    public WorldGenFeaturePillagerOutpostPoolPiece(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+        super(WorldGenFeatureStructurePieceType.ad, nbttagcompound);
         this.g = definedstructuremanager;
         this.b = new BlockPosition(nbttagcompound.getInt("PosX"), nbttagcompound.getInt("PosY"), nbttagcompound.getInt("PosZ"));
         this.e = nbttagcompound.getInt("ground_level_delta");

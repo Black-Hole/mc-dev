@@ -166,9 +166,13 @@ public class PathfinderNormal extends PathfinderAbstract {
             if (pathpoint3.i) {
                 return false;
             } else if (pathpoint2.b <= pathpoint.b && pathpoint1.b <= pathpoint.b) {
-                boolean flag = pathpoint2.l == PathType.FENCE && pathpoint1.l == PathType.FENCE && (double) this.b.getWidth() < 0.5D;
+                if (pathpoint1.l != PathType.WALKABLE_DOOR && pathpoint2.l != PathType.WALKABLE_DOOR && pathpoint3.l != PathType.WALKABLE_DOOR) {
+                    boolean flag = pathpoint2.l == PathType.FENCE && pathpoint1.l == PathType.FENCE && (double) this.b.getWidth() < 0.5D;
 
-                return pathpoint3.k >= 0.0F && (pathpoint2.b < pathpoint.b || pathpoint2.k >= 0.0F || flag) && (pathpoint1.b < pathpoint.b || pathpoint1.k >= 0.0F || flag);
+                    return pathpoint3.k >= 0.0F && (pathpoint2.b < pathpoint.b || pathpoint2.k >= 0.0F || flag) && (pathpoint1.b < pathpoint.b || pathpoint1.k >= 0.0F || flag);
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
@@ -259,23 +263,6 @@ public class PathfinderNormal extends PathfinderAbstract {
                 }
 
                 if (pathtype1 == PathType.OPEN) {
-                    AxisAlignedBB axisalignedbb1 = new AxisAlignedBB((double) i - d2 + 0.5D, (double) j + 0.001D, (double) k - d2 + 0.5D, (double) i + d2 + 0.5D, (double) ((float) j + this.b.getHeight()), (double) k + d2 + 0.5D);
-
-                    if (this.a(axisalignedbb1)) {
-                        return null;
-                    }
-
-                    if (this.b.getWidth() >= 1.0F) {
-                        PathType pathtype2 = this.a(this.b, i, j - 1, k);
-
-                        if (pathtype2 == PathType.BLOCKED) {
-                            pathpoint = this.a(i, j, k);
-                            pathpoint.l = PathType.WALKABLE;
-                            pathpoint.k = Math.max(pathpoint.k, f);
-                            return pathpoint;
-                        }
-                    }
-
                     int i1 = 0;
                     int j1 = j;
 
@@ -290,8 +277,8 @@ public class PathfinderNormal extends PathfinderAbstract {
                             return pathpoint1;
                         }
 
-                        pathpoint1 = this.a(i, j, k);
-                        if (i1++ >= this.b.bL()) {
+                        if (i1++ >= this.b.bO()) {
+                            pathpoint1 = this.a(i, j, k);
                             pathpoint1.l = PathType.BLOCKED;
                             pathpoint1.k = -1.0F;
                             return pathpoint1;
@@ -300,13 +287,14 @@ public class PathfinderNormal extends PathfinderAbstract {
                         pathtype1 = this.a(this.b, i, j, k);
                         f = this.b.a(pathtype1);
                         if (pathtype1 != PathType.OPEN && f >= 0.0F) {
-                            pathpoint = pathpoint1;
-                            pathpoint1.l = pathtype1;
-                            pathpoint1.k = Math.max(pathpoint1.k, f);
+                            pathpoint = this.a(i, j, k);
+                            pathpoint.l = pathtype1;
+                            pathpoint.k = Math.max(pathpoint.k, f);
                             break;
                         }
 
                         if (f < 0.0F) {
+                            pathpoint1 = this.a(i, j, k);
                             pathpoint1.l = PathType.BLOCKED;
                             pathpoint1.k = -1.0F;
                             return pathpoint1;
@@ -359,7 +347,7 @@ public class PathfinderNormal extends PathfinderAbstract {
                 }
             }
 
-            if (pathtype == PathType.OPEN && entityinsentient.a(pathtype1) == 0.0F) {
+            if (pathtype == PathType.OPEN && entityinsentient.a(pathtype1) == 0.0F && l <= 1) {
                 return PathType.OPEN;
             } else {
                 return pathtype1;
@@ -391,7 +379,7 @@ public class PathfinderNormal extends PathfinderAbstract {
 
     protected PathType a(IBlockAccess iblockaccess, boolean flag, boolean flag1, BlockPosition blockposition, PathType pathtype) {
         if (pathtype == PathType.DOOR_WOOD_CLOSED && flag && flag1) {
-            pathtype = PathType.WALKABLE;
+            pathtype = PathType.WALKABLE_DOOR;
         }
 
         if (pathtype == PathType.DOOR_OPEN && !flag1) {
@@ -482,14 +470,8 @@ public class PathfinderNormal extends PathfinderAbstract {
                             return PathType.DANGER_FIRE;
                         }
 
-                        Fluid fluid = iblockaccess.getFluid(blockposition_mutableblockposition);
-
-                        if (fluid.a((Tag) TagsFluid.WATER)) {
+                        if (iblockaccess.getFluid(blockposition_mutableblockposition).a((Tag) TagsFluid.WATER)) {
                             return PathType.WATER_BORDER;
-                        }
-
-                        if (fluid.a((Tag) TagsFluid.LAVA)) {
-                            return PathType.LAVA;
                         }
                     }
                 }
@@ -515,28 +497,10 @@ public class PathfinderNormal extends PathfinderAbstract {
                 return PathType.STICKY_HONEY;
             } else if (iblockdata.a(Blocks.COCOA)) {
                 return PathType.COCOA;
-            } else if (a(iblockdata)) {
-                return PathType.DAMAGE_FIRE;
-            } else if (BlockDoor.h(iblockdata) && !(Boolean) iblockdata.get(BlockDoor.OPEN)) {
-                return PathType.DOOR_WOOD_CLOSED;
-            } else if (block instanceof BlockDoor && material == Material.ORE && !(Boolean) iblockdata.get(BlockDoor.OPEN)) {
-                return PathType.DOOR_IRON_CLOSED;
-            } else if (block instanceof BlockDoor && (Boolean) iblockdata.get(BlockDoor.OPEN)) {
-                return PathType.DOOR_OPEN;
-            } else if (block instanceof BlockMinecartTrackAbstract) {
-                return PathType.RAIL;
-            } else if (block instanceof BlockLeaves) {
-                return PathType.LEAVES;
-            } else if (!block.a((Tag) TagsBlock.FENCES) && !block.a((Tag) TagsBlock.WALLS) && (!(block instanceof BlockFenceGate) || (Boolean) iblockdata.get(BlockFenceGate.OPEN))) {
-                if (!iblockdata.a(iblockaccess, blockposition, PathMode.LAND)) {
-                    return PathType.BLOCKED;
-                } else {
-                    Fluid fluid = iblockaccess.getFluid(blockposition);
-
-                    return fluid.a((Tag) TagsFluid.WATER) ? PathType.WATER : (fluid.a((Tag) TagsFluid.LAVA) ? PathType.LAVA : PathType.OPEN);
-                }
             } else {
-                return PathType.FENCE;
+                Fluid fluid = iblockaccess.getFluid(blockposition);
+
+                return fluid.a((Tag) TagsFluid.WATER) ? PathType.WATER : (fluid.a((Tag) TagsFluid.LAVA) ? PathType.LAVA : (a(iblockdata) ? PathType.DAMAGE_FIRE : (BlockDoor.l(iblockdata) && !(Boolean) iblockdata.get(BlockDoor.OPEN) ? PathType.DOOR_WOOD_CLOSED : (block instanceof BlockDoor && material == Material.ORE && !(Boolean) iblockdata.get(BlockDoor.OPEN) ? PathType.DOOR_IRON_CLOSED : (block instanceof BlockDoor && (Boolean) iblockdata.get(BlockDoor.OPEN) ? PathType.DOOR_OPEN : (block instanceof BlockMinecartTrackAbstract ? PathType.RAIL : (block instanceof BlockLeaves ? PathType.LEAVES : (!block.a((Tag) TagsBlock.FENCES) && !block.a((Tag) TagsBlock.WALLS) && (!(block instanceof BlockFenceGate) || (Boolean) iblockdata.get(BlockFenceGate.OPEN)) ? (!iblockdata.a(iblockaccess, blockposition, PathMode.LAND) ? PathType.BLOCKED : PathType.OPEN) : PathType.FENCE))))))));
             }
         } else {
             return PathType.TRAPDOOR;
@@ -544,6 +508,6 @@ public class PathfinderNormal extends PathfinderAbstract {
     }
 
     private static boolean a(IBlockData iblockdata) {
-        return iblockdata.a((Tag) TagsBlock.FIRE) || iblockdata.a(Blocks.MAGMA_BLOCK) || BlockCampfire.g(iblockdata);
+        return iblockdata.a((Tag) TagsBlock.FIRE) || iblockdata.a(Blocks.LAVA) || iblockdata.a(Blocks.MAGMA_BLOCK) || BlockCampfire.g(iblockdata);
     }
 }

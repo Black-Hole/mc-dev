@@ -84,7 +84,7 @@ public abstract class RecipeSingleItem implements IRecipe<IInventory> {
         public T a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
             String s = packetdataserializer.e(32767);
             RecipeItemStack recipeitemstack = RecipeItemStack.b(packetdataserializer);
-            ItemStack itemstack = packetdataserializer.m();
+            ItemStack itemstack = packetdataserializer.n();
 
             return this.v.create(minecraftkey, s, recipeitemstack, itemstack);
         }

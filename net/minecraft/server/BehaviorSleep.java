@@ -1,8 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import java.util.List;
 import java.util.Optional;
 
 public class BehaviorSleep extends Behavior<EntityLiving> {
@@ -57,9 +55,7 @@ public class BehaviorSleep extends Behavior<EntityLiving> {
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
         if (i > this.b) {
-            entityliving.getBehaviorController().getMemory(MemoryModuleType.OPENED_DOORS).ifPresent((set) -> {
-                BehaviorInteractDoor.a(worldserver, (List) ImmutableList.of(), 0, entityliving, entityliving.getBehaviorController());
-            });
+            BehaviorInteractDoor.a(worldserver, entityliving, (PathPoint) null, (PathPoint) null);
             entityliving.entitySleep(((GlobalPos) entityliving.getBehaviorController().getMemory(MemoryModuleType.HOME).get()).getBlockPosition());
         }
 

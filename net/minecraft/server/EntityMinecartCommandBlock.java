@@ -101,7 +101,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
         @Override
         public CommandListenerWrapper getWrapper() {
-            return new CommandListenerWrapper(this, EntityMinecartCommandBlock.this.getPositionVector(), EntityMinecartCommandBlock.this.be(), this.d(), 2, this.getName().getString(), EntityMinecartCommandBlock.this.getScoreboardDisplayName(), this.d().getMinecraftServer(), EntityMinecartCommandBlock.this);
+            return new CommandListenerWrapper(this, EntityMinecartCommandBlock.this.getPositionVector(), EntityMinecartCommandBlock.this.bh(), this.d(), 2, this.getName().getString(), EntityMinecartCommandBlock.this.getScoreboardDisplayName(), this.d().getMinecraftServer(), EntityMinecartCommandBlock.this);
         }
     }
 }

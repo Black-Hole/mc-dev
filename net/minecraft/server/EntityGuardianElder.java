@@ -17,27 +17,27 @@ public class EntityGuardianElder extends EntityGuardian {
     }
 
     public static AttributeProvider.Builder m() {
-        return EntityGuardian.eN().a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.ATTACK_DAMAGE, 8.0D).a(GenericAttributes.MAX_HEALTH, 80.0D);
+        return EntityGuardian.eM().a(GenericAttributes.MOVEMENT_SPEED, 0.30000001192092896D).a(GenericAttributes.ATTACK_DAMAGE, 8.0D).a(GenericAttributes.MAX_HEALTH, 80.0D);
     }
 
     @Override
-    public int eL() {
+    public int eK() {
         return 60;
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return this.aD() ? SoundEffects.ENTITY_ELDER_GUARDIAN_AMBIENT : SoundEffects.ENTITY_ELDER_GUARDIAN_AMBIENT_LAND;
+        return this.aG() ? SoundEffects.ENTITY_ELDER_GUARDIAN_AMBIENT : SoundEffects.ENTITY_ELDER_GUARDIAN_AMBIENT_LAND;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return this.aD() ? SoundEffects.ENTITY_ELDER_GUARDIAN_HURT : SoundEffects.ENTITY_ELDER_GUARDIAN_HURT_LAND;
+        return this.aG() ? SoundEffects.ENTITY_ELDER_GUARDIAN_HURT : SoundEffects.ENTITY_ELDER_GUARDIAN_HURT_LAND;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return this.aD() ? SoundEffects.ENTITY_ELDER_GUARDIAN_DEATH : SoundEffects.ENTITY_ELDER_GUARDIAN_DEATH_LAND;
+        return this.aG() ? SoundEffects.ENTITY_ELDER_GUARDIAN_DEATH : SoundEffects.ENTITY_ELDER_GUARDIAN_DEATH_LAND;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class EntityGuardianElder extends EntityGuardian {
             }
         }
 
-        if (!this.eA()) {
+        if (!this.ez()) {
             this.a(this.getChunkCoordinates(), 16);
         }
 

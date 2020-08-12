@@ -2,17 +2,19 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import java.util.Map;
+import java.util.Optional;
 
-public interface VillagerType {
+public final class VillagerType {
 
-    VillagerType DESERT = a("desert");
-    VillagerType JUNGLE = a("jungle");
-    VillagerType PLAINS = a("plains");
-    VillagerType SAVANNA = a("savanna");
-    VillagerType SNOW = a("snow");
-    VillagerType SWAMP = a("swamp");
-    VillagerType TAIGA = a("taiga");
-    Map<BiomeBase, VillagerType> h = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+    public static final VillagerType DESERT = a("desert");
+    public static final VillagerType JUNGLE = a("jungle");
+    public static final VillagerType PLAINS = a("plains");
+    public static final VillagerType SAVANNA = a("savanna");
+    public static final VillagerType SNOW = a("snow");
+    public static final VillagerType SWAMP = a("swamp");
+    public static final VillagerType TAIGA = a("taiga");
+    private final String h;
+    private static final Map<ResourceKey<BiomeBase>, VillagerType> i = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         hashmap.put(Biomes.BADLANDS, VillagerType.DESERT);
         hashmap.put(Biomes.BADLANDS_PLATEAU, VillagerType.DESERT);
         hashmap.put(Biomes.DESERT, VillagerType.DESERT);
@@ -59,15 +61,21 @@ public interface VillagerType {
         hashmap.put(Biomes.WOODED_MOUNTAINS, VillagerType.TAIGA);
     });
 
-    static VillagerType a(final String s) {
-        return (VillagerType) IRegistry.a((IRegistry) IRegistry.VILLAGER_TYPE, new MinecraftKey(s), (Object) (new VillagerType() {
-            public String toString() {
-                return s;
-            }
-        }));
+    private VillagerType(String s) {
+        this.h = s;
     }
 
-    static VillagerType a(BiomeBase biomebase) {
-        return (VillagerType) VillagerType.h.getOrDefault(biomebase, VillagerType.PLAINS);
+    public String toString() {
+        return this.h;
+    }
+
+    private static VillagerType a(String s) {
+        return (VillagerType) IRegistry.a((IRegistry) IRegistry.VILLAGER_TYPE, new MinecraftKey(s), (Object) (new VillagerType(s)));
+    }
+
+    public static VillagerType a(Optional<ResourceKey<BiomeBase>> optional) {
+        return (VillagerType) optional.flatMap((resourcekey) -> {
+            return Optional.ofNullable(VillagerType.i.get(resourcekey));
+        }).orElse(VillagerType.PLAINS);
     }
 }

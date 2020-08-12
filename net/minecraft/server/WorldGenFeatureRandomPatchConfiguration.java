@@ -19,19 +19,19 @@ public class WorldGenFeatureRandomPatchConfiguration implements WorldGenFeatureC
             return (List) worldgenfeaturerandompatchconfiguration.d.stream().map(Block::getBlockData).collect(Collectors.toList());
         }), IBlockData.b.listOf().fieldOf("blacklist").forGetter((worldgenfeaturerandompatchconfiguration) -> {
             return ImmutableList.copyOf(worldgenfeaturerandompatchconfiguration.e);
-        }), Codec.INT.fieldOf("tries").withDefault(128).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+        }), Codec.INT.fieldOf("tries").orElse(128).forGetter((worldgenfeaturerandompatchconfiguration) -> {
             return worldgenfeaturerandompatchconfiguration.f;
-        }), Codec.INT.fieldOf("xspread").withDefault(7).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+        }), Codec.INT.fieldOf("xspread").orElse(7).forGetter((worldgenfeaturerandompatchconfiguration) -> {
             return worldgenfeaturerandompatchconfiguration.g;
-        }), Codec.INT.fieldOf("yspread").withDefault(3).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+        }), Codec.INT.fieldOf("yspread").orElse(3).forGetter((worldgenfeaturerandompatchconfiguration) -> {
             return worldgenfeaturerandompatchconfiguration.h;
-        }), Codec.INT.fieldOf("zspread").withDefault(7).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+        }), Codec.INT.fieldOf("zspread").orElse(7).forGetter((worldgenfeaturerandompatchconfiguration) -> {
             return worldgenfeaturerandompatchconfiguration.i;
-        }), Codec.BOOL.fieldOf("can_replace").withDefault(false).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+        }), Codec.BOOL.fieldOf("can_replace").orElse(false).forGetter((worldgenfeaturerandompatchconfiguration) -> {
             return worldgenfeaturerandompatchconfiguration.j;
-        }), Codec.BOOL.fieldOf("project").withDefault(true).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+        }), Codec.BOOL.fieldOf("project").orElse(true).forGetter((worldgenfeaturerandompatchconfiguration) -> {
             return worldgenfeaturerandompatchconfiguration.l;
-        }), Codec.BOOL.fieldOf("need_water").withDefault(false).forGetter((worldgenfeaturerandompatchconfiguration) -> {
+        }), Codec.BOOL.fieldOf("need_water").orElse(false).forGetter((worldgenfeaturerandompatchconfiguration) -> {
             return worldgenfeaturerandompatchconfiguration.m;
         })).apply(instance, WorldGenFeatureRandomPatchConfiguration::new);
     });

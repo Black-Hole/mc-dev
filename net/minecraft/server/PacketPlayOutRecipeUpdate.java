@@ -45,8 +45,8 @@ public class PacketPlayOutRecipeUpdate implements Packet<PacketListenerPlayOut> 
     }
 
     public static IRecipe<?> c(PacketDataSerializer packetdataserializer) {
-        MinecraftKey minecraftkey = packetdataserializer.o();
-        MinecraftKey minecraftkey1 = packetdataserializer.o();
+        MinecraftKey minecraftkey = packetdataserializer.p();
+        MinecraftKey minecraftkey1 = packetdataserializer.p();
 
         return ((RecipeSerializer) IRegistry.RECIPE_SERIALIZER.getOptional(minecraftkey).orElseThrow(() -> {
             return new IllegalArgumentException("Unknown recipe serializer " + minecraftkey);

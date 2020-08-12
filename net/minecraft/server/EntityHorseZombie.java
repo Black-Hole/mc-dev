@@ -8,13 +8,13 @@ public class EntityHorseZombie extends EntityHorseAbstract {
         super(entitytypes, world);
     }
 
-    public static AttributeProvider.Builder eM() {
-        return fj().a(GenericAttributes.MAX_HEALTH, 15.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
+    public static AttributeProvider.Builder eL() {
+        return fi().a(GenericAttributes.MAX_HEALTH, 15.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
     @Override
-    protected void eL() {
-        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.fr());
+    protected void eK() {
+        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.fq());
     }
 
     @Override
@@ -42,8 +42,8 @@ public class EntityHorseZombie extends EntityHorseAbstract {
 
     @Nullable
     @Override
-    public EntityAgeable createChild(EntityAgeable entityageable) {
-        return (EntityAgeable) EntityTypes.ZOMBIE_HORSE.a(this.world);
+    public EntityAgeable createChild(WorldServer worldserver, EntityAgeable entityageable) {
+        return (EntityAgeable) EntityTypes.ZOMBIE_HORSE.a((World) worldserver);
     }
 
     @Override
@@ -79,5 +79,5 @@ public class EntityHorseZombie extends EntityHorseAbstract {
     }
 
     @Override
-    protected void eW() {}
+    protected void eV() {}
 }

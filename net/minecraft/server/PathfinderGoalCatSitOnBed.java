@@ -15,7 +15,7 @@ public class PathfinderGoalCatSitOnBed extends PathfinderGoalGotoTarget {
 
     @Override
     public boolean a() {
-        return this.g.isTamed() && !this.g.isWillSit() && !this.g.eX() && super.a();
+        return this.g.isTamed() && !this.g.isWillSit() && !this.g.eW() && super.a();
     }
 
     @Override
@@ -39,9 +39,9 @@ public class PathfinderGoalCatSitOnBed extends PathfinderGoalGotoTarget {
     public void e() {
         super.e();
         this.g.setSitting(false);
-        if (!this.k()) {
+        if (!this.l()) {
             this.g.x(false);
-        } else if (!this.g.eX()) {
+        } else if (!this.g.eW()) {
             this.g.x(true);
         }
 

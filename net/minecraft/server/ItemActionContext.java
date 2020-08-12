@@ -4,66 +4,71 @@ import javax.annotation.Nullable;
 
 public class ItemActionContext {
 
-    protected final EntityHuman b;
-    protected final EnumHand c;
-    protected final MovingObjectPositionBlock d;
-    protected final World e;
-    protected final ItemStack f;
+    @Nullable
+    private final EntityHuman a;
+    private final EnumHand b;
+    private final MovingObjectPositionBlock c;
+    private final World d;
+    private final ItemStack e;
 
     public ItemActionContext(EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         this(entityhuman.world, entityhuman, enumhand, entityhuman.b(enumhand), movingobjectpositionblock);
     }
 
     protected ItemActionContext(World world, @Nullable EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, MovingObjectPositionBlock movingobjectpositionblock) {
-        this.b = entityhuman;
-        this.c = enumhand;
-        this.d = movingobjectpositionblock;
-        this.f = itemstack;
-        this.e = world;
+        this.a = entityhuman;
+        this.b = enumhand;
+        this.c = movingobjectpositionblock;
+        this.e = itemstack;
+        this.d = world;
+    }
+
+    protected final MovingObjectPositionBlock i() {
+        return this.c;
     }
 
     public BlockPosition getClickPosition() {
-        return this.d.getBlockPosition();
+        return this.c.getBlockPosition();
     }
 
     public EnumDirection getClickedFace() {
-        return this.d.getDirection();
+        return this.c.getDirection();
     }
 
     public Vec3D getPos() {
-        return this.d.getPos();
+        return this.c.getPos();
     }
 
-    public boolean k() {
-        return this.d.d();
+    public boolean l() {
+        return this.c.d();
     }
 
     public ItemStack getItemStack() {
-        return this.f;
+        return this.e;
     }
 
     @Nullable
     public EntityHuman getEntity() {
-        return this.b;
+        return this.a;
     }
 
     public EnumHand getHand() {
-        return this.c;
+        return this.b;
     }
 
     public World getWorld() {
-        return this.e;
+        return this.d;
     }
 
     public EnumDirection f() {
-        return this.b == null ? EnumDirection.NORTH : this.b.getDirection();
+        return this.a == null ? EnumDirection.NORTH : this.a.getDirection();
     }
 
     public boolean isSneaking() {
-        return this.b != null && this.b.ep();
+        return this.a != null && this.a.ep();
     }
 
     public float h() {
-        return this.b == null ? 0.0F : this.b.yaw;
+        return this.a == null ? 0.0F : this.a.yaw;
     }
 }

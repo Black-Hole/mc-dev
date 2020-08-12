@@ -41,7 +41,7 @@ public class CommandExecute {
         };
     };
     private static final SuggestionProvider<CommandListenerWrapper> e = (commandcontext, suggestionsbuilder) -> {
-        LootPredicateManager lootpredicatemanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aI();
+        LootPredicateManager lootpredicatemanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getLootPredicateManager();
 
         return ICompletionProvider.a((Iterable) lootpredicatemanager.a(), suggestionsbuilder);
     };
@@ -71,7 +71,7 @@ public class CommandExecute {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.getPositionVector()).a(entity.be()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.getPositionVector()).a(entity.bh()));
             }
 
             return list;
@@ -97,7 +97,7 @@ public class CommandExecute {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.be()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.bh()));
             }
 
             return list;
@@ -317,7 +317,7 @@ public class CommandExecute {
 
     private static boolean a(CommandListenerWrapper commandlistenerwrapper, LootItemCondition lootitemcondition) {
         WorldServer worldserver = commandlistenerwrapper.getWorld();
-        LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder(worldserver)).set(LootContextParameters.POSITION, new BlockPosition(commandlistenerwrapper.getPosition())).setOptional(LootContextParameters.THIS_ENTITY, commandlistenerwrapper.getEntity());
+        LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder(worldserver)).set(LootContextParameters.ORIGIN, commandlistenerwrapper.getPosition()).setOptional(LootContextParameters.THIS_ENTITY, commandlistenerwrapper.getEntity());
 
         return lootitemcondition.test(loottableinfo_builder.build(LootContextParameterSets.COMMAND));
     }

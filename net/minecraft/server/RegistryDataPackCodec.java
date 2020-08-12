@@ -5,22 +5,21 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.Lifecycle;
-import com.mojang.serialization.MapCodec;
 
 public final class RegistryDataPackCodec<E> implements Codec<RegistryMaterials<E>> {
 
     private final Codec<RegistryMaterials<E>> a;
-    private final ResourceKey<IRegistry<E>> b;
-    private final MapCodec<E> c;
+    private final ResourceKey<? extends IRegistry<E>> b;
+    private final Codec<E> c;
 
-    public static <E> RegistryDataPackCodec<E> a(ResourceKey<IRegistry<E>> resourcekey, Lifecycle lifecycle, MapCodec<E> mapcodec) {
-        return new RegistryDataPackCodec<>(resourcekey, lifecycle, mapcodec);
+    public static <E> RegistryDataPackCodec<E> a(ResourceKey<? extends IRegistry<E>> resourcekey, Lifecycle lifecycle, Codec<E> codec) {
+        return new RegistryDataPackCodec<>(resourcekey, lifecycle, codec);
     }
 
-    private RegistryDataPackCodec(ResourceKey<IRegistry<E>> resourcekey, Lifecycle lifecycle, MapCodec<E> mapcodec) {
-        this.a = RegistryMaterials.c(resourcekey, lifecycle, mapcodec);
+    private RegistryDataPackCodec(ResourceKey<? extends IRegistry<E>> resourcekey, Lifecycle lifecycle, Codec<E> codec) {
+        this.a = RegistryMaterials.c(resourcekey, lifecycle, codec);
         this.b = resourcekey;
-        this.c = mapcodec;
+        this.c = codec;
     }
 
     public <T> DataResult<T> encode(RegistryMaterials<E> registrymaterials, DynamicOps<T> dynamicops, T t0) {
@@ -38,6 +37,6 @@ public final class RegistryDataPackCodec<E> implements Codec<RegistryMaterials<E
     }
 
     public String toString() {
-        return "RegistryDapaPackCodec[" + this.a + " " + this.b + " " + this.c + "]";
+        return "RegistryDataPackCodec[" + this.a + " " + this.b + " " + this.c + "]";
     }
 }

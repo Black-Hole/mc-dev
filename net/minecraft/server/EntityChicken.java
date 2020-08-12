@@ -2,12 +2,12 @@ package net.minecraft.server;
 
 public class EntityChicken extends EntityAnimal {
 
-    private static final RecipeItemStack bC = RecipeItemStack.a(Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS);
-    public float bv;
-    public float bw;
-    public float bx;
-    public float by;
-    public float bz = 1.0F;
+    private static final RecipeItemStack bv = RecipeItemStack.a(Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS);
+    public float bo;
+    public float bp;
+    public float bq;
+    public float br;
+    public float bs = 1.0F;
     public int eggLayTime;
     public boolean chickenJockey;
 
@@ -22,7 +22,7 @@ public class EntityChicken extends EntityAnimal {
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 1.4D));
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
-        this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.0D, false, EntityChicken.bC));
+        this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.0D, false, EntityChicken.bv));
         this.goalSelector.a(4, new PathfinderGoalFollowParent(this, 1.1D));
         this.goalSelector.a(5, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(6, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
@@ -34,29 +34,29 @@ public class EntityChicken extends EntityAnimal {
         return this.isBaby() ? entitysize.height * 0.85F : entitysize.height * 0.92F;
     }
 
-    public static AttributeProvider.Builder eL() {
+    public static AttributeProvider.Builder eK() {
         return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 4.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D);
     }
 
     @Override
     public void movementTick() {
         super.movementTick();
-        this.by = this.bv;
-        this.bx = this.bw;
-        this.bw = (float) ((double) this.bw + (double) (this.onGround ? -1 : 4) * 0.3D);
-        this.bw = MathHelper.a(this.bw, 0.0F, 1.0F);
-        if (!this.onGround && this.bz < 1.0F) {
-            this.bz = 1.0F;
+        this.br = this.bo;
+        this.bq = this.bp;
+        this.bp = (float) ((double) this.bp + (double) (this.onGround ? -1 : 4) * 0.3D);
+        this.bp = MathHelper.a(this.bp, 0.0F, 1.0F);
+        if (!this.onGround && this.bs < 1.0F) {
+            this.bs = 1.0F;
         }
 
-        this.bz = (float) ((double) this.bz * 0.9D);
+        this.bs = (float) ((double) this.bs * 0.9D);
         Vec3D vec3d = this.getMot();
 
         if (!this.onGround && vec3d.y < 0.0D) {
             this.setMot(vec3d.d(1.0D, 0.6D, 1.0D));
         }
 
-        this.bv += this.bz * 2.0F;
+        this.bo += this.bs * 2.0F;
         if (!this.world.isClientSide && this.isAlive() && !this.isBaby() && !this.isChickenJockey() && --this.eggLayTime <= 0) {
             this.playSound(SoundEffects.ENTITY_CHICKEN_EGG, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             this.a((IMaterial) Items.EGG);
@@ -86,18 +86,18 @@ public class EntityChicken extends EntityAnimal {
     }
 
     @Override
-    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
+    protected void b(BlockPosition blockposition, IBlockData iblockdata) {
         this.playSound(SoundEffects.ENTITY_CHICKEN_STEP, 0.15F, 1.0F);
     }
 
     @Override
-    public EntityChicken createChild(EntityAgeable entityageable) {
-        return (EntityChicken) EntityTypes.CHICKEN.a(this.world);
+    public EntityChicken createChild(WorldServer worldserver, EntityAgeable entityageable) {
+        return (EntityChicken) EntityTypes.CHICKEN.a((World) worldserver);
     }
 
     @Override
     public boolean k(ItemStack itemstack) {
-        return EntityChicken.bC.test(itemstack);
+        return EntityChicken.bv.test(itemstack);
     }
 
     @Override
@@ -130,14 +130,14 @@ public class EntityChicken extends EntityAnimal {
     @Override
     public void k(Entity entity) {
         super.k(entity);
-        float f = MathHelper.sin(this.aH * 0.017453292F);
-        float f1 = MathHelper.cos(this.aH * 0.017453292F);
+        float f = MathHelper.sin(this.aA * 0.017453292F);
+        float f1 = MathHelper.cos(this.aA * 0.017453292F);
         float f2 = 0.1F;
         float f3 = 0.0F;
 
-        entity.setPosition(this.locX() + (double) (0.1F * f), this.e(0.5D) + entity.aX() + 0.0D, this.locZ() - (double) (0.1F * f1));
+        entity.setPosition(this.locX() + (double) (0.1F * f), this.e(0.5D) + entity.ba() + 0.0D, this.locZ() - (double) (0.1F * f1));
         if (entity instanceof EntityLiving) {
-            ((EntityLiving) entity).aH = this.aH;
+            ((EntityLiving) entity).aA = this.aA;
         }
 
     }

@@ -69,7 +69,7 @@ public class BlockChorusFlower extends Block {
 
                 if (flag && b((IWorldReader) worldserver, blockposition1, (EnumDirection) null) && worldserver.isEmpty(blockposition.up(2))) {
                     worldserver.setTypeAndData(blockposition, this.b.a((IBlockAccess) worldserver, blockposition), 2);
-                    this.b(worldserver, blockposition1, i);
+                    this.a(worldserver, blockposition1, i);
                 } else if (i < 4) {
                     j = random.nextInt(4);
                     if (flag1) {
@@ -83,7 +83,7 @@ public class BlockChorusFlower extends Block {
                         BlockPosition blockposition2 = blockposition.shift(enumdirection);
 
                         if (worldserver.isEmpty(blockposition2) && worldserver.isEmpty(blockposition2.down()) && b((IWorldReader) worldserver, blockposition2, enumdirection.opposite())) {
-                            this.b(worldserver, blockposition2, i + 1);
+                            this.a(worldserver, blockposition2, i + 1);
                             flag2 = true;
                         }
                     }
@@ -101,7 +101,7 @@ public class BlockChorusFlower extends Block {
         }
     }
 
-    private void b(World world, BlockPosition blockposition, int i) {
+    private void a(World world, BlockPosition blockposition, int i) {
         world.setTypeAndData(blockposition, (IBlockData) this.getBlockData().set(BlockChorusFlower.AGE, i), 2);
         world.triggerEffect(1033, blockposition, 0);
     }

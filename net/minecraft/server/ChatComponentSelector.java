@@ -28,7 +28,7 @@ public class ChatComponentSelector extends ChatBaseComponent implements ChatComp
         this.f = entityselector;
     }
 
-    public String g() {
+    public String h() {
         return this.e;
     }
 
@@ -43,7 +43,7 @@ public class ChatComponentSelector extends ChatBaseComponent implements ChatComp
     }
 
     @Override
-    public ChatComponentSelector f() {
+    public ChatComponentSelector g() {
         return new ChatComponentSelector(this.e);
     }
 

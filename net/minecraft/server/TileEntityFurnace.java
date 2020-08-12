@@ -159,7 +159,7 @@ public abstract class TileEntityFurnace extends TileEntityContainer implements I
 
         if (b(item)) {
             if (SharedConstants.d) {
-                throw (IllegalStateException) SystemUtils.c(new IllegalStateException("A developer tried to explicitly make fire resistant item " + item.h((ItemStack) null).getString() + " a furnace fuel. That will not work!"));
+                throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException("A developer tried to explicitly make fire resistant item " + item.h((ItemStack) null).getString() + " a furnace fuel. That will not work!")));
             }
         } else {
             map.put(item, i);
@@ -406,7 +406,7 @@ public abstract class TileEntityFurnace extends TileEntityContainer implements I
 
     @Override
     public boolean a(EntityHuman entityhuman) {
-        return this.world.getTileEntity(this.position) != this ? false : entityhuman.g((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
+        return this.world.getTileEntity(this.position) != this ? false : entityhuman.h((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
     }
 
     @Override
@@ -439,7 +439,7 @@ public abstract class TileEntityFurnace extends TileEntityContainer implements I
 
     @Nullable
     @Override
-    public IRecipe<?> am_() {
+    public IRecipe<?> ak_() {
         return null;
     }
 
@@ -460,7 +460,7 @@ public abstract class TileEntityFurnace extends TileEntityContainer implements I
         while (objectiterator.hasNext()) {
             Entry<MinecraftKey> entry = (Entry) objectiterator.next();
 
-            world.getCraftingManager().a((MinecraftKey) entry.getKey()).ifPresent((irecipe) -> {
+            world.getCraftingManager().getRecipe((MinecraftKey) entry.getKey()).ifPresent((irecipe) -> {
                 list.add(irecipe);
                 a(world, vec3d, entry.getIntValue(), ((RecipeCooking) irecipe).getExperience());
             });

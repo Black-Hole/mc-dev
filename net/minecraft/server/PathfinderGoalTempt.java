@@ -52,7 +52,7 @@ public class PathfinderGoalTempt extends PathfinderGoal {
     public boolean b() {
         if (this.g()) {
             if (this.a.h((Entity) this.target) < 36.0D) {
-                if (this.target.g(this.e, this.f, this.g) > 0.010000000000000002D) {
+                if (this.target.h(this.e, this.f, this.g) > 0.010000000000000002D) {
                     return false;
                 }
 
@@ -94,7 +94,7 @@ public class PathfinderGoalTempt extends PathfinderGoal {
 
     @Override
     public void e() {
-        this.a.getControllerLook().a(this.target, (float) (this.a.ep() + 20), (float) this.a.eo());
+        this.a.getControllerLook().a(this.target, (float) (this.a.eo() + 20), (float) this.a.O());
         if (this.a.h((Entity) this.target) < 6.25D) {
             this.a.getNavigation().o();
         } else {

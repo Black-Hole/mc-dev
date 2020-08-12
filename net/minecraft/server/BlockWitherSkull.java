@@ -48,7 +48,7 @@ public class BlockWitherSkull extends BlockSkull {
                     BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a(1, 2, 0).getPosition();
 
                     entitywither.setPositionRotation((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.55D, (double) blockposition1.getZ() + 0.5D, shapedetector_shapedetectorcollection.getFacing().n() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F, 0.0F);
-                    entitywither.aH = shapedetector_shapedetectorcollection.getFacing().n() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F;
+                    entitywither.aA = shapedetector_shapedetectorcollection.getFacing().n() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F;
                     entitywither.beginSpawnSequence();
                     Iterator iterator = world.a(EntityPlayer.class, entitywither.getBoundingBox().g(50.0D)).iterator();
 

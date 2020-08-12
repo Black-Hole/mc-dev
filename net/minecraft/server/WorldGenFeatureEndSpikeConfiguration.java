@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 public class WorldGenFeatureEndSpikeConfiguration implements WorldGenFeatureConfiguration {
 
     public static final Codec<WorldGenFeatureEndSpikeConfiguration> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(Codec.BOOL.fieldOf("crystal_invulnerable").withDefault(false).forGetter((worldgenfeatureendspikeconfiguration) -> {
+        return instance.group(Codec.BOOL.fieldOf("crystal_invulnerable").orElse(false).forGetter((worldgenfeatureendspikeconfiguration) -> {
             return worldgenfeatureendspikeconfiguration.b;
         }), WorldGenEnder.Spike.a.listOf().fieldOf("spikes").forGetter((worldgenfeatureendspikeconfiguration) -> {
             return worldgenfeatureendspikeconfiguration.c;
@@ -32,16 +32,16 @@ public class WorldGenFeatureEndSpikeConfiguration implements WorldGenFeatureConf
         this.d = (BlockPosition) optional.orElse((Object) null);
     }
 
-    public boolean a() {
+    public boolean b() {
         return this.b;
     }
 
-    public List<WorldGenEnder.Spike> b() {
+    public List<WorldGenEnder.Spike> c() {
         return this.c;
     }
 
     @Nullable
-    public BlockPosition c() {
+    public BlockPosition d() {
         return this.d;
     }
 }

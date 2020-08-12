@@ -19,7 +19,7 @@ public class BlockNetherSprouts extends BlockPlant {
     }
 
     @Override
-    public BlockBase.EnumRandomOffset aj_() {
+    public BlockBase.EnumRandomOffset ah_() {
         return BlockBase.EnumRandomOffset.XZ;
     }
 }

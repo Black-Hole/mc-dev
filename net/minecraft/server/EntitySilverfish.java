@@ -23,7 +23,7 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     @Override
-    public double aX() {
+    public double ba() {
         return 0.1D;
     }
 
@@ -33,7 +33,7 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     public static AttributeProvider.Builder m() {
-        return EntityMonster.eS().a(GenericAttributes.MAX_HEALTH, 8.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D).a(GenericAttributes.ATTACK_DAMAGE, 1.0D);
+        return EntityMonster.eR().a(GenericAttributes.MAX_HEALTH, 8.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.25D).a(GenericAttributes.ATTACK_DAMAGE, 1.0D);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     @Override
-    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
+    protected void b(BlockPosition blockposition, IBlockData iblockdata) {
         this.playSound(SoundEffects.ENTITY_SILVERFISH_STEP, 0.15F, 1.0F);
     }
 
@@ -76,14 +76,14 @@ public class EntitySilverfish extends EntityMonster {
 
     @Override
     public void tick() {
-        this.aH = this.yaw;
+        this.aA = this.yaw;
         super.tick();
     }
 
     @Override
-    public void l(float f) {
+    public void n(float f) {
         this.yaw = f;
-        super.l(f);
+        super.n(f);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     public static boolean b(EntityTypes<EntitySilverfish> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
-        if (d(entitytypes, generatoraccess, enummobspawn, blockposition, random)) {
+        if (c(entitytypes, generatoraccess, enummobspawn, blockposition, random)) {
             EntityHuman entityhuman = generatoraccess.a((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, 5.0D, true);
 
             return entityhuman == null;

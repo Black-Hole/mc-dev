@@ -1,10 +1,10 @@
 package net.minecraft.server;
 
-import java.util.Set;
+import java.util.List;
 
-public class TagsEntity {
+public final class TagsEntity {
 
-    private static final TagUtil<EntityTypes<?>> f = new TagUtil<>();
+    protected static final TagUtil<EntityTypes<?>> a = TagStatic.a(new MinecraftKey("entity_type"), ITagRegistry::getEntityTags);
     public static final Tag.e<EntityTypes<?>> SKELETONS = a("skeletons");
     public static final Tag.e<EntityTypes<?>> RADIERS = a("raiders");
     public static final Tag.e<EntityTypes<?>> BEEHIVE_INHABITORS = a("beehive_inhabitors");
@@ -12,18 +12,14 @@ public class TagsEntity {
     public static final Tag.e<EntityTypes<?>> IMPACT_PROJECTILES = a("impact_projectiles");
 
     private static Tag.e<EntityTypes<?>> a(String s) {
-        return TagsEntity.f.a(s);
+        return TagsEntity.a.a(s);
     }
 
-    public static void a(Tags<EntityTypes<?>> tags) {
-        TagsEntity.f.a(tags);
+    public static Tags<EntityTypes<?>> a() {
+        return TagsEntity.a.b();
     }
 
-    public static Tags<EntityTypes<?>> b() {
-        return TagsEntity.f.b();
-    }
-
-    public static Set<MinecraftKey> b(Tags<EntityTypes<?>> tags) {
-        return TagsEntity.f.b(tags);
+    public static List<? extends Tag.e<EntityTypes<?>>> b() {
+        return TagsEntity.a.c();
     }
 }

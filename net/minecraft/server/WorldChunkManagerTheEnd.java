@@ -2,20 +2,40 @@ package net.minecraft.server;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
 
 public class WorldChunkManagerTheEnd extends WorldChunkManager {
 
-    public static final Codec<WorldChunkManagerTheEnd> e = Codec.LONG.fieldOf("seed").xmap(WorldChunkManagerTheEnd::new, (worldchunkmanagertheend) -> {
-        return worldchunkmanagertheend.h;
-    }).stable().codec();
+    public static final Codec<WorldChunkManagerTheEnd> e = RecordCodecBuilder.create((instance) -> {
+        return instance.group(RegistryLookupCodec.a(IRegistry.ay).forGetter((worldchunkmanagertheend) -> {
+            return worldchunkmanagertheend.g;
+        }), Codec.LONG.fieldOf("seed").stable().forGetter((worldchunkmanagertheend) -> {
+            return worldchunkmanagertheend.h;
+        })).apply(instance, instance.stable(WorldChunkManagerTheEnd::new));
+    });
     private final NoiseGenerator3Handler f;
-    private static final List<BiomeBase> g = ImmutableList.of(Biomes.THE_END, Biomes.END_HIGHLANDS, Biomes.END_MIDLANDS, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS);
+    private final IRegistry<BiomeBase> g;
     private final long h;
+    private final BiomeBase i;
+    private final BiomeBase j;
+    private final BiomeBase k;
+    private final BiomeBase l;
+    private final BiomeBase m;
 
-    public WorldChunkManagerTheEnd(long i) {
-        super(WorldChunkManagerTheEnd.g);
+    public WorldChunkManagerTheEnd(IRegistry<BiomeBase> iregistry, long i) {
+        this(iregistry, i, (BiomeBase) iregistry.d(Biomes.THE_END), (BiomeBase) iregistry.d(Biomes.END_HIGHLANDS), (BiomeBase) iregistry.d(Biomes.END_MIDLANDS), (BiomeBase) iregistry.d(Biomes.SMALL_END_ISLANDS), (BiomeBase) iregistry.d(Biomes.END_BARRENS));
+    }
+
+    private WorldChunkManagerTheEnd(IRegistry<BiomeBase> iregistry, long i, BiomeBase biomebase, BiomeBase biomebase1, BiomeBase biomebase2, BiomeBase biomebase3, BiomeBase biomebase4) {
+        super((List) ImmutableList.of(biomebase, biomebase1, biomebase2, biomebase3, biomebase4));
+        this.g = iregistry;
         this.h = i;
+        this.i = biomebase;
+        this.j = biomebase1;
+        this.k = biomebase2;
+        this.l = biomebase3;
+        this.m = biomebase4;
         SeededRandom seededrandom = new SeededRandom(i);
 
         seededrandom.a(17292);
@@ -33,11 +53,11 @@ public class WorldChunkManagerTheEnd extends WorldChunkManager {
         int i1 = k >> 2;
 
         if ((long) l * (long) l + (long) i1 * (long) i1 <= 4096L) {
-            return Biomes.THE_END;
+            return this.i;
         } else {
             float f = a(this.f, l * 2 + 1, i1 * 2 + 1);
 
-            return f > 40.0F ? Biomes.END_HIGHLANDS : (f >= 0.0F ? Biomes.END_MIDLANDS : (f < -20.0F ? Biomes.SMALL_END_ISLANDS : Biomes.END_BARRENS));
+            return f > 40.0F ? this.j : (f >= 0.0F ? this.k : (f < -20.0F ? this.l : this.m));
         }
     }
 

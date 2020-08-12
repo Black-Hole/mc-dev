@@ -18,7 +18,7 @@ public class ItemBlock extends Item {
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         EnumInteractionResult enuminteractionresult = this.a(new BlockActionContext(itemactioncontext));
 
-        return !enuminteractionresult.a() && this.isFood() ? this.a(itemactioncontext.e, itemactioncontext.b, itemactioncontext.c).a() : enuminteractionresult;
+        return !enuminteractionresult.a() && this.isFood() ? this.a(itemactioncontext.getWorld(), itemactioncontext.getEntity(), itemactioncontext.getHand()).a() : enuminteractionresult;
     }
 
     public EnumInteractionResult a(BlockActionContext blockactioncontext) {

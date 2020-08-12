@@ -8,11 +8,11 @@ import javax.annotation.Nullable;
 public class ChunkEmpty extends Chunk {
 
     private static final BiomeBase[] b = (BiomeBase[]) SystemUtils.a((Object) (new BiomeBase[BiomeStorage.a]), (abiomebase) -> {
-        Arrays.fill(abiomebase, Biomes.PLAINS);
+        Arrays.fill(abiomebase, BiomeRegistry.a);
     });
 
     public ChunkEmpty(World world, ChunkCoordIntPair chunkcoordintpair) {
-        super(world, chunkcoordintpair, new BiomeStorage(ChunkEmpty.b));
+        super(world, chunkcoordintpair, new BiomeStorage(world.r().b(IRegistry.ay), ChunkEmpty.b));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ChunkEmpty extends Chunk {
     }
 
     @Override
-    public int h(BlockPosition blockposition) {
+    public int g(BlockPosition blockposition) {
         return 0;
     }
 

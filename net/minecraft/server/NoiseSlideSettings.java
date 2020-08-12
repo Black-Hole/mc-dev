@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 public class NoiseSlideSettings {
 
     public static final Codec<NoiseSlideSettings> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(Codec.INT.fieldOf("target").forGetter(NoiseSlideSettings::a), Codecs.a(0, 256).fieldOf("size").forGetter(NoiseSlideSettings::b), Codec.INT.fieldOf("offset").forGetter(NoiseSlideSettings::c)).apply(instance, NoiseSlideSettings::new);
+        return instance.group(Codec.INT.fieldOf("target").forGetter(NoiseSlideSettings::a), Codec.intRange(0, 256).fieldOf("size").forGetter(NoiseSlideSettings::b), Codec.INT.fieldOf("offset").forGetter(NoiseSlideSettings::c)).apply(instance, NoiseSlideSettings::new);
     });
     private final int b;
     private final int c;

@@ -61,7 +61,7 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
         BlockPosition blockposition1 = blockposition.down();
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
 
-        return !iblockdata1.a(Blocks.MYCELIUM) && !iblockdata1.a(Blocks.PODZOL) ? iworldreader.getLightLevel(blockposition, 0) < 13 && this.c(iblockdata1, (IBlockAccess) iworldreader, blockposition1) : true;
+        return iblockdata1.a((Tag) TagsBlock.aD) ? true : iworldreader.getLightLevel(blockposition, 0) < 13 && this.c(iblockdata1, (IBlockAccess) iworldreader, blockposition1);
     }
 
     public boolean a(WorldServer worldserver, BlockPosition blockposition, IBlockData iblockdata, Random random) {
@@ -69,17 +69,17 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
         WorldGenFeatureConfigured worldgenfeatureconfigured;
 
         if (this == Blocks.BROWN_MUSHROOM) {
-            worldgenfeatureconfigured = WorldGenerator.HUGE_BROWN_MUSHROOM.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.HUGE_BROWN_MUSHROOM);
+            worldgenfeatureconfigured = BiomeDecoratorGroups.HUGE_BROWN_MUSHROOM;
         } else {
             if (this != Blocks.RED_MUSHROOM) {
                 worldserver.setTypeAndData(blockposition, iblockdata, 3);
                 return false;
             }
 
-            worldgenfeatureconfigured = WorldGenerator.HUGE_RED_MUSHROOM.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.HUGE_RED_MUSHROOM);
+            worldgenfeatureconfigured = BiomeDecoratorGroups.HUGE_RED_MUSHROOM;
         }
 
-        if (worldgenfeatureconfigured.a(worldserver, worldserver.getStructureManager(), worldserver.getChunkProvider().getChunkGenerator(), random, blockposition)) {
+        if (worldgenfeatureconfigured.a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), random, blockposition)) {
             return true;
         } else {
             worldserver.setTypeAndData(blockposition, iblockdata, 3);

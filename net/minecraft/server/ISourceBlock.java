@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public interface ISourceBlock extends ILocationSource {
+public interface ISourceBlock extends IPosition {
 
     @Override
     double getX();
@@ -16,4 +16,6 @@ public interface ISourceBlock extends ILocationSource {
     IBlockData getBlockData();
 
     <T extends TileEntity> T getTileEntity();
+
+    WorldServer getWorld();
 }

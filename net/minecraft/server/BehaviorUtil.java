@@ -97,7 +97,7 @@ public class BehaviorUtil {
     }
 
     public static boolean b(EntityLiving entityliving, EntityLiving entityliving1) {
-        double d0 = entityliving.g(entityliving1.locX(), entityliving1.locY(), entityliving1.locZ());
+        double d0 = entityliving.h(entityliving1.locX(), entityliving1.locY(), entityliving1.locZ());
         double d1 = (double) (entityliving.getWidth() * 2.0F * entityliving.getWidth() * 2.0F + entityliving1.getWidth());
 
         return d0 <= d1;
@@ -109,8 +109,8 @@ public class BehaviorUtil {
         if (!optional.isPresent()) {
             return false;
         } else {
-            double d1 = entityliving.d(((EntityLiving) optional.get()).getPositionVector());
-            double d2 = entityliving.d(entityliving1.getPositionVector());
+            double d1 = entityliving.e(((EntityLiving) optional.get()).getPositionVector());
+            double d2 = entityliving.e(entityliving1.getPositionVector());
 
             return d2 > d1 + d0 * d0;
         }
@@ -130,7 +130,7 @@ public class BehaviorUtil {
         Vec3D vec3d = entityliving1.getPositionVector();
         Vec3D vec3d1 = entityliving2.getPositionVector();
 
-        return entityliving.d(vec3d) < entityliving.d(vec3d1) ? entityliving1 : entityliving2;
+        return entityliving.e(vec3d) < entityliving.e(vec3d1) ? entityliving1 : entityliving2;
     }
 
     public static Optional<EntityLiving> a(EntityLiving entityliving, MemoryModuleType<UUID> memorymoduletype) {

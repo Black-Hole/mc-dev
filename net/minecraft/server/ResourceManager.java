@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -72,13 +71,6 @@ public class ResourceManager implements IReloadableResourceManager {
         } else {
             throw new FileNotFoundException(minecraftkey.toString());
         }
-    }
-
-    @Override
-    public Collection<MinecraftKey> a(MinecraftKey minecraftkey, Predicate<String> predicate) {
-        IResourceManager iresourcemanager = (IResourceManager) this.b.get(minecraftkey.getNamespace());
-
-        return (Collection) (iresourcemanager != null ? iresourcemanager.a(minecraftkey.getKey(), predicate) : ImmutableSet.of());
     }
 
     @Override

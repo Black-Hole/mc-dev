@@ -13,8 +13,8 @@ public class ItemFishBucket extends ItemBucket {
 
     @Override
     public void a(World world, ItemStack itemstack, BlockPosition blockposition) {
-        if (!world.isClientSide) {
-            this.b(world, itemstack, blockposition);
+        if (world instanceof WorldServer) {
+            this.a((WorldServer) world, itemstack, blockposition);
         }
 
     }
@@ -24,8 +24,8 @@ public class ItemFishBucket extends ItemBucket {
         generatoraccess.playSound(entityhuman, blockposition, SoundEffects.ITEM_BUCKET_EMPTY_FISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
     }
 
-    private void b(World world, ItemStack itemstack, BlockPosition blockposition) {
-        Entity entity = this.a.spawnCreature(world, itemstack, (EntityHuman) null, blockposition, EnumMobSpawn.BUCKET, true, false);
+    private void a(WorldServer worldserver, ItemStack itemstack, BlockPosition blockposition) {
+        Entity entity = this.a.spawnCreature(worldserver, itemstack, (EntityHuman) null, blockposition, EnumMobSpawn.BUCKET, true, false);
 
         if (entity != null) {
             ((EntityFish) entity).setFromBucket(true);

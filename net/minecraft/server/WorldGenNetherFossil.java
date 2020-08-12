@@ -19,7 +19,7 @@ public class WorldGenNetherFossil {
         private final EnumBlockRotation e;
 
         public a(DefinedStructureManager definedstructuremanager, MinecraftKey minecraftkey, BlockPosition blockposition, EnumBlockRotation enumblockrotation) {
-            super(WorldGenFeatureStructurePieceType.ae, 0);
+            super(WorldGenFeatureStructurePieceType.ac, 0);
             this.d = minecraftkey;
             this.c = blockposition;
             this.e = enumblockrotation;
@@ -27,7 +27,7 @@ public class WorldGenNetherFossil {
         }
 
         public a(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.ae, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.ac, nbttagcompound);
             this.d = new MinecraftKey(nbttagcompound.getString("Template"));
             this.e = EnumBlockRotation.valueOf(nbttagcompound.getString("Rot"));
             this.a(definedstructuremanager);
@@ -48,7 +48,7 @@ public class WorldGenNetherFossil {
         }
 
         @Override
-        protected void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {}
+        protected void a(String s, BlockPosition blockposition, WorldAccess worldaccess, Random random, StructureBoundingBox structureboundingbox) {}
 
         @Override
         public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair, BlockPosition blockposition) {

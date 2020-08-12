@@ -25,7 +25,7 @@ public class BehaviorWalkHome extends Behavior<EntityLiving> {
             return false;
         } else {
             EntityCreature entitycreature = (EntityCreature) entityliving;
-            VillagePlace villageplace = worldserver.x();
+            VillagePlace villageplace = worldserver.y();
             Optional<BlockPosition> optional = villageplace.d(VillagePlaceType.r.c(), entityliving.getChunkCoordinates(), 48, VillagePlace.Occupancy.ANY);
 
             return optional.isPresent() && ((BlockPosition) optional.get()).j(entitycreature.getChunkCoordinates()) > 4.0D;
@@ -37,7 +37,7 @@ public class BehaviorWalkHome extends Behavior<EntityLiving> {
         this.d = 0;
         this.e = worldserver.getTime() + (long) worldserver.getRandom().nextInt(20);
         EntityCreature entitycreature = (EntityCreature) entityliving;
-        VillagePlace villageplace = worldserver.x();
+        VillagePlace villageplace = worldserver.y();
         Predicate<BlockPosition> predicate = (blockposition) -> {
             long j = blockposition.asLong();
 
@@ -53,7 +53,7 @@ public class BehaviorWalkHome extends Behavior<EntityLiving> {
         Stream<BlockPosition> stream = villageplace.a(VillagePlaceType.r.c(), predicate, entityliving.getChunkCoordinates(), 48, VillagePlace.Occupancy.ANY);
         PathEntity pathentity = entitycreature.getNavigation().a(stream, VillagePlaceType.r.d());
 
-        if (pathentity != null && pathentity.i()) {
+        if (pathentity != null && pathentity.j()) {
             BlockPosition blockposition = pathentity.m();
             Optional<VillagePlaceType> optional = villageplace.c(blockposition);
 

@@ -11,6 +11,6 @@ public enum GenLayerOceanEdge implements AreaTransformer1 {
         NoiseGeneratorPerlin noisegeneratorperlin = worldgencontext.b();
         double d0 = noisegeneratorperlin.a((double) i / 8.0D, (double) j / 8.0D, 0.0D, 0.0D, 0.0D);
 
-        return d0 > 0.4D ? GenLayers.a : (d0 > 0.2D ? GenLayers.b : (d0 < -0.4D ? GenLayers.e : (d0 < -0.2D ? GenLayers.d : GenLayers.c)));
+        return d0 > 0.4D ? 44 : (d0 > 0.2D ? 45 : (d0 < -0.4D ? 10 : (d0 < -0.2D ? 46 : 0)));
     }
 }

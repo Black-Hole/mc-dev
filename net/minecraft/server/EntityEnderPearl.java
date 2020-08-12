@@ -77,13 +77,13 @@ public class EntityEnderPearl extends EntityProjectileThrowable {
 
     @Nullable
     @Override
-    public Entity a(WorldServer worldserver) {
+    public Entity b(WorldServer worldserver) {
         Entity entity = this.getShooter();
 
         if (entity != null && entity.world.getDimensionKey() != worldserver.getDimensionKey()) {
             this.setShooter((Entity) null);
         }
 
-        return super.a(worldserver);
+        return super.b(worldserver);
     }
 }

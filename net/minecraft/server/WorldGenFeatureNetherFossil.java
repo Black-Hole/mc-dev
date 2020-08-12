@@ -19,7 +19,7 @@ public class WorldGenFeatureNetherFossil extends StructureGenerator<WorldGenFeat
             super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
-        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
             ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
             int k = chunkcoordintpair.d() + this.d.nextInt(16);
             int l = chunkcoordintpair.e() + this.d.nextInt(16);

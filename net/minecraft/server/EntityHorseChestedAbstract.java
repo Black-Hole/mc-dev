@@ -2,34 +2,34 @@ package net.minecraft.server;
 
 public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
 
-    private static final DataWatcherObject<Boolean> bD = DataWatcher.a(EntityHorseChestedAbstract.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityHorseChestedAbstract.class, DataWatcherRegistry.i);
 
     protected EntityHorseChestedAbstract(EntityTypes<? extends EntityHorseChestedAbstract> entitytypes, World world) {
         super(entitytypes, world);
-        this.bB = false;
+        this.bu = false;
     }
 
     @Override
-    protected void eL() {
-        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.fq());
+    protected void eK() {
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) this.fp());
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityHorseChestedAbstract.bD, false);
+        this.datawatcher.register(EntityHorseChestedAbstract.bw, false);
     }
 
-    public static AttributeProvider.Builder eM() {
-        return fj().a(GenericAttributes.MOVEMENT_SPEED, 0.17499999701976776D).a(GenericAttributes.JUMP_STRENGTH, 0.5D);
+    public static AttributeProvider.Builder eL() {
+        return fi().a(GenericAttributes.MOVEMENT_SPEED, 0.17499999701976776D).a(GenericAttributes.JUMP_STRENGTH, 0.5D);
     }
 
     public boolean isCarryingChest() {
-        return (Boolean) this.datawatcher.get(EntityHorseChestedAbstract.bD);
+        return (Boolean) this.datawatcher.get(EntityHorseChestedAbstract.bw);
     }
 
     public void setCarryingChest(boolean flag) {
-        this.datawatcher.set(EntityHorseChestedAbstract.bD, flag);
+        this.datawatcher.set(EntityHorseChestedAbstract.bw, flag);
     }
 
     @Override
@@ -38,8 +38,8 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
     }
 
     @Override
-    public double aY() {
-        return super.aY() - 0.25D;
+    public double bb() {
+        return super.bb() - 0.25D;
     }
 
     @Override
@@ -98,7 +98,7 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
             }
         }
 
-        this.ff();
+        this.fe();
     }
 
     @Override
@@ -141,13 +141,13 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
             }
 
             if (!this.isTamed()) {
-                this.fn();
+                this.fm();
                 return EnumInteractionResult.a(this.world.isClientSide);
             }
 
             if (!this.isCarryingChest() && itemstack.getItem() == Blocks.CHEST.getItem()) {
                 this.setCarryingChest(true);
-                this.eP();
+                this.eO();
                 if (!entityhuman.abilities.canInstantlyBuild) {
                     itemstack.subtract(1);
                 }
@@ -170,11 +170,11 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
         }
     }
 
-    protected void eP() {
+    protected void eO() {
         this.playSound(SoundEffects.ENTITY_DONKEY_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 
-    public int eV() {
+    public int eU() {
         return 5;
     }
 }

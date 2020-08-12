@@ -8,10 +8,10 @@ public interface RecipeHolder {
     void a(@Nullable IRecipe<?> irecipe);
 
     @Nullable
-    IRecipe<?> am_();
+    IRecipe<?> ak_();
 
     default void b(EntityHuman entityhuman) {
-        IRecipe<?> irecipe = this.am_();
+        IRecipe<?> irecipe = this.ak_();
 
         if (irecipe != null && !irecipe.isComplex()) {
             entityhuman.discoverRecipes(Collections.singleton(irecipe));
@@ -21,7 +21,7 @@ public interface RecipeHolder {
     }
 
     default boolean a(World world, EntityPlayer entityplayer, IRecipe<?> irecipe) {
-        if (!irecipe.isComplex() && world.getGameRules().getBoolean(GameRules.DO_LIMITED_CRAFTING) && !entityplayer.B().b(irecipe)) {
+        if (!irecipe.isComplex() && world.getGameRules().getBoolean(GameRules.DO_LIMITED_CRAFTING) && !entityplayer.getRecipeBook().b(irecipe)) {
             return false;
         } else {
             this.a(irecipe);

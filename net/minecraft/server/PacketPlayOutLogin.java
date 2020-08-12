@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.function.Supplier;
 
 public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
 
@@ -14,7 +15,7 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
     private EnumGamemode e;
     private Set<ResourceKey<World>> f;
     private IRegistryCustom.Dimension g;
-    private ResourceKey<DimensionManager> h;
+    private DimensionManager h;
     private ResourceKey<World> i;
     private int j;
     private int k;
@@ -25,12 +26,12 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutLogin() {}
 
-    public PacketPlayOutLogin(int i, EnumGamemode enumgamemode, EnumGamemode enumgamemode1, long j, boolean flag, Set<ResourceKey<World>> set, IRegistryCustom.Dimension iregistrycustom_dimension, ResourceKey<DimensionManager> resourcekey, ResourceKey<World> resourcekey1, int k, int l, boolean flag1, boolean flag2, boolean flag3, boolean flag4) {
+    public PacketPlayOutLogin(int i, EnumGamemode enumgamemode, EnumGamemode enumgamemode1, long j, boolean flag, Set<ResourceKey<World>> set, IRegistryCustom.Dimension iregistrycustom_dimension, DimensionManager dimensionmanager, ResourceKey<World> resourcekey, int k, int l, boolean flag1, boolean flag2, boolean flag3, boolean flag4) {
         this.a = i;
         this.f = set;
         this.g = iregistrycustom_dimension;
-        this.h = resourcekey;
-        this.i = resourcekey1;
+        this.h = dimensionmanager;
+        this.i = resourcekey;
         this.b = j;
         this.d = enumgamemode;
         this.e = enumgamemode1;
@@ -46,26 +47,22 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readInt();
-        short short0 = packetdataserializer.readUnsignedByte();
-
-        this.c = (short0 & 8) == 8;
-        int i = short0 & -9;
-
-        this.d = EnumGamemode.getById(i);
-        this.e = EnumGamemode.getById(packetdataserializer.readUnsignedByte());
-        int j = packetdataserializer.i();
+        this.c = packetdataserializer.readBoolean();
+        this.d = EnumGamemode.getById(packetdataserializer.readByte());
+        this.e = EnumGamemode.getById(packetdataserializer.readByte());
+        int i = packetdataserializer.i();
 
         this.f = Sets.newHashSet();
 
-        for (int k = 0; k < j; ++k) {
-            this.f.add(ResourceKey.a(IRegistry.ae, packetdataserializer.o()));
+        for (int j = 0; j < i; ++j) {
+            this.f.add(ResourceKey.a(IRegistry.L, packetdataserializer.p()));
         }
 
         this.g = (IRegistryCustom.Dimension) packetdataserializer.a(IRegistryCustom.Dimension.a);
-        this.h = ResourceKey.a(IRegistry.ad, packetdataserializer.o());
-        this.i = ResourceKey.a(IRegistry.ae, packetdataserializer.o());
+        this.h = (DimensionManager) ((Supplier) packetdataserializer.a(DimensionManager.n)).get();
+        this.i = ResourceKey.a(IRegistry.L, packetdataserializer.p());
         this.b = packetdataserializer.readLong();
-        this.j = packetdataserializer.readUnsignedByte();
+        this.j = packetdataserializer.i();
         this.k = packetdataserializer.i();
         this.l = packetdataserializer.readBoolean();
         this.m = packetdataserializer.readBoolean();
@@ -76,13 +73,8 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
     @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeInt(this.a);
-        int i = this.d.getId();
-
-        if (this.c) {
-            i |= 8;
-        }
-
-        packetdataserializer.writeByte(i);
+        packetdataserializer.writeBoolean(this.c);
+        packetdataserializer.writeByte(this.d.getId());
         packetdataserializer.writeByte(this.e.getId());
         packetdataserializer.d(this.f.size());
         Iterator iterator = this.f.iterator();
@@ -94,10 +86,12 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
         }
 
         packetdataserializer.a(IRegistryCustom.Dimension.a, this.g);
-        packetdataserializer.a(this.h.a());
+        packetdataserializer.a(DimensionManager.n, () -> {
+            return this.h;
+        });
         packetdataserializer.a(this.i.a());
         packetdataserializer.writeLong(this.b);
-        packetdataserializer.writeByte(this.j);
+        packetdataserializer.d(this.j);
         packetdataserializer.d(this.k);
         packetdataserializer.writeBoolean(this.l);
         packetdataserializer.writeBoolean(this.m);

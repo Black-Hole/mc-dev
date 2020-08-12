@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockSmithingTable extends BlockWorkbench {
 
-    private static final ChatMessage a = new ChatMessage("container.upgrade");
+    private static final IChatBaseComponent a = new ChatMessage("container.upgrade");
 
     protected BlockSmithingTable(BlockBase.Info blockbase_info) {
         super(blockbase_info);

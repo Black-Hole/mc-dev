@@ -72,7 +72,7 @@ public class GameTestHarnessStructures {
         tileentitystructure.a(new MinecraftKey(s));
         tileentitystructure.c(blockposition1);
         tileentitystructure.setUsageMode(BlockPropertyStructureMode.SAVE);
-        tileentitystructure.f(true);
+        tileentitystructure.e(true);
     }
 
     public static TileEntityStructure a(String s, BlockPosition blockposition, EnumBlockRotation enumblockrotation, int i, WorldServer worldserver, boolean flag) {
@@ -185,7 +185,7 @@ public class GameTestHarnessStructures {
     }
 
     private static DefinedStructure a(String s, WorldServer worldserver) {
-        DefinedStructureManager definedstructuremanager = worldserver.r_();
+        DefinedStructureManager definedstructuremanager = worldserver.n();
         DefinedStructure definedstructure = definedstructuremanager.b(new MinecraftKey(s));
 
         if (definedstructure != null) {
@@ -211,13 +211,13 @@ public class GameTestHarnessStructures {
         tileentitystructure.b(enumblockrotation);
         tileentitystructure.a(false);
         tileentitystructure.a(new MinecraftKey(s));
-        tileentitystructure.c(flag);
+        tileentitystructure.a(worldserver, flag);
         if (tileentitystructure.j() != BlockPosition.ZERO) {
             return tileentitystructure;
         } else {
             DefinedStructure definedstructure = a(s, worldserver);
 
-            tileentitystructure.a(flag, definedstructure);
+            tileentitystructure.a(worldserver, flag, definedstructure);
             if (tileentitystructure.j() == BlockPosition.ZERO) {
                 throw new RuntimeException("Failed to load structure " + s);
             } else {
@@ -242,7 +242,7 @@ public class GameTestHarnessStructures {
 
     private static void a(int i, BlockPosition blockposition, WorldServer worldserver) {
         IBlockData iblockdata = null;
-        GeneratorSettingsFlat generatorsettingsflat = GeneratorSettingsFlat.i();
+        GeneratorSettingsFlat generatorsettingsflat = GeneratorSettingsFlat.a((IRegistry) worldserver.r().b(IRegistry.ay));
 
         if (generatorsettingsflat instanceof GeneratorSettingsFlat) {
             IBlockData[] aiblockdata = generatorsettingsflat.g();
@@ -251,9 +251,9 @@ public class GameTestHarnessStructures {
                 iblockdata = aiblockdata[blockposition.getY() - 1];
             }
         } else if (blockposition.getY() == i - 1) {
-            iblockdata = worldserver.getBiome(blockposition).A().a();
+            iblockdata = worldserver.getBiome(blockposition).e().e().a();
         } else if (blockposition.getY() < i - 1) {
-            iblockdata = worldserver.getBiome(blockposition).A().b();
+            iblockdata = worldserver.getBiome(blockposition).e().e().b();
         }
 
         if (iblockdata == null) {

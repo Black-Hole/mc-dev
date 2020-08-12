@@ -23,7 +23,7 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
     }
 
     @Override
-    public BlockBase.EnumRandomOffset aj_() {
+    public BlockBase.EnumRandomOffset ah_() {
         return BlockBase.EnumRandomOffset.XZ;
     }
 
@@ -70,7 +70,9 @@ public class BlockBamboo extends Block implements IBlockFragilePlantElement {
 
                     return (IBlockData) this.getBlockData().set(BlockBamboo.d, i);
                 } else {
-                    return Blocks.BAMBOO_SAPLING.getBlockData();
+                    IBlockData iblockdata1 = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition().up());
+
+                    return !iblockdata1.a(Blocks.BAMBOO) && !iblockdata1.a(Blocks.BAMBOO_SAPLING) ? Blocks.BAMBOO_SAPLING.getBlockData() : (IBlockData) this.getBlockData().set(BlockBamboo.d, iblockdata1.get(BlockBamboo.d));
                 }
             } else {
                 return null;

@@ -28,7 +28,7 @@ public class EntityHorseDonkey extends EntityHorseChestedAbstract {
 
     @Nullable
     @Override
-    protected SoundEffect fh() {
+    protected SoundEffect fg() {
         return SoundEffects.ENTITY_DONKEY_EAT;
     }
 
@@ -40,13 +40,13 @@ public class EntityHorseDonkey extends EntityHorseChestedAbstract {
 
     @Override
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.fp() && ((EntityHorseAbstract) entityanimal).fp());
+        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.fo() && ((EntityHorseAbstract) entityanimal).fo());
     }
 
     @Override
-    public EntityAgeable createChild(EntityAgeable entityageable) {
+    public EntityAgeable createChild(WorldServer worldserver, EntityAgeable entityageable) {
         EntityTypes<? extends EntityHorseAbstract> entitytypes = entityageable instanceof EntityHorse ? EntityTypes.MULE : EntityTypes.DONKEY;
-        EntityHorseAbstract entityhorseabstract = (EntityHorseAbstract) entitytypes.a(this.world);
+        EntityHorseAbstract entityhorseabstract = (EntityHorseAbstract) entitytypes.a((World) worldserver);
 
         this.a(entityageable, entityhorseabstract);
         return entityhorseabstract;

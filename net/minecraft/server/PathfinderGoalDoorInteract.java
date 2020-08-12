@@ -12,7 +12,7 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
     public PathfinderGoalDoorInteract(EntityInsentient entityinsentient) {
         this.door = BlockPosition.ZERO;
         this.entity = entityinsentient;
-        if (!this.h()) {
+        if (!PathfinderGoalUtil.a(entityinsentient)) {
             throw new IllegalArgumentException("Unsupported mob type for DoorInteractGoal");
         }
     }
@@ -37,7 +37,7 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
             IBlockData iblockdata = this.entity.world.getType(this.door);
 
             if (iblockdata.getBlock() instanceof BlockDoor) {
-                ((BlockDoor) iblockdata.getBlock()).setDoor(this.entity.world, this.door, flag);
+                ((BlockDoor) iblockdata.getBlock()).setDoor(this.entity.world, iblockdata, this.door, flag);
             }
         }
 
@@ -45,7 +45,7 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        if (!this.h()) {
+        if (!PathfinderGoalUtil.a(this.entity)) {
             return false;
         } else if (!this.entity.positionChanged) {
             return false;
@@ -53,12 +53,12 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
             Navigation navigation = (Navigation) this.entity.getNavigation();
             PathEntity pathentity = navigation.k();
 
-            if (pathentity != null && !pathentity.b() && navigation.f()) {
+            if (pathentity != null && !pathentity.c() && navigation.f()) {
                 for (int i = 0; i < Math.min(pathentity.f() + 2, pathentity.e()); ++i) {
                     PathPoint pathpoint = pathentity.a(i);
 
                     this.door = new BlockPosition(pathpoint.a, pathpoint.b + 1, pathpoint.c);
-                    if (this.entity.g((double) this.door.getX(), this.entity.locY(), (double) this.door.getZ()) <= 2.25D) {
+                    if (this.entity.h((double) this.door.getX(), this.entity.locY(), (double) this.door.getZ()) <= 2.25D) {
                         this.f = BlockDoor.a(this.entity.world, this.door);
                         if (this.f) {
                             return true;
@@ -97,9 +97,5 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
             this.a = true;
         }
 
-    }
-
-    private boolean h() {
-        return this.entity.getNavigation() instanceof Navigation;
     }
 }

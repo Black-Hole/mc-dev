@@ -9,18 +9,18 @@ import javax.annotation.Nullable;
 
 public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleable {
 
-    private static final RecipeItemStack bv = RecipeItemStack.a(Items.bx);
-    private static final RecipeItemStack bw = RecipeItemStack.a(Items.bx, Items.WARPED_FUNGUS_ON_A_STICK);
-    private static final DataWatcherObject<Integer> bx = DataWatcher.a(EntityStrider.class, DataWatcherRegistry.b);
-    private static final DataWatcherObject<Boolean> by = DataWatcher.a(EntityStrider.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Boolean> bz = DataWatcher.a(EntityStrider.class, DataWatcherRegistry.i);
-    private final SaddleStorage bA;
-    private PathfinderGoalTempt bB;
-    private PathfinderGoalPanic bC;
+    private static final RecipeItemStack bo = RecipeItemStack.a(Items.bx);
+    private static final RecipeItemStack bp = RecipeItemStack.a(Items.bx, Items.WARPED_FUNGUS_ON_A_STICK);
+    private static final DataWatcherObject<Integer> bq = DataWatcher.a(EntityStrider.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Boolean> br = DataWatcher.a(EntityStrider.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> bs = DataWatcher.a(EntityStrider.class, DataWatcherRegistry.i);
+    public final SaddleStorage saddleStorage;
+    private PathfinderGoalTempt bu;
+    private PathfinderGoalPanic bv;
 
     public EntityStrider(EntityTypes<? extends EntityStrider> entitytypes, World world) {
         super(entitytypes, world);
-        this.bA = new SaddleStorage(this.datawatcher, EntityStrider.bx, EntityStrider.bz);
+        this.saddleStorage = new SaddleStorage(this.datawatcher, EntityStrider.bq, EntityStrider.bs);
         this.i = true;
         this.a(PathType.WATER, -1.0F);
         this.a(PathType.LAVA, 0.0F);
@@ -40,8 +40,8 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
     @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityStrider.bx.equals(datawatcherobject) && this.world.isClientSide) {
-            this.bA.a();
+        if (EntityStrider.bq.equals(datawatcherobject) && this.world.isClientSide) {
+            this.saddleStorage.a();
         }
 
         super.a(datawatcherobject);
@@ -50,26 +50,26 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityStrider.bx, 0);
-        this.datawatcher.register(EntityStrider.by, false);
-        this.datawatcher.register(EntityStrider.bz, false);
+        this.datawatcher.register(EntityStrider.bq, 0);
+        this.datawatcher.register(EntityStrider.br, false);
+        this.datawatcher.register(EntityStrider.bs, false);
     }
 
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        this.bA.a(nbttagcompound);
+        this.saddleStorage.a(nbttagcompound);
     }
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
-        this.bA.b(nbttagcompound);
+        this.saddleStorage.b(nbttagcompound);
     }
 
     @Override
     public boolean hasSaddle() {
-        return this.bA.hasSaddle();
+        return this.saddleStorage.hasSaddle();
     }
 
     @Override
@@ -79,7 +79,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
     @Override
     public void saddle(@Nullable SoundCategory soundcategory) {
-        this.bA.setSaddle(true);
+        this.saddleStorage.setSaddle(true);
         if (soundcategory != null) {
             this.world.playSound((EntityHuman) null, (Entity) this, SoundEffects.ENTITY_STRIDER_SADDLE, soundcategory, 0.5F, 1.0F);
         }
@@ -88,11 +88,12 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
     @Override
     protected void initPathfinder() {
-        this.bC = new PathfinderGoalPanic(this, 1.65D);
-        this.goalSelector.a(1, this.bC);
-        this.goalSelector.a(3, new PathfinderGoalBreed(this, 1.0D));
-        this.bB = new PathfinderGoalTempt(this, 1.4D, false, EntityStrider.bw);
-        this.goalSelector.a(4, this.bB);
+        this.bv = new PathfinderGoalPanic(this, 1.65D);
+        this.goalSelector.a(1, this.bv);
+        this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
+        this.bu = new PathfinderGoalTempt(this, 1.4D, false, EntityStrider.bp);
+        this.goalSelector.a(3, this.bu);
+        this.goalSelector.a(4, new EntityStrider.a(this, 1.5D));
         this.goalSelector.a(5, new PathfinderGoalFollowParent(this, 1.1D));
         this.goalSelector.a(7, new PathfinderGoalRandomStroll(this, 1.0D, 60));
         this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
@@ -100,12 +101,12 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
         this.goalSelector.a(9, new PathfinderGoalLookAtPlayer(this, EntityStrider.class, 8.0F));
     }
 
-    public void t(boolean flag) {
-        this.datawatcher.set(EntityStrider.by, flag);
+    public void setShivering(boolean flag) {
+        this.datawatcher.set(EntityStrider.br, flag);
     }
 
-    public boolean eL() {
-        return this.getVehicle() instanceof EntityStrider ? ((EntityStrider) this.getVehicle()).eL() : (Boolean) this.datawatcher.get(EntityStrider.by);
+    public boolean isShivering() {
+        return this.getVehicle() instanceof EntityStrider ? ((EntityStrider) this.getVehicle()).isShivering() : (Boolean) this.datawatcher.get(EntityStrider.br);
     }
 
     @Override
@@ -113,27 +114,16 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
         return fluidtype.a((Tag) TagsFluid.LAVA);
     }
 
-    @Nullable
     @Override
-    public AxisAlignedBB j(Entity entity) {
-        return entity.isCollidable() ? entity.getBoundingBox() : null;
+    public double bb() {
+        float f = Math.min(0.25F, this.av);
+        float f1 = this.aw;
+
+        return (double) this.getHeight() - 0.19D + (double) (0.12F * MathHelper.cos(f1 * 1.5F) * 2.0F * f);
     }
 
     @Override
-    public boolean isCollidable() {
-        return true;
-    }
-
-    @Override
-    public double aY() {
-        float f = Math.min(0.25F, this.aC);
-        float f1 = this.aD;
-
-        return (double) this.getHeight() - 0.2D + (double) (0.12F * MathHelper.cos(f1 * 1.5F) * 2.0F * f);
-    }
-
-    @Override
-    public boolean es() {
+    public boolean er() {
         Entity entity = this.getRidingPassenger();
 
         if (!(entity instanceof EntityHuman)) {
@@ -147,7 +137,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
     @Override
     public boolean a(IWorldReader iworldreader) {
-        return iworldreader.i(this);
+        return iworldreader.j((Entity) this);
     }
 
     @Nullable
@@ -157,7 +147,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
     }
 
     @Override
-    public Vec3D c(EntityLiving entityliving) {
+    public Vec3D b(EntityLiving entityliving) {
         Vec3D[] avec3d = new Vec3D[]{a((double) this.getWidth(), (double) entityliving.getWidth(), entityliving.yaw), a((double) this.getWidth(), (double) entityliving.getWidth(), entityliving.yaw - 22.5F), a((double) this.getWidth(), (double) entityliving.getWidth(), entityliving.yaw + 22.5F), a((double) this.getWidth(), (double) entityliving.getWidth(), entityliving.yaw - 45.0F), a((double) this.getWidth(), (double) entityliving.getWidth(), entityliving.yaw + 45.0F)};
         Set<BlockPosition> set = Sets.newLinkedHashSet();
         double d0 = this.getBoundingBox().maxY;
@@ -166,14 +156,12 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
         Vec3D[] avec3d1 = avec3d;
         int i = avec3d.length;
 
-        double d2;
-
         for (int j = 0; j < i; ++j) {
             Vec3D vec3d = avec3d1[j];
 
             blockposition_mutableblockposition.c(this.locX() + vec3d.x, d0, this.locZ() + vec3d.z);
 
-            for (d2 = d0; d2 > d1; --d2) {
+            for (double d2 = d0; d2 > d1; --d2) {
                 set.add(blockposition_mutableblockposition.immutableCopy());
                 blockposition_mutableblockposition.c(EnumDirection.DOWN);
             }
@@ -185,15 +173,15 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
             BlockPosition blockposition = (BlockPosition) iterator.next();
 
             if (!this.world.getFluid(blockposition).a((Tag) TagsFluid.LAVA)) {
-                UnmodifiableIterator unmodifiableiterator = entityliving.ei().iterator();
+                double d3 = this.world.h(blockposition);
 
-                while (unmodifiableiterator.hasNext()) {
-                    EntityPose entitypose = (EntityPose) unmodifiableiterator.next();
+                if (DismountUtil.a(d3)) {
+                    Vec3D vec3d1 = Vec3D.a((BaseBlockPosition) blockposition, d3);
+                    UnmodifiableIterator unmodifiableiterator = entityliving.ei().iterator();
 
-                    d2 = this.world.m(blockposition);
-                    if (DismountUtil.a(d2)) {
+                    while (unmodifiableiterator.hasNext()) {
+                        EntityPose entitypose = (EntityPose) unmodifiableiterator.next();
                         AxisAlignedBB axisalignedbb = entityliving.f(entitypose);
-                        Vec3D vec3d1 = Vec3D.a((BaseBlockPosition) blockposition, d2);
 
                         if (DismountUtil.a(this.world, entityliving, axisalignedbb.c(vec3d1))) {
                             entityliving.setPose(entitypose);
@@ -208,44 +196,44 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
     }
 
     @Override
-    public void f(Vec3D vec3d) {
-        this.n(this.eM());
-        this.a((EntityInsentient) this, this.bA, vec3d);
+    public void g(Vec3D vec3d) {
+        this.q(this.eL());
+        this.a((EntityInsentient) this, this.saddleStorage, vec3d);
     }
 
-    public float eM() {
-        return (float) this.b(GenericAttributes.MOVEMENT_SPEED) * (this.eL() ? 0.66F : 1.0F);
+    public float eL() {
+        return (float) this.b(GenericAttributes.MOVEMENT_SPEED) * (this.isShivering() ? 0.66F : 1.0F);
     }
 
     @Override
-    public float O_() {
-        return (float) this.b(GenericAttributes.MOVEMENT_SPEED) * (this.eL() ? 0.23F : 0.55F);
+    public float N_() {
+        return (float) this.b(GenericAttributes.MOVEMENT_SPEED) * (this.isShivering() ? 0.23F : 0.55F);
     }
 
     @Override
     public void a_(Vec3D vec3d) {
-        super.f(vec3d);
+        super.g(vec3d);
     }
 
     @Override
-    protected float ao() {
+    protected float as() {
         return this.B + 0.6F;
     }
 
     @Override
-    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
-        this.playSound(this.aN() ? SoundEffects.ENTITY_STRIDER_STEP_LAVA : SoundEffects.ENTITY_STRIDER_STEP, 1.0F, 1.0F);
+    protected void b(BlockPosition blockposition, IBlockData iblockdata) {
+        this.playSound(this.aP() ? SoundEffects.ENTITY_STRIDER_STEP_LAVA : SoundEffects.ENTITY_STRIDER_STEP, 1.0F, 1.0F);
     }
 
     @Override
-    public boolean P_() {
-        return this.bA.a(this.getRandom());
+    public boolean O_() {
+        return this.saddleStorage.a(this.getRandom());
     }
 
     @Override
     protected void a(double d0, boolean flag, IBlockData iblockdata, BlockPosition blockposition) {
         this.checkBlockCollisions();
-        if (this.aN()) {
+        if (this.aP()) {
             this.fallDistance = 0.0F;
         } else {
             super.a(d0, flag, iblockdata, blockposition);
@@ -254,28 +242,28 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
     @Override
     public void tick() {
-        if (this.eP() && this.random.nextInt(140) == 0) {
+        if (this.eO() && this.random.nextInt(140) == 0) {
             this.playSound(SoundEffects.ENTITY_STRIDER_HAPPY, 1.0F, this.dG());
-        } else if (this.eO() && this.random.nextInt(60) == 0) {
+        } else if (this.eN() && this.random.nextInt(60) == 0) {
             this.playSound(SoundEffects.ENTITY_STRIDER_RETREAT, 1.0F, this.dG());
         }
 
         IBlockData iblockdata = this.world.getType(this.getChunkCoordinates());
-        IBlockData iblockdata1 = this.aJ();
+        IBlockData iblockdata1 = this.aM();
         boolean flag = iblockdata.a((Tag) TagsBlock.STRIDER_WARM_BLOCKS) || iblockdata1.a((Tag) TagsBlock.STRIDER_WARM_BLOCKS) || this.b((Tag) TagsFluid.LAVA) > 0.0D;
 
-        this.t(!flag);
+        this.setShivering(!flag);
         super.tick();
-        this.eV();
+        this.eU();
         this.checkBlockCollisions();
     }
 
-    private boolean eO() {
-        return this.bC != null && this.bC.h();
+    private boolean eN() {
+        return this.bv != null && this.bv.h();
     }
 
-    private boolean eP() {
-        return this.bB != null && this.bB.h();
+    private boolean eO() {
+        return this.bu != null && this.bu.h();
     }
 
     @Override
@@ -283,8 +271,8 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
         return true;
     }
 
-    private void eV() {
-        if (this.aN()) {
+    private void eU() {
+        if (this.aP()) {
             VoxelShapeCollision voxelshapecollision = VoxelShapeCollision.a((Entity) this);
 
             if (voxelshapecollision.a(BlockFluids.c, this.getChunkCoordinates(), true) && !this.world.getFluid(this.getChunkCoordinates().up()).a((Tag) TagsFluid.LAVA)) {
@@ -296,13 +284,13 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
     }
 
-    public static AttributeProvider.Builder eN() {
+    public static AttributeProvider.Builder eM() {
         return EntityInsentient.p().a(GenericAttributes.MOVEMENT_SPEED, 0.17499999701976776D).a(GenericAttributes.FOLLOW_RANGE, 16.0D);
     }
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return !this.eO() && !this.eP() ? SoundEffects.ENTITY_STRIDER_AMBIENT : null;
+        return !this.eN() && !this.eO() ? SoundEffects.ENTITY_STRIDER_AMBIENT : null;
     }
 
     @Override
@@ -337,17 +325,17 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return iworldreader.getType(blockposition).getFluid().a((Tag) TagsFluid.LAVA) ? 10.0F : 0.0F;
+        return iworldreader.getType(blockposition).getFluid().a((Tag) TagsFluid.LAVA) ? 10.0F : (this.aP() ? Float.NEGATIVE_INFINITY : 0.0F);
     }
 
     @Override
-    public EntityStrider createChild(EntityAgeable entityageable) {
-        return (EntityStrider) EntityTypes.STRIDER.a(this.world);
+    public EntityStrider createChild(WorldServer worldserver, EntityAgeable entityageable) {
+        return (EntityStrider) EntityTypes.STRIDER.a((World) worldserver);
     }
 
     @Override
     public boolean k(ItemStack itemstack) {
-        return EntityStrider.bv.test(itemstack);
+        return EntityStrider.bo.test(itemstack);
     }
 
     @Override
@@ -363,7 +351,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
     public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         boolean flag = this.k(entityhuman.b(enumhand));
 
-        if (!flag && this.hasSaddle() && !this.isVehicle()) {
+        if (!flag && this.hasSaddle() && !this.isVehicle() && !entityhuman.ep()) {
             if (!this.world.isClientSide) {
                 entityhuman.startRiding(this);
             }
@@ -388,54 +376,71 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
     @Nullable
     @Override
-    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        EntityZombie.GroupDataZombie entityzombie_groupdatazombie = null;
-        EntityStrider$GroupData$Rider entitystrider$groupdata$rider;
-
-        if (groupdataentity instanceof EntityStrider.a) {
-            entitystrider$groupdata$rider = ((EntityStrider.a) groupdataentity).a;
-        } else if (!this.isBaby()) {
-            if (this.random.nextInt(30) == 0) {
-                entitystrider$groupdata$rider = EntityStrider$GroupData$Rider.PIGLIN_RIDER;
-                entityzombie_groupdatazombie = new EntityZombie.GroupDataZombie(EntityZombie.a(this.random), false);
-            } else if (this.random.nextInt(10) == 0) {
-                entitystrider$groupdata$rider = EntityStrider$GroupData$Rider.BABY_RIDER;
-            } else {
-                entitystrider$groupdata$rider = EntityStrider$GroupData$Rider.NO_RIDER;
-            }
-
-            groupdataentity = new EntityStrider.a(entitystrider$groupdata$rider);
-            ((EntityAgeable.a) groupdataentity).a(entitystrider$groupdata$rider == EntityStrider$GroupData$Rider.NO_RIDER ? 0.5F : 0.0F);
+    public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        if (this.isBaby()) {
+            return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
         } else {
-            entitystrider$groupdata$rider = EntityStrider$GroupData$Rider.NO_RIDER;
-        }
+            Object object;
 
-        Object object = null;
+            if (this.random.nextInt(30) == 0) {
+                EntityInsentient entityinsentient = (EntityInsentient) EntityTypes.ZOMBIFIED_PIGLIN.a((World) worldaccess.getMinecraftWorld());
 
-        if (entitystrider$groupdata$rider == EntityStrider$GroupData$Rider.BABY_RIDER) {
-            EntityStrider entitystrider = (EntityStrider) EntityTypes.STRIDER.a(generatoraccess.getMinecraftWorld());
-
-            if (entitystrider != null) {
-                object = entitystrider;
-                entitystrider.setAgeRaw(-24000);
-            }
-        } else if (entitystrider$groupdata$rider == EntityStrider$GroupData$Rider.PIGLIN_RIDER) {
-            EntityPigZombie entitypigzombie = (EntityPigZombie) EntityTypes.ZOMBIFIED_PIGLIN.a(generatoraccess.getMinecraftWorld());
-
-            if (entitypigzombie != null) {
-                object = entitypigzombie;
+                object = this.a(worldaccess, difficultydamagescaler, entityinsentient, new EntityZombie.GroupDataZombie(EntityZombie.a(this.random), false));
+                entityinsentient.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.WARPED_FUNGUS_ON_A_STICK));
                 this.saddle((SoundCategory) null);
+            } else if (this.random.nextInt(10) == 0) {
+                EntityAgeable entityageable = (EntityAgeable) EntityTypes.STRIDER.a((World) worldaccess.getMinecraftWorld());
+
+                entityageable.setAgeRaw(-24000);
+                object = this.a(worldaccess, difficultydamagescaler, entityageable, (GroupDataEntity) null);
+            } else {
+                object = new EntityAgeable.a(0.5F);
             }
+
+            return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) object, nbttagcompound);
+        }
+    }
+
+    private GroupDataEntity a(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EntityInsentient entityinsentient, @Nullable GroupDataEntity groupdataentity) {
+        entityinsentient.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.yaw, 0.0F);
+        entityinsentient.prepare(worldaccess, difficultydamagescaler, EnumMobSpawn.JOCKEY, groupdataentity, (NBTTagCompound) null);
+        entityinsentient.a((Entity) this, true);
+        return new EntityAgeable.a(0.0F);
+    }
+
+    static class a extends PathfinderGoalGotoTarget {
+
+        private final EntityStrider g;
+
+        private a(EntityStrider entitystrider, double d0) {
+            super(entitystrider, d0, 8, 2);
+            this.g = entitystrider;
         }
 
-        if (object != null) {
-            ((EntityInsentient) object).setPositionRotation(this.locX(), this.locY(), this.locZ(), this.yaw, 0.0F);
-            ((EntityInsentient) object).prepare(generatoraccess, difficultydamagescaler, EnumMobSpawn.JOCKEY, entityzombie_groupdatazombie, (NBTTagCompound) null);
-            ((EntityInsentient) object).a((Entity) this, true);
-            generatoraccess.addEntity((Entity) object);
+        @Override
+        public BlockPosition j() {
+            return this.e;
         }
 
-        return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
+        @Override
+        public boolean b() {
+            return !this.g.aP() && this.a(this.g.world, this.e);
+        }
+
+        @Override
+        public boolean a() {
+            return !this.g.aP() && super.a();
+        }
+
+        @Override
+        public boolean k() {
+            return this.d % 20 == 0;
+        }
+
+        @Override
+        protected boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
+            return iworldreader.getType(blockposition).a(Blocks.LAVA) && iworldreader.getType(blockposition.up()).a((IBlockAccess) iworldreader, blockposition, PathMode.LAND);
+        }
     }
 
     static class b extends Navigation {
@@ -458,15 +463,6 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
         @Override
         public boolean a(BlockPosition blockposition) {
             return this.b.getType(blockposition).a(Blocks.LAVA) || super.a(blockposition);
-        }
-    }
-
-    public static class a extends EntityAgeable.a {
-
-        public final EntityStrider$GroupData$Rider a;
-
-        public a(EntityStrider$GroupData$Rider entitystrider$groupdata$rider) {
-            this.a = entitystrider$groupdata$rider;
         }
     }
 }

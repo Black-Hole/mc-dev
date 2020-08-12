@@ -17,9 +17,10 @@ import javax.annotation.Nullable;
 
 public class Explosion {
 
-    private final boolean a;
-    private final Explosion.Effect b;
-    private final Random c = new Random();
+    private static final ExplosionDamageCalculator a = new ExplosionDamageCalculator();
+    private final boolean b;
+    private final Explosion.Effect c;
+    private final Random d = new Random();
     private final World world;
     private final double posX;
     private final double posY;
@@ -27,10 +28,10 @@ public class Explosion {
     @Nullable
     public final Entity source;
     private final float size;
-    private final DamageSource j;
-    private final ExplosionDamageCalculator k;
+    private final DamageSource k;
+    private final ExplosionDamageCalculator l;
     private final List<BlockPosition> blocks = Lists.newArrayList();
-    private final Map<EntityHuman, Vec3D> m = Maps.newHashMap();
+    private final Map<EntityHuman, Vec3D> n = Maps.newHashMap();
 
     public Explosion(World world, @Nullable Entity entity, @Nullable DamageSource damagesource, @Nullable ExplosionDamageCalculator explosiondamagecalculator, double d0, double d1, double d2, float f, boolean flag, Explosion.Effect explosion_effect) {
         this.world = world;
@@ -39,14 +40,14 @@ public class Explosion {
         this.posX = d0;
         this.posY = d1;
         this.posZ = d2;
-        this.a = flag;
-        this.b = explosion_effect;
-        this.j = damagesource == null ? DamageSource.explosion(this) : damagesource;
-        this.k = explosiondamagecalculator == null ? this.a(entity) : explosiondamagecalculator;
+        this.b = flag;
+        this.c = explosion_effect;
+        this.k = damagesource == null ? DamageSource.explosion(this) : damagesource;
+        this.l = explosiondamagecalculator == null ? this.a(entity) : explosiondamagecalculator;
     }
 
     private ExplosionDamageCalculator a(@Nullable Entity entity) {
-        return (ExplosionDamageCalculator) (entity == null ? ExplosionDamageCalculatorBlock.INSTANCE : new ExplosionDamageCalculatorEntity(entity));
+        return (ExplosionDamageCalculator) (entity == null ? Explosion.a : new ExplosionDamageCalculatorEntity(entity));
     }
 
     public static float a(Vec3D vec3d, Entity entity) {
@@ -112,13 +113,13 @@ public class Explosion {
                             BlockPosition blockposition = new BlockPosition(d4, d5, d6);
                             IBlockData iblockdata = this.world.getType(blockposition);
                             Fluid fluid = this.world.getFluid(blockposition);
-                            Optional<Float> optional = this.k.a(this, this.world, blockposition, iblockdata, fluid);
+                            Optional<Float> optional = this.l.a(this, this.world, blockposition, iblockdata, fluid);
 
                             if (optional.isPresent()) {
                                 f -= ((Float) optional.get() + 0.3F) * 0.3F;
                             }
 
-                            if (f > 0.0F && this.k.a(this, this.world, blockposition, iblockdata, f)) {
+                            if (f > 0.0F && this.l.a(this, this.world, blockposition, iblockdata, f)) {
                                 set.add(blockposition);
                             }
 
@@ -147,7 +148,7 @@ public class Explosion {
             Entity entity = (Entity) list.get(l1);
 
             if (!entity.ch()) {
-                double d7 = (double) (MathHelper.sqrt(entity.d(vec3d)) / f2);
+                double d7 = (double) (MathHelper.sqrt(entity.e(vec3d)) / f2);
 
                 if (d7 <= 1.0D) {
                     double d8 = entity.locX() - this.posX;
@@ -174,7 +175,7 @@ public class Explosion {
                             EntityHuman entityhuman = (EntityHuman) entity;
 
                             if (!entityhuman.isSpectator() && (!entityhuman.isCreative() || !entityhuman.abilities.isFlying)) {
-                                this.m.put(entityhuman, new Vec3D(d8 * d13, d9 * d13, d10 * d13));
+                                this.n.put(entityhuman, new Vec3D(d8 * d13, d9 * d13, d10 * d13));
                             }
                         }
                     }
@@ -189,7 +190,7 @@ public class Explosion {
             this.world.a(this.posX, this.posY, this.posZ, SoundEffects.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F, false);
         }
 
-        boolean flag1 = this.b != Explosion.Effect.NONE;
+        boolean flag1 = this.c != Explosion.Effect.NONE;
 
         if (flag) {
             if (this.size >= 2.0F && flag1) {
@@ -216,9 +217,9 @@ public class Explosion {
                     this.world.getMethodProfiler().enter("explosion_blocks");
                     if (block.a(this) && this.world instanceof WorldServer) {
                         TileEntity tileentity = block.isTileEntity() ? this.world.getTileEntity(blockposition) : null;
-                        LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).a(this.world.random).set(LootContextParameters.POSITION, blockposition).set(LootContextParameters.TOOL, ItemStack.b).setOptional(LootContextParameters.BLOCK_ENTITY, tileentity).setOptional(LootContextParameters.THIS_ENTITY, this.source);
+                        LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).a(this.world.random).set(LootContextParameters.ORIGIN, Vec3D.a((BaseBlockPosition) blockposition)).set(LootContextParameters.TOOL, ItemStack.b).setOptional(LootContextParameters.BLOCK_ENTITY, tileentity).setOptional(LootContextParameters.THIS_ENTITY, this.source);
 
-                        if (this.b == Explosion.Effect.DESTROY) {
+                        if (this.c == Explosion.Effect.DESTROY) {
                             loottableinfo_builder.set(LootContextParameters.EXPLOSION_RADIUS, this.size);
                         }
 
@@ -242,13 +243,13 @@ public class Explosion {
             }
         }
 
-        if (this.a) {
+        if (this.b) {
             Iterator iterator1 = this.blocks.iterator();
 
             while (iterator1.hasNext()) {
                 BlockPosition blockposition2 = (BlockPosition) iterator1.next();
 
-                if (this.c.nextInt(3) == 0 && this.world.getType(blockposition2).isAir() && this.world.getType(blockposition2.down()).i(this.world, blockposition2.down())) {
+                if (this.d.nextInt(3) == 0 && this.world.getType(blockposition2).isAir() && this.world.getType(blockposition2.down()).i(this.world, blockposition2.down())) {
                     this.world.setTypeUpdate(blockposition2, BlockFireAbstract.a((IBlockAccess) this.world, blockposition2));
                 }
             }
@@ -277,11 +278,11 @@ public class Explosion {
     }
 
     public DamageSource b() {
-        return this.j;
+        return this.k;
     }
 
     public Map<EntityHuman, Vec3D> c() {
-        return this.m;
+        return this.n;
     }
 
     @Nullable

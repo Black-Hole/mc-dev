@@ -31,11 +31,11 @@ public class ChatComponentScore extends ChatBaseComponent implements ChatCompone
         this.f = s1;
     }
 
-    public String g() {
+    public String h() {
         return this.d;
     }
 
-    public String i() {
+    public String j() {
         return this.f;
     }
 
@@ -73,7 +73,7 @@ public class ChatComponentScore extends ChatBaseComponent implements ChatCompone
     }
 
     @Override
-    public ChatComponentScore f() {
+    public ChatComponentScore g() {
         return new ChatComponentScore(this.d, this.e, this.f);
     }
 

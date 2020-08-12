@@ -103,7 +103,7 @@ public class WorldGenFeatureOceanRuinPieces {
         private final boolean h;
 
         public a(DefinedStructureManager definedstructuremanager, MinecraftKey minecraftkey, BlockPosition blockposition, EnumBlockRotation enumblockrotation, float f, WorldGenFeatureOceanRuin.Temperature worldgenfeatureoceanruin_temperature, boolean flag) {
-            super(WorldGenFeatureStructurePieceType.J, 0);
+            super(WorldGenFeatureStructurePieceType.H, 0);
             this.f = minecraftkey;
             this.c = blockposition;
             this.g = enumblockrotation;
@@ -114,7 +114,7 @@ public class WorldGenFeatureOceanRuinPieces {
         }
 
         public a(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.J, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.H, nbttagcompound);
             this.f = new MinecraftKey(nbttagcompound.getString("Template"));
             this.g = EnumBlockRotation.valueOf(nbttagcompound.getString("Rot"));
             this.e = nbttagcompound.getFloat("Integrity");
@@ -141,25 +141,25 @@ public class WorldGenFeatureOceanRuinPieces {
         }
 
         @Override
-        protected void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
+        protected void a(String s, BlockPosition blockposition, WorldAccess worldaccess, Random random, StructureBoundingBox structureboundingbox) {
             if ("chest".equals(s)) {
-                generatoraccess.setTypeAndData(blockposition, (IBlockData) Blocks.CHEST.getBlockData().set(BlockChest.d, generatoraccess.getFluid(blockposition).a((Tag) TagsFluid.WATER)), 2);
-                TileEntity tileentity = generatoraccess.getTileEntity(blockposition);
+                worldaccess.setTypeAndData(blockposition, (IBlockData) Blocks.CHEST.getBlockData().set(BlockChest.d, worldaccess.getFluid(blockposition).a((Tag) TagsFluid.WATER)), 2);
+                TileEntity tileentity = worldaccess.getTileEntity(blockposition);
 
                 if (tileentity instanceof TileEntityChest) {
                     ((TileEntityChest) tileentity).setLootTable(this.h ? LootTables.F : LootTables.E, random.nextLong());
                 }
             } else if ("drowned".equals(s)) {
-                EntityDrowned entitydrowned = (EntityDrowned) EntityTypes.DROWNED.a(generatoraccess.getMinecraftWorld());
+                EntityDrowned entitydrowned = (EntityDrowned) EntityTypes.DROWNED.a((World) worldaccess.getMinecraftWorld());
 
                 entitydrowned.setPersistent();
                 entitydrowned.setPositionRotation(blockposition, 0.0F, 0.0F);
-                entitydrowned.prepare(generatoraccess, generatoraccess.getDamageScaler(blockposition), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
-                generatoraccess.addEntity(entitydrowned);
-                if (blockposition.getY() > generatoraccess.getSeaLevel()) {
-                    generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 2);
+                entitydrowned.prepare(worldaccess, worldaccess.getDamageScaler(blockposition), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
+                worldaccess.addAllEntities(entitydrowned);
+                if (blockposition.getY() > worldaccess.getSeaLevel()) {
+                    worldaccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 2);
                 } else {
-                    generatoraccess.setTypeAndData(blockposition, Blocks.WATER.getBlockData(), 2);
+                    worldaccess.setTypeAndData(blockposition, Blocks.WATER.getBlockData(), 2);
                 }
             }
 

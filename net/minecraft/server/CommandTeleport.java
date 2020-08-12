@@ -115,7 +115,7 @@ public class CommandTeleport {
     private static void a(CommandListenerWrapper commandlistenerwrapper, Entity entity, WorldServer worldserver, double d0, double d1, double d2, Set<PacketPlayOutPosition.EnumPlayerTeleportFlags> set, float f, float f1, @Nullable CommandTeleport.a commandteleport_a) throws CommandSyntaxException {
         BlockPosition blockposition = new BlockPosition(d0, d1, d2);
 
-        if (!World.k(blockposition)) {
+        if (!World.l(blockposition)) {
             throw CommandTeleport.a.create();
         } else {
             if (entity instanceof EntityPlayer) {
@@ -165,7 +165,7 @@ public class CommandTeleport {
 
             if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).isGliding()) {
                 entity.setMot(entity.getMot().d(1.0D, 0.0D, 1.0D));
-                entity.c(true);
+                entity.setOnGround(true);
             }
 
             if (entity instanceof EntityCreature) {

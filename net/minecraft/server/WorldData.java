@@ -8,6 +8,8 @@ public interface WorldData {
 
     int c();
 
+    float d();
+
     long getTime();
 
     long getDayTime();
@@ -20,7 +22,7 @@ public interface WorldData {
 
     boolean isHardcore();
 
-    GameRules p();
+    GameRules q();
 
     EnumDifficulty getDifficulty();
 

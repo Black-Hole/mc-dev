@@ -215,7 +215,7 @@ public class EntitySelector {
 
         if (!this.e.c()) {
             predicate = predicate.and((entity) -> {
-                return this.e.a(entity.d(vec3d));
+                return this.e.a(entity.e(vec3d));
             });
         }
 

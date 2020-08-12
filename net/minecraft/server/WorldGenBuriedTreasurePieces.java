@@ -6,12 +6,12 @@ public class WorldGenBuriedTreasurePieces {
     public static class a extends StructurePiece {
 
         public a(BlockPosition blockposition) {
-            super(WorldGenFeatureStructurePieceType.ac, 0);
+            super(WorldGenFeatureStructurePieceType.aa, 0);
             this.n = new StructureBoundingBox(blockposition.getX(), blockposition.getY(), blockposition.getZ(), blockposition.getX(), blockposition.getY(), blockposition.getZ());
         }
 
         public a(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.ac, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.aa, nbttagcompound);
         }
 
         @Override

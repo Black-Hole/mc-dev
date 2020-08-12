@@ -58,6 +58,7 @@ public class PacketPlayInUseEntity implements Packet<PacketListenerPlayIn> {
         return this.action;
     }
 
+    @Nullable
     public EnumHand c() {
         return this.d;
     }

@@ -29,7 +29,7 @@ public class MemoryModuleType<U> {
     public static final MemoryModuleType<Entity> RIDE_TARGET = a("ride_target");
     public static final MemoryModuleType<PathEntity> PATH = a("path");
     public static final MemoryModuleType<List<GlobalPos>> INTERACTABLE_DOORS = a("interactable_doors");
-    public static final MemoryModuleType<Set<GlobalPos>> OPENED_DOORS = a("opened_doors");
+    public static final MemoryModuleType<Set<GlobalPos>> DOORS_TO_CLOSE = a("doors_to_close");
     public static final MemoryModuleType<BlockPosition> NEAREST_BED = a("nearest_bed");
     public static final MemoryModuleType<DamageSource> HURT_BY = a("hurt_by");
     public static final MemoryModuleType<EntityLiving> HURT_BY_ENTITY = a("hurt_by_entity");
@@ -38,7 +38,7 @@ public class MemoryModuleType<U> {
     public static final MemoryModuleType<GlobalPos> HIDING_PLACE = a("hiding_place");
     public static final MemoryModuleType<Long> HEARD_BELL_TIME = a("heard_bell_time");
     public static final MemoryModuleType<Long> CANT_REACH_WALK_TARGET_SINCE = a("cant_reach_walk_target_since");
-    public static final MemoryModuleType<Long> GOLEM_LAST_SEEN_TIME = a("golem_last_seen_time");
+    public static final MemoryModuleType<Boolean> GOLEM_DETECTED_RECENTLY = a("golem_detected_recently", Codec.BOOL);
     public static final MemoryModuleType<Long> LAST_SLEPT = a("last_slept", Codec.LONG);
     public static final MemoryModuleType<Long> LAST_WOKEN = a("last_woken", Codec.LONG);
     public static final MemoryModuleType<Long> LAST_WORKED_AT_POI = a("last_worked_at_poi", Codec.LONG);
@@ -48,18 +48,19 @@ public class MemoryModuleType<U> {
     public static final MemoryModuleType<UUID> ANGRY_AT = a("angry_at", MinecraftSerializableUUID.a);
     public static final MemoryModuleType<Boolean> UNIVERSAL_ANGER = a("universal_anger", Codec.BOOL);
     public static final MemoryModuleType<Boolean> ADMIRING_ITEM = a("admiring_item", Codec.BOOL);
+    public static final MemoryModuleType<Integer> TIME_TRYING_TO_REACH_ADMIRE_ITEM = a("time_trying_to_reach_admire_item");
+    public static final MemoryModuleType<Boolean> DISABLE_WALK_TO_ADMIRE_ITEM = a("disable_walk_to_admire_item");
     public static final MemoryModuleType<Boolean> ADMIRING_DISABLED = a("admiring_disabled", Codec.BOOL);
     public static final MemoryModuleType<Boolean> HUNTED_RECENTLY = a("hunted_recently", Codec.BOOL);
     public static final MemoryModuleType<BlockPosition> CELEBRATE_LOCATION = a("celebrate_location");
     public static final MemoryModuleType<Boolean> DANCING = a("dancing");
     public static final MemoryModuleType<EntityHoglin> NEAREST_VISIBLE_HUNTABLE_HOGLIN = a("nearest_visible_huntable_hoglin");
     public static final MemoryModuleType<EntityHoglin> NEAREST_VISIBLE_BABY_HOGLIN = a("nearest_visible_baby_hoglin");
-    public static final MemoryModuleType<EntityPiglin> NEAREST_VISIBLE_BABY_PIGLIN = a("nearest_visible_baby_piglin");
     public static final MemoryModuleType<EntityHuman> NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD = a("nearest_targetable_player_not_wearing_gold");
-    public static final MemoryModuleType<List<EntityPiglin>> NEAREST_ADULT_PIGLINS = a("nearest_adult_piglins");
-    public static final MemoryModuleType<List<EntityPiglin>> NEAREST_VISIBLE_ADULT_PIGLINS = a("nearest_visible_adult_piglins");
+    public static final MemoryModuleType<List<EntityPiglinAbstract>> NEARBY_ADULT_PIGLINS = a("nearby_adult_piglins");
+    public static final MemoryModuleType<List<EntityPiglinAbstract>> NEAREST_VISIBLE_ADULT_PIGLINS = a("nearest_visible_adult_piglins");
     public static final MemoryModuleType<List<EntityHoglin>> NEAREST_VISIBLE_ADULT_HOGLINS = a("nearest_visible_adult_hoglins");
-    public static final MemoryModuleType<EntityPiglin> NEAREST_VISIBLE_ADULT_PIGLIN = a("nearest_visible_adult_piglin");
+    public static final MemoryModuleType<EntityPiglinAbstract> NEAREST_VISIBLE_ADULT_PIGLIN = a("nearest_visible_adult_piglin");
     public static final MemoryModuleType<EntityLiving> NEAREST_VISIBLE_ZOMBIFIED = a("nearest_visible_zombified");
     public static final MemoryModuleType<Integer> VISIBLE_ADULT_PIGLIN_COUNT = a("visible_adult_piglin_count");
     public static final MemoryModuleType<Integer> VISIBLE_ADULT_HOGLIN_COUNT = a("visible_adult_hoglin_count");
@@ -67,10 +68,10 @@ public class MemoryModuleType<U> {
     public static final MemoryModuleType<Boolean> ATE_RECENTLY = a("ate_recently");
     public static final MemoryModuleType<BlockPosition> NEAREST_REPELLENT = a("nearest_repellent");
     public static final MemoryModuleType<Boolean> PACIFIED = a("pacified");
-    private final Optional<Codec<ExpirableMemory<U>>> ah;
+    private final Optional<Codec<ExpirableMemory<U>>> ai;
 
     private MemoryModuleType(Optional<Codec<U>> optional) {
-        this.ah = optional.map(ExpirableMemory::a);
+        this.ai = optional.map(ExpirableMemory::a);
     }
 
     public String toString() {
@@ -78,7 +79,7 @@ public class MemoryModuleType<U> {
     }
 
     public Optional<Codec<ExpirableMemory<U>>> getSerializer() {
-        return this.ah;
+        return this.ai;
     }
 
     private static <U> MemoryModuleType<U> a(String s, Codec<U> codec) {

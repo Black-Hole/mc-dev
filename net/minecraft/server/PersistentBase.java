@@ -1,9 +1,7 @@
 package net.minecraft.server;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -45,28 +43,7 @@ public abstract class PersistentBase {
             nbttagcompound.setInt("DataVersion", SharedConstants.getGameVersion().getWorldVersion());
 
             try {
-                FileOutputStream fileoutputstream = new FileOutputStream(file);
-                Throwable throwable = null;
-
-                try {
-                    NBTCompressedStreamTools.a(nbttagcompound, (OutputStream) fileoutputstream);
-                } catch (Throwable throwable1) {
-                    throwable = throwable1;
-                    throw throwable1;
-                } finally {
-                    if (fileoutputstream != null) {
-                        if (throwable != null) {
-                            try {
-                                fileoutputstream.close();
-                            } catch (Throwable throwable2) {
-                                throwable.addSuppressed(throwable2);
-                            }
-                        } else {
-                            fileoutputstream.close();
-                        }
-                    }
-
-                }
+                NBTCompressedStreamTools.a(nbttagcompound, file);
             } catch (IOException ioexception) {
                 PersistentBase.LOGGER.error("Could not save data {}", this, ioexception);
             }

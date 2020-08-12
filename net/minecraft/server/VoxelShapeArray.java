@@ -25,7 +25,7 @@ public final class VoxelShapeArray extends VoxelShape {
             this.c = doublelist1;
             this.d = doublelist2;
         } else {
-            throw (IllegalArgumentException) SystemUtils.c(new IllegalArgumentException("Lengths of point arrays must be consistent with the size of the VoxelShape."));
+            throw (IllegalArgumentException) SystemUtils.c((Throwable) (new IllegalArgumentException("Lengths of point arrays must be consistent with the size of the VoxelShape.")));
         }
     }
 

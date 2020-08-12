@@ -11,7 +11,7 @@ public class BlockBambooSapling extends Block implements IBlockFragilePlantEleme
     }
 
     @Override
-    public BlockBase.EnumRandomOffset aj_() {
+    public BlockBase.EnumRandomOffset ah_() {
         return BlockBase.EnumRandomOffset.XZ;
     }
 

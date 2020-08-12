@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 public class WorldGenFlatLayerInfo {
 
     public static final Codec<WorldGenFlatLayerInfo> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(Codecs.a(0, 256).fieldOf("height").forGetter(WorldGenFlatLayerInfo::a), IRegistry.BLOCK.fieldOf("block").withDefault(Blocks.AIR).forGetter((worldgenflatlayerinfo) -> {
+        return instance.group(Codec.intRange(0, 256).fieldOf("height").forGetter(WorldGenFlatLayerInfo::a), IRegistry.BLOCK.fieldOf("block").orElse(Blocks.AIR).forGetter((worldgenflatlayerinfo) -> {
             return worldgenflatlayerinfo.b().getBlock();
         })).apply(instance, WorldGenFlatLayerInfo::new);
     });

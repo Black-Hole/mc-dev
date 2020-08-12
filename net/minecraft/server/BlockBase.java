@@ -119,7 +119,7 @@ public abstract class BlockBase {
         return false;
     }
 
-    public BlockBase.EnumRandomOffset aj_() {
+    public BlockBase.EnumRandomOffset ah_() {
         return BlockBase.EnumRandomOffset.NONE;
     }
 
@@ -175,7 +175,7 @@ public abstract class BlockBase {
 
     @Deprecated
     public int f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.i(iblockaccess, blockposition) ? iblockaccess.H() : (iblockdata.a(iblockaccess, blockposition) ? 0 : 1);
+        return iblockdata.i(iblockaccess, blockposition) ? iblockaccess.J() : (iblockdata.a(iblockaccess, blockposition) ? 0 : 1);
     }
 
     @Nullable
@@ -231,7 +231,7 @@ public abstract class BlockBase {
     }
 
     @Deprecated
-    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, ItemStack itemstack) {}
+    public void dropNaturally(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, ItemStack itemstack) {}
 
     @Deprecated
     public void attack(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman) {}
@@ -300,7 +300,7 @@ public abstract class BlockBase {
         private final BlockBase.e o;
         private final BlockBase.e p;
         @Nullable
-        protected BlockBase.BlockData.a a;
+        protected BlockBase.BlockData.Cache a;
 
         protected BlockData(Block block, ImmutableMap<IBlockState<?>, Comparable<?>> immutablemap, MapCodec<IBlockData> mapcodec) {
             super(block, immutablemap, mapcodec);
@@ -323,7 +323,7 @@ public abstract class BlockBase {
 
         public void a() {
             if (!this.getBlock().o()) {
-                this.a = new BlockBase.BlockData.a(this.p());
+                this.a = new BlockBase.BlockData.Cache(this.p());
             }
 
         }
@@ -475,7 +475,7 @@ public abstract class BlockBase {
         }
 
         public Vec3D n(IBlockAccess iblockaccess, BlockPosition blockposition) {
-            BlockBase.EnumRandomOffset blockbase_enumrandomoffset = this.getBlock().aj_();
+            BlockBase.EnumRandomOffset blockbase_enumrandomoffset = this.getBlock().ah_();
 
             if (blockbase_enumrandomoffset == BlockBase.EnumRandomOffset.NONE) {
                 return Vec3D.a;
@@ -544,8 +544,8 @@ public abstract class BlockBase {
             this.getBlock().a(this.p(), world, blockposition, entity);
         }
 
-        public void dropNaturally(World world, BlockPosition blockposition, ItemStack itemstack) {
-            this.getBlock().dropNaturally(this.p(), world, blockposition, itemstack);
+        public void dropNaturally(WorldServer worldserver, BlockPosition blockposition, ItemStack itemstack) {
+            this.getBlock().dropNaturally(this.p(), worldserver, blockposition, itemstack);
         }
 
         public List<ItemStack> a(LootTableInfo.Builder loottableinfo_builder) {
@@ -622,22 +622,27 @@ public abstract class BlockBase {
         }
 
         public boolean d(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-            return this.a != null ? this.a.d[enumdirection.ordinal()] : Block.d(this.p(), iblockaccess, blockposition, enumdirection);
+            return this.a(iblockaccess, blockposition, enumdirection, EnumBlockSupport.FULL);
+        }
+
+        public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection, EnumBlockSupport enumblocksupport) {
+            return this.a != null ? this.a.a(enumdirection, enumblocksupport) : enumblocksupport.a(this.p(), iblockaccess, blockposition, enumdirection);
         }
 
         public boolean r(IBlockAccess iblockaccess, BlockPosition blockposition) {
-            return this.a != null ? this.a.e : Block.a(this.getCollisionShape(iblockaccess, blockposition));
+            return this.a != null ? this.a.d : Block.a(this.getCollisionShape(iblockaccess, blockposition));
         }
 
         protected abstract IBlockData p();
 
-        public boolean isAlwaysDestroyable() {
+        public boolean isRequiresSpecialTool() {
             return this.j;
         }
 
-        static final class a {
+        static final class Cache {
 
-            private static final EnumDirection[] f = EnumDirection.values();
+            private static final EnumDirection[] e = EnumDirection.values();
+            private static final int f = EnumBlockSupport.values().length;
             protected final boolean a;
             private final boolean g;
             private final int h;
@@ -645,10 +650,10 @@ public abstract class BlockBase {
             private final VoxelShape[] i;
             protected final VoxelShape b;
             protected final boolean c;
-            protected final boolean[] d;
-            protected final boolean e;
+            private final boolean[] j;
+            protected final boolean d;
 
-            private a(IBlockData iblockdata) {
+            private Cache(IBlockData iblockdata) {
                 Block block = iblockdata.getBlock();
 
                 this.a = iblockdata.i(BlockAccessAir.INSTANCE, BlockPosition.ZERO);
@@ -659,9 +664,9 @@ public abstract class BlockBase {
                 if (!iblockdata.l()) {
                     this.i = null;
                 } else {
-                    this.i = new VoxelShape[BlockBase.BlockData.a.f.length];
-                    VoxelShape voxelshape = block.d(iblockdata, (IBlockAccess) BlockAccessAir.INSTANCE, BlockPosition.ZERO);
-                    EnumDirection[] aenumdirection = BlockBase.BlockData.a.f;
+                    this.i = new VoxelShape[BlockBase.BlockData.Cache.e.length];
+                    VoxelShape voxelshape = block.d(iblockdata, BlockAccessAir.INSTANCE, BlockPosition.ZERO);
+                    EnumDirection[] aenumdirection = BlockBase.BlockData.Cache.e;
 
                     i = aenumdirection.length;
 
@@ -676,17 +681,31 @@ public abstract class BlockBase {
                 this.c = Arrays.stream(EnumDirection.EnumAxis.values()).anyMatch((enumdirection_enumaxis) -> {
                     return this.b.b(enumdirection_enumaxis) < 0.0D || this.b.c(enumdirection_enumaxis) > 1.0D;
                 });
-                this.d = new boolean[6];
-                EnumDirection[] aenumdirection1 = BlockBase.BlockData.a.f;
+                this.j = new boolean[BlockBase.BlockData.Cache.e.length * BlockBase.BlockData.Cache.f];
+                EnumDirection[] aenumdirection1 = BlockBase.BlockData.Cache.e;
                 int k = aenumdirection1.length;
 
                 for (i = 0; i < k; ++i) {
                     EnumDirection enumdirection1 = aenumdirection1[i];
+                    EnumBlockSupport[] aenumblocksupport = EnumBlockSupport.values();
+                    int l = aenumblocksupport.length;
 
-                    this.d[enumdirection1.ordinal()] = Block.d(iblockdata, BlockAccessAir.INSTANCE, BlockPosition.ZERO, enumdirection1);
+                    for (int i1 = 0; i1 < l; ++i1) {
+                        EnumBlockSupport enumblocksupport = aenumblocksupport[i1];
+
+                        this.j[b(enumdirection1, enumblocksupport)] = enumblocksupport.a(iblockdata, BlockAccessAir.INSTANCE, BlockPosition.ZERO, enumdirection1);
+                    }
                 }
 
-                this.e = Block.a(iblockdata.getCollisionShape(BlockAccessAir.INSTANCE, BlockPosition.ZERO));
+                this.d = Block.a(iblockdata.getCollisionShape(BlockAccessAir.INSTANCE, BlockPosition.ZERO));
+            }
+
+            public boolean a(EnumDirection enumdirection, EnumBlockSupport enumblocksupport) {
+                return this.j[b(enumdirection, enumblocksupport)];
+            }
+
+            private static int b(EnumDirection enumdirection, EnumBlockSupport enumblocksupport) {
+                return enumdirection.ordinal() * BlockBase.BlockData.Cache.f + enumblocksupport.ordinal();
             }
         }
     }

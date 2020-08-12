@@ -7,11 +7,13 @@ public enum AdvancementFrameType {
     private final String d;
     private final int e;
     private final EnumChatFormat f;
+    private final IChatBaseComponent g;
 
     private AdvancementFrameType(String s, int i, EnumChatFormat enumchatformat) {
         this.d = s;
         this.e = i;
         this.f = enumchatformat;
+        this.g = new ChatMessage("advancements.toast." + s);
     }
 
     public String a() {

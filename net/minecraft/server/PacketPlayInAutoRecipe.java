@@ -13,7 +13,7 @@ public class PacketPlayInAutoRecipe implements Packet<PacketListenerPlayIn> {
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readByte();
-        this.b = packetdataserializer.o();
+        this.b = packetdataserializer.p();
         this.c = packetdataserializer.readBoolean();
     }
 

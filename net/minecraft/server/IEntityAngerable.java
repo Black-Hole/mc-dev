@@ -70,7 +70,7 @@ public interface IEntityAngerable {
         }
     }
 
-    default boolean b(EntityLiving entityliving) {
+    default boolean a_(EntityLiving entityliving) {
         return !IEntitySelector.f.test(entityliving) ? false : (entityliving.getEntityType() == EntityTypes.PLAYER && this.a(entityliving.world) ? true : entityliving.getUniqueID().equals(this.getAngerTarget()));
     }
 
@@ -90,7 +90,7 @@ public interface IEntityAngerable {
         }
     }
 
-    default void J_() {
+    default void I_() {
         this.pacify();
         this.anger();
     }

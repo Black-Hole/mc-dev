@@ -25,15 +25,15 @@ public class WorldGenEndGatewayConfiguration implements WorldGenFeatureConfigura
         return new WorldGenEndGatewayConfiguration(Optional.of(blockposition), flag);
     }
 
-    public static WorldGenEndGatewayConfiguration a() {
+    public static WorldGenEndGatewayConfiguration b() {
         return new WorldGenEndGatewayConfiguration(Optional.empty(), false);
     }
 
-    public Optional<BlockPosition> b() {
+    public Optional<BlockPosition> c() {
         return this.b;
     }
 
-    public boolean c() {
+    public boolean d() {
         return this.c;
     }
 }

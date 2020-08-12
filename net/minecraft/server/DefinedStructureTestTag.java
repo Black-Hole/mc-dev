@@ -5,7 +5,11 @@ import java.util.Random;
 
 public class DefinedStructureTestTag extends DefinedStructureRuleTest {
 
-    public static final Codec<DefinedStructureTestTag> a;
+    public static final Codec<DefinedStructureTestTag> a = Tag.a(() -> {
+        return TagsInstance.a().getBlockTags();
+    }).fieldOf("tag").xmap(DefinedStructureTestTag::new, (definedstructuretesttag) -> {
+        return definedstructuretesttag.b;
+    }).codec();
     private final Tag<Block> b;
 
     public DefinedStructureTestTag(Tag<Block> tag) {
@@ -20,14 +24,5 @@ public class DefinedStructureTestTag extends DefinedStructureRuleTest {
     @Override
     protected DefinedStructureRuleTestType<?> a() {
         return DefinedStructureRuleTestType.d;
-    }
-
-    static {
-        TagsInstance tagsinstance = TagsInstance.e();
-
-        tagsinstance.getClass();
-        a = Tag.a(tagsinstance::a).fieldOf("tag").xmap(DefinedStructureTestTag::new, (definedstructuretesttag) -> {
-            return definedstructuretesttag.b;
-        }).codec();
     }
 }

@@ -34,7 +34,7 @@ public class BehaviorPotentialJobSite extends Behavior<EntityVillager> {
             WorldServer worldserver1 = worldserver.getMinecraftServer().getWorldServer(globalpos.getDimensionManager());
 
             if (worldserver1 != null) {
-                VillagePlace villageplace = worldserver1.x();
+                VillagePlace villageplace = worldserver1.y();
 
                 if (villageplace.a(blockposition, (villageplacetype) -> {
                     return true;

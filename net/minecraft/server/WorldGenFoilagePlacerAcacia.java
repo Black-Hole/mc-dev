@@ -11,8 +11,8 @@ public class WorldGenFoilagePlacerAcacia extends WorldGenFoilagePlacer {
         return b(instance).apply(instance, WorldGenFoilagePlacerAcacia::new);
     });
 
-    public WorldGenFoilagePlacerAcacia(int i, int j, int k, int l) {
-        super(i, j, k, l);
+    public WorldGenFoilagePlacerAcacia(IntSpread intspread, IntSpread intspread1) {
+        super(intspread, intspread1);
     }
 
     @Override

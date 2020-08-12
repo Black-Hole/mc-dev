@@ -7,11 +7,11 @@ import java.util.OptionalInt;
 public class FeatureSizeTwoLayers extends FeatureSize {
 
     public static final Codec<FeatureSizeTwoLayers> c = RecordCodecBuilder.create((instance) -> {
-        return instance.group(Codec.INT.fieldOf("limit").withDefault(1).forGetter((featuresizetwolayers) -> {
+        return instance.group(Codec.intRange(0, 81).fieldOf("limit").orElse(1).forGetter((featuresizetwolayers) -> {
             return featuresizetwolayers.d;
-        }), Codec.INT.fieldOf("lower_size").withDefault(0).forGetter((featuresizetwolayers) -> {
+        }), Codec.intRange(0, 16).fieldOf("lower_size").orElse(0).forGetter((featuresizetwolayers) -> {
             return featuresizetwolayers.e;
-        }), Codec.INT.fieldOf("upper_size").withDefault(1).forGetter((featuresizetwolayers) -> {
+        }), Codec.intRange(0, 16).fieldOf("upper_size").orElse(1).forGetter((featuresizetwolayers) -> {
             return featuresizetwolayers.f;
         }), a()).apply(instance, FeatureSizeTwoLayers::new);
     });

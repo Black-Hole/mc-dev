@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockLoom extends BlockFacingHorizontal {
 
-    private static final ChatMessage a = new ChatMessage("container.loom");
+    private static final IChatBaseComponent a = new ChatMessage("container.loom");
 
     protected BlockLoom(BlockBase.Info blockbase_info) {
         super(blockbase_info);

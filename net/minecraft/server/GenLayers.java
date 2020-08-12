@@ -1,19 +1,81 @@
 package net.minecraft.server;
 
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import java.util.function.LongFunction;
 
 public class GenLayers {
 
-    protected static final int a = IRegistry.BIOME.a((Object) Biomes.WARM_OCEAN);
-    protected static final int b = IRegistry.BIOME.a((Object) Biomes.LUKEWARM_OCEAN);
-    protected static final int c = IRegistry.BIOME.a((Object) Biomes.OCEAN);
-    protected static final int d = IRegistry.BIOME.a((Object) Biomes.COLD_OCEAN);
-    protected static final int e = IRegistry.BIOME.a((Object) Biomes.FROZEN_OCEAN);
-    protected static final int f = IRegistry.BIOME.a((Object) Biomes.DEEP_WARM_OCEAN);
-    protected static final int g = IRegistry.BIOME.a((Object) Biomes.DEEP_LUKEWARM_OCEAN);
-    protected static final int h = IRegistry.BIOME.a((Object) Biomes.DEEP_OCEAN);
-    protected static final int i = IRegistry.BIOME.a((Object) Biomes.DEEP_COLD_OCEAN);
-    protected static final int j = IRegistry.BIOME.a((Object) Biomes.DEEP_FROZEN_OCEAN);
+    private static final Int2IntMap a = (Int2IntMap) SystemUtils.a((Object) (new Int2IntOpenHashMap()), (int2intopenhashmap) -> {
+        a(int2intopenhashmap, GenLayers.Type.BEACH, 16);
+        a(int2intopenhashmap, GenLayers.Type.BEACH, 26);
+        a(int2intopenhashmap, GenLayers.Type.DESERT, 2);
+        a(int2intopenhashmap, GenLayers.Type.DESERT, 17);
+        a(int2intopenhashmap, GenLayers.Type.DESERT, 130);
+        a(int2intopenhashmap, GenLayers.Type.EXTREME_HILLS, 131);
+        a(int2intopenhashmap, GenLayers.Type.EXTREME_HILLS, 162);
+        a(int2intopenhashmap, GenLayers.Type.EXTREME_HILLS, 20);
+        a(int2intopenhashmap, GenLayers.Type.EXTREME_HILLS, 3);
+        a(int2intopenhashmap, GenLayers.Type.EXTREME_HILLS, 34);
+        a(int2intopenhashmap, GenLayers.Type.FOREST, 27);
+        a(int2intopenhashmap, GenLayers.Type.FOREST, 28);
+        a(int2intopenhashmap, GenLayers.Type.FOREST, 29);
+        a(int2intopenhashmap, GenLayers.Type.FOREST, 157);
+        a(int2intopenhashmap, GenLayers.Type.FOREST, 132);
+        a(int2intopenhashmap, GenLayers.Type.FOREST, 4);
+        a(int2intopenhashmap, GenLayers.Type.FOREST, 155);
+        a(int2intopenhashmap, GenLayers.Type.FOREST, 156);
+        a(int2intopenhashmap, GenLayers.Type.FOREST, 18);
+        a(int2intopenhashmap, GenLayers.Type.ICY, 140);
+        a(int2intopenhashmap, GenLayers.Type.ICY, 13);
+        a(int2intopenhashmap, GenLayers.Type.ICY, 12);
+        a(int2intopenhashmap, GenLayers.Type.JUNGLE, 168);
+        a(int2intopenhashmap, GenLayers.Type.JUNGLE, 169);
+        a(int2intopenhashmap, GenLayers.Type.JUNGLE, 21);
+        a(int2intopenhashmap, GenLayers.Type.JUNGLE, 23);
+        a(int2intopenhashmap, GenLayers.Type.JUNGLE, 22);
+        a(int2intopenhashmap, GenLayers.Type.JUNGLE, 149);
+        a(int2intopenhashmap, GenLayers.Type.JUNGLE, 151);
+        a(int2intopenhashmap, GenLayers.Type.MESA, 37);
+        a(int2intopenhashmap, GenLayers.Type.MESA, 165);
+        a(int2intopenhashmap, GenLayers.Type.MESA, 167);
+        a(int2intopenhashmap, GenLayers.Type.MESA, 166);
+        a(int2intopenhashmap, GenLayers.Type.BADLANDS_PLATEAU, 39);
+        a(int2intopenhashmap, GenLayers.Type.BADLANDS_PLATEAU, 38);
+        a(int2intopenhashmap, GenLayers.Type.MUSHROOM, 14);
+        a(int2intopenhashmap, GenLayers.Type.MUSHROOM, 15);
+        a(int2intopenhashmap, GenLayers.Type.NONE, 25);
+        a(int2intopenhashmap, GenLayers.Type.OCEAN, 46);
+        a(int2intopenhashmap, GenLayers.Type.OCEAN, 49);
+        a(int2intopenhashmap, GenLayers.Type.OCEAN, 50);
+        a(int2intopenhashmap, GenLayers.Type.OCEAN, 48);
+        a(int2intopenhashmap, GenLayers.Type.OCEAN, 24);
+        a(int2intopenhashmap, GenLayers.Type.OCEAN, 47);
+        a(int2intopenhashmap, GenLayers.Type.OCEAN, 10);
+        a(int2intopenhashmap, GenLayers.Type.OCEAN, 45);
+        a(int2intopenhashmap, GenLayers.Type.OCEAN, 0);
+        a(int2intopenhashmap, GenLayers.Type.OCEAN, 44);
+        a(int2intopenhashmap, GenLayers.Type.PLAINS, 1);
+        a(int2intopenhashmap, GenLayers.Type.PLAINS, 129);
+        a(int2intopenhashmap, GenLayers.Type.RIVER, 11);
+        a(int2intopenhashmap, GenLayers.Type.RIVER, 7);
+        a(int2intopenhashmap, GenLayers.Type.SAVANNA, 35);
+        a(int2intopenhashmap, GenLayers.Type.SAVANNA, 36);
+        a(int2intopenhashmap, GenLayers.Type.SAVANNA, 163);
+        a(int2intopenhashmap, GenLayers.Type.SAVANNA, 164);
+        a(int2intopenhashmap, GenLayers.Type.SWAMP, 6);
+        a(int2intopenhashmap, GenLayers.Type.SWAMP, 134);
+        a(int2intopenhashmap, GenLayers.Type.TAIGA, 160);
+        a(int2intopenhashmap, GenLayers.Type.TAIGA, 161);
+        a(int2intopenhashmap, GenLayers.Type.TAIGA, 32);
+        a(int2intopenhashmap, GenLayers.Type.TAIGA, 33);
+        a(int2intopenhashmap, GenLayers.Type.TAIGA, 30);
+        a(int2intopenhashmap, GenLayers.Type.TAIGA, 31);
+        a(int2intopenhashmap, GenLayers.Type.TAIGA, 158);
+        a(int2intopenhashmap, GenLayers.Type.TAIGA, 5);
+        a(int2intopenhashmap, GenLayers.Type.TAIGA, 19);
+        a(int2intopenhashmap, GenLayers.Type.TAIGA, 133);
+    });
 
     private static <T extends Area, C extends AreaContextTransformed<T>> AreaFactory<T> a(long i, AreaTransformer2 areatransformer2, AreaFactory<T> areafactory, int j, LongFunction<C> longfunction) {
         AreaFactory<T> areafactory1 = areafactory;
@@ -93,21 +155,25 @@ public class GenLayers {
     }
 
     public static boolean a(int i, int j) {
-        if (i == j) {
-            return true;
-        } else {
-            BiomeBase biomebase = (BiomeBase) IRegistry.BIOME.fromId(i);
-            BiomeBase biomebase1 = (BiomeBase) IRegistry.BIOME.fromId(j);
+        return i == j ? true : GenLayers.a.get(i) == GenLayers.a.get(j);
+    }
 
-            return biomebase != null && biomebase1 != null ? (biomebase != Biomes.WOODED_BADLANDS_PLATEAU && biomebase != Biomes.BADLANDS_PLATEAU ? (biomebase.y() != BiomeBase.Geography.NONE && biomebase1.y() != BiomeBase.Geography.NONE && biomebase.y() == biomebase1.y() ? true : biomebase == biomebase1) : biomebase1 == Biomes.WOODED_BADLANDS_PLATEAU || biomebase1 == Biomes.BADLANDS_PLATEAU) : false;
-        }
+    private static void a(Int2IntOpenHashMap int2intopenhashmap, GenLayers.Type genlayers_type, int i) {
+        int2intopenhashmap.put(i, genlayers_type.ordinal());
     }
 
     protected static boolean a(int i) {
-        return i == GenLayers.a || i == GenLayers.b || i == GenLayers.c || i == GenLayers.d || i == GenLayers.e || i == GenLayers.f || i == GenLayers.g || i == GenLayers.h || i == GenLayers.i || i == GenLayers.j;
+        return i == 44 || i == 45 || i == 0 || i == 46 || i == 10 || i == 47 || i == 48 || i == 24 || i == 49 || i == 50;
     }
 
     protected static boolean b(int i) {
-        return i == GenLayers.a || i == GenLayers.b || i == GenLayers.c || i == GenLayers.d || i == GenLayers.e;
+        return i == 44 || i == 45 || i == 0 || i == 46 || i == 10;
+    }
+
+    static enum Type {
+
+        NONE, TAIGA, EXTREME_HILLS, JUNGLE, MESA, BADLANDS_PLATEAU, PLAINS, SAVANNA, ICY, BEACH, FOREST, OCEAN, DESERT, RIVER, SWAMP, MUSHROOM;
+
+        private Type() {}
     }
 }

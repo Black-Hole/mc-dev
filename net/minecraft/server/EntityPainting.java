@@ -54,13 +54,16 @@ public class EntityPainting extends EntityHanging {
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         nbttagcompound.setString("Motive", IRegistry.MOTIVE.getKey(this.art).toString());
+        nbttagcompound.setByte("Facing", (byte) this.direction.get2DRotationValue());
         super.saveData(nbttagcompound);
     }
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         this.art = (Paintings) IRegistry.MOTIVE.get(MinecraftKey.a(nbttagcompound.getString("Motive")));
+        this.direction = EnumDirection.fromType2(nbttagcompound.getByte("Facing"));
         super.loadData(nbttagcompound);
+        this.setDirection(this.direction);
     }
 
     @Override
@@ -100,7 +103,7 @@ public class EntityPainting extends EntityHanging {
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         return new PacketPlayOutSpawnEntityPainting(this);
     }
 }

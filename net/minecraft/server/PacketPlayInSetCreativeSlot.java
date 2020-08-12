@@ -18,7 +18,7 @@ public class PacketPlayInSetCreativeSlot implements Packet<PacketListenerPlayIn>
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.slot = packetdataserializer.readShort();
-        this.b = packetdataserializer.m();
+        this.b = packetdataserializer.n();
     }
 
     @Override

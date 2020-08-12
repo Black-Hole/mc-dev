@@ -117,7 +117,7 @@ public class GameTestHarnessTestCommand {
             BlockPosition blockposition1 = blockposition.b((BaseBlockPosition) optional.get());
             String s1 = blockposition1.getX() + ", " + blockposition1.getY() + ", " + blockposition1.getZ();
             String s2 = tileentitystructure.f();
-            IChatMutableComponent ichatmutablecomponent = (new ChatComponentText(s1)).setChatModifier(ChatModifier.b.setBold(true).setColor(EnumChatFormat.GREEN).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText("Click to copy to clipboard"))).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.COPY_TO_CLIPBOARD, "final BlockPos " + s + " = new BlockPos(" + s1 + ");")));
+            IChatMutableComponent ichatmutablecomponent = (new ChatComponentText(s1)).setChatModifier(ChatModifier.a.setBold(true).setColor(EnumChatFormat.GREEN).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText("Click to copy to clipboard"))).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.COPY_TO_CLIPBOARD, "final BlockPos " + s + " = new BlockPos(" + s1 + ");")));
 
             commandlistenerwrapper.sendMessage((new ChatComponentText("Position relative to " + s2 + ": ")).addSibling(ichatmutablecomponent), false);
             PacketDebug.a(worldserver, new BlockPosition(blockposition), s1, -2147418368, 10000);
@@ -305,7 +305,7 @@ public class GameTestHarnessTestCommand {
     private static int c(CommandListenerWrapper commandlistenerwrapper, String s) {
         java.nio.file.Path java_nio_file_path = Paths.get(GameTestHarnessStructures.a);
         MinecraftKey minecraftkey = new MinecraftKey("minecraft", s);
-        java.nio.file.Path java_nio_file_path1 = commandlistenerwrapper.getWorld().r_().a(minecraftkey, ".nbt");
+        java.nio.file.Path java_nio_file_path1 = commandlistenerwrapper.getWorld().n().a(minecraftkey, ".nbt");
         java.nio.file.Path java_nio_file_path2 = DebugReportNBT.a(java_nio_file_path1, s, java_nio_file_path);
 
         if (java_nio_file_path2 == null) {
@@ -328,7 +328,7 @@ public class GameTestHarnessTestCommand {
     private static int d(CommandListenerWrapper commandlistenerwrapper, String s) {
         java.nio.file.Path java_nio_file_path = Paths.get(GameTestHarnessStructures.a, s + ".snbt");
         MinecraftKey minecraftkey = new MinecraftKey("minecraft", s);
-        java.nio.file.Path java_nio_file_path1 = commandlistenerwrapper.getWorld().r_().a(minecraftkey, ".nbt");
+        java.nio.file.Path java_nio_file_path1 = commandlistenerwrapper.getWorld().n().a(minecraftkey, ".nbt");
 
         try {
             BufferedReader bufferedreader = Files.newBufferedReader(java_nio_file_path);
@@ -336,8 +336,28 @@ public class GameTestHarnessTestCommand {
 
             Files.createDirectories(java_nio_file_path1.getParent());
             OutputStream outputstream = Files.newOutputStream(java_nio_file_path1);
+            Throwable throwable = null;
 
-            NBTCompressedStreamTools.a(MojangsonParser.parse(s1), outputstream);
+            try {
+                NBTCompressedStreamTools.a(MojangsonParser.parse(s1), outputstream);
+            } catch (Throwable throwable1) {
+                throwable = throwable1;
+                throw throwable1;
+            } finally {
+                if (outputstream != null) {
+                    if (throwable != null) {
+                        try {
+                            outputstream.close();
+                        } catch (Throwable throwable2) {
+                            throwable.addSuppressed(throwable2);
+                        }
+                    } else {
+                        outputstream.close();
+                    }
+                }
+
+            }
+
             b(commandlistenerwrapper, "Imported to " + java_nio_file_path1.toAbsolutePath());
             return 0;
         } catch (CommandSyntaxException | IOException ioexception) {

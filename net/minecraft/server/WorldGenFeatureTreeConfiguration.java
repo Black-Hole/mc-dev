@@ -20,9 +20,9 @@ public class WorldGenFeatureTreeConfiguration implements WorldGenFeatureConfigur
             return worldgenfeaturetreeconfiguration.h;
         }), WorldGenFeatureTree.c.listOf().fieldOf("decorators").forGetter((worldgenfeaturetreeconfiguration) -> {
             return worldgenfeaturetreeconfiguration.d;
-        }), Codec.INT.fieldOf("max_water_depth").withDefault(0).forGetter((worldgenfeaturetreeconfiguration) -> {
+        }), Codec.INT.fieldOf("max_water_depth").orElse(0).forGetter((worldgenfeaturetreeconfiguration) -> {
             return worldgenfeaturetreeconfiguration.i;
-        }), Codec.BOOL.fieldOf("ignore_vines").withDefault(false).forGetter((worldgenfeaturetreeconfiguration) -> {
+        }), Codec.BOOL.fieldOf("ignore_vines").orElse(false).forGetter((worldgenfeaturetreeconfiguration) -> {
             return worldgenfeaturetreeconfiguration.j;
         }), HeightMap.Type.g.fieldOf("heightmap").forGetter((worldgenfeaturetreeconfiguration) -> {
             return worldgenfeaturetreeconfiguration.l;
@@ -51,7 +51,7 @@ public class WorldGenFeatureTreeConfiguration implements WorldGenFeatureConfigur
         this.l = heightmap_type;
     }
 
-    public void a() {
+    public void b() {
         this.e = true;
     }
 

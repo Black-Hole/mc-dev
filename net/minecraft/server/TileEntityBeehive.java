@@ -165,7 +165,7 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
                             }
 
                             if (tileentitybeehive_releasestatus == TileEntityBeehive.ReleaseStatus.HONEY_DELIVERED) {
-                                entitybee.fc();
+                                entitybee.fb();
                                 if (iblockdata.getBlock().a((Tag) TagsBlock.BEEHIVES)) {
                                     int i = a(iblockdata);
 
@@ -214,8 +214,8 @@ public class TileEntityBeehive extends TileEntity implements ITickable {
             entitybee.setAgeRaw(Math.max(0, j - i));
         }
 
-        entitybee.setLoveTicks(Math.max(0, entitybee.eR() - i));
-        entitybee.eP();
+        entitybee.setLoveTicks(Math.max(0, entitybee.eQ() - i));
+        entitybee.eO();
     }
 
     private boolean x() {

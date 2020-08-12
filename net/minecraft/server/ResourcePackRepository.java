@@ -15,16 +15,22 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
-public class ResourcePackRepository<T extends ResourcePackLoader> implements AutoCloseable {
+public class ResourcePackRepository implements AutoCloseable {
 
     private final Set<ResourcePackSource> a;
-    private Map<String, T> b = ImmutableMap.of();
-    private List<T> c = ImmutableList.of();
-    private final ResourcePackLoader.a<T> d;
+    private Map<String, ResourcePackLoader> b;
+    private List<ResourcePackLoader> c;
+    private final ResourcePackLoader.a d;
 
-    public ResourcePackRepository(ResourcePackLoader.a<T> resourcepackloader_a, ResourcePackSource... aresourcepacksource) {
+    public ResourcePackRepository(ResourcePackLoader.a resourcepackloader_a, ResourcePackSource... aresourcepacksource) {
+        this.b = ImmutableMap.of();
+        this.c = ImmutableList.of();
         this.d = resourcepackloader_a;
         this.a = ImmutableSet.copyOf(aresourcepacksource);
+    }
+
+    public ResourcePackRepository(ResourcePackSource... aresourcepacksource) {
+        this(ResourcePackLoader::new, aresourcepacksource);
     }
 
     public void a() {
@@ -35,8 +41,8 @@ public class ResourcePackRepository<T extends ResourcePackLoader> implements Aut
         this.c = this.b((Collection) list);
     }
 
-    private Map<String, T> g() {
-        Map<String, T> map = Maps.newTreeMap();
+    private Map<String, ResourcePackLoader> g() {
+        Map<String, ResourcePackLoader> map = Maps.newTreeMap();
         Iterator iterator = this.a.iterator();
 
         while (iterator.hasNext()) {
@@ -54,22 +60,22 @@ public class ResourcePackRepository<T extends ResourcePackLoader> implements Aut
         this.c = this.b(collection);
     }
 
-    private List<T> b(Collection<String> collection) {
-        List<T> list = (List) this.c(collection).collect(Collectors.toList());
+    private List<ResourcePackLoader> b(Collection<String> collection) {
+        List<ResourcePackLoader> list = (List) this.c(collection).collect(Collectors.toList());
         Iterator iterator = this.b.values().iterator();
 
         while (iterator.hasNext()) {
-            T t0 = (ResourcePackLoader) iterator.next();
+            ResourcePackLoader resourcepackloader = (ResourcePackLoader) iterator.next();
 
-            if (t0.f() && !list.contains(t0)) {
-                t0.h().a(list, t0, Functions.identity(), false);
+            if (resourcepackloader.f() && !list.contains(resourcepackloader)) {
+                resourcepackloader.h().a(list, resourcepackloader, Functions.identity(), false);
             }
         }
 
         return ImmutableList.copyOf(list);
     }
 
-    private Stream<T> c(Collection<String> collection) {
+    private Stream<ResourcePackLoader> c(Collection<String> collection) {
         Stream stream = collection.stream();
         Map map = this.b;
 
@@ -81,7 +87,7 @@ public class ResourcePackRepository<T extends ResourcePackLoader> implements Aut
         return this.b.keySet();
     }
 
-    public Collection<T> c() {
+    public Collection<ResourcePackLoader> c() {
         return this.b.values();
     }
 
@@ -89,12 +95,12 @@ public class ResourcePackRepository<T extends ResourcePackLoader> implements Aut
         return (Collection) this.c.stream().map(ResourcePackLoader::e).collect(ImmutableSet.toImmutableSet());
     }
 
-    public Collection<T> e() {
+    public Collection<ResourcePackLoader> e() {
         return this.c;
     }
 
     @Nullable
-    public T a(String s) {
+    public ResourcePackLoader a(String s) {
         return (ResourcePackLoader) this.b.get(s);
     }
 

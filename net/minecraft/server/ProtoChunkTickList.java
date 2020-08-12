@@ -59,7 +59,7 @@ public class ProtoChunkTickList<T> implements TickList<T> {
 
     @Override
     public void a(BlockPosition blockposition, T t0, int i, TickListPriority ticklistpriority) {
-        IChunkAccess.a(this.c, blockposition.getY() >> 4).add(ProtoChunk.k(blockposition));
+        IChunkAccess.a(this.c, blockposition.getY() >> 4).add(ProtoChunk.l(blockposition));
     }
 
     @Override

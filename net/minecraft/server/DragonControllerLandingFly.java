@@ -40,8 +40,8 @@ public class DragonControllerLandingFly extends AbstractDragonController {
     }
 
     private void j() {
-        if (this.c == null || this.c.b()) {
-            int i = this.a.eJ();
+        if (this.c == null || this.c.c()) {
+            int i = this.a.eI();
             BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.a);
             EntityHuman entityhuman = this.a.world.a(DragonControllerLandingFly.b, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
             int j;
@@ -49,9 +49,9 @@ public class DragonControllerLandingFly extends AbstractDragonController {
             if (entityhuman != null) {
                 Vec3D vec3d = (new Vec3D(entityhuman.locX(), 0.0D, entityhuman.locZ())).d();
 
-                j = this.a.o(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
+                j = this.a.p(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
             } else {
-                j = this.a.o(40.0D, (double) blockposition.getY(), 0.0D);
+                j = this.a.p(40.0D, (double) blockposition.getY(), 0.0D);
             }
 
             PathPoint pathpoint = new PathPoint(blockposition.getX(), blockposition.getY(), blockposition.getZ());
@@ -63,25 +63,25 @@ public class DragonControllerLandingFly extends AbstractDragonController {
         }
 
         this.k();
-        if (this.c != null && this.c.b()) {
+        if (this.c != null && this.c.c()) {
             this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.LANDING);
         }
 
     }
 
     private void k() {
-        if (this.c != null && !this.c.b()) {
-            BaseBlockPosition baseblockposition = this.c.g();
+        if (this.c != null && !this.c.c()) {
+            BlockPosition blockposition = this.c.g();
 
             this.c.a();
-            double d0 = (double) baseblockposition.getX();
-            double d1 = (double) baseblockposition.getZ();
+            double d0 = (double) blockposition.getX();
+            double d1 = (double) blockposition.getZ();
 
             double d2;
 
             do {
-                d2 = (double) ((float) baseblockposition.getY() + this.a.getRandom().nextFloat() * 20.0F);
-            } while (d2 < (double) baseblockposition.getY());
+                d2 = (double) ((float) blockposition.getY() + this.a.getRandom().nextFloat() * 20.0F);
+            } while (d2 < (double) blockposition.getY());
 
             this.d = new Vec3D(d0, d2, d1);
         }

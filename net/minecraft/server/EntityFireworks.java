@@ -101,7 +101,7 @@ public class EntityFireworks extends IProjectile {
             this.setMot(vec3d);
         }
 
-        MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, this::a, RayTrace.BlockCollisionOption.COLLIDER);
+        MovingObjectPosition movingobjectposition = ProjectileHelper.a((Entity) this, this::a);
 
         if (!this.noclip) {
             this.a(movingobjectposition);
@@ -195,7 +195,7 @@ public class EntityFireworks extends IProjectile {
                     }
 
                     if (flag) {
-                        float f1 = f * (float) Math.sqrt((5.0D - (double) this.g(entityliving)) / 5.0D);
+                        float f1 = f * (float) Math.sqrt((5.0D - (double) this.g((Entity) entityliving)) / 5.0D);
 
                         entityliving.damageEntity(DamageSource.a(this, this.getShooter()), f1);
                     }
@@ -245,12 +245,12 @@ public class EntityFireworks extends IProjectile {
     }
 
     @Override
-    public boolean bH() {
+    public boolean bK() {
         return false;
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

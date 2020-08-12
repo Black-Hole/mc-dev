@@ -6,18 +6,26 @@ import com.mojang.serialization.Codec;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 public class WorldChunkManagerHell extends WorldChunkManager {
 
-    public static final Codec<WorldChunkManagerHell> e = IRegistry.BIOME.fieldOf("biome").xmap(WorldChunkManagerHell::new, (worldchunkmanagerhell) -> {
+    public static final Codec<WorldChunkManagerHell> e = BiomeBase.d.fieldOf("biome").xmap(WorldChunkManagerHell::new, (worldchunkmanagerhell) -> {
         return worldchunkmanagerhell.f;
     }).stable().codec();
-    private final BiomeBase f;
+    private final Supplier<BiomeBase> f;
 
     public WorldChunkManagerHell(BiomeBase biomebase) {
-        super(ImmutableList.of(biomebase));
-        this.f = biomebase;
+        this(() -> {
+            return biomebase;
+        });
+    }
+
+    public WorldChunkManagerHell(Supplier<BiomeBase> supplier) {
+        super((List) ImmutableList.of(supplier.get()));
+        this.f = supplier;
     }
 
     @Override
@@ -27,17 +35,17 @@ public class WorldChunkManagerHell extends WorldChunkManager {
 
     @Override
     public BiomeBase getBiome(int i, int j, int k) {
-        return this.f;
+        return (BiomeBase) this.f.get();
     }
 
     @Nullable
     @Override
-    public BlockPosition a(int i, int j, int k, int l, int i1, List<BiomeBase> list, Random random, boolean flag) {
-        return list.contains(this.f) ? (flag ? new BlockPosition(i, j, k) : new BlockPosition(i - l + random.nextInt(l * 2 + 1), j, k - l + random.nextInt(l * 2 + 1))) : null;
+    public BlockPosition a(int i, int j, int k, int l, int i1, Predicate<BiomeBase> predicate, Random random, boolean flag) {
+        return predicate.test(this.f.get()) ? (flag ? new BlockPosition(i, j, k) : new BlockPosition(i - l + random.nextInt(l * 2 + 1), j, k - l + random.nextInt(l * 2 + 1))) : null;
     }
 
     @Override
     public Set<BiomeBase> a(int i, int j, int k, int l) {
-        return Sets.newHashSet(new BiomeBase[]{this.f});
+        return Sets.newHashSet(new BiomeBase[]{(BiomeBase) this.f.get()});
     }
 }

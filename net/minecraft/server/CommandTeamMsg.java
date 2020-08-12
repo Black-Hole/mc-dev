@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CommandTeamMsg {
 
-    private static final ChatModifier a = ChatModifier.b.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatMessage("chat.type.team.hover"))).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, "/teammsg "));
+    private static final ChatModifier a = ChatModifier.a.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatMessage("chat.type.team.hover"))).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, "/teammsg "));
     private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.teammsg.failed.noteam"));
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {

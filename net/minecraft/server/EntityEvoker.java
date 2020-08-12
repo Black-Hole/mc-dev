@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 public class EntityEvoker extends EntityIllagerWizard {
 
-    private EntitySheep bv;
+    private EntitySheep bo;
 
     public EntityEvoker(EntityTypes<? extends EntityEvoker> entitytypes, World world) {
         super(entitytypes, world);
@@ -30,8 +30,8 @@ public class EntityEvoker extends EntityIllagerWizard {
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, false));
     }
 
-    public static AttributeProvider.Builder eL() {
-        return EntityMonster.eS().a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.FOLLOW_RANGE, 12.0D).a(GenericAttributes.MAX_HEALTH, 24.0D);
+    public static AttributeProvider.Builder eK() {
+        return EntityMonster.eR().a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.FOLLOW_RANGE, 12.0D).a(GenericAttributes.MAX_HEALTH, 24.0D);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class EntityEvoker extends EntityIllagerWizard {
     }
 
     @Override
-    public SoundEffect eM() {
+    public SoundEffect eL() {
         return SoundEffects.ENTITY_EVOKER_CELEBRATE;
     }
 
@@ -61,7 +61,7 @@ public class EntityEvoker extends EntityIllagerWizard {
 
     @Override
     public boolean r(Entity entity) {
-        return entity == null ? false : (entity == this ? true : (super.r(entity) ? true : (entity instanceof EntityVex ? this.r(((EntityVex) entity).eL()) : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.getScoreboardTeam() == null && entity.getScoreboardTeam() == null : false))));
+        return entity == null ? false : (entity == this ? true : (super.r(entity) ? true : (entity instanceof EntityVex ? this.r(((EntityVex) entity).eK()) : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.getScoreboardTeam() == null && entity.getScoreboardTeam() == null : false))));
     }
 
     @Override
@@ -80,12 +80,12 @@ public class EntityEvoker extends EntityIllagerWizard {
     }
 
     private void a(@Nullable EntitySheep entitysheep) {
-        this.bv = entitysheep;
+        this.bo = entitysheep;
     }
 
     @Nullable
-    private EntitySheep fh() {
-        return this.bv;
+    private EntitySheep fg() {
+        return this.bo;
     }
 
     @Override
@@ -110,7 +110,7 @@ public class EntityEvoker extends EntityIllagerWizard {
         public boolean a() {
             if (EntityEvoker.this.getGoalTarget() != null) {
                 return false;
-            } else if (EntityEvoker.this.eX()) {
+            } else if (EntityEvoker.this.eW()) {
                 return false;
             } else if (EntityEvoker.this.ticksLived < this.c) {
                 return false;
@@ -130,7 +130,7 @@ public class EntityEvoker extends EntityIllagerWizard {
 
         @Override
         public boolean b() {
-            return EntityEvoker.this.fh() != null && this.b > 0;
+            return EntityEvoker.this.fg() != null && this.b > 0;
         }
 
         @Override
@@ -141,7 +141,7 @@ public class EntityEvoker extends EntityIllagerWizard {
 
         @Override
         protected void j() {
-            EntitySheep entitysheep = EntityEvoker.this.fh();
+            EntitySheep entitysheep = EntityEvoker.this.fg();
 
             if (entitysheep != null && entitysheep.isAlive()) {
                 entitysheep.setColor(EnumColor.RED);
@@ -207,16 +207,18 @@ public class EntityEvoker extends EntityIllagerWizard {
 
         @Override
         protected void j() {
+            WorldServer worldserver = (WorldServer) EntityEvoker.this.world;
+
             for (int i = 0; i < 3; ++i) {
                 BlockPosition blockposition = EntityEvoker.this.getChunkCoordinates().b(-2 + EntityEvoker.this.random.nextInt(5), 1, -2 + EntityEvoker.this.random.nextInt(5));
                 EntityVex entityvex = (EntityVex) EntityTypes.VEX.a(EntityEvoker.this.world);
 
                 entityvex.setPositionRotation(blockposition, 0.0F, 0.0F);
-                entityvex.prepare(EntityEvoker.this.world, EntityEvoker.this.world.getDamageScaler(blockposition), EnumMobSpawn.MOB_SUMMONED, (GroupDataEntity) null, (NBTTagCompound) null);
+                entityvex.prepare(worldserver, EntityEvoker.this.world.getDamageScaler(blockposition), EnumMobSpawn.MOB_SUMMONED, (GroupDataEntity) null, (NBTTagCompound) null);
                 entityvex.a((EntityInsentient) EntityEvoker.this);
                 entityvex.g(blockposition);
                 entityvex.a(20 * (30 + EntityEvoker.this.random.nextInt(90)));
-                EntityEvoker.this.world.addEntity(entityvex);
+                worldserver.addAllEntities(entityvex);
             }
 
         }
@@ -331,9 +333,9 @@ public class EntityEvoker extends EntityIllagerWizard {
         @Override
         public void e() {
             if (EntityEvoker.this.getGoalTarget() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.ep(), (float) EntityEvoker.this.eo());
-            } else if (EntityEvoker.this.fh() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.fh(), (float) EntityEvoker.this.ep(), (float) EntityEvoker.this.eo());
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.eo(), (float) EntityEvoker.this.O());
+            } else if (EntityEvoker.this.fg() != null) {
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.fg(), (float) EntityEvoker.this.eo(), (float) EntityEvoker.this.O());
             }
 
         }

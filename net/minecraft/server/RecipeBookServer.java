@@ -25,7 +25,7 @@ public class RecipeBookServer extends RecipeBook {
             IRecipe<?> irecipe = (IRecipe) iterator.next();
             MinecraftKey minecraftkey = irecipe.getKey();
 
-            if (!this.a.contains(minecraftkey) && !irecipe.isComplex()) {
+            if (!this.recipes.contains(minecraftkey) && !irecipe.isComplex()) {
                 this.a(minecraftkey);
                 this.d(minecraftkey);
                 list.add(minecraftkey);
@@ -47,7 +47,7 @@ public class RecipeBookServer extends RecipeBook {
             IRecipe<?> irecipe = (IRecipe) iterator.next();
             MinecraftKey minecraftkey = irecipe.getKey();
 
-            if (this.a.contains(minecraftkey)) {
+            if (this.recipes.contains(minecraftkey)) {
                 this.c(minecraftkey);
                 list.add(minecraftkey);
                 ++i;
@@ -59,22 +59,15 @@ public class RecipeBookServer extends RecipeBook {
     }
 
     private void a(PacketPlayOutRecipes.Action packetplayoutrecipes_action, EntityPlayer entityplayer, List<MinecraftKey> list) {
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(packetplayoutrecipes_action, list, Collections.emptyList(), this.c, this.d, this.e, this.f));
+        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(packetplayoutrecipes_action, list, Collections.emptyList(), this.a()));
     }
 
     public NBTTagCompound save() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        nbttagcompound.setBoolean("isGuiOpen", this.c);
-        nbttagcompound.setBoolean("isFilteringCraftable", this.d);
-        nbttagcompound.setBoolean("isFurnaceGuiOpen", this.e);
-        nbttagcompound.setBoolean("isFurnaceFilteringCraftable", this.f);
-        nbttagcompound.setBoolean("isBlastingFurnaceGuiOpen", this.g);
-        nbttagcompound.setBoolean("isBlastingFurnaceFilteringCraftable", this.h);
-        nbttagcompound.setBoolean("isSmokerGuiOpen", this.i);
-        nbttagcompound.setBoolean("isSmokerFilteringCraftable", this.j);
+        this.a().b(nbttagcompound);
         NBTTagList nbttaglist = new NBTTagList();
-        Iterator iterator = this.a.iterator();
+        Iterator iterator = this.recipes.iterator();
 
         while (iterator.hasNext()) {
             MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
@@ -84,7 +77,7 @@ public class RecipeBookServer extends RecipeBook {
 
         nbttagcompound.set("recipes", nbttaglist);
         NBTTagList nbttaglist1 = new NBTTagList();
-        Iterator iterator1 = this.b.iterator();
+        Iterator iterator1 = this.toBeDisplayed.iterator();
 
         while (iterator1.hasNext()) {
             MinecraftKey minecraftkey1 = (MinecraftKey) iterator1.next();
@@ -97,14 +90,7 @@ public class RecipeBookServer extends RecipeBook {
     }
 
     public void a(NBTTagCompound nbttagcompound, CraftingManager craftingmanager) {
-        this.c = nbttagcompound.getBoolean("isGuiOpen");
-        this.d = nbttagcompound.getBoolean("isFilteringCraftable");
-        this.e = nbttagcompound.getBoolean("isFurnaceGuiOpen");
-        this.f = nbttagcompound.getBoolean("isFurnaceFilteringCraftable");
-        this.g = nbttagcompound.getBoolean("isBlastingFurnaceGuiOpen");
-        this.h = nbttagcompound.getBoolean("isBlastingFurnaceFilteringCraftable");
-        this.i = nbttagcompound.getBoolean("isSmokerGuiOpen");
-        this.j = nbttagcompound.getBoolean("isSmokerFilteringCraftable");
+        this.a(RecipeBookSettings.a(nbttagcompound));
         NBTTagList nbttaglist = nbttagcompound.getList("recipes", 8);
 
         this.a(nbttaglist, this::a, craftingmanager);
@@ -119,7 +105,7 @@ public class RecipeBookServer extends RecipeBook {
 
             try {
                 MinecraftKey minecraftkey = new MinecraftKey(s);
-                Optional<? extends IRecipe<?>> optional = craftingmanager.a(minecraftkey);
+                Optional<? extends IRecipe<?>> optional = craftingmanager.getRecipe(minecraftkey);
 
                 if (!optional.isPresent()) {
                     RecipeBookServer.LOGGER.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey);
@@ -134,6 +120,6 @@ public class RecipeBookServer extends RecipeBook {
     }
 
     public void a(EntityPlayer entityplayer) {
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(PacketPlayOutRecipes.Action.INIT, this.a, this.b, this.c, this.d, this.e, this.f));
+        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(PacketPlayOutRecipes.Action.INIT, this.recipes, this.toBeDisplayed, this.a()));
     }
 }

@@ -15,26 +15,26 @@ public class EntityFishingHook extends IProjectile {
     private static final DataWatcherObject<Integer> e = DataWatcher.a(EntityFishingHook.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Boolean> f = DataWatcher.a(EntityFishingHook.class, DataWatcherRegistry.i);
     private int g;
-    private int an;
-    private int ao;
-    private int ap;
-    private float aq;
-    private boolean ar;
+    private int ag;
+    private int ah;
+    private int ai;
+    private float aj;
+    private boolean ak;
     private Entity hooked;
-    private EntityFishingHook.HookState at;
-    private final int au;
-    private final int av;
+    private EntityFishingHook.HookState am;
+    private final int an;
+    private final int ao;
 
     private EntityFishingHook(World world, EntityHuman entityhuman, int i, int j) {
         super(EntityTypes.FISHING_BOBBER, world);
         this.b = new Random();
-        this.ar = true;
-        this.at = EntityFishingHook.HookState.FLYING;
-        this.ac = true;
+        this.ak = true;
+        this.am = EntityFishingHook.HookState.FLYING;
+        this.Y = true;
         this.setShooter(entityhuman);
         entityhuman.hookedFish = this;
-        this.au = Math.max(0, i);
-        this.av = Math.max(0, j);
+        this.an = Math.max(0, i);
+        this.ao = Math.max(0, j);
     }
 
     public EntityFishingHook(EntityHuman entityhuman, World world, int i, int j) {
@@ -56,7 +56,7 @@ public class EntityFishingHook extends IProjectile {
         vec3d = vec3d.d(0.6D / d3 + 0.5D + this.random.nextGaussian() * 0.0045D, 0.6D / d3 + 0.5D + this.random.nextGaussian() * 0.0045D, 0.6D / d3 + 0.5D + this.random.nextGaussian() * 0.0045D);
         this.setMot(vec3d);
         this.yaw = (float) (MathHelper.d(vec3d.x, vec3d.z) * 57.2957763671875D);
-        this.pitch = (float) (MathHelper.d(vec3d.y, (double) MathHelper.sqrt(b(vec3d))) * 57.2957763671875D);
+        this.pitch = (float) (MathHelper.d(vec3d.y, (double) MathHelper.sqrt(c(vec3d))) * 57.2957763671875D);
         this.lastYaw = this.yaw;
         this.lastPitch = this.pitch;
     }
@@ -114,26 +114,26 @@ public class EntityFishingHook extends IProjectile {
 
             boolean flag = f > 0.0F;
 
-            if (this.at == EntityFishingHook.HookState.FLYING) {
+            if (this.am == EntityFishingHook.HookState.FLYING) {
                 if (this.hooked != null) {
                     this.setMot(Vec3D.a);
-                    this.at = EntityFishingHook.HookState.HOOKED_IN_ENTITY;
+                    this.am = EntityFishingHook.HookState.HOOKED_IN_ENTITY;
                     return;
                 }
 
                 if (flag) {
                     this.setMot(this.getMot().d(0.3D, 0.2D, 0.3D));
-                    this.at = EntityFishingHook.HookState.BOBBING;
+                    this.am = EntityFishingHook.HookState.BOBBING;
                     return;
                 }
 
                 this.m();
             } else {
-                if (this.at == EntityFishingHook.HookState.HOOKED_IN_ENTITY) {
+                if (this.am == EntityFishingHook.HookState.HOOKED_IN_ENTITY) {
                     if (this.hooked != null) {
                         if (this.hooked.dead) {
                             this.hooked = null;
-                            this.at = EntityFishingHook.HookState.FLYING;
+                            this.am = EntityFishingHook.HookState.FLYING;
                         } else {
                             this.setPosition(this.hooked.locX(), this.hooked.e(0.8D), this.hooked.locZ());
                         }
@@ -142,7 +142,7 @@ public class EntityFishingHook extends IProjectile {
                     return;
                 }
 
-                if (this.at == EntityFishingHook.HookState.BOBBING) {
+                if (this.am == EntityFishingHook.HookState.BOBBING) {
                     Vec3D vec3d = this.getMot();
                     double d0 = this.locY() + vec3d.y - (double) blockposition.getY() - (double) f;
 
@@ -151,10 +151,10 @@ public class EntityFishingHook extends IProjectile {
                     }
 
                     this.setMot(vec3d.x * 0.9D, vec3d.y - d0 * (double) this.random.nextFloat() * 0.2D, vec3d.z * 0.9D);
-                    if (this.an <= 0 && this.ap <= 0) {
-                        this.ar = true;
+                    if (this.ag <= 0 && this.ai <= 0) {
+                        this.ak = true;
                     } else {
-                        this.ar = this.ar && this.d < 10 && this.b(blockposition);
+                        this.ak = this.ak && this.d < 10 && this.b(blockposition);
                     }
 
                     if (flag) {
@@ -178,14 +178,14 @@ public class EntityFishingHook extends IProjectile {
 
             this.move(EnumMoveType.SELF, this.getMot());
             this.x();
-            if (this.at == EntityFishingHook.HookState.FLYING && (this.onGround || this.positionChanged)) {
+            if (this.am == EntityFishingHook.HookState.FLYING && (this.onGround || this.positionChanged)) {
                 this.setMot(Vec3D.a);
             }
 
             double d1 = 0.92D;
 
             this.setMot(this.getMot().a(0.92D));
-            this.ac();
+            this.ae();
         }
     }
 
@@ -204,7 +204,7 @@ public class EntityFishingHook extends IProjectile {
     }
 
     private void m() {
-        MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, this::a, RayTrace.BlockCollisionOption.COLLIDER);
+        MovingObjectPosition movingobjectposition = ProjectileHelper.a((Entity) this, this::a);
 
         this.a(movingobjectposition);
     }
@@ -243,15 +243,15 @@ public class EntityFishingHook extends IProjectile {
             ++i;
         }
 
-        if (this.random.nextFloat() < 0.5F && !this.world.f(blockposition1)) {
+        if (this.random.nextFloat() < 0.5F && !this.world.e(blockposition1)) {
             --i;
         }
 
-        if (this.an > 0) {
-            --this.an;
-            if (this.an <= 0) {
-                this.ao = 0;
-                this.ap = 0;
+        if (this.ag > 0) {
+            --this.ag;
+            if (this.ag <= 0) {
+                this.ah = 0;
+                this.ai = 0;
                 this.getDataWatcher().set(EntityFishingHook.f, false);
             }
         } else {
@@ -263,16 +263,16 @@ public class EntityFishingHook extends IProjectile {
             double d2;
             IBlockData iblockdata;
 
-            if (this.ap > 0) {
-                this.ap -= i;
-                if (this.ap > 0) {
-                    this.aq = (float) ((double) this.aq + this.random.nextGaussian() * 4.0D);
-                    f = this.aq * 0.017453292F;
+            if (this.ai > 0) {
+                this.ai -= i;
+                if (this.ai > 0) {
+                    this.aj = (float) ((double) this.aj + this.random.nextGaussian() * 4.0D);
+                    f = this.aj * 0.017453292F;
                     f1 = MathHelper.sin(f);
                     f2 = MathHelper.cos(f);
-                    d0 = this.locX() + (double) (f1 * (float) this.ap * 0.1F);
+                    d0 = this.locX() + (double) (f1 * (float) this.ai * 0.1F);
                     d1 = (double) ((float) MathHelper.floor(this.locY()) + 1.0F);
-                    d2 = this.locZ() + (double) (f2 * (float) this.ap * 0.1F);
+                    d2 = this.locZ() + (double) (f2 * (float) this.ai * 0.1F);
                     iblockdata = worldserver.getType(new BlockPosition(d0, d1 - 1.0D, d2));
                     if (iblockdata.a(Blocks.WATER)) {
                         if (this.random.nextFloat() < 0.15F) {
@@ -291,18 +291,18 @@ public class EntityFishingHook extends IProjectile {
 
                     worldserver.a(Particles.BUBBLE, this.locX(), d3, this.locZ(), (int) (1.0F + this.getWidth() * 20.0F), (double) this.getWidth(), 0.0D, (double) this.getWidth(), 0.20000000298023224D);
                     worldserver.a(Particles.FISHING, this.locX(), d3, this.locZ(), (int) (1.0F + this.getWidth() * 20.0F), (double) this.getWidth(), 0.0D, (double) this.getWidth(), 0.20000000298023224D);
-                    this.an = MathHelper.nextInt(this.random, 20, 40);
+                    this.ag = MathHelper.nextInt(this.random, 20, 40);
                     this.getDataWatcher().set(EntityFishingHook.f, true);
                 }
-            } else if (this.ao > 0) {
-                this.ao -= i;
+            } else if (this.ah > 0) {
+                this.ah -= i;
                 f = 0.15F;
-                if (this.ao < 20) {
-                    f = (float) ((double) f + (double) (20 - this.ao) * 0.05D);
-                } else if (this.ao < 40) {
-                    f = (float) ((double) f + (double) (40 - this.ao) * 0.02D);
-                } else if (this.ao < 60) {
-                    f = (float) ((double) f + (double) (60 - this.ao) * 0.01D);
+                if (this.ah < 20) {
+                    f = (float) ((double) f + (double) (20 - this.ah) * 0.05D);
+                } else if (this.ah < 40) {
+                    f = (float) ((double) f + (double) (40 - this.ah) * 0.02D);
+                } else if (this.ah < 60) {
+                    f = (float) ((double) f + (double) (60 - this.ah) * 0.01D);
                 }
 
                 if (this.random.nextFloat() < f) {
@@ -317,13 +317,13 @@ public class EntityFishingHook extends IProjectile {
                     }
                 }
 
-                if (this.ao <= 0) {
-                    this.aq = MathHelper.a(this.random, 0.0F, 360.0F);
-                    this.ap = MathHelper.nextInt(this.random, 20, 80);
+                if (this.ah <= 0) {
+                    this.aj = MathHelper.a(this.random, 0.0F, 360.0F);
+                    this.ai = MathHelper.nextInt(this.random, 20, 80);
                 }
             } else {
-                this.ao = MathHelper.nextInt(this.random, 100, 600);
-                this.ao -= this.av * 20 * 5;
+                this.ah = MathHelper.nextInt(this.random, 100, 600);
+                this.ah -= this.ao * 20 * 5;
             }
         }
 
@@ -374,7 +374,7 @@ public class EntityFishingHook extends IProjectile {
     }
 
     public boolean g() {
-        return this.ar;
+        return this.ak;
     }
 
     @Override
@@ -394,8 +394,8 @@ public class EntityFishingHook extends IProjectile {
                 CriterionTriggers.D.a((EntityPlayer) entityhuman, itemstack, this, (Collection) Collections.emptyList());
                 this.world.broadcastEntityEffect(this, (byte) 31);
                 i = this.hooked instanceof EntityItem ? 3 : 5;
-            } else if (this.an > 0) {
-                LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).set(LootContextParameters.POSITION, this.getChunkCoordinates()).set(LootContextParameters.TOOL, itemstack).set(LootContextParameters.THIS_ENTITY, this).a(this.random).a((float) this.au + entityhuman.eU());
+            } else if (this.ag > 0) {
+                LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).set(LootContextParameters.ORIGIN, this.getPositionVector()).set(LootContextParameters.TOOL, itemstack).set(LootContextParameters.THIS_ENTITY, this).a(this.random).a((float) this.an + entityhuman.eT());
                 LootTable loottable = this.world.getMinecraftServer().getLootTableRegistry().getLootTable(LootTables.ag);
                 List<ItemStack> list = loottable.populateLoot(loottableinfo_builder.build(LootContextParameterSets.FISHING));
 
@@ -476,7 +476,7 @@ public class EntityFishingHook extends IProjectile {
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         Entity entity = this.getShooter();
 
         return new PacketPlayOutSpawnEntity(this, entity == null ? this.getId() : entity.getId());

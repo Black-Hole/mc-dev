@@ -112,7 +112,7 @@ public class ChunkProviderServer extends IChunkProvider {
                 return ichunkaccess1;
             }, (playerchunk_failure) -> {
                 if (flag) {
-                    throw (IllegalStateException) SystemUtils.c(new IllegalStateException("Chunk not there when requested: " + playerchunk_failure));
+                    throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException("Chunk not there when requested: " + playerchunk_failure)));
                 } else {
                     return null;
                 }
@@ -186,7 +186,7 @@ public class ChunkProviderServer extends IChunkProvider {
                 playerchunk = this.getChunk(k);
                 gameprofilerfiller.exit();
                 if (this.a(playerchunk, l)) {
-                    throw (IllegalStateException) SystemUtils.c(new IllegalStateException("No chunk holder after ticket has been added"));
+                    throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException("No chunk holder after ticket has been added")));
                 }
             }
         }
@@ -324,7 +324,7 @@ public class ChunkProviderServer extends IChunkProvider {
 
             this.world.getMethodProfiler().enter("naturalSpawnCount");
             int l = this.chunkMapDistance.b();
-            SpawnerCreature.d spawnercreature_d = SpawnerCreature.a(l, this.world.z(), this::a);
+            SpawnerCreature.d spawnercreature_d = SpawnerCreature.a(l, this.world.A(), this::a);
 
             this.p = spawnercreature_d;
             this.world.getMethodProfiler().exit();
@@ -383,7 +383,7 @@ public class ChunkProviderServer extends IChunkProvider {
 
     @VisibleForTesting
     public int f() {
-        return this.serverThreadQueue.bg();
+        return this.serverThreadQueue.bh();
     }
 
     public ChunkGenerator getChunkGenerator() {
@@ -400,7 +400,7 @@ public class ChunkProviderServer extends IChunkProvider {
         PlayerChunk playerchunk = this.getChunk(ChunkCoordIntPair.pair(i, j));
 
         if (playerchunk != null) {
-            playerchunk.a(blockposition.getX() & 15, blockposition.getY(), blockposition.getZ() & 15);
+            playerchunk.a(blockposition);
         }
 
     }

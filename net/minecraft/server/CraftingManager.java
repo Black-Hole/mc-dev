@@ -100,7 +100,7 @@ public class CraftingManager extends ResourceDataJson {
         }
     }
 
-    public Optional<? extends IRecipe<?>> a(MinecraftKey minecraftkey) {
+    public Optional<? extends IRecipe<?>> getRecipe(MinecraftKey minecraftkey) {
         return this.recipes.values().stream().map((map) -> {
             return (IRecipe) map.get(minecraftkey);
         }).filter(Objects::nonNull).findFirst();

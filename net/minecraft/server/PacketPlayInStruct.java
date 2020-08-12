@@ -27,8 +27,12 @@ public class PacketPlayInStruct implements Packet<PacketListenerPlayIn> {
         this.b = (TileEntityStructure.UpdateType) packetdataserializer.a(TileEntityStructure.UpdateType.class);
         this.c = (BlockPropertyStructureMode) packetdataserializer.a(BlockPropertyStructureMode.class);
         this.d = packetdataserializer.e(32767);
-        this.e = new BlockPosition(MathHelper.clamp(packetdataserializer.readByte(), -32, 32), MathHelper.clamp(packetdataserializer.readByte(), -32, 32), MathHelper.clamp(packetdataserializer.readByte(), -32, 32));
-        this.f = new BlockPosition(MathHelper.clamp(packetdataserializer.readByte(), 0, 32), MathHelper.clamp(packetdataserializer.readByte(), 0, 32), MathHelper.clamp(packetdataserializer.readByte(), 0, 32));
+        boolean flag = true;
+
+        this.e = new BlockPosition(MathHelper.clamp(packetdataserializer.readByte(), -48, 48), MathHelper.clamp(packetdataserializer.readByte(), -48, 48), MathHelper.clamp(packetdataserializer.readByte(), -48, 48));
+        boolean flag1 = true;
+
+        this.f = new BlockPosition(MathHelper.clamp(packetdataserializer.readByte(), 0, 48), MathHelper.clamp(packetdataserializer.readByte(), 0, 48), MathHelper.clamp(packetdataserializer.readByte(), 0, 48));
         this.g = (EnumBlockMirror) packetdataserializer.a(EnumBlockMirror.class);
         this.h = (EnumBlockRotation) packetdataserializer.a(EnumBlockRotation.class);
         this.i = packetdataserializer.e(12);

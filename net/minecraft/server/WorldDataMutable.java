@@ -8,9 +8,12 @@ public interface WorldDataMutable extends WorldData {
 
     void d(int i);
 
-    default void setSpawn(BlockPosition blockposition) {
+    void a(float f);
+
+    default void setSpawn(BlockPosition blockposition, float f) {
         this.b(blockposition.getX());
         this.c(blockposition.getY());
         this.d(blockposition.getZ());
+        this.a(f);
     }
 }

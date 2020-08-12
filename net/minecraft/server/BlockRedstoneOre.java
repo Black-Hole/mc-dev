@@ -58,12 +58,12 @@ public class BlockRedstoneOre extends Block {
     }
 
     @Override
-    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, ItemStack itemstack) {
-        super.dropNaturally(iblockdata, world, blockposition, itemstack);
+    public void dropNaturally(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, ItemStack itemstack) {
+        super.dropNaturally(iblockdata, worldserver, blockposition, itemstack);
         if (EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) == 0) {
-            int i = 1 + world.random.nextInt(5);
+            int i = 1 + worldserver.random.nextInt(5);
 
-            this.dropExperience(world, blockposition, i);
+            this.dropExperience(worldserver, blockposition, i);
         }
 
     }

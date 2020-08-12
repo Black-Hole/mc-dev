@@ -14,8 +14,8 @@ import javax.annotation.Nullable;
 
 public class ChatModifier {
 
-    public static final MinecraftKey a = new MinecraftKey("minecraft", "default");
-    public static final ChatModifier b = new ChatModifier((ChatHexColor) null, (Boolean) null, (Boolean) null, (Boolean) null, (Boolean) null, (Boolean) null, (ChatClickable) null, (ChatHoverable) null, (String) null, (MinecraftKey) null);
+    public static final ChatModifier a = new ChatModifier((ChatHexColor) null, (Boolean) null, (Boolean) null, (Boolean) null, (Boolean) null, (Boolean) null, (ChatClickable) null, (ChatHoverable) null, (String) null, (MinecraftKey) null);
+    public static final MinecraftKey b = new MinecraftKey("minecraft", "default");
     @Nullable
     private final ChatHexColor color;
     @Nullable
@@ -76,7 +76,7 @@ public class ChatModifier {
     }
 
     public boolean g() {
-        return this == ChatModifier.b;
+        return this == ChatModifier.a;
     }
 
     @Nullable
@@ -95,7 +95,7 @@ public class ChatModifier {
     }
 
     public MinecraftKey getFont() {
-        return this.font != null ? this.font : ChatModifier.a;
+        return this.font != null ? this.font : ChatModifier.b;
     }
 
     public ChatModifier setColor(@Nullable ChatHexColor chathexcolor) {
@@ -151,7 +151,7 @@ public class ChatModifier {
                 obool1 = true;
                 break;
             case RESET:
-                return ChatModifier.b;
+                return ChatModifier.a;
             default:
                 chathexcolor = ChatHexColor.a(enumchatformat);
         }
@@ -189,7 +189,7 @@ public class ChatModifier {
                     obool1 = true;
                     break;
                 case RESET:
-                    return ChatModifier.b;
+                    return ChatModifier.a;
                 default:
                     chathexcolor = ChatHexColor.a(enumchatformat);
             }
@@ -199,7 +199,7 @@ public class ChatModifier {
     }
 
     public ChatModifier setChatModifier(ChatModifier chatmodifier) {
-        return this == ChatModifier.b ? chatmodifier : (chatmodifier == ChatModifier.b ? this : new ChatModifier(this.color != null ? this.color : chatmodifier.color, this.bold != null ? this.bold : chatmodifier.bold, this.italic != null ? this.italic : chatmodifier.italic, this.underlined != null ? this.underlined : chatmodifier.underlined, this.strikethrough != null ? this.strikethrough : chatmodifier.strikethrough, this.obfuscated != null ? this.obfuscated : chatmodifier.obfuscated, this.clickEvent != null ? this.clickEvent : chatmodifier.clickEvent, this.hoverEvent != null ? this.hoverEvent : chatmodifier.hoverEvent, this.insertion != null ? this.insertion : chatmodifier.insertion, this.font != null ? this.font : chatmodifier.font));
+        return this == ChatModifier.a ? chatmodifier : (chatmodifier == ChatModifier.a ? this : new ChatModifier(this.color != null ? this.color : chatmodifier.color, this.bold != null ? this.bold : chatmodifier.bold, this.italic != null ? this.italic : chatmodifier.italic, this.underlined != null ? this.underlined : chatmodifier.underlined, this.strikethrough != null ? this.strikethrough : chatmodifier.strikethrough, this.obfuscated != null ? this.obfuscated : chatmodifier.obfuscated, this.clickEvent != null ? this.clickEvent : chatmodifier.clickEvent, this.hoverEvent != null ? this.hoverEvent : chatmodifier.hoverEvent, this.insertion != null ? this.insertion : chatmodifier.insertion, this.font != null ? this.font : chatmodifier.font));
     }
 
     public String toString() {

@@ -3,8 +3,7 @@ package net.minecraft.server;
 public class ContainerCartography extends Container {
 
     private final ContainerAccess containerAccess;
-    private boolean e;
-    private long f;
+    private long e;
     public final IInventory inventory;
     private final InventoryCraftResult resultInventory;
 
@@ -50,41 +49,16 @@ public class ContainerCartography extends Container {
             }
 
             @Override
-            public ItemStack a(int j) {
-                ItemStack itemstack = super.a(j);
-                ItemStack itemstack1 = (ItemStack) containeraccess.a((world, blockposition) -> {
-                    if (!ContainerCartography.this.e && ContainerCartography.this.inventory.getItem(1).getItem() == Items.dP) {
-                        ItemStack itemstack2 = ItemWorldMap.a(world, ContainerCartography.this.inventory.getItem(0));
-
-                        if (itemstack2 != null) {
-                            itemstack2.setCount(1);
-                            return itemstack2;
-                        }
-                    }
-
-                    return itemstack;
-                }).orElse(itemstack);
-
-                ContainerCartography.this.inventory.splitStack(0, 1);
-                ContainerCartography.this.inventory.splitStack(1, 1);
-                return itemstack1;
-            }
-
-            @Override
-            protected void a(ItemStack itemstack, int j) {
-                this.a(j);
-                super.a(itemstack, j);
-            }
-
-            @Override
             public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
+                ((Slot) ContainerCartography.this.slots.get(0)).a(1);
+                ((Slot) ContainerCartography.this.slots.get(1)).a(1);
                 itemstack.getItem().b(itemstack, entityhuman.world, entityhuman);
                 containeraccess.a((world, blockposition) -> {
                     long j = world.getTime();
 
-                    if (ContainerCartography.this.f != j) {
+                    if (ContainerCartography.this.e != j) {
                         world.playSound((EntityHuman) null, blockposition, SoundEffects.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                        ContainerCartography.this.f = j;
+                        ContainerCartography.this.e = j;
                     }
 
                 });
@@ -141,6 +115,7 @@ public class ContainerCartography extends Container {
                 } else if (item == Items.dP && !worldmap.locked) {
                     itemstack3 = itemstack.cloneItemStack();
                     itemstack3.setCount(1);
+                    itemstack3.getOrCreateTag().setBoolean("map_to_lock", true);
                     this.c();
                 } else {
                     if (item != Items.MAP) {
@@ -175,30 +150,16 @@ public class ContainerCartography extends Container {
 
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
-            ItemStack itemstack2 = itemstack1;
             Item item = itemstack1.getItem();
 
             itemstack = itemstack1.cloneItemStack();
             if (i == 2) {
-                if (this.inventory.getItem(1).getItem() == Items.dP) {
-                    itemstack2 = (ItemStack) this.containerAccess.a((world, blockposition) -> {
-                        ItemStack itemstack3 = ItemWorldMap.a(world, this.inventory.getItem(0));
-
-                        if (itemstack3 != null) {
-                            itemstack3.setCount(1);
-                            return itemstack3;
-                        } else {
-                            return itemstack1;
-                        }
-                    }).orElse(itemstack1);
-                }
-
-                item.b(itemstack2, entityhuman.world, entityhuman);
-                if (!this.a(itemstack2, 3, 39, true)) {
+                item.b(itemstack1, entityhuman.world, entityhuman);
+                if (!this.a(itemstack1, 3, 39, true)) {
                     return ItemStack.b;
                 }
 
-                slot.a(itemstack2, itemstack);
+                slot.a(itemstack1, itemstack);
             } else if (i != 1 && i != 0) {
                 if (item == Items.FILLED_MAP) {
                     if (!this.a(itemstack1, 0, 1, false)) {
@@ -219,18 +180,16 @@ public class ContainerCartography extends Container {
                 return ItemStack.b;
             }
 
-            if (itemstack2.isEmpty()) {
+            if (itemstack1.isEmpty()) {
                 slot.set(ItemStack.b);
             }
 
             slot.d();
-            if (itemstack2.getCount() == itemstack.getCount()) {
+            if (itemstack1.getCount() == itemstack.getCount()) {
                 return ItemStack.b;
             }
 
-            this.e = true;
-            slot.a(entityhuman, itemstack2);
-            this.e = false;
+            slot.a(entityhuman, itemstack1);
             this.c();
         }
 

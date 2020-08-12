@@ -34,12 +34,12 @@ public abstract class IAsyncTaskHandler<R extends Runnable> implements Mailbox<R
         return !this.isMainThread();
     }
 
-    public int bg() {
+    public int bh() {
         return this.d.size();
     }
 
     @Override
-    public String bh() {
+    public String bi() {
         return this.b;
     }
 
@@ -108,7 +108,7 @@ public abstract class IAsyncTaskHandler<R extends Runnable> implements Mailbox<R
         try {
             while (!booleansupplier.getAsBoolean()) {
                 if (!this.executeNext()) {
-                    this.bk();
+                    this.bl();
                 }
             }
         } finally {
@@ -117,7 +117,7 @@ public abstract class IAsyncTaskHandler<R extends Runnable> implements Mailbox<R
 
     }
 
-    protected void bk() {
+    protected void bl() {
         Thread.yield();
         LockSupport.parkNanos("waiting for tasks", 100000L);
     }
@@ -126,7 +126,7 @@ public abstract class IAsyncTaskHandler<R extends Runnable> implements Mailbox<R
         try {
             r0.run();
         } catch (Exception exception) {
-            IAsyncTaskHandler.LOGGER.fatal("Error executing task on {}", this.bh(), exception);
+            IAsyncTaskHandler.LOGGER.fatal("Error executing task on {}", this.bi(), exception);
         }
 
     }

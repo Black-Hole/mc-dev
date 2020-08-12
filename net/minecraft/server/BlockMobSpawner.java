@@ -12,11 +12,11 @@ public class BlockMobSpawner extends BlockTileEntity {
     }
 
     @Override
-    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, ItemStack itemstack) {
-        super.dropNaturally(iblockdata, world, blockposition, itemstack);
-        int i = 15 + world.random.nextInt(15) + world.random.nextInt(15);
+    public void dropNaturally(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, ItemStack itemstack) {
+        super.dropNaturally(iblockdata, worldserver, blockposition, itemstack);
+        int i = 15 + worldserver.random.nextInt(15) + worldserver.random.nextInt(15);
 
-        this.dropExperience(world, blockposition, i);
+        this.dropExperience(worldserver, blockposition, i);
     }
 
     @Override

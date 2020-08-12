@@ -6,14 +6,16 @@ public abstract class ContainerFurnace extends ContainerRecipeBook<IInventory> {
     private final IContainerProperties e;
     protected final World c;
     private final Recipes<? extends RecipeCooking> f;
+    private final RecipeBookType g;
 
-    protected ContainerFurnace(Containers<?> containers, Recipes<? extends RecipeCooking> recipes, int i, PlayerInventory playerinventory) {
-        this(containers, recipes, i, playerinventory, new InventorySubcontainer(3), new ContainerProperties(4));
+    protected ContainerFurnace(Containers<?> containers, Recipes<? extends RecipeCooking> recipes, RecipeBookType recipebooktype, int i, PlayerInventory playerinventory) {
+        this(containers, recipes, recipebooktype, i, playerinventory, new InventorySubcontainer(3), new ContainerProperties(4));
     }
 
-    protected ContainerFurnace(Containers<?> containers, Recipes<? extends RecipeCooking> recipes, int i, PlayerInventory playerinventory, IInventory iinventory, IContainerProperties icontainerproperties) {
+    protected ContainerFurnace(Containers<?> containers, Recipes<? extends RecipeCooking> recipes, RecipeBookType recipebooktype, int i, PlayerInventory playerinventory, IInventory iinventory, IContainerProperties icontainerproperties) {
         super(containers, i);
         this.f = recipes;
+        this.g = recipebooktype;
         a(iinventory, 3);
         a(icontainerproperties, 4);
         this.furnace = iinventory;

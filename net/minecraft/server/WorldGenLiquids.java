@@ -9,7 +9,7 @@ public class WorldGenLiquids extends WorldGenerator<WorldGenFeatureHellFlowingLa
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureHellFlowingLavaConfiguration worldgenfeaturehellflowinglavaconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureHellFlowingLavaConfiguration worldgenfeaturehellflowinglavaconfiguration) {
         if (!worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccessseed.getType(blockposition.up()).getBlock())) {
             return false;
         } else if (worldgenfeaturehellflowinglavaconfiguration.c && !worldgenfeaturehellflowinglavaconfiguration.f.contains(generatoraccessseed.getType(blockposition.down()).getBlock())) {

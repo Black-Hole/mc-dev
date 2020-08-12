@@ -22,7 +22,7 @@ public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Inte
     }
 
     public void a(EntityPlayer entityplayer, @Nullable IRecipe<C> irecipe, boolean flag) {
-        if (irecipe != null && entityplayer.B().b(irecipe)) {
+        if (irecipe != null && entityplayer.getRecipeBook().b(irecipe)) {
             this.c = entityplayer.inventory;
             if (this.b() || entityplayer.isCreative()) {
                 this.b.a();

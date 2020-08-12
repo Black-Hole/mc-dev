@@ -29,7 +29,7 @@ public class PacketPlayOutWindowItems implements Packet<PacketListenerPlayOut> {
         this.b = NonNullList.a(short0, ItemStack.b);
 
         for (int i = 0; i < short0; ++i) {
-            this.b.set(i, packetdataserializer.m());
+            this.b.set(i, packetdataserializer.n());
         }
 
     }

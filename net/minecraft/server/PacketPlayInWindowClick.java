@@ -26,7 +26,7 @@ public class PacketPlayInWindowClick implements Packet<PacketListenerPlayIn> {
         this.button = packetdataserializer.readByte();
         this.d = packetdataserializer.readShort();
         this.shift = (InventoryClickType) packetdataserializer.a(InventoryClickType.class);
-        this.item = packetdataserializer.m();
+        this.item = packetdataserializer.n();
     }
 
     @Override

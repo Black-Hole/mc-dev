@@ -4,17 +4,17 @@ import javax.annotation.Nullable;
 
 public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRangedEntity {
 
-    private int bv;
-    private final Vec3D[][] bw;
+    private int bo;
+    private final Vec3D[][] bp;
 
     public EntityIllagerIllusioner(EntityTypes<? extends EntityIllagerIllusioner> entitytypes, World world) {
         super(entitytypes, world);
         this.f = 5;
-        this.bw = new Vec3D[2][4];
+        this.bp = new Vec3D[2][4];
 
         for (int i = 0; i < 4; ++i) {
-            this.bw[0][i] = Vec3D.a;
-            this.bw[1][i] = Vec3D.a;
+            this.bp[0][i] = Vec3D.a;
+            this.bp[1][i] = Vec3D.a;
         }
 
     }
@@ -36,14 +36,14 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         this.targetSelector.a(3, (new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, false)).a(300));
     }
 
-    public static AttributeProvider.Builder eL() {
-        return EntityMonster.eS().a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.FOLLOW_RANGE, 18.0D).a(GenericAttributes.MAX_HEALTH, 32.0D);
+    public static AttributeProvider.Builder eK() {
+        return EntityMonster.eR().a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.FOLLOW_RANGE, 18.0D).a(GenericAttributes.MAX_HEALTH, 32.0D);
     }
 
     @Override
-    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+    public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.BOW));
-        return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
+        return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
     @Override
@@ -55,30 +55,30 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
     public void movementTick() {
         super.movementTick();
         if (this.world.isClientSide && this.isInvisible()) {
-            --this.bv;
-            if (this.bv < 0) {
-                this.bv = 0;
+            --this.bo;
+            if (this.bo < 0) {
+                this.bo = 0;
             }
 
             if (this.hurtTicks != 1 && this.ticksLived % 1200 != 0) {
                 if (this.hurtTicks == this.hurtDuration - 1) {
-                    this.bv = 3;
+                    this.bo = 3;
 
                     for (int i = 0; i < 4; ++i) {
-                        this.bw[0][i] = this.bw[1][i];
-                        this.bw[1][i] = new Vec3D(0.0D, 0.0D, 0.0D);
+                        this.bp[0][i] = this.bp[1][i];
+                        this.bp[1][i] = new Vec3D(0.0D, 0.0D, 0.0D);
                     }
                 }
             } else {
-                this.bv = 3;
+                this.bo = 3;
                 float f = -6.0F;
                 boolean flag = true;
 
                 int j;
 
                 for (j = 0; j < 4; ++j) {
-                    this.bw[0][j] = this.bw[1][j];
-                    this.bw[1][j] = new Vec3D((double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D, (double) Math.max(0, this.random.nextInt(6) - 4), (double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D);
+                    this.bp[0][j] = this.bp[1][j];
+                    this.bp[1][j] = new Vec3D((double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D, (double) Math.max(0, this.random.nextInt(6) - 4), (double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D);
                 }
 
                 for (j = 0; j < 16; ++j) {
@@ -92,7 +92,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
     }
 
     @Override
-    public SoundEffect eM() {
+    public SoundEffect eL() {
         return SoundEffects.ENTITY_ILLUSIONER_AMBIENT;
     }
 
@@ -126,7 +126,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
 
     @Override
     public void a(EntityLiving entityliving, float f) {
-        ItemStack itemstack = this.f(this.b(ProjectileHelper.a(this, Items.BOW)));
+        ItemStack itemstack = this.f(this.b(ProjectileHelper.a((EntityLiving) this, Items.BOW)));
         EntityArrow entityarrow = ProjectileHelper.a(this, itemstack, f);
         double d0 = entityliving.locX() - this.locX();
         double d1 = entityliving.e(0.3333333333333333D) - entityarrow.locY();

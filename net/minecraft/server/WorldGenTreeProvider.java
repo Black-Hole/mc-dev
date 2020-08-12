@@ -18,8 +18,8 @@ public abstract class WorldGenTreeProvider {
             return false;
         } else {
             worldserver.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 4);
-            ((WorldGenFeatureTreeConfiguration) worldgenfeatureconfigured.e).a();
-            if (worldgenfeatureconfigured.a(worldserver, worldserver.getStructureManager(), chunkgenerator, random, blockposition)) {
+            ((WorldGenFeatureTreeConfiguration) worldgenfeatureconfigured.f).b();
+            if (worldgenfeatureconfigured.a(worldserver, chunkgenerator, random, blockposition)) {
                 return true;
             } else {
                 worldserver.setTypeAndData(blockposition, iblockdata, 4);

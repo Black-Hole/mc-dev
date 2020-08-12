@@ -15,7 +15,7 @@ public class EntityShulkerBullet extends IProjectile {
     private double f;
     private double g;
     @Nullable
-    private UUID an;
+    private UUID ag;
 
     public EntityShulkerBullet(EntityTypes<? extends EntityShulkerBullet> entitytypes, World world) {
         super(entitytypes, world);
@@ -70,7 +70,7 @@ public class EntityShulkerBullet extends IProjectile {
         }
 
         if (nbttagcompound.b("Target")) {
-            this.an = nbttagcompound.a("Target");
+            this.ag = nbttagcompound.a("Target");
         }
 
     }
@@ -174,10 +174,10 @@ public class EntityShulkerBullet extends IProjectile {
         Vec3D vec3d;
 
         if (!this.world.isClientSide) {
-            if (this.target == null && this.an != null) {
-                this.target = ((WorldServer) this.world).getEntity(this.an);
+            if (this.target == null && this.ag != null) {
+                this.target = ((WorldServer) this.world).getEntity(this.ag);
                 if (this.target == null) {
-                    this.an = null;
+                    this.ag = null;
                 }
             }
 
@@ -191,13 +191,14 @@ public class EntityShulkerBullet extends IProjectile {
                 this.setMot(this.getMot().add(0.0D, -0.04D, 0.0D));
             }
 
-            MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, this::a, RayTrace.BlockCollisionOption.COLLIDER);
+            MovingObjectPosition movingobjectposition = ProjectileHelper.a((Entity) this, this::a);
 
             if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.MISS) {
                 this.a(movingobjectposition);
             }
         }
 
+        this.checkBlockCollisions();
         vec3d = this.getMot();
         this.setPosition(this.locX() + vec3d.x, this.locY() + vec3d.y, this.locZ() + vec3d.z);
         ProjectileHelper.a(this, 0.5F);
@@ -240,7 +241,7 @@ public class EntityShulkerBullet extends IProjectile {
     }
 
     @Override
-    public float aO() {
+    public float aQ() {
         return 1.0F;
     }
 
@@ -291,7 +292,7 @@ public class EntityShulkerBullet extends IProjectile {
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

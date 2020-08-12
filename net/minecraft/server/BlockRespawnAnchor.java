@@ -1,12 +1,16 @@
 package net.minecraft.server;
 
-import java.util.Iterator;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
+import com.google.common.collect.UnmodifiableIterator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 public class BlockRespawnAnchor extends Block {
 
     public static final BlockStateInteger a = BlockProperties.aC;
+    private static final ImmutableList<BaseBlockPosition> b = ImmutableList.of(new BaseBlockPosition(0, 0, -1), new BaseBlockPosition(-1, 0, 0), new BaseBlockPosition(0, 0, 1), new BaseBlockPosition(1, 0, 0), new BaseBlockPosition(-1, 0, -1), new BaseBlockPosition(1, 0, -1), new BaseBlockPosition(-1, 0, 1), new BaseBlockPosition(1, 0, 1));
+    private static final ImmutableList<BaseBlockPosition> c = (new Builder()).addAll(BlockRespawnAnchor.b).addAll(BlockRespawnAnchor.b.stream().map(BaseBlockPosition::down).iterator()).addAll(BlockRespawnAnchor.b.stream().map(BaseBlockPosition::up).iterator()).add(new BaseBlockPosition(0, 1, 0)).build();
 
     public BlockRespawnAnchor(BlockBase.Info blockbase_info) {
         super(blockbase_info);
@@ -39,7 +43,7 @@ public class BlockRespawnAnchor extends Block {
                 EntityPlayer entityplayer = (EntityPlayer) entityhuman;
 
                 if (entityplayer.getSpawnDimension() != world.getDimensionKey() || !entityplayer.getSpawn().equals(blockposition)) {
-                    entityplayer.setRespawnPosition(world.getDimensionKey(), blockposition, false, true);
+                    entityplayer.setRespawnPosition(world.getDimensionKey(), blockposition, 0.0F, false, true);
                     world.playSound((EntityHuman) null, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, SoundEffects.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     return EnumInteractionResult.SUCCESS;
                 }
@@ -89,12 +93,7 @@ public class BlockRespawnAnchor extends Block {
         ExplosionDamageCalculator explosiondamagecalculator = new ExplosionDamageCalculator() {
             @Override
             public Optional<Float> a(Explosion explosion, IBlockAccess iblockaccess, BlockPosition blockposition1, IBlockData iblockdata1, Fluid fluid) {
-                return blockposition1.equals(blockposition) && flag1 ? Optional.of(Blocks.WATER.getDurability()) : ExplosionDamageCalculatorBlock.INSTANCE.a(explosion, iblockaccess, blockposition1, iblockdata1, fluid);
-            }
-
-            @Override
-            public boolean a(Explosion explosion, IBlockAccess iblockaccess, BlockPosition blockposition1, IBlockData iblockdata1, float f) {
-                return ExplosionDamageCalculatorBlock.INSTANCE.a(explosion, iblockaccess, blockposition1, iblockdata1, f);
+                return blockposition1.equals(blockposition) && flag1 ? Optional.of(Blocks.WATER.getDurability()) : super.a(explosion, iblockaccess, blockposition1, iblockdata1, fluid);
             }
         };
 
@@ -129,22 +128,30 @@ public class BlockRespawnAnchor extends Block {
         return a(iblockdata, 15);
     }
 
-    public static Optional<Vec3D> a(EntityTypes<?> entitytypes, IWorldReader iworldreader, BlockPosition blockposition) {
-        Iterator iterator = BlockPosition.a(blockposition.b(-1, -1, -1), blockposition.b(1, 1, 1)).iterator();
+    public static Optional<Vec3D> a(EntityTypes<?> entitytypes, ICollisionAccess icollisionaccess, BlockPosition blockposition) {
+        Optional<Vec3D> optional = a(entitytypes, icollisionaccess, blockposition, true);
 
-        Optional optional;
+        return optional.isPresent() ? optional : a(entitytypes, icollisionaccess, blockposition, false);
+    }
+
+    private static Optional<Vec3D> a(EntityTypes<?> entitytypes, ICollisionAccess icollisionaccess, BlockPosition blockposition, boolean flag) {
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+        UnmodifiableIterator unmodifiableiterator = BlockRespawnAnchor.c.iterator();
+
+        Vec3D vec3d;
 
         do {
-            if (!iterator.hasNext()) {
+            if (!unmodifiableiterator.hasNext()) {
                 return Optional.empty();
             }
 
-            BlockPosition blockposition1 = (BlockPosition) iterator.next();
+            BaseBlockPosition baseblockposition = (BaseBlockPosition) unmodifiableiterator.next();
 
-            optional = BlockBed.a(entitytypes, iworldreader, blockposition1);
-        } while (!optional.isPresent());
+            blockposition_mutableblockposition.g(blockposition).h(baseblockposition);
+            vec3d = DismountUtil.a(entitytypes, icollisionaccess, blockposition_mutableblockposition, flag);
+        } while (vec3d == null);
 
-        return optional;
+        return Optional.of(vec3d);
     }
 
     @Override

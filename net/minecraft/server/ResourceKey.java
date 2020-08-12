@@ -11,12 +11,12 @@ public class ResourceKey<T> {
     private final MinecraftKey b;
     private final MinecraftKey c;
 
-    public static <T> ResourceKey<T> a(ResourceKey<IRegistry<T>> resourcekey, MinecraftKey minecraftkey) {
+    public static <T> ResourceKey<T> a(ResourceKey<? extends IRegistry<T>> resourcekey, MinecraftKey minecraftkey) {
         return a(resourcekey.c, minecraftkey);
     }
 
     public static <T> ResourceKey<IRegistry<T>> a(MinecraftKey minecraftkey) {
-        return a(IRegistry.f, minecraftkey);
+        return a(IRegistry.d, minecraftkey);
     }
 
     private static <T> ResourceKey<T> a(MinecraftKey minecraftkey, MinecraftKey minecraftkey1) {
@@ -36,11 +36,15 @@ public class ResourceKey<T> {
         return "ResourceKey[" + this.b + " / " + this.c + ']';
     }
 
+    public boolean a(ResourceKey<? extends IRegistry<?>> resourcekey) {
+        return this.b.equals(resourcekey.a());
+    }
+
     public MinecraftKey a() {
         return this.c;
     }
 
-    public static <T> Function<MinecraftKey, ResourceKey<T>> a(ResourceKey<IRegistry<T>> resourcekey) {
+    public static <T> Function<MinecraftKey, ResourceKey<T>> b(ResourceKey<? extends IRegistry<T>> resourcekey) {
         return (minecraftkey) -> {
             return a(resourcekey, minecraftkey);
         };

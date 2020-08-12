@@ -19,10 +19,21 @@ public class ItemArmorStand extends Item {
             BlockActionContext blockactioncontext = new BlockActionContext(itemactioncontext);
             BlockPosition blockposition = blockactioncontext.getClickPosition();
             ItemStack itemstack = itemactioncontext.getItemStack();
-            EntityArmorStand entityarmorstand = (EntityArmorStand) EntityTypes.ARMOR_STAND.createCreature(world, itemstack.getTag(), (IChatBaseComponent) null, itemactioncontext.getEntity(), blockposition, EnumMobSpawn.SPAWN_EGG, true, true);
+            Vec3D vec3d = Vec3D.c((BaseBlockPosition) blockposition);
+            AxisAlignedBB axisalignedbb = EntityTypes.ARMOR_STAND.l().a(vec3d.getX(), vec3d.getY(), vec3d.getZ());
 
-            if (world.getCubes(entityarmorstand) && world.getEntities(entityarmorstand, entityarmorstand.getBoundingBox()).isEmpty()) {
-                if (!world.isClientSide) {
+            if (world.b((Entity) null, axisalignedbb, (entity) -> {
+                return true;
+            }) && world.getEntities((Entity) null, axisalignedbb).isEmpty()) {
+                if (world instanceof WorldServer) {
+                    WorldServer worldserver = (WorldServer) world;
+                    EntityArmorStand entityarmorstand = (EntityArmorStand) EntityTypes.ARMOR_STAND.createCreature(worldserver, itemstack.getTag(), (IChatBaseComponent) null, itemactioncontext.getEntity(), blockposition, EnumMobSpawn.SPAWN_EGG, true, true);
+
+                    if (entityarmorstand == null) {
+                        return EnumInteractionResult.FAIL;
+                    }
+
+                    worldserver.addAllEntities(entityarmorstand);
                     float f = (float) MathHelper.d((MathHelper.g(itemactioncontext.h() - 180.0F) + 22.5F) / 45.0F) * 45.0F;
 
                     entityarmorstand.setPositionRotation(entityarmorstand.locX(), entityarmorstand.locY(), entityarmorstand.locZ(), f, 0.0F);

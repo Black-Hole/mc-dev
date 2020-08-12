@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.Products.P4;
+import com.mojang.datafixers.Products.P2;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder.Instance;
 import com.mojang.serialization.codecs.RecordCodecBuilder.Mu;
@@ -10,28 +10,20 @@ import java.util.Set;
 public abstract class WorldGenFoilagePlacer {
 
     public static final Codec<WorldGenFoilagePlacer> d = IRegistry.FOLIAGE_PLACER_TYPE.dispatch(WorldGenFoilagePlacer::a, WorldGenFoilagePlacers::a);
-    protected final int e;
-    protected final int f;
-    protected final int g;
-    protected final int h;
+    protected final IntSpread e;
+    protected final IntSpread f;
 
-    protected static <P extends WorldGenFoilagePlacer> P4<Mu<P>, Integer, Integer, Integer, Integer> b(Instance<P> instance) {
-        return instance.group(Codec.INT.fieldOf("radius").forGetter((worldgenfoilageplacer) -> {
+    protected static <P extends WorldGenFoilagePlacer> P2<Mu<P>, IntSpread, IntSpread> b(Instance<P> instance) {
+        return instance.group(IntSpread.a(0, 8, 8).fieldOf("radius").forGetter((worldgenfoilageplacer) -> {
             return worldgenfoilageplacer.e;
-        }), Codec.INT.fieldOf("radius_random").forGetter((worldgenfoilageplacer) -> {
+        }), IntSpread.a(0, 8, 8).fieldOf("offset").forGetter((worldgenfoilageplacer) -> {
             return worldgenfoilageplacer.f;
-        }), Codec.INT.fieldOf("offset").forGetter((worldgenfoilageplacer) -> {
-            return worldgenfoilageplacer.g;
-        }), Codec.INT.fieldOf("offset_random").forGetter((worldgenfoilageplacer) -> {
-            return worldgenfoilageplacer.h;
         }));
     }
 
-    public WorldGenFoilagePlacer(int i, int j, int k, int l) {
-        this.e = i;
-        this.f = j;
-        this.g = k;
-        this.h = l;
+    public WorldGenFoilagePlacer(IntSpread intspread, IntSpread intspread1) {
+        this.e = intspread;
+        this.f = intspread1;
     }
 
     protected abstract WorldGenFoilagePlacers<?> a();
@@ -45,11 +37,11 @@ public abstract class WorldGenFoilagePlacer {
     public abstract int a(Random random, int i, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration);
 
     public int a(Random random, int i) {
-        return this.e + random.nextInt(this.f + 1);
+        return this.e.a(random);
     }
 
     private int a(Random random) {
-        return this.g + random.nextInt(this.h + 1);
+        return this.f.a(random);
     }
 
     protected abstract boolean a(Random random, int i, int j, int k, int l, boolean flag);

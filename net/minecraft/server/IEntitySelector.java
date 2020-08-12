@@ -28,7 +28,7 @@ public final class IEntitySelector {
         double d4 = d3 * d3;
 
         return (entity) -> {
-            return entity != null && entity.g(d0, d1, d2) <= d4;
+            return entity != null && entity.h(d0, d1, d2) <= d4;
         };
     }
 

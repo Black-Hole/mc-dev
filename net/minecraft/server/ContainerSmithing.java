@@ -32,6 +32,8 @@ public class ContainerSmithing extends ContainerAnvilAbstract {
 
     @Override
     protected ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
+        itemstack.a(entityhuman.world, entityhuman, itemstack.getCount());
+        this.resultInventory.b(entityhuman);
         this.d(0);
         this.d(1);
         this.containerAccess.a((world, blockposition) -> {
@@ -57,6 +59,7 @@ public class ContainerSmithing extends ContainerAnvilAbstract {
             this.h = (RecipeSmithing) list.get(0);
             ItemStack itemstack = this.h.a(this.repairInventory);
 
+            this.resultInventory.a((IRecipe) this.h);
             this.resultInventory.setItem(0, itemstack);
         }
 
@@ -67,5 +70,10 @@ public class ContainerSmithing extends ContainerAnvilAbstract {
         return this.i.stream().anyMatch((recipesmithing) -> {
             return recipesmithing.a(itemstack);
         });
+    }
+
+    @Override
+    public boolean a(ItemStack itemstack, Slot slot) {
+        return slot.inventory != this.resultInventory && super.a(itemstack, slot);
     }
 }

@@ -39,7 +39,7 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
                 return false;
             } else {
                 this.d = this.a.getNavigation().a((Entity) entityliving, 0);
-                return this.d != null ? true : this.a(entityliving) >= this.a.g(entityliving.locX(), entityliving.locY(), entityliving.locZ());
+                return this.d != null ? true : this.a(entityliving) >= this.a.h(entityliving.locX(), entityliving.locY(), entityliving.locZ());
             }
         }
     }
@@ -76,10 +76,10 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
         EntityLiving entityliving = this.a.getGoalTarget();
 
         this.a.getControllerLook().a(entityliving, 30.0F, 30.0F);
-        double d0 = this.a.g(entityliving.locX(), entityliving.locY(), entityliving.locZ());
+        double d0 = this.a.h(entityliving.locX(), entityliving.locY(), entityliving.locZ());
 
         this.h = Math.max(this.h - 1, 0);
-        if ((this.c || this.a.getEntitySenses().a(entityliving)) && this.h <= 0 && (this.e == 0.0D && this.f == 0.0D && this.g == 0.0D || entityliving.g(this.e, this.f, this.g) >= 1.0D || this.a.getRandom().nextFloat() < 0.05F)) {
+        if ((this.c || this.a.getEntitySenses().a(entityliving)) && this.h <= 0 && (this.e == 0.0D && this.f == 0.0D && this.g == 0.0D || entityliving.h(this.e, this.f, this.g) >= 1.0D || this.a.getRandom().nextFloat() < 0.05F)) {
             this.e = entityliving.locX();
             this.f = entityliving.locY();
             this.g = entityliving.locZ();

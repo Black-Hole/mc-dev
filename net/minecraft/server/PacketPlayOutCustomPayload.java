@@ -36,7 +36,7 @@ public class PacketPlayOutCustomPayload implements Packet<PacketListenerPlayOut>
 
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.r = packetdataserializer.o();
+        this.r = packetdataserializer.p();
         int i = packetdataserializer.readableBytes();
 
         if (i >= 0 && i <= 1048576) {

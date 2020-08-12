@@ -20,35 +20,35 @@ public class WorldGenFeatureTreeVineTrunk extends WorldGenFeatureTree {
     }
 
     @Override
-    public void a(GeneratorAccess generatoraccess, Random random, List<BlockPosition> list, List<BlockPosition> list1, Set<BlockPosition> set, StructureBoundingBox structureboundingbox) {
+    public void a(GeneratorAccessSeed generatoraccessseed, Random random, List<BlockPosition> list, List<BlockPosition> list1, Set<BlockPosition> set, StructureBoundingBox structureboundingbox) {
         list.forEach((blockposition) -> {
             BlockPosition blockposition1;
 
             if (random.nextInt(3) > 0) {
                 blockposition1 = blockposition.west();
-                if (WorldGenerator.b(generatoraccess, blockposition1)) {
-                    this.a((IWorldWriter) generatoraccess, blockposition1, BlockVine.EAST, set, structureboundingbox);
+                if (WorldGenerator.b(generatoraccessseed, blockposition1)) {
+                    this.a((IWorldWriter) generatoraccessseed, blockposition1, BlockVine.EAST, set, structureboundingbox);
                 }
             }
 
             if (random.nextInt(3) > 0) {
                 blockposition1 = blockposition.east();
-                if (WorldGenerator.b(generatoraccess, blockposition1)) {
-                    this.a((IWorldWriter) generatoraccess, blockposition1, BlockVine.WEST, set, structureboundingbox);
+                if (WorldGenerator.b(generatoraccessseed, blockposition1)) {
+                    this.a((IWorldWriter) generatoraccessseed, blockposition1, BlockVine.WEST, set, structureboundingbox);
                 }
             }
 
             if (random.nextInt(3) > 0) {
                 blockposition1 = blockposition.north();
-                if (WorldGenerator.b(generatoraccess, blockposition1)) {
-                    this.a((IWorldWriter) generatoraccess, blockposition1, BlockVine.SOUTH, set, structureboundingbox);
+                if (WorldGenerator.b(generatoraccessseed, blockposition1)) {
+                    this.a((IWorldWriter) generatoraccessseed, blockposition1, BlockVine.SOUTH, set, structureboundingbox);
                 }
             }
 
             if (random.nextInt(3) > 0) {
                 blockposition1 = blockposition.south();
-                if (WorldGenerator.b(generatoraccess, blockposition1)) {
-                    this.a((IWorldWriter) generatoraccess, blockposition1, BlockVine.NORTH, set, structureboundingbox);
+                if (WorldGenerator.b(generatoraccessseed, blockposition1)) {
+                    this.a((IWorldWriter) generatoraccessseed, blockposition1, BlockVine.NORTH, set, structureboundingbox);
                 }
             }
 

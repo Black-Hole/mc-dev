@@ -31,8 +31,8 @@ public class EntityAreaEffectCloud extends Entity {
     public int durationOnUse;
     public float radiusOnUse;
     public float radiusPerTick;
-    private EntityLiving aw;
-    private UUID ax;
+    private EntityLiving ap;
+    private UUID aq;
 
     public EntityAreaEffectCloud(EntityTypes<? extends EntityAreaEffectCloud> entitytypes, World world) {
         super(entitytypes, world);
@@ -311,21 +311,21 @@ public class EntityAreaEffectCloud extends Entity {
     }
 
     public void setSource(@Nullable EntityLiving entityliving) {
-        this.aw = entityliving;
-        this.ax = entityliving == null ? null : entityliving.getUniqueID();
+        this.ap = entityliving;
+        this.aq = entityliving == null ? null : entityliving.getUniqueID();
     }
 
     @Nullable
     public EntityLiving getSource() {
-        if (this.aw == null && this.ax != null && this.world instanceof WorldServer) {
-            Entity entity = ((WorldServer) this.world).getEntity(this.ax);
+        if (this.ap == null && this.aq != null && this.world instanceof WorldServer) {
+            Entity entity = ((WorldServer) this.world).getEntity(this.aq);
 
             if (entity instanceof EntityLiving) {
-                this.aw = (EntityLiving) entity;
+                this.ap = (EntityLiving) entity;
             }
         }
 
-        return this.aw;
+        return this.ap;
     }
 
     @Override
@@ -339,7 +339,7 @@ public class EntityAreaEffectCloud extends Entity {
         this.radiusPerTick = nbttagcompound.getFloat("RadiusPerTick");
         this.setRadius(nbttagcompound.getFloat("Radius"));
         if (nbttagcompound.b("Owner")) {
-            this.ax = nbttagcompound.a("Owner");
+            this.aq = nbttagcompound.a("Owner");
         }
 
         if (nbttagcompound.hasKeyOfType("Particle", 8)) {
@@ -385,8 +385,8 @@ public class EntityAreaEffectCloud extends Entity {
         nbttagcompound.setFloat("RadiusPerTick", this.radiusPerTick);
         nbttagcompound.setFloat("Radius", this.getRadius());
         nbttagcompound.setString("Particle", this.getParticle().a());
-        if (this.ax != null) {
-            nbttagcompound.a("Owner", this.ax);
+        if (this.aq != null) {
+            nbttagcompound.a("Owner", this.aq);
         }
 
         if (this.hasColor) {
@@ -427,7 +427,7 @@ public class EntityAreaEffectCloud extends Entity {
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         return new PacketPlayOutSpawnEntity(this);
     }
 

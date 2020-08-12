@@ -30,11 +30,11 @@ public class LootItemFunctions {
     public static final LootItemFunctionType v = a("copy_state", (LootSerializer) (new LootItemFunctionCopyState.b()));
 
     private static LootItemFunctionType a(String s, LootSerializer<? extends LootItemFunction> lootserializer) {
-        return (LootItemFunctionType) IRegistry.a(IRegistry.aZ, new MinecraftKey(s), (Object) (new LootItemFunctionType(lootserializer)));
+        return (LootItemFunctionType) IRegistry.a(IRegistry.ap, new MinecraftKey(s), (Object) (new LootItemFunctionType(lootserializer)));
     }
 
     public static Object a() {
-        return JsonRegistry.a(IRegistry.aZ, "function", "function", LootItemFunction::b).a();
+        return JsonRegistry.a(IRegistry.ap, "function", "function", LootItemFunction::b).a();
     }
 
     public static BiFunction<ItemStack, LootTableInfo, ItemStack> a(BiFunction<ItemStack, LootTableInfo, ItemStack>[] abifunction) {

@@ -16,7 +16,7 @@ public class BehaviorStrollInside extends Behavior<EntityCreature> {
     }
 
     protected boolean a(WorldServer worldserver, EntityCreature entitycreature) {
-        return !worldserver.f(entitycreature.getChunkCoordinates());
+        return !worldserver.e(entitycreature.getChunkCoordinates());
     }
 
     protected void a(WorldServer worldserver, EntityCreature entitycreature, long i) {
@@ -25,7 +25,7 @@ public class BehaviorStrollInside extends Behavior<EntityCreature> {
 
         Collections.shuffle(list);
         Optional<BlockPosition> optional = list.stream().filter((blockposition1) -> {
-            return !worldserver.f(blockposition1);
+            return !worldserver.e(blockposition1);
         }).filter((blockposition1) -> {
             return worldserver.a(blockposition1, (Entity) entitycreature);
         }).filter((blockposition1) -> {

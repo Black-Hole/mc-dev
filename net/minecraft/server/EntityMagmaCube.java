@@ -9,7 +9,7 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     public static AttributeProvider.Builder m() {
-        return EntityMonster.eS().a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
+        return EntityMonster.eR().a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
     public static boolean b(EntityTypes<EntityMagmaCube> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
@@ -18,7 +18,7 @@ public class EntityMagmaCube extends EntitySlime {
 
     @Override
     public boolean a(IWorldReader iworldreader) {
-        return iworldreader.i(this) && !iworldreader.containsLiquid(this.getBoundingBox());
+        return iworldreader.j((Entity) this) && !iworldreader.containsLiquid(this.getBoundingBox());
     }
 
     @Override
@@ -28,18 +28,18 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     @Override
-    public float aO() {
+    public float aQ() {
         return 1.0F;
     }
 
     @Override
-    protected ParticleParam eJ() {
+    protected ParticleParam eI() {
         return Particles.FLAME;
     }
 
     @Override
     protected MinecraftKey getDefaultLootTable() {
-        return this.eR() ? LootTables.a : this.getEntityType().i();
+        return this.eQ() ? LootTables.a : this.getEntityType().i();
     }
 
     @Override
@@ -48,12 +48,12 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     @Override
-    protected int eK() {
-        return super.eK() * 4;
+    protected int eJ() {
+        return super.eJ() * 4;
     }
 
     @Override
-    protected void eL() {
+    protected void eK() {
         this.b *= 0.9F;
     }
 
@@ -84,28 +84,28 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     @Override
-    protected boolean eM() {
+    protected boolean eL() {
         return this.doAITick();
     }
 
     @Override
-    protected float eN() {
-        return super.eN() + 2.0F;
+    protected float eM() {
+        return super.eM() + 2.0F;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return this.eR() ? SoundEffects.ENTITY_MAGMA_CUBE_HURT_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_HURT;
+        return this.eQ() ? SoundEffects.ENTITY_MAGMA_CUBE_HURT_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_HURT;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return this.eR() ? SoundEffects.ENTITY_MAGMA_CUBE_DEATH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_DEATH;
+        return this.eQ() ? SoundEffects.ENTITY_MAGMA_CUBE_DEATH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_DEATH;
     }
 
     @Override
     protected SoundEffect getSoundSquish() {
-        return this.eR() ? SoundEffects.ENTITY_MAGMA_CUBE_SQUISH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_SQUISH;
+        return this.eQ() ? SoundEffects.ENTITY_MAGMA_CUBE_SQUISH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_SQUISH;
     }
 
     @Override

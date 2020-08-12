@@ -86,7 +86,7 @@ public abstract class PlayerList {
 
         if (worldserver == null) {
             PlayerList.LOGGER.warn("Unknown respawn dimension {}, defaulting to overworld", resourcekey1);
-            worldserver1 = this.server.D();
+            worldserver1 = this.server.E();
         } else {
             worldserver1 = worldserver;
         }
@@ -108,7 +108,7 @@ public abstract class PlayerList {
         boolean flag = gamerules.getBoolean(GameRules.DO_IMMEDIATE_RESPAWN);
         boolean flag1 = gamerules.getBoolean(GameRules.REDUCED_DEBUG_INFO);
 
-        playerconnection.sendPacket(new PacketPlayOutLogin(entityplayer.getId(), entityplayer.playerInteractManager.getGameMode(), entityplayer.playerInteractManager.c(), BiomeManager.a(worldserver1.getSeed()), worlddata.isHardcore(), this.server.E(), this.s, worldserver1.getTypeKey(), worldserver1.getDimensionKey(), this.getMaxPlayers(), this.viewDistance, flag1, !flag, worldserver1.isDebugWorld(), worldserver1.isFlatWorld()));
+        playerconnection.sendPacket(new PacketPlayOutLogin(entityplayer.getId(), entityplayer.playerInteractManager.getGameMode(), entityplayer.playerInteractManager.c(), BiomeManager.a(worldserver1.getSeed()), worlddata.isHardcore(), this.server.F(), this.s, worldserver1.getDimensionManager(), worldserver1.getDimensionKey(), this.getMaxPlayers(), this.viewDistance, flag1, !flag, worldserver1.isDebugWorld(), worldserver1.isFlatWorld()));
         playerconnection.sendPacket(new PacketPlayOutCustomPayload(PacketPlayOutCustomPayload.a, (new PacketDataSerializer(Unpooled.buffer())).a(this.getServer().getServerModName())));
         playerconnection.sendPacket(new PacketPlayOutServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
         playerconnection.sendPacket(new PacketPlayOutAbilities(entityplayer.abilities));
@@ -117,7 +117,7 @@ public abstract class PlayerList {
         playerconnection.sendPacket(new PacketPlayOutTags(this.server.getTagRegistry()));
         this.d(entityplayer);
         entityplayer.getStatisticManager().c();
-        entityplayer.B().a(entityplayer);
+        entityplayer.getRecipeBook().a(entityplayer);
         this.sendScoreboard(worldserver1.getScoreboard(), entityplayer);
         this.server.invalidatePingSample();
         ChatMessage chatmessage;
@@ -267,7 +267,7 @@ public abstract class PlayerList {
 
     @Nullable
     public NBTTagCompound a(EntityPlayer entityplayer) {
-        NBTTagCompound nbttagcompound = this.server.getSaveData().x();
+        NBTTagCompound nbttagcompound = this.server.getSaveData().y();
         NBTTagCompound nbttagcompound1;
 
         if (entityplayer.getDisplayName().getString().equals(this.server.getSinglePlayerName()) && nbttagcompound != null) {
@@ -394,7 +394,7 @@ public abstract class PlayerList {
             entityplayer2.playerConnection.disconnect(new ChatMessage("multiplayer.disconnect.duplicate_login"));
         }
 
-        WorldServer worldserver = this.server.D();
+        WorldServer worldserver = this.server.E();
         Object object;
 
         if (this.server.isDemoMode()) {
@@ -410,17 +410,18 @@ public abstract class PlayerList {
         this.players.remove(entityplayer);
         entityplayer.getWorldServer().removePlayer(entityplayer);
         BlockPosition blockposition = entityplayer.getSpawn();
+        float f = entityplayer.getSpawnAngle();
         boolean flag1 = entityplayer.isSpawnForced();
         WorldServer worldserver = this.server.getWorldServer(entityplayer.getSpawnDimension());
         Optional optional;
 
         if (worldserver != null && blockposition != null) {
-            optional = EntityHuman.getBed(worldserver, blockposition, flag1, flag);
+            optional = EntityHuman.getBed(worldserver, blockposition, f, flag1, flag);
         } else {
             optional = Optional.empty();
         }
 
-        WorldServer worldserver1 = worldserver != null && optional.isPresent() ? worldserver : this.server.D();
+        WorldServer worldserver1 = worldserver != null && optional.isPresent() ? worldserver : this.server.E();
         Object object;
 
         if (this.server.isDemoMode()) {
@@ -447,11 +448,22 @@ public abstract class PlayerList {
         boolean flag2 = false;
 
         if (optional.isPresent()) {
+            IBlockData iblockdata = worldserver1.getType(blockposition);
+            boolean flag3 = iblockdata.a(Blocks.RESPAWN_ANCHOR);
             Vec3D vec3d = (Vec3D) optional.get();
+            float f1;
 
-            entityplayer1.setPositionRotation(vec3d.x, vec3d.y, vec3d.z, 0.0F, 0.0F);
-            entityplayer1.setRespawnPosition(worldserver1.getDimensionKey(), blockposition, flag1, false);
-            flag2 = !flag && worldserver1.getType(blockposition).getBlock() instanceof BlockRespawnAnchor;
+            if (!iblockdata.a((Tag) TagsBlock.BEDS) && !flag3) {
+                f1 = f;
+            } else {
+                Vec3D vec3d1 = Vec3D.c((BaseBlockPosition) blockposition).d(vec3d).d();
+
+                f1 = (float) MathHelper.g(MathHelper.d(vec3d1.z, vec3d1.x) * 57.2957763671875D - 90.0D);
+            }
+
+            entityplayer1.setPositionRotation(vec3d.x, vec3d.y, vec3d.z, f1, 0.0F);
+            entityplayer1.setRespawnPosition(worldserver1.getDimensionKey(), blockposition, f, flag1, false);
+            flag2 = !flag && flag3;
         } else if (blockposition != null) {
             entityplayer1.playerConnection.sendPacket(new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.a, 0.0F));
         }
@@ -462,9 +474,9 @@ public abstract class PlayerList {
 
         WorldData worlddata = entityplayer1.world.getWorldData();
 
-        entityplayer1.playerConnection.sendPacket(new PacketPlayOutRespawn(entityplayer1.world.getTypeKey(), entityplayer1.world.getDimensionKey(), BiomeManager.a(entityplayer1.getWorldServer().getSeed()), entityplayer1.playerInteractManager.getGameMode(), entityplayer1.playerInteractManager.c(), entityplayer1.getWorldServer().isDebugWorld(), entityplayer1.getWorldServer().isFlatWorld(), flag));
+        entityplayer1.playerConnection.sendPacket(new PacketPlayOutRespawn(entityplayer1.world.getDimensionManager(), entityplayer1.world.getDimensionKey(), BiomeManager.a(entityplayer1.getWorldServer().getSeed()), entityplayer1.playerInteractManager.getGameMode(), entityplayer1.playerInteractManager.c(), entityplayer1.getWorldServer().isDebugWorld(), entityplayer1.getWorldServer().isFlatWorld(), flag));
         entityplayer1.playerConnection.a(entityplayer1.locX(), entityplayer1.locY(), entityplayer1.locZ(), entityplayer1.yaw, entityplayer1.pitch);
-        entityplayer1.playerConnection.sendPacket(new PacketPlayOutSpawnPosition(worldserver1.getSpawn()));
+        entityplayer1.playerConnection.sendPacket(new PacketPlayOutSpawnPosition(worldserver1.getSpawn(), worldserver1.v()));
         entityplayer1.playerConnection.sendPacket(new PacketPlayOutServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
         entityplayer1.playerConnection.sendPacket(new PacketPlayOutExperience(entityplayer1.exp, entityplayer1.expTotal, entityplayer1.expLevel));
         this.a(entityplayer1, worldserver1);
@@ -611,7 +623,7 @@ public abstract class PlayerList {
     }
 
     public boolean isOp(GameProfile gameprofile) {
-        return this.operators.d(gameprofile) || this.server.a(gameprofile) && this.server.getSaveData().n() || this.v;
+        return this.operators.d(gameprofile) || this.server.a(gameprofile) && this.server.getSaveData().o() || this.v;
     }
 
     @Nullable
@@ -674,11 +686,11 @@ public abstract class PlayerList {
     public void reloadWhitelist() {}
 
     public void a(EntityPlayer entityplayer, WorldServer worldserver) {
-        WorldBorder worldborder = this.server.D().getWorldBorder();
+        WorldBorder worldborder = this.server.E().getWorldBorder();
 
         entityplayer.playerConnection.sendPacket(new PacketPlayOutWorldBorder(worldborder, PacketPlayOutWorldBorder.EnumWorldBorderAction.INITIALIZE));
         entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateTime(worldserver.getTime(), worldserver.getDayTime(), worldserver.getGameRules().getBoolean(GameRules.DO_DAYLIGHT_CYCLE)));
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutSpawnPosition(worldserver.getSpawn()));
+        entityplayer.playerConnection.sendPacket(new PacketPlayOutSpawnPosition(worldserver.getSpawn(), worldserver.v()));
         if (worldserver.isRaining()) {
             entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.b, 0.0F));
             entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.h, worldserver.d(1.0F)));
@@ -842,7 +854,7 @@ public abstract class PlayerList {
             EntityPlayer entityplayer = (EntityPlayer) iterator1.next();
 
             entityplayer.playerConnection.sendPacket(packetplayoutrecipeupdate);
-            entityplayer.B().a(entityplayer);
+            entityplayer.getRecipeBook().a(entityplayer);
         }
 
     }

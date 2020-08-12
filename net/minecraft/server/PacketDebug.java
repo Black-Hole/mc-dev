@@ -47,9 +47,13 @@ public class PacketDebug {
 
     public static void a(World world, BlockPosition blockposition) {}
 
-    public static void a(GeneratorAccess generatoraccess, StructureStart<?> structurestart) {}
+    public static void a(GeneratorAccessSeed generatoraccessseed, StructureStart<?> structurestart) {}
 
-    public static void a(World world, EntityInsentient entityinsentient, PathfinderGoalSelector pathfindergoalselector) {}
+    public static void a(World world, EntityInsentient entityinsentient, PathfinderGoalSelector pathfindergoalselector) {
+        if (world instanceof WorldServer) {
+            ;
+        }
+    }
 
     public static void a(WorldServer worldserver, Collection<Raid> collection) {}
 

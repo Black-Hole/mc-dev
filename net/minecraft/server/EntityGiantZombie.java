@@ -12,7 +12,7 @@ public class EntityGiantZombie extends EntityMonster {
     }
 
     public static AttributeProvider.Builder m() {
-        return EntityMonster.eS().a(GenericAttributes.MAX_HEALTH, 100.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.ATTACK_DAMAGE, 50.0D);
+        return EntityMonster.eR().a(GenericAttributes.MAX_HEALTH, 100.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.5D).a(GenericAttributes.ATTACK_DAMAGE, 50.0D);
     }
 
     @Override

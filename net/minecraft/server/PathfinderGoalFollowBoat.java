@@ -24,23 +24,23 @@ public class PathfinderGoalFollowBoat extends PathfinderGoal {
             EntityBoat entityboat = (EntityBoat) iterator.next();
             Entity entity = entityboat.getRidingPassenger();
 
-            if (entity instanceof EntityHuman && (MathHelper.e(((EntityHuman) entity).aY) > 0.0F || MathHelper.e(((EntityHuman) entity).ba) > 0.0F)) {
+            if (entity instanceof EntityHuman && (MathHelper.e(((EntityHuman) entity).aR) > 0.0F || MathHelper.e(((EntityHuman) entity).aT) > 0.0F)) {
                 flag = true;
                 break;
             }
         }
 
-        return this.c != null && (MathHelper.e(this.c.aY) > 0.0F || MathHelper.e(this.c.ba) > 0.0F) || flag;
+        return this.c != null && (MathHelper.e(this.c.aR) > 0.0F || MathHelper.e(this.c.aT) > 0.0F) || flag;
     }
 
     @Override
-    public boolean D_() {
+    public boolean C_() {
         return true;
     }
 
     @Override
     public boolean b() {
-        return this.c != null && this.c.isPassenger() && (MathHelper.e(this.c.aY) > 0.0F || MathHelper.e(this.c.ba) > 0.0F);
+        return this.c != null && this.c.isPassenger() && (MathHelper.e(this.c.aR) > 0.0F || MathHelper.e(this.c.aT) > 0.0F);
     }
 
     @Override
@@ -68,10 +68,10 @@ public class PathfinderGoalFollowBoat extends PathfinderGoal {
 
     @Override
     public void e() {
-        boolean flag = MathHelper.e(this.c.aY) > 0.0F || MathHelper.e(this.c.ba) > 0.0F;
+        boolean flag = MathHelper.e(this.c.aR) > 0.0F || MathHelper.e(this.c.aT) > 0.0F;
         float f = this.d == PathfinderGoalBoat.GO_IN_BOAT_DIRECTION ? (flag ? 0.01F : 0.0F) : 0.015F;
 
-        this.b.a(f, new Vec3D((double) this.b.aY, (double) this.b.aZ, (double) this.b.ba));
+        this.b.a(f, new Vec3D((double) this.b.aR, (double) this.b.aS, (double) this.b.aT));
         this.b.move(EnumMoveType.SELF, this.b.getMot());
         if (--this.a <= 0) {
             this.a = 10;

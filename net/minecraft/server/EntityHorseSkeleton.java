@@ -4,25 +4,25 @@ import javax.annotation.Nullable;
 
 public class EntityHorseSkeleton extends EntityHorseAbstract {
 
-    private final PathfinderGoalHorseTrap bD = new PathfinderGoalHorseTrap(this);
-    private boolean bE;
-    private int bF;
+    private final PathfinderGoalHorseTrap bw = new PathfinderGoalHorseTrap(this);
+    private boolean bx;
+    private int by;
 
     public EntityHorseSkeleton(EntityTypes<? extends EntityHorseSkeleton> entitytypes, World world) {
         super(entitytypes, world);
     }
 
-    public static AttributeProvider.Builder eM() {
-        return fj().a(GenericAttributes.MAX_HEALTH, 15.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
+    public static AttributeProvider.Builder eL() {
+        return fi().a(GenericAttributes.MAX_HEALTH, 15.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.20000000298023224D);
     }
 
     @Override
-    protected void eL() {
-        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.fr());
+    protected void eK() {
+        this.getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(this.fq());
     }
 
     @Override
-    protected void eW() {}
+    protected void eV() {}
 
     @Override
     protected SoundEffect getSoundAmbient() {
@@ -49,12 +49,12 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
                 return SoundEffects.ENTITY_SKELETON_HORSE_STEP_WATER;
             }
 
-            ++this.bC;
-            if (this.bC > 5 && this.bC % 3 == 0) {
+            ++this.bv;
+            if (this.bv > 5 && this.bv % 3 == 0) {
                 return SoundEffects.ENTITY_SKELETON_HORSE_GALLOP_WATER;
             }
 
-            if (this.bC <= 5) {
+            if (this.bv <= 5) {
                 return SoundEffects.ENTITY_SKELETON_HORSE_STEP_WATER;
             }
         }
@@ -73,11 +73,11 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
     }
 
     @Override
-    protected void fo() {
+    protected void fn() {
         if (this.isInWater()) {
             this.playSound(SoundEffects.ENTITY_SKELETON_HORSE_JUMP_WATER, 0.4F, 1.0F);
         } else {
-            super.fo();
+            super.fn();
         }
 
     }
@@ -88,14 +88,14 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
     }
 
     @Override
-    public double aY() {
-        return super.aY() - 0.1875D;
+    public double bb() {
+        return super.bb() - 0.1875D;
     }
 
     @Override
     public void movementTick() {
         super.movementTick();
-        if (this.eN() && this.bF++ >= 18000) {
+        if (this.eM() && this.by++ >= 18000) {
             this.die();
         }
 
@@ -104,19 +104,19 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        nbttagcompound.setBoolean("SkeletonTrap", this.eN());
-        nbttagcompound.setInt("SkeletonTrapTime", this.bF);
+        nbttagcompound.setBoolean("SkeletonTrap", this.eM());
+        nbttagcompound.setInt("SkeletonTrapTime", this.by);
     }
 
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
         this.t(nbttagcompound.getBoolean("SkeletonTrap"));
-        this.bF = nbttagcompound.getInt("SkeletonTrapTime");
+        this.by = nbttagcompound.getInt("SkeletonTrapTime");
     }
 
     @Override
-    public boolean bp() {
+    public boolean bs() {
         return true;
     }
 
@@ -125,17 +125,17 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
         return 0.96F;
     }
 
-    public boolean eN() {
-        return this.bE;
+    public boolean eM() {
+        return this.bx;
     }
 
     public void t(boolean flag) {
-        if (flag != this.bE) {
-            this.bE = flag;
+        if (flag != this.bx) {
+            this.bx = flag;
             if (flag) {
-                this.goalSelector.a(1, this.bD);
+                this.goalSelector.a(1, this.bw);
             } else {
-                this.goalSelector.a((PathfinderGoal) this.bD);
+                this.goalSelector.a((PathfinderGoal) this.bw);
             }
 
         }
@@ -143,8 +143,8 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
 
     @Nullable
     @Override
-    public EntityAgeable createChild(EntityAgeable entityageable) {
-        return (EntityAgeable) EntityTypes.SKELETON_HORSE.a(this.world);
+    public EntityAgeable createChild(WorldServer worldserver, EntityAgeable entityageable) {
+        return (EntityAgeable) EntityTypes.SKELETON_HORSE.a((World) worldserver);
     }
 
     @Override

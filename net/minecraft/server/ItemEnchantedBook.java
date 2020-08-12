@@ -77,7 +77,7 @@ public class ItemEnchantedBook extends Item {
                     }
                 }
             }
-        } else if (creativemodetab.o().length != 0) {
+        } else if (creativemodetab.n().length != 0) {
             iterator = IRegistry.ENCHANTMENT.iterator();
 
             while (iterator.hasNext()) {

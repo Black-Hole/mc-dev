@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 public class WorldGenFeatureFillConfiguration implements WorldGenFeatureConfiguration {
 
     public static final Codec<WorldGenFeatureFillConfiguration> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(Codec.INT.fieldOf("height").forGetter((worldgenfeaturefillconfiguration) -> {
+        return instance.group(Codec.intRange(0, 255).fieldOf("height").forGetter((worldgenfeaturefillconfiguration) -> {
             return worldgenfeaturefillconfiguration.b;
         }), IBlockData.b.fieldOf("state").forGetter((worldgenfeaturefillconfiguration) -> {
             return worldgenfeaturefillconfiguration.c;

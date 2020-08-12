@@ -7,10 +7,10 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class EntityMushroomCow extends EntityCow implements IShearable {
 
-    private static final DataWatcherObject<String> bv = DataWatcher.a(EntityMushroomCow.class, DataWatcherRegistry.d);
-    private MobEffectList bw;
-    private int bx;
-    private UUID by;
+    private static final DataWatcherObject<String> bo = DataWatcher.a(EntityMushroomCow.class, DataWatcherRegistry.d);
+    private MobEffectList bp;
+    private int bq;
+    private UUID br;
 
     public EntityMushroomCow(EntityTypes<? extends EntityMushroomCow> entitytypes, World world) {
         super(entitytypes, world);
@@ -26,12 +26,12 @@ public class EntityMushroomCow extends EntityCow implements IShearable {
     }
 
     @Override
-    public void onLightningStrike(EntityLightning entitylightning) {
+    public void onLightningStrike(WorldServer worldserver, EntityLightning entitylightning) {
         UUID uuid = entitylightning.getUniqueID();
 
-        if (!uuid.equals(this.by)) {
+        if (!uuid.equals(this.br)) {
             this.setVariant(this.getVariant() == EntityMushroomCow.Type.RED ? EntityMushroomCow.Type.BROWN : EntityMushroomCow.Type.RED);
-            this.by = uuid;
+            this.br = uuid;
             this.playSound(SoundEffects.ENTITY_MOOSHROOM_CONVERT, 2.0F, 1.0F);
         }
 
@@ -40,7 +40,7 @@ public class EntityMushroomCow extends EntityCow implements IShearable {
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityMushroomCow.bv, EntityMushroomCow.Type.RED.c);
+        this.datawatcher.register(EntityMushroomCow.bo, EntityMushroomCow.Type.RED.c);
     }
 
     @Override
@@ -51,17 +51,17 @@ public class EntityMushroomCow extends EntityCow implements IShearable {
             boolean flag = false;
             ItemStack itemstack1;
 
-            if (this.bw != null) {
+            if (this.bp != null) {
                 flag = true;
                 itemstack1 = new ItemStack(Items.SUSPICIOUS_STEW);
-                ItemSuspiciousStew.a(itemstack1, this.bw, this.bx);
-                this.bw = null;
-                this.bx = 0;
+                ItemSuspiciousStew.a(itemstack1, this.bp, this.bq);
+                this.bp = null;
+                this.bq = 0;
             } else {
                 itemstack1 = new ItemStack(Items.MUSHROOM_STEW);
             }
 
-            ItemStack itemstack2 = ItemLiquidUtil.a(itemstack, entityhuman, itemstack1);
+            ItemStack itemstack2 = ItemLiquidUtil.a(itemstack, entityhuman, itemstack1, false);
 
             entityhuman.a(enumhand, itemstack2);
             SoundEffect soundeffect;
@@ -84,7 +84,7 @@ public class EntityMushroomCow extends EntityCow implements IShearable {
 
             return EnumInteractionResult.a(this.world.isClientSide);
         } else if (this.getVariant() == EntityMushroomCow.Type.BROWN && itemstack.getItem().a((Tag) TagsItem.SMALL_FLOWERS)) {
-            if (this.bw != null) {
+            if (this.bp != null) {
                 for (int i = 0; i < 2; ++i) {
                     this.world.addParticle(Particles.SMOKE, this.locX() + this.random.nextDouble() / 2.0D, this.e(0.5D), this.locZ() + this.random.nextDouble() / 2.0D, 0.0D, this.random.nextDouble() / 5.0D, 0.0D);
                 }
@@ -105,8 +105,8 @@ public class EntityMushroomCow extends EntityCow implements IShearable {
                     this.world.addParticle(Particles.EFFECT, this.locX() + this.random.nextDouble() / 2.0D, this.e(0.5D), this.locZ() + this.random.nextDouble() / 2.0D, 0.0D, this.random.nextDouble() / 5.0D, 0.0D);
                 }
 
-                this.bw = (MobEffectList) pair.getLeft();
-                this.bx = (Integer) pair.getRight();
+                this.bp = (MobEffectList) pair.getLeft();
+                this.bq = (Integer) pair.getRight();
                 this.playSound(SoundEffects.ENTITY_MOOSHROOM_EAT, 2.0F, 1.0F);
             }
 
@@ -126,7 +126,7 @@ public class EntityMushroomCow extends EntityCow implements IShearable {
 
             entitycow.setPositionRotation(this.locX(), this.locY(), this.locZ(), this.yaw, this.pitch);
             entitycow.setHealth(this.getHealth());
-            entitycow.aH = this.aH;
+            entitycow.aA = this.aA;
             if (this.hasCustomName()) {
                 entitycow.setCustomName(this.getCustomName());
                 entitycow.setCustomNameVisible(this.getCustomNameVisible());
@@ -155,9 +155,9 @@ public class EntityMushroomCow extends EntityCow implements IShearable {
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
         nbttagcompound.setString("Type", this.getVariant().c);
-        if (this.bw != null) {
-            nbttagcompound.setByte("EffectId", (byte) MobEffectList.getId(this.bw));
-            nbttagcompound.setInt("EffectDuration", this.bx);
+        if (this.bp != null) {
+            nbttagcompound.setByte("EffectId", (byte) MobEffectList.getId(this.bp));
+            nbttagcompound.setInt("EffectDuration", this.bq);
         }
 
     }
@@ -167,11 +167,11 @@ public class EntityMushroomCow extends EntityCow implements IShearable {
         super.loadData(nbttagcompound);
         this.setVariant(EntityMushroomCow.Type.b(nbttagcompound.getString("Type")));
         if (nbttagcompound.hasKeyOfType("EffectId", 1)) {
-            this.bw = MobEffectList.fromId(nbttagcompound.getByte("EffectId"));
+            this.bp = MobEffectList.fromId(nbttagcompound.getByte("EffectId"));
         }
 
         if (nbttagcompound.hasKeyOfType("EffectDuration", 3)) {
-            this.bx = nbttagcompound.getInt("EffectDuration");
+            this.bq = nbttagcompound.getInt("EffectDuration");
         }
 
     }
@@ -193,16 +193,16 @@ public class EntityMushroomCow extends EntityCow implements IShearable {
     }
 
     public void setVariant(EntityMushroomCow.Type entitymushroomcow_type) {
-        this.datawatcher.set(EntityMushroomCow.bv, entitymushroomcow_type.c);
+        this.datawatcher.set(EntityMushroomCow.bo, entitymushroomcow_type.c);
     }
 
     public EntityMushroomCow.Type getVariant() {
-        return EntityMushroomCow.Type.b((String) this.datawatcher.get(EntityMushroomCow.bv));
+        return EntityMushroomCow.Type.b((String) this.datawatcher.get(EntityMushroomCow.bo));
     }
 
     @Override
-    public EntityMushroomCow createChild(EntityAgeable entityageable) {
-        EntityMushroomCow entitymushroomcow = (EntityMushroomCow) EntityTypes.MOOSHROOM.a(this.world);
+    public EntityMushroomCow createChild(WorldServer worldserver, EntityAgeable entityageable) {
+        EntityMushroomCow entitymushroomcow = (EntityMushroomCow) EntityTypes.MOOSHROOM.a((World) worldserver);
 
         entitymushroomcow.setVariant(this.a((EntityMushroomCow) entityageable));
         return entitymushroomcow;

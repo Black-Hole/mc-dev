@@ -124,7 +124,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
 
     @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        return (iworldreader.getLightLevel(blockposition, 0) >= 8 || iworldreader.f(blockposition)) && super.canPlace(iblockdata, iworldreader, blockposition);
+        return (iworldreader.getLightLevel(blockposition, 0) >= 8 || iworldreader.e(blockposition)) && super.canPlace(iblockdata, iworldreader, blockposition);
     }
 
     @Override

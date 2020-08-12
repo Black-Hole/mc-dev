@@ -28,7 +28,7 @@ public abstract class Container {
 
     protected static boolean a(ContainerAccess containeraccess, EntityHuman entityhuman, Block block) {
         return (Boolean) containeraccess.a((world, blockposition) -> {
-            return !world.getType(blockposition).a(block) ? false : entityhuman.g((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) <= 64.0D;
+            return !world.getType(blockposition).a(block) ? false : entityhuman.h((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) <= 64.0D;
         }, true);
     }
 

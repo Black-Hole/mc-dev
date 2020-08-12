@@ -99,7 +99,7 @@ public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
 
             if (BehaviorVillageHeroGift.b.containsKey(villagerprofession)) {
                 LootTable loottable = entityvillager.world.getMinecraftServer().getLootTableRegistry().getLootTable((MinecraftKey) BehaviorVillageHeroGift.b.get(villagerprofession));
-                LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) entityvillager.world)).set(LootContextParameters.POSITION, entityvillager.getChunkCoordinates()).set(LootContextParameters.THIS_ENTITY, entityvillager).a(entityvillager.getRandom());
+                LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) entityvillager.world)).set(LootContextParameters.ORIGIN, entityvillager.getPositionVector()).set(LootContextParameters.THIS_ENTITY, entityvillager).a(entityvillager.getRandom());
 
                 return loottable.populateLoot(loottableinfo_builder.build(LootContextParameterSets.GIFT));
             } else {

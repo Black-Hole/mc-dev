@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.mojang.serialization.Codec;
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class WorldGenFeatureHugeFungi extends WorldGenerator<WorldGenFeatureHugeFungiConfiguration> {
 
@@ -10,21 +9,16 @@ public class WorldGenFeatureHugeFungi extends WorldGenerator<WorldGenFeatureHuge
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureHugeFungiConfiguration worldgenfeaturehugefungiconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureHugeFungiConfiguration worldgenfeaturehugefungiconfiguration) {
         Block block = worldgenfeaturehugefungiconfiguration.f.getBlock();
-        Object object = null;
+        BlockPosition blockposition1 = null;
+        Block block1 = generatoraccessseed.getType(blockposition.down()).getBlock();
 
-        if (worldgenfeaturehugefungiconfiguration.j) {
-            Block block1 = generatoraccessseed.getType(blockposition.down()).getBlock();
-
-            if (block1 == block) {
-                object = blockposition;
-            }
-        } else {
-            object = a((GeneratorAccess) generatoraccessseed, blockposition, block);
+        if (block1 == block) {
+            blockposition1 = blockposition;
         }
 
-        if (object == null) {
+        if (blockposition1 == null) {
             return false;
         } else {
             int i = MathHelper.nextInt(random, 4, 13);
@@ -36,7 +30,7 @@ public class WorldGenFeatureHugeFungi extends WorldGenerator<WorldGenFeatureHuge
             if (!worldgenfeaturehugefungiconfiguration.j) {
                 int j = chunkgenerator.getGenerationDepth();
 
-                if (((BlockPosition) object).getY() + i + 1 >= j) {
+                if (blockposition1.getY() + i + 1 >= j) {
                     return false;
                 }
             }
@@ -44,8 +38,8 @@ public class WorldGenFeatureHugeFungi extends WorldGenerator<WorldGenFeatureHuge
             boolean flag = !worldgenfeaturehugefungiconfiguration.j && random.nextFloat() < 0.06F;
 
             generatoraccessseed.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 4);
-            this.a(generatoraccessseed, random, worldgenfeaturehugefungiconfiguration, (BlockPosition) object, i, flag);
-            this.b(generatoraccessseed, random, worldgenfeaturehugefungiconfiguration, (BlockPosition) object, i, flag);
+            this.a(generatoraccessseed, random, worldgenfeaturehugefungiconfiguration, blockposition1, i, flag);
+            this.b(generatoraccessseed, random, worldgenfeaturehugefungiconfiguration, blockposition1, i, flag);
             return true;
         }
     }
@@ -54,7 +48,7 @@ public class WorldGenFeatureHugeFungi extends WorldGenerator<WorldGenFeatureHuge
         return generatoraccess.a(blockposition, (iblockdata) -> {
             Material material = iblockdata.getMaterial();
 
-            return iblockdata.isAir() || iblockdata.a(Blocks.WATER) || iblockdata.a(Blocks.LAVA) || material == Material.REPLACEABLE_PLANT || flag && material == Material.PLANT;
+            return iblockdata.getMaterial().isReplaceable() || flag && material == Material.PLANT;
         });
     }
 
@@ -161,22 +155,6 @@ public class WorldGenFeatureHugeFungi extends WorldGenerator<WorldGenFeatureHuge
             }
         }
 
-    }
-
-    @Nullable
-    private static BlockPosition.MutableBlockPosition a(GeneratorAccess generatoraccess, BlockPosition blockposition, Block block) {
-        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i();
-
-        for (int i = blockposition.getY(); i >= 1; --i) {
-            blockposition_mutableblockposition.p(i);
-            Block block1 = generatoraccess.getType(blockposition_mutableblockposition.down()).getBlock();
-
-            if (block1 == block) {
-                return blockposition_mutableblockposition;
-            }
-        }
-
-        return null;
     }
 
     private static void a(BlockPosition blockposition, GeneratorAccess generatoraccess, Random random) {

@@ -14,7 +14,7 @@ public class BlockAnvil extends BlockFalling {
     private static final VoxelShape h = Block.a(3.0D, 10.0D, 0.0D, 13.0D, 16.0D, 16.0D);
     private static final VoxelShape i = VoxelShapes.a(BlockAnvil.b, BlockAnvil.c, BlockAnvil.d, BlockAnvil.e);
     private static final VoxelShape j = VoxelShapes.a(BlockAnvil.b, BlockAnvil.f, BlockAnvil.g, BlockAnvil.h);
-    private static final ChatMessage k = new ChatMessage("container.repair");
+    private static final IChatBaseComponent k = new ChatMessage("container.repair");
 
     public BlockAnvil(BlockBase.Info blockbase_info) {
         super(blockbase_info);

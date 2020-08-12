@@ -8,14 +8,14 @@ public class TileEntitySign extends TileEntity {
     public final IChatBaseComponent[] lines;
     public boolean isEditable;
     private EntityHuman c;
-    private final IChatFormatted[] g;
+    private final FormattedString[] g;
     private EnumColor color;
 
     public TileEntitySign() {
         super(TileEntityTypes.SIGN);
         this.lines = new IChatBaseComponent[]{ChatComponentText.d, ChatComponentText.d, ChatComponentText.d, ChatComponentText.d};
         this.isEditable = true;
-        this.g = new IChatFormatted[4];
+        this.g = new FormattedString[4];
         this.color = EnumColor.BLACK;
     }
 

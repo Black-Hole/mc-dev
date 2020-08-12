@@ -8,19 +8,15 @@ import java.util.Set;
 public class WorldGenFoilagePlacerPine extends WorldGenFoilagePlacer {
 
     public static final Codec<WorldGenFoilagePlacerPine> a = RecordCodecBuilder.create((instance) -> {
-        return b(instance).and(instance.group(Codec.INT.fieldOf("height").forGetter((worldgenfoilageplacerpine) -> {
+        return b(instance).and(IntSpread.a(0, 16, 8).fieldOf("height").forGetter((worldgenfoilageplacerpine) -> {
             return worldgenfoilageplacerpine.b;
-        }), Codec.INT.fieldOf("height_random").forGetter((worldgenfoilageplacerpine) -> {
-            return worldgenfoilageplacerpine.c;
-        }))).apply(instance, WorldGenFoilagePlacerPine::new);
+        })).apply(instance, WorldGenFoilagePlacerPine::new);
     });
-    private final int b;
-    private final int c;
+    private final IntSpread b;
 
-    public WorldGenFoilagePlacerPine(int i, int j, int k, int l, int i1, int j1) {
-        super(i, j, k, l);
-        this.b = i1;
-        this.c = j1;
+    public WorldGenFoilagePlacerPine(IntSpread intspread, IntSpread intspread1, IntSpread intspread2) {
+        super(intspread, intspread1);
+        this.b = intspread2;
     }
 
     @Override
@@ -50,7 +46,7 @@ public class WorldGenFoilagePlacerPine extends WorldGenFoilagePlacer {
 
     @Override
     public int a(Random random, int i, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
-        return this.b + random.nextInt(this.c + 1);
+        return this.b.a(random);
     }
 
     @Override

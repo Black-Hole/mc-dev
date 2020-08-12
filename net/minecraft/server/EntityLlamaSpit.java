@@ -9,14 +9,14 @@ public class EntityLlamaSpit extends IProjectile {
     public EntityLlamaSpit(World world, EntityLlama entityllama) {
         this(EntityTypes.LLAMA_SPIT, world);
         super.setShooter(entityllama);
-        this.setPosition(entityllama.locX() - (double) (entityllama.getWidth() + 1.0F) * 0.5D * (double) MathHelper.sin(entityllama.aH * 0.017453292F), entityllama.getHeadY() - 0.10000000149011612D, entityllama.locZ() + (double) (entityllama.getWidth() + 1.0F) * 0.5D * (double) MathHelper.cos(entityllama.aH * 0.017453292F));
+        this.setPosition(entityllama.locX() - (double) (entityllama.getWidth() + 1.0F) * 0.5D * (double) MathHelper.sin(entityllama.aA * 0.017453292F), entityllama.getHeadY() - 0.10000000149011612D, entityllama.locZ() + (double) (entityllama.getWidth() + 1.0F) * 0.5D * (double) MathHelper.cos(entityllama.aA * 0.017453292F));
     }
 
     @Override
     public void tick() {
         super.tick();
         Vec3D vec3d = this.getMot();
-        MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, this::a, RayTrace.BlockCollisionOption.OUTLINE);
+        MovingObjectPosition movingobjectposition = ProjectileHelper.a((Entity) this, this::a);
 
         if (movingobjectposition != null) {
             this.a(movingobjectposition);
@@ -32,7 +32,7 @@ public class EntityLlamaSpit extends IProjectile {
 
         if (this.world.a(this.getBoundingBox()).noneMatch(BlockBase.BlockData::isAir)) {
             this.die();
-        } else if (this.aD()) {
+        } else if (this.aG()) {
             this.die();
         } else {
             this.setMot(vec3d.a(0.9900000095367432D));
@@ -68,7 +68,7 @@ public class EntityLlamaSpit extends IProjectile {
     protected void initDatawatcher() {}
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

@@ -28,7 +28,7 @@ public class AdvancementRewards {
 
     public void a(EntityPlayer entityplayer) {
         entityplayer.giveExp(this.b);
-        LootTableInfo loottableinfo = (new LootTableInfo.Builder(entityplayer.getWorldServer())).set(LootContextParameters.THIS_ENTITY, entityplayer).set(LootContextParameters.POSITION, entityplayer.getChunkCoordinates()).a(entityplayer.getRandom()).build(LootContextParameterSets.ADVANCEMENT_REWARD);
+        LootTableInfo loottableinfo = (new LootTableInfo.Builder(entityplayer.getWorldServer())).set(LootContextParameters.THIS_ENTITY, entityplayer).set(LootContextParameters.ORIGIN, entityplayer.getPositionVector()).a(entityplayer.getRandom()).build(LootContextParameterSets.ADVANCEMENT_REWARD);
         boolean flag = false;
         MinecraftKey[] aminecraftkey = this.c;
         int i = aminecraftkey.length;

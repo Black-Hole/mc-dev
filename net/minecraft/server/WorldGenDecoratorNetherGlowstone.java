@@ -12,7 +12,7 @@ public class WorldGenDecoratorNetherGlowstone extends WorldGenDecoratorFeatureSi
     }
 
     public Stream<BlockPosition> a(Random random, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, BlockPosition blockposition) {
-        return IntStream.range(0, random.nextInt(random.nextInt(worldgendecoratorfrequencyconfiguration.b) + 1)).mapToObj((i) -> {
+        return IntStream.range(0, random.nextInt(random.nextInt(worldgendecoratorfrequencyconfiguration.a().a(random)) + 1)).mapToObj((i) -> {
             int j = random.nextInt(16) + blockposition.getX();
             int k = random.nextInt(16) + blockposition.getZ();
             int l = random.nextInt(120) + 4;

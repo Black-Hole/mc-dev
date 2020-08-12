@@ -64,13 +64,13 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
     }
 
     @Override
-    protected void b(BlockPosition blockposition, IBlockData iblockdata) {
+    protected void c(BlockPosition blockposition, IBlockData iblockdata) {
         double d0 = 1.0E-4D;
         double d1 = 0.001D;
 
-        super.b(blockposition, iblockdata);
+        super.c(blockposition, iblockdata);
         Vec3D vec3d = this.getMot();
-        double d2 = b(vec3d);
+        double d2 = c(vec3d);
         double d3 = this.b * this.b + this.c * this.c;
 
         if (d3 > 1.0E-4D && d2 > 0.001D) {

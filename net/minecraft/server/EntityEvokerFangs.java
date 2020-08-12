@@ -93,7 +93,7 @@ public class EntityEvokerFangs extends Entity {
                 while (iterator.hasNext()) {
                     EntityLiving entityliving = (EntityLiving) iterator.next();
 
-                    this.d(entityliving);
+                    this.c(entityliving);
                 }
             }
 
@@ -109,7 +109,7 @@ public class EntityEvokerFangs extends Entity {
 
     }
 
-    private void d(EntityLiving entityliving) {
+    private void c(EntityLiving entityliving) {
         EntityLiving entityliving1 = this.getOwner();
 
         if (entityliving.isAlive() && !entityliving.isInvulnerable() && entityliving != entityliving1) {
@@ -127,7 +127,7 @@ public class EntityEvokerFangs extends Entity {
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

@@ -32,7 +32,7 @@ public class ChunkRegionLoader {
             ChunkRegionLoader.LOGGER.error("Chunk file at {} is in the wrong location; relocating. (Expected {}, got {})", chunkcoordintpair, chunkcoordintpair, chunkcoordintpair1);
         }
 
-        BiomeStorage biomestorage = new BiomeStorage(chunkcoordintpair, worldchunkmanager, nbttagcompound1.hasKeyOfType("Biomes", 11) ? nbttagcompound1.getIntArray("Biomes") : null);
+        BiomeStorage biomestorage = new BiomeStorage(worldserver.r().b(IRegistry.ay), chunkcoordintpair, worldchunkmanager, nbttagcompound1.hasKeyOfType("Biomes", 11) ? nbttagcompound1.getIntArray("Biomes") : null);
         ChunkConverter chunkconverter = nbttagcompound1.hasKeyOfType("UpgradeData", 10) ? new ChunkConverter(nbttagcompound1.getCompound("UpgradeData")) : ChunkConverter.a;
         ProtoChunkTickList<Block> protochunkticklist = new ProtoChunkTickList<>((block) -> {
             return block == null || block.getBlockData().isAir();
@@ -132,7 +132,7 @@ public class ChunkRegionLoader {
                     BlockPosition blockposition = (BlockPosition) iterator.next();
 
                     if (((IChunkAccess) object).getType(blockposition).f() != 0) {
-                        protochunk.j(blockposition);
+                        protochunk.k(blockposition);
                     }
                 }
             }
@@ -290,7 +290,7 @@ public class ChunkRegionLoader {
         while (iterator.hasNext()) {
             BlockPosition blockposition = (BlockPosition) iterator.next();
 
-            nbttagcompound3 = ichunkaccess.i(blockposition);
+            nbttagcompound3 = ichunkaccess.j(blockposition);
             if (nbttagcompound3 != null) {
                 nbttaglist1.add(nbttagcompound3);
             }

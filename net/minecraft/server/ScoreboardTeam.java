@@ -33,7 +33,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         this.a = scoreboard;
         this.b = s;
         this.d = new ChatComponentText(s);
-        this.m = ChatModifier.b.setInsertion(s).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(s)));
+        this.m = ChatModifier.a.setInsertion(s).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(s)));
     }
 
     @Override

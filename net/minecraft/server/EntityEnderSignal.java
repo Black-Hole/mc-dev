@@ -72,7 +72,7 @@ public class EntityEnderSignal extends Entity {
         double d0 = this.locX() + vec3d.x;
         double d1 = this.locY() + vec3d.y;
         double d2 = this.locZ() + vec3d.z;
-        float f = MathHelper.sqrt(b(vec3d));
+        float f = MathHelper.sqrt(c(vec3d));
 
         this.pitch = IProjectile.e(this.lastPitch, (float) (MathHelper.d(vec3d.y, (double) f) * 57.2957763671875D));
         this.yaw = IProjectile.e(this.lastYaw, (float) (MathHelper.d(vec3d.x, vec3d.z) * 57.2957763671875D));
@@ -141,17 +141,17 @@ public class EntityEnderSignal extends Entity {
     }
 
     @Override
-    public float aO() {
+    public float aQ() {
         return 1.0F;
     }
 
     @Override
-    public boolean bH() {
+    public boolean bK() {
         return false;
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

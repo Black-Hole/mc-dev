@@ -9,8 +9,11 @@ import com.mojang.datafixers.types.Type;
 import com.mojang.serialization.DataResult;
 import it.unimi.dsi.fastutil.Hash.Strategy;
 import java.io.File;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -30,6 +33,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinWorkerThread;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
@@ -323,21 +327,110 @@ public class SystemUtils {
         return aint[random.nextInt(aint.length)];
     }
 
+    private static BooleanSupplier a(final java.nio.file.Path java_nio_file_path, final java.nio.file.Path java_nio_file_path1) {
+        return new BooleanSupplier() {
+            public boolean getAsBoolean() {
+                try {
+                    Files.move(java_nio_file_path, java_nio_file_path1);
+                    return true;
+                } catch (IOException ioexception) {
+                    SystemUtils.LOGGER.error("Failed to rename", ioexception);
+                    return false;
+                }
+            }
+
+            public String toString() {
+                return "rename " + java_nio_file_path + " to " + java_nio_file_path1;
+            }
+        };
+    }
+
+    private static BooleanSupplier a(final java.nio.file.Path java_nio_file_path) {
+        return new BooleanSupplier() {
+            public boolean getAsBoolean() {
+                try {
+                    Files.deleteIfExists(java_nio_file_path);
+                    return true;
+                } catch (IOException ioexception) {
+                    SystemUtils.LOGGER.warn("Failed to delete", ioexception);
+                    return false;
+                }
+            }
+
+            public String toString() {
+                return "delete old " + java_nio_file_path;
+            }
+        };
+    }
+
+    private static BooleanSupplier b(final java.nio.file.Path java_nio_file_path) {
+        return new BooleanSupplier() {
+            public boolean getAsBoolean() {
+                return !Files.exists(java_nio_file_path, new LinkOption[0]);
+            }
+
+            public String toString() {
+                return "verify that " + java_nio_file_path + " is deleted";
+            }
+        };
+    }
+
+    private static BooleanSupplier c(final java.nio.file.Path java_nio_file_path) {
+        return new BooleanSupplier() {
+            public boolean getAsBoolean() {
+                return Files.isRegularFile(java_nio_file_path, new LinkOption[0]);
+            }
+
+            public String toString() {
+                return "verify that " + java_nio_file_path + " is present";
+            }
+        };
+    }
+
+    private static boolean a(BooleanSupplier... abooleansupplier) {
+        BooleanSupplier[] abooleansupplier1 = abooleansupplier;
+        int i = abooleansupplier.length;
+
+        for (int j = 0; j < i; ++j) {
+            BooleanSupplier booleansupplier = abooleansupplier1[j];
+
+            if (!booleansupplier.getAsBoolean()) {
+                SystemUtils.LOGGER.warn("Failed to execute {}", booleansupplier);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static boolean a(int i, String s, BooleanSupplier... abooleansupplier) {
+        for (int j = 0; j < i; ++j) {
+            if (a(abooleansupplier)) {
+                return true;
+            }
+
+            SystemUtils.LOGGER.error("Failed to {}, retrying {}/{}", s, j, i);
+        }
+
+        SystemUtils.LOGGER.error("Failed to {}, aborting, progress might be lost", s);
+        return false;
+    }
+
     public static void a(File file, File file1, File file2) {
-        if (file2.exists()) {
-            file2.delete();
-        }
+        a(file.toPath(), file1.toPath(), file2.toPath());
+    }
 
-        file.renameTo(file2);
-        if (file.exists()) {
-            file.delete();
-        }
+    public static void a(java.nio.file.Path java_nio_file_path, java.nio.file.Path java_nio_file_path1, java.nio.file.Path java_nio_file_path2) {
+        boolean flag = true;
 
-        file1.renameTo(file);
-        if (file1.exists()) {
-            file1.delete();
-        }
+        if (!Files.exists(java_nio_file_path, new LinkOption[0]) || a(10, "create backup " + java_nio_file_path2, a(java_nio_file_path2), a(java_nio_file_path, java_nio_file_path2), c(java_nio_file_path2))) {
+            if (a(10, "remove old " + java_nio_file_path, a(java_nio_file_path), b(java_nio_file_path))) {
+                if (!a(10, "replace " + java_nio_file_path + " with " + java_nio_file_path1, a(java_nio_file_path1, java_nio_file_path), c(java_nio_file_path))) {
+                    a(10, "restore " + java_nio_file_path + " from " + java_nio_file_path2, a(java_nio_file_path2, java_nio_file_path), c(java_nio_file_path));
+                }
 
+            }
+        }
     }
 
     public static Consumer<String> a(String s, Consumer<String> consumer) {

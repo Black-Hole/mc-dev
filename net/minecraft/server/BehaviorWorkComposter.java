@@ -27,8 +27,10 @@ public class BehaviorWorkComposter extends BehaviorWork {
     }
 
     private void a(WorldServer worldserver, EntityVillager entityvillager, GlobalPos globalpos, IBlockData iblockdata) {
+        BlockPosition blockposition = globalpos.getBlockPosition();
+
         if ((Integer) iblockdata.get(BlockComposter.a) == 8) {
-            iblockdata = BlockComposter.d(iblockdata, (World) worldserver, globalpos.getBlockPosition());
+            iblockdata = BlockComposter.d(iblockdata, (World) worldserver, blockposition);
         }
 
         int i = 20;
@@ -36,6 +38,7 @@ public class BehaviorWorkComposter extends BehaviorWork {
         int[] aint = new int[BehaviorWorkComposter.b.size()];
         InventorySubcontainer inventorysubcontainer = entityvillager.getInventory();
         int j = inventorysubcontainer.getSize();
+        IBlockData iblockdata1 = iblockdata;
 
         for (int k = j - 1; k >= 0 && i > 0; --k) {
             ItemStack itemstack = inventorysubcontainer.getItem(k);
@@ -52,8 +55,9 @@ public class BehaviorWorkComposter extends BehaviorWork {
                     i -= k1;
 
                     for (int l1 = 0; l1 < k1; ++l1) {
-                        iblockdata = BlockComposter.a(iblockdata, worldserver, itemstack, globalpos.getBlockPosition());
-                        if ((Integer) iblockdata.get(BlockComposter.a) == 7) {
+                        iblockdata1 = BlockComposter.a(iblockdata1, worldserver, itemstack, blockposition);
+                        if ((Integer) iblockdata1.get(BlockComposter.a) == 7) {
+                            this.a(worldserver, iblockdata, blockposition, iblockdata1);
                             return;
                         }
                     }
@@ -61,6 +65,11 @@ public class BehaviorWorkComposter extends BehaviorWork {
             }
         }
 
+        this.a(worldserver, iblockdata, blockposition, iblockdata1);
+    }
+
+    private void a(WorldServer worldserver, IBlockData iblockdata, BlockPosition blockposition, IBlockData iblockdata1) {
+        worldserver.triggerEffect(1500, blockposition, iblockdata1 != iblockdata ? 1 : 0);
     }
 
     private void a(EntityVillager entityvillager) {

@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +35,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccessSeed {
         int i = MathHelper.floor(Math.sqrt((double) list.size()));
 
         if (i * i != list.size()) {
-            throw (IllegalStateException) SystemUtils.c(new IllegalStateException("Cache size is not a square."));
+            throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException("Cache size is not a square.")));
         } else {
             ChunkCoordIntPair chunkcoordintpair = ((IChunkAccess) list.get(list.size() / 2)).getPos();
 
@@ -89,9 +90,9 @@ public class RegionLimitedWorldAccess implements GeneratorAccessSeed {
             RegionLimitedWorldAccess.LOGGER.error("Requested chunk : {} {}", i, j);
             RegionLimitedWorldAccess.LOGGER.error("Region bounds : {} {} | {} {}", this.n.x, this.n.z, this.o.x, this.o.z);
             if (ichunkaccess != null) {
-                throw (RuntimeException) SystemUtils.c(new RuntimeException(String.format("Chunk is not of correct status. Expecting %s, got %s | %s %s", chunkstatus, ichunkaccess.getChunkStatus(), i, j)));
+                throw (RuntimeException) SystemUtils.c((Throwable) (new RuntimeException(String.format("Chunk is not of correct status. Expecting %s, got %s | %s %s", chunkstatus, ichunkaccess.getChunkStatus(), i, j))));
             } else {
-                throw (RuntimeException) SystemUtils.c(new RuntimeException(String.format("We are asking a region for a chunk out of bound | %s %s", i, j)));
+                throw (RuntimeException) SystemUtils.c((Throwable) (new RuntimeException(String.format("We are asking a region for a chunk out of bound | %s %s", i, j))));
             }
         }
     }
@@ -163,7 +164,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccessSeed {
         if (tileentity != null) {
             return tileentity;
         } else {
-            NBTTagCompound nbttagcompound = ichunkaccess.f(blockposition);
+            NBTTagCompound nbttagcompound = ichunkaccess.i(blockposition);
             IBlockData iblockdata = ichunkaccess.getType(blockposition);
 
             if (nbttagcompound != null) {
@@ -221,13 +222,13 @@ public class RegionLimitedWorldAccess implements GeneratorAccessSeed {
         }
 
         if (iblockdata.q(this, blockposition)) {
-            this.e(blockposition);
+            this.j(blockposition);
         }
 
         return true;
     }
 
-    private void e(BlockPosition blockposition) {
+    private void j(BlockPosition blockposition) {
         this.z(blockposition).e(blockposition);
     }
 
@@ -262,6 +263,11 @@ public class RegionLimitedWorldAccess implements GeneratorAccessSeed {
     }
 
     @Override
+    public IRegistryCustom r() {
+        return this.f.r();
+    }
+
+    @Override
     public WorldData getWorldData() {
         return this.h;
     }
@@ -271,7 +277,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccessSeed {
         if (!this.isChunkLoaded(blockposition.getX() >> 4, blockposition.getZ() >> 4)) {
             throw new RuntimeException("We are asking a region for a chunk out of bound");
         } else {
-            return new DifficultyDamageScaler(this.f.getDifficulty(), this.f.getDayTime(), 0L, this.f.aa());
+            return new DifficultyDamageScaler(this.f.getDifficulty(), this.f.getDayTime(), 0L, this.f.ae());
         }
     }
 
@@ -342,5 +348,10 @@ public class RegionLimitedWorldAccess implements GeneratorAccessSeed {
     @Override
     public List<EntityHuman> getPlayers() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public Stream<? extends StructureStart<?>> a(SectionPosition sectionposition, StructureGenerator<?> structuregenerator) {
+        return this.f.a(sectionposition, structuregenerator);
     }
 }

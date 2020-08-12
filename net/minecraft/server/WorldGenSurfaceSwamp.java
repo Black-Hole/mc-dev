@@ -28,6 +28,6 @@ public class WorldGenSurfaceSwamp extends WorldGenSurface<WorldGenSurfaceConfigu
             }
         }
 
-        WorldGenSurface.S.a(random, ichunkaccess, biomebase, i, j, k, d0, iblockdata, iblockdata1, l, i1, worldgensurfaceconfigurationbase);
+        WorldGenSurface.v.a(random, ichunkaccess, biomebase, i, j, k, d0, iblockdata, iblockdata1, l, i1, worldgensurfaceconfigurationbase);
     }
 }

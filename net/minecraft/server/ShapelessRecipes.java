@@ -104,7 +104,7 @@ public class ShapelessRecipes implements RecipeCrafting {
                 nonnulllist.set(j, RecipeItemStack.b(packetdataserializer));
             }
 
-            ItemStack itemstack = packetdataserializer.m();
+            ItemStack itemstack = packetdataserializer.n();
 
             return new ShapelessRecipes(minecraftkey, s, itemstack, nonnulllist);
         }

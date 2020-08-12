@@ -40,7 +40,7 @@ public class ItemCompass extends Item implements ItemVanishable {
 
                 Optional<ResourceKey<World>> optional = a(nbttagcompound);
 
-                if (optional.isPresent() && optional.get() == world.getDimensionKey() && nbttagcompound.hasKey("LodestonePos") && !((WorldServer) world).x().a(VillagePlaceType.w, GameProfileSerializer.b(nbttagcompound.getCompound("LodestonePos")))) {
+                if (optional.isPresent() && optional.get() == world.getDimensionKey() && nbttagcompound.hasKey("LodestonePos") && !((WorldServer) world).y().a(VillagePlaceType.w, GameProfileSerializer.b(nbttagcompound.getCompound("LodestonePos")))) {
                     nbttagcompound.remove("LodestonePos");
                 }
             }
@@ -50,32 +50,35 @@ public class ItemCompass extends Item implements ItemVanishable {
 
     @Override
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
-        BlockPosition blockposition = itemactioncontext.d.getBlockPosition();
+        BlockPosition blockposition = itemactioncontext.getClickPosition();
+        World world = itemactioncontext.getWorld();
 
-        if (!itemactioncontext.e.getType(blockposition).a(Blocks.LODESTONE)) {
+        if (!world.getType(blockposition).a(Blocks.LODESTONE)) {
             return super.a(itemactioncontext);
         } else {
-            itemactioncontext.e.playSound((EntityHuman) null, blockposition, SoundEffects.ITEM_LODESTONE_COMPASS_LOCK, SoundCategory.PLAYERS, 1.0F, 1.0F);
-            boolean flag = !itemactioncontext.b.abilities.canInstantlyBuild && itemactioncontext.f.getCount() == 1;
+            world.playSound((EntityHuman) null, blockposition, SoundEffects.ITEM_LODESTONE_COMPASS_LOCK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+            EntityHuman entityhuman = itemactioncontext.getEntity();
+            ItemStack itemstack = itemactioncontext.getItemStack();
+            boolean flag = !entityhuman.abilities.canInstantlyBuild && itemstack.getCount() == 1;
 
             if (flag) {
-                this.a(itemactioncontext.e.getDimensionKey(), blockposition, itemactioncontext.f.getOrCreateTag());
+                this.a(world.getDimensionKey(), blockposition, itemstack.getOrCreateTag());
             } else {
-                ItemStack itemstack = new ItemStack(Items.COMPASS, 1);
-                NBTTagCompound nbttagcompound = itemactioncontext.f.hasTag() ? itemactioncontext.f.getTag().clone() : new NBTTagCompound();
+                ItemStack itemstack1 = new ItemStack(Items.COMPASS, 1);
+                NBTTagCompound nbttagcompound = itemstack.hasTag() ? itemstack.getTag().clone() : new NBTTagCompound();
 
-                itemstack.setTag(nbttagcompound);
-                if (!itemactioncontext.b.abilities.canInstantlyBuild) {
-                    itemactioncontext.f.subtract(1);
+                itemstack1.setTag(nbttagcompound);
+                if (!entityhuman.abilities.canInstantlyBuild) {
+                    itemstack.subtract(1);
                 }
 
-                this.a(itemactioncontext.e.getDimensionKey(), blockposition, nbttagcompound);
-                if (!itemactioncontext.b.inventory.pickup(itemstack)) {
-                    itemactioncontext.b.drop(itemstack, false);
+                this.a(world.getDimensionKey(), blockposition, nbttagcompound);
+                if (!entityhuman.inventory.pickup(itemstack1)) {
+                    entityhuman.drop(itemstack1, false);
                 }
             }
 
-            return EnumInteractionResult.a(itemactioncontext.e.isClientSide);
+            return EnumInteractionResult.a(world.isClientSide);
         }
     }
 

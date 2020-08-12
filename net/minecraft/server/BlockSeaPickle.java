@@ -38,7 +38,7 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
 
     @Override
     protected boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return !iblockdata.getCollisionShape(iblockaccess, blockposition).a(EnumDirection.UP).isEmpty();
+        return !iblockdata.getCollisionShape(iblockaccess, blockposition).a(EnumDirection.UP).isEmpty() || iblockdata.d(iblockaccess, blockposition, EnumDirection.UP);
     }
 
     @Override

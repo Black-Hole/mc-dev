@@ -11,11 +11,11 @@ public class WorldGenFeatureHellFlowingLavaConfiguration implements WorldGenFeat
     public static final Codec<WorldGenFeatureHellFlowingLavaConfiguration> a = RecordCodecBuilder.create((instance) -> {
         return instance.group(Fluid.a.fieldOf("state").forGetter((worldgenfeaturehellflowinglavaconfiguration) -> {
             return worldgenfeaturehellflowinglavaconfiguration.b;
-        }), Codec.BOOL.fieldOf("requires_block_below").withDefault(true).forGetter((worldgenfeaturehellflowinglavaconfiguration) -> {
+        }), Codec.BOOL.fieldOf("requires_block_below").orElse(true).forGetter((worldgenfeaturehellflowinglavaconfiguration) -> {
             return worldgenfeaturehellflowinglavaconfiguration.c;
-        }), Codec.INT.fieldOf("rock_count").withDefault(4).forGetter((worldgenfeaturehellflowinglavaconfiguration) -> {
+        }), Codec.INT.fieldOf("rock_count").orElse(4).forGetter((worldgenfeaturehellflowinglavaconfiguration) -> {
             return worldgenfeaturehellflowinglavaconfiguration.d;
-        }), Codec.INT.fieldOf("hole_count").withDefault(1).forGetter((worldgenfeaturehellflowinglavaconfiguration) -> {
+        }), Codec.INT.fieldOf("hole_count").orElse(1).forGetter((worldgenfeaturehellflowinglavaconfiguration) -> {
             return worldgenfeaturehellflowinglavaconfiguration.e;
         }), IRegistry.BLOCK.listOf().fieldOf("valid_blocks").xmap(ImmutableSet::copyOf, ImmutableList::copyOf).forGetter((worldgenfeaturehellflowinglavaconfiguration) -> {
             return worldgenfeaturehellflowinglavaconfiguration.f;

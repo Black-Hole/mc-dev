@@ -133,7 +133,7 @@ public class EntityLeash extends EntityHanging {
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         return new PacketPlayOutSpawnEntity(this, this.getEntityType(), 0, this.getBlockPosition());
     }
 }

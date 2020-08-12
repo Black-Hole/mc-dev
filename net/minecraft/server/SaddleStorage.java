@@ -4,33 +4,33 @@ import java.util.Random;
 
 public class SaddleStorage {
 
-    private final DataWatcher d;
-    private final DataWatcherObject<Integer> e;
+    private final DataWatcher dataWatcher;
+    private final DataWatcherObject<Integer> dataWatcherBoostTicks;
     private final DataWatcherObject<Boolean> f;
-    public boolean a;
-    public int b;
-    public int c;
+    public boolean boosting;
+    public int currentBoostTicks;
+    public int boostTicks;
 
     public SaddleStorage(DataWatcher datawatcher, DataWatcherObject<Integer> datawatcherobject, DataWatcherObject<Boolean> datawatcherobject1) {
-        this.d = datawatcher;
-        this.e = datawatcherobject;
+        this.dataWatcher = datawatcher;
+        this.dataWatcherBoostTicks = datawatcherobject;
         this.f = datawatcherobject1;
     }
 
     public void a() {
-        this.a = true;
-        this.b = 0;
-        this.c = (Integer) this.d.get(this.e);
+        this.boosting = true;
+        this.currentBoostTicks = 0;
+        this.boostTicks = (Integer) this.dataWatcher.get(this.dataWatcherBoostTicks);
     }
 
     public boolean a(Random random) {
-        if (this.a) {
+        if (this.boosting) {
             return false;
         } else {
-            this.a = true;
-            this.b = 0;
-            this.c = random.nextInt(841) + 140;
-            this.d.set(this.e, this.c);
+            this.boosting = true;
+            this.currentBoostTicks = 0;
+            this.boostTicks = random.nextInt(841) + 140;
+            this.dataWatcher.set(this.dataWatcherBoostTicks, this.boostTicks);
             return true;
         }
     }
@@ -44,10 +44,10 @@ public class SaddleStorage {
     }
 
     public void setSaddle(boolean flag) {
-        this.d.set(this.f, flag);
+        this.dataWatcher.set(this.f, flag);
     }
 
     public boolean hasSaddle() {
-        return (Boolean) this.d.get(this.f);
+        return (Boolean) this.dataWatcher.get(this.f);
     }
 }

@@ -56,7 +56,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
         } else {
             TileEntity tileentity = this.isTileEntity() ? world.getTileEntity(blockposition) : null;
 
-            a(iblockdata, world, blockposition, tileentity);
+            a(iblockdata, (GeneratorAccess) world, blockposition, tileentity);
             world.a(blockposition, false);
             EnumDirection[] aenumdirection = EnumDirection.values();
             int i = aenumdirection.length;

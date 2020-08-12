@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
+import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -53,7 +54,7 @@ public final class RegionFileCache implements AutoCloseable {
 
         try {
             if (datainputstream != null) {
-                nbttagcompound = NBTCompressedStreamTools.a(datainputstream);
+                nbttagcompound = NBTCompressedStreamTools.a((DataInput) datainputstream);
                 return nbttagcompound;
             }
 

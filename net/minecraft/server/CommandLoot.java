@@ -262,7 +262,7 @@ public class CommandLoot {
         WorldServer worldserver = commandlistenerwrapper.getWorld();
         IBlockData iblockdata = worldserver.getType(blockposition);
         TileEntity tileentity = worldserver.getTileEntity(blockposition);
-        LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder(worldserver)).set(LootContextParameters.POSITION, blockposition).set(LootContextParameters.BLOCK_STATE, iblockdata).setOptional(LootContextParameters.BLOCK_ENTITY, tileentity).setOptional(LootContextParameters.THIS_ENTITY, commandlistenerwrapper.getEntity()).set(LootContextParameters.TOOL, itemstack);
+        LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder(worldserver)).set(LootContextParameters.ORIGIN, Vec3D.a((BaseBlockPosition) blockposition)).set(LootContextParameters.BLOCK_STATE, iblockdata).setOptional(LootContextParameters.BLOCK_ENTITY, tileentity).setOptional(LootContextParameters.THIS_ENTITY, commandlistenerwrapper.getEntity()).set(LootContextParameters.TOOL, itemstack);
         List<ItemStack> list = iblockdata.a(loottableinfo_builder);
 
         return commandloot_b.accept(commandcontext, list, (list1) -> {
@@ -287,7 +287,7 @@ public class CommandLoot {
             loottableinfo_builder.setOptional(LootContextParameters.DIRECT_KILLER_ENTITY, entity1);
             loottableinfo_builder.setOptional(LootContextParameters.KILLER_ENTITY, entity1);
             loottableinfo_builder.set(LootContextParameters.THIS_ENTITY, entity);
-            loottableinfo_builder.set(LootContextParameters.POSITION, new BlockPosition(commandlistenerwrapper.getPosition()));
+            loottableinfo_builder.set(LootContextParameters.ORIGIN, commandlistenerwrapper.getPosition());
             LootTable loottable = commandlistenerwrapper.getServer().getLootTableRegistry().getLootTable(minecraftkey);
             List<ItemStack> list = loottable.populateLoot(loottableinfo_builder.build(LootContextParameterSets.ENTITY));
 
@@ -299,14 +299,14 @@ public class CommandLoot {
 
     private static int a(CommandContext<CommandListenerWrapper> commandcontext, MinecraftKey minecraftkey, CommandLoot.b commandloot_b) throws CommandSyntaxException {
         CommandListenerWrapper commandlistenerwrapper = (CommandListenerWrapper) commandcontext.getSource();
-        LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder(commandlistenerwrapper.getWorld())).setOptional(LootContextParameters.THIS_ENTITY, commandlistenerwrapper.getEntity()).set(LootContextParameters.POSITION, new BlockPosition(commandlistenerwrapper.getPosition()));
+        LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder(commandlistenerwrapper.getWorld())).setOptional(LootContextParameters.THIS_ENTITY, commandlistenerwrapper.getEntity()).set(LootContextParameters.ORIGIN, commandlistenerwrapper.getPosition());
 
         return a(commandcontext, minecraftkey, loottableinfo_builder.build(LootContextParameterSets.CHEST), commandloot_b);
     }
 
     private static int a(CommandContext<CommandListenerWrapper> commandcontext, MinecraftKey minecraftkey, BlockPosition blockposition, ItemStack itemstack, CommandLoot.b commandloot_b) throws CommandSyntaxException {
         CommandListenerWrapper commandlistenerwrapper = (CommandListenerWrapper) commandcontext.getSource();
-        LootTableInfo loottableinfo = (new LootTableInfo.Builder(commandlistenerwrapper.getWorld())).set(LootContextParameters.POSITION, blockposition).set(LootContextParameters.TOOL, itemstack).setOptional(LootContextParameters.THIS_ENTITY, commandlistenerwrapper.getEntity()).build(LootContextParameterSets.FISHING);
+        LootTableInfo loottableinfo = (new LootTableInfo.Builder(commandlistenerwrapper.getWorld())).set(LootContextParameters.ORIGIN, Vec3D.a((BaseBlockPosition) blockposition)).set(LootContextParameters.TOOL, itemstack).setOptional(LootContextParameters.THIS_ENTITY, commandlistenerwrapper.getEntity()).build(LootContextParameterSets.FISHING);
 
         return a(commandcontext, minecraftkey, loottableinfo, commandloot_b);
     }

@@ -14,8 +14,6 @@ public interface IResourceManager {
 
     List<IResource> c(MinecraftKey minecraftkey) throws IOException;
 
-    Collection<MinecraftKey> a(MinecraftKey minecraftkey, Predicate<String> predicate);
-
     Collection<MinecraftKey> a(String s, Predicate<String> predicate);
 
     public static enum Empty implements IResourceManager {
@@ -32,11 +30,6 @@ public interface IResourceManager {
         @Override
         public List<IResource> c(MinecraftKey minecraftkey) {
             return ImmutableList.of();
-        }
-
-        @Override
-        public Collection<MinecraftKey> a(MinecraftKey minecraftkey, Predicate<String> predicate) {
-            return ImmutableSet.of();
         }
 
         @Override

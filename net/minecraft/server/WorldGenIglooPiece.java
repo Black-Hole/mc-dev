@@ -33,7 +33,7 @@ public class WorldGenIglooPiece {
         private final EnumBlockRotation e;
 
         public a(DefinedStructureManager definedstructuremanager, MinecraftKey minecraftkey, BlockPosition blockposition, EnumBlockRotation enumblockrotation, int i) {
-            super(WorldGenFeatureStructurePieceType.K, 0);
+            super(WorldGenFeatureStructurePieceType.I, 0);
             this.d = minecraftkey;
             BlockPosition blockposition1 = (BlockPosition) WorldGenIglooPiece.e.get(minecraftkey);
 
@@ -43,7 +43,7 @@ public class WorldGenIglooPiece {
         }
 
         public a(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.K, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.I, nbttagcompound);
             this.d = new MinecraftKey(nbttagcompound.getString("Template"));
             this.e = EnumBlockRotation.valueOf(nbttagcompound.getString("Rot"));
             this.a(definedstructuremanager);
@@ -64,10 +64,10 @@ public class WorldGenIglooPiece {
         }
 
         @Override
-        protected void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
+        protected void a(String s, BlockPosition blockposition, WorldAccess worldaccess, Random random, StructureBoundingBox structureboundingbox) {
             if ("chest".equals(s)) {
-                generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 3);
-                TileEntity tileentity = generatoraccess.getTileEntity(blockposition.down());
+                worldaccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 3);
+                TileEntity tileentity = worldaccess.getTileEntity(blockposition.down());
 
                 if (tileentity instanceof TileEntityChest) {
                     ((TileEntityChest) tileentity).setLootTable(LootTables.C, random.nextLong());

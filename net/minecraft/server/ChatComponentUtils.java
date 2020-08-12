@@ -26,7 +26,7 @@ public class ChatComponentUtils {
         if (i > 100) {
             return ichatbasecomponent.mutableCopy();
         } else {
-            IChatMutableComponent ichatmutablecomponent = ichatbasecomponent instanceof ChatComponentContextual ? ((ChatComponentContextual) ichatbasecomponent).a(commandlistenerwrapper, entity, i + 1) : ichatbasecomponent.f();
+            IChatMutableComponent ichatmutablecomponent = ichatbasecomponent instanceof ChatComponentContextual ? ((ChatComponentContextual) ichatbasecomponent).a(commandlistenerwrapper, entity, i + 1) : ichatbasecomponent.g();
             Iterator iterator = ichatbasecomponent.getSiblings().iterator();
 
             while (iterator.hasNext()) {
@@ -102,7 +102,7 @@ public class ChatComponentUtils {
     }
 
     public static IChatMutableComponent a(IChatBaseComponent ichatbasecomponent) {
-        return (new ChatComponentText("[")).addSibling(ichatbasecomponent).c("]");
+        return new ChatMessage("chat.square_brackets", new Object[]{ichatbasecomponent});
     }
 
     public static IChatBaseComponent a(Message message) {

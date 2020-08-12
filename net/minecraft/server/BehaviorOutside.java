@@ -28,7 +28,7 @@ public class BehaviorOutside extends Behavior<EntityLiving> {
 
     @Override
     protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
-        return !worldserver.f(entityliving.getChunkCoordinates());
+        return !worldserver.e(entityliving.getChunkCoordinates());
     }
 
     @Nullable
@@ -48,6 +48,6 @@ public class BehaviorOutside extends Behavior<EntityLiving> {
     }
 
     public static boolean a(WorldServer worldserver, EntityLiving entityliving, BlockPosition blockposition) {
-        return worldserver.f(blockposition) && (double) worldserver.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition).getY() <= entityliving.locY();
+        return worldserver.e(blockposition) && (double) worldserver.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition).getY() <= entityliving.locY();
     }
 }

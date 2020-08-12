@@ -76,13 +76,13 @@ public class CriterionConditionPlayer {
                     }
                 }
 
-                RecipeBookServer recipebookserver = entityplayer.B();
+                RecipeBookServer recipebookserver = entityplayer.getRecipeBook();
                 ObjectIterator objectiterator = this.e.object2BooleanEntrySet().iterator();
 
                 while (objectiterator.hasNext()) {
                     it.unimi.dsi.fastutil.objects.Object2BooleanMap.Entry<MinecraftKey> it_unimi_dsi_fastutil_objects_object2booleanmap_entry = (it.unimi.dsi.fastutil.objects.Object2BooleanMap.Entry) objectiterator.next();
 
-                    if (recipebookserver.b((MinecraftKey) it_unimi_dsi_fastutil_objects_object2booleanmap_entry.getKey()) != it_unimi_dsi_fastutil_objects_object2booleanmap_entry.getBooleanValue()) {
+                    if (recipebookserver.hasDiscoveredRecipe((MinecraftKey) it_unimi_dsi_fastutil_objects_object2booleanmap_entry.getKey()) != it_unimi_dsi_fastutil_objects_object2booleanmap_entry.getBooleanValue()) {
                         return false;
                     }
                 }

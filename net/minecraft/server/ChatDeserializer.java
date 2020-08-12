@@ -9,7 +9,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -275,25 +274,8 @@ public class ChatDeserializer {
     }
 
     @Nullable
-    public static <T> T a(Gson gson, Reader reader, TypeToken<T> typetoken, boolean flag) {
-        try {
-            JsonReader jsonreader = new JsonReader(reader);
-
-            jsonreader.setLenient(flag);
-            return gson.getAdapter(typetoken).read(jsonreader);
-        } catch (IOException ioexception) {
-            throw new JsonParseException(ioexception);
-        }
-    }
-
-    @Nullable
     public static <T> T a(Gson gson, String s, Class<T> oclass, boolean flag) {
         return a(gson, (Reader) (new StringReader(s)), oclass, flag);
-    }
-
-    @Nullable
-    public static <T> T a(Gson gson, Reader reader, TypeToken<T> typetoken) {
-        return a(gson, reader, typetoken, false);
     }
 
     @Nullable

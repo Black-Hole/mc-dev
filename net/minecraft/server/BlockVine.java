@@ -1,8 +1,11 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 public class BlockVine extends Block {
@@ -15,35 +18,36 @@ public class BlockVine extends Block {
     public static final Map<EnumDirection, BlockStateBoolean> f = (Map) BlockSprawling.g.entrySet().stream().filter((entry) -> {
         return entry.getKey() != EnumDirection.DOWN;
     }).collect(SystemUtils.a());
-    protected static final VoxelShape g = Block.a(0.0D, 15.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape h = Block.a(0.0D, 0.0D, 0.0D, 1.0D, 16.0D, 16.0D);
-    protected static final VoxelShape i = Block.a(15.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape j = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 1.0D);
-    protected static final VoxelShape k = Block.a(0.0D, 0.0D, 15.0D, 16.0D, 16.0D, 16.0D);
+    private static final VoxelShape g = Block.a(0.0D, 15.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    private static final VoxelShape h = Block.a(0.0D, 0.0D, 0.0D, 1.0D, 16.0D, 16.0D);
+    private static final VoxelShape i = Block.a(15.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    private static final VoxelShape j = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 1.0D);
+    private static final VoxelShape k = Block.a(0.0D, 0.0D, 15.0D, 16.0D, 16.0D, 16.0D);
+    private final Map<IBlockData, VoxelShape> o;
 
     public BlockVine(BlockBase.Info blockbase_info) {
         super(blockbase_info);
         this.j((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockVine.UP, false)).set(BlockVine.NORTH, false)).set(BlockVine.EAST, false)).set(BlockVine.SOUTH, false)).set(BlockVine.WEST, false));
+        this.o = ImmutableMap.copyOf((Map) this.blockStateList.a().stream().collect(Collectors.toMap(Function.identity(), BlockVine::h)));
     }
 
-    @Override
-    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+    private static VoxelShape h(IBlockData iblockdata) {
         VoxelShape voxelshape = VoxelShapes.a();
 
         if ((Boolean) iblockdata.get(BlockVine.UP)) {
-            voxelshape = VoxelShapes.a(voxelshape, BlockVine.g);
+            voxelshape = BlockVine.g;
         }
 
         if ((Boolean) iblockdata.get(BlockVine.NORTH)) {
             voxelshape = VoxelShapes.a(voxelshape, BlockVine.j);
         }
 
-        if ((Boolean) iblockdata.get(BlockVine.EAST)) {
-            voxelshape = VoxelShapes.a(voxelshape, BlockVine.i);
-        }
-
         if ((Boolean) iblockdata.get(BlockVine.SOUTH)) {
             voxelshape = VoxelShapes.a(voxelshape, BlockVine.k);
+        }
+
+        if ((Boolean) iblockdata.get(BlockVine.EAST)) {
+            voxelshape = VoxelShapes.a(voxelshape, BlockVine.i);
         }
 
         if ((Boolean) iblockdata.get(BlockVine.WEST)) {
@@ -54,15 +58,20 @@ public class BlockVine extends Block {
     }
 
     @Override
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return (VoxelShape) this.o.get(iblockdata);
+    }
+
+    @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        return this.h(this.g(iblockdata, iworldreader, blockposition));
+        return this.l(this.g(iblockdata, iworldreader, blockposition));
     }
 
-    private boolean h(IBlockData iblockdata) {
-        return this.l(iblockdata) > 0;
+    private boolean l(IBlockData iblockdata) {
+        return this.m(iblockdata) > 0;
     }
 
-    private int l(IBlockData iblockdata) {
+    private int m(IBlockData iblockdata) {
         int i = 0;
         Iterator iterator = BlockVine.f.values().iterator();
 
@@ -141,7 +150,7 @@ public class BlockVine extends Block {
         } else {
             IBlockData iblockdata2 = this.g(iblockdata, generatoraccess, blockposition);
 
-            return !this.h(iblockdata2) ? Blocks.AIR.getBlockData() : iblockdata2;
+            return !this.l(iblockdata2) ? Blocks.AIR.getBlockData() : iblockdata2;
         }
     }
 
@@ -279,7 +288,7 @@ public class BlockVine extends Block {
     public boolean a(IBlockData iblockdata, BlockActionContext blockactioncontext) {
         IBlockData iblockdata1 = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition());
 
-        return iblockdata1.a((Block) this) ? this.l(iblockdata1) < BlockVine.f.size() : super.a(iblockdata, blockactioncontext);
+        return iblockdata1.a((Block) this) ? this.m(iblockdata1) < BlockVine.f.size() : super.a(iblockdata, blockactioncontext);
     }
 
     @Nullable

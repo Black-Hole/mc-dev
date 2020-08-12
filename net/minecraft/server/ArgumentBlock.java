@@ -319,12 +319,12 @@ public class ArgumentBlock {
     }
 
     private CompletableFuture<Suggestions> k(SuggestionsBuilder suggestionsbuilder, Tags<Block> tags) {
-        return ICompletionProvider.a((Iterable) tags.a(), suggestionsbuilder.createOffset(this.r).add(suggestionsbuilder));
+        return ICompletionProvider.a((Iterable) tags.b(), suggestionsbuilder.createOffset(this.r).add(suggestionsbuilder));
     }
 
     private CompletableFuture<Suggestions> l(SuggestionsBuilder suggestionsbuilder, Tags<Block> tags) {
         if (this.j) {
-            ICompletionProvider.a((Iterable) tags.a(), suggestionsbuilder, String.valueOf('#'));
+            ICompletionProvider.a((Iterable) tags.b(), suggestionsbuilder, String.valueOf('#'));
         }
 
         ICompletionProvider.a((Iterable) IRegistry.BLOCK.keySet(), suggestionsbuilder);

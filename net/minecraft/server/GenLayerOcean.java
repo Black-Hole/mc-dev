@@ -22,32 +22,32 @@ public enum GenLayerOcean implements AreaTransformer3, AreaTransformerIdentity {
                     int k1 = area.a(this.a(i + i1), this.b(j + j1));
 
                     if (!GenLayers.a(k1)) {
-                        if (l == GenLayers.a) {
-                            return GenLayers.b;
+                        if (l == 44) {
+                            return 45;
                         }
 
-                        if (l == GenLayers.e) {
-                            return GenLayers.d;
+                        if (l == 10) {
+                            return 46;
                         }
                     }
                 }
             }
 
-            if (k == GenLayers.h) {
-                if (l == GenLayers.b) {
-                    return GenLayers.g;
+            if (k == 24) {
+                if (l == 45) {
+                    return 48;
                 }
 
-                if (l == GenLayers.c) {
-                    return GenLayers.h;
+                if (l == 0) {
+                    return 24;
                 }
 
-                if (l == GenLayers.d) {
-                    return GenLayers.i;
+                if (l == 46) {
+                    return 49;
                 }
 
-                if (l == GenLayers.e) {
-                    return GenLayers.j;
+                if (l == 10) {
+                    return 50;
                 }
             }
 

@@ -69,9 +69,9 @@ public class ControllerMove {
                 this.g = 0.0F;
             }
 
-            this.a.n(f2);
-            this.a.q(this.f);
-            this.a.s(this.g);
+            this.a.q(f2);
+            this.a.t(this.f);
+            this.a.v(this.g);
             this.h = ControllerMove.Operation.WAIT;
         } else if (this.h == ControllerMove.Operation.MOVE_TO) {
             this.h = ControllerMove.Operation.WAIT;
@@ -81,13 +81,13 @@ public class ControllerMove {
             double d3 = d0 * d0 + d2 * d2 + d1 * d1;
 
             if (d3 < 2.500000277905201E-7D) {
-                this.a.q(0.0F);
+                this.a.t(0.0F);
                 return;
             }
 
             f = (float) (MathHelper.d(d1, d0) * 57.2957763671875D) - 90.0F;
             this.a.yaw = this.a(this.a.yaw, f, 90.0F);
-            this.a.n((float) (this.e * this.a.b(GenericAttributes.MOVEMENT_SPEED)));
+            this.a.q((float) (this.e * this.a.b(GenericAttributes.MOVEMENT_SPEED)));
             BlockPosition blockposition = this.a.getChunkCoordinates();
             IBlockData iblockdata = this.a.world.getType(blockposition);
             Block block = iblockdata.getBlock();
@@ -98,12 +98,12 @@ public class ControllerMove {
                 this.h = ControllerMove.Operation.JUMPING;
             }
         } else if (this.h == ControllerMove.Operation.JUMPING) {
-            this.a.n((float) (this.e * this.a.b(GenericAttributes.MOVEMENT_SPEED)));
+            this.a.q((float) (this.e * this.a.b(GenericAttributes.MOVEMENT_SPEED)));
             if (this.a.isOnGround()) {
                 this.h = ControllerMove.Operation.WAIT;
             }
         } else {
-            this.a.q(0.0F);
+            this.a.t(0.0F);
         }
 
     }

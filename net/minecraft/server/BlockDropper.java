@@ -19,19 +19,19 @@ public class BlockDropper extends BlockDispenser {
     }
 
     @Override
-    public void dispense(World world, BlockPosition blockposition) {
-        SourceBlock sourceblock = new SourceBlock(world, blockposition);
+    public void dispense(WorldServer worldserver, BlockPosition blockposition) {
+        SourceBlock sourceblock = new SourceBlock(worldserver, blockposition);
         TileEntityDispenser tileentitydispenser = (TileEntityDispenser) sourceblock.getTileEntity();
         int i = tileentitydispenser.h();
 
         if (i < 0) {
-            world.triggerEffect(1001, blockposition, 0);
+            worldserver.triggerEffect(1001, blockposition, 0);
         } else {
             ItemStack itemstack = tileentitydispenser.getItem(i);
 
             if (!itemstack.isEmpty()) {
-                EnumDirection enumdirection = (EnumDirection) world.getType(blockposition).get(BlockDropper.FACING);
-                IInventory iinventory = TileEntityHopper.b(world, blockposition.shift(enumdirection));
+                EnumDirection enumdirection = (EnumDirection) worldserver.getType(blockposition).get(BlockDropper.FACING);
+                IInventory iinventory = TileEntityHopper.b((World) worldserver, blockposition.shift(enumdirection));
                 ItemStack itemstack1;
 
                 if (iinventory == null) {

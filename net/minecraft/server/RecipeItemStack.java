@@ -144,7 +144,7 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
         int i = packetdataserializer.i();
 
         return b(Stream.generate(() -> {
-            return new RecipeItemStack.StackProvider(packetdataserializer.m());
+            return new RecipeItemStack.StackProvider(packetdataserializer.n());
         }).limit((long) i));
     }
 
@@ -185,7 +185,7 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
                 return new RecipeItemStack.StackProvider(new ItemStack(item));
             } else if (jsonobject.has("tag")) {
                 minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "tag"));
-                Tag<Item> tag = TagsInstance.e().b().a(minecraftkey);
+                Tag<Item> tag = TagsInstance.a().getItemTags().a(minecraftkey);
 
                 if (tag == null) {
                     throw new JsonSyntaxException("Unknown item tag '" + minecraftkey + "'");
@@ -224,7 +224,7 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
         public JsonObject b() {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.addProperty("tag", TagsInstance.e().b().b(this.a).toString());
+            jsonobject.addProperty("tag", TagsInstance.a().getItemTags().b(this.a).toString());
             return jsonobject;
         }
     }

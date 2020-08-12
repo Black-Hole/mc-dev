@@ -14,7 +14,7 @@ public abstract class PathfinderGoal {
         return this.a();
     }
 
-    public boolean D_() {
+    public boolean C_() {
         return true;
     }
 

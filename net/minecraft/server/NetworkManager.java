@@ -141,7 +141,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
     public void sendPacket(Packet<?> packet, @Nullable GenericFutureListener<? extends Future<? super Void>> genericfuturelistener) {
         if (this.isConnected()) {
-            this.o();
+            this.p();
             this.b(packet, genericfuturelistener);
         } else {
             this.packetQueue.add(new NetworkManager.QueuedPacket(packet, genericfuturelistener));
@@ -189,7 +189,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
     }
 
-    private void o() {
+    private void p() {
         if (this.channel != null && this.channel.isOpen()) {
             Queue queue = this.packetQueue;
 
@@ -205,7 +205,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     }
 
     public void a() {
-        this.o();
+        this.p();
         if (this.packetListener instanceof LoginListener) {
             ((LoginListener) this.packetListener).tick();
         }
@@ -219,12 +219,16 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
         }
 
         if (this.t++ % 20 == 0) {
-            this.s = this.s * 0.75F + (float) this.q * 0.25F;
-            this.r = this.r * 0.75F + (float) this.p * 0.25F;
-            this.q = 0;
-            this.p = 0;
+            this.b();
         }
 
+    }
+
+    protected void b() {
+        this.s = MathHelper.g(0.75F, (float) this.q, this.s);
+        this.r = MathHelper.g(0.75F, (float) this.p, this.r);
+        this.q = 0;
+        this.p = 0;
     }
 
     public SocketAddress getSocketAddress() {
@@ -253,16 +257,16 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
         return this.channel != null && this.channel.isOpen();
     }
 
-    public boolean h() {
+    public boolean i() {
         return this.channel == null;
     }
 
-    public PacketListener i() {
+    public PacketListener j() {
         return this.packetListener;
     }
 
     @Nullable
-    public IChatBaseComponent j() {
+    public IChatBaseComponent k() {
         return this.m;
     }
 
@@ -301,14 +305,18 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
                 NetworkManager.LOGGER.warn("handleDisconnection() called twice");
             } else {
                 this.o = true;
-                if (this.j() != null) {
-                    this.i().a(this.j());
-                } else if (this.i() != null) {
-                    this.i().a(new ChatMessage("multiplayer.disconnect.generic"));
+                if (this.k() != null) {
+                    this.j().a(this.k());
+                } else if (this.j() != null) {
+                    this.j().a(new ChatMessage("multiplayer.disconnect.generic"));
                 }
             }
 
         }
+    }
+
+    public float n() {
+        return this.r;
     }
 
     static class QueuedPacket {

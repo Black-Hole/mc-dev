@@ -16,6 +16,6 @@ public class BehaviorProfession extends Behavior<EntityVillager> {
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
         entityvillager.setVillagerData(entityvillager.getVillagerData().withProfession(VillagerProfession.NONE));
-        entityvillager.b(worldserver);
+        entityvillager.c(worldserver);
     }
 }

@@ -192,7 +192,7 @@ public class EntityTrackerEntry {
             EntityTrackerEntry.LOGGER.warn("Fetching packet for removed entity " + this.tracker);
         }
 
-        Packet<?> packet = this.tracker.O();
+        Packet<?> packet = this.tracker.P();
 
         this.headYaw = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
         consumer.accept(packet);

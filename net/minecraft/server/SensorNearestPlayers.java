@@ -10,8 +10,6 @@ import java.util.stream.Stream;
 
 public class SensorNearestPlayers extends Sensor<EntityLiving> {
 
-    private static final PathfinderTargetCondition a = (new PathfinderTargetCondition()).a(16.0D).b().d();
-
     public SensorNearestPlayers() {}
 
     @Override
@@ -22,7 +20,7 @@ public class SensorNearestPlayers extends Sensor<EntityLiving> {
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving) {
         Stream stream = worldserver.getPlayers().stream().filter(IEntitySelector.g).filter((entityplayer) -> {
-            return entityliving.h((Entity) entityplayer) < 256.0D;
+            return entityliving.a((Entity) entityplayer, 16.0D);
         });
 
         entityliving.getClass();
@@ -31,7 +29,7 @@ public class SensorNearestPlayers extends Sensor<EntityLiving> {
 
         behaviorcontroller.setMemory(MemoryModuleType.NEAREST_PLAYERS, (Object) list);
         List<EntityHuman> list1 = (List) list.stream().filter((entityhuman) -> {
-            return SensorNearestPlayers.a.a(entityliving, entityhuman);
+            return a(entityliving, (EntityLiving) entityhuman);
         }).collect(Collectors.toList());
 
         behaviorcontroller.setMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER, (Object) (list1.isEmpty() ? null : (EntityHuman) list1.get(0)));

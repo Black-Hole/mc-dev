@@ -62,7 +62,7 @@ public class ArgumentParserPosition {
         }
     }
 
-    private static boolean b(StringReader stringreader) {
+    public static boolean b(StringReader stringreader) {
         boolean flag;
 
         if (stringreader.peek() == '~') {

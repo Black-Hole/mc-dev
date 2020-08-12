@@ -2,19 +2,29 @@ package net.minecraft.server;
 
 import javax.annotation.Nullable;
 
-public class BlockChain extends Block implements IBlockWaterlogged {
+public class BlockChain extends BlockRotatable implements IBlockWaterlogged {
 
-    public static final VoxelShape a = Block.a(6.5D, 0.0D, 6.5D, 9.5D, 16.0D, 9.5D);
-    public static final BlockStateBoolean b = BlockProperties.C;
+    public static final BlockStateBoolean a = BlockProperties.C;
+    protected static final VoxelShape b = Block.a(6.5D, 0.0D, 6.5D, 9.5D, 16.0D, 9.5D);
+    protected static final VoxelShape c = Block.a(6.5D, 6.5D, 0.0D, 9.5D, 9.5D, 16.0D);
+    protected static final VoxelShape d = Block.a(0.0D, 6.5D, 6.5D, 16.0D, 9.5D, 9.5D);
 
     public BlockChain(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChain.b, false));
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChain.a, false)).set(BlockChain.AXIS, EnumDirection.EnumAxis.Y));
     }
 
     @Override
     public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
-        return BlockChain.a;
+        switch ((EnumDirection.EnumAxis) iblockdata.get(BlockChain.AXIS)) {
+            case X:
+            default:
+                return BlockChain.d;
+            case Z:
+                return BlockChain.c;
+            case Y:
+                return BlockChain.b;
+        }
     }
 
     @Nullable
@@ -23,12 +33,12 @@ public class BlockChain extends Block implements IBlockWaterlogged {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
         boolean flag = fluid.getType() == FluidTypes.WATER;
 
-        return (IBlockData) super.getPlacedState(blockactioncontext).set(BlockChain.b, flag);
+        return (IBlockData) super.getPlacedState(blockactioncontext).set(BlockChain.a, flag);
     }
 
     @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if ((Boolean) iblockdata.get(BlockChain.b)) {
+        if ((Boolean) iblockdata.get(BlockChain.a)) {
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
@@ -37,12 +47,12 @@ public class BlockChain extends Block implements IBlockWaterlogged {
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockChain.b);
+        blockstatelist_a.a(BlockChain.a).a(BlockChain.AXIS);
     }
 
     @Override
     public Fluid d(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockChain.b) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
+        return (Boolean) iblockdata.get(BlockChain.a) ? FluidTypes.WATER.a(false) : super.d(iblockdata);
     }
 
     @Override

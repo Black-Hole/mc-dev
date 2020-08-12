@@ -68,7 +68,7 @@ public class PersistentRaid extends PersistentBase {
                 return null;
             } else {
                 BlockPosition blockposition = entityplayer.getChunkCoordinates();
-                List<VillagePlaceRecord> list = (List) this.b.x().c(VillagePlaceType.b, blockposition, 64, VillagePlace.Occupancy.IS_OCCUPIED).collect(Collectors.toList());
+                List<VillagePlaceRecord> list = (List) this.b.y().c(VillagePlaceType.b, blockposition, 64, VillagePlace.Occupancy.IS_OCCUPIED).collect(Collectors.toList());
                 int i = 0;
                 Vec3D vec3d = Vec3D.a;
 
@@ -120,7 +120,7 @@ public class PersistentRaid extends PersistentBase {
     }
 
     private Raid a(WorldServer worldserver, BlockPosition blockposition) {
-        Raid raid = worldserver.c_(blockposition);
+        Raid raid = worldserver.b_(blockposition);
 
         return raid != null ? raid : new Raid(this.e(), worldserver, blockposition);
     }

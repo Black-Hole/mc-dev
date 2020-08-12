@@ -305,10 +305,10 @@ public class PlayerSelector {
             a("type", (argumentparserselector) -> {
                 argumentparserselector.a((suggestionsbuilder, consumer) -> {
                     ICompletionProvider.a((Iterable) IRegistry.ENTITY_TYPE.keySet(), suggestionsbuilder, String.valueOf('!'));
-                    ICompletionProvider.a((Iterable) TagsEntity.b().a(), suggestionsbuilder, "!#");
+                    ICompletionProvider.a((Iterable) TagsEntity.a().b(), suggestionsbuilder, "!#");
                     if (!argumentparserselector.F()) {
                         ICompletionProvider.a((Iterable) IRegistry.ENTITY_TYPE.keySet(), suggestionsbuilder);
-                        ICompletionProvider.a((Iterable) TagsEntity.b().a(), suggestionsbuilder, String.valueOf('#'));
+                        ICompletionProvider.a((Iterable) TagsEntity.a().b(), suggestionsbuilder, String.valueOf('#'));
                     }
 
                     return suggestionsbuilder.buildFuture();
@@ -561,12 +561,12 @@ public class PlayerSelector {
                         return false;
                     } else {
                         WorldServer worldserver = (WorldServer) entity.world;
-                        LootItemCondition lootitemcondition = worldserver.getMinecraftServer().aI().a(minecraftkey);
+                        LootItemCondition lootitemcondition = worldserver.getMinecraftServer().getLootPredicateManager().a(minecraftkey);
 
                         if (lootitemcondition == null) {
                             return false;
                         } else {
-                            LootTableInfo loottableinfo = (new LootTableInfo.Builder(worldserver)).set(LootContextParameters.THIS_ENTITY, entity).set(LootContextParameters.POSITION, entity.getChunkCoordinates()).build(LootContextParameterSets.SELECTOR);
+                            LootTableInfo loottableinfo = (new LootTableInfo.Builder(worldserver)).set(LootContextParameters.THIS_ENTITY, entity).set(LootContextParameters.ORIGIN, entity.getPositionVector()).build(LootContextParameterSets.SELECTOR);
 
                             return flag ^ lootitemcondition.test(loottableinfo);
                         }

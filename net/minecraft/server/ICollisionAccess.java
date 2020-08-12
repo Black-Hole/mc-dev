@@ -23,7 +23,7 @@ public interface ICollisionAccess extends IBlockAccess {
         return voxelshape.isEmpty() || this.a((Entity) null, voxelshape.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()));
     }
 
-    default boolean i(Entity entity) {
+    default boolean j(Entity entity) {
         return this.a(entity, VoxelShapes.a(entity.getBoundingBox()));
     }
 
@@ -59,7 +59,7 @@ public interface ICollisionAccess extends IBlockAccess {
         return StreamSupport.stream(new VoxelShapeSpliterator(this, entity, axisalignedbb), false);
     }
 
-    default Stream<VoxelShape> a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, BiPredicate<IBlockData, BlockPosition> bipredicate) {
+    default Stream<VoxelShape> b(@Nullable Entity entity, AxisAlignedBB axisalignedbb, BiPredicate<IBlockData, BlockPosition> bipredicate) {
         return StreamSupport.stream(new VoxelShapeSpliterator(this, entity, axisalignedbb, bipredicate), false);
     }
 }

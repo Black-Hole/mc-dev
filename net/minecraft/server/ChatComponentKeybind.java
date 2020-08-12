@@ -18,7 +18,7 @@ public class ChatComponentKeybind extends ChatBaseComponent {
         this.e = s;
     }
 
-    private IChatBaseComponent i() {
+    private IChatBaseComponent j() {
         if (this.f == null) {
             this.f = (Supplier) ChatComponentKeybind.d.apply(this.e);
         }
@@ -28,11 +28,11 @@ public class ChatComponentKeybind extends ChatBaseComponent {
 
     @Override
     public <T> Optional<T> b(IChatFormatted.a<T> ichatformatted_a) {
-        return this.i().a(ichatformatted_a);
+        return this.j().a(ichatformatted_a);
     }
 
     @Override
-    public ChatComponentKeybind f() {
+    public ChatComponentKeybind g() {
         return new ChatComponentKeybind(this.e);
     }
 
@@ -54,7 +54,7 @@ public class ChatComponentKeybind extends ChatBaseComponent {
         return "KeybindComponent{keybind='" + this.e + '\'' + ", siblings=" + this.siblings + ", style=" + this.getChatModifier() + '}';
     }
 
-    public String h() {
+    public String i() {
         return this.e;
     }
 }

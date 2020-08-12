@@ -9,13 +9,13 @@ public class ResourcePackSourceVanilla implements ResourcePackSource {
     public ResourcePackSourceVanilla() {}
 
     @Override
-    public <T extends ResourcePackLoader> void a(Consumer<T> consumer, ResourcePackLoader.a<T> resourcepackloader_a) {
-        T t0 = ResourcePackLoader.a("vanilla", false, () -> {
+    public void a(Consumer<ResourcePackLoader> consumer, ResourcePackLoader.a resourcepackloader_a) {
+        ResourcePackLoader resourcepackloader = ResourcePackLoader.a("vanilla", false, () -> {
             return this.a;
         }, resourcepackloader_a, ResourcePackLoader.Position.BOTTOM, PackSource.b);
 
-        if (t0 != null) {
-            consumer.accept(t0);
+        if (resourcepackloader != null) {
+            consumer.accept(resourcepackloader);
         }
 
     }

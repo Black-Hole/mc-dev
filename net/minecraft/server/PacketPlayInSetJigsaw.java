@@ -16,9 +16,9 @@ public class PacketPlayInSetJigsaw implements Packet<PacketListenerPlayIn> {
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
-        this.b = packetdataserializer.o();
-        this.c = packetdataserializer.o();
-        this.d = packetdataserializer.o();
+        this.b = packetdataserializer.p();
+        this.c = packetdataserializer.p();
+        this.d = packetdataserializer.p();
         this.e = packetdataserializer.e(32767);
         this.f = (TileEntityJigsaw.JointType) TileEntityJigsaw.JointType.a(packetdataserializer.e(32767)).orElse(TileEntityJigsaw.JointType.ALIGNED);
     }

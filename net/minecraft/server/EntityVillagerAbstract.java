@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 
 public abstract class EntityVillagerAbstract extends EntityAgeable implements NPC, IMerchant {
 
-    private static final DataWatcherObject<Integer> bw = DataWatcher.a(EntityVillagerAbstract.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Integer> bp = DataWatcher.a(EntityVillagerAbstract.class, DataWatcherRegistry.b);
     @Nullable
     private EntityHuman tradingPlayer;
     @Nullable
@@ -21,21 +21,20 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     }
 
     @Override
-    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+    public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         if (groupdataentity == null) {
-            groupdataentity = new EntityAgeable.a();
-            ((EntityAgeable.a) groupdataentity).a(false);
+            groupdataentity = new EntityAgeable.a(false);
         }
 
-        return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
+        return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
     }
 
-    public int eL() {
-        return (Integer) this.datawatcher.get(EntityVillagerAbstract.bw);
+    public int eK() {
+        return (Integer) this.datawatcher.get(EntityVillagerAbstract.bp);
     }
 
     public void s(int i) {
-        this.datawatcher.set(EntityVillagerAbstract.bw, i);
+        this.datawatcher.set(EntityVillagerAbstract.bp, i);
     }
 
     @Override
@@ -51,7 +50,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityVillagerAbstract.bw, 0);
+        this.datawatcher.register(EntityVillagerAbstract.bp, 0);
     }
 
     @Override
@@ -65,7 +64,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return this.tradingPlayer;
     }
 
-    public boolean eO() {
+    public boolean eN() {
         return this.tradingPlayer != null;
     }
 
@@ -118,7 +117,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return flag ? SoundEffects.ENTITY_VILLAGER_YES : SoundEffects.ENTITY_VILLAGER_NO;
     }
 
-    public void eS() {
+    public void eR() {
         this.playSound(SoundEffects.ENTITY_VILLAGER_CELEBRATE, this.getSoundVolume(), this.dG());
     }
 
@@ -146,9 +145,9 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
 
     @Nullable
     @Override
-    public Entity a(WorldServer worldserver) {
+    public Entity b(WorldServer worldserver) {
         this.eT();
-        return super.a(worldserver);
+        return super.b(worldserver);
     }
 
     protected void eT() {

@@ -11,7 +11,7 @@ public interface ICrossbow extends IRangedEntity {
     @Nullable
     EntityLiving getGoalTarget();
 
-    void V_();
+    void U_();
 
     default void b(EntityLiving entityliving, float f) {
         EnumHand enumhand = ProjectileHelper.a(entityliving, Items.CROSSBOW);
@@ -21,7 +21,7 @@ public interface ICrossbow extends IRangedEntity {
             ItemCrossbow.a(entityliving.world, entityliving, enumhand, itemstack, f, (float) (14 - entityliving.world.getDifficulty().a() * 4));
         }
 
-        this.V_();
+        this.U_();
     }
 
     default void a(EntityLiving entityliving, EntityLiving entityliving1, IProjectile iprojectile, float f, float f1) {

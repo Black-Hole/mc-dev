@@ -2,25 +2,26 @@ package net.minecraft.server;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import java.util.function.Supplier;
 
 public class WorldGenFeatureVillageConfiguration implements WorldGenFeatureConfiguration {
 
     public static final Codec<WorldGenFeatureVillageConfiguration> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(MinecraftKey.a.fieldOf("start_pool").forGetter(WorldGenFeatureVillageConfiguration::b), Codec.INT.fieldOf("size").forGetter(WorldGenFeatureVillageConfiguration::a)).apply(instance, WorldGenFeatureVillageConfiguration::new);
+        return instance.group(WorldGenFeatureDefinedStructurePoolTemplate.b.fieldOf("start_pool").forGetter(WorldGenFeatureVillageConfiguration::c), Codec.intRange(0, 7).fieldOf("size").forGetter(WorldGenFeatureVillageConfiguration::b)).apply(instance, WorldGenFeatureVillageConfiguration::new);
     });
-    public final MinecraftKey b;
-    public final int c;
+    private final Supplier<WorldGenFeatureDefinedStructurePoolTemplate> b;
+    private final int c;
 
-    public WorldGenFeatureVillageConfiguration(MinecraftKey minecraftkey, int i) {
-        this.b = minecraftkey;
+    public WorldGenFeatureVillageConfiguration(Supplier<WorldGenFeatureDefinedStructurePoolTemplate> supplier, int i) {
+        this.b = supplier;
         this.c = i;
     }
 
-    public int a() {
+    public int b() {
         return this.c;
     }
 
-    public MinecraftKey b() {
+    public Supplier<WorldGenFeatureDefinedStructurePoolTemplate> c() {
         return this.b;
     }
 }

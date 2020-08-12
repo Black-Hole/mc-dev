@@ -6,8 +6,8 @@ import javax.annotation.Nullable;
 public class EntityVillagerTrader extends EntityVillagerAbstract {
 
     @Nullable
-    private BlockPosition bw;
-    private int bx;
+    private BlockPosition bp;
+    private int bq;
 
     public EntityVillagerTrader(EntityTypes<? extends EntityVillagerTrader> entitytypes, World world) {
         super(entitytypes, world);
@@ -18,7 +18,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     protected void initPathfinder() {
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(0, new PathfinderGoalUseItem<>(this, PotionUtil.a(new ItemStack(Items.POTION), Potions.INVISIBILITY), SoundEffects.ENTITY_WANDERING_TRADER_DISAPPEARED, (entityvillagertrader) -> {
-            return !this.world.isDay() && !entityvillagertrader.isInvisible();
+            return this.world.isNight() && !entityvillagertrader.isInvisible();
         }));
         this.goalSelector.a(0, new PathfinderGoalUseItem<>(this, new ItemStack(Items.MILK_BUCKET), SoundEffects.ENTITY_WANDERING_TRADER_REAPPEARED, (entityvillagertrader) -> {
             return this.world.isDay() && entityvillagertrader.isInvisible();
@@ -42,7 +42,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
 
     @Nullable
     @Override
-    public EntityAgeable createChild(EntityAgeable entityageable) {
+    public EntityAgeable createChild(WorldServer worldserver, EntityAgeable entityageable) {
         return null;
     }
 
@@ -55,7 +55,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.eO() && !this.isBaby()) {
+        if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.eN() && !this.isBaby()) {
             if (enumhand == EnumHand.MAIN_HAND) {
                 entityhuman.a(StatisticList.TALKED_TO_VILLAGER);
             }
@@ -98,9 +98,9 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
-        nbttagcompound.setInt("DespawnDelay", this.bx);
-        if (this.bw != null) {
-            nbttagcompound.set("WanderTarget", GameProfileSerializer.a(this.bw));
+        nbttagcompound.setInt("DespawnDelay", this.bq);
+        if (this.bp != null) {
+            nbttagcompound.set("WanderTarget", GameProfileSerializer.a(this.bp));
         }
 
     }
@@ -109,11 +109,11 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     public void loadData(NBTTagCompound nbttagcompound) {
         super.loadData(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("DespawnDelay", 99)) {
-            this.bx = nbttagcompound.getInt("DespawnDelay");
+            this.bq = nbttagcompound.getInt("DespawnDelay");
         }
 
         if (nbttagcompound.hasKey("WanderTarget")) {
-            this.bw = GameProfileSerializer.b(nbttagcompound.getCompound("WanderTarget"));
+            this.bp = GameProfileSerializer.b(nbttagcompound.getCompound("WanderTarget"));
         }
 
         this.setAgeRaw(Math.max(0, this.getAge()));
@@ -136,7 +136,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return this.eO() ? SoundEffects.ENTITY_WANDERING_TRADER_TRADE : SoundEffects.ENTITY_WANDERING_TRADER_AMBIENT;
+        return this.eN() ? SoundEffects.ENTITY_WANDERING_TRADER_TRADE : SoundEffects.ENTITY_WANDERING_TRADER_AMBIENT;
     }
 
     @Override
@@ -167,11 +167,11 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     public void u(int i) {
-        this.bx = i;
+        this.bq = i;
     }
 
     public int eX() {
-        return this.bx;
+        return this.bq;
     }
 
     @Override
@@ -184,19 +184,19 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     private void eY() {
-        if (this.bx > 0 && !this.eO() && --this.bx == 0) {
+        if (this.bq > 0 && !this.eN() && --this.bq == 0) {
             this.die();
         }
 
     }
 
     public void g(@Nullable BlockPosition blockposition) {
-        this.bw = blockposition;
+        this.bp = blockposition;
     }
 
     @Nullable
     private BlockPosition eZ() {
-        return this.bw;
+        return this.bp;
     }
 
     class a extends PathfinderGoal {

@@ -36,7 +36,7 @@ public class LootItemFunctionExplorationMap extends LootItemFunctionConditional 
 
     @Override
     public Set<LootContextParameter<?>> a() {
-        return ImmutableSet.of(LootContextParameters.POSITION);
+        return ImmutableSet.of(LootContextParameters.ORIGIN);
     }
 
     @Override
@@ -44,17 +44,17 @@ public class LootItemFunctionExplorationMap extends LootItemFunctionConditional 
         if (itemstack.getItem() != Items.MAP) {
             return itemstack;
         } else {
-            BlockPosition blockposition = (BlockPosition) loottableinfo.getContextParameter(LootContextParameters.POSITION);
+            Vec3D vec3d = (Vec3D) loottableinfo.getContextParameter(LootContextParameters.ORIGIN);
 
-            if (blockposition != null) {
+            if (vec3d != null) {
                 WorldServer worldserver = loottableinfo.getWorld();
-                BlockPosition blockposition1 = worldserver.a(this.e, blockposition, this.h, this.i);
+                BlockPosition blockposition = worldserver.a(this.e, new BlockPosition(vec3d), this.h, this.i);
 
-                if (blockposition1 != null) {
-                    ItemStack itemstack1 = ItemWorldMap.createFilledMapView(worldserver, blockposition1.getX(), blockposition1.getZ(), this.g, true, true);
+                if (blockposition != null) {
+                    ItemStack itemstack1 = ItemWorldMap.createFilledMapView(worldserver, blockposition.getX(), blockposition.getZ(), this.g, true, true);
 
                     ItemWorldMap.applySepiaFilter(worldserver, itemstack1);
-                    WorldMap.decorateMap(itemstack1, blockposition1, "+", this.f);
+                    WorldMap.decorateMap(itemstack1, blockposition, "+", this.f);
                     itemstack1.a((IChatBaseComponent) (new ChatMessage("filled_map." + this.e.i().toLowerCase(Locale.ROOT))));
                     return itemstack1;
                 }

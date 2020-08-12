@@ -5,19 +5,19 @@ import javax.annotation.Nullable;
 
 public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
-    private static final DataWatcherObject<Byte> bv = DataWatcher.a(EntityIllagerWizard.class, DataWatcherRegistry.a);
+    private static final DataWatcherObject<Byte> bo = DataWatcher.a(EntityIllagerWizard.class, DataWatcherRegistry.a);
     protected int b;
-    private EntityIllagerWizard.Spell bw;
+    private EntityIllagerWizard.Spell bp;
 
     protected EntityIllagerWizard(EntityTypes<? extends EntityIllagerWizard> entitytypes, World world) {
         super(entitytypes, world);
-        this.bw = EntityIllagerWizard.Spell.NONE;
+        this.bp = EntityIllagerWizard.Spell.NONE;
     }
 
     @Override
     protected void initDatawatcher() {
         super.initDatawatcher();
-        this.datawatcher.register(EntityIllagerWizard.bv, (byte) 0);
+        this.datawatcher.register(EntityIllagerWizard.bo, (byte) 0);
     }
 
     @Override
@@ -32,17 +32,17 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         nbttagcompound.setInt("SpellTicks", this.b);
     }
 
-    public boolean eX() {
-        return this.world.isClientSide ? (Byte) this.datawatcher.get(EntityIllagerWizard.bv) > 0 : this.b > 0;
+    public boolean eW() {
+        return this.world.isClientSide ? (Byte) this.datawatcher.get(EntityIllagerWizard.bo) > 0 : this.b > 0;
     }
 
     public void setSpell(EntityIllagerWizard.Spell entityillagerwizard_spell) {
-        this.bw = entityillagerwizard_spell;
-        this.datawatcher.set(EntityIllagerWizard.bv, (byte) entityillagerwizard_spell.g);
+        this.bp = entityillagerwizard_spell;
+        this.datawatcher.set(EntityIllagerWizard.bo, (byte) entityillagerwizard_spell.g);
     }
 
     public EntityIllagerWizard.Spell getSpell() {
-        return !this.world.isClientSide ? this.bw : EntityIllagerWizard.Spell.a((Byte) this.datawatcher.get(EntityIllagerWizard.bv));
+        return !this.world.isClientSide ? this.bp : EntityIllagerWizard.Spell.a((Byte) this.datawatcher.get(EntityIllagerWizard.bo));
     }
 
     @Override
@@ -57,12 +57,12 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
     @Override
     public void tick() {
         super.tick();
-        if (this.world.isClientSide && this.eX()) {
+        if (this.world.isClientSide && this.eW()) {
             EntityIllagerWizard.Spell entityillagerwizard_spell = this.getSpell();
             double d0 = entityillagerwizard_spell.h[0];
             double d1 = entityillagerwizard_spell.h[1];
             double d2 = entityillagerwizard_spell.h[2];
-            float f = this.aH * 0.017453292F + MathHelper.cos((float) this.ticksLived * 0.6662F) * 0.25F;
+            float f = this.aA * 0.017453292F + MathHelper.cos((float) this.ticksLived * 0.6662F) * 0.25F;
             float f1 = MathHelper.cos(f);
             float f2 = MathHelper.sin(f);
 
@@ -72,7 +72,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
     }
 
-    protected int eZ() {
+    protected int eY() {
         return this.b;
     }
 
@@ -117,7 +117,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         public boolean a() {
             EntityLiving entityliving = EntityIllagerWizard.this.getGoalTarget();
 
-            return entityliving != null && entityliving.isAlive() ? (EntityIllagerWizard.this.eX() ? false : EntityIllagerWizard.this.ticksLived >= this.c) : false;
+            return entityliving != null && entityliving.isAlive() ? (EntityIllagerWizard.this.eW() ? false : EntityIllagerWizard.this.ticksLived >= this.c) : false;
         }
 
         @Override
@@ -175,7 +175,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
         @Override
         public boolean a() {
-            return EntityIllagerWizard.this.eZ() > 0;
+            return EntityIllagerWizard.this.eY() > 0;
         }
 
         @Override
@@ -193,7 +193,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         @Override
         public void e() {
             if (EntityIllagerWizard.this.getGoalTarget() != null) {
-                EntityIllagerWizard.this.getControllerLook().a(EntityIllagerWizard.this.getGoalTarget(), (float) EntityIllagerWizard.this.ep(), (float) EntityIllagerWizard.this.eo());
+                EntityIllagerWizard.this.getControllerLook().a(EntityIllagerWizard.this.getGoalTarget(), (float) EntityIllagerWizard.this.eo(), (float) EntityIllagerWizard.this.O());
             }
 
         }

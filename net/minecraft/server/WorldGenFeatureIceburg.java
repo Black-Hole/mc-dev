@@ -9,7 +9,7 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureLakeCo
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureLakeConfiguration worldgenfeaturelakeconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureLakeConfiguration worldgenfeaturelakeconfiguration) {
         blockposition = new BlockPosition(blockposition.getX(), chunkgenerator.getSeaLevel(), blockposition.getZ());
         boolean flag = random.nextDouble() > 0.7D;
         IBlockData iblockdata = worldgenfeaturelakeconfiguration.b;

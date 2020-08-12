@@ -23,7 +23,7 @@ public class WorldGenShipwreck {
         private final boolean f;
 
         public a(DefinedStructureManager definedstructuremanager, MinecraftKey minecraftkey, BlockPosition blockposition, EnumBlockRotation enumblockrotation, boolean flag) {
-            super(WorldGenFeatureStructurePieceType.ad, 0);
+            super(WorldGenFeatureStructurePieceType.ab, 0);
             this.c = blockposition;
             this.d = enumblockrotation;
             this.e = minecraftkey;
@@ -32,7 +32,7 @@ public class WorldGenShipwreck {
         }
 
         public a(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.ad, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.ab, nbttagcompound);
             this.e = new MinecraftKey(nbttagcompound.getString("Template"));
             this.f = nbttagcompound.getBoolean("isBeached");
             this.d = EnumBlockRotation.valueOf(nbttagcompound.getString("Rot"));
@@ -55,13 +55,13 @@ public class WorldGenShipwreck {
         }
 
         @Override
-        protected void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
+        protected void a(String s, BlockPosition blockposition, WorldAccess worldaccess, Random random, StructureBoundingBox structureboundingbox) {
             if ("map_chest".equals(s)) {
-                TileEntityLootable.a((IBlockAccess) generatoraccess, random, blockposition.down(), LootTables.H);
+                TileEntityLootable.a((IBlockAccess) worldaccess, random, blockposition.down(), LootTables.H);
             } else if ("treasure_chest".equals(s)) {
-                TileEntityLootable.a((IBlockAccess) generatoraccess, random, blockposition.down(), LootTables.J);
+                TileEntityLootable.a((IBlockAccess) worldaccess, random, blockposition.down(), LootTables.J);
             } else if ("supply_chest".equals(s)) {
-                TileEntityLootable.a((IBlockAccess) generatoraccess, random, blockposition.down(), LootTables.I);
+                TileEntityLootable.a((IBlockAccess) worldaccess, random, blockposition.down(), LootTables.I);
             }
 
         }

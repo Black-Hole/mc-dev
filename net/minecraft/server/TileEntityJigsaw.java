@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -86,7 +85,7 @@ public class TileEntityJigsaw extends TileEntity {
 
     public void a(WorldServer worldserver, int i, boolean flag) {
         ChunkGenerator chunkgenerator = worldserver.getChunkProvider().getChunkGenerator();
-        DefinedStructureManager definedstructuremanager = worldserver.r_();
+        DefinedStructureManager definedstructuremanager = worldserver.n();
         StructureManager structuremanager = worldserver.getStructureManager();
         Random random = worldserver.getRandom();
         BlockPosition blockposition = this.getPosition();
@@ -94,29 +93,18 @@ public class TileEntityJigsaw extends TileEntity {
         DefinedStructure definedstructure = new DefinedStructure();
 
         definedstructure.a(worldserver, blockposition, new BlockPosition(1, 1, 1), false, (Block) null);
-        WorldGenFeatureDefinedStructurePoolSingle worldgenfeaturedefinedstructurepoolsingle = new WorldGenFeatureDefinedStructurePoolSingle(definedstructure, ImmutableList.of(), WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID);
-        TileEntityJigsaw.b tileentityjigsaw_b = new TileEntityJigsaw.b(definedstructuremanager, worldgenfeaturedefinedstructurepoolsingle, blockposition, 1, EnumBlockRotation.NONE, new StructureBoundingBox(blockposition, blockposition));
+        WorldGenFeatureDefinedStructurePoolSingle worldgenfeaturedefinedstructurepoolsingle = new WorldGenFeatureDefinedStructurePoolSingle(definedstructure);
+        WorldGenFeaturePillagerOutpostPoolPiece worldgenfeaturepillageroutpostpoolpiece = new WorldGenFeaturePillagerOutpostPoolPiece(definedstructuremanager, worldgenfeaturedefinedstructurepoolsingle, blockposition, 1, EnumBlockRotation.NONE, new StructureBoundingBox(blockposition, blockposition));
 
-        WorldGenFeatureDefinedStructureJigsawPlacement.a(tileentityjigsaw_b, i, TileEntityJigsaw.b::new, chunkgenerator, definedstructuremanager, list, random);
+        WorldGenFeatureDefinedStructureJigsawPlacement.a(worldserver.r(), worldgenfeaturepillageroutpostpoolpiece, i, WorldGenFeaturePillagerOutpostPoolPiece::new, chunkgenerator, definedstructuremanager, list, random);
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
-            WorldGenFeaturePillagerOutpostPoolPiece worldgenfeaturepillageroutpostpoolpiece = (WorldGenFeaturePillagerOutpostPoolPiece) iterator.next();
+            WorldGenFeaturePillagerOutpostPoolPiece worldgenfeaturepillageroutpostpoolpiece1 = (WorldGenFeaturePillagerOutpostPoolPiece) iterator.next();
 
-            worldgenfeaturepillageroutpostpoolpiece.a(worldserver, structuremanager, chunkgenerator, random, StructureBoundingBox.b(), blockposition, flag);
+            worldgenfeaturepillageroutpostpoolpiece1.a(worldserver, structuremanager, chunkgenerator, random, StructureBoundingBox.b(), blockposition, flag);
         }
 
-    }
-
-    public static final class b extends WorldGenFeaturePillagerOutpostPoolPiece {
-
-        public b(DefinedStructureManager definedstructuremanager, WorldGenFeatureDefinedStructurePoolStructure worldgenfeaturedefinedstructurepoolstructure, BlockPosition blockposition, int i, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox) {
-            super(WorldGenFeatureStructurePieceType.ag, definedstructuremanager, worldgenfeaturedefinedstructurepoolstructure, blockposition, i, enumblockrotation, structureboundingbox);
-        }
-
-        public b(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(definedstructuremanager, nbttagcompound, WorldGenFeatureStructurePieceType.ag);
-        }
     }
 
     public static enum JointType implements INamable {

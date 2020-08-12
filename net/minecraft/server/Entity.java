@@ -58,8 +58,8 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     public float A;
     public float B;
     public float fallDistance;
-    private float at;
-    private float au;
+    private float am;
+    private float an;
     public double D;
     public double E;
     public double F;
@@ -74,41 +74,36 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     protected boolean N;
     @Nullable
     protected Tag<FluidType> O;
-    protected boolean inLava;
     public int noDamageTicks;
     protected boolean justCreated;
     protected final DataWatcher datawatcher;
-    protected static final DataWatcherObject<Byte> T = DataWatcher.a(Entity.class, DataWatcherRegistry.a);
+    protected static final DataWatcherObject<Byte> S = DataWatcher.a(Entity.class, DataWatcherRegistry.a);
     private static final DataWatcherObject<Integer> AIR_TICKS = DataWatcher.a(Entity.class, DataWatcherRegistry.b);
-    private static final DataWatcherObject<Optional<IChatBaseComponent>> ax = DataWatcher.a(Entity.class, DataWatcherRegistry.f);
-    private static final DataWatcherObject<Boolean> ay = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Boolean> az = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Boolean> aA = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Optional<IChatBaseComponent>> aq = DataWatcher.a(Entity.class, DataWatcherRegistry.f);
+    private static final DataWatcherObject<Boolean> ar = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> as = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> at = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
     protected static final DataWatcherObject<EntityPose> POSE = DataWatcher.a(Entity.class, DataWatcherRegistry.s);
     public boolean inChunk;
     public int chunkX;
     public int chunkY;
     public int chunkZ;
-    private boolean aB;
-    public long Z;
-    public long aa;
-    public long ab;
-    public boolean ac;
+    private boolean au;
+    private Vec3D av;
+    public boolean Y;
     public boolean impulse;
     public int portalCooldown;
     protected boolean inPortal;
     protected int portalTicks;
-    protected BlockPosition ah;
-    protected Vec3D ai;
-    protected EnumDirection aj;
+    protected BlockPosition ac;
     private boolean invulnerable;
     protected UUID uniqueID;
-    protected String al;
+    protected String ae;
     public boolean glowing;
-    private final Set<String> aD;
-    private boolean aE;
-    private final double[] aF;
-    private long aG;
+    private final Set<String> ay;
+    private boolean az;
+    private final double[] aA;
+    private long aB;
     private EntitySize size;
     private float headHeight;
 
@@ -118,29 +113,30 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.mot = Vec3D.a;
         this.boundingBox = Entity.d;
         this.x = Vec3D.a;
-        this.at = 1.0F;
-        this.au = 1.0F;
+        this.am = 1.0F;
+        this.an = 1.0F;
         this.random = new Random();
         this.fireTicks = -this.getMaxFireTicks();
         this.M = new Object2DoubleArrayMap(2);
         this.justCreated = true;
         this.uniqueID = MathHelper.a(this.random);
-        this.al = this.uniqueID.toString();
-        this.aD = Sets.newHashSet();
-        this.aF = new double[]{0.0D, 0.0D, 0.0D};
+        this.ae = this.uniqueID.toString();
+        this.ay = Sets.newHashSet();
+        this.aA = new double[]{0.0D, 0.0D, 0.0D};
         this.f = entitytypes;
         this.world = world;
         this.size = entitytypes.l();
         this.loc = Vec3D.a;
         this.locBlock = BlockPosition.ZERO;
+        this.av = Vec3D.a;
         this.setPosition(0.0D, 0.0D, 0.0D);
         this.datawatcher = new DataWatcher(this);
-        this.datawatcher.register(Entity.T, (byte) 0);
-        this.datawatcher.register(Entity.AIR_TICKS, this.bD());
-        this.datawatcher.register(Entity.ay, false);
-        this.datawatcher.register(Entity.ax, Optional.empty());
-        this.datawatcher.register(Entity.az, false);
-        this.datawatcher.register(Entity.aA, false);
+        this.datawatcher.register(Entity.S, (byte) 0);
+        this.datawatcher.register(Entity.AIR_TICKS, this.bG());
+        this.datawatcher.register(Entity.ar, false);
+        this.datawatcher.register(Entity.aq, Optional.empty());
+        this.datawatcher.register(Entity.as, false);
+        this.datawatcher.register(Entity.at, false);
         this.datawatcher.register(Entity.POSE, EntityPose.STANDING);
         this.initDatawatcher();
         this.headHeight = this.getHeadHeight(EntityPose.STANDING, this.size);
@@ -162,9 +158,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public void c(double d0, double d1, double d2) {
-        this.Z = PacketPlayOutEntity.a(d0);
-        this.aa = PacketPlayOutEntity.a(d1);
-        this.ab = PacketPlayOutEntity.a(d2);
+        this.a(new Vec3D(d0, d1, d2));
+    }
+
+    public void a(Vec3D vec3d) {
+        this.av = vec3d;
     }
 
     public EntityTypes<?> getEntityType() {
@@ -180,15 +178,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public Set<String> getScoreboardTags() {
-        return this.aD;
+        return this.ay;
     }
 
     public boolean addScoreboardTag(String s) {
-        return this.aD.size() >= 1024 ? false : this.aD.add(s);
+        return this.ay.size() >= 1024 ? false : this.ay.add(s);
     }
 
     public boolean removeScoreboardTag(String s) {
-        return this.aD.remove(s);
+        return this.ay.remove(s);
     }
 
     public void killEntity() {
@@ -236,19 +234,16 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     public void setPosition(double d0, double d1, double d2) {
         this.setPositionRaw(d0, d1, d2);
-        float f = this.size.width / 2.0F;
-        float f1 = this.size.height;
-
-        this.a(new AxisAlignedBB(d0 - (double) f, d1, d2 - (double) f, d0 + (double) f, d1 + (double) f1, d2 + (double) f));
+        this.a(this.size.a(d0, d1, d2));
     }
 
-    protected void ac() {
+    protected void ae() {
         this.setPosition(this.loc.x, this.loc.y, this.loc.z);
     }
 
     public void tick() {
         if (!this.world.isClientSide) {
-            this.setFlag(6, this.bA());
+            this.setFlag(6, this.bD());
         }
 
         this.entityBaseTick();
@@ -268,13 +263,13 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.lastPitch = this.pitch;
         this.lastYaw = this.yaw;
         this.doPortalTick();
-        if (this.aK()) {
-            this.aL();
+        if (this.aN()) {
+            this.aO();
         }
 
-        this.aG();
-        this.n();
-        this.aF();
+        this.aJ();
+        this.m();
+        this.aI();
         if (this.world.isClientSide) {
             this.extinguish();
         } else if (this.fireTicks > 0) {
@@ -284,7 +279,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                     this.extinguish();
                 }
             } else {
-                if (this.fireTicks % 20 == 0) {
+                if (this.fireTicks % 20 == 0 && !this.aP()) {
                     this.damageEntity(DamageSource.BURN, 1.0F);
                 }
 
@@ -292,13 +287,13 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             }
         }
 
-        if (this.aN()) {
+        if (this.aP()) {
             this.burnFromLava();
             this.fallDistance *= 0.5F;
         }
 
         if (this.locY() < -64.0D) {
-            this.ai();
+            this.am();
         }
 
         if (!this.world.isClientSide) {
@@ -309,15 +304,23 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.world.getMethodProfiler().exit();
     }
 
+    public void resetPortalCooldown() {
+        this.portalCooldown = this.getDefaultPortalCooldown();
+    }
+
+    public boolean ah() {
+        return this.portalCooldown > 0;
+    }
+
     protected void E() {
-        if (this.portalCooldown > 0) {
+        if (this.ah()) {
             --this.portalCooldown;
         }
 
     }
 
-    public int ae() {
-        return 1;
+    public int ai() {
+        return 0;
     }
 
     protected void burnFromLava() {
@@ -352,7 +355,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.setFireTicks(0);
     }
 
-    protected void ai() {
+    protected void am() {
         this.die();
     }
 
@@ -364,7 +367,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return this.world.getCubes(this, axisalignedbb) && !this.world.containsLiquid(axisalignedbb);
     }
 
-    public void c(boolean flag) {
+    public void setOnGround(boolean flag) {
         this.onGround = flag;
     }
 
@@ -378,7 +381,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             this.recalcPosition();
         } else {
             if (enummovetype == EnumMoveType.PISTON) {
-                vec3d = this.a(vec3d);
+                vec3d = this.b(vec3d);
                 if (vec3d.equals(Vec3D.a)) {
                     return;
                 }
@@ -392,7 +395,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             }
 
             vec3d = this.a(vec3d, enummovetype);
-            Vec3D vec3d1 = this.f(vec3d);
+            Vec3D vec3d1 = this.g(vec3d);
 
             if (vec3d1.g() > 1.0E-7D) {
                 this.a(this.getBoundingBox().c(vec3d1));
@@ -404,7 +407,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             this.positionChanged = !MathHelper.b(vec3d.x, vec3d1.x) || !MathHelper.b(vec3d.z, vec3d1.z);
             this.v = vec3d.y != vec3d1.y;
             this.onGround = this.v && vec3d.y < 0.0D;
-            BlockPosition blockposition = this.ak();
+            BlockPosition blockposition = this.ao();
             IBlockData iblockdata = this.world.getType(blockposition);
 
             this.a(vec3d1.y, this.onGround, iblockdata, blockposition);
@@ -424,7 +427,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                 block.a((IBlockAccess) this.world, this);
             }
 
-            if (this.onGround && !this.br()) {
+            if (this.onGround && !this.bu()) {
                 block.stepOn(this.world, blockposition, this);
             }
 
@@ -437,10 +440,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                     d1 = 0.0D;
                 }
 
-                this.A = (float) ((double) this.A + (double) MathHelper.sqrt(b(vec3d1)) * 0.6D);
+                this.A = (float) ((double) this.A + (double) MathHelper.sqrt(c(vec3d1)) * 0.6D);
                 this.B = (float) ((double) this.B + (double) MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2) * 0.6D);
-                if (this.B > this.at && !iblockdata.isAir()) {
-                    this.at = this.ao();
+                if (this.B > this.am && !iblockdata.isAir()) {
+                    this.am = this.as();
                     if (this.isInWater()) {
                         Entity entity = this.isVehicle() && this.getRidingPassenger() != null ? this.getRidingPassenger() : this;
                         float f = entity == this ? 0.35F : 0.4F;
@@ -453,15 +456,14 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
                         this.d(f1);
                     } else {
-                        this.a(blockposition, iblockdata);
+                        this.b(blockposition, iblockdata);
                     }
-                } else if (this.B > this.au && this.au() && iblockdata.isAir()) {
-                    this.au = this.e(this.B);
+                } else if (this.B > this.an && this.ay() && iblockdata.isAir()) {
+                    this.an = this.e(this.B);
                 }
             }
 
             try {
-                this.inLava = false;
                 this.checkBlockCollisions();
             } catch (Throwable throwable) {
                 CrashReport crashreport = CrashReport.a(throwable, "Checking entity block collision");
@@ -480,7 +482,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                 this.setFireTicks(-this.getMaxFireTicks());
             }
 
-            if (this.aC() && this.isBurning()) {
+            if (this.aF() && this.isBurning()) {
                 this.playSound(SoundEffects.ENTITY_GENERIC_EXTINGUISH_FIRE, 0.7F, 1.6F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
                 this.setFireTicks(-this.getMaxFireTicks());
             }
@@ -489,7 +491,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         }
     }
 
-    protected BlockPosition ak() {
+    protected BlockPosition ao() {
         int i = MathHelper.floor(this.loc.x);
         int j = MathHelper.floor(this.loc.y - 0.20000000298023224D);
         int k = MathHelper.floor(this.loc.z);
@@ -510,7 +512,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     protected float getBlockJumpFactor() {
         float f = this.world.getType(this.getChunkCoordinates()).getBlock().getJumpFactor();
-        float f1 = this.world.getType(this.an()).getBlock().getJumpFactor();
+        float f1 = this.world.getType(this.ar()).getBlock().getJumpFactor();
 
         return (double) f == 1.0D ? f1 : f;
     }
@@ -519,10 +521,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         Block block = this.world.getType(this.getChunkCoordinates()).getBlock();
         float f = block.getSpeedFactor();
 
-        return block != Blocks.WATER && block != Blocks.BUBBLE_COLUMN ? ((double) f == 1.0D ? this.world.getType(this.an()).getBlock().getSpeedFactor() : f) : f;
+        return block != Blocks.WATER && block != Blocks.BUBBLE_COLUMN ? ((double) f == 1.0D ? this.world.getType(this.ar()).getBlock().getSpeedFactor() : f) : f;
     }
 
-    protected BlockPosition an() {
+    protected BlockPosition ar() {
         return new BlockPosition(this.loc.x, this.getBoundingBox().minY - 0.5000001D, this.loc.z);
     }
 
@@ -530,15 +532,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return vec3d;
     }
 
-    protected Vec3D a(Vec3D vec3d) {
+    protected Vec3D b(Vec3D vec3d) {
         if (vec3d.g() <= 1.0E-7D) {
             return vec3d;
         } else {
             long i = this.world.getTime();
 
-            if (i != this.aG) {
-                Arrays.fill(this.aF, 0.0D);
-                this.aG = i;
+            if (i != this.aB) {
+                Arrays.fill(this.aA, 0.0D);
+                this.aB = i;
             }
 
             double d0;
@@ -560,14 +562,14 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     private double a(EnumDirection.EnumAxis enumdirection_enumaxis, double d0) {
         int i = enumdirection_enumaxis.ordinal();
-        double d1 = MathHelper.a(d0 + this.aF[i], -0.51D, 0.51D);
+        double d1 = MathHelper.a(d0 + this.aA[i], -0.51D, 0.51D);
 
-        d0 = d1 - this.aF[i];
-        this.aF[i] = d1;
+        d0 = d1 - this.aA[i];
+        this.aA[i] = d1;
         return d0;
     }
 
-    private Vec3D f(Vec3D vec3d) {
+    private Vec3D g(Vec3D vec3d) {
         AxisAlignedBB axisalignedbb = this.getBoundingBox();
         VoxelShapeCollision voxelshapecollision = VoxelShapeCollision.a(this);
         VoxelShape voxelshape = this.world.getWorldBorder().c();
@@ -589,12 +591,12 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             if (vec3d3.y < (double) this.G) {
                 Vec3D vec3d4 = a(this, new Vec3D(vec3d.x, 0.0D, vec3d.z), axisalignedbb.c(vec3d3), this.world, voxelshapecollision, streamaccumulator).e(vec3d3);
 
-                if (b(vec3d4) > b(vec3d2)) {
+                if (c(vec3d4) > c(vec3d2)) {
                     vec3d2 = vec3d4;
                 }
             }
 
-            if (b(vec3d2) > b(vec3d1)) {
+            if (c(vec3d2) > c(vec3d1)) {
                 return vec3d2.e(a(this, new Vec3D(0.0D, -vec3d2.y + vec3d.y, 0.0D), axisalignedbb.c(vec3d2), this.world, voxelshapecollision, streamaccumulator));
             }
         }
@@ -602,7 +604,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return vec3d1;
     }
 
-    public static double b(Vec3D vec3d) {
+    public static double c(Vec3D vec3d) {
         return vec3d.x * vec3d.x + vec3d.z * vec3d.z;
     }
 
@@ -690,7 +692,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return new Vec3D(d0, d1, d2);
     }
 
-    protected float ao() {
+    protected float as() {
         return (float) ((int) this.B + 1);
     }
 
@@ -744,7 +746,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     protected void a(IBlockData iblockdata) {}
 
-    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
+    protected void b(BlockPosition blockposition, IBlockData iblockdata) {
         if (!iblockdata.getMaterial().isLiquid()) {
             IBlockData iblockdata1 = this.world.getType(blockposition.up());
             SoundEffectType soundeffecttype = iblockdata1.a(Blocks.SNOW) ? iblockdata1.getStepSound() : iblockdata.getStepSound();
@@ -761,7 +763,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return 0.0F;
     }
 
-    protected boolean au() {
+    protected boolean ay() {
         return false;
     }
 
@@ -773,19 +775,19 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public boolean isSilent() {
-        return (Boolean) this.datawatcher.get(Entity.az);
+        return (Boolean) this.datawatcher.get(Entity.as);
     }
 
     public void setSilent(boolean flag) {
-        this.datawatcher.set(Entity.az, flag);
+        this.datawatcher.set(Entity.as, flag);
     }
 
     public boolean isNoGravity() {
-        return (Boolean) this.datawatcher.get(Entity.aA);
+        return (Boolean) this.datawatcher.get(Entity.at);
     }
 
     public void setNoGravity(boolean flag) {
-        this.datawatcher.set(Entity.aA, flag);
+        this.datawatcher.set(Entity.at, flag);
     }
 
     protected boolean playStepSound() {
@@ -803,11 +805,6 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             this.fallDistance = (float) ((double) this.fallDistance - d0);
         }
 
-    }
-
-    @Nullable
-    public AxisAlignedBB ay() {
-        return null;
     }
 
     public boolean isFireProof() {
@@ -835,7 +832,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     private boolean isInRain() {
         BlockPosition blockposition = this.getChunkCoordinates();
 
-        return this.world.isRainingAt(blockposition) || this.world.isRainingAt(blockposition.a(0.0D, (double) this.size.height, 0.0D));
+        return this.world.isRainingAt(blockposition) || this.world.isRainingAt(new BlockPosition((double) blockposition.getX(), this.getBoundingBox().maxY, (double) blockposition.getZ()));
     }
 
     private boolean k() {
@@ -846,45 +843,42 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return this.isInWater() || this.isInRain();
     }
 
-    public boolean aC() {
+    public boolean aF() {
         return this.isInWater() || this.isInRain() || this.k();
     }
 
-    public boolean aD() {
+    public boolean aG() {
         return this.isInWater() || this.k();
     }
 
-    public boolean aE() {
+    public boolean aH() {
         return this.N && this.isInWater();
     }
 
-    public void aF() {
+    public void aI() {
         if (this.isSwimming()) {
             this.setSwimming(this.isSprinting() && this.isInWater() && !this.isPassenger());
         } else {
-            this.setSwimming(this.isSprinting() && this.aE() && !this.isPassenger());
+            this.setSwimming(this.isSprinting() && this.aH() && !this.isPassenger());
         }
 
     }
 
-    protected boolean aG() {
+    protected boolean aJ() {
         this.M.clear();
-        this.aH();
-        if (this.isInWater()) {
-            return true;
-        } else {
-            double d0 = this.world.getDimensionManager().isNether() ? 0.007D : 0.0023333333333333335D;
+        this.aK();
+        double d0 = this.world.getDimensionManager().isNether() ? 0.007D : 0.0023333333333333335D;
+        boolean flag = this.a((Tag) TagsFluid.LAVA, d0);
 
-            return this.a((Tag) TagsFluid.LAVA, d0);
-        }
+        return this.isInWater() || flag;
     }
 
-    void aH() {
+    void aK() {
         if (this.getVehicle() instanceof EntityBoat) {
             this.inWater = false;
         } else if (this.a((Tag) TagsFluid.WATER, 0.014D)) {
             if (!this.inWater && !this.justCreated) {
-                this.aI();
+                this.aL();
             }
 
             this.fallDistance = 0.0F;
@@ -896,24 +890,23 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     }
 
-    private void n() {
+    private void m() {
         this.N = this.a((Tag) TagsFluid.WATER);
         this.O = null;
         double d0 = this.getHeadY() - 0.1111111119389534D;
-        Vec3D vec3d = new Vec3D(this.locX(), d0, this.locZ());
         Entity entity = this.getVehicle();
 
         if (entity instanceof EntityBoat) {
             EntityBoat entityboat = (EntityBoat) entity;
 
-            if (!entityboat.aE() && entityboat.getBoundingBox().d(vec3d)) {
+            if (!entityboat.aH() && entityboat.getBoundingBox().maxY >= d0 && entityboat.getBoundingBox().minY <= d0) {
                 return;
             }
         }
 
-        BlockPosition blockposition = new BlockPosition(vec3d);
+        BlockPosition blockposition = new BlockPosition(this.locX(), d0, this.locZ());
         Fluid fluid = this.world.getFluid(blockposition);
-        Iterator iterator = TagsFluid.c().iterator();
+        Iterator iterator = TagsFluid.b().iterator();
 
         Tag tag;
 
@@ -933,7 +926,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     }
 
-    protected void aI() {
+    protected void aL() {
         Entity entity = this.isVehicle() && this.getRidingPassenger() != null ? this.getRidingPassenger() : this;
         float f = entity == this ? 0.2F : 0.9F;
         Vec3D vec3d = entity.getMot();
@@ -969,15 +962,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     }
 
-    protected IBlockData aJ() {
-        return this.world.getType(this.ak());
+    protected IBlockData aM() {
+        return this.world.getType(this.ao());
     }
 
-    public boolean aK() {
-        return this.isSprinting() && !this.isInWater() && !this.isSpectator() && !this.bv() && !this.aN() && this.isAlive();
+    public boolean aN() {
+        return this.isSprinting() && !this.isInWater() && !this.isSpectator() && !this.by() && !this.aP() && this.isAlive();
     }
 
-    protected void aL() {
+    protected void aO() {
         int i = MathHelper.floor(this.locX());
         int j = MathHelper.floor(this.locY() - 0.20000000298023224D);
         int k = MathHelper.floor(this.locZ());
@@ -996,12 +989,8 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return this.O == tag;
     }
 
-    public void aM() {
-        this.inLava = true;
-    }
-
-    public boolean aN() {
-        return this.inLava;
+    public boolean aP() {
+        return !this.justCreated && this.M.getDouble(TagsFluid.LAVA) > 0.0D;
     }
 
     public void a(float f, Vec3D vec3d) {
@@ -1024,7 +1013,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         }
     }
 
-    public float aO() {
+    public float aQ() {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(this.locX(), 0.0D, this.locZ());
 
         if (this.world.isLoaded(blockposition_mutableblockposition)) {
@@ -1040,6 +1029,14 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public void setLocation(double d0, double d1, double d2, float f, float f1) {
+        this.f(d0, d1, d2);
+        this.yaw = f % 360.0F;
+        this.pitch = MathHelper.a(f1, -90.0F, 90.0F) % 360.0F;
+        this.lastYaw = this.yaw;
+        this.lastPitch = this.pitch;
+    }
+
+    public void f(double d0, double d1, double d2) {
         double d3 = MathHelper.a(d0, -3.0E7D, 3.0E7D);
         double d4 = MathHelper.a(d2, -3.0E7D, 3.0E7D);
 
@@ -1047,13 +1044,9 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.lastY = d1;
         this.lastZ = d4;
         this.setPosition(d3, d1, d4);
-        this.yaw = f % 360.0F;
-        this.pitch = MathHelper.a(f1, -90.0F, 90.0F) % 360.0F;
-        this.lastYaw = this.yaw;
-        this.lastPitch = this.pitch;
     }
 
-    public void c(Vec3D vec3d) {
+    public void d(Vec3D vec3d) {
         this.teleportAndSync(vec3d.x, vec3d.y, vec3d.z);
     }
 
@@ -1066,13 +1059,13 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public void setPositionRotation(double d0, double d1, double d2, float f, float f1) {
-        this.f(d0, d1, d2);
+        this.g(d0, d1, d2);
         this.yaw = f;
         this.pitch = f1;
-        this.ac();
+        this.ae();
     }
 
-    public void f(double d0, double d1, double d2) {
+    public void g(double d0, double d1, double d2) {
         this.setPositionRaw(d0, d1, d2);
         this.lastX = d0;
         this.lastY = d1;
@@ -1090,7 +1083,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return MathHelper.c(f * f + f1 * f1 + f2 * f2);
     }
 
-    public double g(double d0, double d1, double d2) {
+    public double h(double d0, double d1, double d2) {
         double d3 = this.locX() - d0;
         double d4 = this.locY() - d1;
         double d5 = this.locZ() - d2;
@@ -1099,10 +1092,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public double h(Entity entity) {
-        return this.d(entity.getPositionVector());
+        return this.e(entity.getPositionVector());
     }
 
-    public double d(Vec3D vec3d) {
+    public double e(Vec3D vec3d) {
         double d0 = this.locX() - vec3d.x;
         double d1 = this.locY() - vec3d.y;
         double d2 = this.locZ() - vec3d.z;
@@ -1136,11 +1129,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                     d0 *= (double) (1.0F - this.I);
                     d1 *= (double) (1.0F - this.I);
                     if (!this.isVehicle()) {
-                        this.h(-d0, 0.0D, -d1);
+                        this.i(-d0, 0.0D, -d1);
                     }
 
                     if (!entity.isVehicle()) {
-                        entity.h(d0, 0.0D, d1);
+                        entity.i(d0, 0.0D, d1);
                     }
                 }
 
@@ -1148,7 +1141,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         }
     }
 
-    public void h(double d0, double d1, double d2) {
+    public void i(double d0, double d1, double d2) {
         this.setMot(this.getMot().add(d0, d1, d2));
         this.impulse = true;
     }
@@ -1251,7 +1244,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         try {
             if (this.vehicle != null) {
-                nbttagcompound.set("Pos", this.a(this.vehicle.locX(), this.vehicle.locY(), this.vehicle.locZ()));
+                nbttagcompound.set("Pos", this.a(this.vehicle.locX(), this.locY(), this.vehicle.locZ()));
             } else {
                 nbttagcompound.set("Pos", this.a(this.locX(), this.locY(), this.locZ()));
             }
@@ -1292,9 +1285,9 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             NBTTagList nbttaglist;
             Iterator iterator;
 
-            if (!this.aD.isEmpty()) {
+            if (!this.ay.isEmpty()) {
                 nbttaglist = new NBTTagList();
-                iterator = this.aD.iterator();
+                iterator = this.ay.iterator();
 
                 while (iterator.hasNext()) {
                     String s = (String) iterator.next();
@@ -1344,13 +1337,13 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             double d2 = nbttaglist1.h(2);
 
             this.setMot(Math.abs(d0) > 10.0D ? 0.0D : d0, Math.abs(d1) > 10.0D ? 0.0D : d1, Math.abs(d2) > 10.0D ? 0.0D : d2);
-            this.f(nbttaglist.h(0), nbttaglist.h(1), nbttaglist.h(2));
+            this.g(nbttaglist.h(0), nbttaglist.h(1), nbttaglist.h(2));
             this.yaw = nbttaglist2.i(0);
             this.pitch = nbttaglist2.i(1);
             this.lastYaw = this.yaw;
             this.lastPitch = this.pitch;
             this.setHeadRotation(this.yaw);
-            this.l(this.yaw);
+            this.n(this.yaw);
             this.fallDistance = nbttagcompound.getFloat("FallDistance");
             this.fireTicks = nbttagcompound.getShort("Fire");
             this.setAirTicks(nbttagcompound.getShort("Air"));
@@ -1359,12 +1352,12 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             this.portalCooldown = nbttagcompound.getInt("PortalCooldown");
             if (nbttagcompound.b("UUID")) {
                 this.uniqueID = nbttagcompound.a("UUID");
-                this.al = this.uniqueID.toString();
+                this.ae = this.uniqueID.toString();
             }
 
             if (Double.isFinite(this.locX()) && Double.isFinite(this.locY()) && Double.isFinite(this.locZ())) {
                 if (Double.isFinite((double) this.yaw) && Double.isFinite((double) this.pitch)) {
-                    this.ac();
+                    this.ae();
                     this.setYawPitch(this.yaw, this.pitch);
                     if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
                         String s = nbttagcompound.getString("CustomName");
@@ -1381,18 +1374,18 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                     this.setNoGravity(nbttagcompound.getBoolean("NoGravity"));
                     this.i(nbttagcompound.getBoolean("Glowing"));
                     if (nbttagcompound.hasKeyOfType("Tags", 9)) {
-                        this.aD.clear();
+                        this.ay.clear();
                         NBTTagList nbttaglist3 = nbttagcompound.getList("Tags", 8);
                         int i = Math.min(nbttaglist3.size(), 1024);
 
                         for (int j = 0; j < i; ++j) {
-                            this.aD.add(nbttaglist3.getString(j));
+                            this.ay.add(nbttaglist3.getString(j));
                         }
                     }
 
                     this.loadData(nbttagcompound);
-                    if (this.aS()) {
-                        this.ac();
+                    if (this.aU()) {
+                        this.ae();
                     }
 
                 } else {
@@ -1410,7 +1403,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         }
     }
 
-    protected boolean aS() {
+    protected boolean aU() {
         return true;
     }
 
@@ -1496,7 +1489,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             float f1 = this.size.width * 0.8F;
             AxisAlignedBB axisalignedbb = AxisAlignedBB.g((double) f1, 0.10000000149011612D, (double) f1).d(this.locX(), this.getHeadY(), this.locZ());
 
-            return this.world.a(this, axisalignedbb, (iblockdata, blockposition) -> {
+            return this.world.b(this, axisalignedbb, (iblockdata, blockposition) -> {
                 return iblockdata.o(this.world, blockposition);
             }).findAny().isPresent();
         }
@@ -1506,9 +1499,12 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return EnumInteractionResult.PASS;
     }
 
-    @Nullable
-    public AxisAlignedBB j(Entity entity) {
-        return null;
+    public boolean j(Entity entity) {
+        return entity.aY() && !this.isSameVehicle(entity);
+    }
+
+    public boolean aY() {
+        return false;
     }
 
     public void passengerTick() {
@@ -1525,17 +1521,17 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     private void a(Entity entity, Entity.a entity_a) {
         if (this.w(entity)) {
-            double d0 = this.locY() + this.aY() + entity.aX();
+            double d0 = this.locY() + this.bb() + entity.ba();
 
             entity_a.accept(entity, this.locX(), d0, this.locZ());
         }
     }
 
-    public double aX() {
+    public double ba() {
         return 0.0D;
     }
 
-    public double aY() {
+    public double bb() {
         return (double) this.size.height * 0.75D;
     }
 
@@ -1579,7 +1575,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     }
 
-    public void bb() {
+    public void be() {
         if (this.vehicle != null) {
             Entity entity = this.vehicle;
 
@@ -1590,7 +1586,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public void stopRiding() {
-        this.bb();
+        this.be();
     }
 
     protected void addPassenger(Entity entity) {
@@ -1619,7 +1615,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return this.getPassengers().size() < 1;
     }
 
-    public float bc() {
+    public float bf() {
         return 0.0F;
     }
 
@@ -1627,24 +1623,16 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return this.c(this.pitch, this.yaw);
     }
 
-    public Vec2F be() {
+    public Vec2F bh() {
         return new Vec2F(this.pitch, this.yaw);
     }
 
     public void d(BlockPosition blockposition) {
-        if (this.portalCooldown > 0) {
-            this.portalCooldown = this.getDefaultPortalCooldown();
+        if (this.ah()) {
+            this.resetPortalCooldown();
         } else {
-            if (!this.world.isClientSide && !blockposition.equals(this.ah)) {
-                this.ah = new BlockPosition(blockposition);
-                BlockPortal blockportal = (BlockPortal) Blocks.NETHER_PORTAL;
-                ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = BlockPortal.c((GeneratorAccess) this.world, this.ah);
-                double d0 = shapedetector_shapedetectorcollection.getFacing().n() == EnumDirection.EnumAxis.X ? (double) shapedetector_shapedetectorcollection.a().getZ() : (double) shapedetector_shapedetectorcollection.a().getX();
-                double d1 = MathHelper.a(Math.abs(MathHelper.c((shapedetector_shapedetectorcollection.getFacing().n() == EnumDirection.EnumAxis.X ? this.locZ() : this.locX()) - (double) (shapedetector_shapedetectorcollection.getFacing().g().e() == EnumDirection.EnumAxisDirection.NEGATIVE ? 1 : 0), d0, d0 - (double) shapedetector_shapedetectorcollection.d())), 0.0D, 1.0D);
-                double d2 = MathHelper.a(MathHelper.c(this.locY() - 1.0D, (double) shapedetector_shapedetectorcollection.a().getY(), (double) (shapedetector_shapedetectorcollection.a().getY() - shapedetector_shapedetectorcollection.e())), 0.0D, 1.0D);
-
-                this.ai = new Vec3D(d1, d2, 0.0D);
-                this.aj = shapedetector_shapedetectorcollection.getFacing();
+            if (!this.world.isClientSide && !blockposition.equals(this.ac)) {
+                this.ac = blockposition.immutableCopy();
             }
 
             this.inPortal = true;
@@ -1653,7 +1641,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     protected void doPortalTick() {
         if (this.world instanceof WorldServer) {
-            int i = this.ae();
+            int i = this.ai();
             WorldServer worldserver = (WorldServer) this.world;
 
             if (this.inPortal) {
@@ -1664,8 +1652,8 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                 if (worldserver1 != null && minecraftserver.getAllowNether() && !this.isPassenger() && this.portalTicks++ >= i) {
                     this.world.getMethodProfiler().enter("portal");
                     this.portalTicks = i;
-                    this.portalCooldown = this.getDefaultPortalCooldown();
-                    this.a(worldserver1);
+                    this.resetPortalCooldown();
+                    this.b(worldserver1);
                     this.world.getMethodProfiler().exit();
                 }
 
@@ -1688,7 +1676,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return 300;
     }
 
-    public Iterable<ItemStack> bj() {
+    public Iterable<ItemStack> bm() {
         return Entity.c;
     }
 
@@ -1696,8 +1684,8 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return Entity.c;
     }
 
-    public Iterable<ItemStack> bl() {
-        return Iterables.concat(this.bj(), this.getArmorItems());
+    public Iterable<ItemStack> bo() {
+        return Iterables.concat(this.bm(), this.getArmorItems());
     }
 
     public void setEquipment(EnumItemSlot enumitemslot, ItemStack itemstack) {}
@@ -1716,7 +1704,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return !this.getPassengers().isEmpty();
     }
 
-    public boolean bp() {
+    public boolean bs() {
         return true;
     }
 
@@ -1728,23 +1716,23 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return this.getFlag(1);
     }
 
-    public boolean br() {
-        return this.isSneaking();
-    }
-
-    public boolean bs() {
-        return this.isSneaking();
-    }
-
-    public boolean bt() {
-        return this.isSneaking();
-    }
-
     public boolean bu() {
         return this.isSneaking();
     }
 
     public boolean bv() {
+        return this.isSneaking();
+    }
+
+    public boolean bw() {
+        return this.isSneaking();
+    }
+
+    public boolean bx() {
+        return this.isSneaking();
+    }
+
+    public boolean by() {
         return this.getPose() == EntityPose.CROUCHING;
     }
 
@@ -1760,7 +1748,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return this.getFlag(4);
     }
 
-    public boolean by() {
+    public boolean bB() {
         return this.getPose() == EntityPose.SWIMMING;
     }
 
@@ -1768,7 +1756,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.setFlag(4, flag);
     }
 
-    public boolean bA() {
+    public boolean bD() {
         return this.glowing || this.world.isClientSide && this.getFlag(6);
     }
 
@@ -1802,21 +1790,21 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public boolean getFlag(int i) {
-        return ((Byte) this.datawatcher.get(Entity.T) & 1 << i) != 0;
+        return ((Byte) this.datawatcher.get(Entity.S) & 1 << i) != 0;
     }
 
     public void setFlag(int i, boolean flag) {
-        byte b0 = (Byte) this.datawatcher.get(Entity.T);
+        byte b0 = (Byte) this.datawatcher.get(Entity.S);
 
         if (flag) {
-            this.datawatcher.set(Entity.T, (byte) (b0 | 1 << i));
+            this.datawatcher.set(Entity.S, (byte) (b0 | 1 << i));
         } else {
-            this.datawatcher.set(Entity.T, (byte) (b0 & ~(1 << i)));
+            this.datawatcher.set(Entity.S, (byte) (b0 & ~(1 << i)));
         }
 
     }
 
-    public int bD() {
+    public int bG() {
         return 300;
     }
 
@@ -1828,7 +1816,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.datawatcher.set(Entity.AIR_TICKS, i);
     }
 
-    public void onLightningStrike(EntityLightning entitylightning) {
+    public void onLightningStrike(WorldServer worldserver, EntityLightning entitylightning) {
         this.setFireTicks(this.fireTicks + 1);
         if (this.fireTicks == 0) {
             this.setOnFire(8);
@@ -1864,9 +1852,9 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.fallDistance = 0.0F;
     }
 
-    public void a_(EntityLiving entityliving) {}
+    public void a(WorldServer worldserver, EntityLiving entityliving) {}
 
-    protected void k(double d0, double d1, double d2) {
+    protected void l(double d0, double d1, double d2) {
         BlockPosition blockposition = new BlockPosition(d0, d1, d2);
         Vec3D vec3d = new Vec3D(d0 - (double) blockposition.getX(), d1 - (double) blockposition.getY(), d2 - (double) blockposition.getZ());
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
@@ -1910,7 +1898,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     private static IChatBaseComponent b(IChatBaseComponent ichatbasecomponent) {
-        IChatMutableComponent ichatmutablecomponent = ichatbasecomponent.f().setChatModifier(ichatbasecomponent.getChatModifier().setChatClickable((ChatClickable) null));
+        IChatMutableComponent ichatmutablecomponent = ichatbasecomponent.g().setChatModifier(ichatbasecomponent.getChatModifier().setChatClickable((ChatClickable) null));
         Iterator iterator = ichatbasecomponent.getSiblings().iterator();
 
         while (iterator.hasNext()) {
@@ -1926,10 +1914,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     public IChatBaseComponent getDisplayName() {
         IChatBaseComponent ichatbasecomponent = this.getCustomName();
 
-        return ichatbasecomponent != null ? b(ichatbasecomponent) : this.bF();
+        return ichatbasecomponent != null ? b(ichatbasecomponent) : this.bI();
     }
 
-    protected IChatBaseComponent bF() {
+    protected IChatBaseComponent bI() {
         return this.f.g();
     }
 
@@ -1943,9 +1931,9 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     public void setHeadRotation(float f) {}
 
-    public void l(float f) {}
+    public void n(float f) {}
 
-    public boolean bH() {
+    public boolean bK() {
         return true;
     }
 
@@ -1979,87 +1967,107 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         nbttagcompound.remove("Dimension");
         this.load(nbttagcompound);
         this.portalCooldown = entity.portalCooldown;
-        this.ah = entity.ah;
-        this.ai = entity.ai;
-        this.aj = entity.aj;
+        this.ac = entity.ac;
     }
 
     @Nullable
-    public Entity a(WorldServer worldserver) {
+    public Entity b(WorldServer worldserver) {
         if (this.world instanceof WorldServer && !this.dead) {
             this.world.getMethodProfiler().enter("changeDimension");
             this.decouple();
             this.world.getMethodProfiler().enter("reposition");
-            Vec3D vec3d = this.getMot();
-            float f = 0.0F;
-            BlockPosition blockposition;
+            ShapeDetectorShape shapedetectorshape = this.a(worldserver);
 
-            if (this.world.getDimensionKey() == World.THE_END && worldserver.getDimensionKey() == World.OVERWORLD) {
-                blockposition = worldserver.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, worldserver.getSpawn());
-            } else if (worldserver.getDimensionKey() == World.THE_END) {
-                blockposition = WorldServer.a;
+            if (shapedetectorshape == null) {
+                return null;
             } else {
-                double d0 = this.locX();
-                double d1 = this.locZ();
-                DimensionManager dimensionmanager = this.world.getDimensionManager();
-                DimensionManager dimensionmanager1 = worldserver.getDimensionManager();
-                double d2 = 8.0D;
+                this.world.getMethodProfiler().exitEnter("reloading");
+                Entity entity = this.getEntityType().a((World) worldserver);
 
-                if (!dimensionmanager.h() && dimensionmanager1.h()) {
-                    d0 /= 8.0D;
-                    d1 /= 8.0D;
-                } else if (dimensionmanager.h() && !dimensionmanager1.h()) {
-                    d0 *= 8.0D;
-                    d1 *= 8.0D;
+                if (entity != null) {
+                    entity.v(this);
+                    entity.setPositionRotation(shapedetectorshape.position.x, shapedetectorshape.position.y, shapedetectorshape.position.z, shapedetectorshape.yaw, entity.pitch);
+                    entity.setMot(shapedetectorshape.velocity);
+                    worldserver.addEntityTeleport(entity);
+                    if (worldserver.getDimensionKey() == World.THE_END) {
+                        WorldServer.a(worldserver);
+                    }
                 }
 
-                double d3 = Math.min(-2.9999872E7D, worldserver.getWorldBorder().e() + 16.0D);
-                double d4 = Math.min(-2.9999872E7D, worldserver.getWorldBorder().f() + 16.0D);
-                double d5 = Math.min(2.9999872E7D, worldserver.getWorldBorder().g() - 16.0D);
-                double d6 = Math.min(2.9999872E7D, worldserver.getWorldBorder().h() - 16.0D);
-
-                d0 = MathHelper.a(d0, d3, d5);
-                d1 = MathHelper.a(d1, d4, d6);
-                Vec3D vec3d1 = this.getPortalOffset();
-
-                blockposition = new BlockPosition(d0, this.locY(), d1);
-                ShapeDetector.Shape shapedetector_shape = worldserver.getTravelAgent().a(blockposition, vec3d, this.getPortalDirection(), vec3d1.x, vec3d1.y, this instanceof EntityHuman);
-
-                if (shapedetector_shape == null) {
-                    return null;
-                }
-
-                blockposition = new BlockPosition(shapedetector_shape.position);
-                vec3d = shapedetector_shape.velocity;
-                f = (float) shapedetector_shape.yaw;
+                this.bM();
+                this.world.getMethodProfiler().exit();
+                ((WorldServer) this.world).resetEmptyTime();
+                worldserver.resetEmptyTime();
+                this.world.getMethodProfiler().exit();
+                return entity;
             }
-
-            this.world.getMethodProfiler().exitEnter("reloading");
-            Entity entity = this.getEntityType().a((World) worldserver);
-
-            if (entity != null) {
-                entity.v(this);
-                entity.setPositionRotation(blockposition, entity.yaw + f, entity.pitch);
-                entity.setMot(vec3d);
-                worldserver.addEntityTeleport(entity);
-                if (worldserver.getDimensionKey() == World.THE_END) {
-                    WorldServer.a(worldserver);
-                }
-            }
-
-            this.bJ();
-            this.world.getMethodProfiler().exit();
-            ((WorldServer) this.world).resetEmptyTime();
-            worldserver.resetEmptyTime();
-            this.world.getMethodProfiler().exit();
-            return entity;
         } else {
             return null;
         }
     }
 
-    protected void bJ() {
+    protected void bM() {
         this.dead = true;
+    }
+
+    @Nullable
+    protected ShapeDetectorShape a(WorldServer worldserver) {
+        boolean flag = this.world.getDimensionKey() == World.THE_END && worldserver.getDimensionKey() == World.OVERWORLD;
+        boolean flag1 = worldserver.getDimensionKey() == World.THE_END;
+
+        if (!flag && !flag1) {
+            boolean flag2 = worldserver.getDimensionKey() == World.THE_NETHER;
+
+            if (this.world.getDimensionKey() != World.THE_NETHER && !flag2) {
+                return null;
+            } else {
+                WorldBorder worldborder = worldserver.getWorldBorder();
+                double d0 = Math.max(-2.9999872E7D, worldborder.e() + 16.0D);
+                double d1 = Math.max(-2.9999872E7D, worldborder.f() + 16.0D);
+                double d2 = Math.min(2.9999872E7D, worldborder.g() - 16.0D);
+                double d3 = Math.min(2.9999872E7D, worldborder.h() - 16.0D);
+                double d4 = DimensionManager.a(this.world.getDimensionManager(), worldserver.getDimensionManager());
+                BlockPosition blockposition = new BlockPosition(MathHelper.a(this.locX() * d4, d0, d2), this.locY(), MathHelper.a(this.locZ() * d4, d1, d3));
+
+                return (ShapeDetectorShape) this.a(worldserver, blockposition, flag2).map((blockutil_rectangle) -> {
+                    IBlockData iblockdata = this.world.getType(this.ac);
+                    EnumDirection.EnumAxis enumdirection_enumaxis;
+                    Vec3D vec3d;
+
+                    if (iblockdata.b(BlockProperties.E)) {
+                        enumdirection_enumaxis = (EnumDirection.EnumAxis) iblockdata.get(BlockProperties.E);
+                        BlockUtil.Rectangle blockutil_rectangle1 = BlockUtil.a(this.ac, enumdirection_enumaxis, 21, EnumDirection.EnumAxis.Y, 21, (blockposition1) -> {
+                            return this.world.getType(blockposition1) == iblockdata;
+                        });
+
+                        vec3d = this.a(enumdirection_enumaxis, blockutil_rectangle1);
+                    } else {
+                        enumdirection_enumaxis = EnumDirection.EnumAxis.X;
+                        vec3d = new Vec3D(0.5D, 0.0D, 0.0D);
+                    }
+
+                    return BlockPortalShape.a(worldserver, blockutil_rectangle, enumdirection_enumaxis, vec3d, this.a(this.getPose()), this.getMot(), this.yaw, this.pitch);
+                }).orElse((Object) null);
+            }
+        } else {
+            BlockPosition blockposition1;
+
+            if (flag1) {
+                blockposition1 = WorldServer.a;
+            } else {
+                blockposition1 = worldserver.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, worldserver.getSpawn());
+            }
+
+            return new ShapeDetectorShape(new Vec3D((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY(), (double) blockposition1.getZ() + 0.5D), this.getMot(), this.yaw, this.pitch);
+        }
+    }
+
+    protected Vec3D a(EnumDirection.EnumAxis enumdirection_enumaxis, BlockUtil.Rectangle blockutil_rectangle) {
+        return BlockPortalShape.a(blockutil_rectangle, enumdirection_enumaxis, this.getPositionVector(), this.a(this.getPose()));
+    }
+
+    protected Optional<BlockUtil.Rectangle> a(WorldServer worldserver, BlockPosition blockposition, boolean flag) {
+        return worldserver.getTravelAgent().findPortal(blockposition, flag);
     }
 
     public boolean canPortal() {
@@ -2074,16 +2082,8 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return true;
     }
 
-    public int bL() {
+    public int bO() {
         return 3;
-    }
-
-    public Vec3D getPortalOffset() {
-        return this.ai;
-    }
-
-    public EnumDirection getPortalDirection() {
-        return this.aj;
     }
 
     public boolean isIgnoreBlockTrigger() {
@@ -2113,7 +2113,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     public void a_(UUID uuid) {
         this.uniqueID = uuid;
-        this.al = this.uniqueID.toString();
+        this.ae = this.uniqueID.toString();
     }
 
     public UUID getUniqueID() {
@@ -2121,11 +2121,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public String getUniqueIDString() {
-        return this.al;
+        return this.ae;
     }
 
     public String getName() {
-        return this.al;
+        return this.ae;
     }
 
     public boolean bU() {
@@ -2140,26 +2140,26 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public void setCustomName(@Nullable IChatBaseComponent ichatbasecomponent) {
-        this.datawatcher.set(Entity.ax, Optional.ofNullable(ichatbasecomponent));
+        this.datawatcher.set(Entity.aq, Optional.ofNullable(ichatbasecomponent));
     }
 
     @Nullable
     @Override
     public IChatBaseComponent getCustomName() {
-        return (IChatBaseComponent) ((Optional) this.datawatcher.get(Entity.ax)).orElse((Object) null);
+        return (IChatBaseComponent) ((Optional) this.datawatcher.get(Entity.aq)).orElse((Object) null);
     }
 
     @Override
     public boolean hasCustomName() {
-        return ((Optional) this.datawatcher.get(Entity.ax)).isPresent();
+        return ((Optional) this.datawatcher.get(Entity.aq)).isPresent();
     }
 
     public void setCustomNameVisible(boolean flag) {
-        this.datawatcher.set(Entity.ay, flag);
+        this.datawatcher.set(Entity.ar, flag);
     }
 
     public boolean getCustomNameVisible() {
-        return (Boolean) this.datawatcher.get(Entity.ay);
+        return (Boolean) this.datawatcher.get(Entity.ar);
     }
 
     public final void enderTeleportAndLoad(double d0, double d1, double d2) {
@@ -2179,7 +2179,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             this.setPositionRotation(d0, d1, d2, this.yaw, this.pitch);
             this.co().forEach((entity) -> {
                 worldserver.chunkCheck(entity);
-                entity.aE = true;
+                entity.az = true;
                 Iterator iterator = entity.passengers.iterator();
 
                 while (iterator.hasNext()) {
@@ -2333,16 +2333,16 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public boolean cj() {
-        boolean flag = this.aE;
+        boolean flag = this.az;
 
-        this.aE = false;
+        this.az = false;
         return flag;
     }
 
     public boolean ck() {
-        boolean flag = this.aB;
+        boolean flag = this.au;
 
-        this.aB = false;
+        this.au = false;
         return flag;
     }
 
@@ -2453,7 +2453,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return new Vec3D((double) f1 * d2 / (double) f3, 0.0D, (double) f2 * d2 / (double) f3);
     }
 
-    public Vec3D c(EntityLiving entityliving) {
+    public Vec3D b(EntityLiving entityliving) {
         return new Vec3D(this.locX(), this.getBoundingBox().maxY, this.locZ());
     }
 
@@ -2475,7 +2475,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public CommandListenerWrapper getCommandListener() {
-        return new CommandListenerWrapper(this, this.getPositionVector(), this.be(), this.world instanceof WorldServer ? (WorldServer) this.world : null, this.y(), this.getDisplayName().getString(), this.getScoreboardDisplayName(), this.world.getMinecraftServer(), this);
+        return new CommandListenerWrapper(this, this.getPositionVector(), this.bh(), this.world instanceof WorldServer ? (WorldServer) this.world : null, this.y(), this.getDisplayName().getString(), this.getScoreboardDisplayName(), this.world.getMinecraftServer(), this);
     }
 
     protected int y() {
@@ -2604,7 +2604,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return this.size.height;
     }
 
-    public abstract Packet<?> O();
+    public abstract Packet<?> P();
 
     public EntitySize a(EntityPose entitypose) {
         return this.f.l();
@@ -2681,7 +2681,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                 this.locBlock = new BlockPosition(i, j, k);
             }
 
-            this.aB = true;
+            this.au = true;
         }
 
     }

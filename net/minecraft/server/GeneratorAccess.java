@@ -1,25 +1,18 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
-public interface GeneratorAccess extends IEntityAccess, IWorldReader, VirtualLevelWritable {
+public interface GeneratorAccess extends ICombinedAccess, IWorldTime {
 
-    default float aa() {
-        return DimensionManager.b[this.getDimensionManager().c(this.getWorldData().getDayTime())];
-    }
-
-    default float f(float f) {
-        return this.getDimensionManager().b(this.getWorldData().getDayTime());
+    @Override
+    default long ab() {
+        return this.getWorldData().getDayTime();
     }
 
     TickList<Block> getBlockTickList();
 
     TickList<FluidType> getFluidTickList();
-
-    World getMinecraftWorld();
 
     WorldData getWorldData();
 
@@ -52,20 +45,5 @@ public interface GeneratorAccess extends IEntityAccess, IWorldReader, VirtualLev
 
     default void triggerEffect(int i, BlockPosition blockposition, int j) {
         this.a((EntityHuman) null, i, blockposition, j);
-    }
-
-    @Override
-    default Stream<VoxelShape> c(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Predicate<Entity> predicate) {
-        return IEntityAccess.super.c(entity, axisalignedbb, predicate);
-    }
-
-    @Override
-    default boolean a(@Nullable Entity entity, VoxelShape voxelshape) {
-        return IEntityAccess.super.a(entity, voxelshape);
-    }
-
-    @Override
-    default BlockPosition getHighestBlockYAt(HeightMap.Type heightmap_type, BlockPosition blockposition) {
-        return IWorldReader.super.getHighestBlockYAt(heightmap_type, blockposition);
     }
 }

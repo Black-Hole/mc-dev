@@ -91,7 +91,7 @@ public abstract class DefinedStructurePiece extends StructurePiece {
         return true;
     }
 
-    protected abstract void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox);
+    protected abstract void a(String s, BlockPosition blockposition, WorldAccess worldaccess, Random random, StructureBoundingBox structureboundingbox);
 
     @Override
     public void a(int i, int j, int k) {

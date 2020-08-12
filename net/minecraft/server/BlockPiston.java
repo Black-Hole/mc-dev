@@ -215,11 +215,15 @@ public class BlockPiston extends BlockDirectional {
     }
 
     public static boolean a(IBlockData iblockdata, World world, BlockPosition blockposition, EnumDirection enumdirection, boolean flag, EnumDirection enumdirection1) {
-        if (!iblockdata.a(Blocks.OBSIDIAN) && !iblockdata.a(Blocks.CRYING_OBSIDIAN) && !iblockdata.a(Blocks.RESPAWN_ANCHOR)) {
-            if (!world.getWorldBorder().a(blockposition)) {
-                return false;
-            } else if (blockposition.getY() >= 0 && (enumdirection != EnumDirection.DOWN || blockposition.getY() != 0)) {
-                if (blockposition.getY() <= world.getBuildHeight() - 1 && (enumdirection != EnumDirection.UP || blockposition.getY() != world.getBuildHeight() - 1)) {
+        if (blockposition.getY() >= 0 && blockposition.getY() <= world.getBuildHeight() - 1 && world.getWorldBorder().a(blockposition)) {
+            if (iblockdata.isAir()) {
+                return true;
+            } else if (!iblockdata.a(Blocks.OBSIDIAN) && !iblockdata.a(Blocks.CRYING_OBSIDIAN) && !iblockdata.a(Blocks.RESPAWN_ANCHOR)) {
+                if (enumdirection == EnumDirection.DOWN && blockposition.getY() == 0) {
+                    return false;
+                } else if (enumdirection == EnumDirection.UP && blockposition.getY() == world.getBuildHeight() - 1) {
+                    return false;
+                } else {
                     if (!iblockdata.a(Blocks.PISTON) && !iblockdata.a(Blocks.STICKY_PISTON)) {
                         if (iblockdata.h(world, blockposition) == -1.0F) {
                             return false;
@@ -238,8 +242,6 @@ public class BlockPiston extends BlockDirectional {
                     }
 
                     return !iblockdata.getBlock().isTileEntity();
-                } else {
-                    return false;
                 }
             } else {
                 return false;
@@ -287,7 +289,7 @@ public class BlockPiston extends BlockDirectional {
                 iblockdata1 = world.getType(blockposition3);
                 TileEntity tileentity = iblockdata1.getBlock().isTileEntity() ? world.getTileEntity(blockposition3) : null;
 
-                a(iblockdata1, world, blockposition3, tileentity);
+                a(iblockdata1, (GeneratorAccess) world, blockposition3, tileentity);
                 world.setTypeAndData(blockposition3, Blocks.AIR.getBlockData(), 18);
                 aiblockdata[j++] = iblockdata1;
             }

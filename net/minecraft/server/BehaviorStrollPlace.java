@@ -8,11 +8,13 @@ public class BehaviorStrollPlace extends Behavior<EntityCreature> {
     private final MemoryModuleType<GlobalPos> b;
     private final int c;
     private final int d;
-    private long e;
+    private final float e;
+    private long f;
 
-    public BehaviorStrollPlace(MemoryModuleType<GlobalPos> memorymoduletype, int i, int j) {
+    public BehaviorStrollPlace(MemoryModuleType<GlobalPos> memorymoduletype, float f, int i, int j) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED, memorymoduletype, MemoryStatus.VALUE_PRESENT));
         this.b = memorymoduletype;
+        this.e = f;
         this.c = i;
         this.d = j;
     }
@@ -24,14 +26,14 @@ public class BehaviorStrollPlace extends Behavior<EntityCreature> {
     }
 
     protected void a(WorldServer worldserver, EntityCreature entitycreature, long i) {
-        if (i > this.e) {
+        if (i > this.f) {
             BehaviorController<?> behaviorcontroller = entitycreature.getBehaviorController();
             Optional<GlobalPos> optional = behaviorcontroller.getMemory(this.b);
 
             optional.ifPresent((globalpos) -> {
-                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(globalpos.getBlockPosition(), 0.4F, this.c)));
+                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(globalpos.getBlockPosition(), this.e, this.c)));
             });
-            this.e = i + 80L;
+            this.f = i + 80L;
         }
 
     }

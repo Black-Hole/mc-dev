@@ -11,8 +11,8 @@ public class WorldGenFoilagePlacerDarkOak extends WorldGenFoilagePlacer {
         return b(instance).apply(instance, WorldGenFoilagePlacerDarkOak::new);
     });
 
-    public WorldGenFoilagePlacerDarkOak(int i, int j, int k, int l) {
-        super(i, j, k, l);
+    public WorldGenFoilagePlacerDarkOak(IntSpread intspread, IntSpread intspread1) {
+        super(intspread, intspread1);
     }
 
     @Override

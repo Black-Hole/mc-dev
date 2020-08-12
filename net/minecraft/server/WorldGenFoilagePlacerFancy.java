@@ -11,8 +11,13 @@ public class WorldGenFoilagePlacerFancy extends WorldGenFoilagePlacerBlob {
         return a(instance).apply(instance, WorldGenFoilagePlacerFancy::new);
     });
 
-    public WorldGenFoilagePlacerFancy(int i, int j, int k, int l, int i1) {
-        super(i, j, k, l, i1, WorldGenFoilagePlacers.f);
+    public WorldGenFoilagePlacerFancy(IntSpread intspread, IntSpread intspread1, int i) {
+        super(intspread, intspread1, i);
+    }
+
+    @Override
+    protected WorldGenFoilagePlacers<?> a() {
+        return WorldGenFoilagePlacers.f;
     }
 
     @Override

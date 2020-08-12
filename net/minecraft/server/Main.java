@@ -57,8 +57,9 @@ public class Main {
             DispenserRegistry.init();
             DispenserRegistry.c();
             SystemUtils.l();
+            IRegistryCustom.Dimension iregistrycustom_dimension = IRegistryCustom.b();
             java.nio.file.Path java_nio_file_path = Paths.get("server.properties");
-            DedicatedServerSettings dedicatedserversettings = new DedicatedServerSettings(java_nio_file_path);
+            DedicatedServerSettings dedicatedserversettings = new DedicatedServerSettings(iregistrycustom_dimension, java_nio_file_path);
 
             dedicatedserversettings.save();
             java.nio.file.Path java_nio_file_path1 = Paths.get("eula.txt");
@@ -91,7 +92,7 @@ public class Main {
                 Main.LOGGER.warn("Safe mode active, only vanilla datapack will be loaded");
             }
 
-            ResourcePackRepository<ResourcePackLoader> resourcepackrepository = new ResourcePackRepository<>(ResourcePackLoader::new, new ResourcePackSource[]{new ResourcePackSourceVanilla(), new ResourcePackSourceFolder(convertable_conversionsession.getWorldFolder(SavedFile.DATAPACKS).toFile(), PackSource.c)});
+            ResourcePackRepository resourcepackrepository = new ResourcePackRepository(new ResourcePackSource[]{new ResourcePackSourceVanilla(), new ResourcePackSourceFolder(convertable_conversionsession.getWorldFolder(SavedFile.DATAPACKS).toFile(), PackSource.c)});
             DataPackConfiguration datapackconfiguration1 = MinecraftServer.a(resourcepackrepository, datapackconfiguration == null ? DataPackConfiguration.a : datapackconfiguration, flag);
             CompletableFuture completablefuture = DataPackResources.a(resourcepackrepository.f(), CommandDispatcher.ServerType.DEDICATED, dedicatedserversettings.getProperties().functionPermissionLevel, SystemUtils.f(), Runnable::run);
 
@@ -106,8 +107,7 @@ public class Main {
             }
 
             datapackresources.i();
-            IRegistryCustom.Dimension iregistrycustom_dimension = IRegistryCustom.b();
-            RegistryReadOps<NBTBase> registryreadops = RegistryReadOps.a((DynamicOps) DynamicOpsNBT.a, datapackresources.h(), (IRegistryCustom) iregistrycustom_dimension);
+            RegistryReadOps<NBTBase> registryreadops = RegistryReadOps.a((DynamicOps) DynamicOpsNBT.a, datapackresources.h(), iregistrycustom_dimension);
             Object object = convertable_conversionsession.a((DynamicOps) registryreadops, datapackconfiguration1);
 
             if (object == null) {
@@ -116,12 +116,12 @@ public class Main {
 
                 if (optionset.has(optionspec2)) {
                     worldsettings = MinecraftServer.c;
-                    generatorsettings = GeneratorSettings.b;
+                    generatorsettings = GeneratorSettings.a((IRegistryCustom) iregistrycustom_dimension);
                 } else {
                     DedicatedServerProperties dedicatedserverproperties = dedicatedserversettings.getProperties();
 
                     worldsettings = new WorldSettings(dedicatedserverproperties.levelName, dedicatedserverproperties.gamemode, dedicatedserverproperties.hardcore, dedicatedserverproperties.difficulty, false, new GameRules(), datapackconfiguration1);
-                    generatorsettings = optionset.has(optionspec3) ? dedicatedserverproperties.generatorSettings.k() : dedicatedserverproperties.generatorSettings;
+                    generatorsettings = optionset.has(optionspec3) ? dedicatedserverproperties.generatorSettings.j() : dedicatedserverproperties.generatorSettings;
                 }
 
                 object = new WorldDataServer(worldsettings, generatorsettings, Lifecycle.stable());
@@ -130,7 +130,7 @@ public class Main {
             if (optionset.has(optionspec4)) {
                 convertWorld(convertable_conversionsession, DataConverterRegistry.a(), optionset.has(optionspec5), () -> {
                     return true;
-                }, ((SaveData) object).getGeneratorSettings().g());
+                }, ((SaveData) object).getGeneratorSettings().f());
             }
 
             convertable_conversionsession.a((IRegistryCustom) iregistrycustom_dimension, (SaveData) object);
@@ -144,7 +144,7 @@ public class Main {
                 boolean flag1 = !optionset.has(optionspec) && !optionset.valuesOf(nonoptionargumentspec).contains("nogui");
 
                 if (flag1 && !GraphicsEnvironment.isHeadless()) {
-                    dedicatedserver1.bb();
+                    dedicatedserver1.bc();
                 }
 
                 return dedicatedserver1;

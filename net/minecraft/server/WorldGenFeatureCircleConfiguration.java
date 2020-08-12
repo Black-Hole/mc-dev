@@ -9,23 +9,23 @@ public class WorldGenFeatureCircleConfiguration implements WorldGenFeatureConfig
     public static final Codec<WorldGenFeatureCircleConfiguration> a = RecordCodecBuilder.create((instance) -> {
         return instance.group(IBlockData.b.fieldOf("state").forGetter((worldgenfeaturecircleconfiguration) -> {
             return worldgenfeaturecircleconfiguration.b;
-        }), Codec.INT.fieldOf("radius").withDefault(0).forGetter((worldgenfeaturecircleconfiguration) -> {
+        }), IntSpread.a(0, 4, 4).fieldOf("radius").forGetter((worldgenfeaturecircleconfiguration) -> {
             return worldgenfeaturecircleconfiguration.c;
-        }), Codec.INT.fieldOf("y_size").withDefault(0).forGetter((worldgenfeaturecircleconfiguration) -> {
+        }), Codec.intRange(0, 4).fieldOf("half_height").forGetter((worldgenfeaturecircleconfiguration) -> {
             return worldgenfeaturecircleconfiguration.d;
         }), IBlockData.b.listOf().fieldOf("targets").forGetter((worldgenfeaturecircleconfiguration) -> {
             return worldgenfeaturecircleconfiguration.e;
         })).apply(instance, WorldGenFeatureCircleConfiguration::new);
     });
     public final IBlockData b;
-    public final int c;
+    public final IntSpread c;
     public final int d;
     public final List<IBlockData> e;
 
-    public WorldGenFeatureCircleConfiguration(IBlockData iblockdata, int i, int j, List<IBlockData> list) {
+    public WorldGenFeatureCircleConfiguration(IBlockData iblockdata, IntSpread intspread, int i, List<IBlockData> list) {
         this.b = iblockdata;
-        this.c = i;
-        this.d = j;
+        this.c = intspread;
+        this.d = i;
         this.e = list;
     }
 }

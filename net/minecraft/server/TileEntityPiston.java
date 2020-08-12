@@ -15,6 +15,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
     private float i;
     private float j;
     private long k;
+    private int l;
 
     public TileEntityPiston() {
         super(TileEntityTypes.PISTON);
@@ -80,6 +81,10 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
                     if (entity.getPushReaction() != EnumPistonReaction.IGNORE) {
                         if (flag) {
+                            if (entity instanceof EntityPlayer) {
+                                continue;
+                            }
+
                             Vec3D vec3d = entity.getMot();
                             double d1 = vec3d.x;
                             double d2 = vec3d.y;
@@ -97,38 +102,30 @@ public class TileEntityPiston extends TileEntity implements ITickable {
                             }
 
                             entity.setMot(d1, d2, d3);
-                            if (entity instanceof EntityPlayer) {
-                                ((EntityPlayer) entity).playerConnection.sendPacket(new PacketPlayOutEntityVelocity(entity));
-                            }
                         }
 
                         double d4 = 0.0D;
                         Iterator iterator1 = list1.iterator();
 
-                        while (true) {
-                            if (iterator1.hasNext()) {
-                                AxisAlignedBB axisalignedbb1 = (AxisAlignedBB) iterator1.next();
-                                AxisAlignedBB axisalignedbb2 = PistonUtil.a(this.a(axisalignedbb1), enumdirection, d0);
-                                AxisAlignedBB axisalignedbb3 = entity.getBoundingBox();
+                        while (iterator1.hasNext()) {
+                            AxisAlignedBB axisalignedbb1 = (AxisAlignedBB) iterator1.next();
+                            AxisAlignedBB axisalignedbb2 = PistonUtil.a(this.a(axisalignedbb1), enumdirection, d0);
+                            AxisAlignedBB axisalignedbb3 = entity.getBoundingBox();
 
-                                if (!axisalignedbb2.c(axisalignedbb3)) {
-                                    continue;
-                                }
-
+                            if (axisalignedbb2.c(axisalignedbb3)) {
                                 d4 = Math.max(d4, a(axisalignedbb2, enumdirection, axisalignedbb3));
-                                if (d4 < d0) {
-                                    continue;
+                                if (d4 >= d0) {
+                                    break;
                                 }
                             }
+                        }
 
-                            if (d4 > 0.0D) {
-                                d4 = Math.min(d4, d0) + 0.01D;
-                                a(enumdirection, entity, d4, enumdirection);
-                                if (!this.c && this.g) {
-                                    this.a(entity, enumdirection, d0);
-                                }
+                        if (d4 > 0.0D) {
+                            d4 = Math.min(d4, d0) + 0.01D;
+                            a(enumdirection, entity, d4, enumdirection);
+                            if (!this.c && this.g) {
+                                this.a(entity, enumdirection, d0);
                             }
-                            break;
                         }
                     }
                 }
@@ -224,11 +221,11 @@ public class TileEntityPiston extends TileEntity implements ITickable {
     }
 
     public void l() {
-        if (this.j < 1.0F && this.world != null) {
+        if (this.world != null && (this.j < 1.0F || this.world.isClientSide)) {
             this.i = 1.0F;
             this.j = this.i;
             this.world.removeTileEntity(this.position);
-            this.an_();
+            this.al_();
             if (this.world.getType(this.position).a(Blocks.MOVING_PISTON)) {
                 IBlockData iblockdata;
 
@@ -250,24 +247,28 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         this.k = this.world.getTime();
         this.j = this.i;
         if (this.j >= 1.0F) {
-            this.world.removeTileEntity(this.position);
-            this.an_();
-            if (this.a != null && this.world.getType(this.position).a(Blocks.MOVING_PISTON)) {
-                IBlockData iblockdata = Block.b(this.a, (GeneratorAccess) this.world, this.position);
+            if (this.world.isClientSide && this.l < 5) {
+                ++this.l;
+            } else {
+                this.world.removeTileEntity(this.position);
+                this.al_();
+                if (this.a != null && this.world.getType(this.position).a(Blocks.MOVING_PISTON)) {
+                    IBlockData iblockdata = Block.b(this.a, (GeneratorAccess) this.world, this.position);
 
-                if (iblockdata.isAir()) {
-                    this.world.setTypeAndData(this.position, this.a, 84);
-                    Block.a(this.a, iblockdata, this.world, this.position, 3);
-                } else {
-                    if (iblockdata.b(BlockProperties.C) && (Boolean) iblockdata.get(BlockProperties.C)) {
-                        iblockdata = (IBlockData) iblockdata.set(BlockProperties.C, false);
+                    if (iblockdata.isAir()) {
+                        this.world.setTypeAndData(this.position, this.a, 84);
+                        Block.a(this.a, iblockdata, this.world, this.position, 3);
+                    } else {
+                        if (iblockdata.b(BlockProperties.C) && (Boolean) iblockdata.get(BlockProperties.C)) {
+                            iblockdata = (IBlockData) iblockdata.set(BlockProperties.C, false);
+                        }
+
+                        this.world.setTypeAndData(this.position, iblockdata, 67);
+                        this.world.a(this.position, iblockdata.getBlock(), this.position);
                     }
-
-                    this.world.setTypeAndData(this.position, iblockdata, 67);
-                    this.world.a(this.position, iblockdata.getBlock(), this.position);
                 }
-            }
 
+            }
         } else {
             float f = this.i + 0.5F;
 

@@ -23,7 +23,7 @@ public class PathfinderGoalBreath extends PathfinderGoal {
     }
 
     @Override
-    public boolean D_() {
+    public boolean C_() {
         return false;
     }
 
@@ -56,7 +56,7 @@ public class PathfinderGoalBreath extends PathfinderGoal {
     @Override
     public void e() {
         this.g();
-        this.a.a(0.02F, new Vec3D((double) this.a.aY, (double) this.a.aZ, (double) this.a.ba));
+        this.a.a(0.02F, new Vec3D((double) this.a.aR, (double) this.a.aS, (double) this.a.aT));
         this.a.move(EnumMoveType.SELF, this.a.getMot());
     }
 

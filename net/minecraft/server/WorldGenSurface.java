@@ -5,76 +5,73 @@ import java.util.Random;
 
 public abstract class WorldGenSurface<C extends WorldGenSurfaceConfiguration> {
 
-    public static final IBlockData f = Blocks.AIR.getBlockData();
-    public static final IBlockData g = Blocks.DIRT.getBlockData();
-    public static final IBlockData h = Blocks.GRASS_BLOCK.getBlockData();
-    public static final IBlockData i = Blocks.PODZOL.getBlockData();
-    public static final IBlockData j = Blocks.GRAVEL.getBlockData();
-    public static final IBlockData k = Blocks.STONE.getBlockData();
-    public static final IBlockData l = Blocks.COARSE_DIRT.getBlockData();
-    public static final IBlockData m = Blocks.SAND.getBlockData();
-    public static final IBlockData n = Blocks.RED_SAND.getBlockData();
-    public static final IBlockData o = Blocks.WHITE_TERRACOTTA.getBlockData();
-    public static final IBlockData p = Blocks.MYCELIUM.getBlockData();
-    public static final IBlockData q = Blocks.SOUL_SAND.getBlockData();
-    public static final IBlockData r = Blocks.NETHERRACK.getBlockData();
-    public static final IBlockData s = Blocks.END_STONE.getBlockData();
-    public static final IBlockData t = Blocks.CRIMSON_NYLIUM.getBlockData();
-    public static final IBlockData u = Blocks.WARPED_NYLIUM.getBlockData();
-    public static final IBlockData v = Blocks.NETHER_WART_BLOCK.getBlockData();
-    public static final IBlockData w = Blocks.WARPED_WART_BLOCK.getBlockData();
-    public static final IBlockData x = Blocks.BLACKSTONE.getBlockData();
-    public static final IBlockData y = Blocks.BASALT.getBlockData();
-    public static final IBlockData z = Blocks.MAGMA_BLOCK.getBlockData();
-    public static final WorldGenSurfaceConfigurationBase A = new WorldGenSurfaceConfigurationBase(WorldGenSurface.f, WorldGenSurface.f, WorldGenSurface.f);
-    public static final WorldGenSurfaceConfigurationBase B = new WorldGenSurfaceConfigurationBase(WorldGenSurface.i, WorldGenSurface.g, WorldGenSurface.j);
-    public static final WorldGenSurfaceConfigurationBase C = new WorldGenSurfaceConfigurationBase(WorldGenSurface.j, WorldGenSurface.j, WorldGenSurface.j);
-    public static final WorldGenSurfaceConfigurationBase D = new WorldGenSurfaceConfigurationBase(WorldGenSurface.h, WorldGenSurface.g, WorldGenSurface.j);
-    public static final WorldGenSurfaceConfigurationBase E = new WorldGenSurfaceConfigurationBase(WorldGenSurface.g, WorldGenSurface.g, WorldGenSurface.j);
-    public static final WorldGenSurfaceConfigurationBase F = new WorldGenSurfaceConfigurationBase(WorldGenSurface.k, WorldGenSurface.k, WorldGenSurface.j);
-    public static final WorldGenSurfaceConfigurationBase G = new WorldGenSurfaceConfigurationBase(WorldGenSurface.l, WorldGenSurface.g, WorldGenSurface.j);
-    public static final WorldGenSurfaceConfigurationBase H = new WorldGenSurfaceConfigurationBase(WorldGenSurface.m, WorldGenSurface.m, WorldGenSurface.j);
-    public static final WorldGenSurfaceConfigurationBase I = new WorldGenSurfaceConfigurationBase(WorldGenSurface.h, WorldGenSurface.g, WorldGenSurface.m);
-    public static final WorldGenSurfaceConfigurationBase J = new WorldGenSurfaceConfigurationBase(WorldGenSurface.m, WorldGenSurface.m, WorldGenSurface.m);
-    public static final WorldGenSurfaceConfigurationBase K = new WorldGenSurfaceConfigurationBase(WorldGenSurface.n, WorldGenSurface.o, WorldGenSurface.j);
-    public static final WorldGenSurfaceConfigurationBase L = new WorldGenSurfaceConfigurationBase(WorldGenSurface.p, WorldGenSurface.g, WorldGenSurface.j);
-    public static final WorldGenSurfaceConfigurationBase M = new WorldGenSurfaceConfigurationBase(WorldGenSurface.r, WorldGenSurface.r, WorldGenSurface.r);
-    public static final WorldGenSurfaceConfigurationBase N = new WorldGenSurfaceConfigurationBase(WorldGenSurface.q, WorldGenSurface.q, WorldGenSurface.q);
-    public static final WorldGenSurfaceConfigurationBase O = new WorldGenSurfaceConfigurationBase(WorldGenSurface.s, WorldGenSurface.s, WorldGenSurface.s);
-    public static final WorldGenSurfaceConfigurationBase P = new WorldGenSurfaceConfigurationBase(WorldGenSurface.t, WorldGenSurface.r, WorldGenSurface.v);
-    public static final WorldGenSurfaceConfigurationBase Q = new WorldGenSurfaceConfigurationBase(WorldGenSurface.u, WorldGenSurface.r, WorldGenSurface.w);
-    public static final WorldGenSurfaceConfigurationBase R = new WorldGenSurfaceConfigurationBase(WorldGenSurface.x, WorldGenSurface.y, WorldGenSurface.z);
-    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> S = a("default", new WorldGenSurfaceDefaultBlock(WorldGenSurfaceConfigurationBase.a));
-    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> T = a("mountain", new WorldGenSurfaceExtremeHills(WorldGenSurfaceConfigurationBase.a));
-    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> U = a("shattered_savanna", new WorldGenSurfaceSavannaMutated(WorldGenSurfaceConfigurationBase.a));
-    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> V = a("gravelly_mountain", new WorldGenSurfaceExtremeHillMutated(WorldGenSurfaceConfigurationBase.a));
-    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> W = a("giant_tree_taiga", new WorldGenSurfaceTaigaMega(WorldGenSurfaceConfigurationBase.a));
-    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> X = a("swamp", new WorldGenSurfaceSwamp(WorldGenSurfaceConfigurationBase.a));
-    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> Y = a("badlands", new WorldGenSurfaceMesa(WorldGenSurfaceConfigurationBase.a));
-    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> Z = a("wooded_badlands", new WorldGenSurfaceMesaForest(WorldGenSurfaceConfigurationBase.a));
-    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> aa = a("eroded_badlands", new WorldGenSurfaceMesaBryce(WorldGenSurfaceConfigurationBase.a));
-    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> ab = a("frozen_ocean", new WorldGenSurfaceFrozenOcean(WorldGenSurfaceConfigurationBase.a));
-    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> ac = a("nether", new WorldGenSurfaceNether(WorldGenSurfaceConfigurationBase.a));
-    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> ad = a("nether_forest", new WorldGenSurfaceNetherForest(WorldGenSurfaceConfigurationBase.a));
-    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> ae = a("soul_sand_valley", new WorldGenSurfaceSoulSandValley(WorldGenSurfaceConfigurationBase.a));
-    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> af = a("basalt_deltas", new WorldGenSurfaceBasaltDeltas(WorldGenSurfaceConfigurationBase.a));
-    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> ag = a("nope", new WorldGenSurfaceEmpty(WorldGenSurfaceConfigurationBase.a));
-    private final Codec<WorldGenSurfaceComposite<C>> a;
+    private static final IBlockData a = Blocks.DIRT.getBlockData();
+    private static final IBlockData b = Blocks.GRASS_BLOCK.getBlockData();
+    private static final IBlockData c = Blocks.PODZOL.getBlockData();
+    private static final IBlockData d = Blocks.GRAVEL.getBlockData();
+    private static final IBlockData e = Blocks.STONE.getBlockData();
+    private static final IBlockData K = Blocks.COARSE_DIRT.getBlockData();
+    private static final IBlockData L = Blocks.SAND.getBlockData();
+    private static final IBlockData M = Blocks.RED_SAND.getBlockData();
+    private static final IBlockData N = Blocks.WHITE_TERRACOTTA.getBlockData();
+    private static final IBlockData O = Blocks.MYCELIUM.getBlockData();
+    private static final IBlockData P = Blocks.SOUL_SAND.getBlockData();
+    private static final IBlockData Q = Blocks.NETHERRACK.getBlockData();
+    private static final IBlockData R = Blocks.END_STONE.getBlockData();
+    private static final IBlockData S = Blocks.CRIMSON_NYLIUM.getBlockData();
+    private static final IBlockData T = Blocks.WARPED_NYLIUM.getBlockData();
+    private static final IBlockData U = Blocks.NETHER_WART_BLOCK.getBlockData();
+    private static final IBlockData V = Blocks.WARPED_WART_BLOCK.getBlockData();
+    private static final IBlockData W = Blocks.BLACKSTONE.getBlockData();
+    private static final IBlockData X = Blocks.BASALT.getBlockData();
+    private static final IBlockData Y = Blocks.MAGMA_BLOCK.getBlockData();
+    public static final WorldGenSurfaceConfigurationBase f = new WorldGenSurfaceConfigurationBase(WorldGenSurface.c, WorldGenSurface.a, WorldGenSurface.d);
+    public static final WorldGenSurfaceConfigurationBase g = new WorldGenSurfaceConfigurationBase(WorldGenSurface.d, WorldGenSurface.d, WorldGenSurface.d);
+    public static final WorldGenSurfaceConfigurationBase h = new WorldGenSurfaceConfigurationBase(WorldGenSurface.b, WorldGenSurface.a, WorldGenSurface.d);
+    public static final WorldGenSurfaceConfigurationBase i = new WorldGenSurfaceConfigurationBase(WorldGenSurface.e, WorldGenSurface.e, WorldGenSurface.d);
+    public static final WorldGenSurfaceConfigurationBase j = new WorldGenSurfaceConfigurationBase(WorldGenSurface.K, WorldGenSurface.a, WorldGenSurface.d);
+    public static final WorldGenSurfaceConfigurationBase k = new WorldGenSurfaceConfigurationBase(WorldGenSurface.L, WorldGenSurface.L, WorldGenSurface.d);
+    public static final WorldGenSurfaceConfigurationBase l = new WorldGenSurfaceConfigurationBase(WorldGenSurface.b, WorldGenSurface.a, WorldGenSurface.L);
+    public static final WorldGenSurfaceConfigurationBase m = new WorldGenSurfaceConfigurationBase(WorldGenSurface.L, WorldGenSurface.L, WorldGenSurface.L);
+    public static final WorldGenSurfaceConfigurationBase n = new WorldGenSurfaceConfigurationBase(WorldGenSurface.M, WorldGenSurface.N, WorldGenSurface.d);
+    public static final WorldGenSurfaceConfigurationBase o = new WorldGenSurfaceConfigurationBase(WorldGenSurface.O, WorldGenSurface.a, WorldGenSurface.d);
+    public static final WorldGenSurfaceConfigurationBase p = new WorldGenSurfaceConfigurationBase(WorldGenSurface.Q, WorldGenSurface.Q, WorldGenSurface.Q);
+    public static final WorldGenSurfaceConfigurationBase q = new WorldGenSurfaceConfigurationBase(WorldGenSurface.P, WorldGenSurface.P, WorldGenSurface.P);
+    public static final WorldGenSurfaceConfigurationBase r = new WorldGenSurfaceConfigurationBase(WorldGenSurface.R, WorldGenSurface.R, WorldGenSurface.R);
+    public static final WorldGenSurfaceConfigurationBase s = new WorldGenSurfaceConfigurationBase(WorldGenSurface.S, WorldGenSurface.Q, WorldGenSurface.U);
+    public static final WorldGenSurfaceConfigurationBase t = new WorldGenSurfaceConfigurationBase(WorldGenSurface.T, WorldGenSurface.Q, WorldGenSurface.V);
+    public static final WorldGenSurfaceConfigurationBase u = new WorldGenSurfaceConfigurationBase(WorldGenSurface.W, WorldGenSurface.X, WorldGenSurface.Y);
+    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> v = a("default", new WorldGenSurfaceDefaultBlock(WorldGenSurfaceConfigurationBase.a));
+    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> w = a("mountain", new WorldGenSurfaceExtremeHills(WorldGenSurfaceConfigurationBase.a));
+    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> x = a("shattered_savanna", new WorldGenSurfaceSavannaMutated(WorldGenSurfaceConfigurationBase.a));
+    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> y = a("gravelly_mountain", new WorldGenSurfaceExtremeHillMutated(WorldGenSurfaceConfigurationBase.a));
+    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> z = a("giant_tree_taiga", new WorldGenSurfaceTaigaMega(WorldGenSurfaceConfigurationBase.a));
+    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> A = a("swamp", new WorldGenSurfaceSwamp(WorldGenSurfaceConfigurationBase.a));
+    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> B = a("badlands", new WorldGenSurfaceMesa(WorldGenSurfaceConfigurationBase.a));
+    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> C = a("wooded_badlands", new WorldGenSurfaceMesaForest(WorldGenSurfaceConfigurationBase.a));
+    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> D = a("eroded_badlands", new WorldGenSurfaceMesaBryce(WorldGenSurfaceConfigurationBase.a));
+    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> E = a("frozen_ocean", new WorldGenSurfaceFrozenOcean(WorldGenSurfaceConfigurationBase.a));
+    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> F = a("nether", new WorldGenSurfaceNether(WorldGenSurfaceConfigurationBase.a));
+    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> G = a("nether_forest", new WorldGenSurfaceNetherForest(WorldGenSurfaceConfigurationBase.a));
+    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> H = a("soul_sand_valley", new WorldGenSurfaceSoulSandValley(WorldGenSurfaceConfigurationBase.a));
+    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> I = a("basalt_deltas", new WorldGenSurfaceBasaltDeltas(WorldGenSurfaceConfigurationBase.a));
+    public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> J = a("nope", new WorldGenSurfaceEmpty(WorldGenSurfaceConfigurationBase.a));
+    private final Codec<WorldGenSurfaceComposite<C>> Z;
 
     private static <C extends WorldGenSurfaceConfiguration, F extends WorldGenSurface<C>> F a(String s, F f0) {
         return (WorldGenSurface) IRegistry.a(IRegistry.SURFACE_BUILDER, s, (Object) f0);
     }
 
     public WorldGenSurface(Codec<C> codec) {
-        this.a = codec.fieldOf("config").xmap((worldgensurfaceconfiguration) -> {
-            return new WorldGenSurfaceComposite<>(this, worldgensurfaceconfiguration);
-        }, (worldgensurfacecomposite) -> {
-            return worldgensurfacecomposite.c;
-        }).codec();
+        this.Z = codec.fieldOf("config").xmap(this::a, WorldGenSurfaceComposite::a).codec();
     }
 
     public Codec<WorldGenSurfaceComposite<C>> d() {
-        return this.a;
+        return this.Z;
+    }
+
+    public WorldGenSurfaceComposite<C> a(C c0) {
+        return new WorldGenSurfaceComposite<>(this, c0);
     }
 
     public abstract void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, long i1, C c0);

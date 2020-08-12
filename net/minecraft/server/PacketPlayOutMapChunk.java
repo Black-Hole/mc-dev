@@ -16,21 +16,19 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
     private int c;
     private NBTTagCompound d;
     @Nullable
-    private BiomeStorage e;
+    private int[] e;
     private byte[] f;
     private List<NBTTagCompound> g;
     private boolean h;
-    private boolean i;
 
     public PacketPlayOutMapChunk() {}
 
-    public PacketPlayOutMapChunk(Chunk chunk, int i, boolean flag) {
+    public PacketPlayOutMapChunk(Chunk chunk, int i) {
         ChunkCoordIntPair chunkcoordintpair = chunk.getPos();
 
         this.a = chunkcoordintpair.x;
         this.b = chunkcoordintpair.z;
         this.h = i == 65535;
-        this.i = flag;
         this.d = new NBTTagCompound();
         Iterator iterator = chunk.f().iterator();
 
@@ -44,11 +42,11 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         }
 
         if (this.h) {
-            this.e = chunk.getBiomeIndex().b();
+            this.e = chunk.getBiomeIndex().a();
         }
 
         this.f = new byte[this.a(chunk, i)];
-        this.c = this.a(new PacketDataSerializer(this.k()), chunk, i);
+        this.c = this.a(new PacketDataSerializer(this.j()), chunk, i);
         this.g = Lists.newArrayList();
         iterator = chunk.getTileEntities().entrySet().iterator();
 
@@ -72,11 +70,10 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         this.a = packetdataserializer.readInt();
         this.b = packetdataserializer.readInt();
         this.h = packetdataserializer.readBoolean();
-        this.i = packetdataserializer.readBoolean();
         this.c = packetdataserializer.i();
         this.d = packetdataserializer.l();
         if (this.h) {
-            this.e = new BiomeStorage(packetdataserializer);
+            this.e = packetdataserializer.c(BiomeStorage.a);
         }
 
         int i = packetdataserializer.i();
@@ -102,11 +99,10 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         packetdataserializer.writeInt(this.a);
         packetdataserializer.writeInt(this.b);
         packetdataserializer.writeBoolean(this.h);
-        packetdataserializer.writeBoolean(this.i);
         packetdataserializer.d(this.c);
         packetdataserializer.a(this.d);
         if (this.e != null) {
-            this.e.a(packetdataserializer);
+            packetdataserializer.a(this.e);
         }
 
         packetdataserializer.d(this.f.length);
@@ -126,7 +122,7 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         packetlistenerplayout.a(this);
     }
 
-    private ByteBuf k() {
+    private ByteBuf j() {
         ByteBuf bytebuf = Unpooled.wrappedBuffer(this.f);
 
         bytebuf.writerIndex(0);

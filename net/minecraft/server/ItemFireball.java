@@ -19,7 +19,7 @@ public class ItemFireball extends Item {
             flag = true;
         } else {
             blockposition = blockposition.shift(itemactioncontext.getClickedFace());
-            if (BlockFireAbstract.a((GeneratorAccess) world, blockposition)) {
+            if (BlockFireAbstract.a(world, blockposition, itemactioncontext.f())) {
                 this.a(world, blockposition);
                 world.setTypeUpdate(blockposition, BlockFireAbstract.a((IBlockAccess) world, blockposition));
                 flag = true;

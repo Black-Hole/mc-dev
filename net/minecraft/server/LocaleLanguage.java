@@ -70,11 +70,6 @@ public abstract class LocaleLanguage {
             public boolean b(String s) {
                 return map.containsKey(s);
             }
-
-            @Override
-            public String a(String s, boolean flag) {
-                return s;
-            }
         };
     }
 
@@ -98,6 +93,4 @@ public abstract class LocaleLanguage {
     public abstract String a(String s);
 
     public abstract boolean b(String s);
-
-    public abstract String a(String s, boolean flag);
 }

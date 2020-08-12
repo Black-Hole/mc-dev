@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class BlockActionContext extends ItemActionContext {
 
-    private final BlockPosition g;
+    private final BlockPosition b;
     protected boolean a;
 
     public BlockActionContext(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, MovingObjectPositionBlock movingobjectpositionblock) {
@@ -12,13 +12,13 @@ public class BlockActionContext extends ItemActionContext {
     }
 
     public BlockActionContext(ItemActionContext itemactioncontext) {
-        this(itemactioncontext.getWorld(), itemactioncontext.getEntity(), itemactioncontext.getHand(), itemactioncontext.getItemStack(), itemactioncontext.d);
+        this(itemactioncontext.getWorld(), itemactioncontext.getEntity(), itemactioncontext.getHand(), itemactioncontext.getItemStack(), itemactioncontext.i());
     }
 
     protected BlockActionContext(World world, @Nullable EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, MovingObjectPositionBlock movingobjectpositionblock) {
         super(world, entityhuman, enumhand, itemstack, movingobjectpositionblock);
         this.a = true;
-        this.g = movingobjectpositionblock.getBlockPosition().shift(movingobjectpositionblock.getDirection());
+        this.b = movingobjectpositionblock.getBlockPosition().shift(movingobjectpositionblock.getDirection());
         this.a = world.getType(movingobjectpositionblock.getBlockPosition()).a(this);
     }
 
@@ -28,7 +28,7 @@ public class BlockActionContext extends ItemActionContext {
 
     @Override
     public BlockPosition getClickPosition() {
-        return this.a ? super.getClickPosition() : this.g;
+        return this.a ? super.getClickPosition() : this.b;
     }
 
     public boolean b() {
@@ -40,11 +40,11 @@ public class BlockActionContext extends ItemActionContext {
     }
 
     public EnumDirection d() {
-        return EnumDirection.a((Entity) this.b)[0];
+        return EnumDirection.a((Entity) this.getEntity())[0];
     }
 
     public EnumDirection[] e() {
-        EnumDirection[] aenumdirection = EnumDirection.a((Entity) this.b);
+        EnumDirection[] aenumdirection = EnumDirection.a((Entity) this.getEntity());
 
         if (this.a) {
             return aenumdirection;

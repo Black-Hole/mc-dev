@@ -1,42 +1,25 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class ChatComponentText extends ChatBaseComponent {
 
     public static final IChatBaseComponent d = new ChatComponentText("");
     private final String e;
-    @Nullable
-    private LocaleLanguage f;
-    private String g;
 
     public ChatComponentText(String s) {
         this.e = s;
-        this.g = s;
     }
 
-    public String g() {
+    public String h() {
         return this.e;
     }
 
     @Override
     public String getText() {
-        if (this.e.isEmpty()) {
-            return this.e;
-        } else {
-            LocaleLanguage localelanguage = LocaleLanguage.a();
-
-            if (this.f != localelanguage) {
-                this.g = localelanguage.a(this.e, false);
-                this.f = localelanguage;
-            }
-
-            return this.g;
-        }
+        return this.e;
     }
 
     @Override
-    public ChatComponentText f() {
+    public ChatComponentText g() {
         return new ChatComponentText(this.e);
     }
 
@@ -49,7 +32,7 @@ public class ChatComponentText extends ChatBaseComponent {
         } else {
             ChatComponentText chatcomponenttext = (ChatComponentText) object;
 
-            return this.e.equals(chatcomponenttext.g()) && super.equals(object);
+            return this.e.equals(chatcomponenttext.h()) && super.equals(object);
         }
     }
 

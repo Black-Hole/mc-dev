@@ -21,49 +21,49 @@ public abstract class EntityFishSchool extends EntityFish {
 
     @Override
     public int getMaxSpawnGroup() {
-        return this.eO();
+        return this.eN();
     }
 
-    public int eO() {
+    public int eN() {
         return super.getMaxSpawnGroup();
     }
 
     @Override
-    protected boolean eM() {
-        return !this.eP();
+    protected boolean eL() {
+        return !this.eO();
     }
 
-    public boolean eP() {
+    public boolean eO() {
         return this.b != null && this.b.isAlive();
     }
 
     public EntityFishSchool a(EntityFishSchool entityfishschool) {
         this.b = entityfishschool;
-        entityfishschool.eV();
+        entityfishschool.eU();
         return entityfishschool;
     }
 
-    public void eQ() {
-        this.b.eW();
+    public void eP() {
+        this.b.eV();
         this.b = null;
     }
 
-    private void eV() {
+    private void eU() {
         ++this.c;
     }
 
-    private void eW() {
+    private void eV() {
         --this.c;
     }
 
-    public boolean eR() {
-        return this.eS() && this.c < this.eO();
+    public boolean eQ() {
+        return this.eR() && this.c < this.eN();
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.eS() && this.world.random.nextInt(200) == 1) {
+        if (this.eR() && this.world.random.nextInt(200) == 1) {
             List<EntityFish> list = this.world.a(this.getClass(), this.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
 
             if (list.size() <= 1) {
@@ -73,23 +73,23 @@ public abstract class EntityFishSchool extends EntityFish {
 
     }
 
-    public boolean eS() {
+    public boolean eR() {
         return this.c > 1;
     }
 
-    public boolean eT() {
+    public boolean eS() {
         return this.h((Entity) this.b) <= 121.0D;
     }
 
-    public void eU() {
-        if (this.eP()) {
+    public void eT() {
+        if (this.eO()) {
             this.getNavigation().a((Entity) this.b, 1.0D);
         }
 
     }
 
     public void a(Stream<EntityFishSchool> stream) {
-        stream.limit((long) (this.eO() - this.c)).filter((entityfishschool) -> {
+        stream.limit((long) (this.eN() - this.c)).filter((entityfishschool) -> {
             return entityfishschool != this;
         }).forEach((entityfishschool) -> {
             entityfishschool.a(this);
@@ -98,8 +98,8 @@ public abstract class EntityFishSchool extends EntityFish {
 
     @Nullable
     @Override
-    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
+    public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        super.prepare(worldaccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
         if (groupdataentity == null) {
             groupdataentity = new EntityFishSchool.a(this);
         } else {

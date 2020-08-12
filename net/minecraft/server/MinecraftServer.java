@@ -64,7 +64,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     public final WorldNBTStorage worldNBTStorage;
     private final MojangStatisticsGenerator snooper = new MojangStatisticsGenerator("server", this, SystemUtils.getMonotonicMillis());
     private final List<Runnable> tickables = Lists.newArrayList();
-    private GameProfilerSwitcher m;
+    private final GameProfilerSwitcher m;
     private GameProfilerFiller methodProfiler;
     private ServerConnection serverConnection;
     public final WorldLoadListenerFactory worldLoadListenerFactory;
@@ -108,7 +108,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     private long nextTick;
     private long W;
     private boolean X;
-    private final ResourcePackRepository<ResourcePackLoader> resourcePackRepository;
+    private final ResourcePackRepository resourcePackRepository;
     private final ScoreboardServer scoreboardServer;
     @Nullable
     private PersistentCommandStorage persistentCommandStorage;
@@ -127,7 +127,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     public static <S extends MinecraftServer> S a(Function<Thread, S> function) {
         AtomicReference<S> atomicreference = new AtomicReference();
         Thread thread = new Thread(() -> {
-            ((MinecraftServer) atomicreference.get()).v();
+            ((MinecraftServer) atomicreference.get()).w();
         }, "Server thread");
 
         thread.setUncaughtExceptionHandler((thread1, throwable) -> {
@@ -140,9 +140,9 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return s0;
     }
 
-    public MinecraftServer(Thread thread, IRegistryCustom.Dimension iregistrycustom_dimension, Convertable.ConversionSession convertable_conversionsession, SaveData savedata, ResourcePackRepository<ResourcePackLoader> resourcepackrepository, Proxy proxy, DataFixer datafixer, DataPackResources datapackresources, MinecraftSessionService minecraftsessionservice, GameProfileRepository gameprofilerepository, UserCache usercache, WorldLoadListenerFactory worldloadlistenerfactory) {
+    public MinecraftServer(Thread thread, IRegistryCustom.Dimension iregistrycustom_dimension, Convertable.ConversionSession convertable_conversionsession, SaveData savedata, ResourcePackRepository resourcepackrepository, Proxy proxy, DataFixer datafixer, DataPackResources datapackresources, MinecraftSessionService minecraftsessionservice, GameProfileRepository gameprofilerepository, UserCache usercache, WorldLoadListenerFactory worldloadlistenerfactory) {
         super("Server");
-        this.m = new GameProfilerSwitcher(SystemUtils.a, this::ag);
+        this.m = new GameProfilerSwitcher(SystemUtils.a, this::ah);
         this.methodProfiler = GameProfilerDisabled.a;
         this.serverPing = new ServerPing();
         this.r = new Random();
@@ -222,29 +222,26 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     protected void updateWorldSettings() {}
 
     protected void a(WorldLoadListener worldloadlistener) {
-        IWorldDataServer iworlddataserver = this.saveData.G();
+        IWorldDataServer iworlddataserver = this.saveData.H();
         GeneratorSettings generatorsettings = this.saveData.getGeneratorSettings();
         boolean flag = generatorsettings.isDebugWorld();
         long i = generatorsettings.getSeed();
         long j = BiomeManager.a(i);
         List<MobSpawner> list = ImmutableList.of(new MobSpawnerPhantom(), new MobSpawnerPatrol(), new MobSpawnerCat(), new VillageSiege(), new MobSpawnerTrader(iworlddataserver));
-        RegistryMaterials<WorldDimension> registrymaterials = generatorsettings.e();
+        RegistryMaterials<WorldDimension> registrymaterials = generatorsettings.d();
         WorldDimension worlddimension = (WorldDimension) registrymaterials.a(WorldDimension.OVERWORLD);
         DimensionManager dimensionmanager;
         Object object;
 
         if (worlddimension == null) {
-            dimensionmanager = DimensionManager.a();
-            object = GeneratorSettings.a((new Random()).nextLong());
+            dimensionmanager = (DimensionManager) this.f.a().d(DimensionManager.OVERWORLD);
+            object = GeneratorSettings.a(this.f.b(IRegistry.ay), this.f.b(IRegistry.ar), (new Random()).nextLong());
         } else {
             dimensionmanager = worlddimension.b();
             object = worlddimension.c();
         }
 
-        ResourceKey<DimensionManager> resourcekey = (ResourceKey) this.f.a().c((Object) dimensionmanager).orElseThrow(() -> {
-            return new IllegalStateException("Unregistered dimension type: " + dimensionmanager);
-        });
-        WorldServer worldserver = new WorldServer(this, this.executorService, this.convertable, iworlddataserver, World.OVERWORLD, resourcekey, dimensionmanager, worldloadlistener, (ChunkGenerator) object, flag, j, list, true);
+        WorldServer worldserver = new WorldServer(this, this.executorService, this.convertable, iworlddataserver, World.OVERWORLD, dimensionmanager, worldloadlistener, (ChunkGenerator) object, flag, j, list, true);
 
         this.worldServer.put(World.OVERWORLD, worldserver);
         WorldPersistentData worldpersistentdata = worldserver.getWorldPersistentData();
@@ -253,10 +250,10 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.persistentCommandStorage = new PersistentCommandStorage(worldpersistentdata);
         WorldBorder worldborder = worldserver.getWorldBorder();
 
-        worldborder.a(iworlddataserver.q());
-        if (!iworlddataserver.o()) {
+        worldborder.a(iworlddataserver.r());
+        if (!iworlddataserver.p()) {
             try {
-                a(worldserver, iworlddataserver, generatorsettings.d(), flag, true);
+                a(worldserver, iworlddataserver, generatorsettings.c(), flag, true);
                 iworlddataserver.c(true);
                 if (flag) {
                     this.a(this.saveData);
@@ -281,24 +278,21 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
             this.getBossBattleCustomData().load(this.saveData.getCustomBossEvents());
         }
 
-        Iterator iterator = registrymaterials.c().iterator();
+        Iterator iterator = registrymaterials.d().iterator();
 
         while (iterator.hasNext()) {
             Entry<ResourceKey<WorldDimension>, WorldDimension> entry = (Entry) iterator.next();
-            ResourceKey<WorldDimension> resourcekey1 = (ResourceKey) entry.getKey();
+            ResourceKey<WorldDimension> resourcekey = (ResourceKey) entry.getKey();
 
-            if (resourcekey1 != WorldDimension.OVERWORLD) {
-                ResourceKey<World> resourcekey2 = ResourceKey.a(IRegistry.ae, resourcekey1.a());
+            if (resourcekey != WorldDimension.OVERWORLD) {
+                ResourceKey<World> resourcekey1 = ResourceKey.a(IRegistry.L, resourcekey.a());
                 DimensionManager dimensionmanager1 = ((WorldDimension) entry.getValue()).b();
-                ResourceKey<DimensionManager> resourcekey3 = (ResourceKey) this.f.a().c((Object) dimensionmanager1).orElseThrow(() -> {
-                    return new IllegalStateException("Unregistered dimension type: " + dimensionmanager1);
-                });
                 ChunkGenerator chunkgenerator = ((WorldDimension) entry.getValue()).c();
                 SecondaryWorldData secondaryworlddata = new SecondaryWorldData(this.saveData, iworlddataserver);
-                WorldServer worldserver1 = new WorldServer(this, this.executorService, this.convertable, secondaryworlddata, resourcekey2, resourcekey3, dimensionmanager1, worldloadlistener, chunkgenerator, flag, j, ImmutableList.of(), false);
+                WorldServer worldserver1 = new WorldServer(this, this.executorService, this.convertable, secondaryworlddata, resourcekey1, dimensionmanager1, worldloadlistener, chunkgenerator, flag, j, ImmutableList.of(), false);
 
                 worldborder.a((IWorldBorderListener) (new IWorldBorderListener.a(worldserver1.getWorldBorder())));
-                this.worldServer.put(resourcekey2, worldserver1);
+                this.worldServer.put(resourcekey1, worldserver1);
             }
         }
 
@@ -308,14 +302,15 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         ChunkGenerator chunkgenerator = worldserver.getChunkProvider().getChunkGenerator();
 
         if (!flag2) {
-            iworlddataserver.setSpawn(BlockPosition.ZERO.up(chunkgenerator.getSpawnHeight()));
+            iworlddataserver.setSpawn(BlockPosition.ZERO.up(chunkgenerator.getSpawnHeight()), 0.0F);
         } else if (flag1) {
-            iworlddataserver.setSpawn(BlockPosition.ZERO.up());
+            iworlddataserver.setSpawn(BlockPosition.ZERO.up(), 0.0F);
         } else {
             WorldChunkManager worldchunkmanager = chunkgenerator.getWorldChunkManager();
-            List<BiomeBase> list = worldchunkmanager.b();
             Random random = new Random(worldserver.getSeed());
-            BlockPosition blockposition = worldchunkmanager.a(0, worldserver.getSeaLevel(), 0, 256, list, random);
+            BlockPosition blockposition = worldchunkmanager.a(0, worldserver.getSeaLevel(), 0, 256, (biomebase) -> {
+                return biomebase.b().b();
+            }, random);
             ChunkCoordIntPair chunkcoordintpair = blockposition == null ? new ChunkCoordIntPair(0, 0) : new ChunkCoordIntPair(blockposition);
 
             if (blockposition == null) {
@@ -328,13 +323,13 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
             while (iterator.hasNext()) {
                 Block block = (Block) iterator.next();
 
-                if (worldchunkmanager.d().contains(block.getBlockData())) {
+                if (worldchunkmanager.c().contains(block.getBlockData())) {
                     flag3 = true;
                     break;
                 }
             }
 
-            iworlddataserver.setSpawn(chunkcoordintpair.l().b(8, chunkgenerator.getSpawnHeight(), 8));
+            iworlddataserver.setSpawn(chunkcoordintpair.l().b(8, chunkgenerator.getSpawnHeight(), 8), 0.0F);
             int i = 0;
             int j = 0;
             int k = 0;
@@ -346,7 +341,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
                     BlockPosition blockposition1 = WorldProviderNormal.a(worldserver, new ChunkCoordIntPair(chunkcoordintpair.x + i, chunkcoordintpair.z + j), flag3);
 
                     if (blockposition1 != null) {
-                        iworlddataserver.setSpawn(blockposition1);
+                        iworlddataserver.setSpawn(blockposition1, 0.0F);
                         break;
                     }
                 }
@@ -363,9 +358,9 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
             }
 
             if (flag) {
-                WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured = WorldGenerator.BONUS_CHEST.b((WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.k);
+                WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured = BiomeDecoratorGroups.BONUS_CHEST;
 
-                worldgenfeatureconfigured.a(worldserver, worldserver.getStructureManager(), chunkgenerator, worldserver.random, new BlockPosition(iworlddataserver.a(), iworlddataserver.b(), iworlddataserver.c()));
+                worldgenfeatureconfigured.a(worldserver, chunkgenerator, worldserver.random, new BlockPosition(iworlddataserver.a(), iworlddataserver.b(), iworlddataserver.c()));
             }
 
         }
@@ -374,7 +369,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     private void a(SaveData savedata) {
         savedata.setDifficulty(EnumDifficulty.PEACEFUL);
         savedata.d(true);
-        IWorldDataServer iworlddataserver = savedata.G();
+        IWorldDataServer iworlddataserver = savedata.H();
 
         iworlddataserver.setStorm(false);
         iworlddataserver.setThundering(false);
@@ -384,7 +379,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public void loadSpawn(WorldLoadListener worldloadlistener) {
-        WorldServer worldserver = this.D();
+        WorldServer worldserver = this.E();
 
         MinecraftServer.LOGGER.info("Preparing start region for dimension {}", worldserver.getDimensionKey().a());
         BlockPosition blockposition = worldserver.getSpawn();
@@ -425,7 +420,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.sleepForTick();
         worldloadlistener.b();
         chunkproviderserver.getLightEngine().a(5);
-        this.ba();
+        this.bb();
     }
 
     protected void loadResourcesZip() {
@@ -470,8 +465,8 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
             worldserver.save((IProgressUpdate) null, flag1, worldserver.savingDisabled && !flag2);
         }
 
-        WorldServer worldserver1 = this.D();
-        IWorldDataServer iworlddataserver = this.saveData.G();
+        WorldServer worldserver1 = this.E();
+        IWorldDataServer iworlddataserver = this.saveData.H();
 
         iworlddataserver.a(worldserver1.getWorldBorder().t());
         this.saveData.setCustomBossEvents(this.getBossBattleCustomData().save());
@@ -560,7 +555,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     }
 
-    protected void v() {
+    protected void w() {
         try {
             if (this.init()) {
                 this.nextTick = SystemUtils.getMonotonicMillis();
@@ -608,7 +603,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
                 crashreport = this.b(new CrashReport("Exception in server tick loop", throwable));
             }
 
-            File file = new File(new File(this.A(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
+            File file = new File(new File(this.B(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
 
             if (crashreport.a(file)) {
                 MinecraftServer.LOGGER.error("This crash report has been saved to: {}", file.getAbsolutePath());
@@ -653,13 +648,13 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     @Override
     public boolean executeNext() {
-        boolean flag = this.aZ();
+        boolean flag = this.ba();
 
         this.X = flag;
         return flag;
     }
 
-    private boolean aZ() {
+    private boolean ba() {
         if (super.executeNext()) {
             return true;
         } else {
@@ -712,7 +707,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     }
 
-    public File A() {
+    public File B() {
         return new File(".");
     }
 
@@ -831,10 +826,10 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public File c(String s) {
-        return new File(this.A(), s);
+        return new File(this.B(), s);
     }
 
-    public final WorldServer D() {
+    public final WorldServer E() {
         return (WorldServer) this.worldServer.get(World.OVERWORLD);
     }
 
@@ -843,7 +838,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return (WorldServer) this.worldServer.get(resourcekey);
     }
 
-    public Set<ResourceKey<World>> E() {
+    public Set<ResourceKey<World>> F() {
         return this.worldServer.keySet();
     }
 
@@ -944,7 +939,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     public void a(EnumDifficulty enumdifficulty, boolean flag) {
         if (flag || !this.saveData.isDifficultyLocked()) {
             this.saveData.setDifficulty(this.saveData.isHardcore() ? EnumDifficulty.HARD : enumdifficulty);
-            this.ba();
+            this.bb();
             this.getPlayerList().getPlayers().forEach(this::a);
         }
     }
@@ -953,7 +948,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return i;
     }
 
-    private void ba() {
+    private void bb() {
         Iterator iterator = this.getWorlds().iterator();
 
         while (iterator.hasNext()) {
@@ -1011,7 +1006,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         }
 
         mojangstatisticsgenerator.a("uses_auth", this.onlineMode);
-        mojangstatisticsgenerator.a("gui_state", this.af() ? "enabled" : "disabled");
+        mojangstatisticsgenerator.a("gui_state", this.ag() ? "enabled" : "disabled");
         mojangstatisticsgenerator.a("run_time", (SystemUtils.getMonotonicMillis() - mojangstatisticsgenerator.g()) / 60L * 1000L);
         mojangstatisticsgenerator.a("avg_tick_ms", (int) (MathHelper.a(this.h) * 1.0E-6D));
         int i = 0;
@@ -1036,6 +1031,8 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     public abstract boolean j();
 
+    public abstract int k();
+
     public boolean getOnlineMode() {
         return this.onlineMode;
     }
@@ -1044,7 +1041,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.onlineMode = flag;
     }
 
-    public boolean U() {
+    public boolean V() {
         return this.B;
     }
 
@@ -1060,7 +1057,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return true;
     }
 
-    public abstract boolean k();
+    public abstract boolean l();
 
     public boolean getPVP() {
         return this.pvpMode;
@@ -1108,7 +1105,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.playerList = playerlist;
     }
 
-    public abstract boolean m();
+    public abstract boolean n();
 
     public void a(EnumGamemode enumgamemode) {
         this.saveData.setGameType(enumgamemode);
@@ -1119,13 +1116,13 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.serverConnection;
     }
 
-    public boolean af() {
+    public boolean ag() {
         return false;
     }
 
     public abstract boolean a(EnumGamemode enumgamemode, boolean flag, int i);
 
-    public int ag() {
+    public int ah() {
         return this.ticks;
     }
 
@@ -1145,7 +1142,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.P;
     }
 
-    public boolean ak() {
+    public boolean al() {
         return true;
     }
 
@@ -1177,7 +1174,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.T = 0L;
     }
 
-    public int as() {
+    public int at() {
         return 29999984;
     }
 
@@ -1191,11 +1188,11 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.serverThread;
     }
 
-    public int av() {
+    public int aw() {
         return 256;
     }
 
-    public long aw() {
+    public long ax() {
         return this.nextTick;
     }
 
@@ -1243,7 +1240,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return completablefuture;
     }
 
-    public static DataPackConfiguration a(ResourcePackRepository<ResourcePackLoader> resourcepackrepository, DataPackConfiguration datapackconfiguration, boolean flag) {
+    public static DataPackConfiguration a(ResourcePackRepository resourcepackrepository, DataPackConfiguration datapackconfiguration, boolean flag) {
         resourcepackrepository.a();
         if (flag) {
             resourcepackrepository.a((Collection) Collections.singleton("vanilla"));
@@ -1284,7 +1281,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         }
     }
 
-    private static DataPackConfiguration a(ResourcePackRepository<?> resourcepackrepository) {
+    private static DataPackConfiguration a(ResourcePackRepository resourcepackrepository) {
         Collection<String> collection = resourcepackrepository.d();
         List<String> list = ImmutableList.copyOf(collection);
         List<String> list1 = (List) resourcepackrepository.b().stream().filter((s) -> {
@@ -1295,7 +1292,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public void a(CommandListenerWrapper commandlistenerwrapper) {
-        if (this.aL()) {
+        if (this.aM()) {
             PlayerList playerlist = commandlistenerwrapper.getServer().getPlayerList();
             WhiteList whitelist = playerlist.getWhitelist();
             List<EntityPlayer> list = Lists.newArrayList(playerlist.getPlayers());
@@ -1312,7 +1309,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         }
     }
 
-    public ResourcePackRepository<ResourcePackLoader> getResourcePackRepository() {
+    public ResourcePackRepository getResourcePackRepository() {
         return this.resourcePackRepository;
     }
 
@@ -1321,7 +1318,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public CommandListenerWrapper getServerCommandListener() {
-        WorldServer worldserver = this.D();
+        WorldServer worldserver = this.E();
 
         return new CommandListenerWrapper(this, worldserver == null ? Vec3D.a : Vec3D.b((BaseBlockPosition) worldserver.getSpawn()), Vec2F.a, worldserver, 4, "Server", new ChatComponentText("Server"), this, (Entity) null);
     }
@@ -1340,7 +1337,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.dataPackResources.e();
     }
 
-    public TagRegistry getTagRegistry() {
+    public ITagRegistry getTagRegistry() {
         return this.dataPackResources.d();
     }
 
@@ -1348,7 +1345,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.scoreboardServer;
     }
 
-    public PersistentCommandStorage aG() {
+    public PersistentCommandStorage aH() {
         if (this.persistentCommandStorage == null) {
             throw new NullPointerException("Called before server init");
         } else {
@@ -1360,19 +1357,19 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.dataPackResources.c();
     }
 
-    public LootPredicateManager aI() {
+    public LootPredicateManager getLootPredicateManager() {
         return this.dataPackResources.b();
     }
 
     public GameRules getGameRules() {
-        return this.D().getGameRules();
+        return this.E().getGameRules();
     }
 
     public BossBattleCustomData getBossBattleCustomData() {
         return this.bossBattleCustomData;
     }
 
-    public boolean aL() {
+    public boolean aM() {
         return this.af;
     }
 
@@ -1380,7 +1377,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.af = flag;
     }
 
-    public float aM() {
+    public float aN() {
         return this.ag;
     }
 
@@ -1425,8 +1422,8 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         Throwable throwable = null;
 
         try {
-            bufferedwriter.write(String.format("pending_tasks: %d\n", this.bg()));
-            bufferedwriter.write(String.format("average_tick_time: %f\n", this.aM()));
+            bufferedwriter.write(String.format("pending_tasks: %d\n", this.bh()));
+            bufferedwriter.write(String.format("average_tick_time: %f\n", this.aN()));
             bufferedwriter.write(String.format("tick_times: %s\n", Arrays.toString(this.h)));
             bufferedwriter.write(String.format("queue: %s\n", SystemUtils.f()));
         } catch (Throwable throwable1) {
@@ -1609,15 +1606,15 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.methodProfiler = this.m.d();
     }
 
-    public boolean aQ() {
+    public boolean aR() {
         return this.m.a();
     }
 
-    public void aR() {
+    public void aS() {
         this.O = true;
     }
 
-    public MethodProfilerResults aS() {
+    public MethodProfilerResults aT() {
         MethodProfilerResults methodprofilerresults = this.m.e();
 
         this.m.b();
@@ -1638,5 +1635,9 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     public SaveData getSaveData() {
         return this.saveData;
+    }
+
+    public IRegistryCustom aX() {
+        return this.f;
     }
 }

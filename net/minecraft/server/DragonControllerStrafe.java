@@ -27,7 +27,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
             double d1;
             double d2;
 
-            if (this.d != null && this.d.b()) {
+            if (this.d != null && this.d.c()) {
                 d0 = this.f.locX();
                 d1 = this.f.locZ();
                 double d3 = d0 - this.a.locX();
@@ -57,9 +57,9 @@ public class DragonControllerStrafe extends AbstractDragonController {
                     if (this.c >= 5 && f1 >= 0.0F && f1 < 10.0F) {
                         d2 = 1.0D;
                         Vec3D vec3d2 = this.a.f(1.0F);
-                        double d6 = this.a.bv.locX() - vec3d2.x * 1.0D;
-                        double d7 = this.a.bv.e(0.5D) + 0.5D;
-                        double d8 = this.a.bv.locZ() - vec3d2.z * 1.0D;
+                        double d6 = this.a.bo.locX() - vec3d2.x * 1.0D;
+                        double d7 = this.a.bo.e(0.5D) + 0.5D;
+                        double d8 = this.a.bo.locZ() - vec3d2.z * 1.0D;
                         double d9 = this.f.locX() - d6;
                         double d10 = this.f.e(0.5D) - d7;
                         double d11 = this.f.locZ() - d8;
@@ -74,7 +74,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
                         this.a.world.addEntity(entitydragonfireball);
                         this.c = 0;
                         if (this.d != null) {
-                            while (!this.d.b()) {
+                            while (!this.d.c()) {
                                 this.d.a();
                             }
                         }
@@ -92,8 +92,8 @@ public class DragonControllerStrafe extends AbstractDragonController {
     }
 
     private void j() {
-        if (this.d == null || this.d.b()) {
-            int i = this.a.eJ();
+        if (this.d == null || this.d.c()) {
+            int i = this.a.eI();
             int j = i;
 
             if (this.a.getRandom().nextInt(8) == 0) {
@@ -128,18 +128,18 @@ public class DragonControllerStrafe extends AbstractDragonController {
     }
 
     private void k() {
-        if (this.d != null && !this.d.b()) {
-            BaseBlockPosition baseblockposition = this.d.g();
+        if (this.d != null && !this.d.c()) {
+            BlockPosition blockposition = this.d.g();
 
             this.d.a();
-            double d0 = (double) baseblockposition.getX();
-            double d1 = (double) baseblockposition.getZ();
+            double d0 = (double) blockposition.getX();
+            double d1 = (double) blockposition.getZ();
 
             double d2;
 
             do {
-                d2 = (double) ((float) baseblockposition.getY() + this.a.getRandom().nextFloat() * 20.0F);
-            } while (d2 < (double) baseblockposition.getY());
+                d2 = (double) ((float) blockposition.getY() + this.a.getRandom().nextFloat() * 20.0F);
+            } while (d2 < (double) blockposition.getY());
 
             this.e = new Vec3D(d0, d2, d1);
         }
@@ -156,8 +156,8 @@ public class DragonControllerStrafe extends AbstractDragonController {
 
     public void a(EntityLiving entityliving) {
         this.f = entityliving;
-        int i = this.a.eJ();
-        int j = this.a.o(this.f.locX(), this.f.locY(), this.f.locZ());
+        int i = this.a.eI();
+        int j = this.a.p(this.f.locX(), this.f.locY(), this.f.locZ());
         int k = MathHelper.floor(this.f.locX());
         int l = MathHelper.floor(this.f.locZ());
         double d0 = (double) k - this.a.locX();

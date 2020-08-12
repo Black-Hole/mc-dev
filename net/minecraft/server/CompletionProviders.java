@@ -23,10 +23,10 @@ public class CompletionProviders {
         return ICompletionProvider.a((Iterable) ((ICompletionProvider) commandcontext.getSource()).n(), suggestionsbuilder);
     });
     public static final SuggestionProvider<CommandListenerWrapper> d = a(new MinecraftKey("available_biomes"), (commandcontext, suggestionsbuilder) -> {
-        return ICompletionProvider.a((Iterable) IRegistry.BIOME.keySet(), suggestionsbuilder);
+        return ICompletionProvider.a((Iterable) ((ICompletionProvider) commandcontext.getSource()).q().b(IRegistry.ay).keySet(), suggestionsbuilder);
     });
     public static final SuggestionProvider<CommandListenerWrapper> e = a(new MinecraftKey("summonable_entities"), (commandcontext, suggestionsbuilder) -> {
-        return ICompletionProvider.a(IRegistry.ENTITY_TYPE.e().filter(EntityTypes::b), suggestionsbuilder, EntityTypes::getName, (entitytypes) -> {
+        return ICompletionProvider.a(IRegistry.ENTITY_TYPE.g().filter(EntityTypes::b), suggestionsbuilder, EntityTypes::getName, (entitytypes) -> {
             return new ChatMessage(SystemUtils.a("entity", EntityTypes.getName(entitytypes)));
         });
     });

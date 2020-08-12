@@ -39,7 +39,7 @@ public class EntityComplexPart extends Entity {
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         throw new UnsupportedOperationException();
     }
 

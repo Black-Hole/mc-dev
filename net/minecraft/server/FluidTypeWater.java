@@ -28,7 +28,7 @@ public abstract class FluidTypeWater extends FluidTypeFlowing {
     protected void a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         TileEntity tileentity = iblockdata.getBlock().isTileEntity() ? generatoraccess.getTileEntity(blockposition) : null;
 
-        Block.a(iblockdata, generatoraccess.getMinecraftWorld(), blockposition, tileentity);
+        Block.a(iblockdata, generatoraccess, blockposition, tileentity);
     }
 
     @Override

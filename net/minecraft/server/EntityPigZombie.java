@@ -9,12 +9,12 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
     private static final UUID b = UUID.fromString("49455A49-7EC5-45BA-B886-3B90B23A1718");
     private static final AttributeModifier c = new AttributeModifier(EntityPigZombie.b, "Attacking speed boost", 0.05D, AttributeModifier.Operation.ADDITION);
     private static final IntRange d = TimeRange.a(0, 1);
-    private int bv;
-    private static final IntRange bw = TimeRange.a(20, 39);
-    private int bx;
-    private UUID by;
-    private static final IntRange bz = TimeRange.a(4, 6);
-    private int bA;
+    private int bo;
+    private static final IntRange bp = TimeRange.a(20, 39);
+    private int bq;
+    private UUID br;
+    private static final IntRange bs = TimeRange.a(4, 6);
+    private int bt;
 
     public EntityPigZombie(EntityTypes<? extends EntityPigZombie> entitytypes, World world) {
         super(entitytypes, world);
@@ -23,12 +23,12 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
 
     @Override
     public void setAngerTarget(@Nullable UUID uuid) {
-        this.by = uuid;
+        this.br = uuid;
     }
 
     @Override
-    public double aX() {
-        return this.isBaby() ? -0.16D : -0.45D;
+    public double ba() {
+        return this.isBaby() ? -0.05D : -0.45D;
     }
 
     @Override
@@ -36,16 +36,16 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
         this.goalSelector.a(2, new PathfinderGoalZombieAttack(this, 1.0D, false));
         this.goalSelector.a(7, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.targetSelector.a(1, (new PathfinderGoalHurtByTarget(this, new Class[0])).a());
-        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, 10, true, false, this::b));
+        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, 10, true, false, this::a_));
         this.targetSelector.a(3, new PathfinderGoalUniversalAngerReset<>(this, true));
     }
 
-    public static AttributeProvider.Builder eX() {
-        return EntityZombie.eT().a(GenericAttributes.SPAWN_REINFORCEMENTS, 0.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.23000000417232513D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D);
+    public static AttributeProvider.Builder eW() {
+        return EntityZombie.eS().a(GenericAttributes.SPAWN_REINFORCEMENTS, 0.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.23000000417232513D).a(GenericAttributes.ATTACK_DAMAGE, 5.0D);
     }
 
     @Override
-    protected boolean eO() {
+    protected boolean eN() {
         return false;
     }
 
@@ -58,14 +58,14 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
                 attributemodifiable.b(EntityPigZombie.c);
             }
 
-            this.eY();
+            this.eX();
         } else if (attributemodifiable.a(EntityPigZombie.c)) {
             attributemodifiable.removeModifier(EntityPigZombie.c);
         }
 
         this.a((WorldServer) this.world, true);
         if (this.getGoalTarget() != null) {
-            this.eZ();
+            this.eY();
         }
 
         if (this.isAngry()) {
@@ -75,29 +75,29 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
         super.mobTick();
     }
 
-    private void eY() {
-        if (this.bv > 0) {
-            --this.bv;
-            if (this.bv == 0) {
-                this.fb();
+    private void eX() {
+        if (this.bo > 0) {
+            --this.bo;
+            if (this.bo == 0) {
+                this.fa();
             }
         }
 
+    }
+
+    private void eY() {
+        if (this.bt > 0) {
+            --this.bt;
+        } else {
+            if (this.getEntitySenses().a(this.getGoalTarget())) {
+                this.eZ();
+            }
+
+            this.bt = EntityPigZombie.bs.a(this.random);
+        }
     }
 
     private void eZ() {
-        if (this.bA > 0) {
-            --this.bA;
-        } else {
-            if (this.getEntitySenses().a(this.getGoalTarget())) {
-                this.fa();
-            }
-
-            this.bA = EntityPigZombie.bz.a(this.random);
-        }
-    }
-
-    private void fa() {
         double d0 = this.b(GenericAttributes.FOLLOW_RANGE);
         AxisAlignedBB axisalignedbb = AxisAlignedBB.a(this.getPositionVector()).grow(d0, 10.0D, d0);
 
@@ -112,15 +112,15 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
         });
     }
 
-    private void fb() {
+    private void fa() {
         this.playSound(SoundEffects.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, this.getSoundVolume() * 2.0F, this.dG() * 1.8F);
     }
 
     @Override
     public void setGoalTarget(@Nullable EntityLiving entityliving) {
         if (this.getGoalTarget() == null && entityliving != null) {
-            this.bv = EntityPigZombie.d.a(this.random);
-            this.bA = EntityPigZombie.bz.a(this.random);
+            this.bo = EntityPigZombie.d.a(this.random);
+            this.bt = EntityPigZombie.bs.a(this.random);
         }
 
         if (entityliving instanceof EntityHuman) {
@@ -132,7 +132,7 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
 
     @Override
     public void anger() {
-        this.setAnger(EntityPigZombie.bw.a(this.random));
+        this.setAnger(EntityPigZombie.bp.a(this.random));
     }
 
     public static boolean b(EntityTypes<EntityPigZombie> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
@@ -141,7 +141,7 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
 
     @Override
     public boolean a(IWorldReader iworldreader) {
-        return iworldreader.i(this) && !iworldreader.containsLiquid(this.getBoundingBox());
+        return iworldreader.j((Entity) this) && !iworldreader.containsLiquid(this.getBoundingBox());
     }
 
     @Override
@@ -158,12 +158,12 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
 
     @Override
     public void setAnger(int i) {
-        this.bx = i;
+        this.bq = i;
     }
 
     @Override
     public int getAnger() {
-        return this.bx;
+        return this.bq;
     }
 
     @Override
@@ -192,22 +192,22 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
     }
 
     @Override
-    protected ItemStack eN() {
+    protected ItemStack eM() {
         return ItemStack.b;
     }
 
     @Override
-    protected void eW() {
+    protected void eV() {
         this.getAttributeInstance(GenericAttributes.SPAWN_REINFORCEMENTS).setValue(0.0D);
     }
 
     @Override
     public UUID getAngerTarget() {
-        return this.by;
+        return this.br;
     }
 
     @Override
     public boolean f(EntityHuman entityhuman) {
-        return this.b((EntityLiving) entityhuman);
+        return this.a_((EntityLiving) entityhuman);
     }
 }

@@ -68,7 +68,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
 
     @Override
     public void e() {
-        this.a.getControllerLook().a(this.b, 10.0F, (float) this.a.eo());
+        this.a.getControllerLook().a(this.b, 10.0F, (float) this.a.O());
         if (--this.f <= 0) {
             this.f = 10;
             if (!this.a.isLeashed() && !this.a.isPassenger()) {

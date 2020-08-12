@@ -59,7 +59,7 @@ public class BlockPistonMoving extends BlockTileEntity {
 
     @Override
     public List<ItemStack> a(IBlockData iblockdata, LootTableInfo.Builder loottableinfo_builder) {
-        TileEntityPiston tileentitypiston = this.a((IBlockAccess) loottableinfo_builder.a(), (BlockPosition) loottableinfo_builder.a(LootContextParameters.POSITION));
+        TileEntityPiston tileentitypiston = this.a((IBlockAccess) loottableinfo_builder.a(), new BlockPosition((Vec3D) loottableinfo_builder.a(LootContextParameters.ORIGIN)));
 
         return tileentitypiston == null ? Collections.emptyList() : tileentitypiston.k().a(loottableinfo_builder);
     }

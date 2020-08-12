@@ -186,7 +186,7 @@ public class CrashReportSystemDetails {
         private final String a;
         private final String b;
 
-        public CrashReportDetail(String s, Object object) {
+        public CrashReportDetail(String s, @Nullable Object object) {
             this.a = s;
             if (object == null) {
                 this.b = "~~NULL~~";

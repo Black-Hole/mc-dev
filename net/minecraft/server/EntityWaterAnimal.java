@@ -19,7 +19,7 @@ public abstract class EntityWaterAnimal extends EntityCreature {
 
     @Override
     public boolean a(IWorldReader iworldreader) {
-        return iworldreader.i(this);
+        return iworldreader.j((Entity) this);
     }
 
     @Override
@@ -33,7 +33,7 @@ public abstract class EntityWaterAnimal extends EntityCreature {
     }
 
     protected void a(int i) {
-        if (this.isAlive() && !this.aD()) {
+        if (this.isAlive() && !this.aG()) {
             this.setAirTicks(i - 1);
             if (this.getAirTicks() == -20) {
                 this.setAirTicks(0);

@@ -7,7 +7,7 @@ public class EntityCod extends EntityFishSchool {
     }
 
     @Override
-    protected ItemStack eL() {
+    protected ItemStack eK() {
         return new ItemStack(Items.COD_BUCKET);
     }
 

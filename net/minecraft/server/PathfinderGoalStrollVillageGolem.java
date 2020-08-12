@@ -82,7 +82,7 @@ public class PathfinderGoalStrollVillageGolem extends PathfinderGoalRandomStroll
     @Nullable
     private BlockPosition a(SectionPosition sectionposition) {
         WorldServer worldserver = (WorldServer) this.a.world;
-        VillagePlace villageplace = worldserver.x();
+        VillagePlace villageplace = worldserver.y();
         List<BlockPosition> list = (List) villageplace.c((villageplacetype) -> {
             return true;
         }, sectionposition.q(), 8, VillagePlace.Occupancy.IS_OCCUPIED).map(VillagePlaceRecord::f).collect(Collectors.toList());

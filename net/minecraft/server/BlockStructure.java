@@ -53,35 +53,35 @@ public class BlockStructure extends BlockTileEntity {
 
     @Override
     public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1, boolean flag) {
-        if (!world.isClientSide) {
+        if (world instanceof WorldServer) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityStructure) {
                 TileEntityStructure tileentitystructure = (TileEntityStructure) tileentity;
                 boolean flag1 = world.isBlockIndirectlyPowered(blockposition);
-                boolean flag2 = tileentitystructure.H();
+                boolean flag2 = tileentitystructure.G();
 
                 if (flag1 && !flag2) {
-                    tileentitystructure.d(true);
-                    this.a(tileentitystructure);
+                    tileentitystructure.c(true);
+                    this.a((WorldServer) world, tileentitystructure);
                 } else if (!flag1 && flag2) {
-                    tileentitystructure.d(false);
+                    tileentitystructure.c(false);
                 }
 
             }
         }
     }
 
-    private void a(TileEntityStructure tileentitystructure) {
+    private void a(WorldServer worldserver, TileEntityStructure tileentitystructure) {
         switch (tileentitystructure.getUsageMode()) {
             case SAVE:
                 tileentitystructure.b(false);
                 break;
             case LOAD:
-                tileentitystructure.c(false);
+                tileentitystructure.a(worldserver, false);
                 break;
             case CORNER:
-                tileentitystructure.F();
+                tileentitystructure.E();
             case DATA:
         }
 

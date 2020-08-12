@@ -62,7 +62,7 @@ public class EntityTNTPrimed extends Entity {
                 this.explode();
             }
         } else {
-            this.aG();
+            this.aJ();
             if (this.world.isClientSide) {
                 this.world.addParticle(Particles.SMOKE, this.locX(), this.locY() + 0.5D, this.locZ(), 0.0D, 0.0D, 0.0D);
             }
@@ -118,7 +118,7 @@ public class EntityTNTPrimed extends Entity {
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

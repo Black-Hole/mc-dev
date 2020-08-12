@@ -38,7 +38,7 @@ public class VillagePlaceSection {
         Logger logger = VillagePlaceSection.LOGGER;
 
         logger.getClass();
-        return codec.withDefault(SystemUtils.a("Failed to read POI section: ", logger::error), () -> {
+        return codec.orElseGet(SystemUtils.a("Failed to read POI section: ", logger::error), () -> {
             return new VillagePlaceSection(runnable, false, ImmutableList.of());
         });
     }
@@ -85,7 +85,7 @@ public class VillagePlaceSection {
             if (villageplacetype.equals(villageplacerecord1.g())) {
                 return false;
             } else {
-                throw (IllegalStateException) SystemUtils.c(new IllegalStateException("POI data mismatch: already registered at " + blockposition));
+                throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException("POI data mismatch: already registered at " + blockposition)));
             }
         } else {
             this.b.put(short0, villageplacerecord);
@@ -112,7 +112,7 @@ public class VillagePlaceSection {
         VillagePlaceRecord villageplacerecord = (VillagePlaceRecord) this.b.get(SectionPosition.b(blockposition));
 
         if (villageplacerecord == null) {
-            throw (IllegalStateException) SystemUtils.c(new IllegalStateException("POI never registered at " + blockposition));
+            throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException("POI never registered at " + blockposition)));
         } else {
             boolean flag = villageplacerecord.c();
 

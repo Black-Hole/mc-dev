@@ -65,7 +65,7 @@ public class PathfinderTargetCondition {
         } else {
             if (entityliving != null) {
                 if (!this.f) {
-                    if (!entityliving.d(entityliving1)) {
+                    if (!entityliving.c(entityliving1)) {
                         return false;
                     }
 
@@ -80,8 +80,8 @@ public class PathfinderTargetCondition {
 
                 if (this.b > 0.0D) {
                     double d0 = this.g ? entityliving1.A(entityliving) : 1.0D;
-                    double d1 = this.b * d0;
-                    double d2 = entityliving.g(entityliving1.locX(), entityliving1.locY(), entityliving1.locZ());
+                    double d1 = Math.max(this.b * d0, 2.0D);
+                    double d2 = entityliving.h(entityliving1.locX(), entityliving1.locY(), entityliving1.locZ());
 
                     if (d2 > d1 * d1) {
                         return false;

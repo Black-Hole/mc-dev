@@ -8,11 +8,11 @@ import java.util.function.Function;
 public class StructureSettingsFeature {
 
     public static final Codec<StructureSettingsFeature> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(Codecs.a(0, 4096).fieldOf("spacing").forGetter((structuresettingsfeature) -> {
+        return instance.group(Codec.intRange(0, 4096).fieldOf("spacing").forGetter((structuresettingsfeature) -> {
             return structuresettingsfeature.b;
-        }), Codecs.a(0, 4096).fieldOf("separation").forGetter((structuresettingsfeature) -> {
+        }), Codec.intRange(0, 4096).fieldOf("separation").forGetter((structuresettingsfeature) -> {
             return structuresettingsfeature.c;
-        }), Codecs.a(0, Integer.MAX_VALUE).fieldOf("salt").forGetter((structuresettingsfeature) -> {
+        }), Codec.intRange(0, Integer.MAX_VALUE).fieldOf("salt").forGetter((structuresettingsfeature) -> {
             return structuresettingsfeature.d;
         })).apply(instance, StructureSettingsFeature::new);
     }).comapFlatMap((structuresettingsfeature) -> {

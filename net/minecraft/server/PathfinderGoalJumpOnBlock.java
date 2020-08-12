@@ -29,7 +29,7 @@ public class PathfinderGoalJumpOnBlock extends PathfinderGoalGotoTarget {
     @Override
     public void e() {
         super.e();
-        this.g.setSitting(this.k());
+        this.g.setSitting(this.l());
     }
 
     @Override

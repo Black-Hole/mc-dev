@@ -13,7 +13,7 @@ public abstract class EntityArrow extends IProjectile {
     private static final DataWatcherObject<Byte> f = DataWatcher.a(EntityArrow.class, DataWatcherRegistry.a);
     private static final DataWatcherObject<Byte> g = DataWatcher.a(EntityArrow.class, DataWatcherRegistry.a);
     @Nullable
-    private IBlockData an;
+    private IBlockData ag;
     public boolean inGround;
     protected int c;
     public EntityArrow.PickupStatus fromPlayer;
@@ -21,15 +21,15 @@ public abstract class EntityArrow extends IProjectile {
     public int despawnCounter;
     private double damage;
     public int knockbackStrength;
-    private SoundEffect ar;
-    private IntOpenHashSet as;
-    private List<Entity> at;
+    private SoundEffect ak;
+    private IntOpenHashSet al;
+    private List<Entity> am;
 
     protected EntityArrow(EntityTypes<? extends EntityArrow> entitytypes, World world) {
         super(entitytypes, world);
         this.fromPlayer = EntityArrow.PickupStatus.DISALLOWED;
         this.damage = 2.0D;
-        this.ar = this.i();
+        this.ak = this.i();
     }
 
     protected EntityArrow(EntityTypes<? extends EntityArrow> entitytypes, double d0, double d1, double d2, World world) {
@@ -47,7 +47,7 @@ public abstract class EntityArrow extends IProjectile {
     }
 
     public void a(SoundEffect soundeffect) {
-        this.ar = soundeffect;
+        this.ak = soundeffect;
     }
 
     @Override
@@ -69,7 +69,7 @@ public abstract class EntityArrow extends IProjectile {
         Vec3D vec3d = this.getMot();
 
         if (this.lastPitch == 0.0F && this.lastYaw == 0.0F) {
-            float f = MathHelper.sqrt(b(vec3d));
+            float f = MathHelper.sqrt(c(vec3d));
 
             this.yaw = (float) (MathHelper.d(vec3d.x, vec3d.z) * 57.2957763671875D);
             this.pitch = (float) (MathHelper.d(vec3d.y, (double) f) * 57.2957763671875D);
@@ -108,7 +108,7 @@ public abstract class EntityArrow extends IProjectile {
         }
 
         if (this.inGround && !flag) {
-            if (this.an != iblockdata && this.u()) {
+            if (this.ag != iblockdata && this.u()) {
                 this.z();
             } else if (!this.world.isClientSide) {
                 this.h();
@@ -169,7 +169,7 @@ public abstract class EntityArrow extends IProjectile {
             double d3 = this.locX() + d0;
             double d4 = this.locY() + d1;
             double d5 = this.locZ() + d2;
-            float f1 = MathHelper.sqrt(b(vec3d));
+            float f1 = MathHelper.sqrt(c(vec3d));
 
             if (flag) {
                 this.yaw = (float) (MathHelper.d(-d0, -d2) * 57.2957763671875D);
@@ -235,12 +235,12 @@ public abstract class EntityArrow extends IProjectile {
     }
 
     private void A() {
-        if (this.at != null) {
-            this.at.clear();
+        if (this.am != null) {
+            this.am.clear();
         }
 
-        if (this.as != null) {
-            this.as.clear();
+        if (this.al != null) {
+            this.al.clear();
         }
 
     }
@@ -253,20 +253,20 @@ public abstract class EntityArrow extends IProjectile {
         int i = MathHelper.f(MathHelper.a((double) f * this.damage, 0.0D, 2.147483647E9D));
 
         if (this.getPierceLevel() > 0) {
-            if (this.as == null) {
-                this.as = new IntOpenHashSet(5);
+            if (this.al == null) {
+                this.al = new IntOpenHashSet(5);
             }
 
-            if (this.at == null) {
-                this.at = Lists.newArrayListWithCapacity(5);
+            if (this.am == null) {
+                this.am = Lists.newArrayListWithCapacity(5);
             }
 
-            if (this.as.size() >= this.getPierceLevel() + 1) {
+            if (this.al.size() >= this.getPierceLevel() + 1) {
                 this.die();
                 return;
             }
 
-            this.as.add(entity.getId());
+            this.al.add(entity.getId());
         }
 
         if (this.isCritical()) {
@@ -310,7 +310,7 @@ public abstract class EntityArrow extends IProjectile {
                     Vec3D vec3d = this.getMot().d(1.0D, 0.0D, 1.0D).d().a((double) this.knockbackStrength * 0.6D);
 
                     if (vec3d.g() > 0.0D) {
-                        entityliving.h(vec3d.x, 0.1D, vec3d.z);
+                        entityliving.i(vec3d.x, 0.1D, vec3d.z);
                     }
                 }
 
@@ -324,22 +324,22 @@ public abstract class EntityArrow extends IProjectile {
                     ((EntityPlayer) entity1).playerConnection.sendPacket(new PacketPlayOutGameStateChange(PacketPlayOutGameStateChange.g, 0.0F));
                 }
 
-                if (!entity.isAlive() && this.at != null) {
-                    this.at.add(entityliving);
+                if (!entity.isAlive() && this.am != null) {
+                    this.am.add(entityliving);
                 }
 
                 if (!this.world.isClientSide && entity1 instanceof EntityPlayer) {
                     EntityPlayer entityplayer = (EntityPlayer) entity1;
 
-                    if (this.at != null && this.isShotFromCrossbow()) {
-                        CriterionTriggers.G.a(entityplayer, (Collection) this.at);
+                    if (this.am != null && this.isShotFromCrossbow()) {
+                        CriterionTriggers.G.a(entityplayer, (Collection) this.am);
                     } else if (!entity.isAlive() && this.isShotFromCrossbow()) {
                         CriterionTriggers.G.a(entityplayer, (Collection) Arrays.asList(entity));
                     }
                 }
             }
 
-            this.playSound(this.ar, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+            this.playSound(this.ak, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
             if (this.getPierceLevel() <= 0) {
                 this.die();
             }
@@ -361,7 +361,7 @@ public abstract class EntityArrow extends IProjectile {
 
     @Override
     protected void a(MovingObjectPositionBlock movingobjectpositionblock) {
-        this.an = this.world.getType(movingobjectpositionblock.getBlockPosition());
+        this.ag = this.world.getType(movingobjectpositionblock.getBlockPosition());
         super.a(movingobjectpositionblock);
         Vec3D vec3d = movingobjectpositionblock.getPos().a(this.locX(), this.locY(), this.locZ());
 
@@ -384,7 +384,7 @@ public abstract class EntityArrow extends IProjectile {
     }
 
     protected final SoundEffect getSoundHit() {
-        return this.ar;
+        return this.ak;
     }
 
     protected void a(EntityLiving entityliving) {}
@@ -396,15 +396,15 @@ public abstract class EntityArrow extends IProjectile {
 
     @Override
     protected boolean a(Entity entity) {
-        return super.a(entity) && (this.as == null || !this.as.contains(entity.getId()));
+        return super.a(entity) && (this.al == null || !this.al.contains(entity.getId()));
     }
 
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
         super.saveData(nbttagcompound);
         nbttagcompound.setShort("life", (short) this.despawnCounter);
-        if (this.an != null) {
-            nbttagcompound.set("inBlockState", GameProfileSerializer.a(this.an));
+        if (this.ag != null) {
+            nbttagcompound.set("inBlockState", GameProfileSerializer.a(this.ag));
         }
 
         nbttagcompound.setByte("shake", (byte) this.shake);
@@ -413,7 +413,7 @@ public abstract class EntityArrow extends IProjectile {
         nbttagcompound.setDouble("damage", this.damage);
         nbttagcompound.setBoolean("crit", this.isCritical());
         nbttagcompound.setByte("PierceLevel", this.getPierceLevel());
-        nbttagcompound.setString("SoundEvent", IRegistry.SOUND_EVENT.getKey(this.ar).toString());
+        nbttagcompound.setString("SoundEvent", IRegistry.SOUND_EVENT.getKey(this.ak).toString());
         nbttagcompound.setBoolean("ShotFromCrossbow", this.isShotFromCrossbow());
     }
 
@@ -422,7 +422,7 @@ public abstract class EntityArrow extends IProjectile {
         super.loadData(nbttagcompound);
         this.despawnCounter = nbttagcompound.getShort("life");
         if (nbttagcompound.hasKeyOfType("inBlockState", 10)) {
-            this.an = GameProfileSerializer.c(nbttagcompound.getCompound("inBlockState"));
+            this.ag = GameProfileSerializer.c(nbttagcompound.getCompound("inBlockState"));
         }
 
         this.shake = nbttagcompound.getByte("shake") & 255;
@@ -440,7 +440,7 @@ public abstract class EntityArrow extends IProjectile {
         this.setCritical(nbttagcompound.getBoolean("crit"));
         this.setPierceLevel(nbttagcompound.getByte("PierceLevel"));
         if (nbttagcompound.hasKeyOfType("SoundEvent", 8)) {
-            this.ar = (SoundEffect) IRegistry.SOUND_EVENT.getOptional(new MinecraftKey(nbttagcompound.getString("SoundEvent"))).orElse(this.i());
+            this.ak = (SoundEffect) IRegistry.SOUND_EVENT.getOptional(new MinecraftKey(nbttagcompound.getString("SoundEvent"))).orElse(this.i());
         }
 
         this.setShotFromCrossbow(nbttagcompound.getBoolean("ShotFromCrossbow"));
@@ -492,7 +492,7 @@ public abstract class EntityArrow extends IProjectile {
     }
 
     @Override
-    public boolean bH() {
+    public boolean bK() {
         return false;
     }
 
@@ -573,7 +573,7 @@ public abstract class EntityArrow extends IProjectile {
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         Entity entity = this.getShooter();
 
         return new PacketPlayOutSpawnEntity(this, entity == null ? 0 : entity.getId());

@@ -22,11 +22,11 @@ public class LootItemConditions {
     public static final LootItemConditionType p = a("time_check", (LootSerializer) (new LootItemConditionTimeCheck.b()));
 
     private static LootItemConditionType a(String s, LootSerializer<? extends LootItemCondition> lootserializer) {
-        return (LootItemConditionType) IRegistry.a(IRegistry.ba, new MinecraftKey(s), (Object) (new LootItemConditionType(lootserializer)));
+        return (LootItemConditionType) IRegistry.a(IRegistry.aq, new MinecraftKey(s), (Object) (new LootItemConditionType(lootserializer)));
     }
 
     public static Object a() {
-        return JsonRegistry.a(IRegistry.ba, "condition", "condition", LootItemCondition::b).a();
+        return JsonRegistry.a(IRegistry.aq, "condition", "condition", LootItemCondition::b).a();
     }
 
     public static <T> Predicate<T> a(Predicate<T>[] apredicate) {

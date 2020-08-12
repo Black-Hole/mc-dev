@@ -3,6 +3,8 @@ package net.minecraft.server;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class WorldGenFeatureRandomChoiceConfiguration implements WorldGenFeatureConfiguration {
 
@@ -13,11 +15,24 @@ public class WorldGenFeatureRandomChoiceConfiguration implements WorldGenFeature
             return worldgenfeaturerandomchoiceconfiguration.c;
         }));
     });
-    public final List<WorldGenFeatureRandomChoiceConfigurationWeight<?>> b;
-    public final WorldGenFeatureConfigured<?, ?> c;
+    public final List<WorldGenFeatureRandomChoiceConfigurationWeight> b;
+    public final Supplier<WorldGenFeatureConfigured<?, ?>> c;
 
-    public WorldGenFeatureRandomChoiceConfiguration(List<WorldGenFeatureRandomChoiceConfigurationWeight<?>> list, WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured) {
+    public WorldGenFeatureRandomChoiceConfiguration(List<WorldGenFeatureRandomChoiceConfigurationWeight> list, WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured) {
+        this(list, () -> {
+            return worldgenfeatureconfigured;
+        });
+    }
+
+    private WorldGenFeatureRandomChoiceConfiguration(List<WorldGenFeatureRandomChoiceConfigurationWeight> list, Supplier<WorldGenFeatureConfigured<?, ?>> supplier) {
         this.b = list;
-        this.c = worldgenfeatureconfigured;
+        this.c = supplier;
+    }
+
+    @Override
+    public Stream<WorldGenFeatureConfigured<?, ?>> an_() {
+        return Stream.concat(this.b.stream().flatMap((worldgenfeaturerandomchoiceconfigurationweight) -> {
+            return ((WorldGenFeatureConfigured) worldgenfeaturerandomchoiceconfigurationweight.b.get()).d();
+        }), ((WorldGenFeatureConfigured) this.c.get()).d());
     }
 }

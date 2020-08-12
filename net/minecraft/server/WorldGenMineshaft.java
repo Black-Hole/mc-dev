@@ -15,7 +15,7 @@ public class WorldGenMineshaft extends StructureGenerator<WorldGenMineshaftConfi
 
     protected boolean a(ChunkGenerator chunkgenerator, WorldChunkManager worldchunkmanager, long i, SeededRandom seededrandom, int j, int k, BiomeBase biomebase, ChunkCoordIntPair chunkcoordintpair, WorldGenMineshaftConfiguration worldgenmineshaftconfiguration) {
         seededrandom.c(i, j, k);
-        double d0 = worldgenmineshaftconfiguration.b;
+        double d0 = (double) worldgenmineshaftconfiguration.b;
 
         return seededrandom.nextDouble() < d0;
     }
@@ -31,7 +31,7 @@ public class WorldGenMineshaft extends StructureGenerator<WorldGenMineshaftConfi
             super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
-        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenMineshaftConfiguration worldgenmineshaftconfiguration) {
+        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenMineshaftConfiguration worldgenmineshaftconfiguration) {
             WorldGenMineshaftPieces.WorldGenMineshaftRoom worldgenmineshaftpieces_worldgenmineshaftroom = new WorldGenMineshaftPieces.WorldGenMineshaftRoom(0, this.d, (i << 4) + 2, (j << 4) + 2, worldgenmineshaftconfiguration.c);
 
             this.b.add(worldgenmineshaftpieces_worldgenmineshaftroom);

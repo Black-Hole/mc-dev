@@ -31,7 +31,7 @@ public class BehaviorPositionValidate extends Behavior<EntityLiving> {
         if (worldserver1 != null && !this.a(worldserver1, blockposition)) {
             if (this.a(worldserver1, blockposition, entityliving)) {
                 behaviorcontroller.removeMemory(this.b);
-                worldserver.x().b(blockposition);
+                worldserver.y().b(blockposition);
                 PacketDebug.c(worldserver, blockposition);
             }
         } else {
@@ -47,6 +47,6 @@ public class BehaviorPositionValidate extends Behavior<EntityLiving> {
     }
 
     private boolean a(WorldServer worldserver, BlockPosition blockposition) {
-        return !worldserver.x().a(blockposition, this.c);
+        return !worldserver.y().a(blockposition, this.c);
     }
 }

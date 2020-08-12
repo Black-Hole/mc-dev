@@ -1,6 +1,10 @@
 package net.minecraft.server;
 
-public interface GeneratorAccessSeed extends GeneratorAccess {
+import java.util.stream.Stream;
+
+public interface GeneratorAccessSeed extends WorldAccess {
 
     long getSeed();
+
+    Stream<? extends StructureStart<?>> a(SectionPosition sectionposition, StructureGenerator<?> structuregenerator);
 }

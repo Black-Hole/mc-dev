@@ -22,27 +22,27 @@ public class BlockMonsterEggs extends Block {
         return BlockMonsterEggs.b.containsKey(iblockdata.getBlock());
     }
 
-    private void a(World world, BlockPosition blockposition) {
-        EntitySilverfish entitysilverfish = (EntitySilverfish) EntityTypes.SILVERFISH.a(world);
+    private void a(WorldServer worldserver, BlockPosition blockposition) {
+        EntitySilverfish entitysilverfish = (EntitySilverfish) EntityTypes.SILVERFISH.a((World) worldserver);
 
         entitysilverfish.setPositionRotation((double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, 0.0F, 0.0F);
-        world.addEntity(entitysilverfish);
+        worldserver.addEntity(entitysilverfish);
         entitysilverfish.doSpawnEffect();
     }
 
     @Override
-    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, ItemStack itemstack) {
-        super.dropNaturally(iblockdata, world, blockposition, itemstack);
-        if (!world.isClientSide && world.getGameRules().getBoolean(GameRules.DO_TILE_DROPS) && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) == 0) {
-            this.a(world, blockposition);
+    public void dropNaturally(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, ItemStack itemstack) {
+        super.dropNaturally(iblockdata, worldserver, blockposition, itemstack);
+        if (worldserver.getGameRules().getBoolean(GameRules.DO_TILE_DROPS) && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) == 0) {
+            this.a(worldserver, blockposition);
         }
 
     }
 
     @Override
     public void wasExploded(World world, BlockPosition blockposition, Explosion explosion) {
-        if (!world.isClientSide) {
-            this.a(world, blockposition);
+        if (world instanceof WorldServer) {
+            this.a((WorldServer) world, blockposition);
         }
 
     }

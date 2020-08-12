@@ -45,7 +45,7 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public <T> T a(Codec<T> codec) throws IOException {
-        NBTTagCompound nbttagcompound = this.l();
+        NBTTagCompound nbttagcompound = this.m();
         DataResult<T> dataresult = codec.parse(DynamicOpsNBT.a, nbttagcompound);
 
         if (dataresult.error().isPresent()) {
@@ -241,6 +241,16 @@ public class PacketDataSerializer extends ByteBuf {
 
     @Nullable
     public NBTTagCompound l() {
+        return this.a(new NBTReadLimiter(2097152L));
+    }
+
+    @Nullable
+    public NBTTagCompound m() {
+        return this.a(NBTReadLimiter.a);
+    }
+
+    @Nullable
+    public NBTTagCompound a(NBTReadLimiter nbtreadlimiter) {
         int i = this.readerIndex();
         byte b0 = this.readByte();
 
@@ -250,7 +260,7 @@ public class PacketDataSerializer extends ByteBuf {
             this.readerIndex(i);
 
             try {
-                return NBTCompressedStreamTools.a((DataInput) (new ByteBufInputStream(this)), new NBTReadLimiter(2097152L));
+                return NBTCompressedStreamTools.a((DataInput) (new ByteBufInputStream(this)), nbtreadlimiter);
             } catch (IOException ioexception) {
                 throw new EncoderException(ioexception);
             }
@@ -278,7 +288,7 @@ public class PacketDataSerializer extends ByteBuf {
         return this;
     }
 
-    public ItemStack m() {
+    public ItemStack n() {
         if (!this.readBoolean()) {
             return ItemStack.b;
         } else {
@@ -326,7 +336,7 @@ public class PacketDataSerializer extends ByteBuf {
         }
     }
 
-    public MinecraftKey o() {
+    public MinecraftKey p() {
         return new MinecraftKey(this.e(32767));
     }
 
@@ -335,7 +345,7 @@ public class PacketDataSerializer extends ByteBuf {
         return this;
     }
 
-    public Date p() {
+    public Date q() {
         return new Date(this.readLong());
     }
 
@@ -344,7 +354,7 @@ public class PacketDataSerializer extends ByteBuf {
         return this;
     }
 
-    public MovingObjectPositionBlock q() {
+    public MovingObjectPositionBlock r() {
         BlockPosition blockposition = this.e();
         EnumDirection enumdirection = (EnumDirection) this.a(EnumDirection.class);
         float f = this.readFloat();

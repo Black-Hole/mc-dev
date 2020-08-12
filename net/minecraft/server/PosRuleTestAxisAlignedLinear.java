@@ -7,15 +7,15 @@ import java.util.Random;
 public class PosRuleTestAxisAlignedLinear extends PosRuleTest {
 
     public static final Codec<PosRuleTestAxisAlignedLinear> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(Codec.FLOAT.fieldOf("min_chance").withDefault(0.0F).forGetter((posruletestaxisalignedlinear) -> {
+        return instance.group(Codec.FLOAT.fieldOf("min_chance").orElse(0.0F).forGetter((posruletestaxisalignedlinear) -> {
             return posruletestaxisalignedlinear.b;
-        }), Codec.FLOAT.fieldOf("max_chance").withDefault(0.0F).forGetter((posruletestaxisalignedlinear) -> {
+        }), Codec.FLOAT.fieldOf("max_chance").orElse(0.0F).forGetter((posruletestaxisalignedlinear) -> {
             return posruletestaxisalignedlinear.d;
-        }), Codec.INT.fieldOf("min_dist").withDefault(0).forGetter((posruletestaxisalignedlinear) -> {
+        }), Codec.INT.fieldOf("min_dist").orElse(0).forGetter((posruletestaxisalignedlinear) -> {
             return posruletestaxisalignedlinear.e;
-        }), Codec.INT.fieldOf("max_dist").withDefault(0).forGetter((posruletestaxisalignedlinear) -> {
+        }), Codec.INT.fieldOf("max_dist").orElse(0).forGetter((posruletestaxisalignedlinear) -> {
             return posruletestaxisalignedlinear.f;
-        }), EnumDirection.EnumAxis.d.fieldOf("axis").withDefault(EnumDirection.EnumAxis.Y).forGetter((posruletestaxisalignedlinear) -> {
+        }), EnumDirection.EnumAxis.d.fieldOf("axis").orElse(EnumDirection.EnumAxis.Y).forGetter((posruletestaxisalignedlinear) -> {
             return posruletestaxisalignedlinear.g;
         })).apply(instance, PosRuleTestAxisAlignedLinear::new);
     });

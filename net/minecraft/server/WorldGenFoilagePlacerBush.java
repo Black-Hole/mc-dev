@@ -11,8 +11,8 @@ public class WorldGenFoilagePlacerBush extends WorldGenFoilagePlacerBlob {
         return a(instance).apply(instance, WorldGenFoilagePlacerBush::new);
     });
 
-    public WorldGenFoilagePlacerBush(int i, int j, int k, int l, int i1) {
-        super(i, j, k, l, i1, WorldGenFoilagePlacers.e);
+    public WorldGenFoilagePlacerBush(IntSpread intspread, IntSpread intspread1, int i) {
+        super(intspread, intspread1, i);
     }
 
     @Override

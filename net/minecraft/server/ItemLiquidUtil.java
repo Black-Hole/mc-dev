@@ -7,15 +7,20 @@ public class ItemLiquidUtil {
         return InteractionResultWrapper.consume(entityhuman.b(enumhand));
     }
 
-    public static ItemStack a(ItemStack itemstack, EntityHuman entityhuman, ItemStack itemstack1) {
-        if (entityhuman.abilities.canInstantlyBuild) {
+    public static ItemStack a(ItemStack itemstack, EntityHuman entityhuman, ItemStack itemstack1, boolean flag) {
+        boolean flag1 = entityhuman.abilities.canInstantlyBuild;
+
+        if (flag && flag1) {
             if (!entityhuman.inventory.h(itemstack1)) {
                 entityhuman.inventory.pickup(itemstack1);
             }
 
             return itemstack;
         } else {
-            itemstack.subtract(1);
+            if (!flag1) {
+                itemstack.subtract(1);
+            }
+
             if (itemstack.isEmpty()) {
                 return itemstack1;
             } else {
@@ -26,5 +31,9 @@ public class ItemLiquidUtil {
                 return itemstack;
             }
         }
+    }
+
+    public static ItemStack a(ItemStack itemstack, EntityHuman entityhuman, ItemStack itemstack1) {
+        return a(itemstack, entityhuman, itemstack1, true);
     }
 }

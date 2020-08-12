@@ -74,6 +74,14 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
         this.e = i;
     }
 
+    public BaseBlockPosition up() {
+        return this.up(1);
+    }
+
+    public BaseBlockPosition up(int i) {
+        return this.shift(EnumDirection.UP, i);
+    }
+
     public BaseBlockPosition down() {
         return this.down(1);
     }
@@ -121,6 +129,10 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
         float f2 = (float) Math.abs(baseblockposition.getZ() - this.getZ());
 
         return (int) (f + f1 + f2);
+    }
+
+    public int a(EnumDirection.EnumAxis enumdirection_enumaxis) {
+        return enumdirection_enumaxis.a(this.a, this.b, this.e);
     }
 
     public String toString() {

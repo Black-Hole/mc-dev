@@ -216,11 +216,11 @@ public class WorldGenMonumentPieces {
     public static class WorldGenMonumentPiecePenthouse extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
         public WorldGenMonumentPiecePenthouse(EnumDirection enumdirection, StructureBoundingBox structureboundingbox) {
-            super(WorldGenFeatureStructurePieceType.W, enumdirection, structureboundingbox);
+            super(WorldGenFeatureStructurePieceType.U, enumdirection, structureboundingbox);
         }
 
         public WorldGenMonumentPiecePenthouse(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.W, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.U, nbttagcompound);
         }
 
         @Override
@@ -275,12 +275,12 @@ public class WorldGenMonumentPieces {
         private int p;
 
         public WorldGenMonumentPiece8(EnumDirection enumdirection, StructureBoundingBox structureboundingbox, int i) {
-            super(WorldGenFeatureStructurePieceType.Z, enumdirection, structureboundingbox);
+            super(WorldGenFeatureStructurePieceType.X, enumdirection, structureboundingbox);
             this.p = i & 1;
         }
 
         public WorldGenMonumentPiece8(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.Z, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.X, nbttagcompound);
         }
 
         @Override
@@ -384,11 +384,11 @@ public class WorldGenMonumentPieces {
     public static class WorldGenMonumentPiece2 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
         public WorldGenMonumentPiece2(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
-            super(WorldGenFeatureStructurePieceType.P, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 2, 2, 2);
+            super(WorldGenFeatureStructurePieceType.N, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 2, 2, 2);
         }
 
         public WorldGenMonumentPiece2(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.P, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.N, nbttagcompound);
         }
 
         @Override
@@ -467,11 +467,11 @@ public class WorldGenMonumentPieces {
     public static class WorldGenMonumentPiece6 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
         public WorldGenMonumentPiece6(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
-            super(WorldGenFeatureStructurePieceType.T, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 2, 2);
+            super(WorldGenFeatureStructurePieceType.R, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 2, 2);
         }
 
         public WorldGenMonumentPiece6(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.T, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.R, nbttagcompound);
         }
 
         @Override
@@ -585,11 +585,11 @@ public class WorldGenMonumentPieces {
     public static class WorldGenMonumentPiece4 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
         public WorldGenMonumentPiece4(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
-            super(WorldGenFeatureStructurePieceType.R, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 2, 2, 1);
+            super(WorldGenFeatureStructurePieceType.P, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 2, 2, 1);
         }
 
         public WorldGenMonumentPiece4(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.R, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.P, nbttagcompound);
         }
 
         @Override
@@ -703,11 +703,11 @@ public class WorldGenMonumentPieces {
     public static class WorldGenMonumentPiece7 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
         public WorldGenMonumentPiece7(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
-            super(WorldGenFeatureStructurePieceType.U, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 2);
+            super(WorldGenFeatureStructurePieceType.S, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 2);
         }
 
         public WorldGenMonumentPiece7(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.U, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.S, nbttagcompound);
         }
 
         @Override
@@ -795,11 +795,11 @@ public class WorldGenMonumentPieces {
     public static class WorldGenMonumentPiece3 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
         public WorldGenMonumentPiece3(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
-            super(WorldGenFeatureStructurePieceType.Q, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 2, 1, 1);
+            super(WorldGenFeatureStructurePieceType.O, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 2, 1, 1);
         }
 
         public WorldGenMonumentPiece3(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.Q, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.O, nbttagcompound);
         }
 
         @Override
@@ -868,11 +868,11 @@ public class WorldGenMonumentPieces {
     public static class WorldGenMonumentPiece5 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
         public WorldGenMonumentPiece5(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
-            super(WorldGenFeatureStructurePieceType.S, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 2, 1);
+            super(WorldGenFeatureStructurePieceType.Q, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 2, 1);
         }
 
         public WorldGenMonumentPiece5(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.S, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.Q, nbttagcompound);
         }
 
         @Override
@@ -954,11 +954,11 @@ public class WorldGenMonumentPieces {
     public static class WorldGenMonumentPieceSimpleT extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
         public WorldGenMonumentPieceSimpleT(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
-            super(WorldGenFeatureStructurePieceType.Y, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 1);
+            super(WorldGenFeatureStructurePieceType.W, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 1);
         }
 
         public WorldGenMonumentPieceSimpleT(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.Y, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.W, nbttagcompound);
         }
 
         @Override
@@ -1011,12 +1011,12 @@ public class WorldGenMonumentPieces {
         private int p;
 
         public WorldGenMonumentPieceSimple(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
-            super(WorldGenFeatureStructurePieceType.X, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 1);
+            super(WorldGenFeatureStructurePieceType.V, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 1);
             this.p = random.nextInt(3);
         }
 
         public WorldGenMonumentPieceSimple(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.X, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.V, nbttagcompound);
         }
 
         @Override
@@ -1178,11 +1178,11 @@ public class WorldGenMonumentPieces {
     public static class WorldGenMonumentPieceEntry extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
         public WorldGenMonumentPieceEntry(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
-            super(WorldGenFeatureStructurePieceType.V, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 1);
+            super(WorldGenFeatureStructurePieceType.T, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 1);
         }
 
         public WorldGenMonumentPieceEntry(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.V, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.T, nbttagcompound);
         }
 
         @Override
@@ -1219,7 +1219,7 @@ public class WorldGenMonumentPieces {
         private final List<WorldGenMonumentPieces.WorldGenMonumentPiece> r = Lists.newArrayList();
 
         public WorldGenMonumentPiece1(Random random, int i, int j, EnumDirection enumdirection) {
-            super(WorldGenFeatureStructurePieceType.O, 0);
+            super(WorldGenFeatureStructurePieceType.M, 0);
             this.a(enumdirection);
             EnumDirection enumdirection1 = this.i();
 
@@ -1284,7 +1284,7 @@ public class WorldGenMonumentPieces {
         }
 
         public WorldGenMonumentPiece1(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-            super(WorldGenFeatureStructurePieceType.O, nbttagcompound);
+            super(WorldGenFeatureStructurePieceType.M, nbttagcompound);
         }
 
         private List<WorldGenMonumentPieces.WorldGenMonumentStateTracker> a(Random random) {
@@ -1434,7 +1434,7 @@ public class WorldGenMonumentPieces {
             this.a(generatoraccessseed, structureboundingbox, 0, 0, 0, 58, i, 58);
             this.a(false, 0, generatoraccessseed, random, structureboundingbox);
             this.a(true, 33, generatoraccessseed, random, structureboundingbox);
-            this.a((GeneratorAccess) generatoraccessseed, random, structureboundingbox);
+            this.a(generatoraccessseed, random, structureboundingbox);
             this.b(generatoraccessseed, random, structureboundingbox);
             this.c(generatoraccessseed, random, structureboundingbox);
             this.d(generatoraccessseed, random, structureboundingbox);
@@ -1489,338 +1489,338 @@ public class WorldGenMonumentPieces {
             return true;
         }
 
-        private void a(boolean flag, int i, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
+        private void a(boolean flag, int i, GeneratorAccessSeed generatoraccessseed, Random random, StructureBoundingBox structureboundingbox) {
             boolean flag1 = true;
 
             if (this.a(structureboundingbox, i, 0, i + 23, 20)) {
-                this.a(generatoraccess, structureboundingbox, i + 0, 0, 0, i + 24, 0, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, i + 0, 1, 0, i + 24, 10, 20);
+                this.a(generatoraccessseed, structureboundingbox, i + 0, 0, 0, i + 24, 0, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, i + 0, 1, 0, i + 24, 10, 20);
 
                 int j;
 
                 for (j = 0; j < 4; ++j) {
-                    this.a(generatoraccess, structureboundingbox, i + j, j + 1, j, i + j, j + 1, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                    this.a(generatoraccess, structureboundingbox, i + j + 7, j + 5, j + 7, i + j + 7, j + 5, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                    this.a(generatoraccess, structureboundingbox, i + 17 - j, j + 5, j + 7, i + 17 - j, j + 5, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                    this.a(generatoraccess, structureboundingbox, i + 24 - j, j + 1, j, i + 24 - j, j + 1, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                    this.a(generatoraccess, structureboundingbox, i + j + 1, j + 1, j, i + 23 - j, j + 1, j, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                    this.a(generatoraccess, structureboundingbox, i + j + 8, j + 5, j + 7, i + 16 - j, j + 5, j + 7, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, i + j, j + 1, j, i + j, j + 1, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, i + j + 7, j + 5, j + 7, i + j + 7, j + 5, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, i + 17 - j, j + 5, j + 7, i + 17 - j, j + 5, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, i + 24 - j, j + 1, j, i + 24 - j, j + 1, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, i + j + 1, j + 1, j, i + 23 - j, j + 1, j, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, i + j + 8, j + 5, j + 7, i + 16 - j, j + 5, j + 7, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
                 }
 
-                this.a(generatoraccess, structureboundingbox, i + 4, 4, 4, i + 6, 4, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, i + 7, 4, 4, i + 17, 4, 6, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, i + 18, 4, 4, i + 20, 4, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, i + 11, 8, 11, i + 13, 8, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i + 12, 9, 12, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i + 12, 9, 15, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i + 12, 9, 18, structureboundingbox);
+                this.a(generatoraccessseed, structureboundingbox, i + 4, 4, 4, i + 6, 4, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, i + 7, 4, 4, i + 17, 4, 6, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, i + 18, 4, 4, i + 20, 4, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, i + 11, 8, 11, i + 13, 8, 20, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i + 12, 9, 12, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i + 12, 9, 15, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i + 12, 9, 18, structureboundingbox);
                 j = i + (flag ? 19 : 5);
                 int k = i + (flag ? 5 : 19);
 
                 int l;
 
                 for (l = 20; l >= 5; l -= 3) {
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, j, 5, l, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, j, 5, l, structureboundingbox);
                 }
 
                 for (l = 19; l >= 7; l -= 3) {
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, k, 5, l, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, k, 5, l, structureboundingbox);
                 }
 
                 for (l = 0; l < 4; ++l) {
                     int i1 = flag ? i + 24 - (17 - l * 3) : i + 17 - l * 3;
 
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i1, 5, 5, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i1, 5, 5, structureboundingbox);
                 }
 
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, k, 5, 5, structureboundingbox);
-                this.a(generatoraccess, structureboundingbox, i + 11, 1, 12, i + 13, 7, 12, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, i + 12, 1, 11, i + 12, 7, 13, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, k, 5, 5, structureboundingbox);
+                this.a(generatoraccessseed, structureboundingbox, i + 11, 1, 12, i + 13, 7, 12, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, i + 12, 1, 11, i + 12, 7, 13, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
             }
 
         }
 
-        private void a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
+        private void a(GeneratorAccessSeed generatoraccessseed, Random random, StructureBoundingBox structureboundingbox) {
             if (this.a(structureboundingbox, 22, 5, 35, 17)) {
-                this.a(generatoraccess, structureboundingbox, 25, 0, 0, 32, 8, 20);
+                this.a(generatoraccessseed, structureboundingbox, 25, 0, 0, 32, 8, 20);
 
                 for (int i = 0; i < 4; ++i) {
-                    this.a(generatoraccess, structureboundingbox, 24, 2, 5 + i * 4, 24, 4, 5 + i * 4, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                    this.a(generatoraccess, structureboundingbox, 22, 4, 5 + i * 4, 23, 4, 5 + i * 4, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 25, 5, 5 + i * 4, structureboundingbox);
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 26, 6, 5 + i * 4, structureboundingbox);
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.e, 26, 5, 5 + i * 4, structureboundingbox);
-                    this.a(generatoraccess, structureboundingbox, 33, 2, 5 + i * 4, 33, 4, 5 + i * 4, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                    this.a(generatoraccess, structureboundingbox, 34, 4, 5 + i * 4, 35, 4, 5 + i * 4, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 32, 5, 5 + i * 4, structureboundingbox);
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 31, 6, 5 + i * 4, structureboundingbox);
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.e, 31, 5, 5 + i * 4, structureboundingbox);
-                    this.a(generatoraccess, structureboundingbox, 27, 6, 5 + i * 4, 30, 6, 5 + i * 4, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                    this.a(generatoraccessseed, structureboundingbox, 24, 2, 5 + i * 4, 24, 4, 5 + i * 4, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, 22, 4, 5 + i * 4, 23, 4, 5 + i * 4, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 25, 5, 5 + i * 4, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 26, 6, 5 + i * 4, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.e, 26, 5, 5 + i * 4, structureboundingbox);
+                    this.a(generatoraccessseed, structureboundingbox, 33, 2, 5 + i * 4, 33, 4, 5 + i * 4, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, 34, 4, 5 + i * 4, 35, 4, 5 + i * 4, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 32, 5, 5 + i * 4, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 31, 6, 5 + i * 4, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.e, 31, 5, 5 + i * 4, structureboundingbox);
+                    this.a(generatoraccessseed, structureboundingbox, 27, 6, 5 + i * 4, 30, 6, 5 + i * 4, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
                 }
             }
 
         }
 
-        private void b(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
+        private void b(GeneratorAccessSeed generatoraccessseed, Random random, StructureBoundingBox structureboundingbox) {
             if (this.a(structureboundingbox, 15, 20, 42, 21)) {
-                this.a(generatoraccess, structureboundingbox, 15, 0, 21, 42, 0, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 26, 1, 21, 31, 3, 21);
-                this.a(generatoraccess, structureboundingbox, 21, 12, 21, 36, 12, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 17, 11, 21, 40, 11, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 16, 10, 21, 41, 10, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 15, 7, 21, 42, 9, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 16, 6, 21, 41, 6, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 17, 5, 21, 40, 5, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 21, 4, 21, 36, 4, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 22, 3, 21, 26, 3, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 31, 3, 21, 35, 3, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 23, 2, 21, 25, 2, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 32, 2, 21, 34, 2, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 28, 4, 20, 29, 4, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 27, 3, 21, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 30, 3, 21, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 26, 2, 21, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 31, 2, 21, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 25, 1, 21, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 32, 1, 21, structureboundingbox);
+                this.a(generatoraccessseed, structureboundingbox, 15, 0, 21, 42, 0, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 26, 1, 21, 31, 3, 21);
+                this.a(generatoraccessseed, structureboundingbox, 21, 12, 21, 36, 12, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 17, 11, 21, 40, 11, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 16, 10, 21, 41, 10, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 15, 7, 21, 42, 9, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 16, 6, 21, 41, 6, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 17, 5, 21, 40, 5, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 21, 4, 21, 36, 4, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 22, 3, 21, 26, 3, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 31, 3, 21, 35, 3, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 23, 2, 21, 25, 2, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 32, 2, 21, 34, 2, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 28, 4, 20, 29, 4, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 27, 3, 21, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 30, 3, 21, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 26, 2, 21, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 31, 2, 21, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 25, 1, 21, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 32, 1, 21, structureboundingbox);
 
                 int i;
 
                 for (i = 0; i < 7; ++i) {
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 28 - i, 6 + i, 21, structureboundingbox);
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 29 + i, 6 + i, 21, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 28 - i, 6 + i, 21, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 29 + i, 6 + i, 21, structureboundingbox);
                 }
 
                 for (i = 0; i < 4; ++i) {
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 28 - i, 9 + i, 21, structureboundingbox);
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 29 + i, 9 + i, 21, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 28 - i, 9 + i, 21, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 29 + i, 9 + i, 21, structureboundingbox);
                 }
 
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 28, 12, 21, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 29, 12, 21, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 28, 12, 21, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 29, 12, 21, structureboundingbox);
 
                 for (i = 0; i < 3; ++i) {
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 22 - i * 2, 8, 21, structureboundingbox);
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 22 - i * 2, 9, 21, structureboundingbox);
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 35 + i * 2, 8, 21, structureboundingbox);
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 35 + i * 2, 9, 21, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 22 - i * 2, 8, 21, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 22 - i * 2, 9, 21, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 35 + i * 2, 8, 21, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.c, 35 + i * 2, 9, 21, structureboundingbox);
                 }
 
-                this.a(generatoraccess, structureboundingbox, 15, 13, 21, 42, 15, 21);
-                this.a(generatoraccess, structureboundingbox, 15, 1, 21, 15, 6, 21);
-                this.a(generatoraccess, structureboundingbox, 16, 1, 21, 16, 5, 21);
-                this.a(generatoraccess, structureboundingbox, 17, 1, 21, 20, 4, 21);
-                this.a(generatoraccess, structureboundingbox, 21, 1, 21, 21, 3, 21);
-                this.a(generatoraccess, structureboundingbox, 22, 1, 21, 22, 2, 21);
-                this.a(generatoraccess, structureboundingbox, 23, 1, 21, 24, 1, 21);
-                this.a(generatoraccess, structureboundingbox, 42, 1, 21, 42, 6, 21);
-                this.a(generatoraccess, structureboundingbox, 41, 1, 21, 41, 5, 21);
-                this.a(generatoraccess, structureboundingbox, 37, 1, 21, 40, 4, 21);
-                this.a(generatoraccess, structureboundingbox, 36, 1, 21, 36, 3, 21);
-                this.a(generatoraccess, structureboundingbox, 33, 1, 21, 34, 1, 21);
-                this.a(generatoraccess, structureboundingbox, 35, 1, 21, 35, 2, 21);
+                this.a(generatoraccessseed, structureboundingbox, 15, 13, 21, 42, 15, 21);
+                this.a(generatoraccessseed, structureboundingbox, 15, 1, 21, 15, 6, 21);
+                this.a(generatoraccessseed, structureboundingbox, 16, 1, 21, 16, 5, 21);
+                this.a(generatoraccessseed, structureboundingbox, 17, 1, 21, 20, 4, 21);
+                this.a(generatoraccessseed, structureboundingbox, 21, 1, 21, 21, 3, 21);
+                this.a(generatoraccessseed, structureboundingbox, 22, 1, 21, 22, 2, 21);
+                this.a(generatoraccessseed, structureboundingbox, 23, 1, 21, 24, 1, 21);
+                this.a(generatoraccessseed, structureboundingbox, 42, 1, 21, 42, 6, 21);
+                this.a(generatoraccessseed, structureboundingbox, 41, 1, 21, 41, 5, 21);
+                this.a(generatoraccessseed, structureboundingbox, 37, 1, 21, 40, 4, 21);
+                this.a(generatoraccessseed, structureboundingbox, 36, 1, 21, 36, 3, 21);
+                this.a(generatoraccessseed, structureboundingbox, 33, 1, 21, 34, 1, 21);
+                this.a(generatoraccessseed, structureboundingbox, 35, 1, 21, 35, 2, 21);
             }
 
         }
 
-        private void c(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
+        private void c(GeneratorAccessSeed generatoraccessseed, Random random, StructureBoundingBox structureboundingbox) {
             if (this.a(structureboundingbox, 21, 21, 36, 36)) {
-                this.a(generatoraccess, structureboundingbox, 21, 0, 22, 36, 0, 36, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 21, 1, 22, 36, 23, 36);
+                this.a(generatoraccessseed, structureboundingbox, 21, 0, 22, 36, 0, 36, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 21, 1, 22, 36, 23, 36);
 
                 for (int i = 0; i < 4; ++i) {
-                    this.a(generatoraccess, structureboundingbox, 21 + i, 13 + i, 21 + i, 36 - i, 13 + i, 21 + i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                    this.a(generatoraccess, structureboundingbox, 21 + i, 13 + i, 36 - i, 36 - i, 13 + i, 36 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                    this.a(generatoraccess, structureboundingbox, 21 + i, 13 + i, 22 + i, 21 + i, 13 + i, 35 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                    this.a(generatoraccess, structureboundingbox, 36 - i, 13 + i, 22 + i, 36 - i, 13 + i, 35 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, 21 + i, 13 + i, 21 + i, 36 - i, 13 + i, 21 + i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, 21 + i, 13 + i, 36 - i, 36 - i, 13 + i, 36 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, 21 + i, 13 + i, 22 + i, 21 + i, 13 + i, 35 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, 36 - i, 13 + i, 22 + i, 36 - i, 13 + i, 35 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
                 }
 
-                this.a(generatoraccess, structureboundingbox, 25, 16, 25, 32, 16, 32, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 25, 17, 25, 25, 19, 25, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                this.a(generatoraccess, structureboundingbox, 32, 17, 25, 32, 19, 25, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                this.a(generatoraccess, structureboundingbox, 25, 17, 32, 25, 19, 32, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                this.a(generatoraccess, structureboundingbox, 32, 17, 32, 32, 19, 32, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 26, 20, 26, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 27, 21, 27, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.e, 27, 20, 27, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 26, 20, 31, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 27, 21, 30, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.e, 27, 20, 30, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 31, 20, 31, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 30, 21, 30, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.e, 30, 20, 30, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 31, 20, 26, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 30, 21, 27, structureboundingbox);
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.e, 30, 20, 27, structureboundingbox);
-                this.a(generatoraccess, structureboundingbox, 28, 21, 27, 29, 21, 27, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 27, 21, 28, 27, 21, 29, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 28, 21, 30, 29, 21, 30, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 30, 21, 28, 30, 21, 29, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 25, 16, 25, 32, 16, 32, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 25, 17, 25, 25, 19, 25, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                this.a(generatoraccessseed, structureboundingbox, 32, 17, 25, 32, 19, 25, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                this.a(generatoraccessseed, structureboundingbox, 25, 17, 32, 25, 19, 32, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                this.a(generatoraccessseed, structureboundingbox, 32, 17, 32, 32, 19, 32, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 26, 20, 26, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 27, 21, 27, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.e, 27, 20, 27, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 26, 20, 31, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 27, 21, 30, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.e, 27, 20, 30, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 31, 20, 31, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 30, 21, 30, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.e, 30, 20, 30, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 31, 20, 26, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, 30, 21, 27, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.e, 30, 20, 27, structureboundingbox);
+                this.a(generatoraccessseed, structureboundingbox, 28, 21, 27, 29, 21, 27, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 27, 21, 28, 27, 21, 29, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 28, 21, 30, 29, 21, 30, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 30, 21, 28, 30, 21, 29, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
             }
 
         }
 
-        private void d(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
+        private void d(GeneratorAccessSeed generatoraccessseed, Random random, StructureBoundingBox structureboundingbox) {
             int i;
 
             if (this.a(structureboundingbox, 0, 21, 6, 58)) {
-                this.a(generatoraccess, structureboundingbox, 0, 0, 21, 6, 0, 57, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 0, 1, 21, 6, 7, 57);
-                this.a(generatoraccess, structureboundingbox, 4, 4, 21, 6, 4, 53, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 0, 0, 21, 6, 0, 57, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 0, 1, 21, 6, 7, 57);
+                this.a(generatoraccessseed, structureboundingbox, 4, 4, 21, 6, 4, 53, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
 
                 for (i = 0; i < 4; ++i) {
-                    this.a(generatoraccess, structureboundingbox, i, i + 1, 21, i, i + 1, 57 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, i, i + 1, 21, i, i + 1, 57 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
                 }
 
                 for (i = 23; i < 53; i += 3) {
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 5, 5, i, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 5, 5, i, structureboundingbox);
                 }
 
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 5, 5, 52, structureboundingbox);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 5, 5, 52, structureboundingbox);
 
                 for (i = 0; i < 4; ++i) {
-                    this.a(generatoraccess, structureboundingbox, i, i + 1, 21, i, i + 1, 57 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, i, i + 1, 21, i, i + 1, 57 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
                 }
 
-                this.a(generatoraccess, structureboundingbox, 4, 1, 52, 6, 3, 52, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 5, 1, 51, 5, 3, 53, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 4, 1, 52, 6, 3, 52, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 5, 1, 51, 5, 3, 53, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
             }
 
             if (this.a(structureboundingbox, 51, 21, 58, 58)) {
-                this.a(generatoraccess, structureboundingbox, 51, 0, 21, 57, 0, 57, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 51, 1, 21, 57, 7, 57);
-                this.a(generatoraccess, structureboundingbox, 51, 4, 21, 53, 4, 53, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 51, 0, 21, 57, 0, 57, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 51, 1, 21, 57, 7, 57);
+                this.a(generatoraccessseed, structureboundingbox, 51, 4, 21, 53, 4, 53, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
 
                 for (i = 0; i < 4; ++i) {
-                    this.a(generatoraccess, structureboundingbox, 57 - i, i + 1, 21, 57 - i, i + 1, 57 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, 57 - i, i + 1, 21, 57 - i, i + 1, 57 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
                 }
 
                 for (i = 23; i < 53; i += 3) {
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 52, 5, i, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 52, 5, i, structureboundingbox);
                 }
 
-                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 52, 5, 52, structureboundingbox);
-                this.a(generatoraccess, structureboundingbox, 51, 1, 52, 53, 3, 52, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 52, 1, 51, 52, 3, 53, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 52, 5, 52, structureboundingbox);
+                this.a(generatoraccessseed, structureboundingbox, 51, 1, 52, 53, 3, 52, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 52, 1, 51, 52, 3, 53, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
             }
 
             if (this.a(structureboundingbox, 0, 51, 57, 57)) {
-                this.a(generatoraccess, structureboundingbox, 7, 0, 51, 50, 0, 57, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 7, 1, 51, 50, 10, 57);
+                this.a(generatoraccessseed, structureboundingbox, 7, 0, 51, 50, 0, 57, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 7, 1, 51, 50, 10, 57);
 
                 for (i = 0; i < 4; ++i) {
-                    this.a(generatoraccess, structureboundingbox, i + 1, i + 1, 57 - i, 56 - i, i + 1, 57 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, i + 1, i + 1, 57 - i, 56 - i, i + 1, 57 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
                 }
             }
 
         }
 
-        private void e(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
+        private void e(GeneratorAccessSeed generatoraccessseed, Random random, StructureBoundingBox structureboundingbox) {
             int i;
 
             if (this.a(structureboundingbox, 7, 21, 13, 50)) {
-                this.a(generatoraccess, structureboundingbox, 7, 0, 21, 13, 0, 50, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 7, 1, 21, 13, 10, 50);
-                this.a(generatoraccess, structureboundingbox, 11, 8, 21, 13, 8, 53, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 7, 0, 21, 13, 0, 50, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 7, 1, 21, 13, 10, 50);
+                this.a(generatoraccessseed, structureboundingbox, 11, 8, 21, 13, 8, 53, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
 
                 for (i = 0; i < 4; ++i) {
-                    this.a(generatoraccess, structureboundingbox, i + 7, i + 5, 21, i + 7, i + 5, 54, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, i + 7, i + 5, 21, i + 7, i + 5, 54, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
                 }
 
                 for (i = 21; i <= 45; i += 3) {
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 12, 9, i, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 12, 9, i, structureboundingbox);
                 }
             }
 
             if (this.a(structureboundingbox, 44, 21, 50, 54)) {
-                this.a(generatoraccess, structureboundingbox, 44, 0, 21, 50, 0, 50, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 44, 1, 21, 50, 10, 50);
-                this.a(generatoraccess, structureboundingbox, 44, 8, 21, 46, 8, 53, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 44, 0, 21, 50, 0, 50, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 44, 1, 21, 50, 10, 50);
+                this.a(generatoraccessseed, structureboundingbox, 44, 8, 21, 46, 8, 53, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
 
                 for (i = 0; i < 4; ++i) {
-                    this.a(generatoraccess, structureboundingbox, 50 - i, i + 5, 21, 50 - i, i + 5, 54, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, 50 - i, i + 5, 21, 50 - i, i + 5, 54, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
                 }
 
                 for (i = 21; i <= 45; i += 3) {
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 45, 9, i, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 45, 9, i, structureboundingbox);
                 }
             }
 
             if (this.a(structureboundingbox, 8, 44, 49, 54)) {
-                this.a(generatoraccess, structureboundingbox, 14, 0, 44, 43, 0, 50, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 14, 1, 44, 43, 10, 50);
+                this.a(generatoraccessseed, structureboundingbox, 14, 0, 44, 43, 0, 50, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 14, 1, 44, 43, 10, 50);
 
                 for (i = 12; i <= 45; i += 3) {
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 9, 45, structureboundingbox);
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 9, 52, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 9, 45, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 9, 52, structureboundingbox);
                     if (i == 12 || i == 18 || i == 24 || i == 33 || i == 39 || i == 45) {
-                        this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 9, 47, structureboundingbox);
-                        this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 9, 50, structureboundingbox);
-                        this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 10, 45, structureboundingbox);
-                        this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 10, 46, structureboundingbox);
-                        this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 10, 51, structureboundingbox);
-                        this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 10, 52, structureboundingbox);
-                        this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 11, 47, structureboundingbox);
-                        this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 11, 50, structureboundingbox);
-                        this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 12, 48, structureboundingbox);
-                        this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 12, 49, structureboundingbox);
+                        this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 9, 47, structureboundingbox);
+                        this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 9, 50, structureboundingbox);
+                        this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 10, 45, structureboundingbox);
+                        this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 10, 46, structureboundingbox);
+                        this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 10, 51, structureboundingbox);
+                        this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 10, 52, structureboundingbox);
+                        this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 11, 47, structureboundingbox);
+                        this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 11, 50, structureboundingbox);
+                        this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 12, 48, structureboundingbox);
+                        this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 12, 49, structureboundingbox);
                     }
                 }
 
                 for (i = 0; i < 3; ++i) {
-                    this.a(generatoraccess, structureboundingbox, 8 + i, 5 + i, 54, 49 - i, 5 + i, 54, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                    this.a(generatoraccessseed, structureboundingbox, 8 + i, 5 + i, 54, 49 - i, 5 + i, 54, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
                 }
 
-                this.a(generatoraccess, structureboundingbox, 11, 8, 54, 46, 8, 54, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
-                this.a(generatoraccess, structureboundingbox, 14, 8, 44, 43, 8, 53, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 11, 8, 54, 46, 8, 54, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                this.a(generatoraccessseed, structureboundingbox, 14, 8, 44, 43, 8, 53, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
             }
 
         }
 
-        private void f(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
+        private void f(GeneratorAccessSeed generatoraccessseed, Random random, StructureBoundingBox structureboundingbox) {
             int i;
 
             if (this.a(structureboundingbox, 14, 21, 20, 43)) {
-                this.a(generatoraccess, structureboundingbox, 14, 0, 21, 20, 0, 43, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 14, 1, 22, 20, 14, 43);
-                this.a(generatoraccess, structureboundingbox, 18, 12, 22, 20, 12, 39, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 18, 12, 21, 20, 12, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                this.a(generatoraccessseed, structureboundingbox, 14, 0, 21, 20, 0, 43, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 14, 1, 22, 20, 14, 43);
+                this.a(generatoraccessseed, structureboundingbox, 18, 12, 22, 20, 12, 39, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 18, 12, 21, 20, 12, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
 
                 for (i = 0; i < 4; ++i) {
-                    this.a(generatoraccess, structureboundingbox, i + 14, i + 9, 21, i + 14, i + 9, 43 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, i + 14, i + 9, 21, i + 14, i + 9, 43 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
                 }
 
                 for (i = 23; i <= 39; i += 3) {
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 19, 13, i, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 19, 13, i, structureboundingbox);
                 }
             }
 
             if (this.a(structureboundingbox, 37, 21, 43, 43)) {
-                this.a(generatoraccess, structureboundingbox, 37, 0, 21, 43, 0, 43, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 37, 1, 22, 43, 14, 43);
-                this.a(generatoraccess, structureboundingbox, 37, 12, 22, 39, 12, 39, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 37, 12, 21, 39, 12, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                this.a(generatoraccessseed, structureboundingbox, 37, 0, 21, 43, 0, 43, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 37, 1, 22, 43, 14, 43);
+                this.a(generatoraccessseed, structureboundingbox, 37, 12, 22, 39, 12, 39, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 37, 12, 21, 39, 12, 21, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
 
                 for (i = 0; i < 4; ++i) {
-                    this.a(generatoraccess, structureboundingbox, 43 - i, i + 9, 21, 43 - i, i + 9, 43 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, 43 - i, i + 9, 21, 43 - i, i + 9, 43 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
                 }
 
                 for (i = 23; i <= 39; i += 3) {
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 38, 13, i, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, 38, 13, i, structureboundingbox);
                 }
             }
 
             if (this.a(structureboundingbox, 15, 37, 42, 43)) {
-                this.a(generatoraccess, structureboundingbox, 21, 0, 37, 36, 0, 43, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
-                this.a(generatoraccess, structureboundingbox, 21, 1, 37, 36, 14, 43);
-                this.a(generatoraccess, structureboundingbox, 21, 12, 37, 36, 12, 39, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 21, 0, 37, 36, 0, 43, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
+                this.a(generatoraccessseed, structureboundingbox, 21, 1, 37, 36, 14, 43);
+                this.a(generatoraccessseed, structureboundingbox, 21, 12, 37, 36, 12, 39, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, WorldGenMonumentPieces.WorldGenMonumentPiece1.a, false);
 
                 for (i = 0; i < 4; ++i) {
-                    this.a(generatoraccess, structureboundingbox, 15 + i, i + 9, 43 - i, 42 - i, i + 9, 43 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
+                    this.a(generatoraccessseed, structureboundingbox, 15 + i, i + 9, 43 - i, 42 - i, i + 9, 43 - i, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, WorldGenMonumentPieces.WorldGenMonumentPiece1.b, false);
                 }
 
                 for (i = 21; i <= 36; i += 3) {
-                    this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 13, 38, structureboundingbox);
+                    this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece1.d, i, 13, 38, structureboundingbox);
                 }
             }
 
@@ -1894,17 +1894,17 @@ public class WorldGenMonumentPieces {
         @Override
         protected void a(NBTTagCompound nbttagcompound) {}
 
-        protected void a(GeneratorAccess generatoraccess, StructureBoundingBox structureboundingbox, int i, int j, int k, int l, int i1, int j1) {
+        protected void a(GeneratorAccessSeed generatoraccessseed, StructureBoundingBox structureboundingbox, int i, int j, int k, int l, int i1, int j1) {
             for (int k1 = j; k1 <= i1; ++k1) {
                 for (int l1 = i; l1 <= l; ++l1) {
                     for (int i2 = k; i2 <= j1; ++i2) {
-                        IBlockData iblockdata = this.a((IBlockAccess) generatoraccess, l1, k1, i2, structureboundingbox);
+                        IBlockData iblockdata = this.a((IBlockAccess) generatoraccessseed, l1, k1, i2, structureboundingbox);
 
                         if (!WorldGenMonumentPieces.WorldGenMonumentPiece.g.contains(iblockdata.getBlock())) {
-                            if (this.d(k1) >= generatoraccess.getSeaLevel() && iblockdata != WorldGenMonumentPieces.WorldGenMonumentPiece.f) {
-                                this.a(generatoraccess, Blocks.AIR.getBlockData(), l1, k1, i2, structureboundingbox);
+                            if (this.d(k1) >= generatoraccessseed.getSeaLevel() && iblockdata != WorldGenMonumentPieces.WorldGenMonumentPiece.f) {
+                                this.a(generatoraccessseed, Blocks.AIR.getBlockData(), l1, k1, i2, structureboundingbox);
                             } else {
-                                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece.f, l1, k1, i2, structureboundingbox);
+                                this.a(generatoraccessseed, WorldGenMonumentPieces.WorldGenMonumentPiece.f, l1, k1, i2, structureboundingbox);
                             }
                         }
                     }
@@ -1913,28 +1913,28 @@ public class WorldGenMonumentPieces {
 
         }
 
-        protected void a(GeneratorAccess generatoraccess, StructureBoundingBox structureboundingbox, int i, int j, boolean flag) {
+        protected void a(GeneratorAccessSeed generatoraccessseed, StructureBoundingBox structureboundingbox, int i, int j, boolean flag) {
             if (flag) {
-                this.a(generatoraccess, structureboundingbox, i + 0, 0, j + 0, i + 2, 0, j + 8 - 1, WorldGenMonumentPieces.WorldGenMonumentPiece.a, WorldGenMonumentPieces.WorldGenMonumentPiece.a, false);
-                this.a(generatoraccess, structureboundingbox, i + 5, 0, j + 0, i + 8 - 1, 0, j + 8 - 1, WorldGenMonumentPieces.WorldGenMonumentPiece.a, WorldGenMonumentPieces.WorldGenMonumentPiece.a, false);
-                this.a(generatoraccess, structureboundingbox, i + 3, 0, j + 0, i + 4, 0, j + 2, WorldGenMonumentPieces.WorldGenMonumentPiece.a, WorldGenMonumentPieces.WorldGenMonumentPiece.a, false);
-                this.a(generatoraccess, structureboundingbox, i + 3, 0, j + 5, i + 4, 0, j + 8 - 1, WorldGenMonumentPieces.WorldGenMonumentPiece.a, WorldGenMonumentPieces.WorldGenMonumentPiece.a, false);
-                this.a(generatoraccess, structureboundingbox, i + 3, 0, j + 2, i + 4, 0, j + 2, WorldGenMonumentPieces.WorldGenMonumentPiece.b, WorldGenMonumentPieces.WorldGenMonumentPiece.b, false);
-                this.a(generatoraccess, structureboundingbox, i + 3, 0, j + 5, i + 4, 0, j + 5, WorldGenMonumentPieces.WorldGenMonumentPiece.b, WorldGenMonumentPieces.WorldGenMonumentPiece.b, false);
-                this.a(generatoraccess, structureboundingbox, i + 2, 0, j + 3, i + 2, 0, j + 4, WorldGenMonumentPieces.WorldGenMonumentPiece.b, WorldGenMonumentPieces.WorldGenMonumentPiece.b, false);
-                this.a(generatoraccess, structureboundingbox, i + 5, 0, j + 3, i + 5, 0, j + 4, WorldGenMonumentPieces.WorldGenMonumentPiece.b, WorldGenMonumentPieces.WorldGenMonumentPiece.b, false);
+                this.a(generatoraccessseed, structureboundingbox, i + 0, 0, j + 0, i + 2, 0, j + 8 - 1, WorldGenMonumentPieces.WorldGenMonumentPiece.a, WorldGenMonumentPieces.WorldGenMonumentPiece.a, false);
+                this.a(generatoraccessseed, structureboundingbox, i + 5, 0, j + 0, i + 8 - 1, 0, j + 8 - 1, WorldGenMonumentPieces.WorldGenMonumentPiece.a, WorldGenMonumentPieces.WorldGenMonumentPiece.a, false);
+                this.a(generatoraccessseed, structureboundingbox, i + 3, 0, j + 0, i + 4, 0, j + 2, WorldGenMonumentPieces.WorldGenMonumentPiece.a, WorldGenMonumentPieces.WorldGenMonumentPiece.a, false);
+                this.a(generatoraccessseed, structureboundingbox, i + 3, 0, j + 5, i + 4, 0, j + 8 - 1, WorldGenMonumentPieces.WorldGenMonumentPiece.a, WorldGenMonumentPieces.WorldGenMonumentPiece.a, false);
+                this.a(generatoraccessseed, structureboundingbox, i + 3, 0, j + 2, i + 4, 0, j + 2, WorldGenMonumentPieces.WorldGenMonumentPiece.b, WorldGenMonumentPieces.WorldGenMonumentPiece.b, false);
+                this.a(generatoraccessseed, structureboundingbox, i + 3, 0, j + 5, i + 4, 0, j + 5, WorldGenMonumentPieces.WorldGenMonumentPiece.b, WorldGenMonumentPieces.WorldGenMonumentPiece.b, false);
+                this.a(generatoraccessseed, structureboundingbox, i + 2, 0, j + 3, i + 2, 0, j + 4, WorldGenMonumentPieces.WorldGenMonumentPiece.b, WorldGenMonumentPieces.WorldGenMonumentPiece.b, false);
+                this.a(generatoraccessseed, structureboundingbox, i + 5, 0, j + 3, i + 5, 0, j + 4, WorldGenMonumentPieces.WorldGenMonumentPiece.b, WorldGenMonumentPieces.WorldGenMonumentPiece.b, false);
             } else {
-                this.a(generatoraccess, structureboundingbox, i + 0, 0, j + 0, i + 8 - 1, 0, j + 8 - 1, WorldGenMonumentPieces.WorldGenMonumentPiece.a, WorldGenMonumentPieces.WorldGenMonumentPiece.a, false);
+                this.a(generatoraccessseed, structureboundingbox, i + 0, 0, j + 0, i + 8 - 1, 0, j + 8 - 1, WorldGenMonumentPieces.WorldGenMonumentPiece.a, WorldGenMonumentPieces.WorldGenMonumentPiece.a, false);
             }
 
         }
 
-        protected void a(GeneratorAccess generatoraccess, StructureBoundingBox structureboundingbox, int i, int j, int k, int l, int i1, int j1, IBlockData iblockdata) {
+        protected void a(GeneratorAccessSeed generatoraccessseed, StructureBoundingBox structureboundingbox, int i, int j, int k, int l, int i1, int j1, IBlockData iblockdata) {
             for (int k1 = j; k1 <= i1; ++k1) {
                 for (int l1 = i; l1 <= l; ++l1) {
                     for (int i2 = k; i2 <= j1; ++i2) {
-                        if (this.a((IBlockAccess) generatoraccess, l1, k1, i2, structureboundingbox) == WorldGenMonumentPieces.WorldGenMonumentPiece.f) {
-                            this.a(generatoraccess, iblockdata, l1, k1, i2, structureboundingbox);
+                        if (this.a((IBlockAccess) generatoraccessseed, l1, k1, i2, structureboundingbox) == WorldGenMonumentPieces.WorldGenMonumentPiece.f) {
+                            this.a(generatoraccessseed, iblockdata, l1, k1, i2, structureboundingbox);
                         }
                     }
                 }
@@ -1951,18 +1951,18 @@ public class WorldGenMonumentPieces {
             return structureboundingbox.a(Math.min(i1, k1), Math.min(j1, l1), Math.max(i1, k1), Math.max(j1, l1));
         }
 
-        protected boolean a(GeneratorAccess generatoraccess, StructureBoundingBox structureboundingbox, int i, int j, int k) {
+        protected boolean a(GeneratorAccessSeed generatoraccessseed, StructureBoundingBox structureboundingbox, int i, int j, int k) {
             int l = this.a(i, k);
             int i1 = this.d(j);
             int j1 = this.b(i, k);
 
             if (structureboundingbox.b((BaseBlockPosition) (new BlockPosition(l, i1, j1)))) {
-                EntityGuardianElder entityguardianelder = (EntityGuardianElder) EntityTypes.ELDER_GUARDIAN.a(generatoraccess.getMinecraftWorld());
+                EntityGuardianElder entityguardianelder = (EntityGuardianElder) EntityTypes.ELDER_GUARDIAN.a((World) generatoraccessseed.getMinecraftWorld());
 
                 entityguardianelder.heal(entityguardianelder.getMaxHealth());
                 entityguardianelder.setPositionRotation((double) l + 0.5D, (double) i1, (double) j1 + 0.5D, 0.0F, 0.0F);
-                entityguardianelder.prepare(generatoraccess, generatoraccess.getDamageScaler(entityguardianelder.getChunkCoordinates()), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
-                generatoraccess.addEntity(entityguardianelder);
+                entityguardianelder.prepare(generatoraccessseed, generatoraccessseed.getDamageScaler(entityguardianelder.getChunkCoordinates()), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
+                generatoraccessseed.addAllEntities(entityguardianelder);
                 return true;
             } else {
                 return false;

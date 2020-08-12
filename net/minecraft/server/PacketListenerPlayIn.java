@@ -58,6 +58,8 @@ public interface PacketListenerPlayIn extends PacketListener {
 
     void a(PacketPlayInRecipeDisplayed packetplayinrecipedisplayed);
 
+    void a(PacketPlayInRecipeSettings packetplayinrecipesettings);
+
     void a(PacketPlayInAdvancements packetplayinadvancements);
 
     void a(PacketPlayInTabComplete packetplayintabcomplete);

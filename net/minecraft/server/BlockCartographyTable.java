@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class BlockCartographyTable extends Block {
 
-    private static final ChatMessage a = new ChatMessage("container.cartography_table");
+    private static final IChatBaseComponent a = new ChatMessage("container.cartography_table");
 
     protected BlockCartographyTable(BlockBase.Info blockbase_info) {
         super(blockbase_info);

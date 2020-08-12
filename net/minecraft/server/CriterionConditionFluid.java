@@ -50,7 +50,7 @@ public class CriterionConditionFluid {
             if (jsonobject.has("tag")) {
                 MinecraftKey minecraftkey1 = new MinecraftKey(ChatDeserializer.h(jsonobject, "tag"));
 
-                tag = TagsInstance.e().c().a(minecraftkey1);
+                tag = TagsInstance.a().getFluidTags().a(minecraftkey1);
                 if (tag == null) {
                     throw new JsonSyntaxException("Unknown fluid tag '" + minecraftkey1 + "'");
                 }
@@ -75,7 +75,7 @@ public class CriterionConditionFluid {
             }
 
             if (this.b != null) {
-                jsonobject.addProperty("tag", TagsInstance.e().c().b(this.b).toString());
+                jsonobject.addProperty("tag", TagsInstance.a().getFluidTags().b(this.b).toString());
             }
 
             jsonobject.add("state", this.d.a());

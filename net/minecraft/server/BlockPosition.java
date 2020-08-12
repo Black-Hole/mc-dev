@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import javax.annotation.concurrent.Immutable;
+import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -110,10 +111,12 @@ public class BlockPosition extends BaseBlockPosition {
         return this.b(-baseblockposition.getX(), -baseblockposition.getY(), -baseblockposition.getZ());
     }
 
+    @Override
     public BlockPosition up() {
         return this.shift(EnumDirection.UP);
     }
 
+    @Override
     public BlockPosition up(int i) {
         return this.shift(EnumDirection.UP, i);
     }
@@ -167,6 +170,18 @@ public class BlockPosition extends BaseBlockPosition {
     @Override
     public BlockPosition shift(EnumDirection enumdirection, int i) {
         return i == 0 ? this : new BlockPosition(this.getX() + enumdirection.getAdjacentX() * i, this.getY() + enumdirection.getAdjacentY() * i, this.getZ() + enumdirection.getAdjacentZ() * i);
+    }
+
+    public BlockPosition a(EnumDirection.EnumAxis enumdirection_enumaxis, int i) {
+        if (i == 0) {
+            return this;
+        } else {
+            int j = enumdirection_enumaxis == EnumDirection.EnumAxis.X ? i : 0;
+            int k = enumdirection_enumaxis == EnumDirection.EnumAxis.Y ? i : 0;
+            int l = enumdirection_enumaxis == EnumDirection.EnumAxis.Z ? i : 0;
+
+            return new BlockPosition(this.getX() + j, this.getY() + k, this.getZ() + l);
+        }
     }
 
     public BlockPosition a(EnumBlockRotation enumblockrotation) {
@@ -334,6 +349,48 @@ public class BlockPosition extends BaseBlockPosition {
         };
     }
 
+    public static Iterable<BlockPosition.MutableBlockPosition> a(BlockPosition blockposition, int i, EnumDirection enumdirection, EnumDirection enumdirection1) {
+        Validate.validState(enumdirection.n() != enumdirection1.n(), "The two directions cannot be on the same axis", new Object[0]);
+        return () -> {
+            return new AbstractIterator<BlockPosition.MutableBlockPosition>() {
+                private final EnumDirection[] e = new EnumDirection[]{enumdirection, enumdirection1, enumdirection.opposite(), enumdirection1.opposite()};
+                private final BlockPosition.MutableBlockPosition f = blockposition.i().c(enumdirection1);
+                private final int g = 4 * i;
+                private int h = -1;
+                private int i;
+                private int j;
+                private int k;
+                private int l;
+                private int m;
+
+                {
+                    this.k = this.f.getX();
+                    this.l = this.f.getY();
+                    this.m = this.f.getZ();
+                }
+
+                protected BlockPosition.MutableBlockPosition computeNext() {
+                    this.f.d(this.k, this.l, this.m).c(this.e[(this.h + 4) % 4]);
+                    this.k = this.f.getX();
+                    this.l = this.f.getY();
+                    this.m = this.f.getZ();
+                    if (this.j >= this.i) {
+                        if (this.h >= this.g) {
+                            return (BlockPosition.MutableBlockPosition) this.endOfData();
+                        }
+
+                        ++this.h;
+                        this.j = 0;
+                        this.i = this.h / 2 + 1;
+                    }
+
+                    ++this.j;
+                    return this.f;
+                }
+            };
+        };
+    }
+
     public static class MutableBlockPosition extends BlockPosition {
 
         public MutableBlockPosition() {
@@ -361,6 +418,11 @@ public class BlockPosition extends BaseBlockPosition {
         @Override
         public BlockPosition shift(EnumDirection enumdirection, int i) {
             return super.shift(enumdirection, i).immutableCopy();
+        }
+
+        @Override
+        public BlockPosition a(EnumDirection.EnumAxis enumdirection_enumaxis, int i) {
+            return super.a(enumdirection_enumaxis, i).immutableCopy();
         }
 
         @Override
@@ -409,6 +471,10 @@ public class BlockPosition extends BaseBlockPosition {
 
         public BlockPosition.MutableBlockPosition e(int i, int j, int k) {
             return this.d(this.getX() + i, this.getY() + j, this.getZ() + k);
+        }
+
+        public BlockPosition.MutableBlockPosition h(BaseBlockPosition baseblockposition) {
+            return this.d(this.getX() + baseblockposition.getX(), this.getY() + baseblockposition.getY(), this.getZ() + baseblockposition.getZ());
         }
 
         public BlockPosition.MutableBlockPosition a(EnumDirection.EnumAxis enumdirection_enumaxis, int i, int j) {

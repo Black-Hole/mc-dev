@@ -9,7 +9,7 @@ public class WorldGenFeatureFill extends WorldGenerator<WorldGenFeatureFillConfi
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureFillConfiguration worldgenfeaturefillconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureFillConfiguration worldgenfeaturefillconfiguration) {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
         for (int i = 0; i < 16; ++i) {

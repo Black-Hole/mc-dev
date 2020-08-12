@@ -70,7 +70,7 @@ public abstract class EntityAnimal extends EntityAgeable {
     }
 
     @Override
-    public double aX() {
+    public double ba() {
         return 0.14D;
     }
 
@@ -111,7 +111,7 @@ public abstract class EntityAnimal extends EntityAgeable {
         if (this.k(itemstack)) {
             int i = this.getAge();
 
-            if (!this.world.isClientSide && i == 0 && this.eQ()) {
+            if (!this.world.isClientSide && i == 0 && this.eP()) {
                 this.a(entityhuman, itemstack);
                 this.g(entityhuman);
                 return EnumInteractionResult.SUCCESS;
@@ -138,7 +138,7 @@ public abstract class EntityAnimal extends EntityAgeable {
 
     }
 
-    public boolean eQ() {
+    public boolean eP() {
         return this.loveTicks <= 0;
     }
 
@@ -155,7 +155,7 @@ public abstract class EntityAnimal extends EntityAgeable {
         this.loveTicks = i;
     }
 
-    public int eR() {
+    public int eQ() {
         return this.loveTicks;
     }
 
@@ -182,8 +182,8 @@ public abstract class EntityAnimal extends EntityAgeable {
         return entityanimal == this ? false : (entityanimal.getClass() != this.getClass() ? false : this.isInLove() && entityanimal.isInLove());
     }
 
-    public void a(World world, EntityAnimal entityanimal) {
-        EntityAgeable entityageable = this.createChild(entityanimal);
+    public void a(WorldServer worldserver, EntityAnimal entityanimal) {
+        EntityAgeable entityageable = this.createChild(worldserver, entityanimal);
 
         if (entityageable != null) {
             EntityPlayer entityplayer = this.getBreedCause();
@@ -201,12 +201,12 @@ public abstract class EntityAnimal extends EntityAgeable {
             entityanimal.setAgeRaw(6000);
             this.resetLove();
             entityanimal.resetLove();
-            entityageable.a(true);
+            entityageable.setBaby(true);
             entityageable.setPositionRotation(this.locX(), this.locY(), this.locZ(), 0.0F, 0.0F);
-            world.addEntity(entityageable);
-            world.broadcastEntityEffect(this, (byte) 18);
-            if (world.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
-                world.addEntity(new EntityExperienceOrb(world, this.locX(), this.locY(), this.locZ(), this.getRandom().nextInt(7) + 1));
+            worldserver.addAllEntities(entityageable);
+            worldserver.broadcastEntityEffect(this, (byte) 18);
+            if (worldserver.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
+                worldserver.addEntity(new EntityExperienceOrb(worldserver, this.locX(), this.locY(), this.locZ(), this.getRandom().nextInt(7) + 1));
             }
 
         }

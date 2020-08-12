@@ -23,67 +23,69 @@ public class WorldDataServer implements IWorldDataServer, SaveData {
     private int e;
     private int f;
     private int g;
-    private long h;
+    private float h;
     private long i;
+    private long j;
     @Nullable
-    private final DataFixer j;
-    private final int k;
-    private boolean l;
+    private final DataFixer k;
+    private final int l;
+    private boolean m;
     @Nullable
-    private NBTTagCompound m;
-    private final int n;
+    private NBTTagCompound n;
+    private final int o;
     private int clearWeatherTime;
     private boolean raining;
     private int rainTime;
     private boolean thundering;
     private int thunderTime;
-    private boolean t;
     private boolean u;
-    private WorldBorder.c v;
-    private NBTTagCompound w;
+    private boolean v;
+    private WorldBorder.c w;
+    private NBTTagCompound x;
     @Nullable
     private NBTTagCompound customBossEvents;
-    private int y;
     private int z;
+    private int A;
     @Nullable
-    private UUID A;
-    private final Set<String> B;
-    private boolean C;
-    private final CustomFunctionCallbackTimerQueue<MinecraftServer> D;
+    private UUID B;
+    private final Set<String> C;
+    private boolean D;
+    private final CustomFunctionCallbackTimerQueue<MinecraftServer> E;
 
-    private WorldDataServer(@Nullable DataFixer datafixer, int i, @Nullable NBTTagCompound nbttagcompound, boolean flag, int j, int k, int l, long i1, long j1, int k1, int l1, int i2, boolean flag1, int j2, boolean flag2, boolean flag3, boolean flag4, WorldBorder.c worldborder_c, int k2, int l2, @Nullable UUID uuid, LinkedHashSet<String> linkedhashset, CustomFunctionCallbackTimerQueue<MinecraftServer> customfunctioncallbacktimerqueue, @Nullable NBTTagCompound nbttagcompound1, NBTTagCompound nbttagcompound2, WorldSettings worldsettings, GeneratorSettings generatorsettings, Lifecycle lifecycle) {
-        this.j = datafixer;
-        this.C = flag;
+    private WorldDataServer(@Nullable DataFixer datafixer, int i, @Nullable NBTTagCompound nbttagcompound, boolean flag, int j, int k, int l, float f, long i1, long j1, int k1, int l1, int i2, boolean flag1, int j2, boolean flag2, boolean flag3, boolean flag4, WorldBorder.c worldborder_c, int k2, int l2, @Nullable UUID uuid, LinkedHashSet<String> linkedhashset, CustomFunctionCallbackTimerQueue<MinecraftServer> customfunctioncallbacktimerqueue, @Nullable NBTTagCompound nbttagcompound1, NBTTagCompound nbttagcompound2, WorldSettings worldsettings, GeneratorSettings generatorsettings, Lifecycle lifecycle) {
+        this.k = datafixer;
+        this.D = flag;
         this.e = j;
         this.f = k;
         this.g = l;
-        this.h = i1;
-        this.i = j1;
-        this.n = k1;
+        this.h = f;
+        this.i = i1;
+        this.j = j1;
+        this.o = k1;
         this.clearWeatherTime = l1;
         this.rainTime = i2;
         this.raining = flag1;
         this.thunderTime = j2;
         this.thundering = flag2;
-        this.t = flag3;
-        this.u = flag4;
-        this.v = worldborder_c;
-        this.y = k2;
-        this.z = l2;
-        this.A = uuid;
-        this.B = linkedhashset;
-        this.m = nbttagcompound;
-        this.k = i;
-        this.D = customfunctioncallbacktimerqueue;
+        this.u = flag3;
+        this.v = flag4;
+        this.w = worldborder_c;
+        this.z = k2;
+        this.A = l2;
+        this.B = uuid;
+        this.C = linkedhashset;
+        this.n = nbttagcompound;
+        this.l = i;
+        this.E = customfunctioncallbacktimerqueue;
         this.customBossEvents = nbttagcompound1;
-        this.w = nbttagcompound2;
+        this.x = nbttagcompound2;
         this.b = worldsettings;
         this.c = generatorsettings;
         this.d = lifecycle;
     }
 
     public WorldDataServer(WorldSettings worldsettings, GeneratorSettings generatorsettings, Lifecycle lifecycle) {
-        this((DataFixer) null, SharedConstants.getGameVersion().getWorldVersion(), (NBTTagCompound) null, false, 0, 0, 0, 0L, 0L, 19133, 0, 0, false, 0, false, false, false, WorldBorder.b, 0, 0, (UUID) null, Sets.newLinkedHashSet(), new CustomFunctionCallbackTimerQueue<>(CustomFunctionCallbackTimers.a), (NBTTagCompound) null, new NBTTagCompound(), worldsettings.h(), generatorsettings, lifecycle);
+        this((DataFixer) null, SharedConstants.getGameVersion().getWorldVersion(), (NBTTagCompound) null, false, 0, 0, 0, 0.0F, 0L, 0L, 19133, 0, 0, false, 0, false, false, false, WorldBorder.c, 0, 0, (UUID) null, Sets.newLinkedHashSet(), new CustomFunctionCallbackTimerQueue<>(CustomFunctionCallbackTimers.a), (NBTTagCompound) null, new NBTTagCompound(), worldsettings.h(), generatorsettings, lifecycle);
     }
 
     public static WorldDataServer a(Dynamic<NBTBase> dynamic, DataFixer datafixer, int i, @Nullable NBTTagCompound nbttagcompound, WorldSettings worldsettings, LevelVersion levelversion, GeneratorSettings generatorsettings, Lifecycle lifecycle) {
@@ -92,16 +94,16 @@ public class WorldDataServer implements IWorldDataServer, SaveData {
             return (NBTBase) dynamic.get("DimensionData").get("1").get("DragonFight").orElseEmptyMap().getValue();
         });
 
-        return new WorldDataServer(datafixer, i, nbttagcompound, dynamic.get("WasModded").asBoolean(false), dynamic.get("SpawnX").asInt(0), dynamic.get("SpawnY").asInt(0), dynamic.get("SpawnZ").asInt(0), j, dynamic.get("DayTime").asLong(j), levelversion.a(), dynamic.get("clearWeatherTime").asInt(0), dynamic.get("rainTime").asInt(0), dynamic.get("raining").asBoolean(false), dynamic.get("thunderTime").asInt(0), dynamic.get("thundering").asBoolean(false), dynamic.get("initialized").asBoolean(true), dynamic.get("DifficultyLocked").asBoolean(false), WorldBorder.c.a(dynamic, WorldBorder.b), dynamic.get("WanderingTraderSpawnDelay").asInt(0), dynamic.get("WanderingTraderSpawnChance").asInt(0), (UUID) dynamic.get("WanderingTraderId").read(MinecraftSerializableUUID.a).result().orElse((Object) null), (LinkedHashSet) dynamic.get("ServerBrands").asStream().flatMap((dynamic1) -> {
+        return new WorldDataServer(datafixer, i, nbttagcompound, dynamic.get("WasModded").asBoolean(false), dynamic.get("SpawnX").asInt(0), dynamic.get("SpawnY").asInt(0), dynamic.get("SpawnZ").asInt(0), dynamic.get("SpawnAngle").asFloat(0.0F), j, dynamic.get("DayTime").asLong(j), levelversion.a(), dynamic.get("clearWeatherTime").asInt(0), dynamic.get("rainTime").asInt(0), dynamic.get("raining").asBoolean(false), dynamic.get("thunderTime").asInt(0), dynamic.get("thundering").asBoolean(false), dynamic.get("initialized").asBoolean(true), dynamic.get("DifficultyLocked").asBoolean(false), WorldBorder.c.a(dynamic, WorldBorder.c), dynamic.get("WanderingTraderSpawnDelay").asInt(0), dynamic.get("WanderingTraderSpawnChance").asInt(0), (UUID) dynamic.get("WanderingTraderId").read(MinecraftSerializableUUID.a).result().orElse((Object) null), (LinkedHashSet) dynamic.get("ServerBrands").asStream().flatMap((dynamic1) -> {
             return SystemUtils.a(dynamic1.asString().result());
         }).collect(Collectors.toCollection(Sets::newLinkedHashSet)), new CustomFunctionCallbackTimerQueue<>(CustomFunctionCallbackTimers.a, dynamic.get("ScheduledEvents").asStream()), (NBTTagCompound) dynamic.get("CustomBossEvents").orElseEmptyMap().getValue(), nbttagcompound1, worldsettings, generatorsettings, lifecycle);
     }
 
     @Override
     public NBTTagCompound a(IRegistryCustom iregistrycustom, @Nullable NBTTagCompound nbttagcompound) {
-        this.I();
+        this.J();
         if (nbttagcompound == null) {
-            nbttagcompound = this.m;
+            nbttagcompound = this.n;
         }
 
         NBTTagCompound nbttagcompound1 = new NBTTagCompound();
@@ -113,9 +115,9 @@ public class WorldDataServer implements IWorldDataServer, SaveData {
     private void a(IRegistryCustom iregistrycustom, NBTTagCompound nbttagcompound, @Nullable NBTTagCompound nbttagcompound1) {
         NBTTagList nbttaglist = new NBTTagList();
 
-        this.B.stream().map(NBTTagString::a).forEach(nbttaglist::add);
+        this.C.stream().map(NBTTagString::a).forEach(nbttaglist::add);
         nbttagcompound.set("ServerBrands", nbttaglist);
-        nbttagcompound.setBoolean("WasModded", this.C);
+        nbttagcompound.setBoolean("WasModded", this.D);
         NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 
         nbttagcompound2.setString("Name", SharedConstants.getGameVersion().getName());
@@ -135,8 +137,9 @@ public class WorldDataServer implements IWorldDataServer, SaveData {
         nbttagcompound.setInt("SpawnX", this.e);
         nbttagcompound.setInt("SpawnY", this.f);
         nbttagcompound.setInt("SpawnZ", this.g);
-        nbttagcompound.setLong("Time", this.h);
-        nbttagcompound.setLong("DayTime", this.i);
+        nbttagcompound.setFloat("SpawnAngle", this.h);
+        nbttagcompound.setLong("Time", this.i);
+        nbttagcompound.setLong("DayTime", this.j);
         nbttagcompound.setLong("LastPlayed", SystemUtils.getTimeMillis());
         nbttagcompound.setString("LevelName", this.b.getLevelName());
         nbttagcompound.setInt("version", 19133);
@@ -147,12 +150,12 @@ public class WorldDataServer implements IWorldDataServer, SaveData {
         nbttagcompound.setBoolean("thundering", this.thundering);
         nbttagcompound.setBoolean("hardcore", this.b.isHardcore());
         nbttagcompound.setBoolean("allowCommands", this.b.e());
-        nbttagcompound.setBoolean("initialized", this.t);
-        this.v.a(nbttagcompound);
+        nbttagcompound.setBoolean("initialized", this.u);
+        this.w.a(nbttagcompound);
         nbttagcompound.setByte("Difficulty", (byte) this.b.getDifficulty().a());
-        nbttagcompound.setBoolean("DifficultyLocked", this.u);
+        nbttagcompound.setBoolean("DifficultyLocked", this.v);
         nbttagcompound.set("GameRules", this.b.getGameRules().a());
-        nbttagcompound.set("DragonFight", this.w);
+        nbttagcompound.set("DragonFight", this.x);
         if (nbttagcompound1 != null) {
             nbttagcompound.set("Player", nbttagcompound1);
         }
@@ -164,11 +167,11 @@ public class WorldDataServer implements IWorldDataServer, SaveData {
             nbttagcompound.set("CustomBossEvents", this.customBossEvents);
         }
 
-        nbttagcompound.set("ScheduledEvents", this.D.b());
-        nbttagcompound.setInt("WanderingTraderSpawnDelay", this.y);
-        nbttagcompound.setInt("WanderingTraderSpawnChance", this.z);
-        if (this.A != null) {
-            nbttagcompound.a("WanderingTraderId", this.A);
+        nbttagcompound.set("ScheduledEvents", this.E.b());
+        nbttagcompound.setInt("WanderingTraderSpawnDelay", this.z);
+        nbttagcompound.setInt("WanderingTraderSpawnChance", this.A);
+        if (this.B != null) {
+            nbttagcompound.a("WanderingTraderId", this.B);
         }
 
     }
@@ -189,33 +192,38 @@ public class WorldDataServer implements IWorldDataServer, SaveData {
     }
 
     @Override
-    public long getTime() {
+    public float d() {
         return this.h;
     }
 
     @Override
-    public long getDayTime() {
+    public long getTime() {
         return this.i;
     }
 
-    private void I() {
-        if (!this.l && this.m != null) {
-            if (this.k < SharedConstants.getGameVersion().getWorldVersion()) {
-                if (this.j == null) {
-                    throw (NullPointerException) SystemUtils.c(new NullPointerException("Fixer Upper not set inside LevelData, and the player tag is not upgraded."));
+    @Override
+    public long getDayTime() {
+        return this.j;
+    }
+
+    private void J() {
+        if (!this.m && this.n != null) {
+            if (this.l < SharedConstants.getGameVersion().getWorldVersion()) {
+                if (this.k == null) {
+                    throw (NullPointerException) SystemUtils.c((Throwable) (new NullPointerException("Fixer Upper not set inside LevelData, and the player tag is not upgraded.")));
                 }
 
-                this.m = GameProfileSerializer.a(this.j, DataFixTypes.PLAYER, this.m, this.k);
+                this.n = GameProfileSerializer.a(this.k, DataFixTypes.PLAYER, this.n, this.l);
             }
 
-            this.l = true;
+            this.m = true;
         }
     }
 
     @Override
-    public NBTTagCompound x() {
-        this.I();
-        return this.m;
+    public NBTTagCompound y() {
+        this.J();
+        return this.n;
     }
 
     @Override
@@ -234,20 +242,26 @@ public class WorldDataServer implements IWorldDataServer, SaveData {
     }
 
     @Override
-    public void setTime(long i) {
-        this.h = i;
+    public void a(float f) {
+        this.h = f;
     }
 
     @Override
-    public void setDayTime(long i) {
+    public void setTime(long i) {
         this.i = i;
     }
 
     @Override
-    public void setSpawn(BlockPosition blockposition) {
+    public void setDayTime(long i) {
+        this.j = i;
+    }
+
+    @Override
+    public void setSpawn(BlockPosition blockposition, float f) {
         this.e = blockposition.getX();
         this.f = blockposition.getY();
         this.g = blockposition.getZ();
+        this.h = f;
     }
 
     @Override
@@ -256,12 +270,12 @@ public class WorldDataServer implements IWorldDataServer, SaveData {
     }
 
     @Override
-    public int y() {
-        return this.n;
+    public int z() {
+        return this.o;
     }
 
     @Override
-    public int g() {
+    public int h() {
         return this.clearWeatherTime;
     }
 
@@ -326,33 +340,33 @@ public class WorldDataServer implements IWorldDataServer, SaveData {
     }
 
     @Override
-    public boolean n() {
+    public boolean o() {
         return this.b.e();
     }
 
     @Override
-    public boolean o() {
-        return this.t;
+    public boolean p() {
+        return this.u;
     }
 
     @Override
     public void c(boolean flag) {
-        this.t = flag;
+        this.u = flag;
     }
 
     @Override
-    public GameRules p() {
+    public GameRules q() {
         return this.b.getGameRules();
     }
 
     @Override
-    public WorldBorder.c q() {
-        return this.v;
+    public WorldBorder.c r() {
+        return this.w;
     }
 
     @Override
     public void a(WorldBorder.c worldborder_c) {
-        this.v = worldborder_c;
+        this.w = worldborder_c;
     }
 
     @Override
@@ -367,17 +381,17 @@ public class WorldDataServer implements IWorldDataServer, SaveData {
 
     @Override
     public boolean isDifficultyLocked() {
-        return this.u;
+        return this.v;
     }
 
     @Override
     public void d(boolean flag) {
-        this.u = flag;
+        this.v = flag;
     }
 
     @Override
-    public CustomFunctionCallbackTimerQueue<MinecraftServer> t() {
-        return this.D;
+    public CustomFunctionCallbackTimerQueue<MinecraftServer> u() {
+        return this.E;
     }
 
     @Override
@@ -392,17 +406,17 @@ public class WorldDataServer implements IWorldDataServer, SaveData {
     }
 
     @Override
-    public NBTTagCompound B() {
-        return this.w;
+    public NBTTagCompound C() {
+        return this.x;
     }
 
     @Override
     public void a(NBTTagCompound nbttagcompound) {
-        this.w = nbttagcompound;
+        this.x = nbttagcompound;
     }
 
     @Override
-    public DataPackConfiguration C() {
+    public DataPackConfiguration D() {
         return this.b.g();
     }
 
@@ -423,48 +437,48 @@ public class WorldDataServer implements IWorldDataServer, SaveData {
     }
 
     @Override
-    public int u() {
-        return this.y;
-    }
-
-    @Override
-    public void g(int i) {
-        this.y = i;
-    }
-
-    @Override
     public int v() {
         return this.z;
     }
 
     @Override
-    public void h(int i) {
+    public void g(int i) {
         this.z = i;
     }
 
     @Override
+    public int w() {
+        return this.A;
+    }
+
+    @Override
+    public void h(int i) {
+        this.A = i;
+    }
+
+    @Override
     public void a(UUID uuid) {
-        this.A = uuid;
+        this.B = uuid;
     }
 
     @Override
     public void a(String s, boolean flag) {
-        this.B.add(s);
-        this.C |= flag;
+        this.C.add(s);
+        this.D |= flag;
     }
 
     @Override
-    public boolean E() {
-        return this.C;
+    public boolean F() {
+        return this.D;
     }
 
     @Override
-    public Set<String> F() {
-        return ImmutableSet.copyOf(this.B);
+    public Set<String> G() {
+        return ImmutableSet.copyOf(this.C);
     }
 
     @Override
-    public IWorldDataServer G() {
+    public IWorldDataServer H() {
         return this;
     }
 }

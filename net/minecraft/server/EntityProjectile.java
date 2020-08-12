@@ -19,7 +19,7 @@ public abstract class EntityProjectile extends IProjectile {
     @Override
     public void tick() {
         super.tick();
-        MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, this::a, RayTrace.BlockCollisionOption.OUTLINE);
+        MovingObjectPosition movingobjectposition = ProjectileHelper.a((Entity) this, this::a);
         boolean flag = false;
 
         if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
@@ -32,8 +32,8 @@ public abstract class EntityProjectile extends IProjectile {
             } else if (iblockdata.a(Blocks.END_GATEWAY)) {
                 TileEntity tileentity = this.world.getTileEntity(blockposition);
 
-                if (tileentity instanceof TileEntityEndGateway) {
-                    ((TileEntityEndGateway) tileentity).a((Entity) this);
+                if (tileentity instanceof TileEntityEndGateway && TileEntityEndGateway.a((Entity) this)) {
+                    ((TileEntityEndGateway) tileentity).b((Entity) this);
                 }
 
                 flag = true;
@@ -44,6 +44,7 @@ public abstract class EntityProjectile extends IProjectile {
             this.a(movingobjectposition);
         }
 
+        this.checkBlockCollisions();
         Vec3D vec3d = this.getMot();
         double d0 = this.locX() + vec3d.x;
         double d1 = this.locY() + vec3d.y;
@@ -79,7 +80,7 @@ public abstract class EntityProjectile extends IProjectile {
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

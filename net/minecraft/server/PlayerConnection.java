@@ -276,22 +276,16 @@ public class PlayerConnection implements PacketListenerPlayIn {
     @Override
     public void a(PacketPlayInRecipeDisplayed packetplayinrecipedisplayed) {
         PlayerConnectionUtils.ensureMainThread(packetplayinrecipedisplayed, this, this.player.getWorldServer());
-        if (packetplayinrecipedisplayed.b() == PacketPlayInRecipeDisplayed.Status.SHOWN) {
-            Optional optional = this.minecraftServer.getCraftingManager().a(packetplayinrecipedisplayed.c());
-            RecipeBookServer recipebookserver = this.player.B();
+        Optional optional = this.minecraftServer.getCraftingManager().getRecipe(packetplayinrecipedisplayed.b());
+        RecipeBookServer recipebookserver = this.player.getRecipeBook();
 
-            optional.ifPresent(recipebookserver::e);
-        } else if (packetplayinrecipedisplayed.b() == PacketPlayInRecipeDisplayed.Status.SETTINGS) {
-            this.player.B().a(packetplayinrecipedisplayed.d());
-            this.player.B().b(packetplayinrecipedisplayed.e());
-            this.player.B().c(packetplayinrecipedisplayed.f());
-            this.player.B().d(packetplayinrecipedisplayed.g());
-            this.player.B().e(packetplayinrecipedisplayed.h());
-            this.player.B().f(packetplayinrecipedisplayed.i());
-            this.player.B().g(packetplayinrecipedisplayed.j());
-            this.player.B().h(packetplayinrecipedisplayed.k());
-        }
+        optional.ifPresent(recipebookserver::e);
+    }
 
+    @Override
+    public void a(PacketPlayInRecipeSettings packetplayinrecipesettings) {
+        PlayerConnectionUtils.ensureMainThread(packetplayinrecipesettings, this, this.player.getWorldServer());
+        this.player.getRecipeBook().a(packetplayinrecipesettings.b(), packetplayinrecipesettings.c(), packetplayinrecipesettings.d());
     }
 
     @Override
@@ -462,8 +456,8 @@ public class PlayerConnection implements PacketListenerPlayIn {
                 tileentitystructure.b(packetplayinstruct.i());
                 tileentitystructure.b(packetplayinstruct.j());
                 tileentitystructure.a(packetplayinstruct.k());
-                tileentitystructure.e(packetplayinstruct.l());
-                tileentitystructure.f(packetplayinstruct.m());
+                tileentitystructure.d(packetplayinstruct.l());
+                tileentitystructure.e(packetplayinstruct.m());
                 tileentitystructure.a(packetplayinstruct.n());
                 tileentitystructure.a(packetplayinstruct.o());
                 if (tileentitystructure.g()) {
@@ -476,9 +470,9 @@ public class PlayerConnection implements PacketListenerPlayIn {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.save_failure", new Object[]{s})), false);
                         }
                     } else if (packetplayinstruct.c() == TileEntityStructure.UpdateType.LOAD_AREA) {
-                        if (!tileentitystructure.G()) {
+                        if (!tileentitystructure.F()) {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.load_not_found", new Object[]{s})), false);
-                        } else if (tileentitystructure.E()) {
+                        } else if (tileentitystructure.a(this.player.getWorldServer())) {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.load_success", new Object[]{s})), false);
                         } else {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.load_prepare", new Object[]{s})), false);
@@ -722,7 +716,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
                                 this.B = d12 >= -0.03125D && this.player.playerInteractManager.getGameMode() != EnumGamemode.SPECTATOR && !this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly && !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.isGliding() && this.a((Entity) this.player);
                                 this.player.getWorldServer().getChunkProvider().movePlayer(this.player);
                                 this.player.a(this.player.locY() - d3, packetplayinflying.b());
-                                this.player.c(packetplayinflying.b());
+                                this.player.setOnGround(packetplayinflying.b());
                                 if (flag) {
                                     this.player.fallDistance = 0.0F;
                                 }
@@ -837,7 +831,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
 
         this.player.resetIdleTimer();
         if (blockposition.getY() < this.minecraftServer.getMaxBuildHeight()) {
-            if (this.teleportPos == null && this.player.g((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) < 64.0D && worldserver.a((EntityHuman) this.player, blockposition)) {
+            if (this.teleportPos == null && this.player.h((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) < 64.0D && worldserver.a((EntityHuman) this.player, blockposition)) {
                 EnumInteractionResult enuminteractionresult = this.player.playerInteractManager.a(this.player, worldserver, itemstack, enumhand, movingobjectpositionblock);
 
                 if (enumdirection == EnumDirection.UP && !enuminteractionresult.a() && blockposition.getY() >= this.minecraftServer.getMaxBuildHeight() - 1 && a(this.player, itemstack)) {
@@ -1042,7 +1036,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
                     ijumpable = (IJumpable) this.player.getVehicle();
                     int i = packetplayinentityaction.d();
 
-                    if (ijumpable.Q_() && i > 0) {
+                    if (ijumpable.P_() && i > 0) {
                         ijumpable.b(i);
                     }
                 }
@@ -1082,6 +1076,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
 
             if (this.player.h(entity) < 36.0D) {
                 EnumHand enumhand = packetplayinuseentity.c();
+                ItemStack itemstack = enumhand != null ? this.player.b(enumhand).cloneItemStack() : ItemStack.b;
                 Optional<EnumInteractionResult> optional = Optional.empty();
 
                 if (packetplayinuseentity.b() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT) {
@@ -1099,7 +1094,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
                 }
 
                 if (optional.isPresent() && ((EnumInteractionResult) optional.get()).a()) {
-                    CriterionTriggers.P.a(this.player, this.player.b(enumhand), entity);
+                    CriterionTriggers.P.a(this.player, itemstack, entity);
                     if (((EnumInteractionResult) optional.get()).b()) {
                         this.player.swingHand(enumhand, true);
                     }
@@ -1191,7 +1186,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
         PlayerConnectionUtils.ensureMainThread(packetplayinautorecipe, this, this.player.getWorldServer());
         this.player.resetIdleTimer();
         if (!this.player.isSpectator() && this.player.activeContainer.windowId == packetplayinautorecipe.b() && this.player.activeContainer.c(this.player) && this.player.activeContainer instanceof ContainerRecipeBook) {
-            this.minecraftServer.getCraftingManager().a(packetplayinautorecipe.c()).ifPresent((irecipe) -> {
+            this.minecraftServer.getCraftingManager().getRecipe(packetplayinautorecipe.c()).ifPresent((irecipe) -> {
                 ((ContainerRecipeBook) this.player.activeContainer).a(packetplayinautorecipe.d(), irecipe, this.player);
             });
         }

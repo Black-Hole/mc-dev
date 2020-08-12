@@ -29,59 +29,61 @@ public abstract class CreativeModeTab {
     public static final CreativeModeTab m = new CreativeModeTab(4, "hotbar") {
     };
     public static final CreativeModeTab n = (new CreativeModeTab(11, "inventory") {
-    }).a("inventory.png").k().i();
+    }).a("inventory.png").j().h();
     private final int o;
     private final String p;
-    private String q;
-    private String r = "items.png";
-    private boolean s = true;
+    private final IChatBaseComponent q;
+    private String r;
+    private String s = "items.png";
     private boolean t = true;
-    private EnchantmentSlotType[] u = new EnchantmentSlotType[0];
-    private ItemStack v;
+    private boolean u = true;
+    private EnchantmentSlotType[] v = new EnchantmentSlotType[0];
+    private ItemStack w;
 
     public CreativeModeTab(int i, String s) {
         this.o = i;
         this.p = s;
-        this.v = ItemStack.b;
+        this.q = new ChatMessage("itemGroup." + s);
+        this.w = ItemStack.b;
         CreativeModeTab.a[i] = this;
     }
 
-    public String c() {
-        return this.q == null ? this.p : this.q;
+    public String b() {
+        return this.r == null ? this.p : this.r;
     }
 
     public CreativeModeTab a(String s) {
-        this.r = s;
+        this.s = s;
         return this;
     }
 
     public CreativeModeTab b(String s) {
-        this.q = s;
+        this.r = s;
         return this;
     }
 
-    public CreativeModeTab i() {
+    public CreativeModeTab h() {
+        this.u = false;
+        return this;
+    }
+
+    public CreativeModeTab j() {
         this.t = false;
         return this;
     }
 
-    public CreativeModeTab k() {
-        this.s = false;
-        return this;
-    }
-
-    public EnchantmentSlotType[] o() {
-        return this.u;
+    public EnchantmentSlotType[] n() {
+        return this.v;
     }
 
     public CreativeModeTab a(EnchantmentSlotType... aenchantmentslottype) {
-        this.u = aenchantmentslottype;
+        this.v = aenchantmentslottype;
         return this;
     }
 
     public boolean a(@Nullable EnchantmentSlotType enchantmentslottype) {
         if (enchantmentslottype != null) {
-            EnchantmentSlotType[] aenchantmentslottype = this.u;
+            EnchantmentSlotType[] aenchantmentslottype = this.v;
             int i = aenchantmentslottype.length;
 
             for (int j = 0; j < i; ++j) {

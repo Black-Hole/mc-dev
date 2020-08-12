@@ -28,6 +28,11 @@ public class SecondaryWorldData implements IWorldDataServer {
     }
 
     @Override
+    public float d() {
+        return this.b.d();
+    }
+
+    @Override
     public long getTime() {
         return this.b.getTime();
     }
@@ -43,8 +48,8 @@ public class SecondaryWorldData implements IWorldDataServer {
     }
 
     @Override
-    public int g() {
-        return this.b.g();
+    public int h() {
+        return this.b.h();
     }
 
     @Override
@@ -85,13 +90,16 @@ public class SecondaryWorldData implements IWorldDataServer {
     public void d(int i) {}
 
     @Override
+    public void a(float f) {}
+
+    @Override
     public void setTime(long i) {}
 
     @Override
     public void setDayTime(long i) {}
 
     @Override
-    public void setSpawn(BlockPosition blockposition) {}
+    public void setSpawn(BlockPosition blockposition, float f) {}
 
     @Override
     public void setThundering(boolean flag) {}
@@ -114,26 +122,26 @@ public class SecondaryWorldData implements IWorldDataServer {
     }
 
     @Override
-    public boolean n() {
-        return this.a.n();
+    public boolean o() {
+        return this.a.o();
     }
 
     @Override
-    public boolean o() {
-        return this.b.o();
+    public boolean p() {
+        return this.b.p();
     }
 
     @Override
     public void c(boolean flag) {}
 
     @Override
-    public GameRules p() {
-        return this.a.p();
+    public GameRules q() {
+        return this.a.q();
     }
 
     @Override
-    public WorldBorder.c q() {
-        return this.b.q();
+    public WorldBorder.c r() {
+        return this.b.r();
     }
 
     @Override
@@ -150,12 +158,12 @@ public class SecondaryWorldData implements IWorldDataServer {
     }
 
     @Override
-    public CustomFunctionCallbackTimerQueue<MinecraftServer> t() {
-        return this.b.t();
+    public CustomFunctionCallbackTimerQueue<MinecraftServer> u() {
+        return this.b.u();
     }
 
     @Override
-    public int u() {
+    public int v() {
         return 0;
     }
 
@@ -163,7 +171,7 @@ public class SecondaryWorldData implements IWorldDataServer {
     public void g(int i) {}
 
     @Override
-    public int v() {
+    public int w() {
         return 0;
     }
 

@@ -48,7 +48,7 @@ public class BehaviorMakeLoveAnimal extends Behavior<EntityAnimal> {
         BehaviorUtil.a(entityanimal, entityanimal1, this.c);
         if (entityanimal.a((Entity) entityanimal1, 3.0D)) {
             if (i >= this.d) {
-                entityanimal.a((World) worldserver, entityanimal1);
+                entityanimal.a(worldserver, entityanimal1);
                 entityanimal.getBehaviorController().removeMemory(MemoryModuleType.BREED_TARGET);
                 entityanimal1.getBehaviorController().removeMemory(MemoryModuleType.BREED_TARGET);
             }

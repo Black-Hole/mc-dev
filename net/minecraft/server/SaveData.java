@@ -5,25 +5,25 @@ import javax.annotation.Nullable;
 
 public interface SaveData {
 
-    DataPackConfiguration C();
+    DataPackConfiguration D();
 
     void a(DataPackConfiguration datapackconfiguration);
 
-    boolean E();
+    boolean F();
 
-    Set<String> F();
+    Set<String> G();
 
     void a(String s, boolean flag);
 
     default void a(CrashReportSystemDetails crashreportsystemdetails) {
         crashreportsystemdetails.a("Known server brands", () -> {
-            return String.join(", ", this.F());
+            return String.join(", ", this.G());
         });
         crashreportsystemdetails.a("Level was modded", () -> {
-            return Boolean.toString(this.E());
+            return Boolean.toString(this.F());
         });
         crashreportsystemdetails.a("Level storage version", () -> {
-            int i = this.y();
+            int i = this.z();
 
             return String.format("0x%05X - %s", i, this.i(i));
         });
@@ -45,13 +45,13 @@ public interface SaveData {
 
     void setCustomBossEvents(@Nullable NBTTagCompound nbttagcompound);
 
-    IWorldDataServer G();
+    IWorldDataServer H();
 
     NBTTagCompound a(IRegistryCustom iregistrycustom, @Nullable NBTTagCompound nbttagcompound);
 
     boolean isHardcore();
 
-    int y();
+    int z();
 
     String getName();
 
@@ -59,7 +59,7 @@ public interface SaveData {
 
     void setGameType(EnumGamemode enumgamemode);
 
-    boolean n();
+    boolean o();
 
     EnumDifficulty getDifficulty();
 
@@ -69,11 +69,11 @@ public interface SaveData {
 
     void d(boolean flag);
 
-    GameRules p();
+    GameRules q();
 
-    NBTTagCompound x();
+    NBTTagCompound y();
 
-    NBTTagCompound B();
+    NBTTagCompound C();
 
     void a(NBTTagCompound nbttagcompound);
 

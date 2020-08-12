@@ -7,13 +7,13 @@ import java.util.Random;
 public class PosRuleTestLinear extends PosRuleTest {
 
     public static final Codec<PosRuleTestLinear> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(Codec.FLOAT.fieldOf("min_chance").withDefault(0.0F).forGetter((posruletestlinear) -> {
+        return instance.group(Codec.FLOAT.fieldOf("min_chance").orElse(0.0F).forGetter((posruletestlinear) -> {
             return posruletestlinear.b;
-        }), Codec.FLOAT.fieldOf("max_chance").withDefault(0.0F).forGetter((posruletestlinear) -> {
+        }), Codec.FLOAT.fieldOf("max_chance").orElse(0.0F).forGetter((posruletestlinear) -> {
             return posruletestlinear.d;
-        }), Codec.INT.fieldOf("min_dist").withDefault(0).forGetter((posruletestlinear) -> {
+        }), Codec.INT.fieldOf("min_dist").orElse(0).forGetter((posruletestlinear) -> {
             return posruletestlinear.e;
-        }), Codec.INT.fieldOf("max_dist").withDefault(0).forGetter((posruletestlinear) -> {
+        }), Codec.INT.fieldOf("max_dist").orElse(0).forGetter((posruletestlinear) -> {
             return posruletestlinear.f;
         })).apply(instance, PosRuleTestLinear::new);
     });

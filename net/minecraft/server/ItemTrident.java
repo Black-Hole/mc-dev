@@ -75,7 +75,7 @@ public class ItemTrident extends Item implements ItemVanishable {
                         f2 *= f6 / f5;
                         f3 *= f6 / f5;
                         f4 *= f6 / f5;
-                        entityhuman.h((double) f2, (double) f3, (double) f4);
+                        entityhuman.i((double) f2, (double) f3, (double) f4);
                         entityhuman.r(20);
                         if (entityhuman.isOnGround()) {
                             float f7 = 1.1999999F;

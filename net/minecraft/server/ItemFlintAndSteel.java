@@ -26,7 +26,7 @@ public class ItemFlintAndSteel extends Item {
         } else {
             BlockPosition blockposition1 = blockposition.shift(itemactioncontext.getClickedFace());
 
-            if (BlockFireAbstract.a((GeneratorAccess) world, blockposition1)) {
+            if (BlockFireAbstract.a(world, blockposition1, itemactioncontext.f())) {
                 world.playSound(entityhuman, blockposition1, SoundEffects.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, ItemFlintAndSteel.RANDOM.nextFloat() * 0.4F + 0.8F);
                 IBlockData iblockdata1 = BlockFireAbstract.a((IBlockAccess) world, blockposition1);
 

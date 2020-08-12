@@ -32,7 +32,7 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
         int i = packetdataserializer.readInt();
 
         for (int j = 0; j < i; ++j) {
-            MinecraftKey minecraftkey = packetdataserializer.o();
+            MinecraftKey minecraftkey = packetdataserializer.p();
             AttributeBase attributebase = (AttributeBase) IRegistry.ATTRIBUTE.get(minecraftkey);
             double d0 = packetdataserializer.readDouble();
             List<AttributeModifier> list = Lists.newArrayList();

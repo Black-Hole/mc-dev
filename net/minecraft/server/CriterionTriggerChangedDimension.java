@@ -16,8 +16,8 @@ public class CriterionTriggerChangedDimension extends CriterionTriggerAbstract<C
 
     @Override
     public CriterionTriggerChangedDimension.a b(JsonObject jsonobject, CriterionConditionEntity.b criterionconditionentity_b, LootDeserializationContext lootdeserializationcontext) {
-        ResourceKey<World> resourcekey = jsonobject.has("from") ? ResourceKey.a(IRegistry.ae, new MinecraftKey(ChatDeserializer.h(jsonobject, "from"))) : null;
-        ResourceKey<World> resourcekey1 = jsonobject.has("to") ? ResourceKey.a(IRegistry.ae, new MinecraftKey(ChatDeserializer.h(jsonobject, "to"))) : null;
+        ResourceKey<World> resourcekey = jsonobject.has("from") ? ResourceKey.a(IRegistry.L, new MinecraftKey(ChatDeserializer.h(jsonobject, "from"))) : null;
+        ResourceKey<World> resourcekey1 = jsonobject.has("to") ? ResourceKey.a(IRegistry.L, new MinecraftKey(ChatDeserializer.h(jsonobject, "to"))) : null;
 
         return new CriterionTriggerChangedDimension.a(criterionconditionentity_b, resourcekey, resourcekey1);
     }

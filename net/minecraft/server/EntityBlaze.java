@@ -29,7 +29,7 @@ public class EntityBlaze extends EntityMonster {
     }
 
     public static AttributeProvider.Builder m() {
-        return EntityMonster.eS().a(GenericAttributes.ATTACK_DAMAGE, 6.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.23000000417232513D).a(GenericAttributes.FOLLOW_RANGE, 48.0D);
+        return EntityMonster.eR().a(GenericAttributes.ATTACK_DAMAGE, 6.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.23000000417232513D).a(GenericAttributes.FOLLOW_RANGE, 48.0D);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class EntityBlaze extends EntityMonster {
     }
 
     @Override
-    public float aO() {
+    public float aQ() {
         return 1.0F;
     }
 
@@ -92,7 +92,7 @@ public class EntityBlaze extends EntityMonster {
 
         EntityLiving entityliving = this.getGoalTarget();
 
-        if (entityliving != null && entityliving.getHeadY() > this.getHeadY() + (double) this.b && this.d(entityliving)) {
+        if (entityliving != null && entityliving.getHeadY() > this.getHeadY() + (double) this.b && this.c(entityliving)) {
             Vec3D vec3d = this.getMot();
 
             this.setMot(this.getMot().add(0.0D, (0.30000001192092896D - vec3d.y) * 0.30000001192092896D, 0.0D));
@@ -109,10 +109,10 @@ public class EntityBlaze extends EntityMonster {
 
     @Override
     public boolean isBurning() {
-        return this.eL();
+        return this.eK();
     }
 
-    private boolean eL() {
+    private boolean eK() {
         return ((Byte) this.datawatcher.get(EntityBlaze.d) & 1) != 0;
     }
 
@@ -144,7 +144,7 @@ public class EntityBlaze extends EntityMonster {
         public boolean a() {
             EntityLiving entityliving = this.a.getGoalTarget();
 
-            return entityliving != null && entityliving.isAlive() && this.a.d(entityliving);
+            return entityliving != null && entityliving.isAlive() && this.a.c(entityliving);
         }
 
         @Override

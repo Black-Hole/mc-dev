@@ -73,7 +73,7 @@ public class RecipeRepair extends IRecipeComplex {
                 Map<Enchantment, Integer> map1 = EnchantmentManager.a(itemstack2);
                 Map<Enchantment, Integer> map2 = EnchantmentManager.a(itemstack);
 
-                IRegistry.ENCHANTMENT.e().filter(Enchantment::c).forEach((enchantment) -> {
+                IRegistry.ENCHANTMENT.g().filter(Enchantment::c).forEach((enchantment) -> {
                     int j1 = Math.max((Integer) map1.getOrDefault(enchantment, 0), (Integer) map2.getOrDefault(enchantment, 0));
 
                     if (j1 > 0) {

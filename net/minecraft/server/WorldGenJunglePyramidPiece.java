@@ -11,11 +11,11 @@ public class WorldGenJunglePyramidPiece extends WorldGenScatteredPiece {
     private static final WorldGenJunglePyramidPiece.a i = new WorldGenJunglePyramidPiece.a();
 
     public WorldGenJunglePyramidPiece(Random random, int i, int j) {
-        super(WorldGenFeatureStructurePieceType.I, random, i, 64, j, 12, 10, 15);
+        super(WorldGenFeatureStructurePieceType.G, random, i, 64, j, 12, 10, 15);
     }
 
     public WorldGenJunglePyramidPiece(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-        super(WorldGenFeatureStructurePieceType.I, nbttagcompound);
+        super(WorldGenFeatureStructurePieceType.G, nbttagcompound);
         this.e = nbttagcompound.getBoolean("placedMainChest");
         this.f = nbttagcompound.getBoolean("placedHiddenChest");
         this.g = nbttagcompound.getBoolean("placedTrap1");

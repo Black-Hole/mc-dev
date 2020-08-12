@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
@@ -14,11 +15,11 @@ public interface IBlockAccess {
 
     Fluid getFluid(BlockPosition blockposition);
 
-    default int h(BlockPosition blockposition) {
+    default int g(BlockPosition blockposition) {
         return this.getType(blockposition).f();
     }
 
-    default int H() {
+    default int J() {
         return 15;
     }
 
@@ -64,6 +65,24 @@ public interface IBlockAccess {
         }
 
         return movingobjectpositionblock;
+    }
+
+    default double a(VoxelShape voxelshape, Supplier<VoxelShape> supplier) {
+        if (!voxelshape.isEmpty()) {
+            return voxelshape.c(EnumDirection.EnumAxis.Y);
+        } else {
+            double d0 = ((VoxelShape) supplier.get()).c(EnumDirection.EnumAxis.Y);
+
+            return d0 >= 1.0D ? d0 - 1.0D : Double.NEGATIVE_INFINITY;
+        }
+    }
+
+    default double h(BlockPosition blockposition) {
+        return this.a(this.getType(blockposition).getCollisionShape(this, blockposition), () -> {
+            BlockPosition blockposition1 = blockposition.down();
+
+            return this.getType(blockposition1).getCollisionShape(this, blockposition1);
+        });
     }
 
     static <T> T a(RayTrace raytrace, BiFunction<RayTrace, BlockPosition, T> bifunction, Function<RayTrace, T> function) {

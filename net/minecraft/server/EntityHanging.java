@@ -77,7 +77,7 @@ public abstract class EntityHanging extends Entity {
     public void tick() {
         if (!this.world.isClientSide) {
             if (this.locY() < -64.0D) {
-                this.ai();
+                this.am();
             }
 
             if (this.e++ == 100) {
@@ -165,7 +165,7 @@ public abstract class EntityHanging extends Entity {
     }
 
     @Override
-    public void h(double d0, double d1, double d2) {
+    public void i(double d0, double d1, double d2) {
         if (!this.world.isClientSide && !this.dead && d0 * d0 + d1 * d1 + d2 * d2 > 0.0D) {
             this.die();
             this.a((Entity) null);
@@ -175,7 +175,6 @@ public abstract class EntityHanging extends Entity {
 
     @Override
     public void saveData(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setByte("Facing", (byte) this.direction.get2DRotationValue());
         BlockPosition blockposition = this.getBlockPosition();
 
         nbttagcompound.setInt("TileX", blockposition.getX());
@@ -186,7 +185,6 @@ public abstract class EntityHanging extends Entity {
     @Override
     public void loadData(NBTTagCompound nbttagcompound) {
         this.blockPosition = new BlockPosition(nbttagcompound.getInt("TileX"), nbttagcompound.getInt("TileY"), nbttagcompound.getInt("TileZ"));
-        this.direction = EnumDirection.fromType2(nbttagcompound.getByte("Facing"));
     }
 
     public abstract int getHangingWidth();
@@ -207,7 +205,7 @@ public abstract class EntityHanging extends Entity {
     }
 
     @Override
-    protected boolean aS() {
+    protected boolean aU() {
         return false;
     }
 
@@ -257,7 +255,7 @@ public abstract class EntityHanging extends Entity {
     }
 
     @Override
-    public void onLightningStrike(EntityLightning entitylightning) {}
+    public void onLightningStrike(WorldServer worldserver, EntityLightning entitylightning) {}
 
     @Override
     public void updateSize() {}

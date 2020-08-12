@@ -26,7 +26,7 @@ public class PacketPlayOutCustomSoundEffect implements Packet<PacketListenerPlay
 
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.o();
+        this.a = packetdataserializer.p();
         this.b = (SoundCategory) packetdataserializer.a(SoundCategory.class);
         this.c = packetdataserializer.readInt();
         this.d = packetdataserializer.readInt();

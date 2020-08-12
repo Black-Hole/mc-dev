@@ -92,7 +92,14 @@ public class CommandListenerWrapper implements ICompletionProvider {
     }
 
     public CommandListenerWrapper a(WorldServer worldserver) {
-        return worldserver == this.e ? this : new CommandListenerWrapper(this.base, this.d, this.n, worldserver, this.f, this.g, this.h, this.i, this.k, this.j, this.l, this.m);
+        if (worldserver == this.e) {
+            return this;
+        } else {
+            double d0 = DimensionManager.a(this.e.getDimensionManager(), worldserver.getDimensionManager());
+            Vec3D vec3d = new Vec3D(this.d.x * d0, this.d.y, this.d.z * d0);
+
+            return new CommandListenerWrapper(this.base, vec3d, this.n, worldserver, this.f, this.g, this.h, this.i, this.k, this.j, this.l, this.m);
+        }
     }
 
     public CommandListenerWrapper a(Entity entity, ArgumentAnchor.Anchor argumentanchor_anchor) throws CommandSyntaxException {
@@ -238,6 +245,11 @@ public class CommandListenerWrapper implements ICompletionProvider {
 
     @Override
     public Set<ResourceKey<World>> p() {
-        return this.i.E();
+        return this.i.F();
+    }
+
+    @Override
+    public IRegistryCustom q() {
+        return this.i.aX();
     }
 }

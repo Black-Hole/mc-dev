@@ -25,13 +25,13 @@ public class PathfinderGoalUniversalAngerReset<T extends EntityInsentient & IEnt
     @Override
     public void c() {
         this.c = this.a.cZ();
-        ((IEntityAngerable) this.a).J_();
+        ((IEntityAngerable) this.a).I_();
         if (this.b) {
             this.h().stream().filter((entityinsentient) -> {
                 return entityinsentient != this.a;
             }).map((entityinsentient) -> {
                 return (IEntityAngerable) entityinsentient;
-            }).forEach(IEntityAngerable::J_);
+            }).forEach(IEntityAngerable::I_);
         }
 
         super.c();

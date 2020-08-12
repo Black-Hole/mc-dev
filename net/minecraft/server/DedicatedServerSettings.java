@@ -7,9 +7,9 @@ public class DedicatedServerSettings {
     private final java.nio.file.Path path;
     private DedicatedServerProperties properties;
 
-    public DedicatedServerSettings(java.nio.file.Path java_nio_file_path) {
+    public DedicatedServerSettings(IRegistryCustom iregistrycustom, java.nio.file.Path java_nio_file_path) {
         this.path = java_nio_file_path;
-        this.properties = DedicatedServerProperties.load(java_nio_file_path);
+        this.properties = DedicatedServerProperties.load(iregistrycustom, java_nio_file_path);
     }
 
     public DedicatedServerProperties getProperties() {

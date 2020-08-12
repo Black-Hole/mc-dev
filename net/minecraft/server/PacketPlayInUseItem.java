@@ -12,7 +12,7 @@ public class PacketPlayInUseItem implements Packet<PacketListenerPlayIn> {
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.b = (EnumHand) packetdataserializer.a(EnumHand.class);
-        this.a = packetdataserializer.q();
+        this.a = packetdataserializer.r();
     }
 
     @Override

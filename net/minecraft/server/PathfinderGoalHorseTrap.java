@@ -15,26 +15,29 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
 
     @Override
     public void e() {
-        DifficultyDamageScaler difficultydamagescaler = this.a.world.getDamageScaler(this.a.getChunkCoordinates());
+        WorldServer worldserver = (WorldServer) this.a.world;
+        DifficultyDamageScaler difficultydamagescaler = worldserver.getDamageScaler(this.a.getChunkCoordinates());
 
         this.a.t(false);
         this.a.setTamed(true);
         this.a.setAgeRaw(0);
-        EntityLightning entitylightning = (EntityLightning) EntityTypes.LIGHTNING_BOLT.a(this.a.world);
+        EntityLightning entitylightning = (EntityLightning) EntityTypes.LIGHTNING_BOLT.a((World) worldserver);
 
         entitylightning.teleportAndSync(this.a.locX(), this.a.locY(), this.a.locZ());
         entitylightning.setEffect(true);
-        this.a.world.addEntity(entitylightning);
+        worldserver.addEntity(entitylightning);
         EntitySkeleton entityskeleton = this.a(difficultydamagescaler, this.a);
 
         entityskeleton.startRiding(this.a);
+        worldserver.addAllEntities(entityskeleton);
 
         for (int i = 0; i < 3; ++i) {
             EntityHorseAbstract entityhorseabstract = this.a(difficultydamagescaler);
             EntitySkeleton entityskeleton1 = this.a(difficultydamagescaler, entityhorseabstract);
 
             entityskeleton1.startRiding(entityhorseabstract);
-            entityhorseabstract.h(this.a.getRandom().nextGaussian() * 0.5D, 0.0D, this.a.getRandom().nextGaussian() * 0.5D);
+            entityhorseabstract.i(this.a.getRandom().nextGaussian() * 0.5D, 0.0D, this.a.getRandom().nextGaussian() * 0.5D);
+            worldserver.addAllEntities(entityhorseabstract);
         }
 
     }
@@ -42,20 +45,19 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
     private EntityHorseAbstract a(DifficultyDamageScaler difficultydamagescaler) {
         EntityHorseSkeleton entityhorseskeleton = (EntityHorseSkeleton) EntityTypes.SKELETON_HORSE.a(this.a.world);
 
-        entityhorseskeleton.prepare(this.a.world, difficultydamagescaler, EnumMobSpawn.TRIGGERED, (GroupDataEntity) null, (NBTTagCompound) null);
+        entityhorseskeleton.prepare((WorldServer) this.a.world, difficultydamagescaler, EnumMobSpawn.TRIGGERED, (GroupDataEntity) null, (NBTTagCompound) null);
         entityhorseskeleton.setPosition(this.a.locX(), this.a.locY(), this.a.locZ());
         entityhorseskeleton.noDamageTicks = 60;
         entityhorseskeleton.setPersistent();
         entityhorseskeleton.setTamed(true);
         entityhorseskeleton.setAgeRaw(0);
-        entityhorseskeleton.world.addEntity(entityhorseskeleton);
         return entityhorseskeleton;
     }
 
     private EntitySkeleton a(DifficultyDamageScaler difficultydamagescaler, EntityHorseAbstract entityhorseabstract) {
         EntitySkeleton entityskeleton = (EntitySkeleton) EntityTypes.SKELETON.a(entityhorseabstract.world);
 
-        entityskeleton.prepare(entityhorseabstract.world, difficultydamagescaler, EnumMobSpawn.TRIGGERED, (GroupDataEntity) null, (NBTTagCompound) null);
+        entityskeleton.prepare((WorldServer) entityhorseabstract.world, difficultydamagescaler, EnumMobSpawn.TRIGGERED, (GroupDataEntity) null, (NBTTagCompound) null);
         entityskeleton.setPosition(entityhorseabstract.locX(), entityhorseabstract.locY(), entityhorseabstract.locZ());
         entityskeleton.noDamageTicks = 60;
         entityskeleton.setPersistent();
@@ -63,9 +65,13 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
             entityskeleton.setSlot(EnumItemSlot.HEAD, new ItemStack(Items.IRON_HELMET));
         }
 
-        entityskeleton.setSlot(EnumItemSlot.MAINHAND, EnchantmentManager.a(entityskeleton.getRandom(), entityskeleton.getItemInMainHand(), (int) (5.0F + difficultydamagescaler.d() * (float) entityskeleton.getRandom().nextInt(18)), false));
-        entityskeleton.setSlot(EnumItemSlot.HEAD, EnchantmentManager.a(entityskeleton.getRandom(), entityskeleton.getEquipment(EnumItemSlot.HEAD), (int) (5.0F + difficultydamagescaler.d() * (float) entityskeleton.getRandom().nextInt(18)), false));
-        entityskeleton.world.addEntity(entityskeleton);
+        entityskeleton.setSlot(EnumItemSlot.MAINHAND, EnchantmentManager.a(entityskeleton.getRandom(), this.a(entityskeleton.getItemInMainHand()), (int) (5.0F + difficultydamagescaler.d() * (float) entityskeleton.getRandom().nextInt(18)), false));
+        entityskeleton.setSlot(EnumItemSlot.HEAD, EnchantmentManager.a(entityskeleton.getRandom(), this.a(entityskeleton.getEquipment(EnumItemSlot.HEAD)), (int) (5.0F + difficultydamagescaler.d() * (float) entityskeleton.getRandom().nextInt(18)), false));
         return entityskeleton;
+    }
+
+    private ItemStack a(ItemStack itemstack) {
+        itemstack.removeTag("Enchantments");
+        return itemstack;
     }
 }

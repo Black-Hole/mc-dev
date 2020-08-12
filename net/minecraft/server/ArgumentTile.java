@@ -42,7 +42,7 @@ public class ArgumentTile implements ArgumentType<ArgumentTileLocation> {
             ;
         }
 
-        return argumentblock.a(suggestionsbuilder, TagsBlock.b());
+        return argumentblock.a(suggestionsbuilder, TagsBlock.a());
     }
 
     public Collection<String> getExamples() {

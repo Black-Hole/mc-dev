@@ -589,6 +589,7 @@ public class SoundEffects {
     public static final SoundEffect ENTITY_PARROT_IMITATE_MAGMA_CUBE = a("entity.parrot.imitate.magma_cube");
     public static final SoundEffect ENTITY_PARROT_IMITATE_PHANTOM = a("entity.parrot.imitate.phantom");
     public static final SoundEffect ENTITY_PARROT_IMITATE_PIGLIN = a("entity.parrot.imitate.piglin");
+    public static final SoundEffect ENTITY_PARROT_IMITATE_PIGLIN_BRUTE = a("entity.parrot.imitate.piglin_brute");
     public static final SoundEffect ENTITY_PARROT_IMITATE_PILLAGER = a("entity.parrot.imitate.pillager");
     public static final SoundEffect ENTITY_PARROT_IMITATE_RAVAGER = a("entity.parrot.imitate.ravager");
     public static final SoundEffect ENTITY_PARROT_IMITATE_SHULKER = a("entity.parrot.imitate.shulker");
@@ -627,6 +628,12 @@ public class SoundEffects {
     public static final SoundEffect ENTITY_PIGLIN_RETREAT = a("entity.piglin.retreat");
     public static final SoundEffect ENTITY_PIGLIN_STEP = a("entity.piglin.step");
     public static final SoundEffect ENTITY_PIGLIN_CONVERTED_TO_ZOMBIFIED = a("entity.piglin.converted_to_zombified");
+    public static final SoundEffect ENTITY_PIGLIN_BRUTE_AMBIENT = a("entity.piglin_brute.ambient");
+    public static final SoundEffect ENTITY_PIGLIN_BRUTE_ANGRY = a("entity.piglin_brute.angry");
+    public static final SoundEffect ENTITY_PIGLIN_BRUTE_DEATH = a("entity.piglin_brute.death");
+    public static final SoundEffect ENTITY_PIGLIN_BRUTE_HURT = a("entity.piglin_brute.hurt");
+    public static final SoundEffect ENTITY_PIGLIN_BRUTE_STEP = a("entity.piglin_brute.step");
+    public static final SoundEffect ENTITY_PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED = a("entity.piglin_brute.converted_to_zombified");
     public static final SoundEffect ENTITY_PILLAGER_AMBIENT = a("entity.pillager.ambient");
     public static final SoundEffect ENTITY_PILLAGER_CELEBRATE = a("entity.pillager.celebrate");
     public static final SoundEffect ENTITY_PILLAGER_DEATH = a("entity.pillager.death");

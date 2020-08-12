@@ -29,14 +29,14 @@ public abstract class WorldGenMegaTreeProvider extends WorldGenTreeProvider {
         if (worldgenfeatureconfigured == null) {
             return false;
         } else {
-            ((WorldGenFeatureTreeConfiguration) worldgenfeatureconfigured.e).a();
+            ((WorldGenFeatureTreeConfiguration) worldgenfeatureconfigured.f).b();
             IBlockData iblockdata1 = Blocks.AIR.getBlockData();
 
             worldserver.setTypeAndData(blockposition.b(i, 0, j), iblockdata1, 4);
             worldserver.setTypeAndData(blockposition.b(i + 1, 0, j), iblockdata1, 4);
             worldserver.setTypeAndData(blockposition.b(i, 0, j + 1), iblockdata1, 4);
             worldserver.setTypeAndData(blockposition.b(i + 1, 0, j + 1), iblockdata1, 4);
-            if (worldgenfeatureconfigured.a(worldserver, worldserver.getStructureManager(), chunkgenerator, random, blockposition.b(i, 0, j))) {
+            if (worldgenfeatureconfigured.a(worldserver, chunkgenerator, random, blockposition.b(i, 0, j))) {
                 return true;
             } else {
                 worldserver.setTypeAndData(blockposition.b(i, 0, j), iblockdata, 4);

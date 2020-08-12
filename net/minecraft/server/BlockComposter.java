@@ -75,7 +75,7 @@ public class BlockComposter extends Block implements IInventoryHolder {
         a(0.65F, Items.NETHER_WART);
         a(0.65F, Items.by);
         a(0.65F, Items.bz);
-        a(0.65F, Items.ro);
+        a(0.65F, Items.rp);
         a(0.65F, Items.bh);
         a(0.65F, Items.bi);
         a(0.65F, Items.bj);
@@ -170,7 +170,6 @@ public class BlockComposter extends Block implements IInventoryHolder {
             IBlockData iblockdata1 = b(iblockdata, (GeneratorAccess) worldserver, blockposition, itemstack);
 
             itemstack.subtract(1);
-            worldserver.triggerEffect(1500, blockposition, iblockdata != iblockdata1 ? 1 : 0);
             return iblockdata1;
         } else {
             return iblockdata;

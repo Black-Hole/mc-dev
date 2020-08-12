@@ -13,7 +13,7 @@ public abstract class EntityFireball extends IProjectile {
     public EntityFireball(EntityTypes<? extends EntityFireball> entitytypes, double d0, double d1, double d2, double d3, double d4, double d5, World world) {
         this(entitytypes, world);
         this.setPositionRotation(d0, d1, d2, this.yaw, this.pitch);
-        this.ac();
+        this.ae();
         double d6 = (double) MathHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
 
         if (d6 != 0.0D) {
@@ -41,16 +41,17 @@ public abstract class EntityFireball extends IProjectile {
             this.die();
         } else {
             super.tick();
-            if (this.Y_()) {
+            if (this.W_()) {
                 this.setOnFire(1);
             }
 
-            MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, this::a, RayTrace.BlockCollisionOption.COLLIDER);
+            MovingObjectPosition movingobjectposition = ProjectileHelper.a((Entity) this, this::a);
 
             if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.MISS) {
                 this.a(movingobjectposition);
             }
 
+            this.checkBlockCollisions();
             Vec3D vec3d = this.getMot();
             double d0 = this.locX() + vec3d.x;
             double d1 = this.locY() + vec3d.y;
@@ -80,7 +81,7 @@ public abstract class EntityFireball extends IProjectile {
         return super.a(entity) && !entity.noclip;
     }
 
-    protected boolean Y_() {
+    protected boolean W_() {
         return true;
     }
 
@@ -119,7 +120,7 @@ public abstract class EntityFireball extends IProjectile {
     }
 
     @Override
-    public float bc() {
+    public float bf() {
         return 1.0F;
     }
 
@@ -147,12 +148,12 @@ public abstract class EntityFireball extends IProjectile {
     }
 
     @Override
-    public float aO() {
+    public float aQ() {
         return 1.0F;
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         Entity entity = this.getShooter();
         int i = entity == null ? 0 : entity.getId();
 

@@ -8,10 +8,12 @@ public class BehaviorStrollPosition extends Behavior<EntityCreature> {
     private final MemoryModuleType<GlobalPos> b;
     private long c;
     private final int d;
+    private float e;
 
-    public BehaviorStrollPosition(MemoryModuleType<GlobalPos> memorymoduletype, int i) {
+    public BehaviorStrollPosition(MemoryModuleType<GlobalPos> memorymoduletype, float f, int i) {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED, memorymoduletype, MemoryStatus.VALUE_PRESENT));
         this.b = memorymoduletype;
+        this.e = f;
         this.d = i;
     }
 
@@ -26,7 +28,7 @@ public class BehaviorStrollPosition extends Behavior<EntityCreature> {
             Optional<Vec3D> optional = Optional.ofNullable(RandomPositionGenerator.b(entitycreature, 8, 6));
 
             entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, optional.map((vec3d) -> {
-                return new MemoryTarget(vec3d, 0.4F, 1);
+                return new MemoryTarget(vec3d, this.e, 1);
             }));
             this.c = i + 180L;
         }

@@ -141,7 +141,7 @@ public class EnchantmentManager {
         };
 
         if (entityliving != null) {
-            a(enchantmentmanager_a, entityliving.bl());
+            a(enchantmentmanager_a, entityliving.bo());
         }
 
         if (entity instanceof EntityHuman) {
@@ -156,7 +156,7 @@ public class EnchantmentManager {
         };
 
         if (entityliving != null) {
-            a(enchantmentmanager_a, entityliving.bl());
+            a(enchantmentmanager_a, entityliving.bo());
         }
 
         if (entityliving instanceof EntityHuman) {

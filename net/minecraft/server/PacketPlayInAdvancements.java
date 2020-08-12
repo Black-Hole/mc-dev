@@ -13,7 +13,7 @@ public class PacketPlayInAdvancements implements Packet<PacketListenerPlayIn> {
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = (PacketPlayInAdvancements.Status) packetdataserializer.a(PacketPlayInAdvancements.Status.class);
         if (this.a == PacketPlayInAdvancements.Status.OPENED_TAB) {
-            this.b = packetdataserializer.o();
+            this.b = packetdataserializer.p();
         }
 
     }

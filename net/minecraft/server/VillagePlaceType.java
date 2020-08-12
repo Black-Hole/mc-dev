@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class VillagePlaceType {
 
     private static final Supplier<Set<VillagePlaceType>> y = Suppliers.memoize(() -> {
-        return (Set) IRegistry.VILLAGER_PROFESSION.e().map(VillagerProfession::b).collect(Collectors.toSet());
+        return (Set) IRegistry.VILLAGER_PROFESSION.g().map(VillagerProfession::b).collect(Collectors.toSet());
     });
     public static final Predicate<VillagePlaceType> a = (villageplacetype) -> {
         return ((Set) VillagePlaceType.y.get()).contains(villageplacetype);
@@ -108,7 +108,7 @@ public class VillagePlaceType {
             VillagePlaceType villageplacetype1 = (VillagePlaceType) VillagePlaceType.A.put(iblockdata, villageplacetype);
 
             if (villageplacetype1 != null) {
-                throw (IllegalStateException) SystemUtils.c(new IllegalStateException(String.format("%s is defined in too many tags", iblockdata)));
+                throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException(String.format("%s is defined in too many tags", iblockdata))));
             }
         });
         return villageplacetype;

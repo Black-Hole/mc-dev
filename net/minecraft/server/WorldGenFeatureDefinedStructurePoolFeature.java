@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Supplier;
 
 public class WorldGenFeatureDefinedStructurePoolFeature extends WorldGenFeatureDefinedStructurePoolStructure {
 
@@ -13,17 +14,12 @@ public class WorldGenFeatureDefinedStructurePoolFeature extends WorldGenFeatureD
             return worldgenfeaturedefinedstructurepoolfeature.b;
         }), d()).apply(instance, WorldGenFeatureDefinedStructurePoolFeature::new);
     });
-    private final WorldGenFeatureConfigured<?, ?> b;
+    private final Supplier<WorldGenFeatureConfigured<?, ?>> b;
     private final NBTTagCompound c;
 
-    @Deprecated
-    public WorldGenFeatureDefinedStructurePoolFeature(WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured) {
-        this(worldgenfeatureconfigured, WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID);
-    }
-
-    private WorldGenFeatureDefinedStructurePoolFeature(WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
+    protected WorldGenFeatureDefinedStructurePoolFeature(Supplier<WorldGenFeatureConfigured<?, ?>> supplier, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
         super(worldgenfeaturedefinedstructurepooltemplate_matching);
-        this.b = worldgenfeatureconfigured;
+        this.b = supplier;
         this.c = this.b();
     }
 
@@ -59,7 +55,7 @@ public class WorldGenFeatureDefinedStructurePoolFeature extends WorldGenFeatureD
 
     @Override
     public boolean a(DefinedStructureManager definedstructuremanager, GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, BlockPosition blockposition, BlockPosition blockposition1, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox, Random random, boolean flag) {
-        return this.b.a(generatoraccessseed, structuremanager, chunkgenerator, random, blockposition);
+        return ((WorldGenFeatureConfigured) this.b.get()).a(generatoraccessseed, chunkgenerator, random, blockposition);
     }
 
     @Override
@@ -68,6 +64,6 @@ public class WorldGenFeatureDefinedStructurePoolFeature extends WorldGenFeatureD
     }
 
     public String toString() {
-        return "Feature[" + IRegistry.FEATURE.getKey(this.b.d) + "]";
+        return "Feature[" + IRegistry.FEATURE.getKey(((WorldGenFeatureConfigured) this.b.get()).b()) + "]";
     }
 }

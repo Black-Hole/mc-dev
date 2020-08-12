@@ -29,7 +29,7 @@ public class PacketPlayOutEntityEquipment implements Packet<PacketListenerPlayOu
         do {
             b0 = packetdataserializer.readByte();
             EnumItemSlot enumitemslot = aenumitemslot[b0 & 127];
-            ItemStack itemstack = packetdataserializer.m();
+            ItemStack itemstack = packetdataserializer.n();
 
             this.b.add(Pair.of(enumitemslot, itemstack));
         } while ((b0 & -128) != 0);

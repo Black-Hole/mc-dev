@@ -117,7 +117,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
     }
 
     private static boolean a(byte b0, byte b1, byte b2) {
-        return (b0 == b2 || b0 == 0) && (b1 == b2 || b1 == 0);
+        return b0 == b2 && (b1 == b2 || b1 == 0);
     }
 
     private static <T extends NBTBase> void a(NBTList<T> nbtlist, NBTBase nbtbase, NBTBase nbtbase1) {

@@ -18,7 +18,7 @@ public class ParticleParamItem implements ParticleParam {
 
         @Override
         public ParticleParamItem b(Particle<ParticleParamItem> particle, PacketDataSerializer packetdataserializer) {
-            return new ParticleParamItem(particle, packetdataserializer.m());
+            return new ParticleParamItem(particle, packetdataserializer.n());
         }
     };
     private final Particle<ParticleParamItem> b;

@@ -11,7 +11,7 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
 
     @Override
     protected void initPathfinder() {
-        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityPiglin.class, true));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityPiglinAbstract.class, true));
         super.initPathfinder();
     }
 
@@ -31,7 +31,7 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
     }
 
     @Override
-    SoundEffect eL() {
+    SoundEffect eK() {
         return SoundEffects.ENTITY_WITHER_SKELETON_STEP;
     }
 
@@ -61,11 +61,11 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
 
     @Nullable
     @Override
-    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        GroupDataEntity groupdataentity1 = super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
+    public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        GroupDataEntity groupdataentity1 = super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
 
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(4.0D);
-        this.eM();
+        this.eL();
         return groupdataentity1;
     }
 

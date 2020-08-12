@@ -12,10 +12,10 @@ public class LootEntries {
     public static final LootEntryType h = a("group", LootEntryChildrenAbstract.a(LootEntryGroup::new));
 
     private static LootEntryType a(String s, LootSerializer<? extends LootEntryAbstract> lootserializer) {
-        return (LootEntryType) IRegistry.a(IRegistry.aY, new MinecraftKey(s), (Object) (new LootEntryType(lootserializer)));
+        return (LootEntryType) IRegistry.a(IRegistry.ao, new MinecraftKey(s), (Object) (new LootEntryType(lootserializer)));
     }
 
     public static Object a() {
-        return JsonRegistry.a(IRegistry.aY, "entry", "type", LootEntryAbstract::a).a();
+        return JsonRegistry.a(IRegistry.ao, "entry", "type", LootEntryAbstract::a).a();
     }
 }

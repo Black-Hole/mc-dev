@@ -201,7 +201,7 @@ public abstract class PropertyManager<T extends PropertyManager<T>> {
         return properties;
     }
 
-    protected abstract T reload(Properties properties);
+    protected abstract T reload(IRegistryCustom iregistrycustom, Properties properties);
 
     public class EditableProperty<V> implements Supplier<V> {
 
@@ -219,11 +219,11 @@ public abstract class PropertyManager<T extends PropertyManager<T>> {
             return this.c;
         }
 
-        public T set(V v0) {
+        public T set(IRegistryCustom iregistrycustom, V v0) {
             Properties properties = PropertyManager.this.a();
 
             properties.put(this.b, this.d.apply(v0));
-            return PropertyManager.this.reload(properties);
+            return PropertyManager.this.reload(iregistrycustom, properties);
         }
     }
 }

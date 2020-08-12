@@ -8,7 +8,7 @@ public class BehaviorHomeRaid extends BehaviorHome {
 
     @Override
     protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
-        Raid raid = worldserver.c_(entityliving.getChunkCoordinates());
+        Raid raid = worldserver.b_(entityliving.getChunkCoordinates());
 
         return super.a(worldserver, entityliving) && raid != null && raid.v() && !raid.isVictory() && !raid.isLoss();
     }

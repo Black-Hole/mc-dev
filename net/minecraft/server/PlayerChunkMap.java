@@ -123,7 +123,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
         int j;
 
         if (flag) {
-            SectionPosition sectionposition = entityplayer.N();
+            SectionPosition sectionposition = entityplayer.O();
 
             i = sectionposition.a();
             j = sectionposition.c();
@@ -841,7 +841,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
                 this.chunkDistanceManager.a(SectionPosition.a((Entity) entityplayer), entityplayer);
             }
         } else {
-            SectionPosition sectionposition = entityplayer.N();
+            SectionPosition sectionposition = entityplayer.O();
 
             this.playerMap.a(sectionposition.r().pair(), entityplayer);
             if (!flag2) {
@@ -882,7 +882,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
 
         int i = MathHelper.floor(entityplayer.locX()) >> 4;
         int j = MathHelper.floor(entityplayer.locZ()) >> 4;
-        SectionPosition sectionposition = entityplayer.N();
+        SectionPosition sectionposition = entityplayer.O();
         SectionPosition sectionposition1 = SectionPosition.a((Entity) entityplayer);
         long k = sectionposition.r().pair();
         long l = sectionposition1.r().pair();
@@ -975,7 +975,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
             int j = entitytypes.getUpdateInterval();
 
             if (this.trackedEntities.containsKey(entity.getId())) {
-                throw (IllegalStateException) SystemUtils.c(new IllegalStateException("Entity is already tracked!"));
+                throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException("Entity is already tracked!")));
             } else {
                 PlayerChunkMap.EntityTracker playerchunkmap_entitytracker = new PlayerChunkMap.EntityTracker(entity, i, j, entitytypes.isDeltaTracking());
 
@@ -1077,7 +1077,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
 
     private void a(EntityPlayer entityplayer, Packet<?>[] apacket, Chunk chunk) {
         if (apacket[0] == null) {
-            apacket[0] = new PacketPlayOutMapChunk(chunk, 65535, true);
+            apacket[0] = new PacketPlayOutMapChunk(chunk, 65535);
             apacket[1] = new PacketPlayOutLightUpdate(chunk.getPos(), this.lightEngine, true);
         }
 

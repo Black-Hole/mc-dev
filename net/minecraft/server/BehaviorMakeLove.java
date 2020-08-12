@@ -54,12 +54,12 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
             worldserver.broadcastEntityEffect(entityvillager1, (byte) 13);
             worldserver.broadcastEntityEffect(entityvillager, (byte) 13);
         } else {
-            Optional<EntityVillager> optional1 = this.a(entityvillager, entityvillager1);
+            Optional<EntityVillager> optional1 = this.b(worldserver, entityvillager, entityvillager1);
 
             if (optional1.isPresent()) {
                 this.a(worldserver, (EntityVillager) optional1.get(), (BlockPosition) optional.get());
             } else {
-                worldserver.x().b((BlockPosition) optional.get());
+                worldserver.y().b((BlockPosition) optional.get());
                 PacketDebug.c(worldserver, (BlockPosition) optional.get());
             }
         }
@@ -80,7 +80,7 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
     }
 
     private Optional<BlockPosition> b(WorldServer worldserver, EntityVillager entityvillager) {
-        return worldserver.x().a(VillagePlaceType.r.c(), (blockposition) -> {
+        return worldserver.y().a(VillagePlaceType.r.c(), (blockposition) -> {
             return this.a(entityvillager, blockposition);
         }, entityvillager.getChunkCoordinates(), 48);
     }
@@ -88,11 +88,11 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
     private boolean a(EntityVillager entityvillager, BlockPosition blockposition) {
         PathEntity pathentity = entityvillager.getNavigation().a(blockposition, VillagePlaceType.r.d());
 
-        return pathentity != null && pathentity.i();
+        return pathentity != null && pathentity.j();
     }
 
-    private Optional<EntityVillager> a(EntityVillager entityvillager, EntityVillager entityvillager1) {
-        EntityVillager entityvillager2 = entityvillager.createChild(entityvillager1);
+    private Optional<EntityVillager> b(WorldServer worldserver, EntityVillager entityvillager, EntityVillager entityvillager1) {
+        EntityVillager entityvillager2 = entityvillager.createChild(worldserver, entityvillager1);
 
         if (entityvillager2 == null) {
             return Optional.empty();
@@ -101,8 +101,8 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
             entityvillager1.setAgeRaw(6000);
             entityvillager2.setAgeRaw(-24000);
             entityvillager2.setPositionRotation(entityvillager.locX(), entityvillager.locY(), entityvillager.locZ(), 0.0F, 0.0F);
-            entityvillager.world.addEntity(entityvillager2);
-            entityvillager.world.broadcastEntityEffect(entityvillager2, (byte) 12);
+            worldserver.addAllEntities(entityvillager2);
+            worldserver.broadcastEntityEffect(entityvillager2, (byte) 12);
             return Optional.of(entityvillager2);
         }
     }

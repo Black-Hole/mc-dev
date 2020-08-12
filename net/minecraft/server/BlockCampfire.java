@@ -102,7 +102,7 @@ public class BlockCampfire extends BlockTileEntity implements IBlockWaterlogged 
     public static void c(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         if (generatoraccess.s_()) {
             for (int i = 0; i < 20; ++i) {
-                a(generatoraccess.getMinecraftWorld(), blockposition, (Boolean) iblockdata.get(BlockCampfire.c), true);
+                a((World) generatoraccess, blockposition, (Boolean) iblockdata.get(BlockCampfire.c), true);
             }
         }
 

@@ -53,7 +53,7 @@ public class WorldGenFeatureOceanRuin extends StructureGenerator<WorldGenFeature
             super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
-        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureOceanRuinConfiguration worldgenfeatureoceanruinconfiguration) {
+        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureOceanRuinConfiguration worldgenfeatureoceanruinconfiguration) {
             int k = i * 16;
             int l = j * 16;
             BlockPosition blockposition = new BlockPosition(k, 90, l);

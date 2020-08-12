@@ -68,14 +68,14 @@ public class LootSelectorTag extends LootSelectorEntry {
 
         public void a(JsonObject jsonobject, LootSelectorTag lootselectortag, JsonSerializationContext jsonserializationcontext) {
             super.a(jsonobject, (LootSelectorEntry) lootselectortag, jsonserializationcontext);
-            jsonobject.addProperty("name", TagsInstance.e().b().b(lootselectortag.g).toString());
+            jsonobject.addProperty("name", TagsInstance.a().getItemTags().b(lootselectortag.g).toString());
             jsonobject.addProperty("expand", lootselectortag.h);
         }
 
         @Override
         protected LootSelectorTag b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
             MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "name"));
-            Tag<Item> tag = TagsInstance.e().b().a(minecraftkey);
+            Tag<Item> tag = TagsInstance.a().getItemTags().a(minecraftkey);
 
             if (tag == null) {
                 throw new JsonParseException("Can't find tag: " + minecraftkey);

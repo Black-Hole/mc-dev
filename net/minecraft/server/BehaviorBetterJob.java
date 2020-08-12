@@ -14,7 +14,7 @@ public class BehaviorBetterJob extends Behavior<EntityVillager> {
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
         GlobalPos globalpos = (GlobalPos) entityvillager.getBehaviorController().getMemory(MemoryModuleType.JOB_SITE).get();
 
-        worldserver.x().c(globalpos.getBlockPosition()).ifPresent((villageplacetype) -> {
+        worldserver.y().c(globalpos.getBlockPosition()).ifPresent((villageplacetype) -> {
             BehaviorUtil.a(entityvillager, (entityvillager1) -> {
                 return this.a(globalpos, villageplacetype, entityvillager1);
             }).reduce(entityvillager, BehaviorBetterJob::a);

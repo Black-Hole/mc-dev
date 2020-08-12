@@ -9,7 +9,7 @@ public class WorldGenFeatureKelp extends WorldGenerator<WorldGenFeatureEmptyConf
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         int i = 0;
         int j = generatoraccessseed.a(HeightMap.Type.OCEAN_FLOOR, blockposition.getX(), blockposition.getZ());
         BlockPosition blockposition1 = new BlockPosition(blockposition.getX(), j, blockposition.getZ());

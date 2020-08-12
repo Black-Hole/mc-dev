@@ -18,7 +18,7 @@ public class BehaviorLeaveJob extends Behavior<EntityVillager> {
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
         BlockPosition blockposition = ((GlobalPos) entityvillager.getBehaviorController().getMemory(MemoryModuleType.POTENTIAL_JOB_SITE).get()).getBlockPosition();
-        Optional<VillagePlaceType> optional = worldserver.x().c(blockposition);
+        Optional<VillagePlaceType> optional = worldserver.y().c(blockposition);
 
         if (optional.isPresent()) {
             BehaviorUtil.a(entityvillager, (entityvillager1) -> {
@@ -55,7 +55,7 @@ public class BehaviorLeaveJob extends Behavior<EntityVillager> {
     private boolean a(EntityVillager entityvillager, BlockPosition blockposition, VillagePlaceType villageplacetype) {
         PathEntity pathentity = entityvillager.getNavigation().a(blockposition, villageplacetype.d());
 
-        return pathentity != null && pathentity.i();
+        return pathentity != null && pathentity.j();
     }
 
     private void a(EntityVillager entityvillager) {

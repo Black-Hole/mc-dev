@@ -17,7 +17,7 @@ public class SensorGolemLastSeen extends Sensor<EntityLiving> {
 
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving) {
-        a(worldserver.getTime(), entityliving);
+        a(entityliving);
     }
 
     @Override
@@ -25,9 +25,8 @@ public class SensorGolemLastSeen extends Sensor<EntityLiving> {
         return ImmutableSet.of(MemoryModuleType.MOBS);
     }
 
-    public static void a(long i, EntityLiving entityliving) {
-        BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
-        Optional<List<EntityLiving>> optional = behaviorcontroller.getMemory(MemoryModuleType.MOBS);
+    public static void a(EntityLiving entityliving) {
+        Optional<List<EntityLiving>> optional = entityliving.getBehaviorController().getMemory(MemoryModuleType.MOBS);
 
         if (optional.isPresent()) {
             boolean flag = ((List) optional.get()).stream().anyMatch((entityliving1) -> {
@@ -35,9 +34,13 @@ public class SensorGolemLastSeen extends Sensor<EntityLiving> {
             });
 
             if (flag) {
-                behaviorcontroller.setMemory(MemoryModuleType.GOLEM_LAST_SEEN_TIME, (Object) i);
+                b(entityliving);
             }
 
         }
+    }
+
+    public static void b(EntityLiving entityliving) {
+        entityliving.getBehaviorController().a(MemoryModuleType.GOLEM_DETECTED_RECENTLY, true, 600L);
     }
 }

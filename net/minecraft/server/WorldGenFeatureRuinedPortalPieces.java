@@ -23,7 +23,7 @@ public class WorldGenFeatureRuinedPortalPieces extends DefinedStructurePiece {
     private final WorldGenFeatureRuinedPortalPieces.a i;
 
     public WorldGenFeatureRuinedPortalPieces(BlockPosition blockposition, WorldGenFeatureRuinedPortalPieces.Position worldgenfeatureruinedportalpieces_position, WorldGenFeatureRuinedPortalPieces.a worldgenfeatureruinedportalpieces_a, MinecraftKey minecraftkey, DefinedStructure definedstructure, EnumBlockRotation enumblockrotation, EnumBlockMirror enumblockmirror, BlockPosition blockposition1) {
-        super(WorldGenFeatureStructurePieceType.L, 0);
+        super(WorldGenFeatureStructurePieceType.J, 0);
         this.c = blockposition;
         this.e = minecraftkey;
         this.f = enumblockrotation;
@@ -34,7 +34,7 @@ public class WorldGenFeatureRuinedPortalPieces extends DefinedStructurePiece {
     }
 
     public WorldGenFeatureRuinedPortalPieces(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-        super(WorldGenFeatureStructurePieceType.L, nbttagcompound);
+        super(WorldGenFeatureStructurePieceType.J, nbttagcompound);
         this.e = new MinecraftKey(nbttagcompound.getString("Template"));
         this.f = EnumBlockRotation.valueOf(nbttagcompound.getString("Rotation"));
         this.g = EnumBlockMirror.valueOf(nbttagcompound.getString("Mirror"));
@@ -116,7 +116,7 @@ public class WorldGenFeatureRuinedPortalPieces extends DefinedStructurePiece {
     }
 
     @Override
-    protected void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {}
+    protected void a(String s, BlockPosition blockposition, WorldAccess worldaccess, Random random, StructureBoundingBox structureboundingbox) {}
 
     private void a(Random random, GeneratorAccess generatoraccess, BlockPosition blockposition) {
         IBlockData iblockdata = generatoraccess.getType(blockposition);
@@ -213,7 +213,7 @@ public class WorldGenFeatureRuinedPortalPieces extends DefinedStructurePiece {
     private boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
         IBlockData iblockdata = generatoraccess.getType(blockposition);
 
-        return !iblockdata.a(Blocks.AIR) && !iblockdata.a(Blocks.OBSIDIAN) && (this.h == WorldGenFeatureRuinedPortalPieces.Position.IN_NETHER || !iblockdata.a(Blocks.LAVA));
+        return !iblockdata.a(Blocks.AIR) && !iblockdata.a(Blocks.OBSIDIAN) && !iblockdata.a(Blocks.CHEST) && (this.h == WorldGenFeatureRuinedPortalPieces.Position.IN_NETHER || !iblockdata.a(Blocks.LAVA));
     }
 
     private void d(Random random, GeneratorAccess generatoraccess, BlockPosition blockposition) {

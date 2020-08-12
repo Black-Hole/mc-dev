@@ -33,8 +33,8 @@ public class ProtoChunkExtension extends ProtoChunk {
     }
 
     @Override
-    public int H() {
-        return this.a.H();
+    public int J() {
+        return this.a.J();
     }
 
     @Nullable
@@ -145,14 +145,14 @@ public class ProtoChunkExtension extends ProtoChunk {
 
     @Nullable
     @Override
-    public NBTTagCompound f(BlockPosition blockposition) {
-        return this.a.f(blockposition);
+    public NBTTagCompound i(BlockPosition blockposition) {
+        return this.a.i(blockposition);
     }
 
     @Nullable
     @Override
-    public NBTTagCompound i(BlockPosition blockposition) {
-        return this.a.i(blockposition);
+    public NBTTagCompound j(BlockPosition blockposition) {
+        return this.a.j(blockposition);
     }
 
     @Override
@@ -179,12 +179,12 @@ public class ProtoChunkExtension extends ProtoChunk {
 
     @Override
     public BitSet a(WorldGenStage.Features worldgenstage_features) {
-        throw (UnsupportedOperationException) SystemUtils.c(new UnsupportedOperationException("Meaningless in this context"));
+        throw (UnsupportedOperationException) SystemUtils.c((Throwable) (new UnsupportedOperationException("Meaningless in this context")));
     }
 
     @Override
     public BitSet b(WorldGenStage.Features worldgenstage_features) {
-        throw (UnsupportedOperationException) SystemUtils.c(new UnsupportedOperationException("Meaningless in this context"));
+        throw (UnsupportedOperationException) SystemUtils.c((Throwable) (new UnsupportedOperationException("Meaningless in this context")));
     }
 
     public Chunk u() {

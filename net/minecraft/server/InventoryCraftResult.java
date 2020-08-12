@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 public class InventoryCraftResult implements IInventory, RecipeHolder {
 
     private final NonNullList<ItemStack> items;
+    @Nullable
     private IRecipe<?> b;
 
     public InventoryCraftResult() {
@@ -74,7 +75,7 @@ public class InventoryCraftResult implements IInventory, RecipeHolder {
 
     @Nullable
     @Override
-    public IRecipe<?> am_() {
+    public IRecipe<?> ak_() {
         return this.b;
     }
 }

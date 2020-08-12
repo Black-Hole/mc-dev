@@ -10,12 +10,12 @@ public class WorldGenTreeProviderSpruce extends WorldGenMegaTreeProvider {
     @Nullable
     @Override
     protected WorldGenFeatureConfigured<WorldGenFeatureTreeConfiguration, ?> a(Random random, boolean flag) {
-        return WorldGenerator.TREE.b((WorldGenFeatureConfiguration) BiomeDecoratorGroups.SPRUCE_TREE);
+        return BiomeDecoratorGroups.SPRUCE;
     }
 
     @Nullable
     @Override
     protected WorldGenFeatureConfigured<WorldGenFeatureTreeConfiguration, ?> a(Random random) {
-        return WorldGenerator.TREE.b((WorldGenFeatureConfiguration) (random.nextBoolean() ? BiomeDecoratorGroups.MEGA_SPRUCE_TREE : BiomeDecoratorGroups.MEGA_PINE_TREE));
+        return random.nextBoolean() ? BiomeDecoratorGroups.MEGA_SPRUCE : BiomeDecoratorGroups.MEGA_PINE;
     }
 }

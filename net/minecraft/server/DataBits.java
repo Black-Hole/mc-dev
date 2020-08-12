@@ -35,7 +35,7 @@ public class DataBits {
 
         if (along != null) {
             if (along.length != l) {
-                throw (RuntimeException) SystemUtils.c(new RuntimeException("Invalid length given for storage, got: " + along.length + " but expected: " + l));
+                throw (RuntimeException) SystemUtils.c((Throwable) (new RuntimeException("Invalid length given for storage, got: " + along.length + " but expected: " + l)));
             }
 
             this.b = along;

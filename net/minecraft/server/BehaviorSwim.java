@@ -12,7 +12,7 @@ public class BehaviorSwim extends Behavior<EntityInsentient> {
     }
 
     protected boolean a(WorldServer worldserver, EntityInsentient entityinsentient) {
-        return entityinsentient.isInWater() && entityinsentient.b((Tag) TagsFluid.WATER) > entityinsentient.cw() || entityinsentient.aN();
+        return entityinsentient.isInWater() && entityinsentient.b((Tag) TagsFluid.WATER) > entityinsentient.cw() || entityinsentient.aP();
     }
 
     protected boolean b(WorldServer worldserver, EntityInsentient entityinsentient, long i) {

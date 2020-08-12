@@ -20,15 +20,13 @@ public class Block extends BlockBase implements IMaterial {
             return !VoxelShapes.c(VoxelShapes.b(), voxelshape, OperatorBoolean.NOT_SAME);
         }
     });
-    private static final VoxelShape b = VoxelShapes.a(VoxelShapes.b(), a(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D), OperatorBoolean.ONLY_FIRST);
-    private static final VoxelShape c = a(7.0D, 0.0D, 7.0D, 9.0D, 10.0D, 9.0D);
     protected final BlockStateList<Block, IBlockData> blockStateList;
     private IBlockData blockData;
     @Nullable
     private String name;
     @Nullable
-    private Item f;
-    private static final ThreadLocal<Object2ByteLinkedOpenHashMap<Block.a>> g = ThreadLocal.withInitial(() -> {
+    private Item d;
+    private static final ThreadLocal<Object2ByteLinkedOpenHashMap<Block.a>> e = ThreadLocal.withInitial(() -> {
         Object2ByteLinkedOpenHashMap<Block.a> object2bytelinkedopenhashmap = new Object2ByteLinkedOpenHashMap<Block.a>(2048, 0.25F) {
             protected void rehash(int i) {}
         };
@@ -135,19 +133,13 @@ public class Block extends BlockBase implements IMaterial {
     }
 
     public static boolean c(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        IBlockData iblockdata = iblockaccess.getType(blockposition);
-
-        return iblockdata.r(iblockaccess, blockposition) && iblockdata.d(iblockaccess, blockposition, EnumDirection.UP) || !VoxelShapes.c(iblockdata.l(iblockaccess, blockposition).a(EnumDirection.UP), Block.b, OperatorBoolean.ONLY_SECOND);
+        return iblockaccess.getType(blockposition).a(iblockaccess, blockposition, EnumDirection.UP, EnumBlockSupport.RIGID);
     }
 
     public static boolean a(IWorldReader iworldreader, BlockPosition blockposition, EnumDirection enumdirection) {
         IBlockData iblockdata = iworldreader.getType(blockposition);
 
-        return enumdirection == EnumDirection.DOWN && iblockdata.a((Tag) TagsBlock.aB) ? false : !VoxelShapes.c(iblockdata.l(iworldreader, blockposition).a(enumdirection), Block.c, OperatorBoolean.ONLY_SECOND);
-    }
-
-    public static boolean d(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return a(iblockdata.l(iblockaccess, blockposition), enumdirection);
+        return enumdirection == EnumDirection.DOWN && iblockdata.a((Tag) TagsBlock.aC) ? false : iblockdata.a((IBlockAccess) iworldreader, blockposition, enumdirection, EnumBlockSupport.CENTER);
     }
 
     public static boolean a(VoxelShape voxelshape, EnumDirection enumdirection) {
@@ -167,13 +159,13 @@ public class Block extends BlockBase implements IMaterial {
     public void postBreak(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {}
 
     public static List<ItemStack> a(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, @Nullable TileEntity tileentity) {
-        LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder(worldserver)).a(worldserver.random).set(LootContextParameters.POSITION, blockposition).set(LootContextParameters.TOOL, ItemStack.b).setOptional(LootContextParameters.BLOCK_ENTITY, tileentity);
+        LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder(worldserver)).a(worldserver.random).set(LootContextParameters.ORIGIN, Vec3D.a((BaseBlockPosition) blockposition)).set(LootContextParameters.TOOL, ItemStack.b).setOptional(LootContextParameters.BLOCK_ENTITY, tileentity);
 
         return iblockdata.a(loottableinfo_builder);
     }
 
     public static List<ItemStack> getDrops(IBlockData iblockdata, WorldServer worldserver, BlockPosition blockposition, @Nullable TileEntity tileentity, @Nullable Entity entity, ItemStack itemstack) {
-        LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder(worldserver)).a(worldserver.random).set(LootContextParameters.POSITION, blockposition).set(LootContextParameters.TOOL, itemstack).setOptional(LootContextParameters.THIS_ENTITY, entity).setOptional(LootContextParameters.BLOCK_ENTITY, tileentity);
+        LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder(worldserver)).a(worldserver.random).set(LootContextParameters.ORIGIN, Vec3D.a((BaseBlockPosition) blockposition)).set(LootContextParameters.TOOL, itemstack).setOptional(LootContextParameters.THIS_ENTITY, entity).setOptional(LootContextParameters.BLOCK_ENTITY, tileentity);
 
         return iblockdata.a(loottableinfo_builder);
     }
@@ -183,19 +175,19 @@ public class Block extends BlockBase implements IMaterial {
             a(iblockdata, (WorldServer) world, blockposition, (TileEntity) null).forEach((itemstack) -> {
                 a(world, blockposition, itemstack);
             });
+            iblockdata.dropNaturally((WorldServer) world, blockposition, ItemStack.b);
         }
 
-        iblockdata.dropNaturally(world, blockposition, ItemStack.b);
     }
 
-    public static void a(IBlockData iblockdata, World world, BlockPosition blockposition, @Nullable TileEntity tileentity) {
-        if (world instanceof WorldServer) {
-            a(iblockdata, (WorldServer) world, blockposition, tileentity).forEach((itemstack) -> {
-                a(world, blockposition, itemstack);
+    public static void a(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition, @Nullable TileEntity tileentity) {
+        if (generatoraccess instanceof WorldServer) {
+            a(iblockdata, (WorldServer) generatoraccess, blockposition, tileentity).forEach((itemstack) -> {
+                a((World) ((WorldServer) generatoraccess), blockposition, itemstack);
             });
+            iblockdata.dropNaturally((WorldServer) generatoraccess, blockposition, ItemStack.b);
         }
 
-        iblockdata.dropNaturally(world, blockposition, ItemStack.b);
     }
 
     public static void dropItems(IBlockData iblockdata, World world, BlockPosition blockposition, @Nullable TileEntity tileentity, Entity entity, ItemStack itemstack) {
@@ -203,9 +195,9 @@ public class Block extends BlockBase implements IMaterial {
             getDrops(iblockdata, (WorldServer) world, blockposition, tileentity, entity, itemstack).forEach((itemstack1) -> {
                 a(world, blockposition, itemstack1);
             });
+            iblockdata.dropNaturally((WorldServer) world, blockposition, itemstack);
         }
 
-        iblockdata.dropNaturally(world, blockposition, itemstack);
     }
 
     public static void a(World world, BlockPosition blockposition, ItemStack itemstack) {
@@ -221,13 +213,13 @@ public class Block extends BlockBase implements IMaterial {
         }
     }
 
-    protected void dropExperience(World world, BlockPosition blockposition, int i) {
-        if (!world.isClientSide && world.getGameRules().getBoolean(GameRules.DO_TILE_DROPS)) {
+    protected void dropExperience(WorldServer worldserver, BlockPosition blockposition, int i) {
+        if (worldserver.getGameRules().getBoolean(GameRules.DO_TILE_DROPS)) {
             while (i > 0) {
                 int j = EntityExperienceOrb.getOrbValue(i);
 
                 i -= j;
-                world.addEntity(new EntityExperienceOrb(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, j));
+                worldserver.addEntity(new EntityExperienceOrb(worldserver, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, j));
             }
         }
 
@@ -254,7 +246,7 @@ public class Block extends BlockBase implements IMaterial {
 
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, @Nullable EntityLiving entityliving, ItemStack itemstack) {}
 
-    public boolean ak_() {
+    public boolean ai_() {
         return !this.material.isBuildable() && !this.material.isLiquid();
     }
 
@@ -324,11 +316,11 @@ public class Block extends BlockBase implements IMaterial {
 
     @Override
     public Item getItem() {
-        if (this.f == null) {
-            this.f = Item.getItemOf(this);
+        if (this.d == null) {
+            this.d = Item.getItemOf(this);
         }
 
-        return this.f;
+        return this.d;
     }
 
     public boolean o() {

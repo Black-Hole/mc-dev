@@ -6,6 +6,7 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -51,7 +52,7 @@ public class ServerConnection {
             Class oclass;
             LazyInitVar lazyinitvar;
 
-            if (Epoll.isAvailable() && this.e.k()) {
+            if (Epoll.isAvailable() && this.e.l()) {
                 oclass = EpollServerSocketChannel.class;
                 lazyinitvar = ServerConnection.b;
                 ServerConnection.LOGGER.info("Using epoll channel type");
@@ -70,11 +71,12 @@ public class ServerConnection {
                     }
 
                     channel.pipeline().addLast("timeout", new ReadTimeoutHandler(30)).addLast("legacy_query", new LegacyPingHandler(ServerConnection.this)).addLast("splitter", new PacketSplitter()).addLast("decoder", new PacketDecoder(EnumProtocolDirection.SERVERBOUND)).addLast("prepender", new PacketPrepender()).addLast("encoder", new PacketEncoder(EnumProtocolDirection.CLIENTBOUND));
-                    NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
+                    int j = ServerConnection.this.e.k();
+                    Object object = j > 0 ? new NetworkManagerServer(j) : new NetworkManager(EnumProtocolDirection.SERVERBOUND);
 
-                    ServerConnection.this.connectedChannels.add(networkmanager);
-                    channel.pipeline().addLast("packet_handler", networkmanager);
-                    networkmanager.setPacketListener(new HandshakeListener(ServerConnection.this.e, networkmanager));
+                    ServerConnection.this.connectedChannels.add(object);
+                    channel.pipeline().addLast("packet_handler", (ChannelHandler) object);
+                    ((NetworkManager) object).setPacketListener(new HandshakeListener(ServerConnection.this.e, (NetworkManager) object));
                 }
             }).group((EventLoopGroup) lazyinitvar.a()).localAddress(inetaddress, i)).bind().syncUninterruptibly());
         }
@@ -105,7 +107,7 @@ public class ServerConnection {
             while (iterator.hasNext()) {
                 NetworkManager networkmanager = (NetworkManager) iterator.next();
 
-                if (!networkmanager.h()) {
+                if (!networkmanager.i()) {
                     if (networkmanager.isConnected()) {
                         try {
                             networkmanager.a();

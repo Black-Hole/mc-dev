@@ -13,7 +13,7 @@ public class BlockNylium extends Block implements IBlockFragilePlantElement {
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
         int i = LightEngineLayer.a(iworldreader, iblockdata, blockposition, iblockdata1, blockposition1, EnumDirection.UP, iblockdata1.b((IBlockAccess) iworldreader, blockposition1));
 
-        return i < iworldreader.H();
+        return i < iworldreader.J();
     }
 
     @Override
@@ -40,10 +40,10 @@ public class BlockNylium extends Block implements IBlockFragilePlantElement {
         BlockPosition blockposition1 = blockposition.up();
 
         if (iblockdata1.a(Blocks.CRIMSON_NYLIUM)) {
-            WorldGenFeatureNetherForestVegetation.a(worldserver, random, blockposition1, BiomeDecoratorGroups.aY, 3, 1);
+            WorldGenFeatureNetherForestVegetation.a(worldserver, random, blockposition1, BiomeDecoratorGroups.a.k, 3, 1);
         } else if (iblockdata1.a(Blocks.WARPED_NYLIUM)) {
-            WorldGenFeatureNetherForestVegetation.a(worldserver, random, blockposition1, BiomeDecoratorGroups.aZ, 3, 1);
-            WorldGenFeatureNetherForestVegetation.a(worldserver, random, blockposition1, BiomeDecoratorGroups.ba, 3, 1);
+            WorldGenFeatureNetherForestVegetation.a(worldserver, random, blockposition1, BiomeDecoratorGroups.a.l, 3, 1);
+            WorldGenFeatureNetherForestVegetation.a(worldserver, random, blockposition1, BiomeDecoratorGroups.a.m, 3, 1);
             if (random.nextInt(8) == 0) {
                 WorldGenFeatureTwistingVines.a(worldserver, random, blockposition1, 3, 1, 2);
             }

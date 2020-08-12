@@ -9,8 +9,8 @@ public class EntityVex extends EntityMonster {
     private EntityInsentient c;
     @Nullable
     private BlockPosition d;
-    private boolean bv;
-    private int bw;
+    private boolean bo;
+    private int bp;
 
     public EntityVex(EntityTypes<? extends EntityVex> entitytypes, World world) {
         super(entitytypes, world);
@@ -30,8 +30,8 @@ public class EntityVex extends EntityMonster {
         super.tick();
         this.noclip = false;
         this.setNoGravity(true);
-        if (this.bv && --this.bw <= 0) {
-            this.bw = 20;
+        if (this.bo && --this.bp <= 0) {
+            this.bp = 20;
             this.damageEntity(DamageSource.STARVE, 1.0F);
         }
 
@@ -51,7 +51,7 @@ public class EntityVex extends EntityMonster {
     }
 
     public static AttributeProvider.Builder m() {
-        return EntityMonster.eS().a(GenericAttributes.MAX_HEALTH, 14.0D).a(GenericAttributes.ATTACK_DAMAGE, 4.0D);
+        return EntityMonster.eR().a(GenericAttributes.MAX_HEALTH, 14.0D).a(GenericAttributes.ATTACK_DAMAGE, 4.0D);
     }
 
     @Override
@@ -82,18 +82,18 @@ public class EntityVex extends EntityMonster {
             nbttagcompound.setInt("BoundZ", this.d.getZ());
         }
 
-        if (this.bv) {
-            nbttagcompound.setInt("LifeTicks", this.bw);
+        if (this.bo) {
+            nbttagcompound.setInt("LifeTicks", this.bp);
         }
 
     }
 
-    public EntityInsentient eL() {
+    public EntityInsentient eK() {
         return this.c;
     }
 
     @Nullable
-    public BlockPosition eM() {
+    public BlockPosition eL() {
         return this.d;
     }
 
@@ -133,8 +133,8 @@ public class EntityVex extends EntityMonster {
     }
 
     public void a(int i) {
-        this.bv = true;
-        this.bw = i;
+        this.bo = true;
+        this.bp = i;
     }
 
     @Override
@@ -153,16 +153,16 @@ public class EntityVex extends EntityMonster {
     }
 
     @Override
-    public float aO() {
+    public float aQ() {
         return 1.0F;
     }
 
     @Nullable
     @Override
-    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+    public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         this.a(difficultydamagescaler);
         this.b(difficultydamagescaler);
-        return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
+        return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
     @Override
@@ -209,7 +209,7 @@ public class EntityVex extends EntityMonster {
 
         @Override
         public void e() {
-            BlockPosition blockposition = EntityVex.this.eM();
+            BlockPosition blockposition = EntityVex.this.eL();
 
             if (blockposition == null) {
                 blockposition = EntityVex.this.getChunkCoordinates();
@@ -302,13 +302,13 @@ public class EntityVex extends EntityMonster {
                         Vec3D vec3d1 = EntityVex.this.getMot();
 
                         EntityVex.this.yaw = -((float) MathHelper.d(vec3d1.x, vec3d1.z)) * 57.295776F;
-                        EntityVex.this.aH = EntityVex.this.yaw;
+                        EntityVex.this.aA = EntityVex.this.yaw;
                     } else {
                         double d1 = EntityVex.this.getGoalTarget().locX() - EntityVex.this.locX();
                         double d2 = EntityVex.this.getGoalTarget().locZ() - EntityVex.this.locZ();
 
                         EntityVex.this.yaw = -((float) MathHelper.d(d1, d2)) * 57.295776F;
-                        EntityVex.this.aH = EntityVex.this.yaw;
+                        EntityVex.this.aA = EntityVex.this.yaw;
                     }
                 }
 

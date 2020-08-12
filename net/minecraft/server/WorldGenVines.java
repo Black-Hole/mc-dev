@@ -11,10 +11,10 @@ public class WorldGenVines extends WorldGenerator<WorldGenFeatureEmptyConfigurat
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = blockposition.i();
 
-        for (int i = blockposition.getY(); i < 256; ++i) {
+        for (int i = 64; i < 256; ++i) {
             blockposition_mutableblockposition.g(blockposition);
             blockposition_mutableblockposition.e(random.nextInt(4) - random.nextInt(4), 0, random.nextInt(4) - random.nextInt(4));
             blockposition_mutableblockposition.p(i);

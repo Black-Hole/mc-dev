@@ -5,11 +5,13 @@ import java.io.IOException;
 public class PacketPlayOutSpawnPosition implements Packet<PacketListenerPlayOut> {
 
     public BlockPosition position;
+    private float b;
 
     public PacketPlayOutSpawnPosition() {}
 
-    public PacketPlayOutSpawnPosition(BlockPosition blockposition) {
+    public PacketPlayOutSpawnPosition(BlockPosition blockposition, float f) {
         this.position = blockposition;
+        this.b = f;
     }
 
     @Override

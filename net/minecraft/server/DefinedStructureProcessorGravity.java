@@ -7,9 +7,9 @@ import javax.annotation.Nullable;
 public class DefinedStructureProcessorGravity extends DefinedStructureProcessor {
 
     public static final Codec<DefinedStructureProcessorGravity> a = RecordCodecBuilder.create((instance) -> {
-        return instance.group(HeightMap.Type.g.fieldOf("heightmap").withDefault(HeightMap.Type.WORLD_SURFACE_WG).forGetter((definedstructureprocessorgravity) -> {
+        return instance.group(HeightMap.Type.g.fieldOf("heightmap").orElse(HeightMap.Type.WORLD_SURFACE_WG).forGetter((definedstructureprocessorgravity) -> {
             return definedstructureprocessorgravity.b;
-        }), Codec.INT.fieldOf("offset").withDefault(0).forGetter((definedstructureprocessorgravity) -> {
+        }), Codec.INT.fieldOf("offset").orElse(0).forGetter((definedstructureprocessorgravity) -> {
             return definedstructureprocessorgravity.c;
         })).apply(instance, DefinedStructureProcessorGravity::new);
     });

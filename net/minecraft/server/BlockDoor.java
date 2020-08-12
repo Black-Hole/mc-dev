@@ -144,12 +144,14 @@ public class BlockDoor extends Block {
         }
     }
 
-    public void setDoor(World world, BlockPosition blockposition, boolean flag) {
-        IBlockData iblockdata = world.getType(blockposition);
+    public boolean h(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockDoor.OPEN);
+    }
 
+    public void setDoor(World world, IBlockData iblockdata, BlockPosition blockposition, boolean flag) {
         if (iblockdata.a((Block) this) && (Boolean) iblockdata.get(BlockDoor.OPEN) != flag) {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDoor.OPEN, flag), 10);
-            this.b(world, blockposition, flag);
+            this.a(world, blockposition, flag);
         }
     }
 
@@ -159,7 +161,7 @@ public class BlockDoor extends Block {
 
         if (block != this && flag1 != (Boolean) iblockdata.get(BlockDoor.POWERED)) {
             if (flag1 != (Boolean) iblockdata.get(BlockDoor.OPEN)) {
-                this.b(world, blockposition, flag1);
+                this.a(world, blockposition, flag1);
             }
 
             world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) iblockdata.set(BlockDoor.POWERED, flag1)).set(BlockDoor.OPEN, flag1), 2);
@@ -175,7 +177,7 @@ public class BlockDoor extends Block {
         return iblockdata.get(BlockDoor.HALF) == BlockPropertyDoubleBlockHalf.LOWER ? iblockdata1.d(iworldreader, blockposition1, EnumDirection.UP) : iblockdata1.a((Block) this);
     }
 
-    private void b(World world, BlockPosition blockposition, boolean flag) {
+    private void a(World world, BlockPosition blockposition, boolean flag) {
         world.a((EntityHuman) null, flag ? this.d() : this.c(), blockposition, 0);
     }
 
@@ -200,10 +202,10 @@ public class BlockDoor extends Block {
     }
 
     public static boolean a(World world, BlockPosition blockposition) {
-        return h(world.getType(blockposition));
+        return l(world.getType(blockposition));
     }
 
-    public static boolean h(IBlockData iblockdata) {
+    public static boolean l(IBlockData iblockdata) {
         return iblockdata.getBlock() instanceof BlockDoor && (iblockdata.getMaterial() == Material.WOOD || iblockdata.getMaterial() == Material.NETHER_WOOD);
     }
 }

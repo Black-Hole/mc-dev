@@ -8,7 +8,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
     private NonNullList<ItemStack> items;
     protected float a;
     protected float b;
-    protected int viewingCount;
+    public int viewingCount;
     private int j;
 
     protected TileEntityChest(TileEntityTypes<?> tileentitytypes) {
@@ -62,7 +62,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
         float f = 0.1F;
 
         if (this.viewingCount > 0 && this.a == 0.0F) {
-            this.a(SoundEffects.BLOCK_CHEST_OPEN);
+            this.playOpenSound(SoundEffects.BLOCK_CHEST_OPEN);
         }
 
         if (this.viewingCount == 0 && this.a > 0.0F || this.viewingCount > 0 && this.a < 1.0F) {
@@ -81,7 +81,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
             float f2 = 0.5F;
 
             if (this.a < 0.5F && f1 >= 0.5F) {
-                this.a(SoundEffects.BLOCK_CHEST_CLOSE);
+                this.playOpenSound(SoundEffects.BLOCK_CHEST_CLOSE);
             }
 
             if (this.a < 0.0F) {
@@ -120,7 +120,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
         return l;
     }
 
-    private void a(SoundEffect soundeffect) {
+    public void playOpenSound(SoundEffect soundeffect) {
         BlockPropertyChestType blockpropertychesttype = (BlockPropertyChestType) this.getBlock().get(BlockChest.c);
 
         if (blockpropertychesttype != BlockPropertyChestType.LEFT) {

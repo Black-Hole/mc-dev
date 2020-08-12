@@ -8,9 +8,9 @@ public class WorldGenFeatureOceanRuinConfiguration implements WorldGenFeatureCon
     public static final Codec<WorldGenFeatureOceanRuinConfiguration> a = RecordCodecBuilder.create((instance) -> {
         return instance.group(WorldGenFeatureOceanRuin.Temperature.c.fieldOf("biome_temp").forGetter((worldgenfeatureoceanruinconfiguration) -> {
             return worldgenfeatureoceanruinconfiguration.b;
-        }), Codec.FLOAT.fieldOf("large_probability").forGetter((worldgenfeatureoceanruinconfiguration) -> {
+        }), Codec.floatRange(0.0F, 1.0F).fieldOf("large_probability").forGetter((worldgenfeatureoceanruinconfiguration) -> {
             return worldgenfeatureoceanruinconfiguration.c;
-        }), Codec.FLOAT.fieldOf("cluster_probability").forGetter((worldgenfeatureoceanruinconfiguration) -> {
+        }), Codec.floatRange(0.0F, 1.0F).fieldOf("cluster_probability").forGetter((worldgenfeatureoceanruinconfiguration) -> {
             return worldgenfeatureoceanruinconfiguration.d;
         })).apply(instance, WorldGenFeatureOceanRuinConfiguration::new);
     });

@@ -24,7 +24,7 @@ public class ResourcePackLoader implements AutoCloseable {
     private final PackSource k;
 
     @Nullable
-    public static <T extends ResourcePackLoader> T a(String s, boolean flag, Supplier<IResourcePack> supplier, ResourcePackLoader.a<T> resourcepackloader_a, ResourcePackLoader.Position resourcepackloader_position, PackSource packsource) {
+    public static ResourcePackLoader a(String s, boolean flag, Supplier<IResourcePack> supplier, ResourcePackLoader.a resourcepackloader_a, ResourcePackLoader.Position resourcepackloader_position, PackSource packsource) {
         try {
             IResourcePack iresourcepack = (IResourcePack) supplier.get();
             Throwable throwable = null;
@@ -140,7 +140,7 @@ public class ResourcePackLoader implements AutoCloseable {
 
         private Position() {}
 
-        public <T, P extends ResourcePackLoader> int a(List<T> list, T t0, Function<T, P> function, boolean flag) {
+        public <T> int a(List<T> list, T t0, Function<T, ResourcePackLoader> function, boolean flag) {
             ResourcePackLoader.Position resourcepackloader_position = flag ? this.a() : this;
             ResourcePackLoader resourcepackloader;
             int i;
@@ -174,9 +174,9 @@ public class ResourcePackLoader implements AutoCloseable {
     }
 
     @FunctionalInterface
-    public interface a<T extends ResourcePackLoader> {
+    public interface a {
 
         @Nullable
-        T create(String s, boolean flag, Supplier<IResourcePack> supplier, IResourcePack iresourcepack, ResourcePackInfo resourcepackinfo, ResourcePackLoader.Position resourcepackloader_position, PackSource packsource);
+        ResourcePackLoader create(String s, boolean flag, Supplier<IResourcePack> supplier, IResourcePack iresourcepack, ResourcePackInfo resourcepackinfo, ResourcePackLoader.Position resourcepackloader_position, PackSource packsource);
     }
 }

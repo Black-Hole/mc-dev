@@ -13,7 +13,7 @@ public class DefinedStructureProcessorPredicates {
             return definedstructureprocessorpredicates.b;
         }), DefinedStructureRuleTest.c.fieldOf("location_predicate").forGetter((definedstructureprocessorpredicates) -> {
             return definedstructureprocessorpredicates.c;
-        }), PosRuleTest.c.fieldOf("position_predicate").forGetter((definedstructureprocessorpredicates) -> {
+        }), PosRuleTest.c.optionalFieldOf("position_predicate", PosRuleTestTrue.b).forGetter((definedstructureprocessorpredicates) -> {
             return definedstructureprocessorpredicates.d;
         }), IBlockData.b.fieldOf("output_state").forGetter((definedstructureprocessorpredicates) -> {
             return definedstructureprocessorpredicates.e;

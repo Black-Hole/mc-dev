@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import java.util.function.Supplier;
 
 public interface DefinedStructureStructureProcessorType<P extends DefinedStructureProcessor> {
 
@@ -14,6 +16,15 @@ public interface DefinedStructureStructureProcessorType<P extends DefinedStructu
     DefinedStructureStructureProcessorType<DefinedStructureProcessorBlackstoneReplace> h = a("blackstone_replace", DefinedStructureProcessorBlackstoneReplace.a);
     DefinedStructureStructureProcessorType<DefinedStructureProcessorLavaSubmergedBlock> i = a("lava_submerged_block", DefinedStructureProcessorLavaSubmergedBlock.a);
     Codec<DefinedStructureProcessor> j = IRegistry.STRUCTURE_PROCESSOR.dispatch("processor_type", DefinedStructureProcessor::a, DefinedStructureStructureProcessorType::codec);
+    Codec<ProcessorList> k = DefinedStructureStructureProcessorType.j.listOf().xmap(ProcessorList::new, ProcessorList::a);
+    Codec<ProcessorList> l = Codec.either(DefinedStructureStructureProcessorType.k.fieldOf("processors").codec(), DefinedStructureStructureProcessorType.k).xmap((either) -> {
+        return (ProcessorList) either.map((processorlist) -> {
+            return processorlist;
+        }, (processorlist) -> {
+            return processorlist;
+        });
+    }, Either::left);
+    Codec<Supplier<ProcessorList>> m = RegistryFileCodec.a(IRegistry.aw, DefinedStructureStructureProcessorType.l);
 
     Codec<P> codec();
 

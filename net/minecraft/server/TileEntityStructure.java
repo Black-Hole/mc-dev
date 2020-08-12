@@ -107,10 +107,10 @@ public class TileEntityStructure extends TileEntity {
         }
 
         this.seed = nbttagcompound.getLong("seed");
-        this.L();
+        this.K();
     }
 
-    private void L() {
+    private void K() {
         if (this.world != null) {
             BlockPosition blockposition = this.getPosition();
             IBlockData iblockdata = this.world.getType(blockposition);
@@ -329,7 +329,7 @@ public class TileEntityStructure extends TileEntity {
         if (this.usageMode == BlockPropertyStructureMode.SAVE && !this.world.isClientSide && this.structureName != null) {
             BlockPosition blockposition = this.getPosition().a((BaseBlockPosition) this.relativePosition);
             WorldServer worldserver = (WorldServer) this.world;
-            DefinedStructureManager definedstructuremanager = worldserver.r_();
+            DefinedStructureManager definedstructuremanager = worldserver.n();
 
             DefinedStructure definedstructure;
 
@@ -355,18 +355,17 @@ public class TileEntityStructure extends TileEntity {
         }
     }
 
-    public boolean E() {
-        return this.c(true);
+    public boolean a(WorldServer worldserver) {
+        return this.a(worldserver, true);
     }
 
     private static Random b(long i) {
         return i == 0L ? new Random(SystemUtils.getMonotonicMillis()) : new Random(i);
     }
 
-    public boolean c(boolean flag) {
-        if (this.usageMode == BlockPropertyStructureMode.LOAD && !this.world.isClientSide && this.structureName != null) {
-            WorldServer worldserver = (WorldServer) this.world;
-            DefinedStructureManager definedstructuremanager = worldserver.r_();
+    public boolean a(WorldServer worldserver, boolean flag) {
+        if (this.usageMode == BlockPropertyStructureMode.LOAD && this.structureName != null) {
+            DefinedStructureManager definedstructuremanager = worldserver.n();
 
             DefinedStructure definedstructure;
 
@@ -376,13 +375,13 @@ public class TileEntityStructure extends TileEntity {
                 return false;
             }
 
-            return definedstructure == null ? false : this.a(flag, definedstructure);
+            return definedstructure == null ? false : this.a(worldserver, flag, definedstructure);
         } else {
             return false;
         }
     }
 
-    public boolean a(boolean flag, DefinedStructure definedstructure) {
+    public boolean a(WorldServer worldserver, boolean flag, DefinedStructure definedstructure) {
         BlockPosition blockposition = this.getPosition();
 
         if (!UtilColor.b(definedstructure.b())) {
@@ -395,9 +394,9 @@ public class TileEntityStructure extends TileEntity {
         if (!flag1) {
             this.size = blockposition1;
             this.update();
-            IBlockData iblockdata = this.world.getType(blockposition);
+            IBlockData iblockdata = worldserver.getType(blockposition);
 
-            this.world.notify(blockposition, iblockdata, iblockdata, 3);
+            worldserver.notify(blockposition, iblockdata, iblockdata, 3);
         }
 
         if (flag && !flag1) {
@@ -411,24 +410,24 @@ public class TileEntityStructure extends TileEntity {
 
             BlockPosition blockposition2 = blockposition.a((BaseBlockPosition) this.relativePosition);
 
-            definedstructure.a((GeneratorAccess) this.world, blockposition2, definedstructureinfo, b(this.seed));
+            definedstructure.a((WorldAccess) worldserver, blockposition2, definedstructureinfo, b(this.seed));
             return true;
         }
     }
 
-    public void F() {
+    public void E() {
         if (this.structureName != null) {
             WorldServer worldserver = (WorldServer) this.world;
-            DefinedStructureManager definedstructuremanager = worldserver.r_();
+            DefinedStructureManager definedstructuremanager = worldserver.n();
 
             definedstructuremanager.d(this.structureName);
         }
     }
 
-    public boolean G() {
+    public boolean F() {
         if (this.usageMode == BlockPropertyStructureMode.LOAD && !this.world.isClientSide && this.structureName != null) {
             WorldServer worldserver = (WorldServer) this.world;
-            DefinedStructureManager definedstructuremanager = worldserver.r_();
+            DefinedStructureManager definedstructuremanager = worldserver.n();
 
             try {
                 return definedstructuremanager.b(this.structureName) != null;
@@ -440,19 +439,19 @@ public class TileEntityStructure extends TileEntity {
         }
     }
 
-    public boolean H() {
+    public boolean G() {
         return this.powered;
     }
 
-    public void d(boolean flag) {
+    public void c(boolean flag) {
         this.powered = flag;
     }
 
-    public void e(boolean flag) {
+    public void d(boolean flag) {
         this.showAir = flag;
     }
 
-    public void f(boolean flag) {
+    public void e(boolean flag) {
         this.showBoundingBox = flag;
     }
 

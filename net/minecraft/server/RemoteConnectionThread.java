@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,18 +11,24 @@ public abstract class RemoteConnectionThread implements Runnable {
     private static final AtomicInteger e = new AtomicInteger(0);
     protected volatile boolean a;
     protected final String b;
+    @Nullable
     protected Thread c;
 
     protected RemoteConnectionThread(String s) {
         this.b = s;
     }
 
-    public synchronized void a() {
-        this.a = true;
-        this.c = new Thread(this, this.b + " #" + RemoteConnectionThread.e.incrementAndGet());
-        this.c.setUncaughtExceptionHandler(new ThreadNamedUncaughtExceptionHandler(RemoteConnectionThread.LOGGER));
-        this.c.start();
-        RemoteConnectionThread.LOGGER.info("Thread {} started", this.b);
+    public synchronized boolean a() {
+        if (this.a) {
+            return true;
+        } else {
+            this.a = true;
+            this.c = new Thread(this, this.b + " #" + RemoteConnectionThread.e.incrementAndGet());
+            this.c.setUncaughtExceptionHandler(new ThreadNamedUncaughtExceptionHandler(RemoteConnectionThread.LOGGER));
+            this.c.start();
+            RemoteConnectionThread.LOGGER.info("Thread {} started", this.b);
+            return true;
+        }
     }
 
     public synchronized void b() {

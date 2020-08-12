@@ -9,7 +9,7 @@ public class WorldGenFeatureBlueIce extends WorldGenerator<WorldGenFeatureEmptyC
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         if (blockposition.getY() > generatoraccessseed.getSeaLevel() - 1) {
             return false;
         } else if (!generatoraccessseed.getType(blockposition).a(Blocks.WATER) && !generatoraccessseed.getType(blockposition.down()).a(Blocks.WATER)) {

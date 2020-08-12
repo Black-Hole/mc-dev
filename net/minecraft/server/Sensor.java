@@ -6,12 +6,14 @@ import java.util.Set;
 public abstract class Sensor<E extends EntityLiving> {
 
     private static final Random a = new Random();
-    private final int b;
-    private long c;
+    private static final PathfinderTargetCondition b = (new PathfinderTargetCondition()).a(16.0D).b().d();
+    private static final PathfinderTargetCondition c = (new PathfinderTargetCondition()).a(16.0D).b().d().e();
+    private final int d;
+    private long e;
 
     public Sensor(int i) {
-        this.b = i;
-        this.c = (long) Sensor.a.nextInt(i);
+        this.d = i;
+        this.e = (long) Sensor.a.nextInt(i);
     }
 
     public Sensor() {
@@ -19,8 +21,8 @@ public abstract class Sensor<E extends EntityLiving> {
     }
 
     public final void b(WorldServer worldserver, E e0) {
-        if (--this.c <= 0L) {
-            this.c = (long) this.b;
+        if (--this.e <= 0L) {
+            this.e = (long) this.d;
             this.a(worldserver, e0);
         }
 
@@ -29,4 +31,8 @@ public abstract class Sensor<E extends EntityLiving> {
     protected abstract void a(WorldServer worldserver, E e0);
 
     public abstract Set<MemoryModuleType<?>> a();
+
+    protected static boolean a(EntityLiving entityliving, EntityLiving entityliving1) {
+        return entityliving.getBehaviorController().b(MemoryModuleType.ATTACK_TARGET, (Object) entityliving1) ? Sensor.c.a(entityliving, entityliving1) : Sensor.b.a(entityliving, entityliving1);
+    }
 }

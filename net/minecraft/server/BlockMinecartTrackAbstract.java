@@ -53,14 +53,11 @@ public abstract class BlockMinecartTrackAbstract extends Block {
 
     @Override
     public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1, boolean flag) {
-        if (!world.isClientSide) {
+        if (!world.isClientSide && world.getType(blockposition).a((Block) this)) {
             BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(this.d());
 
-            if (a(blockposition, world, blockpropertytrackposition) && !world.isEmpty(blockposition)) {
-                if (!flag) {
-                    c(iblockdata, world, blockposition);
-                }
-
+            if (a(blockposition, world, blockpropertytrackposition)) {
+                c(iblockdata, world, blockposition);
                 world.a(blockposition, flag);
             } else {
                 this.a(iblockdata, world, blockposition, block);

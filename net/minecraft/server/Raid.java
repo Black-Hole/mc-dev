@@ -19,9 +19,9 @@ import javax.annotation.Nullable;
 
 public class Raid {
 
-    private static final ChatMessage a = new ChatMessage("event.minecraft.raid");
-    private static final ChatMessage b = new ChatMessage("event.minecraft.raid.victory");
-    private static final ChatMessage c = new ChatMessage("event.minecraft.raid.defeat");
+    private static final IChatBaseComponent a = new ChatMessage("event.minecraft.raid");
+    private static final IChatBaseComponent b = new ChatMessage("event.minecraft.raid.victory");
+    private static final IChatBaseComponent c = new ChatMessage("event.minecraft.raid.defeat");
     private static final IChatBaseComponent d = Raid.a.mutableCopy().c(" - ").addSibling(Raid.b);
     private static final IChatBaseComponent e = Raid.a.mutableCopy().c(" - ").addSibling(Raid.c);
     private final Map<Integer, EntityRaider> f = Maps.newHashMap();
@@ -127,7 +127,7 @@ public class Raid {
         return (entityplayer) -> {
             BlockPosition blockposition = entityplayer.getChunkCoordinates();
 
-            return entityplayer.isAlive() && this.world.c_(blockposition) == this;
+            return entityplayer.isAlive() && this.world.b_(blockposition) == this;
         };
     }
 
@@ -198,11 +198,11 @@ public class Raid {
                     return;
                 }
 
-                if (!this.world.b_(this.center)) {
+                if (!this.world.a_(this.center)) {
                     this.z();
                 }
 
-                if (!this.world.b_(this.center)) {
+                if (!this.world.a_(this.center)) {
                     if (this.groupsSpawned > 0) {
                         this.status = Raid.Status.LOSS;
                     } else {
@@ -248,7 +248,7 @@ public class Raid {
                         this.bossBattle.setProgress(MathHelper.a((float) (300 - this.preRaidTicks) / 300.0F, 0.0F, 1.0F));
                     } else if (this.preRaidTicks == 0 && this.groupsSpawned > 0) {
                         this.preRaidTicks = 300;
-                        this.bossBattle.a((IChatBaseComponent) Raid.a);
+                        this.bossBattle.a(Raid.a);
                         return;
                     }
                 }
@@ -260,10 +260,10 @@ public class Raid {
                         if (i <= 2) {
                             this.bossBattle.a((IChatBaseComponent) Raid.a.mutableCopy().c(" - ").addSibling(new ChatMessage("event.minecraft.raid.raiders_remaining", new Object[]{i})));
                         } else {
-                            this.bossBattle.a((IChatBaseComponent) Raid.a);
+                            this.bossBattle.a(Raid.a);
                         }
                     } else {
-                        this.bossBattle.a((IChatBaseComponent) Raid.a);
+                        this.bossBattle.a(Raid.a);
                     }
                 }
 
@@ -399,11 +399,11 @@ public class Raid {
                             hashset.add(entityraider);
                         }
 
-                        if (!this.world.b_(blockposition) && entityraider.dc() > 2400) {
-                            entityraider.b(entityraider.ff() + 1);
+                        if (!this.world.a_(blockposition) && entityraider.dc() > 2400) {
+                            entityraider.b(entityraider.fe() + 1);
                         }
 
-                        if (entityraider.ff() >= 30) {
+                        if (entityraider.fe() >= 30) {
                             hashset.add(entityraider);
                         }
                     }
@@ -462,7 +462,7 @@ public class Raid {
             for (int j1 = 0; j1 < l; ++j1) {
                 EntityRaider entityraider = (EntityRaider) raid_wave.g.a((World) this.world);
 
-                if (!flag && entityraider.eO()) {
+                if (!flag && entityraider.eN()) {
                     entityraider.setPatrolLeader(true);
                     this.a(i, entityraider);
                     flag = true;
@@ -510,8 +510,8 @@ public class Raid {
                 entityraider.setPosition((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 1.0D, (double) blockposition.getZ() + 0.5D);
                 entityraider.prepare(this.world, this.world.getDamageScaler(blockposition), EnumMobSpawn.EVENT, (GroupDataEntity) null, (NBTTagCompound) null);
                 entityraider.a(i, false);
-                entityraider.c(true);
-                this.world.addEntity(entityraider);
+                entityraider.setOnGround(true);
+                this.world.addAllEntities(entityraider);
             }
         }
 
@@ -547,7 +547,7 @@ public class Raid {
     }
 
     public void a(EntityRaider entityraider, boolean flag) {
-        Set<EntityRaider> set = (Set) this.raiders.get(entityraider.fd());
+        Set<EntityRaider> set = (Set) this.raiders.get(entityraider.fc());
 
         if (set != null) {
             boolean flag1 = set.remove(entityraider);
@@ -575,7 +575,7 @@ public class Raid {
         NBTTagList nbttaglist = (new EnumBannerPatternType.a()).a(EnumBannerPatternType.RHOMBUS_MIDDLE, EnumColor.CYAN).a(EnumBannerPatternType.STRIPE_BOTTOM, EnumColor.LIGHT_GRAY).a(EnumBannerPatternType.STRIPE_CENTER, EnumColor.GRAY).a(EnumBannerPatternType.BORDER, EnumColor.LIGHT_GRAY).a(EnumBannerPatternType.STRIPE_MIDDLE, EnumColor.BLACK).a(EnumBannerPatternType.HALF_HORIZONTAL, EnumColor.LIGHT_GRAY).a(EnumBannerPatternType.CIRCLE_MIDDLE, EnumColor.LIGHT_GRAY).a(EnumBannerPatternType.BORDER, EnumColor.BLACK).a();
 
         nbttagcompound.set("Patterns", nbttaglist);
-        itemstack.getOrCreateTag().setInt("HideFlags", 32);
+        itemstack.a(ItemStack.HideFlags.ADDITIONAL);
         itemstack.a((IChatBaseComponent) (new ChatMessage("block.minecraft.ominous_banner")).a(EnumChatFormat.GOLD));
         return itemstack;
     }
@@ -597,7 +597,7 @@ public class Raid {
             int k1 = this.world.a(HeightMap.Type.WORLD_SURFACE, i1, j1);
 
             blockposition_mutableblockposition.d(i1, k1, j1);
-            if ((!this.world.b_(blockposition_mutableblockposition) || i >= 2) && this.world.isAreaLoaded(blockposition_mutableblockposition.getX() - 10, blockposition_mutableblockposition.getY() - 10, blockposition_mutableblockposition.getZ() - 10, blockposition_mutableblockposition.getX() + 10, blockposition_mutableblockposition.getY() + 10, blockposition_mutableblockposition.getZ() + 10) && this.world.getChunkProvider().a(new ChunkCoordIntPair(blockposition_mutableblockposition)) && (SpawnerCreature.a(EntityPositionTypes.Surface.ON_GROUND, (IWorldReader) this.world, blockposition_mutableblockposition, EntityTypes.RAVAGER) || this.world.getType(blockposition_mutableblockposition.down()).a(Blocks.SNOW) && this.world.getType(blockposition_mutableblockposition).isAir())) {
+            if ((!this.world.a_(blockposition_mutableblockposition) || i >= 2) && this.world.isAreaLoaded(blockposition_mutableblockposition.getX() - 10, blockposition_mutableblockposition.getY() - 10, blockposition_mutableblockposition.getZ() - 10, blockposition_mutableblockposition.getX() + 10, blockposition_mutableblockposition.getY() + 10, blockposition_mutableblockposition.getZ() + 10) && this.world.getChunkProvider().a(new ChunkCoordIntPair(blockposition_mutableblockposition)) && (SpawnerCreature.a(EntityPositionTypes.Surface.ON_GROUND, (IWorldReader) this.world, blockposition_mutableblockposition, EntityTypes.RAVAGER) || this.world.getType(blockposition_mutableblockposition.down()).a(Blocks.SNOW) && this.world.getType(blockposition_mutableblockposition).isAir())) {
                 return blockposition_mutableblockposition;
             }
         }

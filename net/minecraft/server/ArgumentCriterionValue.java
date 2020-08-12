@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonObject;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -14,13 +13,8 @@ public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> ex
         return new ArgumentCriterionValue.b();
     }
 
-    public abstract static class c<T extends ArgumentCriterionValue<?>> implements ArgumentSerializer<T> {
-
-        public c() {}
-
-        public void a(T t0, PacketDataSerializer packetdataserializer) {}
-
-        public void a(T t0, JsonObject jsonobject) {}
+    static ArgumentCriterionValue.a b() {
+        return new ArgumentCriterionValue.a();
     }
 
     public static class a implements ArgumentCriterionValue<CriterionConditionValue.FloatRange> {
@@ -35,16 +29,6 @@ public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> ex
 
         public Collection<String> getExamples() {
             return ArgumentCriterionValue.a.a;
-        }
-
-        public static class a extends ArgumentCriterionValue.c<ArgumentCriterionValue.a> {
-
-            public a() {}
-
-            @Override
-            public ArgumentCriterionValue.a b(PacketDataSerializer packetdataserializer) {
-                return new ArgumentCriterionValue.a();
-            }
         }
     }
 
@@ -64,16 +48,6 @@ public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> ex
 
         public Collection<String> getExamples() {
             return ArgumentCriterionValue.b.a;
-        }
-
-        public static class a extends ArgumentCriterionValue.c<ArgumentCriterionValue.b> {
-
-            public a() {}
-
-            @Override
-            public ArgumentCriterionValue.b b(PacketDataSerializer packetdataserializer) {
-                return new ArgumentCriterionValue.b();
-            }
         }
     }
 }

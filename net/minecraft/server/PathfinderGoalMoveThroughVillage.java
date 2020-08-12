@@ -26,14 +26,14 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
         this.g = i;
         this.h = booleansupplier;
         this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
-        if (!this.h()) {
+        if (!PathfinderGoalUtil.a(entitycreature)) {
             throw new IllegalArgumentException("Unsupported mob for MoveThroughVillageGoal");
         }
     }
 
     @Override
     public boolean a() {
-        if (!this.h()) {
+        if (!PathfinderGoalUtil.a(this.a)) {
             return false;
         } else {
             this.g();
@@ -47,10 +47,10 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
                     return false;
                 } else {
                     Vec3D vec3d = RandomPositionGenerator.a(this.a, 15, 7, (blockposition1) -> {
-                        if (!worldserver.b_(blockposition1)) {
+                        if (!worldserver.a_(blockposition1)) {
                             return Double.NEGATIVE_INFINITY;
                         } else {
-                            Optional<BlockPosition> optional = worldserver.x().b(VillagePlaceType.b, this::a, blockposition1, 10, VillagePlace.Occupancy.IS_OCCUPIED);
+                            Optional<BlockPosition> optional = worldserver.y().c(VillagePlaceType.b, this::a, blockposition1, 10, VillagePlace.Occupancy.IS_OCCUPIED);
 
                             return !optional.isPresent() ? Double.NEGATIVE_INFINITY : -((BlockPosition) optional.get()).j(blockposition);
                         }
@@ -59,7 +59,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
                     if (vec3d == null) {
                         return false;
                     } else {
-                        Optional<BlockPosition> optional = worldserver.x().b(VillagePlaceType.b, this::a, new BlockPosition(vec3d), 10, VillagePlace.Occupancy.IS_OCCUPIED);
+                        Optional<BlockPosition> optional = worldserver.y().c(VillagePlaceType.b, this::a, new BlockPosition(vec3d), 10, VillagePlace.Occupancy.IS_OCCUPIED);
 
                         if (!optional.isPresent()) {
                             return false;
@@ -143,9 +143,5 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
             this.f.remove(0);
         }
 
-    }
-
-    private boolean h() {
-        return this.a.getNavigation() instanceof Navigation;
     }
 }

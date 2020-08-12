@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
@@ -10,27 +10,31 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 public abstract class WorldChunkManager implements BiomeManager.Provider {
 
     public static final Codec<WorldChunkManager> a;
-    private static final List<BiomeBase> e;
-    protected final Map<StructureGenerator<?>, Boolean> b = Maps.newHashMap();
-    protected final Set<IBlockData> c = Sets.newHashSet();
+    protected final Map<StructureGenerator<?>, Boolean> b;
+    protected final Set<IBlockData> c;
     protected final List<BiomeBase> d;
 
+    protected WorldChunkManager(Stream<Supplier<BiomeBase>> stream) {
+        this((List) stream.map(Supplier::get).collect(ImmutableList.toImmutableList()));
+    }
+
     protected WorldChunkManager(List<BiomeBase> list) {
+        this.b = Maps.newHashMap();
+        this.c = Sets.newHashSet();
         this.d = list;
     }
 
     protected abstract Codec<? extends WorldChunkManager> a();
 
     public List<BiomeBase> b() {
-        return WorldChunkManager.e;
-    }
-
-    public List<BiomeBase> c() {
         return this.d;
     }
 
@@ -62,12 +66,12 @@ public abstract class WorldChunkManager implements BiomeManager.Provider {
     }
 
     @Nullable
-    public BlockPosition a(int i, int j, int k, int l, List<BiomeBase> list, Random random) {
-        return this.a(i, j, k, l, 1, list, random, false);
+    public BlockPosition a(int i, int j, int k, int l, Predicate<BiomeBase> predicate, Random random) {
+        return this.a(i, j, k, l, 1, predicate, random, false);
     }
 
     @Nullable
-    public BlockPosition a(int i, int j, int k, int l, int i1, List<BiomeBase> list, Random random, boolean flag) {
+    public BlockPosition a(int i, int j, int k, int l, int i1, Predicate<BiomeBase> predicate, Random random, boolean flag) {
         int j1 = i >> 2;
         int k1 = k >> 2;
         int l1 = l >> 2;
@@ -92,7 +96,7 @@ public abstract class WorldChunkManager implements BiomeManager.Provider {
                     int k3 = j1 + j3;
                     int l3 = k1 + i3;
 
-                    if (list.contains(this.getBiome(k3, i2, l3))) {
+                    if (predicate.test(this.getBiome(k3, i2, l3))) {
                         if (blockposition == null || random.nextInt(j2 + 1) == 0) {
                             blockposition = new BlockPosition(k3 << 2, j, l3 << 2);
                             if (flag) {
@@ -112,19 +116,19 @@ public abstract class WorldChunkManager implements BiomeManager.Provider {
     public boolean a(StructureGenerator<?> structuregenerator) {
         return (Boolean) this.b.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
             return this.d.stream().anyMatch((biomebase) -> {
-                return biomebase.a(structuregenerator1);
+                return biomebase.e().a(structuregenerator1);
             });
         });
     }
 
-    public Set<IBlockData> d() {
+    public Set<IBlockData> c() {
         if (this.c.isEmpty()) {
             Iterator iterator = this.d.iterator();
 
             while (iterator.hasNext()) {
                 BiomeBase biomebase = (BiomeBase) iterator.next();
 
-                this.c.add(biomebase.A().a());
+                this.c.add(biomebase.e().e().a());
             }
         }
 
@@ -138,6 +142,5 @@ public abstract class WorldChunkManager implements BiomeManager.Provider {
         IRegistry.a(IRegistry.BIOME_SOURCE, "vanilla_layered", (Object) WorldChunkManagerOverworld.e);
         IRegistry.a(IRegistry.BIOME_SOURCE, "the_end", (Object) WorldChunkManagerTheEnd.e);
         a = IRegistry.BIOME_SOURCE.dispatchStable(WorldChunkManager::a, Function.identity());
-        e = Lists.newArrayList(new BiomeBase[]{Biomes.FOREST, Biomes.PLAINS, Biomes.TAIGA, Biomes.TAIGA_HILLS, Biomes.WOODED_HILLS, Biomes.JUNGLE, Biomes.JUNGLE_HILLS});
     }
 }

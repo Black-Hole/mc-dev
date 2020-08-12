@@ -5,7 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
+import java.nio.charset.StandardCharsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +13,7 @@ public class RemoteControlSession extends RemoteConnectionThread {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private boolean e;
-    private Socket f;
+    private final Socket f;
     private final byte[] g = new byte[1460];
     private final String h;
     private final IMinecraftServer i;
@@ -90,8 +90,6 @@ public class RemoteControlSession extends RemoteConnectionThread {
                             continue;
                     }
                 }
-            } catch (SocketTimeoutException sockettimeoutexception) {
-                return;
             } catch (IOException ioexception) {
                 return;
             } catch (Exception exception1) {
@@ -110,7 +108,7 @@ public class RemoteControlSession extends RemoteConnectionThread {
     private void a(int i, int j, String s) throws IOException {
         ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream(1248);
         DataOutputStream dataoutputstream = new DataOutputStream(bytearrayoutputstream);
-        byte[] abyte = s.getBytes("UTF-8");
+        byte[] abyte = s.getBytes(StandardCharsets.UTF_8);
 
         dataoutputstream.writeInt(Integer.reverseBytes(abyte.length + 10));
         dataoutputstream.writeInt(Integer.reverseBytes(i));
@@ -146,14 +144,11 @@ public class RemoteControlSession extends RemoteConnectionThread {
     }
 
     private void e() {
-        if (null != this.f) {
-            try {
-                this.f.close();
-            } catch (IOException ioexception) {
-                RemoteControlSession.LOGGER.warn("Failed to close socket", ioexception);
-            }
-
-            this.f = null;
+        try {
+            this.f.close();
+        } catch (IOException ioexception) {
+            RemoteControlSession.LOGGER.warn("Failed to close socket", ioexception);
         }
+
     }
 }

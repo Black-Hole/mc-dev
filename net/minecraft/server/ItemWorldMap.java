@@ -201,7 +201,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
     }
 
     private static boolean a(BiomeBase[] abiomebase, int i, int j, int k) {
-        return abiomebase[j * i + k * i * 128 * i].k() >= 0.0F;
+        return abiomebase[j * i + k * i * 128 * i].h() >= 0.0F;
     }
 
     public static void applySepiaFilter(WorldServer worldserver, ItemStack itemstack) {
@@ -264,7 +264,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                             int k1 = 3;
                             MaterialMapColor materialmapcolor = MaterialMapColor.b;
 
-                            if (biomebase.k() < 0.0F) {
+                            if (biomebase.h() < 0.0F) {
                                 materialmapcolor = MaterialMapColor.q;
                                 if (j1 > 7 && i1 % 2 == 0) {
                                     k1 = (l + (int) (MathHelper.sin((float) i1 + 0.0F) * 7.0F)) / 8 % 5;
@@ -336,6 +336,9 @@ public class ItemWorldMap extends ItemWorldMapBase {
         if (nbttagcompound != null && nbttagcompound.hasKeyOfType("map_scale_direction", 99)) {
             a(itemstack, world, nbttagcompound.getInt("map_scale_direction"));
             nbttagcompound.remove("map_scale_direction");
+        } else if (nbttagcompound != null && nbttagcompound.hasKeyOfType("map_to_lock", 1) && nbttagcompound.getBoolean("map_to_lock")) {
+            a(world, itemstack);
+            nbttagcompound.remove("map_to_lock");
         }
 
     }
@@ -349,19 +352,15 @@ public class ItemWorldMap extends ItemWorldMapBase {
 
     }
 
-    @Nullable
-    public static ItemStack a(World world, ItemStack itemstack) {
+    public static void a(World world, ItemStack itemstack) {
         WorldMap worldmap = getSavedMap(itemstack, world);
 
         if (worldmap != null) {
-            ItemStack itemstack1 = itemstack.cloneItemStack();
-            WorldMap worldmap1 = a(itemstack1, world, 0, 0, worldmap.scale, worldmap.track, worldmap.unlimitedTracking, worldmap.map);
+            WorldMap worldmap1 = a(itemstack, world, 0, 0, worldmap.scale, worldmap.track, worldmap.unlimitedTracking, worldmap.map);
 
             worldmap1.a(worldmap);
-            return itemstack1;
-        } else {
-            return null;
         }
+
     }
 
     @Override
@@ -369,13 +368,13 @@ public class ItemWorldMap extends ItemWorldMapBase {
         IBlockData iblockdata = itemactioncontext.getWorld().getType(itemactioncontext.getClickPosition());
 
         if (iblockdata.a((Tag) TagsBlock.BANNERS)) {
-            if (!itemactioncontext.e.isClientSide) {
+            if (!itemactioncontext.getWorld().isClientSide) {
                 WorldMap worldmap = getSavedMap(itemactioncontext.getItemStack(), itemactioncontext.getWorld());
 
                 worldmap.a((GeneratorAccess) itemactioncontext.getWorld(), itemactioncontext.getClickPosition());
             }
 
-            return EnumInteractionResult.a(itemactioncontext.e.isClientSide);
+            return EnumInteractionResult.a(itemactioncontext.getWorld().isClientSide);
         } else {
             return super.a(itemactioncontext);
         }

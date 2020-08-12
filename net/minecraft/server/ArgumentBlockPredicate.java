@@ -36,14 +36,14 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
         if (argumentblock.getBlockData() != null) {
             ArgumentBlockPredicate.a argumentblockpredicate_a = new ArgumentBlockPredicate.a(argumentblock.getBlockData(), argumentblock.getStateMap().keySet(), argumentblock.c());
 
-            return (tagregistry) -> {
+            return (itagregistry) -> {
                 return argumentblockpredicate_a;
             };
         } else {
             MinecraftKey minecraftkey = argumentblock.d();
 
-            return (tagregistry) -> {
-                Tag<Block> tag = tagregistry.getBlockTags().a(minecraftkey);
+            return (itagregistry) -> {
+                Tag<Block> tag = itagregistry.getBlockTags().a(minecraftkey);
 
                 if (tag == null) {
                     throw ArgumentBlockPredicate.b.create(minecraftkey.toString());
@@ -70,7 +70,7 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
             ;
         }
 
-        return argumentblock.a(suggestionsbuilder, TagsBlock.b());
+        return argumentblock.a(suggestionsbuilder, TagsBlock.a());
     }
 
     public Collection<String> getExamples() {
@@ -170,6 +170,6 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
 
     public interface b {
 
-        Predicate<ShapeDetectorBlock> create(TagRegistry tagregistry) throws CommandSyntaxException;
+        Predicate<ShapeDetectorBlock> create(ITagRegistry itagregistry) throws CommandSyntaxException;
     }
 }

@@ -66,7 +66,7 @@ public class BlockGrindstone extends BlockAttachable {
     public static final VoxelShape an = VoxelShapes.a(BlockGrindstone.aj, BlockGrindstone.al);
     public static final VoxelShape ao = VoxelShapes.a(BlockGrindstone.am, BlockGrindstone.an);
     public static final VoxelShape ap = VoxelShapes.a(BlockGrindstone.ao, Block.a(2.0D, 0.0D, 4.0D, 14.0D, 12.0D, 12.0D));
-    private static final ChatMessage aD = new ChatMessage("container.grindstone_title");
+    private static final IChatBaseComponent aD = new ChatMessage("container.grindstone_title");
 
     protected BlockGrindstone(BlockBase.Info blockbase_info) {
         super(blockbase_info);

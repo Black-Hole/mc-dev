@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import javax.annotation.Nullable;
 
@@ -60,17 +61,19 @@ public final class ChunkGeneratorAbstract extends ChunkGenerator {
     protected final IBlockData f;
     protected final IBlockData g;
     private final long w;
-    protected final GeneratorSettingBase h;
+    protected final Supplier<GeneratorSettingBase> h;
     private final int x;
 
-    public ChunkGeneratorAbstract(WorldChunkManager worldchunkmanager, long i, GeneratorSettingBase generatorsettingbase) {
-        this(worldchunkmanager, worldchunkmanager, i, generatorsettingbase);
+    public ChunkGeneratorAbstract(WorldChunkManager worldchunkmanager, long i, Supplier<GeneratorSettingBase> supplier) {
+        this(worldchunkmanager, worldchunkmanager, i, supplier);
     }
 
-    private ChunkGeneratorAbstract(WorldChunkManager worldchunkmanager, WorldChunkManager worldchunkmanager1, long i, GeneratorSettingBase generatorsettingbase) {
-        super(worldchunkmanager, worldchunkmanager1, generatorsettingbase.a(), i);
+    private ChunkGeneratorAbstract(WorldChunkManager worldchunkmanager, WorldChunkManager worldchunkmanager1, long i, Supplier<GeneratorSettingBase> supplier) {
+        super(worldchunkmanager, worldchunkmanager1, ((GeneratorSettingBase) supplier.get()).a(), i);
         this.w = i;
-        this.h = generatorsettingbase;
+        GeneratorSettingBase generatorsettingbase = (GeneratorSettingBase) supplier.get();
+
+        this.h = supplier;
         NoiseSettings noisesettings = generatorsettingbase.b();
 
         this.x = noisesettings.a();
@@ -104,8 +107,8 @@ public final class ChunkGeneratorAbstract extends ChunkGenerator {
         return ChunkGeneratorAbstract.d;
     }
 
-    public boolean a(long i, GeneratorSettingBase.a generatorsettingbase_a) {
-        return this.w == i && this.h.a(generatorsettingbase_a);
+    public boolean a(long i, ResourceKey<GeneratorSettingBase> resourcekey) {
+        return this.w == i && ((GeneratorSettingBase) this.h.get()).a(resourcekey);
     }
 
     private double a(int i, int j, int k, double d0, double d1, double d2, double d3) {
@@ -154,7 +157,7 @@ public final class ChunkGeneratorAbstract extends ChunkGenerator {
     }
 
     private void a(double[] adouble, int i, int j) {
-        NoiseSettings noisesettings = this.h.b();
+        NoiseSettings noisesettings = ((GeneratorSettingBase) this.h.get()).b();
         double d0;
         double d1;
         double d2;
@@ -173,13 +176,13 @@ public final class ChunkGeneratorAbstract extends ChunkGenerator {
             float f2 = 0.0F;
             boolean flag = true;
             int k = this.getSeaLevel();
-            float f3 = this.b.getBiome(i, k, j).k();
+            float f3 = this.b.getBiome(i, k, j).h();
 
             for (int l = -2; l <= 2; ++l) {
                 for (int i1 = -2; i1 <= 2; ++i1) {
                     BiomeBase biomebase = this.b.getBiome(i + l, k, j + i1);
-                    float f4 = biomebase.k();
-                    float f5 = biomebase.o();
+                    float f4 = biomebase.h();
+                    float f5 = biomebase.j();
                     float f6;
                     float f7;
 
@@ -365,8 +368,9 @@ public final class ChunkGeneratorAbstract extends ChunkGenerator {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
         int i = ichunkaccess.getPos().d();
         int j = ichunkaccess.getPos().e();
-        int k = this.h.f();
-        int l = this.x - 1 - this.h.e();
+        GeneratorSettingBase generatorsettingbase = (GeneratorSettingBase) this.h.get();
+        int k = generatorsettingbase.f();
+        int l = this.x - 1 - generatorsettingbase.e();
         boolean flag = true;
         boolean flag1 = l + 4 >= 0 && l < this.x;
         boolean flag2 = k + 4 >= 0 && k < this.x;
@@ -545,7 +549,7 @@ public final class ChunkGeneratorAbstract extends ChunkGenerator {
                                 if (iblockdata != ChunkGeneratorAbstract.k) {
                                     if (iblockdata.f() != 0) {
                                         blockposition_mutableblockposition.d(j3, j2, i4);
-                                        protochunk.j(blockposition_mutableblockposition);
+                                        protochunk.k(blockposition_mutableblockposition);
                                     }
 
                                     chunksection.setType(k3, k2, j4, iblockdata, false);
@@ -593,11 +597,11 @@ public final class ChunkGeneratorAbstract extends ChunkGenerator {
 
     @Override
     public int getSeaLevel() {
-        return this.h.g();
+        return ((GeneratorSettingBase) this.h.get()).g();
     }
 
     @Override
-    public List<BiomeBase.BiomeMeta> getMobsFor(BiomeBase biomebase, StructureManager structuremanager, EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
+    public List<BiomeSettingsMobs.c> getMobsFor(BiomeBase biomebase, StructureManager structuremanager, EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
         if (structuremanager.a(blockposition, true, StructureGenerator.SWAMP_HUT).e()) {
             if (enumcreaturetype == EnumCreatureType.MONSTER) {
                 return StructureGenerator.SWAMP_HUT.c();
@@ -627,7 +631,7 @@ public final class ChunkGeneratorAbstract extends ChunkGenerator {
 
     @Override
     public void addMobs(RegionLimitedWorldAccess regionlimitedworldaccess) {
-        if (!this.h.h()) {
+        if (!((GeneratorSettingBase) this.h.get()).h()) {
             int i = regionlimitedworldaccess.a();
             int j = regionlimitedworldaccess.b();
             BiomeBase biomebase = regionlimitedworldaccess.getBiome((new ChunkCoordIntPair(i, j)).l());

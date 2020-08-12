@@ -9,7 +9,7 @@ public class WorldProviderNormal {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(i, 0, j);
         BiomeBase biomebase = worldserver.getBiome(blockposition_mutableblockposition);
         boolean flag1 = worldserver.getDimensionManager().hasCeiling();
-        IBlockData iblockdata = biomebase.A().a();
+        IBlockData iblockdata = biomebase.e().e().a();
 
         if (flag && !iblockdata.getBlock().a((Tag) TagsBlock.VALID_SPAWN)) {
             return null;

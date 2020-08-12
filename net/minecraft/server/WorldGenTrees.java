@@ -142,7 +142,7 @@ public class WorldGenTrees extends WorldGenerator<WorldGenFeatureTreeConfigurati
         b(iworldwriter, blockposition, iblockdata);
     }
 
-    public final boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
+    public final boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureTreeConfiguration worldgenfeaturetreeconfiguration) {
         Set<BlockPosition> set = Sets.newHashSet();
         Set<BlockPosition> set1 = Sets.newHashSet();
         Set<BlockPosition> set2 = Sets.newHashSet();

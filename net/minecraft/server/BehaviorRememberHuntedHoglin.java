@@ -10,7 +10,7 @@ public class BehaviorRememberHuntedHoglin<E extends EntityPiglin> extends Behavi
 
     protected void a(WorldServer worldserver, E e0, long i) {
         if (this.a(e0)) {
-            PiglinAI.j(e0);
+            PiglinAI.c((EntityPiglinAbstract) e0);
         }
 
     }

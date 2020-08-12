@@ -18,12 +18,12 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     @Override
     public void movementTick() {
         this.dz();
-        this.eR();
+        this.eQ();
         super.movementTick();
     }
 
-    protected void eR() {
-        float f = this.aO();
+    protected void eQ() {
+        float f = this.aQ();
 
         if (f > 0.5F) {
             this.ticksFarFromPlayer += 2;
@@ -71,25 +71,25 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         return 0.5F - iworldreader.y(blockposition);
     }
 
-    public static boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, Random random) {
-        if (generatoraccess.getBrightness(EnumSkyBlock.SKY, blockposition) > random.nextInt(32)) {
+    public static boolean a(WorldAccess worldaccess, BlockPosition blockposition, Random random) {
+        if (worldaccess.getBrightness(EnumSkyBlock.SKY, blockposition) > random.nextInt(32)) {
             return false;
         } else {
-            int i = generatoraccess.getMinecraftWorld().T() ? generatoraccess.c(blockposition, 10) : generatoraccess.getLightLevel(blockposition);
+            int i = worldaccess.getMinecraftWorld().V() ? worldaccess.c(blockposition, 10) : worldaccess.getLightLevel(blockposition);
 
             return i <= random.nextInt(8);
         }
     }
 
-    public static boolean c(EntityTypes<? extends EntityMonster> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
-        return generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL && a(generatoraccess, blockposition, random) && a(entitytypes, generatoraccess, enummobspawn, blockposition, random);
+    public static boolean b(EntityTypes<? extends EntityMonster> entitytypes, WorldAccess worldaccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+        return worldaccess.getDifficulty() != EnumDifficulty.PEACEFUL && a(worldaccess, blockposition, random) && a(entitytypes, (GeneratorAccess) worldaccess, enummobspawn, blockposition, random);
     }
 
-    public static boolean d(EntityTypes<? extends EntityMonster> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
+    public static boolean c(EntityTypes<? extends EntityMonster> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
         return generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL && a(entitytypes, generatoraccess, enummobspawn, blockposition, random);
     }
 
-    public static AttributeProvider.Builder eS() {
+    public static AttributeProvider.Builder eR() {
         return EntityInsentient.p().a(GenericAttributes.ATTACK_DAMAGE);
     }
 

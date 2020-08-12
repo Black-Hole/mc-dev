@@ -8,11 +8,11 @@ public class WorldGenDesertPyramidPiece extends WorldGenScatteredPiece {
     private final boolean[] e = new boolean[4];
 
     public WorldGenDesertPyramidPiece(Random random, int i, int j) {
-        super(WorldGenFeatureStructurePieceType.N, random, i, 64, j, 21, 15, 21);
+        super(WorldGenFeatureStructurePieceType.L, random, i, 64, j, 21, 15, 21);
     }
 
     public WorldGenDesertPyramidPiece(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
-        super(WorldGenFeatureStructurePieceType.N, nbttagcompound);
+        super(WorldGenFeatureStructurePieceType.L, nbttagcompound);
         this.e[0] = nbttagcompound.getBoolean("hasPlacedChest0");
         this.e[1] = nbttagcompound.getBoolean("hasPlacedChest1");
         this.e[2] = nbttagcompound.getBoolean("hasPlacedChest2");

@@ -94,10 +94,6 @@ public class ChunkCoordIntPair {
         return this.z & 31;
     }
 
-    public BlockPosition a(int i, int j, int k) {
-        return new BlockPosition((this.x << 4) + i, j, (this.z << 4) + k);
-    }
-
     public String toString() {
         return "[" + this.x + ", " + this.z + "]";
     }

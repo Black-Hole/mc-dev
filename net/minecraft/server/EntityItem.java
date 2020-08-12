@@ -58,10 +58,11 @@ public class EntityItem extends Entity {
             this.lastY = this.locY();
             this.lastZ = this.locZ();
             Vec3D vec3d = this.getMot();
+            float f = this.getHeadHeight() - 0.11111111F;
 
-            if (this.a((Tag) TagsFluid.WATER)) {
+            if (this.isInWater() && this.b((Tag) TagsFluid.WATER) > (double) f) {
                 this.u();
-            } else if (this.a((Tag) TagsFluid.LAVA)) {
+            } else if (this.aP() && this.b((Tag) TagsFluid.LAVA) > (double) f) {
                 this.v();
             } else if (!this.isNoGravity()) {
                 this.setMot(this.getMot().add(0.0D, -0.04D, 0.0D));
@@ -72,21 +73,25 @@ public class EntityItem extends Entity {
             } else {
                 this.noclip = !this.world.getCubes(this);
                 if (this.noclip) {
-                    this.k(this.locX(), (this.getBoundingBox().minY + this.getBoundingBox().maxY) / 2.0D, this.locZ());
+                    this.l(this.locX(), (this.getBoundingBox().minY + this.getBoundingBox().maxY) / 2.0D, this.locZ());
                 }
             }
 
-            if (!this.onGround || b(this.getMot()) > 9.999999747378752E-6D || (this.ticksLived + this.getId()) % 4 == 0) {
+            if (!this.onGround || c(this.getMot()) > 9.999999747378752E-6D || (this.ticksLived + this.getId()) % 4 == 0) {
                 this.move(EnumMoveType.SELF, this.getMot());
-                float f = 0.98F;
+                float f1 = 0.98F;
 
                 if (this.onGround) {
-                    f = this.world.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().getFrictionFactor() * 0.98F;
+                    f1 = this.world.getType(new BlockPosition(this.locX(), this.locY() - 1.0D, this.locZ())).getBlock().getFrictionFactor() * 0.98F;
                 }
 
-                this.setMot(this.getMot().d((double) f, 0.98D, (double) f));
+                this.setMot(this.getMot().d((double) f1, 0.98D, (double) f1));
                 if (this.onGround) {
-                    this.setMot(this.getMot().d(1.0D, -0.5D, 1.0D));
+                    Vec3D vec3d1 = this.getMot();
+
+                    if (vec3d1.y < 0.0D) {
+                        this.setMot(vec3d1.d(1.0D, -0.5D, 1.0D));
+                    }
                 }
             }
 
@@ -107,7 +112,7 @@ public class EntityItem extends Entity {
                 ++this.age;
             }
 
-            this.impulse |= this.aG();
+            this.impulse |= this.aJ();
             if (!this.world.isClientSide) {
                 double d0 = this.getMot().d(vec3d).g();
 
@@ -302,14 +307,14 @@ public class EntityItem extends Entity {
     }
 
     @Override
-    public boolean bH() {
+    public boolean bK() {
         return false;
     }
 
     @Nullable
     @Override
-    public Entity a(WorldServer worldserver) {
-        Entity entity = super.a(worldserver);
+    public Entity b(WorldServer worldserver) {
+        Entity entity = super.b(worldserver);
 
         if (!this.world.isClientSide && entity instanceof EntityItem) {
             ((EntityItem) entity).mergeNearby();
@@ -383,7 +388,7 @@ public class EntityItem extends Entity {
     }
 
     @Override
-    public Packet<?> O() {
+    public Packet<?> P() {
         return new PacketPlayOutSpawnEntity(this);
     }
 }

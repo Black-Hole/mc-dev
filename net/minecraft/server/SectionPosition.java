@@ -52,7 +52,35 @@ public class SectionPosition extends BaseBlockPosition {
         int j = b(blockposition.getY());
         int k = b(blockposition.getZ());
 
-        return (short) (i << 8 | k << 4 | j);
+        return (short) (i << 8 | k << 4 | j << 0);
+    }
+
+    public static int a(short short0) {
+        return short0 >>> 8 & 15;
+    }
+
+    public static int b(short short0) {
+        return short0 >>> 0 & 15;
+    }
+
+    public static int c(short short0) {
+        return short0 >>> 4 & 15;
+    }
+
+    public int d(short short0) {
+        return this.d() + a(short0);
+    }
+
+    public int e(short short0) {
+        return this.e() + b(short0);
+    }
+
+    public int f(short short0) {
+        return this.f() + c(short0);
+    }
+
+    public BlockPosition g(short short0) {
+        return new BlockPosition(this.d(short0), this.e(short0), this.f(short0));
     }
 
     public static int c(int i) {

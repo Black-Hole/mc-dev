@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
 import com.mojang.datafixers.util.Either;
+import it.unimi.dsi.fastutil.shorts.ShortArraySet;
+import it.unimi.dsi.fastutil.shorts.ShortSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -27,15 +29,15 @@ public class PlayerChunk {
     private int ticketLevel;
     private int n;
     private final ChunkCoordIntPair location;
-    private final short[] dirtyBlocks;
-    private int dirtyCount;
+    private boolean p;
+    private final ShortSet[] dirtyBlocks;
     private int r;
     private int s;
-    private int t;
     private final LightEngine lightEngine;
-    private final PlayerChunk.c v;
+    private final PlayerChunk.c u;
     public final PlayerChunk.d players;
     private boolean hasBeenLoaded;
+    private boolean x;
 
     public PlayerChunk(ChunkCoordIntPair chunkcoordintpair, int i, LightEngine lightengine, PlayerChunk.c playerchunk_c, PlayerChunk.d playerchunk_d) {
         this.statusFutures = new AtomicReferenceArray(PlayerChunk.CHUNK_STATUSES.size());
@@ -43,10 +45,10 @@ public class PlayerChunk {
         this.tickingFuture = PlayerChunk.UNLOADED_CHUNK_FUTURE;
         this.entityTickingFuture = PlayerChunk.UNLOADED_CHUNK_FUTURE;
         this.chunkSave = CompletableFuture.completedFuture((Object) null);
-        this.dirtyBlocks = new short[64];
+        this.dirtyBlocks = new ShortSet[16];
         this.location = chunkcoordintpair;
         this.lightEngine = lightengine;
-        this.v = playerchunk_c;
+        this.u = playerchunk_c;
         this.players = playerchunk_d;
         this.oldTicketLevel = PlayerChunkMap.GOLDEN_TICKET + 1;
         this.ticketLevel = this.oldTicketLevel;
@@ -106,23 +108,18 @@ public class PlayerChunk {
         return this.chunkSave;
     }
 
-    public void a(int i, int j, int k) {
+    public void a(BlockPosition blockposition) {
         Chunk chunk = this.getChunk();
 
         if (chunk != null) {
-            this.r |= 1 << (j >> 4);
-            if (this.dirtyCount < 64) {
-                short short0 = (short) (i << 12 | k << 8 | j);
+            byte b0 = (byte) SectionPosition.a(blockposition.getY());
 
-                for (int l = 0; l < this.dirtyCount; ++l) {
-                    if (this.dirtyBlocks[l] == short0) {
-                        return;
-                    }
-                }
-
-                this.dirtyBlocks[this.dirtyCount++] = short0;
+            if (this.dirtyBlocks[b0] == null) {
+                this.p = true;
+                this.dirtyBlocks[b0] = new ShortArraySet();
             }
 
+            this.dirtyBlocks[b0].add(SectionPosition.b(blockposition));
         }
     }
 
@@ -132,58 +129,67 @@ public class PlayerChunk {
         if (chunk != null) {
             chunk.setNeedsSaving(true);
             if (enumskyblock == EnumSkyBlock.SKY) {
-                this.t |= 1 << i - -1;
-            } else {
                 this.s |= 1 << i - -1;
+            } else {
+                this.r |= 1 << i - -1;
             }
 
         }
     }
 
     public void a(Chunk chunk) {
-        if (this.dirtyCount != 0 || this.t != 0 || this.s != 0) {
+        if (this.p || this.s != 0 || this.r != 0) {
             World world = chunk.getWorld();
+            int i = 0;
 
-            if (this.dirtyCount < 64 && (this.t != 0 || this.s != 0)) {
-                this.a(new PacketPlayOutLightUpdate(chunk.getPos(), this.lightEngine, this.t, this.s, false), true);
-                this.t = 0;
-                this.s = 0;
-            }
-
-            int i;
             int j;
-            int k;
 
-            if (this.dirtyCount == 1) {
-                i = (this.dirtyBlocks[0] >> 12 & 15) + this.location.x * 16;
-                j = this.dirtyBlocks[0] & 255;
-                k = (this.dirtyBlocks[0] >> 8 & 15) + this.location.z * 16;
-                BlockPosition blockposition = new BlockPosition(i, j, k);
+            for (j = 0; j < this.dirtyBlocks.length; ++j) {
+                i += this.dirtyBlocks[j] != null ? this.dirtyBlocks[j].size() : 0;
+            }
 
-                this.a(new PacketPlayOutBlockChange(world, blockposition), false);
-                if (world.getType(blockposition).getBlock().isTileEntity()) {
-                    this.a(world, blockposition);
-                }
-            } else if (this.dirtyCount == 64) {
-                this.a(new PacketPlayOutMapChunk(chunk, this.r, false), false);
-            } else if (this.dirtyCount != 0) {
-                this.a(new PacketPlayOutMultiBlockChange(this.dirtyCount, this.dirtyBlocks, chunk), false);
+            this.x |= i >= 64;
+            if (this.s != 0 || this.r != 0) {
+                this.a(new PacketPlayOutLightUpdate(chunk.getPos(), this.lightEngine, this.s, this.r, true), !this.x);
+                this.s = 0;
+                this.r = 0;
+            }
 
-                for (i = 0; i < this.dirtyCount; ++i) {
-                    j = (this.dirtyBlocks[i] >> 12 & 15) + this.location.x * 16;
-                    k = this.dirtyBlocks[i] & 255;
-                    int l = (this.dirtyBlocks[i] >> 8 & 15) + this.location.z * 16;
-                    BlockPosition blockposition1 = new BlockPosition(j, k, l);
+            for (j = 0; j < this.dirtyBlocks.length; ++j) {
+                ShortSet shortset = this.dirtyBlocks[j];
 
-                    if (world.getType(blockposition1).getBlock().isTileEntity()) {
-                        this.a(world, blockposition1);
+                if (shortset != null) {
+                    SectionPosition sectionposition = SectionPosition.a(chunk.getPos(), j);
+
+                    if (shortset.size() == 1) {
+                        BlockPosition blockposition = sectionposition.g(shortset.iterator().nextShort());
+                        IBlockData iblockdata = world.getType(blockposition);
+
+                        this.a(new PacketPlayOutBlockChange(blockposition, iblockdata), false);
+                        this.a(world, blockposition, iblockdata);
+                    } else {
+                        ChunkSection chunksection = chunk.getSections()[sectionposition.getY()];
+                        PacketPlayOutMultiBlockChange packetplayoutmultiblockchange = new PacketPlayOutMultiBlockChange(sectionposition, shortset, chunksection, this.x);
+
+                        this.a(packetplayoutmultiblockchange, false);
+                        packetplayoutmultiblockchange.a((blockposition1, iblockdata1) -> {
+                            this.a(world, blockposition1, iblockdata1);
+                        });
                     }
+
+                    this.dirtyBlocks[j] = null;
                 }
             }
 
-            this.dirtyCount = 0;
-            this.r = 0;
+            this.p = false;
         }
+    }
+
+    private void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        if (iblockdata.getBlock().isTileEntity()) {
+            this.a(world, blockposition);
+        }
+
     }
 
     private void a(World world, BlockPosition blockposition) {
@@ -320,7 +326,7 @@ public class PlayerChunk {
 
         if (!flag6 && flag7) {
             if (this.entityTickingFuture != PlayerChunk.UNLOADED_CHUNK_FUTURE) {
-                throw (IllegalStateException) SystemUtils.c(new IllegalStateException());
+                throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException()));
             }
 
             this.entityTickingFuture = playerchunkmap.b(this.location);
@@ -332,7 +338,7 @@ public class PlayerChunk {
             this.entityTickingFuture = PlayerChunk.UNLOADED_CHUNK_FUTURE;
         }
 
-        this.v.a(this.location, this::k, this.ticketLevel, this::d);
+        this.u.a(this.location, this::k, this.ticketLevel, this::d);
         this.oldTicketLevel = this.ticketLevel;
     }
 

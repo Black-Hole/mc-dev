@@ -101,7 +101,7 @@ public class EntityBat extends EntityAmbient {
 
             if (this.world.getType(blockposition1).isOccluding(this.world, blockposition)) {
                 if (this.random.nextInt(200) == 0) {
-                    this.aJ = (float) this.random.nextInt(360);
+                    this.aC = (float) this.random.nextInt(360);
                 }
 
                 if (this.world.a(EntityBat.c, (EntityLiving) this) != null) {
@@ -135,7 +135,7 @@ public class EntityBat extends EntityAmbient {
             float f = (float) (MathHelper.d(vec3d1.z, vec3d1.x) * 57.2957763671875D) - 90.0F;
             float f1 = MathHelper.g(f - this.yaw);
 
-            this.ba = 0.5F;
+            this.aT = 0.5F;
             this.yaw += f1;
             if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).isOccluding(this.world, blockposition1)) {
                 this.setAsleep(true);
@@ -194,7 +194,7 @@ public class EntityBat extends EntityAmbient {
             int i = generatoraccess.getLightLevel(blockposition);
             byte b0 = 4;
 
-            if (eK()) {
+            if (eJ()) {
                 b0 = 7;
             } else if (random.nextBoolean()) {
                 return false;
@@ -204,7 +204,7 @@ public class EntityBat extends EntityAmbient {
         }
     }
 
-    private static boolean eK() {
+    private static boolean eJ() {
         LocalDate localdate = LocalDate.now();
         int i = localdate.get(ChronoField.DAY_OF_MONTH);
         int j = localdate.get(ChronoField.MONTH_OF_YEAR);

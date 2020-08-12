@@ -45,18 +45,18 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
     }
 
     @Override
-    public double aX() {
+    public double ba() {
         return -0.45D;
     }
 
-    public boolean eO() {
+    public boolean eN() {
         return true;
     }
 
     @Nullable
     @Override
-    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        if (enummobspawn != EnumMobSpawn.PATROL && enummobspawn != EnumMobSpawn.EVENT && enummobspawn != EnumMobSpawn.STRUCTURE && this.random.nextFloat() < 0.06F && this.eO()) {
+    public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        if (enummobspawn != EnumMobSpawn.PATROL && enummobspawn != EnumMobSpawn.EVENT && enummobspawn != EnumMobSpawn.STRUCTURE && this.random.nextFloat() < 0.06F && this.eN()) {
             this.patrolLeader = true;
         }
 
@@ -69,11 +69,11 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
             this.patrolling = true;
         }
 
-        return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
+        return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
     public static boolean b(EntityTypes<? extends EntityMonsterPatrolling> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
-        return generatoraccess.getBrightness(EnumSkyBlock.BLOCK, blockposition) > 8 ? false : d(entitytypes, generatoraccess, enummobspawn, blockposition, random);
+        return generatoraccess.getBrightness(EnumSkyBlock.BLOCK, blockposition) > 8 ? false : c(entitytypes, generatoraccess, enummobspawn, blockposition, random);
     }
 
     @Override
@@ -90,7 +90,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         return this.patrolTarget;
     }
 
-    public boolean eQ() {
+    public boolean eP() {
         return this.patrolTarget != null;
     }
 
@@ -103,11 +103,11 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         return this.patrolLeader;
     }
 
-    public boolean eU() {
+    public boolean eT() {
         return true;
     }
 
-    public void eV() {
+    public void eU() {
         this.patrolTarget = this.getChunkCoordinates().b(-500 + this.random.nextInt(1000), 0, -500 + this.random.nextInt(1000));
         this.patrolling = true;
     }
@@ -139,7 +139,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
         public boolean a() {
             boolean flag = this.a.world.getTime() < this.d;
 
-            return this.a.isPatrolling() && this.a.getGoalTarget() == null && !this.a.isVehicle() && this.a.eQ() && !flag;
+            return this.a.isPatrolling() && this.a.getGoalTarget() == null && !this.a.isVehicle() && this.a.eP() && !flag;
         }
 
         @Override
@@ -159,7 +159,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
                 if (this.a.isPatrolling() && list.isEmpty()) {
                     this.a.u(false);
                 } else if (flag && this.a.getPatrolTarget().a((IPosition) this.a.getPositionVector(), 10.0D)) {
-                    this.a.eV();
+                    this.a.eU();
                 } else {
                     Vec3D vec3d = Vec3D.c((BaseBlockPosition) this.a.getPatrolTarget());
                     Vec3D vec3d1 = this.a.getPositionVector();
@@ -189,7 +189,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
 
         private List<EntityMonsterPatrolling> g() {
             return this.a.world.a(EntityMonsterPatrolling.class, this.a.getBoundingBox().g(16.0D), (entitymonsterpatrolling) -> {
-                return entitymonsterpatrolling.eU() && !entitymonsterpatrolling.s(this.a);
+                return entitymonsterpatrolling.eT() && !entitymonsterpatrolling.s(this.a);
             });
         }
 

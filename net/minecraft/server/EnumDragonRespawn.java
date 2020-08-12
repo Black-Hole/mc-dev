@@ -70,7 +70,7 @@ public enum EnumDragonRespawn {
                         worldserver.explode((Entity) null, (double) ((float) worldgenender_spike.a() + 0.5F), (double) worldgenender_spike.d(), (double) ((float) worldgenender_spike.b() + 0.5F), 5.0F, Explosion.Effect.DESTROY);
                         WorldGenFeatureEndSpikeConfiguration worldgenfeatureendspikeconfiguration = new WorldGenFeatureEndSpikeConfiguration(true, ImmutableList.of(worldgenender_spike), new BlockPosition(0, 128, 0));
 
-                        WorldGenerator.END_SPIKE.b((WorldGenFeatureConfiguration) worldgenfeatureendspikeconfiguration).a(worldserver, worldserver.getStructureManager(), worldserver.getChunkProvider().getChunkGenerator(), new Random(), new BlockPosition(worldgenender_spike.a(), 45, worldgenender_spike.b()));
+                        WorldGenerator.END_SPIKE.b((WorldGenFeatureConfiguration) worldgenfeatureendspikeconfiguration).a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), new Random(), new BlockPosition(worldgenender_spike.a(), 45, worldgenender_spike.b()));
                     }
                 } else if (flag1) {
                     enderdragonbattle.setRespawnPhase(null.SUMMONING_DRAGON);

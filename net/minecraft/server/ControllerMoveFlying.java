@@ -22,8 +22,8 @@ public class ControllerMoveFlying extends ControllerMove {
             double d3 = d0 * d0 + d1 * d1 + d2 * d2;
 
             if (d3 < 2.500000277905201E-7D) {
-                this.a.r(0.0F);
-                this.a.q(0.0F);
+                this.a.u(0.0F);
+                this.a.t(0.0F);
                 return;
             }
 
@@ -38,19 +38,19 @@ public class ControllerMoveFlying extends ControllerMove {
                 f1 = (float) (this.e * this.a.b(GenericAttributes.FLYING_SPEED));
             }
 
-            this.a.n(f1);
+            this.a.q(f1);
             double d4 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
             float f2 = (float) (-(MathHelper.d(d1, d4) * 57.2957763671875D));
 
             this.a.pitch = this.a(this.a.pitch, f2, (float) this.i);
-            this.a.r(d1 > 0.0D ? f1 : -f1);
+            this.a.u(d1 > 0.0D ? f1 : -f1);
         } else {
             if (!this.j) {
                 this.a.setNoGravity(false);
             }
 
-            this.a.r(0.0F);
-            this.a.q(0.0F);
+            this.a.u(0.0F);
+            this.a.t(0.0F);
         }
 
     }

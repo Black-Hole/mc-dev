@@ -14,7 +14,7 @@ public class WorldGenBonusChest extends WorldGenerator<WorldGenFeatureEmptyConfi
         super(codec);
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition);
         List<Integer> list = (List) IntStream.rangeClosed(chunkcoordintpair.d(), chunkcoordintpair.f()).boxed().collect(Collectors.toList());
 

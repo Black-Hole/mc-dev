@@ -82,7 +82,7 @@ public class BlockStateList<O, S extends IBlockDataHolder<O, S>> {
     }
 
     private static <S extends IBlockDataHolder<?, S>, T extends Comparable<T>> MapCodec<S> a(MapCodec<S> mapcodec, Supplier<S> supplier, String s, IBlockState<T> iblockstate) {
-        return Codec.mapPair(mapcodec, Codecs.a(iblockstate.e().fieldOf(s), () -> {
+        return Codec.mapPair(mapcodec, iblockstate.e().fieldOf(s).setPartial(() -> {
             return iblockstate.a((IBlockDataHolder) supplier.get());
         })).xmap((pair) -> {
             return (IBlockDataHolder) ((IBlockDataHolder) pair.getFirst()).set(iblockstate, ((IBlockState.a) pair.getSecond()).b());

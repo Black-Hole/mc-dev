@@ -13,9 +13,9 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
     protected static final DataWatcherObject<Byte> b = DataWatcher.a(EntityIronGolem.class, DataWatcherRegistry.a);
     private int c;
     private int d;
-    private static final IntRange bv = TimeRange.a(20, 39);
-    private int bw;
-    private UUID bx;
+    private static final IntRange bo = TimeRange.a(20, 39);
+    private int bp;
+    private UUID bq;
 
     public EntityIronGolem(EntityTypes<? extends EntityIronGolem> entitytypes, World world) {
         super(entitytypes, world);
@@ -33,7 +33,7 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(1, new PathfinderGoalDefendVillage(this));
         this.targetSelector.a(2, new PathfinderGoalHurtByTarget(this, new Class[0]));
-        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, 10, true, false, this::b));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, 10, true, false, this::a_));
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityInsentient.class, 5, false, false, (entityliving) -> {
             return entityliving instanceof IMonster && !(entityliving instanceof EntityCreeper);
         }));
@@ -75,7 +75,7 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
             --this.d;
         }
 
-        if (b(this.getMot()) > 2.500000277905201E-7D && this.random.nextInt(5) == 0) {
+        if (c(this.getMot()) > 2.500000277905201E-7D && this.random.nextInt(5) == 0) {
             int i = MathHelper.floor(this.locX());
             int j = MathHelper.floor(this.locY() - 0.20000000298023224D);
             int k = MathHelper.floor(this.locZ());
@@ -113,30 +113,30 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
 
     @Override
     public void anger() {
-        this.setAnger(EntityIronGolem.bv.a(this.random));
+        this.setAnger(EntityIronGolem.bo.a(this.random));
     }
 
     @Override
     public void setAnger(int i) {
-        this.bw = i;
+        this.bp = i;
     }
 
     @Override
     public int getAnger() {
-        return this.bw;
+        return this.bp;
     }
 
     @Override
     public void setAngerTarget(@Nullable UUID uuid) {
-        this.bx = uuid;
+        this.bq = uuid;
     }
 
     @Override
     public UUID getAngerTarget() {
-        return this.bx;
+        return this.bq;
     }
 
-    private float eP() {
+    private float eO() {
         return (float) this.b(GenericAttributes.ATTACK_DAMAGE);
     }
 
@@ -144,7 +144,7 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
     public boolean attackEntity(Entity entity) {
         this.c = 10;
         this.world.broadcastEntityEffect(this, (byte) 4);
-        float f = this.eP();
+        float f = this.eO();
         float f1 = (int) f > 0 ? f / 2.0F + (float) this.random.nextInt((int) f) : f;
         boolean flag = entity.damageEntity(DamageSource.mobAttack(this), f1);
 
@@ -159,17 +159,17 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
 
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
-        EntityIronGolem.CrackLevel entityirongolem_cracklevel = this.eL();
+        EntityIronGolem.CrackLevel entityirongolem_cracklevel = this.eK();
         boolean flag = super.damageEntity(damagesource, f);
 
-        if (flag && this.eL() != entityirongolem_cracklevel) {
+        if (flag && this.eK() != entityirongolem_cracklevel) {
             this.playSound(SoundEffects.ENTITY_IRON_GOLEM_DAMAGE, 1.0F, 1.0F);
         }
 
         return flag;
     }
 
-    public EntityIronGolem.CrackLevel eL() {
+    public EntityIronGolem.CrackLevel eK() {
         return EntityIronGolem.CrackLevel.a(this.getHealth() / this.getMaxHealth());
     }
 
@@ -221,7 +221,7 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
     }
 
     @Override
-    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
+    protected void b(BlockPosition blockposition, IBlockData iblockdata) {
         this.playSound(SoundEffects.ENTITY_IRON_GOLEM_STEP, 1.0F, 1.0F);
     }
 
@@ -263,7 +263,7 @@ public class EntityIronGolem extends EntityGolem implements IEntityAngerable {
                 }
             }
 
-            return SpawnerCreature.a((IBlockAccess) iworldreader, blockposition, iworldreader.getType(blockposition), FluidTypes.EMPTY.h(), EntityTypes.IRON_GOLEM) && iworldreader.i(this);
+            return SpawnerCreature.a((IBlockAccess) iworldreader, blockposition, iworldreader.getType(blockposition), FluidTypes.EMPTY.h(), EntityTypes.IRON_GOLEM) && iworldreader.j((Entity) this);
         }
     }
 

@@ -1,8 +1,7 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableList;
-import java.util.List;
-import java.util.stream.IntStream;
+import it.unimi.dsi.fastutil.doubles.DoubleList;
+import it.unimi.dsi.fastutil.doubles.DoubleListIterator;
 
 public class NoiseGeneratorNormal {
 
@@ -10,17 +9,28 @@ public class NoiseGeneratorNormal {
     private final NoiseGeneratorOctaves b;
     private final NoiseGeneratorOctaves c;
 
-    public NoiseGeneratorNormal(SeededRandom seededrandom, IntStream intstream) {
-        this(seededrandom, (List) intstream.boxed().collect(ImmutableList.toImmutableList()));
+    public static NoiseGeneratorNormal a(SeededRandom seededrandom, int i, DoubleList doublelist) {
+        return new NoiseGeneratorNormal(seededrandom, i, doublelist);
     }
 
-    public NoiseGeneratorNormal(SeededRandom seededrandom, List<Integer> list) {
-        this.b = new NoiseGeneratorOctaves(seededrandom, list);
-        this.c = new NoiseGeneratorOctaves(seededrandom, list);
-        int i = (Integer) list.stream().min(Integer::compareTo).orElse(0);
-        int j = (Integer) list.stream().max(Integer::compareTo).orElse(0);
+    private NoiseGeneratorNormal(SeededRandom seededrandom, int i, DoubleList doublelist) {
+        this.b = NoiseGeneratorOctaves.a(seededrandom, i, doublelist);
+        this.c = NoiseGeneratorOctaves.a(seededrandom, i, doublelist);
+        int j = Integer.MAX_VALUE;
+        int k = Integer.MIN_VALUE;
+        DoubleListIterator doublelistiterator = doublelist.iterator();
 
-        this.a = 0.16666666666666666D / a(j - i);
+        while (doublelistiterator.hasNext()) {
+            int l = doublelistiterator.nextIndex();
+            double d0 = doublelistiterator.nextDouble();
+
+            if (d0 != 0.0D) {
+                j = Math.min(j, l);
+                k = Math.max(k, l);
+            }
+        }
+
+        this.a = 0.16666666666666666D / a(k - j);
     }
 
     private static double a(int i) {

@@ -27,7 +27,7 @@ public class PacketPlayOutSetSlot implements Packet<PacketListenerPlayOut> {
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readByte();
         this.b = packetdataserializer.readShort();
-        this.c = packetdataserializer.m();
+        this.c = packetdataserializer.n();
     }
 
     @Override

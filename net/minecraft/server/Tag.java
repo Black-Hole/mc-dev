@@ -51,11 +51,44 @@ public interface Tag<T> {
         MinecraftKey a();
     }
 
-    public static class f implements Tag.d {
+    public static class g implements Tag.d {
 
         private final MinecraftKey a;
 
-        public f(MinecraftKey minecraftkey) {
+        public g(MinecraftKey minecraftkey) {
+            this.a = minecraftkey;
+        }
+
+        @Override
+        public <T> boolean a(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1, Consumer<T> consumer) {
+            Tag<T> tag = (Tag) function.apply(this.a);
+
+            if (tag != null) {
+                tag.getTagged().forEach(consumer);
+            }
+
+            return true;
+        }
+
+        @Override
+        public void a(JsonArray jsonarray) {
+            JsonObject jsonobject = new JsonObject();
+
+            jsonobject.addProperty("id", "#" + this.a);
+            jsonobject.addProperty("required", false);
+            jsonarray.add(jsonobject);
+        }
+
+        public String toString() {
+            return "#" + this.a + "?";
+        }
+    }
+
+    public static class h implements Tag.d {
+
+        private final MinecraftKey a;
+
+        public h(MinecraftKey minecraftkey) {
             this.a = minecraftkey;
         }
 
@@ -78,6 +111,39 @@ public interface Tag<T> {
 
         public String toString() {
             return "#" + this.a;
+        }
+    }
+
+    public static class f implements Tag.d {
+
+        private final MinecraftKey a;
+
+        public f(MinecraftKey minecraftkey) {
+            this.a = minecraftkey;
+        }
+
+        @Override
+        public <T> boolean a(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1, Consumer<T> consumer) {
+            T t0 = function1.apply(this.a);
+
+            if (t0 != null) {
+                consumer.accept(t0);
+            }
+
+            return true;
+        }
+
+        @Override
+        public void a(JsonArray jsonarray) {
+            JsonObject jsonobject = new JsonObject();
+
+            jsonobject.addProperty("id", this.a.toString());
+            jsonobject.addProperty("required", false);
+            jsonarray.add(jsonobject);
+        }
+
+        public String toString() {
+            return this.a.toString() + "?";
         }
     }
 
@@ -141,8 +207,8 @@ public interface Tag<T> {
             return this.a((Tag.d) (new Tag.c(minecraftkey)), s);
         }
 
-        public Tag.a b(MinecraftKey minecraftkey, String s) {
-            return this.a((Tag.d) (new Tag.f(minecraftkey)), s);
+        public Tag.a c(MinecraftKey minecraftkey, String s) {
+            return this.a((Tag.d) (new Tag.h(minecraftkey)), s);
         }
 
         public <T> Optional<Tag<T>> a(Function<MinecraftKey, Tag<T>> function, Function<MinecraftKey, T> function1) {
@@ -183,13 +249,8 @@ public interface Tag<T> {
 
             while (iterator.hasNext()) {
                 JsonElement jsonelement = (JsonElement) iterator.next();
-                String s1 = ChatDeserializer.a(jsonelement, "value");
 
-                if (s1.startsWith("#")) {
-                    list.add(new Tag.f(new MinecraftKey(s1.substring(1))));
-                } else {
-                    list.add(new Tag.c(new MinecraftKey(s1)));
-                }
+                list.add(a(jsonelement));
             }
 
             if (ChatDeserializer.a(jsonobject, "replace", false)) {
@@ -200,6 +261,31 @@ public interface Tag<T> {
                 this.a.add(new Tag.b(tag_d, s));
             });
             return this;
+        }
+
+        private static Tag.d a(JsonElement jsonelement) {
+            String s;
+            boolean flag;
+
+            if (jsonelement.isJsonObject()) {
+                JsonObject jsonobject = jsonelement.getAsJsonObject();
+
+                s = ChatDeserializer.h(jsonobject, "id");
+                flag = ChatDeserializer.a(jsonobject, "required", true);
+            } else {
+                s = ChatDeserializer.a(jsonelement, "id");
+                flag = true;
+            }
+
+            MinecraftKey minecraftkey;
+
+            if (s.startsWith("#")) {
+                minecraftkey = new MinecraftKey(s.substring(1));
+                return (Tag.d) (flag ? new Tag.h(minecraftkey) : new Tag.g(minecraftkey));
+            } else {
+                minecraftkey = new MinecraftKey(s);
+                return (Tag.d) (flag ? new Tag.c(minecraftkey) : new Tag.f(minecraftkey));
+            }
         }
 
         public JsonObject c() {

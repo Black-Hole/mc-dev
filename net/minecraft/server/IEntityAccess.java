@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -60,18 +59,27 @@ public interface IEntityAccess {
             AxisAlignedBB axisalignedbb1 = axisalignedbb.g(1.0E-7D);
 
             return this.getEntities(entity, axisalignedbb1, predicate.and((entity1) -> {
-                return entity == null || !entity.isSameVehicle(entity1);
-            })).stream().flatMap((entity1) -> {
-                if (entity != null) {
-                    AxisAlignedBB axisalignedbb2 = entity.j(entity1);
+                boolean flag;
 
-                    if (axisalignedbb2 != null && axisalignedbb2.c(axisalignedbb1)) {
-                        return Stream.of(entity1.ay(), axisalignedbb2);
+                if (entity1.getBoundingBox().c(axisalignedbb1)) {
+                    label25:
+                    {
+                        if (entity == null) {
+                            if (!entity1.aY()) {
+                                break label25;
+                            }
+                        } else if (!entity.j(entity1)) {
+                            break label25;
+                        }
+
+                        flag = true;
+                        return flag;
                     }
                 }
 
-                return Stream.of(entity1.ay());
-            }).filter(Objects::nonNull).map(VoxelShapes::a);
+                flag = false;
+                return flag;
+            })).stream().map(Entity::getBoundingBox).map(VoxelShapes::a);
         }
     }
 
@@ -85,7 +93,7 @@ public interface IEntityAccess {
             EntityHuman entityhuman1 = (EntityHuman) iterator.next();
 
             if (predicate == null || predicate.test(entityhuman1)) {
-                double d5 = entityhuman1.g(d0, d1, d2);
+                double d5 = entityhuman1.h(d0, d1, d2);
 
                 if ((d3 < 0.0D || d5 < d3 * d3) && (d4 == -1.0D || d5 < d4)) {
                     d4 = d5;
@@ -127,7 +135,7 @@ public interface IEntityAccess {
                 } while (!IEntitySelector.g.test(entityhuman));
             } while (!IEntitySelector.b.test(entityhuman));
 
-            d4 = entityhuman.g(d0, d1, d2);
+            d4 = entityhuman.h(d0, d1, d2);
         } while (d3 >= 0.0D && d4 >= d3 * d3);
 
         return true;
@@ -168,7 +176,7 @@ public interface IEntityAccess {
             T t1 = (EntityLiving) iterator.next();
 
             if (pathfindertargetcondition.a(entityliving, t1)) {
-                double d4 = t1.g(d0, d1, d2);
+                double d4 = t1.h(d0, d1, d2);
 
                 if (d3 == -1.0D || d4 < d3) {
                     d3 = d4;

@@ -47,12 +47,12 @@ public class ItemHoneyBottle extends Item {
     }
 
     @Override
-    public SoundEffect ag_() {
+    public SoundEffect ae_() {
         return SoundEffects.ITEM_HONEY_BOTTLE_DRINK;
     }
 
     @Override
-    public SoundEffect af_() {
+    public SoundEffect ad_() {
         return SoundEffects.ITEM_HONEY_BOTTLE_DRINK;
     }
 

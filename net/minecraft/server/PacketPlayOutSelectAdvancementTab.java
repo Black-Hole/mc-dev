@@ -21,7 +21,7 @@ public class PacketPlayOutSelectAdvancementTab implements Packet<PacketListenerP
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         if (packetdataserializer.readBoolean()) {
-            this.a = packetdataserializer.o();
+            this.a = packetdataserializer.p();
         }
 
     }

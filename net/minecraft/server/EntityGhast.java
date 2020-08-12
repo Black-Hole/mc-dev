@@ -55,7 +55,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
         this.datawatcher.register(EntityGhast.b, false);
     }
 
-    public static AttributeProvider.Builder eK() {
+    public static AttributeProvider.Builder eJ() {
         return EntityInsentient.p().a(GenericAttributes.MAX_HEALTH, 10.0D).a(GenericAttributes.FOLLOW_RANGE, 100.0D);
     }
 
@@ -196,7 +196,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
                 Vec3D vec3d = this.a.getMot();
 
                 this.a.yaw = -((float) MathHelper.d(vec3d.x, vec3d.z)) * 57.295776F;
-                this.a.aH = this.a.yaw;
+                this.a.aA = this.a.yaw;
             } else {
                 EntityLiving entityliving = this.a.getGoalTarget();
                 double d0 = 64.0D;
@@ -206,7 +206,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
                     double d2 = entityliving.locZ() - this.a.locZ();
 
                     this.a.yaw = -((float) MathHelper.d(d1, d2)) * 57.295776F;
-                    this.a.aH = this.a.yaw;
+                    this.a.aA = this.a.yaw;
                 }
             }
 

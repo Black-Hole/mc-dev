@@ -6,6 +6,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class CommandTell {
 
@@ -20,13 +21,28 @@ public class CommandTell {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, IChatBaseComponent ichatbasecomponent) {
         UUID uuid = commandlistenerwrapper.getEntity() == null ? SystemUtils.b : commandlistenerwrapper.getEntity().getUniqueID();
+        Entity entity = commandlistenerwrapper.getEntity();
+        Consumer consumer;
+
+        if (entity instanceof EntityPlayer) {
+            EntityPlayer entityplayer = (EntityPlayer) entity;
+
+            consumer = (ichatbasecomponent1) -> {
+                entityplayer.sendMessage((new ChatMessage("commands.message.display.outgoing", new Object[]{ichatbasecomponent1, ichatbasecomponent})).a(new EnumChatFormat[]{EnumChatFormat.GRAY, EnumChatFormat.ITALIC}), entityplayer.getUniqueID());
+            };
+        } else {
+            consumer = (ichatbasecomponent1) -> {
+                commandlistenerwrapper.sendMessage((new ChatMessage("commands.message.display.outgoing", new Object[]{ichatbasecomponent1, ichatbasecomponent})).a(new EnumChatFormat[]{EnumChatFormat.GRAY, EnumChatFormat.ITALIC}), false);
+            };
+        }
+
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
-            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+            EntityPlayer entityplayer1 = (EntityPlayer) iterator.next();
 
-            entityplayer.sendMessage((new ChatMessage("commands.message.display.incoming", new Object[]{commandlistenerwrapper.getScoreboardDisplayName(), ichatbasecomponent})).a(new EnumChatFormat[]{EnumChatFormat.GRAY, EnumChatFormat.ITALIC}), uuid);
-            commandlistenerwrapper.sendMessage((new ChatMessage("commands.message.display.outgoing", new Object[]{entityplayer.getScoreboardDisplayName(), ichatbasecomponent})).a(new EnumChatFormat[]{EnumChatFormat.GRAY, EnumChatFormat.ITALIC}), false);
+            consumer.accept(entityplayer1.getScoreboardDisplayName());
+            entityplayer1.sendMessage((new ChatMessage("commands.message.display.incoming", new Object[]{commandlistenerwrapper.getScoreboardDisplayName(), ichatbasecomponent})).a(new EnumChatFormat[]{EnumChatFormat.GRAY, EnumChatFormat.ITALIC}), uuid);
         }
 
         return collection.size();

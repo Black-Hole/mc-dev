@@ -5,16 +5,24 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
-import com.mojang.datafixers.util.Pair;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenCustomHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.Random;
 import java.util.Set;
 import javax.annotation.Nullable;
@@ -25,174 +33,220 @@ import org.apache.logging.log4j.Logger;
 public class RegistryMaterials<T> extends IRegistryWritable<T> {
 
     protected static final Logger LOGGER = LogManager.getLogger();
-    protected final RegistryID<T> b = new RegistryID<>(256);
-    protected final BiMap<MinecraftKey, T> c = HashBiMap.create();
-    private final BiMap<ResourceKey<T>, T> bb = HashBiMap.create();
-    private final Set<ResourceKey<T>> bc = Sets.newIdentityHashSet();
-    protected Object[] d;
-    private int bd;
+    private final ObjectList<T> bf = new ObjectArrayList(256);
+    private final Object2IntMap<T> bg = new Object2IntOpenCustomHashMap(SystemUtils.k());
+    private final BiMap<MinecraftKey, T> bh;
+    private final BiMap<ResourceKey<T>, T> bi;
+    private final Map<T, Lifecycle> bj;
+    private Lifecycle bk;
+    protected Object[] b;
+    private int bl;
 
-    public RegistryMaterials(ResourceKey<IRegistry<T>> resourcekey, Lifecycle lifecycle) {
+    public RegistryMaterials(ResourceKey<? extends IRegistry<T>> resourcekey, Lifecycle lifecycle) {
         super(resourcekey, lifecycle);
+        this.bg.defaultReturnValue(-1);
+        this.bh = HashBiMap.create();
+        this.bi = HashBiMap.create();
+        this.bj = Maps.newIdentityHashMap();
+        this.bk = lifecycle;
+    }
+
+    public static <T> MapCodec<RegistryMaterials.a<T>> a(ResourceKey<? extends IRegistry<T>> resourcekey, MapCodec<T> mapcodec) {
+        return RecordCodecBuilder.mapCodec((instance) -> {
+            return instance.group(MinecraftKey.a.xmap(ResourceKey.b(resourcekey), ResourceKey::a).fieldOf("name").forGetter((registrymaterials_a) -> {
+                return registrymaterials_a.a;
+            }), Codec.INT.fieldOf("id").forGetter((registrymaterials_a) -> {
+                return registrymaterials_a.b;
+            }), mapcodec.forGetter((registrymaterials_a) -> {
+                return registrymaterials_a.c;
+            })).apply(instance, RegistryMaterials.a::new);
+        });
     }
 
     @Override
-    public <V extends T> V a(int i, ResourceKey<T> resourcekey, V v0) {
-        this.b.a(v0, i);
+    public <V extends T> V a(int i, ResourceKey<T> resourcekey, V v0, Lifecycle lifecycle) {
+        return this.a(i, resourcekey, v0, lifecycle, true);
+    }
+
+    private <V extends T> V a(int i, ResourceKey<T> resourcekey, V v0, Lifecycle lifecycle, boolean flag) {
         Validate.notNull(resourcekey);
         Validate.notNull(v0);
-        this.d = null;
-        if (this.bb.containsKey(resourcekey)) {
+        this.bf.size(Math.max(this.bf.size(), i + 1));
+        this.bf.set(i, v0);
+        this.bg.put(v0, i);
+        this.b = null;
+        if (flag && this.bi.containsKey(resourcekey)) {
             RegistryMaterials.LOGGER.debug("Adding duplicate key '{}' to registry", resourcekey);
         }
 
-        this.c.put(resourcekey.a(), v0);
-        this.bb.put(resourcekey, v0);
-        if (this.bd <= i) {
-            this.bd = i + 1;
+        if (this.bh.containsValue(v0)) {
+            RegistryMaterials.LOGGER.error("Adding duplicate value '{}' to registry", v0);
+        }
+
+        this.bh.put(resourcekey.a(), v0);
+        this.bi.put(resourcekey, v0);
+        this.bj.put(v0, lifecycle);
+        this.bk = this.bk.add(lifecycle);
+        if (this.bl <= i) {
+            this.bl = i + 1;
         }
 
         return v0;
     }
 
     @Override
-    public <V extends T> V a(ResourceKey<T> resourcekey, V v0) {
-        return this.a(this.bd, resourcekey, v0);
+    public <V extends T> V a(ResourceKey<T> resourcekey, V v0, Lifecycle lifecycle) {
+        return this.a(this.bl, resourcekey, v0, lifecycle);
+    }
+
+    @Override
+    public <V extends T> V a(OptionalInt optionalint, ResourceKey<T> resourcekey, V v0, Lifecycle lifecycle) {
+        Validate.notNull(resourcekey);
+        Validate.notNull(v0);
+        T t0 = this.bi.get(resourcekey);
+        int i;
+
+        if (t0 == null) {
+            i = optionalint.isPresent() ? optionalint.getAsInt() : this.bl;
+        } else {
+            i = this.bg.getInt(t0);
+            if (optionalint.isPresent() && optionalint.getAsInt() != i) {
+                throw new IllegalStateException("ID mismatch");
+            }
+
+            this.bg.removeInt(t0);
+            this.bj.remove(t0);
+        }
+
+        return this.a(i, resourcekey, v0, lifecycle, false);
     }
 
     @Nullable
     @Override
     public MinecraftKey getKey(T t0) {
-        return (MinecraftKey) this.c.inverse().get(t0);
+        return (MinecraftKey) this.bh.inverse().get(t0);
     }
 
     @Override
     public Optional<ResourceKey<T>> c(T t0) {
-        return Optional.ofNullable(this.bb.inverse().get(t0));
+        return Optional.ofNullable(this.bi.inverse().get(t0));
     }
 
     @Override
     public int a(@Nullable T t0) {
-        return this.b.getId(t0);
+        return this.bg.getInt(t0);
     }
 
     @Nullable
     @Override
     public T a(@Nullable ResourceKey<T> resourcekey) {
-        return this.bb.get(resourcekey);
+        return this.bi.get(resourcekey);
     }
 
     @Nullable
     @Override
     public T fromId(int i) {
-        return this.b.fromId(i);
+        return i >= 0 && i < this.bf.size() ? this.bf.get(i) : null;
+    }
+
+    @Override
+    public Lifecycle d(T t0) {
+        return (Lifecycle) this.bj.get(t0);
+    }
+
+    @Override
+    public Lifecycle b() {
+        return this.bk;
     }
 
     public Iterator<T> iterator() {
-        return this.b.iterator();
+        return Iterators.filter(this.bf.iterator(), Objects::nonNull);
     }
 
     @Nullable
     @Override
     public T get(@Nullable MinecraftKey minecraftkey) {
-        return this.c.get(minecraftkey);
-    }
-
-    @Override
-    public Optional<T> getOptional(@Nullable MinecraftKey minecraftkey) {
-        return Optional.ofNullable(this.c.get(minecraftkey));
+        return this.bh.get(minecraftkey);
     }
 
     @Override
     public Set<MinecraftKey> keySet() {
-        return Collections.unmodifiableSet(this.c.keySet());
+        return Collections.unmodifiableSet(this.bh.keySet());
     }
 
-    public Set<Entry<ResourceKey<T>, T>> c() {
-        return Collections.unmodifiableMap(this.bb).entrySet();
+    @Override
+    public Set<Entry<ResourceKey<T>, T>> d() {
+        return Collections.unmodifiableMap(this.bi).entrySet();
     }
 
     @Nullable
     public T a(Random random) {
-        if (this.d == null) {
-            Collection<?> collection = this.c.values();
+        if (this.b == null) {
+            Collection<?> collection = this.bh.values();
 
             if (collection.isEmpty()) {
                 return null;
             }
 
-            this.d = collection.toArray(new Object[collection.size()]);
+            this.b = collection.toArray(new Object[collection.size()]);
         }
 
-        return SystemUtils.a(this.d, random);
+        return SystemUtils.a(this.b, random);
     }
 
-    @Override
-    public boolean c(MinecraftKey minecraftkey) {
-        return this.c.containsKey(minecraftkey);
-    }
-
-    @Override
-    public boolean b(int i) {
-        return this.b.b(i);
-    }
-
-    @Override
-    public boolean c(ResourceKey<T> resourcekey) {
-        return this.bc.contains(resourcekey);
-    }
-
-    @Override
-    public void d(ResourceKey<T> resourcekey) {
-        this.bc.add(resourcekey);
-    }
-
-    public static <T> Codec<RegistryMaterials<T>> a(ResourceKey<IRegistry<T>> resourcekey, Lifecycle lifecycle, MapCodec<T> mapcodec) {
-        return Codecs.a(resourcekey, mapcodec).codec().listOf().xmap((list) -> {
+    public static <T> Codec<RegistryMaterials<T>> a(ResourceKey<? extends IRegistry<T>> resourcekey, Lifecycle lifecycle, Codec<T> codec) {
+        return a(resourcekey, codec.fieldOf("element")).codec().listOf().xmap((list) -> {
             RegistryMaterials<T> registrymaterials = new RegistryMaterials<>(resourcekey, lifecycle);
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
-                Pair<ResourceKey<T>, T> pair = (Pair) iterator.next();
+                RegistryMaterials.a<T> registrymaterials_a = (RegistryMaterials.a) iterator.next();
 
-                registrymaterials.a((ResourceKey) pair.getFirst(), pair.getSecond());
+                registrymaterials.a(registrymaterials_a.b, registrymaterials_a.a, registrymaterials_a.c, lifecycle);
             }
 
             return registrymaterials;
         }, (registrymaterials) -> {
-            Builder<Pair<ResourceKey<T>, T>> builder = ImmutableList.builder();
-            Iterator iterator = registrymaterials.b.iterator();
+            Builder<RegistryMaterials.a<T>> builder = ImmutableList.builder();
+            Iterator iterator = registrymaterials.iterator();
 
             while (iterator.hasNext()) {
                 T t0 = iterator.next();
 
-                builder.add(Pair.of(registrymaterials.c(t0).get(), t0));
+                builder.add(new RegistryMaterials.a<>((ResourceKey) registrymaterials.c(t0).get(), registrymaterials.a(t0), t0));
             }
 
             return builder.build();
         });
     }
 
-    public static <T> Codec<RegistryMaterials<T>> b(ResourceKey<IRegistry<T>> resourcekey, Lifecycle lifecycle, MapCodec<T> mapcodec) {
-        return RegistryDataPackCodec.a(resourcekey, lifecycle, mapcodec);
+    public static <T> Codec<RegistryMaterials<T>> b(ResourceKey<? extends IRegistry<T>> resourcekey, Lifecycle lifecycle, Codec<T> codec) {
+        return RegistryDataPackCodec.a(resourcekey, lifecycle, codec);
     }
 
-    public static <T> Codec<RegistryMaterials<T>> c(ResourceKey<IRegistry<T>> resourcekey, Lifecycle lifecycle, MapCodec<T> mapcodec) {
-        return Codec.unboundedMap(MinecraftKey.a.xmap(ResourceKey.a(resourcekey), ResourceKey::a), mapcodec.codec()).xmap((map) -> {
+    public static <T> Codec<RegistryMaterials<T>> c(ResourceKey<? extends IRegistry<T>> resourcekey, Lifecycle lifecycle, Codec<T> codec) {
+        return Codec.unboundedMap(MinecraftKey.a.xmap(ResourceKey.b(resourcekey), ResourceKey::a), codec).xmap((map) -> {
             RegistryMaterials<T> registrymaterials = new RegistryMaterials<>(resourcekey, lifecycle);
 
             map.forEach((resourcekey1, object) -> {
-                registrymaterials.a(registrymaterials.bd, resourcekey1, object);
-                registrymaterials.d(resourcekey1);
+                registrymaterials.a(resourcekey1, object, lifecycle);
             });
             return registrymaterials;
         }, (registrymaterials) -> {
-            com.google.common.collect.ImmutableMap.Builder<ResourceKey<T>, T> com_google_common_collect_immutablemap_builder = ImmutableMap.builder();
-
-            registrymaterials.bb.entrySet().stream().filter((entry) -> {
-                return registrymaterials.c((ResourceKey) entry.getKey());
-            }).forEach(com_google_common_collect_immutablemap_builder::put);
-            return com_google_common_collect_immutablemap_builder.build();
+            return ImmutableMap.copyOf(registrymaterials.bi);
         });
+    }
+
+    public static class a<T> {
+
+        public final ResourceKey<T> a;
+        public final int b;
+        public final T c;
+
+        public a(ResourceKey<T> resourcekey, int i, T t0) {
+            this.a = resourcekey;
+            this.b = i;
+            this.c = t0;
+        }
     }
 }

@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.DataFixer;
+import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -81,63 +82,85 @@ public class WorldPersistentData {
 
     public NBTTagCompound a(String s, int i) throws IOException {
         File file = this.a(s);
-        PushbackInputStream pushbackinputstream = new PushbackInputStream(new FileInputStream(file), 2);
+        FileInputStream fileinputstream = new FileInputStream(file);
         Throwable throwable = null;
 
-        NBTTagCompound nbttagcompound;
+        Object object;
 
         try {
-            NBTTagCompound nbttagcompound1;
+            PushbackInputStream pushbackinputstream = new PushbackInputStream(fileinputstream, 2);
+            Throwable throwable1 = null;
 
-            if (this.a(pushbackinputstream)) {
-                nbttagcompound1 = NBTCompressedStreamTools.a((InputStream) pushbackinputstream);
-            } else {
-                DataInputStream datainputstream = new DataInputStream(pushbackinputstream);
-                Throwable throwable1 = null;
+            try {
+                NBTTagCompound nbttagcompound;
 
-                try {
-                    nbttagcompound1 = NBTCompressedStreamTools.a(datainputstream);
-                } catch (Throwable throwable2) {
-                    throwable1 = throwable2;
-                    throw throwable2;
-                } finally {
-                    if (datainputstream != null) {
-                        if (throwable1 != null) {
-                            try {
+                if (this.a(pushbackinputstream)) {
+                    nbttagcompound = NBTCompressedStreamTools.a((InputStream) pushbackinputstream);
+                } else {
+                    DataInputStream datainputstream = new DataInputStream(pushbackinputstream);
+
+                    object = null;
+
+                    try {
+                        nbttagcompound = NBTCompressedStreamTools.a((DataInput) datainputstream);
+                    } catch (Throwable throwable2) {
+                        object = throwable2;
+                        throw throwable2;
+                    } finally {
+                        if (datainputstream != null) {
+                            if (object != null) {
+                                try {
+                                    datainputstream.close();
+                                } catch (Throwable throwable3) {
+                                    ((Throwable) object).addSuppressed(throwable3);
+                                }
+                            } else {
                                 datainputstream.close();
-                            } catch (Throwable throwable3) {
-                                throwable1.addSuppressed(throwable3);
                             }
-                        } else {
-                            datainputstream.close();
                         }
+
                     }
-
                 }
+
+                int j = nbttagcompound.hasKeyOfType("DataVersion", 99) ? nbttagcompound.getInt("DataVersion") : 1343;
+
+                object = GameProfileSerializer.a(this.c, DataFixTypes.SAVED_DATA, nbttagcompound, j, i);
+            } catch (Throwable throwable4) {
+                throwable1 = throwable4;
+                throw throwable4;
+            } finally {
+                if (pushbackinputstream != null) {
+                    if (throwable1 != null) {
+                        try {
+                            pushbackinputstream.close();
+                        } catch (Throwable throwable5) {
+                            throwable1.addSuppressed(throwable5);
+                        }
+                    } else {
+                        pushbackinputstream.close();
+                    }
+                }
+
             }
-
-            int j = nbttagcompound1.hasKeyOfType("DataVersion", 99) ? nbttagcompound1.getInt("DataVersion") : 1343;
-
-            nbttagcompound = GameProfileSerializer.a(this.c, DataFixTypes.SAVED_DATA, nbttagcompound1, j, i);
-        } catch (Throwable throwable4) {
-            throwable = throwable4;
-            throw throwable4;
+        } catch (Throwable throwable6) {
+            throwable = throwable6;
+            throw throwable6;
         } finally {
-            if (pushbackinputstream != null) {
+            if (fileinputstream != null) {
                 if (throwable != null) {
                     try {
-                        pushbackinputstream.close();
-                    } catch (Throwable throwable5) {
-                        throwable.addSuppressed(throwable5);
+                        fileinputstream.close();
+                    } catch (Throwable throwable7) {
+                        throwable.addSuppressed(throwable7);
                     }
                 } else {
-                    pushbackinputstream.close();
+                    fileinputstream.close();
                 }
             }
 
         }
 
-        return nbttagcompound;
+        return (NBTTagCompound) object;
     }
 
     private boolean a(PushbackInputStream pushbackinputstream) throws IOException {

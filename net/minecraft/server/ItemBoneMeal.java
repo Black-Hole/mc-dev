@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.Objects;
+import java.util.Optional;
 import javax.annotation.Nullable;
 
 public class ItemBoneMeal extends Item {
@@ -67,20 +69,20 @@ public class ItemBoneMeal extends Item {
 
                 while (i < 128) {
                     BlockPosition blockposition1 = blockposition;
-                    BiomeBase biomebase = world.getBiome(blockposition);
                     IBlockData iblockdata = Blocks.SEAGRASS.getBlockData();
                     int j = 0;
 
                     while (true) {
                         if (j < i / 16) {
                             blockposition1 = blockposition1.b(ItemBoneMeal.RANDOM.nextInt(3) - 1, (ItemBoneMeal.RANDOM.nextInt(3) - 1) * ItemBoneMeal.RANDOM.nextInt(3) / 2, ItemBoneMeal.RANDOM.nextInt(3) - 1);
-                            biomebase = world.getBiome(blockposition1);
                             if (!world.getType(blockposition1).r(world, blockposition1)) {
                                 ++j;
                                 continue;
                             }
                         } else {
-                            if (biomebase == Biomes.WARM_OCEAN || biomebase == Biomes.DEEP_WARM_OCEAN) {
+                            Optional<ResourceKey<BiomeBase>> optional = world.i(blockposition1);
+
+                            if (Objects.equals(optional, Optional.of(Biomes.WARM_OCEAN)) || Objects.equals(optional, Optional.of(Biomes.DEEP_WARM_OCEAN))) {
                                 if (i == 0 && enumdirection != null && enumdirection.n().d()) {
                                     iblockdata = (IBlockData) ((Block) TagsBlock.WALL_CORALS.a(world.random)).getBlockData().set(BlockCoralFanWallAbstract.a, enumdirection);
                                 } else if (ItemBoneMeal.RANDOM.nextInt(4) == 0) {
@@ -89,7 +91,7 @@ public class ItemBoneMeal extends Item {
                             }
 
                             if (iblockdata.getBlock().a((Tag) TagsBlock.WALL_CORALS)) {
-                                for (j = 0; !iblockdata.canPlace(world, blockposition1) && j < 4; ++j) {
+                                for (int k = 0; !iblockdata.canPlace(world, blockposition1) && k < 4; ++k) {
                                     iblockdata = (IBlockData) iblockdata.set(BlockCoralFanWallAbstract.a, EnumDirection.EnumDirectionLimit.HORIZONTAL.a(ItemBoneMeal.RANDOM));
                                 }
                             }

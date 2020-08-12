@@ -12,7 +12,9 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -263,6 +265,21 @@ public class CommandDispatcher {
     @Nullable
     public static <S> CommandSyntaxException a(ParseResults<S> parseresults) {
         return !parseresults.getReader().canRead() ? null : (parseresults.getExceptions().size() == 1 ? (CommandSyntaxException) parseresults.getExceptions().values().iterator().next() : (parseresults.getContext().getRange().isEmpty() ? CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(parseresults.getReader()) : CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().createWithContext(parseresults.getReader())));
+    }
+
+    public static void b() {
+        RootCommandNode<CommandListenerWrapper> rootcommandnode = (new CommandDispatcher(CommandDispatcher.ServerType.ALL)).a().getRoot();
+        Set<ArgumentType<?>> set = ArgumentRegistry.a((CommandNode) rootcommandnode);
+        Set<ArgumentType<?>> set1 = (Set) set.stream().filter((argumenttype) -> {
+            return !ArgumentRegistry.a(argumenttype);
+        }).collect(Collectors.toSet());
+
+        if (!set1.isEmpty()) {
+            CommandDispatcher.LOGGER.warn("Missing type registration for following arguments:\n {}", set1.stream().map((argumenttype) -> {
+                return "\t" + argumenttype;
+            }).collect(Collectors.joining(",\n")));
+            throw new IllegalStateException("Unregistered argument types");
+        }
     }
 
     public static enum ServerType {

@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -12,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.function.Supplier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,54 +19,45 @@ public class GeneratorSettingsFlat {
 
     private static final Logger LOGGER = LogManager.getLogger();
     public static final Codec<GeneratorSettingsFlat> a = RecordCodecBuilder.create((instance) -> {
-        RecordCodecBuilder recordcodecbuilder = StructureSettings.a.fieldOf("structures").forGetter(GeneratorSettingsFlat::d);
-        RecordCodecBuilder recordcodecbuilder1 = WorldGenFlatLayerInfo.a.listOf().fieldOf("layers").forGetter(GeneratorSettingsFlat::f);
-        RecordCodecBuilder recordcodecbuilder2 = Codec.BOOL.fieldOf("lakes").withDefault(false).forGetter((generatorsettingsflat) -> {
-            return generatorsettingsflat.l;
-        });
-        RecordCodecBuilder recordcodecbuilder3 = Codec.BOOL.fieldOf("features").withDefault(false).forGetter((generatorsettingsflat) -> {
+        return instance.group(RegistryLookupCodec.a(IRegistry.ay).forGetter((generatorsettingsflat) -> {
+            return generatorsettingsflat.d;
+        }), StructureSettings.a.fieldOf("structures").forGetter(GeneratorSettingsFlat::d), WorldGenFlatLayerInfo.a.listOf().fieldOf("layers").forGetter(GeneratorSettingsFlat::f), Codec.BOOL.fieldOf("lakes").orElse(false).forGetter((generatorsettingsflat) -> {
             return generatorsettingsflat.k;
-        });
-        MapCodec mapcodec = IRegistry.BIOME.fieldOf("biome");
-        Logger logger = GeneratorSettingsFlat.LOGGER;
-
-        logger.getClass();
-        return instance.group(recordcodecbuilder, recordcodecbuilder1, recordcodecbuilder2, recordcodecbuilder3, Codecs.a(mapcodec, SystemUtils.a("Unknown biome, defaulting to plains", logger::error), () -> {
-            return Biomes.PLAINS;
-        }).forGetter((generatorsettingsflat) -> {
-            return generatorsettingsflat.h;
+        }), Codec.BOOL.fieldOf("features").orElse(false).forGetter((generatorsettingsflat) -> {
+            return generatorsettingsflat.j;
+        }), BiomeBase.d.optionalFieldOf("biome").orElseGet(Optional::empty).forGetter((generatorsettingsflat) -> {
+            return Optional.of(generatorsettingsflat.g);
         })).apply(instance, GeneratorSettingsFlat::new);
     }).stable();
-    private static final WorldGenFeatureConfigured<?, ?> c = WorldGenerator.LAKE.b((WorldGenFeatureConfiguration) (new WorldGenFeatureLakeConfiguration(Blocks.WATER.getBlockData()))).a(WorldGenDecorator.E.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(4))));
-    private static final WorldGenFeatureConfigured<?, ?> d = WorldGenerator.LAKE.b((WorldGenFeatureConfiguration) (new WorldGenFeatureLakeConfiguration(Blocks.LAVA.getBlockData()))).a(WorldGenDecorator.D.a((WorldGenFeatureDecoratorConfiguration) (new WorldGenDecoratorDungeonConfiguration(80))));
-    private static final Map<StructureGenerator<?>, StructureFeature<?, ?>> e = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
-        hashmap.put(StructureGenerator.MINESHAFT, BiomeDecoratorGroups.b);
-        hashmap.put(StructureGenerator.VILLAGE, BiomeDecoratorGroups.t);
-        hashmap.put(StructureGenerator.STRONGHOLD, BiomeDecoratorGroups.k);
-        hashmap.put(StructureGenerator.SWAMP_HUT, BiomeDecoratorGroups.j);
-        hashmap.put(StructureGenerator.DESERT_PYRAMID, BiomeDecoratorGroups.f);
-        hashmap.put(StructureGenerator.JUNGLE_PYRAMID, BiomeDecoratorGroups.e);
-        hashmap.put(StructureGenerator.IGLOO, BiomeDecoratorGroups.g);
-        hashmap.put(StructureGenerator.OCEAN_RUIN, BiomeDecoratorGroups.m);
-        hashmap.put(StructureGenerator.SHIPWRECK, BiomeDecoratorGroups.h);
-        hashmap.put(StructureGenerator.MONUMENT, BiomeDecoratorGroups.l);
-        hashmap.put(StructureGenerator.ENDCITY, BiomeDecoratorGroups.q);
-        hashmap.put(StructureGenerator.MANSION, BiomeDecoratorGroups.d);
-        hashmap.put(StructureGenerator.FORTRESS, BiomeDecoratorGroups.o);
-        hashmap.put(StructureGenerator.PILLAGER_OUTPOST, BiomeDecoratorGroups.a);
-        hashmap.put(StructureGenerator.RUINED_PORTAL, BiomeDecoratorGroups.y);
-        hashmap.put(StructureGenerator.BASTION_REMNANT, BiomeDecoratorGroups.s);
+    private static final Map<StructureGenerator<?>, StructureFeature<?, ?>> c = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+        hashmap.put(StructureGenerator.MINESHAFT, StructureFeatures.b);
+        hashmap.put(StructureGenerator.VILLAGE, StructureFeatures.t);
+        hashmap.put(StructureGenerator.STRONGHOLD, StructureFeatures.k);
+        hashmap.put(StructureGenerator.SWAMP_HUT, StructureFeatures.j);
+        hashmap.put(StructureGenerator.DESERT_PYRAMID, StructureFeatures.f);
+        hashmap.put(StructureGenerator.JUNGLE_PYRAMID, StructureFeatures.e);
+        hashmap.put(StructureGenerator.IGLOO, StructureFeatures.g);
+        hashmap.put(StructureGenerator.OCEAN_RUIN, StructureFeatures.m);
+        hashmap.put(StructureGenerator.SHIPWRECK, StructureFeatures.h);
+        hashmap.put(StructureGenerator.MONUMENT, StructureFeatures.l);
+        hashmap.put(StructureGenerator.ENDCITY, StructureFeatures.q);
+        hashmap.put(StructureGenerator.MANSION, StructureFeatures.d);
+        hashmap.put(StructureGenerator.FORTRESS, StructureFeatures.o);
+        hashmap.put(StructureGenerator.PILLAGER_OUTPOST, StructureFeatures.a);
+        hashmap.put(StructureGenerator.RUINED_PORTAL, StructureFeatures.y);
+        hashmap.put(StructureGenerator.BASTION_REMNANT, StructureFeatures.s);
     });
-    private final StructureSettings f;
-    private final List<WorldGenFlatLayerInfo> g;
-    private BiomeBase h;
-    private final IBlockData[] i;
+    private final IRegistry<BiomeBase> d;
+    private final StructureSettings e;
+    private final List<WorldGenFlatLayerInfo> f;
+    private Supplier<BiomeBase> g;
+    private final IBlockData[] h;
+    private boolean i;
     private boolean j;
     private boolean k;
-    private boolean l;
 
-    public GeneratorSettingsFlat(StructureSettings structuresettings, List<WorldGenFlatLayerInfo> list, boolean flag, boolean flag1, BiomeBase biomebase) {
-        this(structuresettings);
+    public GeneratorSettingsFlat(IRegistry<BiomeBase> iregistry, StructureSettings structuresettings, List<WorldGenFlatLayerInfo> list, boolean flag, boolean flag1, Optional<Supplier<BiomeBase>> optional) {
+        this(structuresettings, iregistry);
         if (flag) {
             this.b();
         }
@@ -75,65 +66,72 @@ public class GeneratorSettingsFlat {
             this.a();
         }
 
-        this.g.addAll(list);
+        this.f.addAll(list);
         this.h();
-        this.h = biomebase;
+        if (!optional.isPresent()) {
+            GeneratorSettingsFlat.LOGGER.error("Unknown biome, defaulting to plains");
+            this.g = () -> {
+                return (BiomeBase) iregistry.d(Biomes.PLAINS);
+            };
+        } else {
+            this.g = (Supplier) optional.get();
+        }
+
     }
 
-    public GeneratorSettingsFlat(StructureSettings structuresettings) {
-        this.g = Lists.newArrayList();
-        this.i = new IBlockData[256];
+    public GeneratorSettingsFlat(StructureSettings structuresettings, IRegistry<BiomeBase> iregistry) {
+        this.f = Lists.newArrayList();
+        this.h = new IBlockData[256];
+        this.j = false;
         this.k = false;
-        this.l = false;
-        this.f = structuresettings;
+        this.d = iregistry;
+        this.e = structuresettings;
+        this.g = () -> {
+            return (BiomeBase) iregistry.d(Biomes.PLAINS);
+        };
     }
 
     public void a() {
-        this.k = true;
+        this.j = true;
     }
 
     public void b() {
-        this.l = true;
+        this.k = true;
     }
 
     public BiomeBase c() {
         BiomeBase biomebase = this.e();
-        BiomeBase biomebase1 = new BiomeBase((new BiomeBase.a()).a(biomebase.z()).a(biomebase.d()).a(biomebase.y()).a(biomebase.k()).b(biomebase.o()).c(biomebase.getTemperature()).d(biomebase.getHumidity()).a(biomebase.q()).a(biomebase.C())) {
-        };
+        BiomeSettingsGeneration biomesettingsgeneration = biomebase.e();
+        BiomeSettingsGeneration.a biomesettingsgeneration_a = (new BiomeSettingsGeneration.a()).a(biomesettingsgeneration.d());
 
-        if (this.l) {
-            biomebase1.a(WorldGenStage.Decoration.LAKES, GeneratorSettingsFlat.c);
-            biomebase1.a(WorldGenStage.Decoration.LAKES, GeneratorSettingsFlat.d);
+        if (this.k) {
+            biomesettingsgeneration_a.a(WorldGenStage.Decoration.LAKES, BiomeDecoratorGroups.LAKE_WATER);
+            biomesettingsgeneration_a.a(WorldGenStage.Decoration.LAKES, BiomeDecoratorGroups.LAKE_LAVA);
         }
 
-        Iterator iterator = this.f.a().entrySet().iterator();
+        Iterator iterator = this.e.a().entrySet().iterator();
 
         while (iterator.hasNext()) {
             Entry<StructureGenerator<?>, StructureSettingsFeature> entry = (Entry) iterator.next();
 
-            biomebase1.a(biomebase.b((StructureFeature) GeneratorSettingsFlat.e.get(entry.getKey())));
+            biomesettingsgeneration_a.a(biomesettingsgeneration.a((StructureFeature) GeneratorSettingsFlat.c.get(entry.getKey())));
         }
 
-        boolean flag = (!this.j || biomebase == Biomes.THE_VOID) && this.k;
+        boolean flag = (!this.i || this.d.c(biomebase).equals(Optional.of(Biomes.THE_VOID))) && this.j;
+        int i;
 
         if (flag) {
-            List<WorldGenStage.Decoration> list = Lists.newArrayList();
+            List<List<Supplier<WorldGenFeatureConfigured<?, ?>>>> list = biomesettingsgeneration.c();
 
-            list.add(WorldGenStage.Decoration.UNDERGROUND_STRUCTURES);
-            list.add(WorldGenStage.Decoration.SURFACE_STRUCTURES);
-            WorldGenStage.Decoration[] aworldgenstage_decoration = WorldGenStage.Decoration.values();
-            int i = aworldgenstage_decoration.length;
-
-            for (int j = 0; j < i; ++j) {
-                WorldGenStage.Decoration worldgenstage_decoration = aworldgenstage_decoration[j];
-
-                if (!list.contains(worldgenstage_decoration)) {
-                    Iterator iterator1 = biomebase.a(worldgenstage_decoration).iterator();
+            for (i = 0; i < list.size(); ++i) {
+                if (i != WorldGenStage.Decoration.UNDERGROUND_STRUCTURES.ordinal() && i != WorldGenStage.Decoration.SURFACE_STRUCTURES.ordinal()) {
+                    List<Supplier<WorldGenFeatureConfigured<?, ?>>> list1 = (List) list.get(i);
+                    Iterator iterator1 = list1.iterator();
 
                     while (iterator1.hasNext()) {
-                        WorldGenFeatureConfigured<?, ?> worldgenfeatureconfigured = (WorldGenFeatureConfigured) iterator1.next();
+                        Supplier<WorldGenFeatureConfigured<?, ?>> supplier = (Supplier) iterator1.next();
 
-                        biomebase1.a(worldgenstage_decoration, worldgenfeatureconfigured);
+                        biomesettingsgeneration_a.a(i, supplier);
                     }
                 }
             }
@@ -141,51 +139,47 @@ public class GeneratorSettingsFlat {
 
         IBlockData[] aiblockdata = this.g();
 
-        for (int k = 0; k < aiblockdata.length; ++k) {
-            IBlockData iblockdata = aiblockdata[k];
+        for (i = 0; i < aiblockdata.length; ++i) {
+            IBlockData iblockdata = aiblockdata[i];
 
             if (iblockdata != null && !HeightMap.Type.MOTION_BLOCKING.e().test(iblockdata)) {
-                this.i[k] = null;
-                biomebase1.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, WorldGenerator.FILL_LAYER.b((WorldGenFeatureConfiguration) (new WorldGenFeatureFillConfiguration(k, iblockdata))));
+                this.h[i] = null;
+                biomesettingsgeneration_a.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, WorldGenerator.FILL_LAYER.b((WorldGenFeatureConfiguration) (new WorldGenFeatureFillConfiguration(i, iblockdata))));
             }
         }
 
-        return biomebase1;
+        return (new BiomeBase.a()).a(biomebase.c()).a(biomebase.t()).a(biomebase.h()).b(biomebase.j()).c(biomebase.k()).d(biomebase.getHumidity()).a(biomebase.l()).a(biomesettingsgeneration_a.a()).a(biomebase.b()).a();
     }
 
     public StructureSettings d() {
-        return this.f;
+        return this.e;
     }
 
     public BiomeBase e() {
-        return this.h;
-    }
-
-    public void a(BiomeBase biomebase) {
-        this.h = biomebase;
+        return (BiomeBase) this.g.get();
     }
 
     public List<WorldGenFlatLayerInfo> f() {
-        return this.g;
+        return this.f;
     }
 
     public IBlockData[] g() {
-        return this.i;
+        return this.h;
     }
 
     public void h() {
-        Arrays.fill(this.i, 0, this.i.length, (Object) null);
+        Arrays.fill(this.h, 0, this.h.length, (Object) null);
         int i = 0;
 
         WorldGenFlatLayerInfo worldgenflatlayerinfo;
 
-        for (Iterator iterator = this.g.iterator(); iterator.hasNext(); i += worldgenflatlayerinfo.a()) {
+        for (Iterator iterator = this.f.iterator(); iterator.hasNext(); i += worldgenflatlayerinfo.a()) {
             worldgenflatlayerinfo = (WorldGenFlatLayerInfo) iterator.next();
             worldgenflatlayerinfo.a(i);
         }
 
-        this.j = true;
-        Iterator iterator1 = this.g.iterator();
+        this.i = true;
+        Iterator iterator1 = this.f.iterator();
 
         while (iterator1.hasNext()) {
             WorldGenFlatLayerInfo worldgenflatlayerinfo1 = (WorldGenFlatLayerInfo) iterator1.next();
@@ -194,19 +188,21 @@ public class GeneratorSettingsFlat {
                 IBlockData iblockdata = worldgenflatlayerinfo1.b();
 
                 if (!iblockdata.a(Blocks.AIR)) {
-                    this.j = false;
-                    this.i[j] = iblockdata;
+                    this.i = false;
+                    this.h[j] = iblockdata;
                 }
             }
         }
 
     }
 
-    public static GeneratorSettingsFlat i() {
+    public static GeneratorSettingsFlat a(IRegistry<BiomeBase> iregistry) {
         StructureSettings structuresettings = new StructureSettings(Optional.of(StructureSettings.c), Maps.newHashMap(ImmutableMap.of(StructureGenerator.VILLAGE, StructureSettings.b.get(StructureGenerator.VILLAGE))));
-        GeneratorSettingsFlat generatorsettingsflat = new GeneratorSettingsFlat(structuresettings);
+        GeneratorSettingsFlat generatorsettingsflat = new GeneratorSettingsFlat(structuresettings, iregistry);
 
-        generatorsettingsflat.a(Biomes.PLAINS);
+        generatorsettingsflat.g = () -> {
+            return (BiomeBase) iregistry.d(Biomes.PLAINS);
+        };
         generatorsettingsflat.f().add(new WorldGenFlatLayerInfo(1, Blocks.BEDROCK));
         generatorsettingsflat.f().add(new WorldGenFlatLayerInfo(2, Blocks.DIRT));
         generatorsettingsflat.f().add(new WorldGenFlatLayerInfo(1, Blocks.GRASS_BLOCK));

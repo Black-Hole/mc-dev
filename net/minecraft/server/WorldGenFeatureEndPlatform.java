@@ -6,7 +6,7 @@ import java.util.Random;
 public class WorldGenFeatureEndPlatform extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     private static final BlockPosition a = new BlockPosition(8, 3, 8);
-    private static final ChunkCoordIntPair ac = new ChunkCoordIntPair(WorldGenFeatureEndPlatform.a);
+    private static final ChunkCoordIntPair ab = new ChunkCoordIntPair(WorldGenFeatureEndPlatform.a);
 
     public WorldGenFeatureEndPlatform(Codec<WorldGenFeatureEmptyConfiguration> codec) {
         super(codec);
@@ -16,10 +16,10 @@ public class WorldGenFeatureEndPlatform extends WorldGenerator<WorldGenFeatureEm
         return Math.max(Math.abs(i - k), Math.abs(j - l));
     }
 
-    public boolean a(GeneratorAccessSeed generatoraccessseed, StructureManager structuremanager, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition);
 
-        if (a(chunkcoordintpair.x, chunkcoordintpair.z, WorldGenFeatureEndPlatform.ac.x, WorldGenFeatureEndPlatform.ac.z) > 1) {
+        if (a(chunkcoordintpair.x, chunkcoordintpair.z, WorldGenFeatureEndPlatform.ab.x, WorldGenFeatureEndPlatform.ab.z) > 1) {
             return true;
         } else {
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();

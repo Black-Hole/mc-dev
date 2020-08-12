@@ -54,7 +54,7 @@ public class WorldGenEndCity extends StructureGenerator<WorldGenFeatureEmptyConf
             super(structuregenerator, i, j, structureboundingbox, k, l);
         }
 
-        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
             EnumBlockRotation enumblockrotation = EnumBlockRotation.a((Random) this.d);
             int k = WorldGenEndCity.b(i, j, chunkgenerator);
 

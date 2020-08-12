@@ -35,12 +35,12 @@ public class ArgumentParserSelector {
     };
     public static final BiConsumer<Vec3D, List<? extends Entity>> h = (vec3d, list) -> {
         list.sort((entity, entity1) -> {
-            return Doubles.compare(entity.d(vec3d), entity1.d(vec3d));
+            return Doubles.compare(entity.e(vec3d), entity1.e(vec3d));
         });
     };
     public static final BiConsumer<Vec3D, List<? extends Entity>> i = (vec3d, list) -> {
         list.sort((entity, entity1) -> {
-            return Doubles.compare(entity1.d(vec3d), entity.d(vec3d));
+            return Doubles.compare(entity1.e(vec3d), entity.e(vec3d));
         });
     };
     public static final BiConsumer<Vec3D, List<? extends Entity>> j = (vec3d, list) -> {

@@ -21,22 +21,22 @@ public interface IWorldDataServer extends WorldDataMutable {
         WorldDataMutable.super.a(crashreportsystemdetails);
         crashreportsystemdetails.a("Level name", this::getName);
         crashreportsystemdetails.a("Level game mode", () -> {
-            return String.format("Game mode: %s (ID %d). Hardcore: %b. Cheats: %b", this.getGameType().b(), this.getGameType().getId(), this.isHardcore(), this.n());
+            return String.format("Game mode: %s (ID %d). Hardcore: %b. Cheats: %b", this.getGameType().b(), this.getGameType().getId(), this.isHardcore(), this.o());
         });
         crashreportsystemdetails.a("Level weather", () -> {
             return String.format("Rain time: %d (now: %b), thunder time: %d (now: %b)", this.getWeatherDuration(), this.hasStorm(), this.getThunderDuration(), this.isThundering());
         });
     }
 
-    int g();
+    int h();
 
     void a(int i);
 
-    int u();
+    int v();
 
     void g(int i);
 
-    int v();
+    int w();
 
     void h(int i);
 
@@ -46,17 +46,17 @@ public interface IWorldDataServer extends WorldDataMutable {
 
     void a(WorldBorder.c worldborder_c);
 
-    WorldBorder.c q();
+    WorldBorder.c r();
 
-    boolean o();
+    boolean p();
 
     void c(boolean flag);
 
-    boolean n();
+    boolean o();
 
     void setGameType(EnumGamemode enumgamemode);
 
-    CustomFunctionCallbackTimerQueue<MinecraftServer> t();
+    CustomFunctionCallbackTimerQueue<MinecraftServer> u();
 
     void setTime(long i);
 

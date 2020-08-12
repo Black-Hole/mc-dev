@@ -16,11 +16,6 @@ public class WorldGenFeatureDefinedStructurePoolList extends WorldGenFeatureDefi
     });
     private final List<WorldGenFeatureDefinedStructurePoolStructure> b;
 
-    @Deprecated
-    public WorldGenFeatureDefinedStructurePoolList(List<WorldGenFeatureDefinedStructurePoolStructure> list) {
-        this(list, WorldGenFeatureDefinedStructurePoolTemplate.Matching.RIGID);
-    }
-
     public WorldGenFeatureDefinedStructurePoolList(List<WorldGenFeatureDefinedStructurePoolStructure> list, WorldGenFeatureDefinedStructurePoolTemplate.Matching worldgenfeaturedefinedstructurepooltemplate_matching) {
         super(worldgenfeaturedefinedstructurepooltemplate_matching);
         if (list.isEmpty()) {

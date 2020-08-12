@@ -23,12 +23,12 @@ public class LootItemConditionEntityProperty implements LootItemCondition {
 
     @Override
     public Set<LootContextParameter<?>> a() {
-        return ImmutableSet.of(LootContextParameters.POSITION, this.b.a());
+        return ImmutableSet.of(LootContextParameters.ORIGIN, this.b.a());
     }
 
     public boolean test(LootTableInfo loottableinfo) {
         Entity entity = (Entity) loottableinfo.getContextParameter(this.b.a());
-        Vec3D vec3d = (Vec3D) loottableinfo.getContextParameter(LootContextParameters.g);
+        Vec3D vec3d = (Vec3D) loottableinfo.getContextParameter(LootContextParameters.ORIGIN);
 
         return this.a.a(loottableinfo.getWorld(), vec3d, entity);
     }

@@ -155,7 +155,7 @@ public class Item implements IMaterial {
 
     public void b(ItemStack itemstack, World world, EntityHuman entityhuman) {}
 
-    public boolean ae_() {
+    public boolean ac_() {
         return false;
     }
 
@@ -265,11 +265,11 @@ public class Item implements IMaterial {
         return this.foodInfo;
     }
 
-    public SoundEffect ag_() {
+    public SoundEffect ae_() {
         return SoundEffects.ENTITY_GENERIC_DRINK;
     }
 
-    public SoundEffect af_() {
+    public SoundEffect ad_() {
         return SoundEffects.ENTITY_GENERIC_EAT;
     }
 

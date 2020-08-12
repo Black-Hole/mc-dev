@@ -145,12 +145,12 @@ public interface IDispenseBehavior {
             public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 EnumDirection enumdirection = (EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING);
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
-                World world = isourceblock.getWorld();
-                EntityArmorStand entityarmorstand = new EntityArmorStand(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D);
+                WorldServer worldserver = isourceblock.getWorld();
+                EntityArmorStand entityarmorstand = new EntityArmorStand(worldserver, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D);
 
-                EntityTypes.a(world, (EntityHuman) null, (Entity) entityarmorstand, itemstack.getTag());
+                EntityTypes.a((World) worldserver, (EntityHuman) null, (Entity) entityarmorstand, itemstack.getTag());
                 entityarmorstand.yaw = enumdirection.o();
-                world.addEntity(entityarmorstand);
+                worldserver.addEntity(entityarmorstand);
                 itemstack.subtract(1);
                 return itemstack;
             }
@@ -184,7 +184,7 @@ public interface IDispenseBehavior {
             protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
                 List<EntityHorseAbstract> list = isourceblock.getWorld().a(EntityHorseAbstract.class, new AxisAlignedBB(blockposition), (entityhorseabstract) -> {
-                    return entityhorseabstract.isAlive() && entityhorseabstract.ft();
+                    return entityhorseabstract.isAlive() && entityhorseabstract.fs();
                 });
                 Iterator iterator1 = list.iterator();
 
@@ -196,7 +196,7 @@ public interface IDispenseBehavior {
                     }
 
                     entityhorseabstract = (EntityHorseAbstract) iterator1.next();
-                } while (!entityhorseabstract.l(itemstack) || entityhorseabstract.fu() || !entityhorseabstract.isTamed());
+                } while (!entityhorseabstract.l(itemstack) || entityhorseabstract.ft() || !entityhorseabstract.isTamed());
 
                 entityhorseabstract.a_(401, itemstack.cloneAndSubtract(1));
                 this.a(true);
@@ -274,13 +274,13 @@ public interface IDispenseBehavior {
                 double d0 = iposition.getX() + (double) ((float) enumdirection.getAdjacentX() * 0.3F);
                 double d1 = iposition.getY() + (double) ((float) enumdirection.getAdjacentY() * 0.3F);
                 double d2 = iposition.getZ() + (double) ((float) enumdirection.getAdjacentZ() * 0.3F);
-                World world = isourceblock.getWorld();
-                Random random = world.random;
+                WorldServer worldserver = isourceblock.getWorld();
+                Random random = worldserver.random;
                 double d3 = random.nextGaussian() * 0.05D + (double) enumdirection.getAdjacentX();
                 double d4 = random.nextGaussian() * 0.05D + (double) enumdirection.getAdjacentY();
                 double d5 = random.nextGaussian() * 0.05D + (double) enumdirection.getAdjacentZ();
 
-                world.addEntity((Entity) SystemUtils.a((Object) (new EntitySmallFireball(world, d0, d1, d2, d3, d4, d5)), (entitysmallfireball) -> {
+                worldserver.addEntity((Entity) SystemUtils.a((Object) (new EntitySmallFireball(worldserver, d0, d1, d2, d3, d4, d5)), (entitysmallfireball) -> {
                     entitysmallfireball.setItem(itemstack);
                 }));
                 itemstack.subtract(1);
@@ -305,10 +305,10 @@ public interface IDispenseBehavior {
             public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 ItemBucket itembucket = (ItemBucket) itemstack.getItem();
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
-                World world = isourceblock.getWorld();
+                WorldServer worldserver = isourceblock.getWorld();
 
-                if (itembucket.a((EntityHuman) null, world, blockposition, (MovingObjectPositionBlock) null)) {
-                    itembucket.a(world, itemstack, blockposition);
+                if (itembucket.a((EntityHuman) null, (World) worldserver, blockposition, (MovingObjectPositionBlock) null)) {
+                    itembucket.a((World) worldserver, itemstack, blockposition);
                     return new ItemStack(Items.BUCKET);
                 } else {
                     return this.b.dispense(isourceblock, itemstack);
@@ -327,13 +327,13 @@ public interface IDispenseBehavior {
 
             @Override
             public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-                World world = isourceblock.getWorld();
+                WorldServer worldserver = isourceblock.getWorld();
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
-                IBlockData iblockdata = world.getType(blockposition);
+                IBlockData iblockdata = worldserver.getType(blockposition);
                 Block block = iblockdata.getBlock();
 
                 if (block instanceof IFluidSource) {
-                    FluidType fluidtype = ((IFluidSource) block).removeFluid(world, blockposition, iblockdata);
+                    FluidType fluidtype = ((IFluidSource) block).removeFluid(worldserver, blockposition, iblockdata);
 
                     if (!(fluidtype instanceof FluidTypeFlowing)) {
                         return super.a(isourceblock, itemstack);
@@ -359,24 +359,25 @@ public interface IDispenseBehavior {
         BlockDispenser.a((IMaterial) Items.FLINT_AND_STEEL, (IDispenseBehavior) (new DispenseBehaviorMaybe() {
             @Override
             protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-                World world = isourceblock.getWorld();
+                WorldServer worldserver = isourceblock.getWorld();
 
                 this.a(true);
-                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
-                IBlockData iblockdata = world.getType(blockposition);
+                EnumDirection enumdirection = (EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING);
+                BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
+                IBlockData iblockdata = worldserver.getType(blockposition);
 
-                if (BlockFireAbstract.a((GeneratorAccess) world, blockposition)) {
-                    world.setTypeUpdate(blockposition, BlockFireAbstract.a((IBlockAccess) world, blockposition));
+                if (BlockFireAbstract.a((World) worldserver, blockposition, enumdirection)) {
+                    worldserver.setTypeUpdate(blockposition, BlockFireAbstract.a((IBlockAccess) worldserver, blockposition));
                 } else if (BlockCampfire.h(iblockdata)) {
-                    world.setTypeUpdate(blockposition, (IBlockData) iblockdata.set(BlockProperties.r, true));
+                    worldserver.setTypeUpdate(blockposition, (IBlockData) iblockdata.set(BlockProperties.r, true));
                 } else if (iblockdata.getBlock() instanceof BlockTNT) {
-                    BlockTNT.a(world, blockposition);
-                    world.a(blockposition, false);
+                    BlockTNT.a((World) worldserver, blockposition);
+                    worldserver.a(blockposition, false);
                 } else {
                     this.a(false);
                 }
 
-                if (this.a() && itemstack.isDamaged(1, world.random, (EntityPlayer) null)) {
+                if (this.a() && itemstack.isDamaged(1, worldserver.random, (EntityPlayer) null)) {
                     itemstack.setCount(0);
                 }
 
@@ -387,13 +388,13 @@ public interface IDispenseBehavior {
             @Override
             protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 this.a(true);
-                World world = isourceblock.getWorld();
+                WorldServer worldserver = isourceblock.getWorld();
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
 
-                if (!ItemBoneMeal.a(itemstack, world, blockposition) && !ItemBoneMeal.a(itemstack, world, blockposition, (EnumDirection) null)) {
+                if (!ItemBoneMeal.a(itemstack, (World) worldserver, blockposition) && !ItemBoneMeal.a(itemstack, (World) worldserver, blockposition, (EnumDirection) null)) {
                     this.a(false);
-                } else if (!world.isClientSide) {
-                    world.triggerEffect(2005, blockposition, 0);
+                } else if (!worldserver.isClientSide) {
+                    worldserver.triggerEffect(2005, blockposition, 0);
                 }
 
                 return itemstack;
@@ -402,12 +403,12 @@ public interface IDispenseBehavior {
         BlockDispenser.a((IMaterial) Blocks.TNT, (IDispenseBehavior) (new DispenseBehaviorItem() {
             @Override
             protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-                World world = isourceblock.getWorld();
+                WorldServer worldserver = isourceblock.getWorld();
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
-                EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, (EntityLiving) null);
+                EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(worldserver, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, (EntityLiving) null);
 
-                world.addEntity(entitytntprimed);
-                world.playSound((EntityHuman) null, entitytntprimed.locX(), entitytntprimed.locY(), entitytntprimed.locZ(), SoundEffects.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                worldserver.addEntity(entitytntprimed);
+                worldserver.playSound((EntityHuman) null, entitytntprimed.locX(), entitytntprimed.locY(), entitytntprimed.locZ(), SoundEffects.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 itemstack.subtract(1);
                 return itemstack;
             }
@@ -428,16 +429,16 @@ public interface IDispenseBehavior {
         BlockDispenser.a((IMaterial) Items.WITHER_SKELETON_SKULL, (IDispenseBehavior) (new DispenseBehaviorMaybe() {
             @Override
             protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-                World world = isourceblock.getWorld();
+                WorldServer worldserver = isourceblock.getWorld();
                 EnumDirection enumdirection = (EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING);
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
 
-                if (world.isEmpty(blockposition) && BlockWitherSkull.b(world, blockposition, itemstack)) {
-                    world.setTypeAndData(blockposition, (IBlockData) Blocks.WITHER_SKELETON_SKULL.getBlockData().set(BlockSkull.a, enumdirection.n() == EnumDirection.EnumAxis.Y ? 0 : enumdirection.opposite().get2DRotationValue() * 4), 3);
-                    TileEntity tileentity = world.getTileEntity(blockposition);
+                if (worldserver.isEmpty(blockposition) && BlockWitherSkull.b((World) worldserver, blockposition, itemstack)) {
+                    worldserver.setTypeAndData(blockposition, (IBlockData) Blocks.WITHER_SKELETON_SKULL.getBlockData().set(BlockSkull.a, enumdirection.n() == EnumDirection.EnumAxis.Y ? 0 : enumdirection.opposite().get2DRotationValue() * 4), 3);
+                    TileEntity tileentity = worldserver.getTileEntity(blockposition);
 
                     if (tileentity instanceof TileEntitySkull) {
-                        BlockWitherSkull.a(world, blockposition, (TileEntitySkull) tileentity);
+                        BlockWitherSkull.a((World) worldserver, blockposition, (TileEntitySkull) tileentity);
                     }
 
                     itemstack.subtract(1);
@@ -452,13 +453,13 @@ public interface IDispenseBehavior {
         BlockDispenser.a((IMaterial) Blocks.CARVED_PUMPKIN, (IDispenseBehavior) (new DispenseBehaviorMaybe() {
             @Override
             protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-                World world = isourceblock.getWorld();
+                WorldServer worldserver = isourceblock.getWorld();
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
                 BlockPumpkinCarved blockpumpkincarved = (BlockPumpkinCarved) Blocks.CARVED_PUMPKIN;
 
-                if (world.isEmpty(blockposition) && blockpumpkincarved.a((IWorldReader) world, blockposition)) {
-                    if (!world.isClientSide) {
-                        world.setTypeAndData(blockposition, blockpumpkincarved.getBlockData(), 3);
+                if (worldserver.isEmpty(blockposition) && blockpumpkincarved.a((IWorldReader) worldserver, blockposition)) {
+                    if (!worldserver.isClientSide) {
+                        worldserver.setTypeAndData(blockposition, blockpumpkincarved.getBlockData(), 3);
                     }
 
                     itemstack.subtract(1);
@@ -499,17 +500,17 @@ public interface IDispenseBehavior {
             @Override
             public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 this.a(false);
-                World world = isourceblock.getWorld();
+                WorldServer worldserver = isourceblock.getWorld();
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING));
-                IBlockData iblockdata = world.getType(blockposition);
+                IBlockData iblockdata = worldserver.getType(blockposition);
 
                 if (iblockdata.a((Tag) TagsBlock.BEEHIVES, (blockbase_blockdata) -> {
                     return blockbase_blockdata.b(BlockBeehive.b);
                 }) && (Integer) iblockdata.get(BlockBeehive.b) >= 5) {
-                    ((BlockBeehive) iblockdata.getBlock()).a(world.getMinecraftWorld(), iblockdata, blockposition, (EntityHuman) null, TileEntityBeehive.ReleaseStatus.BEE_RELEASED);
+                    ((BlockBeehive) iblockdata.getBlock()).a(worldserver, iblockdata, blockposition, (EntityHuman) null, TileEntityBeehive.ReleaseStatus.BEE_RELEASED);
                     this.a(true);
                     return this.a(isourceblock, itemstack, new ItemStack(Items.HONEY_BOTTLE));
-                } else if (world.getFluid(blockposition).a((Tag) TagsFluid.WATER)) {
+                } else if (worldserver.getFluid(blockposition).a((Tag) TagsFluid.WATER)) {
                     this.a(true);
                     return this.a(isourceblock, itemstack, PotionUtil.a(new ItemStack(Items.POTION), Potions.WATER));
                 } else {
@@ -522,13 +523,13 @@ public interface IDispenseBehavior {
             public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 EnumDirection enumdirection = (EnumDirection) isourceblock.getBlockData().get(BlockDispenser.FACING);
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
-                World world = isourceblock.getWorld();
-                IBlockData iblockdata = world.getType(blockposition);
+                WorldServer worldserver = isourceblock.getWorld();
+                IBlockData iblockdata = worldserver.getType(blockposition);
 
                 this.a(true);
                 if (iblockdata.a(Blocks.RESPAWN_ANCHOR)) {
                     if ((Integer) iblockdata.get(BlockRespawnAnchor.a) != 4) {
-                        BlockRespawnAnchor.a(world, blockposition, iblockdata);
+                        BlockRespawnAnchor.a((World) worldserver, blockposition, iblockdata);
                         itemstack.subtract(1);
                     } else {
                         this.a(false);
