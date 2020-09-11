@@ -67,7 +67,7 @@ public class EntityGuardian extends EntityMonster {
 
     @Override
     public EnumMonsterType getMonsterType() {
-        return EnumMonsterType.e;
+        return EnumMonsterType.WATER_MOB;
     }
 
     public boolean eN() {

@@ -30,7 +30,7 @@ public abstract class EntityLiving extends Entity {
     public static final DataWatcherObject<Float> HEALTH = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.c);
     private static final DataWatcherObject<Integer> f = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Boolean> g = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Integer> bh = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.b);
+    public static final DataWatcherObject<Integer> ARROWS_IN_BODY = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Integer> bi = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Optional<BlockPosition>> bj = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.m);
     protected static final EntitySize ah = EntitySize.c(0.2F, 0.2F);
@@ -42,7 +42,7 @@ public abstract class EntityLiving extends Entity {
     public boolean ai;
     public EnumHand aj;
     public int ak;
-    public int al;
+    public int arrowCooldown;
     public int am;
     public int hurtTicks;
     public int hurtDuration;
@@ -156,7 +156,7 @@ public abstract class EntityLiving extends Entity {
         this.datawatcher.register(EntityLiving.ag, (byte) 0);
         this.datawatcher.register(EntityLiving.f, 0);
         this.datawatcher.register(EntityLiving.g, false);
-        this.datawatcher.register(EntityLiving.bh, 0);
+        this.datawatcher.register(EntityLiving.ARROWS_IN_BODY, 0);
         this.datawatcher.register(EntityLiving.bi, 0);
         this.datawatcher.register(EntityLiving.HEALTH, 1.0F);
         this.datawatcher.register(EntityLiving.bj, Optional.empty());
@@ -1460,11 +1460,11 @@ public abstract class EntityLiving extends Entity {
     }
 
     public final int getArrowCount() {
-        return (Integer) this.datawatcher.get(EntityLiving.bh);
+        return (Integer) this.datawatcher.get(EntityLiving.ARROWS_IN_BODY);
     }
 
     public final void setArrowCount(int i) {
-        this.datawatcher.set(EntityLiving.bh, i);
+        this.datawatcher.set(EntityLiving.ARROWS_IN_BODY, i);
     }
 
     public final int dy() {
@@ -1594,6 +1594,7 @@ public abstract class EntityLiving extends Entity {
 
     public abstract ItemStack getEquipment(EnumItemSlot enumitemslot);
 
+    @Override
     public abstract void setSlot(EnumItemSlot enumitemslot, ItemStack itemstack);
 
     public float dE() {
@@ -1933,12 +1934,12 @@ public abstract class EntityLiving extends Entity {
             int i = this.getArrowCount();
 
             if (i > 0) {
-                if (this.al <= 0) {
-                    this.al = 20 * (30 - i);
+                if (this.arrowCooldown <= 0) {
+                    this.arrowCooldown = 20 * (30 - i);
                 }
 
-                --this.al;
-                if (this.al <= 0) {
+                --this.arrowCooldown;
+                if (this.arrowCooldown <= 0) {
                     this.setArrowCount(i - 1);
                 }
             }
@@ -2834,7 +2835,7 @@ public abstract class EntityLiving extends Entity {
         this.setPose(EntityPose.SLEEPING);
         this.a(blockposition);
         this.e(blockposition);
-        this.setMot(Vec3D.a);
+        this.setMot(Vec3D.ORIGIN);
         this.impulse = true;
     }
 

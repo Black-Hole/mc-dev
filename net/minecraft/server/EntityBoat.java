@@ -47,7 +47,7 @@ public class EntityBoat extends Entity {
     public EntityBoat(World world, double d0, double d1, double d2) {
         this(EntityTypes.BOAT, world);
         this.setPosition(d0, d1, d2);
-        this.setMot(Vec3D.a);
+        this.setMot(Vec3D.ORIGIN);
         this.lastX = d0;
         this.lastY = d1;
         this.lastZ = d2;
@@ -222,7 +222,7 @@ public class EntityBoat extends Entity {
 
             this.move(EnumMoveType.SELF, this.getMot());
         } else {
-            this.setMot(Vec3D.a);
+            this.setMot(Vec3D.ORIGIN);
         }
 
         this.q();

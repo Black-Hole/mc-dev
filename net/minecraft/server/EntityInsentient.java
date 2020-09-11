@@ -806,6 +806,7 @@ public abstract class EntityInsentient extends EntityLiving {
                 }
 
                 this.a(itemstack);
+                this.setSlot(enumitemslot, ItemStack.b);
             }
         }
 

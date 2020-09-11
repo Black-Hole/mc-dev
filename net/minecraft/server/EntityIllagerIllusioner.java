@@ -13,8 +13,8 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         this.bp = new Vec3D[2][4];
 
         for (int i = 0; i < 4; ++i) {
-            this.bp[0][i] = Vec3D.a;
-            this.bp[1][i] = Vec3D.a;
+            this.bp[0][i] = Vec3D.ORIGIN;
+            this.bp[1][i] = Vec3D.ORIGIN;
         }
 
     }
@@ -138,7 +138,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         this.world.addEntity(entityarrow);
     }
 
-    class a extends EntityIllagerWizard.c {
+    class a extends EntityIllagerWizard.PathfinderGoalCastSpell {
 
         private int e;
 
@@ -178,12 +178,12 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         }
 
         @Override
-        protected EntityIllagerWizard.Spell l() {
+        protected EntityIllagerWizard.Spell getCastSpell() {
             return EntityIllagerWizard.Spell.BLINDNESS;
         }
     }
 
-    class b extends EntityIllagerWizard.c {
+    class b extends EntityIllagerWizard.PathfinderGoalCastSpell {
 
         private b() {
             super();
@@ -216,7 +216,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         }
 
         @Override
-        protected EntityIllagerWizard.Spell l() {
+        protected EntityIllagerWizard.Spell getCastSpell() {
             return EntityIllagerWizard.Spell.DISAPPEAR;
         }
     }

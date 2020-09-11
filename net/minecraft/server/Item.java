@@ -248,7 +248,7 @@ public class Item implements IMaterial {
         return itemstack.getItem() == Items.CROSSBOW;
     }
 
-    public ItemStack r() {
+    public ItemStack createItemStack() {
         return new ItemStack(this);
     }
 

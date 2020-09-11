@@ -9,8 +9,8 @@ public class ItemTippedArrow extends ItemArrow {
     }
 
     @Override
-    public ItemStack r() {
-        return PotionUtil.a(super.r(), Potions.POISON);
+    public ItemStack createItemStack() {
+        return PotionUtil.a(super.createItemStack(), Potions.POISON);
     }
 
     @Override

@@ -156,7 +156,7 @@ public class EntityTurtle extends EntityAnimal {
 
     @Override
     public EnumMonsterType getMonsterType() {
-        return EnumMonsterType.e;
+        return EnumMonsterType.WATER_MOB;
     }
 
     @Override

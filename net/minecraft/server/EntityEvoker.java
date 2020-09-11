@@ -96,7 +96,7 @@ public class EntityEvoker extends EntityIllagerWizard {
     @Override
     public void a(int i, boolean flag) {}
 
-    public class d extends EntityIllagerWizard.c {
+    public class d extends EntityIllagerWizard.PathfinderGoalCastSpell {
 
         private final PathfinderTargetCondition e = (new PathfinderTargetCondition()).a(16.0D).a().a((entityliving) -> {
             return ((EntitySheep) entityliving).getColor() == EnumColor.BLUE;
@@ -170,12 +170,12 @@ public class EntityEvoker extends EntityIllagerWizard {
         }
 
         @Override
-        protected EntityIllagerWizard.Spell l() {
+        protected EntityIllagerWizard.Spell getCastSpell() {
             return EntityIllagerWizard.Spell.WOLOLO;
         }
     }
 
-    class c extends EntityIllagerWizard.c {
+    class c extends EntityIllagerWizard.PathfinderGoalCastSpell {
 
         private final PathfinderTargetCondition e;
 
@@ -229,12 +229,12 @@ public class EntityEvoker extends EntityIllagerWizard {
         }
 
         @Override
-        protected EntityIllagerWizard.Spell l() {
+        protected EntityIllagerWizard.Spell getCastSpell() {
             return EntityIllagerWizard.Spell.SUMMON_VEX;
         }
     }
 
-    class a extends EntityIllagerWizard.c {
+    class a extends EntityIllagerWizard.PathfinderGoalCastSpell {
 
         private a() {
             super();
@@ -319,7 +319,7 @@ public class EntityEvoker extends EntityIllagerWizard {
         }
 
         @Override
-        protected EntityIllagerWizard.Spell l() {
+        protected EntityIllagerWizard.Spell getCastSpell() {
             return EntityIllagerWizard.Spell.FANGS;
         }
     }

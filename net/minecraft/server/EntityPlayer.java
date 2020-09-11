@@ -542,7 +542,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         if (shapedetectorshape != null && this.world.getDimensionKey() == World.OVERWORLD && worldserver.getDimensionKey() == World.THE_END) {
             Vec3D vec3d = shapedetectorshape.position.add(0.0D, -1.0D, 0.0D);
 
-            return new ShapeDetectorShape(vec3d, Vec3D.a, 90.0F, 0.0F);
+            return new ShapeDetectorShape(vec3d, Vec3D.ORIGIN, 90.0F, 0.0F);
         } else {
             return shapedetectorshape;
         }

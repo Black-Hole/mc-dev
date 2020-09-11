@@ -1134,7 +1134,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
     @Override
     public IRegistryCustom r() {
-        return this.server.aX();
+        return this.server.getCustomRegistry();
     }
 
     public WorldPersistentData getWorldPersistentData() {

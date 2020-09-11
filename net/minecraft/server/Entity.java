@@ -110,9 +110,9 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     public Entity(EntityTypes<?> entitytypes, World world) {
         this.id = Entity.entityCount.incrementAndGet();
         this.passengers = Lists.newArrayList();
-        this.mot = Vec3D.a;
+        this.mot = Vec3D.ORIGIN;
         this.boundingBox = Entity.d;
-        this.x = Vec3D.a;
+        this.x = Vec3D.ORIGIN;
         this.am = 1.0F;
         this.an = 1.0F;
         this.random = new Random();
@@ -126,9 +126,9 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.f = entitytypes;
         this.world = world;
         this.size = entitytypes.l();
-        this.loc = Vec3D.a;
+        this.loc = Vec3D.ORIGIN;
         this.locBlock = BlockPosition.ZERO;
-        this.av = Vec3D.a;
+        this.av = Vec3D.ORIGIN;
         this.setPosition(0.0D, 0.0D, 0.0D);
         this.datawatcher = new DataWatcher(this);
         this.datawatcher.register(Entity.S, (byte) 0);
@@ -382,7 +382,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         } else {
             if (enummovetype == EnumMoveType.PISTON) {
                 vec3d = this.b(vec3d);
-                if (vec3d.equals(Vec3D.a)) {
+                if (vec3d.equals(Vec3D.ORIGIN)) {
                     return;
                 }
             }
@@ -390,8 +390,8 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             this.world.getMethodProfiler().enter("move");
             if (this.x.g() > 1.0E-7D) {
                 vec3d = vec3d.h(this.x);
-                this.x = Vec3D.a;
-                this.setMot(Vec3D.a);
+                this.x = Vec3D.ORIGIN;
+                this.setMot(Vec3D.ORIGIN);
             }
 
             vec3d = this.a(vec3d, enummovetype);
@@ -547,15 +547,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
             if (vec3d.x != 0.0D) {
                 d0 = this.a(EnumDirection.EnumAxis.X, vec3d.x);
-                return Math.abs(d0) <= 9.999999747378752E-6D ? Vec3D.a : new Vec3D(d0, 0.0D, 0.0D);
+                return Math.abs(d0) <= 9.999999747378752E-6D ? Vec3D.ORIGIN : new Vec3D(d0, 0.0D, 0.0D);
             } else if (vec3d.y != 0.0D) {
                 d0 = this.a(EnumDirection.EnumAxis.Y, vec3d.y);
-                return Math.abs(d0) <= 9.999999747378752E-6D ? Vec3D.a : new Vec3D(0.0D, d0, 0.0D);
+                return Math.abs(d0) <= 9.999999747378752E-6D ? Vec3D.ORIGIN : new Vec3D(0.0D, d0, 0.0D);
             } else if (vec3d.z != 0.0D) {
                 d0 = this.a(EnumDirection.EnumAxis.Z, vec3d.z);
-                return Math.abs(d0) <= 9.999999747378752E-6D ? Vec3D.a : new Vec3D(0.0D, 0.0D, d0);
+                return Math.abs(d0) <= 9.999999747378752E-6D ? Vec3D.ORIGIN : new Vec3D(0.0D, 0.0D, d0);
             } else {
-                return Vec3D.a;
+                return Vec3D.ORIGIN;
             }
         }
     }
@@ -1003,7 +1003,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         double d0 = vec3d.g();
 
         if (d0 < 1.0E-7D) {
-            return Vec3D.a;
+            return Vec3D.ORIGIN;
         } else {
             Vec3D vec3d1 = (d0 > 1.0D ? vec3d.d() : vec3d).a((double) f);
             float f2 = MathHelper.sin(f1 * 0.017453292F);
@@ -1508,7 +1508,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public void passengerTick() {
-        this.setMot(Vec3D.a);
+        this.setMot(Vec3D.ORIGIN);
         this.tick();
         if (this.isPassenger()) {
             this.getVehicle().k(this);
@@ -1688,7 +1688,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return Iterables.concat(this.bm(), this.getArmorItems());
     }
 
-    public void setEquipment(EnumItemSlot enumitemslot, ItemStack itemstack) {}
+    public void setSlot(EnumItemSlot enumitemslot, ItemStack itemstack) {}
 
     public boolean isBurning() {
         boolean flag = this.world != null && this.world.isClientSide;
@@ -2530,7 +2530,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             double d1 = 0.0D;
             boolean flag = this.bU();
             boolean flag1 = false;
-            Vec3D vec3d = Vec3D.a;
+            Vec3D vec3d = Vec3D.ORIGIN;
             int k1 = 0;
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 

@@ -250,6 +250,6 @@ public class CommandListenerWrapper implements ICompletionProvider {
 
     @Override
     public IRegistryCustom q() {
-        return this.i.aX();
+        return this.i.getCustomRegistry();
     }
 }

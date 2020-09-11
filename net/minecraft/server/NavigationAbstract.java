@@ -28,9 +28,10 @@ public abstract class NavigationAbstract {
     private int q;
     private float r;
     private final Pathfinder s;
+    private boolean t;
 
     public NavigationAbstract(EntityInsentient entityinsentient, World world) {
-        this.g = Vec3D.a;
+        this.g = Vec3D.ORIGIN;
         this.h = BaseBlockPosition.ZERO;
         this.l = 0.5F;
         this.r = 1.0F;
@@ -124,7 +125,7 @@ public abstract class NavigationAbstract {
             if (pathentity != null && pathentity.m() != null) {
                 this.p = pathentity.m();
                 this.q = j;
-                this.e();
+                this.f();
             }
 
             return pathentity;
@@ -241,7 +242,10 @@ public abstract class NavigationAbstract {
     protected void a(Vec3D vec3d) {
         if (this.e - this.f > 100) {
             if (vec3d.distanceSquared(this.g) < 2.25D) {
+                this.t = true;
                 this.o();
+            } else {
+                this.t = false;
             }
 
             this.f = this.e;
@@ -262,7 +266,6 @@ public abstract class NavigationAbstract {
 
             if (this.k > 0.0D && (double) this.i > this.k * 3.0D) {
                 this.e();
-                this.o();
             }
 
             this.j = SystemUtils.getMonotonicMillis();
@@ -271,9 +274,15 @@ public abstract class NavigationAbstract {
     }
 
     private void e() {
+        this.f();
+        this.o();
+    }
+
+    private void f() {
         this.h = BaseBlockPosition.ZERO;
         this.i = 0L;
         this.k = 0.0D;
+        this.t = false;
     }
 
     public boolean m() {
@@ -344,5 +353,9 @@ public abstract class NavigationAbstract {
             }
 
         }
+    }
+
+    public boolean t() {
+        return this.t;
     }
 }

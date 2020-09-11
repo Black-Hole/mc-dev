@@ -14,7 +14,7 @@ public abstract class EntityWaterAnimal extends EntityCreature {
 
     @Override
     public EnumMonsterType getMonsterType() {
-        return EnumMonsterType.e;
+        return EnumMonsterType.WATER_MOB;
     }
 
     @Override

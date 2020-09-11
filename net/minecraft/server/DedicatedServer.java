@@ -124,7 +124,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         if (!NameReferencingFileConverter.e(this)) {
             return false;
         } else {
-            this.a((PlayerList) (new DedicatedPlayerList(this, this.f, this.worldNBTStorage)));
+            this.a((PlayerList) (new DedicatedPlayerList(this, this.customRegistry, this.worldNBTStorage)));
             long i = SystemUtils.getMonotonicNanos();
 
             this.c(dedicatedserverproperties.maxBuildHeight);
@@ -398,7 +398,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     public void setIdleTimeout(int i) {
         super.setIdleTimeout(i);
         this.propertyManager.setProperty((dedicatedserverproperties) -> {
-            return (DedicatedServerProperties) dedicatedserverproperties.playerIdleTimeout.set(this.aX(), i);
+            return (DedicatedServerProperties) dedicatedserverproperties.playerIdleTimeout.set(this.getCustomRegistry(), i);
         });
     }
 
@@ -511,7 +511,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     public void setHasWhitelist(boolean flag) {
         this.propertyManager.setProperty((dedicatedserverproperties) -> {
-            return (DedicatedServerProperties) dedicatedserverproperties.whiteList.set(this.aX(), flag);
+            return (DedicatedServerProperties) dedicatedserverproperties.whiteList.set(this.getCustomRegistry(), flag);
         });
     }
 

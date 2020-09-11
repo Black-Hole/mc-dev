@@ -29,7 +29,7 @@ public class EntityFallingBlock extends Entity {
         this.block = iblockdata;
         this.i = true;
         this.setPosition(d0, d1 + (double) ((1.0F - this.getHeight()) / 2.0F), d2);
-        this.setMot(Vec3D.a);
+        this.setMot(Vec3D.ORIGIN);
         this.lastX = d0;
         this.lastY = d1;
         this.lastZ = d2;

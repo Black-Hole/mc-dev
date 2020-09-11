@@ -106,12 +106,12 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         }
     }
 
-    public abstract class c extends PathfinderGoal {
+    public abstract class PathfinderGoalCastSpell extends PathfinderGoal {
 
         protected int b;
         protected int c;
 
-        protected c() {}
+        protected PathfinderGoalCastSpell() {}
 
         @Override
         public boolean a() {
@@ -138,7 +138,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
                 EntityIllagerWizard.this.playSound(soundeffect, 1.0F, 1.0F);
             }
 
-            EntityIllagerWizard.this.setSpell(this.l());
+            EntityIllagerWizard.this.setSpell(this.getCastSpell());
         }
 
         @Override
@@ -164,7 +164,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         @Nullable
         protected abstract SoundEffect k();
 
-        protected abstract EntityIllagerWizard.Spell l();
+        protected abstract EntityIllagerWizard.Spell getCastSpell();
     }
 
     public class b extends PathfinderGoal {

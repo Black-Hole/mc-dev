@@ -39,7 +39,7 @@ public interface ISteerable {
                     entityinsentient.aU = 0;
                 } else {
                     entityinsentient.a((EntityLiving) entityinsentient, false);
-                    entityinsentient.setMot(Vec3D.a);
+                    entityinsentient.setMot(Vec3D.ORIGIN);
                 }
 
                 return true;

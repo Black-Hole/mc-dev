@@ -116,7 +116,7 @@ public class EntityFishingHook extends IProjectile {
 
             if (this.am == EntityFishingHook.HookState.FLYING) {
                 if (this.hooked != null) {
-                    this.setMot(Vec3D.a);
+                    this.setMot(Vec3D.ORIGIN);
                     this.am = EntityFishingHook.HookState.HOOKED_IN_ENTITY;
                     return;
                 }
@@ -179,7 +179,7 @@ public class EntityFishingHook extends IProjectile {
             this.move(EnumMoveType.SELF, this.getMot());
             this.x();
             if (this.am == EntityFishingHook.HookState.FLYING && (this.onGround || this.positionChanged)) {
-                this.setMot(Vec3D.a);
+                this.setMot(Vec3D.ORIGIN);
             }
 
             double d1 = 0.92D;

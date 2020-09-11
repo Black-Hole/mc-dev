@@ -23,7 +23,7 @@ public class CommandLocateBiome {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, MinecraftKey minecraftkey) throws CommandSyntaxException {
-        BiomeBase biomebase = (BiomeBase) commandlistenerwrapper.getServer().aX().b(IRegistry.ay).getOptional(minecraftkey).orElseThrow(() -> {
+        BiomeBase biomebase = (BiomeBase) commandlistenerwrapper.getServer().getCustomRegistry().b(IRegistry.ay).getOptional(minecraftkey).orElseThrow(() -> {
             return CommandLocateBiome.a.create(minecraftkey);
         });
         BlockPosition blockposition = new BlockPosition(commandlistenerwrapper.getPosition());

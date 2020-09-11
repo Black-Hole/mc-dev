@@ -53,7 +53,7 @@ public class EntityCow extends EntityAnimal {
 
         if (itemstack.getItem() == Items.BUCKET && !this.isBaby()) {
             entityhuman.playSound(SoundEffects.ENTITY_COW_MILK, 1.0F, 1.0F);
-            ItemStack itemstack1 = ItemLiquidUtil.a(itemstack, entityhuman, Items.MILK_BUCKET.r());
+            ItemStack itemstack1 = ItemLiquidUtil.a(itemstack, entityhuman, Items.MILK_BUCKET.createItemStack());
 
             entityhuman.a(enumhand, itemstack1);
             return EnumInteractionResult.a(this.world.isClientSide);

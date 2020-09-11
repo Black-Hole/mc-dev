@@ -59,7 +59,7 @@ public class ItemEnderEye extends Item {
                 if (blockposition != null) {
                     EntityEnderSignal entityendersignal = new EntityEnderSignal(world, entityhuman.locX(), entityhuman.e(0.5D), entityhuman.locZ());
 
-                    entityendersignal.b(itemstack);
+                    entityendersignal.setItem(itemstack);
                     entityendersignal.a(blockposition);
                     world.addEntity(entityendersignal);
                     if (entityhuman instanceof EntityPlayer) {

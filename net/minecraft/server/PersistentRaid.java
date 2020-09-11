@@ -70,7 +70,7 @@ public class PersistentRaid extends PersistentBase {
                 BlockPosition blockposition = entityplayer.getChunkCoordinates();
                 List<VillagePlaceRecord> list = (List) this.b.y().c(VillagePlaceType.b, blockposition, 64, VillagePlace.Occupancy.IS_OCCUPIED).collect(Collectors.toList());
                 int i = 0;
-                Vec3D vec3d = Vec3D.a;
+                Vec3D vec3d = Vec3D.ORIGIN;
 
                 for (Iterator iterator = list.iterator(); iterator.hasNext(); ++i) {
                     VillagePlaceRecord villageplacerecord = (VillagePlaceRecord) iterator.next();

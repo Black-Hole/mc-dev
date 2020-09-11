@@ -15,7 +15,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
 
     public EntityPhantom(EntityTypes<? extends EntityPhantom> entitytypes, World world) {
         super(entitytypes, world);
-        this.c = Vec3D.a;
+        this.c = Vec3D.ORIGIN;
         this.d = BlockPosition.ZERO;
         this.bo = EntityPhantom.AttackPhase.CIRCLE;
         this.f = 5;

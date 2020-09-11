@@ -58,7 +58,7 @@ public class CustomFunctionManager implements IReloadListener {
             });
         }, executor).thenCompose((collection) -> {
             Map<MinecraftKey, CompletableFuture<CustomFunction>> map = Maps.newHashMap();
-            CommandListenerWrapper commandlistenerwrapper = new CommandListenerWrapper(ICommandListener.DUMMY, Vec3D.a, Vec2F.a, (WorldServer) null, this.g, "", ChatComponentText.d, (MinecraftServer) null, (Entity) null);
+            CommandListenerWrapper commandlistenerwrapper = new CommandListenerWrapper(ICommandListener.DUMMY, Vec3D.ORIGIN, Vec2F.a, (WorldServer) null, this.g, "", ChatComponentText.d, (MinecraftServer) null, (Entity) null);
             Iterator iterator = collection.iterator();
 
             while (iterator.hasNext()) {

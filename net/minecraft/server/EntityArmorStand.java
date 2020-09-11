@@ -29,7 +29,7 @@ public class EntityArmorStand extends EntityLiving {
     private final NonNullList<ItemStack> armorItems;
     private boolean armorStandInvisible;
     public long bi;
-    private int bv;
+    public int disabledSlots;
     public Vector3f headPose;
     public Vector3f bodyPose;
     public Vector3f leftArmPose;
@@ -193,7 +193,7 @@ public class EntityArmorStand extends EntityLiving {
         nbttagcompound.setBoolean("Invisible", this.isInvisible());
         nbttagcompound.setBoolean("Small", this.isSmall());
         nbttagcompound.setBoolean("ShowArms", this.hasArms());
-        nbttagcompound.setInt("DisabledSlots", this.bv);
+        nbttagcompound.setInt("DisabledSlots", this.disabledSlots);
         nbttagcompound.setBoolean("NoBasePlate", this.hasBasePlate());
         if (this.isMarker()) {
             nbttagcompound.setBoolean("Marker", this.isMarker());
@@ -227,7 +227,7 @@ public class EntityArmorStand extends EntityLiving {
         this.setInvisible(nbttagcompound.getBoolean("Invisible"));
         this.setSmall(nbttagcompound.getBoolean("Small"));
         this.setArms(nbttagcompound.getBoolean("ShowArms"));
-        this.bv = nbttagcompound.getInt("DisabledSlots");
+        this.disabledSlots = nbttagcompound.getInt("DisabledSlots");
         this.setBasePlate(nbttagcompound.getBoolean("NoBasePlate"));
         this.setMarker(nbttagcompound.getBoolean("Marker"));
         this.noclip = !this.A();
@@ -371,15 +371,15 @@ public class EntityArmorStand extends EntityLiving {
     }
 
     private boolean d(EnumItemSlot enumitemslot) {
-        return (this.bv & 1 << enumitemslot.c()) != 0 || enumitemslot.a() == EnumItemSlot.Function.HAND && !this.hasArms();
+        return (this.disabledSlots & 1 << enumitemslot.getSlotFlag()) != 0 || enumitemslot.a() == EnumItemSlot.Function.HAND && !this.hasArms();
     }
 
     private boolean a(EntityHuman entityhuman, EnumItemSlot enumitemslot, ItemStack itemstack, EnumHand enumhand) {
         ItemStack itemstack1 = this.getEquipment(enumitemslot);
 
-        if (!itemstack1.isEmpty() && (this.bv & 1 << enumitemslot.c() + 8) != 0) {
+        if (!itemstack1.isEmpty() && (this.disabledSlots & 1 << enumitemslot.getSlotFlag() + 8) != 0) {
             return false;
-        } else if (itemstack1.isEmpty() && (this.bv & 1 << enumitemslot.c() + 16) != 0) {
+        } else if (itemstack1.isEmpty() && (this.disabledSlots & 1 << enumitemslot.getSlotFlag() + 16) != 0) {
             return false;
         } else {
             ItemStack itemstack2;

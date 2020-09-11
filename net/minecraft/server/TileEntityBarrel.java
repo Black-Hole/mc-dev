@@ -68,7 +68,7 @@ public class TileEntityBarrel extends TileEntityLootable {
 
             ++this.b;
             IBlockData iblockdata = this.getBlock();
-            boolean flag = (Boolean) iblockdata.get(BlockBarrel.b);
+            boolean flag = (Boolean) iblockdata.get(BlockBarrel.OPEN);
 
             if (!flag) {
                 this.playOpenSound(iblockdata, SoundEffects.BLOCK_BARREL_OPEN);
@@ -100,7 +100,7 @@ public class TileEntityBarrel extends TileEntityLootable {
                 return;
             }
 
-            boolean flag = (Boolean) iblockdata.get(BlockBarrel.b);
+            boolean flag = (Boolean) iblockdata.get(BlockBarrel.OPEN);
 
             if (flag) {
                 this.playOpenSound(iblockdata, SoundEffects.BLOCK_BARREL_CLOSE);
@@ -119,7 +119,7 @@ public class TileEntityBarrel extends TileEntityLootable {
     }
 
     public void setOpenFlag(IBlockData iblockdata, boolean flag) {
-        this.world.setTypeAndData(this.getPosition(), (IBlockData) iblockdata.set(BlockBarrel.b, flag), 3);
+        this.world.setTypeAndData(this.getPosition(), (IBlockData) iblockdata.set(BlockBarrel.OPEN, flag), 3);
     }
 
     public void playOpenSound(IBlockData iblockdata, SoundEffect soundeffect) {

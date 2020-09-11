@@ -15,7 +15,7 @@ public class ItemActionContext {
         this(entityhuman.world, entityhuman, enumhand, entityhuman.b(enumhand), movingobjectpositionblock);
     }
 
-    protected ItemActionContext(World world, @Nullable EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, MovingObjectPositionBlock movingobjectpositionblock) {
+    public ItemActionContext(World world, @Nullable EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, MovingObjectPositionBlock movingobjectpositionblock) {
         this.a = entityhuman;
         this.b = enumhand;
         this.c = movingobjectpositionblock;

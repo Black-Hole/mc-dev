@@ -10,8 +10,8 @@ public class ItemPotion extends Item {
     }
 
     @Override
-    public ItemStack r() {
-        return PotionUtil.a(super.r(), Potions.WATER);
+    public ItemStack createItemStack() {
+        return PotionUtil.a(super.createItemStack(), Potions.WATER);
     }
 
     @Override

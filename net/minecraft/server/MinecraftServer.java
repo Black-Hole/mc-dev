@@ -73,7 +73,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     public final DataFixer dataConverterManager;
     private String serverIp;
     private int serverPort;
-    protected final IRegistryCustom.Dimension f;
+    public final IRegistryCustom.Dimension customRegistry;
     public final Map<ResourceKey<World>, WorldServer> worldServer;
     private PlayerList playerList;
     private volatile boolean isRunning;
@@ -156,7 +156,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.scoreboardServer = new ScoreboardServer(this);
         this.bossBattleCustomData = new BossBattleCustomData();
         this.circularTimer = new CircularTimer();
-        this.f = iregistrycustom_dimension;
+        this.customRegistry = iregistrycustom_dimension;
         this.saveData = savedata;
         this.proxy = proxy;
         this.resourcePackRepository = resourcepackrepository;
@@ -234,8 +234,8 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         Object object;
 
         if (worlddimension == null) {
-            dimensionmanager = (DimensionManager) this.f.a().d(DimensionManager.OVERWORLD);
-            object = GeneratorSettings.a(this.f.b(IRegistry.ay), this.f.b(IRegistry.ar), (new Random()).nextLong());
+            dimensionmanager = (DimensionManager) this.customRegistry.a().d(DimensionManager.OVERWORLD);
+            object = GeneratorSettings.a(this.customRegistry.b(IRegistry.ay), this.customRegistry.b(IRegistry.ar), (new Random()).nextLong());
         } else {
             dimensionmanager = worlddimension.b();
             object = worlddimension.c();
@@ -470,7 +470,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
         iworlddataserver.a(worldserver1.getWorldBorder().t());
         this.saveData.setCustomBossEvents(this.getBossBattleCustomData().save());
-        this.convertable.a(this.f, this.saveData, this.getPlayerList().save());
+        this.convertable.a(this.customRegistry, this.saveData, this.getPlayerList().save());
         return flag3;
     }
 
@@ -1320,7 +1320,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     public CommandListenerWrapper getServerCommandListener() {
         WorldServer worldserver = this.E();
 
-        return new CommandListenerWrapper(this, worldserver == null ? Vec3D.a : Vec3D.b((BaseBlockPosition) worldserver.getSpawn()), Vec2F.a, worldserver, 4, "Server", new ChatComponentText("Server"), this, (Entity) null);
+        return new CommandListenerWrapper(this, worldserver == null ? Vec3D.ORIGIN : Vec3D.b((BaseBlockPosition) worldserver.getSpawn()), Vec2F.a, worldserver, 4, "Server", new ChatComponentText("Server"), this, (Entity) null);
     }
 
     @Override
@@ -1637,7 +1637,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.saveData;
     }
 
-    public IRegistryCustom aX() {
-        return this.f;
+    public IRegistryCustom getCustomRegistry() {
+        return this.customRegistry;
     }
 }

@@ -33,7 +33,7 @@ public class EntityTrackerEntry {
     private boolean r;
 
     public EntityTrackerEntry(WorldServer worldserver, Entity entity, int i, boolean flag, Consumer<Packet<?>> consumer) {
-        this.m = Vec3D.a;
+        this.m = Vec3D.ORIGIN;
         this.p = Collections.emptyList();
         this.b = worldserver;
         this.f = consumer;

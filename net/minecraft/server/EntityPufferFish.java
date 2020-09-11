@@ -10,7 +10,7 @@ public class EntityPufferFish extends EntityFish {
     private int c;
     private int d;
     private static final Predicate<EntityLiving> bo = (entityliving) -> {
-        return entityliving == null ? false : (entityliving instanceof EntityHuman && (entityliving.isSpectator() || ((EntityHuman) entityliving).isCreative()) ? false : entityliving.getMonsterType() != EnumMonsterType.e);
+        return entityliving == null ? false : (entityliving instanceof EntityHuman && (entityliving.isSpectator() || ((EntityHuman) entityliving).isCreative()) ? false : entityliving.getMonsterType() != EnumMonsterType.WATER_MOB);
     };
 
     public EntityPufferFish(EntityTypes<? extends EntityPufferFish> entitytypes, World world) {

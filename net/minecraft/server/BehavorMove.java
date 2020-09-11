@@ -56,7 +56,7 @@ public class BehavorMove extends Behavior<EntityInsentient> {
     }
 
     protected void c(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
-        if (entityinsentient.getBehaviorController().hasMemory(MemoryModuleType.WALK_TARGET) && !this.a(entityinsentient, (MemoryTarget) entityinsentient.getBehaviorController().getMemory(MemoryModuleType.WALK_TARGET).get())) {
+        if (entityinsentient.getBehaviorController().hasMemory(MemoryModuleType.WALK_TARGET) && !this.a(entityinsentient, (MemoryTarget) entityinsentient.getBehaviorController().getMemory(MemoryModuleType.WALK_TARGET).get()) && entityinsentient.getNavigation().t()) {
             this.b = worldserver.getRandom().nextInt(40);
         }
 

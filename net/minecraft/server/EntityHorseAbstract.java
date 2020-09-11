@@ -688,7 +688,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
                     this.q((float) this.b(GenericAttributes.MOVEMENT_SPEED));
                     super.g(new Vec3D((double) f, vec3d.y, (double) f1));
                 } else if (entityliving instanceof EntityHuman) {
-                    this.setMot(Vec3D.a);
+                    this.setMot(Vec3D.ORIGIN);
                 }
 
                 if (this.onGround) {

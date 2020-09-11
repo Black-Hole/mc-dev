@@ -82,7 +82,7 @@ public class EntityBat extends EntityAmbient {
     public void tick() {
         super.tick();
         if (this.isAsleep()) {
-            this.setMot(Vec3D.a);
+            this.setMot(Vec3D.ORIGIN);
             this.setPositionRaw(this.locX(), (double) MathHelper.floor(this.locY()) + 1.0D - (double) this.getHeight(), this.locZ());
         } else {
             this.setMot(this.getMot().d(1.0D, 0.6D, 1.0D));

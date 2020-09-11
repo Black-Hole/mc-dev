@@ -56,7 +56,7 @@ public abstract class EntityMinecartAbstract extends Entity {
     protected EntityMinecartAbstract(EntityTypes<?> entitytypes, World world, double d0, double d1, double d2) {
         this(entitytypes, world);
         this.setPosition(d0, d1, d2);
-        this.setMot(Vec3D.a);
+        this.setMot(Vec3D.ORIGIN);
         this.lastX = d0;
         this.lastY = d1;
         this.lastZ = d2;
@@ -442,7 +442,7 @@ public abstract class EntityMinecartAbstract extends Entity {
         if (flag1) {
             d11 = Math.sqrt(c(this.getMot()));
             if (d11 < 0.03D) {
-                this.setMot(Vec3D.a);
+                this.setMot(Vec3D.ORIGIN);
             } else {
                 this.setMot(this.getMot().d(0.5D, 0.0D, 0.5D));
             }

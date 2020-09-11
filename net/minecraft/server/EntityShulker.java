@@ -298,7 +298,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
     @Override
     public void movementTick() {
         super.movementTick();
-        this.setMot(Vec3D.a);
+        this.setMot(Vec3D.ORIGIN);
         if (!this.isNoAI()) {
             this.aB = 0.0F;
             this.aA = 0.0F;

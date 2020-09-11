@@ -6,11 +6,11 @@ import javax.annotation.Nullable;
 public class BlockBarrel extends BlockTileEntity {
 
     public static final BlockStateDirection a = BlockProperties.M;
-    public static final BlockStateBoolean b = BlockProperties.u;
+    public static final BlockStateBoolean OPEN = BlockProperties.u;
 
     public BlockBarrel(BlockBase.Info blockbase_info) {
         super(blockbase_info);
-        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBarrel.a, EnumDirection.NORTH)).set(BlockBarrel.b, false));
+        this.j((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBarrel.a, EnumDirection.NORTH)).set(BlockBarrel.OPEN, false));
     }
 
     @Override
@@ -99,7 +99,7 @@ public class BlockBarrel extends BlockTileEntity {
 
     @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockBarrel.a, BlockBarrel.b);
+        blockstatelist_a.a(BlockBarrel.a, BlockBarrel.OPEN);
     }
 
     @Override

@@ -4,7 +4,7 @@ import java.util.EnumSet;
 
 public class Vec3D implements IPosition {
 
-    public static final Vec3D a = new Vec3D(0.0D, 0.0D, 0.0D);
+    public static final Vec3D ORIGIN = new Vec3D(0.0D, 0.0D, 0.0D);
     public final double x;
     public final double y;
     public final double z;
@@ -42,7 +42,7 @@ public class Vec3D implements IPosition {
     public Vec3D d() {
         double d0 = (double) MathHelper.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 
-        return d0 < 1.0E-4D ? Vec3D.a : new Vec3D(this.x / d0, this.y / d0, this.z / d0);
+        return d0 < 1.0E-4D ? Vec3D.ORIGIN : new Vec3D(this.x / d0, this.y / d0, this.z / d0);
     }
 
     public double b(Vec3D vec3d) {

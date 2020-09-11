@@ -478,7 +478,7 @@ public abstract class BlockBase {
             BlockBase.EnumRandomOffset blockbase_enumrandomoffset = this.getBlock().ah_();
 
             if (blockbase_enumrandomoffset == BlockBase.EnumRandomOffset.NONE) {
-                return Vec3D.a;
+                return Vec3D.ORIGIN;
             } else {
                 long i = MathHelper.c(blockposition.getX(), 0, blockposition.getZ());
 

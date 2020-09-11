@@ -19,7 +19,7 @@ public class EntityEnderSignal extends Entity {
         this.setPosition(d0, d1, d2);
     }
 
-    public void b(ItemStack itemstack) {
+    public void setItem(ItemStack itemstack) {
         if (itemstack.getItem() != Items.ENDER_EYE || itemstack.hasTag()) {
             this.getDataWatcher().set(EntityEnderSignal.b, SystemUtils.a((Object) itemstack.cloneItemStack(), (itemstack1) -> {
                 itemstack1.setCount(1);
@@ -32,7 +32,7 @@ public class EntityEnderSignal extends Entity {
         return (ItemStack) this.getDataWatcher().get(EntityEnderSignal.b);
     }
 
-    public ItemStack g() {
+    public ItemStack getItem() {
         ItemStack itemstack = this.h();
 
         return itemstack.isEmpty() ? new ItemStack(Items.ENDER_EYE) : itemstack;
@@ -112,7 +112,7 @@ public class EntityEnderSignal extends Entity {
                 this.playSound(SoundEffects.ENTITY_ENDER_EYE_DEATH, 1.0F, 1.0F);
                 this.die();
                 if (this.shouldDropItem) {
-                    this.world.addEntity(new EntityItem(this.world, this.locX(), this.locY(), this.locZ(), this.g()));
+                    this.world.addEntity(new EntityItem(this.world, this.locX(), this.locY(), this.locZ(), this.getItem()));
                 } else {
                     this.world.triggerEffect(2003, this.getChunkCoordinates(), 0);
                 }
@@ -137,7 +137,7 @@ public class EntityEnderSignal extends Entity {
     public void loadData(NBTTagCompound nbttagcompound) {
         ItemStack itemstack = ItemStack.a(nbttagcompound.getCompound("Item"));
 
-        this.b(itemstack);
+        this.setItem(itemstack);
     }
 
     @Override

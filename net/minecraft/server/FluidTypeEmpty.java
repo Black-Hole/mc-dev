@@ -16,7 +16,7 @@ public class FluidTypeEmpty extends FluidType {
 
     @Override
     public Vec3D a(IBlockAccess iblockaccess, BlockPosition blockposition, Fluid fluid) {
-        return Vec3D.a;
+        return Vec3D.ORIGIN;
     }
 
     @Override

@@ -24,7 +24,7 @@ public enum EnumItemSlot {
         return this.h;
     }
 
-    public int c() {
+    public int getSlotFlag() {
         return this.i;
     }
 
