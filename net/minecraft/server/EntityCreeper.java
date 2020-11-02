@@ -37,7 +37,7 @@ public class EntityCreeper extends EntityMonster {
     }
 
     @Override
-    public int bO() {
+    public int bP() {
         return this.getGoalTarget() == null ? 3 : 3 + (int) (this.getHealth() - 1.0F);
     }
 

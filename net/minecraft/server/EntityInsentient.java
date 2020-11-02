@@ -69,7 +69,7 @@ public abstract class EntityInsentient extends EntityLiving {
     protected void initPathfinder() {}
 
     public static AttributeProvider.Builder p() {
-        return EntityLiving.cK().a(GenericAttributes.FOLLOW_RANGE, 16.0D).a(GenericAttributes.ATTACK_KNOCKBACK);
+        return EntityLiving.cL().a(GenericAttributes.FOLLOW_RANGE, 16.0D).a(GenericAttributes.ATTACK_KNOCKBACK);
     }
 
     protected NavigationAbstract b(World world) {
@@ -172,7 +172,7 @@ public abstract class EntityInsentient extends EntityLiving {
         SoundEffect soundeffect = this.getSoundAmbient();
 
         if (soundeffect != null) {
-            this.playSound(soundeffect, this.getSoundVolume(), this.dG());
+            this.playSound(soundeffect, this.getSoundVolume(), this.dH());
         }
 
     }
@@ -232,7 +232,7 @@ public abstract class EntityInsentient extends EntityLiving {
                 double d2 = this.random.nextGaussian() * 0.02D;
                 double d3 = 10.0D;
 
-                this.world.addParticle(Particles.POOF, this.c(1.0D) - d0 * 10.0D, this.cE() - d1 * 10.0D, this.g(1.0D) - d2 * 10.0D, d0, d1, d2);
+                this.world.addParticle(Particles.POOF, this.c(1.0D) - d0 * 10.0D, this.cF() - d1 * 10.0D, this.g(1.0D) - d2 * 10.0D, d0, d1, d2);
             }
         } else {
             this.world.broadcastEntityEffect(this, (byte) 20);
@@ -431,12 +431,12 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     @Override
-    public final MinecraftKey do_() {
+    public final MinecraftKey dp() {
         return this.lootTableKey == null ? this.getDefaultLootTable() : this.lootTableKey;
     }
 
     protected MinecraftKey getDefaultLootTable() {
-        return super.do_();
+        return super.dp();
     }
 
     public void t(float f) {
@@ -673,7 +673,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return 40;
     }
 
-    public int eo() {
+    public int Q() {
         return 75;
     }
 
@@ -739,7 +739,7 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     @Override
-    public int bO() {
+    public int bP() {
         if (this.getGoalTarget() == null) {
             return 3;
         } else {
@@ -755,7 +755,7 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     @Override
-    public Iterable<ItemStack> bm() {
+    public Iterable<ItemStack> bn() {
         return this.bp;
     }
 
@@ -1288,8 +1288,8 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     @Override
-    public boolean cr() {
-        return this.er() && super.cr();
+    public boolean cs() {
+        return this.er() && super.cs();
     }
 
     public static boolean c(EnumItemSlot enumitemslot, ItemStack itemstack) {
@@ -1396,7 +1396,7 @@ public abstract class EntityInsentient extends EntityLiving {
 
     protected boolean eG() {
         if (this.world.isDay() && !this.world.isClientSide) {
-            float f = this.aQ();
+            float f = this.aR();
             BlockPosition blockposition = this.getVehicle() instanceof EntityBoat ? (new BlockPosition(this.locX(), (double) Math.round(this.locY()), this.locZ())).up() : new BlockPosition(this.locX(), (double) Math.round(this.locY()), this.locZ());
 
             if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.e(blockposition)) {
@@ -1418,8 +1418,8 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     @Override
-    protected void bM() {
-        super.bM();
+    protected void bN() {
+        super.bN();
         this.unleash(true, false);
     }
 }

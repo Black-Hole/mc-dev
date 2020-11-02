@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Floats;
 import com.mojang.brigadier.ParseResults;
@@ -10,8 +11,13 @@ import it.unimi.dsi.fastutil.ints.Int2ShortMap;
 import it.unimi.dsi.fastutil.ints.Int2ShortOpenHashMap;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -60,6 +66,12 @@ public class PlayerConnection implements PacketListenerPlayIn {
         networkmanager.setPacketListener(this);
         this.player = entityplayer;
         entityplayer.playerConnection = this;
+        ITextFilter itextfilter = entityplayer.Q();
+
+        if (itextfilter != null) {
+            itextfilter.a();
+        }
+
     }
 
     public void tick() {
@@ -163,6 +175,38 @@ public class PlayerConnection implements PacketListenerPlayIn {
 
         this.networkManager.getClass();
         minecraftserver.executeSync(networkmanager::handleDisconnection);
+    }
+
+    private <T> void a(T t0, Consumer<T> consumer, BiFunction<ITextFilter, T, CompletableFuture<Optional<T>>> bifunction) {
+        IAsyncTaskHandler<?> iasynctaskhandler = this.player.getWorldServer().getMinecraftServer();
+        Consumer<T> consumer1 = (object) -> {
+            if (this.a().isConnected()) {
+                consumer.accept(object);
+            } else {
+                PlayerConnection.LOGGER.debug("Ignoring packet due to disconnection");
+            }
+
+        };
+        ITextFilter itextfilter = this.player.Q();
+
+        if (itextfilter != null) {
+            ((CompletableFuture) bifunction.apply(itextfilter, t0)).thenAcceptAsync((optional) -> {
+                optional.ifPresent(consumer1);
+            }, iasynctaskhandler);
+        } else {
+            iasynctaskhandler.execute(() -> {
+                consumer1.accept(t0);
+            });
+        }
+
+    }
+
+    private void a(String s, Consumer<String> consumer) {
+        this.a(s, consumer, ITextFilter::a);
+    }
+
+    private void a(List<String> list, Consumer<List<String>> consumer) {
+        this.a(list, consumer, ITextFilter::a);
     }
 
     @Override
@@ -551,42 +595,76 @@ public class PlayerConnection implements PacketListenerPlayIn {
 
     @Override
     public void a(PacketPlayInBEdit packetplayinbedit) {
-        PlayerConnectionUtils.ensureMainThread(packetplayinbedit, this, this.player.getWorldServer());
         ItemStack itemstack = packetplayinbedit.b();
 
-        if (!itemstack.isEmpty()) {
-            if (ItemBookAndQuill.a(itemstack.getTag())) {
-                ItemStack itemstack1 = this.player.b(packetplayinbedit.d());
+        if (itemstack.getItem() == Items.WRITABLE_BOOK) {
+            NBTTagCompound nbttagcompound = itemstack.getTag();
 
-                if (itemstack.getItem() == Items.WRITABLE_BOOK && itemstack1.getItem() == Items.WRITABLE_BOOK) {
-                    if (packetplayinbedit.c()) {
-                        ItemStack itemstack2 = new ItemStack(Items.WRITTEN_BOOK);
-                        NBTTagCompound nbttagcompound = itemstack1.getTag();
+            if (ItemBookAndQuill.a(nbttagcompound)) {
+                List<String> list = Lists.newArrayList();
+                boolean flag = packetplayinbedit.c();
 
-                        if (nbttagcompound != null) {
-                            itemstack2.setTag(nbttagcompound.clone());
-                        }
-
-                        itemstack2.a("author", (NBTBase) NBTTagString.a(this.player.getDisplayName().getString()));
-                        itemstack2.a("title", (NBTBase) NBTTagString.a(itemstack.getTag().getString("title")));
-                        NBTTagList nbttaglist = itemstack.getTag().getList("pages", 8);
-
-                        for (int i = 0; i < nbttaglist.size(); ++i) {
-                            String s = nbttaglist.getString(i);
-                            ChatComponentText chatcomponenttext = new ChatComponentText(s);
-
-                            s = IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) chatcomponenttext);
-                            nbttaglist.set(i, (NBTBase) NBTTagString.a(s));
-                        }
-
-                        itemstack2.a("pages", (NBTBase) nbttaglist);
-                        this.player.a(packetplayinbedit.d(), itemstack2);
-                    } else {
-                        itemstack1.a("pages", (NBTBase) itemstack.getTag().getList("pages", 8));
-                    }
+                if (flag) {
+                    list.add(nbttagcompound.getString("title"));
                 }
 
+                NBTTagList nbttaglist = nbttagcompound.getList("pages", 8);
+
+                int i;
+
+                for (i = 0; i < nbttaglist.size(); ++i) {
+                    list.add(nbttaglist.getString(i));
+                }
+
+                i = packetplayinbedit.d();
+                if (PlayerInventory.d(i) || i == 40) {
+                    this.a((List) list, flag ? (list1) -> {
+                        this.a((String) list1.get(0), list1.subList(1, list1.size()), i);
+                    } : (list1) -> {
+                        this.a(list1, i);
+                    });
+                }
             }
+        }
+    }
+
+    private void a(List<String> list, int i) {
+        ItemStack itemstack = this.player.inventory.getItem(i);
+
+        if (itemstack.getItem() == Items.WRITABLE_BOOK) {
+            NBTTagList nbttaglist = new NBTTagList();
+
+            list.stream().map(NBTTagString::a).forEach(nbttaglist::add);
+            itemstack.a("pages", (NBTBase) nbttaglist);
+        }
+    }
+
+    private void a(String s, List<String> list, int i) {
+        ItemStack itemstack = this.player.inventory.getItem(i);
+
+        if (itemstack.getItem() == Items.WRITABLE_BOOK) {
+            ItemStack itemstack1 = new ItemStack(Items.WRITTEN_BOOK);
+            NBTTagCompound nbttagcompound = itemstack.getTag();
+
+            if (nbttagcompound != null) {
+                itemstack1.setTag(nbttagcompound.clone());
+            }
+
+            itemstack1.a("author", (NBTBase) NBTTagString.a(this.player.getDisplayName().getString()));
+            itemstack1.a("title", (NBTBase) NBTTagString.a(s));
+            NBTTagList nbttaglist = new NBTTagList();
+            Iterator iterator = list.iterator();
+
+            while (iterator.hasNext()) {
+                String s1 = (String) iterator.next();
+                ChatComponentText chatcomponenttext = new ChatComponentText(s1);
+                String s2 = IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) chatcomponenttext);
+
+                nbttaglist.add(NBTTagString.a(s2));
+            }
+
+            itemstack1.a("pages", (NBTBase) nbttaglist);
+            this.player.inventory.setItem(i, itemstack1);
         }
     }
 
@@ -910,6 +988,12 @@ public class PlayerConnection implements PacketListenerPlayIn {
         this.minecraftServer.getPlayerList().sendMessage((new ChatMessage("multiplayer.player.left", new Object[]{this.player.getScoreboardDisplayName()})).a(EnumChatFormat.YELLOW), ChatMessageType.SYSTEM, SystemUtils.b);
         this.player.p();
         this.minecraftServer.getPlayerList().disconnect(this.player);
+        ITextFilter itextfilter = this.player.Q();
+
+        if (itextfilter != null) {
+            itextfilter.b();
+        }
+
         if (this.isExemptPlayer()) {
             PlayerConnection.LOGGER.info("Stopping singleplayer server as player logged out");
             this.minecraftServer.safeShutdown(false);
@@ -965,12 +1049,22 @@ public class PlayerConnection implements PacketListenerPlayIn {
 
     @Override
     public void a(PacketPlayInChat packetplayinchat) {
-        PlayerConnectionUtils.ensureMainThread(packetplayinchat, this, this.player.getWorldServer());
+        String s = StringUtils.normalizeSpace(packetplayinchat.b());
+
+        if (s.startsWith("/")) {
+            PlayerConnectionUtils.ensureMainThread(packetplayinchat, this, this.player.getWorldServer());
+            this.c(s);
+        } else {
+            this.a(s, this::c);
+        }
+
+    }
+
+    private void c(String s) {
         if (this.player.getChatFlags() == EnumChatVisibility.HIDDEN) {
             this.sendPacket(new PacketPlayOutChat((new ChatMessage("chat.cannotSend")).a(EnumChatFormat.RED), ChatMessageType.SYSTEM, SystemUtils.b));
         } else {
             this.player.resetIdleTimer();
-            String s = StringUtils.normalizeSpace(packetplayinchat.b());
 
             for (int i = 0; i < s.length(); ++i) {
                 if (!SharedConstants.isAllowedChatCharacter(s.charAt(i))) {
@@ -1053,7 +1147,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
                 }
                 break;
             case START_FALL_FLYING:
-                if (!this.player.eC()) {
+                if (!this.player.eD()) {
                     this.player.stopGliding();
                 }
                 break;
@@ -1258,7 +1352,14 @@ public class PlayerConnection implements PacketListenerPlayIn {
 
     @Override
     public void a(PacketPlayInUpdateSign packetplayinupdatesign) {
-        PlayerConnectionUtils.ensureMainThread(packetplayinupdatesign, this, this.player.getWorldServer());
+        List<String> list = (List) Stream.of(packetplayinupdatesign.c()).map(EnumChatFormat::a).collect(Collectors.toList());
+
+        this.a(list, (list1) -> {
+            this.a(packetplayinupdatesign, list1);
+        });
+    }
+
+    private void a(PacketPlayInUpdateSign packetplayinupdatesign, List<String> list) {
         this.player.resetIdleTimer();
         WorldServer worldserver = this.player.getWorldServer();
         BlockPosition blockposition = packetplayinupdatesign.b();
@@ -1278,10 +1379,8 @@ public class PlayerConnection implements PacketListenerPlayIn {
                 return;
             }
 
-            String[] astring = packetplayinupdatesign.c();
-
-            for (int i = 0; i < astring.length; ++i) {
-                tileentitysign.a(i, new ChatComponentText(EnumChatFormat.a(astring[i])));
+            for (int i = 0; i < list.size(); ++i) {
+                tileentitysign.a(i, new ChatComponentText((String) list.get(i)));
             }
 
             tileentitysign.update();

@@ -13,7 +13,7 @@ public class BlockNylium extends Block implements IBlockFragilePlantElement {
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
         int i = LightEngineLayer.a(iworldreader, iblockdata, blockposition, iblockdata1, blockposition1, EnumDirection.UP, iblockdata1.b((IBlockAccess) iworldreader, blockposition1));
 
-        return i < iworldreader.J();
+        return i < iworldreader.K();
     }
 
     @Override

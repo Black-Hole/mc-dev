@@ -65,7 +65,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
     }
 
     public double[] a(int i, float f) {
-        if (this.dk()) {
+        if (this.dl()) {
             f = 0.0F;
         }
 
@@ -106,7 +106,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
         }
 
         this.bp = this.bq;
-        if (this.dk()) {
+        if (this.dl()) {
             f = (this.random.nextFloat() - 0.5F) * 8.0F;
             f1 = (this.random.nextFloat() - 0.5F) * 4.0F;
             float f2 = (this.random.nextFloat() - 0.5F) * 8.0F;
@@ -349,10 +349,10 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
             if (entity instanceof EntityLiving) {
                 double d2 = entity.locX() - d0;
                 double d3 = entity.locZ() - d1;
-                double d4 = d2 * d2 + d3 * d3;
+                double d4 = Math.max(d2 * d2 + d3 * d3, 0.1D);
 
                 entity.i(d2 / d4 * 4.0D, 0.20000000298023224D, d3 / d4 * 4.0D);
-                if (!this.bG.a().a() && ((EntityLiving) entity).cZ() < entity.ticksLived - 2) {
+                if (!this.bG.a().a() && ((EntityLiving) entity).da() < entity.ticksLived - 2) {
                     entity.damageEntity(DamageSource.mobAttack(this), 5.0F);
                     this.a((EntityLiving) this, entity);
                 }
@@ -432,7 +432,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
                     float f1 = this.getHealth();
 
                     this.dealDamage(damagesource, f);
-                    if (this.dk() && !this.bG.a().a()) {
+                    if (this.dl() && !this.bG.a().a()) {
                         this.setHealth(1.0F);
                         this.bG.setControllerPhase(DragonControllerPhase.DYING);
                     }
@@ -475,7 +475,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
     }
 
     @Override
-    protected void cT() {
+    protected void cU() {
         if (this.bF != null) {
             this.bF.b(this);
         }

@@ -20,7 +20,7 @@ public class PathfinderGoalHurtByTarget extends PathfinderGoalTarget {
 
     @Override
     public boolean a() {
-        int i = this.e.cZ();
+        int i = this.e.da();
         EntityLiving entityliving = this.e.getLastDamager();
 
         if (i != this.c && entityliving != null) {
@@ -55,7 +55,7 @@ public class PathfinderGoalHurtByTarget extends PathfinderGoalTarget {
     public void c() {
         this.e.setGoalTarget(this.e.getLastDamager());
         this.g = this.e.getGoalTarget();
-        this.c = this.e.cZ();
+        this.c = this.e.da();
         this.h = 300;
         if (this.b) {
             this.g();

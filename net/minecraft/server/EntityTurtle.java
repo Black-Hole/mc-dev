@@ -145,12 +145,12 @@ public class EntityTurtle extends EntityAnimal {
     }
 
     @Override
-    public boolean bU() {
+    public boolean bV() {
         return false;
     }
 
     @Override
-    public boolean cL() {
+    public boolean cM() {
         return true;
     }
 
@@ -205,12 +205,12 @@ public class EntityTurtle extends EntityAnimal {
     }
 
     @Override
-    protected float as() {
+    protected float at() {
         return this.B + 0.15F;
     }
 
     @Override
-    public float cR() {
+    public float cS() {
         return this.isBaby() ? 0.3F : 1.0F;
     }
 
@@ -326,14 +326,14 @@ public class EntityTurtle extends EntityAnimal {
             if (this.i.isInWater()) {
                 this.i.setMot(this.i.getMot().add(0.0D, 0.005D, 0.0D));
                 if (!this.i.getHomePos().a((IPosition) this.i.getPositionVector(), 16.0D)) {
-                    this.i.q(Math.max(this.i.dM() / 2.0F, 0.08F));
+                    this.i.q(Math.max(this.i.dN() / 2.0F, 0.08F));
                 }
 
                 if (this.i.isBaby()) {
-                    this.i.q(Math.max(this.i.dM() / 3.0F, 0.06F));
+                    this.i.q(Math.max(this.i.dN() / 3.0F, 0.06F));
                 }
             } else if (this.i.onGround) {
-                this.i.q(Math.max(this.i.dM() / 2.0F, 0.06F));
+                this.i.q(Math.max(this.i.dN() / 2.0F, 0.06F));
             }
 
         }
@@ -354,8 +354,8 @@ public class EntityTurtle extends EntityAnimal {
                 this.i.aA = this.i.yaw;
                 float f1 = (float) (this.e * this.i.b(GenericAttributes.MOVEMENT_SPEED));
 
-                this.i.q(MathHelper.g(0.125F, this.i.dM(), f1));
-                this.i.setMot(this.i.getMot().add(0.0D, (double) this.i.dM() * d1 * 0.1D, 0.0D));
+                this.i.q(MathHelper.g(0.125F, this.i.dN(), f1));
+                this.i.setMot(this.i.getMot().add(0.0D, (double) this.i.dN() * d1 * 0.1D, 0.0D));
             } else {
                 this.i.q(0.0F);
             }
@@ -542,7 +542,7 @@ public class EntityTurtle extends EntityAnimal {
 
         @Override
         public void e() {
-            this.b.getControllerLook().a(this.d, (float) (this.b.eo() + 20), (float) this.b.O());
+            this.b.getControllerLook().a(this.d, (float) (this.b.Q() + 20), (float) this.b.O());
             if (this.b.h((Entity) this.d) < 6.25D) {
                 this.b.getNavigation().o();
             } else {

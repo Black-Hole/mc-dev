@@ -52,7 +52,7 @@ public interface IEntityAngerable {
         EntityLiving entityliving = this.getGoalTarget();
         UUID uuid = this.getAngerTarget();
 
-        if ((entityliving == null || entityliving.dk()) && uuid != null && worldserver.getEntity(uuid) instanceof EntityInsentient) {
+        if ((entityliving == null || entityliving.dl()) && uuid != null && worldserver.getEntity(uuid) instanceof EntityInsentient) {
             this.pacify();
         } else {
             if (entityliving != null && !Objects.equals(uuid, entityliving.getUniqueID())) {

@@ -115,7 +115,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
     }
 
     @Override
-    public double bb() {
+    public double bc() {
         float f = Math.min(0.25F, this.av);
         float f1 = this.aw;
 
@@ -177,7 +177,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
                 if (DismountUtil.a(d3)) {
                     Vec3D vec3d1 = Vec3D.a((BaseBlockPosition) blockposition, d3);
-                    UnmodifiableIterator unmodifiableiterator = entityliving.ei().iterator();
+                    UnmodifiableIterator unmodifiableiterator = entityliving.ej().iterator();
 
                     while (unmodifiableiterator.hasNext()) {
                         EntityPose entitypose = (EntityPose) unmodifiableiterator.next();
@@ -216,13 +216,13 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
     }
 
     @Override
-    protected float as() {
+    protected float at() {
         return this.B + 0.6F;
     }
 
     @Override
     protected void b(BlockPosition blockposition, IBlockData iblockdata) {
-        this.playSound(this.aP() ? SoundEffects.ENTITY_STRIDER_STEP_LAVA : SoundEffects.ENTITY_STRIDER_STEP, 1.0F, 1.0F);
+        this.playSound(this.aQ() ? SoundEffects.ENTITY_STRIDER_STEP_LAVA : SoundEffects.ENTITY_STRIDER_STEP, 1.0F, 1.0F);
     }
 
     @Override
@@ -233,7 +233,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
     @Override
     protected void a(double d0, boolean flag, IBlockData iblockdata, BlockPosition blockposition) {
         this.checkBlockCollisions();
-        if (this.aP()) {
+        if (this.aQ()) {
             this.fallDistance = 0.0F;
         } else {
             super.a(d0, flag, iblockdata, blockposition);
@@ -243,13 +243,13 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
     @Override
     public void tick() {
         if (this.eO() && this.random.nextInt(140) == 0) {
-            this.playSound(SoundEffects.ENTITY_STRIDER_HAPPY, 1.0F, this.dG());
+            this.playSound(SoundEffects.ENTITY_STRIDER_HAPPY, 1.0F, this.dH());
         } else if (this.eN() && this.random.nextInt(60) == 0) {
-            this.playSound(SoundEffects.ENTITY_STRIDER_RETREAT, 1.0F, this.dG());
+            this.playSound(SoundEffects.ENTITY_STRIDER_RETREAT, 1.0F, this.dH());
         }
 
         IBlockData iblockdata = this.world.getType(this.getChunkCoordinates());
-        IBlockData iblockdata1 = this.aM();
+        IBlockData iblockdata1 = this.aN();
         boolean flag = iblockdata.a((Tag) TagsBlock.STRIDER_WARM_BLOCKS) || iblockdata1.a((Tag) TagsBlock.STRIDER_WARM_BLOCKS) || this.b((Tag) TagsFluid.LAVA) > 0.0D;
 
         this.setShivering(!flag);
@@ -272,7 +272,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
     }
 
     private void eU() {
-        if (this.aP()) {
+        if (this.aQ()) {
             VoxelShapeCollision voxelshapecollision = VoxelShapeCollision.a((Entity) this);
 
             if (voxelshapecollision.a(BlockFluids.c, this.getChunkCoordinates(), true) && !this.world.getFluid(this.getChunkCoordinates().up()).a((Tag) TagsFluid.LAVA)) {
@@ -309,7 +309,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
     }
 
     @Override
-    public boolean dN() {
+    public boolean dO() {
         return true;
     }
 
@@ -325,7 +325,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
     @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return iworldreader.getType(blockposition).getFluid().a((Tag) TagsFluid.LAVA) ? 10.0F : (this.aP() ? Float.NEGATIVE_INFINITY : 0.0F);
+        return iworldreader.getType(blockposition).getFluid().a((Tag) TagsFluid.LAVA) ? 10.0F : (this.aQ() ? Float.NEGATIVE_INFINITY : 0.0F);
     }
 
     @Override
@@ -351,7 +351,7 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
     public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         boolean flag = this.k(entityhuman.b(enumhand));
 
-        if (!flag && this.hasSaddle() && !this.isVehicle() && !entityhuman.ep()) {
+        if (!flag && this.hasSaddle() && !this.isVehicle() && !entityhuman.eq()) {
             if (!this.world.isClientSide) {
                 entityhuman.startRiding(this);
             }
@@ -424,12 +424,12 @@ public class EntityStrider extends EntityAnimal implements ISteerable, ISaddleab
 
         @Override
         public boolean b() {
-            return !this.g.aP() && this.a(this.g.world, this.e);
+            return !this.g.aQ() && this.a(this.g.world, this.e);
         }
 
         @Override
         public boolean a() {
-            return !this.g.aP() && super.a();
+            return !this.g.aQ() && super.a();
         }
 
         @Override

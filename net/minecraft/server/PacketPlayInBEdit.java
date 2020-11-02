@@ -6,7 +6,7 @@ public class PacketPlayInBEdit implements Packet<PacketListenerPlayIn> {
 
     private ItemStack a;
     private boolean b;
-    private EnumHand c;
+    private int c;
 
     public PacketPlayInBEdit() {}
 
@@ -14,14 +14,14 @@ public class PacketPlayInBEdit implements Packet<PacketListenerPlayIn> {
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.n();
         this.b = packetdataserializer.readBoolean();
-        this.c = (EnumHand) packetdataserializer.a(EnumHand.class);
+        this.c = packetdataserializer.i();
     }
 
     @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.writeBoolean(this.b);
-        packetdataserializer.a((Enum) this.c);
+        packetdataserializer.d(this.c);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
@@ -36,7 +36,7 @@ public class PacketPlayInBEdit implements Packet<PacketListenerPlayIn> {
         return this.b;
     }
 
-    public EnumHand d() {
+    public int d() {
         return this.c;
     }
 }

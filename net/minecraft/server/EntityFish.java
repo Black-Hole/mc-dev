@@ -104,7 +104,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
             this.setMot(this.getMot().add((double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F), 0.4000000059604645D, (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F)));
             this.onGround = false;
             this.impulse = true;
-            this.playSound(this.getSoundFlop(), this.getSoundVolume(), this.dG());
+            this.playSound(this.getSoundFlop(), this.getSoundVolume(), this.dH());
         }
 
         super.movementTick();
@@ -178,7 +178,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
             if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().m()) {
                 float f = (float) (this.e * this.i.b(GenericAttributes.MOVEMENT_SPEED));
 
-                this.i.q(MathHelper.g(0.125F, this.i.dM(), f));
+                this.i.q(MathHelper.g(0.125F, this.i.dN(), f));
                 double d0 = this.b - this.i.locX();
                 double d1 = this.c - this.i.locY();
                 double d2 = this.d - this.i.locZ();
@@ -186,7 +186,7 @@ public abstract class EntityFish extends EntityWaterAnimal {
                 if (d1 != 0.0D) {
                     double d3 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
 
-                    this.i.setMot(this.i.getMot().add(0.0D, (double) this.i.dM() * (d1 / d3) * 0.1D, 0.0D));
+                    this.i.setMot(this.i.getMot().add(0.0D, (double) this.i.dN() * (d1 / d3) * 0.1D, 0.0D));
                 }
 
                 if (d0 != 0.0D || d2 != 0.0D) {

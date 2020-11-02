@@ -265,7 +265,7 @@ public class EntityPanda extends EntityAnimal {
     public void tick() {
         super.tick();
         if (this.isWorried()) {
-            if (this.world.V() && !this.isInWater()) {
+            if (this.world.W() && !this.isInWater()) {
                 this.t(true);
                 this.v(false);
             } else if (!this.eO()) {
@@ -317,7 +317,7 @@ public class EntityPanda extends EntityAnimal {
     }
 
     public boolean ff() {
-        return this.isWorried() && this.world.V();
+        return this.isWorried() && this.world.W();
     }
 
     private void fl() {

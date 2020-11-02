@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Streams;
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
@@ -9,6 +10,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +27,7 @@ public class ThreadWatchdog implements Runnable {
 
     public void run() {
         while (this.b.isRunning()) {
-            long i = this.b.ax();
+            long i = this.b.ay();
             long j = SystemUtils.getMonotonicMillis();
             long k = j - i;
 
@@ -35,7 +37,7 @@ public class ThreadWatchdog implements Runnable {
                 ThreadMXBean threadmxbean = ManagementFactory.getThreadMXBean();
                 ThreadInfo[] athreadinfo = threadmxbean.dumpAllThreads(true, true);
                 StringBuilder stringbuilder = new StringBuilder();
-                Error error = new Error();
+                Error error = new Error("Watchdog");
                 ThreadInfo[] athreadinfo1 = athreadinfo;
                 int l = athreadinfo.length;
 
@@ -56,6 +58,17 @@ public class ThreadWatchdog implements Runnable {
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Thread Dump");
 
                 crashreportsystemdetails.a("Threads", (Object) stringbuilder);
+                CrashReportSystemDetails crashreportsystemdetails1 = crashreport.a("Performance stats");
+
+                crashreportsystemdetails1.a("Random tick rate", () -> {
+                    return ((GameRules.GameRuleInt) this.b.getSaveData().q().get(GameRules.RANDOM_TICK_SPEED)).toString();
+                });
+                crashreportsystemdetails1.a("Level stats", () -> {
+                    return (String) Streams.stream(this.b.getWorlds()).map((worldserver) -> {
+                        return worldserver.getDimensionKey() + ": " + worldserver.F();
+                    }).collect(Collectors.joining(",\n"));
+                });
+                DispenserRegistry.a("Crash report:\n" + crashreport.e());
                 File file = new File(new File(this.b.B(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
 
                 if (crashreport.a(file)) {

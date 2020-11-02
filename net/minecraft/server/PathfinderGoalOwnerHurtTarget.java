@@ -22,8 +22,8 @@ public class PathfinderGoalOwnerHurtTarget extends PathfinderGoalTarget {
             if (entityliving == null) {
                 return false;
             } else {
-                this.b = entityliving.da();
-                int i = entityliving.db();
+                this.b = entityliving.db();
+                int i = entityliving.dc();
 
                 return i != this.c && this.a(this.b, PathfinderTargetCondition.a) && this.a.a(this.b, entityliving);
             }
@@ -38,7 +38,7 @@ public class PathfinderGoalOwnerHurtTarget extends PathfinderGoalTarget {
         EntityLiving entityliving = this.a.getOwner();
 
         if (entityliving != null) {
-            this.c = entityliving.db();
+            this.c = entityliving.dc();
         }
 
         super.c();

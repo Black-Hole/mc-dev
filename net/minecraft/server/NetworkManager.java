@@ -19,7 +19,7 @@ import io.netty.util.concurrent.GenericFutureListener;
 import java.net.SocketAddress;
 import java.util.Queue;
 import javax.annotation.Nullable;
-import javax.crypto.SecretKey;
+import javax.crypto.Cipher;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -247,10 +247,10 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
         return this.channel instanceof LocalChannel || this.channel instanceof LocalServerChannel;
     }
 
-    public void a(SecretKey secretkey) {
+    public void a(Cipher cipher, Cipher cipher1) {
         this.n = true;
-        this.channel.pipeline().addBefore("splitter", "decrypt", new PacketDecrypter(MinecraftEncryption.a(2, secretkey)));
-        this.channel.pipeline().addBefore("prepender", "encrypt", new PacketEncrypter(MinecraftEncryption.a(1, secretkey)));
+        this.channel.pipeline().addBefore("splitter", "decrypt", new PacketDecrypter(cipher));
+        this.channel.pipeline().addBefore("prepender", "encrypt", new PacketEncrypter(cipher1));
     }
 
     public boolean isConnected() {

@@ -160,7 +160,7 @@ public class EntityCat extends EntityTameableAnimal {
     }
 
     public void eZ() {
-        this.playSound(SoundEffects.ENTITY_CAT_HISS, this.getSoundVolume(), this.dG());
+        this.playSound(SoundEffects.ENTITY_CAT_HISS, this.getSoundVolume(), this.dH());
     }
 
     @Override
@@ -284,7 +284,7 @@ public class EntityCat extends EntityTameableAnimal {
     @Override
     public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         groupdataentity = super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
-        if (worldaccess.ae() > 0.9F) {
+        if (worldaccess.af() > 0.9F) {
             this.setCatType(this.random.nextInt(11));
         } else {
             this.setCatType(this.random.nextInt(10));
@@ -475,7 +475,7 @@ public class EntityCat extends EntityTameableAnimal {
             this.a.x(false);
             float f = this.a.world.f(1.0F);
 
-            if (this.b.eB() >= 100 && (double) f > 0.77D && (double) f < 0.8D && (double) this.a.world.getRandom().nextFloat() < 0.7D) {
+            if (this.b.eC() >= 100 && (double) f > 0.77D && (double) f < 0.8D && (double) this.a.world.getRandom().nextFloat() < 0.7D) {
                 this.h();
             }
 

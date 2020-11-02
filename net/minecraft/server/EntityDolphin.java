@@ -28,13 +28,13 @@ public class EntityDolphin extends EntityWaterAnimal {
     @Nullable
     @Override
     public GroupDataEntity prepare(WorldAccess worldaccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        this.setAirTicks(this.bG());
+        this.setAirTicks(this.bH());
         this.pitch = 0.0F;
         return super.prepare(worldaccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
     @Override
-    public boolean cL() {
+    public boolean cM() {
         return false;
     }
 
@@ -134,13 +134,13 @@ public class EntityDolphin extends EntityWaterAnimal {
     }
 
     @Override
-    public int bG() {
+    public int bH() {
         return 4800;
     }
 
     @Override
     protected int m(int i) {
-        return this.bG();
+        return this.bH();
     }
 
     @Override
@@ -154,7 +154,7 @@ public class EntityDolphin extends EntityWaterAnimal {
     }
 
     @Override
-    public int eo() {
+    public int Q() {
         return 1;
     }
 
@@ -190,9 +190,9 @@ public class EntityDolphin extends EntityWaterAnimal {
     public void tick() {
         super.tick();
         if (this.isNoAI()) {
-            this.setAirTicks(this.bG());
+            this.setAirTicks(this.bH());
         } else {
-            if (this.aF()) {
+            if (this.aG()) {
                 this.setMoistness(2400);
             } else {
                 this.setMoistness(this.getMoistness() - 1);
@@ -289,7 +289,7 @@ public class EntityDolphin extends EntityWaterAnimal {
     @Override
     public void g(Vec3D vec3d) {
         if (this.doAITick() && this.isInWater()) {
-            this.a(this.dM(), vec3d);
+            this.a(this.dN(), vec3d);
             this.move(EnumMoveType.SELF, this.getMot());
             this.setMot(this.getMot().a(0.9D));
             if (this.getGoalTarget() == null) {
@@ -397,7 +397,7 @@ public class EntityDolphin extends EntityWaterAnimal {
                     return;
                 }
 
-                this.a.getControllerLook().a(vec3d1.x, vec3d1.y, vec3d1.z, (float) (this.a.eo() + 20), (float) this.a.O());
+                this.a.getControllerLook().a(vec3d1.x, vec3d1.y, vec3d1.z, (float) (this.a.Q() + 20), (float) this.a.O());
                 this.a.getNavigation().a(vec3d1.x, vec3d1.y, vec3d1.z, 1.3D);
                 if (world.random.nextInt(80) == 0) {
                     world.broadcastEntityEffect(this.a, (byte) 38);
@@ -443,7 +443,7 @@ public class EntityDolphin extends EntityWaterAnimal {
 
         @Override
         public void e() {
-            this.a.getControllerLook().a(this.c, (float) (this.a.eo() + 20), (float) this.a.O());
+            this.a.getControllerLook().a(this.c, (float) (this.a.Q() + 20), (float) this.a.O());
             if (this.a.h((Entity) this.c) < 6.25D) {
                 this.a.getNavigation().o();
             } else {

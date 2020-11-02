@@ -74,7 +74,7 @@ public abstract class EntityHuman extends EntityLiving {
             return false;
         } else if (enumgamemode == EnumGamemode.SPECTATOR) {
             return true;
-        } else if (this.eJ()) {
+        } else if (this.eK()) {
             return false;
         } else {
             ItemStack itemstack = this.getItemInMainHand();
@@ -83,8 +83,8 @@ public abstract class EntityHuman extends EntityLiving {
         }
     }
 
-    public static AttributeProvider.Builder eo() {
-        return EntityLiving.cK().a(GenericAttributes.ATTACK_DAMAGE, 1.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.10000000149011612D).a(GenericAttributes.ATTACK_SPEED).a(GenericAttributes.LUCK);
+    public static AttributeProvider.Builder ep() {
+        return EntityLiving.cL().a(GenericAttributes.ATTACK_DAMAGE, 1.0D).a(GenericAttributes.MOVEMENT_SPEED, 0.10000000149011612D).a(GenericAttributes.ATTACK_SPEED).a(GenericAttributes.LUCK);
     }
 
     @Override
@@ -125,7 +125,7 @@ public abstract class EntityHuman extends EntityLiving {
             }
         }
 
-        this.es();
+        this.et();
         super.tick();
         if (!this.world.isClientSide && this.activeContainer != null && !this.activeContainer.canUse(this)) {
             this.closeInventory();
@@ -140,7 +140,7 @@ public abstract class EntityHuman extends EntityLiving {
                 this.a(StatisticList.TIME_SINCE_DEATH);
             }
 
-            if (this.bw()) {
+            if (this.bx()) {
                 this.a(StatisticList.SNEAK_TIME);
             }
 
@@ -170,14 +170,10 @@ public abstract class EntityHuman extends EntityLiving {
 
         this.o();
         this.bM.a();
-        this.et();
+        this.eu();
     }
 
-    public boolean ep() {
-        return this.isSneaking();
-    }
-
-    protected boolean eq() {
+    public boolean eq() {
         return this.isSneaking();
     }
 
@@ -186,6 +182,10 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     protected boolean es() {
+        return this.isSneaking();
+    }
+
+    protected boolean et() {
         this.bB = this.a((Tag) TagsFluid.WATER);
         return this.bB;
     }
@@ -247,7 +247,7 @@ public abstract class EntityHuman extends EntityLiving {
         this.bz += d1 * 0.25D;
     }
 
-    protected void et() {
+    protected void eu() {
         if (this.c(EntityPose.SWIMMING)) {
             EntityPose entitypose;
 
@@ -282,7 +282,7 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     @Override
-    public int ai() {
+    public int aj() {
         return this.abilities.isInvulnerable ? 1 : 80;
     }
 
@@ -329,7 +329,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     @Override
     public void passengerTick() {
-        if (this.eq() && this.isPassenger()) {
+        if (this.er() && this.isPassenger()) {
             this.stopRiding();
             this.setSneaking(false);
         } else {
@@ -347,7 +347,7 @@ public abstract class EntityHuman extends EntityLiving {
     @Override
     protected void doTick() {
         super.doTick();
-        this.dz();
+        this.dA();
         this.aC = this.yaw;
     }
 
@@ -378,7 +378,7 @@ public abstract class EntityHuman extends EntityLiving {
         this.q((float) this.b(GenericAttributes.MOVEMENT_SPEED));
         float f;
 
-        if (this.onGround && !this.dk() && !this.isSwimming()) {
+        if (this.onGround && !this.dl() && !this.isSwimming()) {
             f = Math.min(0.1F, MathHelper.sqrt(c(this.getMot())));
         } else {
             f = 0.0F;
@@ -450,7 +450,7 @@ public abstract class EntityHuman extends EntityLiving {
     @Override
     public void die(DamageSource damagesource) {
         super.die(damagesource);
-        this.ae();
+        this.af();
         if (!this.isSpectator()) {
             this.d(damagesource);
         }
@@ -673,7 +673,7 @@ public abstract class EntityHuman extends EntityLiving {
             return false;
         } else {
             this.ticksFarFromPlayer = 0;
-            if (this.dk()) {
+            if (this.dl()) {
                 return false;
             } else {
                 this.releaseShoulderEntities();
@@ -776,8 +776,8 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     @Override
-    protected boolean cO() {
-        return !this.abilities.isFlying && super.cO();
+    protected boolean cP() {
+        return !this.abilities.isFlying && super.cP();
     }
 
     public void openSign(TileEntitySign tileentitysign) {}
@@ -841,13 +841,13 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     @Override
-    public double ba() {
+    public double bb() {
         return -0.35D;
     }
 
     @Override
-    public void be() {
-        super.be();
+    public void bf() {
+        super.bf();
         this.j = 0;
     }
 
@@ -857,13 +857,13 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     @Override
-    public boolean cS() {
+    public boolean cT() {
         return !this.abilities.isFlying;
     }
 
     @Override
     protected Vec3D a(Vec3D vec3d, EnumMoveType enummovetype) {
-        if (!this.abilities.isFlying && (enummovetype == EnumMoveType.SELF || enummovetype == EnumMoveType.PLAYER) && this.er() && this.q()) {
+        if (!this.abilities.isFlying && (enummovetype == EnumMoveType.SELF || enummovetype == EnumMoveType.PLAYER) && this.es() && this.q()) {
             double d0 = vec3d.x;
             double d1 = vec3d.z;
             double d2 = 0.05D;
@@ -917,7 +917,7 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     public void attack(Entity entity) {
-        if (entity.bK()) {
+        if (entity.bL()) {
             if (!entity.t(this)) {
                 float f = (float) this.b(GenericAttributes.ATTACK_DAMAGE);
                 float f1;
@@ -956,7 +956,7 @@ public abstract class EntityHuman extends EntityLiving {
                     boolean flag3 = false;
                     double d0 = (double) (this.A - this.z);
 
-                    if (flag && !flag2 && !flag1 && this.onGround && d0 < (double) this.dM()) {
+                    if (flag && !flag2 && !flag1 && this.onGround && d0 < (double) this.dN()) {
                         ItemStack itemstack = this.b(EnumHand.MAIN_HAND);
 
                         if (itemstack.getItem() instanceof ItemSword) {
@@ -1006,7 +1006,7 @@ public abstract class EntityHuman extends EntityLiving {
                             }
 
                             this.world.playSound((EntityHuman) null, this.locX(), this.locY(), this.locZ(), SoundEffects.ENTITY_PLAYER_ATTACK_SWEEP, this.getSoundCategory(), 1.0F, 1.0F);
-                            this.ew();
+                            this.ex();
                         }
 
                         if (entity instanceof EntityPlayer && entity.velocityChanged) {
@@ -1104,7 +1104,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     public void b(Entity entity) {}
 
-    public void ew() {
+    public void ex() {
         double d0 = (double) (-MathHelper.sin(this.yaw * 0.017453292F));
         double d1 = (double) MathHelper.cos(this.yaw * 0.017453292F);
 
@@ -1124,7 +1124,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     }
 
-    public boolean ey() {
+    public boolean ez() {
         return false;
     }
 
@@ -1180,7 +1180,7 @@ public abstract class EntityHuman extends EntityLiving {
         return this.isSleeping() && this.sleepTicks >= 100;
     }
 
-    public int eB() {
+    public int eC() {
         return this.sleepTicks;
     }
 
@@ -1262,11 +1262,11 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     @Override
-    public void aI() {
+    public void aJ() {
         if (this.abilities.isFlying) {
             this.setSwimming(false);
         } else {
-            super.aI();
+            super.aJ();
         }
 
     }
@@ -1276,7 +1276,7 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     @Override
-    public float dM() {
+    public float dN() {
         return (float) this.b(GenericAttributes.MOVEMENT_SPEED);
     }
 
@@ -1312,7 +1312,7 @@ public abstract class EntityHuman extends EntityLiving {
                     if (this.isSprinting()) {
                         this.a(StatisticList.SPRINT_ONE_CM, i);
                         this.applyExhaustion(0.1F * (float) i * 0.01F);
-                    } else if (this.by()) {
+                    } else if (this.bz()) {
                         this.a(StatisticList.CROUCH_ONE_CM, i);
                         this.applyExhaustion(0.0F * (float) i * 0.01F);
                     } else {
@@ -1369,7 +1369,7 @@ public abstract class EntityHuman extends EntityLiving {
         }
     }
 
-    public boolean eC() {
+    public boolean eD() {
         if (!this.onGround && !this.isGliding() && !this.isInWater() && !this.hasEffect(MobEffects.LEVITATION)) {
             ItemStack itemstack = this.getEquipment(EnumItemSlot.CHEST);
 
@@ -1392,9 +1392,9 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     @Override
-    protected void aL() {
+    protected void aM() {
         if (!this.isSpectator()) {
-            super.aL();
+            super.aM();
         }
 
     }
@@ -1442,7 +1442,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     }
 
-    public int eF() {
+    public int eG() {
         return this.bG;
     }
 
@@ -1495,11 +1495,11 @@ public abstract class EntityHuman extends EntityLiving {
         return this.abilities.isInvulnerable || flag || this.foodData.c();
     }
 
-    public boolean eI() {
+    public boolean eJ() {
         return this.getHealth() > 0.0F && this.getHealth() < this.getMaxHealth();
     }
 
-    public boolean eJ() {
+    public boolean eK() {
         return this.abilities.mayBuild;
     }
 
@@ -1532,7 +1532,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     @Override
     protected boolean playStepSound() {
-        return !this.abilities.isFlying && (!this.onGround || !this.bw());
+        return !this.abilities.isFlying && (!this.onGround || !this.bx());
     }
 
     public void updateAbilities() {}
@@ -1574,7 +1574,7 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     @Override
-    public Iterable<ItemStack> bm() {
+    public Iterable<ItemStack> bn() {
         return Lists.newArrayList(new ItemStack[]{this.getItemInMainHand(), this.getItemInOffHand()});
     }
 
@@ -1636,7 +1636,7 @@ public abstract class EntityHuman extends EntityLiving {
     public abstract boolean isCreative();
 
     @Override
-    public boolean bU() {
+    public boolean bV() {
         return !this.abilities.isFlying;
     }
 
@@ -1655,7 +1655,7 @@ public abstract class EntityHuman extends EntityLiving {
         String s = this.getProfile().getName();
 
         return ichatmutablecomponent.format((chatmodifier) -> {
-            return chatmodifier.setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, "/tell " + s + " ")).setChatHoverable(this.ca()).setInsertion(s);
+            return chatmodifier.setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, "/tell " + s + " ")).setChatHoverable(this.cb()).setInsertion(s);
         });
     }
 
@@ -1788,12 +1788,12 @@ public abstract class EntityHuman extends EntityLiving {
         this.datawatcher.set(EntityHuman.bl, nbttagcompound);
     }
 
-    public float eQ() {
+    public float eR() {
         return (float) (1.0D / this.b(GenericAttributes.ATTACK_SPEED) * 20.0D);
     }
 
     public float getAttackCooldown(float f) {
-        return MathHelper.a(((float) this.at + f) / this.eQ(), 0.0F, 1.0F);
+        return MathHelper.a(((float) this.at + f) / this.eR(), 0.0F, 1.0F);
     }
 
     public void resetAttackCooldown() {
@@ -1809,7 +1809,7 @@ public abstract class EntityHuman extends EntityLiving {
         return !this.abilities.isFlying && !this.isGliding() ? super.getBlockSpeedFactor() : 1.0F;
     }
 
-    public float eT() {
+    public float eU() {
         return (float) this.b(GenericAttributes.LUCK);
     }
 
@@ -1830,7 +1830,7 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     @Override
-    public ImmutableList<EntityPose> ei() {
+    public ImmutableList<EntityPose> ej() {
         return ImmutableList.of(EntityPose.STANDING, EntityPose.CROUCHING, EntityPose.SWIMMING);
     }
 

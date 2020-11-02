@@ -160,7 +160,7 @@ public class EntityHorse extends EntityHorseAbstract {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (!this.isBaby()) {
-            if (this.isTamed() && entityhuman.ep()) {
+            if (this.isTamed() && entityhuman.eq()) {
                 this.f(entityhuman);
                 return EnumInteractionResult.a(this.world.isClientSide);
             }

@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class EntityMinecartFurnace extends EntityMinecartAbstract {
 
     private static final DataWatcherObject<Boolean> d = DataWatcher.a(EntityMinecartFurnace.class, DataWatcherRegistry.i);
-    private int e;
+    public int fuel;
     public double b;
     public double c;
     private static final RecipeItemStack f = RecipeItemStack.a(Items.COAL, Items.CHARCOAL);
@@ -31,16 +31,16 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
     public void tick() {
         super.tick();
         if (!this.world.s_()) {
-            if (this.e > 0) {
-                --this.e;
+            if (this.fuel > 0) {
+                --this.fuel;
             }
 
-            if (this.e <= 0) {
+            if (this.fuel <= 0) {
                 this.b = 0.0D;
                 this.c = 0.0D;
             }
 
-            this.o(this.e > 0);
+            this.o(this.fuel > 0);
         }
 
         if (this.u() && this.random.nextInt(4) == 0) {
@@ -103,15 +103,15 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
     public EnumInteractionResult a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (EntityMinecartFurnace.f.test(itemstack) && this.e + 3600 <= 32000) {
+        if (EntityMinecartFurnace.f.test(itemstack) && this.fuel + 3600 <= 32000) {
             if (!entityhuman.abilities.canInstantlyBuild) {
                 itemstack.subtract(1);
             }
 
-            this.e += 3600;
+            this.fuel += 3600;
         }
 
-        if (this.e > 0) {
+        if (this.fuel > 0) {
             this.b = this.locX() - entityhuman.locX();
             this.c = this.locZ() - entityhuman.locZ();
         }
@@ -124,7 +124,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         super.saveData(nbttagcompound);
         nbttagcompound.setDouble("PushX", this.b);
         nbttagcompound.setDouble("PushZ", this.c);
-        nbttagcompound.setShort("Fuel", (short) this.e);
+        nbttagcompound.setShort("Fuel", (short) this.fuel);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         super.loadData(nbttagcompound);
         this.b = nbttagcompound.getDouble("PushX");
         this.c = nbttagcompound.getDouble("PushZ");
-        this.e = nbttagcompound.getShort("Fuel");
+        this.fuel = nbttagcompound.getShort("Fuel");
     }
 
     protected boolean u() {

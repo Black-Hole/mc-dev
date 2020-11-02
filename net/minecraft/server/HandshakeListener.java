@@ -16,14 +16,15 @@ public class HandshakeListener implements PacketHandshakingInListener {
         switch (packethandshakinginsetprotocol.b()) {
             case LOGIN:
                 this.c.setProtocol(EnumProtocol.LOGIN);
-                ChatMessage chatmessage;
+                if (packethandshakinginsetprotocol.c() != SharedConstants.getGameVersion().getProtocolVersion()) {
+                    ChatMessage chatmessage;
 
-                if (packethandshakinginsetprotocol.c() > SharedConstants.getGameVersion().getProtocolVersion()) {
-                    chatmessage = new ChatMessage("multiplayer.disconnect.outdated_server", new Object[]{SharedConstants.getGameVersion().getName()});
-                    this.c.sendPacket(new PacketLoginOutDisconnect(chatmessage));
-                    this.c.close(chatmessage);
-                } else if (packethandshakinginsetprotocol.c() < SharedConstants.getGameVersion().getProtocolVersion()) {
-                    chatmessage = new ChatMessage("multiplayer.disconnect.outdated_client", new Object[]{SharedConstants.getGameVersion().getName()});
+                    if (packethandshakinginsetprotocol.c() < 754) {
+                        chatmessage = new ChatMessage("multiplayer.disconnect.outdated_client", new Object[]{SharedConstants.getGameVersion().getName()});
+                    } else {
+                        chatmessage = new ChatMessage("multiplayer.disconnect.incompatible", new Object[]{SharedConstants.getGameVersion().getName()});
+                    }
+
                     this.c.sendPacket(new PacketLoginOutDisconnect(chatmessage));
                     this.c.close(chatmessage);
                 } else {
@@ -31,7 +32,7 @@ public class HandshakeListener implements PacketHandshakingInListener {
                 }
                 break;
             case STATUS:
-                if (this.b.al()) {
+                if (this.b.am()) {
                     this.c.setProtocol(EnumProtocol.STATUS);
                     this.c.setPacketListener(new PacketStatusListener(this.b, this.c));
                 } else {

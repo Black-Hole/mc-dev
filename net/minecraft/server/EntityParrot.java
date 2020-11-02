@@ -295,12 +295,12 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
     }
 
     @Override
-    protected boolean ay() {
+    protected boolean az() {
         return true;
     }
 
     @Override
-    protected float dG() {
+    protected float dH() {
         return a(this.random);
     }
 

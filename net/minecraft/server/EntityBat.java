@@ -28,8 +28,8 @@ public class EntityBat extends EntityAmbient {
     }
 
     @Override
-    protected float dG() {
-        return super.dG() * 0.95F;
+    protected float dH() {
+        return super.dH() * 0.95F;
     }
 
     @Nullable

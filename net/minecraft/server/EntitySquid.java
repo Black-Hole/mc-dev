@@ -86,7 +86,7 @@ public class EntitySquid extends EntityWaterAnimal {
             }
         }
 
-        if (this.aG()) {
+        if (this.aH()) {
             if (this.bp < 3.1415927F) {
                 float f = this.bp / 3.1415927F;
 
@@ -151,7 +151,7 @@ public class EntitySquid extends EntityWaterAnimal {
     }
 
     private void eL() {
-        this.playSound(SoundEffects.ENTITY_SQUID_SQUIRT, this.getSoundVolume(), this.dG());
+        this.playSound(SoundEffects.ENTITY_SQUID_SQUIRT, this.getSoundVolume(), this.dH());
         Vec3D vec3d = this.i(new Vec3D(0.0D, -1.0D, 0.0D)).add(this.locX(), this.locY(), this.locZ());
 
         for (int i = 0; i < 30; ++i) {
@@ -256,7 +256,7 @@ public class EntitySquid extends EntityWaterAnimal {
 
         @Override
         public void e() {
-            int i = this.b.dc();
+            int i = this.b.dd();
 
             if (i > 100) {
                 this.b.a(0.0F, 0.0F, 0.0F);

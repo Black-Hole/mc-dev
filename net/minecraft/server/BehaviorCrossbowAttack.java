@@ -51,7 +51,7 @@ public class BehaviorCrossbowAttack<E extends EntityInsentient & ICrossbow, T ex
                 this.c = BehaviorCrossbowAttack.BowState.UNCHARGED;
             }
 
-            int i = e0.dZ();
+            int i = e0.ea();
             ItemStack itemstack = e0.getActiveItem();
 
             if (i >= ItemCrossbow.g(itemstack)) {

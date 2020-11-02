@@ -68,13 +68,13 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
     }
 
     @Override
-    protected BehaviorController.b<EntityVillager> cJ() {
+    protected BehaviorController.b<EntityVillager> cK() {
         return BehaviorController.a((Collection) EntityVillager.bG, (Collection) EntityVillager.bH);
     }
 
     @Override
     protected BehaviorController<?> a(Dynamic<?> dynamic) {
-        BehaviorController<EntityVillager> behaviorcontroller = this.cJ().a(dynamic);
+        BehaviorController<EntityVillager> behaviorcontroller = this.cK().a(dynamic);
 
         this.a(behaviorcontroller);
         return behaviorcontroller;
@@ -219,7 +219,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
     private void fk() {
         this.s(40);
         if (!this.world.s_()) {
-            this.playSound(SoundEffects.ENTITY_VILLAGER_NO, this.getSoundVolume(), this.dG());
+            this.playSound(SoundEffects.ENTITY_VILLAGER_NO, this.getSoundVolume(), this.dH());
         }
 
     }
@@ -471,7 +471,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
         SoundEffect soundeffect = this.getVillagerData().getProfession().e();
 
         if (soundeffect != null) {
-            this.playSound(soundeffect, this.getSoundVolume(), this.dG());
+            this.playSound(soundeffect, this.getSoundVolume(), this.dH());
         }
 
     }
@@ -644,7 +644,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
     }
 
     @Override
-    protected IChatBaseComponent bI() {
+    protected IChatBaseComponent bJ() {
         return new ChatMessage(this.getEntityType().f() + '.' + IRegistry.VILLAGER_PROFESSION.getKey(this.getVillagerData().getProfession()).getKey());
     }
 

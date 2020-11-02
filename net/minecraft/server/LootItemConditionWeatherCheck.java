@@ -25,7 +25,7 @@ public class LootItemConditionWeatherCheck implements LootItemCondition {
     public boolean test(LootTableInfo loottableinfo) {
         WorldServer worldserver = loottableinfo.getWorld();
 
-        return this.a != null && this.a != worldserver.isRaining() ? false : this.b == null || this.b == worldserver.V();
+        return this.a != null && this.a != worldserver.isRaining() ? false : this.b == null || this.b == worldserver.W();
     }
 
     public static class b implements LootSerializer<LootItemConditionWeatherCheck> {

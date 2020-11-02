@@ -35,7 +35,7 @@ public class EntityRabbit extends EntityAnimal {
     }
 
     @Override
-    protected float dI() {
+    protected float dJ() {
         if (!this.positionChanged && (!this.moveController.b() || this.moveController.e() <= this.locY() + 0.5D)) {
             PathEntity pathentity = this.navigation.k();
 
@@ -151,7 +151,7 @@ public class EntityRabbit extends EntityAnimal {
     }
 
     @Override
-    public boolean aN() {
+    public boolean aO() {
         return false;
     }
 

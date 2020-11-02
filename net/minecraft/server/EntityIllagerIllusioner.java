@@ -82,7 +82,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
                 }
 
                 for (j = 0; j < 16; ++j) {
-                    this.world.addParticle(Particles.CLOUD, this.d(0.5D), this.cE(), this.f(0.5D), 0.0D, 0.0D, 0.0D);
+                    this.world.addParticle(Particles.CLOUD, this.d(0.5D), this.cF(), this.f(0.5D), 0.0D, 0.0D, 0.0D);
                 }
 
                 this.world.a(this.locX(), this.locY(), this.locZ(), SoundEffects.ENTITY_ILLUSIONER_MIRROR_MOVE, this.getSoundCategory(), 1.0F, 1.0F, false);

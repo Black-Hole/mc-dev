@@ -33,13 +33,13 @@ public class EntityPiglinBrute extends EntityPiglinAbstract {
     }
 
     @Override
-    protected BehaviorController.b<EntityPiglinBrute> cJ() {
+    protected BehaviorController.b<EntityPiglinBrute> cK() {
         return BehaviorController.a((Collection) EntityPiglinBrute.bo, (Collection) EntityPiglinBrute.d);
     }
 
     @Override
     protected BehaviorController<?> a(Dynamic<?> dynamic) {
-        return PiglinBruteAI.a(this, this.cJ().a(dynamic));
+        return PiglinBruteAI.a(this, this.cK().a(dynamic));
     }
 
     @Override
@@ -103,11 +103,11 @@ public class EntityPiglinBrute extends EntityPiglinAbstract {
     }
 
     protected void eT() {
-        this.playSound(SoundEffects.ENTITY_PIGLIN_BRUTE_ANGRY, 1.0F, this.dG());
+        this.playSound(SoundEffects.ENTITY_PIGLIN_BRUTE_ANGRY, 1.0F, this.dH());
     }
 
     @Override
     protected void eP() {
-        this.playSound(SoundEffects.ENTITY_PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED, 1.0F, this.dG());
+        this.playSound(SoundEffects.ENTITY_PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED, 1.0F, this.dH());
     }
 }

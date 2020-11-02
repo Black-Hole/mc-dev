@@ -87,7 +87,7 @@ public class EntityArmorStand extends EntityLiving {
     }
 
     @Override
-    public Iterable<ItemStack> bm() {
+    public Iterable<ItemStack> bn() {
         return this.handItems;
     }
 
@@ -533,7 +533,7 @@ public class EntityArmorStand extends EntityLiving {
     }
 
     @Override
-    public double ba() {
+    public double bb() {
         return this.isMarker() ? 0.0D : 0.10000000149011612D;
     }
 
@@ -619,7 +619,7 @@ public class EntityArmorStand extends EntityLiving {
     }
 
     @Override
-    public boolean ch() {
+    public boolean ci() {
         return this.isInvisible();
     }
 
@@ -744,7 +744,7 @@ public class EntityArmorStand extends EntityLiving {
     public void onLightningStrike(WorldServer worldserver, EntityLightning entitylightning) {}
 
     @Override
-    public boolean eg() {
+    public boolean eh() {
         return false;
     }
 
@@ -759,7 +759,7 @@ public class EntityArmorStand extends EntityLiving {
     }
 
     @Override
-    public boolean eh() {
+    public boolean ei() {
         return false;
     }
 

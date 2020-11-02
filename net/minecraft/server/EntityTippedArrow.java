@@ -116,7 +116,7 @@ public class EntityTippedArrow extends EntityArrow {
             double d2 = (double) (j >> 0 & 255) / 255.0D;
 
             for (int k = 0; k < i; ++k) {
-                this.world.addParticle(Particles.ENTITY_EFFECT, this.d(0.5D), this.cE(), this.g(0.5D), d0, d1, d2);
+                this.world.addParticle(Particles.ENTITY_EFFECT, this.d(0.5D), this.cF(), this.g(0.5D), d0, d1, d2);
             }
 
         }

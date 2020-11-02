@@ -175,7 +175,7 @@ public class EntityEnderman extends EntityMonster implements IEntityAngerable {
     public void movementTick() {
         if (this.world.isClientSide) {
             for (int i = 0; i < 2; ++i) {
-                this.world.addParticle(Particles.PORTAL, this.d(0.5D), this.cE() - 0.25D, this.g(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
+                this.world.addParticle(Particles.PORTAL, this.d(0.5D), this.cF() - 0.25D, this.g(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
             }
         }
 
@@ -188,14 +188,14 @@ public class EntityEnderman extends EntityMonster implements IEntityAngerable {
     }
 
     @Override
-    public boolean dN() {
+    public boolean dO() {
         return true;
     }
 
     @Override
     protected void mobTick() {
         if (this.world.isDay() && this.ticksLived >= this.bs + 600) {
-            float f = this.aQ();
+            float f = this.aR();
 
             if (f > 0.5F && this.world.e(this.getChunkCoordinates()) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
                 this.setGoalTarget((EntityLiving) null);

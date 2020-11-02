@@ -261,7 +261,7 @@ public abstract class NavigationAbstract {
                 this.h = blockposition;
                 double d0 = vec3d.f(Vec3D.c(this.h));
 
-                this.k = this.a.dM() > 0.0F ? d0 / (double) this.a.dM() * 1000.0D : 0.0D;
+                this.k = this.a.dN() > 0.0F ? d0 / (double) this.a.dN() * 1000.0D : 0.0D;
             }
 
             if (this.k > 0.0D && (double) this.i > this.k * 3.0D) {
@@ -302,7 +302,7 @@ public abstract class NavigationAbstract {
     protected abstract boolean a();
 
     protected boolean p() {
-        return this.a.aG() || this.a.aP();
+        return this.a.aH() || this.a.aQ();
     }
 
     protected void D_() {

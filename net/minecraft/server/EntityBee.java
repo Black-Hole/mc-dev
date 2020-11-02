@@ -127,7 +127,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
         if (flag) {
             this.a((EntityLiving) this, entity);
             if (entity instanceof EntityLiving) {
-                ((EntityLiving) entity).q(((EntityLiving) entity).dy() + 1);
+                ((EntityLiving) entity).q(((EntityLiving) entity).dz() + 1);
                 byte b0 = 0;
 
                 if (this.world.getDifficulty() == EnumDifficulty.NORMAL) {
@@ -239,7 +239,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
     protected void mobTick() {
         boolean flag = this.hasStung();
 
-        if (this.aG()) {
+        if (this.aH()) {
             ++this.bF;
         } else {
             this.bF = 0;
@@ -496,7 +496,7 @@ public class EntityBee extends EntityAnimal implements IEntityAngerable, EntityB
     protected void a(double d0, boolean flag, IBlockData iblockdata, BlockPosition blockposition) {}
 
     @Override
-    protected boolean ay() {
+    protected boolean az() {
         return true;
     }
 

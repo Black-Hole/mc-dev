@@ -141,12 +141,12 @@ public class EntityEnderSignal extends Entity {
     }
 
     @Override
-    public float aQ() {
+    public float aR() {
         return 1.0F;
     }
 
     @Override
-    public boolean bK() {
+    public boolean bL() {
         return false;
     }
 

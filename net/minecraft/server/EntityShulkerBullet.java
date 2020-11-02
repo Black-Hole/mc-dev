@@ -241,7 +241,7 @@ public class EntityShulkerBullet extends IProjectile {
     }
 
     @Override
-    public float aQ() {
+    public float aR() {
         return 1.0F;
     }
 

@@ -53,6 +53,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     private BlockPosition spawn;
     private boolean spawnForced;
     private float spawnAngle;
+    @Nullable
+    private final ITextFilter co;
     private int containerCounter;
     public boolean e;
     public int ping;
@@ -68,6 +70,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         this.advancementDataPlayer = minecraftserver.getPlayerList().f(this);
         this.G = 1.0F;
         this.c(worldserver);
+        this.co = minecraftserver.a(this);
     }
 
     private void c(WorldServer worldserver) {
@@ -291,7 +294,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             if (entity.isAlive()) {
                 this.setLocation(entity.locX(), entity.locY(), entity.locZ(), entity.yaw, entity.pitch);
                 this.getWorldServer().getChunkProvider().movePlayer(this);
-                if (this.eq()) {
+                if (this.er()) {
                     this.setSpectatorTarget(this);
                 }
             } else {
@@ -423,7 +426,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
         this.releaseShoulderEntities();
         if (this.world.getGameRules().getBoolean(GameRules.FORGIVE_DEAD_PLAYERS)) {
-            this.eV();
+            this.eW();
         }
 
         if (!this.isSpectator()) {
@@ -448,7 +451,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         this.getCombatTracker().g();
     }
 
-    private void eV() {
+    private void eW() {
         AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.getChunkCoordinates())).grow(32.0D, 10.0D, 32.0D);
 
         this.world.b(EntityInsentient.class, axisalignedbb).stream().filter((entityinsentient) -> {
@@ -810,7 +813,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void a(double d0, boolean flag) {
-        BlockPosition blockposition = this.ao();
+        BlockPosition blockposition = this.ap();
 
         if (this.world.isLoaded(blockposition)) {
             super.a(d0, flag, this.world.getType(blockposition), blockposition);
@@ -1148,7 +1151,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
 
         this.updateAbilities();
-        this.dT();
+        this.dU();
     }
 
     @Override
@@ -1235,7 +1238,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     @Override
     protected void C() {
         if (this.isSpectator()) {
-            this.de();
+            this.df();
             this.setInvisible(true);
         } else {
             super.C();
@@ -1417,5 +1420,10 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
             return entityitem;
         }
+    }
+
+    @Nullable
+    public ITextFilter Q() {
+        return this.co;
     }
 }

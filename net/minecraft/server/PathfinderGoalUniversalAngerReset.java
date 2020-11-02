@@ -19,12 +19,12 @@ public class PathfinderGoalUniversalAngerReset<T extends EntityInsentient & IEnt
     }
 
     private boolean g() {
-        return this.a.getLastDamager() != null && this.a.getLastDamager().getEntityType() == EntityTypes.PLAYER && this.a.cZ() > this.c;
+        return this.a.getLastDamager() != null && this.a.getLastDamager().getEntityType() == EntityTypes.PLAYER && this.a.da() > this.c;
     }
 
     @Override
     public void c() {
-        this.c = this.a.cZ();
+        this.c = this.a.da();
         ((IEntityAngerable) this.a).I_();
         if (this.b) {
             this.h().stream().filter((entityinsentient) -> {

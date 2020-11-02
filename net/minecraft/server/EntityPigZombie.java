@@ -27,7 +27,7 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
     }
 
     @Override
-    public double ba() {
+    public double bb() {
         return this.isBaby() ? -0.05D : -0.45D;
     }
 
@@ -113,7 +113,7 @@ public class EntityPigZombie extends EntityZombie implements IEntityAngerable {
     }
 
     private void fa() {
-        this.playSound(SoundEffects.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, this.getSoundVolume() * 2.0F, this.dG() * 1.8F);
+        this.playSound(SoundEffects.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, this.getSoundVolume() * 2.0F, this.dH() * 1.8F);
     }
 
     @Override

@@ -50,6 +50,7 @@ public class DedicatedServerProperties extends PropertyManager<DedicatedServerPr
     public final boolean enableJmxMonitoring;
     public final boolean enableStatus;
     public final int entityBroadcastRangePercentage;
+    public final String textFilteringConfig;
     public final PropertyManager<DedicatedServerProperties>.EditableProperty<Integer> playerIdleTimeout;
     public final PropertyManager<DedicatedServerProperties>.EditableProperty<Boolean> whiteList;
     public final GeneratorSettings generatorSettings;
@@ -100,6 +101,7 @@ public class DedicatedServerProperties extends PropertyManager<DedicatedServerPr
         this.entityBroadcastRangePercentage = this.a("entity-broadcast-range-percentage", (integer) -> {
             return MathHelper.clamp(integer, 10, 1000);
         }, 100);
+        this.textFilteringConfig = this.getString("text-filtering-config", "");
         this.playerIdleTimeout = this.b("player-idle-timeout", 0);
         this.whiteList = this.b("white-list", false);
         this.generatorSettings = GeneratorSettings.a(iregistrycustom, properties);

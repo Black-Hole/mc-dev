@@ -27,11 +27,11 @@ public class PacketLoginInEncryptionBegin implements Packet<PacketLoginInListene
         packetlogininlistener.a(this);
     }
 
-    public SecretKey a(PrivateKey privatekey) {
+    public SecretKey a(PrivateKey privatekey) throws CryptographyException {
         return MinecraftEncryption.a(privatekey, this.a);
     }
 
-    public byte[] b(PrivateKey privatekey) {
-        return privatekey == null ? this.b : MinecraftEncryption.b(privatekey, this.b);
+    public byte[] b(PrivateKey privatekey) throws CryptographyException {
+        return MinecraftEncryption.b(privatekey, this.b);
     }
 }

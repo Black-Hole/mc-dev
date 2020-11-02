@@ -73,7 +73,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
     }
 
     public static boolean a(Entity entity) {
-        return IEntitySelector.g.test(entity) && !entity.getRootVehicle().ah();
+        return IEntitySelector.g.test(entity) && !entity.getRootVehicle().ai();
     }
 
     public boolean d() {

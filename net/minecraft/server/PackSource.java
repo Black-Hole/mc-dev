@@ -19,7 +19,7 @@ public interface PackSource {
         ChatMessage chatmessage = new ChatMessage(s);
 
         return (ichatbasecomponent) -> {
-            return new ChatMessage("pack.nameAndSource", new Object[]{ichatbasecomponent, chatmessage});
+            return (new ChatMessage("pack.nameAndSource", new Object[]{ichatbasecomponent, chatmessage})).a(EnumChatFormat.GRAY);
         };
     }
 }

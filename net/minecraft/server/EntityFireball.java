@@ -13,7 +13,7 @@ public abstract class EntityFireball extends IProjectile {
     public EntityFireball(EntityTypes<? extends EntityFireball> entitytypes, double d0, double d1, double d2, double d3, double d4, double d5, World world) {
         this(entitytypes, world);
         this.setPositionRotation(d0, d1, d2, this.yaw, this.pitch);
-        this.ae();
+        this.af();
         double d6 = (double) MathHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
 
         if (d6 != 0.0D) {
@@ -120,7 +120,7 @@ public abstract class EntityFireball extends IProjectile {
     }
 
     @Override
-    public float bf() {
+    public float bg() {
         return 1.0F;
     }
 
@@ -148,7 +148,7 @@ public abstract class EntityFireball extends IProjectile {
     }
 
     @Override
-    public float aQ() {
+    public float aR() {
         return 1.0F;
     }
 

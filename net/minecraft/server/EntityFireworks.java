@@ -93,7 +93,9 @@ public class EntityFireworks extends IProjectile {
             }
         } else {
             if (!this.isShotAtAngle()) {
-                this.setMot(this.getMot().d(1.15D, 1.0D, 1.15D).add(0.0D, 0.04D, 0.0D));
+                double d2 = this.positionChanged ? 1.0D : 1.15D;
+
+                this.setMot(this.getMot().d(d2, 1.0D, d2).add(0.0D, 0.04D, 0.0D));
             }
 
             vec3d = this.getMot();
@@ -245,7 +247,7 @@ public class EntityFireworks extends IProjectile {
     }
 
     @Override
-    public boolean bK() {
+    public boolean bL() {
         return false;
     }
 

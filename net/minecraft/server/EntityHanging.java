@@ -77,7 +77,7 @@ public abstract class EntityHanging extends Entity {
     public void tick() {
         if (!this.world.isClientSide) {
             if (this.locY() < -64.0D) {
-                this.am();
+                this.an();
             }
 
             if (this.e++ == 100) {
@@ -205,7 +205,7 @@ public abstract class EntityHanging extends Entity {
     }
 
     @Override
-    protected boolean aU() {
+    protected boolean aV() {
         return false;
     }
 

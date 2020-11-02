@@ -103,7 +103,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     public void k(ItemStack itemstack) {
         if (!this.world.isClientSide && this.e > -this.D() + 20) {
             this.e = -this.D();
-            this.playSound(this.t(!itemstack.isEmpty()), this.getSoundVolume(), this.dG());
+            this.playSound(this.t(!itemstack.isEmpty()), this.getSoundVolume(), this.dH());
         }
 
     }
@@ -118,7 +118,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     }
 
     public void eR() {
-        this.playSound(SoundEffects.ENTITY_VILLAGER_CELEBRATE, this.getSoundVolume(), this.dG());
+        this.playSound(SoundEffects.ENTITY_VILLAGER_CELEBRATE, this.getSoundVolume(), this.dH());
     }
 
     @Override

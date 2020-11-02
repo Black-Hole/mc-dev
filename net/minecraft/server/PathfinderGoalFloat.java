@@ -14,7 +14,7 @@ public class PathfinderGoalFloat extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        return this.a.isInWater() && this.a.b((Tag) TagsFluid.WATER) > this.a.cw() || this.a.aP();
+        return this.a.isInWater() && this.a.b((Tag) TagsFluid.WATER) > this.a.cx() || this.a.aQ();
     }
 
     @Override

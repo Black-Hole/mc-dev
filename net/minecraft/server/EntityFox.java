@@ -28,14 +28,14 @@ public class EntityFox extends EntityAnimal {
         } else {
             EntityLiving entityliving = (EntityLiving) entity;
 
-            return entityliving.da() != null && entityliving.db() < entityliving.ticksLived + 600;
+            return entityliving.db() != null && entityliving.dc() < entityliving.ticksLived + 600;
         }
     };
     private static final Predicate<Entity> bu = (entity) -> {
         return entity instanceof EntityChicken || entity instanceof EntityRabbit;
     };
     private static final Predicate<Entity> bv = (entity) -> {
-        return !entity.bw() && IEntitySelector.e.test(entity);
+        return !entity.bx() && IEntitySelector.e.test(entity);
     };
     private PathfinderGoal bw;
     private PathfinderGoal bx;
@@ -153,7 +153,7 @@ public class EntityFox extends EntityAnimal {
 
     @Override
     protected boolean isFrozen() {
-        return this.dk();
+        return this.dl();
     }
 
     private boolean l(ItemStack itemstack) {
@@ -425,7 +425,7 @@ public class EntityFox extends EntityAnimal {
         if (this.doAITick()) {
             boolean flag = this.isInWater();
 
-            if (flag || this.getGoalTarget() != null || this.world.V()) {
+            if (flag || this.getGoalTarget() != null || this.world.W()) {
                 this.fc();
             }
 
@@ -534,7 +534,7 @@ public class EntityFox extends EntityAnimal {
         SoundEffect soundeffect = this.getSoundAmbient();
 
         if (soundeffect == SoundEffects.ENTITY_FOX_SCREECH) {
-            this.playSound(soundeffect, 2.0F, this.dG());
+            this.playSound(soundeffect, 2.0F, this.dH());
         } else {
             super.F();
         }
@@ -788,7 +788,7 @@ public class EntityFox extends EntityAnimal {
 
         @Override
         public boolean a() {
-            return EntityFox.this.isInWater() && EntityFox.this.b((Tag) TagsFluid.WATER) > 0.25D || EntityFox.this.aP();
+            return EntityFox.this.isInWater() && EntityFox.this.b((Tag) TagsFluid.WATER) > 0.25D || EntityFox.this.aQ();
         }
     }
 
@@ -997,7 +997,7 @@ public class EntityFox extends EntityAnimal {
                 this.j();
             }
 
-            EntityFox.this.getControllerLook().a(EntityFox.this.locX() + this.c, EntityFox.this.getHeadY(), EntityFox.this.locZ() + this.d, (float) EntityFox.this.eo(), (float) EntityFox.this.O());
+            EntityFox.this.getControllerLook().a(EntityFox.this.locX() + this.c, EntityFox.this.getHeadY(), EntityFox.this.locZ() + this.d, (float) EntityFox.this.Q(), (float) EntityFox.this.O());
         }
 
         private void j() {
@@ -1080,7 +1080,7 @@ public class EntityFox extends EntityAnimal {
         public c() {}
 
         public boolean test(EntityLiving entityliving) {
-            return entityliving instanceof EntityFox ? false : (!(entityliving instanceof EntityChicken) && !(entityliving instanceof EntityRabbit) && !(entityliving instanceof EntityMonster) ? (entityliving instanceof EntityTameableAnimal ? !((EntityTameableAnimal) entityliving).isTamed() : (entityliving instanceof EntityHuman && (entityliving.isSpectator() || ((EntityHuman) entityliving).isCreative()) ? false : (EntityFox.this.c(entityliving.getUniqueID()) ? false : !entityliving.isSleeping() && !entityliving.bw()))) : true);
+            return entityliving instanceof EntityFox ? false : (!(entityliving instanceof EntityChicken) && !(entityliving instanceof EntityRabbit) && !(entityliving instanceof EntityMonster) ? (entityliving instanceof EntityTameableAnimal ? !((EntityTameableAnimal) entityliving).isTamed() : (entityliving instanceof EntityHuman && (entityliving.isSpectator() || ((EntityHuman) entityliving).isCreative()) ? false : (EntityFox.this.c(entityliving.getUniqueID()) ? false : !entityliving.isSleeping() && !entityliving.bx()))) : true);
         }
     }
 
@@ -1095,7 +1095,7 @@ public class EntityFox extends EntityAnimal {
         @Override
         public boolean a() {
             if (!EntityFox.this.isSleeping() && this.a.getGoalTarget() == null) {
-                if (EntityFox.this.world.V()) {
+                if (EntityFox.this.world.W()) {
                     return true;
                 } else if (this.c > 0) {
                     --this.c;
@@ -1147,7 +1147,7 @@ public class EntityFox extends EntityAnimal {
 
                             this.k = entityliving;
                             this.j = entityliving.getLastDamager();
-                            int i = entityliving.cZ();
+                            int i = entityliving.da();
 
                             return i != this.l && this.a(this.j, this.d);
                         }
@@ -1163,7 +1163,7 @@ public class EntityFox extends EntityAnimal {
             this.a(this.j);
             this.c = this.j;
             if (this.k != null) {
-                this.l = this.k.cZ();
+                this.l = this.k.da();
             }
 
             EntityFox.this.playSound(SoundEffects.ENTITY_FOX_AGGRO, 1.0F, 1.0F);
@@ -1288,7 +1288,7 @@ public class EntityFox extends EntityAnimal {
                 EntityFox.this.w(true);
                 EntityFox.this.setCrouching(true);
                 EntityFox.this.getNavigation().o();
-                EntityFox.this.getControllerLook().a(entityliving, (float) EntityFox.this.eo(), (float) EntityFox.this.O());
+                EntityFox.this.getControllerLook().a(entityliving, (float) EntityFox.this.Q(), (float) EntityFox.this.O());
             } else {
                 EntityFox.this.w(false);
                 EntityFox.this.setCrouching(false);
@@ -1300,7 +1300,7 @@ public class EntityFox extends EntityAnimal {
         public void e() {
             EntityLiving entityliving = EntityFox.this.getGoalTarget();
 
-            EntityFox.this.getControllerLook().a(entityliving, (float) EntityFox.this.eo(), (float) EntityFox.this.O());
+            EntityFox.this.getControllerLook().a(entityliving, (float) EntityFox.this.Q(), (float) EntityFox.this.O());
             if (EntityFox.this.h((Entity) entityliving) <= 36.0D) {
                 EntityFox.this.w(true);
                 EntityFox.this.setCrouching(true);

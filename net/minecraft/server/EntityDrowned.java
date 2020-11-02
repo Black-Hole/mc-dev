@@ -127,7 +127,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
     }
 
     @Override
-    public boolean bU() {
+    public boolean bV() {
         return !this.isSwimming();
     }
 
@@ -154,7 +154,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
     }
 
     @Override
-    public void aI() {
+    public void aJ() {
         if (!this.world.isClientSide) {
             if (this.doAITick() && this.isInWater() && this.eW()) {
                 this.navigation = this.navigationWater;
@@ -236,7 +236,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
                 this.i.yaw = this.a(this.i.yaw, f, 90.0F);
                 this.i.aA = this.i.yaw;
                 float f1 = (float) (this.e * this.i.b(GenericAttributes.MOVEMENT_SPEED));
-                float f2 = MathHelper.g(0.125F, this.i.dM(), f1);
+                float f2 = MathHelper.g(0.125F, this.i.dN(), f1);
 
                 this.i.q(f2);
                 this.i.setMot(this.i.getMot().add((double) f2 * d0 * 0.005D, (double) f2 * d1 * 0.1D, (double) f2 * d2 * 0.005D));

@@ -45,7 +45,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
     }
 
     @Override
-    public double ba() {
+    public double bb() {
         return -0.45D;
     }
 

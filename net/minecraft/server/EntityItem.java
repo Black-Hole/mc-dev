@@ -62,7 +62,7 @@ public class EntityItem extends Entity {
 
             if (this.isInWater() && this.b((Tag) TagsFluid.WATER) > (double) f) {
                 this.u();
-            } else if (this.aP() && this.b((Tag) TagsFluid.LAVA) > (double) f) {
+            } else if (this.aQ() && this.b((Tag) TagsFluid.LAVA) > (double) f) {
                 this.v();
             } else if (!this.isNoGravity()) {
                 this.setMot(this.getMot().add(0.0D, -0.04D, 0.0D));
@@ -112,7 +112,7 @@ public class EntityItem extends Entity {
                 ++this.age;
             }
 
-            this.impulse |= this.aJ();
+            this.impulse |= this.aK();
             if (!this.world.isClientSide) {
                 double d0 = this.getMot().d(vec3d).g();
 
@@ -307,7 +307,7 @@ public class EntityItem extends Entity {
     }
 
     @Override
-    public boolean bK() {
+    public boolean bL() {
         return false;
     }
 

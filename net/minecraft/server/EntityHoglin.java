@@ -36,7 +36,7 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
         } else {
             this.br = 10;
             this.world.broadcastEntityEffect(this, (byte) 4);
-            this.playSound(SoundEffects.ENTITY_HOGLIN_ATTACK, 1.0F, this.dG());
+            this.playSound(SoundEffects.ENTITY_HOGLIN_ATTACK, 1.0F, this.dH());
             HoglinAI.a(this, (EntityLiving) entity);
             return IOglin.a(this, (EntityLiving) entity);
         }
@@ -66,13 +66,13 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
     }
 
     @Override
-    protected BehaviorController.b<EntityHoglin> cJ() {
+    protected BehaviorController.b<EntityHoglin> cK() {
         return BehaviorController.a((Collection) EntityHoglin.bp, (Collection) EntityHoglin.bo);
     }
 
     @Override
     protected BehaviorController<?> a(Dynamic<?> dynamic) {
-        return HoglinAI.a(this.cJ().a(dynamic));
+        return HoglinAI.a(this.cK().a(dynamic));
     }
 
     @Override
@@ -144,7 +144,7 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
     }
 
     @Override
-    public double bb() {
+    public double bc() {
         return (double) this.getHeight() - (this.isBaby() ? 0.2D : 0.15D);
     }
 
@@ -288,7 +288,7 @@ public class EntityHoglin extends EntityAnimal implements IMonster, IOglin {
     }
 
     protected void a(SoundEffect soundeffect) {
-        this.playSound(soundeffect, this.getSoundVolume(), this.dG());
+        this.playSound(soundeffect, this.getSoundVolume(), this.dH());
     }
 
     @Override

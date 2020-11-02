@@ -119,7 +119,7 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
 
     protected void eL() {
         if (this.br <= 0) {
-            this.playSound(SoundEffects.ENTITY_POLAR_BEAR_WARNING, 1.0F, this.dG());
+            this.playSound(SoundEffects.ENTITY_POLAR_BEAR_WARNING, 1.0F, this.dH());
             this.br = 40;
         }
 
@@ -189,7 +189,7 @@ public class EntityPolarBear extends EntityAnimal implements IEntityAngerable {
     }
 
     @Override
-    protected float dL() {
+    protected float dM() {
         return 0.98F;
     }
 

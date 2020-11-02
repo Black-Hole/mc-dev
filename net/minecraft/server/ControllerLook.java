@@ -49,7 +49,7 @@ public class ControllerLook {
         }
 
         if (!this.a.getNavigation().m()) {
-            this.a.aC = MathHelper.b(this.a.aC, this.a.aA, (float) this.a.eo());
+            this.a.aC = MathHelper.b(this.a.aC, this.a.aA, (float) this.a.Q());
         }
 
     }

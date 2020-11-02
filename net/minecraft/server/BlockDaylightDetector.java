@@ -51,7 +51,7 @@ public class BlockDaylightDetector extends BlockTileEntity {
 
     @Override
     public EnumInteractionResult interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        if (entityhuman.eJ()) {
+        if (entityhuman.eK()) {
             if (world.isClientSide) {
                 return EnumInteractionResult.SUCCESS;
             } else {

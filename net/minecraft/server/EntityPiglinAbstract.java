@@ -49,7 +49,7 @@ public abstract class EntityPiglinAbstract extends EntityMonster {
     }
 
     @Override
-    public double ba() {
+    public double bb() {
         return this.isBaby() ? -0.05D : -0.45D;
     }
 

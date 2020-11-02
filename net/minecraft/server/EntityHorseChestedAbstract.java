@@ -38,8 +38,8 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
     }
 
     @Override
-    public double bb() {
-        return super.bb() - 0.25D;
+    public double bc() {
+        return super.bc() - 0.25D;
     }
 
     @Override
@@ -125,7 +125,7 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (!this.isBaby()) {
-            if (this.isTamed() && entityhuman.ep()) {
+            if (this.isTamed() && entityhuman.eq()) {
                 this.f(entityhuman);
                 return EnumInteractionResult.a(this.world.isClientSide);
             }

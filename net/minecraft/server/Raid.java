@@ -399,7 +399,7 @@ public class Raid {
                             hashset.add(entityraider);
                         }
 
-                        if (!this.world.a_(blockposition) && entityraider.dc() > 2400) {
+                        if (!this.world.a_(blockposition) && entityraider.dd() > 2400) {
                             entityraider.b(entityraider.fe() + 1);
                         }
 

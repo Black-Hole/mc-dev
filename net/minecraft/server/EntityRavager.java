@@ -76,12 +76,12 @@ public class EntityRavager extends EntityRaider {
     }
 
     @Override
-    public int eo() {
+    public int Q() {
         return 45;
     }
 
     @Override
-    public double bb() {
+    public double bc() {
         return 2.1D;
     }
 

@@ -97,7 +97,7 @@ public abstract class EntityMinecartAbstract extends Entity {
     }
 
     @Override
-    public double bb() {
+    public double bc() {
         return 0.0D;
     }
 
@@ -111,7 +111,7 @@ public abstract class EntityMinecartAbstract extends Entity {
             int[][] aint = DismountUtil.a(enumdirection);
             BlockPosition blockposition = this.getChunkCoordinates();
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-            ImmutableList<EntityPose> immutablelist = entityliving.ei();
+            ImmutableList<EntityPose> immutablelist = entityliving.ej();
             UnmodifiableIterator unmodifiableiterator = immutablelist.iterator();
 
             while (unmodifiableiterator.hasNext()) {
@@ -243,7 +243,7 @@ public abstract class EntityMinecartAbstract extends Entity {
         }
 
         if (this.locY() < -64.0D) {
-            this.am();
+            this.an();
         }
 
         this.doPortalTick();
@@ -260,7 +260,7 @@ public abstract class EntityMinecartAbstract extends Entity {
                 this.setPosition(d0, d1, d2);
                 this.setYawPitch(this.yaw, this.pitch);
             } else {
-                this.ae();
+                this.af();
                 this.setYawPitch(this.yaw, this.pitch);
             }
 
@@ -335,8 +335,8 @@ public abstract class EntityMinecartAbstract extends Entity {
                 }
             }
 
-            this.aJ();
-            if (this.aP()) {
+            this.aK();
+            if (this.aQ()) {
                 this.burnFromLava();
                 this.fallDistance *= 0.5F;
             }

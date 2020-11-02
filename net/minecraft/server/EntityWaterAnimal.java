@@ -8,7 +8,7 @@ public abstract class EntityWaterAnimal extends EntityCreature {
     }
 
     @Override
-    public boolean cL() {
+    public boolean cM() {
         return true;
     }
 
@@ -33,7 +33,7 @@ public abstract class EntityWaterAnimal extends EntityCreature {
     }
 
     protected void a(int i) {
-        if (this.isAlive() && !this.aG()) {
+        if (this.isAlive() && !this.aH()) {
             this.setAirTicks(i - 1);
             if (this.getAirTicks() == -20) {
                 this.setAirTicks(0);
@@ -54,7 +54,7 @@ public abstract class EntityWaterAnimal extends EntityCreature {
     }
 
     @Override
-    public boolean bU() {
+    public boolean bV() {
         return false;
     }
 

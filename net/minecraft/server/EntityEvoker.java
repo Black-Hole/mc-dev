@@ -333,9 +333,9 @@ public class EntityEvoker extends EntityIllagerWizard {
         @Override
         public void e() {
             if (EntityEvoker.this.getGoalTarget() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.eo(), (float) EntityEvoker.this.O());
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.Q(), (float) EntityEvoker.this.O());
             } else if (EntityEvoker.this.fg() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.fg(), (float) EntityEvoker.this.eo(), (float) EntityEvoker.this.O());
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.fg(), (float) EntityEvoker.this.Q(), (float) EntityEvoker.this.O());
             }
 
         }

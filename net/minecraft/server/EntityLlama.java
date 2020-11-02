@@ -104,12 +104,12 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
             float f1 = MathHelper.sin(this.aA * 0.017453292F);
             float f2 = 0.3F;
 
-            entity.setPosition(this.locX() + (double) (0.3F * f1), this.locY() + this.bb() + entity.ba(), this.locZ() - (double) (0.3F * f));
+            entity.setPosition(this.locX() + (double) (0.3F * f1), this.locY() + this.bc() + entity.bb(), this.locZ() - (double) (0.3F * f));
         }
     }
 
     @Override
-    public double bb() {
+    public double bc() {
         return (double) this.getHeight() * 0.67D;
     }
 
@@ -151,7 +151,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         }
 
         if (this.isBaby() && b0 > 0) {
-            this.world.addParticle(Particles.HAPPY_VILLAGER, this.d(1.0D), this.cE() + 0.5D, this.g(1.0D), 0.0D, 0.0D, 0.0D);
+            this.world.addParticle(Particles.HAPPY_VILLAGER, this.d(1.0D), this.cF() + 0.5D, this.g(1.0D), 0.0D, 0.0D, 0.0D);
             if (!this.world.isClientSide) {
                 this.setAge(b0);
             }
@@ -179,7 +179,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
 
     @Override
     protected boolean isFrozen() {
-        return this.dk() || this.eZ();
+        return this.dl() || this.eZ();
     }
 
     @Nullable
@@ -240,7 +240,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         SoundEffect soundeffect = this.getSoundAngry();
 
         if (soundeffect != null) {
-            this.playSound(soundeffect, this.getSoundVolume(), this.dG());
+            this.playSound(soundeffect, this.getSoundVolume(), this.dH());
         }
 
     }

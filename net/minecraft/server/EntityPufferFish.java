@@ -68,20 +68,20 @@ public class EntityPufferFish extends EntityFish {
         if (!this.world.isClientSide && this.isAlive() && this.doAITick()) {
             if (this.c > 0) {
                 if (this.getPuffState() == 0) {
-                    this.playSound(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.getSoundVolume(), this.dG());
+                    this.playSound(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.getSoundVolume(), this.dH());
                     this.setPuffState(1);
                 } else if (this.c > 40 && this.getPuffState() == 1) {
-                    this.playSound(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.getSoundVolume(), this.dG());
+                    this.playSound(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.getSoundVolume(), this.dH());
                     this.setPuffState(2);
                 }
 
                 ++this.c;
             } else if (this.getPuffState() != 0) {
                 if (this.d > 60 && this.getPuffState() == 2) {
-                    this.playSound(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.getSoundVolume(), this.dG());
+                    this.playSound(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.getSoundVolume(), this.dH());
                     this.setPuffState(1);
                 } else if (this.d > 100 && this.getPuffState() == 1) {
-                    this.playSound(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.getSoundVolume(), this.dG());
+                    this.playSound(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.getSoundVolume(), this.dH());
                     this.setPuffState(0);
                 }
 

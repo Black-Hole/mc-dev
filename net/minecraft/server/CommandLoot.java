@@ -274,7 +274,7 @@ public class CommandLoot {
         if (!(entity instanceof EntityLiving)) {
             throw CommandLoot.c.create(entity.getScoreboardDisplayName());
         } else {
-            MinecraftKey minecraftkey = ((EntityLiving) entity).do_();
+            MinecraftKey minecraftkey = ((EntityLiving) entity).dp();
             CommandListenerWrapper commandlistenerwrapper = (CommandListenerWrapper) commandcontext.getSource();
             LootTableInfo.Builder loottableinfo_builder = new LootTableInfo.Builder(commandlistenerwrapper.getWorld());
             Entity entity1 = commandlistenerwrapper.getEntity();

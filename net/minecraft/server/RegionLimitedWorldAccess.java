@@ -30,6 +30,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccessSeed {
     private final BiomeManager m;
     private final ChunkCoordIntPair n;
     private final ChunkCoordIntPair o;
+    private final StructureManager p;
 
     public RegionLimitedWorldAccess(WorldServer worldserver, List<IChunkAccess> list) {
         int i = MathHelper.floor(Math.sqrt((double) list.size()));
@@ -51,6 +52,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccessSeed {
             this.m = new BiomeManager(this, BiomeManager.a(this.g), worldserver.getDimensionManager().getGenLayerZoomer());
             this.n = ((IChunkAccess) list.get(0)).getPos();
             this.o = ((IChunkAccess) list.get(list.size() - 1)).getPos();
+            this.p = worldserver.getStructureManager().a(this);
         }
     }
 
@@ -277,7 +279,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccessSeed {
         if (!this.isChunkLoaded(blockposition.getX() >> 4, blockposition.getZ() >> 4)) {
             throw new RuntimeException("We are asking a region for a chunk out of bound");
         } else {
-            return new DifficultyDamageScaler(this.f.getDifficulty(), this.f.getDayTime(), 0L, this.f.ae());
+            return new DifficultyDamageScaler(this.f.getDifficulty(), this.f.getDayTime(), 0L, this.f.af());
         }
     }
 
@@ -352,6 +354,6 @@ public class RegionLimitedWorldAccess implements GeneratorAccessSeed {
 
     @Override
     public Stream<? extends StructureStart<?>> a(SectionPosition sectionposition, StructureGenerator<?> structuregenerator) {
-        return this.f.a(sectionposition, structuregenerator);
+        return this.p.a(sectionposition, structuregenerator);
     }
 }

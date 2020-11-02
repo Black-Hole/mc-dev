@@ -84,7 +84,7 @@ public class EntityEndermite extends EntityMonster {
     }
 
     @Override
-    public double ba() {
+    public double bb() {
         return 0.1D;
     }
 
@@ -101,7 +101,7 @@ public class EntityEndermite extends EntityMonster {
         super.movementTick();
         if (this.world.isClientSide) {
             for (int i = 0; i < 2; ++i) {
-                this.world.addParticle(Particles.PORTAL, this.d(0.5D), this.cE(), this.g(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
+                this.world.addParticle(Particles.PORTAL, this.d(0.5D), this.cF(), this.g(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
             }
         } else {
             if (!this.isPersistent()) {

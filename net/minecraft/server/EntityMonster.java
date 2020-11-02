@@ -17,13 +17,13 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
 
     @Override
     public void movementTick() {
-        this.dz();
+        this.dA();
         this.eQ();
         super.movementTick();
     }
 
     protected void eQ() {
-        float f = this.aQ();
+        float f = this.aR();
 
         if (f > 0.5F) {
             this.ticksFarFromPlayer += 2;
@@ -75,7 +75,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         if (worldaccess.getBrightness(EnumSkyBlock.SKY, blockposition) > random.nextInt(32)) {
             return false;
         } else {
-            int i = worldaccess.getMinecraftWorld().V() ? worldaccess.c(blockposition, 10) : worldaccess.getLightLevel(blockposition);
+            int i = worldaccess.getMinecraftWorld().W() ? worldaccess.c(blockposition, 10) : worldaccess.getLightLevel(blockposition);
 
             return i <= random.nextInt(8);
         }
@@ -99,7 +99,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     }
 
     @Override
-    protected boolean cV() {
+    protected boolean cW() {
         return true;
     }
 

@@ -61,7 +61,7 @@ public class EntityGuardian extends EntityMonster {
     }
 
     @Override
-    public boolean cL() {
+    public boolean cM() {
         return true;
     }
 
@@ -129,17 +129,17 @@ public class EntityGuardian extends EntityMonster {
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return this.aG() ? SoundEffects.ENTITY_GUARDIAN_AMBIENT : SoundEffects.ENTITY_GUARDIAN_AMBIENT_LAND;
+        return this.aH() ? SoundEffects.ENTITY_GUARDIAN_AMBIENT : SoundEffects.ENTITY_GUARDIAN_AMBIENT_LAND;
     }
 
     @Override
     protected SoundEffect getSoundHurt(DamageSource damagesource) {
-        return this.aG() ? SoundEffects.ENTITY_GUARDIAN_HURT : SoundEffects.ENTITY_GUARDIAN_HURT_LAND;
+        return this.aH() ? SoundEffects.ENTITY_GUARDIAN_HURT : SoundEffects.ENTITY_GUARDIAN_HURT_LAND;
     }
 
     @Override
     protected SoundEffect getSoundDeath() {
-        return this.aG() ? SoundEffects.ENTITY_GUARDIAN_DEATH : SoundEffects.ENTITY_GUARDIAN_DEATH_LAND;
+        return this.aH() ? SoundEffects.ENTITY_GUARDIAN_DEATH : SoundEffects.ENTITY_GUARDIAN_DEATH_LAND;
     }
 
     @Override
@@ -184,7 +184,7 @@ public class EntityGuardian extends EntityMonster {
 
                 this.bo += this.bq;
                 this.bs = this.br;
-                if (!this.aG()) {
+                if (!this.aH()) {
                     this.br = this.random.nextFloat();
                 } else if (this.eN()) {
                     this.br += (0.0F - this.br) * 0.25F;
@@ -196,7 +196,7 @@ public class EntityGuardian extends EntityMonster {
                     vec3d = this.f(0.0F);
 
                     for (int i = 0; i < 2; ++i) {
-                        this.world.addParticle(Particles.BUBBLE, this.d(0.5D) - vec3d.x * 1.5D, this.cE() - vec3d.y * 1.5D, this.g(0.5D) - vec3d.z * 1.5D, 0.0D, 0.0D, 0.0D);
+                        this.world.addParticle(Particles.BUBBLE, this.d(0.5D) - vec3d.x * 1.5D, this.cF() - vec3d.y * 1.5D, this.g(0.5D) - vec3d.z * 1.5D, 0.0D, 0.0D, 0.0D);
                     }
                 }
 
@@ -229,7 +229,7 @@ public class EntityGuardian extends EntityMonster {
                 }
             }
 
-            if (this.aG()) {
+            if (this.aH()) {
                 this.setAirTicks(300);
             } else if (this.onGround) {
                 this.setMot(this.getMot().add((double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.4F), 0.5D, (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.4F)));
@@ -322,7 +322,7 @@ public class EntityGuardian extends EntityMonster {
                 this.i.yaw = this.a(this.i.yaw, f, 90.0F);
                 this.i.aA = this.i.yaw;
                 float f1 = (float) (this.e * this.i.b(GenericAttributes.MOVEMENT_SPEED));
-                float f2 = MathHelper.g(0.125F, this.i.dM(), f1);
+                float f2 = MathHelper.g(0.125F, this.i.dN(), f1);
 
                 this.i.q(f2);
                 double d4 = Math.sin((double) (this.i.ticksLived + this.i.getId()) * 0.5D) * 0.05D;

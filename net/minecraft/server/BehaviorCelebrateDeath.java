@@ -16,7 +16,7 @@ public class BehaviorCelebrateDeath extends Behavior<EntityLiving> {
 
     @Override
     protected boolean a(WorldServer worldserver, EntityLiving entityliving) {
-        return this.a(entityliving).dk();
+        return this.a(entityliving).dl();
     }
 
     @Override

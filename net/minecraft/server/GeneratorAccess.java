@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 public interface GeneratorAccess extends ICombinedAccess, IWorldTime {
 
     @Override
-    default long ab() {
+    default long ac() {
         return this.getWorldData().getDayTime();
     }
 

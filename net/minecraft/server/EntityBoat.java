@@ -80,11 +80,11 @@ public class EntityBoat extends Entity {
     }
 
     public static boolean a(Entity entity, Entity entity1) {
-        return (entity1.aY() || entity1.isCollidable()) && !entity.isSameVehicle(entity1);
+        return (entity1.aZ() || entity1.isCollidable()) && !entity.isSameVehicle(entity1);
     }
 
     @Override
-    public boolean aY() {
+    public boolean aZ() {
         return true;
     }
 
@@ -99,7 +99,7 @@ public class EntityBoat extends Entity {
     }
 
     @Override
-    public double bb() {
+    public double bc() {
         return -0.1D;
     }
 
@@ -209,7 +209,7 @@ public class EntityBoat extends Entity {
 
         super.tick();
         this.r();
-        if (this.cr()) {
+        if (this.cs()) {
             if (this.getPassengers().isEmpty() || !(this.getPassengers().get(0) instanceof EntityHuman)) {
                 this.a(false, false);
             }
@@ -327,7 +327,7 @@ public class EntityBoat extends Entity {
     }
 
     private void r() {
-        if (this.cr()) {
+        if (this.cs()) {
             this.al = 0;
             this.c(this.locX(), this.locY(), this.locZ());
         }
@@ -602,7 +602,7 @@ public class EntityBoat extends Entity {
     public void k(Entity entity) {
         if (this.w(entity)) {
             float f = 0.0F;
-            float f1 = (float) ((this.dead ? 0.009999999776482582D : this.bb()) + entity.ba());
+            float f1 = (float) ((this.dead ? 0.009999999776482582D : this.bc()) + entity.bb());
 
             if (this.getPassengers().size() > 1) {
                 int i = this.getPassengers().indexOf(entity);
@@ -645,7 +645,7 @@ public class EntityBoat extends Entity {
         if (!this.world.A(blockposition1)) {
             double d2 = (double) blockposition.getY() + this.world.h(blockposition);
             double d3 = (double) blockposition.getY() + this.world.h(blockposition1);
-            UnmodifiableIterator unmodifiableiterator = entityliving.ei().iterator();
+            UnmodifiableIterator unmodifiableiterator = entityliving.ej().iterator();
 
             while (unmodifiableiterator.hasNext()) {
                 EntityPose entitypose = (EntityPose) unmodifiableiterator.next();
@@ -693,7 +693,7 @@ public class EntityBoat extends Entity {
 
     @Override
     public EnumInteractionResult a(EntityHuman entityhuman, EnumHand enumhand) {
-        return entityhuman.ep() ? EnumInteractionResult.PASS : (this.aj < 60.0F ? (!this.world.isClientSide ? (entityhuman.startRiding(this) ? EnumInteractionResult.CONSUME : EnumInteractionResult.PASS) : EnumInteractionResult.SUCCESS) : EnumInteractionResult.PASS);
+        return entityhuman.eq() ? EnumInteractionResult.PASS : (this.aj < 60.0F ? (!this.world.isClientSide ? (entityhuman.startRiding(this) ? EnumInteractionResult.CONSUME : EnumInteractionResult.PASS) : EnumInteractionResult.SUCCESS) : EnumInteractionResult.PASS);
     }
 
     @Override
@@ -795,7 +795,7 @@ public class EntityBoat extends Entity {
     }
 
     @Override
-    public boolean aH() {
+    public boolean aI() {
         return this.ax == EntityBoat.EnumStatus.UNDER_WATER || this.ax == EntityBoat.EnumStatus.UNDER_FLOWING_WATER;
     }
 

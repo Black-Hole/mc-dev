@@ -6,7 +6,7 @@ public class EntityTNTPrimed extends Entity {
 
     private static final DataWatcherObject<Integer> FUSE_TICKS = DataWatcher.a(EntityTNTPrimed.class, DataWatcherRegistry.b);
     @Nullable
-    private EntityLiving source;
+    public EntityLiving source;
     private int fuseTicks;
 
     public EntityTNTPrimed(EntityTypes<? extends EntityTNTPrimed> entitytypes, World world) {
@@ -62,7 +62,7 @@ public class EntityTNTPrimed extends Entity {
                 this.explode();
             }
         } else {
-            this.aJ();
+            this.aK();
             if (this.world.isClientSide) {
                 this.world.addParticle(Particles.SMOKE, this.locX(), this.locY() + 0.5D, this.locZ(), 0.0D, 0.0D, 0.0D);
             }

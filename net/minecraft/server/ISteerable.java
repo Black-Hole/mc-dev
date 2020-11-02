@@ -22,12 +22,12 @@ public interface ISteerable {
                 entityinsentient.aA = entityinsentient.yaw;
                 entityinsentient.aC = entityinsentient.yaw;
                 entityinsentient.G = 1.0F;
-                entityinsentient.aE = entityinsentient.dM() * 0.1F;
+                entityinsentient.aE = entityinsentient.dN() * 0.1F;
                 if (saddlestorage.boosting && saddlestorage.currentBoostTicks++ > saddlestorage.boostTicks) {
                     saddlestorage.boosting = false;
                 }
 
-                if (entityinsentient.cr()) {
+                if (entityinsentient.cs()) {
                     float f = this.N_();
 
                     if (saddlestorage.boosting) {

@@ -457,7 +457,7 @@ public class EntityZombie extends EntityMonster {
     }
 
     @Override
-    public double ba() {
+    public double bb() {
         return this.isBaby() ? 0.0D : -0.45D;
     }
 

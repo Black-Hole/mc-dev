@@ -277,7 +277,7 @@ public class PathfinderNormal extends PathfinderAbstract {
                             return pathpoint1;
                         }
 
-                        if (i1++ >= this.b.bO()) {
+                        if (i1++ >= this.b.bP()) {
                             pathpoint1 = this.a(i, j, k);
                             pathpoint1.l = PathType.BLOCKED;
                             pathpoint1.k = -1.0F;

@@ -175,7 +175,7 @@ public abstract class BlockBase {
 
     @Deprecated
     public int f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.i(iblockaccess, blockposition) ? iblockaccess.J() : (iblockdata.a(iblockaccess, blockposition) ? 0 : 1);
+        return iblockdata.i(iblockaccess, blockposition) ? iblockaccess.K() : (iblockdata.a(iblockaccess, blockposition) ? 0 : 1);
     }
 
     @Nullable

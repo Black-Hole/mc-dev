@@ -15,10 +15,10 @@ public class SensorHurtBy extends Sensor<EntityLiving> {
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving) {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
-        DamageSource damagesource = entityliving.dl();
+        DamageSource damagesource = entityliving.dm();
 
         if (damagesource != null) {
-            behaviorcontroller.setMemory(MemoryModuleType.HURT_BY, (Object) entityliving.dl());
+            behaviorcontroller.setMemory(MemoryModuleType.HURT_BY, (Object) entityliving.dm());
             Entity entity = damagesource.getEntity();
 
             if (entity instanceof EntityLiving) {

@@ -351,7 +351,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
     }
 
     @Override
-    public boolean aY() {
+    public boolean aZ() {
         return this.isAlive();
     }
 
@@ -397,7 +397,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
     }
 
     @Override
-    public int eo() {
+    public int Q() {
         return 180;
     }
 
@@ -405,7 +405,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
     public void collide(Entity entity) {}
 
     @Override
-    public float bf() {
+    public float bg() {
         return 0.0F;
     }
 

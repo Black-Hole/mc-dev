@@ -32,7 +32,7 @@ public class ItemBoat extends Item {
 
                 while (iterator.hasNext()) {
                     Entity entity = (Entity) iterator.next();
-                    AxisAlignedBB axisalignedbb = entity.getBoundingBox().g((double) entity.bf());
+                    AxisAlignedBB axisalignedbb = entity.getBoundingBox().g((double) entity.bg());
 
                     if (axisalignedbb.d(vec3d1)) {
                         return InteractionResultWrapper.pass(itemstack);

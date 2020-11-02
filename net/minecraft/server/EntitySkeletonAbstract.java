@@ -188,7 +188,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
     }
 
     @Override
-    public double ba() {
+    public double bb() {
         return -0.6D;
     }
 }

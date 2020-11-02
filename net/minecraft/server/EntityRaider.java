@@ -474,7 +474,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
         @Override
         public void e() {
             if (!this.b.isSilent() && this.b.random.nextInt(100) == 0) {
-                EntityRaider.this.playSound(EntityRaider.this.eL(), EntityRaider.this.getSoundVolume(), EntityRaider.this.dG());
+                EntityRaider.this.playSound(EntityRaider.this.eL(), EntityRaider.this.getSoundVolume(), EntityRaider.this.dH());
             }
 
             if (!this.b.isPassenger() && this.b.random.nextInt(50) == 0) {

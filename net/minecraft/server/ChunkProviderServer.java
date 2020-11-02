@@ -383,7 +383,7 @@ public class ChunkProviderServer extends IChunkProvider {
 
     @VisibleForTesting
     public int f() {
-        return this.serverThreadQueue.bh();
+        return this.serverThreadQueue.bi();
     }
 
     public ChunkGenerator getChunkGenerator() {

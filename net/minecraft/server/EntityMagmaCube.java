@@ -28,7 +28,7 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     @Override
-    public float aQ() {
+    public float aR() {
         return 1.0F;
     }
 
@@ -61,7 +61,7 @@ public class EntityMagmaCube extends EntitySlime {
     protected void jump() {
         Vec3D vec3d = this.getMot();
 
-        this.setMot(vec3d.x, (double) (this.dI() + (float) this.getSize() * 0.1F), vec3d.z);
+        this.setMot(vec3d.x, (double) (this.dJ() + (float) this.getSize() * 0.1F), vec3d.z);
         this.impulse = true;
     }
 

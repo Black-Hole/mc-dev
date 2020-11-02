@@ -118,7 +118,7 @@ public class EntityLlamaTrader extends EntityLlama {
                     EntityVillagerTrader entityvillagertrader = (EntityVillagerTrader) entity;
 
                     this.c = entityvillagertrader.getLastDamager();
-                    int i = entityvillagertrader.cZ();
+                    int i = entityvillagertrader.da();
 
                     return i != this.d && this.a(this.c, PathfinderTargetCondition.a);
                 }
@@ -131,7 +131,7 @@ public class EntityLlamaTrader extends EntityLlama {
             Entity entity = this.b.getLeashHolder();
 
             if (entity instanceof EntityVillagerTrader) {
-                this.d = ((EntityVillagerTrader) entity).cZ();
+                this.d = ((EntityVillagerTrader) entity).da();
             }
 
             super.c();

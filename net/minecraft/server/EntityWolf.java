@@ -132,7 +132,7 @@ public class EntityWolf extends EntityTameableAnimal implements IEntityAngerable
                 this.bu += (0.0F - this.bu) * 0.4F;
             }
 
-            if (this.aF()) {
+            if (this.aG()) {
                 this.bw = true;
                 if (this.bx && !this.world.isClientSide) {
                     this.world.broadcastEntityEffect(this, (byte) 56);

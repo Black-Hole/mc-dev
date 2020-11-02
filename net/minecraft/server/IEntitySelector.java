@@ -39,7 +39,7 @@ public final class IEntitySelector {
         return (Predicate) (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : IEntitySelector.g.and((entity1) -> {
             if (!entity1.isCollidable()) {
                 return false;
-            } else if (entity.world.isClientSide && (!(entity1 instanceof EntityHuman) || !((EntityHuman) entity1).ey())) {
+            } else if (entity.world.isClientSide && (!(entity1 instanceof EntityHuman) || !((EntityHuman) entity1).ez())) {
                 return false;
             } else {
                 ScoreboardTeamBase scoreboardteambase1 = entity1.getScoreboardTeam();

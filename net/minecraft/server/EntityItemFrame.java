@@ -112,7 +112,7 @@ public class EntityItemFrame extends EntityHanging {
     }
 
     @Override
-    public float bf() {
+    public float bg() {
         return 0.0F;
     }
 

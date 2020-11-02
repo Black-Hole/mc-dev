@@ -22,7 +22,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
     private int bw;
     public final BossBattleServer bossBattle;
     private static final Predicate<EntityLiving> by = (entityliving) -> {
-        return entityliving.getMonsterType() != EnumMonsterType.UNDEAD && entityliving.eh();
+        return entityliving.getMonsterType() != EnumMonsterType.UNDEAD && entityliving.ei();
     };
     private static final PathfinderTargetCondition bz = (new PathfinderTargetCondition()).a(20.0D).a(EntityWither.by);
 

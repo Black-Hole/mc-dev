@@ -12,7 +12,6 @@ import java.io.File;
 import java.net.Proxy;
 import java.nio.file.Paths;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BooleanSupplier;
 import joptsimple.NonOptionArgumentSpec;
@@ -76,7 +75,7 @@ public class Main {
             }
 
             File file = new File((String) optionset.valueOf(optionspec9));
-            YggdrasilAuthenticationService yggdrasilauthenticationservice = new YggdrasilAuthenticationService(Proxy.NO_PROXY, UUID.randomUUID().toString());
+            YggdrasilAuthenticationService yggdrasilauthenticationservice = new YggdrasilAuthenticationService(Proxy.NO_PROXY);
             MinecraftSessionService minecraftsessionservice = yggdrasilauthenticationservice.createMinecraftSessionService();
             GameProfileRepository gameprofilerepository = yggdrasilauthenticationservice.createProfileRepository();
             UserCache usercache = new UserCache(gameprofilerepository, new File(file, MinecraftServer.b.getName()));
@@ -144,7 +143,7 @@ public class Main {
                 boolean flag1 = !optionset.has(optionspec) && !optionset.valuesOf(nonoptionargumentspec).contains("nogui");
 
                 if (flag1 && !GraphicsEnvironment.isHeadless()) {
-                    dedicatedserver1.bc();
+                    dedicatedserver1.bd();
                 }
 
                 return dedicatedserver1;

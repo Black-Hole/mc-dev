@@ -172,7 +172,7 @@ public class PathfinderTurtle extends PathfinderNormal {
 
                     while (j > 0 && pathtype == PathType.OPEN) {
                         --j;
-                        if (i1++ >= this.b.bO()) {
+                        if (i1++ >= this.b.bP()) {
                             return null;
                         }
 

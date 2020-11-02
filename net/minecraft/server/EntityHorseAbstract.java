@@ -410,7 +410,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         }
 
         if (this.isBaby() && short0 > 0) {
-            this.world.addParticle(Particles.HAPPY_VILLAGER, this.d(1.0D), this.cE() + 0.5D, this.g(1.0D), 0.0D, 0.0D, 0.0D);
+            this.world.addParticle(Particles.HAPPY_VILLAGER, this.d(1.0D), this.cF() + 0.5D, this.g(1.0D), 0.0D, 0.0D, 0.0D);
             if (!this.world.isClientSide) {
                 this.setAge(short0);
             }
@@ -522,7 +522,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
             this.d(64, false);
         }
 
-        if ((this.cr() || this.doAITick()) && this.bD > 0 && ++this.bD > 20) {
+        if ((this.cs() || this.doAITick()) && this.bD > 0 && ++this.bD > 20) {
             this.bD = 0;
             this.setStanding(false);
         }
@@ -603,7 +603,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
     }
 
     private void eU() {
-        if (this.cr() || this.doAITick()) {
+        if (this.cs() || this.doAITick()) {
             this.bD = 1;
             this.setStanding(true);
         }
@@ -616,7 +616,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
             SoundEffect soundeffect = this.getSoundAngry();
 
             if (soundeffect != null) {
-                this.playSound(soundeffect, this.getSoundVolume(), this.dG());
+                this.playSound(soundeffect, this.getSoundVolume(), this.dH());
             }
         }
 
@@ -683,8 +683,8 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
                     this.jumpPower = 0.0F;
                 }
 
-                this.aE = this.dM() * 0.1F;
-                if (this.cr()) {
+                this.aE = this.dN() * 0.1F;
+                if (this.cs()) {
                     this.q((float) this.b(GenericAttributes.MOVEMENT_SPEED));
                     super.g(new Vec3D((double) f, vec3d.y, (double) f1));
                 } else if (entityliving instanceof EntityHuman) {
@@ -819,7 +819,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
             float f2 = 0.7F * this.bI;
             float f3 = 0.15F * this.bI;
 
-            entity.setPosition(this.locX() + (double) (f2 * f), this.locY() + this.bb() + entity.ba() + (double) f3, this.locZ() - (double) (f2 * f1));
+            entity.setPosition(this.locX() + (double) (f2 * f), this.locY() + this.bc() + entity.bb() + (double) f3, this.locZ() - (double) (f2 * f1));
             if (entity instanceof EntityLiving) {
                 ((EntityLiving) entity).aA = this.aA;
             }
@@ -899,7 +899,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         double d1 = this.getBoundingBox().minY;
         double d2 = this.locZ() + vec3d.z;
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-        UnmodifiableIterator unmodifiableiterator = entityliving.ei().iterator();
+        UnmodifiableIterator unmodifiableiterator = entityliving.ej().iterator();
 
         while (unmodifiableiterator.hasNext()) {
             EntityPose entitypose = (EntityPose) unmodifiableiterator.next();

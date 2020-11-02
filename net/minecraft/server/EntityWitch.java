@@ -105,7 +105,7 @@ public class EntityWitch extends EntityRaider implements IRangedEntity {
 
                 if (this.random.nextFloat() < 0.15F && this.a((Tag) TagsFluid.WATER) && !this.hasEffect(MobEffects.WATER_BREATHING)) {
                     potionregistry = Potions.WATER_BREATHING;
-                } else if (this.random.nextFloat() < 0.15F && (this.isBurning() || this.dl() != null && this.dl().isFire()) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
+                } else if (this.random.nextFloat() < 0.15F && (this.isBurning() || this.dm() != null && this.dm().isFire()) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
                     potionregistry = Potions.FIRE_RESISTANCE;
                 } else if (this.random.nextFloat() < 0.05F && this.getHealth() < this.getMaxHealth()) {
                     potionregistry = Potions.HEALING;

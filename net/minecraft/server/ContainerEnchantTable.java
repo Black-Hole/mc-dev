@@ -65,7 +65,7 @@ public class ContainerEnchantTable extends Container {
         this.a(ContainerProperty.a(this.costs, 0));
         this.a(ContainerProperty.a(this.costs, 1));
         this.a(ContainerProperty.a(this.costs, 2));
-        this.a(this.i).set(playerinventory.player.eF());
+        this.a(this.i).set(playerinventory.player.eG());
         this.a(ContainerProperty.a(this.enchantments, 0));
         this.a(ContainerProperty.a(this.enchantments, 1));
         this.a(ContainerProperty.a(this.enchantments, 2));
@@ -205,7 +205,7 @@ public class ContainerEnchantTable extends Container {
                     }
 
                     this.enchantSlots.update();
-                    this.i.set(entityhuman.eF());
+                    this.i.set(entityhuman.eG());
                     this.a(this.enchantSlots);
                     world.playSound((EntityHuman) null, blockposition, SoundEffects.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
                 }

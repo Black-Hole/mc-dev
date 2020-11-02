@@ -132,13 +132,13 @@ public class EntityPiglin extends EntityPiglinAbstract implements ICrossbow {
     }
 
     @Override
-    protected BehaviorController.b<EntityPiglin> cJ() {
+    protected BehaviorController.b<EntityPiglin> cK() {
         return BehaviorController.a((Collection) EntityPiglin.bo, (Collection) EntityPiglin.d);
     }
 
     @Override
     protected BehaviorController<?> a(Dynamic<?> dynamic) {
-        return PiglinAI.a(this, this.cJ().a(dynamic));
+        return PiglinAI.a(this, this.cK().a(dynamic));
     }
 
     @Override
@@ -167,7 +167,7 @@ public class EntityPiglin extends EntityPiglinAbstract implements ICrossbow {
     }
 
     @Override
-    public double bb() {
+    public double bc() {
         return (double) this.getHeight() * 0.92D;
     }
 
@@ -360,7 +360,7 @@ public class EntityPiglin extends EntityPiglinAbstract implements ICrossbow {
     }
 
     protected void a(SoundEffect soundeffect) {
-        this.playSound(soundeffect, this.getSoundVolume(), this.dG());
+        this.playSound(soundeffect, this.getSoundVolume(), this.dH());
     }
 
     @Override

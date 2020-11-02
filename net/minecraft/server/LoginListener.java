@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nullable;
+import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -86,9 +87,9 @@ public class LoginListener implements PacketLoginInListener {
             this.disconnect(ichatbasecomponent);
         } else {
             this.g = LoginListener.EnumProtocolState.ACCEPTED;
-            if (this.server.aw() >= 0 && !this.networkManager.isLocal()) {
-                this.networkManager.sendPacket(new PacketLoginOutSetCompression(this.server.aw()), (channelfuture) -> {
-                    this.networkManager.setCompressionLevel(this.server.aw());
+            if (this.server.ax() >= 0 && !this.networkManager.isLocal()) {
+                this.networkManager.sendPacket(new PacketLoginOutSetCompression(this.server.ax()), (channelfuture) -> {
+                    this.networkManager.setCompressionLevel(this.server.ax());
                 });
             }
 
@@ -120,7 +121,7 @@ public class LoginListener implements PacketLoginInListener {
         this.i = packetlogininstart.b();
         if (this.server.getOnlineMode() && !this.networkManager.isLocal()) {
             this.g = LoginListener.EnumProtocolState.KEY;
-            this.networkManager.sendPacket(new PacketLoginOutEncryptionBegin("", this.server.getKeyPair().getPublic(), this.e));
+            this.networkManager.sendPacket(new PacketLoginOutEncryptionBegin("", this.server.getKeyPair().getPublic().getEncoded(), this.e));
         } else {
             this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
         }
@@ -132,55 +133,64 @@ public class LoginListener implements PacketLoginInListener {
         Validate.validState(this.g == LoginListener.EnumProtocolState.KEY, "Unexpected key packet", new Object[0]);
         PrivateKey privatekey = this.server.getKeyPair().getPrivate();
 
-        if (!Arrays.equals(this.e, packetlogininencryptionbegin.b(privatekey))) {
-            throw new IllegalStateException("Invalid nonce!");
-        } else {
+        final String s;
+
+        try {
+            if (!Arrays.equals(this.e, packetlogininencryptionbegin.b(privatekey))) {
+                throw new IllegalStateException("Protocol error");
+            }
+
             this.loginKey = packetlogininencryptionbegin.a(privatekey);
+            Cipher cipher = MinecraftEncryption.a(2, this.loginKey);
+            Cipher cipher1 = MinecraftEncryption.a(1, this.loginKey);
+
+            s = (new BigInteger(MinecraftEncryption.a("", this.server.getKeyPair().getPublic(), this.loginKey))).toString(16);
             this.g = LoginListener.EnumProtocolState.AUTHENTICATING;
-            this.networkManager.a(this.loginKey);
-            Thread thread = new Thread("User Authenticator #" + LoginListener.b.incrementAndGet()) {
-                public void run() {
-                    GameProfile gameprofile = LoginListener.this.i;
-
-                    try {
-                        String s = (new BigInteger(MinecraftEncryption.a("", LoginListener.this.server.getKeyPair().getPublic(), LoginListener.this.loginKey))).toString(16);
-
-                        LoginListener.this.i = LoginListener.this.server.getMinecraftSessionService().hasJoinedServer(new GameProfile((UUID) null, gameprofile.getName()), s, this.a());
-                        if (LoginListener.this.i != null) {
-                            LoginListener.LOGGER.info("UUID of player {} is {}", LoginListener.this.i.getName(), LoginListener.this.i.getId());
-                            LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
-                        } else if (LoginListener.this.server.isEmbeddedServer()) {
-                            LoginListener.LOGGER.warn("Failed to verify username but will let them in anyway!");
-                            LoginListener.this.i = LoginListener.this.a(gameprofile);
-                            LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
-                        } else {
-                            LoginListener.this.disconnect(new ChatMessage("multiplayer.disconnect.unverified_username"));
-                            LoginListener.LOGGER.error("Username '{}' tried to join with an invalid session", gameprofile.getName());
-                        }
-                    } catch (AuthenticationUnavailableException authenticationunavailableexception) {
-                        if (LoginListener.this.server.isEmbeddedServer()) {
-                            LoginListener.LOGGER.warn("Authentication servers are down but will let them in anyway!");
-                            LoginListener.this.i = LoginListener.this.a(gameprofile);
-                            LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
-                        } else {
-                            LoginListener.this.disconnect(new ChatMessage("multiplayer.disconnect.authservers_down"));
-                            LoginListener.LOGGER.error("Couldn't verify username because servers are unavailable");
-                        }
-                    }
-
-                }
-
-                @Nullable
-                private InetAddress a() {
-                    SocketAddress socketaddress = LoginListener.this.networkManager.getSocketAddress();
-
-                    return LoginListener.this.server.V() && socketaddress instanceof InetSocketAddress ? ((InetSocketAddress) socketaddress).getAddress() : null;
-                }
-            };
-
-            thread.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(LoginListener.LOGGER));
-            thread.start();
+            this.networkManager.a(cipher, cipher1);
+        } catch (CryptographyException cryptographyexception) {
+            throw new IllegalStateException("Protocol error", cryptographyexception);
         }
+
+        Thread thread = new Thread("User Authenticator #" + LoginListener.b.incrementAndGet()) {
+            public void run() {
+                GameProfile gameprofile = LoginListener.this.i;
+
+                try {
+                    LoginListener.this.i = LoginListener.this.server.getMinecraftSessionService().hasJoinedServer(new GameProfile((UUID) null, gameprofile.getName()), s, this.a());
+                    if (LoginListener.this.i != null) {
+                        LoginListener.LOGGER.info("UUID of player {} is {}", LoginListener.this.i.getName(), LoginListener.this.i.getId());
+                        LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
+                    } else if (LoginListener.this.server.isEmbeddedServer()) {
+                        LoginListener.LOGGER.warn("Failed to verify username but will let them in anyway!");
+                        LoginListener.this.i = LoginListener.this.a(gameprofile);
+                        LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
+                    } else {
+                        LoginListener.this.disconnect(new ChatMessage("multiplayer.disconnect.unverified_username"));
+                        LoginListener.LOGGER.error("Username '{}' tried to join with an invalid session", gameprofile.getName());
+                    }
+                } catch (AuthenticationUnavailableException authenticationunavailableexception) {
+                    if (LoginListener.this.server.isEmbeddedServer()) {
+                        LoginListener.LOGGER.warn("Authentication servers are down but will let them in anyway!");
+                        LoginListener.this.i = LoginListener.this.a(gameprofile);
+                        LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
+                    } else {
+                        LoginListener.this.disconnect(new ChatMessage("multiplayer.disconnect.authservers_down"));
+                        LoginListener.LOGGER.error("Couldn't verify username because servers are unavailable");
+                    }
+                }
+
+            }
+
+            @Nullable
+            private InetAddress a() {
+                SocketAddress socketaddress = LoginListener.this.networkManager.getSocketAddress();
+
+                return LoginListener.this.server.W() && socketaddress instanceof InetSocketAddress ? ((InetSocketAddress) socketaddress).getAddress() : null;
+            }
+        };
+
+        thread.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(LoginListener.LOGGER));
+        thread.start();
     }
 
     @Override

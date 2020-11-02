@@ -43,6 +43,10 @@ public class SharedConstants {
         return SharedConstants.f;
     }
 
+    public static int b() {
+        return 754;
+    }
+
     static {
         ResourceLeakDetector.setLevel(SharedConstants.a);
         CommandSyntaxException.ENABLE_COMMAND_STACK_TRACES = false;

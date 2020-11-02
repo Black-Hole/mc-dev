@@ -103,7 +103,7 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
     public EnumInteractionResult b(EntityHuman entityhuman, EnumHand enumhand) {
         boolean flag = this.k(entityhuman.b(enumhand));
 
-        if (!flag && this.hasSaddle() && !this.isVehicle() && !entityhuman.ep()) {
+        if (!flag && this.hasSaddle() && !this.isVehicle() && !entityhuman.eq()) {
             if (!this.world.isClientSide) {
                 entityhuman.startRiding(this);
             }
@@ -160,7 +160,7 @@ public class EntityPig extends EntityAnimal implements ISteerable, ISaddleable {
             int[][] aint = DismountUtil.a(enumdirection);
             BlockPosition blockposition = this.getChunkCoordinates();
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-            UnmodifiableIterator unmodifiableiterator = entityliving.ei().iterator();
+            UnmodifiableIterator unmodifiableiterator = entityliving.ej().iterator();
 
             while (unmodifiableiterator.hasNext()) {
                 EntityPose entitypose = (EntityPose) unmodifiableiterator.next();

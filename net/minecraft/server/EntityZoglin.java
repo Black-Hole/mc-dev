@@ -22,13 +22,13 @@ public class EntityZoglin extends EntityMonster implements IMonster, IOglin {
     }
 
     @Override
-    protected BehaviorController.b<EntityZoglin> cJ() {
+    protected BehaviorController.b<EntityZoglin> cK() {
         return BehaviorController.a((Collection) EntityZoglin.c, (Collection) EntityZoglin.b);
     }
 
     @Override
     protected BehaviorController<?> a(Dynamic<?> dynamic) {
-        BehaviorController<EntityZoglin> behaviorcontroller = this.cJ().a(dynamic);
+        BehaviorController<EntityZoglin> behaviorcontroller = this.cK().a(dynamic);
 
         a(behaviorcontroller);
         b(behaviorcontroller);
@@ -91,7 +91,7 @@ public class EntityZoglin extends EntityMonster implements IMonster, IOglin {
         } else {
             this.bo = 10;
             this.world.broadcastEntityEffect(this, (byte) 4);
-            this.playSound(SoundEffects.ENTITY_ZOGLIN_ATTACK, 1.0F, this.dG());
+            this.playSound(SoundEffects.ENTITY_ZOGLIN_ATTACK, 1.0F, this.dH());
             return IOglin.a(this, (EntityLiving) entity);
         }
     }
@@ -110,7 +110,7 @@ public class EntityZoglin extends EntityMonster implements IMonster, IOglin {
     }
 
     @Override
-    public double bb() {
+    public double bc() {
         return (double) this.getHeight() - (this.isBaby() ? 0.2D : 0.15D);
     }
 
@@ -208,7 +208,7 @@ public class EntityZoglin extends EntityMonster implements IMonster, IOglin {
     }
 
     protected void eN() {
-        this.playSound(SoundEffects.ENTITY_ZOGLIN_ANGRY, 1.0F, this.dG());
+        this.playSound(SoundEffects.ENTITY_ZOGLIN_ANGRY, 1.0F, this.dH());
     }
 
     @Override

@@ -32,7 +32,7 @@ public class EntityLlamaSpit extends IProjectile {
 
         if (this.world.a(this.getBoundingBox()).noneMatch(BlockBase.BlockData::isAir)) {
             this.die();
-        } else if (this.aG()) {
+        } else if (this.aH()) {
             this.die();
         } else {
             this.setMot(vec3d.a(0.9900000095367432D));

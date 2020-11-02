@@ -54,7 +54,7 @@ public class EntityBlaze extends EntityMonster {
     }
 
     @Override
-    public float aQ() {
+    public float aR() {
         return 1.0F;
     }
 
@@ -70,7 +70,7 @@ public class EntityBlaze extends EntityMonster {
             }
 
             for (int i = 0; i < 2; ++i) {
-                this.world.addParticle(Particles.LARGE_SMOKE, this.d(0.5D), this.cE(), this.g(0.5D), 0.0D, 0.0D, 0.0D);
+                this.world.addParticle(Particles.LARGE_SMOKE, this.d(0.5D), this.cF(), this.g(0.5D), 0.0D, 0.0D, 0.0D);
             }
         }
 
@@ -78,7 +78,7 @@ public class EntityBlaze extends EntityMonster {
     }
 
     @Override
-    public boolean dN() {
+    public boolean dO() {
         return true;
     }
 

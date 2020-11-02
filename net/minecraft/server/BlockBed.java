@@ -89,7 +89,7 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
 
     @Override
     public void a(IBlockAccess iblockaccess, Entity entity) {
-        if (entity.bv()) {
+        if (entity.bw()) {
             super.a(iblockaccess, entity);
         } else {
             this.a(entity);

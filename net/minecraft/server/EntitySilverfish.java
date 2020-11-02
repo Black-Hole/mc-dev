@@ -23,7 +23,7 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     @Override
-    public double ba() {
+    public double bb() {
         return 0.1D;
     }
 

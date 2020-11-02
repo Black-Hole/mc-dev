@@ -26,7 +26,7 @@ public class VoxelShapeCollisionEntity implements VoxelShapeCollision {
 
     @Deprecated
     protected VoxelShapeCollisionEntity(Entity entity) {
-        boolean flag = entity.bx();
+        boolean flag = entity.by();
         double d0 = entity.locY();
         Item item = entity instanceof EntityLiving ? ((EntityLiving) entity).getItemInMainHand().getItem() : Items.AIR;
         Predicate predicate;

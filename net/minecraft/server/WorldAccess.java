@@ -5,6 +5,6 @@ public interface WorldAccess extends GeneratorAccess {
     WorldServer getMinecraftWorld();
 
     default void addAllEntities(Entity entity) {
-        entity.co().forEach(this::addEntity);
+        entity.cp().forEach(this::addEntity);
     }
 }

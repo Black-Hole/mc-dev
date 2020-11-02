@@ -2,13 +2,13 @@ package net.minecraft.server;
 
 public interface IWorldTime extends IWorldReader {
 
-    long ab();
+    long ac();
 
-    default float ae() {
-        return DimensionManager.e[this.getDimensionManager().b(this.ab())];
+    default float af() {
+        return DimensionManager.e[this.getDimensionManager().b(this.ac())];
     }
 
     default float f(float f) {
-        return this.getDimensionManager().a(this.ab());
+        return this.getDimensionManager().a(this.ac());
     }
 }

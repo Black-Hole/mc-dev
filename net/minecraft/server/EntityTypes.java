@@ -232,7 +232,7 @@ public class EntityTypes<T extends Entity> {
             MinecraftServer minecraftserver = world.getMinecraftServer();
 
             if (minecraftserver != null && entity != null) {
-                if (world.isClientSide || !entity.ci() || entityhuman != null && minecraftserver.getPlayerList().isOp(entityhuman.getProfile())) {
+                if (world.isClientSide || !entity.cj() || entityhuman != null && minecraftserver.getPlayerList().isOp(entityhuman.getProfile())) {
                     NBTTagCompound nbttagcompound1 = entity.save(new NBTTagCompound());
                     UUID uuid = entity.getUniqueID();
 

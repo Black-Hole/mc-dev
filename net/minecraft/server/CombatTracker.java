@@ -23,7 +23,7 @@ public class CombatTracker {
 
     public void a() {
         this.k();
-        Optional<BlockPosition> optional = this.b.dq();
+        Optional<BlockPosition> optional = this.b.dr();
 
         if (optional.isPresent()) {
             IBlockData iblockdata = this.b.world.getType((BlockPosition) optional.get());

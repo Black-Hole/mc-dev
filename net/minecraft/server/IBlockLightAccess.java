@@ -13,6 +13,6 @@ public interface IBlockLightAccess extends IBlockAccess {
     }
 
     default boolean e(BlockPosition blockposition) {
-        return this.getBrightness(EnumSkyBlock.SKY, blockposition) >= this.J();
+        return this.getBrightness(EnumSkyBlock.SKY, blockposition) >= this.K();
     }
 }

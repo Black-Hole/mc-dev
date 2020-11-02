@@ -33,8 +33,8 @@ public class ProtoChunkExtension extends ProtoChunk {
     }
 
     @Override
-    public int J() {
-        return this.a.J();
+    public int K() {
+        return this.a.K();
     }
 
     @Nullable

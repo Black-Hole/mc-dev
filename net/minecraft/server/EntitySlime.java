@@ -39,7 +39,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
 
     public void setSize(int i, boolean flag) {
         this.datawatcher.set(EntitySlime.bo, i);
-        this.ae();
+        this.af();
         this.updateSize();
         this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue((double) (i * i));
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue((double) (0.2F + 0.1F * (float) i));
@@ -140,7 +140,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
             this.yaw = this.aC;
             this.aA = this.aC;
             if (this.isInWater() && this.random.nextInt(20) == 0) {
-                this.aL();
+                this.aM();
             }
         }
 
@@ -156,7 +156,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
     public void die() {
         int i = this.getSize();
 
-        if (!this.world.isClientSide && i > 1 && this.dk()) {
+        if (!this.world.isClientSide && i > 1 && this.dl()) {
             IChatBaseComponent ichatbasecomponent = this.getCustomName();
             boolean flag = this.isNoAI();
             float f = (float) i / 4.0F;
@@ -247,7 +247,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
 
     public static boolean c(EntityTypes<EntitySlime> entitytypes, GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition, Random random) {
         if (generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL) {
-            if (Objects.equals(generatoraccess.i(blockposition), Optional.of(Biomes.SWAMP)) && blockposition.getY() > 50 && blockposition.getY() < 70 && random.nextFloat() < 0.5F && random.nextFloat() < generatoraccess.ae() && generatoraccess.getLightLevel(blockposition) <= random.nextInt(8)) {
+            if (Objects.equals(generatoraccess.i(blockposition), Optional.of(Biomes.SWAMP)) && blockposition.getY() > 50 && blockposition.getY() < 70 && random.nextFloat() < 0.5F && random.nextFloat() < generatoraccess.af() && generatoraccess.getLightLevel(blockposition) <= random.nextInt(8)) {
                 return a(entitytypes, generatoraccess, enummobspawn, blockposition, random);
             }
 
@@ -284,7 +284,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
     protected void jump() {
         Vec3D vec3d = this.getMot();
 
-        this.setMot(vec3d.x, (double) this.dI(), vec3d.z);
+        this.setMot(vec3d.x, (double) this.dJ(), vec3d.z);
         this.impulse = true;
     }
 
@@ -350,7 +350,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
 
         @Override
         public boolean a() {
-            return (this.a.isInWater() || this.a.aP()) && this.a.getControllerMove() instanceof EntitySlime.ControllerMoveSlime;
+            return (this.a.isInWater() || this.a.aQ()) && this.a.getControllerMove() instanceof EntitySlime.ControllerMoveSlime;
         }
 
         @Override
@@ -376,7 +376,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
 
         @Override
         public boolean a() {
-            return this.a.getGoalTarget() == null && (this.a.onGround || this.a.isInWater() || this.a.aP() || this.a.hasEffect(MobEffects.LEVITATION)) && this.a.getControllerMove() instanceof EntitySlime.ControllerMoveSlime;
+            return this.a.getGoalTarget() == null && (this.a.onGround || this.a.isInWater() || this.a.aQ() || this.a.hasEffect(MobEffects.LEVITATION)) && this.a.getControllerMove() instanceof EntitySlime.ControllerMoveSlime;
         }
 
         @Override

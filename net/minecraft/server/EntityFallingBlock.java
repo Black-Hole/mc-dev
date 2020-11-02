@@ -37,7 +37,7 @@ public class EntityFallingBlock extends Entity {
     }
 
     @Override
-    public boolean bK() {
+    public boolean bL() {
         return false;
     }
 
@@ -251,7 +251,7 @@ public class EntityFallingBlock extends Entity {
     }
 
     @Override
-    public boolean ci() {
+    public boolean cj() {
         return true;
     }
 

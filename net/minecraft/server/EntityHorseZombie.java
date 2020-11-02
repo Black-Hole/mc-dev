@@ -54,7 +54,7 @@ public class EntityHorseZombie extends EntityHorseAbstract {
             return EnumInteractionResult.PASS;
         } else if (this.isBaby()) {
             return super.b(entityhuman, enumhand);
-        } else if (entityhuman.ep()) {
+        } else if (entityhuman.eq()) {
             this.f(entityhuman);
             return EnumInteractionResult.a(this.world.isClientSide);
         } else if (this.isVehicle()) {

@@ -146,7 +146,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
     static class b extends PathfinderGoalNearestAttackableTarget<EntityLiving> {
 
         public b(EntityVindicator entityvindicator) {
-            super(entityvindicator, EntityLiving.class, 0, true, true, EntityLiving::eh);
+            super(entityvindicator, EntityLiving.class, 0, true, true, EntityLiving::ei);
         }
 
         @Override

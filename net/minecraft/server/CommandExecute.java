@@ -71,7 +71,7 @@ public class CommandExecute {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.getPositionVector()).a(entity.bh()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.getPositionVector()).a(entity.bi()));
             }
 
             return list;
@@ -97,7 +97,7 @@ public class CommandExecute {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.bh()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.bi()));
             }
 
             return list;

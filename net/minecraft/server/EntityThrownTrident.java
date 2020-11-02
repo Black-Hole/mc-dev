@@ -124,7 +124,7 @@ public class EntityThrownTrident extends EntityArrow {
         this.setMot(this.getMot().d(-0.01D, -0.1D, -0.01D));
         float f1 = 1.0F;
 
-        if (this.world instanceof WorldServer && this.world.V() && EnchantmentManager.h(this.trident)) {
+        if (this.world instanceof WorldServer && this.world.W() && EnchantmentManager.h(this.trident)) {
             BlockPosition blockposition = entity.getChunkCoordinates();
 
             if (this.world.e(blockposition)) {

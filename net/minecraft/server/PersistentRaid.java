@@ -52,7 +52,7 @@ public class PersistentRaid extends PersistentBase {
     }
 
     public static boolean a(EntityRaider entityraider, Raid raid) {
-        return entityraider != null && raid != null && raid.getWorld() != null ? entityraider.isAlive() && entityraider.isCanJoinRaid() && entityraider.dc() <= 2400 && entityraider.world.getDimensionManager() == raid.getWorld().getDimensionManager() : false;
+        return entityraider != null && raid != null && raid.getWorld() != null ? entityraider.isAlive() && entityraider.isCanJoinRaid() && entityraider.dd() <= 2400 && entityraider.world.getDimensionManager() == raid.getWorld().getDimensionManager() : false;
     }
 
     @Nullable

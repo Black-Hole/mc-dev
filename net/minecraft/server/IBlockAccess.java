@@ -19,7 +19,7 @@ public interface IBlockAccess {
         return this.getType(blockposition).f();
     }
 
-    default int J() {
+    default int K() {
         return 15;
     }
 

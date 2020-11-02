@@ -142,7 +142,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     public MinecraftServer(Thread thread, IRegistryCustom.Dimension iregistrycustom_dimension, Convertable.ConversionSession convertable_conversionsession, SaveData savedata, ResourcePackRepository resourcepackrepository, Proxy proxy, DataFixer datafixer, DataPackResources datapackresources, MinecraftSessionService minecraftsessionservice, GameProfileRepository gameprofilerepository, UserCache usercache, WorldLoadListenerFactory worldloadlistenerfactory) {
         super("Server");
-        this.m = new GameProfilerSwitcher(SystemUtils.a, this::ah);
+        this.m = new GameProfilerSwitcher(SystemUtils.a, this::ai);
         this.methodProfiler = GameProfilerDisabled.a;
         this.serverPing = new ServerPing();
         this.r = new Random();
@@ -420,7 +420,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.sleepForTick();
         worldloadlistener.b();
         chunkproviderserver.getLightEngine().a(5);
-        this.bb();
+        this.bc();
     }
 
     protected void loadResourcesZip() {
@@ -648,13 +648,13 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     @Override
     public boolean executeNext() {
-        boolean flag = this.ba();
+        boolean flag = this.bb();
 
         this.X = flag;
         return flag;
     }
 
-    private boolean ba() {
+    private boolean bb() {
         if (super.executeNext()) {
             return true;
         } else {
@@ -932,15 +932,21 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.I != null;
     }
 
-    public void a(KeyPair keypair) {
-        this.H = keypair;
+    protected void P() {
+        MinecraftServer.LOGGER.info("Generating keypair");
+
+        try {
+            this.H = MinecraftEncryption.b();
+        } catch (CryptographyException cryptographyexception) {
+            throw new IllegalStateException("Failed to generate key pair", cryptographyexception);
+        }
     }
 
     public void a(EnumDifficulty enumdifficulty, boolean flag) {
         if (flag || !this.saveData.isDifficultyLocked()) {
             this.saveData.setDifficulty(this.saveData.isHardcore() ? EnumDifficulty.HARD : enumdifficulty);
-            this.bb();
-            this.getPlayerList().getPlayers().forEach(this::a);
+            this.bc();
+            this.getPlayerList().getPlayers().forEach(this::b);
         }
     }
 
@@ -948,7 +954,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return i;
     }
 
-    private void bb() {
+    private void bc() {
         Iterator iterator = this.getWorlds().iterator();
 
         while (iterator.hasNext()) {
@@ -961,10 +967,10 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     public void b(boolean flag) {
         this.saveData.d(flag);
-        this.getPlayerList().getPlayers().forEach(this::a);
+        this.getPlayerList().getPlayers().forEach(this::b);
     }
 
-    private void a(EntityPlayer entityplayer) {
+    private void b(EntityPlayer entityplayer) {
         WorldData worlddata = entityplayer.getWorldServer().getWorldData();
 
         entityplayer.playerConnection.sendPacket(new PacketPlayOutServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
@@ -1006,7 +1012,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         }
 
         mojangstatisticsgenerator.a("uses_auth", this.onlineMode);
-        mojangstatisticsgenerator.a("gui_state", this.ag() ? "enabled" : "disabled");
+        mojangstatisticsgenerator.a("gui_state", this.ah() ? "enabled" : "disabled");
         mojangstatisticsgenerator.a("run_time", (SystemUtils.getMonotonicMillis() - mojangstatisticsgenerator.g()) / 60L * 1000L);
         mojangstatisticsgenerator.a("avg_tick_ms", (int) (MathHelper.a(this.h) * 1.0E-6D));
         int i = 0;
@@ -1041,7 +1047,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.onlineMode = flag;
     }
 
-    public boolean V() {
+    public boolean W() {
         return this.B;
     }
 
@@ -1116,13 +1122,13 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.serverConnection;
     }
 
-    public boolean ag() {
+    public boolean ah() {
         return false;
     }
 
     public abstract boolean a(EnumGamemode enumgamemode, boolean flag, int i);
 
-    public int ah() {
+    public int ai() {
         return this.ticks;
     }
 
@@ -1142,7 +1148,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.P;
     }
 
-    public boolean al() {
+    public boolean am() {
         return true;
     }
 
@@ -1174,7 +1180,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.T = 0L;
     }
 
-    public int at() {
+    public int au() {
         return 29999984;
     }
 
@@ -1188,11 +1194,11 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.serverThread;
     }
 
-    public int aw() {
+    public int ax() {
         return 256;
     }
 
-    public long ax() {
+    public long ay() {
         return this.nextTick;
     }
 
@@ -1292,7 +1298,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     public void a(CommandListenerWrapper commandlistenerwrapper) {
-        if (this.aM()) {
+        if (this.aN()) {
             PlayerList playerlist = commandlistenerwrapper.getServer().getPlayerList();
             WhiteList whitelist = playerlist.getWhitelist();
             List<EntityPlayer> list = Lists.newArrayList(playerlist.getPlayers());
@@ -1345,7 +1351,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.scoreboardServer;
     }
 
-    public PersistentCommandStorage aH() {
+    public PersistentCommandStorage aI() {
         if (this.persistentCommandStorage == null) {
             throw new NullPointerException("Called before server init");
         } else {
@@ -1369,7 +1375,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return this.bossBattleCustomData;
     }
 
-    public boolean aM() {
+    public boolean aN() {
         return this.af;
     }
 
@@ -1377,7 +1383,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.af = flag;
     }
 
-    public float aN() {
+    public float aO() {
         return this.ag;
     }
 
@@ -1422,8 +1428,8 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         Throwable throwable = null;
 
         try {
-            bufferedwriter.write(String.format("pending_tasks: %d\n", this.bh()));
-            bufferedwriter.write(String.format("average_tick_time: %f\n", this.aN()));
+            bufferedwriter.write(String.format("pending_tasks: %d\n", this.bi()));
+            bufferedwriter.write(String.format("average_tick_time: %f\n", this.aO()));
             bufferedwriter.write(String.format("tick_times: %s\n", Arrays.toString(this.h)));
             bufferedwriter.write(String.format("queue: %s\n", SystemUtils.f()));
         } catch (Throwable throwable1) {
@@ -1606,15 +1612,15 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.methodProfiler = this.m.d();
     }
 
-    public boolean aR() {
+    public boolean aS() {
         return this.m.a();
     }
 
-    public void aS() {
+    public void aT() {
         this.O = true;
     }
 
-    public MethodProfilerResults aT() {
+    public MethodProfilerResults aU() {
         MethodProfilerResults methodprofilerresults = this.m.e();
 
         this.m.b();
@@ -1639,5 +1645,10 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     public IRegistryCustom getCustomRegistry() {
         return this.customRegistry;
+    }
+
+    @Nullable
+    public ITextFilter a(EntityPlayer entityplayer) {
+        return null;
     }
 }

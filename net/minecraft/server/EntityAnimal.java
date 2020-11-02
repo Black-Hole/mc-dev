@@ -38,7 +38,7 @@ public abstract class EntityAnimal extends EntityAgeable {
                 double d1 = this.random.nextGaussian() * 0.02D;
                 double d2 = this.random.nextGaussian() * 0.02D;
 
-                this.world.addParticle(Particles.HEART, this.d(1.0D), this.cE() + 0.5D, this.g(1.0D), d0, d1, d2);
+                this.world.addParticle(Particles.HEART, this.d(1.0D), this.cF() + 0.5D, this.g(1.0D), d0, d1, d2);
             }
         }
 
@@ -70,7 +70,7 @@ public abstract class EntityAnimal extends EntityAgeable {
     }
 
     @Override
-    public double ba() {
+    public double bb() {
         return 0.14D;
     }
 

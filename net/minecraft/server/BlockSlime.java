@@ -8,7 +8,7 @@ public class BlockSlime extends BlockHalfTransparent {
 
     @Override
     public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
-        if (entity.bv()) {
+        if (entity.bw()) {
             super.fallOn(world, blockposition, entity, f);
         } else {
             entity.b(f, 0.0F);
@@ -18,7 +18,7 @@ public class BlockSlime extends BlockHalfTransparent {
 
     @Override
     public void a(IBlockAccess iblockaccess, Entity entity) {
-        if (entity.bv()) {
+        if (entity.bw()) {
             super.a(iblockaccess, entity);
         } else {
             this.a(entity);
@@ -41,7 +41,7 @@ public class BlockSlime extends BlockHalfTransparent {
     public void stepOn(World world, BlockPosition blockposition, Entity entity) {
         double d0 = Math.abs(entity.getMot().y);
 
-        if (d0 < 0.1D && !entity.bu()) {
+        if (d0 < 0.1D && !entity.bv()) {
             double d1 = 0.4D + d0 * 0.2D;
 
             entity.setMot(entity.getMot().d(d1, 1.0D, d1));

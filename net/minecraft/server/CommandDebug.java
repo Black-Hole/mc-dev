@@ -41,10 +41,10 @@ public class CommandDebug {
     private static int a(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
-        if (minecraftserver.aR()) {
+        if (minecraftserver.aS()) {
             throw CommandDebug.c.create();
         } else {
-            minecraftserver.aS();
+            minecraftserver.aT();
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.started", new Object[]{"Started the debug profiler. Type '/debug stop' to stop it."}), true);
             return 0;
         }
@@ -53,10 +53,10 @@ public class CommandDebug {
     private static int b(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
-        if (!minecraftserver.aR()) {
+        if (!minecraftserver.aS()) {
             throw CommandDebug.b.create();
         } else {
-            MethodProfilerResults methodprofilerresults = minecraftserver.aT();
+            MethodProfilerResults methodprofilerresults = minecraftserver.aU();
             File file = new File(minecraftserver.c("debug"), "profile-results-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + ".txt");
 
             methodprofilerresults.a(file);

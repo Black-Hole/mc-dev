@@ -110,7 +110,7 @@ public class EntityExperienceOrb extends Entity {
     }
 
     @Override
-    protected void aL() {}
+    protected void aM() {}
 
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
@@ -187,7 +187,7 @@ public class EntityExperienceOrb extends Entity {
     }
 
     @Override
-    public boolean bK() {
+    public boolean bL() {
         return false;
     }
 

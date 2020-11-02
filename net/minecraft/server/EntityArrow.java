@@ -492,7 +492,7 @@ public abstract class EntityArrow extends IProjectile {
     }
 
     @Override
-    public boolean bK() {
+    public boolean bL() {
         return false;
     }
 

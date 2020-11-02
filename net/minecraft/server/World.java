@@ -503,6 +503,10 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
         return explosion;
     }
 
+    public String P() {
+        return this.getChunkProvider().getName();
+    }
+
     @Nullable
     @Override
     public TileEntity getTileEntity(BlockPosition blockposition) {
@@ -604,7 +608,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
         return this.a(blockposition, entity, EnumDirection.UP);
     }
 
-    public void P() {
+    public void Q() {
         double d0 = 1.0D - (double) (this.d(1.0F) * 5.0F) / 16.0D;
         double d1 = 1.0D - (double) (this.b(1.0F) * 5.0F) / 16.0D;
         double d2 = 0.5D + 2.0D * MathHelper.a((double) MathHelper.cos(this.f(1.0F) * 6.2831855F), -0.25D, 0.25D);
@@ -616,7 +620,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
         this.getChunkProvider().a(flag, flag1);
     }
 
-    protected void Q() {
+    protected void R() {
         if (this.worldData.hasStorm()) {
             this.rainLevel = 1.0F;
             if (this.worldData.isThundering()) {
@@ -844,7 +848,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
         return MathHelper.g(f, this.lastRainLevel, this.rainLevel);
     }
 
-    public boolean V() {
+    public boolean W() {
         return this.getDimensionManager().hasSkyLight() && !this.getDimensionManager().hasCeiling() ? (double) this.b(1.0F) > 0.9D : false;
     }
 
@@ -937,7 +941,7 @@ public abstract class World implements GeneratorAccess, AutoCloseable {
         float f = 0.0F;
 
         if (this.isLoaded(blockposition)) {
-            f = this.ae();
+            f = this.af();
             i = this.getChunkAtWorldCoords(blockposition).getInhabitedTime();
         }
 

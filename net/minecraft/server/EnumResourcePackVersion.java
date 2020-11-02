@@ -8,7 +8,7 @@ public enum EnumResourcePackVersion {
     private final IChatBaseComponent e;
 
     private EnumResourcePackVersion(String s) {
-        this.d = new ChatMessage("pack.incompatible." + s);
+        this.d = (new ChatMessage("pack.incompatible." + s)).a(EnumChatFormat.GRAY);
         this.e = new ChatMessage("pack.incompatible.confirm." + s);
     }
 

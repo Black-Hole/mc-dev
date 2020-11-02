@@ -11,12 +11,15 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap.Entry;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.longs.LongSets;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +30,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -81,9 +85,9 @@ public class WorldServer extends World implements GeneratorAccessSeed {
             return minecraftserver.E().getWorldPersistentData();
         });
         this.portalTravelAgent = new PortalTravelAgent(this);
-        this.P();
         this.Q();
-        this.getWorldBorder().a(minecraftserver.at());
+        this.R();
+        this.getWorldBorder().a(minecraftserver.au());
         this.persistentRaid = (PersistentRaid) this.getWorldPersistentData().a(() -> {
             return new PersistentRaid(this);
         }, PersistentRaid.a(this.getDimensionManager()));
@@ -224,7 +228,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
             }
         }
 
-        this.P();
+        this.Q();
         this.b();
         gameprofilerfiller.exitEnter("chunkSource");
         this.getChunkProvider().tick(booleansupplier);
@@ -237,7 +241,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         gameprofilerfiller.exitEnter("raid");
         this.persistentRaid.a();
         gameprofilerfiller.exitEnter("blockEvents");
-        this.aj();
+        this.ak();
         this.ticking = false;
         gameprofilerfiller.exitEnter("entities");
         boolean flag3 = !this.players.isEmpty() || !this.getForceLoadedChunks().isEmpty();
@@ -355,7 +359,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         gameprofilerfiller.enter("thunder");
         BlockPosition blockposition;
 
-        if (flag && this.V() && this.random.nextInt(100000) == 0) {
+        if (flag && this.W() && this.random.nextInt(100000) == 0) {
             blockposition = this.a(this.a(j, 0, k, 15));
             if (this.isRainingAt(blockposition)) {
                 DifficultyDamageScaler difficultydamagescaler = this.getDamageScaler(blockposition);
@@ -580,7 +584,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     public void chunkCheck(Entity entity) {
-        if (entity.ck()) {
+        if (entity.cl()) {
             this.getMethodProfiler().enter("chunkCheck");
             int i = MathHelper.floor(entity.locX() / 16.0D);
             int j = MathHelper.floor(entity.locY() / 16.0D);
@@ -591,7 +595,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
                     this.getChunkAt(entity.chunkX, entity.chunkZ).a(entity, entity.chunkY);
                 }
 
-                if (!entity.cj() && !this.isChunkLoaded(i, k)) {
+                if (!entity.ck() && !this.isChunkLoaded(i, k)) {
                     if (entity.inChunk) {
                         WorldServer.LOGGER.warn("Entity {} left loaded chunk area", entity);
                     }
@@ -619,7 +623,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
                 iprogressupdate.a(new ChatMessage("menu.savingLevel"));
             }
 
-            this.ai();
+            this.aj();
             if (iprogressupdate != null) {
                 iprogressupdate.c(new ChatMessage("menu.savingChunks"));
             }
@@ -628,7 +632,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         }
     }
 
-    private void ai() {
+    private void aj() {
         if (this.dragonBattle != null) {
             this.server.getSaveData().a(this.dragonBattle.a());
         }
@@ -809,7 +813,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     public boolean addAllEntitiesSafely(Entity entity) {
-        if (entity.co().anyMatch(this::isUUIDTaken)) {
+        if (entity.cp().anyMatch(this::isUUIDTaken)) {
             return false;
         } else {
             this.addAllEntities(entity);
@@ -1017,7 +1021,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
         this.L.add(new BlockActionData(blockposition, block, i, j));
     }
 
-    private void aj() {
+    private void ak() {
         while (!this.L.isEmpty()) {
             BlockActionData blockactiondata = (BlockActionData) this.L.removeFirst();
 
@@ -1491,6 +1495,35 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     @Override
     public WorldServer getMinecraftWorld() {
         return this;
+    }
+
+    @VisibleForTesting
+    public String F() {
+        return String.format("players: %s, entities: %d [%s], block_entities: %d [%s], block_ticks: %d, fluid_ticks: %d, chunk_source: %s", this.players.size(), this.entitiesById.size(), a((Collection) this.entitiesById.values(), (entity) -> {
+            return IRegistry.ENTITY_TYPE.getKey(entity.getEntityType());
+        }), this.tileEntityListTick.size(), a((Collection) this.tileEntityListTick, (tileentity) -> {
+            return IRegistry.BLOCK_ENTITY_TYPE.getKey(tileentity.getTileType());
+        }), this.getBlockTickList().a(), this.getFluidTickList().a(), this.P());
+    }
+
+    private static <T> String a(Collection<T> collection, Function<T, MinecraftKey> function) {
+        try {
+            Object2IntOpenHashMap<MinecraftKey> object2intopenhashmap = new Object2IntOpenHashMap();
+            Iterator iterator = collection.iterator();
+
+            while (iterator.hasNext()) {
+                T t0 = iterator.next();
+                MinecraftKey minecraftkey = (MinecraftKey) function.apply(t0);
+
+                object2intopenhashmap.addTo(minecraftkey, 1);
+            }
+
+            return (String) object2intopenhashmap.object2IntEntrySet().stream().sorted(Comparator.comparing(it.unimi.dsi.fastutil.objects.Object2IntMap.Entry::getIntValue).reversed()).limit(5L).map((it_unimi_dsi_fastutil_objects_object2intmap_entry) -> {
+                return it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey() + ":" + it_unimi_dsi_fastutil_objects_object2intmap_entry.getIntValue();
+            }).collect(Collectors.joining(","));
+        } catch (Exception exception) {
+            return "";
+        }
     }
 
     public static void a(WorldServer worldserver) {

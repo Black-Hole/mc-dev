@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 
 public class EntityPotion extends EntityProjectileThrowable {
 
-    public static final Predicate<EntityLiving> b = EntityLiving::dN;
+    public static final Predicate<EntityLiving> b = EntityLiving::dO;
 
     public EntityPotion(EntityTypes<? extends EntityPotion> entitytypes, World world) {
         super(entitytypes, world);
@@ -95,7 +95,7 @@ public class EntityPotion extends EntityProjectileThrowable {
                 EntityLiving entityliving = (EntityLiving) iterator.next();
                 double d0 = this.h(entityliving);
 
-                if (d0 < 16.0D && entityliving.dN()) {
+                if (d0 < 16.0D && entityliving.dO()) {
                     entityliving.damageEntity(DamageSource.c(entityliving, this.getShooter()), 1.0F);
                 }
             }
@@ -113,7 +113,7 @@ public class EntityPotion extends EntityProjectileThrowable {
             while (iterator.hasNext()) {
                 EntityLiving entityliving = (EntityLiving) iterator.next();
 
-                if (entityliving.eg()) {
+                if (entityliving.eh()) {
                     double d0 = this.h(entityliving);
 
                     if (d0 < 16.0D) {

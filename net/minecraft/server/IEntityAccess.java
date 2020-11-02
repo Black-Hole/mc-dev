@@ -65,7 +65,7 @@ public interface IEntityAccess {
                     label25:
                     {
                         if (entity == null) {
-                            if (!entity1.aY()) {
+                            if (!entity1.aZ()) {
                                 break label25;
                             }
                         } else if (!entity.j(entity1)) {
