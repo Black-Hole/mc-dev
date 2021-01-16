@@ -309,19 +309,19 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
                 if (this.bv > 5 && this.bv % 3 == 0) {
                     this.a(soundeffecttype);
                 } else if (this.bv <= 5) {
-                    this.playSound(SoundEffects.ENTITY_HORSE_STEP_WOOD, soundeffecttype.a() * 0.15F, soundeffecttype.b());
+                    this.playSound(SoundEffects.ENTITY_HORSE_STEP_WOOD, soundeffecttype.getVolume() * 0.15F, soundeffecttype.getPitch());
                 }
             } else if (soundeffecttype == SoundEffectType.a) {
-                this.playSound(SoundEffects.ENTITY_HORSE_STEP_WOOD, soundeffecttype.a() * 0.15F, soundeffecttype.b());
+                this.playSound(SoundEffects.ENTITY_HORSE_STEP_WOOD, soundeffecttype.getVolume() * 0.15F, soundeffecttype.getPitch());
             } else {
-                this.playSound(SoundEffects.ENTITY_HORSE_STEP, soundeffecttype.a() * 0.15F, soundeffecttype.b());
+                this.playSound(SoundEffects.ENTITY_HORSE_STEP, soundeffecttype.getVolume() * 0.15F, soundeffecttype.getPitch());
             }
 
         }
     }
 
     protected void a(SoundEffectType soundeffecttype) {
-        this.playSound(SoundEffects.ENTITY_HORSE_GALLOP, soundeffecttype.a() * 0.15F, soundeffecttype.b());
+        this.playSound(SoundEffects.ENTITY_HORSE_GALLOP, soundeffecttype.getVolume() * 0.15F, soundeffecttype.getPitch());
     }
 
     public static AttributeProvider.Builder fi() {

@@ -84,16 +84,22 @@ public class VillagePlaceSection {
         if (villageplacerecord1 != null) {
             if (villageplacetype.equals(villageplacerecord1.g())) {
                 return false;
-            } else {
-                throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException("POI data mismatch: already registered at " + blockposition)));
             }
-        } else {
-            this.b.put(short0, villageplacerecord);
-            ((Set) this.c.computeIfAbsent(villageplacetype, (villageplacetype1) -> {
-                return Sets.newHashSet();
-            })).add(villageplacerecord);
-            return true;
+
+            String s = "POI data mismatch: already registered at " + blockposition;
+
+            if (SharedConstants.d) {
+                throw (IllegalStateException) SystemUtils.c((Throwable) (new IllegalStateException(s)));
+            }
+
+            VillagePlaceSection.LOGGER.error(s);
         }
+
+        this.b.put(short0, villageplacerecord);
+        ((Set) this.c.computeIfAbsent(villageplacetype, (villageplacetype1) -> {
+            return Sets.newHashSet();
+        })).add(villageplacerecord);
+        return true;
     }
 
     public void a(BlockPosition blockposition) {

@@ -55,7 +55,7 @@ public class ItemBlock extends Item {
 
                     SoundEffectType soundeffecttype = iblockdata1.getStepSound();
 
-                    world.playSound(entityhuman, blockposition, this.a(iblockdata1), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
+                    world.playSound(entityhuman, blockposition, this.a(iblockdata1), SoundCategory.BLOCKS, (soundeffecttype.getVolume() + 1.0F) / 2.0F, soundeffecttype.getPitch() * 0.8F);
                     if (entityhuman == null || !entityhuman.abilities.canInstantlyBuild) {
                         itemstack.subtract(1);
                     }
@@ -67,7 +67,7 @@ public class ItemBlock extends Item {
     }
 
     protected SoundEffect a(IBlockData iblockdata) {
-        return iblockdata.getStepSound().e();
+        return iblockdata.getStepSound().getPlaceSound();
     }
 
     @Nullable

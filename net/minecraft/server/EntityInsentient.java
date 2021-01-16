@@ -501,7 +501,7 @@ public abstract class EntityInsentient extends EntityLiving {
             }
 
             this.b(enumitemslot, itemstack);
-            this.b(itemstack);
+            this.playEquipSound(itemstack);
             return true;
         } else {
             return false;

@@ -634,8 +634,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     @Override
-    protected Optional<BlockUtil.Rectangle> a(WorldServer worldserver, BlockPosition blockposition, boolean flag) {
-        Optional<BlockUtil.Rectangle> optional = super.a(worldserver, blockposition, flag);
+    protected Optional<BlockUtil.Rectangle> findOrCreatePortal(WorldServer worldserver, BlockPosition blockposition, boolean flag) {
+        Optional<BlockUtil.Rectangle> optional = super.findOrCreatePortal(worldserver, blockposition, flag);
 
         if (optional.isPresent()) {
             return optional;

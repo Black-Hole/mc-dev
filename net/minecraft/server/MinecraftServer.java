@@ -373,7 +373,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
         iworlddataserver.setStorm(false);
         iworlddataserver.setThundering(false);
-        iworlddataserver.a(1000000000);
+        iworlddataserver.setClearWeatherTime(1000000000);
         iworlddataserver.setDayTime(6000L);
         iworlddataserver.setGameType(EnumGamemode.SPECTATOR);
     }
@@ -420,7 +420,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.sleepForTick();
         worldloadlistener.b();
         chunkproviderserver.getLightEngine().a(5);
-        this.bc();
+        this.updateSpawnFlags();
     }
 
     protected void loadResourcesZip() {
@@ -945,7 +945,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     public void a(EnumDifficulty enumdifficulty, boolean flag) {
         if (flag || !this.saveData.isDifficultyLocked()) {
             this.saveData.setDifficulty(this.saveData.isHardcore() ? EnumDifficulty.HARD : enumdifficulty);
-            this.bc();
+            this.updateSpawnFlags();
             this.getPlayerList().getPlayers().forEach(this::b);
         }
     }
@@ -954,7 +954,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return i;
     }
 
-    private void bc() {
+    private void updateSpawnFlags() {
         Iterator iterator = this.getWorlds().iterator();
 
         while (iterator.hasNext()) {

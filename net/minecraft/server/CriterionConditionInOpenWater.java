@@ -49,7 +49,7 @@ public class CriterionConditionInOpenWater {
         } else {
             EntityFishingHook entityfishinghook = (EntityFishingHook) entity;
 
-            return this.b == entityfishinghook.g();
+            return this.b == entityfishinghook.isInOpenWater();
         }
     }
 }

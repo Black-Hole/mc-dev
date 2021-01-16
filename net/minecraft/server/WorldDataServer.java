@@ -275,12 +275,12 @@ public class WorldDataServer implements IWorldDataServer, SaveData {
     }
 
     @Override
-    public int h() {
+    public int getClearWeatherTime() {
         return this.clearWeatherTime;
     }
 
     @Override
-    public void a(int i) {
+    public void setClearWeatherTime(int i) {
         this.clearWeatherTime = i;
     }
 

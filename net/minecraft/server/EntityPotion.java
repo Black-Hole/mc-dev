@@ -188,7 +188,7 @@ public class EntityPotion extends EntityProjectileThrowable {
         } else if (BlockCampfire.g(iblockdata)) {
             this.world.a((EntityHuman) null, 1009, blockposition, 0);
             BlockCampfire.c((GeneratorAccess) this.world, blockposition, iblockdata);
-            this.world.setTypeUpdate(blockposition, (IBlockData) iblockdata.set(BlockCampfire.b, false));
+            this.world.setTypeUpdate(blockposition, (IBlockData) iblockdata.set(BlockCampfire.LIT, false));
         }
 
     }

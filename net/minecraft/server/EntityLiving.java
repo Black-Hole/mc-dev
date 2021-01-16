@@ -496,7 +496,7 @@ public abstract class EntityLiving extends Entity {
         this.ticksFarFromPlayer = i;
     }
 
-    protected void b(ItemStack itemstack) {
+    protected void playEquipSound(ItemStack itemstack) {
         if (!itemstack.isEmpty()) {
             SoundEffect soundeffect = SoundEffects.ITEM_ARMOR_EQUIP_GENERIC;
             Item item = itemstack.getItem();
@@ -1362,7 +1362,7 @@ public abstract class EntityLiving extends Entity {
             if (!iblockdata.isAir()) {
                 SoundEffectType soundeffecttype = iblockdata.getStepSound();
 
-                this.playSound(soundeffecttype.g(), soundeffecttype.a() * 0.5F, soundeffecttype.b() * 0.75F);
+                this.playSound(soundeffecttype.getFallSound(), soundeffecttype.getVolume() * 0.5F, soundeffecttype.getPitch() * 0.75F);
             }
 
         }

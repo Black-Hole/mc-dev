@@ -1556,20 +1556,20 @@ public abstract class EntityHuman extends EntityLiving {
     @Override
     public void setSlot(EnumItemSlot enumitemslot, ItemStack itemstack) {
         if (enumitemslot == EnumItemSlot.MAINHAND) {
-            this.b(itemstack);
+            this.playEquipSound(itemstack);
             this.inventory.items.set(this.inventory.itemInHandIndex, itemstack);
         } else if (enumitemslot == EnumItemSlot.OFFHAND) {
-            this.b(itemstack);
+            this.playEquipSound(itemstack);
             this.inventory.extraSlots.set(0, itemstack);
         } else if (enumitemslot.a() == EnumItemSlot.Function.ARMOR) {
-            this.b(itemstack);
+            this.playEquipSound(itemstack);
             this.inventory.armor.set(enumitemslot.b(), itemstack);
         }
 
     }
 
     public boolean g(ItemStack itemstack) {
-        this.b(itemstack);
+        this.playEquipSound(itemstack);
         return this.inventory.pickup(itemstack);
     }
 

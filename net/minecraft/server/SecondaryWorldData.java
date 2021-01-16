@@ -48,12 +48,12 @@ public class SecondaryWorldData implements IWorldDataServer {
     }
 
     @Override
-    public int h() {
-        return this.b.h();
+    public int getClearWeatherTime() {
+        return this.b.getClearWeatherTime();
     }
 
     @Override
-    public void a(int i) {}
+    public void setClearWeatherTime(int i) {}
 
     @Override
     public boolean isThundering() {

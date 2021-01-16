@@ -49,41 +49,41 @@ public class SoundEffectType {
     public static final SoundEffectType S = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_CHAIN_BREAK, SoundEffects.BLOCK_CHAIN_STEP, SoundEffects.BLOCK_CHAIN_PLACE, SoundEffects.BLOCK_CHAIN_HIT, SoundEffects.BLOCK_CHAIN_FALL);
     public static final SoundEffectType T = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_NETHER_GOLD_ORE_BREAK, SoundEffects.BLOCK_NETHER_GOLD_ORE_STEP, SoundEffects.BLOCK_NETHER_GOLD_ORE_PLACE, SoundEffects.BLOCK_NETHER_GOLD_ORE_HIT, SoundEffects.BLOCK_NETHER_GOLD_ORE_FALL);
     public static final SoundEffectType U = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_GILDED_BLACKSTONE_BREAK, SoundEffects.BLOCK_GILDED_BLACKSTONE_STEP, SoundEffects.BLOCK_GILDED_BLACKSTONE_PLACE, SoundEffects.BLOCK_GILDED_BLACKSTONE_HIT, SoundEffects.BLOCK_GILDED_BLACKSTONE_FALL);
-    public final float V;
-    public final float W;
-    private final SoundEffect X;
-    private final SoundEffect Y;
-    private final SoundEffect Z;
-    private final SoundEffect aa;
-    private final SoundEffect ab;
+    public final float volume;
+    public final float pitch;
+    public final SoundEffect breakSound;
+    private final SoundEffect stepSound;
+    private final SoundEffect placeSound;
+    public final SoundEffect hitSound;
+    private final SoundEffect fallSound;
 
     public SoundEffectType(float f, float f1, SoundEffect soundeffect, SoundEffect soundeffect1, SoundEffect soundeffect2, SoundEffect soundeffect3, SoundEffect soundeffect4) {
-        this.V = f;
-        this.W = f1;
-        this.X = soundeffect;
-        this.Y = soundeffect1;
-        this.Z = soundeffect2;
-        this.aa = soundeffect3;
-        this.ab = soundeffect4;
+        this.volume = f;
+        this.pitch = f1;
+        this.breakSound = soundeffect;
+        this.stepSound = soundeffect1;
+        this.placeSound = soundeffect2;
+        this.hitSound = soundeffect3;
+        this.fallSound = soundeffect4;
     }
 
-    public float a() {
-        return this.V;
+    public float getVolume() {
+        return this.volume;
     }
 
-    public float b() {
-        return this.W;
+    public float getPitch() {
+        return this.pitch;
     }
 
-    public SoundEffect d() {
-        return this.Y;
+    public SoundEffect getStepSound() {
+        return this.stepSound;
     }
 
-    public SoundEffect e() {
-        return this.Z;
+    public SoundEffect getPlaceSound() {
+        return this.placeSound;
     }
 
-    public SoundEffect g() {
-        return this.ab;
+    public SoundEffect getFallSound() {
+        return this.fallSound;
     }
 }

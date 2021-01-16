@@ -25,7 +25,7 @@ public class BlockHoney extends BlockHalfTransparent {
         }
 
         if (entity.b(f, 0.2F)) {
-            entity.playSound(this.stepSound.g(), this.stepSound.a() * 0.5F, this.stepSound.b() * 0.75F);
+            entity.playSound(this.stepSound.getFallSound(), this.stepSound.getVolume() * 0.5F, this.stepSound.getPitch() * 0.75F);
         }
 
     }

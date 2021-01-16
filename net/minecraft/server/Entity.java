@@ -751,7 +751,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             IBlockData iblockdata1 = this.world.getType(blockposition.up());
             SoundEffectType soundeffecttype = iblockdata1.a(Blocks.SNOW) ? iblockdata1.getStepSound() : iblockdata.getStepSound();
 
-            this.playSound(soundeffecttype.d(), soundeffecttype.a() * 0.15F, soundeffecttype.b());
+            this.playSound(soundeffecttype.getStepSound(), soundeffecttype.getVolume() * 0.15F, soundeffecttype.getPitch());
         }
     }
 
@@ -2029,7 +2029,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                 double d4 = DimensionManager.a(this.world.getDimensionManager(), worldserver.getDimensionManager());
                 BlockPosition blockposition = new BlockPosition(MathHelper.a(this.locX() * d4, d0, d2), this.locY(), MathHelper.a(this.locZ() * d4, d1, d3));
 
-                return (ShapeDetectorShape) this.a(worldserver, blockposition, flag2).map((blockutil_rectangle) -> {
+                return (ShapeDetectorShape) this.findOrCreatePortal(worldserver, blockposition, flag2).map((blockutil_rectangle) -> {
                     IBlockData iblockdata = this.world.getType(this.ac);
                     EnumDirection.EnumAxis enumdirection_enumaxis;
                     Vec3D vec3d;
@@ -2066,7 +2066,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return BlockPortalShape.a(blockutil_rectangle, enumdirection_enumaxis, this.getPositionVector(), this.a(this.getPose()));
     }
 
-    protected Optional<BlockUtil.Rectangle> a(WorldServer worldserver, BlockPosition blockposition, boolean flag) {
+    protected Optional<BlockUtil.Rectangle> findOrCreatePortal(WorldServer worldserver, BlockPosition blockposition, boolean flag) {
         return worldserver.getTravelAgent().findPortal(blockposition, flag);
     }
 
@@ -2177,7 +2177,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             WorldServer worldserver = (WorldServer) this.world;
 
             this.setPositionRotation(d0, d1, d2, this.yaw, this.pitch);
-            this.cp().forEach((entity) -> {
+            this.recursiveStream().forEach((entity) -> {
                 worldserver.chunkCheck(entity);
                 entity.az = true;
                 Iterator iterator = entity.passengers.iterator();
@@ -2401,8 +2401,8 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return set;
     }
 
-    public Stream<Entity> cp() {
-        return Stream.concat(Stream.of(this), this.passengers.stream().flatMap(Entity::cp));
+    public Stream<Entity> recursiveStream() {
+        return Stream.concat(Stream.of(this), this.passengers.stream().flatMap(Entity::recursiveStream));
     }
 
     public boolean hasSinglePlayerPassenger() {

@@ -112,11 +112,11 @@ public class EntityArmorStand extends EntityLiving {
     public void setSlot(EnumItemSlot enumitemslot, ItemStack itemstack) {
         switch (enumitemslot.a()) {
             case HAND:
-                this.b(itemstack);
+                this.playEquipSound(itemstack);
                 this.handItems.set(enumitemslot.b(), itemstack);
                 break;
             case ARMOR:
-                this.b(itemstack);
+                this.playEquipSound(itemstack);
                 this.armorItems.set(enumitemslot.b(), itemstack);
         }
 

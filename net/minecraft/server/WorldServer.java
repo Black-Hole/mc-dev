@@ -105,7 +105,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     public void a(int i, int j, boolean flag, boolean flag1) {
-        this.worldDataServer.a(i);
+        this.worldDataServer.setClearWeatherTime(i);
         this.worldDataServer.setWeatherDuration(j);
         this.worldDataServer.setThunderDuration(j);
         this.worldDataServer.setStorm(flag);
@@ -132,7 +132,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
         if (this.getDimensionManager().hasSkyLight()) {
             if (this.getGameRules().getBoolean(GameRules.DO_WEATHER_CYCLE)) {
-                int i = this.worldDataServer.h();
+                int i = this.worldDataServer.getClearWeatherTime();
                 int j = this.worldDataServer.getThunderDuration();
                 int k = this.worldDataServer.getWeatherDuration();
                 boolean flag1 = this.worldData.isThundering();
@@ -170,7 +170,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
 
                 this.worldDataServer.setThunderDuration(j);
                 this.worldDataServer.setWeatherDuration(k);
-                this.worldDataServer.a(i);
+                this.worldDataServer.setClearWeatherTime(i);
                 this.worldDataServer.setThundering(flag1);
                 this.worldDataServer.setStorm(flag2);
             }
@@ -813,7 +813,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
     }
 
     public boolean addAllEntitiesSafely(Entity entity) {
-        if (entity.cp().anyMatch(this::isUUIDTaken)) {
+        if (entity.recursiveStream().anyMatch(this::isUUIDTaken)) {
             return false;
         } else {
             this.addAllEntities(entity);

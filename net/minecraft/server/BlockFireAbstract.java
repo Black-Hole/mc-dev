@@ -100,7 +100,13 @@ public abstract class BlockFireAbstract extends Block {
                 }
             }
 
-            return flag && BlockPortalShape.a((GeneratorAccess) world, blockposition, enumdirection.h().n()).isPresent();
+            if (!flag) {
+                return false;
+            } else {
+                EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.n().d() ? enumdirection.h().n() : EnumDirection.EnumDirectionLimit.HORIZONTAL.b(world.random);
+
+                return BlockPortalShape.a((GeneratorAccess) world, blockposition, enumdirection_enumaxis).isPresent();
+            }
         }
     }
 }

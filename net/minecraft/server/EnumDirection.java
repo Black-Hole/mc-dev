@@ -264,6 +264,10 @@ public enum EnumDirection implements INamable {
             return (EnumDirection) SystemUtils.a((Object[]) this.c, random);
         }
 
+        public EnumDirection.EnumAxis b(Random random) {
+            return (EnumDirection.EnumAxis) SystemUtils.a((Object[]) this.d, random);
+        }
+
         public boolean test(@Nullable EnumDirection enumdirection) {
             return enumdirection != null && enumdirection.n().e() == this;
         }

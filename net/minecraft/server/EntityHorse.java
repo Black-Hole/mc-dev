@@ -120,7 +120,7 @@ public class EntityHorse extends EntityHorseAbstract {
     protected void a(SoundEffectType soundeffecttype) {
         super.a(soundeffecttype);
         if (this.random.nextInt(10) == 0) {
-            this.playSound(SoundEffects.ENTITY_HORSE_BREATHE, soundeffecttype.a() * 0.6F, soundeffecttype.b());
+            this.playSound(SoundEffects.ENTITY_HORSE_BREATHE, soundeffecttype.getVolume() * 0.6F, soundeffecttype.getPitch());
         }
 
     }

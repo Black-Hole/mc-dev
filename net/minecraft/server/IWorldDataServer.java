@@ -28,9 +28,9 @@ public interface IWorldDataServer extends WorldDataMutable {
         });
     }
 
-    int h();
+    int getClearWeatherTime();
 
-    void a(int i);
+    void setClearWeatherTime(int i);
 
     int v();
 

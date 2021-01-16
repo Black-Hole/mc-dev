@@ -25,7 +25,7 @@ public class CriterionTriggerFishingRodHooked extends CriterionTriggerAbstract<C
     }
 
     public void a(EntityPlayer entityplayer, ItemStack itemstack, EntityFishingHook entityfishinghook, Collection<ItemStack> collection) {
-        LootTableInfo loottableinfo = CriterionConditionEntity.b(entityplayer, (Entity) (entityfishinghook.k() != null ? entityfishinghook.k() : entityfishinghook));
+        LootTableInfo loottableinfo = CriterionConditionEntity.b(entityplayer, (Entity) (entityfishinghook.getHooked() != null ? entityfishinghook.getHooked() : entityfishinghook));
 
         this.a(entityplayer, (criteriontriggerfishingrodhooked_a) -> {
             return criteriontriggerfishingrodhooked_a.a(itemstack, loottableinfo, collection);

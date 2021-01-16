@@ -12,11 +12,11 @@ public class BiomeStorage implements BiomeManager.Provider {
     public static final int a = 1 << BiomeStorage.e + BiomeStorage.e + BiomeStorage.f;
     public static final int b = (1 << BiomeStorage.e) - 1;
     public static final int c = (1 << BiomeStorage.f) - 1;
-    private final Registry<BiomeBase> g;
+    public final Registry<BiomeBase> registry;
     private final BiomeBase[] h;
 
     public BiomeStorage(Registry<BiomeBase> registry, BiomeBase[] abiomebase) {
-        this.g = registry;
+        this.registry = registry;
         this.h = abiomebase;
     }
 
@@ -73,7 +73,7 @@ public class BiomeStorage implements BiomeManager.Provider {
         int[] aint = new int[this.h.length];
 
         for (int i = 0; i < this.h.length; ++i) {
-            aint[i] = this.g.a(this.h[i]);
+            aint[i] = this.registry.a(this.h[i]);
         }
 
         return aint;

@@ -15,7 +15,7 @@ public class ItemFireball extends Item {
 
         if (BlockCampfire.h(iblockdata)) {
             this.a(world, blockposition);
-            world.setTypeUpdate(blockposition, (IBlockData) iblockdata.set(BlockCampfire.b, true));
+            world.setTypeUpdate(blockposition, (IBlockData) iblockdata.set(BlockCampfire.LIT, true));
             flag = true;
         } else {
             blockposition = blockposition.shift(itemactioncontext.getClickedFace());

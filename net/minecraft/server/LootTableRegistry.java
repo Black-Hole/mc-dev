@@ -14,7 +14,7 @@ public class LootTableRegistry extends ResourceDataJson {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson b = LootSerialization.c().create();
-    private Map<MinecraftKey, LootTable> c = ImmutableMap.of();
+    private Map<MinecraftKey, LootTable> keyToLootTable = ImmutableMap.of();
     private final LootPredicateManager d;
 
     public LootTableRegistry(LootPredicateManager lootpredicatemanager) {
@@ -23,7 +23,7 @@ public class LootTableRegistry extends ResourceDataJson {
     }
 
     public LootTable getLootTable(MinecraftKey minecraftkey) {
-        return (LootTable) this.c.getOrDefault(minecraftkey, LootTable.EMPTY);
+        return (LootTable) this.keyToLootTable.getOrDefault(minecraftkey, LootTable.EMPTY);
     }
 
     protected void a(Map<MinecraftKey, JsonElement> map, IResourceManager iresourcemanager, GameProfilerFiller gameprofilerfiller) {
@@ -61,7 +61,7 @@ public class LootTableRegistry extends ResourceDataJson {
         lootcollector.a().forEach((s, s1) -> {
             LootTableRegistry.LOGGER.warn("Found validation problem in " + s + ": " + s1);
         });
-        this.c = immutablemap;
+        this.keyToLootTable = immutablemap;
     }
 
     public static void a(LootCollector lootcollector, MinecraftKey minecraftkey, LootTable loottable) {
@@ -73,6 +73,6 @@ public class LootTableRegistry extends ResourceDataJson {
     }
 
     public Set<MinecraftKey> a() {
-        return this.c.keySet();
+        return this.keyToLootTable.keySet();
     }
 }

@@ -10,7 +10,7 @@ public class EntityItemFrame extends EntityHanging {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final DataWatcherObject<ItemStack> ITEM = DataWatcher.a(EntityItemFrame.class, DataWatcherRegistry.g);
     private static final DataWatcherObject<Integer> g = DataWatcher.a(EntityItemFrame.class, DataWatcherRegistry.b);
-    private float ag = 1.0F;
+    public float itemDropChance = 1.0F;
     public boolean fixed;
 
     public EntityItemFrame(EntityTypes<? extends EntityItemFrame> entitytypes, World world) {
@@ -188,7 +188,7 @@ public class EntityItemFrame extends EntityHanging {
                 if (!itemstack.isEmpty()) {
                     itemstack = itemstack.cloneItemStack();
                     this.c(itemstack);
-                    if (this.random.nextFloat() < this.ag) {
+                    if (this.random.nextFloat() < this.itemDropChance) {
                         this.a(itemstack);
                     }
                 }
@@ -278,7 +278,7 @@ public class EntityItemFrame extends EntityHanging {
         if (!this.getItem().isEmpty()) {
             nbttagcompound.set("Item", this.getItem().save(new NBTTagCompound()));
             nbttagcompound.setByte("ItemRotation", (byte) this.getRotation());
-            nbttagcompound.setFloat("ItemDropChance", this.ag);
+            nbttagcompound.setFloat("ItemDropChance", this.itemDropChance);
         }
 
         nbttagcompound.setByte("Facing", (byte) this.direction.c());
@@ -307,7 +307,7 @@ public class EntityItemFrame extends EntityHanging {
             this.setItem(itemstack, false);
             this.setRotation(nbttagcompound.getByte("ItemRotation"), false);
             if (nbttagcompound.hasKeyOfType("ItemDropChance", 99)) {
-                this.ag = nbttagcompound.getFloat("ItemDropChance");
+                this.itemDropChance = nbttagcompound.getFloat("ItemDropChance");
             }
         }
 
