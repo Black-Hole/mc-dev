@@ -10,6 +10,7 @@ import com.mojang.serialization.Lifecycle;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.net.Proxy;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -18,6 +19,38 @@ import joptsimple.NonOptionArgumentSpec;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
+import net.minecraft.CrashReport;
+import net.minecraft.DefaultUncaughtExceptionHandler;
+import net.minecraft.SystemUtils;
+import net.minecraft.commands.CommandDispatcher;
+import net.minecraft.core.IRegistryCustom;
+import net.minecraft.nbt.DynamicOpsNBT;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.resources.RegistryReadOps;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.server.dedicated.DedicatedServerProperties;
+import net.minecraft.server.dedicated.DedicatedServerSettings;
+import net.minecraft.server.level.progress.WorldLoadListenerLogger;
+import net.minecraft.server.packs.repository.PackSource;
+import net.minecraft.server.packs.repository.ResourcePackRepository;
+import net.minecraft.server.packs.repository.ResourcePackSource;
+import net.minecraft.server.packs.repository.ResourcePackSourceFolder;
+import net.minecraft.server.packs.repository.ResourcePackSourceVanilla;
+import net.minecraft.server.players.UserCache;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.datafix.DataConverterRegistry;
+import net.minecraft.util.worldupdate.WorldUpgrader;
+import net.minecraft.world.level.DataPackConfiguration;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.World;
+import net.minecraft.world.level.WorldSettings;
+import net.minecraft.world.level.levelgen.GeneratorSettings;
+import net.minecraft.world.level.storage.Convertable;
+import net.minecraft.world.level.storage.SaveData;
+import net.minecraft.world.level.storage.SavedFile;
+import net.minecraft.world.level.storage.WorldDataServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,15 +90,15 @@ public class Main {
             DispenserRegistry.c();
             SystemUtils.l();
             IRegistryCustom.Dimension iregistrycustom_dimension = IRegistryCustom.b();
-            java.nio.file.Path java_nio_file_path = Paths.get("server.properties");
-            DedicatedServerSettings dedicatedserversettings = new DedicatedServerSettings(iregistrycustom_dimension, java_nio_file_path);
+            Path path = Paths.get("server.properties");
+            DedicatedServerSettings dedicatedserversettings = new DedicatedServerSettings(iregistrycustom_dimension, path);
 
             dedicatedserversettings.save();
-            java.nio.file.Path java_nio_file_path1 = Paths.get("eula.txt");
-            EULA eula = new EULA(java_nio_file_path1);
+            Path path1 = Paths.get("eula.txt");
+            EULA eula = new EULA(path1);
 
             if (optionset.has(optionspec1)) {
-                Main.LOGGER.info("Initialized '{}' and '{}'", java_nio_file_path.toAbsolutePath(), java_nio_file_path1.toAbsolutePath());
+                Main.LOGGER.info("Initialized '{}' and '{}'", path.toAbsolutePath(), path1.toAbsolutePath());
                 return;
             }
 

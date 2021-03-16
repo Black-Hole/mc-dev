@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import net.minecraft.commands.CommandListenerWrapper;
+
 public class ServerCommand {
 
     public final String command;

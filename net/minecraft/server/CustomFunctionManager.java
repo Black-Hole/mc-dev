@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.collect.Maps;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.datafixers.util.Pair;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -13,6 +14,22 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.Executor;
+import net.minecraft.commands.CommandListenerWrapper;
+import net.minecraft.commands.CustomFunction;
+import net.minecraft.commands.ICommandListener;
+import net.minecraft.network.chat.ChatComponentText;
+import net.minecraft.resources.MinecraftKey;
+import net.minecraft.server.level.WorldServer;
+import net.minecraft.server.packs.resources.IReloadListener;
+import net.minecraft.server.packs.resources.IResource;
+import net.minecraft.server.packs.resources.IResourceManager;
+import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagDataPack;
+import net.minecraft.tags.Tags;
+import net.minecraft.util.profiling.GameProfilerFiller;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec2F;
+import net.minecraft.world.phys.Vec3D;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +43,7 @@ public class CustomFunctionManager implements IReloadListener {
     private final TagDataPack<CustomFunction> e = new TagDataPack<>(this::a, "tags/functions", "function");
     private volatile Tags<CustomFunction> f = Tags.c();
     private final int g;
-    private final com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> h;
+    private final CommandDispatcher<CommandListenerWrapper> h;
 
     public Optional<CustomFunction> a(MinecraftKey minecraftkey) {
         return Optional.ofNullable(this.d.get(minecraftkey));
@@ -44,9 +61,9 @@ public class CustomFunctionManager implements IReloadListener {
         return this.f.b(minecraftkey);
     }
 
-    public CustomFunctionManager(int i, com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+    public CustomFunctionManager(int i, CommandDispatcher<CommandListenerWrapper> commanddispatcher) {
         this.g = i;
-        this.h = com_mojang_brigadier_commanddispatcher;
+        this.h = commanddispatcher;
     }
 
     @Override

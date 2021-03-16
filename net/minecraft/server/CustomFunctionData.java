@@ -1,11 +1,17 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.mojang.brigadier.CommandDispatcher;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import net.minecraft.commands.CommandListenerWrapper;
+import net.minecraft.commands.CustomFunction;
+import net.minecraft.resources.MinecraftKey;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.GameRules;
 
 public class CustomFunctionData {
 
@@ -29,7 +35,7 @@ public class CustomFunctionData {
         return this.server.getGameRules().getInt(GameRules.MAX_COMMAND_CHAIN_LENGTH);
     }
 
-    public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> getCommandDispatcher() {
+    public CommandDispatcher<CommandListenerWrapper> getCommandDispatcher() {
         return this.server.getCommandDispatcher().a();
     }
 

@@ -3,18 +3,20 @@ package net.minecraft.server;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
+import net.minecraft.SharedConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class EULA {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private final java.nio.file.Path b;
+    private final Path b;
     private final boolean c;
 
-    public EULA(java.nio.file.Path java_nio_file_path) {
-        this.b = java_nio_file_path;
+    public EULA(Path path) {
+        this.b = path;
         this.c = SharedConstants.d || this.b();
     }
 

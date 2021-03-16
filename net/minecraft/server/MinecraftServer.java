@@ -26,6 +26,7 @@ import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.KeyPair;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -51,6 +52,105 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
+import net.minecraft.CrashReport;
+import net.minecraft.ReportedException;
+import net.minecraft.SharedConstants;
+import net.minecraft.SystemUtils;
+import net.minecraft.commands.CommandDispatcher;
+import net.minecraft.commands.CommandListenerWrapper;
+import net.minecraft.commands.ICommandListener;
+import net.minecraft.core.BaseBlockPosition;
+import net.minecraft.core.BlockPosition;
+import net.minecraft.core.IRegistry;
+import net.minecraft.core.IRegistryCustom;
+import net.minecraft.core.RegistryMaterials;
+import net.minecraft.data.worldgen.BiomeDecoratorGroups;
+import net.minecraft.gametest.framework.GameTestHarnessTicker;
+import net.minecraft.network.chat.ChatComponentText;
+import net.minecraft.network.chat.ChatMessage;
+import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.PacketPlayOutServerDifficulty;
+import net.minecraft.network.protocol.game.PacketPlayOutUpdateTime;
+import net.minecraft.network.protocol.status.ServerPing;
+import net.minecraft.resources.MinecraftKey;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.bossevents.BossBattleCustomData;
+import net.minecraft.server.level.ChunkProviderServer;
+import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.server.level.TicketType;
+import net.minecraft.server.level.WorldProviderNormal;
+import net.minecraft.server.level.WorldServer;
+import net.minecraft.server.level.progress.WorldLoadListener;
+import net.minecraft.server.level.progress.WorldLoadListenerFactory;
+import net.minecraft.server.network.ITextFilter;
+import net.minecraft.server.network.ServerConnection;
+import net.minecraft.server.packs.repository.ResourcePackLoader;
+import net.minecraft.server.packs.repository.ResourcePackRepository;
+import net.minecraft.server.players.OpListEntry;
+import net.minecraft.server.players.PlayerList;
+import net.minecraft.server.players.UserCache;
+import net.minecraft.server.players.WhiteList;
+import net.minecraft.tags.ITagRegistry;
+import net.minecraft.tags.TagsBlock;
+import net.minecraft.util.CircularTimer;
+import net.minecraft.util.CryptographyException;
+import net.minecraft.util.IProgressUpdate;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MinecraftEncryption;
+import net.minecraft.util.Unit;
+import net.minecraft.util.profiling.GameProfilerDisabled;
+import net.minecraft.util.profiling.GameProfilerFiller;
+import net.minecraft.util.profiling.GameProfilerSwitcher;
+import net.minecraft.util.profiling.GameProfilerTick;
+import net.minecraft.util.profiling.MethodProfilerResults;
+import net.minecraft.util.thread.IAsyncTaskHandlerReentrant;
+import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.IMojangStatistics;
+import net.minecraft.world.MojangStatisticsGenerator;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.village.VillageSiege;
+import net.minecraft.world.entity.npc.MobSpawnerCat;
+import net.minecraft.world.entity.npc.MobSpawnerTrader;
+import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.world.item.crafting.CraftingManager;
+import net.minecraft.world.level.ChunkCoordIntPair;
+import net.minecraft.world.level.DataPackConfiguration;
+import net.minecraft.world.level.EnumGamemode;
+import net.minecraft.world.level.ForcedChunk;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.MobSpawner;
+import net.minecraft.world.level.World;
+import net.minecraft.world.level.WorldSettings;
+import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.world.level.biome.WorldChunkManager;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.border.IWorldBorderListener;
+import net.minecraft.world.level.border.WorldBorder;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.dimension.DimensionManager;
+import net.minecraft.world.level.dimension.WorldDimension;
+import net.minecraft.world.level.levelgen.GeneratorSettings;
+import net.minecraft.world.level.levelgen.MobSpawnerPatrol;
+import net.minecraft.world.level.levelgen.MobSpawnerPhantom;
+import net.minecraft.world.level.levelgen.feature.WorldGenFeatureConfigured;
+import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructureManager;
+import net.minecraft.world.level.saveddata.RunnableSaveScoreboard;
+import net.minecraft.world.level.storage.Convertable;
+import net.minecraft.world.level.storage.IWorldDataServer;
+import net.minecraft.world.level.storage.PersistentCommandStorage;
+import net.minecraft.world.level.storage.SaveData;
+import net.minecraft.world.level.storage.SavedFile;
+import net.minecraft.world.level.storage.SecondaryWorldData;
+import net.minecraft.world.level.storage.WorldData;
+import net.minecraft.world.level.storage.WorldNBTStorage;
+import net.minecraft.world.level.storage.WorldPersistentData;
+import net.minecraft.world.level.storage.loot.LootPredicateManager;
+import net.minecraft.world.level.storage.loot.LootTableRegistry;
+import net.minecraft.world.phys.Vec2F;
+import net.minecraft.world.phys.Vec3D;
+import net.minecraft.world.scores.PersistentScoreboard;
+import net.minecraft.world.scores.Scoreboard;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -638,7 +738,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     @Override
-    protected TickTask postToMainThread(Runnable runnable) {
+    public TickTask postToMainThread(Runnable runnable) {
         return new TickTask(this.ticks, runnable);
     }
 
@@ -1403,28 +1503,28 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     public abstract boolean a(GameProfile gameprofile);
 
-    public void a(java.nio.file.Path java_nio_file_path) throws IOException {
-        java.nio.file.Path java_nio_file_path1 = java_nio_file_path.resolve("levels");
+    public void a(Path path) throws IOException {
+        Path path1 = path.resolve("levels");
         Iterator iterator = this.worldServer.entrySet().iterator();
 
         while (iterator.hasNext()) {
             Entry<ResourceKey<World>, WorldServer> entry = (Entry) iterator.next();
             MinecraftKey minecraftkey = ((ResourceKey) entry.getKey()).a();
-            java.nio.file.Path java_nio_file_path2 = java_nio_file_path1.resolve(minecraftkey.getNamespace()).resolve(minecraftkey.getKey());
+            Path path2 = path1.resolve(minecraftkey.getNamespace()).resolve(minecraftkey.getKey());
 
-            Files.createDirectories(java_nio_file_path2);
-            ((WorldServer) entry.getValue()).a(java_nio_file_path2);
+            Files.createDirectories(path2);
+            ((WorldServer) entry.getValue()).a(path2);
         }
 
-        this.d(java_nio_file_path.resolve("gamerules.txt"));
-        this.e(java_nio_file_path.resolve("classpath.txt"));
-        this.c(java_nio_file_path.resolve("example_crash.txt"));
-        this.b(java_nio_file_path.resolve("stats.txt"));
-        this.f(java_nio_file_path.resolve("threads.txt"));
+        this.d(path.resolve("gamerules.txt"));
+        this.e(path.resolve("classpath.txt"));
+        this.c(path.resolve("example_crash.txt"));
+        this.b(path.resolve("stats.txt"));
+        this.f(path.resolve("threads.txt"));
     }
 
-    private void b(java.nio.file.Path java_nio_file_path) throws IOException {
-        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path);
+    private void b(Path path) throws IOException {
+        BufferedWriter bufferedwriter = Files.newBufferedWriter(path);
         Throwable throwable = null;
 
         try {
@@ -1452,11 +1552,11 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     }
 
-    private void c(java.nio.file.Path java_nio_file_path) throws IOException {
+    private void c(Path path) throws IOException {
         CrashReport crashreport = new CrashReport("Server dump", new Exception("dummy"));
 
         this.b(crashreport);
-        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path);
+        BufferedWriter bufferedwriter = Files.newBufferedWriter(path);
         Throwable throwable = null;
 
         try {
@@ -1481,8 +1581,8 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     }
 
-    private void d(java.nio.file.Path java_nio_file_path) throws IOException {
-        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path);
+    private void d(Path path) throws IOException {
+        BufferedWriter bufferedwriter = Files.newBufferedWriter(path);
         Throwable throwable = null;
 
         try {
@@ -1522,8 +1622,8 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     }
 
-    private void e(java.nio.file.Path java_nio_file_path) throws IOException {
-        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path);
+    private void e(Path path) throws IOException {
+        BufferedWriter bufferedwriter = Files.newBufferedWriter(path);
         Throwable throwable = null;
 
         try {
@@ -1557,12 +1657,12 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
     }
 
-    private void f(java.nio.file.Path java_nio_file_path) throws IOException {
+    private void f(Path path) throws IOException {
         ThreadMXBean threadmxbean = ManagementFactory.getThreadMXBean();
         ThreadInfo[] athreadinfo = threadmxbean.dumpAllThreads(true, true);
 
         Arrays.sort(athreadinfo, Comparator.comparing(ThreadInfo::getThreadName));
-        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path);
+        BufferedWriter bufferedwriter = Files.newBufferedWriter(path);
         Throwable throwable = null;
 
         try {
@@ -1627,7 +1727,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return methodprofilerresults;
     }
 
-    public java.nio.file.Path a(SavedFile savedfile) {
+    public Path a(SavedFile savedfile) {
         return this.convertable.getWorldFolder(savedfile);
     }
 

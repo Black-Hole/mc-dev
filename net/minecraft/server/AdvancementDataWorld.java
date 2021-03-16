@@ -10,6 +10,16 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import javax.annotation.Nullable;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementTree;
+import net.minecraft.advancements.Advancements;
+import net.minecraft.advancements.critereon.LootDeserializationContext;
+import net.minecraft.resources.MinecraftKey;
+import net.minecraft.server.packs.resources.IResourceManager;
+import net.minecraft.server.packs.resources.ResourceDataJson;
+import net.minecraft.util.ChatDeserializer;
+import net.minecraft.util.profiling.GameProfilerFiller;
+import net.minecraft.world.level.storage.loot.LootPredicateManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

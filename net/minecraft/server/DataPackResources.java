@@ -3,6 +3,19 @@ package net.minecraft.server;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import net.minecraft.commands.CommandDispatcher;
+import net.minecraft.server.packs.EnumResourcePackType;
+import net.minecraft.server.packs.IResourcePack;
+import net.minecraft.server.packs.resources.IReloadListener;
+import net.minecraft.server.packs.resources.IReloadableResourceManager;
+import net.minecraft.server.packs.resources.IResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.tags.ITagRegistry;
+import net.minecraft.tags.TagRegistry;
+import net.minecraft.util.Unit;
+import net.minecraft.world.item.crafting.CraftingManager;
+import net.minecraft.world.level.storage.loot.LootPredicateManager;
+import net.minecraft.world.level.storage.loot.LootTableRegistry;
 
 public class DataPackResources implements AutoCloseable {
 

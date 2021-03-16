@@ -7,6 +7,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.PacketPlayOutScoreboardDisplayObjective;
+import net.minecraft.network.protocol.game.PacketPlayOutScoreboardObjective;
+import net.minecraft.network.protocol.game.PacketPlayOutScoreboardScore;
+import net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam;
+import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.world.scores.Scoreboard;
+import net.minecraft.world.scores.ScoreboardObjective;
+import net.minecraft.world.scores.ScoreboardScore;
+import net.minecraft.world.scores.ScoreboardTeam;
 
 public class ScoreboardServer extends Scoreboard {
 
